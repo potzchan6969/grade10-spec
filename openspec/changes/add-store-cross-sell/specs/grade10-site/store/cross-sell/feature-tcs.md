@@ -16,7 +16,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -61,7 +61,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -100,7 +100,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -137,7 +137,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -199,19 +199,20 @@ Runs once per row of **Test data**.
 
 1. Navigate to `<card_1>`'s page.
 2. Scroll to the section under the card.
-3. Hover the first tile.
+3. Hover each tile in turn.
 4. Click the first tile.
-5. Enable scripting, set DevTools network to Slow 3G, open `<card_1>`'s page.
-6. Watch the card and the section under it until loading ends.
+5. Enable scripting in the browser.
+6. Set DevTools network throttling to Slow 3G.
+7. Open `<card_1>`'s page.
+8. Watch the card and the section under it until loading ends.
 
 **Expected Results:**
 
 * Step 2: under the card, the heading You may also like and six tiles render.
-* Each tile is a link to its card's page.
-* Step 3 shows the first tile's card address as the link target.
+* Step 3 shows each tile's own card address as its link target.
 * Step 4 opens that card's page, scripting still disabled.
-* Step 6: no placeholder shows in the rail's place.
-* Step 6: the card's name and price do not move.
+* Step 8: no placeholder shows in the rail's place.
+* Step 8: the card's name and price do not move.
 
 ### grade10-site-store-cross-sell-US1-TC6-1: A sold-out pick stays, says so and still opens
 
@@ -219,7 +220,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -257,7 +258,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -294,7 +295,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -383,7 +384,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<card_7>` | A card nobody can buy, with one pick for sale and at least three cards sharing its world |
+| `<card_7>` | A card nobody can buy (sold out by the recipe "Sell a card out"), with one pick for sale and at least three cards for sale sharing its world |
 
 **Steps:**
 
@@ -401,7 +402,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -438,7 +439,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -475,7 +476,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -513,7 +514,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -595,7 +596,7 @@ picks or no picks,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -634,7 +635,7 @@ picks or no picks,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -690,7 +691,7 @@ picks or no picks,
 
 | Field | Value |
 | --- | --- |
-| `<card_11>` | A card for sale with no picks, sharing its world with ten cards for sale added at different times |
+| `<card_11>` | A card for sale with no picks, sharing its world with ten cards for sale, gained by the catalogue on different days |
 
 **Steps:**
 
@@ -708,7 +709,7 @@ picks or no picks,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -754,7 +755,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-store-cross-sell-US-02
 
 **Pre-conditions:**
@@ -799,7 +800,7 @@ Runs once per row of **Test data**.
 
 * The cards in **Test data** are set up as the recipe "A card with chosen facts, on the staging shop" says.
 * customer is on `<card_14>`'s page.
-* `<new sibling>` is not yet in the store's catalogue.
+* `<new sibling>` is created in the staging shop's admin after both cards, with `<card_14>`'s world, and not published to the store's sales channel.
 
 **Test data:**
 
@@ -817,8 +818,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Before step 1, the two cards sharing `<card_14>`'s world show.
-* `<new sibling>` leads the tiles.
-* The two earlier cards follow, newest first.
+* After step 3, `<new sibling>` leads the tiles.
+* After step 3, the two earlier cards follow, newest first.
 
 ### grade10-site-store-cross-sell-US2-TC8-1: A fact shared twice ranks no higher than once
 
@@ -826,7 +827,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -863,7 +864,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -900,7 +901,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -943,7 +944,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-cross-sell-US-02
 
 **Pre-conditions:**
@@ -982,7 +983,7 @@ the card itself, and see them on its page,
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -1032,6 +1033,7 @@ the card itself, and see them on its page,
 
 **Pre-conditions:**
 
+* `<card_16>`'s picks are set by the recipe "Choose picks on a staging-shop card".
 * admin(stock keeper) is in the staging shop's admin, at Apps > Search & Discovery > Product recommendations, with `<card_16>` open.
 
 **Test data:**
@@ -1071,13 +1073,14 @@ the card itself, and see them on its page,
 
 **Pre-conditions:**
 
+* `<card_17>`'s picks are set by the recipe "Choose picks on a staging-shop card".
 * admin(stock keeper) is in the staging shop's admin, at Apps > Search & Discovery > Product recommendations, with `<card_17>` open.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<card_17>` | A card for sale whose picks are `<pick_8>` then `<pick_9>`, sharing its world with at least one card for sale |
+| `<card_17>` | A card for sale whose picks are `<pick_8>` then `<pick_9>`, sharing its world with at least six cards for sale |
 | `<pick_8>`, `<pick_9>` | Cards for sale sharing no world, language or type with `<card_17>` |
 | `<page window>` | 1 minute |
 
@@ -1087,6 +1090,7 @@ the card itself, and see them on its page,
 2. Click Save.
 3. Wait `<page window>`.
 4. Open `<card_17>`'s page on the staging storefront.
+5. Scroll to You may also like.
 
 **Expected Results:**
 
@@ -1117,23 +1121,24 @@ the card itself, and see them on its page,
 
 | Field | Value |
 | --- | --- |
-| `<card_18>` | A card for sale whose picks are `<kept pick>` then `<gone card>`, sharing its world with at least six cards for sale |
-| `<kept pick>` | A card for sale, chosen first on `<card_18>` |
-| `<gone card>` | A card for sale, chosen second on `<card_18>` |
+| `<card_18>` | A card for sale whose picks are `<kept pick 1>`, `<gone card>`, `<kept pick 2>` |
+| `<kept pick 1>`, `<kept pick 2>` | Cards for sale sharing no world, language or type with `<card_18>` |
+| `<gone card>` | A card for sale, chosen second on `<card_18>`, sharing no world, language or type with it |
 | `<page window>` | 1 minute |
 
 **Steps:**
 
-1. Unpublish `<gone card>` from the store's sales channel.
+1. Unpublish `<gone card>` from the Headless sales channel.
 2. Wait until the store listing no longer shows `<gone card>`.
 3. Wait `<page window>`.
 4. Open `<card_18>`'s page on the staging storefront.
 5. Scroll to You may also like.
+6. Publish `<gone card>` back to the Headless sales channel.
 
 **Expected Results:**
 
 * `<gone card>` shows nowhere, and no tile is left blank for it.
-* `<kept pick>` leads the rail, cards sharing `<card_18>`'s world follow.
+* The first two tiles are `<kept pick 1>`, then `<kept pick 2>`.
 
 ### grade10-site-store-cross-sell-US3-TC5-1: A pick added to a card that already has picks reaches the page
 
@@ -1153,7 +1158,7 @@ the card itself, and see them on its page,
 **Pre-conditions:**
 
 * admin(stock keeper) is in the staging shop's admin, at Apps > Search & Discovery > Product recommendations, with `<card_25>` open.
-* `<card_25>`'s page shows `<pick_5>` and `<pick_6>` as its picks.
+* `<card_25>`'s picks are `<pick_5>` then `<pick_6>`, set by the recipe "Choose picks on a staging-shop card".
 
 **Test data:**
 
@@ -1229,8 +1234,8 @@ staging storefront, where its picks and its clock are in play.
 | `grade10-site-store-cross-sell-US1-TC12-1` | the page's test proves one card is enough; the walk names it, on the apron's one pick; nothing remains for a person beyond the walk |
 | `grade10-site-store-cross-sell-US1-TC13-1` | the rule's test proves a pick is not repeated among the similar cards; the walk names it; nothing remains for a person beyond the walk |
 | `grade10-site-store-cross-sell-US1-TC14-1` | the rule's test proves a card the store's copy does not hold yet shows its picks alone; a person publishes a card with picks on the staging shop and reads it on the staging storefront within the catalogue's window |
-| `grade10-site-store-cross-sell-US1-TC15-1` | the page's test proves a card whose rail cannot be composed answers whole, with no rail; the walk's cold isolate reaches the state; nothing remains for a person beyond the walk |
-| `grade10-site-store-cross-sell-US2-TC1-1` | the rule's test proves a card with no picks shows the cards like it; the walk names it; nothing remains for a person beyond the walk |
+| `grade10-site-store-cross-sell-US1-TC15-1` | the page's test proves a card whose rail cannot be composed answers whole, with no rail; the walk has no test of its own for it yet; a person reaches it only by a cold isolate, which staging cannot be made to hold on demand; nothing remains for a person beyond the walk |
+| `grade10-site-store-cross-sell-US2-TC1-1` | the rule's test proves a card with no picks shows the cards like it; the walk names it, on one tile; a person reads four cards sharing a world, newest first, on the staging storefront |
 | `grade10-site-store-cross-sell-US2-TC2-1` | the rule's test proves a shared world weighs before a shared language, and a language before a type; a person reads the order on the staging shop's cards |
 | `grade10-site-store-cross-sell-US2-TC3-1` | the rule's test proves newest first among cards sharing the same fact; a person reads two such cards on the staging storefront |
 | `grade10-site-store-cross-sell-US2-TC4-1` | the rule's test proves the similar cards stop at six; a person counts the tiles under a card with seven or more like it |
@@ -1240,7 +1245,7 @@ staging storefront, where its picks and its clock are in play.
 | `grade10-site-store-cross-sell-US2-TC8-1` | the rule's test proves a fact shared twice counts once; a person reads two cards sharing two worlds on the staging storefront |
 | `grade10-site-store-cross-sell-US2-TC9-1` | the rule's test proves closer comes before newer; a person reads an older card sharing two facts beside a newer one sharing one |
 | `grade10-site-store-cross-sell-US2-TC10-1` | the rule's test proves a similar card that sells out leaves; a person sells a similar card out on the staging shop and reloads the card's page on the staging storefront |
-| `grade10-site-store-cross-sell-US2-TC11-1` | the rule's test proves unreadable picks leave the similar cards and the page whole; a person breaks the staging shop's picks field by hand |
+| `grade10-site-store-cross-sell-US2-TC11-1` | the rule's test proves unreadable picks leave the similar cards and the page whole; no hand walk reaches unreadable picks on staging; it waits on an automated test |
 | `grade10-site-store-cross-sell-US3-TC1-1` | the rule's test proves the stock keeper's order is the rail's; the walk skips it, the dashboard being out of its lane; the stock keeper's steps are walked by hand on the staging shop and the page read on the staging storefront within its minute |
 | `grade10-site-store-cross-sell-US3-TC2-1` | the rule's test proves the stock keeper's order is the rail's; the reorder in the dashboard is walked by hand and the page read within its minute |
 | `grade10-site-store-cross-sell-US3-TC3-1` | the rule's test proves clearing every pick leaves the similar cards; the clearing in the dashboard is walked by hand |
