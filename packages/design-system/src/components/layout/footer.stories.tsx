@@ -95,9 +95,14 @@ export const Default: Story = {
     // top border here, which is how the drift outlived the component.
     expect(footer).toHaveClass("bg-background-inverse");
     expect(footer).not.toHaveClass("border-t");
-    expect(footer.firstElementChild).toHaveClass("gap-6", "p-8");
+    expect(footer.firstElementChild).toHaveClass(
+      "gap-6",
+      "px-4",
+      "py-8",
+      "sm:px-8",
+    );
     const bar = footer.querySelector('[data-slot="footer-bar"]');
-    expect(bar).toHaveClass("px-8");
+    expect(bar).toHaveClass("px-4", "sm:px-8");
     expect(bar).toHaveClass("border-t");
 
     const canvas = within(canvasElement);
