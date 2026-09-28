@@ -16,6 +16,7 @@ landed_by:
   tech-design: ecchochan
   specs: ecchochan
   test-cases: ecchochan
+  tasks: ecchochan
 reviewed:
   tech-design: c0784633
   specs: a35bc601

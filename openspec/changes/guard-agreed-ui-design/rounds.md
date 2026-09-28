@@ -12,3 +12,4 @@ Written by the landing, in the landing's own commit.
 | 5 | specs | simpler | the blind suite and the scenarios reconciled; the simpler reader's ten edits applied | - | - |
 | 6 | test-cases | simpler | the blind suite reconciled against the scenarios; the simpler reader's edits applied | - | - |
 | 7 | tech-design | deterministic, simple, consistent, testable, simpler, verifier | the migration plan brought in line with the tasks' order, from the tasks round's order reading | - | - |
+| 8 | tasks | order, tests-first, end-to-end, simpler, verifier | ids only where a test cites them; the app's setup in one task after its block check; fix-bug linked in both repositories | - | - |
