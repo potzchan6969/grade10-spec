@@ -5,7 +5,7 @@ import { previewLot } from "@/emails/auction/_components/preview-lot";
 export default function OutbidWithoutImageEmail() {
   return (
     <AuctionLetter
-      body="Another bid took the lead on this lot."
+      body="Another bid took the lead on this auction."
       brandName={previewLot.brandName}
       campaign="outbid"
       canUnsubscribe
@@ -25,7 +25,7 @@ export default function OutbidWithoutImageEmail() {
         label: "Your bid",
         value: previewLot.yourBid,
       }}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

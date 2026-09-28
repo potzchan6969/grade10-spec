@@ -37,7 +37,7 @@ export default function OrderDeliveredEmail({
   return (
     <AuctionLetter
       body={[
-        "Your lot has been delivered.",
+        "Your auction has been delivered.",
         "If it has not reached you, or something is wrong, email support@grade10.com.",
       ]}
       brandName={brandName}
@@ -57,7 +57,7 @@ export default function OrderDeliveredEmail({
       primaryImageUrl={primaryImageUrl}
       secondaryCtaHref={contactUrl}
       secondaryCtaLabel="Contact customer support"
-      whyYouGotThis="You won this auction lot and it was shipped to you by Grade10."
+      whyYouGotThis="You won this auction and it was shipped to you by Grade10."
     />
   );
 }

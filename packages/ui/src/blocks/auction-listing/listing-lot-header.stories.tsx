@@ -10,18 +10,18 @@ const undoUnwatch = fn();
 
 const HEADER_COPY = {
   auctionBreadcrumb: "Auctions",
-  lotBreadcrumb: "Lot",
+  lotBreadcrumb: "Auction Details",
   watch: "Watch",
   watching: "Watching",
-  watchAriaLabel: "Watch this lot",
-  unwatchAriaLabel: "Unwatch this lot",
+  watchAriaLabel: "Watch this auction",
+  unwatchAriaLabel: "Unwatch this auction",
   watchedToast: {
-    title: "Email alerts on for this lot",
+    title: "Email alerts on for this auction",
     actionLabel: "View My Auctions",
   },
   unwatchedToast: {
-    title: "Unwatched this lot",
-    description: "Email alerts for this lot are off too.",
+    title: "Unwatched this auction",
+    description: "Email alerts for this auction are off too.",
     actionLabel: "Undo",
   },
 };
@@ -55,7 +55,9 @@ export const Watch: Story = {
   play: async ({ canvasElement }) => {
     onWatchToggle.mockClear();
     await userEvent.click(
-      within(canvasElement).getByRole("button", { name: "Watch this lot" }),
+      within(canvasElement).getByRole("button", {
+        name: "Watch this auction",
+      }),
     );
     expect(onWatchToggle).toHaveBeenCalled();
   },
@@ -125,11 +127,11 @@ export const WatchAnnounces: Story = {
     const body = within(document.body);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Watch this lot" }),
+      canvas.getByRole("button", { name: "Watch this auction" }),
     );
     await waitFor(() =>
       expect(
-        body.getByText("Email alerts on for this lot"),
+        body.getByText("Email alerts on for this auction"),
       ).toBeInTheDocument(),
     );
     await userEvent.click(
@@ -152,13 +154,13 @@ export const UnwatchAnnounces: Story = {
     const body = within(document.body);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Unwatch this lot" }),
+      canvas.getByRole("button", { name: "Unwatch this auction" }),
     );
     await waitFor(() =>
-      expect(body.getByText("Unwatched this lot")).toBeInTheDocument(),
+      expect(body.getByText("Unwatched this auction")).toBeInTheDocument(),
     );
     expect(
-      body.getByText("Email alerts for this lot are off too."),
+      body.getByText("Email alerts for this auction are off too."),
     ).toBeInTheDocument();
     await userEvent.click(body.getByRole("button", { name: "Undo" }));
     expect(undoUnwatch).toHaveBeenCalled();

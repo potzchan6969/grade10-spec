@@ -36,7 +36,7 @@ export default function OrderShippedEmail({
 }: OrderShippedProps) {
   return (
     <AuctionLetter
-      body="Your lot is on its way. Track the parcel with the carrier, or open Winner Order for the full order."
+      body="Your auction is on its way. Track the parcel with the carrier, or open Winner Order for the full order."
       brandName={brandName}
       campaign="shipped"
       canUnsubscribe={false}
@@ -57,7 +57,7 @@ export default function OrderShippedEmail({
       primaryImageUrl={primaryImageUrl}
       secondaryCtaHref={orderUrl}
       secondaryCtaLabel="View order"
-      whyYouGotThis="You won this auction lot and paid for it on Grade10."
+      whyYouGotThis="You won this auction and paid for it on Grade10."
     />
   );
 }

@@ -36,9 +36,9 @@ type ListingLotMetaProps = {
   badges: readonly ListingLotMetaBadge[];
   description: string;
   vaultShippingBody: string;
-  /** Cataloguing facts under About this lot (year, set, grade, cert, …). */
+  /** Cataloguing facts under About this auction (year, set, grade, cert, …). */
   facts?: readonly ListingLotMetaFact[];
-  /** Comparable sales, shown as a section under About this lot. */
+  /** Comparable sales, shown as a section under About this auction. */
   marketComps?: ListingLotMarketComps;
 };
 
