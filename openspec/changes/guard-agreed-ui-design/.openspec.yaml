@@ -11,6 +11,7 @@ awaiting:
     shared/design-sync/design-override - @ecchochan"
 landed_by:
   proposal: ecchochan
+  decisions: ecchochan
 reviewed:
   tech-design: c0784633
   specs: 02b39c93

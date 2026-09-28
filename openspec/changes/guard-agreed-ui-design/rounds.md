@@ -7,3 +7,4 @@ Written by the landing, in the landing's own commit.
 | --- | --- | --- | --- | --- | --- |
 | 1 | proposal | simpler | the block check named as its own script | - | - |
 | 2 | proposal | simpler | the block check named as its own script | - | - |
+| 3 | decisions | simpler | the blind pass's raised rows landed as Q12 to Q20 | - | - |
