@@ -80,6 +80,34 @@ export const ShowsSuppliedFieldError: Story = {
 
 export const Default: Story = { args: { errors: undefined } };
 
+/** `Button`'s `focus-visible:ring-3`, drawn outside its box. */
+const FOCUS_RING_PX = 3;
+
+/**
+ * The fields scroll, so their region clips at its own edge. Confirm sits in
+ * its bottom-left corner, still lines up with the address kind above it, and
+ * keeps room for its whole focus ring.
+ */
+export const ActionsKeepTheirFocusRing: Story = {
+  args: { errors: undefined },
+  play: async ({ canvasElement }) => {
+    const slot = (name: string) => {
+      const node = canvasElement.querySelector(`[data-slot="${name}"]`);
+      if (node === null) throw new Error(`The form renders no ${name}`);
+      return node.getBoundingClientRect();
+    };
+    const clip = slot("auction-address-fields");
+    const kind = slot("auction-address-kind");
+    const confirm = within(canvasElement)
+      .getByRole("button", { name: "Confirm" })
+      .getBoundingClientRect();
+
+    expect(confirm.left).toBeCloseTo(kind.left, 1);
+    expect(confirm.left - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.left);
+    expect(confirm.bottom + FOCUS_RING_PX).toBeLessThanOrEqual(clip.bottom);
+  },
+};
+
 /** Personal default — Company Name hidden; Confirm clears company (SC-09, SC-12). */
 export const Personal: Story = {
   args: {

@@ -116,6 +116,30 @@ export const Narrow: Story = {
   },
 };
 
+/** `Button`'s `focus-visible:ring-3`, drawn outside its box. */
+const FOCUS_RING_PX = 3;
+
+/**
+ * The narrow pill row scrolls sideways, so it clips at its own edge. A pill
+ * keeps room above and below it for its whole focus ring.
+ */
+export const NarrowPillsKeepTheirFocusRing: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvasElement }) => {
+    const row = canvasElement.querySelector(
+      '[data-slot="listing-narrow-chrome-pills"]',
+    );
+    if (row === null) throw new Error("The narrow chrome renders no pill row");
+    const clip = row.getBoundingClientRect();
+    const pill = within(canvasElement)
+      .getByRole("button", { name: "Latest" })
+      .getBoundingClientRect();
+
+    expect(pill.top - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.top);
+    expect(pill.bottom + FOCUS_RING_PX).toBeLessThanOrEqual(clip.bottom);
+  },
+};
+
 export const NarrowSortAppliesOnChoose: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement, args, step }) => {
