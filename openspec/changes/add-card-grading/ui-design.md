@@ -53,7 +53,8 @@ the pages carry is the product; this file carries the surface.
 | Submission agreement | `G14` | `/grading/sign#<token>` | `CeremonyFlow` → `PdfPageCanvas`, `SignatureField`, `RefusalNotice`; the template in `packages/grading/backend` |
 | Hand-back receipt | `G15`, `G18` | `/grading/sign#<token>` | the same ceremony with the receipt template |
 | Queue | `GA1` | `admin.grade10.com/grading` | `QueuePanel` → `SectionHeader`, `ChoiceList`, `Choice`, `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `StatusBadge`, `Badge`, `CursorPager`, `Button` |
-| Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered; `/grading/walk-in` for a walk-in, the Walk-in desk | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
+| Walk-in desk | `GA2` | `/grading/walk-in`; once the submission is open, its own address | `WalkInForm` → `Panel`, `TextField`, `ChoiceList`, `Choice`, `MoneyField`, `Notice`, `Button` |
+| Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered, a walk-in's included | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
 | Refuse a card | `GA7` | dialog from the hand-in runbook | `RefuseCardDialog` → `FormDialog`, `ChoiceList`, `Choice`, `NotesField`, `Notice` |
 | Batches | `GA4` | `/grading/batches` | `BatchesPanel`, `ShipBatchForm`, `ReestimateDialog` → `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `CursorPager`, `CheckList`, `Check`, `ChoiceList`, `Choice`, `NotesField`, `TextField`, `DateField`, `MoneyField`, `FormDialog`, `Notice`, `Button` |
 | Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `FilePicker`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
@@ -222,8 +223,12 @@ photograph pair is two `MediaFrame`s. Nothing the console package lacks.
   card, the fee `Panel`, the sign `Panel`, the check-in `Panel`. The
   console has no paste: a walk-in's list is written card by card with the
   collector at the desk, and `GradingPasteSheet` stays the collector's
-  surface alone; `recordHref` is the one press to the record, and
-  `onStarted(id)` reports the submission a walk-in mints
+  surface alone; the runbook always takes a `submissionId`, and `recordHref` is the
+  one press to the record
+- **`WalkInForm`** — the Walk-in desk's own form: the collector's email,
+  name and phone, the grader, the level, the shop and the first card with
+  its declared value, then Open the submission; `onStarted(id)` reports the
+  submission it mints, and the runbook takes the cards from there
 - **`RefuseCardDialog`** — the three reasons, the collector's-words field,
   the consequence `Notice`
 - **`BatchesPanel`**, **`ShipBatchForm`**, **`ReestimateDialog`**,

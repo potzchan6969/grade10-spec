@@ -632,9 +632,11 @@ answering the question it was for.
 - **The editor.** `gradingEdit` (`/grading/submissions/:submissionId/edit`,
   session, `open`) is the same wizard opened on a kept plan, carrying `#t=` as
   the submission page does. It reads `submissions.detail` on that access, maps
-  each card to a `PlanCard` and asks the reference again for every
-  `referenceProductId`, so the upcharge warning and the matched and
-  kept-as-typed marks come back; it saves through `submissions.update` with
+  each card to a `PlanCard` and asks the reference again by the card's name,
+  keeping a sale only where it answers the card's own `referenceProductId`,
+  so the upcharge warning and the matched and kept-as-typed marks come back;
+  a name the reference now reads as another product loses its warning,
+  logged, until a read of sales by product id lands. It saves through `submissions.update` with
   the `updatedAt` it read — the same submission, never a second plan — at
   `planned` and `booked`. The editor never books: it keeps `GradingReview` for
   the totals and the warning with `onBook` and `onConsent` left out, and Save
@@ -662,10 +664,10 @@ answering the question it was for.
   `gradingBatches`, `gradingBatch` and `gradingSettings` gain `gradingWalkIn`
   (`/grading/walk-in`), gated on `ADMIN_PERMISSIONS["admin.savePlan"]` and
   reached from a fourth `GradingDesks` entry, Queue · Walk-in · Batches ·
-  Settings, shown only with that grant. It renders `IntakeRunbook` with no
-  submission; the runbook calls `onStarted(id)` once it mints the submission,
-  and the app replaces the address with the bare submission address, so a
-  reload keeps it. The submission address opens the runbook the counter acts
+  Settings, shown only with that grant. It renders `WalkInForm`, the walk-in's
+  own form, which calls `onStarted(id)` once it mints the submission, and the
+  app replaces the address with the bare submission address, so a reload
+  keeps it. `IntakeRunbook` always takes a `submissionId` and a `recordHref`. The submission address opens the runbook the counter acts
   offer — `COUNTER_ACTS.handIn` the hand-in, `COUNTER_ACTS.collect` the
   hand-back — and the record otherwise; `?view=record` opens the record, and
   without it the acts decide. Each runbook's `recordHref` and the panel's
@@ -758,8 +760,9 @@ answering the question it was for.
   agreement packet, the batch row and its manifest lines, and the anchors
   (`created_at`, `appointment_at`, `ready_at`) in the past, so no spec moves a
   clock under another; a repeat answers the same submission.
-  `POST /dev/settings` seeds the unset money keys and the fee sheet once at
-  stack start, called by the global setup and never by a spec.
+  `/dev/setup`'s `seed` seeds the unset money keys and the fee sheet where
+  nothing stands, as inventory's does, so `pnpm dev` and the e2e stack open on
+  the same settings; no spec and no global setup seeds them.
   `POST /dev/sweep { lane }` runs a pass now. `GET /dev/outbox` is the shared
   dev outbox in `@grade10/worker`; a grading entry carries the kind, the
   attachment names and the collector's access link. `start-isolated.sh` gains
@@ -792,7 +795,7 @@ stage read off PSA's order page can never sit on a CGC or BGS batch.
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
 | `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
 | `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
-| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by `plan` (the keep), `book` or `join` given `consented: true`, each in its own commit; the review's Book sends it on the keep; they refuse `CONSENT_REQUIRED` only when neither it nor the input carries the tick |
+| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by `plan` or `update` (the keep), `book` or `join` given `consented: true`, each in its own commit, through `tickOf`, its one writer; the review's Book sends it on either keep; they refuse `CONSENT_REQUIRED` only when neither it nor the input carries the tick |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
 | `batch_id` | `text FK batches` | set at `handIn` |
@@ -992,7 +995,7 @@ receipt, the sealed agreement and the re-minted access link.
 
 | Surface | Change |
 | --- | --- |
-| grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed); `plan`, `book` and `join` take an optional `consented: true`, written on the plan in their own commit |
+| grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed); `plan`, `update`, `book` and `join` take an optional `consented: true`, written on the plan by one writer in their own commit |
 | admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
@@ -1010,15 +1013,17 @@ an optional `staff: StaffAct` and writes `recordStaffAct` inside its own
 transaction, as the plan's keep does, so the cancel and its audit entry are one
 commit; the drop-off goes with it.
 
-- **One window, one predicate** — `cancellable(status, visit, list, at)` in
-  the contracts: `SUBMISSION_MOVES.cancel.from`, the visit's start time not
-  come (`visitStarted`, the slot instant, never the runbook's Start at the
-  desk), and the list not the counter's (`counterOwnsList`). It guards the
+- **One window, one predicate** — `cancellable(visit, list, at)` in the
+  contracts is the window alone: the visit's start time not come
+  (`visitStarted`, the slot instant, never the runbook's Start at the desk),
+  and the list not the counter's (`counterOwnsList`). The status stays with
+  the act tables, as for every other act: `COLLECTOR_ACTS.cancel` and
+  `COUNTER_ACTS.cancel`, both `SUBMISSION_MOVES.cancel.from`. `cancellable` guards the
   Cancel offer and `cancelSubmission` only; the last card refused cancels
-  inside `refuseCard` and never reads it. The collector's
-  `OFFERED.cancel`, the console's offer (`COUNTER_ACTS.cancel` for the
-  status, `cancellable` for the rest) and `cancelSubmission`'s refusal all
-  read it, as `withdrawable` is shared; the worker refuses `VISIT_STARTED` or
+  inside `refuseCard` and never reads it. The collector's `OFFERED.cancel`,
+  the console's offer and `cancelSubmission`'s refusal each read the act
+  table for the status and `cancellable` for the window, once each, as
+  `withdrawable` is shared; the worker refuses `VISIT_STARTED` or
   `LIST_AT_COUNTER` by name. From then the desk's way out is refusing the
   cards, and `startedEarly` no longer lets a collector cancel a card paid
   before the slot

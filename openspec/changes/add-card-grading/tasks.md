@@ -576,7 +576,8 @@ Stage (b).
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 - [ ] 11.10 Keep the plan's tick, its test red first: `submissions.consented_at`
       in a migration `pnpm run db:drizzle:generate` writes, set by
-      `submissions.plan` given an optional `consented: true`, left null by a
+      `submissions.plan` and `submissions.update` given an optional
+      `consented: true`, through `tickOf`, its one writer, left null by a
       plan saved unticked and never cleared, and
       `CONSENT_REQUIRED` added to
       `GRADING_FAILURE_CODES` for 12.12 to raise; then run 11.9's checks and
@@ -680,10 +681,10 @@ Stage (b).
       letters (`grade10-site-grading-dropoff-booking-US1-TC1-1`)
 - [x] 12.10 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 12.11 Write `cancellable(status, visit, list, at)` in the contracts,
-      its test red first — `SUBMISSION_MOVES.cancel.from`, the visit not
-      started and the list not the counter's — and read it in the collector's
-      `OFFERED.cancel` and in `cancelSubmission`, which refuses
+- [ ] 12.11 Write `cancellable(visit, list, at)` in the contracts, its test
+      red first — the window alone, the visit not started and the list not
+      the counter's, the status left to the act tables — and read it in the
+      collector's `OFFERED.cancel` and in `cancelSubmission`, which refuses
       `VISIT_STARTED` or `LIST_AT_COUNTER` by name, as `withdrawable` is
       shared; then run 12.10's checks
       (`grade10-site-grading-submission-lifecycle-SC-61`)
@@ -1787,8 +1788,8 @@ its globs over `packages/*/frontend/src/**` and
       access token, so a signed-out collector's page answers not found; ruled
       after group 31's audit, one `onKept(plan)` carrying the `KeptPlan`
       replaces both, and the page it opens lands on the picker, 27.7's; the
-      review's Book sends `consented: true` on the keep, so a plan kept
-      ticked is asked nothing more; needs 11.10
+      review's Book sends `consented: true` on either keep, `plan` or
+      `update`, so a plan kept ticked is asked nothing more; needs 11.10
       (`grade10-site-grading-submission-lifecycle-SC-60`,
       `grade10-site-grading-submission-plan-SC-62`)
 - [x] 25.8 Write the stories for `Grading/Home`, `Grading/Plan/PlanWizard` and
@@ -1798,8 +1799,9 @@ its globs over `packages/*/frontend/src/**` and
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 - [ ] 25.10 Open the wizard on a kept plan, its test red first:
       `usePlanWizard` reading `submissions.detail` on the `#t=` access, each
-      card mapped to a `PlanCard` and its reference asked again for every
-      `referenceProductId`, and saving through `submissions.update` with the
+      card mapped to a `PlanCard` and its reference asked again by the card's
+      name, a sale kept only for the card's own `referenceProductId`, and
+      saving through `submissions.update` with the
       `updatedAt` it read, the same submission and never a second plan at
       `planned` and `booked`; the editor never books, keeping `GradingReview`
       with `onBook` and `onConsent` left out and Save changes its save's
@@ -2076,14 +2078,16 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 - [x] 29.7 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
-- [ ] 29.8 Start a walk-in at the desk in `IntakeRunbook`: a submission opened
-      with the collector there, its cards added one at a time, and handed in
-      from the same runbook with the fee sheet pinned at the hand-in
-      (`grade10-admin-grading-counter-SC-15`)
+- [ ] 29.8 Start a walk-in at the desk in `WalkInForm`, the walk-in's own
+      form: a submission opened with the collector there, then its cards
+      added one at a time and handed in from its `IntakeRunbook` with the fee
+      sheet pinned at the hand-in (`grade10-admin-grading-counter-SC-15`)
       Reopened: the runbook reports no submission it mints, so a reload loses
       the walk-in; ruled after group 31's audit, it calls `onStarted(id)` once
       it mints one, and the address is the id's one owner: `onStarted(id)`
-      replaces `setStartedId`, and `startedId` goes
+      replaces `setStartedId`, and `startedId` goes; ruled after the group 31
+      amendment's audit, `WalkInPage` renders `WalkInForm`, which calls
+      `onStarted(id)`, and `IntakeRunbook` always takes a `submissionId`
 - [ ] 29.9 Give `IntakeRunbook` and `HandbackRunbook` a `recordHref`, the one
       press to the record, its test red first; 31.5 routes it
 
@@ -2249,8 +2253,10 @@ Both walks drive these routes, so it lands with stage (b).
       and cover lines, a dev-sealed agreement packet, the batch row and its
       manifest lines, and `created_at`, `appointment_at` and `ready_at` in the
       past; a repeat answers the same submission
-- [ ] 32.3 Add `POST /dev/settings`, seeding the unset money keys and the fee
-      sheet once at stack start, called by the global setup and never by a spec
+- [ ] 32.3 Seed the unset money keys and the fee sheet in `/dev/setup`'s
+      `seed` where nothing stands, as inventory's does, so `pnpm dev` and the
+      e2e stack open on the same settings; no spec and no global setup seeds
+      them
 - [ ] 32.4 Add `POST /dev/sweep { lane }` running a pass now, and
       `GET /dev/outbox` over the shared dev outbox in `@grade10/worker`, a
       grading entry carrying the kind, the attachment names and the collector's
