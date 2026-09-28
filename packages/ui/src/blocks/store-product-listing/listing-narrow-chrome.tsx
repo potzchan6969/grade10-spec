@@ -145,8 +145,10 @@ function ListingNarrowChrome({
           {resultCount}
         </p>
 
+        {/* A sideways scroller clips vertically too: `py-1` keeps the pills'
+            focus rings inside it, `-my-1` keeps the row where it was. */}
         <div
-          className="-mx-8 overflow-x-auto overscroll-x-contain"
+          className="-mx-8 -my-1 overflow-x-auto overscroll-x-contain py-1"
           data-slot="listing-narrow-chrome-pills"
         >
           <HStack

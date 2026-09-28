@@ -42,6 +42,13 @@ mark each one `stands` or `falls` and say why in the same table.
 - **What the smaller shape costs** — say it plainly; a finding that hides the
   cost is not a claim
 
+## On a Bug
+
+Dispatched as `simpler` on both of a bug's rounds, [Bug Fixes](../../docs/governance/bug-fixes.md)'s diagnosis and fix. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **A smaller fix** - one change at the root that does the same, or a fix that reaches past its cause
+- **A widened fix** - a sibling fixed here that has its own root cause belongs in its own report
+
 ## Your Stance
 
 Read [the eight principles and the reader's

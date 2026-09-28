@@ -33,6 +33,8 @@ const agents = new Set(
   [
     ...schema.artifacts.flatMap(({ perspectives }) => perspectives),
     ...schema.apply,
+    ...schema.bug.diagnosis,
+    ...schema.bug.fix,
   ].map(({ agent }) => agent),
 );
 

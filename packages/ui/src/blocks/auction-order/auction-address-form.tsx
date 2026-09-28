@@ -214,8 +214,10 @@ function AuctionAddressForm({
           </SegmentedControl>
         </div>
 
+        {/* The fields scroll, so they clip at their own edge: `p-1` keeps a
+            focus ring's room inside it, `-m-1` keeps the column. */}
         <div
-          className="scroll-fade flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain"
+          className="scroll-fade -m-1 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-1"
           data-slot="auction-address-fields"
         >
           <div className="grid gap-3 sm:grid-cols-2">
