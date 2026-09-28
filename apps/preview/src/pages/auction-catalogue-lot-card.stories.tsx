@@ -10,12 +10,12 @@ import {
 } from "./auction-catalogue-content";
 
 /**
- * One lot card. The list uses a heading title; Featured uses `lift` and a
- * link title. Site chrome lives on the page story. Lots are from the
- * collection draw.
+ * One lot card on the All auctions grid. The title is a heading. Site chrome
+ * lives on the page story. The scrolling-row featured card (lift, link title)
+ * lives under Featured Auctions/Archived. Lots are from the collection draw.
  */
 const meta = {
-  title: "Auction List/Lot Card",
+  title: "Auction List/All Auctions/Lot Card",
   component: AuctionLotCard,
   parameters: { layout: "padded" },
   decorators: [
@@ -40,21 +40,11 @@ const upcomingLot = {
 };
 const endedLot = ENDED_ONLY_LOTS[0];
 
-function WatchedCard({
-  lot,
-  heading = true,
-  lift,
-}: {
-  lot: CatalogueLot;
-  heading?: boolean;
-  lift?: boolean;
-}) {
+function WatchedCard({ lot }: { lot: CatalogueLot }) {
   const [watched, setWatched] = useState(false);
   return (
     <AuctionLotCard
-      eager={lift}
-      heading={heading}
-      lift={lift}
+      heading
       lot={lot}
       onToggle={() => setWatched((value) => !value)}
       watched={watched}
@@ -71,7 +61,7 @@ const cardArgs = {
 
 /** A live lot on the list. The title is a heading, and watch is on the card. */
 export const Active: Story = {
-  name: "An active lot",
+  name: "Active",
   args: cardArgs,
   render: () => <WatchedCard lot={activeLot} />,
   play: async ({ canvasElement }) => {
@@ -97,41 +87,16 @@ export const Active: Story = {
   },
 };
 
-/**
- * One card as Featured renders it — white shell, title stays a link (the
- * section already heads the band). The scrolling row lives under Featured.
- */
-export const Featured: Story = {
-  name: "A featured lot",
-  args: { ...cardArgs, heading: false, lift: true },
-  render: () => <WatchedCard heading={false} lift lot={activeLot} />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Current Bid")).toBeInTheDocument();
-    expect(canvas.getByText(`${activeLot.bidCount} bids`)).toBeInTheDocument();
-    expect(canvas.getByText(/Ends in \d+d \d+h \d+m/)).toBeInTheDocument();
-    expect(canvas.queryByRole("heading", { level: 3 })).toBeNull();
-    expect(
-      canvas.getByRole("link", { name: activeLot.title }),
-    ).toBeInTheDocument();
-    const watch = canvas.getByRole("button", {
-      name: `Watch ${activeLot.title}`,
-    });
-    await userEvent.click(watch);
-    expect(
-      canvas.getByRole("button", { name: `Unwatch ${activeLot.title}` }),
-    ).toBeInTheDocument();
-  },
-};
-
 /** A lot that has not opened. Watch is still there. */
 export const Upcoming: Story = {
-  name: "An upcoming lot",
+  name: "Upcoming",
   args: { ...cardArgs, lot: upcomingLot },
   render: () => <WatchedCard lot={upcomingLot} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Starting bid")).toBeInTheDocument();
+    expect(canvas.queryByText("Starting bid")).toBeNull();
+    expect(canvas.queryByText("Current Bid")).toBeNull();
+    expect(canvas.queryByText(upcomingLot.bidLabel)).toBeNull();
     expect(canvas.getByText(/Opens in \d+d \d+h \d+m/)).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: `Watch ${upcomingLot.title}` }),
@@ -141,7 +106,7 @@ export const Upcoming: Story = {
 
 /** A closed lot. The card keeps the result and drops watch. */
 export const Ended: Story = {
-  name: "A closed lot",
+  name: "Closed",
   args: { ...cardArgs, lot: endedLot },
   render: () => <WatchedCard lot={endedLot} />,
   play: async ({ canvasElement }) => {
