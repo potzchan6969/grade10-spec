@@ -516,6 +516,53 @@
 
 ---
 
+### grade10-admin-grading-batches-US1-TC16-1: The batches list puts what waits on the shop first and pages the received batches behind it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on <grade10 admin batches url>.
+* The batches listed under **Test data** stand at the shop, and no other.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch_1> | back from the grader, unchecked |
+| <batch_2> | closed, shipping today |
+| <batch_3> | with the grader, past its estimate |
+| <batch_4> | with the grader, due back in 1 week |
+| <batch_5> | with the grader, due back in 3 weeks |
+| <batch_6> | open, before its cut-off |
+| <batch_7> | closed, holding no submission handed in |
+| Received batches | 60 |
+
+**Steps:**
+
+1. Read the batches panel.
+2. Page forward once.
+
+**Expected Results:**
+
+* Both pages list <batch_1>, <batch_2>, <batch_3>, <batch_4>, <batch_5> and <batch_6> first, in that order.
+* Behind them the 60 received batches and <batch_7> follow newest first: 50 on the first page and 11 on the second, none twice and none missing.
+* The second page offers no further page.
+* <batch_7> offers no Ship.
+
+---
+
 ## grade10-admin-grading-batches-US2: Operator receives a batch against the grader's manifest
 
 **As a** member of shop staff opening a returned box,
@@ -1027,6 +1074,79 @@
 
 ---
 
+### grade10-admin-grading-batches-US2-TC17-1: Arrived is withheld while a submission in the batch is not yet graded
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-02
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on <grade10 admin batches url>.
+* <a batch shipped to the grader> holds two submissions: one at Grades are in, and one the grader has not yet graded.
+
+**Steps:**
+
+1. Read the batch's row on the batches panel.
+2. Send the batch's arrival to the worker directly, as a stale console would.
+
+**Expected Results:**
+
+* Step 1: the row offers no Arrived.
+* Step 2: the arrival is refused, naming the submission not yet graded.
+* Nothing is written: the batch still reads Shipped, and both submissions keep their status.
+
+---
+
+### grade10-admin-grading-batches-US2-TC18-1: A slab the manifest leaves out is added as the grader's omission and then scanned
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-02
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* <a card> travelled in the batch, no manifest line names it, and its slab is in the box.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Cert | <the slab's cert> |
+| Grade | <the slab's grade> |
+
+**Steps:**
+
+1. Under the scan table, add a manifest line for <a card> with the cert and the grade.
+2. Scan the cert.
+
+**Expected Results:**
+
+* Step 1: the new line stands as the grader's omission.
+* Step 2: the cert and the grade stand on <a card>, and its line reads scanned.
+* <a card> no longer holds Finish receiving.
+
+---
+
 ## grade10-admin-grading-batches-US3: Operator records what did not come back as drawn
 
 **As a** member of shop staff finishing a batch,
@@ -1185,6 +1305,40 @@
 **Expected Results:**
 
 * The record is refused, naming the missing expected date.
+
+---
+
+### grade10-admin-grading-batches-US3-TC6-1: A card no manifest line names holds Finish until it is recorded
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-03
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is finishing receiving <a batch back from the grader, unchecked>.
+* The manifest names every card that travelled in the batch but <a card>, and every named card is scanned.
+* <a card> is not in the box.
+
+**Steps:**
+
+1. Attempt Finish receiving.
+2. Record <a card> as not returned.
+3. Attempt Finish receiving again.
+
+**Expected Results:**
+
+* Step 1: Finish is refused, naming <a card>, and no submission moves.
+* Step 3: every submission in the batch reads Ready to collect.
 
 ---
 
@@ -1715,6 +1869,10 @@
 | `grade10-admin-grading-batches-SC-22` | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
 | `grade10-admin-grading-batches-SC-50` | Case added | `grade10-admin-grading-batches-US4-TC9-1` - the due-back badge stands from the estimated day, gives way to running late the day after, and stands no longer once the batch is received |
 | `grade10-admin-grading-batches-SC-51` | Case added | `grade10-admin-grading-batches-US2-TC16-1` - an unmatched line resolved by naming the card it meant, a second closed as the grader's error with a reason, and neither holding the finish |
+| `grade10-admin-grading-batches-SC-52` | Case added, added after the run | `grade10-admin-grading-batches-US2-TC17-1`: decided outside the blind pass, from the worker refusing an arrival while a submission is not yet graded; the row offers no Arrived, and one sent anyway is refused by name |
+| `grade10-admin-grading-batches-SC-53` | Case added, added after the run | `grade10-admin-grading-batches-US3-TC6-1`: decided outside the blind pass, from the worker holding the finish on a travelled card no manifest line names |
+| `grade10-admin-grading-batches-SC-54` | Case added, added after the run | `grade10-admin-grading-batches-US2-TC18-1`: decided outside the blind pass, and Operations' open ❓ on the console page; a slab no line names is added to the manifest as the grader's omission, then scanned |
+| `grade10-admin-grading-batches-SC-55` | Case added, added after the run | `grade10-admin-grading-batches-US1-TC16-1`: decided outside the blind pass, and Product's open ❓ on the console page; every batch not yet received on each page in that order, the rest paged newest first |
 | `grade10-admin-grading-batches-SC-14`, `grade10-admin-grading-batches-SC-33`, `grade10-admin-grading-batches-SC-42` | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
 
 ### Manual

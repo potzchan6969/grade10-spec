@@ -805,6 +805,15 @@ created on first use by `handIn`, `ON CONFLICT DO NOTHING … RETURNING`.
 unmatched), `resolved_by`, `resolved_at`; PK `(batch_id, line_no)`; an
 unmatched line holds `finishReceiving`.
 
+`batch_readings`: `id` identity, `batch_id FK`, `kind CHECK (stage,
+estimate)`, `stage` on a stage, `estimate_at` on an estimate, `words` (the
+grader's words or the reason), `recorded_by`, `at`; index `(batch_id, id)`.
+Append-only, with `words` the one column erasure may rewrite, as migration
+0011 lists it: the words are keyed by batch rather than by person, so nothing
+here is erased by default, and a reason that ever names somebody is put right
+by one UPDATE. A stage's words and a new day back are read from here, and each
+event names its reading.
+
 ### Settings, money, records
 
 | Table | Columns | Guard |
@@ -880,7 +889,9 @@ events, distinct by kind and instant).
 | `shipBatch(db, mail, args)` | batch, courier, tracking, order number, insured, cover | `shipped` | refuses `OVER_COVER`, `CURRENCY_MISMATCH`, `BATCH_CONFLICT`; one transaction: the batch, `markShipped` per submission in id order, events; letters after |
 | `recordBatchStage(db, mail, args)` | batch, stage | the batch, and `graded` on the move stage | under `lockBatch`; a repeat of the same stage is a no-op; letters after commit |
 | `reestimateBatch(db, mail, args)` | batch, date, reason | the batch | one transaction, one event per submission; a repeat of the same date is a no-op; letters after |
-| `receiveBatch(db, args)` | batch, manifest, invoice | `returned` | one transaction; `receive` per submission |
+| `openBatchFor(tx, args)` | shop, grader, level, instant | the trio's open batch, and whether this call inserted it; refuses `BATCH_CONFLICT` where the batch at that cut-off shipped while the call waited on it | the one way a batch is opened, `handIn` and `admin.openBatch` alike; the cut-off setting share-locked; the standing open batch answered, else inserted `ON CONFLICT DO NOTHING` and read back |
+| `receiveBatch(db, args)` | batch | `returned` | under `lockBatch`; refuses `BATCH_CONFLICT` on a batch not shipped and `BATCH_NOT_GRADED` while any submission in it stands at `sent`, naming them; `received_at` stamped and `receive` per submission, one event each; a repeat writes nothing; the manifest, the invoice and the scans wait on it |
+| `addManifestLine(tx, args)` | batch, card, the line's fields | the line | under `lockBatch`, the manifest entered; the card read by `batchCard` over the travelled cards; refuses `NOT_IN_BATCH`, `LINE_RESOLVED` where a line already reads the card, `MANIFEST_DUPLICATE` on a cert a line carries; the line written at the next line number with the card named, stamped resolved as the grader's omission, so it reads unscanned until the cert scans |
 | `scanCard(tx, args)` | batch, cert, intake id | the card | `CERT_HELD_ELSEWHERE` read under the lock before the insert; sets the exception, grade, cert and `moved_to_level` |
 | `finishReceiving(db, mail, args)` | batch | `ready` for every submission | refuses `MANIFEST_UNRESOLVED`; each code drawn in its own savepoint; one transaction; letters after |
 | `recordPayout(db, args)` | card, route, reference, approver | the record | refuses `SAME_APPROVER`, `PAYOUT_EXISTS` on the netted read under the lock; the refund line beside it |
@@ -895,7 +906,12 @@ events, distinct by kind and instant).
 | `eraseUser(db, clock, subject, timeZone)` | `{userId, email}` | holds, or what was purged or held | each submission decided under its own lock; the vault's shape without the identity release |
 
 Every `BALANCE_DUE` carries the figure due and the positions of the cards
-that owe it (`owing`), whichever act refuses it.
+that owe it (`owing`), whichever act refuses it. Every `SETTING_UNSET` and
+`SETTING_MALFORMED` carries what it names in one details shape, `{ keys:
+string[], feeSheetRow?: { grader, level, field } }`, never only in its
+message, which production strips, as a form refusal carries `fields`: one key
+for a setting, `["fee_sheet"]` with the row for a fee-sheet figure, and every
+key the terms cannot pin for the ladder.
 
 Every guard reads under the submission's lock inside the transition's
 transaction; a binding is called before any transaction opens, and its
@@ -923,7 +939,7 @@ receipt, the sealed agreement and the re-minted access link.
 | Surface | Change |
 | --- | --- |
 | grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed) |
-| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,detail,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,withdrawCard,recordRefund,shipBatch,recordBatchStage,reestimateBatch,enterManifest,enterInvoice,scanCard,recordException,finishReceiving,recordSettlement,tickItem,mintHandBack,collect,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,pendingApprovals,approveRequest,resendNotification,documents,signingLink}`, `erasure.erase`, `audit.*` |
+| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
 | `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.{matchCards,referenceSales}`; `GradingInventoryService` |
@@ -932,6 +948,73 @@ receipt, the sealed agreement and the re-minted access link.
 | `@grade10/doc-sign-frontend` | **BREAKING** `createDocSignCoreModule({ ceremonyClients })`; `CeremonyFlow` takes `host` at mount |
 | `@grade10/app-env` | `ServiceId` and `BRAND_SERVICES.grade10` gain `grading`; `RETENTION_CLASSES` gains `case_records`; `consentCopy(brand)`, the e-sign wording the vault and grading both serve, lifted from the vault |
 | `@grade10/auth-contracts` | `grading:read`, `grading:operate`, `grading:approve` |
+
+### The Batches, Receiving and Notice Procedures
+
+What the console's batches, receiving and notice screens call beyond the
+reads group 24 names. Every answer is a type in `@grade10/grading-contracts`,
+and the worker's router is annotated with it.
+
+| Procedure | Input | Answers or refuses | Grant | Reads |
+| --- | --- | --- | --- | --- |
+| `admin.batches` | `{ limit?, cursor? }`, `limit` bounded as `queueInputSchema` bounds it, 50 by default | `BatchPage { asOf, unfinished, rows, nextCursor }`: `unfinished` is every batch not yet received, whole, on every answer; `rows` pages the rest; a `BatchRow` is the id, `batchName`, `cutoffAt`, `batchStanding`, `shipsToday`, `gradesIn`, the cards and the submissions still in it, the ship date, courier, tracking and estimate, the last stage reading typed as `SubmissionBatch.stage`, `receivedAt` and `finishedAt` | `grading:read` | `batches`; the counts in one `GROUP BY batch_id` over the members; the last `stage` reading per batch in one `DISTINCT ON (batch_id)` over `batch_readings`; both bound to the answer's batch ids, never one read per row |
+| `admin.openBatch` | `{ locationId, grader, level }`, `grader` the contracts' grader schema | `{ batchId, written }`, `BatchWriteAnswer.written`, false where the trio's open batch already stood and is answered; refuses `LEVEL_NOT_OFFERED` by `offeredLevel` over the grader's live sheet, and `BATCH_CONFLICT` | `grading:operate` | `openBatchFor`, in its own transaction; the audit row under the batch only when `written` |
+| `admin.receiveBatch` | `{ batchId }` | `{ batchId, receivedAt, written, submissionIds }`; refuses `BATCH_CONFLICT` and `BATCH_NOT_GRADED`, as `receiveBatch` does | `grading:operate` | `receiveBatch`; the row offers it only where `gradesIn` |
+| `admin.receiving` | `{ batchId }` | `ReceivingRead`, below | `grading:read` | `batches`, `batch_manifest_lines`, the travelled cards with their submissions, `lastReadingOf(batch, "stage")` |
+| `admin.addManifestLine` | `{ batchId, cardId, cert, grade?, graderCode?, note?, levelCharged }` | `{ batchId, lineNo }`; refuses as `addManifestLine` does | `grading:operate` | `addManifestLine`; filed under the batch, as `admin.resolveManifestLine` is |
+| `admin.noticeForm` | `{ submissionId }` | `{ postalAddress }`; refuses `NOTICE_NOT_DUE` with `noticeDay` unless the notice is due | `grading:operate`, not `read`: the address is personal data, so only a holder who may post the notice reads it, and only while it is due; `SubmissionDetail` never carries it | `submissions.postal_address` as the agreement took it; declares `auditDetails` and `auditSubject`, the submission, so every read is on the chain |
+
+- **The list** — `unfinished` is every batch with `finished_at` null except
+  one closed with nothing to ship: `ship_date` null, cut-off passed, no
+  member at `checked_in`. A shipped batch also counts no member at
+  `checked_in`, so the null ship date is what tells the two apart. It is
+  sorted in contracts in the order the batches spec gives, `id` last. The
+  rest — received, and closed with nothing to ship — pages on
+  `(coalesce(finished_at, cutoff_at), id)` descending under a sort tag of
+  its own beside `queueCursorSort`, so a queue cursor is refused here, minted
+  and resumed as `keysetPage` does for the queue; the extra row read says
+  whether more remain, and no count is read.
+  A closed batch with nothing to ship offers no Ship
+- **One snapshot** — every read of an answer runs in one `repeatable read`,
+  `read only` transaction, as `listQueue` does; the member status sets the
+  counts read are named constants beside `WITH_THE_GRADER`
+- **`gradesIn`** — true where no member stands at `sent`: `receiveBatch`'s
+  own `BATCH_NOT_GRADED` rule, never the stage order. Until it holds, the
+  row names the grader's `GRADER_STAGE_GRADES_IN` stage in place of Arrived
+- **`shipsToday`** — the predicate `BatchTiles.shipsToday` counts by, one
+  function in contracts, so the row and the tile never disagree
+- **`ReceivingRead.batch`** — the list's `BatchRow` plus `manifestEnteredAt`
+  and the invoice as entered, built by the one function that builds the row.
+  The header's grader line is the row's last stage reading, its instant
+  labelled as the day it was recorded
+- **Each line** — its fields as the grader wrote them, its card resolved by
+  `lineCardOrNull`'s rule — the card staff named, else the batch's card
+  carrying the line's intake id — from the travelled cards the read already
+  loads, never one query per line; `batchCard` takes the same travelled
+  predicate, so manifest entry, resolve, scan and this read agree. `state`
+  from `manifestLineState` in contracts replaces `matched` and `scanned`. A
+  line's card carries its id, intake id, submission id and reference,
+  position, name, declared value, outcome and `heldUntil`, which is what
+  `recordException` and `resolveManifestLine` take
+- **`manifestLineState`** — `unmatched` (no card, not closed), `closed`
+  (resolved with no card, its reason kept), `unscanned` (a card, nothing
+  recorded), `scanned` (resolved onto its card), or the card's `held`,
+  `not_returned` or `damaged`, which wins over the rest
+- **Resolve** — offers the `unlisted` cards with no outcome and no cert, the
+  cards `resolveManifestLine` takes
+- **`unlisted`** — every travelled card no line reaches by card or intake
+  id, with the same card fields: what `finishReceiving` holds on beside the
+  lines. The desk records one held or not returned, or, its slab in the box,
+  adds its line through `admin.addManifestLine`
+- **The counters** — 24.10's, with `matched` counting the lines whose state
+  is `scanned`, `held`, `not_returned` or `damaged`, as `resolvedAt &&
+  cardId` counts them today; `cardsFromSubmissions` is dropped, since
+  `counters.ofCards` carries it
+- **The notice is due** — one predicate in contracts, lifted out of the
+  badge: not posted, and `noticeOpen` on the pinned ladder. The badge,
+  `recordNoticePosted` and `admin.noticeForm` all read it. A due submission
+  with no address, which erasure nulls, fails loudly by name rather than
+  answering an empty one
 
 ## Compatibility
 

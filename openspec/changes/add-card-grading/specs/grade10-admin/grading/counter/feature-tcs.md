@@ -2600,6 +2600,43 @@ Admin(holds `grading:operate`) opens a submission whose posted notice's 30 days 
 
 * No further notice or disposal act is offered; storage keeps accruing and the cards stay in the safe.
 
+### grade10-admin-grading-counter-US12-TC6-1: The notice's address is read only by an operate holder, and only while the notice is due
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-12
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <submission_1> | ready 180 days, the notice due and not posted |
+| <submission_2> | ready 179 days, its notice day tomorrow |
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) is on the Ready view with <submission_1> and <submission_2>; a second operator holds `grading:read` alone.
+
+**Steps:**
+
+1. As the operate holder, open Post the notice on <submission_1>.
+2. As the operate holder, ask for the notice's address on <submission_2>.
+3. As the read holder, ask for the notice's address on <submission_1>.
+
+**Expected Results:**
+
+* Step 1: the dialog shows the postal address taken at signing.
+* Step 2: refused by name, with the day the notice falls due.
+* Step 3: refused by name.
+
 ---
 
 ## grade10-admin-grading-counter-US13: Admin reconstructs one submission's history on the audit chain
@@ -3307,6 +3344,7 @@ Admin(holds `grading:approve`) opens Settings, with the reference rate at 7.84.
 | `grade10-admin-grading-counter-SC-79` | Case added | `grade10-admin-grading-counter-US14-TC7-1` — one verification covering the next act for twelve hours |
 | `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |
 | `grade10-admin-grading-counter-SC-104` | Case added, added after the run | `grade10-admin-grading-counter-US15-TC9-1`: the staff-set reference rate decided outside the blind pass; it prices nothing a collector pays, so one approve holder writes it and nought is refused |
+| `grade10-admin-grading-counter-SC-105` | Case added, added after the run | `grade10-admin-grading-counter-US12-TC6-1`: decided outside the blind pass; the address is personal data, so only a holder who may post the notice reads it, and only while the notice is due |
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
 | `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test in the application repository — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
 

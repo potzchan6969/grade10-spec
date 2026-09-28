@@ -1561,10 +1561,11 @@ Stage (b).
 - [x] 24.4 Add `admin.tiles` — the ready slabs still in the safe against its
       declared cap, what is owed, the batch closing and the batches with
       graders — folded at one instant in the brand's zone; a closed batch with
-      no submission at `checked_in` neither ships nor counts. Add
-      `admin.batchTiles` beside it for the Batches page's own Tiles (GA4)
-      state — the closing batch's cards, submissions and who may still join
-      it today, at its cap the same way
+      no submission at `checked_in` neither ships nor counts; the closing
+      batch's cards, submissions and who may still join it today are
+      `admin.tiles`' own. Add `admin.batchTiles` beside it for the Batches
+      page's Tiles (GA4) state — ship today, with graders and how many past
+      the estimate, back unchecked, and the safe against its cap
       (`grade10-admin-grading-counter-SC-12`,
       `grade10-admin-grading-counter-SC-13`,
       `grade10-admin-grading-counter-SC-87`,
@@ -1997,48 +1998,89 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 
 ## 30. The console's batches, receiving, the notice and the settings (grade10)
 
-Needs group 10's exports and group 25's fixture transport. Stage (c).
+Needs group 10's exports and group 25's fixture transport; types against
+36.1 from the start, and its reads and acts answer once the rest of group 36
+lands. Stage (c).
 
 - [ ] 30.1 Cover the batch and settings screens: the scan counters as the box
       gives cards up, a setting nobody has written marked with the owner who
-      owes it, and a read holder who changes nothing
+      owes it, and a read holder who changes nothing; then the list's rows
+      and Arrived, a new batch, a line resolved and an exception recorded
+      from the receive panel, and the notice dialog printing the address
       (`grade10-admin-grading-batches-SC-29`,
+      `grade10-admin-grading-batches-US2-TC14-1`,
+      `grade10-admin-grading-batches-SC-44`,
+      `grade10-admin-grading-batches-SC-51`,
+      `grade10-admin-grading-batches-SC-34`,
+      `grade10-admin-grading-batches-SC-35`,
+      `grade10-admin-grading-batches-SC-36`,
       `grade10-admin-grading-counter-SC-98`,
-      `grade10-admin-grading-counter-SC-99`)
-- [ ] 30.2 Build `BatchesPanel` and `ShipBatchForm`: the batch list, its Tiles
-      (GA4) state off `admin.batchTiles` — the closing batch's cards,
-      submissions and who may still join it today, at its cap and closed once
-      no submission at it stands `checked_in` — its open, closed and due-back
-      words, the insured total read off the batch's cards and no typed figure
-      taken, and shipping withheld while the batch is open, holds no
+      `grade10-admin-grading-counter-SC-99`,
+      `grade10-admin-grading-counter-SC-105`)
+- [ ] 30.2 Build `BatchesPanel` and `ShipBatchForm`: the batch list off
+      `admin.batches`, a row per state — open, closed and shipping today,
+      closed with nothing to ship, with the grader, past the estimate, back
+      unchecked, received — and empty, every batch not yet received listed
+      in the order the answer gives and the rest behind `CursorPager`; its
+      Tiles (GA4) state off `admin.batchTiles` — ship today, with graders
+      and how many past the estimate, back unchecked, the safe at its cap —
+      the closing batch staying the queue's `admin.tiles`; Arrived on a row
+      with the grader only where the row's `gradesIn` holds, through
+      `admin.receiveBatch`, the row then reading back, unchecked with
+      Receive, and until then the grader's grades-in stage named in its
+      place; the insured total read off the batch's cards and no typed
+      figure taken, and shipping withheld while the batch is open, holds no
       submission at `checked_in`, or a field is missing (`grade10-admin-grading-batches-SC-09`,
       `grade10-admin-grading-batches-SC-49`,
+      `grade10-admin-grading-batches-SC-52`,
+      `grade10-admin-grading-batches-SC-55`,
       `grade10-admin-grading-batches-US1-TC1-1`,
       `grade10-admin-grading-batches-US1-TC3-1`,
       `grade10-admin-grading-batches-US1-TC4-1`,
       `grade10-admin-grading-batches-US1-TC12-1`,
-      `grade10-admin-grading-batches-US1-TC15-1`)
+      `grade10-admin-grading-batches-US1-TC15-1`,
+      `grade10-admin-grading-batches-US2-TC14-1`)
 - [ ] 30.3 Build `NewBatchDialog` and `ReestimateDialog`, the stage recorded
       from the grader's own stages as a `ChoiceList` with one member the move
       to graded and the grader's words in a `NotesField` beside it, never free
-      text; the new batch opens through `openBatchFor`, as the hand-in's does,
+      text; the new batch opens through `admin.openBatch`, the shop from
+      `admin.shops` and only the levels the grader's active sheet carries
+      offered, so it opens through `openBatchFor` as the hand-in's does,
       never a second insert (`grade10-admin-grading-batches-US1-TC7-1`,
       `grade10-admin-grading-batches-US4-TC1-1`,
       `grade10-admin-grading-batches-US4-TC3-1`,
       `grade10-admin-grading-batches-US4-TC4-1`,
       `grade10-admin-grading-batches-US4-TC6-1`)
-- [ ] 30.4 Build `ReceivePanel`: the manifest and invoice entry, the counters
-      reading what the box has given up so far, the scan table, the exceptions
-      `EntryList`, Save and Finish (`grade10-admin-grading-batches-SC-29`)
-- [ ] 30.5 Build `PostNoticeDialog` with the posting date and the tracking,
-      opened from the Notice due rung and recording nothing while either is
+- [ ] 30.4 Build `ReceivePanel`: the header off `admin.receiving`'s batch —
+      the shop named from `admin.shops`, grader · level, the day it went out,
+      the grader's last stage with the day it was recorded, arrived — the
+      manifest and invoice entry, the counters reading what the box has given
+      up so far, the scan table with each line's state, the cards no line
+      names under it, Resolve on an unmatched line through
+      `admin.resolveManifestLine`, Held, Not returned and Damaged on a line's
+      card, Held and Not returned on an unlisted one, through
+      `admin.recordException`, Add to the manifest on an unlisted card whose
+      slab is in the box through `admin.addManifestLine`, the exceptions
+      `EntryList`, Save and Finish
+      (`grade10-admin-grading-batches-SC-29`,
+      `grade10-admin-grading-batches-SC-53`,
+      `grade10-admin-grading-batches-SC-54`,
+      `grade10-admin-grading-batches-US2-TC16-1`,
+      `grade10-admin-grading-batches-US3-TC1-1`,
+      `grade10-admin-grading-batches-US3-TC2-1`,
+      `grade10-admin-grading-batches-US3-TC3-1`)
+- [ ] 30.5 Build `PostNoticeDialog` with the address off `admin.noticeForm`,
+      the posting date and the tracking, opened from the Notice due rung and
+      recording nothing while either is
       missing (`grade10-admin-grading-counter-US12-TC2-1`,
       `grade10-admin-grading-counter-US12-TC3-1`)
 - [ ] 30.6 Build `SettingsPanel`: one `SaveableField` per row, the fee sheet
       and the diary services as their own tables, the second-person dialog on a
       money row, a row nobody has written marked unset with its owner, and
       every field closed to a `grading:read` holder, and the reference rate
-      a single approve holder's row
+      a single approve holder's row; `SETTING_UNSET` and `SETTING_MALFORMED`
+      worded with the setting their `domainDetails` name, as the other
+      refusals read their figures
       (`grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-71`,
       `grade10-admin-grading-counter-SC-98`,
@@ -2215,7 +2257,7 @@ and `ready_at` that stand in for waiting. Stage (c).
 
 ## 35. The manual (grade10-spec)
 
-Lands once groups 1 to 34 are green and the change is deployed.
+Lands once groups 1 to 34 and 36 are green and the change is deployed.
 
 - [ ] 35.1 Take the 🚧 marks off the lines this change delivered on
       `docs/prds/products/grade10-site/grading/index.md`, `planning.md`,
@@ -2232,3 +2274,127 @@ Lands once groups 1 to 34 are green and the change is deployed.
 - [ ] 35.4 Verify: `pnpm check:manual`,
       `pnpm run validate:changes add-card-grading`,
       `pnpm run archive:preflight add-card-grading`
+
+## 36. The batch list, a new batch, the receiving lines and the notice's address (grade10)
+
+The worker's side of group 30, after groups 17 and 24. Its first task lands
+the types group 30 builds against; group 30's reads and acts answer once the
+rest lands. Stage (c).
+
+- [ ] 36.1 Land the contracts first: `BatchPage` and `BatchRow`, the
+      reshaped `ReceivingRead` with the pure `manifestLineState`, the lifted
+      `shipsToday`, the notice-due predicate, and the inputs and answers of
+      `admin.batches`, `admin.openBatch`, `admin.addManifestLine` and
+      `admin.noticeForm`; their entries in `contracts/src/permissions.ts`,
+      and group 25's fixture transport answering each from fixtures, so
+      group 30 types against them while the worker's side is built
+      (`grade10-admin-grading-batches-SC-08`,
+      `grade10-admin-grading-batches-SC-24`,
+      `grade10-admin-grading-batches-SC-51`,
+      `grade10-admin-grading-counter-SC-65`)
+- [ ] 36.2 Cover the worker's side next, before 36.3 to 36.8: the list's row
+      per state, `gradesIn` by `BATCH_NOT_GRADED`'s own rule, every batch
+      not yet received on every answer in the spec's order, a closed batch
+      with nothing to ship among the paged rest and offering no Ship, a page
+      resuming on its cursor with no count read, `shipsToday` agreeing with
+      the tile, and the stages' words in one read inside one snapshot; a
+      batch opened from the console that the trio's first hand-in then
+      joins, a second open answering the standing batch with `written`
+      false and no audit row, a level the live sheet does not offer
+      refused; an arrival refused while a member stands at `sent`; the
+      receiving read naming the batch and its last stage reading, each
+      line's state and card from the travelled cards, `matched` counting
+      scanned, held, not returned and damaged, and the travelled cards no
+      line names; a line added for one of them and its cert then scanned;
+      every `SETTING_UNSET` and `SETTING_MALFORMED` carrying `{ keys,
+      feeSheetRow? }`; and the notice's address read by an operate holder
+      while the notice is due, on the chain, refused before it and below
+      the grant (`grade10-admin-grading-batches-SC-04`,
+      `grade10-admin-grading-batches-SC-05`,
+      `grade10-admin-grading-batches-SC-06`,
+      `grade10-admin-grading-batches-SC-08`,
+      `grade10-admin-grading-batches-SC-17`,
+      `grade10-admin-grading-batches-SC-20`,
+      `grade10-admin-grading-batches-SC-44`,
+      `grade10-admin-grading-batches-SC-45`,
+      `grade10-admin-grading-batches-SC-24`,
+      `grade10-admin-grading-batches-SC-34`,
+      `grade10-admin-grading-batches-SC-51`,
+      `grade10-admin-grading-batches-SC-52`,
+      `grade10-admin-grading-batches-SC-53`,
+      `grade10-admin-grading-batches-SC-54`,
+      `grade10-admin-grading-batches-SC-55`,
+      `grade10-admin-grading-counter-SC-66`,
+      `grade10-admin-grading-counter-SC-69`,
+      `grade10-admin-grading-counter-SC-105`)
+- [ ] 36.3 Add `admin.batches` under `grading:read`, its `limit` bounded as
+      `queueInputSchema` bounds the queue's: `unfinished`, every batch not
+      yet received but those closed with nothing to ship, whole on every
+      answer in the batches spec's order; `rows`, the rest, on
+      `(coalesce(finished_at, cutoff_at), id)` descending under a sort tag
+      of its own; each row's name, standing, `gradesIn` by
+      `BATCH_NOT_GRADED`'s own rule, counts, ship fields, estimate and last
+      stage in its words; every read in one `repeatable read`, `read only`
+      transaction as `listQueue` runs, the `GROUP BY` and `DISTINCT ON`
+      bound to the answer's batch ids and the member status sets named;
+      `shipsToday` read from the contracts by both `admin.batchTiles` and
+      the row; and the comment on `idx_grading_batches_location_id_cutoff_at`
+      (`db/schema/batches.ts`) corrected, since no list reads by it
+      (`grade10-admin-grading-batches-SC-04`,
+      `grade10-admin-grading-batches-SC-05`,
+      `grade10-admin-grading-batches-SC-06`,
+      `grade10-admin-grading-batches-SC-08`,
+      `grade10-admin-grading-batches-SC-17`,
+      `grade10-admin-grading-batches-SC-20`,
+      `grade10-admin-grading-batches-SC-45`,
+      `grade10-admin-grading-batches-SC-52`,
+      `grade10-admin-grading-batches-SC-55`)
+- [ ] 36.4 Add `admin.openBatch` under `grading:operate` over `openBatchFor`
+      in its own transaction: `openBatchFor` reports whether it inserted,
+      and the procedure answers `{ batchId, written }` as
+      `BatchWriteAnswer.written` does, files its audit row under the batch
+      only when written, and lists `BATCH_CONFLICT`; the level checked by
+      `offeredLevel` over the grader's live sheet (`quotes/feeSheet.ts`),
+      refusing `LEVEL_NOT_OFFERED`, and the input's `grader` the contracts'
+      grader schema (`grade10-admin-grading-batches-SC-44`)
+- [ ] 36.5 Widen `admin.receiving`: `ReceivingRead.batch` built by the
+      list's row builder plus `manifestEnteredAt` and the invoice, its last
+      stage reading by `lastReadingOf`; each line's card resolved by
+      `lineCardOrNull`'s rule from the travelled cards the read loads, never
+      one query per line, with its id, intake id and `heldUntil`, and
+      `batchCard` taking the travelled predicate so manifest entry, resolve,
+      scan and the read agree; `state` from `manifestLineState` in place of
+      `matched` and `scanned`, `counters.matched` counting the lines
+      scanned, held, not returned or damaged; `unlisted`, every travelled
+      card no line names; Resolve's picks the unlisted cards with no
+      outcome and no cert; `cardsFromSubmissions` dropped for
+      `counters.ofCards` (`grade10-admin-grading-batches-SC-24`,
+      `grade10-admin-grading-batches-SC-29`,
+      `grade10-admin-grading-batches-SC-34`,
+      `grade10-admin-grading-batches-SC-51`,
+      `grade10-admin-grading-batches-SC-53`)
+- [ ] 36.6 Add `admin.addManifestLine` under `grading:operate` over
+      `addManifestLine`: one line for a travelled card no line names, at the
+      next line number, stamped resolved as the grader's omission and filed
+      under the batch as a resolve is; refusing `NOT_IN_BATCH`,
+      `LINE_RESOLVED` and `MANIFEST_DUPLICATE`; the slab's cert then scans
+      onto it (`grade10-admin-grading-batches-SC-54`)
+- [ ] 36.7 Carry `{ keys, feeSheetRow? }` in the details at every site that
+      throws `SETTING_UNSET` or `SETTING_MALFORMED` — `settings/read.ts`,
+      whose parse every write reuses, the till's fee-sheet row and the
+      terms' ladder at the pin — and move `sweeps/rowError.ts`'s
+      `refusesList` from the message to the details' `keys`, pinned in the
+      same test over them all, so production's stripped message loses
+      nothing the console or a sweep names
+      (`grade10-admin-grading-counter-SC-69`)
+- [ ] 36.8 Add `admin.noticeForm` under `grading:operate`, answering
+      `{ postalAddress }` only, refused `NOTICE_NOT_DUE` unless the notice is
+      due by the predicate lifted out of the badge — not posted, and
+      `noticeOpen` — which the badge and `recordNoticePosted`
+      (`counter/notice.ts`) then read too; `auditDetails` and
+      `auditSubject`, the submission, declared on it; a due submission with
+      no address failing loudly by name; `SubmissionDetail` carrying no
+      address (`grade10-admin-grading-counter-SC-66`,
+      `grade10-admin-grading-counter-SC-105`)
+- [ ] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+      output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`

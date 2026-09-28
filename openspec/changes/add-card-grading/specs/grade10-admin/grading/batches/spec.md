@@ -20,6 +20,8 @@ means to the collector is `grade10-site/grading/submission-lifecycle`.
     leaves the next day
   - The tiles: what ships today, what is with graders, what is back unchecked,
     and what the safe holds
+  - The list: every batch not yet received on each page, what waits on the
+    shop first, and the received ones behind it, newest first
 - Shipping the batch
   - What leaves with it: the packing list of intake ids, the grader's order
     number, and the courier and its tracking
@@ -36,9 +38,13 @@ means to the collector is `grade10-site/grading/submission-lifecycle`.
   - A re-estimate takes a reason: and every collector in the batch is told the
     day it is set
 - Receiving against the manifest
+  - Arrived once the grades are in: the box is recorded back at the shop the
+    day it lands, and only once every submission in it is graded
   - The manifest and the invoice first: no slab is scanned before they are in
   - A line that matches nothing: held as unmatched until staff name the card it
     meant or close it as the grader's error, and finishing waits
+  - A slab the manifest leaves out: its line added as the grader's omission,
+    then scanned
   - A cert belongs to one submission: a scan matching a cert held elsewhere is
     refused by name, so a slab can never be handed to the wrong collector
   - The counters: scanned, matched, ungraded, and the upcharges with their sum
@@ -50,6 +56,8 @@ means to the collector is `grade10-site/grading/submission-lifecycle`.
     cards going on
   - Not returned: recorded on the card, with the payout it owes
   - Damaged: photographed in the box before it leaves it
+  - A card no line names: held or not returned, and finishing waits on it as
+    on a card the manifest names
   - Told the same day: the collector hears either outcome on the day it is
     recorded
 - The upcharge at receiving
@@ -223,6 +231,44 @@ at or above the cap.
 - **THEN** the tiles read 1 shipping today, 2 with graders with 1 past its
   estimate, 1 back and unchecked, and 24000000 HKD minor units against
   30000000 HKD minor units
+
+### Requirement: The batch list puts what waits on the shop first
+
+The batches page is worked from the top, so a batch that owes the shop an act
+comes first and the batches already received page behind it.
+
+**The batches not yet received** - every answer SHALL carry every batch not
+yet received, whole, apart from a closed batch holding no submission handed
+in, in this order:
+
+1. Back and unchecked
+2. Closed with cards to ship - shipping today, or waiting for its ship day
+3. Past its estimate
+4. The rest with the grader, by the day each is due back, soonest first
+5. Open
+
+**Behind them** - the received batches, and each closed batch holding no
+submission handed in, SHALL follow newest first - by the day each was
+received, or by its cut-off where it never shipped - 50 to a page by default,
+on a cursor over what the page stopped reading and never on an offset. Each
+answer SHALL say whether more remain.
+
+**Nothing to ship** - a closed batch holding no submission handed in SHALL
+offer no way to ship it.
+
+#### Scenario: grade10-admin-grading-batches-SC-55 - The list puts what waits on the shop first and pages the rest behind it
+**Serves:** grade10-admin-grading-batches-US-01 - the operator works the morning from the top of the batches page
+
+- **GIVEN** one batch back and unchecked, one closed and shipping today, one
+  past its estimate, two with the grader due back on different days, one
+  open, one closed holding no submission handed in, and 60 received batches
+- **WHEN** the batches are read, and then the next page
+- **THEN** both answers carry the six batches not yet received, in this
+  order: back and unchecked, shipping today, past its estimate, the two with
+  the grader soonest due first, then the open one
+- **AND** the other 61 follow newest first, 50 on the first answer and 11 on
+  the second, none seen twice and none skipped, the second saying no more
+  remain, and the closed batch holding no submission offers no way to ship it
 
 ### Requirement: Shipping a batch is one act over every submission in it
 
@@ -461,6 +507,32 @@ further and SHALL tell nobody again.
 - **WHEN** it is set again
 - **THEN** nothing further is written and no collector is told again
 
+### Requirement: The box is recorded arrived once its grades are in
+
+The day the box lands is the day the batch is received at the shop, which the
+payout window counts from, so it is recorded only once the grader has graded
+every submission in it.
+
+**Recorded arrived** - staff SHALL record the batch arrived back at the shop on
+the day the box lands, and it SHALL then read Back, unchecked.
+
+**Once the grades are in** - recording it SHALL be refused while any
+submission in the batch has not reached Grades are in, naming those
+submissions, and nothing SHALL be written.
+
+**Offered only then** - the act SHALL be offered on the batch only once no
+submission in it is short of Grades are in.
+
+#### Scenario: grade10-admin-grading-batches-SC-52 - The box is not recorded arrived before its grades are in
+**Serves:** grade10-admin-grading-batches-US-02 - the operator records the box the day it lands, once the grader has graded every card in it
+
+- **GIVEN** a batch reading Shipped with two submissions, one at Grades are
+  in and one the grader has not yet graded
+- **WHEN** the batch is read, and its arrival is sent anyway
+- **THEN** the batch offers no way to record it arrived, and the arrival is
+  refused naming the submission not yet graded, nothing is written, and the
+  batch still reads Shipped
+
 ### Requirement: The manifest and the invoice enter before the first scan
 
 What the grader says it is sending back, and what it is charging for, are in
@@ -584,6 +656,36 @@ with the grader's code and its note.
 - **WHEN** that line's card is scanned
 - **THEN** the card is recorded ungraded with the grader's code and its note
 
+### Requirement: A slab the manifest leaves out is added to it
+
+A slab in the box that no manifest line names is put on the manifest before it
+is scanned, so every scan still reads a line and the grader's omission stands
+on the record.
+
+**Adding the line** - staff SHALL add one line to the entered manifest for a
+card that travelled in the batch and that no line names, carrying the fields a
+manifest line carries, and the line SHALL stand as the grader's omission.
+
+**On the record** - adding the line SHALL be filed on the audit chain under
+the batch, as resolving a line is.
+
+**Then scanned** - the slab's cert SHALL then scan onto that card as any
+line's does.
+
+**Refused** - a card that did not travel in the batch, or one a line already
+names, SHALL be refused by name, and nothing entered.
+
+#### Scenario: grade10-admin-grading-batches-SC-54 - A slab the manifest leaves out is added as the grader's omission and scanned
+**Serves:** grade10-admin-grading-batches-US-02 - the operator puts the grader's missing line on the manifest rather than holding the box
+
+- **GIVEN** a batch whose entered manifest names no line for a card that
+  travelled in it, with that card's slab in the box
+- **WHEN** staff add a line for that card with the slab's cert and grade, and
+  then scan the cert
+- **THEN** the line stands as the grader's omission, the cert and the grade
+  stand on that card, the line reads scanned, and the card no longer holds
+  the batch from being finished
+
 ### Requirement: The counters read the batch as it is scanned
 
 What is done and what is left, over the counter, while the box is being worked
@@ -639,8 +741,9 @@ One act closes the box: every collector in the batch hears on the same day and
 nobody is told ready twice.
 
 **Held while anything is open** - finishing SHALL be refused while a manifest
-line is unmatched, or while a card on the manifest is neither scanned nor
-recorded as an exception, naming what holds it.
+line is unmatched, or while any card that travelled in the batch, whether a
+manifest line names it or not, is neither scanned nor recorded as an
+exception, naming what holds it.
 
 **Every submission together** - finishing SHALL move every submission in the
 batch from Back at the shop to Ready to collect in one act, or move none of
@@ -686,14 +789,19 @@ further and SHALL tell nobody again.
 The grader's box is short a slab, and the fact and the money it moves stand on
 that one card while the rest of the batch goes on.
 
-**The outcomes** - a card on the manifest that is not in the box SHALL be
-recorded as one of these:
+**The outcomes** - a card that travelled in the batch and is not in the box,
+whether a manifest line names it or not, SHALL be recorded as one of these:
 
 | Outcome | What is recorded |
 | --- | --- |
 | Held by the grader | the card is kept for a further look, with the date the grader expects to return it |
 | Not returned | the card did not come back, and it owes a payout at its declared value |
 | Damaged | the slab came back damaged, photographed in the box before it leaves it, and it owes a payout at its declared value |
+
+**A card no line names** - a card that no manifest line names SHALL be
+offered held by the grader or not returned only; its slab found in the box is
+added to the manifest first, and then scanned or recorded damaged as any
+line's card is.
 
 **The date is part of the record** - recording a card held by the grader
 without the date it is expected SHALL be refused, naming the date.
@@ -751,6 +859,16 @@ message SHALL name the day the grader holds it until.
 - **THEN** its collector is told on that day, in the message for a card not
   back with the box, and a held card's message names the day the grader holds
   it until
+
+#### Scenario: grade10-admin-grading-batches-SC-53 - A card no manifest line names holds finishing until it is recorded
+**Serves:** grade10-admin-grading-batches-US-03 - the operator cannot close a box with a card the grader never listed left unaccounted for
+
+- **GIVEN** a batch whose manifest names every card that travelled in it but
+  one, every named card scanned, and the one no line names not in the box
+- **WHEN** the operator tries to finish receiving, then records that card not
+  returned and tries again
+- **THEN** the first finish is refused naming that card and no submission
+  moves, and the second makes every submission in the batch ready
 
 ### Requirement: The upcharge is the fee sheet's difference
 

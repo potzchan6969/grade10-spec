@@ -87,6 +87,8 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
     it rather than a sweep sending it
   - Posted and recorded: the address from the agreement, the posting date and
     the tracking, with the email the same day
+  - Who reads the address: only staff who may post the notice, and only while
+    it is due
   - The clock runs from the posting: and nothing further is offered after it
 - The settings
   - Every default is a setting: the clocks, the caps, the thresholds, the fee
@@ -1038,6 +1040,11 @@ no sweep SHALL send it. Recording it before that day SHALL be refused by name.
 together, and SHALL be refused while either is missing. It SHALL be posted to
 the postal address taken at signing.
 
+**Who reads the address** - the postal address SHALL be read only by a holder
+of `grading:operate`, and only while the notice is due: from
+`grading.notice_day` until it is recorded posted. Asked for before then, or by
+a holder of `grading:read` alone, it SHALL be refused by name.
+
 **The email** - the same notice SHALL be emailed to the collector on the day it
 is recorded.
 
@@ -1061,6 +1068,17 @@ on accruing.
 - **GIVEN** the notice posted by registered post to the address on the agreement
 - **WHEN** the operator records it with a posting date and no tracking
 - **THEN** recording is not offered until the tracking is given
+
+#### Scenario: grade10-admin-grading-counter-SC-105 - The address is read by who may post the notice, and only while it is due
+**Serves:** grade10-admin-grading-counter-US-12 - the operator posting the notice reads the address it goes to, and nobody else does
+
+- **GIVEN** a submission whose notice is due, and another whose notice day is
+  tomorrow
+- **WHEN** a holder of `grading:operate` opens the notice on each, and a
+  holder of `grading:read` alone asks for the first one's address
+- **THEN** the first shows the postal address taken at signing, the second is
+  refused by name with the day its notice falls due, and the read holder is
+  refused by name
 
 #### Scenario: grade10-admin-grading-counter-SC-67 - The thirty days run from the posting date
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards

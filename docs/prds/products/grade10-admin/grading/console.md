@@ -66,6 +66,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **One grader, one level** — a batch is what the grader invoices and ships back, so it is what the shop tracks, and
   a card that does not fit waits for the next; its states: open until the cut-off → closed Thursday 19:00, ships the
   next day → with the grader, its stage in its own words → back, unchecked, badged after a day → closed when received
+- 🚧 **New batch** — opened for a grader and a level before their first card, which then joins it rather than a second
 - 🚧 **The ship form** — the packing list, one line per intake id; the grader's order number; insured to the declared
   total against the courier's written cover figure; courier, tracking and the ship date, never in the future; the
   estimate back, the level's counted from the ship day
@@ -78,6 +79,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
 
 ## Receiving
 
+- 🚧 **The box arrives** — recorded the day it lands, once its grades are in: the day the batch is received at the shop,
+  which the payout window counts from; it reads back, unchecked, `graded → returned`; the manifest follows
 - 🚧 **The manifest and the invoice** — enter before the first scan; a line naming no card in the batch holds finishing
   as unmatched until staff name the card it meant or close it as the grader's error, with a reason
 - ❓ **How they enter** — imported as a file, or typed as the morning read is — Operations
@@ -86,12 +89,16 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **Exceptions on the card** — ungraded, with the grader's code and note, the fee standing; an upcharge, the sheet's
   difference between the two levels, the invoice reconciled against it and a gap Commercial's; a slab on the manifest
   not scanned, finished as held by the grader with its expected date or as not returned; damaged, photographed in the box
+- 🚧 **A card no line names** — a card that went out in the batch and that no manifest line names holds finishing, as a
+  card on the manifest does, until it is scanned or recorded held or not returned
+- ❓ **A slab the manifest leaves out** — in the box but on no line: staff add a line for its card to the entered
+  manifest as the grader's omission, filed as a resolved line is, and its cert then scans — Operations
 - ❓ **An ungraded line with no code** — whether a manifest line with no grade must carry the grader's code, or may come
   with neither code nor note, the card then reading ungraded with nothing more — Operations
 - ❓ **A held card coming home** — taken to come back in a later box: its manifest line matches the card held from the
   earlier batch by its intake id, and a second hand-back closes the submission; whether it may also come back on its
   own, outside any batch — Operations
-- 🚧 **Finish receiving** — `graded → returned → ready` for every submission in the batch, each collector emailed the
+- 🚧 **Finish receiving** — `returned → ready` for every submission in the batch, each collector emailed the
   pickup code and what is due, a card held, not returned or damaged the day it is recorded; a batch saved half scanned keeps its scans
 
 ## One Submission
@@ -129,7 +136,10 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 ## Written Notice
 
 - 🚧 **Notice due** — from day 180, posted registered to the agreement's address with its date and tracking; the email
-  goes the same day, the 30 days run from the posting, and after them the cards stay ready as storage accrues
+  goes the same day, the 30 days run from the posting, and after them the cards stay ready as storage accrues; the
+  address shows only in the notice's dialog, to staff who may post the notice, while the notice is due. Whether the
+  agreement also prints the address is Legal's open question on
+  [Documents and Signing](/p/grade10-site/grading/documents#the-submission-agreement)
 
 ## Settings
 
@@ -160,13 +170,13 @@ reaches only submissions not yet booked:
 | Grant | Roles | Opens |
 | --- | --- | --- |
 | 🚧 `grading:read` | staff, admin | the queue, the batches, one submission with its documents and money |
-| 🚧 `grading:operate` | staff, admin | check, refuse, mint, hand in, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
+| 🚧 `grading:operate` | staff, admin | check, refuse, mint, hand in, open a batch, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
 | 🚧 `grading:approve` | staff, admin | a waiver of the upcharge, a payout for a card not returned or damaged, a settings write |
 
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
   and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
 - 🚧 **Second factor and audit** — as the vault's: required in production, and every action filed under its
-  submission on the audit chain — [Operator Console](/p/grade10-site/vault/operator-console#permissions)
+  submission on the audit chain, or under its batch where it acts on the batch — [Operator Console](/p/grade10-site/vault/operator-console#permissions)
 - 🚧 **Staff hear nothing** — no email to staff; the badges, the tiles and the day's strip are the signal
 
 <!-- story: the queue with its tiles, the hand-in runbook, the receive table -->
@@ -214,4 +224,6 @@ reaches only submissions not yet booked:
 | A diary outage during hand-in | ❓ Open | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again. Whether a letter may print from a kept copy of the shop, so the act stands | Operations |
 | An ungraded line with no code | ❓ Open | A manifest line with no grade records the card ungraded, and the code and the note are each taken where the grader gave one; whether a line with neither is refused at entry | Operations |
 | A held card coming home | ❓ Open | Taken to come back in a later box from the grader: receiving matches its manifest line to the card held from an earlier batch by its intake id, records what the grader gave, and a second hand-back closes the submission. Whether it may also come back on its own, outside any batch | Operations |
+| The order of the batches not yet received | ❓ Open | Recommended: what waits on the shop first — back unchecked, ships today, past the estimate — then the rest with the grader by the day each is due back, then the open batches | Product |
+| A slab the manifest leaves out | ❓ Open | Recommended: a staff act adds one line for its card to the entered manifest, filed as the grader's omission and audited the way a resolved line is, and the cert then scans onto it. A scan that skips the manifest, and holding the batch for a corrected manifest, are ruled out | Operations |
 :::
