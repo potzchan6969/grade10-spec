@@ -1,0 +1,60 @@
+name: Bug report
+description: A design-system component, a shared block, a token or a translation does not behave or look as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A bug here is a component, block, token or translation that does not
+        do what the spec, the page or the Figma design already says. If the
+        report asks for something nobody has decided yet, it is a change:
+        start it on the planning line instead. `docs/governance/bug-fixes.md`
+        tells the two apart.
+
+        Once someone confirms it reads as a bug, the `agent-fix` label runs
+        the fix rounds on it and posts each round here.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Storybook: Components/Dialog, Full Width Controls
+        2. Tab to the first button
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where you saw it
+      description: A Storybook story, a preview URL, or the branch and commit you ran.
+      placeholder: "Storybook: Components/Dialog / main @ 6dd7910"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, OS, and window width
+      placeholder: Chrome 141, macOS 15, 390px wide
+    validations:
+      required: true
+  - type: input
+    id: settled
+    attributes:
+      label: What says it should be otherwise
+      description: >-
+        Optional. The spec scenario, the page line or the Figma node that
+        already says the right behaviour. It becomes the name of the test that
+        fixes this.
+      placeholder: "shared-auth-sign-in-SC-12 / Figma 4666:1488"
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshot, recording, or console output
