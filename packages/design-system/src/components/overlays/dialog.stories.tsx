@@ -197,8 +197,23 @@ export const WithoutCloseButton: Story = {
   ),
 };
 
-/** `Button`'s `focus-visible:ring-3`, drawn outside its box. */
-const FOCUS_RING_PX = 3;
+/** How far a focused control paints past its own box: the widest outer
+ * `box-shadow` it computes once its focus transition ends. */
+async function ringOf(control: HTMLElement) {
+  control.focus();
+  await Promise.all(control.getAnimations().map((motion) => motion.finished));
+  const reach = [
+    ...getComputedStyle(control).boxShadow.matchAll(
+      /(-?[\d.]+)px (-?[\d.]+)px ([\d.]+)px (-?[\d.]+)px(?! inset)/g,
+    ),
+  ].map(
+    ([, x, y, blur, spread]) =>
+      Math.max(Math.abs(Number(x)), Math.abs(Number(y))) +
+      Number(blur) +
+      Number(spread),
+  );
+  return Math.max(0, ...reach);
+}
 
 /**
  * Controls flush against the body's edges keep their whole focus ring. The
@@ -237,18 +252,23 @@ export const FullWidthControls: Story = {
       return node.getBoundingClientRect();
     };
     const button = (name: string) =>
-      within(dialog).getByRole("button", { name }).getBoundingClientRect();
+      within(dialog).getByRole("button", { name });
     const clip = slot("dialog-body");
     const column = slot("dialog-header");
-    const top = button("Continue With Google");
-    const bottom = button("Send Link");
+    const first = button("Continue With Google");
+    const last = button("Send Link");
+    const top = first.getBoundingClientRect();
+    const bottom = last.getBoundingClientRect();
+    const ring = await ringOf(first);
 
+    expect(ring).toBeGreaterThan(0);
+    expect(await ringOf(last)).toBe(ring);
     expect(top.left).toBeCloseTo(column.left, 1);
     expect(top.right).toBeCloseTo(column.right, 1);
-    expect(top.top - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.top);
-    expect(top.left - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.left);
-    expect(top.right + FOCUS_RING_PX).toBeLessThanOrEqual(clip.right);
-    expect(bottom.bottom + FOCUS_RING_PX).toBeLessThanOrEqual(clip.bottom);
+    expect(top.top - ring).toBeGreaterThanOrEqual(clip.top);
+    expect(top.left - ring).toBeGreaterThanOrEqual(clip.left);
+    expect(top.right + ring).toBeLessThanOrEqual(clip.right);
+    expect(bottom.bottom + ring).toBeLessThanOrEqual(clip.bottom);
   },
 };
 
