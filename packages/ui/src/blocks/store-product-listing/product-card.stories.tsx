@@ -64,15 +64,29 @@ export const OnSale: Story = {
   },
 };
 
+/** The tile's photo, inside its well. */
+function photo(canvasElement: HTMLElement) {
+  return canvasElement.querySelector(
+    '[data-slot="product-card-image-well"] img',
+  ) as HTMLImageElement;
+}
+
+/** The class that grows the photo on hover, where the well opens. */
+const HOVER_GROW = "group-hover/product-card-image:scale-105";
+
 /** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert where
- * the surface sells. */
+ * the surface sells, address or not: no link, no button, and the dim photo
+ * takes no hover. */
 export const SoldOut: Story = {
-  args: { soldOut: true },
+  args: { soldOut: true, href: "/store/products/abyss-eye-booster-box" },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(copy.soldOut)).toBeVisible();
     expect(canvas.queryAllByRole("button")).toHaveLength(0);
+    expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    expect(photo(canvasElement).className).toContain("opacity-50");
+    expect(photo(canvasElement).className).not.toContain(HOVER_GROW);
   },
 };
 
@@ -307,9 +321,81 @@ export const SoldOutOpensWhereNothingSells: Story = {
     const controls = canvas.getAllByRole("button", { name: defaults.name });
     expect(controls).toHaveLength(2);
     const [photoWell, nameControl] = controls;
+    await userEvent.tab();
+    expect(photoWell).toHaveFocus();
+    expect(photo(canvasElement).className).toContain("opacity-50");
+    expect(photo(canvasElement).className).toContain(HOVER_GROW);
     await userEvent.click(photoWell);
     await userEvent.click(nameControl);
     expect(args.onClick).toHaveBeenCalledTimes(2);
+  },
+};
+
+/** shared-ui-store-product-listing-SC-93: a tile given its product's
+ * address is a link to it, photo and name alike, so it opens before any
+ * script runs, in a new tab, and its address can be copied. A plain press is
+ * still reported and the link gives way to it; a press with a modifier key is
+ * the browser's and reports nothing. */
+export const OpensAsALink: Story = {
+  args: {
+    href: "/store/products/abyss-eye-booster-box",
+    onClick: fn(),
+    onCartQuantityChange: undefined,
+  },
+  decorators: well,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const links = canvas.getAllByRole("link", { name: defaults.name });
+    expect(links).toHaveLength(2);
+    for (const link of links) {
+      expect(link).toHaveAttribute("href", args.href);
+    }
+    expect(canvas.queryAllByRole("button")).toHaveLength(0);
+
+    let prevented: boolean | undefined;
+    /* Runs after the tile's own handler, records what it decided, then stops
+       the story's frame from following the link. */
+    window.addEventListener(
+      "click",
+      (event) => {
+        prevented = event.defaultPrevented;
+        event.preventDefault();
+      },
+      { once: true },
+    );
+    links[1].dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        button: 0,
+        cancelable: true,
+        metaKey: true,
+      }),
+    );
+    expect(prevented).toBe(false);
+    expect(args.onClick).not.toHaveBeenCalled();
+
+    await userEvent.click(links[1]);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** A sold-out tile given its address on a surface that does not sell: both
+ * links open it, and its dim photo takes the hover. */
+export const SoldOutOpensAsALink: Story = {
+  args: {
+    soldOut: true,
+    href: "/store/products/abyss-eye-booster-box",
+    onClick: fn(),
+    onCartQuantityChange: undefined,
+  },
+  decorators: well,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const links = canvas.getAllByRole("link", { name: defaults.name });
+    expect(links).toHaveLength(2);
+    expect(photo(canvasElement).className).toContain(HOVER_GROW);
+    await userEvent.click(links[0]);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };
 

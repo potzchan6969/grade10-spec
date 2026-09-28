@@ -79,11 +79,13 @@ const RELATED_RAIL_COPY = {
 } satisfies StoreProductRelatedRailCopy;
 
 /** Seven cards: more than the rail's page ever hands over, to show the block
- * draws what it is given; the second discounted, the last one sold out. */
+ * draws what it is given; the second discounted, the last one sold out. Each
+ * carries its own address, as the page supplies it. */
 const RELATED_RAIL_STORY: readonly ProductSummary[] = Array.from(
   { length: 7 },
   (_, index) => ({
     id: `related-${index + 1}`,
+    href: `/store/products/booster-box-set-${index + 1}`,
     name: `Pokémon TCG Booster Box – Set ${index + 1}`,
     imageSrc: IMAGE,
     imageAlt: `Booster box ${index + 1}`,
