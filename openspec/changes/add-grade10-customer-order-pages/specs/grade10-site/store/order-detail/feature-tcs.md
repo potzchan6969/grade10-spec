@@ -475,3 +475,30 @@ The user has no signed-in session and owns <requested order>.
 
 * The sign-in surface opens without replacing the requested order address.
 * Step 2 reads <requested order> at the same address.
+
+## Reconciliation
+
+**Run:** 2026-09-28. The existing order-detail feature suite was reconciled
+against the current order-detail scenarios and the updated technical boundary.
+The shared component contract is covered by its own feature suite; this suite
+keeps customer-page behaviour and typed Store facts at the application boundary.
+
+| Spec scenario | Suite coverage |
+| --- | --- |
+| `grade10-site-store-order-detail-SC-01`, `SC-04` | US1-TC1-3 |
+| `grade10-site-store-order-detail-SC-02` | US1-TC2-2 |
+| `grade10-site-store-order-detail-SC-03` | US2-TC1-2 |
+| `grade10-site-store-order-detail-SC-05` | US1-TC3-1 |
+| `grade10-site-store-order-detail-SC-06` | US1-TC4-1 |
+| `grade10-site-store-order-detail-SC-07` | US1-TC5-1 |
+| `grade10-site-store-order-detail-SC-08`, `SC-09` | US1-TC6-1 |
+| `grade10-site-store-order-detail-SC-10` | US1-TC7-1 |
+| `grade10-site-store-order-detail-SC-11` | US1-TC8-1 |
+| `grade10-site-store-order-detail-SC-12` | US1-TC9-1 |
+| `grade10-site-store-order-detail-SC-13` | US1-TC10-1 |
+| `grade10-site-store-order-detail-SC-14` | US1-TC11-1 |
+| `grade10-site-store-order-detail-SC-15` | US1-TC12-1 |
+| `grade10-site-store-order-detail-SC-16` | US1-TC13-1 |
+| `grade10-site-store-order-detail-SC-17` | US1-TC14-1 |
+| Uncovered scenarios | none |
+| Contradicted readings | none |
