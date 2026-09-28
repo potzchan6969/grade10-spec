@@ -98,6 +98,18 @@ const RELATED_RAIL_STORY: readonly ProductSummary[] = Array.from(
 /** The rail's sold-out card: the last of the seven. */
 const RELATED_RAIL_SOLD_OUT: ProductSummary = RELATED_RAIL_STORY[6];
 
+/** A discounted card whose name runs past two lines at a phone's tile width,
+ * priced the way the store formats a dear card. */
+const RELATED_RAIL_LONG_NAME: ProductSummary = {
+  id: "related-long-name",
+  href: "/store/products/pokemon-tcg-sword-and-shield-evolving-skies-booster-box",
+  name: "Pokémon TCG Sword & Shield Evolving Skies Booster Box (Japanese, sealed)",
+  imageSrc: IMAGE,
+  imageAlt: "Evolving Skies booster box",
+  price: "HK$18,999.00",
+  originalPrice: "HK$21,999.00",
+};
+
 export {
   DESCRIPTION_COPY,
   HEADER_COPY,
@@ -105,6 +117,7 @@ export {
   PRODUCT_DETAIL_STORY,
   PURCHASE_COPY,
   RELATED_RAIL_COPY,
+  RELATED_RAIL_LONG_NAME,
   RELATED_RAIL_SOLD_OUT,
   RELATED_RAIL_STORY,
   SOLD_OUT_PRODUCT_STORY,
