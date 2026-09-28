@@ -5,6 +5,7 @@
   - Reusable parts: each part renders without `ProductBrowse`
 - Tile contract
   - Supplied facts: price, sold-out, cart action, and image are displayed as given
+  - Supplied address: a tile that opens is a link to the address it is given
 - Selling is opt-in
   - Supplied handler: the cart control is drawn where the consumer can act on a quantity, and nowhere else
   - No standing default: a control is never drawn over nothing, so a press cannot be swallowed
@@ -58,3 +59,22 @@ so a surface that does not sell names no cart word.
 - **WHEN** a tile renders with no cart quantity handler and copy carrying no cart words
 - **THEN** the tile renders its image, name and prices
 - **AND** no cart word is required of the consumer
+
+### Requirement: A tile given its product's address is a link to it
+
+A tile that opens SHALL be a link to its product's address where the consumer
+supplies one, its photo and its name alike, so the product opens before any
+script runs, in a new tab, and its address can be copied. A plain press SHALL
+still report the tile's activation where a handler is supplied, in place of
+the link's own navigation; a press with a modifier key SHALL be left to the
+browser and report nothing. A tile that does not open — a sold-out tile where
+the surface sells — SHALL be no link, address or not.
+
+#### Scenario: shared-ui-store-product-listing-SC-93 - A tile given its address is a link to it
+**Serves:** Tile contract - a tile opens its product the way any link opens
+
+- **GIVEN** a tile that opens, supplied with its product's address and a handler for its activation
+- **WHEN** it renders
+- **THEN** its photo and its name are links to that address
+- **AND** a plain press reports the activation once and does not follow the link
+- **AND** a press with a modifier key reports nothing and is left to the browser

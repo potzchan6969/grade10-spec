@@ -1,8 +1,8 @@
 ## 1. The rail block and the two widenings (grade10-spec)
 
-The sold-out tile's hover and focus state and the row's narrow layout are the
-frame's, awaited from @tangconst by 2026-09-24; 1.4's stories draw the block
-as the tile exists today and the frame's follow-up rides task 5.2.
+The sold-out tile's hover and focus state and the row's narrow layout are
+group 7's, settled in code once no frame came (Q49); 1.4's stories draw the
+block as the tile existed then.
 
 - [x] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories and a public-exports test under `packages/ui/src/blocks/` for `grade10-site-store-cross-sell-SC-25`, `grade10-site-store-cross-sell-SC-26`, `shared-ui-store-home-SC-10`, `shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`; the same commit flips `shared-ui-store-home-US1-TC1-1`, `shared-ui-store-product-listing-US1-TC1-1` and `shared-ui-store-product-listing-US1-TC2-1` with `pnpm run tcs:automated <case> --decided-by <the story or test path in this store>`
 - [x] 1.2 Make `shared-ui-store-home-SC-10` pass: `StoreSectionHeaderCopy.browseAll` becomes optional, drawn only where a browse destination is supplied
@@ -73,9 +73,20 @@ minute, never on a sleep.
 
 ## 7. The frame's follow-up (grade10-spec)
 
-Gated on @tangconst's frame, awaited by 2026-09-24; claimed only once it
-lands, so no other group waits on it.
+No frame came by 2026-09-24: the design is settled in code (Q49), as
+`ui-design.md` draws it, and Storybook is the live reference; no other group
+waits on it.
 
-- [ ] 7.1 The sold-out tile's hover and focus state as the frame draws it on `Product / Product Card` `4200:155`, in `ProductCard`'s stories and the block
-- [ ] 7.2 The rail's narrow layout as the frame draws it, in the block and its `Narrow` story, and the page's ❓ on the narrow layout closed; no `::figma` card — the page carries the rail's `::story` cards, and Storybook is the live reference from then on
+- [ ] 7.1 The sold-out tile's hover and focus state as `ui-design.md` draws it (Q50), in `ProductCard`'s stories and the block
+- [ ] 7.2 The rail's narrow layout as `ui-design.md` draws it (Q51), in the block and its `Narrow` and `Wide` stories, and the page's ❓ on the narrow layout closed; no `::figma` card — the page carries the rail's `::story` cards, and Storybook is the live reference from then on
 - [ ] 7.3 Verify: `pnpm run test:stories:ui`, `pnpm run design-sync:check`, `pnpm check:manual`
+
+## 8. The tile as a link (grade10-spec, grade10)
+
+Q52 builds Q38 in this change: the product card takes its card's address, and
+every surface that opens a card passes it. Needs group 4 landed.
+
+- [ ] 8.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories under `packages/ui/src/blocks/` for `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`, and in `grade10` the page's and the served document's tests for `grade10-site-store-cross-sell-SC-33`; the same commit flips `shared-ui-store-product-listing-US1-TC3-1` with `pnpm run tcs:automated <case> --decided-by <the story path in this store>`
+- [ ] 8.2 Make `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26` pass: `ProductCard` takes an optional `href` and draws the photo and the name as links to it where the tile opens; a plain press reports the activation in place of the link's navigation, a press with a modifier key is the browser's; `ProductSummary.href`, passed by `ProductList` and `StoreProductRelatedRail`
+- [ ] 8.3 Bump `external/grade10-spec` to the commit carrying 8.2, then make `grade10-site-store-cross-sell-SC-33` pass: `productSummary` takes the site's address for a card, and the rail, the listing and the store home's row pass it; the walk and the listing's e2e helpers read a tile as a link
+- [ ] 8.4 Verify: `pnpm run test:stories:ui`, `pnpm run tcs:validate` and `pnpm check:manual` in this store; `pnpm run typecheck`, `pnpm run lint`, `pnpm run test` and `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts` in `grade10`

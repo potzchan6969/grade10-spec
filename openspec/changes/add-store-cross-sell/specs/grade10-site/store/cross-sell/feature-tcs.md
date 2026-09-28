@@ -176,8 +176,6 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cross-sell-US-01
 
-**Blocked:** Engineering - the tile as a link waits on the listing's round (an address on the product card, @htonyl); until it lands, a served tile opens only once the page's scripts run.
-
 **Pre-conditions:**
 
 * Scripting is disabled in the browser.
@@ -1038,6 +1036,7 @@ None yet.
 - **Contradicted** — none: the two readings stated no opposite outcomes. The one apparent one was the suite's US1-TC9 (no rail when the picks cannot be read) against the tech design (similar cards alone): the `ui-design.md` row "Picks could not be read" had said "as if there were nothing to show" and was corrected to "similar cards alone" (Q21) before the case was rewritten
 - **Uncovered anchors** — `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` (the rail's exports): **Out of suite:** the shared UI package's own tests and stories in this store, `packages/ui/src/blocks/store-product/`; the two widenings the rail leans on are `shared/ui/store-home` (`shared-ui-store-home-SC-10`) and `shared/ui/store-product-listing` (`shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`), verified in those packages' own tests
 - **Cases added after the reconciliation** — US1-TC12 (`grade10-site-store-cross-sell-SC-05`), US1-TC13 (`grade10-site-store-cross-sell-SC-22`), US2-TC8 (`grade10-site-store-cross-sell-SC-19`), US3-TC5 (`grade10-site-store-cross-sell-SC-12`, on the product manager's remark): written by the run from the scenarios the blind pass left unreached, so they are not blind
+- **Scenarios added after the reconciliation** — `grade10-site-store-cross-sell-SC-33`, a card in the rail is a link to its page (Q52), is asserted by US1-TC5-1's link result, which the blind pass wrote before the scenario existed; the case's block on the listing's round is lifted with it
 
 ### Out of suite
 
@@ -1067,7 +1066,7 @@ picks and its clock are in play.
 | `grade10-site-store-cross-sell-US1-TC2-1` | the rule's test proves the cut to six; a person walks a card with six or more like it on the dev shop |
 | `grade10-site-store-cross-sell-US1-TC3-1` | the page's test proves a tile's activation opens its card's page; the walk names it; a person opens a tile on the dev shop |
 | `grade10-site-store-cross-sell-US1-TC4-1` | the rail's stories and the page's test prove no tile carries a cart control; the walk names it; a person reads the tiles on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC5-1` | the served document's test and the page's test prove the rail is in the page's response, headed and under the buy box; the walk names it, with the scripts held and the page not moving; the tile as a link is the listing round's, and the case is blocked on it |
+| `grade10-site-store-cross-sell-US1-TC5-1` | the served document's test proves the rail is in the page's response with each tile a link to its card, and the page's test that it sits under the buy box; the walk names it, with the scripts held, each tile's link read and the page not moving; a person opens the page with scripting off on the dev shop |
 | `grade10-site-store-cross-sell-US1-TC6-1` | the page's test and the tile's stories prove a sold-out pick's place, its words and its activation; a person sells a pick out on the dev shop and reads its tile |
 | `grade10-site-store-cross-sell-US1-TC7-1` | the rule's test proves the card is never under itself; the walk names it; a person chooses a card as its own pick in the dashboard |
 | `grade10-site-store-cross-sell-US1-TC8-1` | the page's test proves no rail, no heading and no space; the walk names it, nothing following the card's last line; a person reads the space on the dev shop |

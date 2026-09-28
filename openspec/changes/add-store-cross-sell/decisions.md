@@ -73,6 +73,11 @@
 | Q46 | What does the Korean heading say? | 함께 보면 좋은 상품 - "products worth seeing together", since the rail holds sealed product as well as cards - the owner's word | 함께 보면 좋은 카드, which names cards alone |
 | Q47 | Does a sold-out card on the store home's row open its page, now that a tile with no cart control opens when sold out? | Yes: the row draws no cart control, so a sold-out card leads to its page like any other, where its own rail shows what else there is - the owner's word | Inert on the home, which needs a prop to hold a rule the listing no longer has |
 | Q48 | Does the rail read the card's own world, type and language live from the shop, so a card the store's copy does not hold yet still gets its similar cards? | No: Q34 stands. The gap lasts until the copy takes the card in, seconds after the keeper hears of it, and the picks show through it; one source for a card's facts means the rule never weighs a live world against a stale one - the owner's word, 2026-09-23 | Reading the facts live, which grows the picks read by three fields and their codec, and makes the copy and the live read two answers to one question |
+| Q49 | The frame awaited from design by 2026-09-24 has not come; who settles the sold-out tile's hover and focus and the rail's narrow layout? | @ecchochan takes the design hand, 2026-09-28: settled in code, the block's Storybook stories the live reference; the Figma set gains no variant, since hover and focus are states - @ecchochan's word | Holding the change for a frame nobody has scheduled |
+| Q50 | What does a sold-out tile that opens do on hover and on focus? | Its dim photo grows on hover as an available tile's photo does, and it takes the focus ring and the name's underline of any tile; it stays dim and draws no cart - decided by the round | A lighter dim on hover, which reads as the card coming back in stock |
+| Q51 | How does the rail lay out where six tiles do not fit? | One row that answers its own width: six side by side from 1152px; below that the row scrolls sideways, each tile snapping to its start, with part of the next tile showing - about 2⅓ tiles on a phone - decided by the round | Wrapping to a second row, which stacks six tiles in a block that pushes the page's end down; fewer tiles on a narrow screen, which makes the cap depend on the screen |
+| Q52 | Is the tile as a link (Q38) built in this change, and on which surfaces? | Yes, on every surface that opens a card - the rail, the listing and the store home's row - so a tile that opens is a link wherever it is drawn; a plain press stays the page's own navigation, and a press with a modifier key opens where the browser puts it - decided by the round | The rail alone, leaving the listing's and the home row's tiles buttons until the listing's own round |
+| Q53 | Is the rail's region named through the heading's id, or by the heading's words? | By the heading's words (`aria-label`), since the section header takes no id and one more prop widens `shared/ui/store-home` a second time - decided by the round | `aria-labelledby` with an id on the header |
 
 ## Raised
 
@@ -85,7 +90,7 @@
 | grade10-site/store/cross-sell | Blind pass: A pick the catalogue still holds but no longer publishes: left out like a lost pick, or kept like a sold-out one? | Q25 |
 | grade10-site/store/cross-sell | Blind pass: Newest first among equals: by when the card entered the store's catalogue, or by its release date? | Q26 |
 | grade10-site/store/cross-sell | Blind pass: Is a card sharing two of the three facts ranked above a card sharing only the first? | Q27 |
-| grade10-site/store/cross-sell | Blind pass: Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | ❓ on the frame — `ui-design.md` Screens, awaited from @tangconst by 2026-09-24 |
+| grade10-site/store/cross-sell | Blind pass: Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | Q51 |
 | grade10-site/store/cross-sell | Scenario pass: the rail's export requirement states behaviour for `StoreSectionHeader` and `ProductCard`, whose contracts other capabilities own, while the proposal modified none. | Q28 |
 | shared/ui/store-product-listing | Plan reader: `activate-listing-tile-by-name` adds `shared-ui-store-product-listing-SC-88` (sold out and an activation callback → the name stays inert), against this change's `shared-ui-store-product-listing-SC-91`. | Q29 |
 | grade10-site/store/cross-sell | Build readers: the rail's `cards` accepts four `ProductSummary` fields it never draws. | Q30 |
@@ -103,3 +108,7 @@
 | grade10-site/store/cross-sell | Build readers: the rail has no landmark, every walk locator is a slot. | Q42 |
 | grade10-site/store/cross-sell | Build readers: the one-card story is built and no page shows it. | Q43 |
 | grade10-site/store/cross-sell | Build readers: the page names its suite and carries no `::cases` block. | Q44 |
+| grade10-site/store/cross-sell | Design: the frame awaited by 2026-09-24 has not come. | Q49 |
+| shared/ui/store-product-listing | Design: a sold-out tile that opens has no hover or focus of its own. | Q50 |
+| shared/ui/store-product-listing | Build: the tile as a link waits on a round nobody has opened, and the suite's served-tile case is blocked on it. | Q52 |
+| grade10-site/store/cross-sell | Build: the section header takes no id for the region to be labelled by. | Q53 |
