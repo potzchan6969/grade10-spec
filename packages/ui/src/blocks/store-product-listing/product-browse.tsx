@@ -1,6 +1,6 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useSyncExternalStore } from "react";
 import type { FilterPanelCopy } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
 import {
@@ -86,21 +86,24 @@ type ProductBrowseProps = {
 /** Matches Tailwind `lg` so only one search Autocomplete mounts at a time. */
 const WIDE_VIEWPORT_QUERY = "(min-width: 1024px)";
 
-function useIsWideViewport() {
-  const [isWide, setIsWide] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.matchMedia(WIDE_VIEWPORT_QUERY).matches;
-  });
+function subscribeToViewport(onChange: () => void) {
+  const media = window.matchMedia(WIDE_VIEWPORT_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
 
-  useEffect(() => {
-    const media = window.matchMedia(WIDE_VIEWPORT_QUERY);
-    const onChange = () => setIsWide(media.matches);
-    onChange();
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
-
-  return isWide;
+/**
+ * Whether the viewport is wide. A served listing is written with no viewport
+ * to measure, and the render that hydrates it has to draw the same markup, so
+ * both answer wide - the sidebar, whose copy a served listing is held to; a
+ * narrow browser swaps in the narrow chrome on the next render.
+ */
+function useIsWideViewport(): boolean {
+  return useSyncExternalStore(
+    subscribeToViewport,
+    () => window.matchMedia(WIDE_VIEWPORT_QUERY).matches,
+    () => true,
+  );
 }
 
 /** Figma `ProductBrowse` (`4098:1952`): gap-16 (64px) between sidebar and
