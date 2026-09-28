@@ -1,6 +1,6 @@
 {
   "title": "订单详情",
-  "orderId": "订单 #{id}",
+  "orderId": "订单 {id}",
   "loading": "正在加载订单详情…",
   "error": "无法加载此订单。请重试。",
   "retry": "再试一次",
@@ -22,6 +22,9 @@
   },
   "money": {
     "subtotal": "报价小计",
+    "discount": "折扣",
+    "shipping": "运费",
+    "tax": "税费",
     "paidTotal": "已支付总额",
     "refund": "退款"
   },

@@ -114,6 +114,9 @@ const ORDER_DETAIL_KEYS = [
   "sidebar.loyaltyPointsToEarn",
   "sidebar.loyaltyPointsEarned",
   "money.subtotal",
+  "money.discount",
+  "money.shipping",
+  "money.tax",
   "money.paidTotal",
   "money.refund",
   "fulfilment.title",
@@ -278,6 +281,15 @@ describe("what a brand and a language answer between them", () => {
           expect(value).not.toBe("");
         }
       }
+
+      const orderLabel =
+        locale === "en"
+          ? "Order {id}"
+          : locale === "zh-Hant"
+            ? "訂單 {id}"
+            : "订单 {id}";
+      expect(messages.orderHistory.orderId).toBe(orderLabel);
+      expect(messages.orderDetail.orderId).toBe(orderLabel);
     },
   );
 
