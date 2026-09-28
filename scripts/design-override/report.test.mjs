@@ -68,7 +68,7 @@ function report(repo, before, after) {
   return { status: done.status, err: done.stderr, calls: read("calls"), posts };
 }
 
-test("SC-40 an override reaching main is told, naming the designer and the lines", () => {
+test("shared-design-sync-design-override-SC-40 - an override reaching main is told, naming the designer and the lines", () => {
   const repo = store();
   const before = repo.head();
   repo.write(CARD, `<div className="p-6" />\n`);
@@ -94,17 +94,23 @@ test("SC-40 an override reaching main is told, naming the designer and the lines
   );
 });
 
-test("SC-41 a commit that skipped the check is told and stays", () => {
+test("shared-design-sync-design-override-SC-41 - a commit that skipped the check is told and stays", () => {
   const repo = store();
   const before = repo.head();
   repo.write(CARD, `<div className="p-2" />\n`);
   const sha = skipped(repo, "fix: tighter");
   const { posts } = report(repo, before, sha);
+  assert.equal(posts.length, 1);
+  assert.match(posts[0], /^<!-- design-override -->\n@tangconst /);
   assert.match(posts[0], /without a `Design-Override:` line/);
+  assert.match(
+    posts[0],
+    /- <div className="p-4" \/>\n\+ <div className="p-2" \/>/,
+  );
   assert.equal(repo.head(), sha);
 });
 
-test("SC-42 a passing, an exempt or a confirmed-but-harmless commit is not told", () => {
+test("shared-design-sync-design-override-SC-42 - a passing, an exempt or a confirmed-but-harmless commit is not told", () => {
   const repo = store();
   const before = repo.head();
   repo.write("packages/ui/src/blocks/other.tsx", "export const other = 1;\n");
@@ -118,7 +124,7 @@ test("SC-42 a passing, an exempt or a confirmed-but-harmless commit is not told"
   assert.deepEqual(posts, []);
 });
 
-test("SC-43 a commit already told is not told again", () => {
+test("shared-design-sync-design-override-SC-43 - a commit already told is not told again", () => {
   const repo = store();
   const before = repo.head();
   repo.write(CARD, `<div className="p-2" />\n`);
@@ -132,7 +138,7 @@ test("SC-43 a commit already told is not told again", () => {
   assert.deepEqual(posts, []);
 });
 
-test("SC-44 a comment that cannot be posted fails the job", () => {
+test("shared-design-sync-design-override-SC-44 - a comment that cannot be posted fails the job", () => {
   const repo = store();
   const before = repo.head();
   repo.write(CARD, `<div className="p-2" />\n`);
@@ -143,7 +149,7 @@ test("SC-44 a comment that cannot be posted fails the job", () => {
   assert.match(err, /refused/);
 });
 
-test("SC-45 a push that creates the branch reads only its last commit", () => {
+test("shared-design-sync-design-override-SC-45 - a push that creates the branch reads only its last commit", () => {
   const repo = store();
   repo.write(CARD, `<div className="p-2" />\n`);
   skipped(repo, "fix: first");
@@ -157,22 +163,28 @@ test("SC-45 a push that creates the branch reads only its last commit", () => {
   );
 });
 
-test("SC-32 the same stops at commit, at push and on main", () => {
+test("shared-design-sync-design-override-SC-32 - the same stops at commit, at push and on main", () => {
   const repo = store();
-  const before = repo.head();
-  repo.write(CARD, `<div className="p-2" />\n`);
-  const atCommit = repo.commit("fix: tighter").err;
-  const sha = skipped(repo, "fix: tighter");
   const bare = `${repo.dir}.remote`;
   repo.must(["init", "-q", "--bare", bare], { cwd: "/" });
   repo.must(["remote", "add", "origin", bare]);
-  const atPush = repo.git(["push", "-q", "origin", "main"]).err;
-  const onMain = report(repo, before, sha).posts[0];
-  for (const said of [atCommit, atPush, onMain]) {
-    assert.match(said, /<div className="p-4" \/>/);
-    assert.match(said, /<div className="p-2" \/>/);
-  }
-  const stopLines = (said) =>
-    said.split("\n").filter((line) => /^ {2}(before|after|set by)/.test(line));
-  assert.deepEqual(stopLines(atCommit), stopLines(atPush));
+  repo.must(["push", "-q", "--no-verify", "origin", "main"]);
+  const before = repo.head();
+
+  repo.write("packages/ui/src/blocks/other.tsx", "export const other = 1;\n");
+  const passing = repo.commit("feat: other");
+  repo.write(CARD, `<div className="p-2" />\n`);
+  const atCommit = repo.commit("fix: tighter").err;
+  const sha = skipped(repo, "fix: tighter");
+  const atPush = repo.git(["push", "-q", "origin", "main"]);
+  const { posts } = report(repo, before, sha);
+
+  assert.equal(passing.status, 0);
+  assert.notEqual(atPush.status, 0);
+  assert.equal(posts.length, 1);
+  const stopped = (said) =>
+    [...said.matchAll(/^(?: {2}before {2}|- )(.*)$/gm)].map(([, line]) => line);
+  assert.deepEqual(stopped(atCommit), ['<div className="p-4" />']);
+  assert.deepEqual(stopped(atPush.err), stopped(atCommit));
+  assert.deepEqual(stopped(posts[0]), stopped(atCommit));
 });

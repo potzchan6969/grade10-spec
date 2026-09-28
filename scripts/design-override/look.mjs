@@ -2,7 +2,7 @@
  * The look rule: the lines a single-parent commit removes or rewrites that
  * set the agreed look, and the tokens it removes or changes.
  */
-import { blame, diff, ReadError, readAt } from "./git.mjs";
+import { blame, diff, readAt } from "./git.mjs";
 import { removedLines } from "./lines.mjs";
 
 const UTILITY =
@@ -50,7 +50,7 @@ function tokensOf(text, path) {
   try {
     parsed = JSON.parse(text);
   } catch (cause) {
-    throw new ReadError(`could not read ${path} as JSON: ${cause.message}`);
+    throw new Error(`could not read ${path} as JSON: ${cause.message}`);
   }
   const walk = (node, trail) => {
     if (typeof node !== "object" || node === null || Array.isArray(node))

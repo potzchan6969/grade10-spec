@@ -32,9 +32,12 @@ export function parseDiff(text) {
   return files.filter((f) => f.path);
 }
 
+const squeeze = (lines) => lines.join("").replace(/\s+/g, "");
+
 /**
  * The removed lines `counts(path, text)` keeps, less one for each equal line
- * added anywhere in the diff: a move is not a removal.
+ * added anywhere in the diff: a move is not a removal, and neither is a hunk
+ * that only moves line breaks.
  */
 export function removedLines(from, to, paths, counts) {
   const files = parseDiff(diff(from, to, paths, ["-w", "-U0"]));
@@ -46,6 +49,8 @@ export function removedLines(from, to, paths, counts) {
   const removed = [];
   for (const { path, hunks } of files) {
     for (const { removed: lines, added: replacements } of hunks) {
+      if (squeeze(lines.map(({ text }) => text)) === squeeze(replacements))
+        continue;
       lines.forEach(({ n, text }, i) => {
         if (!counts(path, text)) return;
         const key = normalize(text);
@@ -57,7 +62,7 @@ export function removedLines(from, to, paths, counts) {
           file: path,
           n,
           before: text.trim(),
-          after: (replacements[i] ?? replacements.at(-1))?.trim(),
+          after: replacements[i]?.trim(),
         });
       });
     }

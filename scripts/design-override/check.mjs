@@ -6,10 +6,10 @@
  *   node check.mjs --message <file>   commit-msg: the index and the message
  *   node check.mjs --push <remote>    pre-push: every commit a pushed ref sends
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { evaluate, loadSettings } from "./evaluate.mjs";
 import { stopText } from "./format.mjs";
-import { git, isZero, ReadError, succeeds } from "./git.mjs";
+import { git, isZero, succeeds } from "./git.mjs";
 import { cleanMessage } from "./message.mjs";
 
 function commentChar() {
@@ -19,12 +19,21 @@ function commentChar() {
   return set === "" || set === "auto" ? "#" : set;
 }
 
+/** Every other parent of a merge in progress; an octopus has several. */
+function mergeHeads() {
+  const file = git(["rev-parse", "--git-path", "MERGE_HEAD"]).trim();
+  return existsSync(file)
+    ? readFileSync(file, "utf8").split("\n").filter(Boolean)
+    : [];
+}
+
 /** The commit git is about to record, built from the index without recording it. */
 function atCommit(settings, file) {
   const message = cleanMessage(readFileSync(file, "utf8"), commentChar());
-  const parents = ["HEAD", "MERGE_HEAD"].filter((ref) =>
-    succeeds(["rev-parse", "-q", "--verify", ref]),
-  );
+  const parents = [
+    ...(succeeds(["rev-parse", "-q", "--verify", "HEAD"]) ? ["HEAD"] : []),
+    ...mergeHeads(),
+  ];
   const tree = git(["write-tree"]).trim();
   const sha = git(
     ["commit-tree", tree, ...parents.flatMap((ref) => ["-p", ref])],
@@ -64,7 +73,7 @@ function main([mode, value]) {
   const settings = loadSettings();
   if (mode === "--message" && value) return atCommit(settings, value);
   if (mode === "--push") return atPush(settings);
-  throw new ReadError("usage: check.mjs --message <file> | --push <remote>");
+  throw new Error("usage: check.mjs --message <file> | --push <remote>");
 }
 
 try {

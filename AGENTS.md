@@ -72,11 +72,11 @@ Ask only questions that materially affect scope or an irreversible product choic
 
 ## Design Override
 
-The agreed UI design is what `main` holds in `packages/ui/src/blocks`, `packages/design-system/src/components`, `packages/design-system/tokens.json` and `apps/preview/src/pages`. The hooks set by `pnpm install` stop a commit that changes it, and a merge that drops either side's lines — [Design Override](docs/prds/products/shared/design-sync/design-override.md).
+The agreed look is what `main` holds in `packages/ui/src/blocks`, `packages/design-system/src/components`, `packages/design-system/tokens.json` and `apps/preview/src/pages`. The hooks set by `pnpm install` stop a commit that changes it. They also stop a merge that drops either side's lines — [Design Override](docs/prds/products/shared/design-sync/design-override.md).
 
 - **Keep the agreed look** — implementation builds on it and never restyles it on the way.
 - **A missing state or variant is the designer's** — never a local addition.
-- **A stop is shown to your person** — show them its lines and wait. Write `Design-Override: <what changes and why>` as the message's last paragraph, or a page's reason in the application's block check, only on their yes.
+- **A stop is shown to your person** — show them its lines and wait. On their yes, write `Design-Override: <what changes and why>` as the message's last paragraph, or a page's reason in the application's block check.
 - **Never skip the check** — no `--no-verify`.
 
 ## Product UI component contracts

@@ -56,9 +56,12 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
 
   const env = {
     ...Object.fromEntries(
-      Object.entries(process.env).filter(([key]) => !key.startsWith("GIT_")),
+      Object.entries(process.env).filter(
+        ([key]) => key !== "CI" && !key.startsWith("GIT_"),
+      ),
     ),
-    GIT_CONFIG_GLOBAL: gitConfig === undefined ? "/dev/null" : join(dir, ".gitconfig-global"),
+    GIT_CONFIG_GLOBAL:
+      gitConfig === undefined ? "/dev/null" : join(dir, ".gitconfig-global"),
     GIT_CONFIG_NOSYSTEM: "1",
     GIT_AUTHOR_DATE: "2026-09-01T00:00:00Z",
     GIT_COMMITTER_DATE: "2026-09-01T00:00:00Z",
@@ -90,8 +93,16 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
     return done.out;
   };
 
+  /** Runs the install `pnpm install` runs, as a person's clone, or with `extra` set. */
+  const install = (extra = {}) =>
+    spawnSync("sh", ["scripts/design-override/install.sh"], {
+      cwd: dir,
+      encoding: "utf8",
+      env: { ...env, ...extra },
+    });
+
   must(["init", "-q", "-b", "main"]);
-  must(["config", "core.hooksPath", ".githooks"]);
+  if (install().status !== 0) throw new Error("install.sh failed");
   must(["add", "-A"]);
   must(["commit", "-q", "-m", "the store"]);
 
@@ -99,6 +110,7 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
     dir,
     git,
     must,
+    install,
     write: (path, text) => write(dir, path, text),
     remove: (path) => rmSync(join(dir, path)),
     /** Stage everything and commit; the result carries the hook's stop. */

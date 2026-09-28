@@ -58,7 +58,7 @@ const stopped = (result) => {
 const passed = (result) =>
   assert.equal(result.status, 0, `expected a pass: ${result.err}`);
 
-test("SC-02 each look-line kind stops", () => {
+test("shared-design-sync-design-override-SC-02 - each look-line kind stops", () => {
   const kinds = {
     class: `<span className="text-sm" />`,
     variant: `variants: { size: { sm: "h-8" } },`,
@@ -81,7 +81,7 @@ test("SC-02 each look-line kind stops", () => {
   }
 });
 
-test("SC-02 a story's title stops", () => {
+test("shared-design-sync-design-override-SC-02 - a story's title stops", () => {
   const repo = store();
   const story = "packages/design-system/src/components/button.stories.tsx";
   repo.write(story, `export default {\n  title: "Primitives/Button",\n};\n`);
@@ -93,7 +93,7 @@ test("SC-02 a story's title stops", () => {
   );
 });
 
-test("SC-03 a block moved in from an older copy names only the lines it lost", () => {
+test("shared-design-sync-design-override-SC-03 - a block moved in from an older copy names only the lines it lost", () => {
   const repo = store();
   const banner = (motion) => `export function Banner() {
   return (
@@ -120,7 +120,7 @@ ${motion}    />
   assert.doesNotMatch(err, /initial=/);
 });
 
-test("SC-04 a changed or removed token stops, naming its path", () => {
+test("shared-design-sync-design-override-SC-04 - a changed or removed token stops, naming its path", () => {
   const repo = store();
   repo.write(TOKENS, tokens("#000000"));
   assert.match(stopped(repo.commit("chore: darker brand")), /color\.brand/);
@@ -128,7 +128,7 @@ test("SC-04 a changed or removed token stops, naming its path", () => {
   assert.match(stopped(repo.commit("chore: drop brand")), /color\.brand/);
 });
 
-test("SC-05 an added token passes", () => {
+test("shared-design-sync-design-override-SC-05 - an added token passes", () => {
   const repo = store();
   repo.write(
     TOKENS,
@@ -140,14 +140,17 @@ test("SC-05 an added token passes", () => {
   passed(repo.commit("feat: ink token"));
 });
 
-test("SC-06 code moved unchanged passes, a rename included", () => {
+test("shared-design-sync-design-override-SC-06 - code moved unchanged from a preview page into blocks passes", () => {
   const repo = store();
-  repo.remove(CARD);
-  repo.write("packages/ui/src/blocks/card/panel.tsx", card());
-  passed(repo.commit("refactor: rename the card"));
+  const hero = `export function Hero() {\n  return <section className="grid gap-6 p-8" />;\n}\n`;
+  repo.write(PAGE, `import { Card } from "./card";\n\n${hero}`);
+  repo.commit("feat: hero", { as: DESIGNER });
+  repo.write(PAGE, `import { Card } from "./card";\n`);
+  repo.write("packages/ui/src/blocks/hero/hero.tsx", hero);
+  passed(repo.commit("refactor: lift the hero into blocks"));
 });
 
-test("SC-07 formatting passes", () => {
+test("shared-design-sync-design-override-SC-07 - formatting passes", () => {
   const repo = store();
   repo.write(
     CARD,
@@ -159,10 +162,21 @@ test("SC-07 formatting passes", () => {
       .replaceAll("  ", "    "),
   );
   passed(repo.commit("style: format"));
+  repo.write(
+    CARD,
+    card().replace(
+      `    <div className={cn("rounded-lg p-4 shadow-sm")}>`,
+      `    <div\n      className={cn("rounded-lg p-4 shadow-sm")}\n    >`,
+    ),
+  );
+  passed(repo.commit("style: wrap the tag"));
 });
 
-test("SC-08 lines that set no look pass", () => {
+test("shared-design-sync-design-override-SC-08 - lines that set no look pass", () => {
   const repo = store();
+  const extras = `type Props = { title: string };\n// the card's frame\n\n`;
+  repo.write(CARD, extras + card());
+  repo.commit("feat: typed card", { as: DESIGNER });
   repo.write(
     CARD,
     card()
@@ -176,7 +190,7 @@ test("SC-08 lines that set no look pass", () => {
   passed(repo.commit("refactor: tidy"));
 });
 
-test("SC-09 a path outside the watched paths passes", () => {
+test("shared-design-sync-design-override-SC-09 - a path outside the watched paths passes", () => {
   const repo = store();
   repo.write("scripts/tool.tsx", `<div className="p-4" />\n`);
   repo.commit("feat: tool");
@@ -184,7 +198,7 @@ test("SC-09 a path outside the watched paths passes", () => {
   passed(repo.commit("fix: tool"));
 });
 
-test("SC-46 a reordered class list stops", () => {
+test("shared-design-sync-design-override-SC-46 - a reordered class list stops", () => {
   const repo = store();
   repo.write(
     CARD,
@@ -201,7 +215,7 @@ test("SC-46 a reordered class list stops", () => {
   );
 });
 
-test("SC-10 the stop shows before, after and who set it", () => {
+test("shared-design-sync-design-override-SC-10 - the stop shows before, after and who set it", () => {
   const repo = store();
   const setter = repo.head().slice(0, 8);
   repo.write(CARD, card("p-2"));
@@ -212,21 +226,22 @@ test("SC-10 the stop shows before, after and who set it", () => {
   assert.match(err, new RegExp(`set by {2}Constance, 2026-09-01, ${setter}`));
 });
 
-test("SC-11 a line removed with nothing in its place shows no after", () => {
+test("shared-design-sync-design-override-SC-11 - a motion line removed with nothing in its place shows no after", () => {
   const repo = store();
+  const fade = "packages/ui/src/blocks/fade.tsx";
   repo.write(
-    CARD,
-    card().replace(
-      `    <div className={cn("rounded-lg p-4 shadow-sm")}>\n`,
-      "",
-    ),
+    fade,
+    "export const fade = {\n  transition: { duration: 0.2 },\n};\n",
   );
-  const err = stopped(repo.commit("fix: drop wrapper"));
-  assert.match(err, /before/);
+  repo.commit("feat: fade", { as: DESIGNER });
+  repo.write(fade, "export const fade = {\n};\n");
+  const err = stopped(repo.commit("fix: instant fade"));
+  assert.match(err, /before {2}transition: \{ duration: 0\.2 \},/);
+  assert.match(err, /set by {2}Constance, 2026-09-01/);
   assert.doesNotMatch(err, /after {3}/);
 });
 
-test("SC-12 the stop ends with the line to add", () => {
+test("shared-design-sync-design-override-SC-12 - the stop ends with the line to add", () => {
   const repo = store();
   repo.write(CARD, card("p-2"));
   const paragraphs = stopped(repo.commit("fix: lint")).trim().split("\n\n");
@@ -242,7 +257,7 @@ function branchPair(repo, mine, theirs) {
   repo.must(["checkout", "-q", "feature"]);
 }
 
-test("SC-13 a merge that keeps an old copy stops", () => {
+test("shared-design-sync-design-override-SC-13 - a merge that keeps an old copy stops", () => {
   const repo = store();
   branchPair(
     repo,
@@ -263,7 +278,7 @@ test("SC-13 a merge that keeps an old copy stops", () => {
   assert.match(err, /held by/);
 });
 
-test("SC-14 a clean pull passes", () => {
+test("shared-design-sync-design-override-SC-14 - a clean pull passes", () => {
   const repo = store();
   branchPair(
     repo,
@@ -288,7 +303,7 @@ test("SC-14 a clean pull passes", () => {
   passed(repo.git(["merge", "-q", "--no-edit", "main"]));
 });
 
-test("SC-15 a line both sides hold, removed by the merge, stops", () => {
+test("shared-design-sync-design-override-SC-15 - a line both sides hold, removed by the merge, stops", () => {
   const repo = store();
   branchPair(
     repo,
@@ -306,7 +321,7 @@ test("SC-15 a line both sides hold, removed by the merge, stops", () => {
   assert.match(stopped(repo.commit("Merge main")), /const label = "card";/);
 });
 
-test("SC-16 the designer's merge is held", () => {
+test("shared-design-sync-design-override-SC-16 - the designer's merge is held", () => {
   const repo = store();
   branchPair(
     repo,
@@ -327,7 +342,7 @@ test("SC-16 the designer's merge is held", () => {
   );
 });
 
-test("SC-47 a line dropped outside the watched paths passes a merge", () => {
+test("shared-design-sync-design-override-SC-47 - a line dropped outside the watched paths passes a merge", () => {
   const repo = store();
   const doc = "docs/prds/page.md";
   repo.write(doc, "one\n");
@@ -348,18 +363,22 @@ test("SC-47 a line dropped outside the watched paths passes a merge", () => {
   passed(repo.commit("Merge main"));
 });
 
-test("SC-24 the line passes every stop, beside a co-author", () => {
+test("shared-design-sync-design-override-SC-24 - the line passes every stop in two blocks, beside a co-author", () => {
   const repo = store();
+  const alert = "packages/ui/src/blocks/alert/alert.tsx";
+  repo.write(alert, `<div className="p-4 rounded-md" />\n`);
+  repo.commit("feat: alert", { as: DESIGNER });
   repo.write(CARD, card("p-2"));
-  repo.write(TOKENS, tokens("#000000"));
+  repo.write(alert, `<div className="p-2 rounded-md" />\n`);
+  stopped(repo.commit("fix: tighter"));
   passed(
     repo.commit(
-      "fix: tighter\n\nCo-authored-by: Echo <ecchochan@gmail.com>\nDesign-Override: tighter padding, agreed with the designer",
+      "fix: tighter\n\nCo-authored-by: Echo <ecchochan@gmail.com>\nDesign-Override: tighter padding on both alerts, agreed with the designer",
     ),
   );
 });
 
-test("SC-25 an empty reason is refused", () => {
+test("shared-design-sync-design-override-SC-25 - an empty reason is refused", () => {
   const repo = store();
   repo.write(CARD, card("p-2"));
   const err = stopped(repo.commit("fix: tighter\n\nDesign-Override:   "));
@@ -367,7 +386,7 @@ test("SC-25 an empty reason is refused", () => {
   assert.match(err, /p-2/);
 });
 
-test("SC-26 the line outside the last paragraph does not count", () => {
+test("shared-design-sync-design-override-SC-26 - the line outside the last paragraph does not count", () => {
   const repo = store();
   repo.write(CARD, card("p-2"));
   stopped(
@@ -396,22 +415,38 @@ test("the line is found when the message carries a verbose diff", () => {
   );
 });
 
-test("SC-28 to SC-30 the designer's own commits are exempt", () => {
-  for (const people of [
-    { as: DESIGNER },
-    { as: AGENT, committer: DESIGNER },
-    {
-      as: "Claude <noreply@anthropic.com>",
-      message: "\n\nCo-authored-by: C <TANGCONSTANCE@GMAIL.COM>",
-    },
-  ]) {
-    const repo = store();
-    repo.write(CARD, card("p-2"));
-    passed(repo.commit(`fix: polish${people.message ?? ""}`, people));
-  }
+test("shared-design-sync-design-override-SC-28 - the designer as author passes", () => {
+  const repo = store();
+  repo.write(CARD, card("p-2"));
+  passed(repo.commit("fix: polish", { as: DESIGNER }));
 });
 
-test("SC-31 an agent with no known person is held", () => {
+test("shared-design-sync-design-override-SC-29 - an agent authors a motion change the designer commits, and it passes", () => {
+  const repo = store();
+  const fade = "packages/ui/src/blocks/fade.tsx";
+  repo.write(
+    fade,
+    "export const fade = {\n  transition: { duration: 0.2 },\n};\n",
+  );
+  repo.commit("feat: fade", { as: DESIGNER });
+  repo.write(
+    fade,
+    "export const fade = {\n  transition: { duration: 0.4 },\n};\n",
+  );
+  passed(repo.commit("fix: slower fade", { as: AGENT, committer: DESIGNER }));
+});
+
+test("shared-design-sync-design-override-SC-30 - the designer as co-author passes, whatever the case of the e-mail", () => {
+  const repo = store();
+  repo.write(CARD, card("p-2"));
+  passed(
+    repo.commit("fix: polish\n\nCo-authored-by: C <TANGCONSTANCE@GMAIL.COM>", {
+      as: "Claude <noreply@anthropic.com>",
+    }),
+  );
+});
+
+test("shared-design-sync-design-override-SC-31 - an agent with no known person is held", () => {
   const repo = store();
   repo.write(CARD, card("p-2"));
   stopped(repo.commit("fix: polish", { as: AGENT }));
@@ -423,7 +458,7 @@ test("with no designer in the map, nobody is exempt", () => {
   stopped(repo.commit("fix: polish", { as: DESIGNER }));
 });
 
-test("SC-49 the check refuses when it cannot read the team", () => {
+test("shared-design-sync-design-override-SC-49 - the check refuses when it cannot read the team", () => {
   const repo = store();
   repo.remove("docs/prds/team.yaml");
   repo.write(CARD, card("p-2"));
@@ -452,7 +487,7 @@ function withRemote(repo) {
   return bare;
 }
 
-test("SC-33 a commit that skipped the check is refused at push", () => {
+test("shared-design-sync-design-override-SC-33 - a commit that skipped the check is refused at push", () => {
   const repo = store();
   withRemote(repo);
   repo.write(CARD, card("p-2"));
@@ -464,7 +499,7 @@ test("SC-33 a commit that skipped the check is refused at push", () => {
   assert.match(err, /p-2/);
 });
 
-test("SC-34 a merge is checked at commit", () => {
+test("shared-design-sync-design-override-SC-34 - a merge is checked at commit", () => {
   const repo = store();
   branchPair(
     repo,
@@ -482,7 +517,7 @@ test("SC-34 a merge is checked at commit", () => {
   assert.match(stopped(repo.commit("Merge main")), /p-5/);
 });
 
-test("SC-35 a new branch is checked over its own commits only", () => {
+test("shared-design-sync-design-override-SC-35 - a new branch is checked over its own commits only", () => {
   const repo = store();
   withRemote(repo);
   repo.write(CARD, card("p-2"));
@@ -495,7 +530,7 @@ test("SC-35 a new branch is checked over its own commits only", () => {
   passed(repo.git(["push", "-q", "origin", "fresh"]));
 });
 
-test("SC-36 deleting a branch checks nothing", () => {
+test("shared-design-sync-design-override-SC-36 - deleting a branch checks nothing", () => {
   const repo = store();
   withRemote(repo);
   repo.must(["checkout", "-q", "-b", "old"]);
@@ -504,6 +539,16 @@ test("SC-36 deleting a branch checks nothing", () => {
   repo.must(["commit", "-q", "--no-verify", "-m", "fix: skipped"]);
   repo.must(["push", "-q", "--no-verify", "origin", "old"]);
   passed(repo.git(["push", "-q", "origin", "--delete", "old"]));
+});
+
+test("shared-design-sync-design-override-SC-37 - install sets the hooks in a person's clone and not in CI", () => {
+  const repo = store();
+  const hooksPath = () =>
+    repo.git(["config", "--get", "core.hooksPath"]).out.trim();
+  assert.equal(hooksPath(), ".githooks");
+  repo.must(["config", "--unset", "core.hooksPath"]);
+  assert.equal(repo.install({ CI: "true" }).status, 0);
+  assert.equal(hooksPath(), "");
 });
 
 test("a person's own git config changes no answer", () => {
@@ -526,5 +571,6 @@ test("a person's own git config changes no answer", () => {
   repo.write(CARD, card("p-3"));
   const err = stopped(repo.commit("Merge main"));
   assert.match(err, /p-5/);
-  assert.doesNotMatch(err, /p-4|\u001b/);
+  assert.doesNotMatch(err, /p-4/);
+  assert.ok(!err.includes("\u001b"), "no colour codes");
 });

@@ -7,8 +7,8 @@ export const MARKER = "<!-- design-override -->";
 export const TRAILER = "Design-Override: <what changes and why>";
 
 const WHY = {
-  look: "it changes the agreed UI design",
-  merge: "it drops lines one side of the merge holds",
+  look: "changes the agreed UI design",
+  merge: "drops lines one side of the merge holds",
 };
 
 const setBy = ({ setBy: who }) =>
@@ -38,7 +38,7 @@ export function stopText(result) {
     result.override === ""
       ? "\nThe Design-Override line has no reason, so it is refused.\n"
       : "";
-  return `${head}Design Override stopped this commit: ${WHY[result.rule]}.
+  return `${head}Design Override stopped this commit: it ${WHY[result.rule]}.
 
 ${lines}
 ${empty}

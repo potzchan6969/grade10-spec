@@ -1,20 +1,14 @@
 /*
- * The only way the check reads git. A read that fails throws a `ReadError`,
- * naming the command, so a broken clone refuses rather than passes.
+ * The only way the check reads git. A read that fails throws, naming the
+ * command, so a broken clone refuses rather than passes.
  */
 import { spawnSync } from "node:child_process";
-
-export class ReadError extends Error {}
 
 const PINNED = [
   "-c",
   "merge.conflictStyle=merge",
   "-c",
-  "color.ui=never",
-  "-c",
   "core.quotePath=false",
-  "-c",
-  "diff.noprefix=false",
 ];
 
 function run(args, input) {
@@ -23,15 +17,14 @@ function run(args, input) {
     input,
     maxBuffer: 1 << 28,
   });
-  if (done.error)
-    throw new ReadError(`could not run git: ${done.error.message}`);
+  if (done.error) throw new Error(`could not run git: ${done.error.message}`);
   return done;
 }
 
 export function git(args, { input, ok = [0] } = {}) {
   const done = run(args, input);
   if (!ok.includes(done.status)) {
-    throw new ReadError(
+    throw new Error(
       `could not read git: git ${args.join(" ")}\n${done.stderr.trim()}`,
     );
   }
@@ -50,7 +43,7 @@ export function requireGit() {
     .slice(1)
     .map(Number);
   if (major < 2 || (major === 2 && minor < 38)) {
-    throw new ReadError(
+    throw new Error(
       `git ${major}.${minor} lacks merge-tree --write-tree: install git 2.38 or later`,
     );
   }
@@ -58,7 +51,7 @@ export function requireGit() {
 
 export function refuseShallow() {
   if (git(["rev-parse", "--is-shallow-repository"]).trim() === "true") {
-    throw new ReadError(
+    throw new Error(
       "this clone is shallow, so history cannot be read: run git fetch --unshallow",
     );
   }
@@ -70,7 +63,7 @@ export function readAt(ref, path) {
   if (done.status === 0) return done.stdout;
   if (git(["ls-tree", "--name-only", ref, "--", path]).trim() === "")
     return undefined;
-  throw new ReadError(
+  throw new Error(
     `could not read ${path} at ${short(ref)}: ${done.stderr.trim()}`,
   );
 }

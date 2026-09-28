@@ -6,7 +6,7 @@ import { readFileSync, realpathSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseTeamMap, TEAM_MAP } from "../openspec/lib/team-parse.mjs";
-import { git, ReadError, requireGit } from "./git.mjs";
+import { git, requireGit } from "./git.mjs";
 import { lookStops } from "./look.mjs";
 import { mergeStops } from "./merge.mjs";
 import { readMessage } from "./message.mjs";
@@ -26,18 +26,18 @@ function readFile(path, what) {
   try {
     return readFileSync(path, "utf8");
   } catch (cause) {
-    throw new ReadError(`could not read ${what}: ${cause.message}`);
+    throw new Error(`could not read ${what}: ${cause.message}`);
   }
 }
 
 function sitesOf(root) {
   try {
-    const { sites } = JSON.parse(readFile(join(root, CONFIG), CONFIG));
+    const { sites } = JSON.parse(readFileSync(join(root, CONFIG), "utf8"));
     if (!Array.isArray(sites))
       throw new Error("`sites` must be a list of pathspecs");
     return sites;
   } catch (cause) {
-    throw new ReadError(`could not read ${CONFIG}: ${cause.message}`);
+    throw new Error(`could not read ${CONFIG}: ${cause.message}`);
   }
 }
 
@@ -49,12 +49,7 @@ export function loadSettings() {
     root === STORE
       ? { look: STORE_PATHS, merge: STORE_PATHS }
       : { look: [], merge: sitesOf(root) };
-  let team;
-  try {
-    team = parseTeamMap(readFile(join(STORE, TEAM_MAP), TEAM_MAP));
-  } catch (cause) {
-    throw new ReadError(cause.message);
-  }
+  const team = parseTeamMap(readFile(join(STORE, TEAM_MAP), TEAM_MAP));
   const designers = Object.entries(team.handles)
     .filter(([, member]) => member.roles.includes("design"))
     .map(([handle, member]) => ({ handle, email: member.email }));
@@ -62,15 +57,13 @@ export function loadSettings() {
 }
 
 export function evaluate(settings, sha) {
-  const [parents, author, committer, subject] = git([
+  const [parents, author, committer, subject, ...body] = git([
     "log",
     "-1",
-    "--format=%P%n%ae%n%ce%n%s",
+    "--format=%P%n%ae%n%ce%n%s%n%B",
     sha,
   ]).split("\n");
-  const { override, coAuthors } = readMessage(
-    git(["log", "-1", "--format=%B", sha]),
-  );
+  const { override, coAuthors } = readMessage(body.join("\n"));
   const people = [author, committer]
     .map((email) => email.toLowerCase())
     .concat(coAuthors);

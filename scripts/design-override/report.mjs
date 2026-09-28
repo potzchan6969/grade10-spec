@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 /*
  * The report on `main`: a comment for the designer on every pushed commit
  * that stops, with or without its `Design-Override:` line. Never blocks, never
@@ -7,6 +6,7 @@ import { spawnSync } from "node:child_process";
  *
  *   node report.mjs <before> <after>   GITHUB_REPOSITORY names the repository
  */
+import { spawnSync } from "node:child_process";
 import { evaluate, loadSettings } from "./evaluate.mjs";
 import { commentBody, MARKER } from "./format.mjs";
 import { git, isZero, refuseShallow } from "./git.mjs";
