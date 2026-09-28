@@ -64,6 +64,8 @@ export const previewLot = {
   addressDeadline: "19 Sep 2026, 21:30 GMT+8",
   /** 7 calendar days from invoice send — payment window. */
   paymentDeadline: "24 Sep 2026, 21:30 GMT+8",
+  /** The operator's reason for the winner when payment proof is returned. */
+  proofReturnReason: "Amount does not match",
   currentBid: "HK$12,800",
   /** Hammer / winning bid at close. */
   winningBid: "HK$12,800",

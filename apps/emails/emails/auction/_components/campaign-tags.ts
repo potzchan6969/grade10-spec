@@ -14,6 +14,7 @@ export type AuctionEmailCampaign =
   | "setup_overdue"
   | "payment_reminder"
   | "payment_overdue"
+  | "proof_not_accepted"
   | "payment_received"
   | "payment_received_partial"
   | "shipped"
