@@ -152,10 +152,10 @@ rules for the same shop count would let the stepper and the message disagree.
 
 The new labels (`Shop`, `About This Item`, `Shipping & Pickup`, `Shipping
 calculated at checkout`, `Shipping fee`, `Free pick-up at`, `Hong Kong Grade10
-Store`, `Only X left`, `Show more`, `Show less`, `Adding...`, `Added to cart`,
-and `Sold out`) are added to the shared product/store message catalog. Other
-locales fall back through the existing catalog-resolution mechanism until
-translations are supplied.
+Store`, `Only X left`, `Show more`, `Show less`, `Adding…`, and `Sold out`)
+are added to the shared product/store message catalog. Other locales fall back
+through the existing catalog-resolution mechanism until translations are
+supplied.
 
 ## Data model
 

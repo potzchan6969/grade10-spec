@@ -31,8 +31,8 @@ function StoreProductMetadata({
 }: StoreProductMetadataProps) {
   return (
     <VStack data-slot="store-product-metadata" gap="lg">
-      <VStack className="border-t border-border pt-6" gap="sm">
-        <Text size="sm" weight="bold">
+      <VStack gap="sm">
+        <Text className="font-semibold" size="sm">
           {copy.aboutThisItem}
         </Text>
         {badges.length > 0 ? (
@@ -46,8 +46,8 @@ function StoreProductMetadata({
         ) : null}
       </VStack>
 
-      <VStack className="border-t border-border pt-6" gap="sm">
-        <Text size="sm" weight="bold">
+      <VStack gap="sm">
+        <Text className="font-semibold" size="sm">
           {copy.shippingAndPickup}
         </Text>
         <ul className="list-disc pl-5">
@@ -71,7 +71,7 @@ function StoreProductMetadata({
       </VStack>
 
       {sku ? (
-        <Text size="sm" tone="secondary">
+        <Text size="sm">
           {copy.skuLabel}: {sku}
         </Text>
       ) : null}

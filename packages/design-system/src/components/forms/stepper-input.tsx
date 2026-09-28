@@ -185,6 +185,7 @@ function StepperInput({
   formatValue,
   onBlur,
   onFocus,
+  "aria-label": ariaLabel,
   ...props
 }: StepperInputProps) {
   const generatedId = useId();
@@ -336,7 +337,9 @@ function StepperInput({
             status === "error" && messageId ? messageId : undefined
           }
           aria-invalid={status === "error" || undefined}
-          aria-label={typeof label === "string" ? label : undefined}
+          aria-label={
+            ariaLabel ?? (typeof label === "string" ? label : undefined)
+          }
           aria-valuemax={max}
           aria-valuemin={min}
           aria-valuenow={numeric}

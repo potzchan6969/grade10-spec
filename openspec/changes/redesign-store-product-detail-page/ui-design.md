@@ -12,12 +12,13 @@
 - `Breadcrumbs`, `BreadcrumbItem`, `BreadcrumbSeparator` — product location.
 - `Badge` — non-interactive product facets.
 - `Stepper` — quantity control.
-- `Button` — add, loading, added, and sold-out states.
+- `Button` — add, loading, and sold-out states.
 - `Text` — static fulfilment copy and the display-only SKU.
 - `Link` — breadcrumb and other destinations where the application has a real
   target; the v1 fulfilment labels remain non-interactive because their targets
   are TBC.
 - `HStack`, `VStack` — page and detail-rail composition.
+- `CartDrawer` — opens after a successful add; owned by the cart capability.
 
 No new `@grade10/design-system` or `@grade10/ui` export, variant, or token is
 required.
@@ -30,6 +31,6 @@ required.
 | Product with no images | `grade10-site-store-product-page-SC-14` | Product catalogue response |
 | Product with optional badges and item facts | `grade10-site-store-product-page-SC-15` | Product catalogue response and locale catalog |
 | Description collapsed / expanded | `grade10-site-store-product-page-SC-16` | Product page disclosure state |
-| Add quantity pending / added | `grade10-site-store-product-page-SC-17` | Cart mutation and cart query |
+| Add quantity pending; success opens the cart drawer and resets the stepper | `grade10-site-store-product-page-SC-17` | Cart mutation and cart query |
 | Product item sold out | `grade10-site-store-product-page-SC-18`, existing `grade10-site-store-product-page-SC-11` | Product availability |
 | Unknown product address | Existing `grade10-site-store-product-page-SC-03` | Product loader and not-found surface |
