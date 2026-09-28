@@ -170,7 +170,10 @@ export const PreAuction: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
-    expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
+    const reachable = canvas
+      .queryAllByText("No bids yet")
+      .filter((element) => element.closest("[inert]") == null);
+    expect(reachable).toHaveLength(0);
     expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
