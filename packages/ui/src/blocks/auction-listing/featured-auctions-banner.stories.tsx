@@ -21,6 +21,8 @@ const COPY: FeaturedAuctionsBannerCopy = {
   endedAt: "Ended",
   progress: "Featured lots",
   slide: "Show featured lot {position}: {title}",
+  previous: "Previous featured lot",
+  next: "Next featured lot",
 };
 
 /**
@@ -89,7 +91,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Stage image uses `object-cover object-center`. Operator canvas: 2400×1500 (8:5), subject centred. Optional `imageSrcSet` / `imageSizes`; default sizes `(min-width: 768px) 66vw, 100vw`. Stage changes fade the new image in over an opaque underlay (same `imageSrc` skips); copy soft-crossfades.",
+          "Stage image uses `object-cover object-center`. Operator canvas: 2400×1500 (8:5), subject centred. Below `md` the stage is `aspect-[8/5]` full-bleed with previous/next chevrons, swipe, and horizontal page motion; copy slides stack so the band height is the tallest slide (no title-length jump), the end clock sits beside the CTA, and progress sits under the stack with extra top pad, left-aligned. From `md` the band is a 600px side-by-side row with a crossfade stage. Optional `imageSrcSet` / `imageSizes`; default sizes `(min-width: 768px) 66vw, 100vw`.",
       },
     },
   },
@@ -129,6 +131,12 @@ export const CarouselBanner: Story = {
     expect(
       canvas.getByRole("navigation", { name: "Featured lots" }),
     ).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[aria-label="Previous featured lot"]'),
+    ).not.toBeNull();
+    expect(
+      canvasElement.querySelector('[aria-label="Next featured lot"]'),
+    ).not.toBeNull();
 
     const second = canvas.getByRole("button", {
       name: `Show featured lot 2: ${SLIDES[1].title}`,
@@ -161,6 +169,9 @@ export const OneSlide: Story = {
     expect(
       canvas.queryByRole("navigation", { name: "Featured lots" }),
     ).not.toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[aria-label="Previous featured lot"]'),
+    ).toBeNull();
     expect(canvas.getByRole("link", { name: /Bid Now/i })).toBeInTheDocument();
   },
 };

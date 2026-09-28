@@ -4,14 +4,23 @@ import {
 } from "@grade10/design-system/components/display/carousel-progress";
 import { StepIndicator } from "@grade10/design-system/components/display/step-indicator";
 import { buttonVariants } from "@grade10/design-system/components/forms/button";
+import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ArrowRight, CalendarBlank } from "@phosphor-icons/react";
+import {
+  ArrowRight,
+  CalendarBlank,
+  CaretLeft,
+  CaretRight,
+} from "@phosphor-icons/react";
 import {
   type CSSProperties,
   type FocusEvent,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
   type ReactNode,
   useEffect,
   useId,
+  useRef,
   useState,
 } from "react";
 import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
@@ -20,15 +29,38 @@ import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
 const AUTO_ADVANCE_MS = 5000;
 
 /**
- * Slide crossfade — `--duration-fast` + `--ease-smooth-out`.
- * Stage uses fade-in over an opaque underlay (never both translucent — that
- * flashed the empty cell). Copy may soften with `--blur-small`.
+ * Slide motion — `--duration-fast` + `--ease-smooth-out`.
+ * Below md the stage pages horizontally (track + swipe). From md it fades the
+ * new image in over an opaque underlay (never both translucent — that flashed
+ * the empty cell). Copy may soften with `--blur-small`.
  */
 const CROSSFADE_MS = 250;
 const CROSSFADE_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 const COPY_BLUR_PX = 2;
+/** Horizontal page on the small-viewport stage. */
+const SLIDE_MS = 250;
+const SLIDE_EASE = CROSSFADE_EASE;
 
 const HOUR_MS = 60 * 60 * 1000;
+
+/** Fraction of stage width that commits a swipe to the next slide. */
+const SWIPE_THRESHOLD = 0.2;
+/** Ignore tiny moves so a vertical scroll does not steal the stage. */
+const DRAG_LOCK_PX = 8;
+/** Expand the 32px IconButton visual to a 44px touch target. */
+const CHEVRON_HIT =
+  "pointer-events-auto relative after:absolute after:-inset-1.5 after:content-['']";
+/** Tailwind `md` — chevrons and swipe only below this. */
+const MD_UP_MQ = "(min-width: 768px)";
+
+type DragSession = {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  width: number;
+  /** null = undecided, true = horizontal slide, false = vertical scroll. */
+  axis: boolean | null;
+};
 
 /** The lot's external status, as the public catalogue answers it. */
 type FeaturedAuctionsBannerStatus = "active" | "upcoming" | "ended";
@@ -64,6 +96,10 @@ type FeaturedAuctionsBannerCopy = {
   progress: string;
   /** One slide's control. `{position}` and `{title}` are filled in. */
   slide: string;
+  /** Previous slide control (small viewports, on the stage). */
+  previous: string;
+  /** Next slide control (small viewports, on the stage). */
+  next: string;
 };
 
 /**
@@ -130,6 +166,23 @@ function usePrefersReducedMotion() {
   }, []);
 
   return reduced;
+}
+
+/** True from the Tailwind `md` breakpoint up — stage chevrons/swipe stay off. */
+function useIsMdUp() {
+  const [mdUp, setMdUp] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(MD_UP_MQ).matches : true,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(MD_UP_MQ);
+    setMdUp(media.matches);
+    const onChange = () => setMdUp(media.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  return mdUp;
 }
 
 function statusLabel(
@@ -326,7 +379,8 @@ function SlideImage({
     <img
       alt={decorative ? "" : (slide.imageAlt ?? "")}
       aria-hidden={decorative ? true : undefined}
-      className={className}
+      className={cn(className, "pointer-events-none [-webkit-user-drag:none]")}
+      draggable={false}
       fetchPriority={priority ? "high" : "auto"}
       loading={priority ? "eager" : "lazy"}
       onError={() => {
@@ -362,10 +416,16 @@ function FeaturedAuctionsBanner({
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [playKey, setPlayKey] = useState(0);
+  const [dragPx, setDragPx] = useState(0);
+  const [dragging, setDragging] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
+  const mdUp = useIsMdUp();
   const headingId = useId();
   /** After first paint, enable crossfade so the initial slide does not animate in. */
   const [crossfadeReady, setCrossfadeReady] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<DragSession | null>(null);
+  const suppressClickRef = useRef(false);
   const safeIndex =
     slides.length === 0 ? 0 : Math.min(index, slides.length - 1);
   const slide = slides[safeIndex];
@@ -392,18 +452,118 @@ function FeaturedAuctionsBanner({
 
   function goTo(nextIndex: number) {
     if (nextIndex !== safeIndex) setIndex(nextIndex);
+    setDragPx(0);
+    setDragging(false);
     setPlayKey((key) => key + 1);
+  }
+
+  function step(delta: number) {
+    if (slides.length <= 1) return;
+    const next = (safeIndex + delta + slides.length) % slides.length;
+    goTo(next);
   }
 
   function advanceFromTimer() {
     if (paused || slides.length <= 1) return;
     setIndex((current) => (current + 1) % slides.length);
+    setDragPx(0);
+    setDragging(false);
     setPlayKey((key) => key + 1);
+  }
+
+  function endDrag(clientX: number) {
+    const drag = dragRef.current;
+    if (!drag) return;
+    const wasHorizontal = drag.axis === true;
+    const dx = wasHorizontal ? clientX - drag.startX : 0;
+    const threshold = drag.width * SWIPE_THRESHOLD;
+    dragRef.current = null;
+    setPaused(false);
+    setDragging(false);
+
+    if (wasHorizontal && Math.abs(dx) >= threshold) {
+      suppressClickRef.current = true;
+      setDragPx(0);
+      step(dx < 0 ? 1 : -1);
+      return;
+    }
+    if (wasHorizontal) suppressClickRef.current = true;
+    setDragPx(0);
+  }
+
+  function onStagePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (mdUp || slides.length <= 1 || event.button !== 0) return;
+    if (reduceMotion) return;
+    if ((event.target as Element).closest("button")) return;
+    const stage = stageRef.current;
+    if (!stage) return;
+    stage.setPointerCapture(event.pointerId);
+    setPaused(true);
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      width: stage.clientWidth,
+      axis: null,
+    };
+  }
+
+  function onStagePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    const dx = event.clientX - drag.startX;
+    const dy = event.clientY - drag.startY;
+
+    if (drag.axis === null) {
+      if (Math.abs(dx) < DRAG_LOCK_PX && Math.abs(dy) < DRAG_LOCK_PX) return;
+      if (Math.abs(dy) > Math.abs(dx)) {
+        drag.axis = false;
+        const stage = stageRef.current;
+        if (stage?.hasPointerCapture(event.pointerId)) {
+          stage.releasePointerCapture(event.pointerId);
+        }
+        dragRef.current = null;
+        setPaused(false);
+        setDragging(false);
+        setDragPx(0);
+        return;
+      }
+      drag.axis = true;
+      setDragging(true);
+      suppressClickRef.current = true;
+    }
+
+    if (drag.axis !== true) return;
+    setDragPx(dx);
+  }
+
+  function onStagePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    endDrag(event.clientX);
+  }
+
+  function onStagePointerCancel(event: ReactPointerEvent<HTMLDivElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    setPaused(false);
+    setDragging(false);
+    setDragPx(0);
+  }
+
+  function onStageClickCapture(event: ReactMouseEvent<HTMLDivElement>) {
+    if (!suppressClickRef.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+    suppressClickRef.current = false;
   }
 
   if (!slide) return null;
 
   const multiple = slides.length > 1;
+  const stageSwipe = multiple && !mdUp;
   const copyAnimate =
     crossfadeReady && !reduceMotion && multiple
       ? ({
@@ -415,6 +575,28 @@ function FeaturedAuctionsBanner({
           transitionProperty: "none",
           transitionDuration: "0ms",
         } as const);
+
+  function progressControls(className: string) {
+    return (
+      <CarouselProgress aria-label={copy.progress} className={className}>
+        {slides.map((item, itemIndex) => (
+          <CarouselProgressItem
+            active={itemIndex === safeIndex}
+            durationMs={AUTO_ADVANCE_MS}
+            key={item.id}
+            label={copy.slide
+              .replace("{position}", String(itemIndex + 1))
+              .replace("{title}", item.title)}
+            onClick={() => goTo(itemIndex)}
+            onComplete={advanceFromTimer}
+            paused={paused}
+            playKey={playKey}
+            reduceMotion={reduceMotion}
+          />
+        ))}
+      </CarouselProgress>
+    );
+  }
 
   return (
     <section
@@ -433,30 +615,86 @@ function FeaturedAuctionsBanner({
     >
       {/*
         Both cells share one md row at 600px so copy can centre in the full
-        left band. Progress pins to the foot and does not own a second row.
+        left band. Progress pins to the foot from md. Below md the stage keeps
+        the 8:5 front-page ratio full-bleed and pages horizontally; slides
+        stack in one grid cell so the copy band holds the tallest slide's
+        height, the end clock sits beside the CTA, and progress sits under
+        the stack, left-aligned. Chevrons and swipe live on the stage below
+        md only.
       */}
       <div className="grid w-full grid-cols-1 md:h-[600px] md:grid-cols-[minmax(28rem,1fr)_minmax(0,2fr)] md:grid-rows-1">
-        <div className="relative order-1 h-72 overflow-hidden bg-background-subtle sm:h-80 md:order-none md:col-start-2 md:row-start-1 md:h-full">
-          <StageFade
-            activeIndex={safeIndex}
-            ready={crossfadeReady}
-            reduceMotion={reduceMotion}
-            slides={slides}
-          />
+        <div
+          className={cn(
+            "relative order-1 aspect-[8/5] w-full overflow-hidden bg-background-subtle select-none md:order-none md:col-start-2 md:row-start-1 md:aspect-auto md:h-full",
+            stageSwipe && "touch-pan-y",
+          )}
+          onClickCapture={stageSwipe ? onStageClickCapture : undefined}
+          onPointerCancel={stageSwipe ? onStagePointerCancel : undefined}
+          onPointerDown={stageSwipe ? onStagePointerDown : undefined}
+          onPointerMove={stageSwipe ? onStagePointerMove : undefined}
+          onPointerUp={stageSwipe ? onStagePointerUp : undefined}
+          ref={stageRef}
+        >
+          {mdUp ? (
+            <StageFade
+              activeIndex={safeIndex}
+              ready={crossfadeReady}
+              reduceMotion={reduceMotion}
+              slides={slides}
+            />
+          ) : (
+            <StageTrack
+              activeIndex={safeIndex}
+              dragPx={dragPx}
+              dragging={dragging}
+              reduceMotion={reduceMotion}
+              slides={slides}
+            />
+          )}
+          {multiple ? (
+            <div className="pointer-events-none absolute inset-y-0 z-20 flex w-full items-center justify-between px-3 md:hidden">
+              <IconButton
+                aria-label={copy.previous}
+                className={CHEVRON_HIT}
+                onClick={() => step(-1)}
+                size="sm"
+                type="button"
+                variant="outline"
+              >
+                <CaretLeft aria-hidden size={12} weight="bold" />
+              </IconButton>
+              <IconButton
+                aria-label={copy.next}
+                className={CHEVRON_HIT}
+                onClick={() => step(1)}
+                size="sm"
+                type="button"
+                variant="outline"
+              >
+                <CaretRight aria-hidden size={12} weight="bold" />
+              </IconButton>
+            </div>
+          ) : null}
         </div>
 
-        <div className="relative order-2 flex min-h-[22rem] min-w-0 flex-col bg-muted sm:min-h-[24rem] md:order-none md:col-start-1 md:row-start-1 md:h-full md:min-h-0 md:min-w-[28rem]">
-          <div className="relative min-h-0 flex-1 overflow-hidden">
+        <div className="relative order-2 flex min-w-0 flex-col bg-muted md:order-none md:col-start-1 md:row-start-1 md:h-full md:min-h-0 md:min-w-[28rem]">
+          {/*
+            Below md every slide stays in flow in the same grid cell so the
+            band height is the tallest copy (no jump when the title length
+            changes). Progress sits under that stack with its own top pad.
+            From md the band is a fixed 600px row and slides go absolute.
+          */}
+          <div className="relative grid min-h-0 flex-1">
             {slides.map((item, itemIndex) => {
               const active = itemIndex === safeIndex;
               return (
                 <div
                   aria-hidden={!active}
                   className={cn(
-                    "absolute inset-0 flex flex-col justify-center gap-5 px-6 py-12 will-change-[opacity,filter] sm:gap-6 sm:px-10 md:gap-8 md:px-16",
+                    "col-start-1 row-start-1 relative flex flex-col justify-center gap-5 px-6 py-6 will-change-[opacity,filter] sm:gap-6 sm:px-10 sm:py-8 md:gap-8 md:px-16 md:py-12",
                     active
-                      ? "z-10 opacity-100"
-                      : "pointer-events-none z-0 opacity-0",
+                      ? "z-10 opacity-100 md:absolute md:inset-0"
+                      : "pointer-events-none z-0 opacity-0 md:absolute md:inset-0",
                   )}
                   inert={!active ? true : undefined}
                   key={item.id}
@@ -471,6 +709,7 @@ function FeaturedAuctionsBanner({
                     copy={copy}
                     headingId={active ? headingId : undefined}
                     locale={locale}
+                    mdUp={mdUp}
                     slide={item}
                   />
                 </div>
@@ -478,28 +717,14 @@ function FeaturedAuctionsBanner({
             })}
           </div>
 
-          {multiple ? (
-            <CarouselProgress
-              aria-label={copy.progress}
-              className="relative z-10 justify-center border-border border-t bg-background px-6 py-5 sm:px-10 md:absolute md:inset-x-0 md:bottom-0 md:justify-start md:border-0 md:bg-transparent md:px-16 md:pt-5 md:pb-10"
-            >
-              {slides.map((item, itemIndex) => (
-                <CarouselProgressItem
-                  active={itemIndex === safeIndex}
-                  durationMs={AUTO_ADVANCE_MS}
-                  key={item.id}
-                  label={copy.slide
-                    .replace("{position}", String(itemIndex + 1))
-                    .replace("{title}", item.title)}
-                  onClick={() => goTo(itemIndex)}
-                  onComplete={advanceFromTimer}
-                  paused={paused}
-                  playKey={playKey}
-                  reduceMotion={reduceMotion}
-                />
-              ))}
-            </CarouselProgress>
-          ) : null}
+          {multiple && !mdUp
+            ? progressControls("justify-start px-6 pt-2 pb-6 sm:px-10 sm:pb-8")
+            : null}
+          {multiple && mdUp
+            ? progressControls(
+                "absolute inset-x-0 bottom-0 z-10 justify-start px-16 pt-5 pb-10",
+              )
+            : null}
         </div>
       </div>
     </section>
@@ -508,7 +733,8 @@ function FeaturedAuctionsBanner({
 
 /**
  * Opaque underlay + fade-in overlay. Simultaneous opacity on both layers let
- * the empty stage show through; same `imageSrc` skips motion entirely.
+ * the empty stage show through; same `imageSrc` skips motion entirely. Used
+ * from md up — below md the stage pages on `StageTrack`.
  */
 function StageFade({
   slides,
@@ -613,16 +839,140 @@ function StageFade({
   );
 }
 
+/**
+ * Horizontal page track for small viewports. Clones the ends so a wrap
+ * (last→first / first→last) still slides in the travel direction, then snaps
+ * the track without a visible jump.
+ */
+function StageTrack({
+  slides,
+  activeIndex,
+  dragPx,
+  dragging,
+  reduceMotion,
+}: {
+  slides: readonly FeaturedAuctionsBannerSlide[];
+  activeIndex: number;
+  dragPx: number;
+  dragging: boolean;
+  reduceMotion: boolean;
+}) {
+  const count = slides.length;
+  const loop = count > 1;
+  const cells = loop
+    ? [slides[count - 1], ...slides, slides[0]]
+    : [...slides];
+  const [pos, setPos] = useState(loop ? activeIndex + 1 : activeIndex);
+  const [instant, setInstant] = useState(false);
+  const prevActiveRef = useRef(activeIndex);
+
+  useEffect(() => {
+    if (!loop) {
+      setPos(activeIndex);
+      prevActiveRef.current = activeIndex;
+      return;
+    }
+
+    const prev = prevActiveRef.current;
+    if (prev === activeIndex) return;
+    prevActiveRef.current = activeIndex;
+
+    if (reduceMotion) {
+      setInstant(true);
+      setPos(activeIndex + 1);
+      return;
+    }
+
+    if (prev === count - 1 && activeIndex === 0) {
+      setPos(count + 1);
+      return;
+    }
+    if (prev === 0 && activeIndex === count - 1) {
+      setPos(0);
+      return;
+    }
+    setPos(activeIndex + 1);
+  }, [activeIndex, count, loop, reduceMotion]);
+
+  function onTransitionEnd() {
+    if (!loop || instant) return;
+    if (pos === count + 1) {
+      setInstant(true);
+      setPos(1);
+      return;
+    }
+    if (pos === 0) {
+      setInstant(true);
+      setPos(count);
+    }
+  }
+
+  useEffect(() => {
+    if (!instant) return;
+    const raf = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setInstant(false));
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [instant, pos]);
+
+  return (
+    <div
+      className={cn(
+        "flex h-full w-full will-change-transform",
+        loop && "cursor-grab active:cursor-grabbing",
+      )}
+      onTransitionEnd={onTransitionEnd}
+      style={{
+        transform: `translate3d(calc(${-pos * 100}% + ${dragPx}px), 0, 0)`,
+        transitionProperty: instant || dragging || reduceMotion ? "none" : "transform",
+        transitionDuration: `${SLIDE_MS}ms`,
+        transitionTimingFunction: SLIDE_EASE,
+      }}
+    >
+      {cells.map((item, cellIndex) => {
+        const realIndex = loop
+          ? cellIndex === 0
+            ? count - 1
+            : cellIndex === count + 1
+              ? 0
+              : cellIndex - 1
+          : cellIndex;
+        return (
+          <div
+            aria-hidden={realIndex !== activeIndex}
+            className="relative h-full w-full shrink-0 grow-0 basis-full"
+            key={`${item.id}:${cellIndex}`}
+          >
+            <OpenLot
+              className="absolute inset-0 block size-full"
+              slide={item}
+              tabIndex={realIndex === activeIndex ? undefined : -1}
+            >
+              <SlideImage
+                className="size-full object-cover object-center"
+                priority={realIndex === activeIndex}
+                slide={item}
+              />
+            </OpenLot>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function SlideCopy({
   slide,
   copy,
   locale,
   headingId,
+  mdUp,
 }: {
   slide: FeaturedAuctionsBannerSlide;
   copy: FeaturedAuctionsBannerCopy;
   locale?: string;
   headingId?: string;
+  mdUp: boolean;
 }) {
   const priceLabel =
     slide.status === "ended"
@@ -637,6 +987,19 @@ function SlideCopy({
       <ArrowRight aria-hidden size={16} weight="bold" />
     </>
   );
+
+  const endClock =
+    slide.status === "ended" && slide.closeLabel != null ? (
+      <span className="inline-flex items-center gap-1">
+        <CalendarBlank aria-hidden size={14} weight="bold" />
+        {copy.endedAt} {slide.closeLabel}
+      </span>
+    ) : slide.countdown != null ? (
+      <span className="inline-flex items-center gap-1">
+        <CalendarBlank aria-hidden size={14} weight="bold" />
+        <BannerCountdown copy={copy} countdown={slide.countdown} />
+      </span>
+    ) : null;
 
   return (
     <>
@@ -668,10 +1031,14 @@ function SlideCopy({
           </p>
         </div>
       ) : null}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         {slide.href != null ? (
           <a
-            className={buttonVariants({ size: "lg", variant: "default" })}
+            className={buttonVariants({
+              size: "md",
+              variant: "default",
+              className: "md:h-12 md:px-4 md:text-base",
+            })}
             href={slide.href}
             tabIndex={headingId ? undefined : -1}
           >
@@ -679,7 +1046,11 @@ function SlideCopy({
           </a>
         ) : (
           <button
-            className={buttonVariants({ size: "lg", variant: "default" })}
+            className={buttonVariants({
+              size: "md",
+              variant: "default",
+              className: "md:h-12 md:px-4 md:text-base",
+            })}
             onClick={slide.onOpen}
             tabIndex={headingId ? undefined : -1}
             type="button"
@@ -687,20 +1058,15 @@ function SlideCopy({
             {ctaContent}
           </button>
         )}
-      </div>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-secondary-foreground text-sm">
-        {slide.status === "ended" && slide.closeLabel != null ? (
-          <span className="inline-flex items-center gap-1">
-            <CalendarBlank aria-hidden size={14} weight="bold" />
-            {copy.endedAt} {slide.closeLabel}
-          </span>
-        ) : slide.countdown != null ? (
-          <span className="inline-flex items-center gap-1">
-            <CalendarBlank aria-hidden size={14} weight="bold" />
-            <BannerCountdown copy={copy} countdown={slide.countdown} />
-          </span>
+        {!mdUp && endClock != null ? (
+          <div className="text-secondary-foreground text-sm">{endClock}</div>
         ) : null}
       </div>
+      {mdUp && endClock != null ? (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-secondary-foreground text-sm">
+          {endClock}
+        </div>
+      ) : null}
     </>
   );
 }
