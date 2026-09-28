@@ -49,6 +49,9 @@ function SummaryRow({
   );
 }
 
+const hasValue = (value: ReactNode | undefined): boolean =>
+  value != null && value !== "";
+
 function AddressSection({
   heading,
   address,
@@ -62,7 +65,9 @@ function AddressSection({
         {heading}
       </h3>
       <VStack className="w-full text-sm leading-5" gap="xs">
-        <p className="font-medium text-foreground">{address.name}</p>
+        {hasValue(address.name) ? (
+          <p className="font-medium text-foreground">{address.name}</p>
+        ) : null}
         {address.lines.map((line) =>
           address.mapsHref ? (
             <Link
@@ -132,8 +137,10 @@ function OrderDetailsSidebar({
       summary.tax,
     ].some((row) => row != null);
   const hasAddress = shippingAddress != null || pickupAddress != null;
-  const hasSecondaryGroups =
-    payment != null || hasAddress || loyaltyPoints != null;
+  const hasPayment =
+    payment != null &&
+    [payment.brand, payment.label, payment.maskedNumber].some(hasValue);
+  const hasSecondaryGroups = hasPayment || hasAddress || loyaltyPoints != null;
   const hasSidebar = hasSummary || hasSecondaryGroups;
 
   if (!hasSidebar) return null;
@@ -223,14 +230,21 @@ function OrderDetailsSidebar({
         ) : null}
         {hasSecondaryGroups ? (
           <VStack className="w-full p-6" gap="lg" hAlign="stretch">
-            {payment ? (
+            {hasPayment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   {copy.paymentMethod}
                 </h3>
                 <PaymentMethodCard
-                  label={payment.maskedNumber}
-                  leading={<OrderDetailsPaymentLogo brand={payment.brand} />}
+                  description={
+                    payment.maskedNumber != null ? payment.label : undefined
+                  }
+                  label={payment.maskedNumber ?? payment.label}
+                  leading={
+                    payment.brand ? (
+                      <OrderDetailsPaymentLogo brand={payment.brand} />
+                    ) : null
+                  }
                 />
               </VStack>
             ) : null}
