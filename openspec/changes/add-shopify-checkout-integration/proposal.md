@@ -1,6 +1,6 @@
 # Add Shopify checkout integration
 
-**Author** - @kinisworking, 2026-09-28
+**Author:** @kinisworking - 2026-09-28
 
 ## Why
 
