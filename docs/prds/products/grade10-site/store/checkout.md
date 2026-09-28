@@ -1,5 +1,6 @@
 ---
 title: Checkout
+spec: grade10-site/store/checkout
 order: 5
 ---
 
@@ -35,12 +36,23 @@ An item that sold out in the meantime is refused, with the item named.
 ## Shopify — Tell the store
 The order moves from pending to paid within seconds.
 
-## Collector — Press Continue shopping
-On Shopify's confirmation page, back to the store.
+## Collector — Open Your Orders in Grade10
+The Shopify Thank You and Order status page offers a Grade10 Your Orders link.
+The matching purchase appears there. The native Continue shopping button is
+not the return path.
 
 ## Collector — Find the order
 In Your Orders.
 :::
+
+## Integration readiness
+
+🚧 **Checkout integration** - The live review, hosted handoff, safe recovery
+and settlement run through staging before production enablement.
+
+🚧 **Return path** - Shopify's Thank You and Order status extension offers a
+Grade10 Your Orders link, and the staging walk proves the matching purchase
+appears after return.
 
 - **Members only** — checkout is signed in; there is no guest checkout
 - **The bar** — goods worth **HKD 120,000** or more need a verified buyer;
