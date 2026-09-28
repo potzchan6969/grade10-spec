@@ -204,6 +204,7 @@
       "consent": "我已閱讀個人資料收集聲明。",
       "book": "預約交卡",
       "saveForLater": "儲存，稍後再約",
+      "saveChanges": "儲存變更",
       "expired": "這張清單已經過期。價格與參考成交會變，請由收費表重新開始。",
       "failed": "暫時未能保存，請稍後再試。",
       "minimumGrade": "最低評級"

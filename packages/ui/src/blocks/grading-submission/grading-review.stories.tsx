@@ -194,6 +194,46 @@ export const PlanExpiredMeanwhile: Story = {
   },
 };
 
+/** The editor's review: a kept list read for its totals and its warning,
+ * neither booked nor ticked again, and saved in the words it is handed
+ * (shared-ui-grading-submission-SC-74). */
+export const KeptPlanEditor: Story = {
+  args: {
+    copy: { ...REVIEW_COPY, saveForLater: "Save changes" },
+    schedule: REVIEW_SCHEDULE.slice(0, 2),
+    warnings: [WARNING],
+  },
+  render: ({ consented, onConsent, onBook, ...review }) => (
+    <GradingReview {...review} />
+  ),
+  play: async ({ args, canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step(
+      "shared-ui-grading-submission-SC-74 - A review given no booking offers neither the booking nor the statement",
+      async () => {
+        expect(canvas.queryByRole("checkbox")).toBeNull();
+        expect(
+          canvas.queryByRole("button", { name: REVIEW_COPY.book }),
+        ).toBeNull();
+        expect(
+          itemsUnder(canvasElement, REVIEW_COPY.scheduleTitle),
+        ).toHaveLength(2);
+        expect(
+          canvas.getByText("Declared in total: HK$8,000"),
+        ).toBeInTheDocument();
+        expect(canvas.getByText("Fee: HK$1,000")).toBeInTheDocument();
+        expect(
+          canvas.getByText("Difference due before collection: HK$300"),
+        ).toBeInTheDocument();
+        await userEvent.click(
+          canvas.getByRole("button", { name: "Save changes" }),
+        );
+        expect(args.onSaveForLater).toHaveBeenCalled();
+      },
+    );
+  },
+};
+
 /** The review's words in Traditional Chinese, as a second brand hands them over. */
 const REVIEW_COPY_ZH_HANT: GradingReviewCopy = {
   title: "核對後預約交卡",

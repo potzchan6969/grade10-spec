@@ -56,24 +56,31 @@ type GradingReviewCopy = {
   edit: string;
 };
 
-type GradingReviewProps = GradingLocaleProps & {
-  copy: GradingReviewCopy;
-  /** The header line: the cards, the grader, the level and the weeks. */
-  summary: string;
-  schedule: readonly GradingReviewCard[];
-  totals: { declared: GradingMoney; fee: GradingMoney; cover?: GradingMoney };
-  warnings?: readonly GradingUpchargeWarning[];
-  goodToKnow: readonly string[];
-  consented: boolean;
-  pending?: boolean;
-  /** The refusal the shop gave, in its words. */
-  error?: string;
-  onEdit: () => void;
-  onConsent: (consented: boolean) => void;
-  onBook: () => void;
-  onSaveForLater: () => void;
-  className?: string;
-};
+/** The collection statement and the booking, given together or not at all. */
+type GradingReviewBooking =
+  | {
+      consented: boolean;
+      onConsent: (consented: boolean) => void;
+      onBook: () => void;
+    }
+  | { consented?: never; onConsent?: never; onBook?: never };
+
+type GradingReviewProps = GradingLocaleProps &
+  GradingReviewBooking & {
+    copy: GradingReviewCopy;
+    /** The header line: the cards, the grader, the level and the weeks. */
+    summary: string;
+    schedule: readonly GradingReviewCard[];
+    totals: { declared: GradingMoney; fee: GradingMoney; cover?: GradingMoney };
+    warnings?: readonly GradingUpchargeWarning[];
+    goodToKnow: readonly string[];
+    pending?: boolean;
+    /** The refusal the shop gave, in its words. */
+    error?: string;
+    onEdit: () => void;
+    onSaveForLater: () => void;
+    className?: string;
+  };
 
 /**
  * The last page before the drop-off is booked: every card as it will be handed
@@ -84,6 +91,9 @@ type GradingReviewProps = GradingLocaleProps & {
  * booking nor saving is offered while the review reads as pending: both
  * controls are disabled rather than removed, so the page does not move under
  * the collector while the shop answers.
+ *
+ * Given no booking, the review offers neither the statement nor Book, and its
+ * save act reads `copy.saveForLater`, whatever the caller names it.
  */
 function GradingReview({
   copy,
@@ -214,13 +224,15 @@ function GradingReview({
         </List>
       </VStack>
 
-      <CheckboxListInput
-        checked={consented}
-        data-slot="grading-review-consent"
-        onCheckedChange={(next) => onConsent(next)}
-      >
-        {copy.consent}
-      </CheckboxListInput>
+      {onConsent ? (
+        <CheckboxListInput
+          checked={consented === true}
+          data-slot="grading-review-consent"
+          onCheckedChange={(next) => onConsent(next)}
+        >
+          {copy.consent}
+        </CheckboxListInput>
+      ) : null}
 
       {error ? (
         <Text data-slot="grading-review-error" size="sm" tone="error">
@@ -229,14 +241,16 @@ function GradingReview({
       ) : null}
 
       <VStack gap="sm" hAlign="stretch">
-        <Button
-          data-slot="grading-review-book"
-          disabled={!consented || pending}
-          loading={pending}
-          onClick={onBook}
-        >
-          {copy.book}
-        </Button>
+        {onBook ? (
+          <Button
+            data-slot="grading-review-book"
+            disabled={consented !== true || pending}
+            loading={pending}
+            onClick={onBook}
+          >
+            {copy.book}
+          </Button>
+        ) : null}
         <Button
           data-slot="grading-review-save"
           disabled={pending}

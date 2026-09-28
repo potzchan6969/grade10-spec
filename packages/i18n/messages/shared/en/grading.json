@@ -204,6 +204,7 @@
       "consent": "I have read the personal information collection statement.",
       "book": "Book the drop-off",
       "saveForLater": "Save and book later",
+      "saveChanges": "Save changes",
       "expired": "This list has expired. Prices and references move, so start again from the price sheet.",
       "failed": "We could not save this just now. Try again in a moment.",
       "minimumGrade": "Minimum grade"

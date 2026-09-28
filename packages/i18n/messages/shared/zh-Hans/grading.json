@@ -204,6 +204,7 @@
       "consent": "我已阅读个人资料收集声明。",
       "book": "预约交卡",
       "saveForLater": "保存，稍后再约",
+      "saveChanges": "保存更改",
       "expired": "这张清单已经过期。价格与参考成交会变，请由收费表重新开始。",
       "failed": "暂时未能保存，请稍后再试。",
       "minimumGrade": "最低评级"
