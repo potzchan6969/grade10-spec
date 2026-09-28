@@ -39,9 +39,13 @@ winner of three lots has three orders, each with its own deadlines.
 | Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address; an operator reopen starts a fresh **48 hours** |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
-| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG or HEIC files of up to **5 MB** each, **15 MB** total, uploaded once |
+| Payment proof | 🚧 **1 to 3** PDF, PNG or JPG files of up to **5 MB** each, **15 MB** total, uploaded once; a phone's HEIC photo is converted to JPG before it is sent |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
+- 🚧 **Next step** — a panel above Order Summary in every status: what
+  Grade10 is doing, by when, what the winner does next, and Contact Us. While
+  the invoice is being prepared it says the 7 days to pay start when the
+  invoice arrives, and promises no time for it
 - **Sections** — Order Information with Invoice Status and Collection Method,
   Order Status with a time per step, and Lots
 - **Progress** — five steps, Address → Invoice → Payment → Shipped →
@@ -52,6 +56,7 @@ winner of three lots has three orders, each with its own deadlines.
   Copy Message first on Winner Order, Open Mail App second; overdue,
   cancelled, delivered and partial-payment letters use the same subject and
   body
+- 🚧 **Contact Us reason** — the order's status, whichever it is
 - ❓ **Copy Message confirmation** — whether Copy Message shows any success
   chrome beyond the control's own state; Product (@tangconst) confirms
 
@@ -129,14 +134,14 @@ meaning.
 
 ## Order Setup
 
-Before any invoice, the winner confirms three things on one form, inside 48
+Before any invoice, the winner confirms three things together, inside 48
 hours of the close.
 
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
+| 🚧 Payment method | Card in every currency; bank transfer where Grade10 holds bank details for the order's currency; each choice shows its fee rule | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
-| 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
 
 - **Form** — Personal or Company; first and last name, phone (country and
   digits), country or region, town or city, address line 1 and postal code are
@@ -164,11 +169,16 @@ hours of the close.
   browser locale, account language, or fixed English; Product confirms
 - **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
   form and only Grade10 reopens it, under Edge Cases
-- 🚧 **Locked on confirming** — the winner changes none of the three
-  afterwards; an operator edits them on request before send and reissues
-  after, and the order shows what changed
-- ❓ **Fee range wording** — what each choice says; the bank transfer wording
-  names no amount, because the operator sets that fee; Product confirms
+- 🚧 **Fee rule at the choice** — the rule each method's fee is quoted from
+  in Payment Settings, never an amount: `3.4% + HK$2.35 processing fee`, a
+  zero part left out, `Free` when both are, or `Set on your invoice` with no
+  rule; the amount first shows on the sent invoice
+- 🚧 **Review before confirming** — setup ends on a review of the three
+  choices, each with a way back, which says they lock once confirmed;
+  confirming records all three together, and leaving first records none
+- 🚧 **Locked on confirming** — the three read locked with Contact Us, and
+  the winner changes none of them; an operator edits them on request before
+  send and reissues after, and the order shows what changed
 - ❓ **One-time address after a reload** — whether it survives leaving and
   returning to the order; Product and Design confirm
 
@@ -186,8 +196,8 @@ by card, reads:
 | Insurance | 500 | Optional and above zero; absent when none |
 | 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
 | Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
-| Payment Processing Fee | 4,272 | Priced by method and fixed at send; for card, grossed up from the Subtotal at the provider's live fees, so Grade10 keeps the Subtotal whole |
-| Order Total | 125,572 | Subtotal plus the fee — what the winner pays |
+| 🚧 Payment Processing Fee | 4,271.80 | Set by the operator, pre-filled from the fee schedule in Payment Settings — here card at 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
+| Order Total | 125,571.80 | Subtotal plus the fee — what the winner pays |
 
 - 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
   fee rows as TBD; after send it carries a brief info tooltip (`0.9% of the
@@ -197,8 +207,8 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
-- 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
-  Free when zero
+- 🚧 **Payment Processing Fee** — set by the operator on every invoice, card
+  or bank transfer, from the schedule's suggestion; zero reads Free
 - 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
   the document names it rather than leaving it to the fee amount alone
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
@@ -239,11 +249,10 @@ doing, under Edge Cases.
   on a stored card or another; Grade10 confirms it on its own, and a declined
   attempt leaves the invoice payable until the deadline
 - 🚧 **Unfinished payment** — a payment that times out or is abandoned says
-  so and leaves Pay with Card ready; a completed one reads Confirming payment until
-  Grade10 records it
-- 🚧 **Started in time** — a payment received before the deadline completes
-  even if it confirms after; one received at or after it is refused, and the
-  card is not charged
+  so and leaves Pay with Card ready; a completed one reads Confirming payment
+  while Grade10 checks it with the provider, then the order's status
+- 🚧 **Started in time** — one tried at or after the deadline cannot start, so
+  the card is not charged; one started in time still counts
 
 ### By Bank Transfer
 
@@ -259,24 +268,22 @@ doing, under Edge Cases.
   name, bank address, SWIFT/BIC, full account or IBAN, then payment
   reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
-- 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
-  or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
-  each and **15 MB** total, uploaded once after paying, behind a confirm
-  step saying nothing can be added later; the order reads Payment Verifying,
-  the deadline stops, and Submit Payment Proof, View Bank Details and further
-  uploads are hidden
-- 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
-  the transfer and will email when payment is confirmed, placed where the
-  Preparing Invoice alert sits
+- 🚧 **Submit Payment Proof** — the files and an optional transaction
+  reference from the winner's bank, with no amount due or bank reference
+  shown; uploaded once after paying, behind a confirm step saying nothing can
+  be added later; the order reads Payment Verifying, the deadline stops, and
+  Submit Payment Proof, View Bank Details and further uploads are hidden
 - 🚧 **Manual confirmation** — an operator confirms the proof, or returns it
   with a reason the winner reads, the latest only; the deadline runs again
   with the time that was left, and the winner uploads again — [Auction
   Management · Payment](/p/grade10-admin/auction/management#payment)
-- 🚧 **Proof stays private** — the winner never sees a proof file or its name;
-  the order shows only that proof was sent
-- ❓ **The accounts** — the details for each of the three ways; Finance
-  confirms. Preview uses Grade10 Finance Limited / HSBC Hong Kong samples
-  until then
+- 🚧 **Proof stays private** — the winner never sees a payment proof file, its
+  name or the transaction reference; the order shows only that proof was sent
+- 🚧 **Bank details by lane** — the Grade10 Finance Limited / HSBC Hong Kong
+  sample outside production; none in production, so card only there until
+  Finance confirms Grade10's account
+- ❓ **The accounts** — Grade10's HKD account for each of the three ways;
+  Finance confirms
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -355,11 +362,11 @@ at expiry, then shipped, delivered, and order cancelled.
 | Missed | What the winner sees | What an operator does |
 | --- | --- | --- |
 | The 48-hour address deadline | Confirm hidden, Missed setup deadline with Contact Us; the order reads Setup Overdue | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
-| The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the order reads Payment Overdue | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
+| The 7-day payment deadline | Pay hidden, the overdue message with Contact Us; the order reads Payment Overdue | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
 
-- **Overdue penalties** — a missed payment deadline suspends the bidder,
-  below; ❓ what "penalties or extra charges" in the overdue letters means
-  beyond that, Product confirms
+- **Overdue penalties** — a missed payment deadline suspends the bidder, below
+- ❓ **Other penalties** — what else "penalties or extra charges" in the
+  overdue letters means; Product confirms
 
 ### Partial Payment
 
@@ -370,9 +377,9 @@ balance. The invoice above, settled in three payments:
 
 | Payment | Amount | Its receipt shows | The operator |
 | --- | --- | --- | --- |
-| `-P1` | 50,000 | Invoice total 125,572 · previous payments 0 · this payment 50,000 · balance due 75,572 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
-| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,572 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
-| `-P3` | 10,572 | Previous 115,000 · this payment 10,572 · balance due 0 | An exact match closes on its own; the order reads Processing |
+| `-P1` | 50,000 | Invoice total 125,571.80 · previous payments 0 · this payment 50,000 · balance due 75,571.80 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
+| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
+| `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Processing |
 
 - 🚧 **The close prompt** — from the payment that brings the total to 90% of
   the invoice, every payment asks the operator to close as Paid or keep it
@@ -461,10 +468,14 @@ a second payment provider, and changes to the bid-time rules.
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
-| Payment processing fee | 🚧 In flight | On every invoice, priced by method: card grossed up from the Subtotal at send from the provider's live fees, never from an admin rate; bank transfer entered by the operator, no cap. A fee that costs more than quoted is absorbed; the sent invoice never re-prices. | Product (@jeffffej0909) |
+| Payment processing fee | 🚧 In flight | On every invoice, card or bank transfer, the operator sets the fee, pre-filled from a fee schedule in Payment Settings: a percentage and a fixed amount per currency and method, the card rule grossed up from the Subtotal. No cap; a fee that costs more than quoted is absorbed; the sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
-| Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
-| Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address and method, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
+| Bank details | 🚧 In flight | Grade10 holds bank details per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account, so production offers card only until then. Chosen over a sample account in the site's code, which showed on every lane and on every invoice PDF, production included. | Product and Finance |
+| Payment proof files | 🚧 In flight | PDF, PNG or JPG, with an optional transaction reference from the winner's bank; a phone's HEIC photo is converted on the device. Chosen over taking HEIC as it is, which an operator's browser cannot open. | Product |
+| Fee disclosure | 🚧 In flight | The winner chooses a method on its fee rule from the same schedule — `3.4% + HK$2.35 processing fee`, `Free`, or `Set on your invoice` where no rule is set, with a zero part left out, as in `3.4% processing fee`; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. Chosen over fixed wording Grade10 writes by hand, which drifts from the rule the invoice is quoted from, and over showing `+ HK$0.00`, which reads as a charge. | Product |
+| Next step | 🚧 In flight | Every status opens with one panel saying what Grade10 is doing, by when, what the winner does next, and Contact Us. Awaiting the invoice, it says the 7 days start when the invoice arrives and promises no time for the invoice itself. Chosen over alerts in some statuses only, which left a winner waiting on the invoice with no word on what happens next. | Product |
+| Review before confirming | 🚧 In flight | Setup ends on a review of the three choices that says they lock on confirming; confirming records all three together, and leaving records none. Chosen over saving each step as the winner goes, which makes a half-finished setup look confirmed. | Product |
+| Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address and method, only an operator changes them: an edit with a reason before send, a reissue after. Chosen over a winner amendment while a window stays open, which moves the address under an invoice being prepared. | Product (@jeffffej0909) |
 | Address deadline | Decided | 48 hours from lot close. A miss hides Confirm, shows Contact Us, and the order reads Setup Overdue; no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |
 | Reopening the address form | Decided | An operator, with payment processing and a reason, reopens it once the deadline passes before an address was confirmed, for a fresh 48 hours; never on a cancelled order; no letter, the operator tells the winner. Or the operator records an address given by phone without reopening. | Product (@jeffffej0909) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
@@ -475,7 +486,6 @@ a second payment provider, and changes to the bid-time rules.
 | Refund transaction clues | Decided | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
-| Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation at listing creation, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. Receipt identifier format remains unresolved on the Receipt ID row below. | Product and Finance |
 | Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
 | Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |
@@ -483,6 +493,7 @@ a second payment provider, and changes to the bid-time rules.
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
+| Contact Us reason | 🚧 In flight | The ready email names the order's status, whichever it is, since Contact Us sits in the Next step panel in every status. Chosen over three fixed reasons, which named none for a winner writing from any other status. | Product |
 | Contact Us destination | Decided | Copy-first sheet on Winner Order: To, Subject, Message, Copy Message first, Open Mail App second. Letters prefill the same mailto and name the address. Chosen over opening a mail client, a contact form, or a toast with the address only. A partial-payment template lists receipts and never the remaining balance. Subject uses the current invoice id after a reissue; Message is an editable Textarea with Copy Message footer-only. | Product (@tangconst) |
 | Reissue letter | Decided | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
 | Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |

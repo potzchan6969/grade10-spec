@@ -30,7 +30,7 @@ the card is in the winner's hands. The collector's half is
 | **Draft** | The first save; nothing is required yet | Everything, sandbox included |
 | **Created** | Create: a title, a slug, a starting price, a start, a close after both the start and now, at least one media item, and the stock hold the draft took | Catalogue fields, prices and window, slug, Publish at, media |
 | **Published** | An operator publishes, or Publish at arrives; a draft never publishes | Catalogue copy, taxonomy and media only |
-| **Closed** | The close passes — [Bidding](/p/grade10-site/auction/bidding#auction-logic) | Nothing; the sale is settled in the queue |
+| **Closed** | The close passes — [Bidding](/p/grade10-site/auction/bidding#auction-logic) | Nothing; the sale goes on in its order |
 | **Settled** | The order is done | Nothing |
 | **Canceled** | Called off from draft, created or published, or its campaign is cancelled | Nothing; a second call-off is refused |
 
@@ -83,6 +83,9 @@ the card is in the winner's hands. The collector's half is
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
+- 🚧 **Extended bidding** - a published lot past its scheduled close and still
+  taking bids reads Extended in the Listings table; its status does not change
+- 🚧 **Open order** - a won lot's row opens its order in Orders
 - **Watchers** — opening Stats on a listing shows how many collectors watch
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
@@ -134,72 +137,83 @@ Operator-curated slides on the collector catalogue's Featured band —
   first gallery image, or the stage’s default background colour if that is
   missing too — no broken-image chrome
 
-## Post-Sale Queue
+## Orders
 
-The queue works every winner order from close through delivery: each row
-wears one outcome, the queue filters to one outcome at a time, and an order
-opens into its winner, invoices, payments, addresses, fulfilment and trail.
+🚧 One workspace, Orders under `/auction`, works every won lot from the close
+through delivery: a worklist that says what needs doing, and a page for each
+order.
 
 | Rule | Value |
 | --- | --- |
 | Payment window | **7 calendar days** from send |
-| Address window | **48 hours** from actual close; a reasoned operator reopen gives a fresh **48 hours**; invoice send ends address changes |
-| Setup Overdue | **48 hours** from lot close while Awaiting Setup only; Preparing Invoice has no queue Setup Overdue mark, and its payment timer starts when the invoice is sent and visible to the winner |
+| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen gives a fresh **48 hours**; after confirmation only an operator changes it |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
-| Outcome | When | Needs action |
-| --- | --- | --- |
-| Draft · Scheduled · Live | Before a sale; time left is read from the close | No |
-| Unsold · Called off | Ended without a payable order | No |
-| Awaiting Setup | The lot closed with setup incomplete | No |
-| Preparing Invoice | The winner confirmed an address; no invoice yet | Yes |
-| Pending Payment | The invoice is unpaid before its deadline | No |
-| Payment Overdue | The unpaid invoice passed its payment deadline | Yes |
-| 🚧 Payment Verifying | The winner uploaded payment proof | Yes, until the proof is checked |
-| 🚧 Partially Paid | An operator has recorded at least one payment and money is still owed | No |
-| Processing | Paid, not dispatched | Yes |
-| Shipped · Delivered | Dispatched; delivery confirmed | No |
-| Cancelled · Refunded | A recorded terminal outcome | No |
+| Status | Segment | Primary action | Waited since |
+| --- | --- | --- | --- |
+| 🚧 Awaiting Setup | Waiting on winner | None | The lot's close |
+| 🚧 Setup Overdue | Needs action | Reopen setup | The address deadline |
+| 🚧 Preparing Invoice | Needs action | Send invoice | The winner's setup confirmation |
+| 🚧 Pending Payment | Waiting on winner | None | The send |
+| 🚧 Payment Overdue | Needs action | Reissue | The payment deadline |
+| 🚧 Payment Verifying | Needs action | Check proof | The winner's latest proof |
+| 🚧 Partially Paid | Waiting on winner | Record payment | The latest payment |
+| 🚧 Processing | Needs action | Dispatch | The payment that paid it |
+| 🚧 Shipped | In transit | Confirm delivery | The dispatch |
+| 🚧 Delivered · Cancelled · Refunded | Closed | None | The delivery, the cancel or the refund |
 
-- **Setup Overdue** — a separate, filterable mark on an Awaiting Setup order after its
-  persisted 48-hour address deadline; Preparing Invoice has no queue Overdue
-  mark, and the operator decides whether to contact the winner, invoice or
-  cancel
-- **Payment Overdue** — the winner's invoice is overdue after the payment
-  deadline, which starts when the invoice is sent and visible to the winner;
-  this is separate from the address deadline
-- **Extended bidding: ON** — a lot past its scheduled close and still taking
-  bids carries this label; its outcome does not change
-- 🚧 **Search** — by listing code, invoice ID or bank reference; a replaced
-  invoice's ID or reference still finds the order
-- **The order detail** — the winner's name, registered email and phone, never
-  a payment-provider identifier; the invoice, fulfilment and derived statuses
-  with the rule that produced them, the deadline with its countdown, the
-  reissue count and the suspension state; how long it has waited; and the
-  trail of status changes and comments in one time order, never edited or
-  deleted
+- 🚧 **The order page** - at its own address. The header holds the status, a
+  Test badge on a sandbox lot, the rule behind the status in one sentence, how
+  long it has waited, and one primary action, with every other action that
+  applies now under More
+- **The winner** - name, registered email and phone, never a payment-provider
+  identifier, beside the deadline, the reissue count and the suspension state
+- 🚧 **One timeline** - the invoice log, the fulfilment log and comments,
+  oldest first; a comment is 1 to 2,000 characters, never edited or deleted
+- 🚧 **Each action is a dialog** - it restates what will happen, a refusal
+  reads as a sentence with the dialog kept open, and money is typed as the
+  winner reads it, `50.00` for HK$50.00
 
-| Action | On | Grant |
+| Action | On | Access |
 | --- | --- | --- |
 | Send invoice | Preparing Invoice | Payment processing |
-| 🚧 Reissue | A sent invoice, pending or expired, never Partially Paid | Payment processing |
+| 🚧 Reissue | Pending Payment or Payment Overdue | Payment processing |
 | 🚧 Confirm or return proof | Payment Verifying, where these are the only actions | Payment processing |
-| Settle manually | A bank transfer invoice, pending or expired | Payment processing |
-| 🚧 Record a partial payment | An invoice pending or expired, or already Partially Paid | Payment processing |
-| 🚧 Cancel order | Awaiting Setup, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
-| 🚧 Reopen the address form, or record an address | Awaiting Setup after the deadline, before send | Payment processing |
+| 🚧 Record payment | A bank transfer invoice in Pending Payment or Payment Overdue, or a Partially Paid order | Payment processing |
+| 🚧 Cancel order | Awaiting Setup, Setup Overdue, Preparing Invoice or Payment Overdue | Payment processing |
+| 🚧 Reopen the address form, or record setup | Setup Overdue | Payment processing |
+| 🚧 Clear flag | Each flagged payment, with a reason | Payment processing |
 | Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
-| Dispatch | A paid order | Shipment processing |
-| Confirm delivery | A dispatched order | Shipment processing |
-| Comment | Any order the operator can open | None |
+| 🚧 Dispatch | Processing | Shipment processing |
+| 🚧 Confirm delivery | Shipped | Shipment processing |
+| 🚧 Comment | Any order the operator can open | Reading |
+
+## Post-Sale Queue
+
+🚧 The Orders worklist: one row per won lot's order, in Needs action, Waiting
+on winner, In transit, Closed and All, opening on Needs action.
+
+- 🚧 **Segments** - each counted, the counts adding up to All; a flagged order
+  sits under Needs action only until every flag is cleared. The first three
+  list the longest wait first, Closed and All the latest first
+- 🚧 **Row** - the listing code, which opens the order, the lot, the winner,
+  the status and its flag, the total, how long it has waited, and the primary
+  action unless the order is flagged or the operator lacks the access
+- 🚧 **Waited** - from when the status began, or from a flag. Setup Overdue is
+  the status at the 48-hour address deadline and nothing else is marked:
+  Preparing Invoice carries no mark, and no wait changes a status
+- 🚧 **Search and filters** - by the start of a listing code, any invoice ID
+  the order held, the winner's email, a payment's reference or a proof's
+  transaction reference; one status of the segment's, then a cancellation
+  category; all kept in the address
 
 ## Payment
 
-- **The quote** — the operator reads the confirmed address, the method, the
-  winning bid and the premium, enters Shipping & Handling (zero allowed) and
-  optional Insurance (above zero), and sends; the send locks the address and
-  starts the 7 days
+- 🚧 **The quote** - the operator reads the confirmed address, the method, the
+  winning bid and the premium, enters Shipping & Handling (zero allowed),
+  optional Insurance (above zero) and the Payment Processing Fee, reads the
+  total and the deadline to the minute, and sends, which starts the 7 days
 - 🚧 **Tax** — a third quoted amount beside Shipping & Handling and
   Insurance, optional and above zero. Grade10 computes no rate: the operator
   decides what is owed and enters it
@@ -207,45 +221,64 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   send is refused while the order has none, and the edit before send adds
   it; an address recorded by phone asks for billing too, same as delivery by
   default
-- 🚧 **Payment Processing Fee** — for card, priced by Grade10 from the
-  provider's live fees, and the send is refused when they cannot be read; for
-  bank transfer, entered by the operator on every invoice, zero or more
+- 🚧 **Payment Processing Fee** - starts from the fee schedule's rule for the
+  order's currency and method, and follows the subtotal until the operator
+  types one; zero or more, with no cap. With no rule it starts empty and must
+  be filled. On a reissue it starts from the current invoice while the method
+  stays, or from the new method's rule after a switch, with the schedule's
+  suggestion beside it. A sent invoice never re-prices
+- 🚧 **What was seen is sent** - the send and the reissue carry the total the
+  operator read; when Grade10 now prices the order differently, for example
+  because the premium minimum changed, the send is refused and the dialog
+  shows the new total
 - 🚧 **Edit before send** — at the winner's request the operator changes the
   address, the method or both, with a reason the log keeps beside the old and
-  new values; the order stays Preparing Invoice. Bank transfer only in a
-  currency with bank details — HKD at launch
-- 🚧 **Reissue** — one action for any change after send: address, method,
-  fee, shipping, insurance, tax, and the deadline kept or restarted, with a reason
-  and at least one change; no limit, each logged with its count, and the
-  buyer's reissue history across all their orders shown before another is
-  granted
-- 🚧 **Checking proof** — the operator confirms, with the winner's files and
-  their own if they wish, or returns the invoice to pending with a reason the
-  winner reads and one kept internal; the prompt shows the time left, and
-  returning is not offered once the invoice has expired
-- 🚧 **Expired invoice** — the winner can no longer pay it: a card payment
-  received at or after the deadline is refused, while one started in time
-  still counts; the operator reissues with a fresh 7 days, settles manually,
-  or cancels
-- 🚧 **Manual settlement** — records bank transfer, cash or another described
-  method, a reference where required, and 1 to 5 private proof files; settled
-  at the invoice's full order total with its fee line kept, and never on a
-  card invoice, which is reissued as bank transfer first
-- 🚧 **Recording a partial payment** — the manual settlement form, for less
-  than the balance owed, on a pending, expired or Partially Paid invoice; the
-  order reads Partially Paid, its deadline stops for good, and its numbers
-  are fixed: no reissue and no cancel, and what will not be paid off is
-  settled by hand outside the system. A payment above the original invoice
-  total is accepted after an overpayment confirmation dialog before the
-  invoice is marked Paid; the full payment remains recorded and the excess
-  can be returned through the refund flow
+  new values; the order stays Preparing Invoice. Bank transfer is refused
+  where Grade10 holds no bank details for the order's currency
+- 🚧 **Reissue** — one action for any change after send, on a pending or
+  expired invoice: address, method, fee, shipping, insurance, tax, and the
+  deadline kept or restarted, with a reason and at least one change; no limit,
+  each logged with its count, and the buyer's reissue history across all their
+  orders shown before another is granted. The replaced invoice reads
+  Replaced, and its ID still finds the order
+- 🚧 **Checking proof** — the operator opens the winner's files and
+  transaction reference on the order page, then confirms, with their own files
+  if they wish, or returns the invoice to pending with a reason the winner
+  reads and one kept internal; the deadline resumes with the time that was
+  left, and returning is not offered once the invoice has expired
+- 🚧 **Expired invoice** — the winner can no longer start a payment on it;
+  one started in time still counts, and one that lands after expiry pays it,
+  flagged Paid late. The operator reissues with a fresh 7 days, records a
+  payment, or cancels
+- 🚧 **Money that lands** - a card payment is always recorded. One the
+  invoice did not expect carries one of six flags until an operator clears it
+  with a reason, and clearing moves nothing. Money that counts toward nothing
+  blocks neither a reissue nor a cancel, and finance returns it outside
+  Grade10
+
+| A card payment that lands | What it does | Flag |
+| --- | --- | --- |
+| 🚧 On a cancelled order | Counts toward nothing; the order stays Cancelled | Paid after cancel |
+| 🚧 On a replaced invoice | Counts toward nothing | Paid on a replaced invoice |
+| 🚧 At another amount or currency | Counts toward nothing | Amount mismatch |
+| 🚧 On an expired invoice | Pays it | Paid late |
+| 🚧 On a paid invoice | Counts above the Order Total | Overpaid |
+| 🚧 On an invoice in any other state, which no card payment can start on | Counts toward nothing | Unexpected status |
+
+- 🚧 **Record payment** - one dialog for money received outside the card
+  checkout: the amount, starting at the balance; bank transfer, cash or a
+  described method; a reference, required for a bank transfer; the date
+  received; 1 to 5 private proof files; and a reason. Never on a card invoice,
+  which is reissued as bank transfer first
+- 🚧 **Partially Paid** — the deadline stops for good, and what will not be
+  paid off is settled by hand outside Grade10
 
 | Payments so far | The next payment | What happens |
 | --- | --- | --- |
 | 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid |
 | 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
-| 🚧 Any | More than the balance | Accepted after an overpayment confirmation dialog; the full payment is recorded, the invoice is marked Paid, and the excess can be returned through the refund flow |
+| 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
 - 🚧 **Reopening the address form** — after the 48-hour deadline and before
   send, on request and with a reason, giving a fresh 48 hours; repeatable,
@@ -270,13 +303,11 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | --- | --- |
 | Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; offered at what was paid, and the operator decides it |
 | Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other; the note carries what the winner asked and is optional, Other included |
-| Date | When the money left, typed by the operator and never in the future |
+| 🚧 Date | When the money left, typed by the operator and never in the future |
 | Method and reference | How the money went back, with its Stripe or bank reference |
-| Bank channel | A bank refund names it: FPS, HK local bank transfer, or SWIFT international wire; a card refund has none |
-| Where it went | The bank name, and the account, IBAN or FPS ID — a phone number, an email or an FPS id — typed in full and stored in full; free text, checked for nothing, and the same three fields whichever channel sent it |
-| What the winner sees of it | The bank name and a masked destination, read from what was typed: the last four digits of an account or a phone, or the first letter and domain of an email. The destination is the only masked value, and nothing on the winner's page reveals it in full |
-| Before it commits | The operator confirms a restatement of the amount, the method and where it went, and the lot's outcome, saying this is the order's only refund and cannot be undone |
-| Proof | 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB, as manual settlement takes them; operators only |
+| 🚧 Where it went | A card by its brand and last four digits. By bank: FPS, HK local bank transfer or SWIFT international wire, the bank name, and an account number or IBAN, or for FPS a phone number, an email or an FPS ID. It is typed in full and kept only masked, as the winner reads it: a number to its last four digits, an email to its first letter and domain |
+| 🚧 Before it commits | The operator confirms a restatement of the amount, the method and where it went, and the lot's outcome, saying this is the order's only refund and cannot be undone |
+| Proof | 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB, as Record payment takes them; operators only |
 | The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
 | Its number | The next one in the internal audit series |
 
@@ -305,22 +336,42 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 Shipment is its own grant, apart from payment: the person who may settle
 money is not necessarily the person who dispatches cards.
 
-- **Dispatch** — needs a paid invoice; records the address snapshot, the
-  carrier and the tracking number, and recording an address never dispatches
-- **Delivery** — records the carrier's proof; the winner reads both on their
-  order — [Post-Bidding · Winner
+- 🚧 **Dispatch** - from the page of a Processing order: the carrier, the
+  tracking number and the carrier's tracker link when there is one, with the
+  address kept as it stood; the order reads Shipped and the winner gets the
+  shipped letter. Recording an address never dispatches
+- 🚧 **Delivery** - from the page of a Shipped order: the date it arrived,
+  and the carrier's proof as one file when there is one; the order reads
+  Delivered, and the winner reads both on their order and keeps the proof -
+  [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
 
 ## Payment Settings
 
-The buyer-premium minimums, as the Payment settings tab under `/auction`.
+The buyer-premium minimums and the payment processing fee schedule, as the
+Payment settings tab under `/auction`.
 
 | Rule | Value |
 | --- | --- |
-| Minimum charge | One non-negative whole amount per currency, in minor units; **0** in USD, HKD and JPY at first |
-| Who | Operators who can settle auction money; others neither read nor change it |
-| Saved | Whole, replacing the mapping at once and recording the operator and the time; a new value applies to invoices sent or reissued after it |
-| Refused | A missing or unsupported currency, a negative or fractional amount, or a read or save without the settlement permission — nothing stored changes |
+| Minimum charge | One amount per currency, zero or more; **0** in USD, HKD and JPY at first |
+| 🚧 Fee schedule | Per currency, a card rule and a bank transfer rule: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
+| 🚧 At rollout | Nothing is stored until the first save; Finance sets HKD card **3.4% + HK$2.35** and HKD bank transfer **0% + HK$0.00** |
+| 🚧 Typed as | The currency's major units, `2.35` for HK$2.35, stored as minor units |
+| Who | 🚧 Operators with payment processing, `auction:payment`; others neither read nor change it |
+| Saved | Whole, replacing the settings at once and recording the operator and the time; a new value applies to invoices sent or reissued after it, and never re-prices a sent one |
+| Refused | A missing or unsupported currency, a negative amount or one finer than the currency's smallest unit, or a read or save without that access — nothing stored changes |
+
+- 🚧 **Live example** - each rule shows, as it is typed, the fee it suggests
+  on a subtotal of 1,000 in its currency, grossed up so Grade10 keeps the
+  whole subtotal once the rule is taken from the whole charge
+- ❓ **USD and JPY** - no rule until Finance sets one; Finance confirms the
+  rates
+
+| Subtotal | Rule | Suggested fee | Order total |
+| --- | --- | --- | --- |
+| HK$1,000.00 | Card, 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
+| HK$3,120.00 | Card, 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |
+| HK$3,120.00 | Bank transfer, 0% + HK$0.00 | HK$0.00, read as Free | HK$3,120.00 |
 
 ::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 
@@ -329,17 +380,43 @@ The buyer-premium minimums, as the Payment settings tab under `/auction`.
 | Work | Grant | Held by |
 | --- | --- | --- |
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
-| Sending, reissuing and settling an invoice, checking proof, cancelling, reopening the address form, the premium minimums | `auction:settle` — payment processing | `finance`, and `admin` |
-| Dispatch and delivery | Shipment processing | `staff`, and `admin` |
-| Recording a refund | `auction:refund` — refund processing | `staff`, and `admin` |
+| 🚧 Opening Orders, an order and its proof files, and commenting; attaching a proof file takes the grant of its action | `auction:read` - reading | `staff`, `finance`, `treasurer` and `admin` |
+| Sending and reissuing an invoice, recording a payment, checking proof, cancelling, reopening or recording setup | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
+| 🚧 Clearing a flag, and Payment Settings: the premium minimums and the fee schedule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
+| Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
+| Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
+| 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
 
-- **A control the operator lacks** — stays visible and disabled, and the
-  server refuses it too; reissue, returning proof, manual settlement and
-  cancellation each record the operator and a mandatory reason —
-  [Roles](/p/shared/auth/roles)
+- 🚧 **A control the operator lacks** - stays listed and disabled, naming the
+  access it needs, such as Needs payment processing, and the server refuses
+  it too - [Roles](/p/shared/auth/roles)
+- 🚧 **Reasons** - an edit before send, a reissue, a recorded payment or
+  refund, a cancel, a returned proof, a setup change and a cleared flag each
+  need one; a send and a confirmed proof need none. Every entry names the
+  operator signed in and Grade10's own time
 - **The trail** — every elevated move appends to the hash-chained audit trail
   and refuses to run if that record cannot be written — [Audit
   trail](/p/grade10-admin/audit)
+
+## Test Winners
+
+🚧 Outside production, one action makes a test account that has won a closed
+sandbox lot, so QA walks the winner's order by hand as a real winner would.
+
+| Rule | Value |
+| --- | --- |
+| Where | Local, staging, staging-2 and UAT only; never production, whose console carries no Test tab |
+| Email | The operator's own address with a `+qa-<code>` tag, checked by Grade10, so every letter lands in their own inbox. The same address makes one test winner; one that holds a verified account is refused |
+| The lot | `Test lot <code>`, a sandbox lot closed through the real close, now or up to 30 days back, so its order and letters are the real ones; never biddable |
+| Sign-in | The ordinary sign-in link, which the console emails to the test address after making it and again on request; opened in a private window, so the operator stays signed in |
+
+- 🚧 **The list** - Winners in the Test tab lists test winners newest first,
+  each with its email, lot, order status and when it was made, with Email
+  sign-in link and Open order
+- 🚧 **Worked as any order** - the order reads Test in Orders, where Cancel is
+  the ordinary cancel and the lot stays closed; Winners cancels nothing itself
+
+::changes{spec="grade10-admin/auction/test-winners"}
 
 ## Pending Spec
 
@@ -363,16 +440,17 @@ The buyer-premium minimums, as the Payment settings tab under `/auction`.
 :::detail{title="Product decisions" for="pm"}
 An operator chooses the auction currency but not the increments that shape its
 bidding: one schedule keeps a lot's opening price accessible and its later
-competition proportionate without asking anyone to predict the close. The
-queue is the operator's close-out surface, where payment and shipment are
-separate jobs and one order detail keeps the winner contact, money, delivery
-state and trail together.
+competition proportionate without asking anyone to predict the close. Orders
+is the operator's close-out surface: a worklist that says what needs doing,
+and one page per order that keeps the winner contact, money, delivery state
+and timeline together, with payment and shipment as separate jobs.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Auction operator | Creating a listing | Chooses a supported currency without predicting its closing price. |
-| Finance operator | Reviews or updates the premium minimums | Sees one value for USD, HKD and JPY and saves a non-negative whole amount. |
-| Other operator | Opens Auction without settlement permission | Cannot read or change the payment settings. |
+| Finance operator | Reviews or updates the premium minimums and the fee schedule | Sees one minimum and a card and a bank transfer rule per currency, and saves them whole. |
+| Other operator | Opens Auction without payment processing | Cannot read or change the payment settings. |
+| QA | Needs to walk a winner's order | Makes a test winner in one step outside production and signs in with the ordinary link. |
 
 **Not in scope.** Operator editing of the increment schedules; currency
 conversion or added currencies; per-listing floors; changing Stripe account
@@ -385,16 +463,21 @@ settings.
 | Catalogue Featured | 🚧 In flight | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
-| Payment source | Decided | The queue distinguishes a fresh Stripe charge from manual settlement, and both release the bid-time hold rather than capturing it. | Product and Finance |
+| Payment source | Decided | The order tells a card payment through Stripe from money an operator records, and neither captures the bid-time hold, which is released at the close. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
-| Premium minimum | Decided | Under Auction because auction invoices use it; behind the settlement permission because changing it changes the amount collected. | Product and finance |
-| Overdue mark in Awaiting Setup | Decided | The Overdue mark follows the 48-hour address deadline. | Product |
-| Overdue mark in Preparing Invoice | Decided | Preparing Invoice has no queue Overdue mark; its payment Overdue timer starts only after invoice send and winner visibility. | Product |
-| Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
-| Who records a refund | Decided | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:settle`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
+| Premium minimum | 🚧 In flight | Under Auction because auction invoices use it; behind payment processing, `auction:payment`, because changing it changes the amount collected. Chosen over the settlement grant, which only `admin` holds, so finance could not keep the settings it owns. | Product and finance |
+| Fee schedule | 🚧 In flight | Payment Settings holds a card rule and a bank transfer rule per currency - a percentage and a fixed amount, or no rule - that pre-fill each invoice's fee, which the operator sets. The card rule is grossed up so Grade10 keeps the subtotal whole, a sent invoice never re-prices, and Finance enters the rules at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |
+| A reissue's fee | 🚧 In flight | Starts from the current invoice while the method stays, and from the new method's rule after a switch, with the schedule's suggestion beside it. Chosen over always starting from the schedule, which undoes a fee the operator agreed with the winner. | Product and finance |
+| Orders workspace | 🚧 In flight | One worklist in segments with counts - Needs action, Waiting on winner, In transit, Closed, All - and one page per order with one primary action and each action in its own dialog. Chosen over a listing-level queue beside a separate winner orders tab, which split one order across two surfaces. | Product and Operations |
+| What was seen is sent | 🚧 In flight | The send and the reissue carry the total the operator read and are refused when Grade10 now prices the order differently. Chosen over sending whatever the server computes, which can bill a total nobody saw. | Product and finance |
+| Money that lands | 🚧 In flight | A card payment is always recorded, and one the invoice did not expect carries a flag until an operator clears it with a reason. On an expired invoice it pays the invoice, since it paid the whole total; on a replaced or cancelled invoice, at an amount that differs, or on an invoice in any state that cannot take a card payment, it counts toward nothing and blocks nothing, and finance returns it outside Grade10. Chosen over refusing or dropping it, which loses track of money Grade10 holds, and over never moving a status, which leaves an expired invoice the winner paid in full to be settled a second time. | Product and finance |
+| Test winners | 🚧 In flight | Outside production, one action makes a test account on the operator's own tagged address that won a closed sandbox lot through the real close, so its letters go out. It signs in with the ordinary link in a private window, and Cancel is the order's own. Chosen over seeding an order around the real close, which skipped its letters, and over a sign-in link of its own, which auth would have to guard. | Product and Engineering |
+| How long an order waited | 🚧 In flight | Each row and order page shows how long the order has waited in its status. Setup Overdue is the status at the 48-hour address deadline, and Preparing Invoice carries no mark; its payment timer starts at send. Chosen over a second Overdue mark beside the Setup Overdue status, which also marked the operator's own queue after 72 hours. | Product |
+| Partial payment stays operator-only | 🚧 In flight | Recorded through Record payment, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
+| Who records a refund | Decided | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:payment`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
 | Refund money path | Decided | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
 | One refund, any amount | Decided | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
 | Refund letter | Decided | None; Customer Service already speaks to the winner. | Product |
@@ -402,7 +485,7 @@ settings.
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |
-| Finding a flagged cancel | ❓ Open | Whether a Paid after cancel order shows as needing action in the queue, or is found only by opening the order. | Product and Operations |
+| Finding a flagged order | 🚧 In flight | A flagged order, Paid after cancel included, counts under Needs action only, whatever its status, until an operator clears every flag on it. Chosen over finding it only by opening the order, since a flag is money waiting on someone. | Product and Operations |
 | Measuring cancellation | 🚧 In flight | Cancellations each month by category, and winner contacts per 100 cancellations. | Product |
 | Partially Paid needs no action | 🚧 In flight | Unlike Payment Verifying, nothing is waiting on the operator by default; they open the order when a new payment arrives. | Product and finance |
 :::
