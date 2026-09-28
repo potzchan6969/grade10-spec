@@ -188,11 +188,11 @@ function DialogHeader({
  * Body copy defaults to primary `text-base` (16px). Overflowing content gets
  * shadcn's scroll-aware top/bottom fade.
  *
- * A scroller clips at its own edge, which would cut the 3px focus ring of a
- * control flush against it, and Google's sign-in frame, which reaches 2px past
- * its slot. So the body pads one spacing unit inside that edge and takes it
- * back with a negative margin. The width comes from the parent's stretch,
- * because `w-full` would count the padding and narrow the column.
+ * A scroller clips at its own edge, which would cut the focus ring a control
+ * flush against it paints outside its box. So the body pads one spacing unit
+ * inside that edge and takes it back with a negative margin. The width comes
+ * from the parent's stretch, because `w-full` would count the padding and
+ * narrow the column.
  */
 function DialogBody({ className, ...props }: ComponentProps<"div">) {
   return (
