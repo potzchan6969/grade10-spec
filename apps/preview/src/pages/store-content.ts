@@ -6,6 +6,11 @@ import type {
   ProductSummary,
   SortOption,
 } from "@grade10/ui";
+import {
+  InstagramLogo,
+  ThreadsLogo,
+  YoutubeLogo,
+} from "@phosphor-icons/react";
 import { createElement, type ReactNode } from "react";
 import {
   HELP_NAV_ITEM,
@@ -77,18 +82,39 @@ const STORE_SITE_HEADER = {
 
 const STORE_FOOTER = {
   copy: {
-    description:
-      "Japanese trading cards selected for collectors, openers, and complete-set builders.",
     attribution: "A division of MemeStrategy (HKEX: 2440)",
     copyright: "© 2026 Grade10. All rights reserved.",
-    locale: "HONG KONG / HKD",
   },
   logo: FOOTER_LOGO,
   logoHref: "/",
   socialLinks: [
-    { label: "INSTAGRAM", href: "#instagram" },
-    { label: "YOUTUBE", href: "#youtube" },
-    { label: "THREADS", href: "#threads" },
+    {
+      label: "Instagram",
+      href: "#instagram",
+      icon: createElement(InstagramLogo, {
+        "aria-hidden": true,
+        size: 16,
+        weight: "fill",
+      }),
+    },
+    {
+      label: "YouTube",
+      href: "#youtube",
+      icon: createElement(YoutubeLogo, {
+        "aria-hidden": true,
+        size: 16,
+        weight: "fill",
+      }),
+    },
+    {
+      label: "Threads",
+      href: "#threads",
+      icon: createElement(ThreadsLogo, {
+        "aria-hidden": true,
+        size: 16,
+        weight: "fill",
+      }),
+    },
   ],
   legalLinks: [
     { label: "PRIVACY", href: PRIVACY_POLICY_HREF },
