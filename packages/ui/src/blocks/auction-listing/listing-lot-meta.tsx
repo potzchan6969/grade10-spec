@@ -67,12 +67,15 @@ function ListingLotMeta({
   const collapsedHeightRef = useRef<number | null>(null);
   const collapsePendingRef = useRef(false);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  /** Label, chevron, and aria flip on click — not after the height settles. */
+  const [controlExpanded, setControlExpanded] = useState(false);
   const [descriptionOverflows, setDescriptionOverflows] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [animatedHeight, setAnimatedHeight] = useState<number | "auto">("auto");
 
   useLayoutEffect(() => {
     setDescriptionExpanded(false);
+    setControlExpanded(false);
     setDescriptionOverflows(false);
     setIsAnimating(false);
     setAnimatedHeight("auto");
@@ -101,6 +104,7 @@ function ListingLotMeta({
 
     if (prefersReducedMotion()) {
       setDescriptionExpanded((value) => !value);
+      setControlExpanded((value) => !value);
       return;
     }
 
@@ -108,6 +112,7 @@ function ListingLotMeta({
       const from = element.clientHeight;
       collapsedHeightRef.current = from;
       collapsePendingRef.current = false;
+      setControlExpanded(true);
       setIsAnimating(true);
       setAnimatedHeight(from);
       setDescriptionExpanded(true);
@@ -122,6 +127,7 @@ function ListingLotMeta({
     const from = element.getBoundingClientRect().height;
     const to = collapsedHeightRef.current ?? from;
     collapsePendingRef.current = true;
+    setControlExpanded(false);
     setIsAnimating(true);
     setAnimatedHeight(from);
     requestAnimationFrame(() => {
@@ -212,7 +218,7 @@ function ListingLotMeta({
           {descriptionOverflows ? (
             <Link
               aria-controls={descriptionId}
-              aria-expanded={descriptionExpanded}
+              aria-expanded={controlExpanded}
               onClick={toggleDescription}
               render={<button type="button" />}
               size="sm"
@@ -220,7 +226,7 @@ function ListingLotMeta({
                 <span
                   className={cn(
                     "inline-flex transition-transform motion-reduce:transition-none",
-                    descriptionExpanded && "rotate-180",
+                    controlExpanded && "rotate-180",
                   )}
                   style={{
                     transitionDuration: `${DESCRIPTION_DURATION_MS}ms`,
@@ -231,7 +237,7 @@ function ListingLotMeta({
                 </span>
               }
             >
-              {descriptionExpanded ? copy.showLess : copy.showMore}
+              {controlExpanded ? copy.showLess : copy.showMore}
             </Link>
           ) : null}
         </VStack>
