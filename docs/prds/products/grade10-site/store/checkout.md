@@ -7,6 +7,9 @@ Checkout is Shopify's page, under `checkout.grade10.com`. The store hands it
 the cart, Shopify takes the address and the money, and the order comes back
 to Grade10.
 
+🚧 **Active integration** - This flow is being carried through a real staging
+shop before production enablement. The staging walk is the release gate.
+
 :::flow{title="From the cart to the order"}
 # Leaving the store
 
