@@ -4,7 +4,7 @@
 
 None.
 
-## Added
+## ADDED User journeys
 
 ### grade10-site-store-checkout-US-01: Collector sends a current cart to hosted payment
 
@@ -30,10 +30,10 @@ None.
 **I want** checkout to explain the identity requirement,
 **so that** I can sign in before an order or payment is started.
 
-## Modified
+## MODIFIED User journeys
 
 None.
 
-## Removed
+## REMOVED User journeys
 
 None.

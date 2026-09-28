@@ -29,8 +29,8 @@ the application repository.
 
 ### Shopify Thank You and Order status
 
-| State | Shows | Anchor |
+| State | Shows | Spec scenario |
 | --- | --- | --- |
-| Thank You page | A visible Grade10 Your Orders link | `grade10-site-store-checkout-US-03` |
-| Order status page revisit | The same Grade10 Your Orders link and the matching purchase in the orders surface | `grade10-site-store-checkout-US-03` |
-| Native Continue shopping action | Not relied on for the Grade10 return | `Order settlement and return` |
+| Thank You page | A visible Grade10 Your Orders link | `grade10-site-store-checkout-SC-15` |
+| Order status page revisit | The same Grade10 Your Orders link and the matching purchase in the orders surface | `grade10-site-store-checkout-SC-12` |
+| Native Continue shopping action | Not relied on for the Grade10 return | **Out of suite:** Shopify owns this native action; the Grade10 link is covered by `grade10-site-store-checkout-SC-15` |

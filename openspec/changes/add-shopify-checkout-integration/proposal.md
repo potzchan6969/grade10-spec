@@ -22,13 +22,13 @@ preserved so the integration can show whether stale basket refusals decrease.
   and at the payment decision; block stale, failed or contradictory reads.
 - **Hosted handoff** - Send the reviewed basket to one Shopify Draft Order
   invoice while Grade10 remains the order of record.
-- **One intent** - Make a repeated Pay action, same-session reload and lost
-  provider response resolve to the same open order and invoice.
+- **One intent** - Make a repeated Pay action, same-session reload, terminal
+  replay and lost provider response resolve to the same order and invoice.
 - **Settlement** - Let verified webhooks accelerate payment, while order
   reads and reconciliation repair missed events and release the member cart
   only after payment.
-- **Staging gate** - Prove the real shop, carrier callback, return link and
-  payment lifecycle in staging before production enablement.
+- **Staging gate** - Prove the real shop, carrier callback, Grade10 Your Orders
+  link and payment lifecycle in staging before production enablement.
 
 ## Non-goals
 
@@ -61,14 +61,20 @@ None.
 - **Backend** - Add the intent/idempotency persistence and guarded provider
   lifecycle around the existing order, Shopify, webhook, reconciliation and
   carrier seams.
-- **Persistence** - Add nullable checkout-intent identity and the canonical
-  reviewed-request fingerprint to web orders, with an index for one active
-  intent per member. Legacy and non-web orders remain readable.
-- **External systems** - Use the existing Shopify adapter, webhook route and
-  carrier rule; staging configuration and dashboard setup are release-gated.
+- **Persistence** - Add nullable checkout-intent identity, the canonical
+  reviewed-request fingerprint, provider-dispatch state and recovery deadline
+  to web orders, with an all-status index for one intent per member. Legacy
+  and non-web orders remain readable.
+- **External systems** - Use the existing Shopify adapter, webhook route,
+  carrier rule and a Shopify Thank You and Order status extension; staging
+  configuration and dashboard setup are release-gated.
 - **Packages** - No new production dependency is proposed.
 
 ## Open questions
 
 None that change the product contract. Exact Shopify dashboard menu names and
 credentials are operational details to verify during the staging walk.
+
+## References
+
+- [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
