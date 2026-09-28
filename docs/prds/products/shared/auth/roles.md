@@ -17,8 +17,15 @@ grants lives in reviewed code.
 That split is what makes a compromised operator account a limited problem: it
 can hold roles it should not, but it cannot invent a permission for one.
 
+- **Payment processing** — `auction:payment`, held by `finance`, `treasurer`
+  and `admin`; collecting auction money: sending and reissuing an invoice,
+  recording a payment, checking proof and cancelling an order — [Auction
+  Management](/p/grade10-admin/auction/management#grants)
+- 🚧 **Payment Settings** — the premium minimums and the fee schedule sit
+  under `auction:payment`, so finance keeps them — [Auction Management ·
+  Payment Settings](/p/grade10-admin/auction/management#payment-settings)
 - **Refund processing** — `auction:refund`, held by `staff` and `admin`;
-  recording an auction refund, apart from `auction:settle`, which collects
+  recording an auction refund, apart from `auction:payment`, which collects
   money — [Auction Management](/p/grade10-admin/auction/management#grants)
 
 :::detail{title="Gate layers" for="operator"}
@@ -32,11 +39,12 @@ item photo — climbs the same ladder.
 :::
 
 :::callout{kind="warning"}
-The code and the architecture docs use a sixth role, `treasurer`, that this
-spec's closed set does not name. It is a real role: the vault's grants table
-depends on it, and it is deliberately disjoint from what `staff` hold so that a
-payout takes two people. Either the spec or the code is out of date, and it is
-the spec.
+The code and the architecture docs use two roles that this spec's closed set
+does not name. `finance` reads the auction and collects its money, and holds
+nothing else. `treasurer` is a real role too: the vault's grants table depends
+on it, and it is deliberately disjoint from what `staff` hold so that a payout
+takes two people. Either the spec or the code is out of date, and it is the
+spec.
 :::
 
 :::callout{kind="warning"}
