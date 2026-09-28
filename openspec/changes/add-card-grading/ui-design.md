@@ -691,6 +691,14 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 | Read grant | no row action past Open | `grade10-admin-grading-counter-SC-75` |
 | Walk-in desk | the section's desks read Queue · Walk-in · Batches · Settings; Walk-in shown only with `admin.savePlan`, and absent for a read holder | `grade10-admin-grading-counter-SC-15`, `grade10-admin-grading-counter-SC-75` |
 
+### Walk-in form
+
+Stories `grading-admin-intake-walk-in-form--`.
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Walk-in | the Walk-in desk at `/grading/walk-in`, no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-SC-15` |
+
 ### Hand-in runbook
 
 Stories `grading-admin-intake-intake-runbook--`.
@@ -699,7 +707,6 @@ Stories `grading-admin-intake-intake-runbook--`.
 | --- | --- | --- |
 | Header (`GA2`) | the summary, the id, the status word, declared in total, the visit in progress at the desk; the drop-off card with Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-SC-14` |
 | Visit not started | step 1 offers Start at the desk; the rest wait | `grade10-admin-grading-counter-SC-14` |
-| Walk-in | the Walk-in desk at `/grading/walk-in`, no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-SC-15` |
 | Second submission on the visit | the other submission named under the visit; each runs its own runbook | `grade10-admin-grading-counter-SC-21` |
 | Cards table | per row: the card, declared with its reference, Present, Condition, the level check, Refuse; the photograph pair | `grade10-admin-grading-counter-SC-16` |
 | Card present | Present ticked; the photograph pair taken | `grade10-admin-grading-counter-SC-16` |
