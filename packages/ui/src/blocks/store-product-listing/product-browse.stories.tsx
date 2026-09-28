@@ -116,8 +116,23 @@ export const Narrow: Story = {
   },
 };
 
-/** `Button`'s `focus-visible:ring-3`, drawn outside its box. */
-const FOCUS_RING_PX = 3;
+/** How far a focused control paints past its own box: the widest outer
+ * `box-shadow` it computes once its focus transition ends. */
+async function ringOf(control: HTMLElement) {
+  control.focus();
+  await Promise.all(control.getAnimations().map((motion) => motion.finished));
+  const reach = [
+    ...getComputedStyle(control).boxShadow.matchAll(
+      /(-?[\d.]+)px (-?[\d.]+)px ([\d.]+)px (-?[\d.]+)px(?! inset)/g,
+    ),
+  ].map(
+    ([, x, y, blur, spread]) =>
+      Math.max(Math.abs(Number(x)), Math.abs(Number(y))) +
+      Number(blur) +
+      Number(spread),
+  );
+  return Math.max(0, ...reach);
+}
 
 /**
  * The narrow pill row scrolls sideways, so it clips at its own edge. A pill
@@ -131,12 +146,15 @@ export const NarrowPillsKeepTheirFocusRing: Story = {
     );
     if (row === null) throw new Error("The narrow chrome renders no pill row");
     const clip = row.getBoundingClientRect();
-    const pill = within(canvasElement)
-      .getByRole("button", { name: "Latest" })
-      .getBoundingClientRect();
+    const control = within(canvasElement).getByRole("button", {
+      name: "Latest",
+    });
+    const pill = control.getBoundingClientRect();
+    const ring = await ringOf(control);
 
-    expect(pill.top - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.top);
-    expect(pill.bottom + FOCUS_RING_PX).toBeLessThanOrEqual(clip.bottom);
+    expect(ring).toBeGreaterThan(0);
+    expect(pill.top - ring).toBeGreaterThanOrEqual(clip.top);
+    expect(pill.bottom + ring).toBeLessThanOrEqual(clip.bottom);
   },
 };
 

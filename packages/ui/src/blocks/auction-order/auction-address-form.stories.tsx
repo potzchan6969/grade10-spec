@@ -80,8 +80,23 @@ export const ShowsSuppliedFieldError: Story = {
 
 export const Default: Story = { args: { errors: undefined } };
 
-/** `Button`'s `focus-visible:ring-3`, drawn outside its box. */
-const FOCUS_RING_PX = 3;
+/** How far a focused control paints past its own box: the widest outer
+ * `box-shadow` it computes once its focus transition ends. */
+async function ringOf(control: HTMLElement) {
+  control.focus();
+  await Promise.all(control.getAnimations().map((motion) => motion.finished));
+  const reach = [
+    ...getComputedStyle(control).boxShadow.matchAll(
+      /(-?[\d.]+)px (-?[\d.]+)px ([\d.]+)px (-?[\d.]+)px(?! inset)/g,
+    ),
+  ].map(
+    ([, x, y, blur, spread]) =>
+      Math.max(Math.abs(Number(x)), Math.abs(Number(y))) +
+      Number(blur) +
+      Number(spread),
+  );
+  return Math.max(0, ...reach);
+}
 
 /**
  * The fields scroll, so their region clips at its own edge. Confirm sits in
@@ -98,13 +113,16 @@ export const ActionsKeepTheirFocusRing: Story = {
     };
     const clip = slot("auction-address-fields");
     const kind = slot("auction-address-kind");
-    const confirm = within(canvasElement)
-      .getByRole("button", { name: "Confirm" })
-      .getBoundingClientRect();
+    const control = within(canvasElement).getByRole("button", {
+      name: "Confirm",
+    });
+    const confirm = control.getBoundingClientRect();
+    const ring = await ringOf(control);
 
+    expect(ring).toBeGreaterThan(0);
     expect(confirm.left).toBeCloseTo(kind.left, 1);
-    expect(confirm.left - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.left);
-    expect(confirm.bottom + FOCUS_RING_PX).toBeLessThanOrEqual(clip.bottom);
+    expect(confirm.left - ring).toBeGreaterThanOrEqual(clip.left);
+    expect(confirm.bottom + ring).toBeLessThanOrEqual(clip.bottom);
   },
 };
 
