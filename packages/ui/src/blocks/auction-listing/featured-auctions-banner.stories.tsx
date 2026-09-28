@@ -89,7 +89,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Stage image uses `object-cover object-center` in a cell that changes aspect by viewport. Operator canvas: 2400×1500 (8:5), subject in the centre. Optional `imageSrcSet` / `imageSizes` on each slide; default sizes are `(min-width: 768px) 66vw, 100vw`.",
+          "Stage image uses `object-cover object-center`. Operator canvas: 2400×1500 (8:5), subject centred. Optional `imageSrcSet` / `imageSizes`; default sizes `(min-width: 768px) 66vw, 100vw`. Stage changes fade the new image in over an opaque underlay (same `imageSrc` skips); copy soft-crossfades.",
       },
     },
   },
@@ -119,8 +119,9 @@ export const CarouselBanner: Story = {
         name: SLIDES[0].title,
       }),
     ).toBeInTheDocument();
-    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
-    expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
+    // Stacked slides keep inactive copy in the DOM (crossfade); match any.
+    expect(canvas.getAllByText("LIVE BIDDING").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("CURRENT BID").length).toBeGreaterThan(0);
     expect(canvas.getByRole("link", { name: /Bid Now/i })).toHaveAttribute(
       "href",
       SLIDES[0].href,
