@@ -530,14 +530,13 @@ export function buildListingAuctionBidView(
         ? liveTiming.closesAtMs
         : meta.deadlineAtMs;
   const viewerMaximumMinor = viewerMaximumForState(state);
-  const priceLabel =
-    meta.opens
-      ? ""
-      : meta.closed || meta.isUnsold
-        ? meta.priceLabel
-        : hasBids
-          ? "Current Bid"
-          : "Starting bid";
+  const priceLabel = meta.opens
+    ? ""
+    : meta.closed || meta.isUnsold
+      ? meta.priceLabel
+      : hasBids
+        ? "Current Bid"
+        : "Starting bid";
 
   return {
     currency: BID_FIXTURE_LOT.currency,
