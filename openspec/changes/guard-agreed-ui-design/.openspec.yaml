@@ -13,6 +13,7 @@ landed_by:
   proposal: ecchochan
   decisions: ecchochan
   tech-design: ecchochan
+  specs: ecchochan
 reviewed:
   tech-design: c0784633
   specs: 02b39c93
