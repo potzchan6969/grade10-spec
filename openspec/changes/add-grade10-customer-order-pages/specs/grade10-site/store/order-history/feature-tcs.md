@@ -290,3 +290,25 @@ The signed-in user owns no Store orders.
 
 * The designed empty state appears after the order read succeeds.
 * Step 2 opens `/store`.
+
+## Reconciliation
+
+**Run:** 2026-09-28. The existing order-history feature suite was reconciled
+against the current order-history scenarios and the updated technical boundary.
+The suite keeps customer-facing labels, navigation, tracking and read states at
+the application boundary.
+
+| Spec scenario | Suite coverage |
+| --- | --- |
+| `grade10-site-store-order-history-SC-01`, `SC-03`, `SC-04` | US1-TC1-2 |
+| `grade10-site-store-order-history-SC-02` | US2-TC1-1 |
+| `grade10-site-store-order-history-SC-05` | US1-TC2-1 |
+| `grade10-site-store-order-history-SC-06` | US1-TC1-2 |
+| `grade10-site-store-order-history-SC-07` | US1-TC3-1 |
+| `grade10-site-store-order-history-SC-08` | US1-TC4-1 |
+| `grade10-site-store-order-history-SC-09` | US1-TC5-1 |
+| `grade10-site-store-order-history-SC-10` | US1-TC6-1 |
+| `grade10-site-store-order-history-SC-11` | US3-TC1-1 |
+| `grade10-site-store-order-history-SC-12`, `SC-13` | US1-TC7-1 |
+| Uncovered scenarios | none |
+| Contradicted readings | none |
