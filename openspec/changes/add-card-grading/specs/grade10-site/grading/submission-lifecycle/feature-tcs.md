@@ -240,7 +240,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is signed out, on <grade10 grading url>'s wizard at the review with an email given and a level picked.
+* The collector is signed out, on the wizard at <grade10 grading url>/new, at the review with an email given and a level picked.
 
 **Test data:**
 
@@ -1331,6 +1331,45 @@ Runs once per row of **Test data**.
 * The page states nothing was paid and nothing is owed.
 * No message about the cancellation is in the submission's messages: the collector was told at the counter.
 
+### grade10-site-grading-submission-lifecycle-US10-TC5-1: Cancel is withheld once the visit's start time comes or the counter checks or refuses a card
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-10
+
+**Pre-conditions:**
+
+* The collector has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, loaded before the state in the row was reached.
+
+**Test data:**
+
+| State | The desk |
+| --- | --- |
+| Start time come | the visit's start time has come; no card checked or refused |
+| Card checked early | before the visit's start time, the desk started early and checked the first card |
+| Card refused early | before the visit's start time, the desk started early and refused the first card |
+
+**Steps:**
+
+1. Load the submission page in the first tab.
+2. In the second tab, click Cancel this submission and confirm Yes, cancel.
+
+**Expected Results:**
+
+* Step 1: no Cancel this submission shows.
+* Step 2: the cancel is refused by name, and the submission is not cancelled.
+
 ---
 
 ## grade10-site-grading-submission-lifecycle-US11: Collector is offered only what the status allows
@@ -1404,7 +1443,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The collector has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, loaded before the counter acted.
-* At the counter, staff have acted on the first card as in the row, and on nothing else.
+* At the counter, before the visit's start time, the desk started early and staff acted on the first card as in the row, and on nothing else.
 
 **Test data:**
 
@@ -1494,7 +1533,7 @@ Runs once per row of **Test data**.
 | `US11-TC1-1`'s acts for a Collected submission | Corrected | The case offered Vault it and erasure alone; the acts table also offers reading the record and consigning to an auction |
 | `grade10-site-grading-submission-lifecycle-SC-01` a move the status does not name is refused | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its anchor is the feature set group The statuses: no journey of this capability walks a move, and every move is made at the counter |
 | `grade10-site-grading-submission-lifecycle-SC-60` | Case added, added after the run | `US1-TC8-1`: decided outside the blind pass, after a plan kept signed out landed on not found; the wizard opens the page on the access the emailed link carries |
-| `grade10-site-grading-submission-lifecycle-SC-61` | Case revised, added after the run | `US11-TC2-1` became `US11-TC2-2`: decided outside the blind pass, the cancel shares the counter's window, so it goes with the edit once a card is checked or refused and a cancel sent from a stale page is refused |
+| `grade10-site-grading-submission-lifecycle-SC-61` | Case added, added after the run | `US10-TC5-1`: decided outside the blind pass; one window for both hands, so the cancel goes once the visit's start time comes or a card is checked or refused, a desk that started early included. `US11-TC2-1` became `US11-TC2-2` beside it: the cancel goes with the edit once the counter acts, and a cancel from a stale page is refused |
 | `grade10-site-grading-submission-lifecycle-SC-62` | Case added, added after the run | `US11-TC3-1`: decided outside the blind pass; the editor saves the same submission at Planned and Booked and books nothing |
 
 **Uncovered anchors:** none. Every journey US-01 to US-11 carries cases, and the one feature-set anchor, The statuses, is listed out of suite above.

@@ -569,8 +569,8 @@ it reads as pending.
 **Acts** - editing the list, saving for later and booking SHALL each report
 through a callback of its own.
 
-**Without booking** - the booking callback and the consent callback SHALL be
-given together or not at all. Given neither, the review SHALL offer neither
+**Without booking** - the booking callback, the consent callback and the
+tick's state SHALL be given together or not at all. Given neither, the review SHALL offer neither
 the booking nor the statement, and its save act SHALL read the words the
 consumer passes.
 
@@ -621,8 +621,8 @@ consumer passes.
 #### Scenario: shared-ui-grading-submission-SC-74 - A review given no booking offers neither the booking nor the statement
 **Serves:** Reviewing before booking - a collector changing a kept list reads its totals and its warning without booking again
 
-- **GIVEN** a review given no booking callback and no consent callback, and a
-  save act whose words read Save changes
+- **GIVEN** a review given no booking callback, no consent callback and no
+  tick's state, and a save act whose words read Save changes
 - **WHEN** `GradingReview` renders it
 - **THEN** neither the booking nor the collection statement is shown
 - **AND** the schedule, the totals and any warning read as given

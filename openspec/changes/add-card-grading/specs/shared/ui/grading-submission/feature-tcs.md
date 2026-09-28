@@ -2107,7 +2107,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingReview` carries two cards, one of them with an upcharge warning, no `onBook` and no `onConsent`, and a save act whose words read Save changes.
+* `GradingReview` carries two cards, one of them with an upcharge warning, no `onBook`, no `onConsent` and no `consented`, and a save act whose words read Save changes.
 
 **Steps:**
 

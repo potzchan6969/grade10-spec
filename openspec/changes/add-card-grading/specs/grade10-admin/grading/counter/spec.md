@@ -1360,12 +1360,14 @@ console SHALL read it again.
   who did it
 - **AND** the collector is sent no message
 
-#### Scenario: grade10-admin-grading-counter-SC-107 - Cancel is withheld once the visit starts or a card is checked
+#### Scenario: grade10-admin-grading-counter-SC-107 - Cancel is withheld once the visit's start time comes or a card is checked or refused
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
-- **GIVEN** a booked submission whose visit has started at the desk, and
-  another one of whose cards the counter has checked
+- **GIVEN** a booked submission whose visit's start time has come, another one
+  of whose cards the counter checked before its visit's start time, and a third
+  whose first card the counter refused before its visit's start time, the desk
+  having started early on both
 - **WHEN** an operator opens each submission's page
-- **THEN** cancel is offered on neither
-- **AND** a cancel sent for either is refused by name, and the submission is
-  left as it was
+- **THEN** cancel is offered on none of them
+- **AND** a cancel sent for any of them is refused by name, and the submission
+  is left as it was

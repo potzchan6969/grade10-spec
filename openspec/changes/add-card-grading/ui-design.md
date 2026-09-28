@@ -141,8 +141,8 @@ or an instant through `formatLocalTime` in the zone given.
   (declared, fee, cover or none), `warnings` (per card: the reference above
   the ceiling, the level, the difference, the higher level's fee now) or
   none, `goodToKnow` (five), `consented`, `pending`, `error`, `onEdit`,
-  `onConsent`, `onBook`, `onSaveForLater`; `onConsent` and `onBook` are given
-  together or not at all, and left out the review offers neither the tick nor
+  `onConsent`, `onBook`, `onSaveForLater`; `consented`, `onConsent` and
+  `onBook` are given together or not at all, and left out the review offers neither the tick nor
   Book, its save act reading the caller's words, as the editor's Save changes
 - **`GradingStatusRail`** — `stage` (one of Planned, Booked, Handed in,
   Sent, Graded, Back, Home), `ended` — the word that says the ending — or
@@ -411,7 +411,7 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 | Good to know | the five lines in order | `shared-ui-grading-submission-SC-24` |
 | Consent unticked | Book the drop-off disabled until the statement is ticked | `shared-ui-grading-submission-SC-27` |
 | Booking | Book pending; both buttons disabled | `shared-ui-grading-submission-SC-27` |
-| Saved for later | the plan kept; its page opens at Planned, on the picker, asking for the statement first | `grade10-site-grading-submission-plan-SC-58` |
+| Saved for later | the plan kept; its page opens at Planned, on the picker, asking for the statement first where the plan was kept unticked | `grade10-site-grading-submission-plan-SC-58` |
 | Plan expired meanwhile | the refusal by name; Start again | `shared-ui-grading-submission-SC-28` |
 | Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-SC-08` |
 
@@ -425,7 +425,7 @@ Stories `grading-plan-plan-wizard--`, the Kept rows.
 | Kept, error | the read's failure in the error tone; Back to the submission | **Out of suite:** the view's colocated test |
 | Kept, not found | the site's not-found copy, as the submission page reads it | `grade10-site-grading-submission-lifecycle-SC-52` |
 | Kept, planned | the three steps on the kept list, grader and level; the review with its totals and any warning, no tick and no Book; Save changes | `grade10-site-grading-submission-lifecycle-SC-62` |
-| Kept, booked | the same, the grader fixed and a level required on the booked sheet; the email fixed; a list passing 20 names the longer visit | `grade10-site-grading-dropoff-booking-SC-30` |
+| Kept, booked | the same, the grader fixed and a level required on the booked sheet; the email fixed | `grade10-site-grading-dropoff-booking-SC-30` |
 | Kept, warning kept | a card above the ceiling still warned, its reference asked again | `grade10-site-grading-submission-plan-SC-32` |
 | Saved | the same submission page opens; no second plan | `grade10-site-grading-submission-lifecycle-SC-62` |
 | At the counter | the save refused by name: the counter has the list | `grade10-site-grading-submission-lifecycle-SC-59` |

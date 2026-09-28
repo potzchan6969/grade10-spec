@@ -83,8 +83,8 @@ emailed is `grade10-site/grading/collector-notifications`.
   - Never stock: a collector's slab never enters the catalogue, and a vault
     valuation or an auction reads the record from here
 - Cancelled and expired
-  - Cancelled before hand-in: the collector calls the submission off and the
-    drop-off goes with it
+  - Cancelled before the visit starts: the collector calls the submission off
+    and the drop-off goes with it
   - Until the visit starts: no cancel once the visit has begun or the counter
     has checked or refused a card, for the collector and for staff acting on
     their word, and nobody is emailed about it
@@ -836,7 +836,7 @@ graded.
 - **THEN** the submission is collected
 - **AND** the record carries both hand-backs and both receipts
 
-### Requirement: A submission is cancelled before hand-in, and expires when nobody books
+### Requirement: A submission is cancelled until its visit starts or the counter takes a card, and expires when nobody books
 
 Both endings leave the cards with the collector and the account settled at
 nothing.
@@ -888,16 +888,17 @@ nothing.
 - **THEN** the submission is cancelled and the collector is told at the counter
 - **AND** no message is sent, and nothing was paid and nothing is owed
 
-#### Scenario: grade10-site-grading-submission-lifecycle-SC-61 - Cancel is withheld once the visit starts or the counter checks a card
-**Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector is not offered a cancel the counter would refuse
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-61 - Cancel is withheld once the visit's start time comes or the counter checks or refuses a card
+**Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector is not offered a cancel the counter would refuse
 
-- **GIVEN** a booked submission whose visit has started at the desk, one of
-  whose cards the counter has checked
-- **WHEN** the collector opens the submission page, or sends a cancel from a
-  page read before
-- **THEN** no cancel is offered
-- **AND** the cancel is refused by name, and the submission and its cards stay
-  as the counter wrote them
+- **GIVEN** a booked submission whose visit's start time has come, and another
+  one of whose cards the counter checked before its visit's start time, the
+  desk having started early
+- **WHEN** the collector opens each submission's page, or sends a cancel for
+  either from a page read before
+- **THEN** no cancel is offered on either
+- **AND** each cancel is refused by name, and each submission and its cards
+  stay as they were
 
 ### Requirement: The page offers only the acts the status allows
 

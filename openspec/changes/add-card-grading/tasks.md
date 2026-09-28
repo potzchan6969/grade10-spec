@@ -148,8 +148,8 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-28`)
 - [x] 3.7 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm run typecheck`, `pnpm run lint`
-- [ ] 3.8 Make `GradingReview`'s `onBook` and `onConsent` optional as a
-      pair, its test and a Kept story red first: given neither, no Book and no
+- [ ] 3.8 Make `GradingReview`'s `onBook`, `onConsent` and `consented`
+      optional as one set, its test and a Kept story red first: given neither, no Book and no
       statement, the save act reading the words the caller passes; then run
       3.7's checks (`shared-ui-grading-submission-SC-74`)
 
@@ -575,19 +575,18 @@ Stage (b).
 - [x] 11.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 - [ ] 11.10 Keep the plan's tick, its test red first: `submissions.consented_at`
-      in a migration `pnpm run db:drizzle:generate` writes, set by the keep
-      that carries the tick, left null by a plan saved unticked and never
-      cleared, and
+      in a migration `pnpm run db:drizzle:generate` writes, set by
+      `submissions.plan` given an optional `consented: true`, left null by a
+      plan saved unticked and never cleared, and
       `CONSENT_REQUIRED` added to
       `GRADING_FAILURE_CODES` for 12.12 to raise; then run 11.9's checks and
       `pnpm run check:migrations`
-      (`grade10-site-grading-submission-plan-SC-58`)
-- [ ] 11.11 Cover the edit at `booked` as `plan.ts` runs it: the same
-      submission saved and no second one, the grader fixed, a level required
-      on the pinned sheet, and a list edited past twenty moving the visit to
-      the Bulk drop-off at its slot once, after the commit
-      (`grade10-site-grading-submission-lifecycle-SC-62`,
-      `grade10-site-grading-dropoff-booking-SC-30`)
+      (`grade10-site-grading-submission-plan-SC-62`)
+- [ ] 11.11 Cover what `plan.ts` already runs for an edit at `booked`, as
+      coverage rather than a red test: the grader fixed, a level required on
+      the pinned sheet, and a list edited past twenty moving the visit to the
+      Bulk drop-off at its slot once, after the commit
+      (`grade10-site-grading-dropoff-booking-SC-30`)
 
 ## 12. The drop-off, the joiner and the shared visit (grade10)
 
@@ -1787,8 +1786,11 @@ its globs over `packages/*/frontend/src/**` and
       Reopened: `onBooked` and `onSaved` carry the plan's id and drop its
       access token, so a signed-out collector's page answers not found; ruled
       after group 31's audit, one `onKept(plan)` carrying the `KeptPlan`
-      replaces both, and the page it opens lands on the picker, 27.7's
-      (`grade10-site-grading-submission-lifecycle-SC-60`)
+      replaces both, and the page it opens lands on the picker, 27.7's; the
+      review's Book sends `consented: true` on the keep, so a plan kept
+      ticked is asked nothing more; needs 11.10
+      (`grade10-site-grading-submission-lifecycle-SC-60`,
+      `grade10-site-grading-submission-plan-SC-62`)
 - [x] 25.8 Write the stories for `Grading/Home`, `Grading/Plan/PlanWizard` and
       the paste sheet, one per distinct layout, each with `surface: site`
 - [x] 25.9 Verify: `pnpm run test`,

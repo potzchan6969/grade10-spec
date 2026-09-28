@@ -1812,6 +1812,36 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * Umbreon VMAX is named with Express as the level the grader would move it to.
 * The difference due at the counter reads 60000 (HKD, minor units).
 
+### grade10-site-grading-submission-plan-US7-TC9-1: A plan booked from a ticked review opens on the picker with nothing asked
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-plan-US-07
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the wizard's review at <grade10 grading url>/new, with an email given, a level picked and no drop-off held under the email.
+
+**Steps:**
+
+1. Tick the collection statement.
+2. Click Book the drop-off.
+3. Reload the submission page that opens.
+
+**Expected Results:**
+
+* Step 2: the submission page opens on the drop-off picker, and the statement is not asked for.
+* Step 3: the page still opens on the picker with no statement asked: the plan was kept ticked.
+
 ## grade10-site-grading-submission-plan-US8: Collector who never books is nudged and then let go
 
 **As a** collector who planned a submission and booked no drop-off,
@@ -1968,6 +1998,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 | `grade10-site-grading-submission-plan-SC-36` the sheet pinned at booking | **Case added:** `US6-TC7-1` | |
 | `grade10-site-grading-submission-plan-SC-37` a sheet changed before booking | **Case added:** `US6-TC8-1` | |
 | `grade10-site-grading-submission-plan-SC-60` a USD sale read at the rate staff set | **Case added:** `US7-TC8-1` | written after the blind pass, with Q116; the reference answers in USD alone, so without the rate `US7-TC2-1` never fires |
+| `grade10-site-grading-submission-plan-SC-62` a plan kept from a ticked review | **Case added:** `US7-TC9-1` | written after the blind pass: the keep carries the review's tick, so a plan booked from the review is never asked for it again |
 | `grade10-site-grading-submission-plan-SC-61` a plan kept unticked asks for the statement | **Case added:** `US6-TC9-1` | written after the blind pass: a plan saved unticked and booked from its page was asked for nothing, so the plan now holds its tick and a booking or a join for it unticked is refused |
 
 ### Manual

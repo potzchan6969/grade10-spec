@@ -791,7 +791,7 @@ stage read off PSA's order page can never sit on a CGC or BGS batch.
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
 | `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
 | `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
-| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by the keep that carries the tick, or by `book` or `join` given `consented: true`, in their own commit; they refuse `CONSENT_REQUIRED` only when neither it nor the input carries the tick |
+| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by `plan` (the keep), `book` or `join` given `consented: true`, each in its own commit; the review's Book sends it on the keep; they refuse `CONSENT_REQUIRED` only when neither it nor the input carries the tick |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
 | `batch_id` | `text FK batches` | set at `handIn` |
@@ -991,7 +991,7 @@ receipt, the sealed agreement and the re-minted access link.
 
 | Surface | Change |
 | --- | --- |
-| grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed); `book` and `join` take an optional `consented: true`, written on the plan in their own commit |
+| grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed); `plan`, `book` and `join` take an optional `consented: true`, written on the plan in their own commit |
 | admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
@@ -1010,8 +1010,11 @@ transaction, as the plan's keep does, so the cancel and its audit entry are one
 commit; the drop-off goes with it.
 
 - **One window, one predicate** — `cancellable(status, visit, list, at)` in
-  the contracts: `SUBMISSION_MOVES.cancel.from`, the visit not started, and
-  the list not the counter's (`counterOwnsList`). The collector's
+  the contracts: `SUBMISSION_MOVES.cancel.from`, the visit's start time not
+  come (`visitStarted`, the slot instant, never the runbook's Start at the
+  desk), and the list not the counter's (`counterOwnsList`). It guards the
+  Cancel offer and `cancelSubmission` only; the last card refused cancels
+  inside `refuseCard` and never reads it. The collector's
   `OFFERED.cancel`, the console's offer (`COUNTER_ACTS.cancel` for the
   status, `cancellable` for the rest) and `cancelSubmission`'s refusal all
   read it, as `withdrawable` is shared; the worker refuses `VISIT_STARTED` or

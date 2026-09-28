@@ -63,8 +63,9 @@ fee sheet it is booked on. The visit it is handed in on is
     booking rather than on the iPad
   - The consent: the collection statement, ticked before the drop-off is
     booked
-  - The tick kept with the plan: a plan saved unticked is asked for it on its
-    page before a drop-off is picked or joined
+  - The tick kept with the plan: a plan kept from a ticked review is asked
+    nothing more, and one saved unticked is asked for it on its page before a
+    drop-off is picked or joined
 - Priced at booking
   - The sheet is pinned: a plan is priced on the sheet it was booked on, and
     the agreement prints those figures
@@ -720,7 +721,8 @@ keeping the plan for later SHALL be offered with it unticked, and the plan
 SHALL be kept unticked.
 
 **The plan carries its tick** - a kept plan SHALL hold whether its statement
-was ticked. For a plan held unticked, its page SHALL ask for the statement, in
+was ticked, and a plan kept from a review whose statement is ticked SHALL be
+kept ticked, so its page asks for nothing more. For a plan held unticked, its page SHALL ask for the statement, in
 the review's words, before a drop-off is picked or joined, and the booking or
 the join SHALL carry that tick and write it on the plan in the same step. A
 booking or a join that neither finds the plan ticked nor carries the tick SHALL
@@ -803,6 +805,14 @@ be refused by name.
   name, and the plan holds no drop-off
 - **AND** once the statement is ticked the days are offered, and the booking
   made carries the tick, so the plan holds its drop-off and its tick together
+
+#### Scenario: grade10-site-grading-submission-plan-SC-62 - A plan kept from a ticked review opens on the picker with nothing asked
+**Serves:** grade10-site-grading-submission-plan-US-07 - a collector who ticked the statement on the review is not asked again
+
+- **GIVEN** a review whose collection statement is ticked
+- **WHEN** the collector books the drop-off from it
+- **THEN** the plan is kept ticked
+- **AND** its page opens on the drop-off picker with no statement asked for
 
 ### Requirement: A plan is priced on the fee sheet it was booked on
 

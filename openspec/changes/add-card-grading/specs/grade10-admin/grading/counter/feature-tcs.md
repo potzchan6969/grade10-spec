@@ -2982,7 +2982,7 @@ Admin(holds `grading:operate`) is on <grade10 admin grading submission url> for 
 * Step 3: the cancel is on the trail, with the operator who made it.
 * Step 4: no message about the cancel was sent.
 
-### grade10-admin-grading-counter-US14-TC9-1: Cancel is withheld once the visit starts or a card is checked
+### grade10-admin-grading-counter-US14-TC9-1: Cancel is withheld once the visit's start time comes or a card is checked or refused
 
 Runs once per row of **Test data**.
 
@@ -3006,8 +3006,9 @@ Admin(holds `grading:operate`) has <grade10 admin grading submission url> open i
 
 | State | The desk |
 | --- | --- |
-| Visit started | the visit started at the desk; no card checked or refused |
-| Card checked | the visit started and one card checked, with both intake photographs |
+| Start time come | the visit's start time has come; no card checked or refused |
+| Card checked early | before the visit's start time, the desk started early and checked one card, with both intake photographs |
+| Card refused early | before the visit's start time, the desk started early and refused the first card, with its reason |
 
 **Steps:**
 
@@ -3414,7 +3415,7 @@ Admin(holds `grading:approve`) opens Settings, with the reference rate at 7.84.
 | `grade10-admin-grading-counter-SC-104` | Case added, added after the run | `grade10-admin-grading-counter-US15-TC9-1`: the staff-set reference rate decided outside the blind pass; it prices nothing a collector pays, so one approve holder writes it and nought is refused |
 | `grade10-admin-grading-counter-SC-105` | Case added, added after the run | `grade10-admin-grading-counter-US12-TC6-1`: decided outside the blind pass; the address is personal data, so only a holder who may post the notice reads it, and only while the notice is due |
 | `grade10-admin-grading-counter-SC-106` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC8-1`: decided outside the blind pass; staff cancel on the collector's word inside the collector's own window, the drop-off going with it, filed on the audit chain and no message sent |
-| `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-1`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once the visit starts or a card is checked, and the desk refuses the cards instead |
+| `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-1`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once the visit's start time comes or a card is checked or refused, a desk that started early included, and the desk refuses the cards instead |
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
 | `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test in the application repository — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
 
