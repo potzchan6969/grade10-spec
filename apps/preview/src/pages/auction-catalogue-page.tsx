@@ -26,7 +26,7 @@ import {
   FEATURED_BANNER_FRONT_PAGE,
 } from "./auction-catalogue-content";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
-import { STORE_FOOTER } from "./store-content";
+import { AUCTION_FOOTER } from "./store-content";
 
 const FEATURED_CAP = 4;
 /** Featured carousel holds at most three complete slides. */
@@ -50,6 +50,8 @@ const FEATURED_BANNER_COPY: FeaturedAuctionsBannerCopy = {
   endedAt: "Ended",
   progress: "Featured lots",
   slide: "Show featured lot {position}: {title}",
+  previous: "Previous featured lot",
+  next: "Next featured lot",
 };
 
 function toFeaturedSlide(lot: CatalogueLot): FeaturedAuctionsBannerSlide {
@@ -440,7 +442,7 @@ function AuctionCataloguePage({
           </section>
         </div>
       </main>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }

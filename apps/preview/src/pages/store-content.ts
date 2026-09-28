@@ -149,6 +149,34 @@ const STORE_FOOTER = {
     },
   ],
 };
+
+/**
+ * Auction-only footer — brand, social, Docs, Privacy and Terms. No shop
+ * column and no bar legal duplicates (Components/Footer → Auction only).
+ */
+const AUCTION_FOOTER = {
+  copy: {
+    attribution: "A division of MemeStrategy (HKEX: 2440)",
+    copyright: "© 2026 Grade10. All rights reserved.",
+  },
+  logo: FOOTER_LOGO,
+  logoHref: "/",
+  socialLinks: STORE_FOOTER.socialLinks,
+  legalLinks: [] as typeof STORE_FOOTER.legalLinks,
+  columns: [
+    {
+      heading: "HELP",
+      links: [{ label: "Docs", href: "/docs", external: true }],
+    },
+    {
+      heading: "LEGAL",
+      links: [
+        { label: "Privacy Policy", href: PRIVACY_POLICY_HREF },
+        { label: "Terms of Service", href: TERMS_OF_SERVICE_HREF },
+      ],
+    },
+  ],
+};
 const SORT_OPTIONS: SortOption[] = [
   { id: "new", label: "Latest product", shortLabel: "Latest" },
   { id: "price-asc", label: "Lowest price", shortLabel: "Lowest" },
@@ -346,6 +374,7 @@ const STORE_CART_COPY = {
 
 export {
   appliedFiltersFromSelection,
+  AUCTION_FOOTER,
   FILTER_GROUPS,
   FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,
