@@ -176,7 +176,7 @@ Rules `operatorRefusal` holds beyond the status table:
   invoice: { id; number; revision; status; lines: InvoiceLines; subtotalMinor; totalMinor; currency; paymentDeadline; sentAt;
              bankDetails: AuctionBankRailDetails | null; paymentReferenceCode; proofReturnReason } | null;
   payments: { receiptNumber; amountMinor; method; brand; lastFour; receivedAt }[];
-  overpaidMinor: number | null; refund: { amountMinor; method; destination; refundedAt } | null;
+  overpaidMinor: number | null; refund: { amountMinor; method; destination; reference; reason; note; refundedAt } | null;  // reference for bank only
   shipment: { carrier; trackingNumber; trackerUrl; dispatchedAt; deliveredAt; deliveryProof: { name } | null } | null;
   cancellation: { at } | null; suspension: { suspendedAt } | null;
 }

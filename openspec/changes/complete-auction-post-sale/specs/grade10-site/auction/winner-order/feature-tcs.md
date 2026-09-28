@@ -148,7 +148,7 @@ Runs once per row of **Test data**.
 | Status | The panel says | It also offers |
 | --- | --- | --- |
 | Awaiting Setup | Choose delivery, payment and billing by the setup deadline | Complete Order Setup |
-| Setup Overdue | `Missed address deadline:` and the day-only date | Nothing |
+| Setup Overdue | `Missed setup deadline:` and the day-only date | Nothing |
 | Preparing Invoice | Grade10 is preparing the invoice; the 7 days to pay start when it arrives; no date or time for it | Nothing |
 | Pending Payment, card invoice of 323225 minor units in HKD due 2026-10-06T10:00:00Z | Pay HK$3,232.25 by card by 6 October 2026, 18:00 | Nothing |
 | Pending Payment, bank transfer | Transfer the order total quoting the bank reference, then send proof, by the deadline | Nothing |
@@ -261,7 +261,7 @@ Runs once per row of **Test data**.
 
 | Status | How it got there | The panel says | Not offered |
 | --- | --- | --- | --- |
-| Setup Overdue | The 48-hour address window passed with no confirmed address | `Missed address deadline:` and the day-only date | Confirm delivery address |
+| Setup Overdue | The 48-hour setup window passed with no confirmed setup | `Missed setup deadline:` and the day-only date | Complete Order Setup |
 | Payment Overdue | The card invoice's payment deadline passed unpaid | The payment deadline has passed | Pay with Card |
 | Payment Overdue | Proof was returned with 1 minute left, and that minute passed | The payment deadline has passed | Proof upload |
 

@@ -19,8 +19,9 @@
 - Partial payments, cancellation reasons and reopening the address form. Each
   is its own change
 - Bank transfer outside HKD, and a second payment provider
-- Letter wording, and a requirement for the order link in letters or the old
-  order address. Both restore settled behaviour and ship as fixes
+- Rewording the existing letters, and a requirement for the order link in
+  letters or the old order address. The link and the address restore settled
+  behaviour and ship as fixes
 - Bugs that restore settled behaviour. They ship as `fix` commits with a
   regression test
 - Test winners in production or on a preview, bidding as a test account on a

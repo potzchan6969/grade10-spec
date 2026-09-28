@@ -526,14 +526,14 @@ reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
 
 ### Requirement: The address confirm window is 48 hours from lot close
 
-The winner SHALL have 48 hours from lot close to confirm a delivery address on
-the auction order. Grade10 SHALL show the absolute datetime under Confirm
-delivery address while the window is open (`Confirm by …` in the winner's
+The winner SHALL have 48 hours from lot close to confirm setup on the auction
+order. Grade10 SHALL show the absolute datetime under Complete Order Setup while
+the window is open (`Confirm by …` in the winner's
 zone). Progress Address subtext SHALL use the day-only form (`Confirm by …`
 without time).
 
-When the window passes without a confirmed address, Winner Order SHALL hide
-Confirm delivery address, and its Next step panel SHALL read `Missed address
+When the window passes without a confirmed setup, Winner Order SHALL hide
+Complete Order Setup, and its Next step panel SHALL read `Missed setup
 deadline: {date}` (day-only, no middle-dot separator) and offer Contact Us, per
 "Winner Order leads with the next step".
 Derived order status SHALL be Setup Overdue. Invoice status SHALL remain
@@ -556,7 +556,7 @@ follows up per `grade10-admin/auction/post-sale`.
 - **GIVEN** a lot that closed at 2026-09-17T13:30:00Z
 - **AND** its auction order is Awaiting Setup inside the confirm window
 - **WHEN** the winner opens Winner Order
-- **THEN** Confirm delivery address is offered
+- **THEN** Complete Order Setup is offered
 - **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
   displayed in the winner's zone as an absolute datetime
 - **AND** no countdown is shown
@@ -567,8 +567,8 @@ follows up per `grade10-admin/auction/post-sale`.
 - **GIVEN** an auction order still Awaiting Setup whose address confirm
   window has passed
 - **WHEN** the winner opens Winner Order
-- **THEN** Grade10 offers no Confirm delivery address control
-- **AND** the Next step panel reads Missed address deadline with the day-only
+- **THEN** Grade10 offers no Complete Order Setup control
+- **AND** the Next step panel reads Missed setup deadline with the day-only
   date and offers Contact Us
 - **AND** derived status is Setup Overdue
 - **AND** invoice status remains `not_issued`
