@@ -11,3 +11,5 @@ reviewed:
   tasks: 91f67485
 landed_by:
   tasks: seankcw
+deploy_waived: "sean: staging/staging-2/uat verification sufficient; behavior confirmed via the walk (US-11) on staging, no production/preview deploy has run since PR #618/#637 merged"
+decisions_carried: "none"
