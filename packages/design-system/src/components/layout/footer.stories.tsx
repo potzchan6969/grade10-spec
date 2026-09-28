@@ -1,7 +1,7 @@
 import {
+  FacebookLogo,
   InstagramLogo,
   ThreadsLogo,
-  YoutubeLogo,
 } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
@@ -24,19 +24,19 @@ import { Footer } from "./footer";
 const SOCIAL_LINKS = [
   {
     label: "Instagram",
-    href: "#instagram",
+    href: "https://www.instagram.com/grade10hk/",
     external: true,
     icon: <InstagramLogo aria-hidden size={16} weight="fill" />,
   },
   {
-    label: "YouTube",
-    href: "#youtube",
+    label: "Facebook",
+    href: "https://www.facebook.com/grade10hk/",
     external: true,
-    icon: <YoutubeLogo aria-hidden size={16} weight="fill" />,
+    icon: <FacebookLogo aria-hidden size={16} weight="fill" />,
   },
   {
     label: "Threads",
-    href: "#threads",
+    href: "https://www.threads.com/@grade10hk",
     external: true,
     icon: <ThreadsLogo aria-hidden size={16} weight="fill" />,
   },
@@ -145,6 +145,10 @@ export const AuctionOnly: Story = {
     expect(canvas.getByText("LEGAL")).toBeInTheDocument();
     expect(canvas.queryByText("SHOP")).toBeNull();
     expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/grade10hk/",
+    );
+    expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
       "target",
       "_blank",
     );
@@ -152,9 +156,17 @@ export const AuctionOnly: Story = {
       "rel",
       "noopener noreferrer",
     );
-    expect(canvas.getByRole("link", { name: "YouTube" })).toHaveAttribute(
+    expect(canvas.getByRole("link", { name: "Facebook" })).toHaveAttribute(
+      "href",
+      "https://www.facebook.com/grade10hk/",
+    );
+    expect(canvas.getByRole("link", { name: "Facebook" })).toHaveAttribute(
       "target",
       "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Threads" })).toHaveAttribute(
+      "href",
+      "https://www.threads.com/@grade10hk",
     );
     expect(canvas.getByRole("link", { name: "Threads" })).toHaveAttribute(
       "target",

@@ -7,9 +7,9 @@ import type {
   SortOption,
 } from "@grade10/ui";
 import {
+  FacebookLogo,
   InstagramLogo,
   ThreadsLogo,
-  YoutubeLogo,
 } from "@phosphor-icons/react";
 import { createElement, type ReactNode } from "react";
 import {
@@ -90,7 +90,7 @@ const STORE_FOOTER = {
   socialLinks: [
     {
       label: "Instagram",
-      href: "#instagram",
+      href: "https://www.instagram.com/grade10hk/",
       external: true,
       icon: createElement(InstagramLogo, {
         "aria-hidden": true,
@@ -99,10 +99,10 @@ const STORE_FOOTER = {
       }),
     },
     {
-      label: "YouTube",
-      href: "#youtube",
+      label: "Facebook",
+      href: "https://www.facebook.com/grade10hk/",
       external: true,
-      icon: createElement(YoutubeLogo, {
+      icon: createElement(FacebookLogo, {
         "aria-hidden": true,
         size: 16,
         weight: "fill",
@@ -110,7 +110,7 @@ const STORE_FOOTER = {
     },
     {
       label: "Threads",
-      href: "#threads",
+      href: "https://www.threads.com/@grade10hk",
       external: true,
       icon: createElement(ThreadsLogo, {
         "aria-hidden": true,
