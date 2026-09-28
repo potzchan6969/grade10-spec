@@ -27,7 +27,8 @@ instrumented.
   (list-card short form; no Extended label; close moves with live bid
   freshness), money on Active only (rolls on increase after first paint;
   Upcoming shows no money until open), Bid Now or View Auction by status, and
-  progress dots when more than one slide.
+  progress dots when more than one slide (on a small viewport, stage previous/next
+  and swipe also advance).
 - **Quiet catalogue only** — Featured (when present) then All auctions; no
   category tiles and no busy filter in this change.
 - **Watch from All auctions** — the same watch as the lot page and My Auctions;

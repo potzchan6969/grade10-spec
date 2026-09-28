@@ -34,7 +34,7 @@
 | Q8 | Which lots may fill a Featured slot? | Published Active or Upcoming only; Ended cannot fill a slot - decided by the round. If a curated lot closes before the operator clears it, the slot drops from the served Featured set — no Ended slide on the banner | Ended lots in Featured; any published lot including Closed |
 | Q9 | Where do site catalogue rules live? | Delta on `grade10-site/auction/auction`; admin curation is new `grade10-admin/auction/featured` - decided by the round | Overloading `listing-page` (lot address only); extending campaigns as the sole Featured source |
 | Q10 | Design reference? | Storybook `Auction List/Featured Auctions` → **Carousel banner** (`auction-list-featured-auctions--carousel-banner`) - decided by the round | Scrolling featured row and busy/quiet category page stories as canonical |
-| Q11 | Does Featured progress auto-advance? | Progress control advances slides; CarouselProgress auto-play is allowed presentation only | Requiring auto-advance as a product rule |
+| Q11 | Does Featured progress auto-advance? | Collector advance is the product rule (progress; on small viewports also stage previous/next or swipe). CarouselProgress auto-play is allowed presentation only | Requiring auto-advance as a product rule |
 | Q12 | One Featured slide progress chrome? | Multi-dot advance not required; progress may be absent or a single item | Forcing one chrome shape |
 | Q13 | Featured lot Ends while slotted? | Public Featured drops it at read time; admin slot stays until clear or replace | Auto-clearing the admin slot |
 | Q14 | Same lot in two Featured slots? | No | Allowing duplicates |

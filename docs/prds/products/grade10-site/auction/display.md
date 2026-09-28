@@ -79,7 +79,8 @@ the one a search engine keeps.
   Extended bidding keeps LIVE BIDDING and
   Ends in to the recorded close — no Extended label — and that close moves with
   the same freshness as the live current bid. Progress dots advance the slides
-  when more than one is set. The section is headed Featured auctions —
+  when more than one is set; on a small viewport, previous/next on the stage and
+  a horizontal swipe also advance. The section is headed Featured auctions —
   [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
 - 🚧 **No category section** — category tiles and the busy filter stay off this
   page until a later change; quiet layout is the only layout

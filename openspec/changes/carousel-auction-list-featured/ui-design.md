@@ -18,20 +18,21 @@ this layout and the management page marks are the source.
 
 | Export | Package | Exists | Composes |
 | --- | --- | --- | --- |
-| `FeaturedAuctionsBanner` | `@grade10/ui`, `src/blocks/auction-listing/featured-auctions-banner.tsx` | Yes — local promotion pending store PR | Full-width carousel: one front page image as ground and slab (`object-cover object-center`; load failure → gallery → stage background; optional `imageSrcSet` / `imageSizes`), title, status, list-card short Ends in / Opens in, Active bid rolls on increase, Bid Now or View Auction by status, `CarouselProgress` dots |
-| `AuctionCataloguePage` | Preview (`apps/preview/src/pages/auction-catalogue-page.tsx`) | Partly — page composition, not a package export | Featured (when set) then All auctions grid with infinite scroll and load-more Boneyard skeletons; no category chrome in the carousel-banner layout |
+| `FeaturedAuctionsBanner` | `@grade10/ui`, `src/blocks/auction-listing/featured-auctions-banner.tsx` | Yes — local promotion pending store PR | Full-width carousel: front page image as stage (`object-cover object-center`; load failure → gallery → stage background; optional `imageSrcSet` / `imageSizes`), title, status, list-card short Ends in / Opens in, Active bid rolls on increase, Bid Now or View Auction by status, `CarouselProgress` dots. Below `md`: stage chevrons and swipe with horizontal page motion; countdown beside the CTA; progress under the copy stack, left-aligned; copy band height is the tallest slide. From `md`: side-by-side 600px band with stage crossfade |
+| `AuctionCataloguePage` | Preview (`apps/preview/src/pages/auction-catalogue-page.tsx`) | Partly — page composition, not a package export | Featured (when set) then All auctions grid with infinite scroll and load-more Boneyard skeletons; no category chrome in the carousel-banner layout; auction-only footer (HELP + LEGAL, no shop column) |
 | `AuctionCard` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | All auctions list tile: image, title, bid, countdown, watch |
 | `WatchButton` | `@grade10/ui`, `src/blocks/auction-record/` | Yes | Watch on/off on an All auctions card (same control as lot page / My Auctions) |
 | `ListingRollingMoneyDisplay` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | Rolling current bid on the Featured slide |
 | `ListingCountdownDisplay` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | Client countdown on list cards; banner uses the same short remaining form inline |
 | `CarouselProgress`, `CarouselProgressItem` | `@grade10/design-system` | Yes | Featured slide progress / advance |
+| `IconButton` | `@grade10/design-system` | Yes | Small-viewport stage previous/next |
 | Admin Manage Featured | `grade10-admin` Listings sub-page | Yes — application work outside this store's package blocks | Ordered slots ≤3: listing pick, front page image upload (not gallery), reorder, clear |
 
 **Copy.** Banner words arrive as a `copy` prop on the block. Shared keys under
 `auction.featured` are answered in `en`, `ko`, `zh-Hans`, and `zh-Hant`
 (status, price captions including FINAL BID, Bid Now / View Auction, countdown
-leads, Ended stamp, progress, slide control). Catalogue section words and
-admin curator labels stay application copy.
+leads, Ended stamp, progress, slide control, previous, next). Catalogue section
+words and admin curator labels stay application copy.
 
 ## States
 
@@ -42,6 +43,7 @@ admin curator labels stay application copy.
 | Empty Featured | No Featured band; All auctions only | `grade10-site-auction-auction-SC-30` |
 | One Featured slide | Carousel with one slide; progress may be absent or a single item; Bid Now when Active | `grade10-site-auction-auction-SC-36` |
 | Two or three Featured slides | Carousel; progress dots; advancing changes the visible lot; mixed Active and Upcoming allowed | `grade10-site-auction-auction-SC-35` |
+| Small-viewport Featured advance | Below `md`: stage previous/next and horizontal swipe page the stage; countdown beside the CTA; progress under the copy stack, left-aligned; band height holds the tallest slide | `grade10-site-auction-auction-SC-35` |
 | Live bid roll | Current bid animates when the served amount **increases** after first paint (Active only); same freshness updates Ends in when the recorded close moves | `grade10-site-auction-auction-SC-32` |
 | Countdown | Relative **Ends in** / **Opens in** with list-card short remaining; neutral colour; at zero shows now until refresh; extended bidding still Ends in with no Extended cue | `grade10-site-auction-auction-SC-31` |
 | Bid Now | Active slide: Bid Now opens the lot details page | `grade10-site-auction-auction-SC-34` |

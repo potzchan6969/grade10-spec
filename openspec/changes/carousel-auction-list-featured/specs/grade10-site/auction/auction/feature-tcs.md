@@ -198,7 +198,8 @@ Runs once per row of **Test data**.
 ## grade10-site-auction-auction-US7: Collector advances Featured slides
 
 **As a** collector on `/auction` with more than one Featured slide,
-**I want** to move between slides with the progress control,
+**I want** to move between slides with the progress control, and on a small
+viewport also with stage previous/next or a horizontal swipe,
 **so that** I can reach every curated lot without leaving the band.
 
 ### grade10-site-auction-auction-US7-TC01-1: Progress advances between two Featured slides
@@ -239,6 +240,46 @@ Runs once per row of **Test data**.
 * Step 1 shows `<lot A>`.
 * Step 3 shows `<lot B>`.
 * Progress dots are present for the two slides.
+
+### grade10-site-auction-auction-US7-TC01-2: On a small viewport, stage next advances between two Featured slides
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-07
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` at a small viewport (below `md`).
+* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published lot in Featured slot 1 |
+| `<lot B>` | Published lot in Featured slot 2 |
+
+**Steps:**
+
+1. Read the visible Featured lot.
+2. Activate stage next on the Featured image.
+3. Read the visible Featured lot.
+
+**Expected Results:**
+
+* Step 1 shows `<lot A>`.
+* Step 3 shows `<lot B>`.
+* The stage image pages horizontally to `<lot B>`.
+* Progress dots mark `<lot B>` current.
 
 ### grade10-site-auction-auction-US7-TC02-1: Progress reaches every slide when three are set
 
@@ -307,6 +348,7 @@ Runs once per row of **Test data**.
 
 * The single slide is shown.
 * There is no multi-dot advance among slides.
+* Stage previous/next is not required.
 
 ---
 
@@ -777,8 +819,8 @@ to open that lot's details page,
 
 ## Settled
 
-- Progress advances by the progress control; CarouselProgress auto-play is allowed presentation, not a separate product rule for this change
-- One Featured slide need not offer multi-dot advance; progress may be absent or a single item
+- Progress advances by the progress control; on a small viewport stage previous/next and horizontal swipe also advance. CarouselProgress auto-play is allowed presentation, not a separate product rule for this change
+- One Featured slide need not offer multi-dot advance or stage previous/next; progress may be absent or a single item
 - A Featured lot that is no longer Active or Upcoming leaves the public Featured band at read time; the admin slot remains until cleared or replaced
 - One lot may not occupy two Featured slots
 - Signed-out watch on catalogue cards is owned by `grade10-site/auction/watchlist` (offer sign-in)
@@ -802,7 +844,7 @@ to open that lot's details page,
 - Upcoming hides money on Featured and All auctions → `grade10-site-auction-auction-SC-33`, `SC-61`
 
 ### Raised, rejected
-- Auto-advance as a required product behaviour — journey and decisions name the progress control; auto-play is CarouselProgress presentation only
+- Auto-advance as a required product behaviour — journey and decisions name collector advance (progress; on small viewports stage previous/next or swipe); auto-play is CarouselProgress presentation only
 - Signed-out watch behaviour on All auctions cards — already required by `grade10-site/auction/watchlist`; not restated here
 
 ### Uncovered anchors
