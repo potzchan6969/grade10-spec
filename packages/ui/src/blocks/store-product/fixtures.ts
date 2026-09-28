@@ -40,9 +40,7 @@ const DESCRIPTION_COPY = {
 };
 
 const HEADER_COPY = {
-  home: "Home",
   onlyLeft: (count: number) => `Only ${count} left`,
-  shop: "Shop",
 };
 
 const METADATA_COPY = {
@@ -56,11 +54,10 @@ const METADATA_COPY = {
 };
 
 const PURCHASE_COPY = {
-  addedToCart: "Added to cart",
+  adding: "Adding…",
   addToCart: "Add to cart",
   decreaseQuantity: "Decrease quantity",
   increaseQuantity: "Increase quantity",
-  notForSaleNote: "This product is not for sale.",
   quantityLabel: "Quantity",
   soldOut: "Sold out",
 };
