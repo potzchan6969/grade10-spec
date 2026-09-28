@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { Button } from "../forms/button";
 import { Input } from "../forms/input";
 import { Label } from "../forms/label";
@@ -194,6 +195,61 @@ export const WithoutCloseButton: Story = {
       </DialogContent>
     </Dialog>
   ),
+};
+
+/** `Button`'s `focus-visible:ring-3`, drawn outside its box. */
+const FOCUS_RING_PX = 3;
+
+/**
+ * Controls flush against the body's edges keep their whole focus ring. The
+ * body scrolls, so it clips at its own edge; the ring has to fit inside that
+ * edge on every side, and the controls still span the header's column.
+ */
+export const FullWidthControls: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Sign In</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          <Button className="w-full" size="md" variant="outline">
+            Continue With Google
+          </Button>
+          <DialogDescription>
+            Or have a sign-in link sent to your email.
+          </DialogDescription>
+          <Button className="w-full" size="md">
+            Send Link
+          </Button>
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
+  ),
+  play: async ({ canvasElement }) => {
+    const dialog = await within(canvasElement.ownerDocument.body).findByRole(
+      "dialog",
+    );
+    await Promise.all(dialog.getAnimations().map((motion) => motion.finished));
+    const slot = (name: string) => {
+      const node = dialog.querySelector(`[data-slot="${name}"]`);
+      if (node === null) throw new Error(`The dialog renders no ${name}`);
+      return node.getBoundingClientRect();
+    };
+    const button = (name: string) =>
+      within(dialog).getByRole("button", { name }).getBoundingClientRect();
+    const clip = slot("dialog-body");
+    const column = slot("dialog-header");
+    const top = button("Continue With Google");
+    const bottom = button("Send Link");
+
+    expect(top.left).toBeCloseTo(column.left, 1);
+    expect(top.right).toBeCloseTo(column.right, 1);
+    expect(top.top - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.top);
+    expect(top.left - FOCUS_RING_PX).toBeGreaterThanOrEqual(clip.left);
+    expect(top.right + FOCUS_RING_PX).toBeLessThanOrEqual(clip.right);
+    expect(bottom.bottom + FOCUS_RING_PX).toBeLessThanOrEqual(clip.bottom);
+  },
 };
 
 /** Tall body content scrolls between the pinned header and footer. */
