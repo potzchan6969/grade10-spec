@@ -1547,6 +1547,50 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * Step 3: the days are offered.
 * Step 4: the drop-off is booked, and on reload the plan holds the tick with it.
 
+### grade10-site-grading-submission-plan-US6-TC10-1: A plan kept with no level asks for one before its drop-off
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-plan-US-06
+
+**Pre-conditions:**
+
+* `customer(collector)` has a plan kept part way through the wizard, with PSA picked, no level picked, the collection statement unticked and no drop-off booked.
+* A drop-off is booked under the same email for another submission.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Level picked in the edit | Regular |
+
+**Steps:**
+
+1. Open the kept plan from its emailed link.
+2. Send a booking of a free day and time for the plan, outside its page.
+3. Send a join of the other submission's drop-off for the plan, outside its page.
+4. Click the list's edit link.
+5. On the service step, pick the level from **Test data**.
+6. Save the changes from the review.
+
+**Expected Results:**
+
+* Step 1: the page asks for a level beside the list's edit link; no day and no join are offered.
+* Step 2: the booking is refused by name; the diary holds no new visit.
+* Step 3: the join is refused by name; the other drop-off is unchanged.
+* Step 4: the editor opens on the kept list.
+* Step 5: the estimate shows for the level picked.
+* Step 6: the page no longer asks for a level; it asks for the statement in the review's words, and no day is offered yet.
+
 ---
 
 ## grade10-site-grading-submission-plan-US7: Collector reads the review before booking
@@ -2000,6 +2044,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 | `grade10-site-grading-submission-plan-SC-60` a USD sale read at the rate staff set | **Case added:** `US7-TC8-1` | written after the blind pass, with Q116; the reference answers in USD alone, so without the rate `US7-TC2-1` never fires |
 | `grade10-site-grading-submission-plan-SC-62` a plan kept from a ticked review | **Case added:** `US7-TC9-1` | written after the blind pass: the keep carries the review's tick, so a plan booked from the review is never asked for it again |
 | `grade10-site-grading-submission-plan-SC-61` a plan kept unticked asks for the statement | **Case added:** `US6-TC9-1` | written after the blind pass: a plan saved unticked and booked from its page was asked for nothing, so the plan now holds its tick and a booking or a join for it unticked is refused |
+| `grade10-site-grading-submission-plan-SC-63` a plan kept with no level asks for one | **Case added:** `US6-TC10-1` | written after the blind pass: a plan kept before a level was picked was offered a drop-off its booking could only refuse, so its page now asks for the level through the list's edit, and a booking or a join sent for it is refused before the diary is asked |
 
 ### Manual
 

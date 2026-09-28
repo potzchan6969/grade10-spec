@@ -66,6 +66,8 @@ fee sheet it is booked on. The visit it is handed in on is
   - The tick kept with the plan: a plan kept from a ticked review is asked
     nothing more, and one saved unticked is asked for it on its page before a
     drop-off is picked or joined
+  - The level kept with the plan: a plan kept before a level is picked is
+    offered no drop-off, and is asked for a level through the list's edit
 - Priced at booking
   - The sheet is pinned: a plan is priced on the sheet it was booked on, and
     the agreement prints those figures
@@ -728,6 +730,12 @@ the join SHALL carry that tick and write it on the plan in the same step. A
 booking or a join that neither finds the plan ticked nor carries the tick SHALL
 be refused by name.
 
+**The plan carries its level** - a plan kept with no level SHALL be offered no
+drop-off on its page, which SHALL ask for a level through the list's edit
+instead. A booking or a join sent for a plan with no level SHALL be refused by
+name before the diary is asked, so no visit is taken and the plan holds no
+drop-off.
+
 #### Scenario: grade10-site-grading-submission-plan-SC-31 - The review totals the declared value, the fee and the cover
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector reading the whole submission back before booking
 
@@ -805,6 +813,19 @@ be refused by name.
   name, and the plan holds no drop-off
 - **AND** once the statement is ticked the days are offered, and the booking
   made carries the tick, so the plan holds its drop-off and its tick together
+
+#### Scenario: grade10-site-grading-submission-plan-SC-63 - A plan kept with no level asks for one before its drop-off
+**Serves:** grade10-site-grading-submission-plan-US-06 - a collector picking up a plan kept before a level was picked
+
+- **GIVEN** a plan kept part way through the wizard, with no level picked
+- **WHEN** the collector opens its page to book the drop-off
+- **THEN** a level is asked for through the list's edit, and no day and no
+  join are offered
+- **AND** a booking or a join sent for the plan is refused by name before the
+  diary is asked, so no visit is taken and the plan holds no drop-off
+- **AND** once the list is saved with a level, the level is no longer asked
+  for, and the page asks for the statement before any day, as for any plan
+  kept unticked
 
 #### Scenario: grade10-site-grading-submission-plan-SC-62 - A plan kept from a ticked review opens on the picker with nothing asked
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector who ticked the statement on the review is not asked again

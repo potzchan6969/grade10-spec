@@ -73,7 +73,8 @@
     "step": {
       "cards": "The cards",
       "service": "The service",
-      "book": "Book"
+      "book": "Book",
+      "review": "Review"
     },
     "aboutYou": {
       "title": "About you",
@@ -248,6 +249,7 @@
     "joined": "This submission joins the drop-off you already have on {day}, {time}. One visit, both lists.",
     "resized": "Both lists together pass {standard, plural, one {# card} other {# cards}}, so the visit takes the longer Bulk drop-off. We moved it once in the diary; the day and time stand.",
     "alreadyBooked": "You already have a visit booked for this day. Pick another.",
+    "levelRequired": "This list has no level, so nothing was booked. Edit the list to pick one, then try again.",
     "conflict": "This booking has moved on since you read it. We’re reading the latest — pick a time again.",
     "booked": {
       "title": "Your drop-off is booked",
@@ -293,6 +295,7 @@
     "notFound": "We could not find that submission. Check the link we emailed you.",
     "notFoundLink": "Start a submission",
     "edit": "Edit the list",
+    "levelNeeded": "This list has no level yet. Edit the list to pick one, then book the drop-off.",
     "retry": "Try again",
     "paid": "Paid at the counter",
     "cancelled": "Cancelled. The cards never left you, and nothing was paid.",

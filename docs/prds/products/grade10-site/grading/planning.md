@@ -107,6 +107,9 @@ to book later.
 - 🚧 **Consent** — the personal information collection statement, read and
   ticked before booking; a plan kept unticked asks for it on its page before
   a drop-off is picked or joined
+- 🚧 **A plan with no level** — a plan kept before a level is picked offers
+  no drop-off on its page; it asks for the level through Edit the list, and a
+  booking or a join sent for it is refused by name
 - 🚧 **Finish later** — the plan is kept under the email given and its link
   is emailed the moment the collector leaves; it opens on any device with no
   account

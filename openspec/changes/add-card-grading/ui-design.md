@@ -280,7 +280,7 @@ the new `grading` namespace; the words are not written here.
 - **`grading.home.*`** — the lead, howItWorks (four), priceSheet (lead,
   aboveTop, bulkLine, columns, coverLine), start, bookWithoutList, signIn,
   submissions (title, empty, open, closed), lostLink
-- **`grading.plan.*`** — step (three), aboutYou (fields, signedInLine,
+- **`grading.plan.*`** — step (four), aboutYou (fields, signedInLine,
   emailLine), card (matched, keptAsTyped, edit, remove, declaredValue,
   referenceSales, referenceNote, minimumGrade, noValue, aboveCeiling,
   referenceUnavailable), add, paste, capNotice, overTwenty, overCap,
@@ -294,12 +294,12 @@ the new `grading` namespace; the words are not written here.
   consent, book, saveForLater, saveChanges, expired)
 - **`grading.dropoff.*`** — lead, bulkLead, shop (durations, moreShops,
   joinsExisting), batchLine (before, after, estimateFrom), moveOrCancel,
-  book, joined, resized; booked (title, emailLine, calendar, move, cancel,
+  book, joined, resized, levelRequired; booked (title, emailLine, calendar, move, cancel,
   beforeYouCome (four), openTheList, vaultLine, bulkDuration)
 - **`grading.submission.*`** — status (ten words), chip (waitingOnYou,
   withUs, withGrader, runningLate, dropoff, collected, onTheirWayBack),
   stage (seven), lead per status, outcome (fourteen badges), exception
-  (each fact's line), visit (booked, missed, bookAgain), edit, cancel (line,
+  (each fact's line), visit (booked, missed, bookAgain), edit, levelNeeded, cancel (line,
   dialogTitle, dialogBody, confirm, back), cancelled, expired, paid,
   withdraw (title, body, whatsapp, closed), grader (order, readMostDays,
   stages, nextStage, runningLate), grades (headline, settle (title, body,
@@ -430,11 +430,12 @@ Stories `grading-plan-plan-wizard--`, the Kept rows.
 | Kept, loading | the wizard's frame; the steps wait on the kept plan's read | **Out of suite:** the view's colocated test |
 | Kept, error | the read's failure in the error tone; Back to the submission | **Out of suite:** the view's colocated test |
 | Kept, not found | the site's not-found copy, as the submission page reads it | `grade10-site-grading-submission-lifecycle-SC-52` |
-| Kept, planned | the three steps on the kept list, grader and level; the review with its totals and any warning, no tick and no Book; Save changes | `grade10-site-grading-submission-lifecycle-SC-62` |
+| Kept, planned | the three steps on the kept list, grader and level, the rail's last step and the service step's continue both Review, never Book; the review with its totals and any warning, no tick and no Book; Save changes | `grade10-site-grading-submission-lifecycle-SC-62` |
 | Kept, booked | the same, the grader fixed and a level required on the booked sheet; the email fixed | `grade10-site-grading-dropoff-booking-SC-30` |
 | Kept, warning kept | a card above the ceiling still warned, its reference asked again | `grade10-site-grading-submission-plan-SC-32` |
 | Saved | the same submission page opens; no second plan | `grade10-site-grading-submission-lifecycle-SC-62` |
 | At the counter | the save refused by name: the counter has the list | `grade10-site-grading-submission-lifecycle-SC-59` |
+| Kept, closed | an edit link opened once the counter has the list, or on a cancelled or expired list: that status's own words and Back to the submission; no step, no wizard | `grade10-site-grading-submission-lifecycle-SC-59`, `grade10-site-grading-submission-lifecycle-SC-50` |
 
 ### Book the drop-off
 
@@ -494,6 +495,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Chip: Collected | Back with you and the date | `shared-ui-grading-submission-SC-29` |
 | Chip: none | Cancelled, Expired: the word alone | `shared-ui-grading-submission-SC-30` |
 | Planned | Not handed in yet · Waiting on you; the estimate; `DropoffBooking` open in place where Book is offered, or Join where a visit under the email waits; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-SC-42` |
+| Planned, no level | a plan kept before a level was picked: the level line beside Edit the list; no estimate, no picker and no Join; a booking or a join sent with no level refused in the drop-off's words | `grade10-site-grading-submission-plan-SC-63`, `grade10-site-grading-submission-plan-SC-38`, `grade10-site-grading-submission-plan-SC-27` |
 | Nudged | the kept-until line reads the expiry day | `grade10-site-grading-submission-plan-SC-43` |
 | Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-SC-44` |
 | Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
