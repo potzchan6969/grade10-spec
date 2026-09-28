@@ -1,6 +1,6 @@
 {
   "title": "訂單詳情",
-  "orderId": "訂單 #{id}",
+  "orderId": "訂單 {id}",
   "loading": "正在載入訂單詳情…",
   "error": "無法載入此訂單。請再試一次。",
   "retry": "再試一次",
@@ -22,6 +22,9 @@
   },
   "money": {
     "subtotal": "報價小計",
+    "discount": "折扣",
+    "shipping": "運費",
+    "tax": "稅項",
     "paidTotal": "已付款總額",
     "refund": "退款"
   },
