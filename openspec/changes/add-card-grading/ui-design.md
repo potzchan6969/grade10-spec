@@ -44,21 +44,21 @@ the pages carry is the product; this file carries the surface.
 | Screen | Board | Route | Composes |
 | --- | --- | --- | --- |
 | Grading home | `G16`, `G01` | `grade10.com/grading` | `GradingHome` → `GradingFeeSheet`, `GradingOwnershipChip`, `Card`, `List`, `EmptyState`, `Button`, `Link`, `Text` |
-| Plan wizard | `G02`, `G03`, `G04` | `/grading/new`; a kept plan at `/grading/submissions/:submissionId/edit`, saved in place with Save changes, no Book step once booked | `PlanWizard` → `Stepper`, `Step`, `TextInput`, `GradingCardList`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `Alert`, `Button` |
+| Plan wizard | `G02`, `G03`, `G04` | `/grading/new`; a kept plan at `/grading/submissions/:submissionId/edit`, saved in place with Save changes; the editor never books | `PlanWizard` → `Stepper`, `Step`, `TextInput`, `GradingCardList`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `Alert`, `Button` |
 | Paste a list | `G17` | a sheet over the cards step | `GradingPasteSheet` → `Drawer`, `Textarea`, `List`, `Alert`, `Button` |
-| Book the drop-off | `G05` | in place on the submission page, reached from the review's Book | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Alert` for the batch line, `Text`, `Button` |
+| Book the drop-off | `G05` | in place on the submission page, open wherever the submission holds no visit and Book is offered; the review's Book, Save for later and the emailed link land on it | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Alert` for the batch line, `Text`, `Button` |
 | Drop-off booked | `G06` | on the submission page, after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `List`, `Alert`, `Link`, `Button` |
 | Submission page | `G07`–`G12`, `G13`, `G18` | `/grading/submissions/:submissionId` | `SubmissionPage` → `GradingStatusRail`, `GradingOwnershipChip`, `BookingManageCard`, `GradingCardRecord`, `GradingGradeCards`, `GradingPickupCard`, `GradingNamedCollector`, `GradingMoneyBlock`, `GradingUncollectedLadder`, `Card`, `Alert`, `Dialog`, `List`, `Link`, `Button`, `Text` |
 | Walk-in booking | none; `G00-Main` names it | `grade10.com/book` | the site's own booking flow, unchanged: the Grading visit is a listed service, and the visit it books is the diary's own, which grading never reads |
 | Submission agreement | `G14` | `/grading/sign#<token>` | `CeremonyFlow` → `PdfPageCanvas`, `SignatureField`, `RefusalNotice`; the template in `packages/grading/backend` |
 | Hand-back receipt | `G15`, `G18` | `/grading/sign#<token>` | the same ceremony with the receipt template |
 | Queue | `GA1` | `admin.grade10.com/grading` | `QueuePanel` → `SectionHeader`, `ChoiceList`, `Choice`, `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `StatusBadge`, `Badge`, `CursorPager`, `Button` |
-| Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered, or with `?view=runbook`; `/grading/walk-in` for a walk-in | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
+| Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered; `/grading/walk-in` for a walk-in, the Walk-in desk | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
 | Refuse a card | `GA7` | dialog from the hand-in runbook | `RefuseCardDialog` → `FormDialog`, `ChoiceList`, `Choice`, `NotesField`, `Notice` |
 | Batches | `GA4` | `/grading/batches` | `BatchesPanel`, `ShipBatchForm`, `ReestimateDialog` → `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `CursorPager`, `CheckList`, `Check`, `ChoiceList`, `Choice`, `NotesField`, `TextField`, `DateField`, `MoneyField`, `FormDialog`, `Notice`, `Button` |
 | Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `FilePicker`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
-| Hand-back runbook | `GA6`, `G18` | `/grading/submissions/:submissionId` while the hand-back is offered, or with `?view=runbook` | `HandbackRunbook` → `CheckList`, `Check`, `Panel`, `TextField`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `Notice`, `Button`, `Link`, `Code` |
-| One submission | `GA3` | `/grading/submissions/:submissionId` while no runbook is offered, or with `?view=record`; one press from the runbook | `SubmissionPanel` → `Tabs`, `Tab`, `TabPanel`, `StatusBadge`, `Badge`, `Panel`, `EntryList`, `Entry`, `Table`, `Row`, `Cell`, `Money`, `At`, `FormDialog`, `MoneyField`, `DateField`, `NotesField`, `Notice`, `Button`, `Link` |
+| Hand-back runbook | `GA6`, `G18` | `/grading/submissions/:submissionId` while the hand-back is offered | `HandbackRunbook` → `CheckList`, `Check`, `Panel`, `TextField`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `Notice`, `Button`, `Link`, `Code` |
+| One submission | `GA3` | `/grading/submissions/:submissionId` while no runbook is offered, or with `?view=record`; one press from the runbook, and the runbook one press from it | `SubmissionPanel` → `Tabs`, `Tab`, `TabPanel`, `StatusBadge`, `Badge`, `Panel`, `EntryList`, `Entry`, `Table`, `Row`, `Cell`, `Money`, `At`, `FormDialog`, `MoneyField`, `DateField`, `NotesField`, `Notice`, `Button`, `Link` |
 | Written notice | none drawn; `GA1`'s Notice due badge and `M18` | dialog from the Ready view or the submission | `PostNoticeDialog` → `FormDialog`, `Text`, `DateField`, `TextField`, `Notice` |
 | Settings | none drawn; the console page's table | `/grading/settings` | `SettingsPanel` → `SectionHeader`, `Table`, `Row`, `Cell`, `SaveableField`, `MoneyField`, `PercentField`, `NumberField`, `FormDialog`, `Notice` |
 
@@ -141,7 +141,9 @@ or an instant through `formatLocalTime` in the zone given.
   (declared, fee, cover or none), `warnings` (per card: the reference above
   the ceiling, the level, the difference, the higher level's fee now) or
   none, `goodToKnow` (five), `consented`, `pending`, `error`, `onEdit`,
-  `onConsent`, `onBook`, `onSaveForLater`
+  `onConsent`, `onBook`, `onSaveForLater`; `onConsent` and `onBook` are given
+  together or not at all, and left out the review offers neither the tick nor
+  Book, its save act reading the caller's words, as the editor's Save changes
 - **`GradingStatusRail`** — `stage` (one of Planned, Booked, Handed in,
   Sent, Graded, Back, Home), `ended` — the word that says the ending — or
   none; a `Stepper` of seven `Step`s, the stage `progress`, earlier
@@ -206,7 +208,8 @@ to the diary's five steps, and the wizard's rail is three `Step`s.
 `EntryList`, `Entry`, `FormDialog`, `InfoDialog`, `MoneyField`, `PercentField`,
 `NumberField`, `DateField`, `DateTimeField`, `TextField`, `NotesField`,
 `SaveableField`, `FilePicker`, `MediaFrame`, `Thumbnail`, `Code`, `Button`,
-`Link`, `Text`, `OperatorIdentity`, `keepRefusal`. A tile is a `Figure`; a
+`Link`, `Text`, `OperatorIdentity`, `keepRefusal`, and `useConfirm` from
+`@grade10/frontend-dialog` for an act that cannot be taken back. A tile is a `Figure`; a
 runbook is a `CheckList` of `Check`s, each with its button or its reason; a
 photograph pair is two `MediaFrame`s. Nothing the console package lacks.
 
@@ -219,7 +222,8 @@ photograph pair is two `MediaFrame`s. Nothing the console package lacks.
   card, the fee `Panel`, the sign `Panel`, the check-in `Panel`. The
   console has no paste: a walk-in's list is written card by card with the
   collector at the desk, and `GradingPasteSheet` stays the collector's
-  surface alone
+  surface alone; `recordHref` is the one press to the record, and
+  `onStarted(id)` reports the submission a walk-in mints
 - **`RefuseCardDialog`** — the three reasons, the collector's-words field,
   the consequence `Notice`
 - **`BatchesPanel`**, **`ShipBatchForm`**, **`ReestimateDialog`**,
@@ -231,9 +235,10 @@ photograph pair is two `MediaFrame`s. Nothing the console package lacks.
   exceptions `EntryList`, Save and Finish
 - **`HandbackRunbook`** — the six `Check`s, the items table with Handed over
   and Vault instead per row, the sign `Panel`, the money `Panel`, the vault
-  `Panel`, the photographs
+  `Panel`, the photographs; `recordHref` is the one press to the record
 - **`SubmissionPanel`** — the header chips, the pickup or drop-off block,
-  the collector block with the WhatsApp templates, the four tabs;
+  the collector block with the WhatsApp templates, the four tabs,
+  `runbookHref` where a runbook is offered, Cancel behind `useConfirm`;
   **`WaiveUpchargeDialog`**, **`PayoutDialog`**, **`WithdrawCardDialog`**,
   **`SettlementDialog`**, **`MintDialog`** on its tabs
 - **`PostNoticeDialog`** — the address from the agreement as `Text`, the
@@ -281,7 +286,7 @@ the new `grading` namespace; the words are not written here.
   backIn), estimate (title, perCard, coverPerCard, paidAtCounter, includes),
   upchargeNotice); review (title, header, backIn, edit, schedule, totals
   (declared, fee, cover), warning (line, nowLine), goodToKnow (five),
-  consent, book, saveForLater, expired)
+  consent, book, saveForLater, saveChanges, expired)
 - **`grading.dropoff.*`** — lead, bulkLead, shop (durations, moreShops,
   joinsExisting), batchLine (before, after, estimateFrom), moveOrCancel,
   book, joined, resized; booked (title, emailLine, calendar, move, cancel,
@@ -317,6 +322,7 @@ Stories `grading-plan-grading-home--`, the Fee sheet rows `grading-submission-gr
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Loading | `home.loading`; no list | `grade10-site-grading-submission-plan-SC-02` |
+| Prerendered | the lead and How it works as static HTML; the fee sheet and Your submissions in their loading state until the page reads them, since staff change the sheet without a deploy | **Out of suite:** the anonymous smoke of task 31.8 |
 | Signed out (`G16`) | the lead, the four-step How it works, `GradingFeeSheet`, Start a submission, Book a drop-off without a list, Sign in in the header | `grade10-site-grading-submission-plan-SC-01` |
 | Signed in (`G01`) | the account line; Your submissions as one `Card` per submission with the summary, the status word, the chip and the id; What it costs below | `grade10-site-grading-submission-plan-SC-41` |
 | Signed in, none | `EmptyState` under Your submissions; Start a submission | `grade10-site-grading-submission-plan-SC-46` |
@@ -405,9 +411,24 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 | Good to know | the five lines in order | `shared-ui-grading-submission-SC-24` |
 | Consent unticked | Book the drop-off disabled until the statement is ticked | `shared-ui-grading-submission-SC-27` |
 | Booking | Book pending; both buttons disabled | `shared-ui-grading-submission-SC-27` |
-| Saved for later | the plan kept; the page opens at Planned | `grade10-site-grading-submission-plan-SC-58` |
+| Saved for later | the plan kept; its page opens at Planned, on the picker, asking for the statement first | `grade10-site-grading-submission-plan-SC-58` |
 | Plan expired meanwhile | the refusal by name; Start again | `shared-ui-grading-submission-SC-28` |
 | Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-SC-08` |
+
+### Plan wizard — a kept plan
+
+Stories `grading-plan-plan-wizard--`, the Kept rows.
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Kept, loading | the wizard's frame; the steps wait on the kept plan's read | **Out of suite:** the view's colocated test |
+| Kept, error | the read's failure in the error tone; Back to the submission | **Out of suite:** the view's colocated test |
+| Kept, not found | the site's not-found copy, as the submission page reads it | `grade10-site-grading-submission-lifecycle-SC-52` |
+| Kept, planned | the three steps on the kept list, grader and level; the review with its totals and any warning, no tick and no Book; Save changes | `grade10-site-grading-submission-lifecycle-SC-62` |
+| Kept, booked | the same, the grader fixed and a level required on the booked sheet; the email fixed; a list passing 20 names the longer visit | `grade10-site-grading-dropoff-booking-SC-30` |
+| Kept, warning kept | a card above the ceiling still warned, its reference asked again | `grade10-site-grading-submission-plan-SC-32` |
+| Saved | the same submission page opens; no second plan | `grade10-site-grading-submission-lifecycle-SC-62` |
+| At the counter | the save refused by name: the counter has the list | `grade10-site-grading-submission-lifecycle-SC-59` |
 
 ### Book the drop-off
 
@@ -415,6 +436,7 @@ Stories `grading-dropoff-dropoff-booking--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
+| Statement unticked | a plan kept unticked: the collection statement in the review's words and its tick before the shop and the days; a join waits on the same tick | `grade10-site-grading-submission-plan-SC-61` |
 | Lead (`G05`) | bring the n cards; about 20 minutes; nothing paid until each card is checked and signed | `grade10-site-grading-dropoff-booking-SC-04` |
 | Bulk lead | 20 or more: the longer visit, about 45 minutes | `grade10-site-grading-dropoff-booking-SC-05` |
 | Shop | `BookingLocationPicker`: one shop with the address and the two durations; the more-shops line; the already-booked line | `grade10-site-grading-dropoff-booking-SC-04` |
@@ -465,7 +487,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Chip: On their way back | Grades are in | `shared-ui-grading-submission-SC-29` |
 | Chip: Collected | Back with you and the date | `shared-ui-grading-submission-SC-29` |
 | Chip: none | Cancelled, Expired: the word alone | `shared-ui-grading-submission-SC-30` |
-| Planned | Not handed in yet · Waiting on you; the estimate; Book the drop-off; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-SC-42` |
+| Planned | Not handed in yet · Waiting on you; the estimate; `DropoffBooking` open in place where Book is offered, or Join where a visit under the email waits; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-SC-42` |
 | Nudged | the kept-until line reads the expiry day | `grade10-site-grading-submission-plan-SC-43` |
 | Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-SC-44` |
 | Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
@@ -476,6 +498,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-SC-19` |
 | Cancel this submission | the button with its line; `CancelSubmissionDialog` naming the drop-off it cancels; Yes, cancel and Go back | `grade10-site-grading-submission-lifecycle-SC-47` |
 | Cancelled | Cancelled; the rail ended; the cards never left, nothing paid; Start a submission | `grade10-site-grading-submission-lifecycle-SC-47` |
+| Cancel withheld | the visit started, or the counter checked or refused a card: no Cancel this submission | `grade10-site-grading-submission-lifecycle-SC-61` |
 | Handed in (`G08`) | Handed in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-SC-53` |
 | Refused card | the card's Refused at the counter badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-SC-06` |
 | Withdrawn card | the card's Withdrawn badge with the refund line; the estimate dropped | `grade10-site-grading-submission-lifecycle-SC-15` |
@@ -660,6 +683,7 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 | Loading | the console's async status line | **Out of suite:** the panel's colocated test |
 | Error | the console's async status line, retry | **Out of suite:** the panel's colocated test |
 | Read grant | no row action past Open | `grade10-admin-grading-counter-SC-75` |
+| Walk-in desk | the section's desks read Queue · Walk-in · Batches · Settings; Walk-in shown only with `admin.savePlan`, and absent for a read holder | `grade10-admin-grading-counter-SC-15`, `grade10-admin-grading-counter-SC-75` |
 
 ### Hand-in runbook
 
@@ -697,6 +721,7 @@ Stories `grading-admin-intake-intake-runbook--`.
 | Checked in | the runbook closed; the submission at Handed in | `grade10-admin-grading-counter-SC-20` |
 | Read grant | the runbook with no button | `grade10-admin-grading-counter-SC-75` |
 | Stale | an act refused because the submission moved; the page reads again | `grade10-admin-grading-counter-SC-84` |
+| Record, one press | the header's link to the record, `?view=record`; Cancel lives there | **Out of suite:** the route test of task 31.1 |
 
 ### Refuse a card
 
@@ -747,7 +772,7 @@ Stories `grading-admin-receiving-receive-panel--`.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Header (`GA5`) | the batch, grader · level, cards from submissions, the grader's last stage with the day it was recorded, arrived; the progress | `grade10-admin-grading-batches-SC-29` |
-| Before the manifest | Scan disabled; Import the manifest and the invoice first | `grade10-admin-grading-batches-SC-23` |
+| Before the manifest | Scan disabled; Enter the manifest and the invoice first | `grade10-admin-grading-batches-SC-23` |
 | Manifest entry | `FilePicker` or typed lines — ❓ Operations | `grade10-admin-grading-batches-SC-23` |
 | Invoice entry | the invoice's lines and total | `grade10-admin-grading-batches-SC-23` |
 | Unmatched manifest line | a line naming no intake id in the batch listed unmatched; Finish held | `grade10-admin-grading-batches-SC-24` |
@@ -770,7 +795,7 @@ Stories `grading-admin-receiving-receive-panel--`.
 | Finish held | an unmatched line or an unscanned slab unresolved: Finish disabled naming it | `grade10-admin-grading-batches-SC-31` |
 | Finish | Finish receiving · notify n collectors; every submission ready, the codes emailed | `grade10-admin-grading-batches-SC-32` |
 | Finished | the batch closed with its received date | `grade10-admin-grading-batches-SC-06` |
-| Read grant | no Scan, Import or Finish | `grade10-admin-grading-counter-SC-75` |
+| Read grant | no Scan, Enter or Finish | `grade10-admin-grading-counter-SC-75` |
 
 ### Hand-back runbook
 
@@ -800,6 +825,7 @@ Stories `grading-admin-handback-handback-runbook--`.
 | Vault, waiting | Open a vault case disabled until the balance is settled | `grade10-admin-grading-counter-SC-41` |
 | Vault | the slab handed to the vault; the case opened; the receipt says so | `grade10-admin-grading-counter-SC-40` |
 | Read grant | the runbook with no button | `grade10-admin-grading-counter-SC-75` |
+| Record, one press | the header's link to the record, `?view=record` | **Out of suite:** the route test of task 31.1 |
 
 ### One submission
 
@@ -826,7 +852,10 @@ Stories `grading-admin-submission-submission-panel--`.
 | Send again | the letter re-sent; the grades email the same | `grade10-admin-grading-counter-SC-49` |
 | Message not sent | the failed letter flagged with its reason; Send again | `grade10-admin-grading-counter-SC-11` |
 | Timeline tab | every event with its figures, the grader's stages in its words, staff-only entries marked | `grade10-admin-grading-counter-SC-56` |
-| Actions by status (`GA3`) | only the status's acts; Cancel absent once the cards have left | `grade10-admin-grading-counter-SC-82`, `grade10-admin-grading-counter-SC-83` |
+| Actions by status (`GA3`) | only the status's acts; Cancel absent once the visit starts, a card is checked or refused, or the cards have left | `grade10-admin-grading-counter-SC-82`, `grade10-admin-grading-counter-SC-83`, `grade10-admin-grading-counter-SC-107` |
+| Runbook, one press | where the hand-in or the hand-back is offered, the header's link back to its runbook | **Out of suite:** the route test of task 31.1 |
+| Cancel | `useConfirm`: the confirm names the drop-off that goes with it and says it is on the collector's word, and that the collector is sent nothing; Cancel and Go back | `grade10-admin-grading-counter-SC-106` |
+| Cancelled | the status word Cancelled; the drop-off block gone; the cancel on the Timeline with the operator; no act but Open | `grade10-admin-grading-counter-SC-106` |
 | Stale | an act refused because the submission moved; the panel reads again | `grade10-admin-grading-counter-SC-84` |
 | Read grant | the tabs with no act | `grade10-admin-grading-counter-SC-75` |
 | Not found | the console's not-found line | `grade10-admin-grading-counter-SC-94` |

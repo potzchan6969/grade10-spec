@@ -63,6 +63,8 @@ fee sheet it is booked on. The visit it is handed in on is
     booking rather than on the iPad
   - The consent: the collection statement, ticked before the drop-off is
     booked
+  - The tick kept with the plan: a plan saved unticked is asked for it on its
+    page before a drop-off is picked or joined
 - Priced at booking
   - The sheet is pinned: a plan is priced on the sheet it was booked on, and
     the agreement prints those figures
@@ -717,6 +719,11 @@ statement, and booking the drop-off SHALL be refused until they have.
 keeping the plan for later SHALL be offered with it unticked, and the plan
 SHALL be kept unticked.
 
+**The plan carries its tick** - a kept plan SHALL hold whether its statement
+was ticked. Booking or joining a drop-off for a plan held unticked SHALL be
+refused by name, and its page SHALL ask for the statement, in the review's
+words, before a drop-off is picked or joined.
+
 #### Scenario: grade10-site-grading-submission-plan-SC-31 - The review totals the declared value, the fee and the cover
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector reading the whole submission back before booking
 
@@ -782,6 +789,18 @@ SHALL be kept unticked.
 - **WHEN** the collector saves the plan to book later
 - **THEN** the plan is kept with the statement unticked
 - **AND** booking the drop-off is the only thing that was refused
+
+#### Scenario: grade10-site-grading-submission-plan-SC-61 - A plan kept unticked asks for the statement before its drop-off
+**Serves:** grade10-site-grading-submission-plan-US-06 - a collector picking a plan back up to book its visit
+
+- **GIVEN** a plan saved for later with the collection statement unticked
+- **WHEN** the collector opens its page to book the drop-off
+- **THEN** the statement is asked for, in the review's words, before any day
+  is offered
+- **AND** a booking or a join sent for the plan while it is unticked is
+  refused by name, and the plan holds no drop-off
+- **AND** once the statement is ticked the plan holds that tick and the days
+  are offered
 
 ### Requirement: A plan is priced on the fee sheet it was booked on
 

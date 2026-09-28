@@ -22,6 +22,8 @@ emailed is `grade10-site/grading/collector-notifications`.
     where it ended
   - What is not a status: a refusal, a withdrawal, an upcharge, a held card
     and running late are all answers to questions, not states
+  - Who reads the page: the collector signed in, or whoever holds the emailed
+    link, and a plan kept signed out lands on its page on that same link
 - With the grader
   - The grader's own words: each stage it publishes reaches the page unchanged
   - The estimate: counted from the day the batch left, and read against the
@@ -83,10 +85,15 @@ emailed is `grade10-site/grading/collector-notifications`.
 - Cancelled and expired
   - Cancelled before hand-in: the collector calls the submission off and the
     drop-off goes with it
+  - Until the visit starts: no cancel once the visit has begun or the counter
+    has checked or refused a card, for the collector and for staff acting on
+    their word, and nobody is emailed about it
   - Expired: a plan nobody booked ends on its own clock
   - Nothing paid, nothing owed: both ends leave the cards with the collector
 - Acts by status
   - Only what the status allows: the page offers no act it would refuse
+  - Editing the list: the same submission saved again, never a second one,
+    and nothing booked by the edit
   - Nothing while the cards are away: from sent to back the page is a read
 
 ## ADDED Requirements
@@ -170,6 +177,9 @@ link the shop emailed, and by nobody else.
   booked under SHALL read the submission page.
 - **The emailed link** - the access token that link carries SHALL open the same
   page on any device, with no account.
+- **From the wizard** - a plan kept in the wizard SHALL open its page on the
+  access the emailed link carries, so a collector who is not signed in lands on
+  it.
 - **Anybody else** - a reader holding neither SHALL be given the site's
   not-found page, and the page SHALL NOT say whether the submission exists.
 - **An id nobody was issued** - a submission id the shop never issued SHALL be
@@ -182,6 +192,15 @@ link the shop emailed, and by nobody else.
 - **WHEN** somebody who is neither signed in as that collector nor holding the emailed link opens its address
 - **THEN** the site's not-found page is shown
 - **AND** nothing on it says whether that submission exists
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-60 - A plan kept signed out opens its page on the link it was kept with
+**Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector follows their own submission with no account
+
+- **GIVEN** a collector who is not signed in and has kept a plan in the
+  wizard, by booking it or by saving it for later
+- **WHEN** the wizard opens the plan's submission page
+- **THEN** the page opens with no account and no sign-in asked for
+- **AND** it is the page the emailed link opens
 
 ### Requirement: The page reads one word, one chip and one rail
 
@@ -823,7 +842,10 @@ Both endings leave the cards with the collector and the account settled at
 nothing.
 
 - **Cancelling** - the collector SHALL be able to cancel a submission that is
-  `planned` or `booked`, and SHALL NOT be able to once the cards are handed in.
+  `planned` or `booked` until its visit starts and until the counter checks or
+  refuses a card on its list, and SHALL NOT be able to after either, nor once
+  the cards are handed in. Staff SHALL cancel in the same window, on the
+  collector's word, and the collector SHALL be sent no message for either.
 - **The drop-off goes with it** - cancelling SHALL cancel the drop-off booked
   for that submission.
 - **Expiring** - a `planned` submission nobody books, and a `booked` submission
@@ -866,6 +888,17 @@ nothing.
 - **THEN** the submission is cancelled and the collector is told at the counter
 - **AND** no message is sent, and nothing was paid and nothing is owed
 
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-61 - Cancel is withheld once the visit starts or the counter checks a card
+**Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector is not offered a cancel the counter would refuse
+
+- **GIVEN** a booked submission whose visit has started at the desk, one of
+  whose cards the counter has checked
+- **WHEN** the collector opens the submission page, or sends a cancel from a
+  page read before
+- **THEN** no cancel is offered
+- **AND** the cancel is refused by name, and the submission and its cards stay
+  as the counter wrote them
+
 ### Requirement: The page offers only the acts the status allows
 
 The acts on the page are decided by the status, so the collector is never shown
@@ -887,6 +920,9 @@ something the shop would refuse.
 - **The counter owns the list** - from the first card the counter checks or
   refuses, the page SHALL offer no edit of the list, and an edit or a paste
   sent onto it SHALL be refused by name before anything is written.
+- **Editing keeps the submission** - an edit of the list at `planned` or
+  `booked` SHALL save the same submission and never a second one, and SHALL
+  book nothing: booking is the submission page's.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-50 - Each status offers its own acts and no others
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector reads one page and sees only what they can do now
@@ -913,3 +949,13 @@ something the shop would refuse.
 - **THEN** the page offers no edit of the list
 - **AND** the edit and the paste are refused by name, and the cards, their
   photographs and the refusal's words stay as the counter wrote them
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-62 - Editing a kept list saves the same submission and books nothing
+**Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector changes the list before hand-in without starting again
+
+- **GIVEN** a planned submission with no drop-off, and a booked submission
+  holding one
+- **WHEN** the collector edits each list and saves it
+- **THEN** each keeps its own submission id, and no second submission is kept
+- **AND** the planned one holds no drop-off and the booked one keeps its own,
+  so the edit booked nothing

@@ -22,7 +22,8 @@ collector, because the diary tells them nothing for a product booking.
   - Where and when: the shop, a day inside the horizon, and a time in the
     shop's own zone
   - Sized by the list: twenty cards or more takes the longer visit, and so do
-    two lists on one visit that pass twenty together
+    two lists on one visit that pass twenty together, and a booked list edited
+    past twenty
   - The diary refuses in its own words: a slot not offered, full, without its
     resource or already booked, and another day offered
 - The batch a day makes
@@ -133,6 +134,10 @@ leave no day reading as free.
 no card; every amount is taken at the counter after each card is checked and
 the agreement is signed.
 
+**A booked list that grows** - an edit that takes a booked submission's list,
+or the lists on its visit, to 20 cards or more SHALL move the visit to the Bulk
+drop-off at the same slot, in one move and without cancelling it first.
+
 #### Scenario: grade10-site-grading-dropoff-booking-SC-04 - A collector books the drop-off from the plan
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector booking the visit their cards are handed in on
 
@@ -173,6 +178,14 @@ the agreement is signed.
 - **WHEN** the read of the shops and slots fails
 - **THEN** the failure is named
 - **AND** no day reads as free and none can be picked
+
+#### Scenario: grade10-site-grading-dropoff-booking-SC-30 - A booked list edited past twenty cards takes the longer visit at the same slot
+**Serves:** grade10-site-grading-dropoff-booking-US-06 - a dealer whose list grew after the visit was booked
+
+- **GIVEN** a booked drop-off of 15 cards on one submission
+- **WHEN** the collector edits the list to 22 cards and saves it
+- **THEN** the visit is the Bulk drop-off at the same day and time
+- **AND** it was moved once and never cancelled
 
 ### Requirement: The chosen day names the batch the cards leave in
 

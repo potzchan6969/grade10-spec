@@ -105,13 +105,17 @@ to book later.
   or signed before staff have checked each card with the collector; slabs are
   not shipped back, the collector or a person they name collects
 - 🚧 **Consent** — the personal information collection statement, read and
-  ticked before booking
+  ticked before booking; a plan kept unticked asks for it on its page before
+  a drop-off is picked or joined
 - 🚧 **Finish later** — the plan is kept under the email given and its link
   is emailed the moment the collector leaves; it opens on any device with no
   account
 - 🚧 **Changing a kept list** — Edit the list opens the wizard on the kept
-  plan and saves the same submission, never a second one; once a drop-off is
-  booked the wizard has no Book step
+  plan and saves the same submission, never a second one; the wizard never
+  books, the submission page does. Once a drop-off is booked the cards and the
+  level still change, the level on the sheet the plan was booked on; the
+  grader and the email stay, and a list that passes 20 cards takes the Bulk
+  drop-off at the same day and time
 - 🚧 **Signed in** — the home lists every submission under the email, open
   and closed, each opening its page; signing in is the same email and no
   password

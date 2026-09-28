@@ -9,16 +9,19 @@ in a batch and hands the slabs back in person. A submission is one grader and
 one level, and every card in it carries its own outcome.
 
 - 🚧 **Where** — one host and a path per surface
-  1. `grade10.com/grading` — the price sheet, the wizard and the collector's
-     own submissions
-  2. `grade10.com/grading/submissions/<id>` — one submission, the address every
-     email links to; no account needed
-  3. `grade10.com/grading/sign#<token>` — the submission agreement and the
+  1. `grade10.com/grading` — the price sheet and the collector's own
+     submissions; public and indexed, as `/book` is
+  2. `grade10.com/grading/new` — the wizard
+  3. `grade10.com/grading/submissions/<id>` — one submission, the address every
+     email links to, where its drop-off is booked; no account needed
+  4. `grade10.com/grading/submissions/<id>/edit` — the wizard on a kept plan
+  5. `grade10.com/grading/sign#<token>` — the submission agreement and the
      hand-back receipt on the shop iPad, opened from the QR code or link staff
      hand over
-  4. `grade10.com/book` — a walk-in's drop-off with no list; the cards are
+  6. `grade10.com/book` — a walk-in's drop-off with no list; the cards are
      listed at the counter
-  5. `admin.grade10.com/grading` — the queue, the batches and one submission
+  7. `admin.grade10.com/grading` — the queue, the batches and one submission;
+     `admin.grade10.com/grading/walk-in` for a list written at the desk
 - 🚧 **Money** — HKD, taken at the till against one POS line per card, and a
   cover line per card at Express and Super Express, written back to the
   submission; nothing is paid before every card is checked and the agreement

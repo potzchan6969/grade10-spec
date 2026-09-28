@@ -9,6 +9,7 @@ The Grading section of the admin panel is a queue of submissions cut by what eac
 one submission in tabs whose buttons follow its status; cards are counted here, money is taken at the till.
 
 - 🚧 **URL** — `admin.grade10.com/grading`, `/grading/walk-in`, `/grading/batches` and `/grading/submissions/<id>`; the diary stays its own section
+- 🚧 **Opening a submission** — it opens on the runbook its next act needs, the hand-in or the hand-back, with the tabs one press away
 
 ## Queue
 
@@ -50,6 +51,8 @@ Opens once the agreement is sealed: the POS with one Grading Service line per ca
 One intake label per card, the cards sealed into the intake bag with the printed list, `booked → checked_in`; the intake receipt goes out by email with the signed agreement attached.
 :::
 
+- 🚧 **Walk-in desk** — a fourth desk, Queue · Walk-in · Batches · Settings, shown only to staff who may operate; the
+  list of a collector with no booking is written there with them, and a reload keeps it
 - 🚧 **No hand-in without a paid line** — a sealed agreement with no paid line leaves the submission booked, the seal
   standing and the cards with the collector; the till is run again or another drop-off is booked
 - 🚧 **Refusing a card** — the grader will not take it, it is above the level, or the collector withdrew it, with a
@@ -113,7 +116,9 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - ❓ **A payout received** — stamped when a till payout is recorded; a transfer by a later act, or not at all — Operations
 - 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter carried it
 - 🚧 **Timeline tab** — every event with its figures and the grader's stages in its words; staff-only entries stay here
-- 🚧 **Cancel** — staff cancel a planned or booked submission from its page; never once the cards are handed in
+- 🚧 **Cancel** — staff cancel a planned or booked submission from its page on the collector's word, the drop-off going
+  with it and the collector sent nothing; offered only before the visit starts and before a card is checked or refused,
+  after which the counter refuses the cards instead
 
 ## Hand-back
 
@@ -171,7 +176,7 @@ reaches only submissions not yet booked:
 | Grant | Roles | Opens |
 | --- | --- | --- |
 | 🚧 `grading:read` | staff, admin | the queue, the batches, one submission with its documents and money |
-| 🚧 `grading:operate` | staff, admin | check, refuse, mint, hand in, cancel before hand-in, open a batch, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
+| 🚧 `grading:operate` | staff, admin | write a walk-in's list, check, refuse, mint, hand in, cancel before a card is checked, open a batch, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
 | 🚧 `grading:approve` | staff, admin | a waiver of the upcharge, a payout for a card not returned or damaged, a settings write |
 
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks

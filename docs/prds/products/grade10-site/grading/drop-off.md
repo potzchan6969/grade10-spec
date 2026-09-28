@@ -23,8 +23,12 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 - 🚧 **The diary service** — a Grading drop-off service bound to the
   submission, as the vault's visit is: the visit carries the list, the diary
   is given no address, and the submission owns every email
+- 🚧 **Where it is booked** — on the submission page: the review's Book keeps
+  the plan and opens its page on the picker, and so does any submission that
+  holds no drop-off and has none to join
 - 🚧 **The Bulk drop-off** — 20 cards or more books the longer service; so
-  do two lists on one visit that pass 20 together
+  do two lists on one visit that pass 20 together, and a booked list edited
+  past 20
 - 🚧 **Where and when** — the shop, a day inside the service's horizon and a
   time in the shop's own zone; beside the day, the batch it makes: hand in by
   that Thursday 19:00 and the cards leave the next day, after it the next

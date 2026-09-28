@@ -2951,6 +2951,74 @@ Admin(holds `grading:operate`) verified their session an hour ago in production.
 
 * Neither act asks for the second factor again; the session stays verified for 12 hours from the verification.
 
+### grade10-admin-grading-counter-US14-TC8-1: Staff cancel a booked submission on the collector's word
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-14
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a `booked` submission whose visit has not started, none of whose cards the counter has checked or refused; the collector has asked the shop to call it off.
+
+**Steps:**
+
+1. Click Cancel on the submission.
+2. Confirm the cancel.
+3. Pull the submission's audit trail by its id.
+4. Open the collector's messages for the submission.
+
+**Expected Results:**
+
+* Step 2: the submission reads Cancelled, and its drop-off is cancelled in the diary with it.
+* Step 3: the cancel is on the trail, with the operator who made it.
+* Step 4: no message about the cancel was sent.
+
+### grade10-admin-grading-counter-US14-TC9-1: Cancel is withheld once the visit starts or a card is checked
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-14
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) has <grade10 admin grading submission url> open in a second tab for a `booked` submission, loaded before the state in the row was reached.
+
+**Test data:**
+
+| State | The desk |
+| --- | --- |
+| Visit started | the visit started at the desk; no card checked or refused |
+| Card checked | the visit started and one card checked, with both intake photographs |
+
+**Steps:**
+
+1. Load the submission in the first tab.
+2. In the second tab, click Cancel on the submission and confirm.
+
+**Expected Results:**
+
+* Step 1: Cancel is not offered.
+* Step 2: the cancel is refused by name, and the submission reads as before.
+
 ---
 
 ## grade10-admin-grading-counter-US15: Operations changes a default without a deploy
@@ -3345,6 +3413,8 @@ Admin(holds `grading:approve`) opens Settings, with the reference rate at 7.84.
 | `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |
 | `grade10-admin-grading-counter-SC-104` | Case added, added after the run | `grade10-admin-grading-counter-US15-TC9-1`: the staff-set reference rate decided outside the blind pass; it prices nothing a collector pays, so one approve holder writes it and nought is refused |
 | `grade10-admin-grading-counter-SC-105` | Case added, added after the run | `grade10-admin-grading-counter-US12-TC6-1`: decided outside the blind pass; the address is personal data, so only a holder who may post the notice reads it, and only while the notice is due |
+| `grade10-admin-grading-counter-SC-106` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC8-1`: decided outside the blind pass; staff cancel on the collector's word inside the collector's own window, the drop-off going with it, filed on the audit chain and no message sent |
+| `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-1`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once the visit starts or a card is checked, and the desk refuses the cards instead |
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
 | `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test in the application repository — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
 

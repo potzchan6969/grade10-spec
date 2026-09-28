@@ -109,6 +109,8 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
 - Acts by grant and status
   - Shown only where they can run: an act absent is better than an act refused
   - Cancel never once the cards have left
+  - Cancel on the collector's word: only before the visit starts and before a
+    card is checked or refused, the drop-off going with it and nobody emailed
   - The worker refuses independently: a submission that moved under the
     operator is refused by name rather than written over
 
@@ -1304,7 +1306,7 @@ An act absent is better than an act refused, and the console is never the guard.
 | --- | --- | --- |
 | Open the submission, its documents and its money | read | every status |
 | Start the visit, check, add or refuse a card, mint the agreement, record the fee paid, hand in | operate | `planned`, `booked` |
-| Cancel the submission | operate | `planned`, `booked` |
+| Cancel the submission | operate | `planned`, `booked`, before the visit starts and before a card is checked or refused |
 | Withdraw a card | operate | `checked_in`, until its batch closes |
 | Mint the hand-back receipt, hand over, open a vault case for a slab | operate | `ready` |
 | Post the written notice | operate | `ready`, from the notice day |
@@ -1313,8 +1315,11 @@ An act absent is better than an act refused, and the console is never the guard.
 | Record or reverse a payout | approve | `returned`, `ready`, `collected` |
 | Write a setting or a fee-sheet row | approve | every status |
 
-**Cancel** - cancelling a submission SHALL never be offered once the cards have
-been handed in.
+**Cancel** - cancelling a submission SHALL never be offered once its visit has
+started, once the counter has checked or refused a card on its list, or once
+the cards have been handed in; from then the desk refuses the cards instead.
+Staff SHALL cancel only on the collector's word, the drop-off SHALL go with the
+submission, and the collector SHALL be sent no message.
 
 **The worker** - an act SHALL be refused by name by the worker, independently
 of what the console offered, when the submission has moved since the console
@@ -1341,3 +1346,26 @@ console SHALL read it again.
 - **GIVEN** two operators at one counter, one of whom has already handed the submission in
 - **WHEN** the other sends an act the submission no longer allows
 - **THEN** it is refused by name, the submission keeps what the first operator wrote, and the console reads it again
+
+#### Scenario: grade10-admin-grading-counter-SC-106 - Staff cancel a booked submission on the collector's word
+**Serves:** grade10-admin-grading-counter-US-14 - the operator calls a submission off for a collector who asked
+
+- **GIVEN** a booked submission whose visit has not started, none of whose
+  cards the counter has checked or refused, and a collector who asked the shop
+  to call it off
+- **WHEN** an operator holding `grading:operate` cancels it from its page and
+  confirms
+- **THEN** the submission is cancelled and its drop-off is cancelled with it
+- **AND** the cancel is filed under the submission on the audit trail, with
+  who did it
+- **AND** the collector is sent no message
+
+#### Scenario: grade10-admin-grading-counter-SC-107 - Cancel is withheld once the visit starts or a card is checked
+**Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
+
+- **GIVEN** a booked submission whose visit has started at the desk, and
+  another one of whose cards the counter has checked
+- **WHEN** an operator opens each submission's page
+- **THEN** cancel is offered on neither
+- **AND** a cancel sent for either is refused by name, and the submission is
+  left as it was

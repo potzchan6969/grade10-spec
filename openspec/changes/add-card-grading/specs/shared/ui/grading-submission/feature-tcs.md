@@ -2090,6 +2090,36 @@ Runs once per row of **Test data**.
 * The card given a reversal line shows it in place of a payout line.
 * The card given neither shows no such line.
 
+### shared-ui-grading-submission-US1-TC73-1: A review given no booking offers neither the booking nor the statement
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reviewing before booking
+
+**Pre-conditions:**
+
+* `GradingReview` carries two cards, one of them with an upcharge warning, no `onBook` and no `onConsent`, and a save act whose words read Save changes.
+
+**Steps:**
+
+1. Open the `GradingReview` story with that review.
+2. Activate the save act.
+
+**Expected Results:**
+
+* Step 1: no booking and no collection statement shows; the schedule, the totals and the warning read as given.
+* Step 1: the save act reads Save changes.
+* Step 2: the save reports through its own callback.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
@@ -2128,6 +2158,7 @@ Runs once per row of **Test data**.
 | A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68` |
 | The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as `shared-ui-grading-submission-SC-69` |
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
+| `shared-ui-grading-submission-SC-74` | Case added, added after the run | `shared-ui-grading-submission-US1-TC73-1`: decided outside the blind pass; the editor keeps the review for its totals and warning, so the booking and the tick are left out together and the save reads the consumer's words |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
 
 ### Manual

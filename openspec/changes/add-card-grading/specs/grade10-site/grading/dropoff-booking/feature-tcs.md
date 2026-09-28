@@ -859,6 +859,36 @@ Runs once per row of **Test data**.
 
 * The slot offered matches <Slot offered>.
 
+### grade10-site-grading-dropoff-booking-US6-TC3-1: A booked list edited past twenty cards takes the Bulk drop-off at the same slot
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-dropoff-booking-US-06
+
+**Pre-conditions:**
+
+* customer(with a submission of 15 cards and a standard drop-off booked on it) is on <grade10 grading submission page url>, the visit not started.
+
+**Steps:**
+
+1. Click Edit the list.
+2. Add seven cards, each with a declared value, to make 22, and save the changes.
+3. Read the drop-off on the submission page.
+
+**Expected Results:**
+
+* Step 3: the visit is the Bulk drop-off, about 45 minutes, at the same day and time as before.
+* The diary moved the visit once and never cancelled it.
+
 ---
 
 ## Reconciliation
@@ -887,6 +917,7 @@ Runs once per row of **Test data**.
 | `grade10-site-grading-dropoff-booking-US5-TC2-1` | Dropped, `deprecated` | The walk-in books on the diary's own booking-details form, which asks the fields the diary asks for; grading adds no field and no validation of its own, so a refusal on a blank field tests `grade10-site/appointment/booking`, not this capability. Landed as `Q56` |
 | `grade10-site-grading-dropoff-booking-US6-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`, `grade10-site-grading-dropoff-booking-SC-13` |
 | `grade10-site-grading-dropoff-booking-US6-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`; the below-twenty partition is the booking requirement's step 2 |
+| `grade10-site-grading-dropoff-booking-SC-30` | Case added, added after the run | `grade10-site-grading-dropoff-booking-US6-TC3-1`: decided outside the blind pass; a booked list edited past twenty resizes the visit as a join does, at the same slot |
 | `grade10-site-grading-dropoff-booking-SC-01` | Case added | `grade10-site-grading-dropoff-booking-US5-TC3-1` — the booking page lists the Grading visit and neither drop-off |
 | `grade10-site-grading-dropoff-booking-SC-11` | Case added | `grade10-site-grading-dropoff-booking-US1-TC9-1` — the estimated day back counts from the day the batch leaves |
 | `grade10-site-grading-dropoff-booking-SC-14` | Case added | `grade10-site-grading-dropoff-booking-US1-TC10-1` — the vault line on the booked page |

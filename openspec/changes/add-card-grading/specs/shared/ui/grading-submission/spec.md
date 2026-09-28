@@ -44,6 +44,8 @@ imports the set rather than drawing it again. The drop-off's own blocks are
   - The upcharge warning per card: the level it would move to, the difference
     due, and what the higher level costs now
   - Before it can be booked: the good-to-know lines and the consent tick
+  - A review with no booking: the booking and the tick left out together, and
+    the save act in the consumer's words
 - Where the submission stands
   - The status word and whose move it is: one pair, so the two can never
     disagree
@@ -567,6 +569,11 @@ it reads as pending.
 **Acts** - editing the list, saving for later and booking SHALL each report
 through a callback of its own.
 
+**Without booking** - the booking callback and the consent callback SHALL be
+given together or not at all. Given neither, the review SHALL offer neither
+the booking nor the statement, and its save act SHALL read the words the
+consumer passes.
+
 #### Scenario: shared-ui-grading-submission-SC-24 - The review reads the schedule and the totals
 **Serves:** Reviewing before booking - a collector reads every card as it will be handed in
 
@@ -610,6 +617,16 @@ through a callback of its own.
 - **WHEN** `GradingReview` renders with a refusal saying the plan expired
 - **THEN** that refusal is shown
 - **AND** no booking is reported
+
+#### Scenario: shared-ui-grading-submission-SC-74 - A review given no booking offers neither the booking nor the statement
+**Serves:** Reviewing before booking - a collector changing a kept list reads its totals and its warning without booking again
+
+- **GIVEN** a review given no booking callback and no consent callback, and a
+  save act whose words read Save changes
+- **WHEN** `GradingReview` renders it
+- **THEN** neither the booking nor the collection statement is shown
+- **AND** the schedule, the totals and any warning read as given
+- **AND** the save act reads Save changes and reports through its callback
 
 ### Requirement: The status word and whose move it is are one pair
 

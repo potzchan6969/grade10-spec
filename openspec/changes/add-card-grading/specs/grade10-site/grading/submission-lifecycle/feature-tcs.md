@@ -221,6 +221,44 @@ Runs once per row of **Test data**.
 * Both steps show the site's not-found page.
 * Nothing on the page says whether that submission exists, and no card, name or pickup code shows.
 
+### grade10-site-grading-submission-lifecycle-US1-TC8-1: A plan kept signed out lands on its own page with no account
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-01
+
+**Pre-conditions:**
+
+* The collector is signed out, on <grade10 grading url>'s wizard at the review with an email given and a level picked.
+
+**Test data:**
+
+| Kept by | Review |
+| --- | --- |
+| Book the drop-off | the statement ticked |
+| Save and book later | the statement unticked |
+
+**Steps:**
+
+1. Keep the plan as in the row.
+2. Open the plan's link from the email it sent, in a second browser that has never signed in.
+
+**Expected Results:**
+
+* Step 1: the plan's submission page opens, with no sign-in asked for and no not-found page.
+* Step 2: the same submission page opens.
+
 ---
 
 ## grade10-site-grading-submission-lifecycle-US2: Collector asks for a card back before the batch closes
@@ -1346,7 +1384,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### grade10-site-grading-submission-lifecycle-US11-TC2-1: The edit of the list goes once the counter checks or refuses a card
+### grade10-site-grading-submission-lifecycle-US11-TC2-2: The edit of the list and the cancel go once the counter checks or refuses a card
 
 Runs once per row of **Test data**.
 
@@ -1379,12 +1417,54 @@ Runs once per row of **Test data**.
 
 1. Load the submission page in the first tab.
 2. In the second tab, change a card's name and save the list.
+3. In the second tab, click Cancel this submission and confirm Yes, cancel.
 
 **Expected Results:**
 
-* Step 1: the page offers no edit of the list; moving or cancelling the drop-off and cancelling the submission are still offered.
+* Step 1: the page offers no edit of the list and no Cancel this submission.
 * Step 2: the save is refused with a message that the list is at the counter.
-* After step 2, reloading the page shows both cards as before, and the first card as in the row.
+* Step 3: the cancel is refused by name, and the submission is not cancelled.
+* After step 3, reloading the page shows both cards as before, and the first card as in the row.
+
+### grade10-site-grading-submission-lifecycle-US11-TC3-1: Editing a kept list saves the same submission and books nothing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-11
+
+**Pre-conditions:**
+
+* The collector is on <grade10 grading submission page url> for a submission of three cards at the status in the row, and the counter has checked or refused none of them.
+
+**Test data:**
+
+| Status | Drop-off |
+| --- | --- |
+| Planned | None booked |
+| Booked | A drop-off booked |
+
+**Steps:**
+
+1. Click Edit the list.
+2. Add a fourth card with a declared value, and save the changes.
+3. Open the collector's submissions on <grade10 grading url>.
+
+**Expected Results:**
+
+* Step 2: the same submission page opens, its id unchanged, listing four cards.
+* Step 2: the drop-off is as in the row: none on the Planned one, the same day and time on the Booked one.
+* Step 3: one submission is listed for this list, not two.
 
 ---
 
@@ -1410,9 +1490,12 @@ Runs once per row of **Test data**.
 | `US10-TC1-1`'s rail after a cancel from Booked | Corrected | The case ended the rail at Planned for both rows; `grade10-site-grading-submission-lifecycle-SC-06` leaves it at the stage the submission ended on |
 | `US10-TC3-1` backing out of the cancel confirmation | No scenario: the dialog's own | `grade10-site-grading-submission-lifecycle-SC-47` states the cancel; Go back is the view's branch, and the case stays as its guard |
 | The last card refused at the counter | Folded in | `grade10-site-grading-submission-lifecycle-SC-58` - the counter cancels the submission and tells the collector there, and no message sends; landed as `decisions.md`'s last-card-refused row, which the counter's hand wrote from its own side as `grade10-admin-grading-counter-SC-89`, written as a 🚧 line on `docs/prds/products/grade10-site/grading/submission.md`, and the `ui-design.md` Flags ❓ closed. Case `US10-TC4-1` added |
-| The counter owns the list from the first card it checks or refuses | Folded in | `grade10-site-grading-submission-lifecycle-SC-59` - an edit sent after the counter checked a card deleted cards its photographs hang off; the director ruled the list the counter's from its first check or refusal, written as a 🚧 line on `docs/prds/products/grade10-site/grading/submission.md` and in task 11.8. Case `US11-TC2-1` added |
+| The counter owns the list from the first card it checks or refuses | Folded in | `grade10-site-grading-submission-lifecycle-SC-59` - an edit sent after the counter checked a card deleted cards its photographs hang off; the director ruled the list the counter's from its first check or refusal, written as a 🚧 line on `docs/prds/products/grade10-site/grading/submission.md` and in task 11.8. Case `US11-TC2-2` added |
 | `US11-TC1-1`'s acts for a Collected submission | Corrected | The case offered Vault it and erasure alone; the acts table also offers reading the record and consigning to an auction |
 | `grade10-site-grading-submission-lifecycle-SC-01` a move the status does not name is refused | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its anchor is the feature set group The statuses: no journey of this capability walks a move, and every move is made at the counter |
+| `grade10-site-grading-submission-lifecycle-SC-60` | Case added, added after the run | `US1-TC8-1`: decided outside the blind pass, after a plan kept signed out landed on not found; the wizard opens the page on the access the emailed link carries |
+| `grade10-site-grading-submission-lifecycle-SC-61` | Case revised, added after the run | `US11-TC2-1` became `US11-TC2-2`: decided outside the blind pass, the cancel shares the counter's window, so it goes with the edit once a card is checked or refused and a cancel sent from a stale page is refused |
+| `grade10-site-grading-submission-lifecycle-SC-62` | Case added, added after the run | `US11-TC3-1`: decided outside the blind pass; the editor saves the same submission at Planned and Booked and books nothing |
 
 **Uncovered anchors:** none. Every journey US-01 to US-11 carries cases, and the one feature-set anchor, The statuses, is listed out of suite above.
 

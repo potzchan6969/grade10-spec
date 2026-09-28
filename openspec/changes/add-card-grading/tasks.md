@@ -7,7 +7,7 @@ other order a group depends on is a prose line under that group's heading.
 
 The four migrations `0000_grading_schema.sql` to `0003_seed_settings.sql` land
 whole in group 9: nothing is live and the `grading` gate hides the site's pages
-off production. Three stages deploy, and each grade10 group's prose line names
+on uat and production. Three stages deploy, and each grade10 group's prose line names
 the one it lands in — (a) the shared modules, the three providers and the
 registered worker answering its health probe; (b) plan through ship, the money
 and the safe, with walk 33; (c) receiving through hand-back, the ladder, the
@@ -41,6 +41,9 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
       `packages/i18n/src/catalogs.ts`
 - [x] 1.7 Verify: `pnpm --filter @grade10/i18n run test`, `pnpm run typecheck`,
       `pnpm run lint`
+- [ ] 1.8 Name `grading.plan.review.saveChanges`, the editor's save, in the
+      vocabulary type first, then answer it in every language 1.2 answers;
+      then run 1.7's checks
 
 ## 2. The three rungs on `Text` (grade10-spec)
 
@@ -145,6 +148,10 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-28`)
 - [x] 3.7 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm run typecheck`, `pnpm run lint`
+- [ ] 3.8 Make `GradingReview`'s `onBook` and `onConsent` optional as a
+      pair, its test and a Kept story red first: given neither, no Book and no
+      statement, the save act reading the words the caller passes; then run
+      3.7's checks (`shared-ui-grading-submission-SC-74`)
 
 ## 4. The submission blocks and the barrel (grade10-spec)
 
@@ -567,6 +574,20 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-59`)
 - [x] 11.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 11.10 Keep the plan's tick, its test red first: `submissions.consented_at`
+      in a migration `pnpm run db:drizzle:generate` writes, set by the keep
+      and by `submissions.update` where the input carries the tick, left
+      null by a plan saved unticked and never cleared, and
+      `CONSENT_REQUIRED` added to
+      `GRADING_FAILURE_CODES` for 12.12 to raise; then run 11.9's checks and
+      `pnpm run check:migrations`
+      (`grade10-site-grading-submission-plan-SC-58`)
+- [ ] 11.11 Cover the edit at `booked` as `plan.ts` runs it: the same
+      submission saved and no second one, the grader fixed, a level required
+      on the pinned sheet, and a list edited past twenty moving the visit to
+      the Bulk drop-off at its slot once, after the commit
+      (`grade10-site-grading-submission-lifecycle-SC-62`,
+      `grade10-site-grading-dropoff-booking-SC-30`)
 
 ## 12. The drop-off, the joiner and the shared visit (grade10)
 
@@ -660,6 +681,17 @@ Stage (b).
       letters (`grade10-site-grading-dropoff-booking-US1-TC1-1`)
 - [x] 12.10 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 12.11 Write `cancellable(status, visit, list, at)` in the contracts,
+      its test red first — `SUBMISSION_MOVES.cancel.from`, the visit not
+      started and the list not the counter's — and read it in the collector's
+      `OFFERED.cancel` and in `cancelSubmission`, which refuses
+      `VISIT_STARTED` or `LIST_AT_COUNTER` by name, as `withdrawable` is
+      shared; then run 12.10's checks
+      (`grade10-site-grading-submission-lifecycle-SC-61`)
+- [ ] 12.12 Refuse `submissions.book` and `submissions.join` for a plan whose
+      `consented_at` is null, `CONSENT_REQUIRED` before the diary is asked,
+      its test red first; needs 11.10
+      (`grade10-site-grading-submission-plan-SC-61`)
 
 ## 13. The hand-in, the till and the safe (grade10)
 
@@ -768,6 +800,17 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-54`)
 - [x] 13.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 13.9 Add `admin.cancel` on `grading:operate`, its tests red first, after
+      12.11: the contracts' `act` input, its row in
+      `contracts/src/permissions.ts`, `COUNTER_ACTS.cancel` as
+      `SUBMISSION_MOVES.cancel.from`, and `cancelSubmission` taking an
+      optional `staff: StaffAct` whose `recordStaffAct` is written in the
+      cancel's own transaction; refused by `cancellable` and by a stale
+      `expectedUpdatedAt`, the drop-off going with it and no letter drafted
+      but a joiner's `dropoff_detached`; then run 13.8's checks
+      (`grade10-admin-grading-counter-SC-106`,
+      `grade10-admin-grading-counter-SC-107`,
+      `grade10-admin-grading-counter-SC-84`)
 
 ## 14. The two templates and the intake receipt (grade10)
 
@@ -1741,17 +1784,27 @@ its globs over `packages/*/frontend/src/**` and
       (`grade10-site-grading-submission-plan-SC-60`)
       Reopened: `onBooked` and `onSaved` carry the plan's id and drop its
       access token, so a signed-out collector's page answers not found; ruled
-      after group 31's audit, they carry the `KeptPlan`
+      after group 31's audit, one `onKept(plan)` carrying the `KeptPlan`
+      replaces both, and the page it opens lands on the picker, 27.7's
+      (`grade10-site-grading-submission-lifecycle-SC-60`)
 - [x] 25.8 Write the stories for `Grading/Home`, `Grading/Plan/PlanWizard` and
       the paste sheet, one per distinct layout, each with `surface: site`
 - [x] 25.9 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 - [ ] 25.10 Open the wizard on a kept plan, its test red first:
-      `usePlanWizard` taking the kept plan and its access, the list saved in
-      place with Save changes and never a second plan at `planned` and
-      `booked`, no Book step at `booked`, and an edit the counter's list
-      refuses read by name (`grade10-site-grading-submission-lifecycle-SC-59`)
+      `usePlanWizard` reading `submissions.detail` on the `#t=` access, each
+      card mapped to a `PlanCard` and its reference asked again for every
+      `referenceProductId`, and saving through `submissions.update` with the
+      `updatedAt` it read, the same submission and never a second plan at
+      `planned` and `booked`; the editor never books, keeping `GradingReview`
+      with `onBook` and `onConsent` left out and Save changes its save's
+      words; at `booked` the grader fixed and a level required; an edited card
+      above the ceiling still warned; an edit the counter's list refuses read
+      by name; and the stories for ui-design's Kept rows. Needs 1.8, 3.8 and
+      11.11 (`grade10-site-grading-submission-lifecycle-SC-62`,
+      `grade10-site-grading-submission-lifecycle-SC-59`,
+      `grade10-site-grading-submission-plan-SC-32`)
 
 ## 26. The collector's drop-off screens (grade10)
 
@@ -1863,8 +1916,16 @@ Stage (b).
       where the act cannot be taken back
       (`grade10-site-grading-submission-lifecycle-SC-50`)
       Reopened: at `planned`, Book and Join go to `bookHref` and no page books
-      a first drop-off; ruled after group 31's audit, `DropoffBooking` mounts
-      in place at `planned` as it does for a rebook, and `bookHref` goes
+      a first drop-off; ruled after group 31's audit, the page opens
+      `DropoffBooking` wherever the submission holds no visit and `book` is
+      offered, never for `join`, and `bookHref` goes; a plan held unticked is
+      asked for the statement, in the review's words, before the picker or
+      the join, the tick sent through `submissions.update`. Test red first;
+      needs 11.10 and 12.12
+      (`grade10-site-grading-submission-plan-SC-42`,
+      `grade10-site-grading-dropoff-booking-SC-04`,
+      `grade10-site-grading-dropoff-booking-SC-20`,
+      `grade10-site-grading-submission-plan-SC-61`)
 - [x] 27.8 Write the stories for `Grading/Submission/Submission Page`, one per
       distinct layout, the varied value an args control, each with
       `surface: site`
@@ -1935,7 +1996,7 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-100`)
 - [x] 28.5 Write the stories for `Grading/Admin/Queue` and
       `Grading/Admin/Submission`, each with `surface: console`
-- [x] 28.6 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
+- [x] 28.6 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 - [x] 28.7 Build `PayoutDialog`, `WaiveUpchargeDialog` and the approvals
@@ -1959,13 +2020,14 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       with its line refunded and its receipt issued, and the act gone once
       the batch closes (`grade10-admin-grading-counter-SC-54`,
       `grade10-admin-grading-counter-SC-55`)
-- [ ] 28.10 Build the console's Cancel, its tests red first: `admin.cancel` on
-      `grading:operate` from `SUBMISSION_MOVES.cancel.from`, audited under the
-      submission, with its row in `contracts/src/permissions.ts` and
-      `COUNTER_ACTS.cancel`; the act on `SubmissionPanel` behind `useConfirm`,
-      offered where the counter's acts table offers it and gone once the cards
-      are handed in (`grade10-admin-grading-counter-SC-82`,
-      `grade10-admin-grading-counter-SC-83`)
+- [ ] 28.10 Build the console's Cancel on `SubmissionPanel`, its tests red
+      first; needs 13.9: offered by `COUNTER_ACTS.cancel` and `cancellable`,
+      behind `useConfirm` whose words name the drop-off and say it is on the
+      collector's word, the Cancelled record after it, a stale refusal read
+      again, and `runbookHref` where a runbook is offered
+      (`grade10-admin-grading-counter-SC-106`,
+      `grade10-admin-grading-counter-SC-107`,
+      `grade10-admin-grading-counter-SC-84`)
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
@@ -2006,7 +2068,7 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 - [x] 29.6 Write the stories for `Grading/Admin/Intake` and
       `Grading/Admin/Handback`, each with `surface: console`, one per States
       row of the intake and hand-back runbooks
-- [x] 29.7 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
+- [x] 29.7 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 - [ ] 29.8 Start a walk-in at the desk in `IntakeRunbook`: a submission opened
@@ -2015,7 +2077,10 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       (`grade10-admin-grading-counter-SC-15`)
       Reopened: the runbook reports no submission it mints, so a reload loses
       the walk-in; ruled after group 31's audit, it calls `onStarted(id)` once
-      it mints one
+      it mints one, and the address is the id's one owner: `onStarted(id)`
+      replaces `setStartedId`, and `startedId` goes
+- [ ] 29.9 Give `IntakeRunbook` and `HandbackRunbook` a `recordHref`, the one
+      press to the record, its test red first; 31.5 routes it
 
 ## 30. The console's batches, receiving, the notice and the settings (grade10)
 
@@ -2095,7 +2160,8 @@ lands. Stage (c).
       recording nothing while either is
       missing (`grade10-admin-grading-counter-US12-TC2-1`,
       `grade10-admin-grading-counter-US12-TC3-1`)
-- [ ] 30.6 Build `SettingsPanel`: one `SaveableField` per row, the fee sheet
+- [ ] 30.6 Build `SettingsPanel`: one `SaveableField` per row and a
+      `MoneyField` on a money row, the fee sheet
       and the diary services as their own tables, the second-person dialog on a
       money row, a row nobody has written marked unset with its owner, and
       every field closed to a `grading:read` holder, and the reference rate
@@ -2110,7 +2176,7 @@ lands. Stage (c).
 - [ ] 30.7 Write the stories for `Grading/Admin/Batches`,
       `Grading/Admin/Receiving` and `Grading/Admin/Settings`, each with
       `surface: console`
-- [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
+- [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
@@ -2122,9 +2188,10 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 - [ ] 31.1 Cover the addresses: a route test per surface over the site's five
       and the console's six, each resolving to its page with its modules
       installed; the console's submission address opening the runbook its acts
-      offer and switching by `?view=`; a reloaded walk-in keeping its
-      submission; and the site's five resolving nowhere on a uat or production
-      build
+      offer, the record with `?view=record`, and each one press from the
+      other; a reloaded walk-in keeping its submission; the Walk-in desk and
+      its address absent without `admin.savePlan`; and the site's five
+      resolving nowhere on a uat or production build
 - [ ] 31.2 Register `grading` (`/grading`, session, `open`), `gradingNew`
       (`/grading/new`, session, `open`), `gradingEdit`
       (`/grading/submissions/:submissionId/edit`, session, `open`),
@@ -2132,9 +2199,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       `gradingSign` (`/grading/sign`, `open`) in the site's `src/surfaces.ts`,
       and their routes in `src/routes.ts` and `react-router.config.ts`; point
       the home's Start, `startHref`, `editHref` and the not-found link at
-      `gradingNew` and `gradingEdit`; then make `grading` `prerendered` and
-      public as `book` is, with its head meta, the `/tc` and `/sc` variants,
-      the sitemap row and an anonymous smoke
+      `gradingNew` and `gradingEdit`; 31.8 makes `grading` `prerendered`
 - [ ] 31.3 Add the `grading` row to `Gate` and `gatesFor` as the vault's, read
       at build time, so the site carries no grading address where the gate is
       shut and opening the gate is an edit, a build and a redeploy
@@ -2144,18 +2209,27 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       read the worker rather than the fixture transport
 - [ ] 31.5 Register the console's `grading`, `gradingSubmission`,
       `gradingBatches`, `gradingBatch`, `gradingSettings` and `gradingWalkIn`
-      (`/grading/walk-in`, behind a Walk-in desk) surfaces and their routes,
-      grant-gated on `ADMIN_PERMISSIONS["admin.queue"]` with no environment
-      gate; the submission's address opening the runbook
+      (`/grading/walk-in`) surfaces and their routes, grant-gated on
+      `ADMIN_PERMISSIONS["admin.queue"]` with no environment gate, and the
+      walk-in on `ADMIN_PERMISSIONS["admin.savePlan"]`; `GradingDesks` gaining
+      a fourth desk, Queue · Walk-in · Batches · Settings, the Walk-in shown
+      only with that grant; the submission's address opening the runbook
       `COUNTER_ACTS.handIn` or `COUNTER_ACTS.collect` offers and the record
-      otherwise, `?view=record|runbook` switching; the walk-in's
-      `onStarted(id)` replacing the address with the submission's at
-      `?view=runbook`; and the appointments section's
-      `CASE_ADDRESS.grading` set to `gradingSubmissionAddress`
+      otherwise, `?view=record` opening the record, and the runbooks'
+      `recordHref` and the panel's `runbookHref` routed to each other; the
+      walk-in's `onStarted(id)` replacing the address with the bare
+      submission address; and the appointments section's
+      `CASE_ADDRESS.grading` set to `gradingSubmissionAddress`. Needs 28.10
+      and 29.9
 - [ ] 31.6 Render the grading nav item from the `chrome` key task 1.6 added, so
       the collector reaches `/grading` from the shell
 - [ ] 31.7 Verify: `pnpm run test`, `pnpm run check:libs`,
       `pnpm run typecheck`, `pnpm run lint`
+- [ ] 31.8 Make `grading` `prerendered` and public as `book` is, once 31.2
+      has landed: its head meta, the `/tc` and `/sc` variants, the sitemap
+      row, and an anonymous smoke reading the lead and How it works as static
+      HTML and the fee sheet and Your submissions loading until the page
+      reads them; then run 31.7's checks
 
 ## 32. The dev routes and the isolated stack (grade10)
 
@@ -2182,6 +2256,9 @@ Both walks drive these routes, so it lands with stage (b).
       `apps/frontend/grade10/e2e/helpers/env.ts`
 - [ ] 32.6 Verify: `pnpm run test:backend`, `pnpm run test:e2e:smoke` on the
       isolated stack, `pnpm run typecheck`, `pnpm run lint`
+- [ ] 32.7 Seed a customer-bookable diary service under the slug `grading` at
+      the isolated stack's start, so the site's `/book?service=grading` link
+      resolves on the dev and e2e stacks; then run 32.6's checks
 
 ## 33. The walk — the plan, the drop-off and the hand-in (grade10)
 

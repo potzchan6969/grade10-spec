@@ -202,7 +202,10 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   **No appointment migration**: the two product-bound drop-off services (about
   20 minutes, and the Bulk variant at about 45) and the customer-bookable
   Grading visit are created by a readiness-list console act, `services.create`,
-  their ids read back and never asserted; the e2e specs book a named fixture
+  their ids read back and never asserted; the e2e specs book a named fixture.
+  The diary lists the Grading visit under the slug `grading`, the one the
+  site's `/book?service=grading` link names, so it is created under that slug
+  and the dev stack seeds it so
 - **Order and fallback** — the spec word lands first: `grading` joins the
   `Product` row of `shared/appointment/scheduling` in
   `add-multi-store-appointments`'s delta (Q19), and the code ships after it
@@ -615,45 +618,71 @@ answering the question it was for.
   email must equal `submissions.email`. No TTL — the grant lives from
   `plan_saved` to `collected` — and revocation is a re-mint the `handed_in`
   and `ready` letters carry
-- **Every grading address.** The site's `grading` (`/grading`) is session and
-  `open` first, then `prerendered` and public as `book` is: its head meta, the
-  `/tc` and `/sc` variants, a sitemap row and an anonymous smoke, landing after
-  the opened addresses. `gradingNew` (`/grading/new`, session, `open`) is the
-  wizard at its own address, as the vault's `vaultNew` is. `gradingEdit`
-  (`/grading/submissions/:submissionId/edit`, session, `open`) is the same
-  wizard opened on a kept plan, carrying `#t=` as the submission page does; it
-  saves the list in place with Save changes, never a second plan, at `planned`
-  and `booked`, and has no Book step at `booked`. `gradingSubmission`
-  (`/grading/submissions/:submissionId`, `open`) books and joins a drop-off in
-  place, so no booking address exists and `bookHref` goes; the home's Start,
-  `startHref`, `editHref` and the not-found link point at `gradingNew` and
-  `gradingEdit`. `gradingSign` is `/grading/sign`, `open`. Each sits on a new
+- **Every grading address.** The site's `grading` (`/grading`) is
+  `prerendered` and public as `book` is: its head meta, the `/tc` and `/sc`
+  variants, a sitemap row and an anonymous smoke. Staff change the fee sheet
+  without a deploy, so the static HTML carries the lead and How it works, and
+  the sheet and Your submissions read once it loads; it lands after the opened
+  addresses. `gradingNew` (`/grading/new`, session, `open`) is the wizard at
+  its own address, as the vault's `vaultNew` is. `gradingSign` is
+  `/grading/sign`, `open`. The home's Start, `startHref`, `editHref` and the
+  not-found link point at `gradingNew` and `gradingEdit`. Each sits on a new
   `grading` gate, as the vault's: open on development, staging and staging-2,
-  shut on uat and production. The console's `grading`, `gradingSubmission`,
+  shut on uat and production
+- **The editor.** `gradingEdit` (`/grading/submissions/:submissionId/edit`,
+  session, `open`) is the same wizard opened on a kept plan, carrying `#t=` as
+  the submission page does. It reads `submissions.detail` on that access, maps
+  each card to a `PlanCard` and asks the reference again for every
+  `referenceProductId`, so the upcharge warning and the matched and
+  kept-as-typed marks come back; it saves through `submissions.update` with
+  the `updatedAt` it read — the same submission, never a second plan — at
+  `planned` and `booked`. The editor never books: it keeps `GradingReview` for
+  the totals and the warning with `onBook` and `onConsent` left out, and Save
+  changes is the save act's copy, `grading.plan.review.saveChanges`. At
+  `booked` it edits what `plan.ts` already lets it: the list, and the level on
+  the pinned sheet; the grader (`GRADER_PINNED`) and the email stay. The worker
+  resizes the visit at its slot after the commit (`sizeAfterCommit`), as a
+  join does, and a diary with no Bulk slot there refuses by name once the edit
+  has committed
+- **Booking in place.** `gradingSubmission`
+  (`/grading/submissions/:submissionId`, `open`) books and joins a drop-off in
+  place, so no booking address exists and `bookHref` goes. The page opens
+  `DropoffBooking` wherever the submission holds no visit and `book` is
+  offered — a `planned` plan, and a `booked` one whose visit fell away — and
+  never for `join`, which opens no picker. The review's Book, Save for later
+  and the emailed link all land there, and one `onKept(plan)`, carrying the
+  `KeptPlan` with its access token, replaces `onBooked` and `onSaved`. A plan
+  kept unticked shows the statement, in the review's words, before the picker
+  or the join; the tick reaches the plan through `submissions.update` with the
+  list as read, and `submissions.book` and `join` refuse an unticked plan
+  `CONSENT_REQUIRED`
+- **The console's addresses.** The console's `grading`, `gradingSubmission`,
   `gradingBatches`, `gradingBatch` and `gradingSettings` gain `gradingWalkIn`
-  (`/grading/walk-in`), which renders `IntakeRunbook` with no submission behind
-  a Walk-in desk; the runbook calls `onStarted(id)` once it mints the
-  submission, and the app replaces the address with the submission's at
-  `?view=runbook`, so a reload keeps it. The console's submission address
-  opens the runbook the counter acts offer — `COUNTER_ACTS.handIn` the
-  hand-in, `COUNTER_ACTS.collect` the hand-back — and the record otherwise;
-  `?view=record|runbook` switches, one press from either view, and the page
-  branches on the acts, never on a status literal, as `withheldActs.ts` does.
-  A `planned` list and a reloaded walk-in reach the hand-in through it
+  (`/grading/walk-in`), gated on `ADMIN_PERMISSIONS["admin.savePlan"]` and
+  reached from a fourth `GradingDesks` entry, Queue · Walk-in · Batches ·
+  Settings, shown only with that grant. It renders `IntakeRunbook` with no
+  submission; the runbook calls `onStarted(id)` once it mints the submission,
+  and the app replaces the address with the bare submission address, so a
+  reload keeps it. The submission address opens the runbook the counter acts
+  offer — `COUNTER_ACTS.handIn` the hand-in, `COUNTER_ACTS.collect` the
+  hand-back — and the record otherwise; `?view=record` opens the record, and
+  without it the acts decide. Each runbook's `recordHref` and the panel's
+  `runbookHref` are the one press between the two, and the page branches on
+  the acts, never on a status literal, as `withheldActs.ts` does. A
+  desk-written walk-in, reloaded or not, reaches the hand-in through it
 - **What the gate does, and what it does not.** `gatesFor` is read at build
   time by `src/routes.ts`, `react-router.config.ts` and the serving worker, so
   the site carries no grading address where the gate is shut; the console declares no
   environment gate and its grading section is grant-gated only, on
-  `ADMIN_PERMISSIONS["admin.queue"]`; the gateway routes `/grading/*` and
+  `ADMIN_PERMISSIONS["admin.queue"]`, the walk-in on `admin.savePlan`; the gateway routes `/grading/*` and
   `/api/sign` whatever the gate says, which is correct — the pages are
   unreachable and the API refuses nothing it should not. Flipping the gate is
   an edit, a build and a redeploy, never a rollback. **The removal is named**:
   the launch change opens the gate and deletes its row from `Gate` and
   `gatesFor`, once Q48's readiness list is complete
 - `packages/grading/admin-frontend/src/features/{queue,handin,batches,receiving,handback,submission,settings,notice}`
-  composing `@grade10/frontend-console`; admin surfaces `grading`,
-  `gradingSubmission`, `gradingBatches`, `gradingBatch`, `gradingSettings`,
-  `gradingWalkIn`
+  composing `@grade10/frontend-console`; the admin surfaces are the six **The
+  console's addresses** names
 - **Which events a collector sees** is derived at the read, never stored:
   `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent` in
   `packages/grading/contracts`, as the vault's `vocabulary.ts` holds them
@@ -761,6 +790,7 @@ stage read off PSA's order page can never sit on a CGC or BGS batch.
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
 | `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
 | `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
+| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by the keep and the edit that carry the tick; `book` and `join` refuse `CONSENT_REQUIRED` while it is null |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
 | `batch_id` | `text FK batches` | set at `handIn` |
@@ -971,12 +1001,29 @@ receipt, the sealed agreement and the re-minted access link.
 | `@grade10/app-env` | `ServiceId` and `BRAND_SERVICES.grade10` gain `grading`; `RETENTION_CLASSES` gains `case_records`; `consentCopy(brand)`, the e-sign wording the vault and grading both serve, lifted from the vault |
 | `@grade10/auth-contracts` | `grading:read`, `grading:operate`, `grading:approve` |
 
-`admin.cancel` is the console's Cancel: `{ submissionId }`, on
-`grading:operate`, running from `SUBMISSION_MOVES.cancel.from` through the
-collector's `cancelSubmission` with the operator acting, the drop-off going
-with it, and filed under the submission on the audit chain.
-`COUNTER_ACTS.cancel` is that same set, so `SubmissionPanel` offers Cancel,
-behind `useConfirm`, exactly where the worker runs it.
+`admin.cancel` is the console's Cancel: the contracts' `act` input,
+`{ submissionId, expectedUpdatedAt }`, so a stale console is refused by name,
+on `grading:operate`. It runs the collector's `cancelSubmission`, which takes
+an optional `staff: StaffAct` and writes `recordStaffAct` inside its own
+transaction, as the plan's keep does, so the cancel and its audit entry are one
+commit; the drop-off goes with it.
+
+- **One window, one predicate** — `cancellable(status, visit, list, at)` in
+  the contracts: `SUBMISSION_MOVES.cancel.from`, the visit not started, and
+  the list not the counter's (`counterOwnsList`). The collector's
+  `OFFERED.cancel`, the console's offer (`COUNTER_ACTS.cancel` for the
+  status, `cancellable` for the rest) and `cancelSubmission`'s refusal all
+  read it, as `withdrawable` is shared; the worker refuses `VISIT_STARTED` or
+  `LIST_AT_COUNTER` by name. From then the desk's way out is refusing the
+  cards, and `startedEarly` no longer lets a collector cancel a card paid
+  before the slot
+- **A paid line never meets a cancel** — a fee needs the sealed agreement,
+  the agreement needs every card checked, and a checked card makes the list
+  the counter's, so `cancellable` is false before any line can be paid
+- **Silent, on the collector's word** — the collector is sent nothing, as on
+  their own cancel and on the last card refused; a joiner is still sent
+  `dropoff_detached`. `SubmissionPanel` offers Cancel behind `useConfirm`,
+  whose words say it is on the collector's word
 
 ### The Batches, Receiving and Notice Procedures
 
@@ -1160,7 +1207,9 @@ change creates are imported from their shared home by both products.
    before the PR that needs them deploys; that PR carries `force-deploy`. The
    worker, both SPAs and the three providers ship from one commit.
    `start-isolated.sh` and `STACK_READY_URLS` gain `appointment-service` and
-   `grading-service`
+   `grading-service`. Operators create the customer-bookable Grading visit
+   under the slug the diary section names before the site's booking link
+   goes out
 8. **Launch** — the change that opens the `grading` gate deletes its row from
    `Gate` and `gatesFor`, once Q48's readiness list is complete
 

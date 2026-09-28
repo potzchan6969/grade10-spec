@@ -158,6 +158,8 @@ it changes; the rest of the cards carry on:
 | `collected` | read the record; vault it, sell it at a Grade10 auction, ask for erasure |
 
 - 🚧 **The counter's list** — no edit once the counter checks or refuses a card
+- 🚧 **Cancelling** — offered until the visit starts and until the counter
+  checks or refuses a card; after that the counter refuses the cards instead
 
 <!-- story: the submission page at ready, with a collector named -->
 
