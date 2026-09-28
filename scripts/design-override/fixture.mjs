@@ -12,10 +12,16 @@ import {
   symlinkSync,
   writeFileSync,
 } from "node:fs";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+/** Where `yaml` resolves from, the store's own install or the application's around it. */
+const MODULES = resolve(
+  createRequire(import.meta.url).resolve("yaml/package.json"),
+  "../..",
+);
 const STORE = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 export const DESIGNER = "Constance <tangconstance@gmail.com>";
@@ -49,7 +55,7 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
   copy("scripts/openspec/lib/team-parse.mjs");
   copy("scripts/openspec/lib/handle.mjs");
   copy(".githooks");
-  symlinkSync(join(STORE, "node_modules"), join(dir, "node_modules"));
+  symlinkSync(MODULES, join(dir, "node_modules"));
   if (team !== undefined) write(dir, "docs/prds/team.yaml", team);
   if (gitConfig !== undefined) write(dir, ".gitconfig-global", gitConfig);
   write(dir, ".gitignore", "node_modules\n.gitconfig-global\n");
