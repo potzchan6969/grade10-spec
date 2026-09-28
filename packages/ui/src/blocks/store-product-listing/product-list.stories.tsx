@@ -29,6 +29,29 @@ export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
 };
 
+/** shared-ui-store-product-listing-SC-93 on the list: a product given its
+ * address is drawn as a tile whose photo and name are links to it, beside the
+ * cart control the list still draws. */
+export const AddressedProducts: Story = {
+  args: {
+    products: [
+      { ...PRODUCTS[1], id: "addressed", href: "/store/products/addressed" },
+    ],
+    onProductCartQuantityChange: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const links = canvas.getAllByRole("link", { name: PRODUCTS[1].name });
+    expect(links).toHaveLength(2);
+    for (const link of links) {
+      expect(link).toHaveAttribute("href", "/store/products/addressed");
+    }
+    expect(
+      canvas.getByRole("button", { name: "Add to cart" }),
+    ).toBeInTheDocument();
+  },
+};
+
 /** Appending the next page shows Boneyard skeleton tiles below the grid. */
 export const LoadingMore: Story = {
   args: {

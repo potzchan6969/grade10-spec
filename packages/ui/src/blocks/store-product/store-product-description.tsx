@@ -1,6 +1,7 @@
-import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { CaretDown } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 
 type StoreProductDescriptionCopy = {
@@ -42,26 +43,35 @@ function StoreProductDescription({
   return (
     <VStack data-slot="store-product-description" gap="sm">
       <p
-        id={descriptionId}
-        ref={descriptionRef}
         className={cn(
-          "leading-snug text-muted-foreground",
+          "text-base leading-snug text-foreground",
           !expanded && overflows && "line-clamp-3",
         )}
+        id={descriptionId}
+        ref={descriptionRef}
       >
         {description}
       </p>
       {overflows ? (
-        <Button
+        <Link
           aria-controls={descriptionId}
           aria-expanded={expanded}
           className="self-start"
           onClick={() => setExpanded((value) => !value)}
-          size="sm"
-          variant="ghost"
+          render={<button type="button" />}
+          trailing={
+            <span
+              className={cn(
+                "inline-flex transition-transform motion-reduce:transition-none",
+                expanded && "rotate-180",
+              )}
+            >
+              <CaretDown aria-hidden size={16} />
+            </span>
+          }
         >
           {expanded ? copy.showLess : copy.showMore}
-        </Button>
+        </Link>
       ) : null}
     </VStack>
   );

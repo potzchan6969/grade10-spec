@@ -5,6 +5,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 import skeletonImage from "./product-card.fixture.png";
+import { ProductCardActivation } from "./product-card-activation";
 import type { ProductCardImageCopy } from "./product-card-image";
 import { ProductCardImage } from "./product-card-image";
 
@@ -58,13 +59,21 @@ type ProductCardProps = {
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /**
-   * Fires when the image or the product name is activated. No navigation
-   * target is wired here — the consumer decides what happens (route, modal,
-   * etc.). Omitted leaves both inert. A sold-out tile stays inert where the
-   * surface sells (a cart handler is supplied) and still opens where it does
-   * not — a rail that carries the shopper on rather than selling.
+   * Fires when the image or the product name is activated; the consumer
+   * decides what happens (route, modal, etc.). Omitted, with no `href`,
+   * leaves both inert. A sold-out tile stays inert where the surface sells (a
+   * cart handler is supplied) and still opens where it does not — a rail
+   * that carries the shopper on rather than selling.
    */
   onClick?: () => void;
+  /**
+   * The product's own address. Where the tile opens, the image and the name
+   * are links to it, so its address can be copied and a press with a
+   * modifier key opens it in a new tab. A plain press is still reported
+   * through `onClick` where one is supplied, in place of the link's own
+   * navigation.
+   */
+  href?: string;
   className?: string;
 };
 
@@ -107,9 +116,12 @@ function ProductCardContent({
   remainingLabel,
   onCartQuantityChange,
   onClick,
+  href,
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
-  const opens = onClick != null && (!soldOut || onCartQuantityChange == null);
+  const opens =
+    (onClick != null || href != null) &&
+    (!soldOut || onCartQuantityChange == null);
 
   return (
     <VStack
@@ -128,6 +140,7 @@ function ProductCardContent({
         inCart={inCart}
         maxCartQuantity={maxCartQuantity}
         name={name}
+        href={opens ? href : undefined}
         onCartQuantityChange={onCartQuantityChange}
         onClick={opens ? onClick : undefined}
         soldOut={soldOut}
@@ -139,19 +152,20 @@ function ProductCardContent({
         gap="none"
       >
         {opens ? (
-          <button
+          <ProductCardActivation
             className="line-clamp-2 w-full cursor-pointer text-left text-base font-medium text-card-foreground underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            href={href}
             onClick={onClick}
-            type="button"
           >
             {name}
-          </button>
+          </ProductCardActivation>
         ) : (
           <p className="line-clamp-2 text-base font-medium text-card-foreground">
             {name}
           </p>
         )}
-        <HStack gap="sm" vAlign="baseline">
+        {/* Wraps where a narrow tile cannot hold both prices on one line. */}
+        <HStack gap="sm" vAlign="baseline" wrap>
           <p
             className={cn(
               "text-base",
@@ -196,7 +210,7 @@ const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
  * hover-revealed (fine pointer on a wide viewport) or always-visible (coarse
  * pointer, no-hover, or narrow viewport) add affordance into an inline
  * quantity stepper, collapsing to a quantity pill when in cart. Sold-out
- * tiles do not scale on hover, and are inert where the surface sells.
+ * tiles are inert where the surface sells.
  */
 function ProductCard({
   loading = false,

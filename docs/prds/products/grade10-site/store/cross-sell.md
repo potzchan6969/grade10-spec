@@ -16,8 +16,9 @@ store shows other cards the collector may also like.
 - 🚧 **One rail** — under the card, headed **You may also like**: the stock
   keeper's picks first, in their order, then similar cards to fill; nothing
   names a card as chosen or computed
-- 🚧 **Opens the card** — a rail card opens that card's own page; nothing in
-  the rail adds to the cart
+- 🚧 **Opens the card** — a rail card is a
+  [link](/p/shared/ui/store-product-listing#product-tile) to that card's own
+  page; nothing in the rail adds to the cart
 - 🚧 **Nothing to show, no rail** — a card with no picks and nothing similar
   shows no rail and leaves no empty space
 - 🚧 **Sold out** — a chosen pick nobody can buy stays in the rail, says it is
@@ -30,6 +31,8 @@ store shows other cards the collector may also like.
 - 🚧 **A rail the store cannot compose** — where the store's copy of the
   catalogue is not to hand, the card's page answers whole with no rail for that
   minute
+- 🚧 **Switched off** — the store can turn the rail off for a brand and
+  environment; every card's page then shows no rail, as with nothing to show
 - 🚧 **Picks the store cannot read** — where a card's picks cannot be read,
   the similar cards fill the rail alone
 
@@ -55,6 +58,8 @@ the similar cards follow, within minutes
 ::story{id="store-product-related-rail--sold-out-pick-opens" title="A sold-out pick, still open"}
 
 ::story{id="store-product-related-rail--one-card" title="One card is enough"}
+
+::story{id="store-product-related-rail--narrow" title="On a narrow screen"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector who reaches a card and does not buy it leaves with nothing else to
@@ -89,6 +94,6 @@ curating the similar cards by hand. Auction lots.
 | Also bought | Decided | Phase two, its own change, once the store has orders to count. | Product |
 | One rail | Decided | One rail for picks and similar cards alike, unlabelled and shown even with one card. Not a rail per source, which labels a distinction no collector acts on; not hiding a one-card rail, since a pick is the stock keeper's deliberate act. | Product |
 | No cart in the rail | Decided | Adding is done on the card's own page, where the collector sees what they are buying. Not adding from the rail — a rail tile that sells is a card the collector has not opened. | Product |
-| Narrow layout | ❓ Open | How the rail lays out on a narrow screen — the tile width, the gap, wrap or scroll — waits on the frame from design. | Design |
+| Narrow layout | Decided | One row: six cards side by side on a wide page; on a narrower one the row scrolls, part of the next card showing. Not a second row, which pushes the end of the page down; not fewer cards on a small screen, since a collector on a phone should see as many of the stock keeper's picks as one on a desktop. | Design |
 | Now, before launch | Decided | Picks are a stock keeper's work and can be loaded before the store opens. | Product |
 :::

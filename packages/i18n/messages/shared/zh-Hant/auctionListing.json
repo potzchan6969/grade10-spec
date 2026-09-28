@@ -1,5 +1,8 @@
 {
+  "aboutThisAuction": "關於本場拍賣",
   "auctionClosed": "拍賣已結束",
+  "auctionDetails": "拍賣詳情",
+  "auctionImages": "拍賣圖片",
   "auctionStatus": "拍賣",
   "auctionWon": "競投成功",
   "authorizationDeclined": "未能授權你的信用卡。請換另一張卡再試。",
@@ -64,6 +67,7 @@
   "nextImage": "下一張圖片",
   "nextLot": "下一件拍品",
   "noBidsYet": "尚未有出價",
+  "opensIn": "距開拍",
   "opensLabel": "開始",
   "opensSoon": "即將開始",
   "outbid": "已被超越",

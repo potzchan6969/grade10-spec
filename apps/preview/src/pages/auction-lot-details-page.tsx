@@ -43,7 +43,7 @@ import {
 const LIVE_BID_INTERVAL_MS = 8_000;
 
 const AUCTION_LOT_MARKET_COMPS = {
-  title: "Market price",
+  title: "Market Price",
   range: "HK$46,800–HK$171,600",
 };
 

@@ -484,10 +484,6 @@ export {
   type StoreProductDescriptionProps,
 } from "./blocks/store-product/store-product-description";
 export {
-  StoreProductGallery,
-  type StoreProductGalleryProps,
-} from "./blocks/store-product/store-product-gallery";
-export {
   StoreProductHeader,
   type StoreProductHeaderCopy,
   type StoreProductHeaderProps,

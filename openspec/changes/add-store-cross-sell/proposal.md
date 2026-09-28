@@ -26,8 +26,8 @@ defines them; unmeasured until instrumented.
 - **No rail where there is nothing to show** — a card with no picks and no
   similar card shows no rail and leaves no empty space.
 - **In the page as it arrives** — the rail is in the product page's response,
-  so it is there before any script runs and the page does not move when it
-  appears.
+  so it is there before any script runs, each card in it a link to its own
+  page, and the page does not move when it appears.
 
 ## Non-Goals
 
@@ -47,7 +47,10 @@ See [Non-Goals](decisions.md#non-goals).
   label where no link is drawn.
 - `shared/ui/store-product-listing` — a sold-out `ProductCard` still reports
   its activation where the consumer handles it, and a tile drawn without a cart
-  control needs no cart words.
+  control needs no cart words. `ProductCard` and `ProductSummary` take an
+  optional `href`, the product's address, which draws a tile that opens as a
+  link to it: in `grade10`, the rail gives each tile its card's address, and
+  the listing page and the store home's row give none yet (Q52).
 
 ## Impact
 
@@ -57,8 +60,8 @@ See [Non-Goals](decisions.md#non-goals).
   its cart control, and the heading in `packages/i18n` in every language of
   the shared layer; the export set is the requirements'. The two blocks it
   composes widen: the section header's browse label and the card's cart words
-  become optional, and a sold-out card can open — each on the capability that
-  owns the export. The store home's row of cards draws no cart control, so a
+  become optional, a sold-out card can open, and a card given its address is a
+  link to it — each on the capability that owns the export. The store home's row of cards draws no cart control, so a
   sold-out card there opens its page too.
 - `redesign-store-product-detail-page` is Building on the same page; this
   change lands the rail on the redesigned page and carries no delta on

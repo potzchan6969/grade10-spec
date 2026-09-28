@@ -225,8 +225,8 @@ export const AUCTION_LOT_DETAILS_COPY = {
     autoExtendedTooltip: formatAutoExtendedTooltip(
       AUCTION_LOT_EXTENSION_POLICY,
     ),
-    aboutThisLot: "About this auction",
-    vaultShipping: "Vault shipping",
+    aboutThisLot: "About This Auction",
+    vaultShipping: "Vault Shipping",
     showMore: "Show more",
     showLess: "Show less",
   },
