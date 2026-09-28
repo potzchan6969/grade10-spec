@@ -1,7 +1,7 @@
 # grade10-site/store/cross-sell Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-21, tcs-rules r3.0
+**Drafts styled:** 2026-09-28, tcs-rules r4
 **Out of suite:** grade10-site-store-cross-sell-SC-25, grade10-site-store-cross-sell-SC-26
 
 ## grade10-site-store-cross-sell-US1: Collector opens a card the stock keeper chose for this one
@@ -190,14 +190,16 @@ Runs once per row of **Test data**.
 
 1. Navigate to `<card_1>`'s page.
 2. Scroll to the section under the card.
-3. Hover the first tile, then click it.
+3. Hover the first tile.
+4. Click the first tile.
 
 **Expected Results:**
 
 * The heading and six tiles render with scripting disabled.
-* Each tile is a link to its card's page.
 * The page does not shift as it settles.
-* Step 3 shows the first tile's card address as the link's target, then opens that card's page with scripting still disabled.
+* Each tile is a link to its card's page.
+* Step 3 shows the first tile's card address as the link target.
+* Step 4 opens that card's page, scripting still disabled.
 
 ### grade10-site-store-cross-sell-US1-TC6-1: A sold-out pick stays, says so and still opens
 
@@ -405,6 +407,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Scroll to the section under the card.
+2. Read the heading and the tiles.
 
 **Expected Results:**
 
@@ -446,8 +449,6 @@ Runs once per row of **Test data**.
 
 * `<pick_3>` is the first tile and appears once.
 * The three other cards follow it.
-
----
 
 ### grade10-site-store-cross-sell-US1-TC14-1: A card the store has just taken in shows its picks alone
 
@@ -787,8 +788,6 @@ Runs once per row of **Test data**.
 
 * `<card_24>` is before `<card_23>`.
 
----
-
 ### grade10-site-store-cross-sell-US2-TC9-1: Closer comes before newer
 
 **Classification:**
@@ -863,9 +862,10 @@ the card itself, and see them on its page,
 
 **Steps:**
 
-1. Choose `<first choice>`, then `<second choice>`, on `<card_15>`.
-2. Open `<card_15>`'s page in the store.
-3. Scroll to the section under the card.
+1. Choose `<first choice>` on `<card_15>`.
+2. Choose `<second choice>` after it.
+3. Open `<card_15>`'s page in the store.
+4. Scroll to the section under the card.
 
 **Expected Results:**
 
@@ -984,8 +984,6 @@ the card itself, and see them on its page,
 * `<gone card>` shows nowhere, and no tile is left blank for it.
 * `<kept pick>` leads the rail, cards sharing `<card_18>`'s world follow.
 
----
-
 ### grade10-site-store-cross-sell-US3-TC5-1: A pick added to a card that already has picks reaches the page
 
 **Classification:**
@@ -1012,12 +1010,14 @@ the card itself, and see them on its page,
 | --- | --- |
 | `<card_25>` | A card for sale with two picks, `<pick_5>` then `<pick_6>` |
 | `<pick_7>` | A card for sale not yet among `<card_25>`'s picks |
+| `<page window>` | 1 minute |
 
 **Steps:**
 
 1. Add `<pick_7>` to `<card_25>`'s picks, after `<pick_6>`.
-2. Wait one minute.
-3. Open `<card_25>`'s page as a customer and scroll to the section under the card.
+2. Wait `<page window>`.
+3. Open `<card_25>`'s page in the store.
+4. Scroll to the section under the card.
 
 **Expected Results:**
 
