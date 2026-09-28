@@ -757,12 +757,12 @@ Stories `grading-admin-receiving-receive-panel--`.
 | Cert held elsewhere | the scan refused naming the submission that holds it | `grade10-admin-grading-batches-SC-26` |
 | Cert not on the manifest | the scan refused by name | `grade10-admin-grading-batches-SC-27` |
 | Ungraded row | the code, Returned raw with the note; the fee stands | `grade10-admin-grading-batches-SC-28` |
-| Upcharge row | the level moved and the sheet's difference; the invoice reconciled | `grade10-admin-grading-batches-SC-38` |
-| Invoice gap | the invoice's figure against the sheet's; the gap marked Commercial's | `grade10-admin-grading-batches-SC-39` |
+| Upcharge row | the level moved and the sheet's difference | `grade10-admin-grading-batches-SC-38` |
+| Invoice gap | the invoice's figure against the sheet's; the gap always Commercial's to read, since a US-dollar invoice is not reconciled against the sheet's HKD differences | `grade10-admin-grading-batches-SC-39` |
 | Not scanned yet | On the manifest, not scanned; Scan | `grade10-admin-grading-batches-SC-31` |
 | Held by the grader | the card recorded held with its expected date | `grade10-admin-grading-batches-SC-34` |
 | Not returned | the card recorded not returned; the payout line | `grade10-admin-grading-batches-SC-35` |
-| Damaged | the slab photographed in the box; Damaged on the card | `grade10-admin-grading-batches-SC-36` |
+| Damaged | the slab photographed in the box; Damaged on the card, recorded before its cert is scanned | `grade10-admin-grading-batches-SC-36` |
 | Not on the manifest | a card that went out and no line names, listed under the table; Held, Not returned, Add to the manifest; Finish held until it is accounted for | `grade10-admin-grading-batches-SC-53` |
 | Added to the manifest | the slab in the box on no line: its line added for the card with the cert and the grade, marked the grader's omission; then scanned as any line | `grade10-admin-grading-batches-SC-54` |
 | Exceptions (`GA5`) | the `EntryList`: ungraded, upcharges, not scanned, damaged | `grade10-admin-grading-batches-SC-29` |
@@ -854,8 +854,9 @@ Stories `grading-admin-settings-settings-panel--`.
 | Diary services | the three entries with their durations | `grade10-admin-grading-counter-SC-99` |
 | Edit a clock | `SaveableField`; saved under the settings subject | `grade10-admin-grading-counter-SC-71` |
 | Edit the reference rate | `SaveableField` taking the HKD one US dollar buys, 7.84 at the start; saved by one approve holder under the settings subject, nought refused on the field | `grade10-admin-grading-counter-SC-71` |
-| Edit a money setting | the second-person dialog with the reason | `grade10-admin-grading-counter-SC-70` |
-| Refused | the refusal by name on the field | `grade10-admin-grading-counter-SC-60` |
+| Edit a money setting | the second-person dialog with the reason; the row then reads waiting on a second approver | `grade10-admin-grading-counter-SC-70` |
+| Approve a money setting | Approve on the waiting row for an approve holder who did not ask; the value written carrying both names; the recorder offered no Approve on their own request | `grade10-admin-grading-counter-SC-60` |
+| Refused | the refusal by name on the field | `grade10-admin-grading-counter-SC-104` |
 | Operate grant | the table read-only; no field opens | `grade10-admin-grading-counter-SC-76` |
 | Fact unset | a bracketed value marked; the readiness line naming its owner | `grade10-admin-grading-counter-SC-98` |
 
