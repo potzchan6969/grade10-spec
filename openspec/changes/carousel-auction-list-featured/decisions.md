@@ -26,14 +26,14 @@
 | --- | --- | --- | --- |
 | Q1 | Who chooses Featured slides? | An authorized operator curates each slide from **Manage Featured** on the Listings tab: pick a listing and upload one **front page image** for that slot (banner background and slab as that single asset), never a gallery pick for the upload | Auto Top-N live lots; campaign cover or listing gallery image as the uploaded carousel image; separate background and slab uploads |
 | Q2 | How many slides? | At most **3**, in operator order | Current PRD max 4 scrolling cards |
-| Q3 | Does the banner show a live current bid? | Yes on Active — served amount, rolling digits when it **increases** after first paint; Upcoming starting bid is static | Static served bid only; roll on any change including decreases |
+| Q3 | Does the banner show a live current bid? | Yes on Active — served amount, rolling digits when it **increases** after first paint. Upcoming shows **no money** until the lot opens (Q39) | Static served bid only; Upcoming starting bid on the banner |
 | Q4 | How does end or open time show on the banner? | Client countdown from the served close or open; no live status websocket. Relative **Ends in** / **Opens in** with the list-card short remaining form; neutral colour; extended bidding keeps Ends in to the recorded close (Q24–Q28) | Real-time lot-status push; absolute date on the banner; rolling digit countdown; Extended label |
 | Q5 | Categories and busy filter? | Out for this change: Featured (when present) then All auctions only; quiet layout always until a later change | Busy tiles and category filter from the old Catalogue rules |
 | Q6 | Watch from the list? | Same watch as the lot page and My Auctions (`grade10-site/auction/watchlist`) | List-local watch rules |
 | Q7 | Upcoming / Ended card chrome? | Not this change — pending design | Specifying those card variants now |
 | Q8 | Which lots may fill a Featured slot? | Published Active or Upcoming only; Ended cannot fill a slot - decided by the round. If a curated lot closes before the operator clears it, the slot drops from the served Featured set — no Ended slide on the banner | Ended lots in Featured; any published lot including Closed |
 | Q9 | Where do site catalogue rules live? | Delta on `grade10-site/auction/auction`; admin curation is new `grade10-admin/auction/featured` - decided by the round | Overloading `listing-page` (lot address only); extending campaigns as the sole Featured source |
-| Q10 | Design reference? | Storybook `Pages/Auction List` → **Carousel banner** (`pages-auction-list--carousel-banner`) - decided by the round | Scrolling featured row and busy/quiet category page stories as canonical |
+| Q10 | Design reference? | Storybook `Auction List/Featured Auctions` → **Carousel banner** (`auction-list-featured-auctions--carousel-banner`) - decided by the round | Scrolling featured row and busy/quiet category page stories as canonical |
 | Q11 | Does Featured progress auto-advance? | Progress control advances slides; CarouselProgress auto-play is allowed presentation only | Requiring auto-advance as a product rule |
 | Q12 | One Featured slide progress chrome? | Multi-dot advance not required; progress may be absent or a single item | Forcing one chrome shape |
 | Q13 | Featured lot Ends while slotted? | Public Featured drops it at read time; admin slot stays until clear or replace | Auto-clearing the admin slot |
@@ -44,7 +44,7 @@
 | Q18 | Admin Featured curator placement? | **Manage Featured** control beside Create listing on the Listings tab; opens a Listings sub-page of ordered slots | Campaigns sibling tab; curation only inside a listing detail dialog |
 | Q19 | How does `/auction` load Featured? | Dedicated public `featured.publicList` endpoint returning slide facts and the front page image URL | Nesting Featured inside the All auctions catalogue page payload |
 | Q20 | Banner CTA by lot status? | Active: **Bid Now**. Upcoming and any Ended-that-still-shows: **View Auction**. Upcoming status is **UPCOMING** with no live status dot - grill 2026-09-25 | Bid Now for Upcoming; hide CTA on Ended |
-| Q21 | When does the current bid roll? | Only on Active when the served amount **increases** after first paint; Upcoming starting bid stays static - grill 2026-09-25 | Roll on any amount change including first paint and decreases |
+| Q21 | When does the current bid roll? | Only on Active when the served amount **increases** after first paint; Upcoming has no money to roll - grill 2026-09-25 | Roll on any amount change including first paint and decreases; Upcoming starting bid on the banner |
 | Q22 | Banner Storybook coverage? | Live Active carousel (default), one-slide, Upcoming-only, empty Featured on the page story - grill 2026-09-25 | Separate stories for urgency colour, broken hero, reduced motion |
 | Q23 | Ended money caption on a stale slide? | **FINAL BID** - grill 2026-09-25 | CURRENT BID; invent another label |
 | Q24 | Mixed Active + Upcoming in one Featured set? | Allowed; chrome follows each slide - grill 2026-09-25 | Force a single status across all slots |
@@ -61,6 +61,9 @@
 | Q35 | Ended slide time row? | **Ended {closeLabel}** — keep the absolute closed stamp - grill 2026-09-25 | Hide the time row once ENDED |
 | Q36 | Extended-bidding cue on the banner? | None — LIVE BIDDING + **Ends in** only; no Extended label or secondary line - grill 2026-09-25 | Quiet “Extended bidding” line or tooltip on the banner |
 | Q37 | Close jump when an extension bid lands? | Recorded close (and Ends in) moves with the **same freshness as the live current bid** on the banner - grill 2026-09-25 | Countdown only on the next catalogue poll |
+| Q38 | Front page image canvas and crop? | Operator canvas **2400 × 1500** (8:5), subject centred; JPEG/WebP ≤ ~400 KB. Site stage uses `object-cover` from centre; optional CDN `srcSet` — no separate mobile crop in v1 | Exact pixel match per breakpoint; forced gallery aspect; dual art-direction uploads |
+| Q39 | Upcoming money on Featured and All auctions? | No starting bid (and no other money) until the lot is Active — Featured slide and All auctions card alike | Show starting bid while Upcoming |
+| Q40 | How does All auctions load a long catalogue? | Infinite scroll: next batch near the end of the list; Boneyard skeleton cards while that batch settles; no pagination controls | Numbered pages; load-more button only |
 
 ## Raised
 

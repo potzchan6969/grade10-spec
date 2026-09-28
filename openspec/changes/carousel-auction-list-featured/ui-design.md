@@ -2,8 +2,8 @@
 
 ### Auction List (`/auction`)
 
-Storybook workbench: [Pages/Auction List → Carousel banner](http://localhost:6008/?path=/story/pages-auction-list--carousel-banner)
-(`pages-auction-list--carousel-banner`). Layout source until a Figma frame is
+Storybook workbench: [Auction List/Featured Auctions → Carousel banner](http://localhost:6008/?path=/story/auction-list-featured-auctions--carousel-banner)
+(`auction-list-featured-auctions--carousel-banner`). Layout source until a Figma frame is
 linked here: that story — Featured carousel then All auctions, no category
 section.
 
@@ -18,8 +18,8 @@ this layout and the management page marks are the source.
 
 | Export | Package | Exists | Composes |
 | --- | --- | --- | --- |
-| `FeaturedAuctionsBanner` | `@grade10/ui`, `src/blocks/auction-listing/featured-auctions-banner.tsx` | Yes — local promotion pending store PR | Full-width carousel: one front page image as ground and slab (load failure → gallery → stage background), title, status, list-card short Ends in / Opens in, Active bid rolls on increase, Bid Now or View Auction by status, `CarouselProgress` dots |
-| `AuctionCataloguePage` | Preview (`apps/preview/src/pages/auction-catalogue-page.tsx`) | Partly — page composition, not a package export | Featured (when set) then All auctions grid; no category chrome in the carousel-banner layout |
+| `FeaturedAuctionsBanner` | `@grade10/ui`, `src/blocks/auction-listing/featured-auctions-banner.tsx` | Yes — local promotion pending store PR | Full-width carousel: one front page image as ground and slab (`object-cover object-center`; load failure → gallery → stage background; optional `imageSrcSet` / `imageSizes`), title, status, list-card short Ends in / Opens in, Active bid rolls on increase, Bid Now or View Auction by status, `CarouselProgress` dots |
+| `AuctionCataloguePage` | Preview (`apps/preview/src/pages/auction-catalogue-page.tsx`) | Partly — page composition, not a package export | Featured (when set) then All auctions grid with infinite scroll and load-more Boneyard skeletons; no category chrome in the carousel-banner layout |
 | `AuctionCard` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | All auctions list tile: image, title, bid, countdown, watch |
 | `WatchButton` | `@grade10/ui`, `src/blocks/auction-record/` | Yes | Watch on/off on an All auctions card (same control as lot page / My Auctions) |
 | `ListingRollingMoneyDisplay` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | Rolling current bid on the Featured slide |
@@ -46,7 +46,9 @@ admin curator labels stay application copy.
 | Countdown | Relative **Ends in** / **Opens in** with list-card short remaining; neutral colour; at zero shows now until refresh; extended bidding still Ends in with no Extended cue | `grade10-site-auction-auction-SC-31` |
 | Bid Now | Active slide: Bid Now opens the lot details page | `grade10-site-auction-auction-SC-34` |
 | View Auction | Upcoming slide: View Auction opens the lot details page; UPCOMING has no live status dot | `grade10-site-auction-auction-SC-58` |
-| Upcoming Featured | UPCOMING (no live status dot), STARTING BID, View Auction, Opens in … | `grade10-site-auction-auction-SC-33` |
+| Upcoming Featured | UPCOMING (no live status dot), View Auction, Opens in … — no starting bid | `grade10-site-auction-auction-SC-33` |
+| Upcoming All auctions card | Title, Opens in, watch — no starting bid | `grade10-site-auction-auction-SC-61` |
+| Loading more All auctions | Lots already shown stay; Boneyard skeleton cards below until the next batch arrives | `grade10-site-auction-auction-SC-59`, `SC-60` |
 | Bid roll while paused | Hover/focus pause stops auto-advance only; Active bid may still roll | `grade10-site-auction-auction-SC-32` |
 | Front page image load failure | Fall back to lot gallery first item, else container default background | `grade10-site-auction-auction-SC-31` |
 | Loading catalogue | Page shell while lots are not yet shown — as the page story treats enter; no separate Featured skeleton | **Out of suite:** presentation; page story enter |
@@ -62,7 +64,7 @@ admin curator labels stay application copy.
 | Empty slots | Up to three empty ordered slots ready to fill | `grade10-admin-auction-featured-SC-01` |
 | Manage Featured entry | Manage Featured beside Create listing opens the sub-page | `grade10-admin-auction-featured-SC-11` |
 | Slot filled | Listing title (or id) and front page image preview on that slot | `grade10-admin-auction-featured-SC-04` |
-| Front page image upload | Upload control; no listing gallery picker | `grade10-admin-auction-featured-SC-12` |
+| Front page image upload | Upload control; no listing gallery picker; brief **2400 × 1500**, subject centred | `grade10-admin-auction-featured-SC-12` |
 | Reordered | Slots in the new order; site Featured follows | `grade10-admin-auction-featured-SC-07` |
 | Cleared slot | Slot empty; that slide leaves `/auction` Featured | `grade10-admin-auction-featured-SC-08` |
 | Cap reached | Third slot filled; no fourth slot offered | `grade10-admin-auction-featured-SC-01` |
