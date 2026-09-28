@@ -290,7 +290,7 @@ spanning several lines included.
 **Listed pages** - A page SHALL pass both rules, for every primitive and
 every block it uses, only when the block check lists it with its reason.
 Today's rebuilt pages, among them `AuctionWinnerOrderPage.tsx`,
-`ListingCatalogueCard.tsx` and `AccountAuctionRecordPage.tsx`, SHALL be
+`OrderDetailsPage.tsx` and `AccountAuctionRecordPage.tsx`, SHALL be
 listed that way. A listing with an empty reason, or naming a page that no
 longer exists or no longer rebuilds a block, SHALL fail the check.
 
