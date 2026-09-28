@@ -41,6 +41,15 @@ requirements and the cases are read by the two independent readings
   part is a finding
   ([`docs/governance/specs-to-test-cases.md`](../../docs/governance/specs-to-test-cases.md))
 
+## On a Bug
+
+Dispatched as `qa` on both of a bug's rounds, [Bug Fixes](../../docs/governance/bug-fixes.md)'s diagnosis and fix. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **The test, planned** - the regression test the diagnosis names fails on `main` for the reported reason, at a seam its lane reaches. One that would pass on `main`, or fail for another reason, `blocks`
+- **The steps** - the report reproduces from what the diagnosis records: the steps, the width, the state
+- **Red, then green** - in the fix round, the test commit comes first and fails without the fix, and asserts what the reader sees rather than how the code gets there
+- **The symptom** - the fix round's verification walks the report's own steps, not only the new test
+
 ## Your Stance
 
 Read [the eight principles and the reader's

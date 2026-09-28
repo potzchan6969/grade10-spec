@@ -36,6 +36,14 @@ and by the specialist that mechanism summons.
 - **What the page already says** — a draft contradicting an unmarked line on
   the page is wrong until the page moves
 
+## On a Bug
+
+Dispatched as `lane` on a bug's diagnosis, the round [Bug Fixes](../../docs/governance/bug-fixes.md) runs before any code. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **The lane** - the fix restores what is settled, or it moves something: a requirement, a page line, an outcome nobody has decided. A change the diagnosis calls a bug `blocks`
+- **The source** - the spec, page or design the diagnosis cites says what the diagnosis claims it says; a citation that does not, or none where one is owed, is a finding
+- **Two sources disagree** - the spec against the design, or the page against the spec, makes it a change, whichever side the code follows
+
 ## Your Stance
 
 Read [the reader's stance](../../docs/governance/system-design.md#the-readers-stance)

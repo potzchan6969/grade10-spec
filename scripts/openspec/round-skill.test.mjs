@@ -823,7 +823,7 @@ test("each line skill names its artifact and follows the round", () => {
 
 // The readers a round may dispatch, enumerated from the schema itself rather
 // than from a prose table: every distinct `agent` any artifact's
-// `perspectives:` or the schema's `apply:` block names, plus the verifier,
+// `perspectives:`, the schema's `apply:` block or its `bug:` rounds name, plus the verifier,
 // which no schema row names because it is dispatched by verdict rather than
 // by trigger.
 const readerFiles = () => {
@@ -832,6 +832,8 @@ const readerFiles = () => {
   for (const artifact of schema.artifacts)
     for (const { agent } of artifact.perspectives) files.add(agent);
   for (const { agent } of schema.apply) files.add(agent);
+  for (const round of ["diagnosis", "fix"])
+    for (const { agent } of schema.bug[round]) files.add(agent);
   return [...files].sort();
 };
 

@@ -108,15 +108,32 @@ export function applyPerspectives(root: string, schema: string): Perspective[] {
   return perspectives(apply.perspectives, "apply");
 }
 
-function schemaOf(
+/** The readers of a bug's two rounds, off the schema's `bug:` block: the
+ * diagnosis, read before any code, and the fix, read once it lands. A bug is
+ * no change and no artifact of the schema, so its readers sit beside the
+ * `apply:` block rather than on an artifact. Empty where the schema records
+ * none. */
+export function bugPerspectives(
   root: string,
   schema: string,
-): { artifacts?: unknown; apply?: unknown } | undefined {
+): { diagnosis: Perspective[]; fix: Perspective[] } {
+  const bug = (schemaOf(root, schema)?.bug ?? {}) as Record<string, unknown>;
+  const round = (id: string) =>
+    perspectives(
+      ((bug[id] ?? {}) as Record<string, unknown>).perspectives,
+      `bug.${id}`,
+    );
+  return { diagnosis: round("diagnosis"), fix: round("fix") };
+}
+
+type ParsedSchema = { artifacts?: unknown; apply?: unknown; bug?: unknown };
+
+function schemaOf(root: string, schema: string): ParsedSchema | undefined {
   const text = readTextIfExists(
     join(root, "openspec", "schemas", schema, "schema.yaml"),
   );
   if (text === undefined) return undefined;
-  return (YAML.parse(text) ?? {}) as { artifacts?: unknown; apply?: unknown };
+  return (YAML.parse(text) ?? {}) as ParsedSchema;
 }
 
 /** One entry is three facts: the perspective's name, the triggers a draft can

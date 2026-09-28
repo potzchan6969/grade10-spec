@@ -50,6 +50,13 @@ them.
   every reader that filed the kind and quotes each reader's fix where they
   differ
 
+## On a Bug
+
+Dispatched once over every reader's findings on each of [Bug Fixes](../../docs/governance/bug-fixes.md)'s rounds. You are given the report, the diagnosis and, in the fix round, the landed diff, beside the findings.
+
+- **Same table, same verdicts** - a finding that stands is fixed before the next round; an `asks` stops the fix and is posted on the report for the person it waits on
+- **The lane first** - a finding that the fix is a change stands over every other: the fix stops and goes to planning
+
 ## Your Stance
 
 Read [the eight principles and the reader's

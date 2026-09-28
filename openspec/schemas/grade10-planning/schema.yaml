@@ -1115,3 +1115,56 @@ apply:
     tech-design.md when the change earns one, ui-design.md when it alters
     something a user sees, and tasks.md always.
     `openspec status --change <change-name>` lists what is still missing.
+
+# A bug is no change and carries no artifact of this schema, but its fix is
+# read the way a draft is: `docs/governance/bug-fixes.md` runs two rounds on
+# it, read through `scripts/openspec/bug-readers.mjs`. The diagnosis round
+# reads the plan before any code: product whether it is a bug at all, tech
+# whether the cause named is the root cause, QA whether the test fails for the
+# reported reason, the simpler thing whether a smaller fix does it; design
+# where a reader sees the symptom. The fix round reads the landed diff with a
+# task group's readers, and design again where the diff moves a surface.
+bug:
+  diagnosis:
+    perspectives:
+      - name: lane
+        when: [always]
+        agent: .claude/agents/product.md
+      - name: root-cause
+        when: [always]
+        agent: .claude/agents/tech.md
+      - name: qa
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
+      - name: surface
+        when: [surface]
+        agent: .claude/agents/design.md
+  fix:
+    perspectives:
+      - name: missing-pieces
+        when: [code]
+        agent: .claude/agents/build.md
+      - name: code-smell
+        when: [code]
+        agent: .claude/agents/build.md
+      - name: conventions
+        when: [code]
+        agent: .claude/agents/build.md
+      - name: reader
+        when: [copy]
+        agent: .claude/agents/reader.md
+      - name: surface
+        when: [surface]
+        agent: .claude/agents/design.md
+      - name: qa
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: operations
+        when: [migration, flag, money, deploy]
+        agent: .claude/agents/operations.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
