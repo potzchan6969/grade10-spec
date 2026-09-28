@@ -100,18 +100,18 @@ A card with a given world, language, collectible type and picks, in a known cata
 1. In the staging shop's admin, open the product.
 2. Set its world, language and collectible type, the product's metafields the catalogue filters read.
 3. Set its picks by the recipe "Choose picks on a staging-shop card".
-4. Read its catalogue order, its creation date, on the store listing sorted by newest.
-5. Wait 60 seconds before reading the card's page.
+4. Read its catalogue order, its creation date, on the store listing sorted by latest product.
+5. Wait until the listing's world filter shows the card, then 60 more seconds.
 
 **Holds for:** staging.
 
 ### A card sharing nothing
 
-A card for sale whose world, language and collectible type no other product for sale carries, with no picks.
+A card for sale whose world, language and collectible type no other product for sale carries, with picks as the case states.
 
 1. In the staging shop's admin, create the product, for sale.
 2. Give its world, language and collectible type values no other card uses.
-3. Leave its picks empty.
+3. Set its picks as the case states.
 
 **Holds for:** staging.
 
@@ -130,8 +130,9 @@ A card the catalogue lists with nothing for sale.
 
 The team's names for a surface or a control, and where a tester finds it: `<name> — <page or placeholder>, <where on it>`.
 
-- Staging storefront — the Grade10 site on staging, backed by the Shopify shop `grade10-staging-wcmnrpar.myshopify.com`; every hand walk of `grade10-site/store/cross-sell` runs here
+- Staging storefront — https://grade10-stg.com, the Grade10 site on staging, backed by the Shopify shop `grade10-staging-wcmnrpar.myshopify.com`; every hand walk of `grade10-site/store/cross-sell` runs here, and a card's page is `/store/products/<handle>`
 - Staging shop's admin — the Shopify admin of `grade10-staging-wcmnrpar.myshopify.com`
+- Store's sales channel — the staging shop's admin, the product, Publishing, Headless
 - Product recommendations — the staging shop's admin, Apps > Search & Discovery > Product recommendations; Shopify's own label, named in `add-store-cross-sell`'s decisions Q45
 - Complementary products — the staging shop's admin, Apps > Search & Discovery > Product recommendations, the product, the Complementary products field; Shopify's own label, where a card's picks are chosen in order
 - Save — the staging shop's admin, Product recommendations, the product, the Save button that keeps its Complementary products; Shopify's own label
