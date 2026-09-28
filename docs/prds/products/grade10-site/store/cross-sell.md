@@ -31,6 +31,8 @@ store shows other cards the collector may also like.
 - 🚧 **A rail the store cannot compose** — where the store's copy of the
   catalogue is not to hand, the card's page answers whole with no rail for that
   minute
+- 🚧 **Switched off** — the store can turn the rail off for a brand and
+  environment; every card's page then shows no rail, as with nothing to show
 - 🚧 **Picks the store cannot read** — where a card's picks cannot be read,
   the similar cards fill the rail alone
 

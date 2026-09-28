@@ -151,6 +151,24 @@ in `@grade10/ui`, with the formatter the listing already uses —
   page's minute on top; a pick the mirror has not heard of yet is left out
   until it has
 
+### The rail has one off switch, in the brand's store config
+
+`CROSS_SELL` in the application's `packages/app-env`, a
+`Record<Brand, Record<DeployEnv, boolean>>` beside `POINTS_TENDER`, is on
+wherever the store runs. The rail's module owns it: `crossSellOn(env)` sits in
+`services/catalog/related.ts` with `readCardWithRail`, the card's read with its
+picks and the compose, so the catalog router only chooses between the card
+with its rail and the card alone. Off, the read never asks the shop for the
+picks, composes nothing and counts nothing, and answers the card with no
+`related`, which the contract's decoding default reads as an empty rail
+(Q40), the page as no rail (`grade10-site-store-cross-sell-SC-34`, Q55).
+
+- **Deployed as code** — a switch that changes on a deploy holds no state to
+  repair; a database switch would still wait out the read's cached minute
+- **The page needs no switch of its own** — it already draws nothing for an
+  empty rail, so the one read that composes the rail is the one place it turns
+  off
+
 ## Service Interfaces
 
 | Function | Input | Output |
@@ -199,6 +217,7 @@ in `@grade10/ui`, with the formatter the listing already uses —
 | A pick the mirror has no entry for | Left out; the rest of the rail stands; the ids on the log line | `outcome:pick_unresolved` |
 | The complementary list cannot be read, or holds anything but product gids | Similar cards alone, as for a card nobody chose for | `outcome:picks_unreadable`, the reason logged |
 | Nothing shared, no picks | No rail — the ordinary answer | `outcome:empty` |
+| The rail switched off (`CROSS_SELL`) | No rail; the card is read alone and no picks are asked for | None: nothing is composed |
 
 ## Risks / Trade-offs
 
@@ -230,7 +249,8 @@ in `@grade10/ui`, with the formatter the listing already uses —
 
 ## Migration Plan
 
-- **Nothing to migrate** — no schema, no flag of its own; the rail is on the
+- **Nothing to migrate** — no schema; the one switch, `CROSS_SELL`, is code
+  and on; the rail is on the
   card's page, which the site's `store` gate keeps out of every production
   build until the shop opens
   ([Where It Is Open](../../../docs/prds/products/grade10-site/store/index.md#where-it-is-open)),

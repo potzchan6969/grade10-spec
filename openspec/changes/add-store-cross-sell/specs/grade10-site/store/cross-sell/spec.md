@@ -147,6 +147,9 @@ SHALL leave no space for one.
   missing something.
 - **A rail the site cannot compose** — where the site cannot compose the rail,
   the card's page answers whole and shows no rail, as with nothing to show.
+- **Switched off** — where the store has switched the rail off for its brand
+  and environment, every card's page answers whole and shows no rail, as with
+  nothing to show.
 
 #### Scenario: grade10-site-store-cross-sell-SC-09 - Nothing to show, nothing drawn
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector reads a card whose page ends with the card
@@ -160,6 +163,15 @@ SHALL leave no space for one.
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for
 
 - **GIVEN** a card the site cannot compose a rail for
+- **WHEN** a collector opens its page
+- **THEN** the card's page answers whole
+- **AND** no rail, no heading and no space are under the card
+
+#### Scenario: grade10-site-store-cross-sell-SC-34 - The rail switched off
+**Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for while the store has the rail off
+
+- **GIVEN** the store has switched the rail off
+- **AND** a card with picks and cards like it
 - **WHEN** a collector opens its page
 - **THEN** the card's page answers whole
 - **AND** no rail, no heading and no space are under the card
