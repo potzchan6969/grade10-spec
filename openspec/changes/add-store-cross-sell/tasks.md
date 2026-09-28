@@ -1,8 +1,8 @@
 ## 1. The rail block and the two widenings (grade10-spec)
 
-The sold-out tile's hover and focus state and the row's narrow layout are the
-frame's, awaited from @tangconst by 2026-09-24; 1.4's stories draw the block
-as the tile exists today and the frame's follow-up rides task 5.2.
+The sold-out tile's hover and focus state and the row's narrow layout are
+group 7's, settled in code once no frame came (Q49); 1.4's stories draw the
+block as the tile existed then.
 
 - [x] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories and a public-exports test under `packages/ui/src/blocks/` for `grade10-site-store-cross-sell-SC-25`, `grade10-site-store-cross-sell-SC-26`, `shared-ui-store-home-SC-10`, `shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`; the same commit flips `shared-ui-store-home-US1-TC1-1`, `shared-ui-store-product-listing-US1-TC1-1` and `shared-ui-store-product-listing-US1-TC2-1` with `pnpm run tcs:automated <case> --decided-by <the story or test path in this store>`
 - [x] 1.2 Make `shared-ui-store-home-SC-10` pass: `StoreSectionHeaderCopy.browseAll` becomes optional, drawn only where a browse destination is supplied
@@ -10,7 +10,7 @@ as the tile exists today and the frame's follow-up rides task 5.2.
 - [x] 1.4 Make `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` pass: `StoreProductRelatedRail`, `StoreProductRelatedRailProps` and `StoreProductRelatedRailCopy` in `packages/ui/src/blocks/store-product/store-product-related-rail.tsx`, re-exported from the public entry `packages/ui/src/index.ts`, composing `StoreSectionHeader` and one `ProductCard` per card given, in a row, passing no browse-all word and no cart word; stories for the picks-and-similar, one-card, sold-out-pick and narrow states
 - [x] 1.5 Answer `product.youMayAlsoLike` in the shared layer — `en`, `ko`, `zh-Hans`, `zh-Hant`
 - [x] 1.6 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm --dir packages/i18n test`, `pnpm run tcs:validate`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
-- [ ] 1.7 After group 6 (Q42): `StoreProductRelatedRail` draws a `region` labelled by its heading, so a walk reaches the rail by role and name, with the story lane and `pnpm run design-sync:check` as 1.6 names them; the walk's slot queries retire in group 6's next round
+- [x] 1.7 Make `grade10-site-store-cross-sell-SC-26`'s region pass (Q42): `StoreProductRelatedRail` draws a `region` named by its heading, so a walk reaches the rail by role and name, verified as 1.6 names
 
 ## 2. The rail's rule (grade10)
 
@@ -49,14 +49,14 @@ is rebuilding, so this group follows that change's page work.
 ## 5. The manual (grade10-spec)
 
 - [x] 5.1 Update `docs/prds/products/grade10-site/store/cross-sell.md`, the `You May Also Like` section of `docs/prds/products/grade10-site/store/product-page.md` and the `Product Tile` section of `docs/prds/products/shared/ui/store-product-listing.md` — whose "a sold-out tile's name stays inert" gains "where the tile sells" — to the shipped rail, with a `::story` card for the block, restating no requirement; `docs/prds/products/shared/ui/store-home.md` already reads that a header with no browse address renders a title alone and needs no line
-- [ ] 5.2 After the walk (group 6) has run, correct the suite's `### Manual` table in `openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/feature-tcs.md` to what the walk reached — the rows the walk did not reach say so, and are named in the walk's `rounds.md` row
+- [x] 5.2 After the walk (group 6) has run, correct the suite's `### Manual` table in `openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/feature-tcs.md` to what the walk reached — the rows the walk did not reach say so, and are named in the walk's `rounds.md` row
 - [x] 5.3 Verify: `pnpm run tcs:validate`, `pnpm check:manual`
 
 ## 6. The walk (grade10)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-store-cross-sell`) as its input.
 
-Needs groups 1 to 4 landed. The walks live in
+Needs groups 1 to 4, 7, 8 and 9 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and run on the
 isolated stack, whose fixture catalogue seeds the stock keeper's picks as the
 app stores them (`packages/shopify/backend/src/testing/fixture.ts`); the lane
@@ -68,14 +68,38 @@ skip per case, walked by hand on the dev shop with the page read after them
 within its minute. The walk waits on the card's own read, past the card's
 minute, never on a sleep.
 
-- [ ] 6.1 One test per case the fixture reaches, under a describe per journey, end to end through the collector's browser on the isolated stack's fixture catalogue, which seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
-- [ ] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
+- [x] 6.1 One test per case the fixture reaches, under a describe per journey, end to end through the collector's browser on the isolated stack's fixture catalogue, which seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
+- [x] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
 
-## 7. The frame's follow-up (grade10-spec)
+## 7. The frame's follow-up and the tile as a link (grade10-spec)
 
-Gated on @tangconst's frame, awaited by 2026-09-24; claimed only once it
-lands, so no other group waits on it.
+No frame came by 2026-09-24: the design is settled in code (Q49), as
+`ui-design.md` draws it, ahead of the Figma file. Q52 builds Q38's tile as a
+link in this change, for the rail. No other group in this store waits on it;
+group 8 builds on it.
 
-- [ ] 7.1 The sold-out tile's hover and focus state as the frame draws it on `Product / Product Card` `4200:155`, in `ProductCard`'s stories and the block
-- [ ] 7.2 The rail's narrow layout as the frame draws it, in the block and its `Narrow` story, and the page's ❓ on the narrow layout closed; no `::figma` card — the page carries the rail's `::story` cards, and Storybook is the live reference from then on
-- [ ] 7.3 Verify: `pnpm run test:stories:ui`, `pnpm run design-sync:check`, `pnpm check:manual`
+- [x] 7.1 The sold-out tile's hover and focus state as `ui-design.md` draws it (Q50), in `ProductCard`'s stories and the block
+- [x] 7.2 The rail's narrow layout as `ui-design.md` draws it (Q51, Q54), in the block and its `Narrow` and `Wide` stories, and the page's ❓ on the narrow layout closed; no `::figma` card, since the page carries the rail's `::story` cards
+- [x] 7.3 The tests `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`'s links name, in their own commit before its code, ticked last: stories under `packages/ui/src/blocks/`; the same commit flips `shared-ui-store-product-listing-US1-TC3-1` with `pnpm run tcs:automated <case> --decided-by <the story path in this store>`
+- [x] 7.4 Make `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`'s links pass: `ProductCard` takes an optional `href` and draws the photo and the name as links to it where the tile opens; a plain press reports the activation in place of the link's navigation, and a press with a modifier key is the browser's; `ProductSummary.href`, passed by `ProductList` and `StoreProductRelatedRail`, whose `onCardClick` becomes optional
+- [x] 7.5 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm run tcs:validate`, `pnpm run validate:changes add-store-cross-sell`, `pnpm check:manual`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
+
+## 8. The rail's tiles as links (grade10)
+
+Needs group 4 landed and group 7 in this store. The listing page and the
+store home's row give their tiles no address (Q52), so their tiles stay
+buttons.
+
+- [ ] 8.1 Bump `external/grade10-spec` to the commit carrying group 7
+- [ ] 8.2 The tests this group's scenarios name, in their own commit before its code, ticked last: the served document's test for `grade10-site-store-cross-sell-SC-33`, over every card under the fixture card, and the page's tests reading the rail by its region and its tiles as links
+- [ ] 8.3 Make `grade10-site-store-cross-sell-SC-33` pass: `productSummary` takes the site's address for a card, and the rail passes it for each tile; the e2e tile helpers read a tile's photo and name as a link or a button, whichever the surface draws
+- [ ] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:submodules`, and the walks the tile helpers reach: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/catalog.spec.ts e2e/tests/store/home.spec.ts e2e/tests/store/cart-count.spec.ts e2e/tests/store/catalog-keeper.spec.ts`
+
+## 9. The rail's off switch (grade10)
+
+Needs group 3 landed. `CROSS_SELL` in `packages/app-env`, on for every brand
+and environment, is the rail's off switch (Q55).
+
+- [x] 9.1 The test `grade10-site-store-cross-sell-SC-34` names, in its own commit before its code: the card read's test drives `readCard` asked for the rail with the switch off and on, and not asked
+- [x] 9.2 Make `grade10-site-store-cross-sell-SC-34` pass: `CROSS_SELL` in `packages/app-env`, read by `storeCrossSell` in `deps.ts` and carried on both catalog contexts as `crossSell`; `readCard` in the rail's module holds the card read's whole decision, answering an empty rail with no picks asked for where the switch is off, and the catalog router maps its outcome; the rail's own view, `ProductRelatedRail`, draws the rail apart from `ProductView`; the runbook's § Turning the You May Also Like rail off
+- [x] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the cross-sell walk on the isolated stack: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`

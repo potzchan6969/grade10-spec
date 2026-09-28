@@ -38,7 +38,11 @@ function StoreProductPurchasePanel({
     : copy.soldOut;
 
   return (
-    <VStack className="gap-3" data-slot="store-product-purchase-panel" gap="none">
+    <VStack
+      className="gap-3"
+      data-slot="store-product-purchase-panel"
+      gap="none"
+    >
       <StepperInput
         aria-label={copy.quantityLabel}
         decrementLabel={copy.decreaseQuantity}

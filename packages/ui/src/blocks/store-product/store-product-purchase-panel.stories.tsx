@@ -68,12 +68,14 @@ export const Default: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
     expect(canvas.getByRole("button", { name: "Adding…" })).toBeDisabled();
     expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toBeDisabled();
+    // The stepper takes its reset value in an effect, a render after the
+    // button's label returns, so both are waited for.
     await waitFor(() => {
       expect(canvas.getByRole("button", { name: "Add to cart" })).toBeEnabled();
+      expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
+        "1",
+      );
     });
-    expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
-      "1",
-    );
     expect(canvas.queryByText("Added to cart")).toBeNull();
   },
 };

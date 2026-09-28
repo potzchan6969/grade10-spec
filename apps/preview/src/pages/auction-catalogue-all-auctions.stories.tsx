@@ -108,10 +108,11 @@ export const Default: Story = {
       ),
     ).not.toBeNull();
 
-    canvasElement
-      .querySelector('[data-slot="all-auctions-load-more-sentinel"]')
-      ?.scrollIntoView();
+    // The test browser's viewport is taller than the observer's root, so the
+    // sentinel is brought into range by scrolling the window to its end, again
+    // on each retry while the page is still laying out.
     await waitFor(() => {
+      window.scrollTo(0, document.documentElement.scrollHeight);
       expect(
         canvas.getByLabelText("Loading more auctions"),
       ).toBeInTheDocument();

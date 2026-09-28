@@ -151,6 +151,25 @@ in `@grade10/ui`, with the formatter the listing already uses —
   page's minute on top; a pick the mirror has not heard of yet is left out
   until it has
 
+### The rail has one off switch, in the brand's store config
+
+`CROSS_SELL` in the application's `packages/app-env`, a
+`Record<Brand, Record<DeployEnv, boolean>>` beside `POINTS_TENDER`, is on
+wherever the store runs. `deps.ts` reads it beside the brand's other config,
+and both catalog contexts carry it as `crossSell`. The card's read,
+`readCard` in `services/catalog/related.ts`, holds the whole decision, so the
+catalog router only maps its outcome. Asked for the rail with the switch off,
+the read never asks the shop for the picks, composes nothing and counts
+nothing, and answers the card with an empty rail, which the page reads as no
+rail (`grade10-site-store-cross-sell-SC-34`, Q55). It never leans on the
+contract's decoding default, which goes with 3.2's deploy (Q40).
+
+- **Deployed as code** — a switch that changes on a deploy holds no state to
+  repair; a database switch would still wait out the read's cached minute
+- **The page needs no switch of its own** — it already draws nothing for an
+  empty rail, so the one read that composes the rail is the one place it turns
+  off
+
 ## Service Interfaces
 
 | Function | Input | Output |
@@ -174,7 +193,7 @@ in `@grade10/ui`, with the formatter the listing already uses —
 | Procedure | Change | Consumer |
 | --- | --- | --- |
 | `catalog.product` | Additive: an optional `related` input; set, the answer gains `related`, the per-tile shape `catalog.products` answers today, in rail order, empty where there is nothing to show; unset, the answer is today's | The card's page in `grade10`, the one caller that sets it |
-| `ProductSummary` (`@grade10/ui`) | Unchanged: the block's prop type; the page builds one per `related` entry with the listing's formatter | The rail block |
+| `ProductSummary` (`@grade10/ui`) | Additive: an optional `href`, the product's address, which `ProductList` and the rail pass to `ProductCard`'s own optional `href`, so a tile that opens is a link (Q52); the page builds one per `related` entry with the listing's formatter and the card's address | The rail block; `ProductList`, whose consumers give none yet |
 
 | Half | Where it lands |
 | --- | --- |
@@ -199,6 +218,7 @@ in `@grade10/ui`, with the formatter the listing already uses —
 | A pick the mirror has no entry for | Left out; the rest of the rail stands; the ids on the log line | `outcome:pick_unresolved` |
 | The complementary list cannot be read, or holds anything but product gids | Similar cards alone, as for a card nobody chose for | `outcome:picks_unreadable`, the reason logged |
 | Nothing shared, no picks | No rail — the ordinary answer | `outcome:empty` |
+| The rail switched off (`CROSS_SELL`) | No rail; the card is read alone and no picks are asked for | None: nothing is composed |
 
 ## Risks / Trade-offs
 
@@ -230,8 +250,8 @@ in `@grade10/ui`, with the formatter the listing already uses —
 
 ## Migration Plan
 
-- **Nothing to migrate** — no schema, no flag of its own; the rail is on the
-  card's page, which the site's `store` gate keeps out of every production
+- **Nothing to migrate** — no schema; the one switch, `CROSS_SELL`, is code
+  and on; the rail is on the card's page, which the site's `store` gate keeps out of every production
   build until the shop opens
   ([Where It Is Open](../../../docs/prds/products/grade10-site/store/index.md#where-it-is-open)),
   and `related` rides a read only that page asks for, as the listing's does.

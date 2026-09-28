@@ -43,6 +43,7 @@ export const Default: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(growsOnHover(photo(canvasElement))).toBe(true);
     expect(canvas.queryByRole("button", { name: /wishlist/i })).toBeNull();
     expect(canvas.queryByText("SALE")).not.toBeInTheDocument();
     expect(canvas.queryByText("Pokémon")).toBeNull();
@@ -64,15 +65,57 @@ export const OnSale: Story = {
   },
 };
 
+/** The tile's photo, inside its well. */
+function photo(canvasElement: HTMLElement) {
+  return canvasElement.querySelector(
+    '[data-slot="product-card-image-well"] img',
+  ) as HTMLImageElement;
+}
+
+/** Whether the photo grows on hover: the transition that scales it is on. */
+const growsOnHover = (img: HTMLImageElement) =>
+  getComputedStyle(img).transitionProperty.includes("scale");
+
+/**
+ * Presses a link with a modifier key held, or none, and says whether the
+ * press's default was prevented by then. The listener runs after the tile's
+ * own handler, then stops the story's frame from following the link.
+ */
+async function pressLink(
+  link: HTMLElement,
+  modifier?: "Control" | "Meta" | "Shift" | "Alt",
+) {
+  let prevented: boolean | undefined;
+  window.addEventListener(
+    "click",
+    (event) => {
+      prevented = event.defaultPrevented;
+      event.preventDefault();
+    },
+    { once: true },
+  );
+  /* One session, so the key held down is still down when the link is
+     pressed. */
+  const user = userEvent.setup();
+  if (modifier) await user.keyboard(`{${modifier}>}`);
+  await user.click(link);
+  if (modifier) await user.keyboard(`{/${modifier}}`);
+  return prevented;
+}
+
 /** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert where
- * the surface sells. */
+ * the surface sells, address or not: no link, no button, and the dim photo
+ * takes no hover. */
 export const SoldOut: Story = {
-  args: { soldOut: true },
+  args: { soldOut: true, href: "/store/products/abyss-eye-booster-box" },
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(copy.soldOut)).toBeVisible();
     expect(canvas.queryAllByRole("button")).toHaveLength(0);
+    expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    expect(getComputedStyle(photo(canvasElement)).opacity).toBe("0.5");
+    expect(growsOnHover(photo(canvasElement))).toBe(false);
   },
 };
 
@@ -288,9 +331,10 @@ export const SoldOutWithRemainingCount: Story = {
 
 /** shared-ui-store-product-listing-SC-91: a sold-out tile still opens where
  * an activation handler is supplied and no cart handler is — a surface that
- * carries the shopper on rather than selling. The suite's
- * grade10-site-store-cross-sell-US1-TC6-1 credits this story with a sold-out
- * pick's place, its words and its activation. */
+ * carries the shopper on rather than selling. Its dim photo grows on hover
+ * like an available one, and it takes the keyboard's focus (Q50). The
+ * suite's grade10-site-store-cross-sell-US1-TC6-1 credits this story with a
+ * sold-out pick's place, its words and its activation. */
 export const SoldOutOpensWhereNothingSells: Story = {
   args: {
     soldOut: true,
@@ -307,9 +351,66 @@ export const SoldOutOpensWhereNothingSells: Story = {
     const controls = canvas.getAllByRole("button", { name: defaults.name });
     expect(controls).toHaveLength(2);
     const [photoWell, nameControl] = controls;
+    await userEvent.tab();
+    expect(photoWell).toHaveFocus();
+    expect(getComputedStyle(photo(canvasElement)).opacity).toBe("0.5");
+    expect(growsOnHover(photo(canvasElement))).toBe(true);
     await userEvent.click(photoWell);
     await userEvent.click(nameControl);
     expect(args.onClick).toHaveBeenCalledTimes(2);
+  },
+};
+
+/** shared-ui-store-product-listing-SC-93: a tile given its product's
+ * address is a link to it, photo and name alike. A plain press is reported
+ * and the link's own navigation gives way to it; a press with a modifier key
+ * on either link is the browser's and reports nothing. */
+export const OpensAsALink: Story = {
+  args: {
+    href: "/store/products/abyss-eye-booster-box",
+    onClick: fn(),
+    onCartQuantityChange: undefined,
+  },
+  decorators: well,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const links = canvas.getAllByRole("link", { name: defaults.name });
+    expect(links).toHaveLength(2);
+    for (const link of links) {
+      expect(link).toHaveAttribute("href", args.href);
+    }
+    expect(canvas.queryAllByRole("button")).toHaveLength(0);
+
+    for (const link of links) {
+      for (const modifier of ["Control", "Meta", "Shift", "Alt"] as const) {
+        expect(await pressLink(link, modifier)).toBe(false);
+      }
+    }
+    expect(args.onClick).not.toHaveBeenCalled();
+
+    expect(await pressLink(links[1])).toBe(true);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** A sold-out tile given its address on a surface that does not sell: both
+ * links open it, and its dim photo grows on hover like an available one. */
+export const SoldOutOpensAsALink: Story = {
+  args: {
+    soldOut: true,
+    href: "/store/products/abyss-eye-booster-box",
+    onClick: fn(),
+    onCartQuantityChange: undefined,
+  },
+  decorators: well,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const links = canvas.getAllByRole("link", { name: defaults.name });
+    expect(links).toHaveLength(2);
+    expect(getComputedStyle(photo(canvasElement)).opacity).toBe("0.5");
+    expect(growsOnHover(photo(canvasElement))).toBe(true);
+    await userEvent.click(links[0]);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };
 

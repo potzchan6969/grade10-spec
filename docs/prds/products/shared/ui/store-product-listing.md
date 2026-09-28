@@ -17,6 +17,10 @@ and load more as the shopper scrolls.
 does too, the same way the photo does; a sold-out tile’s name stays inert
 where the tile sells.
 
+🚧 **A link** — a tile given its product's page is a link to it: it can open
+in a new tab, and its address can be copied —
+[You May Also Like](/p/grade10-site/store/cross-sell)'s tiles
+
 🚧 **Opens where it does not sell** — on a surface that draws no cart control,
 a sold-out tile still opens its product, sold-out treatment and all —
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
@@ -100,11 +104,11 @@ The tile reports the quantity change and the application updates the cart.
 The surface displays what a consuming application supplies and decides none of
 it. Two things it has always done were missing from the map above it, and are
 recorded here rather than quietly folded into a group that does not mean them.
-A third row records a decision about the tile that no change carries yet.
+A third row records a decision about the tile.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Responsive layout | Open | The list answers the width it is given, and has since it was written, but no part of the feature set said so. Named as its own part of the map. Confirm that is where it belongs, or fold it somewhere that already means it. | Product |
 | Load more | Open | Reaching the end of the catalogue and waiting for the next products are reported like every other change, and were likewise unmapped. Named as its own part. Same question. | Product |
-| Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. Today a tile opens only once the page is live, and carries no address. Built in the listing's own round. | Product |
+| Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round. | Product |
 :::

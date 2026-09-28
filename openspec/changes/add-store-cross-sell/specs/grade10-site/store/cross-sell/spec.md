@@ -8,7 +8,7 @@ what fills the rail, in what order, and when it shows nothing.
 - The rail
   - Place and heading: under the card, headed You may also like, in the page's response
   - Order: the picks first in the stock keeper's order, then similar cards, up to six
-  - Opens the card: a tile opens its card's own page; nothing in the rail adds to the cart
+  - Opens the card: a card in the rail is a link to its own page; nothing in the rail adds to the cart
   - Nothing to show: no rail and no space where there are no picks and no similar cards
   - Never itself: the card being read is never in its own rail
 - Picks
@@ -23,6 +23,7 @@ what fills the rail, in what order, and when it shows nothing.
   - Moves with the catalogue: appears and leaves as the store's copy of the catalogue moves
 - Rail block
   - One export: the rail composes the tiles it is given, with the heading, and draws no cart control
+  - Named region: the rail is a region named by its heading
 
 ## ADDED Requirements
 
@@ -107,6 +108,8 @@ nothing that adds to the cart.
 
 - **Opens the card** — activating a card in the rail lands the collector on
   that card's own page, reading that card.
+- **A link** — each card in the rail is a link to that card's own page, in
+  the page's response.
 - **No cart control** — no card in the rail offers a control that adds to the
   cart, whether or not it is for sale.
 - **Buying is on the card's page** — adding is done on the page the rail
@@ -118,6 +121,13 @@ nothing that adds to the cart.
 - **GIVEN** a collector reading a card with a rail under it
 - **WHEN** they open a card in the rail
 - **THEN** they are on that card's own page, reading that card
+
+#### Scenario: grade10-site-store-cross-sell-SC-33 - A card in the rail is a link to its page
+**Serves:** grade10-site-store-cross-sell-US-01 - the collector opens the next card the way they open any link, before the page's scripts run
+
+- **GIVEN** a card with cards to show under it
+- **WHEN** its page is fetched and no script runs
+- **THEN** each card in the rail is a link to that card's own page
 
 #### Scenario: grade10-site-store-cross-sell-SC-08 - Nothing in the rail adds to the cart
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector buys on the card's own page, not from under another card
@@ -137,6 +147,9 @@ SHALL leave no space for one.
   missing something.
 - **A rail the site cannot compose** — where the site cannot compose the rail,
   the card's page answers whole and shows no rail, as with nothing to show.
+- **Switched off** — where the store has switched the rail off for its brand
+  and environment, every card's page answers whole and shows no rail, as with
+  nothing to show.
 
 #### Scenario: grade10-site-store-cross-sell-SC-09 - Nothing to show, nothing drawn
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector reads a card whose page ends with the card
@@ -150,6 +163,15 @@ SHALL leave no space for one.
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for
 
 - **GIVEN** a card the site cannot compose a rail for
+- **WHEN** a collector opens its page
+- **THEN** the card's page answers whole
+- **AND** no rail, no heading and no space are under the card
+
+#### Scenario: grade10-site-store-cross-sell-SC-34 - The rail switched off
+**Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for while the store has the rail off
+
+- **GIVEN** the store has switched the rail off
+- **AND** a card with picks and cards like it
 - **WHEN** a collector opens its page
 - **THEN** the card's page answers whole
 - **AND** no rail, no heading and no space are under the card
@@ -391,17 +413,20 @@ The shared UI package SHALL export, from its public entry,
 
 - **What it composes** — `StoreProductRelatedRail` draws the heading with
   `StoreSectionHeader` and one `ProductCard` per card it is given, in the order
-  given, and draws no cart control on any of them.
+  given, passing each card's address to its tile, and draws no cart control on
+  any of them.
+- **A named region** — the rail is a region named by its heading, so a reader
+  reaches it by that name.
 - **Words through copy** — it takes the words it renders in a single `copy`
   prop of its own copy type, and each card's own words with that card; it
   passes no browse-all word and no cart word.
 - **Nothing of its own** — it takes the cards and their order as given: it
   reads no catalogue, cuts no list, orders nothing and decides nothing about
   what a card is worth showing.
-- **What the tiles owe it** — a heading that needs no browse label and a
-  sold-out tile that still opens are `shared/ui/store-home`'s and
-  `shared/ui/store-product-listing`'s rules, carried by this change's deltas on
-  them.
+- **What the tiles owe it** — a heading that needs no browse label, a
+  sold-out tile that still opens and a tile given its address that is a link
+  to it are `shared/ui/store-home`'s and `shared/ui/store-product-listing`'s
+  rules, carried by this change's deltas on them.
 
 #### Scenario: grade10-site-store-cross-sell-SC-25 - An application imports the surface
 **Serves:** Rail block - an application builds the section under a card from the package rather than its own copy
@@ -413,7 +438,8 @@ The shared UI package SHALL export, from its public entry,
 #### Scenario: grade10-site-store-cross-sell-SC-26 - The rail draws what it is given, and sells nothing
 **Serves:** Rail block - the page decides the cards, the block draws them
 
-- **GIVEN** `StoreProductRelatedRail` rendered with a heading and seven cards, one of them sold out
+- **GIVEN** `StoreProductRelatedRail` rendered with a heading and seven cards, each with its address, one of them sold out
 - **WHEN** it renders
-- **THEN** seven tiles appear in the order given, the sold-out one with its treatment
+- **THEN** a region named by the heading holds seven tiles in the order given, the sold-out one with its treatment
+- **AND** each tile is a link to its card's address
 - **AND** no tile offers a cart control, and no browse-all link is drawn under the heading

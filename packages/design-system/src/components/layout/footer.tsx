@@ -123,7 +123,9 @@ function Footer({
             {logo}
           </a>
           {copy.description ? (
-            <p className="text-xs text-primary-foreground">{copy.description}</p>
+            <p className="text-xs text-primary-foreground">
+              {copy.description}
+            </p>
           ) : null}
           <p className="text-xs text-primary-foreground">{copy.attribution}</p>
           {socialLinks.length > 0 ? (
