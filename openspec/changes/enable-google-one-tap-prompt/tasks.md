@@ -23,7 +23,7 @@ Needs group 1 landed. Independent of group 2 — claim and land in parallel.
 
 ## 4. PRD (grade10-spec) (owner: @sean)
 
-- [x] 4.1 Confirm `docs/prds/products/shared/auth/sign-in.md`'s `Google One Tap` section and its three `Google One Tap …` `Product decisions` rows (already written landing this change) still match the landed requirement.
+- [x] 4.1 Confirm `docs/prds/products/shared/auth/sign-in.md`'s `Google One Tap` section and its four `Google One Tap …` `Product decisions` rows (already written landing this change) still match the landed requirement.
 - [x] 4.2 Verify: `pnpm check:manual`
 
 ## 5. The walk (grade10) (owner: @sean)
