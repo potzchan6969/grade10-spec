@@ -392,7 +392,7 @@ a vault case, withdrawn, or paid out.
 #### Scenario: grade10-site-grading-counter-documents-SC-21 - The receipt prints what was paid, refunded and paid out
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector reading the money on the paper before signing for the cards
 
-- **GIVEN** a collection settling an upcharge, refunding an ungraded card's fee and paying out a card that did not come back
+- **GIVEN** a collection settling an upcharge, refunding the fee of a card withdrawn before its batch closed, and paying out a card that did not come back
 - **WHEN** the hand-back receipt is rendered
 - **THEN** it prints what was paid, what was refunded and what was paid out, each with how it moved
 
