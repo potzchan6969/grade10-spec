@@ -38,7 +38,7 @@ export const Cancelled: Story = {
     ).not.toBeNull();
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Order Progress")).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
@@ -71,7 +71,7 @@ export const Refunded: Story = {
     ).not.toBeNull();
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Refunded")).toBeVisible();
-    expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Order Progress")).not.toBeInTheDocument();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();

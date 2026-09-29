@@ -36,7 +36,7 @@ import {
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   REVEAL_HIDDEN_CLASS,
   REVEAL_REDUCED_MOTION_CLASS,
@@ -547,9 +547,6 @@ function LotCard({
         <Text className="tabular-nums" size="sm" weight="medium">
           Winning bid: {content.winningBid}
         </Text>
-        <p className="text-sm leading-5 text-secondary-foreground">
-          {content.endedAt}
-        </p>
       </VStack>
     </>
   );
@@ -788,13 +785,43 @@ function OrderSummary({
 
 function WinnerProgressCard({
   steps,
-  trackLabel,
-  onTrack,
+  trackingCode,
+  trackingHref,
 }: {
   steps: WinnerProgressStep[];
-  trackLabel?: string | null;
-  onTrack?: () => void;
+  /** Tracking id as an external link with arrow, when present. */
+  trackingCode?: string | null;
+  trackingHref?: string | null;
 }) {
+  const railRef = useRef<HTMLDivElement>(null);
+  const currentKey = steps.find((step) => step.state === "current")?.label;
+
+  useLayoutEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    function scrollCurrentIntoView() {
+      // Equal-flex layout at sm+ — no horizontal overflow to correct.
+      if (window.matchMedia("(min-width: 640px)").matches) return;
+      const current = rail.querySelector<HTMLElement>(
+        '[data-slot="step"][data-state="progress"]',
+      );
+      if (!current) return;
+      const railRect = rail.getBoundingClientRect();
+      const stepRect = current.getBoundingClientRect();
+      const delta =
+        stepRect.left +
+        stepRect.width / 2 -
+        (railRect.left + railRect.width / 2);
+      rail.scrollLeft += delta;
+    }
+
+    scrollCurrentIntoView();
+    const mq = window.matchMedia("(min-width: 640px)");
+    mq.addEventListener("change", scrollCurrentIntoView);
+    return () => mq.removeEventListener("change", scrollCurrentIntoView);
+  }, [currentKey]);
+
   return (
     <div className="w-full" data-slot="winner-order-progress">
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
@@ -804,29 +831,36 @@ function WinnerProgressCard({
           vAlign="center"
         >
           <h3 className="min-w-0 text-base leading-6 font-medium text-foreground">
-            Order progress
+            Order Progress
           </h3>
-          {trackLabel && onTrack ? (
-            <Button
-              className="shrink-0"
-              onClick={onTrack}
-              size="md"
+          {trackingCode && trackingHref ? (
+            <Link
+              className="min-w-0 shrink tabular-nums"
+              href={trackingHref}
+              rel="noopener noreferrer"
+              size="sm"
+              target="_blank"
               trailing={<ArrowUpRight aria-hidden size={14} weight="bold" />}
-              variant="outline"
+              variant="secondary"
             >
-              {trackLabel}
-            </Button>
+              {trackingCode}
+            </Link>
           ) : null}
         </HStack>
         {/*
           Five nowrap labels cannot share 320px without colliding. Keep a
           horizontal scroll rail on small viewports; restore equal flex at sm+.
+          Mobile column min-width fits “Completed” and date subtext without
+          clipping the label. Scroll the current step into the rail on open.
         */}
-        <div className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div
+          className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          ref={railRef}
+        >
           <Stepper className="min-w-max sm:min-w-0 sm:w-full">
             {steps.map((step, index) => (
               <Step
-                className="w-[4.75rem] flex-none basis-[4.75rem] sm:w-auto sm:min-w-0 sm:flex-1 sm:basis-0"
+                className="w-[7.5rem] min-w-[7.5rem] flex-none basis-[7.5rem] sm:w-auto sm:min-w-0 sm:flex-1 sm:basis-0"
                 description={step.description}
                 key={step.label}
                 label={step.label}
@@ -1176,8 +1210,6 @@ function WinnerOrderPage({
       <SiteHeader {...AUCTION_SITE_HEADER} />
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 pt-6 pb-16 sm:gap-12 sm:px-8 sm:pt-8">
         <Breadcrumbs>
-          <BreadcrumbItem href="#account">Account</BreadcrumbItem>
-          <BreadcrumbSeparator />
           <BreadcrumbItem href={MY_AUCTIONS_PAGE_HREF}>
             My Auctions
           </BreadcrumbItem>
@@ -1209,17 +1241,9 @@ function WinnerOrderPage({
                 staggerIndex={mainStaggerIndex}
               >
                 <WinnerProgressCard
-                  onTrack={
-                    content.primaryCta === "Track shipment"
-                      ? handlePrimaryAction
-                      : undefined
-                  }
                   steps={progress}
-                  trackLabel={
-                    content.primaryCta === "Track shipment"
-                      ? content.primaryCta
-                      : null
-                  }
+                  trackingCode={content.trackingCode}
+                  trackingHref={content.trackingHref}
                 />
               </RevealGroup>
             ) : null}
@@ -1256,12 +1280,6 @@ function WinnerOrderPage({
                     status={content.outcomeAlert.status}
                     title={content.outcomeAlert.title}
                   />
-                ) : null}
-
-                {content.secondaryNote && content.status === "shipped" ? (
-                  <Text size="sm" tone="secondary">
-                    {content.secondaryNote}
-                  </Text>
                 ) : null}
               </VStack>
             </RevealGroup>

@@ -75,6 +75,10 @@ export type WinnerOrderContent = {
   overdue?: boolean;
   primaryCta: string | null;
   secondaryNote?: string;
+  /** Carrier tracking id — linked in Order Progress when shipped. */
+  trackingCode?: string;
+  /** External carrier tracking URL for `trackingCode`. */
+  trackingHref?: string;
   progressDates?: WinnerOrderProgressDates;
   /**
    * Inline Alert under the lot for a cancelled order.
@@ -115,6 +119,13 @@ const LOT = {
   lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
   winningBid: "HK$12,800",
   endedAt: "Ended 17 Sep 2026, 21:30 HKT",
+} as const;
+
+/** Preview SF Express waybill — same id on Shipped and Delivered. */
+const TRACKING = {
+  trackingCode: "SF1234567890",
+  trackingHref:
+    "https://www.sf-express.com/us/en/dynamic_function/waybill/#search/bill-number/SF1234567890",
 } as const;
 
 /** Same collector-facing invoice ID as Email Grade10 / Contact Us. */
@@ -480,11 +491,12 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
         invoiceId: INVOICE_ID,
-        primaryCta: "Track shipment",
+        primaryCta: null,
         progressDates: {
           ...PROGRESS_SHIPPED,
         },
-        secondaryNote: "SF Express · SF1234567890",
+        trackingCode: TRACKING.trackingCode,
+        trackingHref: TRACKING.trackingHref,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
         receipts: [{ label: "Receipt" }],
@@ -501,6 +513,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         progressDates: {
           ...PROGRESS_DELIVERED,
         },
+        trackingCode: TRACKING.trackingCode,
+        trackingHref: TRACKING.trackingHref,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
         receipts: [{ label: "Receipt" }],
