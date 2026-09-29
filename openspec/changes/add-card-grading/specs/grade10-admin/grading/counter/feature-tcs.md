@@ -2473,7 +2473,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Paid at hand-in shows 240000 minor units (HKD 2,400.00) with its POS reference.
+* Paid at hand-in shows 240000 minor units (HKD 2,400.00) over four lines, each naming the till's reference and its card.
 * To settle shows the upcharge and storage lines separately, totalling 72000 minor units (HKD 720.00).
 
 ### grade10-admin-grading-counter-US10-TC3-1: The till and the record say the same figure
@@ -2531,7 +2531,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The header shows the summary, declared in total, the upcharge to settle, the ungraded card, and the batch it is in.
+* The header shows the summary, the status word, declared in total, the upcharge to settle, the ungraded card, and the batch it is in.
 
 ### grade10-admin-grading-counter-US10-TC5-1: The collector's email, phone and click-to-chat templates are reachable from the header
 
@@ -2681,8 +2681,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission is seeded at `checked_in`, as *Seeding a submission* says, so its agreement is sealed.
-* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it, and the shop's iPad is at the desk.
+* A submission is seeded at `collected`, as *Seeding a submission* says, so its agreement, its intake receipt and its hand-back receipt are sealed.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, and the shop's iPad is at the desk.
 
 **Steps:**
 
@@ -2692,7 +2692,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The tab lists the document with its fingerprint.
+* The tab lists the agreement, the intake receipt and the hand-back receipt, each with its fingerprint.
 * Showing it again reopens the same sealed copy, not a new mint.
 
 ### grade10-admin-grading-counter-US11-TC4-1: A sealed document's link is copied instead of shown on iPad
@@ -2781,6 +2781,8 @@ Runs once per row of **Test data**.
 * The tab shows nothing sealed yet.
 
 ### grade10-admin-grading-counter-US11-TC7-1: A failed send is flagged with its reason and Send again offered
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
