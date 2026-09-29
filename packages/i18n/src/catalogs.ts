@@ -21,6 +21,7 @@
  */
 
 import grade10EnAuctionListing from "../messages/grade10/en/auctionListing.json";
+import grade10EnAuctionOrders from "../messages/grade10/en/auctionOrders.json";
 import grade10EnChrome from "../messages/grade10/en/chrome.json";
 import grade10EnEmail from "../messages/grade10/en/email.json";
 import grade10EnHead from "../messages/grade10/en/head.json";
@@ -34,6 +35,7 @@ import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
 import grade10EnVault from "../messages/grade10/en/vault.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
+import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
 import grade10ZhHansEmail from "../messages/grade10/zh-Hans/email.json";
 import grade10ZhHansHead from "../messages/grade10/zh-Hans/head.json";
@@ -47,6 +49,7 @@ import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
 import grade10ZhHansVault from "../messages/grade10/zh-Hans/vault.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
+import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
 import grade10ZhHantEmail from "../messages/grade10/zh-Hant/email.json";
 import grade10ZhHantHead from "../messages/grade10/zh-Hant/head.json";
@@ -288,6 +291,7 @@ export const brandCatalogs = {
   grade10: {
     en: {
       auctionListing: grade10EnAuctionListing,
+      auctionOrders: grade10EnAuctionOrders,
       chrome: grade10EnChrome,
       email: grade10EnEmail,
       head: grade10EnHead,
@@ -303,6 +307,7 @@ export const brandCatalogs = {
     },
     "zh-Hant": {
       auctionListing: grade10ZhHantAuctionListing,
+      auctionOrders: grade10ZhHantAuctionOrders,
       chrome: grade10ZhHantChrome,
       email: grade10ZhHantEmail,
       head: grade10ZhHantHead,
@@ -318,6 +323,7 @@ export const brandCatalogs = {
     },
     "zh-Hans": {
       auctionListing: grade10ZhHansAuctionListing,
+      auctionOrders: grade10ZhHansAuctionOrders,
       chrome: grade10ZhHansChrome,
       email: grade10ZhHansEmail,
       head: grade10ZhHansHead,
