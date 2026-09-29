@@ -117,8 +117,9 @@ or an instant through `formatLocalTime` in the zone given.
   one settings record, so a sheet change cannot make them disagree
 - **`GradingCardList`** — the editable planning list: `cards` (id, name,
   set line, matched or kept as typed, declared value or none, reference
-  sales or none, minimum grade or none), `cap` (the count and the level it
-  closes), `search` as `AsyncState` of matches, `onSearch`, `onAdd`,
+  sales or none, minimum grade or none), the reference note under a matched
+  card's sales, `cap` (the count and the level it closes), `search` as
+  `AsyncState` of matches, `onSearch`, `onAdd`,
   `onEdit`, `onRemove`, `onDeclare`, `onMinimumGrade`, `onPaste`; `Card` per
   card with `Autocomplete`, `NumberInput`, `CheckboxListInput` and `Text`
 - **`GradingCardRecord`** — the read-only list after hand-in: `cards` (id,
@@ -129,10 +130,11 @@ or an instant through `formatLocalTime` in the zone given.
 - **`GradingPasteSheet`** — `open`, `result` as `AsyncState` of the four
   counts with their lines (matched, kept as typed, without a value, above the
   ceiling) and the skipped count, `bulkNotice` or none, `onChange`, `onAdd`,
-  `onClose`; a `Drawer` with a `Textarea`, the line counter and a `List` of
-  result rows
+  `onClose`; a `Drawer` with a `Textarea`, the line counter reading the
+  matching word while the result loads, and a `List` of result rows
 - **`GradingLevelPicker`** — `graders`, `selectedGraderId`, `levels` (each
-  open, or closed with the card or the count that closes it), `selectedLevelId`,
+  open with the open line filled with its ceiling and its fee a card, or
+  closed with the card or the count that closes it), `selectedLevelId`,
   `highestDeclared`, `estimate` (cards × fee, the cover line or none, the
   total, the weeks, the includes line or none, the footnote or none) or
   none, `onSelectGrader`, `onSelectLevel`; a `SegmentedControl`, a
@@ -145,7 +147,9 @@ or an instant through `formatLocalTime` in the zone given.
   none, `goodToKnow` (five), `consented`, `pending`, `error`, `onEdit`,
   `onConsent`, `onBook`, `onSaveForLater`; `consented`, `onConsent` and
   `onBook` are given together or not at all, and left out the review offers neither the tick nor
-  Book, its save act reading the caller's words, as the editor's Save changes
+  Book, its save act reading the caller's words, as the editor's Save changes;
+  `error` withdraws the act it refused, Book where the review books and the
+  save where it only saves
 - **`GradingStatusRail`** — `stage` (one of Planned, Booked, Handed in,
   Sent, Graded, Back, Home), `ended` — the word that says the ending — or
   none; a `Stepper` of seven `Step`s, the stage `progress`, earlier
@@ -279,44 +283,44 @@ Every key below is answered in `shared/` for every language it speaks, in
 the new `grading` namespace; the words are not written here.
 
 - **`grading.home.*`** — the lead, howItWorks (four), priceSheet (lead,
-  aboveTop, bulkLine, columns, coverLine), start, bookWithoutList, signIn,
-  submissions (title, empty, open, closed), lostLink
+  aboveTop, bulkLine, table), start, bookWithoutList, signIn,
+  submissions (title, empty), lostLink
 - **`grading.plan.*`** — step (four), aboutYou (fields, signedInLine,
   emailLine), card (matched, keptAsTyped, edit, remove, declaredValue,
   referenceSales, referenceNote, minimumGrade, noValue, aboveCeiling,
-  referenceUnavailable), add, paste, capNotice, overTwenty, overCap,
+  referenceUnavailable), paste, capNotice, overTwenty, overCap,
   continueWithCount, finishLater, finishLaterEmail; pasteSheet (lead,
-  yourList, linesRead, matched, keptAsTyped, withoutValue, aboveCeiling,
-  skipped, bulkNotice, add, goBack); service (lead, highestDeclared, grader,
-  level (open, closedByValue, closedByCount, bulkOnly, allClosed, coverLine,
-  backIn), estimate (title, perCard, coverPerCard, paidAtCounter, includes),
-  upchargeNotice); review (title, header, backIn, edit, schedule, totals
-  (declared, fee, cover), warning (line, nowLine), goodToKnow (five),
-  consent, book, saveForLater, saveChanges, expired)
+  yourList, labels, matching, matched, keptAsTyped, withoutValue,
+  aboveCeiling, skipped, bulkNotice, add, goBack); service (highestDeclaredLabel,
+  grader, level (open, closedByValue, closedByCount, bulkOnly, allClosed,
+  coverLine, backIn), estimate (title, perCard, coverPerCard, paidAtCounter,
+  includes), upchargeNotice); review (title, header, backIn, summary, edit,
+  schedule, totals (declared, fee, cover), warning (line, nowLine),
+  goodToKnow (five), consent, book, saveForLater, saveChanges, expired,
+  noEmail, noCards, withoutValue)
 - **`grading.dropoff.*`** — lead, bulkLead, shop (durations, moreShops,
   joinsExisting), batchLine (before, after, estimateFrom), moveOrCancel,
   book, joined, resized, levelRequired; booked (title, emailLine, calendar, move, cancel,
   beforeYouCome (four), openTheList, vaultLine, bulkDuration)
 - **`grading.submission.*`** — status (ten words), chip (waitingOnYou,
   withUs, withGrader, runningLate, dropoff, collected, onTheirWayBack),
-  stage (seven), lead per status, outcome (fourteen badges), exception
-  (each fact's line), visit (booked, missed, bookAgain), edit, levelNeeded, cancel (line,
-  dialogTitle, dialogBody, confirm, back), cancelled, expired, paid,
-  withdraw (title, body, whatsapp, closed), grader (order, readMostDays,
-  stages, nextStage, runningLate), grades (headline, settle (title, body,
-  payAtCounter, nothingToDo, reference), ungraded (title, body, codesLink),
-  aboutGrades), pickup (title, items, where, open, toSettle, bring
-  (aboveThreshold, named, none)), named (lead, field, placeholder, save,
-  badge, namedAt, line, change, remove), vaultIt (title, body, howItWorks),
-  money (every line label, includes, footnote), ladder (readyLabel,
+  stage (seven), lead per status, outcome (fourteen badges), visit (missed,
+  bookAgain), edit, levelNeeded, cancel (line, dialogTitle, dialogBody,
+  confirm, back), actRefused (a line per refusal a collector can meet),
+  withdraw (title, body, whatsapp), grader (order, readMostDays, stages,
+  nextStage, runningLate), grades (headline, settle (title), ungraded (body),
+  aboutGrades, cards (the labels, noReason)), pickup (title, items, where,
+  open, toSettle, bring (aboveThreshold, named, none)), named (lead, field,
+  placeholder, save, badge, line, change, remove, refused), vaultIt (title,
+  body, howItWorks), money (every line label, footnote), ladder (readyLabel,
   cardsHeldLabel, passedLabel, postedLabel, reminders, storage, notice,
   noticeLine, afterNotice, closing), collected (lead, record, lookUp,
-  photographs, documents, whatNext (vault, auction, yourData)), history
-  (title, events), notFound, loading, error
+  whatNext (vault, auction, yourData)), history (title, events), notFound,
+  loading, error
 - **`grading.ceremony.*`** — the `RefusalWords` entry per
   `DocSignFailureCode`, yourName (label, hint, hintNamed), postalAddress
-  (label, hint), sign, decline, afterAgreement, afterReceipt, sealed
-  (download, emailed), declined
+  (label, hint), agreeLabel on the e-sign disclosure, sign, decline,
+  declined
 - **`grading.console.*`** — the WhatsApp templates (seven), and nothing
   else: the console's own words stay the console's English
 
@@ -349,9 +353,9 @@ Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-s
 | Rail, the cards | `WizardRail`: The cards `progress`, The service and Book `upcoming` | `grade10-site-grading-submission-plan-SC-08` |
 | About you, signed in (`G02`) | name, email, phone prefilled; the change-for-this-submission line | `grade10-site-grading-submission-plan-SC-09` |
 | About you, signed out | empty fields; the emailed-link line under the email | `grade10-site-grading-submission-plan-SC-09` |
-| Empty list | no card; Add a card and Paste a list; Continue disabled | `shared-ui-grading-submission-SC-18` |
+| Empty list | no card: the empty line naming both ways to start, the card search and Paste a list; Continue disabled | `shared-ui-grading-submission-SC-18` |
 | Card search | `Autocomplete` over the reference as the name is typed; a miss keeps the name | `shared-ui-grading-submission-SC-14` |
-| Card, matched (`G02`) | the set · number · matched line; Edit and remove; the declared value; the three reference sales with the reference note | `shared-ui-grading-submission-SC-13` |
+| Card, matched (`G02`) | the set · number · matched line; Edit and remove; the declared value; the three reference sales with the reference note | `shared-ui-grading-submission-SC-13`, `shared-ui-grading-submission-SC-76` |
 | Card, kept as typed | the name as typed; no reference row | `shared-ui-grading-submission-SC-14` |
 | Card, no value | the declared value asked for on the card; Continue disabled naming the count | `shared-ui-grading-submission-SC-15` |
 | Card, minimum grade | the caption: only encapsulate at PSA 9 or above, the fee applies either way | `shared-ui-grading-submission-SC-13` |
@@ -373,7 +377,7 @@ Stories `grading-submission-gradingpastesheet--`.
 | --- | --- | --- |
 | Open (`G17`) | `Drawer`: the lead, Your list `Textarea`, the lines-read counter; Add n cards, Go back | `shared-ui-grading-submission-SC-20` |
 | Nothing read | the empty `Textarea`; Add disabled | `shared-ui-grading-submission-SC-20` |
-| Matching | the counter reads matching; Add disabled | `shared-ui-grading-submission-SC-20` |
+| Matching | the counter reads matching; Add disabled | `shared-ui-grading-submission-SC-20`, `shared-ui-grading-submission-SC-77` |
 | Matched | the row with the count and the references-show line | `shared-ui-grading-submission-SC-21` |
 | Kept as typed | the row naming each line kept | `shared-ui-grading-submission-SC-21` |
 | Without a value | the row naming each line; the list asks for it before Continue | `shared-ui-grading-submission-SC-21` |
@@ -389,7 +393,7 @@ Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish-later row
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Grader (`G03`) | `SegmentedControl` PSA · CGC · BGS; the highest-declared line | `shared-ui-grading-submission-SC-60` |
-| Level open | `RadioCard`: the name, value up to, fee a card, back in about | `shared-ui-grading-submission-SC-06` |
+| Level open | `RadioCard`: the name; value up to and fee a card on the open line; back in about | `shared-ui-grading-submission-SC-06`, `shared-ui-grading-submission-SC-78` |
 | Level open, cover | the cover line on Express and Super Express | `shared-ui-grading-submission-SC-06` |
 | Level closed by a value | greyed: Not available, the card declared above the ceiling | `shared-ui-grading-submission-SC-07` |
 | Level closed by a count | Bulk greyed: Not available, Bulk starts at 20 and you have n | `shared-ui-grading-submission-SC-08` |
@@ -420,6 +424,7 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 | Booking | Book pending; both buttons disabled | `shared-ui-grading-submission-SC-27` |
 | Saved for later | the plan kept; its page opens at Planned, on the picker, asking for the statement first where the plan was kept unticked | `grade10-site-grading-submission-plan-SC-58` |
 | Plan expired meanwhile | the refusal by name; Start again | `shared-ui-grading-submission-SC-28` |
+| Refused by name | the refusal in the collector's words beside the act; Book withdrawn, Save and book later still offered | `shared-ui-grading-submission-SC-79` |
 | Kept plan editor | the editor's review: the schedule, the totals and any warning; no statement and no Book; Save changes | `shared-ui-grading-submission-SC-74` |
 | Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-SC-08` |
 
@@ -436,7 +441,7 @@ Stories `grading-plan-plan-wizard--`, the Kept rows.
 | Kept, booked | the same, the grader fixed and a level required on the booked sheet; the email fixed | `grade10-site-grading-dropoff-booking-SC-30` |
 | Kept, warning kept | a card above the ceiling still warned, its reference asked again | `grade10-site-grading-submission-plan-SC-32` |
 | Saved | the same submission page opens; no second plan | `grade10-site-grading-submission-lifecycle-SC-62` |
-| At the counter | the save refused by name: the counter has the list | `grade10-site-grading-submission-lifecycle-SC-59` |
+| At the counter | the save refused by name: the counter has the list; Save changes withdrawn | `grade10-site-grading-submission-lifecycle-SC-59`, `shared-ui-grading-submission-SC-79` |
 | Kept, closed | an edit link opened once the counter has the list, or on a cancelled or expired list: that status's own words and Back to the submission; no step, no wizard | `grade10-site-grading-submission-lifecycle-SC-59`, `grade10-site-grading-submission-lifecycle-SC-50` |
 
 ### Book the drop-off
@@ -515,14 +520,14 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Batch closed | `WithdrawCard` gone once the batch closed | `grade10-site-grading-submission-lifecycle-SC-16` |
 | With the grader (`G09`) | With the grader · With PSA; the lead; `GraderStagesCard`; Nothing to do; the cards with intake ids; History | `grade10-site-grading-submission-lifecycle-SC-07` |
 | Running late | chip Running late · with PSA; the new date with the stage; the emailed-the-day-we-set-it line | `grade10-site-grading-submission-lifecycle-SC-09` |
-| Grades in (`G10`) | Grades are in · On their way back; the headline; `GradingGradeCards`; `GradingMoneyBlock` with the settle lead; About the ungraded card; About the grades; the cards; History | `grade10-site-grading-submission-lifecycle-SC-12` |
+| Grades in (`G10`) | Grades are in · On their way back; the headline; `GradingGradeCards`, an ungraded card with its code and the grader's note, or the no-reason line where the grader gave none; `GradingMoneyBlock` with the settle lead; About the grades; the cards, the ungraded card's line on its record; History | `grade10-site-grading-submission-lifecycle-SC-12` |
 | Back, being checked | Back at the shop, being checked · With us; the arrived line; nothing to do | `grade10-site-grading-submission-lifecycle-SC-53` |
 | Ready (`G11`) | Ready to collect · Waiting on you; `GradingPickupCard`; `GradingNamedCollector`; `VaultItCard`; the cards; `GradingMoneyBlock`; `GradingUncollectedLadder`; History | `grade10-site-grading-submission-lifecycle-SC-25` |
 | Ready, one card moved up | that card's Moved up a level line with the money it changes; the other three none | `grade10-site-grading-submission-lifecycle-SC-12` |
 | Ready, one card held | the held card's badge with the grader's date; the receipt-names-it line | `grade10-site-grading-submission-lifecycle-SC-14` |
 | Ready, notice posted | `GradingUncollectedLadder` with the reminder rung passed and the notice rung carrying its posting date, the days left of the 30 and the day they end | `grade10-site-grading-submission-lifecycle-SC-36` |
 | Payout reversed | the card back with the reversal line | `grade10-site-grading-submission-lifecycle-SC-43` |
-| Collected (`G12`) | Back with you · Collected <date>; the lead; the graded record with Look up per slab; the slab photographs; `DocumentsList` with the three; `WhatNextCard`; `YourDataLine` | `grade10-site-grading-submission-lifecycle-SC-44` |
+| Collected (`G12`) | Back with you · Collected <date>; the lead; the graded record with Look up and the slab photograph per slab; `GradingMoneyBlock` with the settled line; `DocumentsList` with the three; `WhatNextCard`; `YourDataLine` | `grade10-site-grading-submission-lifecycle-SC-44` |
 | Collected, one card still out | the record with the card held and the second-hand-back line | `grade10-site-grading-submission-lifecycle-SC-46` |
 | Acts by status | only the status's acts on the page; nothing from Sent to Back | `grade10-site-grading-submission-lifecycle-SC-50` |
 | Error | the message in the error tone; the page reads again | **Out of suite:** the view's colocated test |
@@ -588,7 +593,7 @@ Stories `grading-submission-gradingmoneyblock--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Estimate (`G07`) | Fee n × fee = total; Paid: at the counter once checked; Includes; the ungraded and refused footnote | `shared-ui-grading-submission-SC-46` |
+| Estimate (`G07`) | Fee n × fee = total; the includes line, the plan's own sentence; the paid-at-the-counter footnote with the ungraded and refused one | `shared-ui-grading-submission-SC-46` |
 | Estimate with cover | the cover line under the fee | `shared-ui-grading-submission-SC-46` |
 | Paid (`G08`) | Paid: method · instant · POS reference | `shared-ui-grading-submission-SC-50` |
 | Refunded | a refunded line, the way it was paid | `shared-ui-grading-submission-SC-48` |
@@ -610,7 +615,7 @@ Stories `grading-documents-sign-page--`.
 | Pages not viewed | the refusal by name; the document scrolled to the end first | `grade10-site-grading-counter-documents-SC-07` |
 | Name mismatch | the refusal by name against the booking | `grade10-site-grading-counter-documents-SC-04`, `grade10-site-grading-counter-documents-SC-28` |
 | Declined | the declined outcome; nothing paid, nothing signed | `grade10-site-grading-counter-documents-SC-09`, `grade10-site-grading-counter-documents-SC-10` |
-| Sealed | the sealed outcome; the download; then the fee at the till | `grade10-site-grading-counter-documents-SC-25` |
+| Sealed | Signed and sealed; the copies on the submission page and the fingerprint; Download per document | `grade10-site-grading-counter-documents-SC-25` |
 | Link expired | the refusal by name: ask staff for a new link | `grade10-site-grading-counter-documents-SC-08` |
 | Already signed | the refusal by name; the sealed copy on the page | `grade10-site-grading-counter-documents-SC-11` |
 | Receipt, signable (`G15`) | handed back, settled, collected by, where and when; three clauses; the same signing block; the slabs-are-yours footer | `grade10-site-grading-counter-documents-SC-16`, `grade10-site-grading-counter-documents-SC-21` |
@@ -961,8 +966,8 @@ Stories `grading-admin-settings-settings-panel--`.
   cover; the rows above draw both forms
 - **❓ Legal** — the receipt's first clause when a named person collects;
   the row prefills the name and prints the clause as drawn
-- **Drawn, not carried** — `G00-Main`'s disposal step and `G13`'s twelfth
-  exception's disposal line (`decisions.md` Q44), `GA3`'s WhatsApp
+- **Drawn, not carried** — `G00-Main`'s disposal step and `G13`'s exception
+  lines, the twelfth's disposal line among them (`decisions.md` Q44), `GA3`'s WhatsApp
   templates' words, `G06`'s vault cross-sell copy beyond one line, `GA6`'s
   ten-to-fifteen-minutes line, and the console's 2FA strip; the first
   release stops at the notice, and the console's chrome is the console's

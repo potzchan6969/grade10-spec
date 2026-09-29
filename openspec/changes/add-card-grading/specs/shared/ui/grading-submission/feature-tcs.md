@@ -2745,14 +2745,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2781,14 +2783,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2812,14 +2816,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2841,14 +2847,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reviewing before booking
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 

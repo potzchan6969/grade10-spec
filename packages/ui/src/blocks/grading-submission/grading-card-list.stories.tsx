@@ -109,8 +109,7 @@ export const Matched: Story = {
         expect(
           within(reference as HTMLElement)
             .getByText("Sold 28 Apr: HK$3,580")
-            .compareDocumentPosition(note) &
-            Node.DOCUMENT_POSITION_FOLLOWING,
+            .compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING,
         ).toBeTruthy();
         expect(canvas.getAllByText(CARD_LIST_COPY.referenceNote)).toHaveLength(
           1,

@@ -19,7 +19,8 @@ is [Booking Blocks](/p/shared/ui/appointment-booking).
   priced listed with no figure where its price would be
 - 🚧 **`GradingCardList`** — the list a collector edits before hand-in: a
   card matched in the reference or kept as typed, its declared value, its
-  reference sales and a minimum grade; the cap, the count that closes a
+  reference sales with the note that they are a reference, not a valuation,
+  and a minimum grade; the cap, the count that closes a
   level, a card with no value and a card above a ceiling, each named on the
   list; a value is kept in its field until the field is left, and reopened
   from Edit to change it
@@ -36,7 +37,8 @@ is [Booking Blocks](/p/shared/ui/appointment-booking).
   is paid
 - 🚧 **`GradingReview`** — the schedule, the totals, the upcharge warning
   per card with both prices, the five good-to-know lines and the consent tick
-  before booking
+  before booking; a refusal read in the collector's words, with the act it
+  refused withdrawn
 - 🚧 **`GradingStatusRail`** — Planned to Home in seven steps, the stage
   marked; an ended submission stays where it ended
 - 🚧 **`GradingOwnershipChip`** — the status word and whose move it is, as
