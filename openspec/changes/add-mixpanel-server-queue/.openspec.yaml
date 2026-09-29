@@ -4,15 +4,14 @@ hands:
   pm: "@ecchochan"
   tech: "@ecchochan"
   dev: "@ecchochan"
-ui_waived: no collector or admin surface; backend Mixpanel delivery only
-awaiting:
-  specs: 2026-09-29, the requirements and the blind suite are drafted on the
-    branch and land after the tech design
+ui_waived: no collector or admin surface; backend Mixpanel delivery only branch
+  and land after the tech design
 landed_by:
   proposal: ecchochan
   decisions: ecchochan
   user-journeys: ecchochan
   tech-design: ecchochan
+  specs: ecchochan
 reviewed:
   user-journeys: 88b7d170
   tech-design: 54ed4ce9
