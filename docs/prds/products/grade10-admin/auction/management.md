@@ -183,6 +183,7 @@ order.
 | 🚧 Record payment | A bank transfer invoice in Pending Payment or Payment Overdue, or a Partially Paid order | Payment processing |
 | 🚧 Cancel order | Awaiting Setup, Setup Overdue, Preparing Invoice or Payment Overdue | Payment processing |
 | 🚧 Reopen the address form, or record setup | Setup Overdue | Payment processing |
+| 🚧 Change setup | Preparing Invoice | Payment processing |
 | 🚧 Clear flag | Each flagged payment, with a reason | Payment processing |
 | Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
 | 🚧 Dispatch | Processing | Shipment processing |
@@ -381,7 +382,7 @@ Payment settings tab under `/auction`.
 | --- | --- | --- |
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
 | 🚧 Opening Orders, an order and its proof files, and commenting; attaching a proof file takes the grant of its action | `auction:read` - reading | `staff`, `finance`, `treasurer` and `admin` |
-| Sending and reissuing an invoice, recording a payment, checking proof, cancelling, reopening or recording setup | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
+| Sending and reissuing an invoice, recording a payment, checking proof, cancelling, reopening, recording or changing setup | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | 🚧 Clearing a flag, and Payment Settings: the premium minimums and the fee schedule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
 | Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
@@ -405,7 +406,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 
 | Rule | Value |
 | --- | --- |
-| Where | Local, staging, staging-2 and UAT only; never production, whose console carries no Test tab |
+| Where | Local, staging, staging-2 and UAT only; never production or a preview, whose console carries no Test tab |
 | Email | The operator's own address with a `+qa-<code>` tag, checked by Grade10, so every letter lands in their own inbox. The same address makes one test winner; one that holds a verified account is refused |
 | The lot | `Test lot <code>`, a sandbox lot closed through the real close, now or up to 30 days back, so its order and letters are the real ones; never biddable |
 | Sign-in | The ordinary sign-in link, which the console emails to the test address after making it and again on request; opened in a private window, so the operator stays signed in |
@@ -424,7 +425,8 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service)
-- **Test panel** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs seed and drop fixture listings, local dev only
+- **Fixture tabs** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs seed and drop fixture listings, local dev only
+- **Winners** — `trpc/routers/testWinners.ts` on the `testBids` middleware; the Test tab ships only in pre-production builds
 :::
 
 :::detail{title="Test cases" for="qa"}
