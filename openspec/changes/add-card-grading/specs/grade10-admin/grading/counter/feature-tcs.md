@@ -1,7 +1,19 @@
 # grade10-admin/grading/counter Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
+
+## Background
+
+* The stack is a Grade10 dev or isolated end-to-end stack, started so its grading dev settings stand: PSA's five levels (Value: ceiling 390000 minor units, fee 25000; Regular: ceiling 1170000, fee 60000; Express: ceiling 1950000, fee 120000, cover 1.5%; Super Express: ceiling 3900000, fee 240000, cover 1.5%; Bulk: ceiling 150000, fee 18000), the storage fee of 3000 minor units a card a month, the ID glance threshold of 2000000, the safe's declared cap of 999999999, and the clocks as seeded: storage from day 90, reminders on days 30 and 60, the notice on day 180, settlement in 14 days, the batch cut-off Thursday 19:00 `Asia/Hong_Kong`. A case that needs another figure writes it first, as *Writing a money setting* says.
+* admin A and admin B each hold the `staff` role, which carries `grading:read`, `grading:operate` and `grading:approve`, and each is signed in to the console in a browser of their own. A case naming one admin means admin A.
+* The collector of a submission reads it at <grade10 grading submission url>, through the access link its seed answers.
+* *Seeding a submission* — `POST <grade10 api origin>/grading/dev/submissions/seed` with a fresh `seed`, the `status` the case names and, where the case gives them, `arrival` (`booked` or `walk-in`), `level`, `cards` (one declared value per card, in minor units), `appointmentAt` and `readyAt`, all in the past. It walks the submission to that status through the desk's own acts and answers its id, reference, pickup code and batch; its page is <grade10 admin grading submission url> with that id.
+* *Receiving with an exception* — seed the submission at `sent`; on <grade10 admin grading batches url> record on its batch the grader's stage that puts the grades in, then press Arrived; press Receive, enter the manifest and the invoice with a line per card, a card moved up a level on a line at the higher level; scan every card but the one the case names, record that one as the case says (held by the grader, not returned, damaged or returned ungraded), and press Finish receiving.
+* *Writing a money setting* — admin A edits the row on <grade10 admin grading settings url>, gives a reason and asks for approval; admin B presses Approve on the waiting row in their own console. It is written before any submission the figure must reach is seeded, since a submission pins its figures at booking and at signing.
+* *Reading a letter* — `GET <grade10 api origin>/grading/dev/outbox?email=<collector email>` answers the last letter grading sent that address, and 404 where it sent none.
+
+---
 
 ## grade10-admin-grading-counter-US1: Operator opens the shop and sees what every submission waits for
 
@@ -25,20 +37,22 @@
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. The queue holds at least one submission each in Booked, Handed in, With the grader, Ready, and Closed.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* One submission is seeded at each of `booked`, `checked_in`, `sent`, `returned`, `ready`, `collected`, `cancelled` and `expired`, as *Seeding a submission* says, and the tester has noted each reference.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Open Booked.
-3. Open Ready.
-4. Open Closed.
+2. Click Booked.
+3. Click Ready.
+4. Click Closed.
 
 **Expected Results:**
 
-* Step 2 lists only `booked` submissions, with its own count on the view.
-* Step 3 lists only `ready` submissions.
-* Step 4 lists `collected`, `cancelled` and `expired` submissions together, and none of them appears in another view.
+* Step 2 lists the `booked` submission and no other seeded one, with the view's own count.
+* Step 3 lists the `ready` submission and no other seeded one.
+* Step 4 lists the `collected`, `cancelled` and `expired` submissions together, and none of them appears in another view.
 * Every row carries the submission id, the collector, the cards, the grader and level, the status word, the visit, when it was last touched and what it is waiting on.
 
 ### grade10-admin-grading-counter-US1-TC2-1: The Today strip lists the day's drop-offs in slot order
@@ -57,12 +71,14 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. The queue h
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. Two drop-offs fall on the shop's own day, one earlier than the other.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* Two submissions are seeded at `booked`, as *Seeding a submission* says, with `appointmentAt` at two different times earlier on the shop's own day, `Asia/Hong_Kong`.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Read the Today strip.
+2. Read the strip of the day's drop-offs above the rows.
 
 **Expected Results:**
 
@@ -85,18 +101,22 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. Two drop-of
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on the Handed in view. A `checked_in` submission's batch cut-off is today.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* It is Thursday on the shop's own day, `Asia/Hong_Kong`, the batch cut-off's day.
+* A `checked_in` submission sits in a batch whose cut-off is today: handed in at the desk this week, as a walk-in at <grade10 admin grading walk-in url>.
 
 **Steps:**
 
-1. Open the Handed in view.
-2. Read the submission's badge.
-3. Reload the view after the batch has closed past its cut-off.
+1. Click Handed in.
+2. Read the submission's row.
+3. On Friday, with nothing done to the submission, click Handed in again.
+4. Read the same row.
 
 **Expected Results:**
 
 * Step 2 shows the Batch closes today badge.
-* Step 3 no longer shows that badge on the same row, recomputed from the submission's own dates rather than a value somebody has to clear.
+* Step 4 no longer shows that badge on the same row, recomputed from the submission's own dates rather than a value somebody has to clear.
 
 ### grade10-admin-grading-counter-US1-TC4-1: The counter tiles summarise closing, with graders, ready, and to settle
 
@@ -114,7 +134,11 @@ Admin(holds `grading:read`) is on the Handed in view. A `checked_in` submission'
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A batch closes today, some submissions with a grader are past their estimate, some ready submissions are past 30 days uncollected, and one ready submission owes an unpaid upcharge.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>, on a stack holding no submission but those below.
+* A batch at PSA Regular closes at the next cut-off, holding two submissions of one card each, handed in at the desk this week as walk-ins at <grade10 admin grading walk-in url>.
+* Three submissions are with the grader, seeded at `sent` at Express as *Seeding a submission* says, one with `appointmentAt` 30 days back so its batch is past its three-week estimate, two with the default anchors.
+* Four submissions are ready and uncollected: two seeded at `ready`, one with `readyAt` 45 days back and one with the default anchors; and two reached by *Receiving with an exception*, each owing an unpaid upcharge, one card moved from Value to Regular, 35000 minor units (HKD 350.00), and one from Regular to Express, 60000 minor units (HKD 600.00).
 
 **Steps:**
 
@@ -123,10 +147,10 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A batch clo
 
 **Expected Results:**
 
-* The closing tile names the grader and level, the cards, the submissions, and the ship day.
-* The with-graders tile shows the total count and how many are past their estimate.
-* The ready tile shows the total count and how many are past 30 days.
-* The to-settle tile shows the sum and the count of unpaid upcharges.
+* The Batch closing tile names PSA Regular, its 2 cards, its 2 submissions and the day it ships.
+* The With graders tile reads 3, of which 1 is past its estimate.
+* The Ready, uncollected tile reads 4, of which 1 is past 30 days.
+* The To settle tile reads 95000 minor units (HKD 950.00), 35000 plus 60000, over 2 submissions.
 
 ### grade10-admin-grading-counter-US1-TC5-1: A view with no submissions shows its empty state
 
@@ -144,12 +168,14 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A batch clo
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. The Closed view holds no submission.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* The stack holds no `collected`, `cancelled` or `expired` submission, as a fresh stack does.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Open Closed.
+2. Click Closed.
 
 **Expected Results:**
 
@@ -171,13 +197,15 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. The Closed 
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A view holds 51 submissions.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* 51 submissions are seeded at `booked`, as *Seeding a submission* says, and no other submission is booked.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Open that view.
-3. Advance the pager.
+2. Click Booked.
+3. Click the pager's next page.
 
 **Expected Results:**
 
@@ -200,12 +228,14 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A view hold
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <grade10 admin grading queue url>. A row is `booked`.
+
+* admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <grade10 admin grading queue url>. No shipped role holds that grant alone, so the operator's grants are mocked.
+* A submission is seeded at `booked`, as *Seeding a submission* says.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Check the row's actions.
+2. Read the actions on the `booked` submission's row.
 
 **Expected Results:**
 
@@ -227,17 +257,21 @@ Admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <g
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) reads the queue early in the shop's morning, while the date in Coordinated Universal Time is still the day before.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* The time is between 00:00 and 07:59 on the shop's own day, `Asia/Hong_Kong`, so the date in Coordinated Universal Time is still the day before.
+* The collector has booked a drop-off for later that day on the site, at <grade10 grading url>, so its submission is `booked`.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Open Today.
+2. Click Today.
+3. Read the submission's row.
 
 **Expected Results:**
 
-* Today lists the drop-off booked for later that day on the shop's own calendar day, `Asia/Hong_Kong`.
-* The row's Visit today badge and the Today cut agree.
+* Step 2 lists the submission booked for later that day on the shop's own calendar day, `Asia/Hong_Kong`.
+* Step 3 shows the row's Visit today badge, agreeing with the Today cut.
 
 ### grade10-admin-grading-counter-US1-TC9-1: A planned submission with no drop-off booked is in no view
 
@@ -255,12 +289,14 @@ Admin(holds `grading:read`) reads the queue early in the shop's morning, while t
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A submission is `planned` with no drop-off booked.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* A submission is seeded at `planned`, as *Seeding a submission* says, with no drop-off booked, and the tester has noted its reference.
 
 **Steps:**
 
-1. Open each of the six status views in turn.
-2. Open Today.
+1. Click Booked, Handed in, With the grader, Back, Ready and Closed in turn, reading each list.
+2. Click Today.
 
 **Expected Results:**
 
@@ -282,13 +318,16 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A submissio
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) works a shift with a mailbox and push notifications open. A submission becomes `ready`, another runs past its estimate, and a third falls due for the written notice.
+
+* admin A and admin B hold the `staff` role, each with a mailbox the tester can read, *Reading a letter* serving for each staff address.
+* A submission is `sent` in a batch whose grades are in, a second is seeded at `sent` at Express with `appointmentAt` 30 days back so its batch is past its estimate, and a third is seeded at `ready` with `readyAt` 180 days back.
 
 **Steps:**
 
-1. Let the three submissions move.
-2. Read the mailbox and the push notifications.
-3. Read the queue.
+1. Receive the first submission's batch, as *Receiving with an exception* says with no exception, so it becomes `ready`.
+2. Read each staff address's letters, as *Reading a letter* says.
+3. Navigate to <grade10 admin grading queue url>.
+4. Read the tiles, the strip and the three submissions' rows.
 
 **Expected Results:**
 
@@ -319,12 +358,14 @@ Admin(holds `grading:read`) works a shift with a mailbox and push notifications 
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on the Today strip of <grade10 admin grading queue url>. A `booked` submission's drop-off falls today and has not started.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading queue url>.
+* A submission is seeded at `booked`, as *Seeding a submission* says, with `appointmentAt` earlier on the shop's own day; its visit has not been started at the desk.
 
 **Steps:**
 
-1. Open the submission from the Today strip.
-2. Start at the desk.
+1. Click the submission in the strip of the day's drop-offs.
+2. Click Start at the desk.
 
 **Expected Results:**
 
@@ -347,17 +388,28 @@ Admin(holds `grading:operate`) is on the Today strip of <grade10 admin grading q
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at the desk with a walk-in collector who holds no booking.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading walk-in url>.
+* A collector is at the desk with two cards and no submission.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Grader and level | PSA Regular |
+| First card's declared value | 300000 minor units (HKD 3,000.00), any value up to Regular's ceiling of 1170000 |
+| Second card's declared value | 500000 minor units (HKD 5,000.00), any value up to Regular's ceiling of 1170000 |
 
 **Steps:**
 
-1. Open a new submission at the desk.
-2. Add a card with the collector, naming it and its declared value.
-3. Add a second card the same way.
+1. Enter the collector's email, name and phone, the grader and level, the shop and the first card with its declared value.
+2. Click Open the submission.
+3. On the submission's runbook, click Add a card and enter the second card with its declared value.
 
 **Expected Results:**
 
-* Steps 2 and 3 each add one card at a time with no paste option offered.
+* Step 1 takes one card, and neither step offers a paste of a list.
+* Step 3 adds the second card, one at a time with the collector.
 * The runbook proceeds from Not handed in yet with the two cards listed.
 
 ### grade10-admin-grading-counter-US2-TC3-1: A card is checked present, condition-noted and photographed front and back
@@ -376,19 +428,28 @@ Admin(holds `grading:operate`) is at the desk with a walk-in collector who holds
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is checking cards on a `booked` submission's runbook. One card on the list has not yet been checked.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, its visit started with Start at the desk.
+* The collector's page for the submission is open at <grade10 grading submission url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Condition note | Light whitening on the back corners |
 
 **Steps:**
 
-1. Tick Present for the card.
-2. Type a condition note.
-3. Capture the front and back photographs.
+1. On the first card's row, tick Present.
+2. Type the condition note.
+3. Take the front photograph, then the back photograph.
+4. Reload the collector's page.
 
 **Expected Results:**
 
 * Step 1 marks the card present.
-* Step 2 shows the note in place of "Nothing noted."
-* Step 3 attaches both photographs to the collector's page.
+* Step 2 shows the note as typed in place of "Nothing noted."
+* Step 4 shows both photographs on the collector's page.
 
 ### grade10-admin-grading-counter-US2-TC4-1: A card at the level's declared-value ceiling passes the level check
 
@@ -406,7 +467,8 @@ Admin(holds `grading:operate`) is checking cards on a `booked` submission's runb
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is checking cards on a `booked` submission at Value level.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with one card of the declared value below, as *Seeding a submission* says, its visit started with Start at the desk.
 
 **Test data:**
 
@@ -414,12 +476,12 @@ Admin(holds `grading:operate`) is checking cards on a `booked` submission at Val
 | --- | --- |
 | Level | Value |
 | Ceiling | 390000 minor units (HKD 3,900.00) |
-| Card's declared value | 390000 minor units (HKD 3,900.00) |
+| Card's declared value | 390000 minor units (HKD 3,900.00), exactly the ceiling |
 
 **Steps:**
 
-1. Check the card's declared value against the ceiling.
-2. Read the level banner.
+1. On the card's row, tick Present, keep the declared value as listed, and take the front and back photographs.
+2. Read the level check.
 
 **Expected Results:**
 
@@ -440,6 +502,10 @@ Admin(holds `grading:operate`) is checking cards on a `booked` submission at Val
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
 
+**Pre-conditions:**
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with two cards of 300000 minor units each, as *Seeding a submission* says, its visit started with Start at the desk.
+
 **Test data:**
 
 | Field | Value |
@@ -447,15 +513,12 @@ Admin(holds `grading:operate`) is checking cards on a `booked` submission at Val
 | Level | Value |
 | Ceiling | 390000 minor units (HKD 3,900.00) |
 | Card's value on the list | 300000 minor units (HKD 3,000.00) |
-| Card's value declared at the desk | 400000 minor units (HKD 4,000.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) is checking cards on a `booked` submission at Value level, its visit started at the desk.
+| Card's value declared at the desk | 400000 minor units (HKD 4,000.00), any value above the ceiling |
 
 **Steps:**
 
-1. Check the card, declaring HKD 4,000.00 against its reference.
-2. Read the level banner.
+1. On the first card's row, tick Present and change the declared value to the one declared at the desk.
+2. Read the level check and the first card's row.
 
 **Expected Results:**
 
@@ -478,11 +541,13 @@ Admin(holds `grading:operate`) is checking cards on a `booked` submission at Val
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on the hand-in runbook of a three-card submission. One card has not been checked.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with three cards, as *Seeding a submission* says, its visit started with Start at the desk.
+* Two cards are checked, Present ticked and both photographs taken; the third is neither checked nor refused.
 
 **Steps:**
 
-1. Open the sign step.
+1. Read the Sign the agreement step.
 
 **Expected Results:**
 
@@ -504,17 +569,21 @@ Admin(holds `grading:operate`) is on the hand-in runbook of a three-card submiss
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on the hand-in runbook. Every card is checked.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with two cards, as *Seeding a submission* says, its visit started with Start at the desk.
+* Both cards are checked, Present ticked and both photographs taken.
+* The shop's iPad is at the desk with a browser open.
 
 **Steps:**
 
-1. Open the sign step.
-2. Show on iPad, or copy the link.
+1. Read the Sign the agreement step.
+2. Click Show on iPad.
+3. Read the agreement on the iPad.
 
 **Expected Results:**
 
 * Step 1 offers Show on iPad and Copy link with the 30-minute line.
-* Step 2 opens the schedule of cards as checked on the collector's device.
+* Step 3 shows the schedule of cards as checked, on the collector's device.
 
 ### grade10-admin-grading-counter-US2-TC8-1: The till opens only once the agreement is sealed, one line per card and a cover line where the level carries one
 
@@ -531,28 +600,33 @@ Admin(holds `grading:operate`) is on the hand-in runbook. Every card is checked.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
 
+**Pre-conditions:**
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Express with the two cards below, as *Seeding a submission* says, its visit started with Start at the desk.
+* Both cards are checked, Present ticked and both photographs taken; the agreement is not yet sealed.
+* The shop's iPad is at the desk, and the collector signs on it when asked.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Level | Express |
-| Cards | 2 |
 | Fee a card | 120000 minor units (HKD 1,200.00) |
-| Cover a card | 1.5% of each card's declared value |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) is on the hand-in runbook of a two-card Express submission.
+| Cover rate | 1.5% of each card's declared value |
+| First card's declared value | 200000 minor units (HKD 2,000.00), any value up to Express's ceiling of 1950000 |
+| Second card's declared value | 400000 minor units (HKD 4,000.00), any value up to Express's ceiling of 1950000 |
+| Cover lines | 3000 and 6000 minor units (HKD 30.00 and HKD 60.00) |
 
 **Steps:**
 
 1. Read Take payment before the agreement is sealed.
-2. Seal the agreement.
-3. Open the till.
+2. Click Show on iPad, and have the collector sign the agreement on the iPad.
+3. Click Take payment.
 
 **Expected Results:**
 
 * Step 1 shows Take payment disabled.
-* Step 3 opens the POS with one Grading Service line per card at 120000 minor units (HKD 1,200.00) and one cover line per card at 1.5% of its declared value.
+* Step 3 opens the till with one Grading Service line per card at 120000 minor units (HKD 1,200.00) and one cover line per card at 1.5% of its declared value, 3000 and 6000 minor units.
 
 ### grade10-admin-grading-counter-US2-TC9-1: No hand-in without a paid line leaves the submission booked and the cards with the collector
 
@@ -570,12 +644,14 @@ Admin(holds `grading:operate`) is on the hand-in runbook of a two-card Express s
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) sealed the agreement on a `booked` submission and opened the till.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, every card checked at the desk and the agreement sealed on the iPad.
+* Take payment has opened the till.
 
 **Steps:**
 
-1. Leave the till without a paid order.
-2. Close the runbook.
+1. Close the till without taking payment, so no paid order is recorded.
+2. Read the runbook.
 
 **Expected Results:**
 
@@ -597,6 +673,12 @@ Admin(holds `grading:operate`) sealed the agreement on a `booked` submission and
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
 
+**Pre-conditions:**
+
+* The safe's declared cap is written as below, as *Writing a money setting* says, on a stack holding no other `checked_in`, `returned` or `ready` submission.
+* The safe holds the declared value below: one submission seeded at `checked_in` at Super Express, as *Seeding a submission* says, with eight cards, seven of 3900000 minor units and one of 2600000.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a further submission seeded at `booked` with one card of the declared total below, every card checked at the desk and the agreement sealed on the iPad.
+
 **Test data:**
 
 | Field | Value |
@@ -604,13 +686,11 @@ Admin(holds `grading:operate`) sealed the agreement on a `booked` submission and
 | Safe declared cap | 30000000 minor units (HKD 300,000.00) |
 | Safe currently holds | 29900000 minor units (HKD 299,000.00) |
 | This hand-in's declared total | 200000 minor units (HKD 2,000.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) is at the till step of the hand-in runbook. Sealing this hand-in would carry the safe from 29900000 to 30100000 minor units, past its cap.
+| Held after this hand-in | 30100000 minor units (HKD 301,000.00), past the cap |
 
 **Steps:**
 
-1. Attempt to take the fee.
+1. Attempt to take the fee with Take payment.
 
 **Expected Results:**
 
@@ -632,18 +712,24 @@ Admin(holds `grading:operate`) is at the till step of the hand-in runbook. Seali
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) has a paid order on a sealed, fully checked three-card submission.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with three cards, as *Seeding a submission* says.
+* At the desk, all three cards are checked, the agreement is sealed on the iPad, and the fee is paid at the till with Take payment.
+* The desk's label printer is on.
 
 **Steps:**
 
-1. Print labels and check in.
+1. Click Print 3 labels and check in.
+2. Seal the three cards into the intake bag with the printed list.
+3. Read the submission's status word.
+4. Read the collector's letter, as *Reading a letter* says.
 
 **Expected Results:**
 
-* Three intake labels print, one per card.
-* The cards are sealed into the intake bag with the printed list.
-* The submission moves `booked → checked_in`.
-* The intake receipt and the signed agreement go out by email.
+* Step 1 prints three intake labels, one per card.
+* Step 2 seals the cards into the intake bag with the printed list.
+* Step 3 reads Handed in: the submission moved `booked → checked_in`.
+* Step 4 is the intake receipt, with the signed agreement.
 
 ### grade10-admin-grading-counter-US2-TC12-1: A second submission on the same visit runs its own hand-in runbook
 
@@ -661,12 +747,15 @@ Admin(holds `grading:operate`) has a paid order on a sealed, fully checked three
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens the drop-off's first submission at the desk. A second submission is listed under the same visit.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for the first of two submissions on one drop-off today: the collector booked the drop-off for the first on the site, at <grade10 grading url>, and brought a second list to that same drop-off there.
+* The first submission's visit is started with Start at the desk.
 
 **Steps:**
 
-1. Open the second submission from the visit.
-2. Check its cards independently of the first.
+1. Click the second submission where the runbook names it under the visit.
+2. On the second submission's runbook, check its cards, tick Present and take both photographs for each, without touching the first.
+3. Read its level check and its Take payment step.
 
 **Expected Results:**
 
@@ -688,11 +777,13 @@ Admin(holds `grading:operate`) opens the drop-off's first submission at the desk
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) has every card checked on a `booked` submission and has not sealed the agreement.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, every card checked at the desk and the agreement not sealed.
 
 **Steps:**
 
-1. Attempt to print labels and check in.
+1. Send the check-in for the submission directly, outside the runbook, which offers no step before the one above it is done.
+2. Read the submission's status word.
 
 **Expected Results:**
 
@@ -714,6 +805,12 @@ Admin(holds `grading:operate`) has every card checked on a `booked` submission a
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
 
+**Pre-conditions:**
+
+* Two submissions are seeded at `booked`, as *Seeding a submission* says, as the test data sets them, each with its card checked at the desk and its agreement sealed on the iPad.
+* One paid order is rung at the till carrying a Grading Service line at each level, and its order number is noted.
+* admin(holds `grading:operate`) has both submissions open at <grade10 admin grading submission url>, one tab each, at the fee step.
+
 **Test data:**
 
 | Field | Value |
@@ -722,14 +819,11 @@ Admin(holds `grading:operate`) has every card checked on a `booked` submission a
 | Second submission | Regular, one card, agreement sealed |
 | Paid order | one order carrying a Grading Service line at each level |
 
-**Pre-conditions:**
-Admin(holds `grading:operate`) is at the till step of both submissions' hand-in runbooks, and the one paid order is in the till.
-
 **Steps:**
 
-1. Record the paid order on the Express submission.
-2. Record the same order on the Regular submission.
-3. Record the same order on the Express submission again.
+1. On the Express submission, record the paid order by its order number.
+2. On the Regular submission, record the same order number.
+3. On the Express submission, record the same order number again.
 
 **Expected Results:**
 
@@ -762,6 +856,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
 
+**Pre-conditions:**
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with two cards, as *Seeding a submission* says, its visit started with Start at the desk.
+* The collector's page for the submission is open at <grade10 grading submission url>.
+
 **Test data:**
 
 | Row | Reason | Words |
@@ -770,20 +869,21 @@ Runs once per row of **Test data**.
 | B | Declared above the level | Declared HKD 50,000, this level tops at HKD 39,000 |
 | C | The collector withdrew it | Collector wants to keep this one for now |
 
-**Pre-conditions:**
-Admin(holds `grading:operate`) is checking a card on a `booked` submission's runbook.
-
 **Steps:**
 
-1. Open Refuse on the card.
+1. On the first card's row, click Refuse.
 2. Choose the row's reason.
-3. Type the row's words.
-4. Refuse the card.
+3. Type the row's words in the collector's-words field.
+4. Click Refuse this card.
+5. Reload the collector's page.
+6. Check the second card, seal the agreement on the iPad, take the fee with Take payment, and click Print 1 label and check in.
+7. Read the intake receipt, as *Reading a letter* says.
 
 **Expected Results:**
 
-* Step 4 strikes the row with its own reason and the words shown exactly as typed, both on the submission page and on the receipt.
-* The card is never charged.
+* Step 4 strikes the row with its own reason.
+* Steps 5 and 7 show the words exactly as typed, on the submission page and on the receipt.
+* The card is never charged: step 6's till carries no line for it.
 
 ### grade10-admin-grading-counter-US3-TC2-1: Refuse stays disabled until a reason and the collector's words are given
 
@@ -801,12 +901,14 @@ Admin(holds `grading:operate`) is checking a card on a `booked` submission's run
 * **Trace:** grade10-admin-grading-counter-US-03
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opened Refuse on a card and has picked no reason.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, its visit started with Start at the desk.
 
 **Steps:**
 
-1. Open Refuse.
-2. Leave the reason and the words empty.
+1. On a card's row, click Refuse.
+2. Leave the reason unpicked and the collector's-words field empty.
+3. Read Refuse this card.
 
 **Expected Results:**
 
@@ -828,12 +930,14 @@ Admin(holds `grading:operate`) opened Refuse on a card and has picked no reason.
 * **Trace:** grade10-admin-grading-counter-US-03
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) refuses one card of a three-card, sealed, unpaid submission before the till opens.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Regular with three cards, as *Seeding a submission* says.
+* At the desk, all three cards are checked and the agreement is sealed on the iPad; the fee is not yet taken.
 
 **Steps:**
 
-1. Refuse the card with a reason and words.
-2. Open the till.
+1. On the first card's row, click Refuse, choose The grader would not take it, type Corner crease along the top edge, and click Refuse this card.
+2. Click Take payment.
 
 **Expected Results:**
 
@@ -854,19 +958,21 @@ Admin(holds `grading:operate`) refuses one card of a three-card, sealed, unpaid 
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
 
+**Pre-conditions:**
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Regular with two cards, as *Seeding a submission* says.
+* At the desk, both cards are checked, the agreement is sealed on the iPad and the fee is paid at the till with Take payment; the cards are not yet checked in.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Fee already paid for the card | 60000 minor units (HKD 600.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) is refusing a card whose fee was already paid at the till.
+| Fee already paid for the card | 60000 minor units (HKD 600.00), Regular's fee |
 
 **Steps:**
 
-1. Refuse the card with a reason and words.
-2. Read the Notice on the dialog.
+1. On the first card's row, click Refuse, choose The collector withdrew it and type Collector wants to keep this one for now.
+2. Read the notice in the dialog.
 
 **Expected Results:**
 
@@ -888,13 +994,18 @@ Admin(holds `grading:operate`) is refusing a card whose fee was already paid at 
 * **Trace:** grade10-admin-grading-counter-US-03
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is refusing the last unrefused card on a submission whose other cards, if any, have already been refused or withdrawn.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with one card, as *Seeding a submission* says, its visit started with Start at the desk.
+* The collector's last letter is noted, as *Reading a letter* says.
 
 **Steps:**
 
-1. Open Refuse on the last card.
-2. Choose a reason and type the words.
-3. Read the Notice.
+1. On the card's row, click Refuse.
+2. Choose The grader would not take it and type Corner crease along the top edge.
+3. Read the notice in the dialog.
+4. Click Refuse this card.
+5. Read the submission's status word and its money.
+6. Read the collector's last letter again.
 
 **Expected Results:**
 
@@ -926,13 +1037,15 @@ Admin(holds `grading:operate`) is refusing the last unrefused card on a submissi
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at the hand-back runbook of a `ready` submission with a four-digit pickup code and the collector's name on the page.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready`, as *Seeding a submission* says, its hand-back runbook at who is collecting.
+* The collector is at the desk with the pickup code the seed answered, and gives the name on the submission.
 
 **Steps:**
 
-1. Take the pickup code.
-2. Take the name given at the counter.
-3. Match it to the submission page.
+1. Enter the collector's pickup code in the code field.
+2. Enter the name the collector gives.
+3. Read the hand-back runbook.
 
 **Expected Results:**
 
@@ -953,26 +1066,30 @@ Admin(holds `grading:operate`) is at the hand-back runbook of a `ready` submissi
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
 
+**Pre-conditions:**
+
+* The ID glance threshold is written as below, as *Writing a money setting* says, before the submission is seeded, since the agreement pins it.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` at Express with one card of the declared total below, as *Seeding a submission* says, its hand-back runbook at who is collecting.
+* The collector is at the desk with the pickup code and an identity document in the name on the submission.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | ID glance threshold | 1000000 minor units (HKD 10,000.00) |
-| Declared total | 1200000 minor units (HKD 12,000.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) is verifying a collector at hand-back whose submission's declared total is above the threshold.
+| Declared total | 1200000 minor units (HKD 12,000.00), any total above the threshold |
 
 **Steps:**
 
-1. Match the code and the name.
-2. Glance at an ID matching the name.
-3. Continue.
+1. Enter the pickup code and the collector's name.
+2. Glance at the collector's identity document, matching it to the name.
+3. Mark the identity matched and continue.
+4. At the end of the hand-back, read the sealed receipt on the Documents tab.
 
 **Expected Results:**
 
-* Step 2 shows the ID line.
-* Step 3 records that an ID was matched to the name, keeping no document number or photograph.
+* Step 1 shows the ID line.
+* Step 4's receipt records that an ID was matched to the name, keeping no document number or photograph.
 
 ### grade10-admin-grading-counter-US4-TC3-1: At the threshold, the code and the name alone release the cards
 
@@ -989,20 +1106,23 @@ Admin(holds `grading:operate`) is verifying a collector at hand-back whose submi
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
 
+**Pre-conditions:**
+
+* The ID glance threshold is written as below, as *Writing a money setting* says, before the submission is seeded, since the agreement pins it.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` at Regular with one card of the declared total below, as *Seeding a submission* says, its hand-back runbook at who is collecting.
+* The collector is at the desk with the pickup code.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | ID glance threshold | 1000000 minor units (HKD 10,000.00) |
-| Declared total | 1000000 minor units (HKD 10,000.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) is verifying a collector at hand-back whose submission's declared total is exactly the threshold.
+| Declared total | 1000000 minor units (HKD 10,000.00), exactly the threshold |
 
 **Steps:**
 
-1. Match the code and the name.
-2. Continue.
+1. Enter the pickup code and the collector's name.
+2. Read the runbook's next step.
 
 **Expected Results:**
 
@@ -1024,11 +1144,18 @@ Admin(holds `grading:operate`) is verifying a collector at hand-back whose submi
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at the hand-back runbook. The person at the desk gives a code that does not match the submission.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready`, as *Seeding a submission* says, its hand-back runbook at who is collecting.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Code given | any four digits but the pickup code the seed answered |
 
 **Steps:**
 
-1. Type the wrong code.
+1. Type the code given in the pickup code field.
 2. Submit it.
 
 **Expected Results:**
@@ -1050,20 +1177,22 @@ Admin(holds `grading:operate`) is at the hand-back runbook. The person at the de
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
 
+**Pre-conditions:**
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a `ready` submission owing the upcharge and the storage below, and has matched the collector's code and name at who is collecting.
+* A card moved from Regular to Express at receiving owes the upcharge, as *Receiving with an exception* says; the storage accrues only past day 90 of ready, so a submission owing both is a mocked state.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Upcharge due | 60000 minor units (HKD 600.00) |
+| Upcharge due | 60000 minor units (HKD 600.00), Express's fee less Regular's |
 | Storage accrued | 12000 minor units (HKD 120.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) matched the collector on a `ready` submission owing an upcharge and storage.
 
 **Steps:**
 
 1. Read the Settle step.
-2. Take payment.
+2. Click Take payment and take the payment at the till.
 
 **Expected Results:**
 
@@ -1086,7 +1215,9 @@ Admin(holds `grading:operate`) matched the collector on a `ready` submission owi
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) matched a collector on a `ready` submission with no upcharge and no storage due.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` with the default anchors, as *Seeding a submission* says, so no upcharge and no storage are due.
+* The collector's code and name are matched at who is collecting.
 
 **Steps:**
 
@@ -1112,13 +1243,15 @@ Admin(holds `grading:operate`) matched a collector on a `ready` submission with 
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) settled the balance on a `ready` submission with two slabs and one raw card returned ungraded.
+
+* A submission of three cards is received with the third returned ungraded, as *Receiving with an exception* says, so it is `ready` with two slabs and one raw card.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting and Settle, nothing being due.
 
 **Steps:**
 
-1. Tick the first slab as handed over.
-2. Photograph it.
-3. Tick the raw card as handed over.
+1. On the first slab's row, tick Handed over.
+2. Photograph the slab.
+3. On the raw card's row, tick Handed over.
 
 **Expected Results:**
 
@@ -1141,11 +1274,13 @@ Admin(holds `grading:operate`) settled the balance on a `ready` submission with 
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on the sign step of the hand-back runbook with one item still unticked.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` with two cards and the default anchors, as *Seeding a submission* says, so nothing is due.
+* On its hand-back runbook the code and name are matched, Settle is ticked, and the first item is ticked Handed over; the second is not.
 
 **Steps:**
 
-1. Open the sign step.
+1. Read the Sign the receipt step.
 
 **Expected Results:**
 
@@ -1167,15 +1302,22 @@ Admin(holds `grading:operate`) is on the sign step of the hand-back runbook with
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) sealed the hand-back receipt for every item on a `ready` submission with nothing held by the grader.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` with the default anchors, as *Seeding a submission* says, nothing held by the grader.
+* On its hand-back runbook every item is ticked Handed over and the receipt is sealed on the iPad.
+* The collector's page for the submission is open at <grade10 grading submission url>.
 
 **Steps:**
 
-1. Hand over on the sealed step.
+1. Click Hand over.
+2. Read the submission's status word.
+3. Reload the collector's page.
 
 **Expected Results:**
 
-* The packet goes over the counter; the submission reads `ready → collected`; the record stays on the page.
+* Step 1: the packet goes over the counter.
+* Step 2 reads Back with you: the submission moved `ready → collected`.
+* Step 3: the record stays on the collector's page.
 
 ### grade10-admin-grading-counter-US4-TC10-1: A second hand-back closes a submission whose card the grader held
 
@@ -1193,13 +1335,17 @@ Admin(holds `grading:operate`) sealed the hand-back receipt for every item on a 
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) already closed a first hand-back on a submission with one card the grader held; that card has now come back and is ready.
+
+* A submission of three cards is received with one card held by the grader, as *Receiving with an exception* says, and its first hand-back over the other two is closed on a sealed receipt, leaving it `ready`.
+* The held card has since come back and is received at the shop.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, and the collector is at the desk with the pickup code.
 
 **Steps:**
 
-1. Open the submission's second hand-back.
-2. Tick the one remaining item.
-3. Close on its own sealed receipt.
+1. Open the submission's second hand-back runbook.
+2. Enter the pickup code and the collector's name.
+3. Settle, then tick Handed over on the one item.
+4. Seal its receipt on the iPad and click Hand over.
 
 **Expected Results:**
 
@@ -1223,18 +1369,60 @@ Admin(holds `grading:operate`) already closed a first hand-back on a submission 
 * **Trace:** grade10-admin-grading-counter-US-04
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) settled the balance on a `ready` submission of three cards, one of which the grader is still holding.
+
+* A submission of three cards is received with the third held by the grader, as *Receiving with an exception* says, so it is `ready`.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting and Settle, nothing being due.
 
 **Steps:**
 
-1. Read the items step.
-2. Attempt to tick the held card.
-3. Seal the receipt over the other two.
+1. Read the Hand over and inspect step.
+2. Attempt to tick Handed over on the held card's row.
+3. Tick Handed over on the other two, seal the receipt on the iPad and click Hand over.
+4. Read the sealed receipt on the Documents tab and the submission's status word.
 
 **Expected Results:**
 
-* The held card's row reads as still out and cannot be ticked.
-* The sealed receipt names that card as still with the grader, and the submission stays `ready`.
+* Steps 1 and 2: the held card's row reads as still out and cannot be ticked.
+* Step 4: the sealed receipt names that card as still with the grader, and the submission stays `ready`.
+
+### grade10-admin-grading-counter-US4-TC12-1: A wrong pickup code is refused as often as it is typed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-04
+
+**Pre-conditions:**
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready`, as *Seeding a submission* says, its hand-back runbook at who is collecting.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Wrong codes | three different four-digit codes, none the pickup code the seed answered |
+
+**Steps:**
+
+1. Enter the first wrong code in the pickup code field.
+2. Enter the second wrong code.
+3. Enter the third wrong code.
+4. Read the runbook's who is collecting step.
+5. Open the submission's Timeline tab.
+
+**Expected Results:**
+
+* Steps 1 to 3 are each refused on the field, and nothing closes the field after the third.
+* Step 4 offers the ID glance against the collector's own name instead.
+* Step 5 lists each of the three refusals.
 
 ---
 
@@ -1260,17 +1448,28 @@ Admin(holds `grading:operate`) settled the balance on a `ready` submission of th
 * **Trace:** grade10-admin-grading-counter-US-05
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at hand-back for a `ready` submission where the collector named a pickup person on the page.
+
+* A submission is seeded at `ready`, as *Seeding a submission* says, and its collector has named a pickup person on their page at <grade10 grading submission url>.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook at who is collecting.
+* The named person is at the desk with the pickup code.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Named person | Chan Tai Man, any full name other than the collector's |
 
 **Steps:**
 
-1. Take the code and the named person's name.
-2. Match it to the page.
+1. Enter the pickup code and the named person's name.
+2. Read who the runbook matches.
+3. Work the hand-back to the end: Settle, tick Handed over on each item, seal the receipt on the iPad and click Hand over.
+4. Read the sealed receipt on the Documents tab.
 
 **Expected Results:**
 
-* The named person is matched, not the collector.
-* The hand-back receipt records that person, not the collector, as who collected.
+* Step 2 matches the named person, not the collector.
+* Step 4's receipt records that person, not the collector, as who collected.
 
 ### grade10-admin-grading-counter-US5-TC2-1: Somebody who is neither the collector nor the named person is turned away, code or no code
 
@@ -1288,12 +1487,16 @@ Admin(holds `grading:operate`) is at hand-back for a `ready` submission where th
 * **Trace:** grade10-admin-grading-counter-US-05
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at hand-back for a `ready` submission naming a specific pickup person. A different person presents the correct pickup code.
+
+* A submission is seeded at `ready`, as *Seeding a submission* says, and its collector has named a pickup person on their page.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook at who is collecting.
+* A third person, neither the collector nor the named person, is at the desk with the correct pickup code.
 
 **Steps:**
 
-1. Take the code from the person at the desk.
-2. Take their name.
+1. Enter the pickup code the person gives.
+2. Enter the name the person gives.
+3. Read the who is collecting step.
 
 **Expected Results:**
 
@@ -1315,11 +1518,14 @@ Admin(holds `grading:operate`) is at hand-back for a `ready` submission naming a
 * **Trace:** grade10-admin-grading-counter-US-05
 
 **Pre-conditions:**
-Admin(holds `grading:operate` and `grading:approve`) is at hand-back with a turned-away person at the desk.
+
+* A submission is seeded at `ready`, as *Seeding a submission* says.
+* admin(holds `grading:operate` and `grading:approve`) is on <grade10 admin grading submission url> for it, its hand-back runbook at who is collecting.
+* A person who is not the collector is at the desk with the correct pickup code, and has been turned away.
 
 **Steps:**
 
-1. Check the runbook for a release override.
+1. Read every control on the who is collecting step and the rest of the runbook for a way to release the cards anyway.
 
 **Expected Results:**
 
@@ -1341,12 +1547,21 @@ Admin(holds `grading:operate` and `grading:approve`) is at hand-back with a turn
 * **Trace:** grade10-admin-grading-counter-US-05
 
 **Pre-conditions:**
-A `ready` submission currently names no pickup person. The collector is about to send someone else in their place.
+
+* A submission is seeded at `ready`, as *Seeding a submission* says, naming no pickup person.
+* The collector has its page open at <grade10 grading submission url>.
+* admin(holds `grading:operate`) has <grade10 admin grading submission url> for it open at the hand-back runbook.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Named person | Chan Tai Man, any full name other than the collector's |
 
 **Steps:**
 
-1. The collector names a person on the submission page.
-2. Staff reload the hand-back runbook.
+1. As the collector, name the person on the submission page.
+2. As the admin, reload the hand-back runbook.
 
 **Expected Results:**
 
@@ -1368,12 +1583,15 @@ A `ready` submission currently names no pickup person. The collector is about to
 * **Trace:** grade10-admin-grading-counter-US-05
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at hand-back for a `ready` submission that also names a pickup person. The collector themself arrives.
+
+* A submission is seeded at `ready`, as *Seeding a submission* says, and its collector has named a pickup person on their page.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook at who is collecting.
+* The collector is at the desk with the pickup code.
 
 **Steps:**
 
-1. Take the code and the collector's own name.
-2. Match it.
+1. Enter the pickup code and the collector's own name.
+2. Read who the runbook matches.
 
 **Expected Results:**
 
@@ -1403,11 +1621,13 @@ Admin(holds `grading:operate`) is at hand-back for a `ready` submission that als
 * **Trace:** grade10-admin-grading-counter-US-06
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at the items step of hand-back on a `ready` submission with an unsettled upcharge.
+
+* A submission of one card is received with that card moved from Value to Regular, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 35000 minor units (HKD 350.00), unpaid.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting, the upcharge not taken.
 
 **Steps:**
 
-1. Open the slab's row.
+1. On the slab's row, click Vault instead.
 2. Read Open a vault case.
 
 **Expected Results:**
@@ -1430,12 +1650,16 @@ Admin(holds `grading:operate`) is at the items step of hand-back on a `ready` su
 * **Trace:** grade10-admin-grading-counter-US-06
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) settled the balance on a `ready` submission with one slab.
+
+* A submission of one card is seeded at `ready` with the default anchors, as *Seeding a submission* says, so nothing is due.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting and Settle.
+* The collector is at the desk.
 
 **Steps:**
 
-1. Open Open a vault case on the slab's row.
-2. Complete opening the case with the collector.
+1. On the slab's row, click Vault instead, then Open a vault case.
+2. Open the case with the collector, as the vault's own form asks.
+3. Read the vault case the step names.
 
 **Expected Results:**
 
@@ -1457,12 +1681,16 @@ Admin(holds `grading:operate`) settled the balance on a `ready` submission with 
 * **Trace:** grade10-admin-grading-counter-US-06
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opened a vault case for one of two items on a `ready` submission; the other item is handed over in person.
+
+* A submission of two cards is seeded at `ready` with the default anchors, as *Seeding a submission* says, so nothing is due.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting and Settle.
 
 **Steps:**
 
-1. Complete hand-back for both items.
-2. Seal and read the receipt.
+1. On the first slab's row, click Vault instead and open its vault case with the collector.
+2. On the second slab's row, tick Handed over and photograph it.
+3. Seal the receipt on the iPad and click Hand over.
+4. Read the sealed receipt on the Documents tab.
 
 **Expected Results:**
 
@@ -1484,12 +1712,14 @@ Admin(holds `grading:operate`) opened a vault case for one of two items on a `re
 * **Trace:** grade10-admin-grading-counter-US-06
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on a two-item `ready` submission, one slab and one raw card.
+
+* A submission of two cards is received with the second returned ungraded, as *Receiving with an exception* says, so it is `ready` with one slab and one raw card and nothing due.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting and Settle.
 
 **Steps:**
 
-1. Vault the slab.
-2. Tick the raw card as handed over.
+1. On the slab's row, click Vault instead and open its vault case with the collector.
+2. On the raw card's row, tick Handed over.
 
 **Expected Results:**
 
@@ -1519,12 +1749,15 @@ Admin(holds `grading:operate`) is on a two-item `ready` submission, one slab and
 * **Trace:** grade10-admin-grading-counter-US-07
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on the Cards tab of a `checked_in` submission with two cards, whose batch has not closed.
+
+* A submission of two cards is handed in at the desk this week as a walk-in at <grade10 admin grading walk-in url>, so it is `checked_in` in a batch still open until its cut-off. A seeded `checked_in` submission will not do: its batch closes at the hand-in.
+* admin(holds `grading:operate`) is on the Cards tab of <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open Withdraw on one card.
-2. Confirm the withdrawal.
+1. On the first card's row, click Withdraw.
+2. Confirm the withdrawal in the dialog.
+3. Read both card rows.
 
 **Expected Results:**
 
@@ -1545,19 +1778,21 @@ Admin(holds `grading:operate`) is on the Cards tab of a `checked_in` submission 
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-07
 
+**Pre-conditions:**
+
+* A submission of two cards at Regular is handed in at the desk this week as a walk-in at <grade10 admin grading walk-in url>, its fee paid at the till, so it is `checked_in` in a batch still open until its cut-off.
+* admin(holds `grading:operate`) is on the Cards tab of <grade10 admin grading submission url> for it.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Card's paid fee | 60000 minor units (HKD 600.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) withdraws a card whose fee line was already paid at hand-in.
+| Card's paid fee | 60000 minor units (HKD 600.00), Regular's fee |
 
 **Steps:**
 
-1. Withdraw the card.
-2. Read the refund line.
+1. On the first card's row, click Withdraw and confirm in the dialog.
+2. Open the Money tab and read the refund line.
 
 **Expected Results:**
 
@@ -1579,16 +1814,18 @@ Admin(holds `grading:operate`) withdraws a card whose fee line was already paid 
 * **Trace:** grade10-admin-grading-counter-US-07
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is withdrawing a card at Handed in.
+
+* A submission of two cards is handed in at the desk this week as a walk-in at <grade10 admin grading walk-in url>, so it is `checked_in` in a batch still open until its cut-off.
+* admin(holds `grading:operate`) is on the Cards tab of <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Withdraw the card.
-2. Read the receipt offered.
+1. On the first card's row, click Withdraw and confirm in the dialog.
+2. Read the receipt the withdrawal offers, and the Documents tab.
 
 **Expected Results:**
 
-* The card is released against a hand-back receipt naming that one card, separate from the submission's eventual full receipt.
+* The card is released against its own withdrawal receipt naming that one card, separate from the submission's eventual full receipt.
 
 ### grade10-admin-grading-counter-US7-TC4-1: Withdraw is absent once the batch has closed
 
@@ -1606,12 +1843,14 @@ Admin(holds `grading:operate`) is withdrawing a card at Handed in.
 * **Trace:** grade10-admin-grading-counter-US-07
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens the Cards tab of a submission whose batch has closed.
+
+* A submission is seeded at `checked_in`, as *Seeding a submission* says; its batch closes at the hand-in.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open the Cards tab.
-2. Check the card row's actions.
+1. Click the Cards tab.
+2. Read each card row's actions.
 
 **Expected Results:**
 
@@ -1633,12 +1872,15 @@ Admin(holds `grading:operate`) opens the Cards tab of a submission whose batch h
 * **Trace:** grade10-admin-grading-counter-US-07
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on a `checked_in` submission with three cards before the batch closes.
+
+* A submission of three cards is handed in at the desk this week as a walk-in at <grade10 admin grading walk-in url>, so it is `checked_in` in a batch still open until its cut-off.
+* admin(holds `grading:operate`) is on the Cards tab of <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Withdraw one card.
-2. Read the remaining cards' status.
+1. On the first card's row, click Withdraw and confirm in the dialog.
+2. Read the other two card rows.
+3. On <grade10 admin grading batches url>, open the submission's batch and read its cards.
 
 **Expected Results:**
 
@@ -1667,21 +1909,25 @@ Admin(holds `grading:operate`) is on a `checked_in` submission with three cards 
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
 
+**Pre-conditions:**
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing the upcharge below, unpaid.
+* admin A(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it.
+* admin B(holds `grading:approve`) has the same submission's Money tab open in their own console.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Upcharge | 60000 minor units (HKD 600.00) |
-
-**Pre-conditions:**
-Admin A(holds `grading:approve`) is on the Money tab of a `returned` submission owing the upcharge; admin B also holds `grading:approve`.
+| Upcharge | 60000 minor units (HKD 600.00), Express's fee less Regular's |
+| Reason | Grader moved the level on its own reading; goodwill |
 
 **Steps:**
 
-1. Open Waive the upcharge.
+1. As admin A, click Waive the upcharge.
 2. Type the reason.
-3. Send the request.
-4. As admin B, on admin B's own console, open the request and approve it.
+3. Click Ask for approval.
+4. As admin B, reload the Money tab and click Approve on the request waiting on a second person.
 
 **Expected Results:**
 
@@ -1705,12 +1951,14 @@ Admin A(holds `grading:approve`) is on the Money tab of a `returned` submission 
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) is on the Money tab of a `sent` submission with an upcharge expected once graded.
+
+* A submission is seeded at `sent`, as *Seeding a submission* says, so its cards are with the grader.
+* admin(holds `grading:approve`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open the Money tab.
-2. Check for Waive the upcharge.
+1. Click the Money tab.
+2. Read its acts for Waive the upcharge.
 
 **Expected Results:**
 
@@ -1732,11 +1980,14 @@ Admin(holds `grading:approve`) is on the Money tab of a `sent` submission with a
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `returned` submission.
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 60000 minor units (HKD 600.00).
+* admin A(holds `grading:approve`) has asked for the upcharge's waiver on its Money tab at <grade10 admin grading submission url>, with a reason, and nobody has approved it.
 
 **Steps:**
 
-1. As admin A, open the request and approve it.
+1. As admin A, send the approval of admin A's own request directly, outside the console, which offers the recorder no Approve on their own request.
+2. As admin A, reload the Money tab.
 
 **Expected Results:**
 
@@ -1759,11 +2010,15 @@ Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `return
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `returned` submission. Admin C's roles do not hold `grading:approve`.
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 60000 minor units (HKD 600.00).
+* admin A(holds `grading:approve`) has asked for the upcharge's waiver on its Money tab at <grade10 admin grading submission url>, with a reason, and nobody has approved it.
+* admin C(holds `grading:operate`, not `grading:approve`) is signed in to their own console. No shipped role holds `grading:operate` without `grading:approve`, so admin C's grants are mocked.
 
 **Steps:**
 
 1. As admin C, on admin C's own console, send the approval of admin A's request.
+2. As admin A, reload the Money tab.
 
 **Expected Results:**
 
@@ -1786,12 +2041,15 @@ Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `return
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A and admin B both hold `grading:approve`; A asks for a waiver of an upcharge on a `returned` submission.
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 60000 minor units (HKD 600.00).
+* admin A(holds `grading:approve`) has asked for the upcharge's waiver on its Money tab at <grade10 admin grading submission url>, with a reason.
+* admin B(holds `grading:approve`) has the same Money tab open in their own console.
 
 **Steps:**
 
-1. As admin B, on admin B's own console, approve the request.
-2. Open the Timeline tab.
+1. As admin B, click Approve on the request waiting on a second person.
+2. On <grade10 admin audit url>, pull the trail for the submission's id.
 
 **Expected Results:**
 
@@ -1822,6 +2080,12 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
 
+**Pre-conditions:**
+
+* A submission of one card at Regular, declared at the row's value, is received today with that card not returned, as *Receiving with an exception* says.
+* admin A(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it.
+* admin B(holds `grading:approve`) has the same Money tab open in their own console.
+
 **Test data:**
 
 | Row | Route | Declared value | Fee refunded |
@@ -1829,15 +2093,12 @@ Runs once per row of **Test data**.
 | A | Till | 300000 minor units (HKD 3,000.00) | 60000 minor units (HKD 600.00) |
 | B | Bank transfer | 300000 minor units (HKD 3,000.00) | 60000 minor units (HKD 600.00) |
 
-**Pre-conditions:**
-Admin A(holds `grading:approve`) is on the Money tab of a submission whose batch was received with one card not returned; admin B also holds `grading:approve`.
-
 **Steps:**
 
-1. Open Payout.
-2. Choose the row's route and type the reason.
-3. Send the request.
-4. As admin B, on admin B's own console, open the request and approve it.
+1. As admin A, click the act that records a payout on the not-returned card.
+2. Choose the row's route and type the reason, Lost by the grader in transit.
+3. Click Ask for approval.
+4. As admin B, reload the Money tab and click Approve on the request waiting on a second person.
 
 **Expected Results:**
 
@@ -1859,18 +2120,21 @@ Admin A(holds `grading:approve`) is on the Money tab of a submission whose batch
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
 
+**Pre-conditions:**
+
+* A submission holds a card recorded not returned in a batch received at the shop 15 days ago. Receiving happens now, so a batch received 15 days back is a mocked state.
+* admin(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Settlement window | 14 days from the batch's received day |
-
-**Pre-conditions:**
-Admin(holds `grading:approve`) opens Payout on a card not returned, 15 days after the batch's received day.
+| Batch received | 15 days ago, one day past the window |
 
 **Steps:**
 
-1. Open Payout.
+1. Click the act that records a payout on the not-returned card.
 
 **Expected Results:**
 
@@ -1892,13 +2156,17 @@ Admin(holds `grading:approve`) opens Payout on a card not returned, 15 days afte
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) recorded a payout for a card the grader has now located; admin B also holds `grading:approve`.
+
+* A submission of one card is received with that card not returned, as *Receiving with an exception* says, and its payout is recorded by the till: asked for by admin A and approved by admin B.
+* The grader has since located the card.
+* admin A(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it; admin B(holds `grading:approve`) has the same tab open in their own console.
 
 **Steps:**
 
-1. Open the payout's record.
-2. Ask for its reversal with a reason.
-3. As admin B, on admin B's own console, approve the request.
+1. As admin A, click Reverse the payout on the payout's record.
+2. Type the reason, Card located by the grader, and click Ask for approval.
+3. As admin B, reload the Money tab and click Approve on the request waiting on a second person.
+4. Read the payout's record and the Cards tab.
 
 **Expected Results:**
 
@@ -1920,11 +2188,14 @@ Admin A(holds `grading:approve`) recorded a payout for a card the grader has now
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) asked for a payout on a card not returned.
+
+* A submission of one card is received with that card not returned, as *Receiving with an exception* says.
+* admin A(holds `grading:approve`) has asked for its payout on the Money tab of <grade10 admin grading submission url>, with a reason, and nobody has approved it.
 
 **Steps:**
 
-1. As admin A, open the request and approve it.
+1. As admin A, send the approval of admin A's own request directly, outside the console, which offers the recorder no Approve on their own request.
+2. As admin A, reload the Money tab.
 
 **Expected Results:**
 
@@ -1947,12 +2218,15 @@ Admin A(holds `grading:approve`) asked for a payout on a card not returned.
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin A and admin B both hold `grading:approve`; admin A asked for a payout on a card not returned.
+
+* A submission of one card is received with that card not returned, as *Receiving with an exception* says.
+* admin A(holds `grading:approve`) has asked for its payout by the till on the Money tab of <grade10 admin grading submission url>, with a reason.
+* admin B(holds `grading:approve`) has the same Money tab open in their own console.
 
 **Steps:**
 
-1. As admin B, on admin B's own console, approve the request.
-2. Open the Timeline tab.
+1. As admin B, click Approve on the request waiting on a second person.
+2. On <grade10 admin audit url>, pull the trail for the submission's id.
 
 **Expected Results:**
 
@@ -1974,12 +2248,15 @@ Admin A and admin B both hold `grading:approve`; admin A asked for a payout on a
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A payout is owed on a card whose batch was received at the shop 15 days ago, with `grading.settlement_days` at 14 and nothing paid out.
+
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+* `grading.settlement_days` stands at 14, as seeded.
+* A payout is owed on a card recorded not returned in a batch received at the shop 15 days ago, and nothing is paid out. Receiving happens now, so a batch received 15 days back is a mocked state.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
-2. Read the submission's row.
+2. Click Ready and read the submission's row.
 
 **Expected Results:**
 
@@ -2001,12 +2278,15 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A payout is
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) opens Payout on a card that already carries a payout nobody has reversed.
+
+* A submission of one card is received with that card not returned, as *Receiving with an exception* says, and its payout is recorded by the till: asked for by admin A and approved by admin B, and not reversed.
+* admin(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open Payout on that card.
-2. Ask for a second payout.
+1. Look on the Money tab for the act that records a payout on the same card.
+2. Ask for a second payout on that card, from the tab where it is offered, or directly, outside the console, where it is not.
+3. Read the payout's record.
 
 **Expected Results:**
 
@@ -2029,13 +2309,15 @@ Admin(holds `grading:approve`) opens Payout on a card that already carries a pay
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) is on the Money tab of a submission with one card not returned; nobody else has opened it.
+
+* A submission of one card is received with that card not returned, as *Receiving with an exception* says.
+* admin A(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it; nobody else has opened it.
 
 **Steps:**
 
-1. Open Payout, choose the till and type the reason.
-2. Send the request.
-3. Read the Money tab and the Timeline tab.
+1. Click the act that records a payout on the not-returned card, choose the till and type the reason, Lost by the grader in transit.
+2. Click Ask for approval.
+3. Read the Money tab, then click the Timeline tab and read it.
 
 **Expected Results:**
 

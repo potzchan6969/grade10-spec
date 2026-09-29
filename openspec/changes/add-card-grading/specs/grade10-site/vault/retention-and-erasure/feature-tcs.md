@@ -1,7 +1,11 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
+
+## Background
+
+Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after a submission ends. `<grade10 vault your data url>` is `grade10.com/profile/data`, Your data, reached signed in. `<grade10 grading url>` is `grade10.com/grading`, where a collector plans a submission. `<grade10 admin erasure url>` is `admin.grade10.com/erasure`, the console's Account erasure page: a filed request opens its Checklist, one Erase button a product. Grading's dev seed (`/grading/dev/submissions/seed`) walks a submission to a named status through the desk's own acts, dated off the anchors it is given. The retention review runs on grading's slow sweep lane (`/grading/dev/sweep`, lane `slow`). No route moves a filed erasure request past its 7-day window; a case that runs the erasure ages the request in the stack's data.
 
 ## grade10-site-vault-retention-and-erasure-US4: Collector who graded cards is forgotten by the same request
 
@@ -26,9 +30,10 @@
 
 **Pre-conditions:**
 
-* `<submission_1>` reached `collected` with the classes it carries.
-* The collector filed the account's erasure ask, its cancellation window passed uncancelled, and an admin ran grading's erasure for the account from the console.
+* `<submission_1>` is seeded at `collected` through grading's dev seed, under the collector's email.
 * The account holds no open vault case.
+* The account's request to be forgotten is filed and its 7-day window has passed uncancelled.
+* admin(holds user:delete) is on `<grade10 admin erasure url>`.
 
 **Test data:**
 
@@ -38,7 +43,9 @@
 
 **Steps:**
 
-1. Read `<submission_1>`'s retained data.
+1. Open the account's request and its Checklist.
+2. Click Erase beside Grading.
+3. Read what grading keeps of `<submission_1>`: its documents, photographs and submission record.
 
 **Expected Results:**
 
@@ -71,16 +78,16 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<end event>` | Recorded window start |
-| --- | --- |
-| Collected | The collection date |
-| Cancelled | The cancellation date |
-| Expired | The plan's expiry date |
-| Its last card paid out | The payout date |
+| `<end event>` | How the tester ends it | Recorded window start |
+| --- | --- | --- |
+| Collected | Seed it on to `collected` through grading's dev seed | The collection date |
+| Cancelled | Seed it on to `cancelled` through grading's dev seed | The cancellation date |
+| Expired | Seed it at `planned` 30 days back and run grading's fast sweep lane | The plan's expiry date |
+| Its last card paid out | Record the payout on its last card from the Money tab of the console's One submission page | The payout date |
 
 **Steps:**
 
-1. End `<submission_2>` by `<end event>`.
+1. End `<submission_2>` by `<end event>`, as the row says.
 2. Read the window start recorded for its submission record.
 
 **Expected Results:**
@@ -104,7 +111,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<submission_3>` was cancelled while `planned`, before any drop-off.
+* `<submission_3>` was cancelled while `planned`, before any drop-off: planned by the collector on `<grade10 grading url>` and cancelled from its own page.
 * The account holds no open vault case.
 
 **Test data:**
@@ -116,8 +123,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read `<submission_3>`'s retained data and the window its record stands under.
-2. File the account's erasure ask, let its cancellation window pass uncancelled, and run grading's erasure for the account from the console.
-3. Read `<submission_3>` again.
+2. As the collector, file the ask to be forgotten on `<grade10 vault your data url>`.
+3. Age the request past its 7-day window, uncancelled.
+4. As admin(holds user:delete), open the request's Checklist on `<grade10 admin erasure url>`.
+5. Click Erase beside Grading.
+6. Read `<submission_3>` again.
 
 **Expected Results:**
 
@@ -148,6 +158,7 @@ Runs once per row of **Test data**.
 
 * customer(closed account) is signed in and on `<grade10 vault your data url>`.
 * The account holds `<submission_4>` and no open vault case.
+* `<submission_4>` is seeded at the row's status through grading's dev seed, under the account's email and user id.
 
 **Test data:**
 
@@ -186,6 +197,7 @@ Runs once per row of **Test data**.
 
 * customer(closed account) is signed in and on `<grade10 vault your data url>`.
 * The account holds `<submission_5>` and `<vault case_1>`.
+* `<submission_5>` is seeded at `sent` through grading's dev seed, under the account's email and user id.
 
 **Test data:**
 
@@ -222,18 +234,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<submission_6>` was handed in and has not ended.
-* The brand keeps agreements, photos and case records for 2,555 days.
+* `<submission_6>` was handed in and has not ended: seeded at `sent` through grading's dev seed, its anchors 2,600 days back.
+* The brand keeps agreements, photos and case records for 2,555 days (7 years).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<submission_6>` | A submission `sent`, with the grader, carrying a sealed submission agreement, an intake receipt, hand-in photographs and a submission record, its drop-off 2,600 days ago |
+| `<submission_6>` | A submission `sent`, with the grader, carrying a sealed submission agreement, an intake receipt, hand-in photographs and a submission record, its drop-off 2,600 days ago (about 7.1 years, past every window) |
 
 **Steps:**
 
-1. Run the retention review.
+1. Run the retention review on grading's slow sweep lane.
+2. Read the classes the review reports `<submission_6>` under.
 
 **Expected Results:**
 
@@ -261,7 +274,9 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The account holds `<submission_7>` alone, with no money due on it, and no open vault case.
-* The collector filed the account's erasure ask and its cancellation window passed uncancelled.
+* `<submission_7>` is brought to the row's state: seeded at that status through grading's dev seed, or, for the paid-out row, its last card's payout recorded from the Money tab of the console's One submission page.
+* The account's request to be forgotten is filed and its 7-day window has passed uncancelled.
+* admin(holds user:delete) is on `<grade10 admin erasure url>`.
 
 **Test data:**
 
@@ -275,8 +290,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Run grading's erasure for the account from the console.
-2. Read what is left of `<submission_7>`.
+1. Open the account's request and its Checklist.
+2. Click Erase beside Grading.
+3. Read what is left of `<submission_7>`.
 
 **Expected Results:**
 
@@ -302,6 +318,7 @@ Runs once per row of **Test data**.
 
 * customer(closed account) is signed in and on `<grade10 vault your data url>`.
 * The account holds `<submission_8>` and no open vault case.
+* `<submission_8>` is seeded at `sent` through grading's dev seed, under the account's email and user id.
 
 **Test data:**
 
@@ -311,7 +328,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the erasure block on Your data.
+1. Scroll to the ask to be forgotten on Your data.
+2. Read the ask's block.
 
 **Expected Results:**
 
@@ -337,7 +355,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<submission_9>` reached `collected`.
-* The collector filed the account's erasure ask, its cancellation window passed uncancelled, and an admin ran grading's erasure for the account from the console.
+* The account's request to be forgotten is filed and its 7-day window has passed uncancelled.
+* admin(holds user:delete) is on `<grade10 admin erasure url>`.
 
 **Test data:**
 
@@ -347,7 +366,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read `<submission_9>`'s owed messages and its history.
+1. Open the account's request and its Checklist.
+2. Click Erase beside Grading.
+3. Read `<submission_9>`'s owed messages and its history.
 
 **Expected Results:**
 
@@ -388,6 +409,42 @@ Runs once per row of **Test data**.
 * The page names that grading's holds could not be read.
 * The ask is not offered, and nothing is filed.
 * What the vault keeps stays on screen.
+
+### grade10-site-vault-retention-and-erasure-US4-TC11-1: A submission past its window is reported under each class it holds
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-04
+
+**Pre-conditions:**
+
+* The brand keeps agreements, photos and case records for 2,555 days (7 years).
+* `<submission_11>` is seeded at `collected` through grading's dev seed, its anchors 2,600 days back.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<submission_11>` | A submission collected 2,600 days ago (about 7.1 years, past every window), carrying a sealed agreement, both receipts, the hand-in and hand-back photographs and a submission record |
+
+**Steps:**
+
+1. Run the retention review on grading's slow sweep lane.
+2. Read the classes the review reports `<submission_11>` under.
+
+**Expected Results:**
+
+* `<submission_11>` is reported under agreements, photos and case records.
+* It is reported under no identity class.
 
 ## Settled
 

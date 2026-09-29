@@ -26,20 +26,35 @@
 
 **Pre-conditions:**
 
-* customer(with a saved plan under twenty cards) has reached the Book the drop-off step from the plan's review.
+* customer(with a kept plan of <cards in the list> at <level>, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked.
+* The plan was kept from Start a submission on <grade10 grading url>, giving <collector email>, and Book pressed on its review.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <cards in the list> | 6 cards, each declared HKD 1,000.00 (any count under 20 takes the standard drop-off) |
+| <level> | Express (a level whose fee carries a cover line) |
+| <collector email> | an address only this run uses, whose inbox the tester reads |
+| <picked day> | the Tuesday of a week inside the booking horizon, before that week's Thursday 19:00 cut-off |
+| <picked time> | the first time offered on <picked day> |
 
 **Steps:**
 
-1. Select the shop in the location picker.
-2. Select a day inside the service's booking horizon, before this week's batch cut-off.
-3. Select one of the day's offered times and confirm the booking.
+1. Click the shop in the shop picker.
+2. Click <picked day> in the day picker.
+3. Read the batch line beside the day.
+4. Click <picked time>, then Book <day, time>.
+5. Read the booked page.
+6. Open the inbox of <collector email>.
 
 **Expected Results:**
 
-* The batch line beside the picked day names hand-in by that Thursday's cut-off and the cards leaving the next day.
-* The submission's booked page shows the day, the time, the shop and its address, with an add-to-calendar file, Move and Cancel.
-* The booked page lists the four Before you come items, and a confirmation email is sent.
-* The email is grading's own; the diary sends no message of its own about the visit.
+* Step 3: the batch line names hand-in by that Thursday's cut-off and the cards leaving the next day.
+* Step 5: the booked page shows the day, the time, the shop and its address, with Add to calendar, Move and Cancel.
+* Step 5: the booked page lists the four Before you come items.
+* Step 6: a confirmation email has arrived.
+* Step 6: the email is grading's own; no message from the diary about the visit arrives.
 
 ### grade10-site-grading-dropoff-booking-US1-TC2-1: Booking after the cut-off shows the next batch's dates
 
@@ -58,15 +73,22 @@
 
 **Pre-conditions:**
 
-* customer(with a saved plan) is on the Book the drop-off step with the shop selected.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked and the shop clicked in the shop picker.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <picked day> | the Friday of a week inside the booking horizon, the day after that week's Thursday 19:00 cut-off |
 
 **Steps:**
 
-1. Select a day past this week's batch cut-off but inside the booking horizon.
+1. Click <picked day> in the day picker.
+2. Read the batch line beside the day.
 
 **Expected Results:**
 
-* The batch line names the following batch's close and ship days rather than the current week's.
+* Step 2: the batch line names the following batch's close and ship days rather than the current week's.
 
 ### grade10-site-grading-dropoff-booking-US1-TC3-1: Booking exactly at the cut-off stays in that batch, at the limit
 
@@ -85,7 +107,8 @@
 
 **Pre-conditions:**
 
-* customer(with a saved plan) is on the Book the drop-off step.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked and the shop clicked in the shop picker.
+* The shop's diary offers a free time at 19:00 on a Thursday inside the booking horizon.
 
 **Test data:**
 
@@ -95,11 +118,13 @@
 
 **Steps:**
 
-1. Select the day and time at <Picked visit day and time>.
+1. Click the Thursday of <Picked visit day and time> in the day picker.
+2. Click the 19:00 time.
+3. Read the batch line beside the day.
 
 **Expected Results:**
 
-* The batch line reads hand-in by that same Thursday's cut-off, with the cards leaving the next day.
+* Step 3: the batch line reads hand-in by that same Thursday's cut-off, with the cards leaving the next day.
 
 ### grade10-site-grading-dropoff-booking-US1-TC4-1: Shop and days render as skeletons while the diary loads
 
@@ -118,15 +143,17 @@
 
 **Pre-conditions:**
 
-* customer(with a saved plan) is on the Book the drop-off step, and the diary's response is still pending.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) has <grade10 grading submission page url> open, the collection statement ticked.
+* Network conditions are manipulated to hold the diary's answer of shops and slots pending.
 
 **Steps:**
 
-1. Observe the shop and day picker.
+1. Reload the page and scroll to the Book the drop-off step.
+2. Read the shop picker and the day picker before the diary answers.
 
 **Expected Results:**
 
-* The shop and the days render as loading skeletons; no day reads as bookable yet.
+* Step 2: the shop and the days render as loading skeletons; no day reads as bookable yet.
 
 ### grade10-site-grading-dropoff-booking-US1-TC5-1: No free slot leaves every day in the horizon unbookable
 
@@ -145,15 +172,17 @@
 
 **Pre-conditions:**
 
-* customer(with a saved plan) is on the Book the drop-off step, and the shop's diary offers no free slot anywhere inside the booking horizon.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked.
+* The shop's diary offers no free slot anywhere inside the booking horizon: every day from today to the horizon's last day is closed for the shop in the shop's diary console at <grade10 admin appointments url>.
 
 **Steps:**
 
-1. Open the day picker.
+1. Click the shop in the shop picker.
+2. Click each day of the horizon in the day picker in turn.
 
 **Expected Results:**
 
-* Every day in the horizon reads with nothing free, and none is selectable.
+* Step 2: every day in the horizon reads with nothing free, and none is selectable.
 
 ### grade10-site-grading-dropoff-booking-US1-TC6-1: A day past the booking horizon is disabled, at the limit
 
@@ -172,17 +201,27 @@
 
 **Pre-conditions:**
 
-* customer(with a saved plan) is on the day picker, with slots free on the last day inside the service's booking horizon.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked and the shop clicked in the shop picker.
+* The drop-off service's horizon in the shop's diary is <horizon>, and slots are free on <last horizon day>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <horizon> | 30 days, as the diary seeds it |
+| <last horizon day> | the last day <horizon> reaches from today |
+| <first day past> | the day after <last horizon day> |
 
 **Steps:**
 
-1. Select the last day inside the booking horizon.
-2. Attempt to select the first day past the horizon.
+1. Page the day picker forward to <last horizon day>.
+2. Click <last horizon day>.
+3. Click <first day past>.
 
 **Expected Results:**
 
-* The last day inside the horizon is selectable, with its times offered.
-* The first day past the horizon is disabled and cannot be selected.
+* Step 2: <last horizon day> is selectable, with its times offered.
+* Step 3: <first day past> is disabled and cannot be selected.
 
 ### grade10-site-grading-dropoff-booking-US1-TC7-1: The diary's own refusal words offer another day to book
 
@@ -203,25 +242,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a saved plan) has selected a shop, a day and a time to book.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, having clicked the shop, <picked day> and <picked time>.
+* The diary will answer the booking of <picked time> with <Diary's refusal>, reached as <How the refusal is reached> says.
 
 **Test data:**
 
-| Diary's refusal |
-| --- |
-| The slot is not offered |
-| The slot is full |
-| The slot's resource is not available |
-| The day is already booked |
+| Diary's refusal | How the refusal is reached |
+| --- | --- |
+| The slot is not offered | the diary's answer is mocked |
+| The slot is full | in a second browser session, another collector books <picked time>, the day's last free slot, first |
+| The slot's resource is not available | the diary's answer is mocked |
+| The day is already booked | the diary's answer is mocked |
 
 **Steps:**
 
-1. Confirm a booking the diary answers with <Diary's refusal>.
+1. Click Book <day, time>.
+2. Read the drop-off step.
 
 **Expected Results:**
 
-* The page reads <Diary's refusal> in the diary's own words.
-* Another day is offered, and the day's times are read again.
+* Step 2: the page reads <Diary's refusal> in the diary's own words.
+* Step 2: another day is offered, and the day's times are read again.
 
 ### grade10-site-grading-dropoff-booking-US1-TC8-1: Diary failure reads in the error tone with no free day
 
@@ -240,16 +281,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a saved plan) is on the Book the drop-off step, and the diary's request has failed.
+* customer(with a kept plan of 6 cards at Regular, no visit booked) has <grade10 grading submission page url> open, the collection statement ticked.
+* Network conditions are manipulated to fail the diary's read of shops and slots.
 
 **Steps:**
 
-1. Observe the shop and day picker.
+1. Reload the page and scroll to the Book the drop-off step.
+2. Read the shop picker and the day picker.
 
 **Expected Results:**
 
-* The failure reads in the page's error tone.
-* No day reads as free.
+* Step 2: the failure reads in the page's error tone.
+* Step 2: no day reads as free.
 
 ### grade10-site-grading-dropoff-booking-US1-TC9-1: The estimated day back counts from the day the batch leaves
 
@@ -268,17 +311,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a saved plan at a level quoted at a number of weeks back) is on the Book the drop-off step.
+* customer(with a kept plan of 1 card at <level>, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked and the shop clicked in the shop picker.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <level> | Regular, quoted at <weeks back> on the fee sheet |
+| <weeks back> | the weeks the fee sheet quotes for <level> (5 on the stack's dev sheet) |
+| <picked day> | the Tuesday of a week inside the horizon, before that week's cut-off |
+| <ship day> | the day the batch line names the cards leaving, the Friday after <picked day> |
 
 **Steps:**
 
-1. Select a day inside the horizon and read the estimated day back beside it.
-2. Book that day and read the estimated day back on the booked page.
+1. Click <picked day> in the day picker.
+2. Read the estimated day back beside it.
+3. Click the first time offered, then Book <day, time>.
+4. Read the estimated day back in the fourth Before you come item on the booked page.
 
 **Expected Results:**
 
-* The estimated day back is the level's weeks counted from the day the batch leaves the shop.
-* It is not counted from the day of the visit, nor from the day the booking was made.
+* Steps 2 and 4: the estimated day back is <ship day> plus <weeks back>.
+* It is not <picked day> plus <weeks back>, nor today plus <weeks back>.
 
 ### grade10-site-grading-dropoff-booking-US1-TC10-1: The booked page offers a vault case on the same visit
 
@@ -297,7 +351,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a drop-off booked) is on the submission's booked page.
+* customer(with a drop-off booked from a kept plan of 1 card at Regular) is on the submission's booked page at <grade10 grading submission page url>.
 
 **Steps:**
 
@@ -305,8 +359,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The page says a card that is not being graded can open a vault case at the same counter.
-* It says that case takes the identity check grading itself does not ask for.
+* Step 1: the page says a card that is not being graded can open a vault case at the same counter.
+* Step 1: it says that case takes the identity check grading itself does not ask for.
 
 ---
 
@@ -333,17 +387,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a drop-off booked and not yet started) is on <the submission page>.
+* customer(with a drop-off booked from a kept plan of 1 card at Regular under <collector email>, the visit not yet started) is on <grade10 grading submission page url>, opened from the booked email's link.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector email> | an address only this run uses, whose inbox the tester reads |
+| <new day> | a day inside the horizon other than the one the visit holds |
+| <new time> | the first time offered on <new day> |
 
 **Steps:**
 
-1. Open Move on the booked visit.
-2. Select a new day and time and confirm.
+1. Click Move on the visit card.
+2. Click the shop, then <new day>, and read the batch line.
+3. Click <new time>, then Book <day, time>.
+4. Read the visit card.
+5. Open the inbox of <collector email>.
 
 **Expected Results:**
 
-* The visit reads the new day and time, and the batch line reads again for the newly picked day.
-* A moved email is sent naming the new visit.
+* Steps 2 and 4: the visit reads <new day> and <new time>, and the batch line reads again for <new day>.
+* Step 5: a moved email has arrived naming <new day> and <new time>.
 
 ### grade10-site-grading-dropoff-booking-US2-TC4-1: Moving the drop-off never offers its own current slot back
 
@@ -362,17 +427,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a drop-off booked and not yet started) is on <the submission page>.
+* customer(with a drop-off booked on <held day> at <held time> from a kept plan of 1 card at Regular, the visit not yet started) is on <grade10 grading submission page url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <held day>, <held time> | the day and time the visit already holds |
+| <times seen when booking> | the free times on <held day> the tester noted before booking the visit |
 
 **Steps:**
 
-1. Open Move on the booked visit.
-2. Read the days and times offered.
+1. Click Move on the visit card.
+2. Click the shop, then <held day>.
+3. Read the times offered.
 
 **Expected Results:**
 
-* The day and time the visit already holds is not offered.
-* Every other free slot is offered as before.
+* Step 3: <held time> is not offered.
+* Step 3: every other time in <times seen when booking> is offered as before.
 
 ### grade10-site-grading-dropoff-booking-US2-TC2-1: Collector cancels the drop-off and keeps the card list
 
@@ -391,17 +464,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a drop-off booked and not yet started) is on <the submission page>.
+* customer(with a drop-off booked from a kept plan of 1 card at Regular under <collector email>, the visit not yet started) is on <grade10 grading submission page url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector email> | an address only this run uses, whose inbox the tester reads |
 
 **Steps:**
 
-1. Open Cancel visit.
-2. Confirm the cancellation.
+1. Note the cards and the estimate on the page.
+2. Click Cancel visit on the visit card.
+3. Confirm the cancel in the dialog.
+4. Read the page.
+5. Open the inbox of <collector email>.
 
 **Expected Results:**
 
-* The visit closes and the submission reads Not handed in yet.
-* The list and the estimate stay as they were, and a cancelled email is sent.
+* Step 4: the visit closes and the submission reads Not handed in yet.
+* Step 4: the list and the estimate stay as they were at step 1.
+* Step 5: a cancelled email has arrived.
 
 ### grade10-site-grading-dropoff-booking-US2-TC3-1: Neither Move nor Cancel is offered once the visit has started
 
@@ -420,7 +503,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a booked drop-off whose start time has passed and which the shop has not closed) is on <the submission page>.
+* customer(with a booked drop-off whose start time passed 5 minutes ago and which the shop has not closed) is on <grade10 grading submission page url>.
+* The visit was booked for the earliest free time and the tester waited past its start, or, on the local stack, the submission was seeded at Drop-off booked with its visit 5 minutes past and no sweep run since.
 
 **Steps:**
 
@@ -428,7 +512,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Neither Move nor Cancel visit is offered.
+* Step 1: neither Move nor Cancel visit is offered.
 
 ---
 
@@ -455,17 +539,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(whose booked visit passed unattended and was marked missed by the shop's console, less than an hour ago) is on <the submission page>.
+* customer(with a drop-off booked from a kept plan of 2 cards at Regular under <collector email>) booked the visit for the earliest free time, and its start time has passed with nobody at the desk.
+* admin(holds appointment:manage) closed that visit as missed in the shop's diary console at <grade10 admin appointments url>, less than an hour ago.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector email> | an address only this run uses, whose inbox the tester reads |
 
 **Steps:**
 
-1. Read the page's chip, list and estimate.
+1. Open <grade10 grading submission page url> from the booked email's link.
+2. Read the page's status word, chip, list and estimate.
+3. Open the inbox of <collector email>.
 
 **Expected Results:**
 
-* The page reads Drop-off booked with the visit closed and the chip Waiting on you.
-* The list and the estimate show exactly as they were, and a missed email confirms it.
-* A Book another drop-off line is offered.
+* Step 2: the page reads Drop-off booked with the visit closed and the chip Waiting on you.
+* Steps 2 and 3: the list and the estimate show exactly as they were, and a missed email confirms it.
+* Step 2: a Book another drop-off line is offered.
 
 ### grade10-site-grading-dropoff-booking-US3-TC2-1: Booking again after a miss reuses the same list
 
@@ -484,17 +577,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(whose submission shows a missed visit with the Book another drop-off line) is on <the submission page>.
+* customer(whose submission of 2 cards shows a missed visit with the Book another drop-off line) is on <grade10 grading submission page url>.
+* The missed visit was closed as missed in the shop's diary console, or, on the local stack, the submission was seeded at Drop-off booked with its visit 2 hours past and the sweep's fast lane run.
 
 **Steps:**
 
-1. Select Book another drop-off.
-2. Complete the booking with a new shop, day and time.
+1. Note the cards and the estimate on the page.
+2. Click Book another drop-off.
+3. Tick the collection statement where the step asks for it.
+4. Click the shop, a day inside the horizon and its first free time, then Book <day, time>.
+5. Read the page.
 
 **Expected Results:**
 
-* The new visit books against the same list and estimate the missed visit carried.
-* The submission reads Drop-off booked with the new day.
+* Step 5: the new visit books against the same list and estimate noted at step 1.
+* Step 5: the submission reads Drop-off booked with the new day.
 
 ### grade10-site-grading-dropoff-booking-US3-TC4-1: A missed visit restarts the plan's clock from the day of the miss
 
@@ -544,16 +641,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(whose booked visit's start time has passed with nobody at the desk, and which the shop's diary console has not yet closed) is on <the submission page>.
+* customer(with a drop-off booked under <collector email>, whose start time passed 2 hours ago with nobody at the desk, and which the shop's diary console has not yet closed) is on <grade10 grading submission page url>.
+* On the local stack, the submission was seeded at Drop-off booked with its visit 2 hours past, and no sweep has run since.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector email> | an address only this run uses, whose inbox the tester reads |
 
 **Steps:**
 
-1. Read the page's chip, the visit card and the mailbox.
+1. Read the page's status word and the visit card.
+2. Open the inbox of <collector email>.
 
 **Expected Results:**
 
-* The page still reads Drop-off booked and holds the visit.
-* No missed email has been sent.
+* Step 1: the page still reads Drop-off booked and holds the visit.
+* Step 2: no missed email has been sent.
 
 ---
 
@@ -580,16 +685,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a first submission's drop-off already booked) is on the Book the drop-off step for a second submission under the same email.
+* customer(with a first submission of 1 card at Regular whose drop-off is booked under <collector email>) has kept a second plan of 1 card at Express under the same email, and is on its Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector email> | an address only this run uses |
+| <owner's visit> | the day and time the first submission's visit card reads |
 
 **Steps:**
 
-1. Observe the step's shop and day picker.
+1. Read the second submission's Book the drop-off step.
+2. Reload the second submission's page and read its visit card.
 
 **Expected Results:**
 
-* No shop or day picker is shown; the step reads the existing visit as joined instead.
-* The second submission's page shows the same day and time, read through the owning submission.
+* Step 1: no shop or day picker is shown; the step reads the existing visit as joined instead.
+* Step 2: the second submission's page shows <owner's visit>, read through the owning submission.
 
 ### grade10-site-grading-dropoff-booking-US4-TC2-1: Two joined lists passing twenty resize to the Bulk slot
 
@@ -608,15 +721,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(whose first submission's drop-off is booked at the standard visit) has a second submission ready to join, the two lists' combined count passing twenty.
+* customer(whose first submission of <first list> has its drop-off booked at the standard visit under <collector email>) has kept a second plan of <second list> under the same email, the two lists' combined count passing twenty.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <first list> | 12 cards at Regular, each declared HKD 100.00 |
+| <second list> | 9 cards at Express, each declared HKD 100.00 |
+| <collector email> | an address only this run uses |
 
 **Steps:**
 
-1. Join the second submission to the first submission's visit.
+1. Open the second submission at <grade10 grading submission page url> and tick the collection statement, so it joins the first submission's visit.
+2. Read the joined line on the second submission's page.
+3. Read the visit in the shop's diary console at <grade10 admin appointments url>.
 
 **Expected Results:**
 
-* The visit is resized to the longer Bulk service, moved once in the diary.
+* Steps 2 and 3: the visit is resized to the longer Bulk service, moved once in the diary.
 
 ### grade10-site-grading-dropoff-booking-US4-TC3-1: Owner's cancelled or missed visit detaches every joiner
 
@@ -637,24 +760,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a second submission joined to the first submission's visit).
+* customer(with a second submission of 1 card at Express joined to the visit a first submission of 1 card at Regular owns, both under <collector email>).
 
 **Test data:**
 
-| Owner's action |
-| --- |
-| Cancels the visit |
-| Misses the visit |
+| Owner's action | How the tester makes it |
+| --- | --- |
+| Cancels the visit | on the owning submission's page, click Cancel visit and confirm the cancel |
+| Misses the visit | book the owner's visit for the earliest free time, let its start pass, and close it as missed in the shop's diary console at <grade10 admin appointments url> |
 
 **Steps:**
 
-1. The owning submission <Owner's action>.
-2. Open the joiner's submission page.
+1. Note the joiner's cards and estimate on its page.
+2. Make the owning submission <Owner's action>, as the row says.
+3. Open the joiner's submission page at <grade10 grading submission page url>.
+4. Open the inbox of <collector email>.
 
 **Expected Results:**
 
-* The joiner's page reads Not handed in yet, with the list and the estimate as they were.
-* A Book another drop-off line is offered, and a letter tells the joiner the visit ended.
+* Step 3: the joiner's page reads Not handed in yet, with the list and the estimate as noted at step 1.
+* Steps 3 and 4: a Book another drop-off line is offered, and a letter tells the joiner the visit ended.
 
 ---
 
@@ -681,16 +806,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with no card list) is on <grade10.com/book> with the Grading visit selected.
+* customer(with no card list) is on <grade10 booking page url> with the Grading visit selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <walk-in name> | Walk In Collector |
+| <walk-in email> | an address only this run uses, whose inbox the tester reads |
 
 **Steps:**
 
-1. Enter a name and an email.
-2. Select a day and time and confirm the booking.
+1. Click the shop, a day inside the horizon and its first free time.
+2. Enter <walk-in name> and <walk-in email> in the booking details.
+3. Confirm the booking.
+4. Open the inbox of <walk-in email>.
 
 **Expected Results:**
 
-* The visit books with no card list attached, and no grading submission is created.
+* Steps 3 and 4: the visit books with no card list attached, and no grading submission is created.
 
 ### grade10-site-grading-dropoff-booking-US5-TC2-1: Walk-in booking is refused missing a name or email
 
@@ -746,7 +880,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with no card list) is on <grade10.com/book>.
+* customer(with no card list) is on <grade10 booking page url>.
 
 **Steps:**
 
@@ -754,8 +888,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The Grading visit is listed.
-* Neither the Grading drop-off nor its Bulk variant is offered there.
+* Step 1: the Grading visit is listed.
+* Step 1: neither the Grading drop-off nor its Bulk variant is offered there.
 
 ### grade10-site-grading-dropoff-booking-US5-TC4-1: The walk-in's cards are listed at the desk and grading says nothing about the visit
 
@@ -774,17 +908,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with no card list) has a booked Grading visit and is at the counter.
+* customer(with no card list) booked a Grading visit on <grade10 booking page url> under <walk-in email>, and is at the counter on its day.
+* admin(holds grading:operate) is on the Walk-in desk at <grade10 admin grading walk-in url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <walk-in email> | the address the Grading visit was booked under, whose inbox the tester reads |
+| <first card> | one card at Regular, declared HKD 1,000.00 |
 
 **Steps:**
 
-1. Staff write the cards with the collector at the desk.
-2. Read the submission the counter created, and the messages sent about the visit.
+1. On the Walk-in desk, enter <walk-in email>, the name and the phone, the grader, Regular, the shop and <first card>, then click Open the submission.
+2. Hand the submission in from the Hand-in runbook with the collector at the desk.
+3. Read the submission the desk created, on its page in the console.
+4. Open the inbox of <walk-in email>.
 
 **Expected Results:**
 
-* The submission is created at the desk and handed in from there.
-* Grading sent no booked, moved, cancelled or missed message about that visit.
+* Step 3: the submission is created at the desk and handed in from there.
+* Step 4: grading sent no booked, moved, cancelled or missed message about that visit.
 
 ---
 
@@ -811,17 +955,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(a dealer with a plan of twenty cards or more) is on the Book the drop-off step.
+* customer(a dealer with a kept plan of <cards in the list> at Bulk, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <cards in the list> | 20 cards, each declared HKD 100.00 (twenty or more) |
 
 **Steps:**
 
-1. Open the shop and day picker.
-2. Book a day and time.
+1. Read the step's lead, then click the shop and a day inside the horizon.
+2. Click the first time offered, then Book <day, time>.
+3. Read the booked page.
 
 **Expected Results:**
 
-* The Bulk drop-off's longer slots, about 45 minutes, are offered rather than the standard visit.
-* The booked page names the visit's length as about 45 minutes.
+* Step 1: the Bulk drop-off's longer slots, about 45 minutes, are offered rather than the standard visit.
+* Step 3: the booked page names the visit's length as about 45 minutes.
 
 ### grade10-site-grading-dropoff-booking-US6-TC2-1: Nineteen and twenty cards split on either side, at the limit
 
@@ -842,22 +993,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a plan of <Cards in the list> cards) is on the Book the drop-off step.
+* customer(with a kept plan of <Cards in the list> cards at <Level>, each declared HKD 100.00, no visit booked) is on the Book the drop-off step at <grade10 grading submission page url>, the collection statement ticked.
 
 **Test data:**
 
-| Cards in the list | Slot offered |
-| --- | --- |
-| 19 | The standard visit |
-| 20 | The Bulk drop-off |
+| Cards in the list | Level | Slot offered |
+| --- | --- | --- |
+| 19 | Regular | The standard visit |
+| 20 | Bulk, the only level open at twenty | The Bulk drop-off |
 
 **Steps:**
 
-1. Open the shop and day picker.
+1. Read the step's lead.
+2. Click the shop and a day inside the horizon.
 
 **Expected Results:**
 
-* The slot offered matches <Slot offered>.
+* Steps 1 and 2: the slot offered matches <Slot offered>.
 
 ### grade10-site-grading-dropoff-booking-US6-TC3-1: A booked list edited past twenty cards takes the Bulk drop-off at the same slot
 
@@ -876,18 +1028,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(with a submission of 15 cards and a standard drop-off booked on it) is on <grade10 grading submission page url>, the visit not started.
+* customer(with a submission of 15 cards at Regular, each declared HKD 100.00, and a standard drop-off booked on it) is on <grade10 grading submission page url>, the visit not started.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <booked slot> | the day and time the visit card reads before the edit |
+| <added cards> | 7 cards, each declared HKD 100.00 |
 
 **Steps:**
 
 1. Click Edit the list.
-2. Add seven cards, each with a declared value, to make 22, and save the changes.
+2. Add <added cards> to make 22, pick Bulk at the service step, and click Save changes.
 3. Read the drop-off on the submission page.
+4. Read the visit in the shop's diary console at <grade10 admin appointments url>.
 
 **Expected Results:**
 
-* Step 3: the visit is the Bulk drop-off, about 45 minutes, at the same day and time as before.
-* The diary moved the visit once and never cancelled it.
+* Step 3: the visit is the Bulk drop-off, about 45 minutes, at <booked slot>.
+* Step 4: the diary moved the visit once and never cancelled it.
 
 ---
 

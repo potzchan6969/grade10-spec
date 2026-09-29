@@ -1,7 +1,7 @@
 # grade10-site/grading/collector-notifications Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
 
@@ -36,12 +36,21 @@
 
 **Pre-conditions:**
 
-* A collector has a planned submission listing cards, not yet booked, on <grade10 grading submission url>.
+* On staging, customer(collector) holds a plan kept under <collector inbox>, listing cards, with a level picked and no drop-off booked.
+* The collector is on <grade10 grading submission page url> for that plan, the drop-off picker open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector inbox> | An email inbox the tester reads, used by no other run |
+| <visit> | Any free day and time the picker offers |
 
 **Steps:**
 
-1. Book the drop-off from the submission page.
-2. Check the collector's inbox.
+1. Pick the shop, then the day and the time of <visit> in the drop-off picker.
+2. Click Book <day, time>.
+3. Open <collector inbox>.
 
 **Expected Results:**
 
@@ -65,17 +74,29 @@
 
 **Pre-conditions:**
 
-* A collector's submission is at hand-in, every card checked and the agreement sealed.
+* On staging, customer(collector) reads the site in Traditional Chinese (`<lang>` is `/tc`) and planned the submission there, under <collector inbox> and <collector phone>.
+* The submission is Drop-off booked, every card checked on the hand-in runbook, the agreement sealed and the fee paid.
+* admin(holds grading:operate) is on the submission's hand-in runbook at <grade10 admin grading submission url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector inbox> | An email inbox the tester reads, used by no other run |
+| <collector phone> | A phone the tester holds, receiving SMS and WhatsApp |
 
 **Steps:**
 
-1. Finish hand-in for the submission.
-2. Open the handed-in message received.
+1. Click Print n labels and check in on the runbook.
+2. Open <collector inbox>.
+3. Open the handed-in email.
+4. Check <collector phone> for any SMS or WhatsApp message about the submission.
 
 **Expected Results:**
 
-* The message arrives by email; no SMS or WhatsApp message arrives.
-* The message reads entirely in English.
+* Step 2: the handed-in message arrives by email.
+* Step 3: the message reads entirely in English.
+* Step 4: no SMS or WhatsApp message arrives.
 
 ### grade10-site-grading-collector-notifications-US1-TC3-1: The message link opens the submission with no account
 
@@ -94,12 +115,13 @@
 
 **Pre-conditions:**
 
-* A collector's submission is booked for its drop-off; the booked email has arrived.
-* The device used holds no signed-in session.
+* customer(collector)'s submission is Drop-off booked, and the drop-off booked email has arrived in <collector inbox>.
+* The browser used holds no signed-in session: a private window.
 
 **Steps:**
 
-1. Open the link from the drop-off booked email.
+1. Open the drop-off booked email in <collector inbox>.
+2. Click Open your submission, into the private window.
 
 **Expected Results:**
 
@@ -123,11 +145,12 @@
 
 **Pre-conditions:**
 
-* A collector's submission is handed in, the agreement sealed and the intake receipt issued.
+* customer(collector)'s submission is Handed in under <collector email>, the agreement sealed and the intake receipt issued.
+* On the local stack this is a submission seeded at Handed in, whose hand-in sends the handed-in email to the grading outbox for <collector email>.
 
 **Steps:**
 
-1. Open the handed-in email.
+1. Open the latest grading email to <collector email>: the handed-in email.
 
 **Expected Results:**
 
@@ -151,11 +174,12 @@
 
 **Pre-conditions:**
 
-* A collector's submission's batch has shipped to the grader.
+* customer(collector)'s submission is With the grader under <collector email>: its batch has shipped.
+* On the local stack this is a submission seeded at With the grader, whose ship sends the on-their-way email to the grading outbox for <collector email>.
 
 **Steps:**
 
-1. Open the "on their way" email.
+1. Open the latest grading email to <collector email>: the on-their-way email.
 
 **Expected Results:**
 
@@ -179,17 +203,19 @@
 
 **Pre-conditions:**
 
-* A collector's submission triggers a mapped event on a production environment, with every footer fact set.
+* On production, every footer fact is set: <grade10 admin grading settings url> reads no fact as not set.
+* customer(collector) has received a grading email about a submission in <collector inbox>.
 
 **Steps:**
 
-1. Open the received email.
-2. Read its footer.
+1. Open the latest grading email in <collector inbox>.
+2. Read the line directly above the footer.
+3. Read the footer.
 
 **Expected Results:**
 
-* The footer names the submission id and its summary.
-* The footer names the custodian's registered name trading as Grade10, the shop and its address, and the complaints contact.
+* Step 2: the line names the submission id and its summary: the cards, the grader and the level.
+* Step 3: the footer names the custodian's registered name trading as Grade10, the shop and its address, and the complaints contact.
 * Every date and time in the message reads Hong Kong time.
 
 ### grade10-site-grading-collector-notifications-US1-TC7-1: The footer marks an unset fact outside production
@@ -209,11 +235,12 @@
 
 **Pre-conditions:**
 
-* A collector's submission triggers a mapped event outside production, with one footer fact unset.
+* On the local stack, the complaints contact reads not set on <grade10 admin grading settings url>, and every other footer fact is set.
+* customer(collector)'s submission sends a grading email to <collector email>: on the local stack, a submission seeded at Handed in.
 
 **Steps:**
 
-1. Open the received email.
+1. Open the latest grading email to <collector email>.
 2. Read its footer.
 
 **Expected Results:**
@@ -238,18 +265,22 @@
 
 **Pre-conditions:**
 
-* Two collectors each hold a submission with a drop-off booked, on <grade10 grading submission url>.
-* admin(shop staff) is on <grade10 admin grading submission url> for the second submission.
+* customer A and customer B each hold a submission booked for a drop-off from its page's drop-off picker, under <collector A email> and <collector B email>.
+* customer A is on <grade10 grading submission page url> for their submission.
+* admin(holds grading:operate) is on <grade10 admin grading submission url> for customer B's submission.
 
 **Steps:**
 
-1. Cancel the first visit from the collector's submission page.
-2. Cancel the second visit from the console.
-3. Open both collectors' inboxes.
+1. On customer A's page, click Cancel visit on the visit card.
+2. Confirm the cancel.
+3. On the console, click Cancel visit on customer B's drop-off block.
+4. Confirm the cancel.
+5. Open the latest grading email to <collector A email>.
+6. Open the latest grading email to <collector B email>.
 
 **Expected Results:**
 
-* Both collectors receive the drop-off cancelled email.
+* Steps 5 and 6: both collectors receive the drop-off cancelled email.
 * The two emails carry the same wording.
 * Neither names who cancelled the visit.
 
@@ -270,12 +301,12 @@
 
 **Pre-conditions:**
 
-* A collector's submission has its grades posted, nothing to settle and no ungraded card.
+* customer(collector)'s submission is Grades are in under <collector email>, with no card moved up a level and no card returned ungraded.
+* On the local stack this is a submission seeded at Grades are in, whose grades send the grades email to the grading outbox for <collector email>.
 
 **Steps:**
 
-1. Open the collector's inbox.
-2. Open the grades email.
+1. Open the latest grading email to <collector email>: the grades email.
 
 **Expected Results:**
 
@@ -300,12 +331,20 @@
 
 **Pre-conditions:**
 
-* A collector's submission has a drop-off booked for tomorrow.
+* On the local stack, after 09:00 on the shop's clock, customer(collector) holds a plan kept under <collector email> with a level picked and no drop-off booked.
+* The collector is on <grade10 grading submission page url> for that plan, the drop-off picker open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <visit> | Tomorrow, any free time the picker offers |
 
 **Steps:**
 
-1. Let the shop's clock reach the day before the visit.
-2. Open the collector's inbox.
+1. Book <visit> from the drop-off picker.
+2. Run grading's reminder sweep once, standing in for the day before the visit.
+3. Open the latest grading email to <collector email>.
 
 **Expected Results:**
 
@@ -329,12 +368,13 @@
 
 **Pre-conditions:**
 
-* A submission ready and uncollected for 30 days has had its reminder sent.
+* On the local stack, after 09:00 on the shop's clock, customer(collector)'s submission is Ready to collect under <collector email>, its ready day 30 days back.
+* Grading's reminder sweep has run once today and sent the 30-day reminder.
 
 **Steps:**
 
-1. Run the uncollected sweep again the same day.
-2. Open the collector's inbox.
+1. Run grading's reminder sweep again the same day.
+2. Open the collector's grading emails for <collector email>.
 
 **Expected Results:**
 
@@ -366,19 +406,33 @@
 
 **Pre-conditions:**
 
-* A collector is checking in at the counter; one card the grader would not take is on the list, alongside cards that will be accepted.
+* customer(collector)'s submission of three cards is Drop-off booked under <collector email>, booked from its page's drop-off picker; the booked email is the latest grading email to that address.
+* admin(holds grading:operate) is on the submission's hand-in runbook at <grade10 admin grading submission url>, the visit started at the desk, no card checked yet.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <refused card> | The first card on the list: one the grader would not take |
+| <reason> | Any of the three reasons the Refuse dialog offers |
+| <collector's words> | Crease across the front |
 
 **Steps:**
 
-1. Staff refuse the one card with a reason.
-2. Finish hand-in for the accepted cards.
-3. Open the handed-in email.
+1. Click Refuse on <refused card>'s row.
+2. Pick <reason>, type <collector's words>, and click Refuse this card.
+3. Open the latest grading email to <collector email>.
+4. Tick Present on each of the other two cards.
+5. Seal the agreement on the iPad and take payment, as the runbook's steps offer.
+6. Click Print 2 labels and check in.
+7. Open the latest grading email to <collector email>: the handed-in email.
+8. Open <grade10 grading submission page url> for the submission.
 
 **Expected Results:**
 
-* No email names the refusal.
-* The handed-in email still arrives, naming only the accepted cards and their estimate.
-* The intake receipt and the submission page carry the refused card's badge and reason.
+* Step 3: no email names the refusal; the latest email is still the booked one.
+* Step 7: the handed-in email still arrives, naming only the accepted cards and their estimate.
+* Steps 7 and 8: the intake receipt and the submission page carry the refused card's badge and reason.
 
 ### grade10-site-grading-collector-notifications-US2-TC2-1: Naming, changing or removing a collector sends no email
 
@@ -399,24 +453,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A collector's submission is ready to collect, on <grade10 grading submission url>.
+* customer(collector)'s submission is Ready to collect under <collector email>, and the latest grading email to that address is the ready email.
+* The collector is on <grade10 grading submission page url> for the submission, with the person the row's Before names.
 
 **Test data:**
 
-| Action | Value |
-| --- | --- |
-| Name a collector | Names a person on the page for the first time |
-| Change the named person | Replaces the person already named |
-| Remove the named person | Clears the named person from the page |
+| Action | Before | On the naming card |
+| --- | --- | --- |
+| Name a collector | Nobody named | Type Chan Tai Man in Their name, click Save |
+| Change the named person | Chan Tai Man named | Click Change, type Wong Siu Ming in Their name, click Save |
+| Remove the named person | Chan Tai Man named | Click Remove |
 
 **Steps:**
 
-1. Perform <Action> from the submission page.
+1. Do the row's On the naming card.
+2. Open the latest grading email to <collector email>.
+3. Read History on the submission page.
 
 **Expected Results:**
 
-* No email sends for <Action>.
-* History logs <Action> with when it happened.
+* Step 2: no email sends for <Action>; the latest email is still the ready email.
+* Step 3: History logs <Action> with when it happened.
 
 ---
 
@@ -443,19 +500,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(shop staff) is on <grade10 admin grading queue url>.
-* A submission's message to its collector has run out of send attempts.
+* A submission's message to its collector has run out of send attempts: the mail provider refused every send until the retry ladder was spent.
+* admin(holds grading:operate) is signed in to the console.
 
 **Steps:**
 
-1. Open the queue.
-2. Open the flagged submission.
+1. Navigate to <grade10 admin grading queue url>.
+2. Find the submission's row.
+3. Click Open on the row.
 
 **Expected Results:**
 
-* The queue row carries the Message not sent badge.
-* The submission names the failed letter and its reason.
-* Send again is offered.
+* Step 2: the queue row carries the Message not sent badge.
+* Step 3: the submission names the failed letter and its reason.
+* Step 3: Send again is offered.
 
 ### grade10-site-grading-collector-notifications-US3-TC2-1: Staff resend a parked message from the submission
 
@@ -474,11 +532,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(shop staff) is on <grade10 admin grading submission url>, on a submission flagged with a message not sent.
+* A submission's message to its collector has run out of send attempts, and the mail provider now accepts sends.
+* admin(holds grading:operate) is on <grade10 admin grading submission url> for that submission, the failed letter named in its header.
 
 **Steps:**
 
-1. Click Send again on the flagged message.
+1. Click Send again beside the failed letter.
 
 **Expected Results:**
 
@@ -501,11 +560,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(shop staff) is on <grade10 admin grading submission url>; the submission's grades-posted message has run out of send attempts.
+* A submission's grades-posted message has run out of send attempts: the mail provider refused every send until the retry ladder was spent.
+* admin(holds grading:operate) is on <grade10 admin grading submission url> for that submission.
 
 **Steps:**
 
-1. Open the submission's timeline.
+1. Open the submission's Timeline tab.
 
 **Expected Results:**
 
@@ -530,11 +590,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(shop staff) is on <grade10 admin grading queue url>; every submission's messages have sent.
+* On the local stack, every submission's messages have sent: the mail provider has refused none.
+* admin(holds grading:operate) is signed in to the console.
 
 **Steps:**
 
-1. Open the queue.
+1. Navigate to <grade10 admin grading queue url>.
+2. Read the badges on every row of every view.
 
 **Expected Results:**
 
@@ -557,11 +619,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds a grading read grant) is on <grade10 admin grading submission url>, on a submission flagged with a message not sent.
+* A submission's message to its collector has run out of send attempts.
+* admin(holds grading:read and no other grading grant) is on <grade10 admin grading submission url> for that submission.
 
 **Steps:**
 
-1. Open the submission's documents.
+1. Read the submission's header, where the failed letter is named.
 
 **Expected Results:**
 
@@ -585,19 +648,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(shop staff) is on <grade10 admin grading submission url>, on a submission flagged with a message not sent.
-* The mail provider accepts sends again.
+* A submission's message to its collector has run out of send attempts, and the mail provider now accepts sends.
+* admin(holds grading:operate) is on <grade10 admin grading submission url> for that submission, the failed letter named in its header.
 
 **Steps:**
 
-1. Click Send again on the flagged message.
-2. Open the queue at <grade10 admin grading queue url>.
+1. Click Send again beside the failed letter.
+2. Navigate to <grade10 admin grading queue url>.
+3. Find the submission's row.
+4. Click Open on the row.
 
 **Expected Results:**
 
-* The message leaves the parked list once the channel accepts it.
-* The submission's row carries no Message not sent badge.
-* The submission's page shows no failed letter.
+* Step 1: the message leaves the parked list once the channel accepts it.
+* Step 3: the submission's row carries no Message not sent badge.
+* Step 4: the submission's page shows no failed letter.
 
 ## Reconciliation
 

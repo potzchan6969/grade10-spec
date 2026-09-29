@@ -1,12 +1,16 @@
 # grade10-site/grading/submission-plan Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
 **Out of suite:** grade10-site-grading-submission-plan-SC-02
 
 ## Background
 
-Grade10's currency is HKD; every amount below is stated in minor units with its ISO 4217 code. `<grade10 grading url>` is `grade10.com/grading`, the collector's grading home and the plan wizard it mounts; `<grade10 grading submission url>` is one submission's own page.
+Grade10's currency is HKD; every amount is stated in minor units with its ISO 4217 code, and beside it the dollar reading a tester types or reads: the card's declared value field and a pasted line both take dollars.
+
+`<grade10 grading url>` is `grade10.com/grading`, the grading home. `<grade10 plan wizard url>` is `grade10.com/grading/new`, the plan wizard, opening on its empty Cards step. `<grade10 grading submission url>` is one submission's own page, opened from its emailed link with no account. `<grade10 book url>` is `grade10.com/book`, the site's walk-in booking. `<grade10 admin grading settings url>` is `admin.grade10.com/grading/settings`: a fee change is asked by one approver and written once a second approves it.
+
+The stack opens with PSA's five levels at the sheet's figures and no figures for CGC or BGS. Its card price reference holds no rows, so a typed name matches nothing and no reference sale shows: a matched card and a PSA 10 reference sale are a seeded or mocked reference. Grading's dev seed (`/grading/dev/submissions/seed`) walks a submission to a named status, dated off the anchors it is given; its fast sweep lane (`/grading/dev/sweep`, lane `fast`) runs the nudge and the expiry now and holds a letter until 09:00 on the shop's clock; its outbox (`/grading/dev/outbox?email=<address>`) reads the last letter sent to an address. Signing in on the site mails a link to the email given.
 
 ## grade10-site-grading-submission-plan-US1: Collector learns what grading costs before signing in
 
@@ -31,16 +35,18 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is signed out, `<grade10 grading url>`.
+* customer(no account) is signed out.
 
 **Steps:**
 
 1. Navigate to `<grade10 grading url>`.
-2. Read the page before entering a name, email or phone.
+2. Read How it works.
+3. Scroll to the fee sheet under What it costs.
+4. Read the buttons below the lead.
 
 **Expected Results:**
 
-* The four-step explanation of how grading works renders, with no name, email or phone asked for.
+* The four steps of How it works render, and no name, email or phone is asked for.
 * The fee sheet lists the first grader's levels, each with its declared-value ceiling, cards a submission, fee a card and weeks back.
 * Start a submission and Book a drop-off without a list are both offered.
 
@@ -61,17 +67,18 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is signed out, `<grade10 grading url>`.
+* customer(no account) is signed out and on `<grade10 grading url>`.
 
 **Steps:**
 
-1. Read the fee sheet's Value, Regular and Bulk rows.
-2. Read the fee sheet's Express and Super Express rows.
+1. Scroll to the fee sheet under What it costs.
+2. Read the cover column on the Value, Regular and Bulk rows.
+3. Read the cover column on the Express and Super Express rows.
 
 **Expected Results:**
 
 * Value, Regular and Bulk name no cover rate.
-* Express and Super Express each name a cover rate of 1.5% of the declared value a card.
+* Express and Super Express each name a cover rate of 150 basis points (1.5%) of the declared value a card.
 
 ### grade10-site-grading-submission-plan-US1-TC3-1: Multiple graders show as a tab per grader on the fee sheet
 
@@ -90,13 +97,14 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is signed out, `<grade10 grading url>`.
-* PSA, CGC and BGS each carry a fee sheet.
+* customer(no account) is signed out and on `<grade10 grading url>`.
+* PSA, CGC and BGS each carry active levels with their figures, written in `<grade10 admin grading settings url>`; the stack writes PSA's alone.
 
 **Steps:**
 
-1. Read the fee sheet section.
-2. Switch to CGC's tab.
+1. Scroll to the fee sheet under What it costs.
+2. Read the grader switch above it.
+3. Click CGC.
 
 **Expected Results:**
 
@@ -120,7 +128,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is signed out, `<grade10 grading url>`.
+* customer(no account) is signed out and on `<grade10 grading url>`.
 
 **Steps:**
 
@@ -128,7 +136,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Expected Results:**
 
-* The plan wizard opens on the Cards step, with no card listed.
+* The plan wizard opens at `<grade10 plan wizard url>` on the Cards step, with no card listed.
 
 ### grade10-site-grading-submission-plan-US1-TC5-1: Booking without a list leaves the grading home with no list started
 
@@ -147,7 +155,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is signed out, `<grade10 grading url>`.
+* customer(no account) is signed out and on `<grade10 grading url>`.
 
 **Steps:**
 
@@ -155,7 +163,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Expected Results:**
 
-* The browser leaves `<grade10 grading url>` for the walk-in booking page.
+* The browser leaves `<grade10 grading url>` for the walk-in booking at `<grade10 book url>`.
 * No card list is created for this visit.
 
 ### grade10-site-grading-submission-plan-US1-TC6-1: The fee sheet names the counter for a card above the top ceiling
@@ -175,15 +183,16 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is signed out, `<grade10 grading url>`.
+* customer(no account) is signed out and on `<grade10 grading url>`.
 
 **Steps:**
 
-1. Read the fee sheet on the grading home, below its level rows.
+1. Scroll to the fee sheet under What it costs.
+2. Read the lines below its level rows.
 
 **Expected Results:**
 
-* The sheet names a card declared above the top level's ceiling of 3900000 (HKD, minor units).
+* The sheet names a card declared above the top level's ceiling of 3900000 (HKD minor units, HK$39,000.00).
 * It says such a card is asked about at the counter or on WhatsApp rather than priced.
 
 ---
@@ -211,19 +220,21 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with no card listed, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
+* The card price reference holds a row for `<card A>`, with recent sales at ungraded, PSA 9 and PSA 10.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Card searched | Umbreon VMAX (Alternate Art) |
-| Declared value | 850000 (HKD, minor units) |
+| `<card A>` | Umbreon VMAX (Alternate Art), Evolving Skies 188/203 |
+| Declared value | 850000 (HKD minor units, HK$8,500.00): any value above nought |
 
 **Steps:**
 
-1. Search the card from **Test data** and select the matched result.
-2. Enter the declared value from **Test data**.
+1. Type `<card A>`'s name in the card name field.
+2. Pick the matched result from the list under the field.
+3. Enter the declared value from **Test data**, in dollars.
 
 **Expected Results:**
 
@@ -248,12 +259,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has one matched card listed on the Cards step, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with one card listed and its declared value given.
 
 **Steps:**
 
-1. Open the card's minimum-grade setting.
-2. Set the minimum grade to PSA 9.
+1. Find the card's minimum-grade tick.
+2. Tick it at PSA 9.
 
 **Expected Results:**
 
@@ -277,11 +288,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with no card listed, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
 
 **Steps:**
 
 1. Read the Cards step without adding a card.
+2. Read the continue button at its foot.
 
 **Expected Results:**
 
@@ -306,16 +318,24 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has two matched cards listed on the Cards step, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with `<card B>` and `<card C>` listed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card B>` | Homebrew Test Card, declared 50000 (HKD minor units, HK$500.00) |
+| `<card C>` | Homebrew Second Card, declared 70000 (HKD minor units, HK$700.00) |
 
 **Steps:**
 
-1. Remove one of the two listed cards.
+1. Click Remove on `<card C>`.
+2. Read the list.
 
 **Expected Results:**
 
-* The removed card no longer shows on the list.
-* One card remains listed.
+* `<card C>` no longer shows on the list.
+* One card remains listed: `<card B>`.
 
 ### grade10-site-grading-submission-plan-US2-TC5-1: The wizard rail marks the cards step in progress
 
@@ -334,12 +354,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with one card listed, its declared value given and an email in About you.
 
 **Steps:**
 
-1. Read the wizard rail on the Cards step.
-2. Continue to the Service step and read the rail again.
+1. Read the wizard rail.
+2. Click Continue.
+3. Read the wizard rail on the Service step.
 
 **Expected Results:**
 
@@ -363,13 +384,24 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a name, an email and a phone on their account.
+* customer(signed in) has a name, an email and a phone on their account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Phone for this submission | +852 5555 0100: any valid phone other than the account's |
 
 **Steps:**
 
-1. Signed in, open the Cards step and read the About you fields.
-2. Change the phone for this submission.
-3. Sign out, open a new plan and read the same fields.
+1. Navigate to `<grade10 grading url>`.
+2. Click Start a submission.
+3. Read the About you fields.
+4. Change the phone to the one in **Test data**.
+5. Open the account's profile page and read its phone.
+6. Sign out from the header.
+7. Navigate to `<grade10 plan wizard url>`.
+8. Read the About you fields.
 
 **Expected Results:**
 
@@ -394,20 +426,21 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with no card listed, `<grade10 grading url>`.
-* The card price reference is reachable and carries no match for the name typed.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
+* The card price reference is reachable and carries no match for the name typed; the stack's reference holds none.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Card typed | Homebrew Test Card |
-| Declared value | 50000 (HKD, minor units) |
+| Declared value | 50000 (HKD minor units, HK$500.00): any value above nought |
 
 **Steps:**
 
-1. Type the card name from **Test data** and add it by hand.
-2. Enter the declared value from **Test data**.
+1. Type the card name from **Test data** in the card name field.
+2. Click Add this card.
+3. Enter the declared value from **Test data**, in dollars.
 
 **Expected Results:**
 
@@ -432,19 +465,65 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with no card listed, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
 * The card price reference cannot be reached.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Card typed | Homebrew Test Card |
 
 **Steps:**
 
-1. Type a card name and add it by hand.
-2. Read the card line.
+1. Type the card name from **Test data** in the card name field.
+2. Click Add this card.
+3. Read the card line.
 
 **Expected Results:**
 
 * The card carries the reference-unavailable line rather than the kept-as-typed one.
 * The declared value is still asked for.
 * Nothing on the step waits on the reference.
+
+### grade10-site-grading-submission-plan-US2-TC9-1: A minimum grade is carried to the review and costs nothing
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* customer is on the Cards step at `<grade10 plan wizard url>`, with `<card D>` listed, its declared value given, and an email in About you.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card D>` | Homebrew Lugia, declared 200000 (HKD minor units, HK$2,000.00): any value at or below Regular's 1170000 (HK$11,700.00) |
+| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
+
+**Steps:**
+
+1. Tick `<card D>`'s minimum grade at PSA 9.
+2. Click Continue.
+3. Pick PSA at Regular.
+4. Continue to the Book step.
+5. Read the schedule and the fee at the counter.
+
+**Expected Results:**
+
+* `<card D>` carries a minimum grade of PSA 9 beside it on the schedule.
+* The fee at the counter reads 60000 (HKD minor units, HK$600.00), Regular's fee a card for one card, unchanged by the minimum.
 
 ---
 
@@ -471,20 +550,21 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
-* The card price reference is reachable.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
+* The card price reference holds a row for each line's card.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Line 1 | Charizard 1st Edition, Base Set 4/102, declared value 350000 (HKD, minor units) |
-| Line 2 | Umbreon VMAX (Alternate Art), Evolving Skies 188/203, declared value 850000 (HKD, minor units) |
+| Line 1 | `Charizard 1st Edition, Base Set, 4/102, 3500`: declared 350000 (HKD minor units, HK$3,500.00) |
+| Line 2 | `Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 8500`: declared 850000 (HKD minor units, HK$8,500.00) |
 
 **Steps:**
 
-1. Paste the two lines from **Test data** into the paste sheet.
+1. Paste the two lines from **Test data** into Your list.
 2. Wait for matching to finish.
+3. Read the rows under the lines-read counter.
 
 **Expected Results:**
 
@@ -508,19 +588,20 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
-* The card price reference is reachable and carries no match for the pasted name.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
+* The card price reference is reachable and carries no match for the pasted name; the stack's reference holds none.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Line 1 | Homebrew Test Card, no set, declared value 50000 (HKD, minor units) |
+| Line 1 | `Homebrew Test Card, 500`: no set, declared 50000 (HKD minor units, HK$500.00) |
 
 **Steps:**
 
-1. Paste the line from **Test data** into the paste sheet.
+1. Paste the line from **Test data** into Your list.
 2. Wait for matching to finish.
+3. Read the rows under the lines-read counter.
 
 **Expected Results:**
 
@@ -544,20 +625,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Line 1 | Charizard 1st Edition, Base Set 4/102, no value |
+| Line 1 | `Charizard 1st Edition, Base Set, 4/102`: no value |
 
 **Steps:**
 
-1. Paste the line from **Test data** into the paste sheet.
+1. Paste the line from **Test data** into Your list.
 2. Wait for matching to finish.
-3. Click Add 1 card, then read the Cards step.
+3. Read the rows under the lines-read counter.
+4. Click the button that adds 1 card to the list.
+5. Read the Cards step and its continue button.
 
 **Expected Results:**
 
@@ -582,24 +665,25 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Line 1 | Umbreon VMAX (Alternate Art), Evolving Skies 188/203, declared value 4200000 (HKD, minor units) |
+| Line 1 | `Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 42000`: declared 4200000 (HKD minor units, HK$42,000.00), any value above the top ceiling of 3900000 (HK$39,000.00) |
 
 **Steps:**
 
-1. Paste the line from **Test data** into the paste sheet.
+1. Paste the line from **Test data** into Your list.
 2. Wait for matching to finish.
+3. Read the rows under the lines-read counter.
 
 **Expected Results:**
 
 * The line reports as above the ceiling, naming the card and its declared value.
-* The collector is told to ask at the counter or on WhatsApp, 4200000 (HKD, minor units) being above the top level's 3900000 (HKD, minor units) ceiling.
+* The collector is told to ask at the counter or on WhatsApp, 4200000 (HKD minor units) being above the top level's 3900000 (HKD minor units) ceiling.
 * No second submission is named for it.
 
 ### grade10-site-grading-submission-plan-US3-TC5-1: A pasted duplicate of a listed card is skipped
@@ -619,21 +703,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has one matched card listed by hand on the Cards step, `<grade10 grading url>`.
-* The card price reference is reachable.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the listed card from **Test data** added by hand and matched.
+* The card price reference is reachable and holds a row for the listed card.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Listed card | Charizard 1st Edition, Base Set 4/102, declared value 350000 (HKD, minor units) |
-| Pasted line | Charizard 1st Edition, Base Set 4/102, declared value 350000 (HKD, minor units) |
+| Listed card | Charizard 1st Edition, Base Set 4/102, declared 350000 (HKD minor units, HK$3,500.00) |
+| Pasted line | `Charizard 1st Edition, Base Set, 4/102, 3500`: the same card |
 
 **Steps:**
 
-1. Open the paste sheet.
-2. Paste the pasted line from **Test data**.
+1. Click Paste a list.
+2. Paste the pasted line from **Test data** into Your list.
 3. Wait for matching to finish.
+4. Read the rows under the lines-read counter.
 
 **Expected Results:**
 
@@ -657,11 +742,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
 
 **Steps:**
 
-1. Leave the paste sheet's text field empty.
+1. Leave Your list empty.
+2. Read the sheet's add button.
 
 **Expected Results:**
 
@@ -684,20 +770,21 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
 * The card price reference cannot be reached.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Line 1 | Charizard 1st Edition, Base Set 4/102, declared value 350000 (HKD, minor units) |
-| Line 2 | Umbreon VMAX (Alternate Art), Evolving Skies 188/203, declared value 850000 (HKD, minor units) |
+| Line 1 | `Charizard 1st Edition, Base Set, 4/102, 3500`: declared 350000 (HKD minor units, HK$3,500.00) |
+| Line 2 | `Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 8500`: declared 850000 (HKD minor units, HK$8,500.00) |
 
 **Steps:**
 
-1. Paste the two lines from **Test data** into the paste sheet.
+1. Paste the two lines from **Test data** into Your list.
 2. Wait for matching to finish.
+3. Read the rows and the sheet's add button.
 
 **Expected Results:**
 
@@ -721,19 +808,23 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
-* The card price reference is reachable.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
+* The card price reference is reachable and holds a row for each matched line's card.
 * One of the 30 cards pasted is already on the list.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Pasted lines | 30 lines: matched, kept as typed, without a value, above the ceiling and one already listed |
+| Line kind | Lines | Pasted as |
+| --- | --- | --- |
+| Matched | 6 | Six cards the reference holds, each `<name>, <set>, <number>, 1000`: declared 100000 (HKD minor units, HK$1,000.00) |
+| Kept as typed | 14 | `Homebrew Card 01, 1000` to `Homebrew Card 14, 1000` |
+| Without a value | 5 | Five more cards the reference holds, with no value |
+| Above the ceiling | 4 | `Homebrew Card 15, 2000` to `Homebrew Card 18, 2000`: declared 200000 (HK$2,000.00), above Bulk's 150000 (HK$1,500.00), the ceiling a list past 20 lines is read against |
+| Skipped | 1 | The card already on the list, pasted again |
 
 **Steps:**
 
-1. Paste the 30 lines from **Test data**.
+1. Paste the 30 lines from **Test data** into Your list.
 2. Wait for matching to finish.
 3. Add the counts the paste reports together.
 
@@ -767,19 +858,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with an email in About you and the paste sheet open over it from Paste a list.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Pasted lines | 25 lines, each a card matched in the reference, declared value 100000 (HKD, minor units) |
+| Pasted lines | 25 lines, `Homebrew Card 01, 1000` to `Homebrew Card 25, 1000`: each declared 100000 (HKD minor units, HK$1,000.00), inside Bulk's 150000 (HK$1,500.00); any count above 20 |
 
 **Steps:**
 
-1. Paste the 25 lines from **Test data**.
-2. Wait for matching to finish, then continue to the Service step.
+1. Paste the 25 lines from **Test data** into Your list.
+2. Wait for matching to finish.
+3. Click the button that adds 25 cards to the list.
+4. Click Continue.
+5. Read the levels.
 
 **Expected Results:**
 
@@ -803,19 +897,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with an email in About you and the paste sheet open over it from Paste a list.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Pasted lines | 20 lines, each a card matched in the reference, declared value 100000 (HKD, minor units) |
+| Pasted lines | 20 lines, `Homebrew Card 01, 1000` to `Homebrew Card 20, 1000`: each declared 100000 (HKD minor units, HK$1,000.00), inside every level's ceiling |
 
 **Steps:**
 
-1. Paste the 20 lines from **Test data**.
-2. Wait for matching to finish, then continue to the Service step.
+1. Paste the 20 lines from **Test data** into Your list.
+2. Wait for matching to finish.
+3. Click the button that adds 20 cards to the list.
+4. Click Continue.
+5. Read the levels.
 
 **Expected Results:**
 
@@ -838,19 +935,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with an email in About you and the paste sheet open over it from Paste a list.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Pasted lines | 21 lines, each a card matched in the reference, declared value 100000 (HKD, minor units) |
+| Pasted lines | 21 lines, `Homebrew Card 01, 1000` to `Homebrew Card 21, 1000`: each declared 100000 (HKD minor units, HK$1,000.00), inside Bulk's 150000 (HK$1,500.00) |
 
 **Steps:**
 
-1. Paste the 21 lines from **Test data**.
-2. Wait for matching to finish, then continue to the Service step.
+1. Paste the 21 lines from **Test data** into Your list.
+2. Wait for matching to finish.
+3. Click the button that adds 21 cards to the list.
+4. Click Continue.
+5. Read the levels.
 
 **Expected Results:**
 
@@ -874,19 +974,21 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Pasted lines | 21 lines matched in the reference at 100000 (HKD, minor units) each, and one line at 200000 (HKD, minor units), above Bulk's 150000 (HKD, minor units) ceiling |
+| Pasted lines | 21 lines, `Homebrew Card 01, 1000` to `Homebrew Card 21, 1000`: each declared 100000 (HKD minor units, HK$1,000.00) |
+| The line above Bulk's ceiling | `Homebrew Grail, 2000`: declared 200000 (HKD minor units, HK$2,000.00), above Bulk's 150000 (HK$1,500.00) and inside the top ceiling of 3900000 (HK$39,000.00) |
 
 **Steps:**
 
-1. Paste the 22 lines from **Test data**.
+1. Paste the 22 lines from **Test data** into Your list.
 2. Wait for matching to finish.
+3. Read the rows under the lines-read counter.
 
 **Expected Results:**
 
@@ -910,19 +1012,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has 100 cards listed at Bulk on the Cards step, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with 100 cards listed, which leaves Bulk the only open level: pasted as `Homebrew Card 001, 1000` to `Homebrew Card 100, 1000`.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Pasted line | one more card matched in the reference, declared value 100000 (HKD, minor units) |
+| Pasted line | `Homebrew Card 101, 1000`: one more card, declared 100000 (HKD minor units, HK$1,000.00) |
 
 **Steps:**
 
-1. Paste the line from **Test data**.
-2. Wait for matching to finish.
+1. Click Paste a list.
+2. Paste the line from **Test data** into Your list.
+3. Wait for matching to finish.
+4. Click the button that adds the card to the list.
+5. Read the Cards step.
 
 **Expected Results:**
 
@@ -946,24 +1051,27 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has 99 cards listed at Bulk on the Cards step, `<grade10 grading url>`.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with 99 cards listed, which leaves Bulk the only open level: pasted as `Homebrew Card 001, 1000` to `Homebrew Card 099, 1000`.
 * The card price reference is reachable.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Pasted line | one more card matched in the reference, declared value 100000 (HKD, minor units) |
+| Pasted line | `Homebrew Card 100, 1000`: one more card, declared 100000 (HKD minor units, HK$1,000.00) |
 
 **Steps:**
 
-1. Paste the line from **Test data**.
-2. Wait for matching to finish.
+1. Click Paste a list.
+2. Paste the line from **Test data** into Your list.
+3. Wait for matching to finish.
+4. Click the button that adds the card to the list.
+5. Read the Cards step.
 
 **Expected Results:**
 
 * The card is added to the list at Bulk.
-* No cap notice shows.
+* The over-the-cap line, the rest in a second submission on another day, does not show.
 
 ---
 
@@ -990,18 +1098,24 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with 4 cards listed, the highest declared at 850000 (HKD, minor units), `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, the four cards in **Test data** listed and an email given on the Cards step.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00), `Homebrew Pikachu` 100000 (HK$1,000.00), `Homebrew Eevee` 80000 (HK$800.00), `Homebrew Mew` 50000 (HK$500.00), all HKD minor units: the highest above Value's 390000 (HK$3,900.00) and at or below Regular's 1170000 (HK$11,700.00) |
 
 **Steps:**
 
-1. Select PSA as the grader.
+1. Click PSA under Grader.
 2. Read the Regular level.
 3. Read the Express level.
 
 **Expected Results:**
 
-* Regular shows open, naming its ceiling of 1170000 (HKD, minor units), its fee a card of 60000 (HKD, minor units) and its return date about 5 weeks out.
-* Express additionally names a cover line at 1.5% of the declared value a card.
+* Regular shows open, naming its ceiling of 1170000 (HKD minor units, HK$11,700.00), its fee a card of 60000 (HKD minor units, HK$600.00) and its return date about 5 weeks out.
+* Express additionally names a cover line at 150 basis points (1.5%) of the declared value a card.
 
 ### grade10-site-grading-submission-plan-US5-TC2-1: A level closed by value names the card declared above it
 
@@ -1020,16 +1134,22 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with 4 cards listed, the highest declared at 850000 (HKD, minor units), `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, the four cards in **Test data** listed and an email given on the Cards step.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00), `Homebrew Pikachu` 100000 (HK$1,000.00), `Homebrew Eevee` 80000 (HK$800.00), `Homebrew Mew` 50000 (HK$500.00), all HKD minor units: the highest above Value's 390000 (HK$3,900.00) |
 
 **Steps:**
 
-1. Select PSA as the grader.
+1. Click PSA under Grader.
 2. Read the Value level.
 
 **Expected Results:**
 
-* Value shows closed, naming the card declared at 850000 (HKD, minor units) as above its 390000 (HKD, minor units) ceiling.
+* Value shows closed, naming the card declared at 850000 (HKD minor units, HK$8,500.00) as above its 390000 (HKD minor units, HK$3,900.00) ceiling.
 
 ### grade10-site-grading-submission-plan-US5-TC3-1: Bulk closed by count names how many more cards are needed
 
@@ -1048,11 +1168,11 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with 4 cards listed, `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, four cards listed, each declared inside Bulk's 150000 (HKD minor units, HK$1,500.00), and an email given on the Cards step.
 
 **Steps:**
 
-1. Select PSA as the grader.
+1. Click PSA under Grader.
 2. Read the Bulk level.
 
 **Expected Results:**
@@ -1076,12 +1196,19 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with one card listed, declared at 4200000 (HKD, minor units), `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, the card in **Test data** listed and an email given on the Cards step.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Card | `Homebrew Grail`, declared 4200000 (HKD minor units, HK$42,000.00): any value above the top ceiling of 3900000 (HK$39,000.00) |
 
 **Steps:**
 
-1. Select PSA as the grader.
+1. Click PSA under Grader.
 2. Read every level.
+3. Read the line under the levels and the continue button.
 
 **Expected Results:**
 
@@ -1106,11 +1233,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with a grader selected and no level chosen, `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, with a grader selected and no level chosen.
 
 **Steps:**
 
 1. Read the Service step before picking a level.
+2. Read the continue button.
 
 **Expected Results:**
 
@@ -1134,12 +1262,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with cards listed, `<grade10 grading url>`.
-* CGC's fee sheet carries only the example figures.
+* customer is on the Service step at `<grade10 plan wizard url>`, with cards listed.
+* CGC's fee sheet carries only the example figures: no CGC figure is written in `<grade10 admin grading settings url>`, as the stack opens.
 
 **Steps:**
 
-1. Select CGC as the grader.
+1. Click CGC under Grader.
+2. Read CGC's levels.
 
 **Expected Results:**
 
@@ -1163,12 +1292,14 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with 4 cards listed, none above Regular's ceiling, `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, four cards listed, none declared above Regular's 1170000 (HKD minor units, HK$11,700.00), and an email given on the Cards step.
 
 **Steps:**
 
-1. Select PSA as the grader and Regular as the level.
-2. Continue to the Book step and read the schedule.
+1. Click PSA under Grader.
+2. Pick Regular.
+3. Continue to the Book step.
+4. Read the review's header and the schedule.
 
 **Expected Results:**
 
@@ -1192,23 +1323,24 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with 4 cards listed, `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, four cards listed, none declared above Regular's 1170000 (HKD minor units, HK$11,700.00), and an email given on the Cards step.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Regular fee a card | 60000 (HKD, minor units) |
-| Estimate, 4 cards | 240000 (HKD, minor units) |
+| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
+| Estimate, 4 cards | 240000 (HKD minor units, HK$2,400.00) |
 
 **Steps:**
 
-1. Select PSA as the grader and Regular as the level.
-2. Read the estimate.
+1. Click PSA under Grader.
+2. Pick Regular.
+3. Read Your estimate.
 
 **Expected Results:**
 
-* The estimate reads 240000 (HKD, minor units) from **Test data**, being 4 times the fee a card.
+* The estimate reads 240000 (HKD minor units) from **Test data**, being 4 times the fee a card.
 * It carries no cover line at Regular.
 * It reads about 5 weeks back, counted from the day the batch leaves the shop.
 * It says everything on it is paid at the counter.
@@ -1230,25 +1362,26 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Service step with one card declared at 850000 (HKD, minor units), `<grade10 grading url>`.
+* customer is on the Service step at `<grade10 plan wizard url>`, one card listed, declared at 850000 (HKD minor units, HK$8,500.00), and an email given on the Cards step.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Express fee a card | 120000 (HKD, minor units) |
-| Cover, 1.5% of 850000 | 12750 (HKD, minor units) |
-| Total | 132750 (HKD, minor units) |
+| Express fee a card | 120000 (HKD minor units, HK$1,200.00) |
+| Cover, 150 basis points (1.5%) of 850000 | 12750 (HKD minor units, HK$127.50) |
+| Total | 132750 (HKD minor units, HK$1,327.50) |
 
 **Steps:**
 
-1. Select PSA as the grader and Express as the level.
-2. Read the estimate.
+1. Click PSA under Grader.
+2. Pick Express.
+3. Read Your estimate.
 
 **Expected Results:**
 
-* The cover line for the card reads 12750 (HKD, minor units) from **Test data**.
-* The total reads 132750 (HKD, minor units), the fee and the cover line added.
+* The cover line for the card reads 12750 (HKD minor units) from **Test data**.
+* The total reads 132750 (HKD minor units), the fee and the cover line added.
 
 ---
 
@@ -1275,19 +1408,20 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is on the Cards step of a new plan with one card listed, signed out, `<grade10 grading url>`.
+* customer(no account) is signed out and on the Cards step at `<grade10 plan wizard url>`, with one card listed and its declared value given.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Email | collector@example.com |
+| `<collector email>` | An address only this run writes to, such as `plan-later-<run>@grade10.dev` |
 
 **Steps:**
 
-1. Enter the email from **Test data**.
+1. Enter `<collector email>` in About you.
 2. Click Finish later.
 3. Leave the page.
+4. Read the last letter to `<collector email>` in grading's outbox.
 
 **Expected Results:**
 
@@ -1311,11 +1445,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` is on the Cards step of a new plan with one card listed, signed out, with the email field blank, `<grade10 grading url>`.
+* customer(no account) is signed out and on the Cards step at `<grade10 plan wizard url>`, with one card listed and the email field blank.
 
 **Steps:**
 
 1. Click Finish later without entering an email.
+2. Read the Cards step under About you.
 
 **Expected Results:**
 
@@ -1339,11 +1474,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(no account)` has a plan kept under an email, with its link known, on a device other than the one that created it.
+* customer(no account) has a plan kept under an email with Save and book later, and holds its emailed link.
+* A second device, or a private window, has never signed in to the site.
 
 **Steps:**
 
 1. Open the emailed link on the second device.
+2. Read the page that opens.
 
 **Expected Results:**
 
@@ -1367,19 +1504,21 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has two submissions under one email, one open and one collected.
+* customer(signed out) has two submissions under `<collector email>`: one planned on the site and kept, and one seeded at `collected` through grading's dev seed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Email | collector@example.com |
+| `<collector email>` | An address only this run writes to, such as `plan-home-<run>@grade10.dev` |
 
 **Steps:**
 
 1. Navigate to `<grade10 grading url>`.
-2. Sign in with the email from **Test data**.
-3. Read the home page.
+2. Click Sign in in the header.
+3. Enter `<collector email>`.
+4. Open the sign-in link mailed to it.
+5. Read Your submissions on the home.
 
 **Expected Results:**
 
@@ -1403,11 +1542,11 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is signed in under an email with no submissions, `<grade10 grading url>`.
+* customer(signed in) has no submission under their email and is on `<grade10 grading url>`.
 
 **Steps:**
 
-1. Read the home page.
+1. Read Your submissions on the home.
 
 **Expected Results:**
 
@@ -1431,12 +1570,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is signed in, `<grade10 grading url>`.
+* customer(signed in) is on `<grade10 grading url>`.
 * Reading the collector's submissions fails.
 
 **Steps:**
 
-1. Read the home page.
+1. Read Your submissions on the home.
 
 **Expected Results:**
 
@@ -1460,23 +1599,26 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a submission booked at PSA Regular at 60000 (HKD, minor units) a card, `<grade10 grading submission url>`.
+* customer has a submission at PSA Regular with its drop-off booked from its page, while Regular was 60000 (HKD minor units, HK$600.00) a card, and holds its emailed link.
+* admin A(holds grading:approve) and admin B(holds grading:approve) are each on `<grade10 admin grading settings url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Regular fee a card, booked on | 60000 (HKD, minor units) |
-| Regular fee a card, changed to | 70000 (HKD, minor units) |
+| Regular fee a card, booked on | 60000 (HKD minor units, HK$600.00) |
+| Regular fee a card, changed to | 70000 (HKD minor units, HK$700.00): any figure other than the booked one |
 
 **Steps:**
 
-1. Change the fee sheet's Regular fee a card to the changed figure from **Test data**.
-2. Open the booked submission again.
+1. As admin A, change PSA Regular's fee a card to the changed figure from **Test data**, with a reason.
+2. As admin B, approve the waiting change.
+3. As the customer, open the booked submission from its emailed link.
+4. Read its fee a card, its estimate and its totals.
 
 **Expected Results:**
 
-* The submission still reads 60000 (HKD, minor units) a card.
+* The submission still reads 60000 (HKD minor units) a card.
 * Its estimate and its totals are unchanged.
 
 ### grade10-site-grading-submission-plan-US6-TC8-1: A sheet changed before booking reaches the reopened plan
@@ -1496,22 +1638,25 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a plan kept at PSA Regular with no drop-off booked, made while Regular was 60000 (HKD, minor units) a card.
+* customer has a plan kept at PSA Regular with Save and book later, no drop-off booked, made while Regular was 60000 (HKD minor units, HK$600.00) a card, and holds its emailed link.
+* admin A(holds grading:approve) and admin B(holds grading:approve) are each on `<grade10 admin grading settings url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Regular fee a card, changed to | 70000 (HKD, minor units) |
+| Regular fee a card, changed to | 70000 (HKD minor units, HK$700.00): any figure other than the one the plan was made on |
 
 **Steps:**
 
-1. Change the fee sheet's Regular fee a card to the figure from **Test data**.
-2. Open the kept plan from its emailed link.
+1. As admin A, change PSA Regular's fee a card to the figure from **Test data**, with a reason.
+2. As admin B, approve the waiting change.
+3. As the customer, open the kept plan from its emailed link.
+4. Read its estimate.
 
 **Expected Results:**
 
-* The estimate reads 70000 (HKD, minor units) a card.
+* The estimate reads 70000 (HKD minor units) a card.
 
 ### grade10-site-grading-submission-plan-US6-TC9-1: A plan saved unticked asks for the statement before its drop-off
 
@@ -1530,7 +1675,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a plan saved for later with the collection statement unticked, no drop-off booked and none held under the same email.
+* customer has a plan saved for later with the collection statement unticked, no drop-off booked and none held under the same email, and holds its emailed link.
 * A second tab holds the plan's page, loaded while the plan was unticked.
 
 **Steps:**
@@ -1564,7 +1709,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a plan kept part way through the wizard, with PSA picked, no level picked, the collection statement unticked and no drop-off booked.
+* customer has a plan kept part way through the wizard with Finish later on the Service step, PSA picked, no level picked, the collection statement unticked and no drop-off booked, and holds its emailed link.
 * A drop-off is booked under the same email for another submission.
 
 **Test data:**
@@ -1616,23 +1761,23 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with 4 cards at PSA Regular, none above the level's ceiling, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Regular, none declared above Regular's 1170000 (HKD minor units, HK$11,700.00), and an email given.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Fee a card at Regular | 60000 (HKD, minor units) |
-| Fee at the counter, 4 cards | 240000 (HKD, minor units) |
+| Fee a card at Regular | 60000 (HKD minor units, HK$600.00) |
+| Fee at the counter, 4 cards | 240000 (HKD minor units, HK$2,400.00) |
 
 **Steps:**
 
-1. Read the review step's totals.
+1. Read the review's totals.
 2. Read Good to know.
 
 **Expected Results:**
 
-* The totals show the fee at the counter of 240000 (HKD, minor units) from **Test data**, with no cover line at Regular.
+* The totals show the fee at the counter of 240000 (HKD minor units) from **Test data**, with no cover line at Regular.
 * Good to know lists, in order: a fee is charged on a card returned ungraded, a card can move up a level, the return date is an estimate, nothing is paid or signed before the cards are checked, and slabs are not shipped back.
 
 ### grade10-site-grading-submission-plan-US7-TC2-1: The upcharge warning names the level and both prices
@@ -1652,25 +1797,25 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with 4 cards at PSA Regular, `<grade10 grading url>`.
-* One card, Umbreon VMAX (Alternate Art), is declared at 850000 (HKD, minor units) with a PSA 10 reference of 1500000 (HKD, minor units), above Regular's 1170000 (HKD, minor units) ceiling.
+* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Regular.
+* One card, Umbreon VMAX (Alternate Art), is matched in the card price reference and declared at 850000 (HKD minor units, HK$8,500.00), its PSA 10 reference reading 1500000 (HKD minor units, HK$15,000.00) at the reference rate, above Regular's 1170000 (HKD minor units, HK$11,700.00) ceiling.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Regular fee a card | 60000 (HKD, minor units) |
-| Express fee a card | 120000 (HKD, minor units) |
+| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
+| Express fee a card | 120000 (HKD minor units, HK$1,200.00) |
 
 **Steps:**
 
-1. Read the review step's upcharge warning for Umbreon VMAX.
+1. Read the review's upcharge warning for Umbreon VMAX.
 
 **Expected Results:**
 
 * Umbreon VMAX is named with Express as the level the grader would move it to.
-* The difference due at the counter reads 60000 (HKD, minor units), Express's fee less Regular's fee from **Test data**.
-* Express's fee now, 120000 (HKD, minor units), shows beside it.
+* The difference due at the counter reads 60000 (HKD minor units), Express's fee less Regular's fee from **Test data**.
+* Express's fee now, 120000 (HKD minor units), shows beside it.
 
 ### grade10-site-grading-submission-plan-US7-TC3-1: No card above the ceiling shows no upcharge warning
 
@@ -1689,11 +1834,11 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with 4 cards at PSA Regular, every card's PSA 10 reference within Regular's ceiling, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Regular, every card's PSA 10 reference within Regular's 1170000 (HKD minor units, HK$11,700.00) ceiling.
 
 **Steps:**
 
-1. Read the review step.
+1. Read the review.
 
 **Expected Results:**
 
@@ -1716,12 +1861,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with the collection statement unticked, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, with the collection statement unticked.
 
 **Steps:**
 
-1. Read the Book step before ticking the consent statement.
-2. Tick the consent statement.
+1. Read Book the drop-off before ticking the collection statement.
+2. Tick the collection statement.
+3. Read Book the drop-off again.
 
 **Expected Results:**
 
@@ -1745,15 +1891,15 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with 4 cards at PSA Express, each with a declared value, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Express, each with a declared value inside Express's 1950000 (HKD minor units, HK$19,500.00).
 
 **Steps:**
 
-1. Read the review step's totals.
+1. Read the review's totals.
 
 **Expected Results:**
 
-* The cover line shows under the fee, per card and in total, at 1.5% of each card's declared value.
+* The cover line shows under the fee, per card and in total, at 150 basis points (1.5%) of each card's declared value.
 
 ### grade10-site-grading-submission-plan-US7-TC6-1: Booking shows pending and disables both buttons
 
@@ -1772,11 +1918,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with the consent statement ticked, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, with the collection statement ticked.
 
 **Steps:**
 
 1. Click Book the drop-off.
+2. Read both buttons while the booking is in progress.
 
 **Expected Results:**
 
@@ -1800,12 +1947,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step with the collection statement unticked, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, with an email given and the collection statement unticked.
 
 **Steps:**
 
 1. Leave the collection statement unticked.
 2. Click Save and book later.
+3. Read the submission page that opens.
 
 **Expected Results:**
 
@@ -1813,8 +1961,6 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * The plan is kept, and its page opens at Planned.
 * The statement is still unticked on the plan.
 * Book the drop-off was the only action the unticked statement refused.
-
----
 
 ### grade10-site-grading-submission-plan-US7-TC8-1: A USD reference sale is warned about at the rate staff set
 
@@ -1833,28 +1979,28 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* The console's reference rate reads 7.84 HKD to 1 USD.
-* `customer(collector)` is on the Book step at PSA Regular, `<grade10 grading url>`.
-* One card, Umbreon VMAX (Alternate Art), is declared at 850000 (HKD, minor units) with a PSA 10 reference sale of 150000 (USD, minor units).
+* The reference rate in `<grade10 admin grading settings url>` reads 7.84 HKD to 1 USD, as the stack seeds it.
+* customer is on the Book step at `<grade10 plan wizard url>`, at PSA Regular.
+* One card, Umbreon VMAX (Alternate Art), is matched in the card price reference and declared at 850000 (HKD minor units, HK$8,500.00), with a PSA 10 reference sale of 150000 (USD minor units, US$1,500.00).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Reference rate | 784 (HKD, minor units) to 1 USD |
-| Regular ceiling | 1170000 (HKD, minor units) |
-| Regular fee a card | 60000 (HKD, minor units) |
-| Express fee a card | 120000 (HKD, minor units) |
+| Reference rate | 784 (HKD minor units) to 1 USD (7.84) |
+| Regular ceiling | 1170000 (HKD minor units, HK$11,700.00) |
+| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
+| Express fee a card | 120000 (HKD minor units, HK$1,200.00) |
 
 **Steps:**
 
-1. Read the review step's upcharge warning for Umbreon VMAX.
+1. Read the review's upcharge warning for Umbreon VMAX.
 
 **Expected Results:**
 
-* The PSA 10 sale reads 1176000 (HKD, minor units), 150000 (USD, minor units) at the rate from **Test data**, above Regular's ceiling.
+* The PSA 10 sale reads 1176000 (HKD minor units, HK$11,760.00), 150000 (USD minor units) at the rate from **Test data**, above Regular's ceiling.
 * Umbreon VMAX is named with Express as the level the grader would move it to.
-* The difference due at the counter reads 60000 (HKD, minor units).
+* The difference due at the counter reads 60000 (HKD minor units).
 
 ### grade10-site-grading-submission-plan-US7-TC9-1: A plan booked from a ticked review opens on the picker with nothing asked
 
@@ -1873,7 +2019,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the wizard's review at <grade10 grading url>/new, with an email given, a level picked and no drop-off held under the email.
+* customer is on the wizard's review at `<grade10 plan wizard url>`, with an email given, a level picked and no drop-off held under the email.
 
 **Steps:**
 
@@ -1885,6 +2031,46 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 * Step 2: the submission page opens on the drop-off picker, and the statement is not asked for.
 * Step 3: the page still opens on the picker with no statement asked: the plan was kept ticked.
+
+### grade10-site-grading-submission-plan-US7-TC10-1: The review totals the declared value, the fee and the cover
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-07
+
+**Pre-conditions:**
+
+* customer is on the Book step at `<grade10 plan wizard url>`, the two cards in **Test data** listed at PSA Express and an email given.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00) and `Homebrew Charizard` 400000 (HK$4,000.00), HKD minor units, each inside Express's 1950000 (HK$19,500.00) |
+| Declared in total | 1250000 (HKD minor units, HK$12,500.00) |
+| Fee at the counter | 240000 (HKD minor units, HK$2,400.00) |
+| Cover | 18750 (HKD minor units, HK$187.50) |
+
+**Steps:**
+
+1. Read the review's totals.
+
+**Expected Results:**
+
+* The declared total reads 1250000 (HKD minor units) from **Test data**, the two declared values added.
+* The fee reads 240000 (HKD minor units), 2 times Express's fee a card of 120000.
+* The cover reads 18750 (HKD minor units), 150 basis points (1.5%) of each card's declared value, added.
+
+---
 
 ## grade10-site-grading-submission-plan-US8: Collector who never books is nudged and then let go
 
@@ -1909,11 +2095,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a plan kept 21 days ago with no drop-off booked, `<grade10 grading submission url>`.
+* customer has a plan kept 21 Asia/Hong_Kong days ago with no drop-off booked: seeded at `planned` through grading's dev seed, created 21 days back, and holds its link.
 
 **Steps:**
 
-1. Open the plan's page.
+1. Open the plan's page from its link.
+2. Read the lead under the status.
 
 **Expected Results:**
 
@@ -1937,11 +2124,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a plan kept 30 days ago with no drop-off booked, `<grade10 grading submission url>`.
+* customer has a plan kept 30 Asia/Hong_Kong days ago with no drop-off booked: seeded at `planned` through grading's dev seed, created 30 days back, and holds its link.
 
 **Steps:**
 
-1. Open the plan's page.
+1. Run grading's fast sweep lane.
+2. Open the plan's page from its link.
+3. Read the status and the lead.
 
 **Expected Results:**
 
@@ -1966,11 +2155,12 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Book step of a plan kept 30 days ago with no drop-off booked, `<grade10 grading url>`.
+* customer is on the Book step at `<grade10 plan wizard url>`, the plan kept from the wizard with Finish later, and its keep moved 30 Asia/Hong_Kong days back while the review stays open, no drop-off booked.
 
 **Steps:**
 
-1. Click Book the drop-off.
+1. Tick the collection statement.
+2. Click Book the drop-off.
 
 **Expected Results:**
 
@@ -1994,11 +2184,13 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Pre-conditions:**
 
-* `customer(collector)` has a plan with a drop-off booked 30 days ago, `<grade10 grading submission url>`.
+* customer has a plan with a drop-off booked, kept 30 Asia/Hong_Kong days ago: seeded at `booked` through grading's dev seed, created 30 days back, and holds its link.
 
 **Steps:**
 
-1. Open the plan's page.
+1. Run grading's fast sweep lane.
+2. Open the plan's page from its link.
+3. Read the status and the lead.
 
 **Expected Results:**
 
