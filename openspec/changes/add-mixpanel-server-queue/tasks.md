@@ -8,13 +8,13 @@
 ## 2. Vault adoption (grade10) (owner: @ecchochan)
 
 - [x] 2.1 Test each vault send recorded with its transition, including verdicts the sweep settles, none on rollback, and erasure `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
-- [x] 2.2 Add the outbox tables and migration `0031_mixpanel_outbox`; record every vault send and Identity Standing in its transaction and remove the direct sends; register the send list; erase with the user `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
+- [x] 2.2 Add the outbox tables and the `mixpanel_outbox` migration; record every vault send and Identity Standing in its transaction and remove the direct sends; register the send list; erase with the user `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [x] 2.3 Verify: the vault package tests and the vault app's db lane
 
 ## 3. Loyalty adoption (grade10) (owner: @ecchochan)
 
 - [x] 3.1 Test Reward Redeemed and the Member and Tier writes recorded with their facts, none on rollback, and an erasure that records the end of membership once `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
-- [x] 3.2 Add the outbox tables and migrations `0021_mixpanel_outbox` and `0022_member_erased_at`; record Reward Redeemed in the redemption and Member and Tier on enrolment, every tier change and the end of membership; remove the direct sends and the store's Member and Tier writes; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
+- [x] 3.2 Add the outbox tables and the `mixpanel_outbox` and `member_erased_at` migrations; record Reward Redeemed in the redemption and Member and Tier on enrolment, every tier change and the end of membership; remove the direct sends and the store's Member and Tier writes; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [x] 3.3 Verify: the loyalty package tests and the loyalty app's db lane
 
 ## 4. Store adoption (grade10) (owner: @ecchochan)
@@ -27,7 +27,7 @@
 ## 5. Auction adoption (grade10) (owner: @ecchochan)
 
 - [x] 5.1 Test Auction Won, Invoice Paid, Card Linked, Lot Watched, Bid Placed and Bidder Outbid recorded with their facts, none on rollback, and erasure `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
-- [x] 5.2 Add the outbox tables and migration `0006_mixpanel_outbox`; record every auction send in its fact's transaction and remove the direct sends; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
+- [x] 5.2 Add the outbox tables and the `mixpanel_outbox` migration; record every auction send in its fact's transaction and remove the direct sends; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [x] 5.3 Verify: the auction package tests and the auction app's db lane
 
 ## 6. Operations (grade10) (owner: @ecchochan)
