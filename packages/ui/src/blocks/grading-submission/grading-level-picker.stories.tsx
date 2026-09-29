@@ -60,6 +60,9 @@ const BULK_OPEN: GradingPickerLevel = {
   weeks: "Back in about 12 weeks",
 };
 
+const INCLUDES = "Includes intake, photographs, shipping both ways and cover.";
+const FOOTNOTE = "Paid at the counter once every card is checked.";
+
 const meta = {
   title: "Grading Submission/GradingLevelPicker",
   component: GradingLevelPicker,
@@ -234,6 +237,33 @@ export const EstimateWithCover: Story = {
     expect(estimate.getByText("HK$1,120")).toBeInTheDocument();
     expect(estimate.getByText("Back in about 6 weeks")).toBeInTheDocument();
     expect(estimate.queryByText("HK$1,000")).toBeNull();
+  },
+};
+
+/** What the estimate includes and when it is paid read inside the estimate
+ * card, under the total, as the consumer worded them
+ * (shared-ui-grading-submission-SC-75). */
+export const EstimateIncludesAndFootnote: Story = {
+  args: {
+    selectedLevelId: "regular",
+    estimate: { ...ESTIMATE, includes: INCLUDES, footnote: FOOTNOTE },
+  },
+  play: async ({ canvasElement }) => {
+    const card = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="grading-level-picker-estimate"]',
+    );
+    expect(card).not.toBeNull();
+    const estimate = within(card as HTMLElement);
+    expect(estimate.getByText(INCLUDES)).toBeInTheDocument();
+    expect(estimate.getByText(FOOTNOTE)).toBeInTheDocument();
+    const canvas = within(canvasElement);
+    expect(canvas.getAllByText(INCLUDES)).toHaveLength(1);
+    expect(canvas.getAllByText(FOOTNOTE)).toHaveLength(1);
+    const total = estimate.getByText("HK$1,120");
+    expect(
+      total.compareDocumentPosition(estimate.getByText(FOOTNOTE)) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   },
 };
 

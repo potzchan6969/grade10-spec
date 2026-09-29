@@ -134,8 +134,9 @@ or an instant through `formatLocalTime` in the zone given.
 - **`GradingLevelPicker`** — `graders`, `selectedGraderId`, `levels` (each
   open, or closed with the card or the count that closes it), `selectedLevelId`,
   `highestDeclared`, `estimate` (cards × fee, the cover line or none, the
-  total, the weeks) or none, `onSelectGrader`, `onSelectLevel`; a
-  `SegmentedControl`, a `RadioCard` per level, the dark estimate `Card`, the
+  total, the weeks, the includes line or none, the footnote or none) or
+  none, `onSelectGrader`, `onSelectLevel`; a `SegmentedControl`, a
+  `RadioCard` per level, the dark estimate `Card` holding both lines, the
   upcharge `Alert`
 - **`GradingReview`** — `summary` (cards, grader, level, weeks), `schedule`
   (name, set line, minimum grade, declared value, cover or none), `totals`
@@ -394,7 +395,7 @@ Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish-later row
 | Bulk only | more than 20 cards: every other level closed by the count, Bulk open | `shared-ui-grading-submission-SC-08` |
 | Every level closed | a card above the top ceiling: the ask-at-the-counter line; Continue disabled | `shared-ui-grading-submission-SC-09` |
 | No level picked | no estimate; Continue disabled | `shared-ui-grading-submission-SC-06` |
-| Estimate | the dark `Card`: the total, n × fee · level · weeks, the paid-at-the-counter line, includes | `shared-ui-grading-submission-SC-10` |
+| Estimate | the dark `Card`: the total, n × fee · level · weeks, then inside the card under them the includes line and the paid-at-the-counter footnote | `shared-ui-grading-submission-SC-10`, `shared-ui-grading-submission-SC-75` |
 | Estimate with cover | the cover line per card under the fee and the total with it | `shared-ui-grading-submission-SC-10` |
 | Upcharge notice (`G03`) | the `Alert`: moved up a level, the difference passed on, told before collection | `shared-ui-grading-submission-SC-11` |
 | Grader with example figures | CGC or BGS: the levels as data with the example-fees line | `shared-ui-grading-submission-SC-12` |
@@ -472,7 +473,7 @@ Stories `grading-dropoff-dropoff-booked--`.
 | The day the cards leave | item 4: the ship day when handed in by the cut-off, the estimated day back | `grade10-site-grading-dropoff-booking-SC-12` |
 | Vault line | the vault-on-the-same-visit `Alert` | `grade10-site-grading-dropoff-booking-SC-14` |
 | Joined | the second submission: the visit the first one owns, named, and read through it | `grade10-site-grading-dropoff-booking-SC-20` |
-| Visit detached | the owner cancelled or missed the visit: every joiner loses it, is told by letter, and is asked to book again | `grade10-site-grading-dropoff-booking-SC-22` |
+| Visit detached | the owner cancelled or missed the visit: every joiner loses it, is told by letter, and is asked to book again | `grade10-site-grading-dropoff-booking-SC-22`, `grade10-site-grading-dropoff-booking-SC-27` |
 | Moved | the new day and time; the moved email line | `grade10-site-grading-dropoff-booking-SC-15` |
 
 ### Submission page
@@ -500,7 +501,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-SC-44` |
 | Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
 | Booked, joined | the visit card names the submission that owns it | `grade10-site-grading-dropoff-booking-SC-20` |
-| Visit detached | the owner cancelled or missed the visit: the joiner's page holds no visit and reads that the visit closed, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22` |
+| Visit detached | the owner cancelled or missed the visit: the joiner's page holds no visit and reads that the visit closed, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22`, `grade10-site-grading-dropoff-booking-SC-27` |
 | Move | the picker on the page; the batch line reads again | `grade10-site-grading-dropoff-booking-SC-15` |
 | Cancel visit | `BookingManageCard`'s confirm: the visit closes, the list stays | `grade10-site-grading-dropoff-booking-SC-16` |
 | Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-SC-19` |

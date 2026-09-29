@@ -28,7 +28,7 @@ imports the set rather than drawing it again. The drop-off's own blocks are
   - Open or closed, with the reason: a level names the card declared above its
     ceiling, or the count that closes it
   - The estimate belongs to the pick: the cards times the fee, the cover line
-    per card, the total and the return date
+    per card, the total, the return date, what it includes and when it is paid
   - Two drawings of one sheet: the sheet and the picker read the same figures,
     so they cannot disagree
 - Listing the cards
@@ -252,6 +252,13 @@ cards times the fee a card, the cover line per card where the level carries
 one, the total and the weeks back; where it is given none it SHALL show none.
 It SHALL compute no estimate of its own.
 
+**Includes and footnote** - `GradingEstimate` carries an optional `includes`
+line and an optional `footnote`, both in the consumer's words; the footnote is
+where the consumer says the estimate is paid at the counter once every card is
+checked. The picker SHALL show each one the estimate carries inside the
+estimate, under the total, as given, and SHALL work out neither; where it
+carries neither it SHALL show neither.
+
 **The upcharge notice** - the picker SHALL show the notice it is given that a
 card moved up a level is charged the difference before collection.
 
@@ -313,6 +320,15 @@ render its levels, with the line it is given about them.
 - **WHEN** `GradingLevelPicker` renders it
 - **THEN** all four read as given, in the locale the picker was given
 - **AND** the picker computes none of them
+
+#### Scenario: shared-ui-grading-submission-SC-75 - The estimate carries what it includes and when it is paid
+**Serves:** Reading what it costs - a collector reads what the total covers and that nothing is paid before the counter checks the cards
+
+- **GIVEN** an estimate carrying an includes line and the footnote saying it
+  is paid at the counter once every card is checked
+- **WHEN** `GradingLevelPicker` renders it
+- **THEN** both read inside the estimate, under the total, as given
+- **AND** neither reads anywhere else on the picker
 
 #### Scenario: shared-ui-grading-submission-SC-11 - The picker names what a card moved up would cost
 **Serves:** Reading what it costs - a collector told before booking that a card graded higher costs more

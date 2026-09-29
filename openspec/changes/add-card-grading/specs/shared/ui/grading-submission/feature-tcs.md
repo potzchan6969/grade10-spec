@@ -2700,6 +2700,45 @@ Runs once per row of **Test data**.
 
 * The cap and the level the count closes read as they were given.
 
+### shared-ui-grading-submission-US1-TC83-1: The estimate carries what it includes and when it is paid
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
+
+**Pre-conditions:**
+
+* The Estimate Includes And Footnote story gives `GradingLevelPicker` Regular picked and an estimate carrying an includes line and the footnote saying it is paid at the counter once every card is checked.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Includes line | Includes intake, photographs, shipping both ways and cover. |
+| Footnote | Paid at the counter once every card is checked. |
+
+**Steps:**
+
+1. Open Grading Submission / GradingLevelPicker / Estimate Includes And Footnote at <grade10 ui workbench url>.
+2. Read the estimate card top to bottom.
+3. Read the rest of the picker, outside the estimate card.
+
+**Expected Results:**
+
+* Step 2: the includes line and the footnote read inside the estimate card, under the total, as the test data gives them.
+* Step 3: neither line reads outside the estimate card.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
@@ -2744,6 +2783,7 @@ Runs once per row of **Test data**.
 | `shared-ui-grading-submission-US1-TC55-1` — two starting states | Split at review | The cap and the level the count closes are `shared-ui-grading-submission-US1-TC82-1`; the story's cap stands for the cap the list is given |
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
 | `shared-ui-grading-submission-SC-74` | Case added, added after the run | `shared-ui-grading-submission-US1-TC73-1`: decided outside the blind pass; the editor keeps the review for its totals and warning, so the booking and the tick are left out together and the save reads the consumer's words |
+| `shared-ui-grading-submission-SC-75` | Case added, added after the run | `shared-ui-grading-submission-US1-TC83-1`: decided outside the blind pass; the estimate carries the includes line and the paid-at-the-counter footnote inside its card, the way the money block carries them |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
 
 ### Manual

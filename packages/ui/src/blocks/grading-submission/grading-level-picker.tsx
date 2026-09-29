@@ -42,6 +42,10 @@ type GradingEstimate = {
   coverLine?: string;
   total: GradingMoney;
   weeks: string;
+  /** What the total covers, as the consumer words it. */
+  includes?: string;
+  /** When it is paid: at the counter once every card is checked. */
+  footnote?: string;
 };
 
 type GradingLevelPickerCopy = {
@@ -178,6 +182,24 @@ function GradingLevelPicker({
               <Text size="sm" tone="secondary">
                 {estimate.weeks}
               </Text>
+              {estimate.includes ? (
+                <Text
+                  data-slot="grading-level-picker-estimate-includes"
+                  size="sm"
+                  tone="secondary"
+                >
+                  {estimate.includes}
+                </Text>
+              ) : null}
+              {estimate.footnote ? (
+                <Text
+                  data-slot="grading-level-picker-estimate-footnote"
+                  size="xs"
+                  tone="secondary"
+                >
+                  {estimate.footnote}
+                </Text>
+              ) : null}
             </VStack>
           </CardContent>
         </Card>

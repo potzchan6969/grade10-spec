@@ -32,7 +32,8 @@ is [Booking Blocks](/p/shared/ui/appointment-booking).
   the Bulk line past 20 cards
 - 🚧 **`GradingLevelPicker`** — the grader, then the levels: open with the
   ceiling, the fee and the weeks, or closed naming the card or the count that
-  closes it; the estimate with its cover line
+  closes it; the estimate with its cover line, what it includes and when it
+  is paid
 - 🚧 **`GradingReview`** — the schedule, the totals, the upcharge warning
   per card with both prices, the five good-to-know lines and the consent tick
   before booking
