@@ -5,13 +5,13 @@ import {
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 
-type VaultFactCardSkeletonCopy = {
+type FactCardSkeletonCopy = {
   /** What is loading, in the consumer's words; the status's name. */
   label: string;
 };
 
-type VaultFactCardSkeletonProps = {
-  copy: VaultFactCardSkeletonCopy;
+type FactCardSkeletonProps = {
+  copy: FactCardSkeletonCopy;
   /** The cards the read will fill; one at least. */
   count: number;
   className?: string;
@@ -23,14 +23,10 @@ type VaultFactCardSkeletonProps = {
  * than a status per placeholder. A count below one is the caller's mistake
  * and is refused by name, so a page never waits on an empty status.
  */
-function VaultFactCardSkeleton({
-  copy,
-  count,
-  className,
-}: VaultFactCardSkeletonProps) {
+function FactCardSkeleton({ copy, count, className }: FactCardSkeletonProps) {
   if (!Number.isInteger(count) || count < 1) {
     throw new Error(
-      `VaultFactCardSkeleton: a count of ${count} draws no card; give one at least`,
+      `FactCardSkeleton: a count of ${count} draws no card; give one at least`,
     );
   }
 
@@ -58,5 +54,5 @@ function VaultFactCardSkeleton({
   );
 }
 
-export type { VaultFactCardSkeletonCopy, VaultFactCardSkeletonProps };
-export { VaultFactCardSkeleton };
+export type { FactCardSkeletonCopy, FactCardSkeletonProps };
+export { FactCardSkeleton };

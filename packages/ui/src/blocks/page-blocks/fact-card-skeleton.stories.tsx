@@ -1,21 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { FactCardSkeleton } from "./fact-card-skeleton";
 import { LOADING_LABEL } from "./fixtures";
-import { VaultFactCardSkeleton } from "./vault-fact-card-skeleton";
 
 const meta = {
-  title: "Vault Case/VaultFactCardSkeleton",
-  component: VaultFactCardSkeleton,
+  title: "Page Blocks/FactCardSkeleton",
+  component: FactCardSkeleton,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: { copy: { label: LOADING_LABEL }, count: 2 },
-} satisfies Meta<typeof VaultFactCardSkeleton>;
+} satisfies Meta<typeof FactCardSkeleton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Two placeholder cards inside one busy status a reader hears once
- * (shared-ui-vault-case-SC-07). */
+ * (shared-ui-page-blocks-SC-06). */
 export const Two: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

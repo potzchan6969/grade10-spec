@@ -6,15 +6,15 @@ import {
   STORAGE_STAGES,
   WIZARD_STEPS,
 } from "./fixtures";
-import { VaultStageRail } from "./vault-stage-rail";
+import { StageRail } from "./stage-rail";
 
 const meta = {
-  title: "Vault Case/VaultStageRail",
-  component: VaultStageRail,
+  title: "Page Blocks/StageRail",
+  component: StageRail,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: { copy: { stages: FINANCED_STAGES }, current: "signed" },
-} satisfies Meta<typeof VaultStageRail>;
+} satisfies Meta<typeof StageRail>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -33,7 +33,7 @@ function read(canvasElement: HTMLElement) {
 }
 
 /** The financed lane at Signed: four done, Signed the one current step,
- * three to come (shared-ui-vault-case-SC-12). */
+ * three to come (shared-ui-page-blocks-SC-11). */
 export const FinancedMid: Story = {
   play: async ({ canvasElement }) => {
     const { steps, labels, states, current } = read(canvasElement);
@@ -52,7 +52,7 @@ export const FinancedMid: Story = {
   },
 };
 
-/** The storage lane's six stages, at Vault (shared-ui-vault-case-SC-13). */
+/** The storage lane's six stages, at Vault (shared-ui-page-blocks-SC-12). */
 export const StorageLane: Story = {
   args: { copy: { stages: STORAGE_STAGES }, current: "vault" },
   play: async ({ canvasElement }) => {
@@ -77,7 +77,7 @@ export const StorageLane: Story = {
   },
 };
 
-/** The wizard's first step (shared-ui-vault-case-SC-14). */
+/** The wizard's first step (shared-ui-page-blocks-SC-13). */
 export const WizardFirst: Story = {
   args: { copy: { stages: WIZARD_STEPS }, current: "describe" },
   play: async ({ canvasElement }) => {
@@ -88,7 +88,7 @@ export const WizardFirst: Story = {
 };
 
 /** An ended case stays at its stage with the ending's word under it, and no
- * later stage reads as reached (shared-ui-vault-case-SC-15). */
+ * later stage reads as reached (shared-ui-page-blocks-SC-14). */
 export const Ended: Story = {
   args: {
     copy: { stages: FINANCED_STAGES, ended: ENDED_WORD },
@@ -106,7 +106,7 @@ export const Ended: Story = {
 };
 
 /** Eight stages in 320 pixels: the rail scrolls sideways, the page does not
- * (shared-ui-vault-case-SC-17). */
+ * (shared-ui-page-blocks-SC-16). */
 export const Narrow: Story = {
   decorators: [
     (Story) => (

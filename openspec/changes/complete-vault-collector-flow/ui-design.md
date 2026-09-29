@@ -9,10 +9,11 @@ data and the mechanism.
 
 - **Where the views live** — `packages/vault/frontend` for the collector and
   `packages/vault/admin-frontend` for the console, as today. The collector's
-  cards, lists, rail, accept confirmation, empty home and loading cards are
-  `@grade10/ui` blocks, `shared/ui/vault-case`, which the views word and
-  compose: Design Override refuses a site page that draws a card, a list, a
-  table, a stepper or a dialog of its own
+  cards, lists, rail and loading cards are `@grade10/ui`'s page blocks,
+  `shared/ui/page-blocks`, and the accept confirmation and empty home are
+  `shared/ui/vault-case`; the views word and compose them: Design Override
+  refuses a site page that draws a card, a list, a table, a stepper, a
+  dialog or an empty state of its own
 - **Stories** — one story per view per distinct layout, colocated as
   `<View>.stories.tsx` beside its view, wrapped in the feature's root
   element, with inline stand-in data and a Theme toolbar, in the monorepo
@@ -40,12 +41,12 @@ data and the mechanism.
 
 | Screen | Board | Route | Composes | Stories |
 | --- | --- | --- | --- | --- |
-| Vault home | `C01`, `C21` | `grade10.com/vault` | `CaseList` → `VaultFactCard`, `VaultFactCardSkeleton`, `VaultCasesEmpty`, `Badge`, `Button`, `Text` | `vault-cases-case-list--*` |
-| Request wizard | `C02`–`C05` | `/vault/new`, mounted by the home | `RequestWizard` → `VaultStageRail`, `VaultNoteList`, `RadioList`, `RadioListItem`, `TextInput`, `Textarea`, `NumberInput`, `FileDropzone`, `CheckboxListInput`, `Button`, `Text` | `vault-request-request-wizard--*` |
-| Case page | `C10`–`C19`, `C22`, `C23` | `/vault/cases/:caseId` | `CaseDetailView` → `VaultStageRail`, `VaultFactCard`, `VaultNoteList`, `VaultAcceptOfferDialog`, `Badge`, `Alert`, `Link`, `Button`, `Text` | `vault-cases-case-detail-view--*` |
+| Vault home | `C01`, `C21` | `grade10.com/vault` | `CaseList` → `FactCard`, `FactCardSkeleton`, `VaultCasesEmpty`, `Badge`, `Button`, `Text` | `vault-cases-case-list--*` |
+| Request wizard | `C02`–`C05` | `/vault/new`, mounted by the home | `RequestWizard` → `StageRail`, `NoteList`, `RadioList`, `RadioListItem`, `TextInput`, `Textarea`, `NumberInput`, `FileDropzone`, `CheckboxListInput`, `Button`, `Text` | `vault-request-request-wizard--*` |
+| Case page | `C10`–`C19`, `C22`, `C23` | `/vault/cases/:caseId` | `CaseDetailView` → `StageRail`, `FactCard`, `NoteList`, `VaultAcceptOfferDialog`, `Badge`, `Alert`, `Link`, `Button`, `Text` | `vault-cases-case-detail-view--*` |
 | Book a visit | `C06`, superseded | on the case page | `VisitBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Button`, `Text` | `vault-booking-visit-booking--*` |
-| Visit booked | `C07` | on the case page, after a booking | new `VisitBooked` → `BookingConfirmation`, `BookingManageCard`, `VaultNoteList`, `Link`, `Button` | `vault-booking-visit-booked--*` |
-| Your data | `C20` | `/profile/data`, under the account, behind the vault's gate | new `YourDataView` → `VaultFactCard`, `Badge`, `Button`, `Alert`, `Text` | `vault-retention-your-data-view--*` |
+| Visit booked | `C07` | on the case page, after a booking | new `VisitBooked` → `BookingConfirmation`, `BookingManageCard`, `NoteList`, `Link`, `Button` | `vault-booking-visit-booked--*` |
+| Your data | `C20` | `/profile/data`, under the account, behind the vault's gate | new `YourDataView` → `FactCard`, `Badge`, `Button`, `Alert`, `Text` | `vault-retention-your-data-view--*` |
 | Queue | `A01` | `admin.grade10.com/vault`, the cut in the address | `VaultPage`, `CaseQueuePanel` → `SectionHeader`, `Search`, `ChoiceList`, `Choice`, `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Badge`, `Status`, `Button` | `vault-admin-cases-case-queue-panel--*` |
 | Overdue | `A02` | `/vault`, the Overdue cut | `OverdueLoansPanel` → `Figure`, `Table`, `Badge`, `CursorPager`, `Status`, `Text` | `vault-admin-cases-overdue-loans-panel--*` |
 | Money | `A07` | `/vault`, Money tab | `MoneyLedgerPanel` → `Figure`, `DateField`, `ChoiceList`, `Choice`, `Select`, `Table`, `Money`, `CursorPager`, `Button`, `Status` | `vault-admin-settlement-money-ledger-panel--*` |
@@ -75,26 +76,30 @@ data and the mechanism.
   local composition of `HStack` and `Text`; no primitive draws a bar, and
   none is asked for
 
-### `@grade10/ui` — new, `shared/ui/vault-case`
+### `@grade10/ui` — new, `shared/ui/page-blocks` and `shared/ui/vault-case`
 
 Every word, figure and callback through props; none fetches, formats or
-derives. No existing block changes.
+derives. No existing block changes. The page blocks serve every site page,
+grading's collector pages among them, and each takes the slot a page finds
+it by.
 
-- **`VaultFactCard`** — a titled card, a region named by its title: an
+- **`FactCard`** — a titled card, a region named by its title: an
   optional line under the title, a lead, label · value rows as a table named
   by its own label or the title, a body, then actions; a part left out draws
   nothing. Its call sites: the fact the case meets (`C22`), the ending
   (`C19`), the offer (`C11`), what is owed, the reminders, the repayments,
   the final notice (`C16`), custody (`C14`), what we keep, the list's case
   cards (`C01`), and Your data's standing, download and ask (`C20`)
-- **`VaultFactCardSkeleton`** — the list's loading cards: one busy status
+- **`FactCardSkeleton`** — the list's loading cards: one busy status
   named by its label, each placeholder hidden from a screen reader
-- **`VaultNoteList`** — lines one under the other, a divider between two
+- **`NoteList`** — lines one under the other, a divider between two
   and none after the last; Before you come, the photo tips, the reminders,
   the repayments and How the loan works
-- **`VaultStageRail`** — the case's eight or six stages and the wizard's
+- **`StageRail`** — the case's eight or six stages and the wizard's
   three steps, with the word an ended case reads under its stage; it
   scrolls sideways inside itself on a narrow screen
+- **`EmptyPanel`** — nothing here yet: a title, the line under it and the
+  way out; the vault home's empty panel inside `VaultCasesEmpty`
 - **`VaultAcceptOfferDialog`** — the accept confirmation (`C12`), opened by
   the case page, which holds it open (`docs/conventions/dialogs.md`)
 - **`VaultCasesEmpty`** — the vault home with no case (`C21`)
@@ -121,11 +126,11 @@ CSV export is a `Button` and a download. Nothing the console package lacks.
 ### New in `packages/vault/frontend` — work in grade10
 
 - **`CaseStepper`** — the eight stages, six on the storage lane, read from
-  the status and handed to `VaultStageRail`
+  the status and handed to `StageRail`
 - **`OwnershipChip`** — the `Badge` and its word, read from the status, the
   offer and the due date
 - **`OfferCard`** — the terms table with the valuation, How the loan works,
-  Accept and Decline, worded onto `VaultFactCard` and `VaultNoteList`
+  Accept and Decline, worded onto `FactCard` and `NoteList`
 - **`AcceptOfferDialog`** — the offer's words onto `VaultAcceptOfferDialog`,
   which the case page mounts. Decline, Cancel this request,
   Cancel the visit, Ask for it back and the erasure ask are words and one
@@ -133,14 +138,14 @@ CSV export is a `Button` and a download. Nothing the console package lacks.
 - **`HowToPayBlock`** — the structured block
 - **`WhatIsOwedCard`** — the as-at figures, the progress line and the term
   breakdown; `RepaymentsList` under it, empty, one or many; both on
-  `VaultFactCard`, the repayments a `VaultNoteList`
+  `FactCard`, the repayments a `NoteList`
 - **`RetentionTable`** — what is kept and for how long, on the released case
-  and on Your data: the rows and the reviewed line a `VaultFactCard` takes
+  and on Your data: the rows and the reviewed line a `FactCard` takes
 - **`RequestReview`** — the wizard's third step: the read-back with Edit per
   block, what happens next, the statement tick
 - **`VisitBooked`** — the screen after a booking, composing the two
-  booking cards and Before you come as a `VaultNoteList`
-- **`YourDataView`** — `VaultFactCard` for the standing, the download and
+  booking cards and Before you come as a `NoteList`
+- **`YourDataView`** — `FactCard` for the standing, the download and
   the ask, over `RetentionTable`'s rows
 - **The reference** — a `Text` in the mono face on the header, the list card
   and the sent step; no component of its own
@@ -393,27 +398,30 @@ beside them.
 
 ### Vault blocks
 
-The states each `shared/ui/vault-case` block carries, reached from its
-stories with props alone, titled `Vault Case/<Block>`.
+The states each `shared/ui/page-blocks` and `shared/ui/vault-case` block
+carries, reached from its stories with props alone, titled
+`Page Blocks/<Block>` and `Vault Case/<Block>`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Fact card, every part | the title and the line under it, the lead, the rows as a table named by its own label, the body, then the actions | `shared-ui-vault-case-SC-04` |
-| Fact card, rows only | the title, then the rows as a table named by the title; no lead, body or actions drawn | `shared-ui-vault-case-SC-05` |
-| Fact card, body only | the title and the body; no table | `shared-ui-vault-case-SC-06` |
-| Loading cards | one busy status named by its label, holding the given number of placeholder cards, each hidden from a screen reader | `shared-ui-vault-case-SC-07` |
-| Loading cards, a count below one | refused, naming the count; nothing drawn | `shared-ui-vault-case-SC-08` |
-| Before you come, storage lane | three lines: verified or Verify now, bring the item, sign the custody agreement; a divider under the first two, none under the last | `shared-ui-vault-case-SC-09` |
-| Before you come, financed lane | four lines: verified or Verify now, bring the item, sign both agreements, the money follows; a divider under the first three, none under the last | `shared-ui-vault-case-SC-09` |
-| Note list, one line | the line, no divider | `shared-ui-vault-case-SC-09` |
-| Note list, a line with a link | the link stays a link inside its line | `shared-ui-vault-case-SC-10` |
-| Note list, empty | nothing drawn | `shared-ui-vault-case-SC-11` |
-| Rail, the financed lane at Signed | eight stages: four done, Signed in progress, three to come | `shared-ui-vault-case-SC-12` |
-| Rail, the storage lane | six stages: Request, Valued, Agreed, Signed, Vault, Home | `shared-ui-vault-case-SC-13` |
-| Rail, the wizard's first step | three steps: Describe in progress, Photograph and Review to come | `shared-ui-vault-case-SC-14` |
-| Rail, ended | the stage the case ended at in progress, the ending's word under it, every later stage to come | `shared-ui-vault-case-SC-15` |
-| Rail, a stage it does not hold | refused, naming the stage and the stages it holds | `shared-ui-vault-case-SC-16` |
-| Rail, narrow | the rail scrolls sideways; the page does not | `shared-ui-vault-case-SC-17` |
+| Fact card, every part | the title and the line under it, the lead, the rows as a table named by its own label, the body, then the actions | `shared-ui-page-blocks-SC-03` |
+| Fact card, rows only | the title, then the rows as a table named by the title; no lead, body or actions drawn | `shared-ui-page-blocks-SC-04` |
+| Fact card, body only | the title and the body; no table | `shared-ui-page-blocks-SC-05` |
+| Loading cards | one busy status named by its label, holding the given number of placeholder cards, each hidden from a screen reader | `shared-ui-page-blocks-SC-06` |
+| Loading cards, a count below one | refused, naming the count; nothing drawn | `shared-ui-page-blocks-SC-07` |
+| Before you come, storage lane | three lines: verified or Verify now, bring the item, sign the custody agreement; a divider under the first two, none under the last | `shared-ui-page-blocks-SC-08` |
+| Before you come, financed lane | four lines: verified or Verify now, bring the item, sign both agreements, the money follows; a divider under the first three, none under the last | `shared-ui-page-blocks-SC-08` |
+| Note list, one line | the line, no divider | `shared-ui-page-blocks-SC-08` |
+| Note list, a line with a link | the link stays a link inside its line | `shared-ui-page-blocks-SC-09` |
+| Note list, empty | nothing drawn | `shared-ui-page-blocks-SC-10` |
+| Rail, the financed lane at Signed | eight stages: four done, Signed in progress, three to come | `shared-ui-page-blocks-SC-11` |
+| Rail, the storage lane | six stages: Request, Valued, Agreed, Signed, Vault, Home | `shared-ui-page-blocks-SC-12` |
+| Rail, the wizard's first step | three steps: Describe in progress, Photograph and Review to come | `shared-ui-page-blocks-SC-13` |
+| Rail, ended | the stage the case ended at in progress, the ending's word under it, every later stage to come | `shared-ui-page-blocks-SC-14` |
+| Rail, a stage it does not hold | refused, naming the stage and the stages it holds | `shared-ui-page-blocks-SC-15` |
+| Empty panel, a way out | the title, no line, the start action; the action reported | `shared-ui-page-blocks-SC-17` |
+| Found by slot | each page block carries the slot it is given, or the design system's own | `shared-ui-page-blocks-SC-18` |
+| Rail, narrow | the rail scrolls sideways; the page does not | `shared-ui-page-blocks-SC-16` |
 | Accept, open (`C12`) | the title, the lead, the total, what a late day costs, what will be signed; Go back and Accept | `shared-ui-vault-case-SC-18` |
 | Accept, in flight | Accept busy, Go back unavailable; Escape and the overlay leave it open | `shared-ui-vault-case-SC-20` |
 | Accept, refused | the refusal as an alert beside the terms; both buttons back | `shared-ui-vault-case-SC-21` |
@@ -581,7 +589,7 @@ One row per kind, and the blocks each carries after the lead.
   prop; no existing block changes
 - **Before you come's dividers** — today the storage lane's last line
   carries a divider and the financed lane's third has none; on
-  `VaultNoteList` a divider falls between two lines on both lanes, the one
+  `NoteList` a divider falls between two lines on both lanes, the one
   visible change the blocks bring
 - **Journeys the states reach past** — the stepper and the chip, the
   list card's held-since line and the storage-lane custody card (`C14`)

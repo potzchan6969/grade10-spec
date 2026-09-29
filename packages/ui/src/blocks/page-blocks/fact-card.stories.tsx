@@ -2,6 +2,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { FactCard } from "./fact-card";
 import {
   KEEPS_ROWS,
   KEEPS_TITLE,
@@ -15,15 +16,14 @@ import {
   REMINDERS_FREE,
   REMINDERS_TITLE,
 } from "./fixtures";
-import { VaultFactCard } from "./vault-fact-card";
 
 const meta = {
-  title: "Vault Case/VaultFactCard",
-  component: VaultFactCard,
+  title: "Page Blocks/FactCard",
+  component: FactCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: { copy: { title: OFFER_TITLE } },
-} satisfies Meta<typeof VaultFactCard>;
+} satisfies Meta<typeof FactCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -33,7 +33,7 @@ const before = (a: Node, b: Node) =>
   Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
 
 /** Every part, drawn in one order; the card a region named by its title,
- * the rows a table named by their own label (shared-ui-vault-case-SC-04). */
+ * the rows a table named by their own label (shared-ui-page-blocks-SC-03). */
 export const EveryPart: Story = {
   args: {
     copy: {
@@ -70,7 +70,7 @@ export const EveryPart: Story = {
 };
 
 /** Rows alone: the table takes the card's title, and nothing else is drawn
- * (shared-ui-vault-case-SC-05). */
+ * (shared-ui-page-blocks-SC-04). */
 export const RowsOnly: Story = {
   args: { copy: { title: KEEPS_TITLE }, rows: KEEPS_ROWS },
   play: async ({ canvasElement }) => {
@@ -88,7 +88,7 @@ export const RowsOnly: Story = {
   },
 };
 
-/** A body with no rows draws no table (shared-ui-vault-case-SC-06). */
+/** A body with no rows draws no table (shared-ui-page-blocks-SC-05). */
 export const BodyOnly: Story = {
   args: {
     copy: { title: REMINDERS_TITLE },
@@ -103,7 +103,7 @@ export const BodyOnly: Story = {
   },
 };
 
-/** An empty list of rows is no rows (shared-ui-vault-case-SC-06). */
+/** An empty list of rows is no rows (shared-ui-page-blocks-SC-05). */
 export const EmptyRows: Story = {
   args: { ...BodyOnly.args, rows: [] },
   play: async ({ canvasElement }) => {

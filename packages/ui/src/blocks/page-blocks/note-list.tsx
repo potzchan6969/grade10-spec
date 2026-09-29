@@ -2,16 +2,18 @@ import { List, ListItem } from "@grade10/design-system/components/display/list";
 import type { ReactNode } from "react";
 
 /** One line: a stable id, and what it reads, a link included. */
-type VaultNote = { id: string; content: ReactNode };
+type NoteListItem = { id: string; content: ReactNode };
 
-type VaultNoteListCopy = {
+type NoteListCopy = {
   /** The list's accessible name, where one is wanted. */
   label?: string;
 };
 
-type VaultNoteListProps = {
-  copy?: VaultNoteListCopy;
-  notes: readonly VaultNote[];
+type NoteListProps = {
+  copy?: NoteListCopy;
+  notes: readonly NoteListItem[];
+  /** The `data-slot` the consumer finds this list by. */
+  slot?: string;
   className?: string;
 };
 
@@ -21,11 +23,15 @@ type VaultNoteListProps = {
  * whose last line depends on the case never ends on a divider or loses one
  * between two lines. No lines draws nothing.
  */
-function VaultNoteList({ copy, notes, className }: VaultNoteListProps) {
+function NoteList({ copy, notes, slot, className }: NoteListProps) {
   if (notes.length === 0) return null;
 
   return (
-    <List aria-label={copy?.label} className={className}>
+    <List
+      aria-label={copy?.label}
+      className={className}
+      data-slot={slot ?? "list"}
+    >
       {notes.map((note, at) => (
         <ListItem divider={at < notes.length - 1} key={note.id}>
           {note.content}
@@ -35,5 +41,5 @@ function VaultNoteList({ copy, notes, className }: VaultNoteListProps) {
   );
 }
 
-export type { VaultNote, VaultNoteListCopy, VaultNoteListProps };
-export { VaultNoteList };
+export type { NoteListCopy, NoteListItem, NoteListProps };
+export { NoteList };

@@ -830,9 +830,9 @@ function WinnerProgressCard({
           gap="none"
           vAlign="center"
         >
-          <h3 className="min-w-0 text-base leading-6 font-medium text-foreground">
+          <h2 className="min-w-0 text-base leading-6 font-medium text-foreground">
             Order Progress
-          </h3>
+          </h2>
           {trackingCode && trackingHref ? (
             <Link
               className="min-w-0 shrink tabular-nums"
