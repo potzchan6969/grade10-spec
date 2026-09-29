@@ -241,7 +241,7 @@ viewport also with stage previous/next or a horizontal swipe,
 * Step 3 shows `<lot B>`.
 * Progress dots are present for the two slides.
 
-### grade10-site-auction-auction-US7-TC01-2: On a small viewport, stage next advances between two Featured slides
+### grade10-site-auction-auction-US7-TC04-1: On a small viewport, stage next advances between two Featured slides
 
 **Classification:**
 

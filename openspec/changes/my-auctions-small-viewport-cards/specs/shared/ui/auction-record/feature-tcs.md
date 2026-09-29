@@ -1,89 +1,106 @@
+# shared/ui/auction-record Test Cases
+
+**Status:** pending-review
+**Drafts styled:** 2026-09-30, tcs-rules r4
+
 ## shared-ui-auction-record-US1: The record surface exports
 
 **As an** application composing My Auctions,
 **I want** the shared auction-record blocks to present bookmarked lots,
-**so that** collectors can act on every lot without losing facts on a small
-viewport.
+**so that** collectors can act on every lot without losing facts on a small viewport.
 
 ### shared-ui-auction-record-US1-TC20-1: Below md each lot is a card without sideways scroll
 
-**Trace:** shared-ui-auction-record-SC-17
+**Classification:**
 
-| | |
-| --- | --- |
-| Level | Feature |
-| Priority | Must |
-| Type | Functional |
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The record surface exports
 
-**Preconditions**
+**Pre-conditions:**
 
-* Storybook or preview renders `AuctionRecord` with at least one bidding lot
-  and one watching lot at a viewport below `md`.
+* `AuctionRecord` is supplied with at least one bidding lot and one watching lot.
+* The viewport is below `md`.
 
-**Steps**
+**Steps:**
 
-1. Open My Auctions below `md`.
-2. Read each lot's identity, current bid, and Status without panning sideways.
+1. Render the record surface.
+2. Read each lot's identity, current bid and Status without panning sideways.
 3. Reach Email alerts and Unwatch or View order on a lot that supplies them.
 
-**Expected**
+**Expected Results:**
 
-* Each lot is a stacked card with identity, inline current bid, Status badge
-  when labelled, and a footer for alerts / Unwatch / View order when supplied.
-* Those facts and actions are reachable without horizontal scroll of the page
-  content.
+* Each lot is a stacked card with its identity, the current bid on one line, a Status badge when labelled, and a footer for Email alerts, Unwatch and View order when supplied.
+* Those facts and actions are reachable without horizontal scroll of the page content.
 * The table column header row is not shown.
 
 ### shared-ui-auction-record-US1-TC21-1: From md the five-column table remains
 
-**Trace:** shared-ui-auction-record-SC-18
+**Classification:**
 
-| | |
-| --- | --- |
-| Level | Feature |
-| Priority | Must |
-| Type | Functional |
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The record surface exports
 
-**Preconditions**
+**Pre-conditions:**
 
-* Storybook or preview renders `AuctionRecord` with at least one bidding lot
-  and one watching lot at a viewport from `md` up.
+* `AuctionRecord` is supplied with at least one bidding lot and one watching lot.
+* The viewport is `md` or wider.
 
-**Steps**
+**Steps:**
 
-1. Open My Auctions from `md` up.
+1. Render the record surface.
 2. Read the column header row and the table body.
 
-**Expected**
+**Expected Results:**
 
-* Lots appear in one five-column table with the column header row.
+* The lots appear in one five-column table with the column header row.
 
 ### shared-ui-auction-record-US1-TC22-1: Below md the whole card opens the lot or order
 
-**Trace:** shared-ui-auction-record-SC-19
+**Classification:**
 
-| | |
-| --- | --- |
-| Level | Feature |
-| Priority | Must |
-| Type | Functional |
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The record surface exports
 
-**Preconditions**
+**Pre-conditions:**
 
-* Storybook or preview renders `AuctionRecord` below `md` with a won lot whose
-  `href` opens Winner Order and a watching lot with Unwatch and Email alerts.
+* The viewport is below `md`.
+* `AuctionRecord` is supplied with a won lot whose `href` opens Winner Order.
+* It is also supplied with a watching lot that has Unwatch and Email alerts.
 
-**Steps**
+**Steps:**
 
-1. Activate the won lot's card body (not Unwatch or Email alerts).
-2. On a watching card, mute Email alerts and Unwatch without activating the
-   card body.
+1. Activate the won lot's card body, away from its controls.
+2. On the watching card, turn Email alerts off.
+3. On the same card, select Unwatch.
 
-**Expected**
+**Expected Results:**
 
-* The won card body opens the supplied Winner Order `href`.
-* Email alerts and Unwatch still change only that lot; they do not open the
-  card's `href`.
+* Step 1 opens the supplied Winner Order `href`.
+* Steps 2 and 3 each change only that lot and do not open the card's `href`.
 
 ## Reconciliation
 
