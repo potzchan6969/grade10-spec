@@ -9,5 +9,4 @@ reviewed:
   user-journeys: 9c5098e5
   tasks: c5875992
 deploy_waived: "rita: code merged; archive requested without waiting for deployed_at"
-tasks_waived: "rita: group 5 e2e deferred per tasks.md disposition — walk awaits tcs-review + real e2e; groups 2–4 cover named SC scenarios"
 decisions_carried: "Q1/Q8/Q9–Q21 lasting choices onto Create Account Product decisions on shared/auth/users, shared/console/user-directory, and grade10-admin/console/user-directory PRDs"
