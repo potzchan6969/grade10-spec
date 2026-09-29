@@ -21,12 +21,14 @@ the admin frontend.
 - [ ] 2.3 One local starting-price check in `services/listings/` - a safe integer, 0 or more - used by `draft.ts` and `schedule.ts`, with the refusal "starting price must be whole minor units, 0 or more" under `INVALID_PRICING`, and an empty price kept null through both - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`, `grade10-admin-auction-listing-SC-128`, `grade10-admin-auction-listing-SC-129`
 - [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` for auction
 
-## 3. Bidding at a 0 start (grade10)
+## 3. The first-bid floor and a 0 start (grade10)
 
-- [ ] 3.1 Tests: `openingPrice` returns a positive starting price unchanged and 100 `USD`, 1000 `HKD`, 100 `JPY` for 0; in `apps/backend/grade10/auction/test/db/bidding/`, on a 0 start a first maximum below the opening price is refused naming it, a lone maximum stands at the opening price and writes one public bid there, never 0, and a lone bidder closes as winner at the opening price; a positive start keeps today's floor and lone price; a sandbox test bid runs on a 0 start - `grade10-site-auction-auto-bidding-SC-30`, `grade10-site-auction-auto-bidding-SC-31`
-- [ ] 3.2 Add `openingPrice(currency, startingPriceMinor)` beside `nextBidAmount` in `packages/grade10-auction/contracts/src/bidIncrements.ts`, and call it in `bidFloor`'s no-bid branch, in `resolveStandingMaxima`'s lone-leader `resolvedAmountMinor` and its public record, and in the demo's `FakeAuctionService` - `grade10-site-auction-auto-bidding-SC-30`, `grade10-site-auction-auto-bidding-SC-31`
-- [ ] 3.3 Drop `startingPrice > 0` from `isEligibleTestListing` in `services/bidding/testBids.ts`, and take the existing `nonNegativeMinorUnits` for the test-bid listing's `startingPrice` in `contracts/src/admin.ts`
-- [ ] 3.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` for auction, the `placeBid`, `autoBidding` and `resolveStandingMaxima` specs among them
+- [ ] 3.1 Tests: `openingPrice` returns a positive starting price unchanged and 100 `USD`, 1000 `HKD`, 100 `JPY` for 0; in `apps/backend/grade10/auction/test/db/bidding/`, a first bid at an `HKD` starting price of 20000 is refused naming 21000, a first bid of 1 minor unit on a `USD` 0 start is refused naming 100, the published minimum before any bid is the starting price plus its tier increment, a lone maximum on a 0 start stands at the opening price and writes one public bid there, never 0, a lone bidder on a 0 start closes as winner at the opening price, a lone maximum on a positive start still stands at the starting price, and a sandbox test bid runs on a 0 start; the `placeBid` and `autoBidding` specs that bid at the starting price are rewritten to the new floor - `grade10-site-auction-auction-SC-62`, `grade10-site-auction-auction-SC-63`, `grade10-site-auction-auto-bidding-SC-30`, `grade10-site-auction-auto-bidding-SC-31`
+- [ ] 3.2 Return `nextBidAmount(currency, startingPrice)` from `bidFloor`'s no-bid branch - `grade10-site-auction-auction-SC-62`, `grade10-site-auction-auction-SC-63`
+- [ ] 3.3 Add `openingPrice(currency, startingPriceMinor)` beside `nextBidAmount` in `packages/grade10-auction/contracts/src/bidIncrements.ts`, and call it in `resolveStandingMaxima`'s lone-leader `resolvedAmountMinor` and its public record, and in the demo's `FakeAuctionService` - `grade10-site-auction-auto-bidding-SC-30`, `grade10-site-auction-auto-bidding-SC-31`
+- [ ] 3.4 Drop `startingPrice > 0` from `isEligibleTestListing` in `services/bidding/testBids.ts`, and take the existing `nonNegativeMinorUnits` for the test-bid listing's `startingPrice` in `contracts/src/admin.ts`
+- [ ] 3.5 Rewrite the automated test behind `grade10-site-auction-e2e-US03-TC01-2` to bid the starting price plus its tier increment and read the lot standing at the starting price, and move its acceptance link to the new revision - `grade10-site-auction-auction-SC-62`
+- [ ] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` for auction, the `placeBid`, `autoBidding` and `resolveStandingMaxima` specs among them
 
 ## 4. The listing editor accepts 0 (grade10)
 
@@ -38,6 +40,6 @@ the admin frontend.
 
 Needs `feature-tcs.md` reviewed (`/tcs-review allow-zero-starting-price`) as its input, and groups 2 to 4 landed.
 
-- [ ] 5.1 Walk `grade10-admin-auction-listing-US-01`, `grade10-admin-auction-listing-US-03` and `grade10-admin-auction-listing-US-04` through the admin listing editor, and `grade10-site-auction-auto-bidding-US-01` through the collector's bid panel on a 0-start lot, end to end, kept as the change's end-to-end suite under `apps/frontend/grade10/e2e/tests/auction/`
+- [ ] 5.1 Walk `grade10-admin-auction-listing-US-01`, `grade10-admin-auction-listing-US-03` and `grade10-admin-auction-listing-US-04` through the admin listing editor, and `grade10-site-auction-auto-bidding-US-01` and `grade10-site-auction-auction-US-02` through the collector's bid panel on a 0-start lot and a positive-start lot with no bid, end to end, kept as the change's end-to-end suite under `apps/frontend/grade10/e2e/tests/auction/`
 - [ ] 5.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own commit; the ones that stay manual are named in the suite and named in the walk's `rounds.md` row
 - [ ] 5.3 Verify: the walks pass against a deployed staging, and `pnpm run tcs:validate` in `grade10-spec`

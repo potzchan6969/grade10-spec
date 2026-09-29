@@ -25,6 +25,9 @@
 | Q9 | Does publish check the starting price again? | No - create is the gate; a created listing at 0 publishes like any other - decided by the round | A second price check at publish |
 | Q10 | Is a lone maximum's stand on a 0 start recorded as that collector's bid? | Yes - one public bid at the lowest increment, as a lone maximum on a positive start is recorded at the starting price - decided by the round | No bid until a second maximum arrives - rejected: the bid count and history would disagree with the current bid |
 | Q11 | On a 0 start, is a starting price of 0 beside a current bid at the lowest increment the intended pair on the bid panel? | Yes - the panel shows both facts as it does today; how it shows a starting price is a non-goal - decided by the round | Hiding the starting price once a bid stands |
+| Q12 | Two specs disagree on the first bid: `grade10-site/auction/auction` says it meets the starting price, `grade10-site/auction/bid-increments` says the starting price plus its tier increment, and the app takes the first. Which holds, on every start? | The starting price plus its tier increment, as the Bidding page already states ("The first bid must reach HK$210"); this change rewrites the auction requirement and moves the app's first-bid floor to match - decided by the round | Keep the starting price as the first bid - rejected: it contradicts the page, and on a 0 start it takes the one-minor-unit first bid the non-goals rule out |
+| Q13 | Before any bid, what does quick-bid chip 1x read? | The first-bid minimum: the chips count from the starting price before any bid, so chip 1x is the starting price plus its tier increment - on a 0 start, the lowest increment - decided by the round | Counting from 0, or from the starting price without the increment - rejected: a chip that reads below the minimum is refused on tap |
+| Q14 | The first-bid rule has no journey of its own. Is `grade10-site-auction-auction-US-02` its walk? | Yes - placing a bid inside the window is where a collector meets the minimum; no new journey - decided by the round | A first-bid journey of its own - rejected: it would restate US-02's walk |
 
 ## Raised
 
@@ -37,3 +40,5 @@
 | `grade10-admin/auction/listing` | Whether publish checks the starting price again | Q9 |
 | `grade10-site/auction/auto-bidding` | Whether a lone maximum's stand on a 0 start is recorded as a bid | Q10 |
 | `grade10-site/auction/auto-bidding` | Whether a starting price of 0 beside a current bid at the lowest increment is the intended pair | Q11 |
+| `grade10-site/auction/auction` | What quick-bid chip 1x reads before any bid | Q13 |
+| `grade10-site/auction/auction` | Whether US-02 is the walk for the first-bid rule | Q14 |

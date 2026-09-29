@@ -16,9 +16,11 @@ through `formatMinor`, so 0 reads as a zero amount (Q6).
 
 Two bidding paths read the starting price as a price, and both break at 0:
 
-- **`bidFloor`** returns `startingPrice` before any bid, so a 0 start takes a
-  first maximum of 1 minor unit - the one-minor-unit first bid the
-  decisions rule out.
+- **`bidFloor`** returns `startingPrice` before any bid. That follows the
+  old wording of `grade10-site/auction/auction`, which this change rewrites
+  (Q12): the first bid is the starting price plus its tier increment on
+  every start. At 0 the old floor takes a first maximum of 1 minor unit -
+  the one-minor-unit first bid the decisions rule out.
 - **`resolveStandingMaxima`** stands a lone maximum at `startingPrice`, so a
   0 start writes a bid of amount 0, which `bids`' own check
   (`maximum > 0 AND amount > 0`) refuses; bidding on the lot fails. `topAmount
@@ -32,37 +34,44 @@ Two bidding paths read the starting price as a price, and both break at 0:
 
 - A 0 start through the form, the API, the draft and schedule services, and
   the sandbox test-bid tool.
-- One opening price for a listing, read by the bid floor and the lone
-  maximum, so a 0 start opens at the currency's lowest increment (Q1, Q4).
+- A first-bid floor of the starting price plus its tier increment on every
+  start (Q12), so a 0 start opens at the currency's lowest increment (Q1).
+- A lone maximum on a 0 start standing at that increment, never 0 (Q4).
 
 **Non-Goals:**
 
-- Moving the positive-start first-bid floor. `bidFloor` takes a first bid
-  at the starting price, where `grade10-site/auction/bid-increments` asks for
-  the starting price plus its increment; that divergence predates this
-  change and is a bug of its own.
+- Moving the lone-maximum price on a positive start: it stays the starting
+  price, as `grade10-site/auction/auto-bidding` states.
 - A migration: no column, check or backfill changes.
 
 ## Decisions
 
-1. **One opening-price helper in the contracts package**
-   - The specs govern the amounts: the first-bid minimum in
-     `grade10-site/auction/bid-increments`, the lone-maximum price in
-     `grade10-site/auction/auto-bidding` (this change, on Q4).
+1. **The first-bid floor is `nextBidAmount` of the starting price**
+   - The specs govern the amount: the first-bid minimum in
+     `grade10-site/auction/bid-increments`, which the rewritten
+     `grade10-site/auction/auction` requirement now names (Q12).
+   - `bidFloor`'s no-bid branch returns `nextBidAmount(currency,
+     startingPrice)` - 21000 on an `HKD` start of 20000, 100 on a `USD` start
+     of 0. Every reader of the published minimum (`publicState`, the
+     listings repository, `accountRecord`, `testBids`) already goes through
+     `bidFloor`, so they move together.
+   - Alternatives rejected: a 0-start special case in `bidFloor` that leaves
+     positive starts at the starting price (keeps the app contradicting the
+     spec and the Bidding page).
+
+2. **One lone-maximum price helper in the contracts package**
+   - The spec governs it: `grade10-site/auction/auto-bidding`, on Q4.
    - Add `openingPrice(currency, startingPriceMinor)` beside `nextBidAmount`
      in `packages/grade10-auction/contracts/src/bidIncrements.ts`: the
      starting price when it is above 0, else `nextBidAmount(currency, 0)` -
-     100 `USD`, 1000 `HKD`, 100 `JPY`. `bidFloor`'s no-bid branch and
-     `resolveStandingMaxima`'s lone-leader branch (`resolvedAmountMinor` and
-     its public record) both call it; the demo's `FakeAuctionService` does
-     too, so the demo and the service cannot drift.
-   - Alternatives rejected: a special case inline in each of the two paths
-     (two places to forget the third); storing the opening price on the
-     listing (a derived value in a second column); `nextBidAmount` for every
-     start (fixes the positive-start divergence too, but moves every live
-     lot's floor - out of scope, above).
+     100 `USD`, 1000 `HKD`, 100 `JPY`. `resolveStandingMaxima`'s lone-leader
+     branch (`resolvedAmountMinor` and its public record) and the demo's
+     `FakeAuctionService` call it, so the demo and the service cannot drift.
+   - Alternatives rejected: a special case inline in the resolver and the
+     demo (two places to forget the third); storing the opening price on the
+     listing (a derived value in a second column).
 
-2. **A non-negative whole amount for the starting price only**
+3. **A non-negative whole amount for the starting price only**
    - The specs govern the rule: 0 or more, whole minor units, empty only
      while draft.
    - One local check in `services/listings/`, shared by `draft.ts` and
@@ -75,7 +84,7 @@ Two bidding paths read the starting price as a price, and both break at 0:
      `@grade10/utils/money` for two auction callers; relaxing `positiveInt`
      wholesale in the router.
 
-3. **Empty stays null end to end**
+4. **Empty stays null end to end**
    - The spec governs it: an empty price is refused at create and never
      stored as 0 (Q8).
    - The form keeps `null` for an empty field and `0` for an entered 0;
@@ -85,10 +94,10 @@ Two bidding paths read the starting price as a price, and both break at 0:
      with `||` or `Number("")`; the tests assert both sides.
    - Alternatives rejected: an empty string decoded to 0 at the edge.
 
-4. **Sandbox test bids take a 0 start**
+5. **Sandbox test bids take a 0 start**
    - `testBids.ts` drops its `startingPrice > 0` eligibility and the contract
-     reuses its existing `nonNegativeMinorUnits`; `minimumNextAmount` stays positive,
-     because `bidFloor` now returns the opening price.
+     reuses its existing `nonNegativeMinorUnits`; `minimumNextAmount` stays
+     positive, because `bidFloor` now adds the tier increment.
 
 ## API Contracts
 
@@ -111,6 +120,12 @@ Additive widening: every client that sent a valid value still does.
   stays as the backstop.
 - [Risk] `topAmount = 0` keeps meaning "no bid" → Mitigation: the lone
   leader stands at the opening price, above 0, so the sentinel still holds.
+- [Risk] A published lot with no bid yet has its floor rise by one tier
+  increment at deploy, so a collector who read the old minimum is refused →
+  Mitigation: the refusal already names the new minimum (`AMOUNT_TOO_LOW`
+  with `minimumNextAmount`), and the page reads the same `bidFloor`. The
+  `placeBid` and `autoBidding` specs that bid at the starting price are
+  rewritten to the new floor in the same group.
 - [Risk] Q4 is answered the other way → Mitigation: the helper is the only
   place the lone-leader amount is decided, so the change is one line and its
   tests; standing at 0 would also need the `bids` check and the sentinel
@@ -119,7 +134,8 @@ Additive widening: every client that sent a valid value still does.
 ## Migration Plan
 
 Deploy the backend before the admin frontend, so a form that sends 0 never
-meets a service that refuses it. Rollback is the reverse; a listing already
+meets a service that refuses it. The floor change takes effect for every
+unbid lot on the backend deploy; no data moves. Rollback is the reverse; a listing already
 created at 0 stays valid under the old read path, and bidding on it needs the
 new `bidFloor`, so the backend rolls back only while no 0-start listing is
 published.
