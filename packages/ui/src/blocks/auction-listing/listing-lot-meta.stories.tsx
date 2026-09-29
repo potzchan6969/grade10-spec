@@ -1,8 +1,11 @@
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { ListingLotMeta } from "./listing-lot-meta";
+
+const { auctionListing } = getMessages("grade10", "en");
 
 /** Matches Pages/Auction Lot Details fixture content. */
 const LOT_DESCRIPTION =
@@ -29,10 +32,10 @@ const MARKET_COMPS = {
 } as const;
 
 const COPY = {
-  aboutThisLot: "About This Auction",
-  vaultShipping: "Vault Shipping",
-  showMore: "Show more",
-  showLess: "Show less",
+  aboutThisLot: auctionListing.aboutThisAuction,
+  vaultShipping: auctionListing.vaultShippingLabel,
+  showMore: auctionListing.showMore,
+  showLess: auctionListing.showLess,
 } as const;
 
 const meta = {
@@ -71,13 +74,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("About This Auction")).toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
     expect(canvas.getByText("Cert number")).toBeInTheDocument();
     expect(canvas.getByText("95109007")).toBeInTheDocument();
     expect(canvas.getByText("Market Price")).toBeInTheDocument();
-    expect(canvas.getByText("Vault Shipping")).toBeInTheDocument();
+    expect(canvas.getByText("Vault shipping")).toBeInTheDocument();
     expect(canvas.getByText(/Bandai Carddass checklist/)).toBeInTheDocument();
     expect(canvas.queryByText("Result")).not.toBeInTheDocument();
   },
@@ -119,8 +122,8 @@ export const AfterSale: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("About This Auction")).toBeInTheDocument();
-    expect(canvas.getByText("Vault Shipping")).toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
+    expect(canvas.getByText("Vault shipping")).toBeInTheDocument();
     expect(canvas.queryByText("Market Price")).not.toBeInTheDocument();
     expect(canvas.queryByText("Result")).not.toBeInTheDocument();
   },

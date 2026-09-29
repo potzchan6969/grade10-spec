@@ -1,6 +1,9 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { ProfileForm } from "./profile-form";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Store Profile/ProfileForm",
@@ -8,7 +11,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    copy: { displayName: "Display name", bio: "Bio", submit: "Save" },
+    copy: { displayName: "Display name", bio: "Bio", submit: common.save },
     initialDisplayName: "Collector",
     initialBio: "",
     onSubmit: fn(),
@@ -25,8 +28,8 @@ export const Pending: Story = {
     copy: {
       displayName: "Display name",
       bio: "Bio",
-      submit: "Save",
-      cancel: "Cancel",
+      submit: common.save,
+      cancel: common.cancel,
     },
     pending: true,
   },
@@ -39,8 +42,8 @@ export const ErrorWithCancel: Story = {
     copy: {
       displayName: "Display name",
       bio: "Bio",
-      submit: "Save",
-      cancel: "Cancel",
+      submit: common.save,
+      cancel: common.cancel,
     },
     error: "Profile could not be saved.",
     onCancel: fn(),

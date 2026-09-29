@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
@@ -9,6 +10,8 @@ import {
   SEPTEMBER_DAYS,
   SLOT_PICKER_COPY,
 } from "./fixtures";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Appointment Booking/BookingSlotPicker",
@@ -89,13 +92,13 @@ export const Failed: Story = {
     slots: {
       status: "error",
       message: "The times could not be read.",
-      action: { label: "Try again", onAction: fn() },
+      action: { label: common.retry, onAction: fn() },
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("The times could not be read.")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Try again" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: common.retry })).toBeVisible();
     expect(
       canvas.queryByText("Nothing is free on this day any more."),
     ).toBeNull();

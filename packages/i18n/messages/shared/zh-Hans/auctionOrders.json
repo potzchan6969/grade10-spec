@@ -78,11 +78,24 @@
     "city": "城市/城镇",
     "addressLine1": "地址行 1",
     "addressLine2": "地址行 2",
+    "apartment": "单元/楼层/大厦",
     "state": "州/省/地区",
     "postalCode": "邮政编码",
     "optional": "可选",
     "confirm": "确认",
     "cancel": "取消",
     "countrySearchPlaceholder": "例如 United States"
+  },
+  "detail": {
+    "orderInformation": "订单信息",
+    "collectionMethod": "收货方式",
+    "orderStatus": "订单状态",
+    "lots": "拍品",
+    "orderNumber": "订单编号",
+    "auction": "拍卖",
+    "currency": "货币",
+    "date": "日期",
+    "invoiceStatus": "发票状态",
+    "payNow": "立即付款"
   }
 }

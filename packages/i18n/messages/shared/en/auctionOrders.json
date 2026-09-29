@@ -78,11 +78,24 @@
     "city": "Town/City",
     "addressLine1": "Address Line 1",
     "addressLine2": "Address Line 2",
+    "apartment": "Apt./Suite/Building",
     "state": "State/Province/Region",
     "postalCode": "Postal Code",
     "optional": "Optional",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "countrySearchPlaceholder": "e.g. United States"
+  },
+  "detail": {
+    "orderInformation": "Order Information",
+    "collectionMethod": "Collection Method",
+    "orderStatus": "Order Status",
+    "lots": "Lots",
+    "orderNumber": "Order No.",
+    "auction": "Auction",
+    "currency": "Currency",
+    "date": "Date",
+    "invoiceStatus": "Invoice Status",
+    "payNow": "Pay Now"
   }
 }

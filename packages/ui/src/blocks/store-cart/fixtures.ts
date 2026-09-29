@@ -1,4 +1,7 @@
+import { getMessages } from "@grade10/i18n";
 import type { CartDrawerCopy, CartItemSummary, HeldPromoCode } from "./types";
+
+const { common } = getMessages("grade10", "en");
 
 /** Subtotal used by cart drawer Storybook stubs. */
 const STORY_CART_SUBTOTAL_HKD = 42700;
@@ -86,7 +89,7 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
     usePromoCode: "Promo code",
     selectOrEnterPromoCode: "Select or enter code",
     promoSheetTitle: "Promo code",
-    promoSheetBackLabel: "Back",
+    promoSheetBackLabel: common.back,
     applyPromo: "Apply",
     promoPlaceholder: "Enter promo code",
     removePromo: "Remove",

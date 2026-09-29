@@ -1,0 +1,41 @@
+{
+  "document": {
+    "billToHeading": "帳單地址",
+    "shipToHeading": "送貨地址",
+    "descriptionLabel": "說明",
+    "amountLabel": "金額"
+  },
+  "invoice": {
+    "documentTitle": "發票",
+    "invoiceNumberLabel": "發票編號",
+    "sentAtLabel": "開立日期",
+    "paymentDeadlineLabel": "到期日",
+    "paymentMethodLabel": "付款方式",
+    "bankDetailsHeading": "銀行資料",
+    "swiftLabel": "SWIFT",
+    "fpsLabel": "FPS",
+    "hkLocalTransferLabel": "香港本地轉帳",
+    "beneficiaryLabel": "收款人",
+    "swiftBicLabel": "SWIFT/BIC",
+    "accountIbanLabel": "帳戶/IBAN",
+    "fpsIdLabel": "FPS ID",
+    "bankAndCodeLabel": "銀行及代碼",
+    "accountNoLabel": "帳戶號碼",
+    "bankReferenceNoteLabel": "請在你的銀行應用程式的備註或附言欄位中輸入此參考編號。遺漏會延遲核實。轉帳時請引用此參考編號："
+  },
+  "receipt": {
+    "documentTitle": "收據",
+    "receiptNumberLabel": "收據編號",
+    "invoiceNumberLabel": "發票編號",
+    "datePaidLabel": "付款日期",
+    "paymentMethodLabel": "付款方式",
+    "paymentReferenceLabel": "付款參考編號",
+    "paymentSectionLabel": "付款",
+    "transferReferenceLabel": "轉帳參考編號",
+    "paymentBreakdownLabel": "付款明細",
+    "originalInvoiceTotalLabel": "原發票總額",
+    "previousPaymentsLabel": "先前付款",
+    "currentPaymentReceivedLabel": "本次已收付款",
+    "remainingBalanceDueLabel": "尚欠餘額"
+  }
+}

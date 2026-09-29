@@ -78,11 +78,24 @@
     "city": "시/군/구",
     "addressLine1": "주소 1",
     "addressLine2": "주소 2",
+    "apartment": "호실/스위트/건물",
     "state": "주/도/지역",
     "postalCode": "우편번호",
     "optional": "선택",
     "confirm": "확인",
     "cancel": "취소",
     "countrySearchPlaceholder": "예: United States"
+  },
+  "detail": {
+    "orderInformation": "주문 정보",
+    "collectionMethod": "수령 방법",
+    "orderStatus": "주문 상태",
+    "lots": "상품",
+    "orderNumber": "주문 번호",
+    "auction": "경매",
+    "currency": "통화",
+    "date": "날짜",
+    "invoiceStatus": "청구서 상태",
+    "payNow": "지금 결제"
   }
 }

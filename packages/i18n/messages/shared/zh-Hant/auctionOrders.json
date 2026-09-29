@@ -78,11 +78,24 @@
     "city": "城市/城鎮",
     "addressLine1": "地址行 1",
     "addressLine2": "地址行 2",
+    "apartment": "室/樓層/大廈",
     "state": "州/省/地區",
     "postalCode": "郵遞區號",
     "optional": "選填",
     "confirm": "確認",
     "cancel": "取消",
     "countrySearchPlaceholder": "例如 United States"
+  },
+  "detail": {
+    "orderInformation": "訂單資訊",
+    "collectionMethod": "收貨方式",
+    "orderStatus": "訂單狀態",
+    "lots": "拍品",
+    "orderNumber": "訂單編號",
+    "auction": "拍賣",
+    "currency": "貨幣",
+    "date": "日期",
+    "invoiceStatus": "發票狀態",
+    "payNow": "立即付款"
   }
 }
