@@ -86,7 +86,8 @@ change, and `Member: false` with `Tier` unset in `endMembership`. The store
 keeps `Wallet Pass` and `Created`; the vault keeps `Identity Standing`. Each
 path that records a guaranteed send takes the outbox as a required argument;
 a brand with no token passes the disabled outbox `createMixpanelOutbox`
-returns, never a no-op exported for production code.
+returns. The one production caller of `disabledMixpanelOutbox` is the
+auction's operator test bid, which records nothing by design.
 
 ### Where each send is recorded
 
@@ -101,7 +102,10 @@ returns, never a no-op exported for production code.
   path. The mark sits on the order, since a claim mints a new order event. A withheld, ownerless
   order records it under the order, and a later claim finds the mark and
   records nothing, so the order counts once under one identity
-  (`grade10-site-analytics-SC-05`, `grade10-site-analytics-SC-06`)
+  (`grade10-site-analytics-SC-05`, `grade10-site-analytics-SC-06`). An
+  unmarked order the old direct path already sent - a till sale, which
+  reported at ingestion, or one with a delivered paid event - is marked
+  and not recorded again when a claim mints a new paid event
 - **In its own transaction** - Member Identified, Pass Added, and the
   vault's expired standing on a throw path: no stored fact
 
@@ -155,6 +159,10 @@ one left is the erasure's own write, which is sent however long it waits.
   rather than silently not recording
 - **Overlapping passes** - the skip-locked profile claim is proven on real
   Postgres in the store's `test/pg` lane; pglite runs one connection
+- **Account Created after a failed commit** - auth creates the account
+  before the store's transaction; if that transaction fails, the retry finds
+  the account existing and records no Account Created. Accepted for now; an
+  auth-side `created` keyed on the order is the follow-up
 - **Rollback** - profile writes left waiting by a rolled-back release are
   sent after the next forward deploy and may land over a newer value the
   old code wrote directly; the next write of that property corrects it
@@ -167,11 +175,19 @@ One additive migration per database for the outbox tables: store Grade10
 and ZZZ, auction, vault, loyalty. Two more are additive columns: loyalty's
 nullable `account_member.erased_at`, and the store's
 `orders.order_paid_recorded_at` (`0047`, Grade10 and ZZZ), both with no
-default, so code rolled back ignores them. `0047` marks every paid or
-refunded order recorded, since the direct path already sent its Order Paid. No lock
+default, so code rolled back ignores them. `0047` also marks the orders
+whose paid event the old drain withheld after sending Order Paid anonymously
+(no owner, at least one attempt); the other two proofs the old path sent - a
+till sale, a delivered paid event - are read by the drain itself, so orders
+paid between the migration and the deploy stay covered. A withheld send in
+that window still counts twice: accepted. No lock
 or contract line. Migrations apply before the code ships (`force-deploy`,
 the pending-migrations check). Loyalty deploys no later than the store, so
-`Member` and `Tier` always have a writer. A rollback leaves the tables and
+`Member` and `Tier` always have a writer: `scripts/deploy/components.mjs`
+ranks loyalty first, and production rolls every flipped app back when one
+flip fails. Staging's `report` mode can leave the store flipped over an old
+loyalty until the next dispatch; an enrolment in that gap misses `Member`
+and `Tier` until its next write. A rollback leaves the tables and
 their rows for the next forward deploy; a table is never dropped while it
 holds rows.
 
