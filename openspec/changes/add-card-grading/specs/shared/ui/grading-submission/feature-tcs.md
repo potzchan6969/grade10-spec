@@ -5,7 +5,10 @@
 
 ## Background
 
-* Every case opens the block under test from its own story in the design workbench, with no network, application state, routing or browser storage behind it.
+* <grade10 ui workbench url> is the `@grade10/ui` design workbench: `pnpm run storybook:ui` from the store's root, or the published workbench behind Cloudflare Access. Each block sits in its sidebar under Grading Submission, one entry per story.
+* A story renders its block from props alone, with no network, application state, routing or browser storage behind it.
+* A callback a block reports logs in the Actions panel under its own name. A story's own checks run when it opens and show in the Interactions panel; before a step that clicks, return the story to its start there and clear the Actions panel.
+* The Controls panel changes a story's props in place; a step that plays the consumer's part sets them there.
 
 ## shared-ui-grading-submission-US1: The grading submission blocks
 
@@ -32,17 +35,18 @@
 
 **Pre-conditions:**
 
-* The package entry's `shared/ui/grading-submission` re-exports are read.
+* The store's `packages/ui/src/index.ts` is open at its `shared/ui/grading-submission` comment.
 
 **Steps:**
 
-1. List every export re-exported under the `shared/ui/grading-submission` comment.
+1. List every component exported under the `shared/ui/grading-submission` comment.
 2. Match the list against the thirteen named blocks the capability declares.
+3. Find each component's prop type and copy type beside it.
 
 **Expected Results:**
 
 * `GradingFeeSheet`, `GradingCardList`, `GradingCardRecord`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `GradingStatusRail`, `GradingOwnershipChip`, `GradingPickupCard`, `GradingNamedCollector`, `GradingGradeCards`, `GradingMoneyBlock` and `GradingUncollectedLadder` are all exported.
-* Each export carries its own prop type and a `copy` type for its words.
+* Each export carries its own `<Name>Props` type and a `<Name>Copy` type for its words.
 
 ### shared-ui-grading-submission-US1-TC2-1: The booking set is imported unchanged, not redrawn
 
@@ -61,11 +65,13 @@
 
 **Pre-conditions:**
 
-* The package entry's `shared/ui/appointment-booking` exports — `BookingLocationPicker`, `BookingSlotPicker`, `BookingDetailsForm`, `BookingConfirmation`, `BookingManageCard` — are read.
+* The store's `packages/ui/src/index.ts` is open.
 
 **Steps:**
 
-1. Search `shared/ui/grading-submission`'s own exports for a component duplicating any booking export's name or role.
+1. Find the `shared/ui/appointment-booking` exports: `BookingLocationPicker`, `BookingSlotPicker`, `BookingDetailsForm`, `BookingConfirmation` and `BookingManageCard`.
+2. Read every export under the `shared/ui/grading-submission` comment.
+3. Look for a grading shop picker, day and time picker, details form, confirmation or manage card, under any name.
 
 **Expected Results:**
 
@@ -88,11 +94,12 @@
 
 **Pre-conditions:**
 
-* The `shared/ui/grading-submission` export list is read in full.
+* The store's `packages/ui/src/index.ts` is open at its `shared/ui/grading-submission` comment.
 
 **Steps:**
 
-1. Check each export for an operator-only surface: a queue, a runbook, a panel or a dialog naming an admin action.
+1. Read every export under that comment.
+2. Check each for an operator's view: a queue, a runbook, a batch, receiving or settings.
 
 **Expected Results:**
 
@@ -115,17 +122,24 @@
 
 **Pre-conditions:**
 
-* `fillGradingCopy` and `GradingLocaleProps` are read from the package's public entry.
+* `fillGradingCopy` and `GradingLocaleProps` are imported from the store's `packages/ui/src/index.ts`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <template missing a value> | `Collect at {shop}`, with values `{}` |
+| <template answered> | `{set} · {number}`, with values `{ set: "Base Set", number: "4/102" }` |
 
 **Steps:**
 
-1. Call `fillGradingCopy` with a template naming `{shop}` and a `values` record with no `shop` key.
-2. Call `fillGradingCopy` again with a template naming only placeholders `values` answers.
+1. Call `fillGradingCopy` with <template missing a value>.
+2. Call `fillGradingCopy` with <template answered>.
 
 **Expected Results:**
 
-* The first call throws an error naming `{shop}` and returns no text.
-* The second call returns the template with every placeholder replaced.
+* Step 1 throws an error naming `{shop}` and returns no text.
+* Step 2 returns the template with every placeholder replaced.
 
 ### shared-ui-grading-submission-US1-TC4-1: The fee sheet lists one grader's levels and figures
 
@@ -144,17 +158,17 @@
 
 **Pre-conditions:**
 
-* `GradingFeeSheet` carries one grader with its levels, each naming a ceiling, the cards a submission, a fee and the weeks back.
+* The One Grader story gives `GradingFeeSheet` one grader, PSA, with four levels, each naming a ceiling, the cards a submission, a fee and the weeks back.
 
 **Steps:**
 
-1. Open the `GradingFeeSheet` story with that grader.
-2. Read the level rows.
+1. Open Grading Submission / GradingFeeSheet / One Grader at <grade10 ui workbench url>.
+2. Read each level row.
 
 **Expected Results:**
 
 * Every level row names its ceiling, cards a submission, fee and weeks back.
-* No `SegmentedControl` renders, since there is one grader.
+* No grader control is drawn, since there is one grader.
 
 ### shared-ui-grading-submission-US1-TC5-1: Cover rate shows only on the levels that carry one
 
@@ -173,17 +187,17 @@
 
 **Pre-conditions:**
 
-* `GradingFeeSheet` carries a grader whose Express and Super Express levels each carry a cover rate, and whose other levels carry none.
+* The Cover Column story gives `GradingFeeSheet` a grader whose Express and Super Express levels each carry a cover rate, and whose Value level carries none.
 
 **Steps:**
 
-1. Open the `GradingFeeSheet` story with that grader.
-2. Read every level row's cover column.
+1. Open Grading Submission / GradingFeeSheet / Cover Column at <grade10 ui workbench url>.
+2. Read each level row's cover column.
 
 **Expected Results:**
 
 * Express and Super Express name their cover rate.
-* Every other level's cover column is empty.
+* Value, the level carrying none, shows no cover rate.
 
 ### shared-ui-grading-submission-US1-TC6-1: A grader per tab keeps three fee sheets apart
 
@@ -202,19 +216,22 @@
 
 **Pre-conditions:**
 
-* `GradingFeeSheet` carries three graders, `selectedGraderId` naming the first.
+* The Three Graders story gives `GradingFeeSheet` three graders, PSA, CGC and BGS, with PSA selected.
 
 **Steps:**
 
-1. Open the `GradingFeeSheet` story with the three graders.
-2. Select the second grader's tab.
+1. Open Grading Submission / GradingFeeSheet / Three Graders at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click CGC, the second grader.
 
 **Expected Results:**
 
-* A `SegmentedControl` lists all three graders.
-* `onSelectGrader` fires with the second grader's id, and its own table replaces the first's.
+* Step 1: the grader control lists all three graders.
+* Step 3: `onSelectGrader` logs `cgc`, and CGC's own table replaces PSA's.
 
 ### shared-ui-grading-submission-US1-TC7-1: A closed level names what closes it
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -231,17 +248,26 @@
 
 **Pre-conditions:**
 
-* `GradingLevelPicker`'s `levels` carries one level closed with a card reason and one level, Bulk, closed with a count reason.
+* The row's story gives `GradingLevelPicker` the row's level, closed for the row's reason.
+
+**Test data:**
+
+| Closed by | Story | Closed level | What it names |
+| --- | --- | --- | --- |
+| A card declared above the ceiling | Level Closed By A Value | Value | The card declared above its ceiling |
+| The count of cards listed | Level Closed By A Count | Bulk | The count it needs and the count listed |
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with those two closed levels.
-2. Read each closed `RadioCard`.
+1. Open Grading Submission / GradingLevelPicker / the row's story at <grade10 ui workbench url>.
+2. Read the closed level's card.
+3. Return the story to its start and clear the Actions panel.
+4. Click the closed level.
 
 **Expected Results:**
 
-* Each closed level renders the reason its `levels` entry carries.
-* Neither closed level can be selected.
+* Step 2: the closed level reads Not available, with the reason the row names.
+* Step 4: the level is not selected, and nothing logs under `onSelectLevel`.
 
 ### shared-ui-grading-submission-US1-TC8-1: The estimate reads cards times fee plus the cover line
 
@@ -260,16 +286,16 @@
 
 **Pre-conditions:**
 
-* `GradingLevelPicker`'s `estimate` carries the cards, the fee, a cover line and the weeks for the picked level.
+* The Estimate With Cover story gives `GradingLevelPicker` Express picked and an estimate carrying the cards times the fee, a cover line, the total and the weeks.
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with `selectedLevelId` set and that `estimate`.
-2. Read the estimate `Card`.
+1. Open Grading Submission / GradingLevelPicker / Estimate With Cover at <grade10 ui workbench url>.
+2. Read the estimate under the levels.
 
 **Expected Results:**
 
-* The estimate shows cards × fee, the cover line and the total, each as `estimate` supplies it.
+* The estimate shows cards × fee, the cover line and the total, each as the estimate gives it.
 
 ### shared-ui-grading-submission-US1-TC9-1: No level picked shows no estimate
 
@@ -288,15 +314,15 @@
 
 **Pre-conditions:**
 
-* `GradingLevelPicker` carries no `selectedLevelId`, and `estimate` is none.
+* The No Level Picked story gives `GradingLevelPicker` no level picked and no estimate.
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with neither set.
+1. Open Grading Submission / GradingLevelPicker / No Level Picked at <grade10 ui workbench url>.
 
 **Expected Results:**
 
-* No estimate `Card` renders.
+* No estimate shows under the levels.
 
 ### shared-ui-grading-submission-US1-TC10-1: A matched card shows its reference sales
 
@@ -315,16 +341,16 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card matched in the reference, with a declared value and three reference sales.
+* The Matched story gives `GradingCardList` one card, Charizard, matched in the reference, with a declared value and three reference sales.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with that card.
-2. Read the card's `Card`.
+1. Open Grading Submission / GradingCardList / Matched at <grade10 ui workbench url>.
+2. Read Charizard's card.
 
 **Expected Results:**
 
-* The card shows the set, number and matched line, the declared value and the three reference sales.
+* The card shows its set, number and matched line, the declared value and the three reference sales.
 
 ### shared-ui-grading-submission-US1-TC11-1: A card kept as typed shows no reference row
 
@@ -343,11 +369,12 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card with no reference match, kept as typed.
+* The Kept As Typed story gives `GradingCardList` one card with no reference match, kept as typed.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with that card.
+1. Open Grading Submission / GradingCardList / Kept As Typed at <grade10 ui workbench url>.
+2. Read the card.
 
 **Expected Results:**
 
@@ -371,15 +398,16 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card whose declared value is none.
+* The No Value story gives `GradingCardList` three cards, one of them, Pikachu Illustrator, with no declared value.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with that card.
+1. Open Grading Submission / GradingCardList / No Value at <grade10 ui workbench url>.
+2. Read Pikachu Illustrator's card.
 
 **Expected Results:**
 
-* The list names the card with no value.
+* The list names Pikachu Illustrator as still needing a declared value.
 
 ### shared-ui-grading-submission-US1-TC13-1: A card above a ceiling is named on the list
 
@@ -398,15 +426,16 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card whose declared value sits above `cap`'s level ceiling.
+* The Above Bulks Ceiling story gives `GradingCardList` a card, Lugia first edition, declared above the level's ceiling.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with that card and `cap`.
+1. Open Grading Submission / GradingCardList / Above Bulks Ceiling at <grade10 ui workbench url>.
+2. Read Lugia first edition's card.
 
 **Expected Results:**
 
-* The list names the card above the ceiling.
+* The list names Lugia first edition as above the ceiling.
 
 ### shared-ui-grading-submission-US1-TC14-1: An empty card list shows no card
 
@@ -425,11 +454,11 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries no cards.
+* The Empty List story gives `GradingCardList` no cards.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with an empty `cards` array.
+1. Open Grading Submission / GradingCardList / Empty List at <grade10 ui workbench url>.
 
 **Expected Results:**
 
@@ -453,19 +482,35 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card and its `onAdd`, `onEdit`, `onDeclare` and `onRemove` callbacks.
+* The Card Search story gives `GradingCardList` a search for `Blast` whose matches read as ready.
+* The Matched story gives `GradingCardList` one card, Charizard, with its value declared.
+* The No Value story gives `GradingCardList` a card, Pikachu Illustrator, with an empty value field.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <declared value typed> | 8500 |
 
 **Steps:**
 
-1. Open the `GradingCardList` story with that card.
-2. Search and add a card, open the existing card for editing, type a declared value and leave the field, then remove the card.
+1. Open Grading Submission / GradingCardList / Card Search at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click the Add a card search field.
+4. Click the Blastoise match.
+5. Open the Matched story, return it to its start and clear the Actions panel.
+6. Click the edit button on Charizard's card.
+7. Click Remove on Charizard's card.
+8. Open the No Value story, return it to its start and clear the Actions panel.
+9. Type <declared value typed> in Pikachu Illustrator's value field.
+10. Press Tab to leave the field.
 
 **Expected Results:**
 
-* `onAdd` fires with the searched card.
-* `onEdit` fires with the card's id, opening it for editing.
-* `onDeclare` fires once, when the field is left, with the card's id and the value typed.
-* `onRemove` fires with the removed card's id.
+* Step 4: `onAdd` logs the Blastoise match.
+* Step 6: `onEdit` logs Charizard's id, opening it for editing.
+* Step 7: `onRemove` logs Charizard's id.
+* Step 10: `onDeclare` logs once, when the field is left, with Pikachu Illustrator's id and <declared value typed>.
 
 ### shared-ui-grading-submission-US1-TC16-1: The paste result names each outcome's count and line
 
@@ -484,12 +529,12 @@
 
 **Pre-conditions:**
 
-* `GradingPasteSheet`'s `result` carries five counts from one pasted list: matched, kept as typed, without a value, above the ceiling, and a skipped count.
+* The Open story gives `GradingPasteSheet` a result of five counts from one pasted list: matched, kept as typed, without a value, above the ceiling, and skipped.
 
 **Steps:**
 
-1. Open the `GradingPasteSheet` story with that result.
-2. Read the result `List`.
+1. Open Grading Submission / GradingPasteSheet / Open at <grade10 ui workbench url>.
+2. Read the result rows under the pasted text.
 
 **Expected Results:**
 
@@ -512,15 +557,16 @@
 
 **Pre-conditions:**
 
-* `GradingPasteSheet`'s pasted list passes twenty lines, and `bulkNotice` carries the consumer-supplied notice.
+* The Bulk Notice story gives `GradingPasteSheet` a pasted list past twenty lines, and the consumer's Bulk line.
 
 **Steps:**
 
-1. Open the `GradingPasteSheet` story with that list and `bulkNotice`.
+1. Open Grading Submission / GradingPasteSheet / Bulk Notice at <grade10 ui workbench url>.
+2. Read the sheet under the result rows.
 
 **Expected Results:**
 
-* The `bulkNotice` text renders in the sheet.
+* The Bulk line the story gives renders in the sheet.
 
 ### shared-ui-grading-submission-US1-TC18-1: Add stays disabled while the paste is matching
 
@@ -539,16 +585,19 @@
 
 **Pre-conditions:**
 
-* `GradingPasteSheet`'s `result` is pending.
+* The Matching story gives `GradingPasteSheet` a result still loading.
 
 **Steps:**
 
-1. Open the `GradingPasteSheet` story mid-match.
+1. Open Grading Submission / GradingPasteSheet / Matching at <grade10 ui workbench url>.
+2. Read the line counter.
+3. Clear the Actions panel.
+4. Click the add button at the foot of the sheet.
 
 **Expected Results:**
 
-* The line counter reads matching.
-* Add is disabled.
+* Step 2: the line counter reads matching.
+* Step 4: the add button is disabled, and nothing logs under `onApply`.
 
 ### shared-ui-grading-submission-US1-TC19-1: The review schedule lists every card handed in
 
@@ -567,12 +616,12 @@
 
 **Pre-conditions:**
 
-* `GradingReview`'s `schedule` carries three cards, each with a name, set line, minimum grade, declared value and cover.
+* The Minimum Grade On The Schedule story gives `GradingReview` four cards, each with a name, set line, declared value and cover, one of them, Charizard, with a minimum grade.
 
 **Steps:**
 
-1. Open the `GradingReview` story with that schedule.
-2. Read the schedule table.
+1. Open Grading Submission / GradingReview / Minimum Grade On The Schedule at <grade10 ui workbench url>.
+2. Read each row under the schedule.
 
 **Expected Results:**
 
@@ -595,12 +644,12 @@
 
 **Pre-conditions:**
 
-* `GradingReview`'s `warnings` carries one card above its level's ceiling, with the level it moves to, the difference due and the higher level's fee now.
+* The Upcharge Warning story gives `GradingReview` one card, Charizard, above its level's ceiling, with the level it moves to, the difference due and the higher level's fee now.
 
 **Steps:**
 
-1. Open the `GradingReview` story with that warning.
-2. Read the warning block.
+1. Open Grading Submission / GradingReview / Upcharge Warning at <grade10 ui workbench url>.
+2. Read the warning above the schedule's totals.
 
 **Expected Results:**
 
@@ -623,15 +672,16 @@
 
 **Pre-conditions:**
 
-* `GradingReview`'s `warnings` is none.
+* The No Warning story gives `GradingReview` no upcharge warning.
 
 **Steps:**
 
-1. Open the `GradingReview` story with no warnings.
+1. Open Grading Submission / GradingReview / No Warning at <grade10 ui workbench url>.
+2. Read the review from top to bottom.
 
 **Expected Results:**
 
-* No upcharge warning block renders.
+* No upcharge warning shows anywhere on the review.
 
 ### shared-ui-grading-submission-US1-TC22-1: Book stays disabled until the consent tick is checked
 
@@ -650,17 +700,21 @@
 
 **Pre-conditions:**
 
-* `GradingReview`'s `consented` is false.
+* The Consent Unticked story gives `GradingReview` the collection statement unticked.
 
 **Steps:**
 
-1. Open the `GradingReview` story unconsented.
-2. Tick the consent statement.
+1. Open Grading Submission / GradingReview / Consent Unticked at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click Book the drop-off.
+4. Tick the collection statement.
+5. In the Controls panel, set `consented` to true, as the consumer does on the tick.
 
 **Expected Results:**
 
-* Book the drop-off is disabled before the tick.
-* `onConsent` fires and Book becomes enabled once ticked.
+* Step 3: Book the drop-off is disabled, and nothing logs.
+* Step 4: `onConsent` logs true.
+* Step 5: Book the drop-off is enabled.
 
 ### shared-ui-grading-submission-US1-TC23-1: Booking pending disables both action buttons
 
@@ -679,11 +733,12 @@
 
 **Pre-conditions:**
 
-* `GradingReview`'s `pending` is true.
+* The Booking story gives `GradingReview` the statement ticked and a booking pending.
 
 **Steps:**
 
-1. Open the `GradingReview` story while pending.
+1. Open Grading Submission / GradingReview / Booking at <grade10 ui workbench url>.
+2. Read the two buttons at the foot of the review.
 
 **Expected Results:**
 
@@ -706,15 +761,16 @@
 
 **Pre-conditions:**
 
-* `GradingReview`'s `error` carries a booking failure message.
+* The Plan Expired Meanwhile story gives `GradingReview` a refusal saying the plan expired.
 
 **Steps:**
 
-1. Open the `GradingReview` story with that error.
+1. Open Grading Submission / GradingReview / Plan Expired Meanwhile at <grade10 ui workbench url>.
+2. Read the review above the two buttons.
 
 **Expected Results:**
 
-* The error message renders in the error tone.
+* The refusal the story gives renders in the error tone.
 
 ### shared-ui-grading-submission-US1-TC25-1: The status rail marks the reached stage among seven
 
@@ -733,18 +789,18 @@
 
 **Pre-conditions:**
 
-* `GradingStatusRail`'s `stage` is Sent, a middle stage of the seven.
+* The Sent story gives `GradingStatusRail` the stage Sent, a middle stage of the seven.
 
 **Steps:**
 
-1. Open the `GradingStatusRail` story at Sent.
-2. Read all seven `Step`s.
+1. Open Grading Submission / GradingStatusRail / Sent at <grade10 ui workbench url>.
+2. Read all seven steps of the rail.
 
 **Expected Results:**
 
-* Planned through Handed in read `completed`.
-* Sent reads `progress`.
-* Graded through Home read `upcoming`.
+* Planned, Booked and Handed in read as done.
+* Sent reads as the stage reached, marked current.
+* Graded, Back and Home read as still to come.
 
 ### shared-ui-grading-submission-US1-TC26-1: An ended submission's rail stays at its ending stage
 
@@ -763,16 +819,17 @@
 
 **Pre-conditions:**
 
-* `GradingStatusRail`'s `stage` is Handed in, and `ended` names a cancellation.
+* The Ended story gives `GradingStatusRail` the stage Planned, and an ending that names a cancellation.
 
 **Steps:**
 
-1. Open the `GradingStatusRail` story with `ended` set.
+1. Open Grading Submission / GradingStatusRail / Ended at <grade10 ui workbench url>.
+2. Read the rail and the line beside it.
 
 **Expected Results:**
 
-* The rail stays at Handed in as `progress`.
-* The word names the ending, not a later stage.
+* The rail stays at Planned, marked as the stage reached.
+* The line names the ending; no later stage reads as reached.
 
 ### shared-ui-grading-submission-US1-TC27-1: The status word and the chip read as one pair
 
@@ -791,15 +848,16 @@
 
 **Pre-conditions:**
 
-* `GradingOwnershipChip`'s `status` names With the grader, and `chip` names the grader.
+* The With The Grader story gives `GradingOwnershipChip` the status word With the grader, and a chip naming the grader, each with its tone.
 
 **Steps:**
 
-1. Open the `GradingOwnershipChip` story with that pair.
+1. Open Grading Submission / GradingOwnershipChip / With The Grader at <grade10 ui workbench url>.
+2. Inspect the two badges; each tone is its variant.
 
 **Expected Results:**
 
-* The status word and the chip render together from the one pair, in the tones the status table names.
+* The status word and the chip render together as one pair, each in the tone it was given.
 
 ### shared-ui-grading-submission-US1-TC28-1: A closed submission shows the status word with no chip
 
@@ -818,11 +876,11 @@
 
 **Pre-conditions:**
 
-* `GradingOwnershipChip`'s `chip` is none.
+* The None story gives `GradingOwnershipChip` the status word Cancelled and no chip.
 
 **Steps:**
 
-1. Open the `GradingOwnershipChip` story with `chip` none.
+1. Open Grading Submission / GradingOwnershipChip / None at <grade10 ui workbench url>.
 
 **Expected Results:**
 
@@ -845,11 +903,12 @@
 
 **Pre-conditions:**
 
-* `GradingCardRecord` carries one card with an intake id and a front-and-back photograph pair.
+* The Handed In story gives `GradingCardRecord` one card, Charizard, with an intake id and a front-and-back photograph pair.
 
 **Steps:**
 
-1. Open the `GradingCardRecord` story with that card.
+1. Open Grading Submission / GradingCardRecord / Handed In at <grade10 ui workbench url>.
+2. Read Charizard's card.
 
 **Expected Results:**
 
@@ -874,28 +933,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingCardRecord` carries one card whose outcome badge and line, for the row's outcome, are supplied through `cards`.
+* The row's story gives `GradingCardRecord` one card in the row's outcome, with its badge words and its line and no tone.
 
 **Test data:**
 
-| Outcome | Badge tone |
-| --- | --- |
-| Refused at the counter | error |
-| Withdrawn | default |
-| Graded | success |
-| Moved up a level | warning |
-| Ungraded | error |
-| Minimum grade not met | error |
-| Held by the grader | warning |
-| Not returned | error |
-| Damaged | error |
-| Collected | default |
-| Vaulted | default |
+| Outcome | Story | Badge tone |
+| --- | --- | --- |
+| Refused at the counter | Refused At The Counter | error |
+| Withdrawn | Withdrawn | default |
+| Graded | Graded | success |
+| Moved up a level | Moved Up A Level | warning |
+| Ungraded | Ungraded | error |
+| Minimum grade not met | Minimum Grade Not Met | error |
+| Held by the grader | Held By The Grader | warning |
+| Not returned | Not Returned | error |
+| Damaged | Damaged | error |
+| Collected | Collected | default |
+| Vaulted | Vaulted | default |
 
 **Steps:**
 
-1. Open the `GradingCardRecord` story with that card.
-2. Read the card's badge and line.
+1. Open Grading Submission / GradingCardRecord / the row's story at <grade10 ui workbench url>.
+2. Read the card's badge and the line beside it.
+3. Inspect the badge; its tone is its variant.
 
 **Expected Results:**
 
@@ -918,11 +978,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingGradeCards` carries one card with a grade, the grader's label word and a cert.
+* The Graded story gives `GradingGradeCards` one card with a grade, the grader's label word and a cert.
 
 **Steps:**
 
-1. Open the `GradingGradeCards` story with that card.
+1. Open Grading Submission / GradingGradeCards / Graded at <grade10 ui workbench url>.
+2. Read the card.
 
 **Expected Results:**
 
@@ -945,11 +1006,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingGradeCards` carries one card with no grade, an ungraded code and a note.
+* The Ungraded story gives `GradingGradeCards` a graded card and one card, Umbreon holo, with no grade, an ungraded code and a note.
 
 **Steps:**
 
-1. Open the `GradingGradeCards` story with that card.
+1. Open Grading Submission / GradingGradeCards / Ungraded at <grade10 ui workbench url>.
+2. Read Umbreon holo's card.
 
 **Expected Results:**
 
@@ -973,11 +1035,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingCardRecord` carries one card with no intake id and no photograph pair.
+* The Listed story gives `GradingCardRecord` one card with no intake id and no photograph pair.
 
 **Steps:**
 
-1. Open the `GradingCardRecord` story with that card.
+1. Open Grading Submission / GradingCardRecord / Listed at <grade10 ui workbench url>.
+2. Read the card.
 
 **Expected Results:**
 
@@ -1000,15 +1063,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPickupCard`'s `bring` names an ID matching the collector's name.
+* The Above The Threshold story gives `GradingPickupCard` a figure to settle and an identity line naming the collector.
 
 **Steps:**
 
-1. Open the `GradingPickupCard` story with that `bring` value.
+1. Open Grading Submission / GradingPickupCard / Above The Threshold at <grade10 ui workbench url>.
+2. Read the card from top to bottom.
 
 **Expected Results:**
 
-* The card shows the code, the items, where and when, what is due as one figure, and asks for an ID matching the name.
+* The card shows the code, the items, where and when, what is due as one figure, and asks for an ID matching the collector's name.
 
 ### shared-ui-grading-submission-US1-TC35-1: The pickup card asks for nothing below the threshold
 
@@ -1027,11 +1091,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPickupCard`'s `bring` is none.
+* The Below The Threshold story gives `GradingPickupCard` no identity line.
 
 **Steps:**
 
-1. Open the `GradingPickupCard` story with `bring` none.
+1. Open Grading Submission / GradingPickupCard / Below The Threshold at <grade10 ui workbench url>.
+2. Read the card's bring row.
 
 **Expected Results:**
 
@@ -1054,11 +1119,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPickupCard`'s `bring` names the person who was named, not the collector.
+* The Someone Named story gives `GradingPickupCard` an identity line naming the person who was named, not the collector.
 
 **Steps:**
 
-1. Open the `GradingPickupCard` story with that `bring` value.
+1. Open Grading Submission / GradingPickupCard / Someone Named at <grade10 ui workbench url>.
+2. Read the card's bring row.
 
 **Expected Results:**
 
@@ -1081,15 +1147,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingNamedCollector`'s `named` is none, and the name field is empty.
+* The Name Empty story gives `GradingNamedCollector` nobody named and an empty name field.
 
 **Steps:**
 
-1. Open the `GradingNamedCollector` story with `named` none and an empty field.
+1. Open Grading Submission / GradingNamedCollector / Name Empty at <grade10 ui workbench url>.
+2. Clear the Actions panel.
+3. Click Save.
 
 **Expected Results:**
 
-* Save is disabled while the field is empty.
+* Save is disabled while the field is empty, and step 3 logs nothing.
 
 ### shared-ui-grading-submission-US1-TC38-1: Removing a named person clears the card back to nobody
 
@@ -1108,17 +1176,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingNamedCollector`'s `named` carries a name and the day they were named.
+* The Named story gives `GradingNamedCollector` one named person and the day they were named.
 
 **Steps:**
 
-1. Open the `GradingNamedCollector` story with that `named` value.
-2. Click Remove.
+1. Open Grading Submission / GradingNamedCollector / Named at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click Remove.
 
 **Expected Results:**
 
-* The Named badge, the name and the day render before Remove.
-* `onRemove` fires and the card returns to nobody named.
+* Step 2: the Named badge, the name and the day render.
+* Step 3: `onRemove` logs, and the card returns to nobody named.
 
 ### shared-ui-grading-submission-US1-TC39-1: The money block lists its lines in the fixed order
 
@@ -1137,16 +1206,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingMoneyBlock`'s `lines` carries a fee, a cover, a paid line, a moved-up line, a storage line and a due line, in that order.
+* The Due story gives `GradingMoneyBlock` a fee line, a moved-up line and a due line.
+
+**Test data:**
+
+| Line | Label | Amount |
+| --- | --- | --- |
+| cover | Cover | 12000 HKD minor units |
+| paid | Paid | 100000 HKD minor units |
+| storage | Storage | 3000 HKD minor units |
 
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with those lines.
-2. Read the lines top to bottom.
+1. Open Grading Submission / GradingMoneyBlock / Due at <grade10 ui workbench url>.
+2. In the Controls panel, add each **Test data** line to `lines`, in the fee line's shape.
+3. Read the lines top to bottom.
 
 **Expected Results:**
 
-* The lines render in the order given: fee as n × fee = total, cover, paid, moved up, storage, due.
+* The lines render in the fixed order: fee as n × fee = total, cover, paid, moved up, storage, due.
 * The due line renders in the `warning` tone.
 
 ### shared-ui-grading-submission-US1-TC40-1: No lead line shows when nothing is due
@@ -1166,15 +1244,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingMoneyBlock`'s `lead` is none.
+* The Settled story gives `GradingMoneyBlock` no settle lead and no due line.
 
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with `lead` none.
+1. Open Grading Submission / GradingMoneyBlock / Settled at <grade10 ui workbench url>.
+2. Read the block from its title down.
 
 **Expected Results:**
 
-* No settle-lead line renders.
+* No settle lead renders above the lines.
 
 ### shared-ui-grading-submission-US1-TC41-1: The storage line reads the fee per card per month
 
@@ -1193,11 +1272,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingMoneyBlock`'s `lines` carries a storage line naming the fee per card and the accruing months.
+* The Storage story gives `GradingMoneyBlock` a storage line naming the fee per card and the day it accrues from.
 
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with that storage line.
+1. Open Grading Submission / GradingMoneyBlock / Storage at <grade10 ui workbench url>.
+2. Read the storage line.
 
 **Expected Results:**
 
@@ -1220,15 +1300,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingUncollectedLadder`'s `rungs` carries the reminder, storage and notice rungs, each dated, none passed.
+* The None Reached story gives `GradingUncollectedLadder` the reminder, storage and notice rungs, each dated, none passed.
 
 **Steps:**
 
-1. Open the `GradingUncollectedLadder` story with those rungs.
+1. Open Grading Submission / GradingUncollectedLadder / None Reached at <grade10 ui workbench url>.
+2. Read each rung.
 
 **Expected Results:**
 
-* All three rungs render with their dates.
+* The reminder, storage and notice rungs each render with their day.
 * None is marked passed.
 
 ### shared-ui-grading-submission-US1-TC43-1: A passed rung is marked once its day is reached
@@ -1248,15 +1329,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingUncollectedLadder`'s reminder rung's day has passed.
+* The Reminded story gives `GradingUncollectedLadder` the first reminder rung's day as passed.
 
 **Steps:**
 
-1. Open the `GradingUncollectedLadder` story with the reminder rung passed.
+1. Open Grading Submission / GradingUncollectedLadder / Reminded at <grade10 ui workbench url>.
+2. Read each rung.
 
 **Expected Results:**
 
-* The reminder rung is marked passed; the storage and notice rungs are not.
+* The first reminder rung is marked passed; the rungs after it, storage and the notice among them, are not.
 
 ### shared-ui-grading-submission-US1-TC44-1: The notice rung names the posting date and its window
 
@@ -1275,11 +1357,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingUncollectedLadder`'s notice rung carries a posting date and the 30 days it gives.
+* The Notice story gives `GradingUncollectedLadder` a notice rung carrying a posting day and the 30 days it gives.
 
 **Steps:**
 
-1. Open the `GradingUncollectedLadder` story with that notice rung.
+1. Open Grading Submission / GradingUncollectedLadder / Notice at <grade10 ui workbench url>.
+2. Read the notice rung.
 
 **Expected Results:**
 
@@ -1302,15 +1385,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingUncollectedLadder`'s `cardsHeld` excludes a card that was withdrawn, paid out or vaulted.
+* The Cards Excluded story gives `GradingUncollectedLadder` a count of cards held that leaves out a card withdrawn, paid out or vaulted.
 
 **Steps:**
 
-1. Open the `GradingUncollectedLadder` story with `cardsHeld` excluding that card.
+1. Open Grading Submission / GradingUncollectedLadder / Cards Excluded at <grade10 ui workbench url>.
+2. Read the cards-held line.
 
 **Expected Results:**
 
-* `cardsHeld` counts only the cards still held; the excluded card is not among them.
+* The cards held reads the count given, of the cards still held; the excluded card is not among them.
 
 ### shared-ui-grading-submission-US1-TC46-1: Every rendered word comes from the copy prop
 
@@ -1329,18 +1413,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingReview` is rendered with a `copy` prop naming a distinct label for its static words.
+* The Traditional Chinese story gives `GradingReview` a `copy` naming a distinct label for each of its static words.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Book button label | "Book the drop-off" |
-| Consent statement | "I agree to the grading terms" |
+| Book button label | 預約交卡 |
+| Consent statement | 我同意卡牌的領回方式。 |
 
 **Steps:**
 
-1. Open the `GradingReview` story with that `copy` prop.
+1. Open Grading Submission / GradingReview / Traditional Chinese at <grade10 ui workbench url>.
 2. Read every static label the block renders.
 
 **Expected Results:**
@@ -1364,7 +1448,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Every block's source under `packages/ui/src/blocks/grading-submission/` is read.
+* Every block's source under the store's `packages/ui/src/blocks/grading-submission/` is open.
 
 **Steps:**
 
@@ -1391,21 +1475,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingMoneyBlock`'s fee line carries an amount in minor units with an ISO 4217 code.
+* The Estimate story gives `GradingMoneyBlock` a fee line whose amount is minor units with an ISO 4217 code, in the `en` locale.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Amount | 150000 minor units, HKD |
+| Amount | 100000 minor units, HKD |
+| Reads as | HK$1,000 (100000 ÷ 100, in `en`) |
 
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with that amount.
+1. Open Grading Submission / GradingMoneyBlock / Estimate at <grade10 ui workbench url>.
+2. Read the fee line's amount.
 
 **Expected Results:**
 
-* The amount renders formatted by `formatMoney`, in HKD.
+* The amount reads as **Test data**'s reading of it, in HKD.
 
 ### shared-ui-grading-submission-US1-TC49-1: A day renders in the locale and zone supplied
 
@@ -1424,15 +1510,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingUncollectedLadder`'s storage rung carries a day, with `locale` and the brand's zone supplied through props.
+* The None Reached story gives `GradingUncollectedLadder` a storage rung with a day, the `en` locale and the zone `Asia/Hong_Kong`.
 
 **Steps:**
 
-1. Open the `GradingUncollectedLadder` story with that day, locale and zone.
+1. Open Grading Submission / GradingUncollectedLadder / None Reached at <grade10 ui workbench url>.
+2. Read the storage rung's day.
 
 **Expected Results:**
 
-* The day renders formatted by `formatLocalTime`, in the zone supplied, not the browser's own.
+* The day reads in the locale and the zone the story supplies, not the browser's own.
 
 ### shared-ui-grading-submission-US1-TC50-1: Every design-record state has its own story
 
@@ -1451,11 +1538,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The design record's state tables for `shared/ui/grading-submission` are read against the package's stories.
+* The change's `ui-design.md` is open at its `@grade10/ui` blocks and their state tables.
+* <grade10 ui workbench url> is open at Grading Submission.
 
 **Steps:**
 
-1. Match every state the design record names to a story under the block's own file.
+1. For each state the design record names for a grading block, find the story under that block that draws it.
+2. Open that story.
 
 **Expected Results:**
 
@@ -1478,16 +1567,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingLevelPicker`'s `levels` are every one closed, and the counter line is supplied.
+* The Every Level Closed story gives `GradingLevelPicker` every level closed, and the counter line.
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with every level closed.
+1. Open Grading Submission / GradingLevelPicker / Every Level Closed at <grade10 ui workbench url>.
+2. Clear the Actions panel.
+3. Click each closed level.
 
 **Expected Results:**
 
-* The counter line renders as it was given.
-* No estimate renders, and no level reports a pick.
+* Step 1: the counter line renders as it was given.
+* Step 3: no estimate renders, and nothing logs under `onSelectLevel`.
 
 ### shared-ui-grading-submission-US1-TC52-1: The upcharge notice reads on the picker
 
@@ -1506,11 +1597,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingLevelPicker`'s upcharge notice carries the consumer's words.
+* The Upcharge Notice story gives `GradingLevelPicker` the consumer's upcharge notice.
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with that notice.
+1. Open Grading Submission / GradingLevelPicker / Upcharge Notice at <grade10 ui workbench url>.
+2. Read the notice under the levels.
 
 **Expected Results:**
 
@@ -1533,11 +1625,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingLevelPicker` carries a grader whose levels hold example figures, with the line saying so.
+* The Grader With Example Figures story gives `GradingLevelPicker` a grader, CGC, whose levels hold example figures, with the line saying so.
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with that grader selected.
+1. Open Grading Submission / GradingLevelPicker / Grader With Example Figures at <grade10 ui workbench url>.
+2. Read the levels and the line above them.
 
 **Expected Results:**
 
@@ -1561,18 +1654,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingLevelPicker` carries three graders with the second selected, and the highest declared value of the list.
+* The Grader story gives `GradingLevelPicker` three graders, PSA, CGC and BGS, with the second, CGC, selected, and the highest declared value of the list.
 
 **Steps:**
 
-1. Open the `GradingLevelPicker` story with those three graders.
-2. Select the third grader.
+1. Open Grading Submission / GradingLevelPicker / Grader at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click BGS, the third grader.
 
 **Expected Results:**
 
-* All three graders render, the second marked, and its levels below.
-* The highest declared value renders as it was given.
-* `onSelectGrader` fires with the third grader's id.
+* Step 2: all three graders render, CGC marked, and its levels below.
+* Step 2: the highest declared value renders as it was given.
+* Step 3: `onSelectGrader` logs `bgs`.
 
 ### shared-ui-grading-submission-US1-TC55-1: The cap refuses the card past it and names the level the count closes
 
@@ -1592,17 +1686,22 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `GradingCardList` carries 100 cards, its `cap` at 100, and the level the count closes.
+* The Over The Cap story gives `GradingCardList` a list at its cap, with a name typed in the search.
+* The Cap Notice story gives `GradingCardList` a cap and the level the count closes.
 
 **Steps:**
 
-1. Open the `GradingCardList` story at the cap.
-2. Add one more card.
+1. Open Grading Submission / GradingCardList / Over The Cap at <grade10 ui workbench url>.
+2. Clear the Actions panel.
+3. Click Add as typed.
+4. Open the Cap Notice story.
+5. Read the cap line above the cards.
 
 **Expected Results:**
 
-* `onAdd` does not fire.
-* The second-submission-another-day line renders.
-* The cap and the level the count closes read as they were given.
+* Step 3: `onAdd` logs nothing.
+* Step 3: the line naming a second submission on another day renders.
+* Step 5: the cap and the level the count closes read as they were given.
 
 ### shared-ui-grading-submission-US1-TC56-1: The reference out of reach keeps the list working
 
@@ -1621,11 +1720,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingCardList`'s matches read as an error, with the catalogue-unavailable line supplied.
+* The Reference Unavailable story gives `GradingCardList` two cards with no declared value, its matches reading as an error, and the catalogue-unavailable line.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with the matches in error.
+1. Open Grading Submission / GradingCardList / Reference Unavailable at <grade10 ui workbench url>.
+2. Read each card.
 
 **Expected Results:**
 
@@ -1649,11 +1749,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPasteSheet`'s `result` carries one line above the level's ceiling, with the second-submission line supplied.
+* The Above The Ceiling story gives `GradingPasteSheet` a result with one line above the level's ceiling, and the second-submission line.
 
 **Steps:**
 
-1. Open the `GradingPasteSheet` story with that result.
+1. Open Grading Submission / GradingPasteSheet / Above The Ceiling at <grade10 ui workbench url>.
+2. Read the above-the-ceiling row and the sheet under it.
 
 **Expected Results:**
 
@@ -1677,17 +1778,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPasteSheet`'s `result` carries matched, kept-as-typed and valueless cards, with `onApply` supplied.
+* The Matched story gives `GradingPasteSheet` a result of matched, kept-as-typed and valueless cards.
 
 **Steps:**
 
-1. Open the `GradingPasteSheet` story with that result.
-2. Activate Add n cards.
+1. Open Grading Submission / GradingPasteSheet / Matched at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click Add these cards to the list, at the foot of the sheet.
 
 **Expected Results:**
 
-* `onApply` fires with every card the paste made, in the outcomes it made them.
-* The sheet writes to no list of its own.
+* `onApply` logs every card the paste made, in the outcomes it made them.
+* The sheet writes to no list of its own: its result rows read as before.
 
 ### shared-ui-grading-submission-US1-TC59-1: A paste error reads as an error, not an empty list
 
@@ -1706,11 +1808,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPasteSheet`'s `result` reads as an error, with the consumer's message.
+* The Reference Unavailable story gives `GradingPasteSheet` a result reading as an error, with the consumer's message.
 
 **Steps:**
 
-1. Open the `GradingPasteSheet` story with the result in error.
+1. Open Grading Submission / GradingPasteSheet / Reference Unavailable at <grade10 ui workbench url>.
+2. Read the sheet under the pasted text.
 
 **Expected Results:**
 
@@ -1734,11 +1837,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingOwnershipChip`'s `chip` carries the running-late words and their tone, and `status` its word.
+* The Running Late story gives `GradingOwnershipChip` a chip carrying the running-late words and their tone, and the status word.
 
 **Steps:**
 
-1. Open the `GradingOwnershipChip` story with that pair.
+1. Open Grading Submission / GradingOwnershipChip / Running Late at <grade10 ui workbench url>.
+2. Inspect the chip; its tone is its variant.
 
 **Expected Results:**
 
@@ -1762,11 +1866,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingCardRecord` carries one graded card with a certificate and the grader's lookup address.
+* The Graded story gives `GradingCardRecord` one graded card with a certificate and the grader's lookup address.
 
 **Steps:**
 
-1. Open the `GradingCardRecord` story with that card.
+1. Open Grading Submission / GradingCardRecord / Graded at <grade10 ui workbench url>.
+2. Hover the certificate's lookup link and read the address it points at.
 
 **Expected Results:**
 
@@ -1792,21 +1897,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingGradeCards` carries one card for the row's outcome, with its badge and no grade.
+* The row's story gives `GradingGradeCards` one card for the row's outcome, with its badge.
 
 **Test data:**
 
-| Outcome |
-| --- |
-| Moved up a level |
-| Held by the grader |
-| Minimum grade not met |
-| Not returned |
-| Damaged |
+| Outcome | Story |
+| --- | --- |
+| Moved up a level | Moved Up |
+| Held by the grader | Held |
+| Minimum grade not met | Minimum Not Met |
+| Not returned | Not Returned |
+| Damaged | Damaged |
 
 **Steps:**
 
-1. Open the `GradingGradeCards` story with that card.
+1. Open Grading Submission / GradingGradeCards / the row's story at <grade10 ui workbench url>.
+2. Where the story's card carries a grade, remove `grade` and `gradeLabel` from it in the Controls panel.
+3. Read the card.
 
 **Expected Results:**
 
@@ -1830,11 +1937,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPickupCard` is given nothing to settle.
+* The Nothing Due story gives `GradingPickupCard` nothing to settle.
 
 **Steps:**
 
-1. Open the `GradingPickupCard` story with nothing to settle.
+1. Open Grading Submission / GradingPickupCard / Nothing Due at <grade10 ui workbench url>.
+2. Read the card's settle row.
 
 **Expected Results:**
 
@@ -1858,17 +1966,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingNamedCollector` carries the refusal that the cards were already collected.
+* The Refused story gives `GradingNamedCollector` a name typed and the refusal that the cards were already collected.
 
 **Steps:**
 
-1. Open the `GradingNamedCollector` story with that refusal.
-2. Activate Save.
+1. Open Grading Submission / GradingNamedCollector / Refused at <grade10 ui workbench url>.
+2. Clear the Actions panel.
+3. Click Save.
 
 **Expected Results:**
 
-* The refusal renders under the name field.
-* `onSave` does not fire.
+* Step 1: the refusal renders under the name field.
+* Step 3: `onSave` logs nothing.
 
 ### shared-ui-grading-submission-US1-TC65-1: The money block reads an estimate as unpaid
 
@@ -1885,6 +1994,10 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** What is paid and due
 
+**Pre-conditions:**
+
+* The Estimate With Cover story gives `GradingMoneyBlock` the fee line, the cover line and the paid-at-the-counter line, with no paid line.
+
 **Test data:**
 
 | Field | Value |
@@ -1892,13 +2005,10 @@ Runs once per row of **Test data**.
 | Fee line | 4 cards × 25000 HKD minor units, total 100000 |
 | Cover line | 12000 HKD minor units |
 
-**Pre-conditions:**
-
-* `GradingMoneyBlock` carries the fee line, the cover line and the paid-at-the-counter line, with no paid line.
-
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with those lines.
+1. Open Grading Submission / GradingMoneyBlock / Estimate With Cover at <grade10 ui workbench url>.
+2. Read the lines top to bottom.
 
 **Expected Results:**
 
@@ -1921,6 +2031,10 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** What is paid and due
 
+**Pre-conditions:**
+
+* The Paid Out story gives `GradingMoneyBlock` the payout line with its route and the refunded fee line.
+
 **Test data:**
 
 | Field | Value |
@@ -1928,13 +2042,10 @@ Runs once per row of **Test data**.
 | Payout | 600000 HKD minor units, by bank transfer |
 | Refunded fee | 25000 HKD minor units |
 
-**Pre-conditions:**
-
-* `GradingMoneyBlock` carries the payout line with its route and the refunded fee line.
-
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with those two lines.
+1. Open Grading Submission / GradingMoneyBlock / Paid Out at <grade10 ui workbench url>.
+2. Read the refunded and paid-out lines.
 
 **Expected Results:**
 
@@ -1955,21 +2066,23 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** What is paid and due
 
+**Pre-conditions:**
+
+* The Paid story gives `GradingMoneyBlock` a paid line with its amount, method, instant and till reference.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Paid | 100000 HKD minor units |
 | Method | card |
-| Till reference | the POS reference supplied |
-
-**Pre-conditions:**
-
-* `GradingMoneyBlock` carries a paid line with its amount, method, instant and till reference.
+| Instant | 15 Jun 2026, 17:00 |
+| Till reference | POS 4471-0098 |
 
 **Steps:**
 
-1. Open the `GradingMoneyBlock` story with that paid line.
+1. Open Grading Submission / GradingMoneyBlock / Paid at <grade10 ui workbench url>.
+2. Read the paid line.
 
 **Expected Results:**
 
@@ -1992,16 +2105,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card matched in the reference, carrying no set and no number.
+* The Matched No Detail story gives `GradingCardList` one card, Mewtwo, matched in the reference, carrying no set and no number.
 
 **Steps:**
 
-1. Open the `GradingCardList` story with that card.
+1. Open Grading Submission / GradingCardList / Matched No Detail at <grade10 ui workbench url>.
+2. Read Mewtwo's card.
 
 **Expected Results:**
 
 * The card reads as matched, from its name alone.
-* Rendering the card raises no error.
+* Rendering the card raises no error: the story draws, and the Interactions panel shows no failure.
 
 ### shared-ui-grading-submission-US1-TC69-1: A collected slab carries its hand-back photograph
 
@@ -2020,18 +2134,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingGradeCards` carries one graded card given the photograph taken at
-  hand-back, and one graded card given none.
+* The Collected story gives `GradingGradeCards` one graded card given the photograph taken at hand-back.
+* The Graded story gives `GradingGradeCards` one graded card given none.
 
 **Steps:**
 
-1. Open the `GradingGradeCards` story with both cards.
+1. Open Grading Submission / GradingGradeCards / Collected at <grade10 ui workbench url>.
+2. Read the card.
+3. Open the Graded story.
+4. Read the card.
 
 **Expected Results:**
 
-* The card given a photograph shows it beside its grade, grader and
+* Step 2: the card given a photograph shows it beside its grade, grader and
   certificate.
-* The card given none shows none.
+* Step 4: the card given none shows none.
 
 ### shared-ui-grading-submission-US1-TC71-1: A shop naming no hours shows no Open row
 
@@ -2050,11 +2167,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingPickupCard` is given no `open`.
+* The No Opening Hours story gives `GradingPickupCard` no `open`.
 
 **Steps:**
 
-1. Open the `GradingPickupCard` story with `open` left out.
+1. Open Grading Submission / GradingPickupCard / No Opening Hours at <grade10 ui workbench url>.
+2. Read the card's where-and-when rows.
 
 **Expected Results:**
 
@@ -2078,17 +2196,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingGradeCards` carries one card given a payout line, one given a reversal line, and one given neither.
+* The Not Returned story gives `GradingGradeCards` one card given a payout line.
+* The Payout Reversed story gives `GradingGradeCards` one card given a reversal line.
+* The Graded story gives `GradingGradeCards` one card given neither.
 
 **Steps:**
 
-1. Open the `GradingGradeCards` story with the three cards.
+1. Open Grading Submission / GradingGradeCards / Not Returned at <grade10 ui workbench url>.
+2. Read the card.
+3. Open the Payout Reversed story and read the card.
+4. Open the Graded story and read the card.
 
 **Expected Results:**
 
-* The card given a payout line shows it.
-* The card given a reversal line shows it in place of a payout line.
-* The card given neither shows no such line.
+* Step 2: the card given a payout line shows it.
+* Step 3: the card given a reversal line shows it in place of a payout line.
+* Step 4: the card given neither shows no such line.
 
 ### shared-ui-grading-submission-US1-TC73-1: A review given no booking offers neither the booking nor the statement
 
@@ -2121,6 +2244,192 @@ Runs once per row of **Test data**.
 * Step 1: no booking and no collection statement shows; the schedule, the totals and the warning read as given.
 * Step 1: the save act reads Save changes.
 * Step 2: the save reports through its own callback.
+
+### shared-ui-grading-submission-US1-TC74-1: An open level carrying cover is picked by id
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* The Level Open Cover story gives `GradingLevelPicker` an open level, Express, carrying a cover line, with no level picked and no estimate.
+
+**Steps:**
+
+1. Open Grading Submission / GradingLevelPicker / Level Open Cover at <grade10 ui workbench url>.
+2. Read Express's level card and the space under the levels.
+3. Clear the Actions panel.
+4. Click Express.
+5. In the Controls panel, set `selectedLevelId` to `express`, as the consumer does on the pick.
+
+**Expected Results:**
+
+* Step 2: Express shows its cover line, and no estimate shows.
+* Step 4: `onSelectLevel` logs `express`.
+* Step 5: Express reads as selected.
+
+### shared-ui-grading-submission-US1-TC75-1: The fee sheet and the picker each draw the one record they are given
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* The One Record Two Drawings story gives `GradingFeeSheet` and `GradingLevelPicker` one fee sheet record, PSA's four levels.
+
+**Steps:**
+
+1. Open Grading Submission / GradingFeeSheet / One Record Two Drawings at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Read each level's fee in the fee sheet.
+4. Read each level's fee in the level picker below it.
+
+**Expected Results:**
+
+* Step 3 and step 4 read the same four fees, the record's, and no other figure.
+* Nothing logs in the Actions panel: neither block reports on the other.
+
+### shared-ui-grading-submission-US1-TC76-1: A level with no figures reads the no-figure word, not nought
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* The Unpriced Grader story gives `GradingFeeSheet` a grader, BGS, whose levels carry no ceiling and no fee, and the no-figure word.
+
+**Steps:**
+
+1. Open Grading Submission / GradingFeeSheet / Unpriced Grader at <grade10 ui workbench url>.
+2. Read each level row's ceiling and fee columns.
+
+**Expected Results:**
+
+* Each level's ceiling and fee columns read the no-figure word the story gives.
+* No column reads as HK$0.
+
+### shared-ui-grading-submission-US1-TC77-1: The fee sheet's title takes the heading rung it is given
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* The Title Under A Section story gives `GradingFeeSheet` a third-rung heading.
+* The One Grader story gives `GradingFeeSheet` no heading rung.
+
+**Steps:**
+
+1. Open Grading Submission / GradingFeeSheet / Title Under A Section at <grade10 ui workbench url>.
+2. Inspect the sheet's title in the browser's inspector.
+3. Open the One Grader story.
+4. Inspect the sheet's title.
+
+**Expected Results:**
+
+* Step 2: the title is a third-rung heading.
+* Step 4: the title is a second-rung heading.
+
+### shared-ui-grading-submission-US1-TC78-1: A list given no cap refuses no add
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The No Cap story gives `GradingCardList` two cards, no cap, and a name typed in the search that matched nothing.
+
+**Steps:**
+
+1. Open Grading Submission / GradingCardList / No Cap at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click Add as typed.
+
+**Expected Results:**
+
+* Step 3: `onAdd` logs the typed name.
+* No line saying the submission is full renders.
+
+### shared-ui-grading-submission-US1-TC79-1: A paste sheet with nothing read adds nothing
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The Nothing Read story gives `GradingPasteSheet` an empty text and no result.
+
+**Steps:**
+
+1. Open Grading Submission / GradingPasteSheet / Nothing Read at <grade10 ui workbench url>.
+2. Read the line counter.
+3. Clear the Actions panel.
+4. Click Add these cards to the list, at the foot of the sheet.
+
+**Expected Results:**
+
+* Step 2: the lines-read count reads none.
+* Step 4: the add button is disabled, and nothing logs under `onApply`.
 
 ## Reconciliation
 
