@@ -843,6 +843,9 @@ Lands once every other group is green and the change is deployed.
       production until they are set
 - [x] 20.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes complete-vault-collector-flow`
+- [ ] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/vault-case.md`
+      and the Blocks line of `collector-pages.md`'s code map once group 25
+      is deployed
 
 ## 21. The walk (grade10)
 
@@ -988,3 +991,72 @@ makes nothing a scenario names.
       address to probe
 - [x] 23.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the isolated stack
       coming up and `GET /dev/outbox` answering
+
+## 24. The vault blocks (grade10-spec)
+
+Lands before group 25, which composes them. No existing block changes: every
+file is new under `packages/ui/src/blocks/vault-case/`, and the public entry
+gains one group.
+
+- [ ] 24.1 Write the six blocks' stories and the capability's
+      `public-exports.test.ts` first, each story that proves a scenario with
+      its play function, and see them fail
+- [ ] 24.2 `VaultFactCard` and `VaultFactCardSkeleton`: the parts in order,
+      the region and the table by name, no table for no rows, one busy
+      status, a count below one refused
+      (`shared-ui-vault-case-SC-04`, `shared-ui-vault-case-SC-05`,
+      `shared-ui-vault-case-SC-06`, `shared-ui-vault-case-SC-07`,
+      `shared-ui-vault-case-SC-08`)
+- [ ] 24.3 `VaultNoteList`: the lines in order, a divider under every line
+      but the last, a link kept, nothing for no lines
+      (`shared-ui-vault-case-SC-09`, `shared-ui-vault-case-SC-10`,
+      `shared-ui-vault-case-SC-11`)
+- [ ] 24.4 `VaultStageRail`: done, in progress and to come, the ending's
+      word, a stage it does not hold refused, the sideways scroll inside the
+      rail (`shared-ui-vault-case-SC-12`, `shared-ui-vault-case-SC-13`,
+      `shared-ui-vault-case-SC-14`, `shared-ui-vault-case-SC-15`,
+      `shared-ui-vault-case-SC-16`, `shared-ui-vault-case-SC-17`)
+- [ ] 24.5 `VaultAcceptOfferDialog`: the terms, Accept and going back, held
+      while in flight, the refusal beside the terms, `open` forwarded
+      (`shared-ui-vault-case-SC-18`, `shared-ui-vault-case-SC-19`,
+      `shared-ui-vault-case-SC-20`, `shared-ui-vault-case-SC-21`,
+      `shared-ui-vault-case-SC-22`)
+- [ ] 24.6 `VaultCasesEmpty`: the empty home in order, the start reported
+      (`shared-ui-vault-case-SC-23`)
+- [ ] 24.7 Export the six blocks and their types from `src/index.ts` under
+      `// shared/ui/vault-case`, reading no catalogue and reaching past no
+      prop (`shared-ui-vault-case-SC-01`, `shared-ui-vault-case-SC-02`,
+      `shared-ui-vault-case-SC-03`)
+- [ ] 24.8 Verify: `pnpm run typecheck`, `pnpm run lint`, each stories file
+      under `npx vitest run --project storybook`, `pnpm run tcs:validate`,
+      `pnpm run validate:changes complete-vault-collector-flow`,
+      `pnpm check:manual`
+
+## 25. The vault pages on the store's blocks (grade10)
+
+Lands after group 24's store commit, through a submodule bump. The views keep
+their words, their tests and their story ids; only what draws them moves.
+
+- [ ] 25.1 Bring `origin/main` into the branch, then move
+      `external/grade10-spec` to the store commit carrying group 24
+- [ ] 25.2 `CaseStepper` and `RequestStepper` hand their stages to
+      `VaultStageRail`; `CaseStepper` keeps `LANE_STAGES` and drops its
+      overflow wrapper, which the rail now owns
+- [ ] 25.3 `CaseFactCard` and `FactTable` give way to `VaultFactCard`, and
+      `RetentionTable` to the rows and the reviewed line it hands one;
+      `OfferCard`, `WhatIsOwedCard`, `RemindersCard`, `RepaymentsList`,
+      `EndingCard`, `FinalNoticeCard`, `StandingFactCard`, `HowToPayBlock`,
+      `CaseDetailView` and `YourDataView` compose it, the lists in them a
+      `VaultNoteList`
+- [ ] 25.4 `AcceptOfferDialog` words `VaultAcceptOfferDialog`, which the case
+      page still mounts through `useDialogSubject`
+- [ ] 25.5 `VisitBooked`'s Before you come and `RequestWizard`'s photo tips
+      become `VaultNoteList`s
+- [ ] 25.6 `CaseList`'s cards compose `VaultFactCard`, its loading
+      `VaultFactCardSkeleton` and its empty home `VaultCasesEmpty`;
+      `SkeletonCards` is deleted
+- [ ] 25.7 Take `CaseDetailView` and `CaseList` out of
+      `design-override.config.json`'s `exempt`
+- [ ] 25.8 Verify: `node scripts/checks/check-store-blocks.mjs`,
+      `node scripts/checks/check-dialogs.mjs`, the vault frontend's suites
+      and stories unchanged, `pnpm run typecheck`, `pnpm run lint`

@@ -68,7 +68,11 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### New Capabilities
 
-None.
+- `shared/ui/vault-case`: the collector's blocks in `@grade10/ui` -
+  `VaultFactCard`, `VaultFactCardSkeleton`, `VaultNoteList`,
+  `VaultStageRail`, `VaultAcceptOfferDialog` and `VaultCasesEmpty`, with
+  their `<Name>Props` and `<Name>Copy` types. None exists yet; no existing
+  block changes
 
 ### Modified Capabilities
 
@@ -114,8 +118,14 @@ None.
   reference and the derived fact; `paymentInstructions` is replaced by the
   structured block, **BREAKING** for the collector SPA's case mapper, its
   model and its fixture transport
-- **This store** — `apps/emails` gains the vault preview letters and
-  `packages/i18n` the collector's new words; a submodule bump carries both
+- **This store** — `apps/emails` gains the vault preview letters,
+  `packages/i18n` the collector's new words and `packages/ui` the six vault
+  blocks; a submodule bump carries all three
+- **Design Override** — the collector SPA's `CaseList`, `CaseDetailView`,
+  the case page's cards, the wizard, `VisitBooked` and Your data compose the
+  vault blocks, so both vault listings leave `design-override.config.json`;
+  the one consumer is `packages/vault/frontend`, rendered by
+  `apps/frontend/grade10`
 - **Beside this change** — `add-hosted-identity-verification` owns the six
   identity states this change only shows; `add-card-grading` carries what the
   grading product needs from the vault
@@ -144,6 +154,7 @@ None.
 
 ## References
 
+- [Vault Blocks](../../../docs/prds/products/shared/ui/vault-case.md)
 - [Collector Pages · Request wizard](../../../docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard)
 - [Collector Pages · Case page](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-page)
 - [Collector Pages · Booking a visit](../../../docs/prds/products/grade10-site/vault/collector-pages.md#booking-a-visit)
