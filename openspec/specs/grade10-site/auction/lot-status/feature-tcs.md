@@ -104,6 +104,7 @@ Runs once per row of **Test data**.
 **so that** I do not spend time on a lot that never went to auction.
 
 <!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
+<!-- review-note 2026-09-29: keep draft for now. Combine with grade10-site-auction-e2e-US11-TC01-1 after define-public-auction-identifiers folds, keeping only the latest behaviour. -->
 ### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.
@@ -156,7 +157,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -195,7 +196,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
