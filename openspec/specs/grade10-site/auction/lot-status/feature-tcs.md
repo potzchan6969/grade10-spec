@@ -1,6 +1,6 @@
 # grade10-site/auction/lot-status Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-lot-status-US1: Collector sees whether a lot can still be bid on
@@ -10,6 +10,7 @@
 **so that** I can see at a glance whether I can still bid on it.
 
 <!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
+<!-- review-note 2026-09-29: keep draft for now. Some of these statuses should be covered in an FE user flow before this case is approved. -->
 ### grade10-site-auction-lot-status-US1-TC1-1: External lot status matches the lot
 
 Runs once per row of **Test data**.
@@ -64,7 +65,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
