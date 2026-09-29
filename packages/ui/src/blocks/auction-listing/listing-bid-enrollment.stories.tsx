@@ -114,7 +114,7 @@ export const EmptyLinkedCard: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
-      canvas.getByRole("button", { name: "Link a card to place a bid." }),
+      canvas.getByRole("button", { name: "Link a card to bid." }),
     );
     expect(onLinkEmpty).toHaveBeenCalledOnce();
   },
