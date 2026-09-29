@@ -31,10 +31,6 @@
     "priceSheet": {
       "title": "收费",
       "lead": "以下为每张卡的参考费用，已包括评级公司费用及来回投保运费。Express 与 Super Express 另加申报价值 {rate} 的保额。交卡当日付款。",
-      "columns": {
-        "level": "{grader} 级别",
-        "fee": "每张收费"
-      },
       "table": {
         "level": "级别",
         "ceiling": "卡值上限",
@@ -45,10 +41,7 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "row": "卡值上限 {ceiling} · 约 {weeks, plural, other {# 星期}}回到门店",
-      "perCard": "每张",
       "coverLine": "另加 {rate} 保额",
-      "graders": "每间评级公司各有收费表；选服务时可在其分页查看其余几间。",
       "aboveTop": "有卡值超过 {ceiling}？请先到柜台或 WhatsApp 我们，好让我们预备合适级别。",
       "bulkLine": "二十张或以上走 Bulk 级别，交卡时间较长，同样在此预约。",
       "error": "暂时加载不到收费表，请稍后再试。"
@@ -56,9 +49,7 @@
     "submissions": {
       "title": "你的清单",
       "signedInAs": "已登录 · {email}",
-      "signedOut": "未登录",
       "empty": "这里暂时空空如也。开始一张清单，之后就会在此显示。",
-      "emptySignedOut": "登录即可在此看到你的清单",
       "open": "{day} 建立 · 柜台付 {amount}",
       "closed": "{grades} · 证书编号在页内",
       "cards": "{count} 张卡",
@@ -68,8 +59,6 @@
   },
   "plan": {
     "title": "列出你会带来的卡牌",
-    "lead": "填上卡名与系列，以及每张你想保多少。申报价值决定服务级别与保额，不会影响评级结果。",
-    "stepOf": "第 {step} 步，共 {total} 步",
     "step": {
       "cards": "卡牌",
       "service": "服务",
@@ -101,7 +90,6 @@
     },
     "add": "新增一张卡",
     "paste": "贴上清单",
-    "pasteNote": "一行一张卡，填卡名、系列、编号与价值，可一次过加入多张。目录对不上的卡会保留你输入的名称，也不会显示参考成交。",
     "capNotice": "同一张清单只走一间评级公司、一个级别。Value 至 Super Express 最多 {standard, plural, other {# 张}}；Bulk 最多 {bulk} 张。需要其他级别的卡另立一张清单，两张清单可同一次交卡。",
     "capNoticeUncapped": "同一张清单只走一间评级公司、一个级别。需要其他级别的卡另立一张清单，两张清单可同一次交卡。",
     "overTwenty": "超过 {standard, plural, other {# 张}}，所以下一步只开放 Bulk 级别。",
@@ -121,7 +109,6 @@
       },
       "lead": "一行一张卡：卡名、系列与编号，然后是你想保多少。我们会逐行对目录；对不上的行会保留你输入的名称，也不会显示参考成交。已在清单上的卡会略过。",
       "yourList": "你的清单",
-      "linesRead": "读到 {count, plural, other {# 行}}",
       "matching": "对目录中⋯",
       "matched": "{count} 张在目录中对上 — 清单上会显示未评级、{lower} 与 {upper} 的参考成交。",
       "keptAsTyped": "{count} 张保留你输入的名称 — {names}：旁边没有参考成交，以你输入的名称为准。",
@@ -138,7 +125,6 @@
       "title": "选评级公司与级别",
       "lead": "级别看的是最贵那一张卡值多少，以及多快回来。",
       "highestDeclaredLabel": "你申报的最高价值",
-      "highestDeclared": "你申报的最高价值是 {amount}。",
       "grader": "评级公司",
       "level": {
         "open": "每张卡值上限 {ceiling} · 每张 {fee}",
@@ -229,8 +215,6 @@
     "lead": "{count, plural, other {请带同 # 张卡。}}整个过程约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
     "bulkLead": "{count, plural, other {请带同 # 张卡。}}二十张或以上走较长的 Bulk 交卡，约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
     "where": "地点",
-    "day": "日期",
-    "time": "{day} 的时间",
     "nothingFree": "这一日已经没有剩余时段。",
     "error": "暂时读不到预约系统，请稍后再试。",
     "shop": {
@@ -297,9 +281,6 @@
     "edit": "修改清单",
     "levelNeeded": "这份清单还没有选级别。请修改清单选好级别，再预约交卡。",
     "retry": "重试",
-    "paid": "已在柜台付款",
-    "cancelled": "已取消。卡牌一直在你手上，也没有付过款。",
-    "expired": "已过期。没有付过款，也没有欠款。",
     "status": {
       "planned": "尚未交卡",
       "booked": "交卡已预约",
@@ -373,7 +354,6 @@
       "notCollected": "卡牌等候期间会有提示，之后开始计保管费，再之后发出书面通知。通知之后，卡牌可能按《无人认领货品处置条例》（第 456 章）出售，所得款项扣除费用后为你保留。"
     },
     "visit": {
-      "booked": "你的交卡预约",
       "missed": "该次到店已结束。你的清单与预算完全不变。",
       "bookAgain": "再约一次交卡"
     },
@@ -389,13 +369,13 @@
     "actRefused": {
       "conflict": "此页面读取的是旧版本。我们正在重新读取——请稍后再试一次。",
       "visitStarted": "到店已经开始，无法在此更改。",
-      "listAtCounter": "柜台已开始核对你的卡，无法在此更改。请向柜台查询。"
+      "listAtCounter": "柜台已开始核对你的卡，无法在此更改。请向柜台查询。",
+      "dropped": "我们没有及时收到回应，这项操作可能未完成。我们正在重新读取页面——请查看后再试一次。"
     },
     "withdraw": {
       "title": "改变主意？",
       "body": "批次于 {cutOff} 截止之前，我们可以取回其中一张卡。先联络我们，然后到柜台领回：费用会在收银处退回，预算也会扣减至继续送出的卡牌。",
-      "whatsapp": "WhatsApp 门店",
-      "closed": "批次已截止，卡牌正在路上，现在不能取回。"
+      "whatsapp": "WhatsApp 门店"
     },
     "grader": {
       "order": "在 {grader} · 单号 {order}",
@@ -429,14 +409,10 @@
     },
     "cards": {
       "title": "卡牌 · {count} 张",
-      "declaredValues": "申报价值 · 卡牌交收之前都可以更改",
       "intakeIdLabel": "收件编号",
       "declaredValueLabel": "申报价值",
       "minimumGradeLabel": "最低评分",
-      "intakeIds": "收件编号与相片",
-      "intakeIdsOnly": "收件编号，已印在卡套上",
       "grades": "成绩以评级公司的说法显示",
-      "photographPair": "正反两面，于柜台同你一起拍摄",
       "cert": "证书编号",
       "refusedReason": "柜台拒收 · {reason}",
       "withdrawnRefund": "已取回 · 已退回 {amount}",
@@ -464,13 +440,11 @@
     },
     "named": {
       "title": "由其他人代领？",
-      "optional": "选填",
       "lead": "在此填上代领人姓名，他凭取件码领回；上面的取件卡会注明是否需要带身份证明。未有指定代领人，就只有你本人可以领回。",
       "field": "代领人姓名",
       "placeholder": "与其身份证明相同的全名",
       "save": "保存",
       "badge": "已指定",
-      "namedAt": "{when} 指定",
       "line": "他凭取件码及取件卡所要求的身份证明领回；交收单据会列明他的姓名。同一时间只可指定一人。",
       "change": "更改",
       "remove": "移除",
@@ -507,7 +481,6 @@
       "refunded": "已退款",
       "refundedLine": "{amount} · {method}",
       "paidOut": "已赔偿",
-      "paidOutLine": "按申报价值 {amount} · {route}",
       "route": {
         "till": "柜台",
         "transfer": "银行转账"
@@ -525,7 +498,7 @@
       "cardsHeldLabel": "保管中的卡牌",
       "passedLabel": "已过",
       "postedLabel": "通知寄出日期",
-      "reminders": "我们会在 {first} 与 {second} 提醒你。提醒本身不收任何费用。",
+      "reminders": "我们会在 {days} 提醒你。提醒本身不收任何费用。",
       "storage": "自 {day} 起，每张每月 {rate} 保管费。费用在此累计，须于领回前付清。",
       "notice": "{day} 发出书面通知。",
       "noticeLine": "由寄出日起计的 30 日，尚余 {daysLeft, plural, other {# 日}}，于 {day} 届满。",
@@ -537,7 +510,6 @@
       "record": "评级记录",
       "lookUp": "查证",
       "photographs": "卡壳相片，于交收时拍摄",
-      "documents": "文件",
       "whatNext": {
         "title": "接下来",
         "vault": "存入金库 — 在门店免费寄存，估值后也可借贷。",
@@ -745,10 +717,8 @@
     "emptyPacketMessage": "请告知身旁的员工 — 这批文件未准备妥当。",
     "disclosureTitle": "电子签署之前",
     "disclosureFallback": "你即将以电子方式阅览并签署文件。如你不想这样做，请告知身旁的员工。",
-    "agreeLabel": "同意并继续",
     "agreeingLabel": "正在记录你的同意…",
     "packetExpiry": "这些文件可于 {when} 前签署。",
-    "declineLabel": "拒绝签署",
     "declineConfirmTitle": "拒绝签署？",
     "declineConfirmMessage": "这会撤回今天准备的所有文件 — 是整套，而非其中一份。不会签署任何文件，之后由身旁的员工为你跟进。",
     "declineReasonLabel": "如你愿意，可告诉我们原因（可不填 — 只会留在此屏幕，不会保存）",
@@ -756,7 +726,6 @@
     "declineCancelLabel": "返回",
     "decliningLabel": "正在拒绝…",
     "declinedTitle": "没有签署任何文件",
-    "declinedMessage": "文件已撤回，你的签署链接也已失效。身旁的员工可协助你处理下一步。",
     "rosterLabel": "今天需要签署：共 {total} 份文件",
     "rosterEntry": "{position}. {title} — {state}",
     "rosterStateSigned": "已签署",
@@ -782,10 +751,6 @@
     "signatureEmpty": "尚未签名。",
     "signatureTypedFailed": "此设备无法将你输入的内容转成签名。请告知身旁的员工。",
     "signatureTypedCaption": "输入式签名",
-    "fullNameLabel": "你的姓名，须与出示证件上的完全相同",
-    "heldNameHint": "这是文件拟备时所用的姓名。",
-    "postalAddressLabel": "你的通讯地址",
-    "postalAddressHint": "只会用于寄发书面通知。",
     "submitLabel": "签署{title}",
     "submittingLabel": "正在签署…",
     "retryLabel": "再试一次",

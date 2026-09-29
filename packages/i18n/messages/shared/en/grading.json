@@ -31,10 +31,6 @@
     "priceSheet": {
       "title": "What it costs",
       "lead": "Example fees, a card, including the grader’s fee and insured shipping both ways. Express and Super Express add cover at {rate} of the declared value. Paid when you hand the cards in.",
-      "columns": {
-        "level": "{grader} level",
-        "fee": "Fee, a card"
-      },
       "table": {
         "level": "Level",
         "ceiling": "Value up to",
@@ -45,10 +41,7 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "row": "Cards up to {ceiling} · back in about {weeks, plural, one {# week} other {# weeks}}",
-      "perCard": "a card",
       "coverLine": "+ {rate} cover",
-      "graders": "Each grader has its own sheet; the others are on their tabs when you pick the service.",
       "aboveTop": "A card worth more than {ceiling}? Ask at the counter or WhatsApp us first, so the right level is ready.",
       "bulkLine": "Twenty cards or more take the Bulk level and a longer drop-off, booked the same way.",
       "error": "We could not load the prices. Try again in a moment."
@@ -56,9 +49,7 @@
     "submissions": {
       "title": "Your submissions",
       "signedInAs": "Signed in · {email}",
-      "signedOut": "Signed out",
       "empty": "Nothing here yet. Start a submission and it shows up here.",
-      "emptySignedOut": "Sign in to see yours here",
       "open": "Planned {day} · {amount} at the counter",
       "closed": "{grades} · certs on the page",
       "cards": "{count, plural, one {# card} other {# cards}}",
@@ -68,8 +59,6 @@
   },
   "plan": {
     "title": "List the cards you are bringing",
-    "lead": "Name and set, and what you would insure each one for. The declared value picks the service level and the cover; it never sways the grade.",
-    "stepOf": "Step {step} of {total}",
     "step": {
       "cards": "The cards",
       "service": "The service",
@@ -101,7 +90,6 @@
     },
     "add": "Add a card",
     "paste": "Paste a list",
-    "pasteNote": "Paste one card a line, name, set, number and value, for many cards at once. A card the catalogue cannot match keeps the name you typed and shows no reference.",
     "capNotice": "All the cards go to one grader at one level. Up to {standard, plural, one {# card} other {# cards}} from Value to Super Express; up to {bulk} at Bulk. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
     "capNoticeUncapped": "All the cards go to one grader at one level. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
     "overTwenty": "More than {standard, plural, one {# card} other {# cards}}, so Bulk is the only level open at the next step.",
@@ -121,7 +109,6 @@
       },
       "lead": "One card a line: name, set and number, then the value you would insure it for. We match each line against the catalogue; a line we cannot match keeps the name you typed and shows no reference. A line naming a card already on your list is skipped.",
       "yourList": "Your list",
-      "linesRead": "{count, plural, one {# line read} other {# lines read}}",
       "matching": "Matching…",
       "matched": "{count} matched in the catalogue — the ungraded, {lower} and {upper} references show beside each on the list.",
       "keptAsTyped": "{count} kept as typed — {names}: no reference beside them; the name you typed stands.",
@@ -138,7 +125,6 @@
       "title": "Pick the grader and the level",
       "lead": "The level is the most any one card is worth, and how fast it comes back.",
       "highestDeclaredLabel": "Your highest declared value",
-      "highestDeclared": "Your highest declared value is {amount}.",
       "grader": "Grader",
       "level": {
         "open": "Value up to {ceiling} a card · {fee} a card",
@@ -229,8 +215,6 @@
     "lead": "{count, plural, one {Bring the # card.} other {Bring the # cards.}} The visit takes about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
     "bulkLead": "{count, plural, one {Bring the # card.} other {Bring the # cards.}} Twenty or more books the longer Bulk drop-off, about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
     "where": "Where",
-    "day": "Day",
-    "time": "Time on {day}",
     "nothingFree": "Nothing is free on this day any more.",
     "error": "We could not read the diary. Try again in a moment.",
     "shop": {
@@ -297,9 +281,6 @@
     "edit": "Edit the list",
     "levelNeeded": "This list has no level yet. Edit the list to pick one, then book the drop-off.",
     "retry": "Try again",
-    "paid": "Paid at the counter",
-    "cancelled": "Cancelled. The cards never left you, and nothing was paid.",
-    "expired": "Expired. Nothing was paid and nothing is owed.",
     "status": {
       "planned": "Not handed in yet",
       "booked": "Drop-off booked",
@@ -373,7 +354,6 @@
       "notCollected": "Reminders while the cards wait, then a storage fee, then written notice. After the notice the cards may be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456), the proceeds less fees held for you."
     },
     "visit": {
-      "booked": "Your drop-off",
       "missed": "The visit closed. Your list and estimate stay exactly as they were.",
       "bookAgain": "Book another drop-off"
     },
@@ -389,13 +369,13 @@
     "actRefused": {
       "conflict": "This page was reading an older version. We're reading it again — try that once more.",
       "visitStarted": "The drop-off has already started, so this can no longer be changed here.",
-      "listAtCounter": "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter."
+      "listAtCounter": "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter.",
+      "dropped": "We did not hear back in time, so this may not have gone through. We're reading the page again; check it, then try once more."
     },
     "withdraw": {
       "title": "Changed your mind?",
       "body": "Until the batch closes on {cutOff} we can pull a card. Message us, then collect it at the counter: its fee comes back at the till, and the estimate drops to the cards that go on.",
-      "whatsapp": "WhatsApp the shop",
-      "closed": "The batch has closed and the cards are on their way. Nothing can be pulled now."
+      "whatsapp": "WhatsApp the shop"
     },
     "grader": {
       "order": "At {grader} · order {order}",
@@ -429,14 +409,10 @@
     },
     "cards": {
       "title": "The cards · {count}",
-      "declaredValues": "Declared values · change them until the cards are checked in",
       "intakeIdLabel": "Intake id",
       "declaredValueLabel": "Declared value",
       "minimumGradeLabel": "Minimum grade",
-      "intakeIds": "Intake ids and photographs",
-      "intakeIdsOnly": "Intake ids, printed on the sleeves",
       "grades": "Grades in the grader’s words",
-      "photographPair": "Front and back, photographed at the counter with you",
       "cert": "Cert",
       "refusedReason": "Refused at the counter · {reason}",
       "withdrawnRefund": "Withdrawn · {amount} refunded",
@@ -464,13 +440,11 @@
     },
     "named": {
       "title": "Someone else collecting?",
-      "optional": "Optional",
       "lead": "Name them here and they collect with the code; the pickup card above says whether to bring an ID. With nobody named, only you can.",
       "field": "Their name",
       "placeholder": "Full name, as on their ID",
       "save": "Save",
       "badge": "Named",
-      "namedAt": "Named {when}",
       "line": "They collect with the pickup code, and the ID the pickup card asks for; the hand-back receipt names them. One person at a time.",
       "change": "Change",
       "remove": "Remove",
@@ -507,7 +481,6 @@
       "refunded": "Refunded",
       "refundedLine": "{amount} · {method}",
       "paidOut": "Paid out",
-      "paidOutLine": "{amount} at declared value · {route}",
       "route": {
         "till": "Till",
         "transfer": "Bank transfer"
@@ -525,7 +498,7 @@
       "cardsHeldLabel": "Cards held",
       "passedLabel": "Passed",
       "postedLabel": "Notice posted",
-      "reminders": "We remind you on {first} and {second}. Reminders never cost anything.",
+      "reminders": "We remind you on {days}. {count, plural, one {The reminder never costs anything.} other {Reminders never cost anything.}}",
       "storage": "From {day}, a storage fee of {rate} a card a month. It accrues here and is due before collection.",
       "notice": "Written notice on {day}.",
       "noticeLine": "{daysLeft, plural, one {# day} other {# days}} left of the 30 from the posting date, until {day}.",
@@ -537,7 +510,6 @@
       "record": "The graded record",
       "lookUp": "Look up",
       "photographs": "Slab photographs, taken at hand-back",
-      "documents": "Documents",
       "whatNext": {
         "title": "What next",
         "vault": "Vault it — free storage in the shop, or a loan against it after a valuation.",
@@ -745,10 +717,8 @@
     "emptyPacketMessage": "Please tell the member of staff with you — these documents were not prepared properly.",
     "disclosureTitle": "Before you sign electronically",
     "disclosureFallback": "You are about to review and sign documents electronically. Ask the member of staff with you if you would rather not.",
-    "agreeLabel": "Agree and continue",
     "agreeingLabel": "Recording your agreement…",
     "packetExpiry": "These documents can be signed until {when}.",
-    "declineLabel": "Decline to sign",
     "declineConfirmTitle": "Decline to sign?",
     "declineConfirmMessage": "This withdraws every document prepared for today — the whole set, not one of them. Nothing will be signed, and the member of staff with you can take it from there.",
     "declineReasonLabel": "Tell us why, if you like (optional — this stays on this screen and is not stored)",
@@ -756,7 +726,6 @@
     "declineCancelLabel": "Go back",
     "decliningLabel": "Declining…",
     "declinedTitle": "Nothing was signed",
-    "declinedMessage": "The documents were withdrawn and your signing link is no longer valid. The member of staff with you can help with what happens next.",
     "rosterLabel": "What you are signing today: {total} documents",
     "rosterEntry": "{position}. {title} — {state}",
     "rosterStateSigned": "signed",
@@ -782,10 +751,6 @@
     "signatureEmpty": "No signature yet.",
     "signatureTypedFailed": "This device could not turn what you typed into a signature. Ask the member of staff with you.",
     "signatureTypedCaption": "Typed signature",
-    "fullNameLabel": "Your name, exactly as printed on the ID you showed us",
-    "heldNameHint": "The name these documents were prepared under.",
-    "postalAddressLabel": "Your postal address",
-    "postalAddressHint": "Used only to send you written notice.",
     "submitLabel": "Sign the {title}",
     "submittingLabel": "Signing…",
     "retryLabel": "Try again",

@@ -31,10 +31,6 @@
     "priceSheet": {
       "title": "비용",
       "lead": "카드 한 장 기준 예시 요금이며, 감정사 수수료와 왕복 보험 배송비가 포함되어 있습니다. Express와 Super Express는 신고 가액의 {rate}에 해당하는 보상이 추가됩니다. 카드를 맡기실 때 결제합니다.",
-      "columns": {
-        "level": "{grader} 레벨",
-        "fee": "카드당 요금"
-      },
       "table": {
         "level": "레벨",
         "ceiling": "신고 가액 상한",
@@ -45,10 +41,7 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "row": "카드당 {ceiling}까지 · 약 {weeks, plural, other {#주}} 뒤 매장 도착",
-      "perCard": "카드당",
       "coverLine": "+ 보상 {rate}",
-      "graders": "감정사마다 요금표가 다릅니다. 서비스를 고르실 때 각 탭에서 확인하실 수 있습니다.",
       "aboveTop": "{ceiling}이 넘는 카드가 있으신가요? 알맞은 레벨을 준비할 수 있도록 창구나 WhatsApp으로 먼저 문의해 주세요.",
       "bulkLine": "20장 이상은 Bulk 레벨로, 방문 시간이 더 긴 예약으로 진행됩니다. 예약 방법은 같습니다.",
       "error": "요금표를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
@@ -56,9 +49,7 @@
     "submissions": {
       "title": "내 감정 신청",
       "signedInAs": "로그인함 · {email}",
-      "signedOut": "로그아웃 상태",
       "empty": "아직 아무것도 없습니다. 감정 신청을 시작하시면 여기에 표시됩니다.",
-      "emptySignedOut": "로그인하시면 여기에서 확인하실 수 있습니다",
       "open": "{day} 작성 · 창구에서 {amount}",
       "closed": "{grades} · 인증 번호는 상세 페이지에",
       "cards": "{count}장",
@@ -68,8 +59,6 @@
   },
   "plan": {
     "title": "맡기실 카드를 적어 주세요",
-    "lead": "카드 이름과 세트, 그리고 각 카드의 보험 가액을 적어 주세요. 신고 가액이 서비스 레벨과 보상 한도를 정하며, 감정 결과에는 영향을 주지 않습니다.",
-    "stepOf": "{total}단계 중 {step}단계",
     "step": {
       "cards": "카드",
       "service": "서비스",
@@ -101,7 +90,6 @@
     },
     "add": "카드 추가",
     "paste": "목록 붙여넣기",
-    "pasteNote": "한 줄에 한 장씩 이름, 세트, 번호, 가액을 적으면 여러 장을 한 번에 넣을 수 있습니다. 카탈로그에서 찾지 못한 카드는 입력하신 이름 그대로 두고 참고 시세를 보여주지 않습니다.",
     "capNotice": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. Value부터 Super Express까지는 최대 {standard, plural, other {#장}}, Bulk는 최대 {bulk}장입니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
     "capNoticeUncapped": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
     "overTwenty": "{standard, plural, other {#장}}을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다.",
@@ -121,7 +109,6 @@
       },
       "lead": "한 줄에 한 장씩, 이름과 세트와 번호, 그다음에 보험 가액을 적어 주세요. 각 줄을 카탈로그와 대조하며, 찾지 못한 줄은 입력하신 이름 그대로 두고 참고 시세를 보여주지 않습니다. 이미 목록에 있는 카드는 건너뜁니다.",
       "yourList": "목록",
-      "linesRead": "{count, plural, other {#줄 읽음}}",
       "matching": "대조하는 중…",
       "matched": "{count}장 카탈로그에서 확인됨 — 목록에 미감정, {lower}, {upper} 참고 시세가 함께 표시됩니다.",
       "keptAsTyped": "{count}장 입력하신 이름 그대로 — {names}: 참고 시세가 없고 입력하신 이름을 그대로 씁니다.",
@@ -138,7 +125,6 @@
       "title": "감정사와 레벨을 고르세요",
       "lead": "레벨은 가장 비싼 카드 한 장의 가액과 돌아오는 속도로 정해집니다.",
       "highestDeclaredLabel": "신고하신 최고 가액",
-      "highestDeclared": "신고하신 가액 중 가장 높은 금액은 {amount}입니다.",
       "grader": "감정사",
       "level": {
         "open": "카드당 {ceiling}까지 · 카드당 {fee}",
@@ -229,8 +215,6 @@
     "lead": "{count, plural, other {카드 #장을 가져와 주세요.}} 약 {minutes}분 걸리며, 카드를 모두 확인하고 서명하시기 전에는 결제하지 않습니다.",
     "bulkLead": "{count, plural, other {카드 #장을 가져와 주세요.}} 20장 이상은 시간이 더 긴 Bulk 방문으로 약 {minutes}분 걸리며, 카드를 모두 확인하고 서명하시기 전에는 결제하지 않습니다.",
     "where": "장소",
-    "day": "날짜",
-    "time": "{day} 시간",
     "nothingFree": "이 날짜에는 남은 시간이 없습니다.",
     "error": "예약 정보를 읽지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "shop": {
@@ -297,9 +281,6 @@
     "edit": "목록 수정",
     "levelNeeded": "이 목록에는 아직 레벨이 없습니다. 목록을 수정해 레벨을 고른 뒤 방문을 예약하세요.",
     "retry": "다시 시도",
-    "paid": "창구에서 결제함",
-    "cancelled": "취소되었습니다. 카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
-    "expired": "만료되었습니다. 결제된 금액도, 남은 금액도 없습니다.",
     "status": {
       "planned": "아직 맡기지 않음",
       "booked": "방문 예약됨",
@@ -373,7 +354,6 @@
       "notCollected": "카드가 기다리는 동안 안내를 보내고, 이후 보관료가 시작되며, 그다음 서면 통지가 나갑니다. 통지 이후에는 미수령 물품 처분 조례(Cap. 456)에 따라 카드를 매각할 수 있으며, 수수료를 뺀 대금은 고객님을 위해 보관합니다."
     },
     "visit": {
-      "booked": "예약된 방문",
       "missed": "방문이 종료되었습니다. 목록과 예상 금액은 그대로입니다.",
       "bookAgain": "다시 방문 예약하기"
     },
@@ -389,13 +369,13 @@
     "actRefused": {
       "conflict": "이 페이지는 이전 버전을 보고 있었습니다. 다시 읽어오는 중이니, 잠시 후 다시 시도해 주세요.",
       "visitStarted": "방문이 이미 시작되어 여기서는 더 이상 변경할 수 없습니다.",
-      "listAtCounter": "창구에서 이미 카드 확인을 시작해 여기서는 더 이상 변경할 수 없습니다. 창구에 문의해 주세요."
+      "listAtCounter": "창구에서 이미 카드 확인을 시작해 여기서는 더 이상 변경할 수 없습니다. 창구에 문의해 주세요.",
+      "dropped": "제때 응답을 받지 못해 처리되지 않았을 수 있습니다. 페이지를 다시 읽어오는 중이니, 확인한 뒤 한 번 더 시도해 주세요."
     },
     "withdraw": {
       "title": "마음이 바뀌셨나요?",
       "body": "배치가 {cutOff}에 마감되기 전까지는 카드를 빼드릴 수 있습니다. 먼저 연락 주신 뒤 창구에서 찾아가시면, 그 카드의 요금은 계산대에서 환불되고 예상 금액도 남은 카드 기준으로 줄어듭니다.",
-      "whatsapp": "매장에 WhatsApp 보내기",
-      "closed": "배치가 마감되어 카드가 이동 중입니다. 지금은 뺄 수 없습니다."
+      "whatsapp": "매장에 WhatsApp 보내기"
     },
     "grader": {
       "order": "{grader} · 주문 번호 {order}",
@@ -429,14 +409,10 @@
     },
     "cards": {
       "title": "카드 · {count}장",
-      "declaredValues": "신고 가액 · 접수 전까지 바꾸실 수 있습니다",
       "intakeIdLabel": "접수 번호",
       "declaredValueLabel": "신고 가액",
       "minimumGradeLabel": "최저 등급",
-      "intakeIds": "접수 번호와 사진",
-      "intakeIdsOnly": "슬리브에 인쇄된 접수 번호",
       "grades": "감정사의 표현 그대로의 결과",
-      "photographPair": "앞뒤 양면, 창구에서 함께 촬영",
       "cert": "인증 번호",
       "refusedReason": "창구에서 반려 · {reason}",
       "withdrawnRefund": "회수함 · {amount} 환불됨",
@@ -464,13 +440,11 @@
     },
     "named": {
       "title": "다른 분이 찾아가시나요?",
-      "optional": "선택 사항",
       "lead": "여기에 이름을 적어 두시면 그분이 코드로 찾아가십니다. 신분증이 필요한지는 위의 픽업 카드에 나옵니다. 아무도 지정하지 않으시면 고객님만 찾아가실 수 있습니다.",
       "field": "대리인 성함",
       "placeholder": "신분증에 적힌 그대로의 성명",
       "save": "저장",
       "badge": "지정됨",
-      "namedAt": "{when} 지정",
       "line": "그분은 픽업 코드와 픽업 카드가 요구하는 신분증으로 찾아가시고, 전달 영수증에 성함이 적힙니다. 한 번에 한 분만 지정하실 수 있습니다.",
       "change": "변경",
       "remove": "삭제",
@@ -507,7 +481,6 @@
       "refunded": "환불함",
       "refundedLine": "{amount} · {method}",
       "paidOut": "보상함",
-      "paidOutLine": "신고 가액 {amount} · {route}",
       "route": {
         "till": "카운터 결제",
         "transfer": "계좌 이체"
@@ -525,7 +498,7 @@
       "cardsHeldLabel": "보관 중인 카드",
       "passedLabel": "지남",
       "postedLabel": "통지 발송일",
-      "reminders": "{first}과(와) {second}에 알려드립니다. 안내 자체에는 비용이 붙지 않습니다.",
+      "reminders": "{days}에 알려드립니다. 안내 자체에는 비용이 붙지 않습니다.",
       "storage": "{day}부터 카드당 월 {rate}의 보관료가 붙습니다. 여기에 쌓이며 찾아가시기 전에 정산하셔야 합니다.",
       "notice": "{day}에 서면 통지를 보냅니다.",
       "noticeLine": "발송일부터 센 30일 중 {daysLeft, plural, other {#일}}이 남았습니다. {day}에 끝납니다.",
@@ -537,7 +510,6 @@
       "record": "감정 기록",
       "lookUp": "조회",
       "photographs": "전달 시 촬영한 슬랩 사진",
-      "documents": "문서",
       "whatNext": {
         "title": "다음 단계",
         "vault": "금고 보관 — 매장에서 무료로 보관하고, 감정 후 대출도 가능합니다.",
@@ -745,10 +717,8 @@
     "emptyPacketMessage": "옆에 있는 직원에게 알려 주세요 — 서류가 제대로 준비되지 않았습니다.",
     "disclosureTitle": "전자 서명을 하시기 전에",
     "disclosureFallback": "지금부터 서류를 전자적으로 검토하고 서명하게 됩니다. 원하지 않으시면 옆에 있는 직원에게 말씀해 주세요.",
-    "agreeLabel": "동의하고 계속",
     "agreeingLabel": "동의를 기록하는 중…",
     "packetExpiry": "이 서류는 {when}까지 서명하실 수 있습니다.",
-    "declineLabel": "서명 거부",
     "declineConfirmTitle": "서명을 거부하시겠습니까?",
     "declineConfirmMessage": "오늘 준비된 서류가 모두 철회됩니다 — 한 건이 아니라 전체입니다. 아무것도 서명되지 않으며, 이후는 옆에 있는 직원이 도와드립니다.",
     "declineReasonLabel": "원하시면 이유를 알려 주세요(선택 사항 — 이 화면에만 남고 저장되지 않습니다)",
@@ -756,7 +726,6 @@
     "declineCancelLabel": "돌아가기",
     "decliningLabel": "거부하는 중…",
     "declinedTitle": "서명된 서류가 없습니다",
-    "declinedMessage": "서류가 철회되었으며 서명 링크는 더 이상 유효하지 않습니다. 다음 절차는 옆에 있는 직원이 도와드립니다.",
     "rosterLabel": "오늘 서명할 서류: 총 {total}건",
     "rosterEntry": "{position}. {title} — {state}",
     "rosterStateSigned": "서명 완료",
@@ -782,10 +751,6 @@
     "signatureEmpty": "아직 서명이 없습니다.",
     "signatureTypedFailed": "이 기기에서 입력하신 내용을 서명으로 만들지 못했습니다. 옆에 있는 직원에게 알려 주세요.",
     "signatureTypedCaption": "입력한 서명",
-    "fullNameLabel": "제시하신 신분증에 적힌 것과 똑같은 성명",
-    "heldNameHint": "서류를 준비할 때 쓰인 성명입니다.",
-    "postalAddressLabel": "우편 주소",
-    "postalAddressHint": "서면 통지를 보낼 때만 사용됩니다.",
     "submitLabel": "{title} 서명하기",
     "submittingLabel": "서명 중…",
     "retryLabel": "다시 시도",
