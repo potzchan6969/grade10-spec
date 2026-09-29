@@ -39,7 +39,7 @@ winner of three lots has three orders, each with its own deadlines.
 | Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address; an operator reopen starts a fresh **48 hours** |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
-| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG or HEIC files of up to **5 MB** each, **15 MB** total, uploaded once |
+| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
 - **Sections** — Order Information with Invoice Status and Collection Method,
@@ -259,7 +259,7 @@ doing, under Edge Cases.
   reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
 - 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
-  or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
+  or transfer reference); **1 to 3** PDF, PNG, JPG, HEIC or HEIF files, **5 MB**
   each and **15 MB** total, uploaded once after paying, behind a confirm
   step saying nothing can be added later; the order reads Payment Verifying,
   the deadline stops, and Submit Payment Proof, View Bank Details and further
