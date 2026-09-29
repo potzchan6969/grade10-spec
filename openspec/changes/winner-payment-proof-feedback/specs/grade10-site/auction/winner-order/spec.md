@@ -40,7 +40,9 @@ Submit Payment Proof SHALL lock the whole form and SHALL block leave (Cancel,
 Escape and overlay dismiss do nothing) until that beat finishes.
 
 **Refused** - Grade10 SHALL refuse the whole upload and store nothing when any
-file breaks step 1, SHALL refuse a confirm with no file, and SHALL refuse an
+file breaks step 1. It SHALL judge a file's type by its content, not its name:
+a file whose content is not PDF, PNG, JPEG, HEIC or HEIF SHALL be refused and
+never relabelled. Grade10 SHALL refuse a confirm with no file, and SHALL refuse an
 upload on a card invoice, on any invoice not `pending`, and from anyone but
 the order's winner.
 
@@ -49,12 +51,13 @@ successful confirm SHALL store nothing. An upload that fails part-way SHALL
 store nothing, leave the invoice `pending`, keep Submit Payment Proof open with
 the draft the winner had entered, and show an error toast titled **Proof not
 submitted** with description **Nothing was saved. Try again.**; the winner may
-upload again; the one upload counts only once an upload succeeds.
+upload again; a file sent before the failure SHALL be deleted after a day. The
+one upload counts only once an upload succeeds.
 
-**Who reads the files** - Proof files SHALL be readable by any operator who
-can open the order, per `grade10-admin/auction/post-sale`, and never by the
-winner. Winner Order, the receipt and every letter SHALL show no proof file
-and no file name, the winner's or an operator's. Only the Payment Verifying
+**Who reads the files** - Payment proof files SHALL be readable by any operator
+who can open the order, per `grade10-admin/auction/post-sale`, and never by the
+winner. Winner Order, the receipt and every letter SHALL show no payment proof
+file and no file name, the winner's or an operator's. Only the Payment Verifying
 status shows that proof was sent.
 
 #### Scenario: winner-order-SC-99 - Uploading proof stops the deadline
@@ -119,8 +122,8 @@ status shows that proof was sent.
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** an invoice that is `payment_verifying`
-- **WHEN** a card payment is attempted for it
-- **THEN** Grade10 refuses it and makes no charge
+- **WHEN** the winner tries to start a card payment for it
+- **THEN** Grade10 starts none and makes no charge
 - **AND** the invoice is still `payment_verifying`
 
 #### Scenario: winner-order-SC-118 - No upload before send or after payment
@@ -172,3 +175,12 @@ status shows that proof was sent.
 - **WHEN** the winner opens Submit Payment Proof
 - **THEN** irreversible microcopy says nothing can be added or changed after submit
 - **AND** no second confirm screen is shown
+
+#### Scenario: winner-order-SC-239 - A file whose content is not a type Grade10 takes is refused
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** an upload carries a GIF file named `slip.jpg`
+- **THEN** Grade10 refuses the whole upload and stores no file
+- **AND** the invoice is still `pending`
+

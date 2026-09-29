@@ -36,7 +36,13 @@ import {
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   REVEAL_HIDDEN_CLASS,
   REVEAL_REDUCED_MOTION_CLASS,
@@ -796,11 +802,12 @@ function WinnerProgressCard({
   const railRef = useRef<HTMLDivElement>(null);
   const currentKey = steps.find((step) => step.state === "current")?.label;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-centre when the current step moves
   useLayoutEffect(() => {
     const rail = railRef.current;
     if (!rail) return;
 
-    function scrollCurrentIntoView() {
+    const scrollCurrentIntoView = () => {
       // Equal-flex layout at sm+ — no horizontal overflow to correct.
       if (window.matchMedia("(min-width: 640px)").matches) return;
       const current = rail.querySelector<HTMLElement>(
@@ -814,7 +821,7 @@ function WinnerProgressCard({
         stepRect.width / 2 -
         (railRect.left + railRect.width / 2);
       rail.scrollLeft += delta;
-    }
+    };
 
     scrollCurrentIntoView();
     const mq = window.matchMedia("(min-width: 640px)");
@@ -1159,10 +1166,6 @@ function WinnerOrderPage({
         title={content.secondaryNote}
       />
     ) : null;
-
-  function handlePrimaryAction() {
-    onPrimaryAction?.();
-  }
 
   function handleConfirmAddressClick() {
     setSetupDialogOpen(true);

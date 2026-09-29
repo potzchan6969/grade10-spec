@@ -8,3 +8,5 @@ hands:
   qa: "@tangconst"
   dev: "@tangconst"
 decisions_carried: "Q1–Q16 on docs/prds/products/grade10-site/auction/post-bidding.md Paying · Submit Payment Proof 🚧 lines and Proof submit feedback Product decisions row"
+depends_on:
+  - complete-auction-post-sale

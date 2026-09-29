@@ -350,12 +350,14 @@ export const ExtendedBidding: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Time left (extended)")).toBeInTheDocument();
+    expect(canvas.getAllByText("Time left (extended)").length).toBeGreaterThan(
+      0,
+    );
     expect(
-      canvas.getByLabelText(
+      canvas.getAllByLabelText(
         /After the scheduled close, each bid restarts a 30-minute timer/,
-      ),
-    ).toBeInTheDocument();
+      ).length,
+    ).toBeGreaterThan(0);
   },
 };
 

@@ -22,8 +22,7 @@ const CARD_FACT_LABELS = {
 
 const FILLED_SMALL_VIEWPORT_STORY =
   "?path=/story/my-auctions-my-auctions--filled-small-viewport";
-const MY_AUCTIONS_PAGE_STORY =
-  "?path=/story/pages-my-auctions-page--default";
+const MY_AUCTIONS_PAGE_STORY = "?path=/story/pages-my-auctions-page--default";
 
 function AuctionCard(item: AuctionRecordRowProps) {
   return (
@@ -32,8 +31,7 @@ function AuctionCard(item: AuctionRecordRowProps) {
         {...item}
         factLabels={CARD_FACT_LABELS}
         onEmailAlertsChange={
-          item.onEmailAlertsChange ??
-          (item.emailAlertsCopy ? fn() : undefined)
+          item.onEmailAlertsChange ?? (item.emailAlertsCopy ? fn() : undefined)
         }
         presentation="card"
       />
@@ -48,6 +46,7 @@ function AuctionCard(item: AuctionRecordRowProps) {
 const meta = {
   title: "My Auctions/Auction Card",
   component: AuctionRecordRow,
+  args: BIDDING_CHARIZARD,
   tags: ["autodocs"],
   globals: { viewport: { value: "mobile1" } },
   parameters: {
@@ -111,14 +110,10 @@ export const Outbid: Story = {
 /** Watch-only — alerts + Unwatch; no standing badge when none supplied. */
 export const Watching: Story = {
   name: "Watching",
-  render: () => (
-    <AuctionCard {...WATCHING_CAMERA} onWatchToggle={fn()} />
-  ),
+  render: () => <AuctionCard {...WATCHING_CAMERA} onWatchToggle={fn()} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("1994 Vintage Rangefinder Camera"),
-    ).toBeVisible();
+    expect(canvas.getByText("1994 Vintage Rangefinder Camera")).toBeVisible();
     expect(canvas.getByRole("switch")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Unwatch this lot" }),
@@ -129,9 +124,7 @@ export const Watching: Story = {
 /** Closed watch-only — Ended badge, Unwatch still available. */
 export const Ended: Story = {
   name: "Ended",
-  render: () => (
-    <AuctionCard {...WATCHING_ENDED} onWatchToggle={fn()} />
-  ),
+  render: () => <AuctionCard {...WATCHING_ENDED} onWatchToggle={fn()} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Ended")).toBeVisible();
@@ -179,9 +172,10 @@ export const AwaitingSetup: Story = {
         name: "Open order: 1999 Base Set Charizard PSA 9",
       }),
     ).toHaveAttribute("href", BIDDING_WON_AWAITING_ADDRESS.href);
-    expect(
-      canvas.getByRole("link", { name: /View order/ }),
-    ).toHaveAttribute("href", BIDDING_WON_AWAITING_ADDRESS.href);
+    expect(canvas.getByRole("link", { name: /View order/ })).toHaveAttribute(
+      "href",
+      BIDDING_WON_AWAITING_ADDRESS.href,
+    );
   },
 };
 
@@ -192,8 +186,6 @@ export const PendingPayment: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Pending Payment")).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: /View order/ }),
-    ).toBeVisible();
+    expect(canvas.getByRole("link", { name: /View order/ })).toBeVisible();
   },
 };

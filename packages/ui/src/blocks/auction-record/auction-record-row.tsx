@@ -318,9 +318,7 @@ function AuctionRecordRow({
               : emailAlertsCopy.offAriaLabel
           }
           checked={alertsEnabled}
-          disabled={
-            Boolean(emailAlertsDisabled) || Boolean(emailAlertsPending)
-          }
+          disabled={Boolean(emailAlertsDisabled) || Boolean(emailAlertsPending)}
           onCheckedChange={(checked) => onEmailAlertsChange(checked === true)}
           size="md"
         />
@@ -352,9 +350,7 @@ function AuctionRecordRow({
               : emailAlertsCopy.offAriaLabel
           }
           checked={alertsEnabled}
-          disabled={
-            Boolean(emailAlertsDisabled) || Boolean(emailAlertsPending)
-          }
+          disabled={Boolean(emailAlertsDisabled) || Boolean(emailAlertsPending)}
           onCheckedChange={(checked) => onEmailAlertsChange(checked === true)}
           size="md"
         />
@@ -395,12 +391,7 @@ function AuctionRecordRow({
         aria-busy={watchPending || undefined}
         aria-label={watchCopy.unwatchAriaLabel}
         disabled={watchPending || exiting}
-        render={
-          <button
-            onClick={onWatchToggle}
-            type="button"
-          />
-        }
+        render={<button onClick={onWatchToggle} type="button" />}
         size="xs"
         variant="error"
       >
@@ -444,11 +435,9 @@ function AuctionRecordRow({
         style={motionStyle}
       >
         {href ? (
-          <a
-            aria-label={cardNavigateLabel}
-            className="absolute inset-0 z-0 rounded-2xl"
-            href={href}
-          />
+          <a className="absolute inset-0 z-0 rounded-2xl" href={href}>
+            <span className="sr-only">{cardNavigateLabel}</span>
+          </a>
         ) : onOpen ? (
           <button
             aria-label={cardNavigateLabel}
@@ -459,11 +448,7 @@ function AuctionRecordRow({
         ) : null}
         <div className="pointer-events-none relative z-0 flex w-full flex-col gap-3">
           <div className="flex items-start gap-4">
-            <LotThumbnail
-              imageAlt={imageAlt}
-              imageSrc={imageSrc}
-              size="lg"
-            />
+            <LotThumbnail imageAlt={imageAlt} imageSrc={imageSrc} size="lg" />
             <VStack className="min-w-0 flex-1" gap="sm" hAlign="start">
               {cardStandingValue}
               <VStack className="min-w-0 w-full" gap="none" hAlign="start">

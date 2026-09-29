@@ -94,7 +94,7 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { name: "Collections" }),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: /Pokémon/ })).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Pokémon" })).toBeInTheDocument();
     expect(
       canvas.getAllByText("Pokémon TCG Sealed Booster Box – Abyss Eye (M5)")
         .length,
