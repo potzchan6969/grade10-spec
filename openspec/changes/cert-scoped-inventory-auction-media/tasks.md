@@ -70,7 +70,7 @@
   `grade10-admin-inventory-catalog-US-13`,
   `grade10-admin-auction-listing-US-12`,
   `grade10-admin-auction-listing-US-14`)
-- [ ] 3.3 Verify: run the Grade10 Admin cross-domain media E2E suite and the
+- [x] 3.3 Verify: run the Grade10 Admin cross-domain media E2E suite and the
   application build.
 
 ## 4. Planning review (grade10-spec)
