@@ -1,13 +1,27 @@
 # grade10-admin/grading/batches Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
 
 - `grade10-admin-grading-batches-SC-14` - two operators marking one parcel sent: the backend's concurrency test over the ship act, where the second act meets the batch's shipped stamp under `lockBatch` and is refused by name.
 - `grade10-admin-grading-batches-SC-33` - finishing a box already finished: the backend's idempotency test over finishing, which the panel offers no second time.
 - `grade10-admin-grading-batches-SC-42` - two desks handing in against one shelf: the backend's concurrency test over the hand-in, which takes the safe's cap row for update before it counts.
+
+## Background
+
+* The stack is a Grade10 dev or isolated end-to-end stack, started so its grading dev settings stand: PSA's levels as seeded (Regular: ceiling 1170000 minor units a card, fee 60000, back in 5 weeks; Express: ceiling 1950000, fee 120000, back in 3 weeks; Super Express: ceiling 3900000, fee 240000, back in 2 weeks), the batch cut-off Thursday 19:00 `Asia/Hong_Kong`, and the safe's declared cap as seeded, 999999999. A case that needs the cap at 30000000 writes it first, as *Writing a money setting* says.
+* admin A and admin B each hold the `staff` role, which carries `grading:read`, `grading:operate` and `grading:approve`, and each is signed in to the console in a browser of their own. A case naming one admin means admin A. No shipped role holds `grading:read` alone, so a case naming that grant mocks the operator's grants.
+* PSA's stages read, in order: Arrived, Order prep, Research and ID, Grading, Assembly, QA checks, Completed, Shipped. Completed is the stage that is the move to the grades being in.
+* *Seeding a submission* - `POST <grade10 api origin>/grading/dev/submissions/seed` with a fresh `seed`, the `status` the case names, `level`, `cards` (one declared value per card, in minor units), an `email` only this run uses, and, where the case gives them, `appointmentAt` (the hand-in) and `readyAt`, all in the past. It walks the submission to that status through the desk's own acts; its hand-in joins a batch of its own, closed at the hand-in's instant, and the batch ships a quarter of the way from the hand-in to `readyAt`. `checked_in` leaves the batch closed and not shipped; `sent` shipped; `graded` shipped with the grades in; `returned` back, unchecked, with the grader's manifest entered whole, a line per card, and no invoice; `ready` received.
+* *A batch of several submissions* - each submission is handed in at the counter, from its Hand-in runbook at <grade10 admin grading submission url>, for one grader and one level at the shop before that week's Thursday 19:00 cut-off; each joins the trio's open batch. Seeded submissions never share a batch.
+* *Arriving a seeded batch* - a submission seeded at `graded`; on <grade10 admin grading batches url>, Arrived on its batch's row. The batch reads Back, unchecked, with no manifest entered.
+* *Typing a manifest* - on the batch's Receive page, one line per card in the manifest lines: intake id, cert, grade, level charged, the grader's code, note, separated by commas, then Enter the manifest. The intake ids are read off the batch's cards on each submission's console page.
+* *Writing a money setting* - admin A edits the row on <grade10 admin grading settings url>, gives a reason and asks for approval; admin B approves the waiting row in their own console.
+* *Reading a letter* - `GET <grade10 api origin>/grading/dev/outbox?email=<collector email>` answers the last letter grading sent that address, and 404 where it sent none.
+
+---
 
 ## grade10-admin-grading-batches-US1: Operator ships the batch that closed
 
@@ -32,32 +46,34 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
-* <a batch closed at Thursday 19:00> holds every submission checked in before the cut-off.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <closed batch of one card> stands closed and not shipped.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Packing list | one line per intake id in the batch |
-| Grader's order number | <grader order number> |
-| Courier | <courier name> |
-| Tracking number | <tracking number> |
-| Insured total | 30000000 (HKD, minor units), within <the courier's written cover figure> |
-| Shipped on | <today> |
-| Estimated back | <ship day> plus the level's weeks |
+| <closed batch of one card> | one submission seeded at `checked_in` at Regular, its one card declared 500000 (HKD, minor units) |
+| Grader's order number | PSA-ORDER-0001 |
+| Courier | SF Express |
+| Tracking number | SF1000000001 |
+| Courier's written cover | 30000000, HKD, above the insured total |
+| Shipped on | today |
+| Estimated back | <ship day> plus Regular's 5 weeks |
 
 **Steps:**
 
-1. Open the closed batch's row and start Ship.
-2. Fill the packing list, order number, courier, tracking, insured total and shipped-on date.
-3. Confirm Mark as shipped.
+1. Click Ship on <closed batch of one card>'s row.
+2. Tick each check under Before it leaves, the packing list printed among them.
+3. Enter the order number, courier, tracking number, courier's written cover with its currency, and Shipped on.
+4. Click Mark as shipped.
+5. Read the batch's row, and read the letter to the submission's collector.
 
 **Expected Results:**
 
-* Every submission in the batch moves to Sent.
-* Every collector in the batch is emailed the courier and the estimate.
-* The batch's row reads shipped, with its tracking and estimate.
+* Step 4: every submission in the batch moves to With the grader.
+* Step 5: every collector in the batch is emailed the courier and the estimate.
+* Step 5: the batch's row reads shipped, with its tracking and estimate.
 
 ---
 
@@ -78,16 +94,22 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
-* <a batch open, before its cut-off> holds one or more checked-in submissions.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <open batch> holds one submission handed in at the counter, and its cut-off is still ahead.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <open batch> | a batch at PSA · Regular, one submission handed in at the counter earlier in the week, before that Thursday's 19:00 cut-off |
 
 **Steps:**
 
-1. Open the batch's row.
+1. Read <open batch>'s row.
 
 **Expected Results:**
 
-* The row reads building, with no Ship action offered.
+* Step 1: the row reads building until its cut-off, with no Ship offered.
 
 ---
 
@@ -108,24 +130,31 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of one card> closed and not shipped.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Shipped on | a day after today |
+| <closed batch of one card> | one submission seeded at `checked_in` at Regular, its one card declared 500000 (HKD, minor units) |
+| Grader's order number | PSA-ORDER-0003 |
+| Courier | SF Express |
+| Tracking number | SF1000000003 |
+| Courier's written cover | 30000000, HKD |
+| Shipped on | tomorrow on the shop's clock, a day after today |
 
 **Steps:**
 
-1. Fill the ship form's other fields.
-2. Set Shipped on to a day after today.
-3. Attempt Mark as shipped.
+1. Click Ship on <closed batch of one card>'s row.
+2. Tick each check under Before it leaves, and enter the order number, courier, tracking number and courier's written cover with its currency.
+3. Set Shipped on to tomorrow.
+4. Click Mark as shipped, where it is offered.
+5. Read the batch's row.
 
 **Expected Results:**
 
-* The date is refused on the field.
-* No submission moves to Sent.
+* Step 3: the date is refused on the field.
+* Step 5: no submission moves to With the grader; the row still reads closed.
 
 ---
 
@@ -146,21 +175,28 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of one card> closed and not shipped.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
+| <closed batch of one card> | one submission seeded at `checked_in` at Regular, its one card declared 500000 (HKD, minor units) |
+| Grader's order number | PSA-ORDER-0004 |
+| Courier | SF Express |
 | Tracking number | left blank |
+| Courier's written cover | 30000000, HKD |
+| Shipped on | today |
 
 **Steps:**
 
-1. Fill every ship form field except the tracking number.
+1. Click Ship on <closed batch of one card>'s row.
+2. Tick each check under Before it leaves, and fill every ship form field except the tracking number.
+3. Read Mark as shipped and the line beside it.
 
 **Expected Results:**
 
-* Mark as shipped is disabled, naming the tracking number field.
+* Step 3: Mark as shipped is disabled, naming the tracking number field.
 
 ---
 
@@ -181,16 +217,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of three cards> closed and not shipped.
 * The batch's declared total exceeds <the courier's written cover figure>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch of three cards> | one submission seeded at `checked_in` at Regular, its three cards declared 500000, 300000 and 200000 (HKD, minor units): an insured total of 1000000 |
+| <the courier's written cover figure> | 800000, HKD, below the insured total |
 
 **Steps:**
 
-1. Fill the ship form with the batch's declared total as the insured total.
+1. Click Ship on <closed batch of three cards>'s row.
+2. Enter <the courier's written cover figure> and its currency.
+3. Read the insured line.
 
 **Expected Results:**
 
-* The insured line reads in the warning tone.
+* Step 3: the insured line reads in the warning tone.
 
 ---
 
@@ -211,17 +256,32 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00> holding several submissions from different collectors.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <closed batch of three collectors> is closed and not shipped, holding several submissions from different collectors.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch of three collectors> | three submissions at PSA · Regular, one each from collectors A, B and C, handed in as *A batch of several submissions* says; walked on the Friday after the cut-off |
+| Grader's order number | PSA-ORDER-0006 |
+| Courier | SF Express |
+| Tracking number | SF1000000006 |
+| Courier's written cover | 30000000, HKD |
+| Shipped on | today |
 
 **Steps:**
 
-1. Complete the ship form.
-2. Confirm Mark as shipped.
+1. Click Ship on <closed batch of three collectors>'s row.
+2. Tick each check under Before it leaves, and enter the fields from **Test data**.
+3. Click Mark as shipped.
+4. Read each of the three submissions on the queue at <grade10 admin grading queue url>.
+5. Read the letter to each of collectors A, B and C.
 
 **Expected Results:**
 
-* Every submission in the batch, not only one, moves to Sent.
-* Every collector among them is emailed; none is skipped.
+* Step 4: every submission in the batch, not only one, moves to With the grader.
+* Step 5: every collector among them is emailed; none is skipped.
 
 ---
 
@@ -242,23 +302,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>, with no batch listed.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with no open batch listed for <Grader> and <Level> at the shop.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Grader | <a grader> |
-| Level | <a level> |
+| Shop | the stack's shop |
+| Grader | PSA |
+| Level | Super Express |
 
 **Steps:**
 
-1. Start New batch.
-2. Pick the grader and the level.
+1. Click New batch.
+2. Pick the shop, <Grader> and <Level>, and confirm the dialog.
+3. Read the batches list.
 
 **Expected Results:**
 
-* A batch opens for that grader and that level.
+* Step 3: a batch opens for that grader and that level.
 * A card at another grader or another level is not offered into it.
 
 ---
@@ -280,15 +342,21 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:read) is on <grade10 admin batches url>, with <a batch closed at Thursday 19:00>.
+* admin(holds grading:read) is on <grade10 admin grading batches url>, with <closed batch of one card> closed and not shipped.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch of one card> | one submission seeded at `checked_in` at Regular, its one card declared 500000 (HKD, minor units) |
 
 **Steps:**
 
-1. Open the closed batch's row.
+1. Read <closed batch of one card>'s row.
 
 **Expected Results:**
 
-* No Ship action is offered.
+* Step 1: no Ship action is offered.
 
 ---
 
@@ -309,15 +377,23 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has submitted a complete ship form for <a batch closed at Thursday 19:00>.
+* admin(holds grading:operate) has the ship form of <closed batch of one card> filled, every check ticked and every field set as US1-TC1-1's **Test data** lists.
+* Network conditions are manipulated to hold the ship act's answer pending.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch of one card> | one submission seeded at `checked_in` at Regular, its one card declared 500000 (HKD, minor units) |
 
 **Steps:**
 
-1. Confirm Mark as shipped.
+1. Click Mark as shipped.
+2. Read the form while the act is in flight.
 
 **Expected Results:**
 
-* The form shows pending; its actions are disabled until it completes.
+* Step 2: the form shows pending; its actions are disabled until it completes.
 
 ---
 
@@ -338,17 +414,24 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is checking in <a submission at a grader and level> at the counter.
+* admin(holds grading:operate) is checking in <first submission> at the counter, on its Hand-in runbook at <grade10 admin grading submission url>, before that week's cut-off.
 * No open batch stands for that shop, grader and level.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <first submission> | a booked submission of 2 cards at PSA · Super Express, each declared 500000 (HKD, minor units) |
 
 **Steps:**
 
-1. Check in the submission.
+1. Check in <first submission> from the Hand-in runbook.
+2. Open <grade10 admin grading batches url> and read the rows.
 
 **Expected Results:**
 
-* A batch opens for that shop, grader and level, carrying its cut-off.
-* The submission is listed in it.
+* Step 2: a batch opens for that shop, grader and level, carrying its cut-off.
+* Step 2: the submission is listed in it, its 2 cards counted on the row.
 
 ---
 
@@ -369,17 +452,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is checking in <a second submission at the same grader and level>.
-* <an open batch> already stands for that shop, grader and level.
+* admin(holds grading:operate) is checking in <second submission> at the counter, on its Hand-in runbook at <grade10 admin grading submission url>, before that week's cut-off.
+* <open batch> already stands for that shop, grader and level.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <open batch> | a batch at PSA · Regular, one submission handed in at the counter earlier in the week, before that Thursday's 19:00 cut-off |
+| <second submission> | a booked submission of 1 card at PSA · Regular, declared 500000 (HKD, minor units) |
 
 **Steps:**
 
-1. Check in the second submission.
+1. Check in <second submission> from the Hand-in runbook.
+2. Open <grade10 admin grading batches url> and read the rows.
 
 **Expected Results:**
 
-* The submission joins the standing batch.
-* No second batch is listed for that shop, grader and level.
+* Step 2: the submission joins the standing batch.
+* Step 2: no second batch is listed for that shop, grader and level.
 
 ---
 
@@ -400,18 +491,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
-* <a batch open, before its cut-off> holds checked-in submissions and Thursday 19:00 on the shop's day passes with no ship date recorded.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <open batch> holds submissions handed in at the counter, and Thursday 19:00 on the shop's day has passed with no ship date recorded: it is the Friday morning after.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <open batch> | a batch at PSA · Regular, one submission handed in at the counter earlier in the week, before that Thursday's 19:00 cut-off |
 
 **Steps:**
 
-1. Read the batches panel after the cut-off has passed.
+1. Read <open batch>'s row after the cut-off has passed.
+2. Click Ship on the row and read the estimated back on the form.
 
 **Expected Results:**
 
-* The batch's row reads Closed, with nobody having acted on it.
-* The row says it ships that day, the day after the cut-off.
-* Its estimate back is counted from that ship day at the level's weeks.
+* Step 1: the batch's row reads Closed, with nobody having acted on it.
+* Step 1: the row says it ships that day, the day after the cut-off.
+* Step 2: its estimate back is counted from that ship day at the level's weeks, today plus Regular's 5 weeks.
 
 ---
 
@@ -432,17 +530,26 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is checking in <a submission at a grader and level> after Thursday 19:00 on the shop's day.
-* <a batch closed at Thursday 19:00> stands for that shop, grader and level.
+* admin(holds grading:operate) is checking in <late submission> at the counter, on its Hand-in runbook, after Thursday 19:00 on the shop's day.
+* <open batch> closed at that Thursday 19:00 and is not shipped, at the same shop, grader and level.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <open batch> | a batch at PSA · Regular, one submission handed in at the counter earlier in the week, before that Thursday's 19:00 cut-off |
+| <late submission> | a booked submission of 1 card at PSA · Regular, declared 500000 (HKD, minor units), checked in on the Thursday evening after 19:00 or on the Friday before the batch ships |
 
 **Steps:**
 
-1. Check in the submission.
+1. On <grade10 admin grading batches url>, note the cards <open batch>'s row counts.
+2. Check in <late submission> from the Hand-in runbook.
+3. Read the batches list again.
 
 **Expected Results:**
 
-* The submission joins that trio's next batch, not the closed one.
-* The closed batch's cards are unchanged.
+* Step 3: the submission joins that trio's next batch, not the closed one.
+* Step 3: the closed batch's cards are unchanged from step 1.
 
 ---
 
@@ -463,24 +570,32 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of three cards> closed and not shipped.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Insured total | 45000000 (HKD, minor units) |
-| Cover figure | 1000000 (USD, minor units), as the courier wrote it |
+| <closed batch of three cards> | one submission seeded at `checked_in` at Regular, its three cards declared 500000, 300000 and 200000 (HKD, minor units): an insured total of 1000000 |
+| Insured total | 1000000 (HKD, minor units), read off the cards |
+| Cover figure | 500000 (USD, minor units), as the courier wrote it; converted at any rate it would cover the total, so a refusal can only be the currency's |
+| Grader's order number | PSA-ORDER-0014 |
+| Courier | SF Express |
+| Tracking number | SF1000000014 |
+| Shipped on | today |
 
 **Steps:**
 
-1. Record the cover figure in USD.
-2. Attempt Mark as shipped.
+1. Click Ship on <closed batch of three cards>'s row.
+2. Tick each check under Before it leaves, and enter the order number, courier, tracking number and Shipped on.
+3. Record the cover figure with USD as its currency.
+4. Click Mark as shipped, where it is offered.
+5. Read the form and the batch's row.
 
 **Expected Results:**
 
-* The batch is refused because the two figures carry different currencies.
-* No rate is applied to either figure, and no submission moves.
+* Step 5: the batch is refused because the two figures carry different currencies.
+* Step 5: no rate is applied to either figure, and no submission moves.
 
 ---
 
@@ -501,18 +616,32 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00> holding three cards declared at 500000, 300000 and 200000 (HKD, minor units).
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of three cards> closed and not shipped.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch of three cards> | one submission seeded at `checked_in` at Regular, its three cards declared 500000, 300000 and 200000 (HKD, minor units) |
+| Grader's order number | PSA-ORDER-0015 |
+| Courier | SF Express |
+| Tracking number | SF1000000015 |
+| Courier's written cover | 30000000, HKD |
+| Shipped on | today |
 
 **Steps:**
 
-1. Read the insured line.
-2. Attempt to type over the insured total.
+1. Click Ship on <closed batch of three cards>'s row.
+2. Read the insured line.
+3. Attempt to type over the insured total.
+4. Tick each check under Before it leaves, enter the fields from **Test data**, and click Mark as shipped.
+5. Read the insured total the shipped batch carries.
 
 **Expected Results:**
 
-* The insured total reads 1000000 (HKD, minor units), the sum of the batch's declared values.
-* The figure cannot be typed over.
-* Once the batch ships, that figure stands on it as the one declared to the courier.
+* Step 2: the insured total reads 1000000 (HKD, minor units), the sum of the batch's declared values.
+* Step 3: the figure cannot be typed over.
+* Step 5: once the batch ships, that figure stands on it as the one declared to the courier.
 
 ---
 
@@ -533,33 +662,73 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
-* The batches listed under **Test data** stand at the shop, and no other.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* The batches listed under **Test data** stand at the shop, reached as its How column says, on a stack holding no other batch.
+
+**Test data:**
+
+| Field | Value | How |
+| --- | --- | --- |
+| <row_1> | back from the grader, unchecked | *Arriving a seeded batch* |
+| <row_2> | closed, shipping today | a submission seeded at `checked_in`, handed in yesterday |
+| <row_3> | with the grader, past its estimate | a submission seeded at `sent` at Regular, handed in 60 days back and `readyAt` 50 days back |
+| <row_4> | with the grader, due back in 1 week | a submission seeded at `sent` at Regular, shipped 4 weeks back |
+| <row_5> | with the grader, due back in 3 weeks | a submission seeded at `sent` at Regular, shipped 2 weeks back |
+| <row_6> | open, before its cut-off | New batch at PSA · Express this week |
+| <row_7> | closed, holding no submission handed in | New batch at PSA · Value the week before, left empty past its cut-off |
+| Received batches | 60 | 60 submissions seeded at `ready`, each receiving its own batch |
+
+**Steps:**
+
+1. Read the batches panel.
+2. Page forward once with Older batches.
+
+**Expected Results:**
+
+* Steps 1 and 2: both pages list <row_1>, <row_2>, <row_3>, <row_4>, <row_5> and <row_6> first, in that order.
+* Behind them the 60 received batches and <row_7> follow newest first: 50 on the first page and 11 on the second, none twice and none missing.
+* Step 2: the second page offers no further page.
+* <row_7> offers no Ship.
+
+---
+
+### grade10-admin-grading-batches-US1-TC17-1: A submission at another level joins its own batch and leaves the open one unchanged
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is checking in <other-level submission> at the counter, on its Hand-in runbook at <grade10 admin grading submission url>, before that week's cut-off.
+* <open batch> stands open at the same grader and a different level.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <batch_1> | back from the grader, unchecked |
-| <batch_2> | closed, shipping today |
-| <batch_3> | with the grader, past its estimate |
-| <batch_4> | with the grader, due back in 1 week |
-| <batch_5> | with the grader, due back in 3 weeks |
-| <batch_6> | open, before its cut-off |
-| <batch_7> | closed, holding no submission handed in |
-| Received batches | 60 |
+| <open batch> | a batch at PSA · Regular, one submission handed in at the counter earlier in the week, before that Thursday's 19:00 cut-off |
+| <other-level submission> | a booked submission of 1 card at PSA · Express, declared 500000 (HKD, minor units) |
 
 **Steps:**
 
-1. Read the batches panel.
-2. Page forward once.
+1. On <grade10 admin grading batches url>, note the cards <open batch>'s row counts.
+2. Check in <other-level submission> from the Hand-in runbook.
+3. Read the batches list again.
 
 **Expected Results:**
 
-* Both pages list <batch_1>, <batch_2>, <batch_3>, <batch_4>, <batch_5> and <batch_6> first, in that order.
-* Behind them the 60 received batches and <batch_7> follow newest first: 50 on the first page and 11 on the second, none twice and none missing.
-* The second page offers no further page.
-* <batch_7> offers no Ship.
+* Step 3: <other-level submission> joins PSA · Express's own batch instead, not <open batch>.
+* Step 3: <open batch> is unchanged, its cards as noted at step 1.
 
 ---
 
@@ -586,16 +755,23 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the receive panel of <a batch back from the grader, unchecked>, with no manifest or invoice entered.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <batch back without a manifest> reading Back, unchecked and no manifest or invoice entered.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
 
 **Steps:**
 
-1. Open the receive panel.
+1. Click Receive on <batch back without a manifest>'s row.
+2. Read the scan bar.
 
 **Expected Results:**
 
-* Scan is disabled.
-* Import the manifest and the invoice first is shown.
+* Step 2: Scan is disabled.
+* Step 2: Enter the manifest and the invoice first is shown.
 
 ---
 
@@ -616,24 +792,26 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the receive panel of <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) is on the Receive page of <batch back without a manifest>, with no manifest or invoice entered.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Manifest | one line per intake id in the batch |
-| Invoice | the grader's lines and total |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| Manifest | one line per intake id in the batch: `<intake id 1>, 90000001, MINT 9, regular,,` and `<intake id 2>, 90000002, NM-MT 8, regular,,`, typed as *Typing a manifest* says |
+| Invoice | reference INV-0002, currency USD, total 3000 (minor units) |
 
 **Steps:**
 
-1. Enter the manifest.
-2. Enter the invoice.
+1. Type the manifest lines and click Enter the manifest.
+2. Enter the invoice's reference, currency and total, and click Enter the invoice.
+3. Read the scan bar and the invoice.
 
 **Expected Results:**
 
-* Scan becomes enabled.
-* The invoice's lines and total are shown.
+* Step 3: Scan becomes enabled.
+* Step 3: the invoice's lines and total are shown.
 
 ---
 
@@ -654,17 +832,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back with its manifest>, on its Receive page.
 * <a slab> carries a cert on a manifest line naming an intake id in the batch, held by no other submission.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with its manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0003, USD, 3000 |
+| <a slab> | the first card's slab; its cert is the one its manifest line reads in the scan table |
 
 **Steps:**
 
-1. Scan the slab's cert.
+1. Type <a slab>'s cert in Cert and click Scan.
+2. Read the line's row in the scan table and the counters.
 
 **Expected Results:**
 
-* The row reads the grade, cert, card and submission, Matched and Scanned.
-* The scanned and matched counters each rise by one.
+* Step 2: the row reads the grade, cert, card and submission, Matched and Scanned.
+* Step 2: the scanned and matched counters each rise by one.
 
 ---
 
@@ -685,17 +871,28 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back without a manifest>, on its Receive page, its first card's manifest line carrying <a cert>.
 * <a cert> is already matched and held by <a submission it belongs to>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| <a submission it belongs to> | another submission, seeded at `ready` at PSA · Regular |
+| <a cert> | the cert on <a submission it belongs to>'s card, read off its console page at <grade10 admin grading submission url> |
+| Manifest | the first card's line carrying <a cert>, the second card's line carrying 90000402, typed as *Typing a manifest* says |
+| Invoice | reference INV-0004, currency USD, total 3000 (minor units) |
 
 **Steps:**
 
-1. Scan the same cert against a second card.
+1. Scan <a cert>, the cert on the first card's line.
+2. Read the scan bar and the first card's row.
 
 **Expected Results:**
 
-* The scan is refused, naming the submission that already holds the cert.
-* The second card stays unmatched.
+* Step 2: the scan is refused, naming the submission that already holds the cert.
+* Step 2: the second card stays unmatched.
 
 ---
 
@@ -716,17 +913,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back with its manifest>, on its Receive page.
 * <a cert> appears on no line of the entered manifest.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with its manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0005, USD, 3000 |
+| <a cert> | 99999999, a cert no line of the manifest carries |
 
 **Steps:**
 
-1. Scan that cert.
+1. Type <a cert> in Cert and click Scan.
+2. Read the scan bar and the scan table.
 
 **Expected Results:**
 
-* The scan is refused by name.
-* No card is matched to it.
+* Step 2: the scan is refused by name.
+* Step 2: no card is matched to it.
 
 ---
 
@@ -747,17 +952,26 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is entering the manifest for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) is entering the manifest for <batch back without a manifest>, on its Receive page.
 * One manifest line names an intake id that belongs to no submission in the batch.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| <stray intake id> | an intake id read off a card of another batch, which no submission in this batch carries |
+| Manifest | a line for each of the batch's 2 cards, and a third line `<stray intake id>, 90000603, MINT 9, regular,,`, typed as *Typing a manifest* says |
 
 **Steps:**
 
-1. Enter that manifest line among the rest.
+1. Type the manifest lines, the <stray intake id> line among the rest, and click Enter the manifest.
+2. Read the manifest lines and Finish receiving.
 
 **Expected Results:**
 
-* The line is listed as unmatched.
-* Finish is held until staff resolve it.
+* Step 2: the line is listed as unmatched.
+* Step 2: Finish is held until staff resolve it.
 
 ---
 
@@ -778,16 +992,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has matched <a card> whose manifest line carries the grader's ungraded code and note, no grade.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back without a manifest>, on its Receive page, <a card>'s manifest line carrying the grader's ungraded code and note, no grade.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| <a card> | the first card; its line `<intake id 1>, 90000701, , regular, N1, Authenticity could not be verified` |
+| Invoice | reference INV-0007, currency USD, total 3000 (minor units) |
 
 **Steps:**
 
-1. Match the card's line against the manifest.
+1. Scan <a card>'s cert, 90000701.
+2. Read its row and the counters.
 
 **Expected Results:**
 
-* The card is recorded ungraded, with the grader's code and note.
-* The ungraded counter rises by one; the card's fee stands.
+* Step 2: the card is recorded ungraded, with the grader's code and note.
+* Step 2: the ungraded counter rises by one; the card's fee stands.
 
 ---
 
@@ -808,16 +1031,28 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has scanned <a card the grader moved to a higher level>, entered on the invoice at that level's fee.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back without a manifest>, on its Receive page, <a card the grader moved to a higher level>'s line charged at that level and entered on the invoice at that level's fee.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| <a card the grader moved to a higher level> | the first card; its line `<intake id 1>, 90000801, GEM MT 10, express,,` |
+| Booked level's fee, on the pinned sheet | Regular, 60000 (HKD, minor units) a card |
+| Charged level's fee, on the pinned sheet | Express, 120000 (HKD, minor units) a card |
+| <upcharge> | 60000 (HKD, minor units) |
+| Invoice | reference INV-0008, currency HKD, total 120000 (minor units), the card at Express's fee |
 
 **Steps:**
 
-1. Match the card's scan against the manifest.
+1. Scan the card's cert, 90000801.
+2. Read its row, the counters and the invoice figure.
 
 **Expected Results:**
 
-* The card is recorded at the fee sheet's difference between the two levels.
-* The invoice is reconciled against that figure; the upcharges counter and its sum rise.
+* Step 2: the card is recorded at the fee sheet's difference between the two levels, <upcharge>: Express's fee less Regular's.
+* Step 2: the invoice is reconciled against that figure; the upcharges counter and its sum rise.
 
 ---
 
@@ -838,15 +1073,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has recorded an upcharge whose invoice figure differs from the fee sheet's difference.
+* admin(holds grading:operate) has recorded, on the Receive page of <batch back without a manifest>, an upcharge whose invoice figure differs from the fee sheet's difference.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| Manifest | the first card's line `<intake id 1>, 90000901, GEM MT 10, express,,`, the second card's at Regular, typed as *Typing a manifest* says |
+| Sheet's difference | 60000 (HKD, minor units), Express's fee less Regular's |
+| Invoice | reference INV-0009, currency USD, total 8000 (minor units) |
 
 **Steps:**
 
-1. Review the reconciled upcharge row.
+1. Scan the first card's cert, 90000901.
+2. Review the reconciled upcharge row and the invoice figure.
 
 **Expected Results:**
 
-* The gap between the invoice's figure and the sheet's is shown, marked Commercial's.
+* Step 2: the gap between the invoice's figure and the sheet's is shown, marked Commercial's.
 
 ---
 
@@ -867,21 +1112,32 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has scanned some, not all, of <a batch back from the grader, unchecked>'s cards.
+* admin(holds grading:operate) has scanned some, not all, of <batch back with three cards>'s cards on its Receive page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with three cards> | one submission of 3 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0010, USD, 4500 |
+| Scanned before leaving | the first two cards' certs, as the scan table reads them |
 
 **Steps:**
 
-1. Leave the receive panel with the batch part-scanned.
-2. Reopen the same batch's receive panel later.
+1. Save the batch part-scanned, to finish later.
+2. Click Back to the batches.
+3. Click Receive on the same batch's row again.
+4. Read the scan table and the batch's word.
 
 **Expected Results:**
 
-* Every earlier scan is still recorded.
-* The batch still reads back, unchecked.
+* Step 4: every earlier scan is still recorded.
+* Step 4: the batch still reads Back, unchecked.
 
 ---
 
 ### grade10-admin-grading-batches-US2-TC11-1: Finish is held while an unmatched line or an unscanned slab remains
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -898,15 +1154,22 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the receive panel of <a batch back from the grader, unchecked>, with an unmatched manifest line or a manifest slab not yet scanned.
+* admin(holds grading:operate) is on the Receive page of <batch back without a manifest>, its invoice entered, with <Unresolved> left open and every other line scanned.
+
+**Test data:**
+
+| Unresolved | How it is left open |
+| --- | --- |
+| An unmatched manifest line | the manifest typed with a third line naming an intake id no card in the batch carries |
+| A manifest slab not yet scanned | the manifest typed with a line per card, and the second card's cert not scanned |
 
 **Steps:**
 
-1. Attempt Finish receiving.
+1. Read Finish receiving and the line beside it.
 
 **Expected Results:**
 
-* Finish is disabled, naming the unresolved line or slab.
+* Step 1: Finish is disabled, naming <Unresolved>.
 
 ---
 
@@ -927,17 +1190,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the receive panel of <a batch back from the grader, unchecked>, every manifest line matched or otherwise resolved.
+* admin(holds grading:operate) is on the Receive page of <batch back of three collectors>, every manifest line matched or otherwise resolved.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back of three collectors> | three submissions at PSA · Regular, one each from collectors A, B and C, handed in as *A batch of several submissions* says, then shipped, Completed recorded, Arrived, the manifest and invoice entered and every card scanned |
 
 **Steps:**
 
-1. Confirm Finish receiving.
+1. Click Finish receiving.
+2. Read the batch's row on <grade10 admin grading batches url> and each submission on the queue.
+3. Read the letter to each of collectors A, B and C.
 
 **Expected Results:**
 
-* Every submission in the batch moves to ready together, none left behind.
-* Each collector is emailed the pickup code and what is due.
-* The batch closes with its received date.
+* Step 2: every submission in the batch moves to Ready to collect together, none left behind.
+* Step 3: each collector is emailed the pickup code and what is due.
+* Step 2: the batch closes with its received date.
 
 ---
 
@@ -958,15 +1229,21 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:read) is on the receive panel of <a batch back from the grader, unchecked>.
+* admin(holds grading:read) is on the Receive page of <batch back without a manifest>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
 
 **Steps:**
 
-1. Open the receive panel.
+1. Read the Receive page's actions.
 
 **Expected Results:**
 
-* No Scan, Import or Finish action is offered.
+* Step 1: no Scan, Enter or Finish action is offered.
 
 ---
 
@@ -987,17 +1264,24 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>, with <a batch shipped to the grader>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <batch with its grades in> shipped to the grader.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch with its grades in> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `graded` |
 
 **Steps:**
 
-1. Record the batch as arrived back at the shop.
-2. Read the batches panel again a day later.
+1. Click Arrived on <batch with its grades in>'s row.
+2. Read the row.
+3. Read the batches panel again more than a day later, the batch still unchecked.
 
 **Expected Results:**
 
-* The batch's row reads back, unchecked, offering Receive.
-* After it has stood unchecked for more than a day, the row carries the unchecked-return badge.
+* Step 2: the batch's row reads Back, unchecked, offering Receive.
+* Step 3: after it has stood unchecked for more than a day, the row is badged as waiting on the shop.
 
 ---
 
@@ -1018,17 +1302,28 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back without a manifest>, on its Receive page, its first card's line carrying <a cert>.
 * <a cert> is already carried by a card in <a submission of an earlier batch at the same grader>, that batch already received.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| <a submission of an earlier batch at the same grader> | a submission seeded at `ready` at PSA · Regular, its batch received |
+| <a cert> | the cert on that submission's card, read off its console page at <grade10 admin grading submission url> |
+| Manifest | the first card's line carrying <a cert>, the second card's carrying 90001502, typed as *Typing a manifest* says |
+| Invoice | reference INV-0015, currency USD, total 3000 (minor units) |
 
 **Steps:**
 
-1. Scan that cert against a card in this batch.
+1. Scan <a cert> against the first card in this batch.
+2. Read the scan bar, the first card's row, and the earlier submission's card on its console page.
 
 **Expected Results:**
 
-* The scan is refused, naming the submission that holds the cert.
-* Nothing is recorded on either card, the earlier batch's card included.
+* Step 2: the scan is refused, naming the submission that holds the cert.
+* Step 2: nothing is recorded on either card, the earlier batch's card included.
 
 ---
 
@@ -1049,7 +1344,7 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back with three cards typed>, on its Receive page.
 * One unmatched line carries a mistyped intake id for <a card in the batch>; a second unmatched line names a card the shop never sent.
 * Every other card in the batch is scanned or recorded as an exception.
 
@@ -1057,20 +1352,24 @@
 
 | Field | Value |
 | --- | --- |
+| <batch back with three cards typed> | one submission of 3 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says, its invoice entered as INV-0016, USD, 4500 |
+| <a card in the batch> | the third card |
+| First unmatched line | `<third card's intake id with its last character changed>, 90001603, MINT 9, regular,,` |
+| Second unmatched line | `<an intake id no card of this shop carries>, 90001699, MINT 9, regular,,` |
 | Reason for the second line | Listed in error by the grader |
 
 **Steps:**
 
-1. On the first line, name the card it meant.
-2. Scan the first line's cert.
+1. On the first line, name <a card in the batch> as the card it meant.
+2. Scan the first line's cert, 90001603.
 3. Close the second line as the grader's error with the reason.
-4. Attempt Finish receiving.
+4. Click Finish receiving.
 
 **Expected Results:**
 
-* The first line's cert is recorded on the card named, and the line reads matched.
-* The second line reads closed with its reason.
-* Finish receiving goes ahead; neither line holds it.
+* Step 2: the first line's cert is recorded on the card named, and the line reads matched.
+* Step 3: the second line reads closed with its reason.
+* Step 4: Finish receiving goes ahead; neither line holds it.
 
 ---
 
@@ -1091,19 +1390,26 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
-* <a batch shipped to the grader> holds two submissions: one at Grades are in, and one the grader has not yet graded.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <batch half graded> holds two submissions: one at Grades are in, and one the grader has not yet graded. Recording Completed moves a whole batch at once, so the state is made with mock data.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch half graded> | a shipped batch at PSA · Regular of two submissions, one at Grades are in and one at With the grader |
 
 **Steps:**
 
-1. Read the batch's row on the batches panel.
+1. Read <batch half graded>'s row on the batches panel.
 2. Send the batch's arrival to the worker directly, as a stale console would.
+3. Read the row and both submissions again.
 
 **Expected Results:**
 
 * Step 1: the row offers no Arrived.
 * Step 2: the arrival is refused, naming the submission not yet graded.
-* Nothing is written: the batch still reads Shipped, and both submissions keep their status.
+* Step 3: nothing is written: the batch still reads Shipped, and both submissions keep their status.
 
 ---
 
@@ -1124,19 +1430,23 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) has entered the manifest and invoice for <batch back without a manifest>, on its Receive page.
 * <a card> travelled in the batch, no manifest line names it, and its slab is in the box.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Cert | <the slab's cert> |
-| Grade | <the slab's grade> |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| Manifest | one line, for the first card only, typed as *Typing a manifest* says |
+| Invoice | reference INV-0018, currency USD, total 3000 (minor units) |
+| <a card> | the second card, listed under the scan table as on no line |
+| Cert | 90001802, <the slab's cert> |
+| Grade | NM-MT 8, <the slab's grade> |
 
 **Steps:**
 
-1. Under the scan table, add a manifest line for <a card> with the cert and the grade.
+1. Under the scan table, click Add to the manifest on <a card>, enter the cert and the grade, and confirm.
 2. Scan the cert.
 
 **Expected Results:**
@@ -1170,18 +1480,27 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is finishing receiving <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) is finishing receiving <batch back with its manifest>, on its Receive page, its invoice entered and its first card scanned.
 * <a card> is on the manifest but not found in the box; the grader's morning read gives its expected return date.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with its manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0101, USD, 3000 |
+| <a card> | the second card |
+| Expected back | a date 3 weeks after today |
 
 **Steps:**
 
-1. Record the card as held by the grader.
-2. Enter its expected date.
+1. Click Held on <a card>'s line.
+2. Enter its expected date, and confirm.
+3. Read the card's line, and read the letter to the submission's collector.
 
 **Expected Results:**
 
-* The card reads held by the grader, with the expected date.
-* The collector is emailed the same day.
+* Step 3: the card reads held by the grader, with the expected date.
+* Step 3: the collector is emailed the same day.
 
 ---
 
@@ -1202,17 +1521,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is finishing receiving <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) is finishing receiving <batch back with its manifest>, on its Receive page, its invoice entered and its first card scanned.
 * <a card> is on the manifest but not found in the box, with no held date given.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with its manifest> | one submission of 2 cards at Regular, seeded at `returned`, the first declared 500000 and the second 800000 (HKD, minor units); its invoice entered as reference INV-0102, USD, 3000 |
+| <a card> | the second card, declared 800000 (HKD, minor units) |
 
 **Steps:**
 
-1. Record the card as not returned.
+1. Click Not returned on <a card>'s line, and confirm.
+2. Read the card's line, and read the letter to the submission's collector.
 
 **Expected Results:**
 
-* The card reads not returned, carrying the payout it owes.
-* The collector is emailed the same day.
+* Step 2: the card reads not returned, carrying the payout it owes.
+* Step 2: the collector is emailed the same day.
 
 ---
 
@@ -1233,17 +1560,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) finds <a slab damaged> still inside its shipping box.
+* admin(holds grading:operate) is on the Receive page of <batch back with its manifest>, its invoice entered, and finds <a slab damaged> still inside its shipping box.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with its manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0103, USD, 3000 |
+| <a slab damaged> | the second card's slab, its case cracked |
 
 **Steps:**
 
 1. Photograph the slab inside the box.
-2. Record the card as damaged.
+2. Click Damaged on the card's line, attach the photograph from step 1 as the photograph in the box, and confirm.
+3. Read the card's line, and read the letter to the submission's collector.
 
 **Expected Results:**
 
-* The photograph is attached to the card, taken before it left the box.
-* The card reads damaged; the collector is emailed the same day.
+* Step 3: the photograph is attached to the card, taken before it left the box.
+* Step 3: the card reads damaged; the collector is emailed the same day.
 
 ---
 
@@ -1264,18 +1599,28 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is finishing receiving <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) is finishing receiving <batch back with four cards>, on its Receive page, its invoice entered.
 * One card of <a submission with several cards> is held by the grader; the rest are in the box.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with four cards> | <a submission with several cards>, seeded at `returned`; its invoice entered as reference INV-0104, USD, 6000 |
+| <a submission with several cards> | one submission of 4 cards at Regular, each declared 500000 (HKD, minor units) |
+| Held card | the fourth card, expected back a date 3 weeks after today |
 
 **Steps:**
 
-1. Record the one card as held by the grader.
-2. Finish receiving the batch.
+1. Scan the first three cards' certs.
+2. Record the fourth card as held by the grader, with its expected date.
+3. Click Finish receiving.
+4. Read the submission's page at <grade10 admin grading submission url>.
 
 **Expected Results:**
 
-* The submission's other cards finish and go ready with it.
-* Only the held card's outcome is exceptional.
+* Step 4: the submission's other cards finish and go ready with it.
+* Step 4: only the held card's outcome is exceptional.
 
 ---
 
@@ -1296,15 +1641,24 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is recording <a card> not found in the box as held by the grader.
+* admin(holds grading:operate) is recording <a card> not found in the box as held by the grader, on the Receive page of <batch back with its manifest>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back with its manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0105, USD, 3000 |
+| <a card> | the second card |
+| Expected back | left blank |
 
 **Steps:**
 
-1. Attempt to record the card held, with no expected date entered.
+1. Click Held on <a card>'s line.
+2. Leave the expected date empty, and confirm.
 
 **Expected Results:**
 
-* The record is refused, naming the missing expected date.
+* Step 2: the record is refused, naming the missing expected date.
 
 ---
 
@@ -1325,15 +1679,24 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is finishing receiving <a batch back from the grader, unchecked>.
+* admin(holds grading:operate) is finishing receiving <batch back without a manifest>, on its Receive page.
 * The manifest names every card that travelled in the batch but <a card>, and every named card is scanned.
 * <a card> is not in the box.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <batch back without a manifest> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), brought back as *Arriving a seeded batch* says |
+| Manifest | one line, for the first card only, typed as *Typing a manifest* says, its cert scanned |
+| Invoice | reference INV-0106, currency USD, total 1500 (minor units) |
+| <a card> | the second card, listed under the scan table as on no line |
+
 **Steps:**
 
-1. Attempt Finish receiving.
-2. Record <a card> as not returned.
-3. Attempt Finish receiving again.
+1. Click Finish receiving.
+2. Click Not returned on <a card> under the scan table, and confirm.
+3. Click Finish receiving again.
 
 **Expected Results:**
 
@@ -1365,24 +1728,27 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the row of <a batch with the grader>.
+* admin(holds grading:operate) is on the row of <a batch with the grader>, on <grade10 admin grading batches url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Stage | one of the grader's own stages |
-| Note | the grader's words, as typed |
+| <a batch with the grader> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `sent` |
+| Stage | Research and ID, one of PSA's own stages |
+| Note | In research and ID since Monday, as typed |
 
 **Steps:**
 
-1. Pick the stage from the grader's own stages.
-2. Type the grader's words into the note beside it.
+1. Open the act that records the grader's stage on the batch's row.
+2. Pick the stage from the grader's own stages.
+3. Type the grader's words into the note beside it, and confirm.
+4. Read the batch's row and the submission's timeline at <grade10 admin grading submission url>.
 
 **Expected Results:**
 
-* The stage lands on the batch's timeline and on every submission's timeline in it.
-* The note carries the grader's words; the stage itself is never free text.
+* Step 4: the stage lands on the batch's timeline and on every submission's timeline in it.
+* Step 4: the note carries the grader's words; the stage itself is never free text.
 
 ---
 
@@ -1403,16 +1769,22 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
 * <a batch with the grader, past its estimate> holds no re-estimate yet.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <a batch with the grader, past its estimate> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `sent`, handed in 60 days back and `readyAt` 50 days back, so Regular's 5 weeks from its ship day have passed |
 
 **Steps:**
 
-1. Open the batches panel.
+1. Open the batches panel and read the batch's row.
 
 **Expected Results:**
 
-* The batch's row reads Due back in the warning tone, read from the clock.
+* Step 1: the batch's row reads Due back in the warning tone, read from the clock.
 
 ---
 
@@ -1433,26 +1805,28 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the row of <a batch with the grader, past its estimate>, holding several submissions.
+* admin(holds grading:operate) is on the row of <a batch with the grader, past its estimate, holding several submissions>, on <grade10 admin grading batches url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Stage | one of the grader's own stages |
-| New estimate | <a later date> |
-| Reason | <a reason, as typed> |
+| <a batch with the grader, past its estimate, holding several submissions> | three submissions at PSA · Regular, one each from collectors A, B and C, handed in as *A batch of several submissions* says and shipped more than 5 weeks ago |
+| Stage | QA checks, one of PSA's own stages |
+| New estimate | a date 2 weeks after today |
+| Reason | PSA moved the order to QA checks, as typed |
 
 **Steps:**
 
-1. Open Re-estimate.
+1. Click Re-estimate on the batch's row.
 2. Set the stage, the new estimate and the reason.
 3. Confirm.
+4. Read the batch's row, and read the letter to each of collectors A, B and C.
 
 **Expected Results:**
 
-* The new estimate is set with its reason on the batch.
-* Every collector in the batch, however many, is emailed the day it is set.
+* Step 4: the new estimate is set with its reason on the batch.
+* Step 4: every collector in the batch, however many, is emailed the day it is set.
 
 ---
 
@@ -1479,16 +1853,19 @@
 
 | Field | Value |
 | --- | --- |
+| <a batch with the grader, past its estimate> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `sent`, handed in 60 days back and `readyAt` 50 days back |
+| Stage | QA checks |
+| New estimate | a date 2 weeks after today |
 | Reason | left blank |
 
 **Steps:**
 
-1. Set the stage and a new estimate, leaving the reason blank.
+1. Set the stage and the new estimate, leaving the reason blank.
 2. Attempt to confirm.
 
 **Expected Results:**
 
-* The re-estimate is refused, naming the missing reason.
+* Step 2: the re-estimate is refused, naming the missing reason.
 
 ---
 
@@ -1509,15 +1886,21 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:read) is on the row of <a batch with the grader, past its estimate>.
+* admin(holds grading:read) is on <grade10 admin grading batches url>, at the row of <a batch with the grader, past its estimate>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <a batch with the grader, past its estimate> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `sent`, handed in 60 days back and `readyAt` 50 days back |
 
 **Steps:**
 
-1. Open the batch's row.
+1. Read the batch's row.
 
 **Expected Results:**
 
-* No Re-estimate action is offered.
+* Step 1: no Re-estimate action is offered.
 
 ---
 
@@ -1538,22 +1921,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on the row of <a batch with the grader> holding several submissions, each at Sent.
+* admin(holds grading:operate) is on the row of <a batch with the grader holding several submissions>, each at With the grader, on <grade10 admin grading batches url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Stage | the grader's stage that is the move to the grades being in |
+| <a batch with the grader holding several submissions> | three submissions at PSA · Regular, one each from collectors A, B and C, handed in as *A batch of several submissions* says and shipped |
+| Stage | Completed, the grader's stage that is the move to the grades being in |
+| Note | Grades posted, as typed |
 
 **Steps:**
 
-1. Record that stage from the grader's own stages.
+1. Record Completed from the grader's own stages, with the note.
+2. Read each submission on <grade10 admin grading queue url>, and read the letter to each of collectors A, B and C.
 
 **Expected Results:**
 
-* Every submission in the batch reads grades are in.
-* Each collector in the batch is emailed once.
+* Step 2: every submission in the batch reads Grades are in.
+* Step 2: each collector in the batch is emailed once.
 
 ---
 
@@ -1576,14 +1962,23 @@
 
 * admin(holds grading:operate) is on the row of <a batch with the grader> whose last recorded stage is <a stage>.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <a batch with the grader> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `sent` |
+| <a stage> | Research and ID, recorded once already with the note In research and ID |
+
 **Steps:**
 
-1. Record the same stage again.
+1. Note the batch's timeline and the last letter to the submission's collector.
+2. Record <a stage> again.
+3. Read the timeline and the last letter again.
 
 **Expected Results:**
 
-* Nothing further is written to the batch or its submissions.
-* No collector is emailed a second time.
+* Step 3: nothing further is written to the batch or its submissions.
+* Step 3: no collector is emailed a second time.
 
 ---
 
@@ -1610,17 +2005,21 @@
 
 | Field | Value |
 | --- | --- |
-| New estimate | the date already set |
-| Reason | <a reason, as typed> |
+| <a batch with the grader> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `sent` |
+| <a date> | the due date the batch's row reads |
+| New estimate | the date already set, <a date> |
+| Reason | The grader confirmed the same date, as typed |
 
 **Steps:**
 
-1. Set the estimate to the date already carried and confirm.
+1. Note the batch's timeline and the last letter to the submission's collector.
+2. Set the estimate to the date already carried, give the reason and confirm.
+3. Read the timeline and the last letter again.
 
 **Expected Results:**
 
-* Nothing further is written to the batch.
-* No collector is emailed a second time.
+* Step 3: nothing further is written to the batch.
+* Step 3: no collector is emailed a second time.
 
 ---
 
@@ -1641,20 +2040,27 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin queue url>.
+* admin(holds grading:operate) is on <grade10 admin grading queue url>.
 * <a batch with the grader> carries an estimated day back of the shop's own day and holds <a submission>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <a submission> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `graded` with its hand-in 35 days and 5 minutes back and `readyAt` 35 days back, so it shipped 35 days back and Regular's 5 weeks end today |
+| <a batch with the grader> | <a submission>'s own batch |
 
 **Steps:**
 
-1. Read the queue on the estimated day back.
+1. Read <a submission>'s row on the queue on the estimated day back.
 2. Read it again on the day after the estimate.
-3. Finish receiving the batch and read it again.
+3. Receive the batch - Arrived, the manifest and invoice entered, every card scanned, Finish receiving - and read the row again.
 
 **Expected Results:**
 
-* On the estimated day the submission's row is badged as due back.
-* On the day after the estimate the row is badged as running late in place of due back.
-* Once the batch reads Received the row carries neither badge.
+* Step 1: on the estimated day the submission's row is badged as due back.
+* Step 2: on the day after the estimate the row is badged as running late in place of due back.
+* Step 3: once the batch reads Received the row carries neither badge.
 
 ---
 
@@ -1681,17 +2087,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>, with a batch closing today, a batch with a grader, and a batch back unchecked.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with a batch closing today, a batch with a grader, and a batch back unchecked, on a stack holding no other batch.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| A batch closing today | a submission seeded at `checked_in`, handed in yesterday |
+| A batch with a grader | a submission seeded at `sent` |
+| A batch back unchecked | a submission seeded at `graded`, Arrived pressed on its row |
 
 **Steps:**
 
-1. Open the batches panel.
+1. Open the batches panel and read the tiles.
 
 **Expected Results:**
 
-* The Ship today tile names the grader, level, cards and submissions closing.
-* The With graders tile counts submissions, and how many are past their estimate.
-* The Back unchecked tile counts what has not been received.
+* Step 1: the Ship today tile names the grader, level, cards and submissions closing.
+* Step 1: the With graders tile counts submissions, and how many are past their estimate.
+* Step 1: the Back unchecked tile counts what has not been received.
 
 ---
 
@@ -1712,15 +2126,23 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>, with <several slabs ready and uncollected> and <a batch checked in and not yet shipped>.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with <several slabs ready and uncollected> and <a batch checked in and not yet shipped>, on a stack holding no other card.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <a batch checked in and not yet shipped> | a submission seeded at `checked_in` at Super Express, 3 cards declared 3900000, 3900000 and 2200000 (HKD, minor units): 10000000 |
+| <several slabs ready and uncollected> | a submission seeded at `ready` at Super Express, 2 cards declared 3000000 each (HKD, minor units): 6000000 |
+| <safe total> | 16000000 (HKD, minor units), 10000000 plus 6000000 |
 
 **Steps:**
 
-1. Open the batches panel.
+1. Open the batches panel and read the Declared value in the safe tile.
 
 **Expected Results:**
 
-* The safe's tile sums the declared value of both the checked-in cards and the ready slabs still held.
+* Step 1: the safe's tile sums the declared value of both the checked-in cards and the ready slabs still held, <safe total>.
 
 ---
 
@@ -1741,16 +2163,24 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin batches url>.
-* The safe's declared value has reached <the safe's cap>, 30000000 (HKD, minor units).
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <the safe's cap> is written as 30000000, as *Writing a money setting* says.
+* The safe's declared value has reached <the safe's cap>, 30000000 (HKD, minor units), on a stack holding no other card.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <the safe's cap> | 30000000 (HKD, minor units) |
+| Cards held | 3 submissions seeded at `checked_in` at Super Express, each of 3 cards declared 3900000, 3900000 and 2200000 (HKD, minor units): 30000000 in all |
 
 **Steps:**
 
-1. Open the batches panel.
+1. Open the batches panel and read the Declared value in the safe tile.
 
 **Expected Results:**
 
-* The safe's tile reads in the warning tone.
+* Step 1: the safe's tile reads in the warning tone.
 
 ---
 
@@ -1771,17 +2201,27 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is checking in <a submission> at the counter.
+* admin(holds grading:operate) is checking in <a submission> at the counter, on its Hand-in runbook at <grade10 admin grading submission url>.
+* <the safe's cap> is written as 30000000, as *Writing a money setting* says.
 * The safe already holds declared value under <the safe's cap>, and this hand-in's declared total would carry it past <the safe's cap>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <the safe's cap> | 30000000 (HKD, minor units) |
+| <safe held> | 29000000 (HKD, minor units): 3 submissions seeded at `checked_in` at Super Express, of cards declared 3900000, 3900000 and 2200000; 3900000, 3900000 and 2200000; 3900000, 3900000 and 1200000, on a stack holding no other card |
+| <a submission> | a booked submission of 1 card at Super Express, declared 2000000 (HKD, minor units): <safe held> plus 2000000 passes <the safe's cap> |
 
 **Steps:**
 
-1. Attempt to check in the submission.
+1. Attempt to check in <a submission> from the Hand-in runbook.
+2. Read the runbook and <a submission>'s drop-off.
 
 **Expected Results:**
 
-* Check-in is refused, naming the safe's cap.
-* The next drop-off is booked for the submission instead.
+* Step 2: check-in is refused, naming the safe's cap.
+* Step 2: the next drop-off is booked for the submission instead.
 
 ---
 
@@ -1802,16 +2242,25 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is checking in <a submission> at the counter.
+* admin(holds grading:operate) is checking in <a submission> at the counter, on its Hand-in runbook at <grade10 admin grading submission url>.
+* <the safe's cap> is written as 30000000, as *Writing a money setting* says.
 * The safe's declared value, with this hand-in added, stays at or under <the safe's cap>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <the safe's cap> | 30000000 (HKD, minor units) |
+| <safe held> | 29000000 (HKD, minor units): 3 submissions seeded at `checked_in` at Super Express, of cards declared 3900000, 3900000 and 2200000; 3900000, 3900000 and 2200000; 3900000, 3900000 and 1200000, on a stack holding no other card |
+| <a submission> | a booked submission of 1 card at Super Express, declared 1000000 (HKD, minor units): <safe held> plus 1000000 reaches <the safe's cap> exactly |
 
 **Steps:**
 
-1. Check in the submission.
+1. Check in <a submission> from the Hand-in runbook.
 
 **Expected Results:**
 
-* Check-in proceeds; no cap refusal is shown.
+* Step 1: check-in proceeds; no cap refusal is shown.
 
 ## Reconciliation
 
