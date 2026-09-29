@@ -176,8 +176,9 @@ export const Booking: Story = {
   },
 };
 
-/** A refused booking reads the refusal it was given, and books nothing
- * (shared-ui-grading-submission-SC-28). */
+/** A refused booking reads the refusal it was given, and books nothing;
+ * saving for later stays offered beside the withdrawn booking
+ * (shared-ui-grading-submission-SC-28, shared-ui-grading-submission-SC-79). */
 export const PlanExpiredMeanwhile: Story = {
   args: {
     consented: true,
@@ -235,6 +236,38 @@ export const KeptPlanEditor: Story = {
           canvas.getByRole("button", { name: "Save changes" }),
         );
         expect(args.onSaveForLater).toHaveBeenCalled();
+      },
+    );
+  },
+};
+
+/** The editor's save refused by name: the refusal reads, and Save changes is
+ * withdrawn beside it, since saving is the act it refused
+ * (shared-ui-grading-submission-SC-79). */
+export const KeptPlanEditorRefused: Story = {
+  args: {
+    copy: { ...REVIEW_COPY, saveForLater: "Save changes" },
+    schedule: REVIEW_SCHEDULE.slice(0, 2),
+    error:
+      "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter.",
+  },
+  render: ({ consented, onConsent, onBook, ...review }) => (
+    <GradingReview {...review} />
+  ),
+  play: async ({ args, canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step(
+      "shared-ui-grading-submission-SC-79 - A refusal withdraws the act it refused",
+      async () => {
+        expect(
+          canvas.getByText(
+            "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter.",
+          ),
+        ).toBeInTheDocument();
+        const save = canvas.getByRole("button", { name: "Save changes" });
+        expect(save).toBeDisabled();
+        await userEvent.click(save, { pointerEventsCheck: 0 });
+        expect(args.onSaveForLater).not.toHaveBeenCalled();
       },
     );
   },

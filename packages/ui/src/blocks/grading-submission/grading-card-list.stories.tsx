@@ -81,12 +81,13 @@ export const CardSearch: Story = {
   },
 };
 
-/** A matched card reads its set line, its declared value, its three sales and
- * its minimum grade; editing, removing and pasting each report through a
- * callback of their own, and the list carries none of them out
- * (shared-ui-grading-submission-SC-13, shared-ui-grading-submission-SC-61). */
+/** A matched card reads its set line, its declared value, its three sales
+ * with the reference note under them, and its minimum grade; editing,
+ * removing and pasting each report through a callback of their own, and the
+ * list carries none of them out (shared-ui-grading-submission-SC-13,
+ * shared-ui-grading-submission-SC-61, shared-ui-grading-submission-SC-76). */
 export const Matched: Story = {
-  play: async ({ args, canvasElement }) => {
+  play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
     expect(
       canvas.getByText("Base Set · 4/102 · matched in the catalogue"),
@@ -95,6 +96,27 @@ export const Matched: Story = {
     expect(canvas.getByText("Sold 12 May: HK$3,650")).toBeInTheDocument();
     expect(canvas.getByText("Sold 3 May: HK$3,720")).toBeInTheDocument();
     expect(canvas.getByText("Sold 28 Apr: HK$3,580")).toBeInTheDocument();
+    await step(
+      "shared-ui-grading-submission-SC-76 - A matched card's sales read with the reference note",
+      async () => {
+        const reference = canvasElement.querySelector<HTMLElement>(
+          '[data-slot="grading-card-list-reference"]',
+        );
+        expect(reference).not.toBeNull();
+        const note = within(reference as HTMLElement).getByText(
+          CARD_LIST_COPY.referenceNote,
+        );
+        expect(
+          within(reference as HTMLElement)
+            .getByText("Sold 28 Apr: HK$3,580")
+            .compareDocumentPosition(note) &
+            Node.DOCUMENT_POSITION_FOLLOWING,
+        ).toBeTruthy();
+        expect(canvas.getAllByText(CARD_LIST_COPY.referenceNote)).toHaveLength(
+          1,
+        );
+      },
+    );
     expect(
       canvas.getByRole("checkbox", {
         name: "Only encapsulate at PSA 9 or above · the fee applies either way",

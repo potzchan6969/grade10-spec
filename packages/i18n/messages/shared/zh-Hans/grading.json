@@ -41,7 +41,6 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "coverLine": "另加 {rate} 保额",
       "aboveTop": "有卡值超过 {ceiling}？请先到柜台或 WhatsApp 我们，好让我们预备合适级别。",
       "bulkLine": "二十张或以上走 Bulk 级别，交卡时间较长，同样在此预约。",
       "error": "暂时加载不到收费表，请稍后再试。"
@@ -50,8 +49,6 @@
       "title": "你的清单",
       "signedInAs": "已登录 · {email}",
       "empty": "这里暂时空空如也。开始一张清单，之后就会在此显示。",
-      "open": "{day} 建立 · 柜台付 {amount}",
-      "closed": "{grades} · 证书编号在页内",
       "cards": "{count} 张卡",
       "service": "{grader} · {level}"
     },
@@ -88,7 +85,6 @@
       "referenceUnavailable": "暂时连不上目录，所以这张卡保留你输入的名称。申报价值仍然要填。",
       "ungraded": "未评级"
     },
-    "add": "新增一张卡",
     "paste": "贴上清单",
     "capNotice": "同一张清单只走一间评级公司、一个级别。Value 至 Super Express 最多 {standard, plural, other {# 张}}；Bulk 最多 {bulk} 张。需要其他级别的卡另立一张清单，两张清单可同一次交卡。",
     "capNoticeUncapped": "同一张清单只走一间评级公司、一个级别。需要其他级别的卡另立一张清单，两张清单可同一次交卡。",
@@ -123,7 +119,6 @@
     },
     "service": {
       "title": "选评级公司与级别",
-      "lead": "级别看的是最贵那一张卡值多少，以及多快回来。",
       "highestDeclaredLabel": "你申报的最高价值",
       "grader": "评级公司",
       "level": {
@@ -150,6 +145,7 @@
       "title": "核对后预约交卡",
       "header": "{count, plural, other {# 张卡}} · {grader} {level}",
       "backIn": "由卡牌寄出当日起计，约 {weeks, plural, other {# 星期}}回来",
+      "summary": "{header}，{backIn}",
       "edit": "修改",
       "schedule": "你列出的卡牌",
       "totals": {
@@ -193,6 +189,9 @@
       "saveForLater": "保存，稍后再约",
       "saveChanges": "保存更改",
       "expired": "这张清单已经过期。价格与参考成交会变，请由收费表重新开始。",
+      "noEmail": "保留清单需要电邮地址。请在“你的资料”填上电邮，我们会把清单链接寄到那里。",
+      "noCards": "清单上还没有卡。请先加入卡牌，再预约或保存。",
+      "withoutValue": "每张卡都要有申报价值，才可保留清单。请修改清单，补上未填的价值。",
       "failed": "暂时未能保存，请稍后再试。",
       "minimumGrade": "最低评级"
     },
@@ -339,20 +338,6 @@
       "collected": "已领回",
       "vaulted": "已存入金库"
     },
-    "exception": {
-      "refused": "评级公司不会受理的卡：经过改动、裁切、翻印，或申报价值高于级别上限。卡会连同原因留在你手上，那张卡不会收费。清单与预算会扣减至继续送出的卡牌。",
-      "missedDropoff": "该次到店会结束；你的清单与预算完全不变。可在清单页再约一次交卡。",
-      "withdrawn": "交卡之后改变主意？批次截止之前，我们可以从收件袋取回那张卡。先联络我们，然后到柜台凭单据领回：费用会在收银处退回。",
-      "ungraded": "评级公司把卡连同说明退回，未有入壳。按评级公司的条款，费用照收；这一点在你预约之前已经说明。",
-      "minimumNotMet": "你指定了最低评分，而它评到的分数低于此数，所以退回时不入壳，以免收到你不想要的卡壳。费用照收。",
-      "movedUp": "卡牌回来时价值高于级别上限，评级公司按上一级收费。差额须于领回前在柜台付清 — 成绩公布当日就会告知，不会突然冒出。",
-      "gradeNotAccepted": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；可在柜台查询。",
-      "runningLate": "评级公司超出了预计时间。页面会显示它的阶段，我们也会在订出新日期当日电邮你。柜台这边不受影响。",
-      "held": "评级公司留下其中一张再看，其余先行寄回。其他卡现在就可以领回；单据会注明仍未回来的那张，第二次交收会结束整张清单。",
-      "notReturned": "卡牌未有寄回，或回来时有损毁，我们会按申报价值赔偿并退回该张的费用，{days} 日内办妥。我们会自行向评级公司或速递公司追讨，你不用等。",
-      "refunds": "退款会按原本付款方式在收银处退回：拒收的一行、取回的卡、未有寄回的卡。未获评级的卡不设退款，批次寄出后评级费用也不再退回。",
-      "notCollected": "卡牌等候期间会有提示，之后开始计保管费，再之后发出书面通知。通知之后，卡牌可能按《无人认领货品处置条例》（第 456 章）出售，所得款项扣除费用后为你保留。"
-    },
     "visit": {
       "missed": "该次到店已结束。你的清单与预算完全不变。",
       "bookAgain": "再约一次交卡"
@@ -370,6 +355,15 @@
       "conflict": "此页面读取的是旧版本。我们正在重新读取——请稍后再试一次。",
       "visitStarted": "到店已经开始，无法在此更改。",
       "listAtCounter": "柜台已开始核对你的卡，无法在此更改。请向柜台查询。",
+      "notOwner": "这张清单登记在另一个电邮之下，无法在此更改。请用我们寄到该电邮的链接打开。",
+      "alreadyCollected": "卡牌已经领回，无法再更改。",
+      "cardCap": "清单上的卡多于一张清单可收的数量，所以没有保存。请把其余的卡移出，另立一张清单，另约一日。",
+      "graderPinned": "交卡已按这间评级公司预约，评级公司不能更改。要交给另一间评级公司的卡，请另立一张清单。",
+      "levelNotOffered": "评级公司目前不提供这个级别，所以没有保存。请修改清单，改选其他级别。",
+      "consentRequired": "尚未预约。请先剔选已阅读个人资料收集声明，再预约交卡。",
+      "referenceUnavailable": "未能为这张清单开立申请，所以没有保存。清单仍留在此页；请 WhatsApp 我们，我们会跟进。",
+      "pricesUnconfirmed": "店铺尚未确认价格，所以没有保存。请向柜台查询或 WhatsApp 我们。",
+      "diaryUnavailable": "暂时连不上店铺的预约系统，所以没有任何更改。交卡预约和清单维持不变；请向柜台查询或 WhatsApp 我们。",
       "dropped": "我们没有及时收到回应，这项操作可能未完成。我们正在重新读取页面——请查看后再试一次。"
     },
     "withdraw": {
@@ -389,21 +383,16 @@
     "grades": {
       "headline": "成绩已出：{summary}",
       "settle": {
-        "title": "领回之前有一项要结清",
-        "body": "{card} 回来时价值约 {value}，高于 {level} 级别的 {ceiling}，所以 {grader} 把它升至 {nextLevel}。差额为 {amount}。",
-        "payAtCounter": "在柜台付款",
-        "nothingToDo": "领回时在收银处以信用卡、现金或转数快支付。现在不用做什么。",
-        "reference": "参考编号"
+        "title": "领回之前有一项要结清"
       },
       "ungraded": {
-        "title": "关于未获评级的卡",
-        "body": "{card} 会连同评级公司的说明退回，放在卡套内未入壳：{code}，{note}。无论是否入壳，评级公司都会收费，所以这张卡不设退款。",
-        "codesLink": "{grader} 的代码是什么意思"
+        "body": "{card} 会连同评级公司的说明退回，放在卡套内未入壳：{code}，{note}。无论是否入壳，评级公司都会收费，所以这张卡不设退款。"
       },
       "aboutGrades": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；领回时可在柜台查询。",
       "cards": {
         "graderLabel": "评级公司",
         "codeLabel": "评级公司代码",
+        "noReason": "评级公司没有说明原因。",
         "photoAlt": "{card}，返还时拍摄"
       }
     },
@@ -462,7 +451,6 @@
       "cover": "保额",
       "coverLine": "申报价值的 {rate} · {total}",
       "paid": "已付",
-      "paidAtCounter": "卡牌核对好后，在柜台付款",
       "paidWith": "{method} · {when} · POS {reference}",
       "method": {
         "card": "银行卡",
@@ -488,7 +476,6 @@
       "paidOutNote": "按申报价值 · {route}",
       "settled": "领回时已结清 · POS {reference}",
       "nothingDue": "没有欠款",
-      "includes": "已包括",
       "includesLine": "评级公司费用及来回投保运费",
       "footnote": "即使卡牌未获评级，费用一样要收。在我们柜台拒收的卡则不会收费。"
     },
@@ -509,7 +496,6 @@
       "lead": "这一页保留全部记录：成绩、证书编号、卡壳相片与所有单据。",
       "record": "评级记录",
       "lookUp": "查证",
-      "photographs": "卡壳相片，于交收时拍摄",
       "whatNext": {
         "title": "接下来",
         "vault": "存入金库 — 在门店免费寄存，估值后也可借贷。",
@@ -701,12 +687,6 @@
     },
     "sign": "签署",
     "decline": "拒绝签署",
-    "afterAgreement": "已签妥。请在收银处付费，同事会收下卡牌。",
-    "afterReceipt": "已签妥。卡牌是你的了；单据会放在清单页，也会寄到你的邮箱。",
-    "sealed": {
-      "download": "下载副本",
-      "emailed": "副本正在寄往你的邮箱，也会一直保留在清单页。"
-    },
     "declined": "没有签署任何文件，也没有付款。在场的同事可以协助你下一步怎样做。",
     "loading": "正在打开你的文件…",
     "noTokenTitle": "这条链接不完整",
@@ -717,6 +697,7 @@
     "emptyPacketMessage": "请告知身旁的员工 — 这批文件未准备妥当。",
     "disclosureTitle": "电子签署之前",
     "disclosureFallback": "你即将以电子方式阅览并签署文件。如你不想这样做，请告知身旁的员工。",
+    "agreeLabel": "同意并继续",
     "agreeingLabel": "正在记录你的同意…",
     "packetExpiry": "这些文件可于 {when} 前签署。",
     "declineConfirmTitle": "拒绝签署？",

@@ -161,6 +161,7 @@ const LEVEL_PICKER_COPY: GradingLevelPickerCopy = {
   title: "Pick a service",
   graderLabel: "Grader",
   highestDeclaredLabel: "Your highest declared value is",
+  levelOpen: "Value up to {ceiling} a card · {fee} a card",
   estimateTitle: "Your estimate",
   totalLabel: "Total",
   unavailable: "Not available",
@@ -222,6 +223,8 @@ const CARD_LIST_COPY: GradingCardListCopy = {
   noValue: "Tell us the declared value before you continue.",
   declaredValueLabel: "Declared value",
   referenceSalesLabel: "Recent sales:",
+  referenceNote:
+    "PSA asks for the value at the grade you expect. A reference, not a valuation.",
   minimumGrade:
     "Only encapsulate at {grade} or above · the fee applies either way",
   edit: "Edit",
@@ -313,6 +316,7 @@ const PASTE_SHEET_COPY: GradingPasteSheetCopy = {
   textLabel: "Your list",
   textPlaceholder: "Charizard Base Set 4/102",
   linesReadLabel: "Lines read:",
+  matching: "Matching…",
   matched: "Matched",
   keptAsTyped: "Kept as typed",
   withoutValue: "Without a value",

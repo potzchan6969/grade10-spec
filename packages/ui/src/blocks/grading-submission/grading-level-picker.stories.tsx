@@ -107,12 +107,29 @@ export const Grader: Story = {
 };
 
 /** An open level carrying cover, picked by id and marked as the one radio of
- * the group; before the pick it read its cover line and no estimate
- * (shared-ui-grading-submission-SC-06). */
+ * the group; before the pick it read its cover line and no estimate. Each
+ * open level reads its figures inside the open line it was given, the fee
+ * once (shared-ui-grading-submission-SC-06,
+ * shared-ui-grading-submission-SC-78). */
 export const LevelOpen: Story = {
   render: (args) => <Consumer {...args} />,
-  play: async ({ args, canvasElement }) => {
+  play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
+    await step(
+      "shared-ui-grading-submission-SC-78 - An open level reads its figures in the words it was given",
+      async () => {
+        const regular = within(
+          canvas
+            .getByRole("radio", { name: /Regular/ })
+            .closest('[data-slot="radio-card"]') as HTMLElement,
+        );
+        expect(
+          regular.getByText("Value up to HK$4,000 a card · HK$400 a card"),
+        ).toBeInTheDocument();
+        expect(regular.getAllByText(/HK\$400/)).toHaveLength(1);
+        expect(regular.getByText("Back in about 6 weeks")).toBeInTheDocument();
+      },
+    );
     const express = canvas.getByRole("radio", {
       name: /Express.*Cover adds HK\$30 a card/,
     });

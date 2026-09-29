@@ -10,7 +10,11 @@ import { SegmentedControl } from "@grade10/design-system/components/forms/segmen
 import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useId } from "react";
-import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
+import {
+  fillGradingCopy,
+  formatGradingMoney,
+  type GradingLocaleProps,
+} from "./grading-copy";
 import type { GradingGrader, GradingMoney } from "./types";
 
 /** One level the collector can leave the list on, or cannot. A closed level
@@ -53,6 +57,9 @@ type GradingLevelPickerCopy = {
   graderLabel: string;
   /** Leads the highest declared value the levels are read against. */
   highestDeclaredLabel: string;
+  /** Read by an open level: what it takes and what it costs a card. Fills
+   * `{ceiling}` and `{fee}`. */
+  levelOpen: string;
   estimateTitle: string;
   totalLabel: string;
   /** Read by a level that reports no pick. */
@@ -237,19 +244,23 @@ function LevelCard({
             <Text as="span" size="xs" tone="secondary">
               {copy.unavailable}
             </Text>
-          ) : (
-            <Text as="span" size="sm" weight="medium">
-              {formatGradingMoney(level.feePerCard, locale)}
-            </Text>
-          )}
+          ) : null}
         </span>
       }
       value={level.id}
     >
       {level.state === "open" ? (
         <>
-          <Text as="span" size="sm" tone="secondary">
-            {formatGradingMoney(level.ceiling, locale)}
+          <Text
+            as="span"
+            data-slot="grading-level-picker-open"
+            size="sm"
+            tone="secondary"
+          >
+            {fillGradingCopy(copy.levelOpen, {
+              ceiling: formatGradingMoney(level.ceiling, locale),
+              fee: formatGradingMoney(level.feePerCard, locale),
+            })}
           </Text>
           {level.coverLine ? (
             <Text

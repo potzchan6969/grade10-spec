@@ -66,6 +66,9 @@ type GradingCardListCopy = {
   noValue: string;
   declaredValueLabel: string;
   referenceSalesLabel: string;
+  /** Read under a matched card's reference sales: the sales are a reference,
+   * not a valuation. Arrives whole; the consumer names the grader in it. */
+  referenceNote: string;
   /** The minimum-grade option and what it costs. Fills `{grade}`. */
   minimumGrade: string;
   edit: string;
@@ -98,8 +101,8 @@ const NO_MATCHES: readonly GradingCardMatch[] = [];
 
 /**
  * The list a collector edits before hand-in, one card a row: matched in the
- * reference or kept as typed, its declared value, its reference sales and its
- * minimum grade.
+ * reference or kept as typed, its declared value, its reference sales with the
+ * note that they are a reference, and its minimum grade.
  *
  * The card search is an `Autocomplete` with `mode="none"` — the matches are
  * the consumer's, filtered wherever the consumer filters, and the popup is the
@@ -355,6 +358,13 @@ function ListedCard({
                   {`${sale.label}: ${formatGradingMoney(sale.price, locale)}`}
                 </Text>
               ))}
+              <Text
+                data-slot="grading-card-list-reference-note"
+                size="xs"
+                tone="secondary"
+              >
+                {copy.referenceNote}
+              </Text>
             </VStack>
           ) : null}
           {card.minimumGrade ? (

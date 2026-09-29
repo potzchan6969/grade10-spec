@@ -57,16 +57,27 @@ export const NothingRead: Story = {
   },
 };
 
-/** While the paste is being matched the add reports nothing either
- * (shared-ui-grading-submission-SC-20). */
+/** While the paste is being matched the counter reads the matching word
+ * rather than a count, and the add reports nothing either
+ * (shared-ui-grading-submission-SC-20, shared-ui-grading-submission-SC-77). */
 export const Matching: Story = {
   args: { result: { status: "loading" } },
-  play: async ({ args }) => {
+  play: async ({ args, step }) => {
     const sheet = within(document.body);
     expect(
       sheet.getByRole("button", { name: "Add these cards to the list" }),
     ).toBeDisabled();
     expect(args.onApply).not.toHaveBeenCalled();
+    await step(
+      "shared-ui-grading-submission-SC-77 - The counter reads matching while the paste is matched",
+      async () => {
+        const counter = document.querySelector<HTMLElement>(
+          '[data-slot="grading-paste-sheet-lines"]',
+        );
+        expect(counter).toHaveTextContent(PASTE_SHEET_COPY.matching);
+        expect(sheet.queryByText("Lines read: 20")).toBeNull();
+      },
+    );
   },
 };
 

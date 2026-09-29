@@ -41,7 +41,6 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "coverLine": "+ {rate} cover",
       "aboveTop": "A card worth more than {ceiling}? Ask at the counter or WhatsApp us first, so the right level is ready.",
       "bulkLine": "Twenty cards or more take the Bulk level and a longer drop-off, booked the same way.",
       "error": "We could not load the prices. Try again in a moment."
@@ -50,8 +49,6 @@
       "title": "Your submissions",
       "signedInAs": "Signed in · {email}",
       "empty": "Nothing here yet. Start a submission and it shows up here.",
-      "open": "Planned {day} · {amount} at the counter",
-      "closed": "{grades} · certs on the page",
       "cards": "{count, plural, one {# card} other {# cards}}",
       "service": "{grader} · {level}"
     },
@@ -88,7 +85,6 @@
       "referenceUnavailable": "We could not reach the catalogue, so this card keeps the name you typed. The value is still needed.",
       "ungraded": "Ungraded"
     },
-    "add": "Add a card",
     "paste": "Paste a list",
     "capNotice": "All the cards go to one grader at one level. Up to {standard, plural, one {# card} other {# cards}} from Value to Super Express; up to {bulk} at Bulk. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
     "capNoticeUncapped": "All the cards go to one grader at one level. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
@@ -123,7 +119,6 @@
     },
     "service": {
       "title": "Pick the grader and the level",
-      "lead": "The level is the most any one card is worth, and how fast it comes back.",
       "highestDeclaredLabel": "Your highest declared value",
       "grader": "Grader",
       "level": {
@@ -150,6 +145,7 @@
       "title": "Check it, then book the drop-off",
       "header": "{count, plural, one {# card} other {# cards}} to {grader} · {level}",
       "backIn": "Back in about {weeks, plural, one {# week} other {# weeks}} from the day your cards leave",
+      "summary": "{header} · {backIn}",
       "edit": "Edit",
       "schedule": "The cards, as you listed them",
       "totals": {
@@ -193,6 +189,9 @@
       "saveForLater": "Save and book later",
       "saveChanges": "Save changes",
       "expired": "This list has expired. Prices and references move, so start again from the price sheet.",
+      "noEmail": "We need an email to keep the list. Add yours under About you, and we send the list’s link there.",
+      "noCards": "There are no cards on the list yet. Add a card, then book or save.",
+      "withoutValue": "Every card needs a declared value before the list is kept. Edit the list to add the missing ones.",
       "failed": "We could not save this just now. Try again in a moment.",
       "minimumGrade": "Minimum grade"
     },
@@ -339,20 +338,6 @@
       "collected": "Collected",
       "vaulted": "Vaulted"
     },
-    "exception": {
-      "refused": "A card the grader would not take: altered, trimmed, a reprint, or declared above the level. It stays in your hands with the reason, and its fee is never charged. The list and the estimate drop to the cards that go on.",
-      "missedDropoff": "The visit closes; your list and estimate stay exactly as they were. Book another drop-off from the submission page.",
-      "withdrawn": "Changed your mind after hand-in? Until the batch closes we pull the card from the intake bag. Message us, then collect it at the counter against a receipt: its fee comes back at the till.",
-      "ungraded": "The grader sent the card back raw with its note. The fee still applies, as the grader’s terms say; you were told this before you booked.",
-      "minimumNotMet": "You asked for a minimum grade and it graded below it, so it comes back raw rather than in a slab you did not want. The fee still applies.",
-      "movedUp": "The card came back worth more than the level allows, so the grader charged the next level. The difference is due at the counter before collection — told the day the grades post, never a surprise.",
-      "gradeNotAccepted": "The grade is the grader’s decision, not ours. A review is a new submission at the grader’s review fee; ask at the counter.",
-      "runningLate": "The grader is past the estimate. The page says so with the grader’s stage, and we email the new date the day we set it. Nothing changes at the counter.",
-      "held": "The grader kept one card for a further look and shipped the rest. The others are ready to collect now; the receipt names the card still out, and a second hand-back closes the submission.",
-      "notReturned": "A card that does not come back, or comes back damaged, is settled at its declared value with its fee refunded, within {days} days. We claim from the grader or the courier ourselves; you do not wait for that.",
-      "refunds": "A refund goes back the way it was paid, at the till: a refused line, a withdrawn card, a card not returned. Nothing is refunded on an ungraded card, and the grader’s fee never comes back once the batch has left.",
-      "notCollected": "Reminders while the cards wait, then a storage fee, then written notice. After the notice the cards may be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456), the proceeds less fees held for you."
-    },
     "visit": {
       "missed": "The visit closed. Your list and estimate stay exactly as they were.",
       "bookAgain": "Book another drop-off"
@@ -370,6 +355,15 @@
       "conflict": "This page was reading an older version. We're reading it again — try that once more.",
       "visitStarted": "The drop-off has already started, so this can no longer be changed here.",
       "listAtCounter": "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter.",
+      "notOwner": "This submission is kept under another email, so it cannot be changed from here. Open it from the link we emailed to that address.",
+      "alreadyCollected": "The cards have already been collected, so this can no longer be changed.",
+      "cardCap": "The list has more cards than one submission takes, so nothing was saved. Take the rest off and bring them in a second submission, another day.",
+      "graderPinned": "The drop-off is booked for this grader, so the grader stays. A card for another grader goes in a second submission.",
+      "levelNotOffered": "The grader does not offer this level at the moment, so nothing was saved. Edit the list to pick another level.",
+      "consentRequired": "Nothing was booked. Tick that you have read the personal information collection statement, then book the drop-off.",
+      "referenceUnavailable": "We could not open a submission for this list, so nothing was kept. The list stays on this page; WhatsApp us and we look into it.",
+      "pricesUnconfirmed": "The shop has not confirmed its prices yet, so nothing was saved. Ask at the counter or WhatsApp us.",
+      "diaryUnavailable": "We could not reach the shop’s diary, so nothing was changed. The drop-off and the list stand as they were; ask at the counter or WhatsApp us.",
       "dropped": "We did not hear back in time, so this may not have gone through. We're reading the page again; check it, then try once more."
     },
     "withdraw": {
@@ -389,21 +383,16 @@
     "grades": {
       "headline": "Grades are in: {summary}",
       "settle": {
-        "title": "One thing to settle before you collect",
-        "body": "{card} came back worth about {value}, above the {level} level’s {ceiling}, so {grader} moved it to {nextLevel}. The difference is {amount}.",
-        "payAtCounter": "Pay at the counter",
-        "nothingToDo": "Card, cash or FPS at the till, when you collect. Nothing to do now.",
-        "reference": "Reference"
+        "title": "One thing to settle before you collect"
       },
       "ungraded": {
-        "title": "About the ungraded card",
-        "body": "{card} comes back raw, in a sleeve with the grader’s note: {code}, {note}. The grader charges its fee whether or not it encapsulates, so nothing is refunded for it.",
-        "codesLink": "What the {grader} codes mean"
+        "body": "{card} comes back raw, in a sleeve with the grader’s note: {code}, {note}. The grader charges its fee whether or not it encapsulates, so nothing is refunded for it."
       },
       "aboutGrades": "A grade is the grader’s decision, not ours. If you want a second look, a review is a new submission at the grader’s review fee; ask at the counter when you collect.",
       "cards": {
         "graderLabel": "Grader",
         "codeLabel": "Grader's code",
+        "noReason": "The grader gave no reason.",
         "photoAlt": "{card}, photographed at hand-back"
       }
     },
@@ -462,7 +451,6 @@
       "cover": "Cover",
       "coverLine": "{rate} of the declared value · {total}",
       "paid": "Paid",
-      "paidAtCounter": "At the counter, once the cards are checked",
       "paidWith": "{method} · {when} · POS {reference}",
       "method": {
         "card": "Card",
@@ -488,7 +476,6 @@
       "paidOutNote": "at declared value · {route}",
       "settled": "Settled at collection · POS {reference}",
       "nothingDue": "Nothing due",
-      "includes": "Includes",
       "includesLine": "the grader’s fee and insured shipping both ways",
       "footnote": "A fee is charged even when a card comes back ungraded. A card refused at our counter is never charged."
     },
@@ -509,7 +496,6 @@
       "lead": "This page keeps the record: grades, certs, slab photographs and every receipt.",
       "record": "The graded record",
       "lookUp": "Look up",
-      "photographs": "Slab photographs, taken at hand-back",
       "whatNext": {
         "title": "What next",
         "vault": "Vault it — free storage in the shop, or a loan against it after a valuation.",
@@ -701,12 +687,6 @@
     },
     "sign": "Sign",
     "decline": "Decline",
-    "afterAgreement": "Signed. Pay the fee at the till and staff take the cards in.",
-    "afterReceipt": "Signed. The cards are yours; the receipt is on your submission page and in your inbox.",
-    "sealed": {
-      "download": "Download your copy",
-      "emailed": "A copy is on its way to your inbox, and it stays on your submission page."
-    },
     "declined": "Nothing was signed and nothing was paid. The member of staff with you can help with what happens next.",
     "loading": "Opening your documents…",
     "noTokenTitle": "This link is incomplete",
@@ -717,6 +697,7 @@
     "emptyPacketMessage": "Please tell the member of staff with you — these documents were not prepared properly.",
     "disclosureTitle": "Before you sign electronically",
     "disclosureFallback": "You are about to review and sign documents electronically. Ask the member of staff with you if you would rather not.",
+    "agreeLabel": "Agree and continue",
     "agreeingLabel": "Recording your agreement…",
     "packetExpiry": "These documents can be signed until {when}.",
     "declineConfirmTitle": "Decline to sign?",

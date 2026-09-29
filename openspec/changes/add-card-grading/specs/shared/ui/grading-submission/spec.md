@@ -33,7 +33,8 @@ imports the set rather than drawing it again. The drop-off's own blocks are
     so they cannot disagree
 - Listing the cards
   - The editable list: a card matched or kept as typed, its declared value,
-    its reference sales and its minimum grade
+    its reference sales with the note that they are a reference, and its
+    minimum grade
   - The caps on the list: the cap named, a card with no value named, and a
     card above a ceiling named
   - The paste and what it made: matched, kept as typed, without a value, above
@@ -46,6 +47,7 @@ imports the set rather than drawing it again. The drop-off's own blocks are
   - Before it can be booked: the good-to-know lines and the consent tick
   - A review with no booking: the booking and the tick left out together, and
     the save act in the consumer's words
+  - A refusal by name: the refusal read, and the act it refused withdrawn
 - Where the submission stands
   - The status word and whose move it is: one pair, so the two can never
     disagree
@@ -233,9 +235,10 @@ The grader and the level for the whole list, and the estimate that follows.
 given, mark the selected one and report a pick by its id, then render that
 grader's levels.
 
-**Open** - an open level SHALL show its name, the declared value it takes up
-to, the fee a card, the cover line where the level carries one, and the weeks
-back, and SHALL report a pick by its id.
+**Open** - an open level SHALL show its name, the open line it is given
+filled with the declared value it takes up to and the fee a card, the cover
+line where the level carries one, and the weeks back, and SHALL report a pick
+by its id. The fee a card SHALL read once on the level, inside the open line.
 
 **Closed** - a closed level SHALL report no pick and SHALL name what closes
 it: the card declared above its ceiling, or the count of cards against the
@@ -285,6 +288,18 @@ render its levels, with the line it is given about them.
 - **THEN** the picker reports that level's id and marks it selected
 - **AND** before the pick the level showed its cover line and the picker showed
   no estimate
+
+#### Scenario: shared-ui-grading-submission-SC-78 - An open level reads its figures in the words it was given
+**Serves:** Reading what it costs - a collector reads what each level takes and what it costs a card before picking one
+
+- **GIVEN** `GradingLevelPicker` given an open level with a ceiling of 400000
+  HKD minor units, a fee of 40000 HKD minor units a card, and the open line
+  reading value up to the ceiling a card and the fee a card
+- **WHEN** it renders
+- **THEN** the level reads the open line with both figures filled in, in the
+  locale the picker was given
+- **AND** the fee a card reads once on the level
+- **AND** the weeks back read as given
 
 #### Scenario: shared-ui-grading-submission-SC-07 - A level closed by a declared value names the card
 **Serves:** Reading what it costs - a collector reads why the level they wanted is shut
@@ -352,7 +367,9 @@ The list a collector edits before hand-in, one card a row.
 **A card** - `GradingCardList` SHALL show each card's name, its set line
 where one is given, whether it was matched in the reference or kept as typed,
 its declared value where one is given, its reference sales where they are
-given, and its minimum grade where one is set. A card matched with no set and
+given with the reference note it is given under them, and its minimum grade
+where one is set. A card with no reference sales SHALL show no reference
+note. A card matched with no set and
 no number of its own SHALL read as matched, from its name alone.
 
 **Searching** - the list SHALL take the matches as loading, empty, error or
@@ -395,6 +412,17 @@ own.
   and the three sales
 - **AND** the minimum grade reads on the card, with the line that the fee
   applies either way
+
+#### Scenario: shared-ui-grading-submission-SC-76 - A matched card's sales read with the reference note
+**Serves:** Listing the cards - a collector reads that the sales beside a card are a reference, not a valuation
+
+- **GIVEN** a card matched in the reference with three reference sales, and a
+  reference note saying the grader asks for the value at the grade expected
+  and the sales are a reference, not a valuation
+- **WHEN** `GradingCardList` renders it
+- **THEN** the note reads under the three sales, as given
+- **AND** it reads once on the card
+- **AND** a card kept as typed, with no sales, reads no note
 
 #### Scenario: shared-ui-grading-submission-SC-65 - A matched card names no set or number of its own
 **Serves:** Listing the cards - a collector lists a card the reference matched by name alone
@@ -490,7 +518,8 @@ own.
 A pasted list, one card a line, and what the paste made of each.
 
 **Reading** - `GradingPasteSheet` SHALL show the count of lines read as the
-text changes, and report each change.
+text changes, and report each change. While the result reads as loading the
+counter SHALL read the matching word it is given in place of the count.
 
 **Not yet** - with nothing read, and while the result reads as loading, the
 sheet SHALL report no add.
@@ -521,6 +550,15 @@ the composing page feeds to `GradingCardList`'s `cards`.
 - **THEN** the lines-read count reads none
 - **AND** activating the add reports nothing
 - **AND** a sheet whose result reads as loading reports nothing either
+
+#### Scenario: shared-ui-grading-submission-SC-77 - The counter reads matching while the paste is matched
+**Serves:** Listing the cards - a dealer who has pasted a list and waits while it is matched
+
+- **GIVEN** `GradingPasteSheet` given 20 lines read, a result reading as
+  loading, and a matching word
+- **WHEN** it renders
+- **THEN** the counter reads the matching word rather than the count
+- **AND** activating the add reports nothing
 
 #### Scenario: shared-ui-grading-submission-SC-21 - Every pasted line is accounted for
 **Serves:** Listing the cards - a dealer pasting a list and reading what became of it
@@ -580,7 +618,10 @@ through its own callback.
 **While booking** - it SHALL offer neither booking nor saving for later while
 it reads as pending.
 
-**Refused** - it SHALL show the refusal it is given, and report no booking.
+**Refused** - it SHALL show the refusal it is given and withdraw the act it
+refused: the booking where it is given one, saving for later staying offered
+beside it, and the save where it is given no booking. It SHALL report no
+withdrawn act.
 
 **Acts** - editing the list, saving for later and booking SHALL each report
 through a callback of its own.
@@ -633,6 +674,17 @@ consumer passes.
 - **WHEN** `GradingReview` renders with a refusal saying the plan expired
 - **THEN** that refusal is shown
 - **AND** no booking is reported
+
+#### Scenario: shared-ui-grading-submission-SC-79 - A refusal withdraws the act it refused
+**Serves:** Reviewing before booking - a collector changing a kept list the counter has already started on
+
+- **GIVEN** a review given no booking, a save act whose words read Save
+  changes, and a refusal saying the counter has started checking the cards
+- **WHEN** `GradingReview` renders it
+- **THEN** the refusal is shown
+- **AND** Save changes is withdrawn, and activating it reports nothing
+- **AND** a review given a booking and a refusal withdraws the booking and
+  leaves saving for later offered
 
 #### Scenario: shared-ui-grading-submission-SC-74 - A review given no booking offers neither the booking nor the statement
 **Serves:** Reviewing before booking - a collector changing a kept list reads its totals and its warning without booking again

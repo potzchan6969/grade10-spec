@@ -75,7 +75,8 @@ type GradingReviewProps = GradingLocaleProps &
     warnings?: readonly GradingUpchargeWarning[];
     goodToKnow: readonly string[];
     pending?: boolean;
-    /** The refusal the shop gave, in its words. */
+    /** The refusal the shop gave, in its words. It withdraws the booking,
+     * or the save where the review is given no booking. */
     error?: string;
     onEdit: () => void;
     onSaveForLater: () => void;
@@ -90,8 +91,9 @@ type GradingReviewProps = GradingLocaleProps &
  * Nothing is booked before the collection statement is ticked, and neither
  * booking nor saving is offered while the review reads as pending: both
  * controls are disabled rather than removed, so the page does not move under
- * the collector while the shop answers. A refusal withdraws the booking it
- * answers and leaves saving offered.
+ * the collector while the shop answers. A refusal withdraws the act it
+ * answers: the booking where the review books, leaving saving for later
+ * offered beside it, and the save where the review only saves.
  *
  * Given no booking, the review offers neither the statement nor Book, and its
  * save act reads `copy.saveForLater`, whatever the caller names it.
@@ -114,6 +116,7 @@ function GradingReview({
   className,
 }: GradingReviewProps) {
   const bookOffered = consented === true && !pending && !error;
+  const saveOffered = !pending && !(error && !onBook);
 
   return (
     <VStack className={className} data-slot="grading-review" gap="md">
@@ -256,7 +259,7 @@ function GradingReview({
         ) : null}
         <Button
           data-slot="grading-review-save"
-          disabled={pending}
+          disabled={!saveOffered}
           onClick={onSaveForLater}
           variant="secondary"
         >

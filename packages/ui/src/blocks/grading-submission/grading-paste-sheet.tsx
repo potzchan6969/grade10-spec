@@ -52,6 +52,8 @@ type GradingPasteSheetCopy = {
   textPlaceholder: string;
   /** Leads the count of lines read. */
   linesReadLabel: string;
+  /** Read by the counter instead of the count while the paste is matched. */
+  matching: string;
   matched: string;
   keptAsTyped: string;
   withoutValue: string;
@@ -85,7 +87,8 @@ type GradingPasteSheetProps = {
  * kept as typed, without a value, above the ceiling, and skipped.
  *
  * Nothing is added until the result is in hand: with nothing read, and while
- * the result reads as loading, the add reports nothing. `onApply` carries the
+ * the result reads as loading, the add reports nothing and the counter reads
+ * the matching word rather than a count. `onApply` carries the
  * cards the paste made, which the composing page feeds to `GradingCardList`.
  */
 function GradingPasteSheet({
@@ -135,7 +138,9 @@ function GradingPasteSheet({
             size="sm"
             tone="secondary"
           >
-            {`${copy.linesReadLabel} ${linesRead}`}
+            {result?.status === "loading"
+              ? copy.matching
+              : `${copy.linesReadLabel} ${linesRead}`}
           </Text>
           {result?.status === "loading" ? (
             <Skeleton className="h-24 w-full" />
