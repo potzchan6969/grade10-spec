@@ -176,11 +176,14 @@ what refuses them.
   and null throws `LEGAL_IDENTITY_UNSET` naming the field, any other
   environment answers a marked `[fpsId]` placeholder
 - **`printedEntity` and `printedPayee` compose over it** — every name, the
-  FPS id and the bank account print through `printedValue`, so an unset field
-  prints its placeholder outside production and never a trading-name
-  fallback; the licence line is still composed from `licenceWording` and
-  `licenceNumber`. `assertLoanPrintable` calls both at the offer, so a
-  production loan never goes live without a named lender and a way to pay
+  licence line, the FPS id and the bank account print through `printedValue`,
+  so an unset field prints its placeholder outside production and never a
+  trading-name fallback. The lender's `licence` is `licenceWording` then
+  `licenceNumber`, and the letter footer prints `entity.licence` rather than
+  reading the two again. `assertLoanPrintable` calls both at the offer, so a
+  production loan never goes live without a named, licensed lender and a way
+  to pay. The complaints contact alone is read raw: a document prints it where
+  set, a letter refuses without it
 - **The act renders before it commits** — `renderVaultLetter(kind, facts)` is
   pure and calls `printedValue`, so an act that would print an unset value
   refuses by name before its transaction opens. `recordPayout`,
@@ -390,8 +393,9 @@ The spec governs what each message names; this is the shape.
   `letters/render.test.tsx` reads the same file through `external/grade10-spec`.
   The two shells cannot be shared, Tailwind against inline, so the preview is
   an unchecked copy of the layout and a checked copy of the facts
-- **The licence footer and the complaints contact read `printedValue`**, so a
-  staging letter prints `[licenceWording]` and a production act refuses
+- **The licence footer reads `printedEntity` and the complaints contact
+  `printedValue`**, so a staging letter prints `[licenceWording]` and a
+  production act refuses
 - Alternative rejected: copy in `@grade10/i18n` inside the four-field shell,
   which cannot hold a table — the decision's rejection
 
