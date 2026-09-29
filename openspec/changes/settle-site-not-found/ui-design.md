@@ -42,5 +42,5 @@ No pathname or other dynamic content on the surface.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Unknown address | Static title, description, Back to Home inside the shell | `grade10-site-site-navigation-US-01`, `zzz-site-site-navigation-US-01` |
-| Unlisted surface | No primary nav item marked current | page-shell current-surface rule |
+| Unknown address | Static title, description, Back to Home inside the shell | `grade10-site-site-navigation-SC-03`, `grade10-site-site-navigation-SC-26`, `zzz-site-site-navigation-SC-03`, `zzz-site-site-navigation-SC-24` |
+| Unlisted surface | No primary nav item marked current | **Out of suite:** already covered by the shell's current-surface rule, `grade10-site-site-page-shell-SC-14` |

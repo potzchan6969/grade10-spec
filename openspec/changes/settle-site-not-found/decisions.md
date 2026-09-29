@@ -30,4 +30,3 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| — | — | — |
