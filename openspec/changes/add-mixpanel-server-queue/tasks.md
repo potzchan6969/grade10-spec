@@ -1,4 +1,4 @@
-## 1. Outbox package (grade10)
+## 1. Outbox package (grade10) (owner: @ecchochan)
 
 - [ ] 1.1 Test the fold, the batch packing and the answer classification, and the outbox against pglite: frozen insert, no token, accepted, refused per record, an unnamed 400 split, retry on the ladder, 413 split, a refused fold split by `seq`, held profile passed by a later write, erasure `grade10-site-analytics-SC-48`, `grade10-site-analytics-SC-49`, `grade10-site-analytics-SC-50`, `grade10-site-analytics-SC-51`, `grade10-site-analytics-SC-52`, `grade10-site-analytics-SC-53`, `grade10-site-analytics-SC-54`, `grade10-site-analytics-SC-55`, `grade10-site-analytics-SC-56`, `grade10-site-analytics-SC-57`
 - [ ] 1.2 Add `@grade10/mixpanel/outbox` - table factory, writer, send pass, work list, erasure - and move `/api/track`'s tracker to `@grade10/mixpanel/ingest` `grade10-site-analytics-SC-48`, `grade10-site-analytics-SC-49`, `grade10-site-analytics-SC-50`, `grade10-site-analytics-SC-51`, `grade10-site-analytics-SC-52`, `grade10-site-analytics-SC-53`, `grade10-site-analytics-SC-54`, `grade10-site-analytics-SC-55`, `grade10-site-analytics-SC-56`, `grade10-site-analytics-SC-57`
