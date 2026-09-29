@@ -147,10 +147,7 @@ function useEmailAlertsToast(
   }, [active, copy, enabled]);
 }
 
-function useCollapseOnExit(
-  exiting: boolean,
-  exitMs: number,
-): {
+function useCollapseOnExit(exiting: boolean): {
   ref: RefObject<HTMLElement | null>;
   collapseHeight: number | null;
 } {
@@ -227,7 +224,7 @@ function AuctionRecordRow({
     ? `${copy.viewOrder}: ${title}`
     : undefined;
 
-  const { ref, collapseHeight } = useCollapseOnExit(exiting, exitMs);
+  const { ref, collapseHeight } = useCollapseOnExit(exiting);
 
   useEmailAlertsToast(alertsEnabled, emailAlertsCopy, showEmailAlerts);
 
