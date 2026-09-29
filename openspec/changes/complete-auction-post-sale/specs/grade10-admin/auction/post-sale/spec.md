@@ -11,7 +11,7 @@ delivery recorded, with every change on one timeline.
   - Segments with counts: Needs action, Waiting on winner, In transit, Closed and All, the counts adding up to All
   - Won lots only: a lot before a sale is read in the Listings table, never in the worklist
   - Waited: each row counts from when its status began, and no second mark sits beside the status
-  - Search: the start of a listing code, any invoice ID the order held, the winner's email, a payment's reference, or a proof's transaction reference
+  - Search: the start of a listing code, any invoice ID the order held, the winner's email, or a payment's reference
   - Row action: the status's primary action on the row, unless the order is flagged or the operator lacks its access
 - Order page
   - Own address: an order opens at its own link, which a reload or a colleague opens again
@@ -91,9 +91,8 @@ cancellation category.
 
 **Search** - The worklist SHALL find an order by the start of any of: its
 listing code, which is also its payment reference; any invoice ID it has held,
-a replaced one included; the winner's account email, in any case; the
-reference on a payment recorded against it; and the transaction reference the
-winner gave with a proof. A replaced invoice's ID SHALL find its order, which
+a replaced one included; the winner's account email, in any case; and the
+reference on a payment recorded against it. A replaced invoice's ID SHALL find its order, which
 shows its current invoice.
 
 **Own address** - The segment, the filters and the search SHALL be kept in the

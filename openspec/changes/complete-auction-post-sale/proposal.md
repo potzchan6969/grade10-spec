@@ -12,9 +12,8 @@ Preparing Invoice is out of reach.
 Around that block, the operator has two tabs that disagree: a listing queue
 built for a card-capture flow that no longer runs, where Cancel and Reissue
 both request a wire, and an order list with no search, no counts, no address of
-its own, and money typed in minor units. A winner waiting on the invoice reads
-one line, and QA cannot walk the flow by hand without bidding and waiting for a
-real close.
+its own, and money typed in minor units. QA cannot walk the flow by hand
+without bidding and waiting for a real close.
 
 **Metric:** the share of won lots whose invoice is sent within 48 hours of the
 winner confirming setup, in production. It is 0 today, since no send succeeds.
@@ -27,10 +26,9 @@ winner confirming setup, in production. It is 0 today, since no send succeeds.
   the final amount, zero or more. The sent invoice never re-prices, and no send
   needs the payment provider
 - **Tax on the quote**, as `add-winner-order-tax-line` writes it
-- **The winner reads the rule at the choice.** `3.4% + HK$2.35 processing
-  fee`, `Free`, or `Set on your invoice`; bank transfer only where Grade10
-  holds bank details for the currency. Setup ends on a review, and the choices
-  lock when the winner confirms
+- **The winner's page keeps its design.** Only the admin console is
+  redesigned. Behind the page, bank transfer is offered only where Grade10
+  holds bank details for the currency, and setup stays locked once confirmed
 - **What was seen is sent.** A send or reissue carries the total the operator
   read, and is refused when Grade10 now prices it differently; the dialog shows
   the new total
@@ -48,8 +46,6 @@ winner confirming setup, in production. It is 0 today, since no send succeeds.
 - **Grants follow the code.** Payment processing is `auction:payment`, and
   Payment Settings moves to it, so finance keeps it. A control the operator
   lacks names the access it needs
-- **A Next step panel on the winner's order** in every status, which says
-  while the invoice is prepared that the 7 days start when it arrives
 - **Test winners outside production.** One action makes a test account on the
   operator's own address that won a closed sandbox lot through the real close,
   and emails it the ordinary sign-in link. The Test tab lists them
@@ -68,9 +64,9 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-- `grade10-site/auction/winner-order`: the fee rule at the method choice, bank
-  transfer only where Grade10 holds bank details, the review that locks setup,
-  and the Next step panel.
+- `grade10-site/auction/winner-order`: bank transfer only where Grade10 holds
+  bank details, a proof file judged by its content, and no card payment
+  started on an expired or checked invoice.
 - `grade10-admin/auction/post-sale`: the Orders worklist and order page, the
   fee from the schedule, what was seen is sent, proofs, dispatch and delivery
   on the order, money that lands, the grant table, how long an order waited in
@@ -84,11 +80,10 @@ See [Non-Goals](decisions.md#non-goals).
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | Winner Order leads with the Next step panel above the Order Summary; the method choice shows each fee rule; setup ends on a review that locks it |
+| `apps/frontend/grade10` | No change: the winner's page keeps its design and its procedures |
 | `apps/admin/grade10` | Orders replaces the Queue and Winner orders tabs, with a page per order at its own address and a dialog per action; Payment Settings gains the fee schedule; the Test tab gains test winners |
 | Auction service | Fee schedule; the fee stored as the operator set it; send and reissue priced again against the total read; order status read from the order's facts; money that lands recorded and flagged; proof files served to operators; order-level dispatch and delivery; the worklist query; the listing-level post-sale actions removed; test winners |
-| Store service | Passes the winner procedures through under their new names; the old names answer for one release |
-| `@grade10/i18n` | New keys in the shared `auctionOrders` catalog for the Next step panel, the fee rules and the review, in every locale |
+| Store service | Passes the winner procedures through unchanged, with the session's user |
 | `apps/emails` | The Proof not accepted letter's template |
 | `@grade10/ui`, `@grade10/design-system` | No export or token change |
 
@@ -102,8 +97,7 @@ See [Non-Goals](decisions.md#non-goals).
 - **After `define-public-auction-identifiers`**, declared. Its invoice IDs are
   what the worklist search matches, a replaced one included
 - **Beside `add-winner-how-to-pay-rails`.** Its bank transfer requirement is
-  left as it is, and the Pay controls sit under Order Total where it places
-  them
+  left as it is
 - **Beside `add-my-auction-orders`.** Pay with Card starts a fresh session each
   time, as that change writes it
 - **Beside the other post-sale changes.** Partial payments, cancellation

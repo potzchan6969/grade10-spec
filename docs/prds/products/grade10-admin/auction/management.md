@@ -204,8 +204,8 @@ on winner, In transit, Closed and All, opening on Needs action.
   the status at the 48-hour address deadline and nothing else is marked:
   Preparing Invoice carries no mark, and no wait changes a status
 - 🚧 **Search and filters** - by the start of a listing code, any invoice ID
-  the order held, the winner's email, a payment's reference or a proof's
-  transaction reference; one status of the segment's, then a cancellation
+  the order held, the winner's email or a payment's reference; one status of
+  the segment's, then a cancellation
   category; all kept in the address
 
 ## Payment
@@ -241,8 +241,8 @@ on winner, In transit, Closed and All, opening on Needs action.
   each logged with its count, and the buyer's reissue history across all their
   orders shown before another is granted. The replaced invoice reads
   Replaced, and its ID still finds the order
-- 🚧 **Checking proof** — the operator opens the winner's files and
-  transaction reference on the order page, then confirms, with their own files
+- 🚧 **Checking proof** — the operator opens the winner's files on the
+  order page, then confirms, with their own files
   if they wish, or returns the invoice to pending with a reason the winner
   reads and one kept internal; the deadline resumes with the time that was
   left, and returning is not offered once the invoice has expired

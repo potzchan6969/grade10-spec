@@ -12,12 +12,6 @@
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
-### winner-order-US-16: Winner emails Grade10 from a locked order
-
-**As a** winner whose payment access has closed,
-**I want** a ready email with this order's details that I can copy into any mail app,
-**so that** I can reach Grade10 without a system mail client, and support can find the order.
-
 ## ADDED User journeys
 
 ## MODIFIED User journeys
