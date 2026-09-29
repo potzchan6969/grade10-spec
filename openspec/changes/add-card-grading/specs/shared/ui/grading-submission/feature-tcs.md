@@ -2739,6 +2739,135 @@ Runs once per row of **Test data**.
 * Step 2: the includes line and the footnote read inside the estimate card, under the total, as the test data gives them.
 * Step 3: neither line reads outside the estimate card.
 
+### shared-ui-grading-submission-US1-TC84-1: A matched card's sales read with the reference note
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The Matched story gives `GradingCardList` Charizard, matched in the reference with three reference sales, and a reference note.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Reference note | PSA asks for the value at the grade you expect. A reference, not a valuation. |
+
+**Steps:**
+
+1. Open Grading Submission / GradingCardList / Matched at <grade10 ui workbench url>.
+2. Read Charizard's reference sales and the line under them.
+3. Open Grading Submission / GradingCardList / Kept As Typed and read the card.
+
+**Expected Results:**
+
+* Step 2: the reference note reads under the three sales, as the test data gives it, once on the card.
+* Step 3: the card kept as typed shows no sales and no reference note.
+
+### shared-ui-grading-submission-US1-TC85-1: The counter reads matching while the paste is matched
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The Matching story gives `GradingPasteSheet` 20 lines read and a result still loading.
+
+**Steps:**
+
+1. Open Grading Submission / GradingPasteSheet / Matching at <grade10 ui workbench url>.
+2. Read the counter under the list.
+3. Clear the Actions panel.
+4. Click the add button at the foot of the sheet.
+
+**Expected Results:**
+
+* Step 2: the counter reads Matching…, not Lines read: 20.
+* Step 4: the add button is disabled, and nothing logs under `onApply`.
+
+### shared-ui-grading-submission-US1-TC86-1: An open level reads its figures in the words it was given
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* The Level Open story gives `GradingLevelPicker` three open levels and the open line `Value up to {ceiling} a card · {fee} a card`.
+
+**Steps:**
+
+1. Open Grading Submission / GradingLevelPicker / Level Open at <grade10 ui workbench url>.
+2. Read Regular's level card top to bottom.
+
+**Expected Results:**
+
+* Step 2: Regular reads Value up to HK$4,000 a card · HK$400 a card, then Back in about 6 weeks.
+* Step 2: HK$400 reads once on the card.
+
+### shared-ui-grading-submission-US1-TC87-1: A refusal withdraws the act it refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reviewing before booking
+
+**Pre-conditions:**
+
+* The Kept Plan Editor Refused story gives `GradingReview` no booking, a save act reading Save changes, and a refusal saying the counter has started checking the cards.
+
+**Steps:**
+
+1. Open Grading Submission / GradingReview / Kept Plan Editor Refused at <grade10 ui workbench url>.
+2. Clear the Actions panel.
+3. Click Save changes.
+4. Open Grading Submission / GradingReview / Plan Expired Meanwhile.
+5. Read the two buttons at the foot of the review.
+
+**Expected Results:**
+
+* Step 1: the refusal reads as given.
+* Step 3: Save changes is disabled, and nothing logs under `onSaveForLater`.
+* Step 5: Book the drop-off is disabled; Save and book later is enabled.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
@@ -2784,6 +2913,10 @@ Runs once per row of **Test data**.
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
 | `shared-ui-grading-submission-SC-74` | Case added, added after the run | `shared-ui-grading-submission-US1-TC73-1`: decided outside the blind pass; the editor keeps the review for its totals and warning, so the booking and the tick are left out together and the save reads the consumer's words |
 | `shared-ui-grading-submission-SC-75` | Case added, added after the run | `shared-ui-grading-submission-US1-TC83-1`: decided outside the blind pass; the estimate carries the includes line and the paid-at-the-counter footnote inside its card, the way the money block carries them |
+| `shared-ui-grading-submission-SC-76` | Case added, added after the run | `shared-ui-grading-submission-US1-TC84-1`: decided outside the blind pass; the reference note the design names under a matched card's sales reads through a word of the list's own |
+| `shared-ui-grading-submission-SC-77` | Case added, added after the run | `shared-ui-grading-submission-US1-TC85-1`: decided outside the blind pass; the counter reads the matching word while the paste is matched. `shared-ui-grading-submission-US1-TC18-1` keeps the disabled add |
+| `shared-ui-grading-submission-SC-78` | Case added, added after the run | `shared-ui-grading-submission-US1-TC86-1`: decided outside the blind pass; an open level reads its ceiling and its fee inside the open line it is given, the fee once |
+| `shared-ui-grading-submission-SC-79` | Case added, added after the run | `shared-ui-grading-submission-US1-TC87-1`: decided outside the blind pass; a refusal withdraws the act it refused, Save changes on the editor's review, and leaves saving for later offered beside a withdrawn booking |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
 
 ### Manual
