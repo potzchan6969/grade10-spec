@@ -28,8 +28,11 @@ export const TermsOfService: Story = {
         name: TERMS_DOCUMENT.title,
       }),
     ).toBeVisible();
-    expect(canvas.getByText(TERMS_DOCUMENT.lastUpdatedLabel)).toBeVisible();
-    expect(canvas.getByText(TERMS_DOCUMENT.lastUpdatedDate)).toBeVisible();
+    expect(
+      canvas.getByText(
+        `${TERMS_DOCUMENT.lastUpdatedLabel} ${TERMS_DOCUMENT.lastUpdatedDate}`,
+      ),
+    ).toBeVisible();
     expect(
       canvas.getByRole("heading", {
         level: 3,
@@ -52,8 +55,11 @@ export const PrivacyPolicy: Story = {
         name: PRIVACY_DOCUMENT.title,
       }),
     ).toBeVisible();
-    expect(canvas.getByText(PRIVACY_DOCUMENT.lastUpdatedLabel)).toBeVisible();
-    expect(canvas.getByText(PRIVACY_DOCUMENT.lastUpdatedDate)).toBeVisible();
+    expect(
+      canvas.getByText(
+        `${PRIVACY_DOCUMENT.lastUpdatedLabel} ${PRIVACY_DOCUMENT.lastUpdatedDate}`,
+      ),
+    ).toBeVisible();
     expect(
       canvas.getByRole("heading", {
         level: 3,

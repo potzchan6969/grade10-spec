@@ -17,6 +17,8 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment |
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999** |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
+| Empty bid count | **No bids yet** while the lot is open; **No bids** when it is closed |
+| Lot title under the breadcrumb | Smaller title size on a small viewport; larger from tablet |
 
 ## Gallery
 
@@ -123,9 +125,11 @@ cancelled; when holds are on it also says the hold matches the maximum.
 ::story{id="auction-listing-listingdetails--default" title="The details section"}
 
 :::detail{title="Code map" for="engineer"}
-- **Blocks** — `ListingGallery`, `ListingAuctionBidCard`, `ListingDetails`,
-  `ListingUserBidHistory`, `ListingBidHistoryList`, `EnrollmentSetupSheet`,
-  `PaymentMethodRow` and `PaymentMethodEmptyState`, in `packages/ui`
+- **Blocks** — `ListingLotHeader`, `ListingGallery`, `ListingAuctionBidCard`,
+  `ListingDetails`, `ListingUserBidHistory`, `ListingBidHistoryList`,
+  `EnrollmentSetupSheet`, `PaymentMethodRow` and `PaymentMethodEmptyState`, in
+  `packages/ui`
+- **Empty bid copy** — `copy.noBidsYet` while open; `copy.noBids` when closed
 - **Signal** — `bidEnrollment`: `signed-out`, `needs-card` or `ready`
 :::
 

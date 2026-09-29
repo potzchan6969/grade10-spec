@@ -180,6 +180,8 @@ authorization rather than adding a second.
 | **Leading** | Their maximum, the current bid and Leading |
 | **Outbid** | Outbid, and the next valid bid |
 | **Lost** | Did not win, with no hold-release copy; that reads on My Auctions |
+| **Open, no bids** | **No bids yet** under the starting bid |
+| **Closed, no bids** | **Ended** as the result, and **No bids** under it — never **No bids yet** |
 
 - 🚧 **Time left (extended)** — while the lot is in extended bidding the label
   says so, and its tooltip names the extension duration only
@@ -258,9 +260,12 @@ the letters that follow those lots.
 
 ### My Auctions
 
-🚧 One table holds every bookmarked lot once — bid rows before watch-only,
+🚧 One list holds every bookmarked lot once — bid lots before watch-only,
 soonest close first in each band, closed lots after open ones — with the row
 count in the title. The former Bidding and Watching sections do not appear.
+On a small viewport each lot is a stacked card; the whole card opens the lot
+or Winner Order, and Unwatch and Email alerts stay on the card. From tablet
+the same facts sit in the five-column table.
 
 | Column | What it shows |
 | --- | --- |

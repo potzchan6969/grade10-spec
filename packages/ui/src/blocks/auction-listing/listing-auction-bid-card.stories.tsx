@@ -60,7 +60,7 @@ const COPY = {
     "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
     "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
-  customAmountPlaceholder: "Custom amount (min. {amount})",
+  customAmountPlaceholder: "{amount} min.",
   stepperMessage: "Min.: {amount}",
   invalidAmount: "Enter a valid amount.",
   useMinimum: "Use minimum",
@@ -75,6 +75,7 @@ const COPY = {
     "At least {amount} (your maximum + {increment})",
   maximumBelowMinimum: "Enter at least {amount}",
   buyerFeeHint: "20% buyer fee is added on top of the winning bid",
+  noBids: "No bids",
   noBidsYet: "No bids yet",
   endsLabel: "Ends",
   opensLabel: "Opens",
@@ -202,7 +203,7 @@ export const Default: Story = {
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
     expect(
-      canvas.getByPlaceholderText(/Custom amount \(min\./),
+      canvas.getByPlaceholderText("60,500 min."),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Set maximum to/ }),
@@ -246,7 +247,7 @@ export const NeedsCard: Story = {
       expect(preset).toBeDisabled();
     }
     expect(
-      canvas.getByRole("spinbutton", { name: /Custom amount \(min\./ }),
+      canvas.getByRole("spinbutton", { name: "60,500 min." }),
     ).toBeDisabled();
 
     await userEvent.click(
@@ -314,7 +315,7 @@ export const Leading: Story = {
     expect(canvas.getByText("HK$105,000")).toBeInTheDocument();
     expect(canvas.queryByText("HK$95,001")).not.toBeInTheDocument();
     expect(
-      canvas.getByPlaceholderText(/Custom amount \(min\. 95,001\)/),
+      canvas.getByPlaceholderText("95,001 min."),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
@@ -421,7 +422,7 @@ export const CustomMaximumCeiling: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("spinbutton", {
-      name: /Custom amount \(min\./,
+      name: "60,500 min.",
     });
     await userEvent.clear(field);
     await userEvent.type(field, "500");
