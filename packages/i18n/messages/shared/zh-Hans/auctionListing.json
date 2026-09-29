@@ -98,6 +98,7 @@
   "raiseMaximumWithAmount": "将最高出价提高至 {amount}",
   "raisePrivateMaximum": "提高你的私密最高出价",
   "recentBids": "近期出价",
+  "samePricePriorityTip": "同价时，较早出价者获优先。",
   "recentSales": "近期成交",
   "recentSalesEmpty": "此拍品的近期成交数据尚未提供。",
   "registerCard": "请先绑定付款卡才能出价。",
