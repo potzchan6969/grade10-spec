@@ -14,38 +14,41 @@ import {
 } from "./listing-extension-policy";
 import type { ListingAuctionBidView, ListingBidHistoryRow } from "./types";
 
-const { common } = getMessages("grade10", "en");
+const { auctionListing, common } = getMessages("grade10", "en");
 
 const COPY = {
-  recentBids: "Recent Bids",
-  bidHistory: { you: "You", empty: "No bids yet" },
-  auctionWon: "Auction won",
-  completePurchase: "Confirm delivery address",
-  completePurchaseBody:
-    "Confirm where we ship this auction. Grade10 prepares the invoice next — nothing is due yet.",
-  completePurchaseAction: "Confirm address",
-  paid: "Paid",
-  paidBody: "Track shipping and delivery for this auction.",
-  viewOrderDetails: "View order details",
-  didNotWin: "Did not win",
-  outbid: "Outbid",
-  highestBid: "Leading",
-  yourMaximum: "Your maximum",
-  setMaximumLabel: "Set Maximum",
-  setMaximumCurrentLabel: "Set Maximum (current: {amount})",
-  opensIn: "Opens in",
-  closed: "Closed",
-  timeLeft: "Time left",
-  timeLeftAutoExtended: "Time left (extended)",
+  recentBids: auctionListing.recentBids,
+  bidHistory: {
+    you: auctionListing.bidHistoryYou,
+    empty: auctionListing.noBidsYet,
+  },
+  auctionWon: auctionListing.auctionWon,
+  completePurchase: auctionListing.completePurchase,
+  completePurchaseBody: auctionListing.completePurchaseBody,
+  completePurchaseAction: auctionListing.completePurchaseAction,
+  paid: auctionListing.paid,
+  paidBody: auctionListing.paidBody,
+  viewOrderDetails: auctionListing.viewOrderDetails,
+  didNotWin: auctionListing.youDidntWin,
+  outbid: auctionListing.outbid,
+  highestBid: auctionListing.highestBidder,
+  yourMaximum: auctionListing.automaticMaximum,
+  setMaximumLabel: auctionListing.setMaximumLabel,
+  setMaximumCurrentLabel: auctionListing.setMaximumCurrentLabel,
+  opensIn: auctionListing.opensIn,
+  closed: auctionListing.closed,
+  timeLeft: auctionListing.timeLeft,
+  timeLeftAutoExtended: auctionListing.timeLeftExtended,
   autoExtendedTooltip: formatAutoExtendedTooltip(
     DEFAULT_LISTING_EXTENSION_POLICY,
   ),
-  placeBidSection: "Place bid",
-  placeBid: "Place Bid",
-  signInToBid: "Sign In to Bid",
-  linkACardToBid: "Link a card to bid",
+  placeBidSection: auctionListing.placeBidTitle,
+  placeBid: auctionListing.placeBid,
+  signInToBid: auctionListing.signInToBid,
+  linkACardToBid: auctionListing.linkACardToBid,
   confirmMaximum: common.confirm,
-  raiseMaximum: "Raise",
+  raiseMaximum: auctionListing.automaticMaximumRaise,
+  // Not catalogued: no confirmed production wiring found for these five.
   confirmMaximumTooltip:
     "The most we’ll bid for you. You may pay less if the auction ends below it.",
   confirmMaximumAriaLabel: "Confirm Maximum",
@@ -53,38 +56,37 @@ const COPY = {
   enableAutoBidding: "Enable auto-bidding",
   autoBiddingTooltip:
     "We bid for you as needed, up to your maximum. You may pay less if the auction ends below it.",
-  setPrivateMaximum: "Set your private maximum",
-  raisePrivateMaximum: "Raise your private maximum",
-  currentMaximum: "Max: {amount}",
-  reviewMaximum: "Set maximum to {amount}",
-  raiseMaximumReview: "Raise maximum to {amount}",
-  bidNowReview: "Bid now at {amount}",
-  privateMaximumTooltip:
-    "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
-  maximumMechanismSubtext:
-    "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
+  setPrivateMaximum: auctionListing.setPrivateMaximum,
+  raisePrivateMaximum: auctionListing.raisePrivateMaximum,
+  currentMaximum: auctionListing.currentMaximum,
+  reviewMaximum: auctionListing.setMaximumWithAmount,
+  raiseMaximumReview: auctionListing.raiseMaximumWithAmount,
+  bidNowReview: auctionListing.bidNowWithAmount,
+  privateMaximumTooltip: auctionListing.privateMaximumTooltip,
+  maximumMechanismSubtext: auctionListing.maximumMechanismSubtext,
+  // Not catalogued: no confirmed production wiring found for these six.
   customAmountPlaceholder: "{amount} min.",
   stepperMessage: "Min.: {amount}",
-  invalidAmount: "Enter a valid amount.",
+  invalidAmount: auctionListing.invalidAmount,
   useMinimum: "Use minimum",
-  bidImmediate: "Maximum {amount}",
-  bidUpTo: "Maximum {amount}",
+  bidImmediate: auctionListing.maximumChip,
+  bidUpTo: auctionListing.maximumChip,
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
   amountAboveMaximum: "{amount} vs max",
-  minimumMaximumFloor: "At least {amount} (current bid + {increment})",
-  minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
-  minimumMaximumLeadingIncrement:
-    "At least {amount} (your maximum + {increment})",
+  minimumMaximumFloor: auctionListing.minimumMaximumFloor,
+  minimumMaximumLeadingNudge: auctionListing.minimumMaximumLeadingNudge,
+  minimumMaximumLeadingIncrement: auctionListing.minimumMaximumLeadingIncrement,
+  // Not catalogued: no confirmed production wiring found.
   maximumBelowMinimum: "Enter at least {amount}",
-  buyerFeeHint: "20% buyer fee is added on top of the winning bid",
-  noBids: "No bids",
-  noBidsYet: "No bids yet",
-  endsLabel: "Ends",
-  opensLabel: "Opens",
-  closedAt: "Closed {when}",
-  closedSummary: "Closed at {time}. Ran {duration}",
-  unsold: "Ended",
+  buyerFeeHint: auctionListing.buyerFeeHint,
+  noBids: auctionListing.noBids,
+  noBidsYet: auctionListing.noBidsYet,
+  endsLabel: auctionListing.endsLabel,
+  opensLabel: auctionListing.opensLabel,
+  closedAt: auctionListing.closedAt,
+  closedSummary: auctionListing.closedSummary,
+  unsold: auctionListing.unsold,
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } as const;
 
@@ -205,9 +207,7 @@ export const Default: Story = {
     expect(canvas.getByText("Current Bid")).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
-    expect(
-      canvas.getByPlaceholderText("60,500 min."),
-    ).toBeInTheDocument();
+    expect(canvas.getByPlaceholderText("60,500 min.")).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Set maximum to/ }),
     ).toBeInTheDocument();
@@ -317,9 +317,7 @@ export const Leading: Story = {
     expect(canvas.getByText("HK$100,000")).toBeInTheDocument();
     expect(canvas.getByText("HK$105,000")).toBeInTheDocument();
     expect(canvas.queryByText("HK$95,001")).not.toBeInTheDocument();
-    expect(
-      canvas.getByPlaceholderText("95,001 min."),
-    ).toBeInTheDocument();
+    expect(canvas.getByPlaceholderText("95,001 min.")).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
     ).toBeInTheDocument();
