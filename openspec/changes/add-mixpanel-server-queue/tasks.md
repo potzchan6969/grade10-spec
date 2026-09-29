@@ -24,7 +24,7 @@
 - [ ] 4.3 Test two overlapping passes on real Postgres never send an older fold first `grade10-site-analytics-SC-54`
 - [ ] 4.4 Verify: the store package tests, both store apps' db lanes, and the store's `test/pg` lane
 
-## 5. Auction adoption (grade10)
+## 5. Auction adoption (grade10) (owner: @ecchochan)
 
 - [ ] 5.1 Test Auction Won, Invoice Paid, Card Linked, Lot Watched, Bid Placed and Bidder Outbid recorded with their facts, none on rollback, and erasure `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [ ] 5.2 Add the outbox tables and migration `0006_mixpanel_outbox`; record every auction send in its fact's transaction and remove the direct sends; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
