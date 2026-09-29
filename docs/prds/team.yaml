@@ -29,7 +29,7 @@ handles:
     roles: [tech, dev]
   ecchochan: # @echo on Slack
     email: ecchochan@gmail.com
-    roles: [tech, dev]
+    roles: [pm, tech, dev]
   seankcw: # @sean on Slack
     email: seankcw@gmail.com
     roles: [tech, dev]
