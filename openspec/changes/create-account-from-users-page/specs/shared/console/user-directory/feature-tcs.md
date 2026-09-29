@@ -112,7 +112,7 @@ Signed in as admin(console supplies a create handler).
 * The dialog collects name, email, and roles.
 * The dialog offers no password field.
 
-### shared-console-user-directory-US6-TC4-1: Duplicate open-existing reports the existing account
+### shared-console-user-directory-US6-TC4-1: Taken email refuses on the form before review
 
 **Classification:**
 
@@ -128,7 +128,7 @@ Signed in as admin(console supplies a create handler).
 * **Trace:** shared-console-user-directory-US-06
 
 **Pre-conditions:**
-Signed in as admin(console supplies a create handler). Create will be refused because <taken email> already exists on <existing account>, and the consumer can supply that account's identifier.
+Signed in as admin(console supplies a create handler and an email lookup). An account already holds <taken email>.
 
 **Test data:**
 
@@ -140,16 +140,14 @@ Signed in as admin(console supplies a create handler). Create will be refused be
 
 1. Open the directory surface.
 2. Choose Create.
-3. Enter a name, <taken email>, and a role from the console vocabulary, and confirm.
-4. Confirm the review.
-5. Choose the open-existing action.
-6. Note what the create surface reports to the console.
+3. Enter a name, <taken email>, and a role from the console vocabulary, and confirm Create on the form.
+4. Choose the open-existing action that steers them to change roles.
+5. Note what the create surface reports to the console.
 
 **Expected Results:**
 
-* Step 3 opens a confirmation of the draft and does not create.
-* Step 4 is refused with a clear message and an open-existing action.
-* Step 6 reports <existing account>'s identifier through `onOpenExisting`; the components decide nothing about what shows next.
+* Step 3 stays on the create form, does not open the review, shows the duplicate refuse and open-existing, and does not call create.
+* Step 5 reports <existing account>'s identifier through `onOpenExisting`; the components decide nothing about what shows next.
 
 ### shared-console-user-directory-US6-TC5-1: Create warns when the email is malformed or off the console list
 
@@ -181,7 +179,7 @@ Signed in as admin(console supplies a create handler and a non-empty list of all
 1. Open the directory surface.
 2. Choose Create.
 3. Enter a name and <off-list email>, and confirm.
-4. Read the warning and go back.
+4. Read the warning and choose Back.
 5. Confirm Create again, then confirm the warning.
 6. Repeat from Create with <malformed email>, confirm Create, then confirm the warning.
 
@@ -223,7 +221,7 @@ Signed in as admin(console supplies a create handler, a locked-role list, and a 
 1. Open the directory surface.
 2. Choose Create.
 3. Enter a name, <fine email>, and <locked role>, and confirm.
-4. Read the warning and go back.
+4. Read the warning and choose Back.
 5. Confirm Create again, then confirm the warning.
 6. Repeat from Create with <off-list email> and <locked role>, and confirm.
 
@@ -235,7 +233,7 @@ Signed in as admin(console supplies a create handler, a locked-role list, and a 
 * Step 5 creates the account.
 * Step 6 shows email and locked-role notes on the same confirmation; the typed email and the locked role label are both in bold.
 
-### shared-console-user-directory-US6-TC7-1: Create still reviews a well-formed on-list email with no locked role
+### shared-console-user-directory-US6-TC7-1: Create reviews a free well-formed on-list email with no locked role
 
 **Classification:**
 
@@ -282,10 +280,10 @@ Signed in as admin(console supplies a create handler and a non-empty list of all
 **Raised, folded into spec**
 
 - Create gated on handler, dialog vocabulary, success reports identifier, no password field — folded as `shared-console-user-directory-SC-33` through `SC-35`.
-- Duplicate open-existing via `onOpenExisting` — folded as `shared-console-user-directory-SC-36` (ui-design contract alignment).
-- Review notes when the email is malformed or off the console-supplied list — folded as `shared-console-user-directory-SC-37`.
+- Taken email refuses on the form before review; open-existing via `onOpenExisting` — folded as `shared-console-user-directory-SC-36`.
+- Review notes when the email is malformed or off the console-supplied list; Back returns to the form — folded as `shared-console-user-directory-SC-37`.
 - Review notes when a locked role is selected; email and locked-role notes on one confirmation — folded as `shared-console-user-directory-SC-38`.
-- Review still opens for a well-formed on-list email with no locked role — folded as `shared-console-user-directory-SC-39`.
+- Review opens when the email is free (or lookup skipped / fails open) — folded as `shared-console-user-directory-SC-39`.
 
 **Uncovered anchors**
 

@@ -42,8 +42,8 @@ signed in.
 - **Grant** — offered only with `user:create`
 - **Roles** — Create stays disabled until at least one role is selected. Without `user:set-role`, the dialog offers only `user`
 - **Success** — the new account's panel opens
-- **Duplicate** — refused in the dialog, with a control that opens the existing account
-- 🚧 **Confirm** — every create is confirmed against a preview of the trimmed name, email, and roles
+- **Duplicate** — refused on the create form before review; the refuse steers the operator to change roles on the existing account's panel
+- 🚧 **Confirm** — when the email is free, create is confirmed against a preview of the trimmed name, email, and roles; Back returns to the form
 - 🚧 **Email** — expects `@9gag.com` or `@memestrategy.com`. A malformed address or one outside those domains adds a note on that confirmation; the email is in bold; the usual addresses are listed
 - 🚧 **Admin** — creating `admin` adds a note on that same confirmation — `admin` cannot be removed from the account once created; the role name is in bold
 - 🚧 **Trim** — name and email are trimmed before the confirmation and before create

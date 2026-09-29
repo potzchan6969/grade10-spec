@@ -7,7 +7,7 @@
   loyalty provision
 - Create is offered only when the operator holds `user:create`; choosing a
   non-`user` role also requires `user:set-role`
-- A duplicate email is refused, with a way to open the existing account
+- A duplicate email is refused on the create form before review, with a way to open the existing account's panel to change roles
 - After a successful create, the new account's panel opens
 
 ## Non-Goals
@@ -26,7 +26,7 @@
 | Q1 | What does create buy on Users — Auth + roles, or Override's full provision (Auth + Loyalty + points)? | Simulate ordinary account creation then an elevated grant. Verified: ordinary Auth create does not enroll Loyalty or set opening points, so Users create is Auth + roles only. | Override's Create user and member pipeline (enroll + opening points) on the access desk |
 | Q2 | Who may create, and when is Create shown? | Clarified by Q10. | Gating Create on `user:set-role` alone, or offering it without `user:create` |
 | Q3 | Roles at create time? | Pick roles in the create dialog from the closed set, including elevated roles such as `admin`, under the same refusals as set-role. | Create as plain `user` only, then set roles later in the panel |
-| Q4 | Email already taken? | Refuse with a clear message and a way to open the existing account. Never a second Auth row. | Refuse and leave the operator to search alone |
+| Q4 | Email already taken? | Refuse with a clear message that steers the operator to change roles on the existing account's panel (open-existing closes create and opens that panel). Never a second Auth row. | Refuse and leave the operator to search alone; invent a roles-only dialog |
 | Q5 | After a successful create? | Open the new account's panel, same as picking a row. | Stay on the list with no panel open |
 | Q6 | Override after this ships? | Leave Override's create-and-member flow as the non-prod loyalty tool. | Strip create from Override in this change |
 | Q7 | Brand scope? | Grade10 Users page + shared Auth create rules; shared directory components grow if needed; ZZZ adopts when it chooses. | Wiring ZZZ in this change |
@@ -41,7 +41,9 @@
 | Q16 | When the session lacks `user:set-role`, offer only `user` in the create dialog, or offer every role and refuse after submit? | Console offers only `user` in the role options when the session lacks `user:set-role`; server still refuses a non-`user` role (stale session). - decided by the round | Offer every closed-set role and refuse after submit |
 | Q17 | Off-list or malformed email on create — refuse, warn, or create silently? | Warning confirmation, not a refuse. Grade10 domains are `9gag.com` and `memestrategy.com` (exact host after the last `@`, without letter case). Confirming still creates. Server accepts any email. | Refusing off-list or malformed, or silently creating |
 | Q18 | Warn when creating admin? | Warn on admin create — that role cannot be demoted once created. The same confirmation holds the email check when both apply. The console supplies the locked role ids; the dialog does not hardcode `admin`. - decided by this request | Silent create of admin, or a second dialog after the email warning |
-| Q19 | Always confirm create, or only when email or a locked role looks wrong? | Always confirm against a preview, even when the draft looks fine. Email and locked-role notes sit on that same confirmation when they apply. Copy is a double-check, not an alarm. - decided by this request | Create immediately when the email and roles look fine |
+| Q19 | Always confirm create, or only when email or a locked role looks wrong? | Always confirm against a preview when the email is free (or lookup is skipped / fails open), even when the draft looks fine. Email and locked-role notes sit on that same confirmation when they apply. Copy is a double-check, not an alarm. | Create immediately when the email and roles look fine |
+| Q20 | Taken email — refuse on the form, or open review then refuse after create? | Look up the trimmed email on Create. When an account holds it, stay on the form, show the duplicate refuse and open-existing, and create nothing. When free, open the review as today. Post-create duplicate refuse stays as a safety net. | Open review first, then refuse after Auth create |
+| Q21 | Review dismiss control — Cancel or Back? | Back on the review confirmation (returns to the create form). Cancel stays on the create form (closes the whole create). | Cancel on both dialogs |
 
 ## Raised
 

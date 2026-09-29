@@ -80,7 +80,7 @@ Signed in as admin(holds `user:list` and `user:set-role`, not `user:create`).
 
 * Create is not offered.
 
-### grade10-admin-console-user-directory-US4-TC3-1: Duplicate email refuses and opens the existing account
+### grade10-admin-console-user-directory-US4-TC3-1: Duplicate email refuses on the form and opens the existing account
 
 **Classification:**
 
@@ -108,15 +108,13 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). Auth 
 
 1. Navigate to <grade10 admin users url>.
 2. Choose Create.
-3. Enter a name, <taken email>, and role `user`, and confirm.
-4. Confirm the review.
-5. Choose the way offered to open the existing account.
+3. Enter a name, <taken email>, and a role, and confirm Create on the form.
+4. Choose the way offered to open the existing account to change roles.
 
 **Expected Results:**
 
-* Step 3 shows a confirmation of the draft and does not create.
-* Step 4 is refused with a clear message and a way to open the existing account.
-* Step 5 opens <existing account>'s panel.
+* Step 3 stays on the create form, does not open the review, shows the duplicate refuse, and does not call Create.
+* Step 4 opens <existing account>'s panel.
 * No second Auth row holds <taken email>.
 
 ### grade10-admin-console-user-directory-US4-TC4-1: Create with only user:create offers plain user
@@ -190,7 +188,7 @@ Signed in as admin(holds `user:create` and `user:set-role`). Users create expect
 1. Navigate to <grade10 admin users url>.
 2. Choose Create.
 3. Enter a name, <fine email>, and <roles>, and confirm.
-4. Read the review and go back.
+4. Read the review and choose Back.
 5. Confirm Create again, then confirm the review.
 6. Repeat from Create with <off-list email> and <roles>, and confirm.
 

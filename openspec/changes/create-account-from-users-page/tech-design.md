@@ -53,16 +53,18 @@ and funds points (Q1 / Q9).
 
 ### Duplicate email → existing id for open-existing
 
-BetterAuth refuses with `USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL` and does not
-return the existing id. Extend the directory repository create outcome so a
-duplicate refusal carries `existingUserId` after an exact-email lookup
-(`listDirectory` with the submitted email, or the existing better-auth email
-contains list + exact match — same idea Override uses in
-`findExactEmail`, without importing provisioning). The dialog never searches;
-it receives the id from the create outcome and calls `onOpenExisting`.
+Look up the trimmed email before review via
+`UserDirectoryRepository.findExactEmail` (same list + contains + exact match
+pattern as the post-create path). When an id is found, the create form shows
+the duplicate refuse and open-existing without opening review or calling
+create. When none is found (or lookup fails open), review opens as today.
+BetterAuth still refuses with `USER_ALREADY_EXISTS_*` and no id; create outcome
+still carries `existingUserId` after the same lookup as a safety net.
+`existingUserIdForDuplicate` calls `findExactEmail`.
 
 _Rejected:_ changing BetterAuth's create response shape.
 _Rejected:_ leaving the operator to search the list alone (Q4).
+_Rejected:_ opening review first, then refusing after Auth create (Q20).
 
 ### Empty roles on the wire
 
@@ -83,7 +85,8 @@ Land in `@grade10/frontend-console` beside `UserRolesDialog`:
 | Valid | Confirm disabled until name, email, and at least one role are present |
 | Password | Absent |
 | Success | Report created id via `onCreated` (name as ui-design / props dictate) |
-| Duplicate | Refusal copy + open-existing control → `onOpenExisting(existingUserId)` |
+| Duplicate | Refusal copy + open-existing on the form before review when lookup finds an id; post-create refuse remains a safety net → `onOpenExisting(existingUserId)` |
+| Review dismiss | `FormDialog` `cancelLabel="Back"` on the review branch only |
 | Copy | `UserCreateDialogCopy` — consumer-owned; no `@grade10/i18n` keys |
 
 Export `UserCreateDialog`, `UserCreateDialogProps`, `UserCreateDialogCopy` from
@@ -95,11 +98,13 @@ it in the application console package.
 
 ### Email domain warning: console-supplied, Auth unchanged
 
-`UserCreateDialog` accepts optional `allowedEmailDomains` and optional
-`lockedRoleIds`. Every Create opens one confirmation of the trimmed draft
+`UserCreateDialog` accepts optional `allowedEmailDomains`, optional
+`lockedRoleIds`, and optional `onLookupEmail`. Create looks up the email when
+that prop is set; a taken address refuses on the form. A free email (or
+skipped / failed-open lookup) opens one confirmation of the trimmed draft
 before `onCreate`. A malformed address, an off-list host, or a chosen locked
 role adds notes on that same confirmation. Name and email are trimmed before
-the confirmation and before create. Confirming proceeds; back clears the
+the confirmation and before create. Confirming proceeds; Back clears the
 confirmation only. Grade10 Users supplies `9gag.com` and `memestrategy.com`,
 and `lockedRoleIds={["admin"]}`. The dialog does not hardcode `admin`. Auth
 create is unchanged and still accepts any email.

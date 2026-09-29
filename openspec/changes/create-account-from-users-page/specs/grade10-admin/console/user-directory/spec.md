@@ -11,8 +11,8 @@ everything access is not.
 - Create from Users
   - Create offered only with `user:create`
   - Success opens the new account's panel
-  - Duplicate email opens the existing account
-  - Review before create: every Create opens a confirmation of the trimmed draft; a note is added when the email is malformed or outside `9gag.com` and `memestrategy.com`, or when the role is `admin`
+  - Duplicate email refuses on the create form before review and offers opening the existing account
+  - Review before create: Create opens a confirmation when the email is free; a note is added when the email is malformed or outside `9gag.com` and `memestrategy.com`, or when the role is `admin`; Back returns to the form
 
 ## ADDED Requirements
 
@@ -31,16 +31,17 @@ the create grant.
    dialog — no password field, no loyalty enroll, no opening points.
 3. On success, that account's panel opens beside the list, the same as
    picking a row.
-4. When the email is already taken, create is refused with a clear message and
-   a way to open the existing account; choosing that way opens that account's
-   panel. No second Auth row is created.
-5. After Create, a confirmation always previews the trimmed name, email, and
-   roles. Grade10 create expects `@9gag.com` or `@memestrategy.com` (exact host
-   after the last `@`, without letter case). A malformed address or one outside
-   those domains adds a note on that same confirmation. Confirming still
-   creates. Going back returns to the create form and creates nothing. The
-   server still accepts any email. A well-formed on-list email still shows the
-   confirmation; confirming it then creates.
+4. When the email is already taken, create is refused on the create form
+   before review, with a clear message that steers the operator to change
+   roles on the existing account; choosing that way opens that account's
+   panel. No second Auth row is created. Create is not called.
+5. When the email is free, Create opens a confirmation that previews the
+   trimmed name, email, and roles. Grade10 create expects `@9gag.com` or
+   `@memestrategy.com` (exact host after the last `@`, without letter case).
+   A malformed address or one outside those domains adds a note on that same
+   confirmation. Confirming still creates. Back returns to the create form
+   and creates nothing. The server still accepts any email. A well-formed
+   on-list email still shows the confirmation; confirming it then creates.
 6. Creating `admin` adds a note on that same confirmation — that role cannot
    be removed once created; the role name is in bold. Confirming still creates.
    An email that also needs a check sits on the same confirmation. Name and
@@ -72,10 +73,12 @@ the create grant.
 
 - **GIVEN** a signed-in operator who holds `user:list` and `user:create`
 - **AND** an Auth account already holds the email
-- **WHEN** they choose Create, enter a name, that email, and role `user`, and confirm
-- **THEN** create is refused with a clear message and a way to open the existing account
+- **WHEN** they choose Create, enter a name, that email, and a role, and confirm Create on the form
+- **THEN** the dialog stays on the create form and does not open the review
+- **AND** create is refused with a clear message that steers them to change roles on the existing account
 - **AND** choosing that way opens that account's panel
 - **AND** no second Auth row holds that email
+- **AND** Create was not called
 
 #### Scenario: grade10-admin-console-user-directory-SC-23 - Create with only user:create stands up a plain user
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
@@ -95,7 +98,7 @@ the create grant.
 - **WHEN** they choose Create, enter a name and an email that is malformed or whose host is not those domains, and confirm
 - **THEN** the confirmation shows the email note and no account is created
 - **AND** confirming the review creates the account
-- **AND** going back returns to the create form and creates nothing
+- **AND** Back returns to the create form and creates nothing
 
 #### Scenario: grade10-admin-console-user-directory-SC-25 - Users create review notes when the role is admin
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
