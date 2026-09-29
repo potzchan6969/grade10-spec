@@ -57,6 +57,7 @@
   "refusal": {
     "NOT_FOUND": "找不到此订单。",
     "ADDRESS_LOCKED": "你的订单设置已确认，无法再在此更改。",
+    "ADDRESS_UNCONFIRMED": "请先确认你的收货地址。",
     "ADDRESS_WINDOW_CLOSED": "设置期限已过，订单设置已关闭。",
     "METHOD_UNAVAILABLE": "此订单不支持银行转账，请选择信用卡。",
     "ORDER_NOT_PAYABLE": "此订单目前无法付款。",

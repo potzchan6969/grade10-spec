@@ -57,6 +57,7 @@
   "refusal": {
     "NOT_FOUND": "This order was not found.",
     "ADDRESS_LOCKED": "Your order setup is confirmed and can no longer be changed here.",
+    "ADDRESS_UNCONFIRMED": "Confirm your delivery address first.",
     "ADDRESS_WINDOW_CLOSED": "The setup deadline has passed, so order setup is closed.",
     "METHOD_UNAVAILABLE": "Bank transfer is not available for this order. Choose card.",
     "ORDER_NOT_PAYABLE": "This order cannot be paid right now.",
