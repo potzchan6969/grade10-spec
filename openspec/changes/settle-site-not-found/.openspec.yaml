@@ -7,3 +7,5 @@ reviewed:
   user-journeys: 692ca45b
   specs: e5ea44d6
   test-cases: e5ea44d6
+deploy_waived: "production deploys are currently blocked repo-wide by a pre-existing, unrelated gap (missing ZZZ legal-identity/lending config, VAPID keys, Shopify token, Neon databases); both production deploy attempts today (2026-09-29 06:15 and 06:53 UTC) failed on that gate before reaching this change. Verified shipped to staging: merge commit 50c74893c is an ancestor of the successful staging deploy (run 36534334614, sha c4729dac6). Owner (sean) accepted staging-only evidence."
+decisions_carried: "none"

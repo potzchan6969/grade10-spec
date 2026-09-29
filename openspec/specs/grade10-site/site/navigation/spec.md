@@ -15,7 +15,8 @@ navigating between surfaces does.
   - Nested ownership: a surface owns the addresses beneath it unless a nested
     surface names one, and the deepest one naming it renders
   - Not-found fallback: an address under no surface renders the not-found
-    surface, naming the address that failed
+    surface with a static title, description, and a way home — never naming
+    the address
 - In-page navigation
   - No document load: a link from one surface to another, the chrome's
     included, navigates without reloading the document

@@ -7,9 +7,9 @@
 
 **As a** collector,
 **I want** every address to resolve to one surface — the deepest one naming
-it, or the not-found surface,
-**so that** a link I open lands me on the surface that owns it, and tells me
-which address failed when none does.
+it, or the not-found surface with a clear static message and a way home,
+**so that** a link I open lands me on the surface that owns it, and when none
+does I know I am still on the site and can leave for home.
 
 <!-- trace:case id=g10.site-navigation.TC-07a rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
 ### grade10-site-site-navigation-US1-TC1-1: Nested address answers as its parent surface
@@ -67,7 +67,7 @@ The catalogue publishes <a published lot>.
 * The nested lot surface renders, not the auction above it.
 
 <!-- trace:case id=g10.site-navigation.TC-68k rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
-### grade10-site-site-navigation-US1-TC3-1: Unknown address resolves to not-found naming it
+### grade10-site-site-navigation-US1-TC3-2: Unknown address resolves to not-found, without naming it
 
 **Classification:**
 
@@ -76,6 +76,7 @@ The catalogue publishes <a published lot>.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -91,7 +92,96 @@ None.
 
 **Expected Results:**
 
-* The not-found surface renders, naming the address that failed.
+* The not-found surface renders.
+* The failed address does not appear anywhere on the page.
+
+### grade10-site-site-navigation-US1-TC4-1: Not-found shows only the shared catalog's static words
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-navigation-US-01
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <an address under no surface the site answers>.
+2. Read the rendered title and description.
+
+**Expected Results:**
+
+* The title reads exactly "Nothing is here".
+* The description reads exactly "The link may be wrong, or the page may have moved."
+* Neither string contains any part of the address navigated to in step 1.
+
+### grade10-site-site-navigation-US1-TC5-1: Not-found never reflects a crafted address
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-navigation-US-01
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <an address under no surface the site answers, with a path
+   segment carrying markup such as `<script>`>.
+2. Read the rendered page's title, description, and markup.
+
+**Expected Results:**
+
+* The not-found surface renders the same static title and description as any
+  other unknown address.
+* No part of the crafted address appears anywhere on the page, as text or as
+  markup.
+* No script from the crafted address executes.
+
+### grade10-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the brand home
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-navigation-US-01
+
+**Pre-conditions:**
+A collector is on the not-found surface after navigating to <an address under
+no surface the site answers>.
+
+**Steps:**
+
+1. Click "Back to Home".
+
+**Expected Results:**
+
+* <grade10 marketing url> renders.
 
 ---
 
@@ -622,3 +712,10 @@ read.
 **Expected Results:**
 
 * The store renders without waiting for the session.
+
+## Settled
+
+Which locale the not-found surface's words render in is `shared/localization`'s
+job, not this capability's — `shared-localization-SC-19` and
+`shared-localization-SC-27` already guarantee a not-found surface renders in
+the visiting locale for any unknown address, platform-wide.

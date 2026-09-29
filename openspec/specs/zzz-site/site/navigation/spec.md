@@ -19,7 +19,8 @@ surface, whatever specs that owns it.
   - Deepest surface wins: a surface owns the addresses beneath it unless a
     nested surface names one
   - Not-found fallback: an address under no surface renders a not-found
-    surface naming it, never home
+    surface with a static title, description, and a way home — never naming
+    it, never home
 - Session-decided addresses
   - Session correction: home and sign-in each answer with what the session
     allows

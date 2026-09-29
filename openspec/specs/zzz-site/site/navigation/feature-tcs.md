@@ -7,9 +7,11 @@
 
 **As a** collector,
 **I want** sign-in and the profile to answer at addresses of their own, and an
-address under no surface to answer as not-found,
+address under no surface to answer as not-found with a clear static message
+and a way home,
 **so that** a link or a refresh puts me back on the surface I was on rather
-than at home.
+than at home, and when none answers I know I am still on the site and can
+leave for home.
 
 <!-- trace:case id=zzz.site-navigation.TC-wbf rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
 ### zzz-site-site-navigation-US1-TC1-1: Sign-in and profile answer at their own addresses
@@ -69,7 +71,7 @@ A collector who moved from home to sign-in.
 * Sign-in renders, not home.
 
 <!-- trace:case id=zzz.site-navigation.TC-c5s rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
-### zzz-site-site-navigation-US1-TC3-1: Unknown address resolves to not-found, never home
+### zzz-site-site-navigation-US1-TC3-2: Unknown address resolves to not-found, never home, never naming it
 
 **Classification:**
 
@@ -78,6 +80,7 @@ A collector who moved from home to sign-in.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -93,7 +96,126 @@ None.
 
 **Expected Results:**
 
-* The not-found surface renders, naming the address that failed.
+* The not-found surface renders, not <zzz home url>.
+* The failed address does not appear anywhere on the page.
+
+### zzz-site-site-navigation-US1-TC4-1: Not-found shows only the shared catalog's static words
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** zzz-site-site-navigation-US-01
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <an address under no surface the zzz site answers>.
+2. Read the rendered title and description.
+
+**Expected Results:**
+
+* The title reads exactly "Nothing is here".
+* The description reads exactly "The link may be wrong, or the page may have moved."
+* Neither string contains any part of the address navigated to in step 1.
+
+### zzz-site-site-navigation-US1-TC5-1: Not-found never reflects a crafted address
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** zzz-site-site-navigation-US-01
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <an address under no surface the zzz site answers, with a path
+   segment carrying markup such as `<script>`>.
+2. Read the rendered page's title, description, and markup.
+
+**Expected Results:**
+
+* The not-found surface renders the same static title and description as any
+  other unknown address.
+* No part of the crafted address appears anywhere on the page, as text or as
+  markup.
+* No script from the crafted address executes.
+
+### zzz-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the ZZZ home
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** zzz-site-site-navigation-US-01
+
+**Pre-conditions:**
+A collector is on the not-found surface after navigating to <an address under
+no surface the zzz site answers>.
+
+**Steps:**
+
+1. Click "Back to Home".
+
+**Expected Results:**
+
+* <zzz home url> renders.
+
+### zzz-site-site-navigation-US1-TC7-1: Not-found does not correct itself to home on its own
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** zzz-site-site-navigation-US-01
+
+**Pre-conditions:**
+A collector has navigated to <an address under no surface the zzz site
+answers>.
+
+**Steps:**
+
+1. Wait, without clicking anything.
+2. Read the address bar and the rendered surface.
+
+**Expected Results:**
+
+* The not-found surface is still rendered.
+* <zzz home url> has not been reached.
+* The address bar still shows the address navigated to.
 
 ---
 
@@ -542,3 +664,10 @@ The collector is not signed in and has opened <zzz profile url>.
 * <zzz home url> renders.
 * Step 2 shows home's address, not the profile's.
 * Step 3 leaves the site rather than returning to the profile.
+
+## Settled
+
+Which locale the not-found surface's words render in is `shared/localization`'s
+job, not this capability's — `shared-localization-SC-19` and
+`shared-localization-SC-27` already guarantee a not-found surface renders in
+the visiting locale for any unknown address, platform-wide.
