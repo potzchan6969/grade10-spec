@@ -41,7 +41,9 @@ navigating between surfaces does.
     code
   - Loaded on arrival: a surface's code loads when the collector navigates to
     it
+
 ## Requirements
+
 ### Requirement: An address resolves to one surface
 
 The site SHALL resolve every address to at most one surface. A surface SHALL
@@ -49,9 +51,10 @@ own every address beneath its own, so a deeper address answers as that
 surface — unless a nested surface names that address, in which case the
 nested one renders. Where more than one surface could own an address, the
 deepest one naming it SHALL be the one that renders. An address under no
-surface SHALL resolve to the not-found surface.
+surface SHALL resolve to the not-found surface. The not-found surface's title
+and description SHALL be static text that never includes the failed address
+or any other dynamic content, and it SHALL offer a control back to home.
 
-<!-- trace:scenario id=g10.site-navigation.SC-70e rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-01 - A nested address answers as its surface
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -59,7 +62,6 @@ surface SHALL resolve to the not-found surface.
   its own names, such as an address beneath the store
 - **THEN** that surface renders
 
-<!-- trace:scenario id=g10.site-navigation.SC-p5e rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-02 - A nested surface renders for itself
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -67,12 +69,19 @@ surface SHALL resolve to the not-found surface.
   mailed lot link beneath the auction
 - **THEN** the nested surface renders, not the surface above it
 
-<!-- trace:scenario id=g10.site-navigation.SC-jo4 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-03 - An unknown address resolves to not-found
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
 - **WHEN** a collector opens an address under no surface the site answers
-- **THEN** the not-found surface renders, naming the address that failed
+- **THEN** the not-found surface renders, showing its static title and
+  description
+
+#### Scenario: grade10-site-site-navigation-SC-26 - Back to Home leaves the not-found surface for the brand home
+**Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
+
+- **GIVEN** a collector on the not-found surface
+- **WHEN** they choose Back to Home
+- **THEN** the brand home renders
 
 ### Requirement: In-app navigation stays in the page
 
@@ -298,4 +307,3 @@ SHALL be confined to the surfaces that have nothing to show without one.
 - **GIVEN** the session has not yet answered
 - **WHEN** a collector opens any public surface
 - **THEN** that surface renders without waiting for it
-

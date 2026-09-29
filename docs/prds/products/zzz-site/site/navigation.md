@@ -12,7 +12,7 @@ specific mistake this rules out.
 
 ## Not Found
 
-🚧 The not-found page shares catalogs with grade10: a static title and
+The not-found page shares catalogs with grade10: a static title and
 description with Back to Home; the page does not name the failed path.
 
 Home and sign-in are session-decided: a signed-in collector who opens either is
