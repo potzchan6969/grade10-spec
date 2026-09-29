@@ -79,6 +79,15 @@ carrier cases.
 None that change the product contract. Exact Shopify dashboard menu names and
 credentials are operational details to verify during the staging walk.
 
+**Narrowed by `move-checkout-into-cart-drawer` (2026-09-29):** that change
+removes the separate `/checkout` page this proposal assumed, folding the
+checkout-open read into the cart drawer's own continuous live quote - see
+`decisions.md`'s Q1. The Shopify handoff, idempotent-intent, settlement and
+carrier decisions here (Q2, Q5-Q14) are unaffected. The requirement "Checkout
+reviews the current member basket before payment" in
+`specs/grade10-site/store/checkout/spec.md` needs its checkout-open language
+reconciled against that change when both are specified.
+
 ## References
 
 - [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
