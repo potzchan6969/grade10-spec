@@ -1122,6 +1122,117 @@
 
 * No Insurance row and no Insurance tooltip show.
 
+### winner-order-US1-TC29-1: A listing code already held is replaced before publish
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* <listing_2> holds listing code <code_1>.
+* <listing_3> is a draft whose internal id hashes to <code_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <code_1> | A listing code in use |
+
+**Steps:**
+
+1. Publish <listing_3>.
+2. Read <listing_3>'s listing code.
+3. Change the hash method, then read both listing codes.
+
+**Expected Results:**
+
+* Step 2: <listing_3> holds a code other than <code_1>, hashed again with a counter.
+* Step 2: `L` and 5 characters; no `0`, `O`, `1`, `I` or lower case.
+* Step 3: both listings keep their codes.
+
+### winner-order-US1-TC34-1: The winner sees an operator's edit before send, and cannot change it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_preparing>.
+* An operator changed <order_preparing> to <address_work> and bank transfer.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_preparing> | An HKD order reading Preparing Invoice, home address and card confirmed |
+| <address_work> | A saved address named Work |
+
+**Steps:**
+
+1. Reload the order.
+2. Look for address and payment-method controls.
+
+**Expected Results:**
+
+* Step 1: the order shows <address_work> and bank transfer, still Preparing Invoice.
+* Step 2: no control changes either.
+
+### winner-order-US1-TC35-1: Archiving an address a confirmed order uses leaves the order's copy
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) confirmed <address_work> on <order_preparing>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_preparing> | An order reading Preparing Invoice, <address_work> confirmed |
+| <address_work> | A saved address named Work |
+
+**Steps:**
+
+1. Archive <address_work> in the address book.
+2. Navigate to <winner order url> for <order_preparing>.
+
+**Expected Results:**
+
+* Step 1: <address_work> is archived.
+* Step 2: the order still shows <address_work>.
+
 ---
 
 ## winner-order-US2: Winner follows a settled lot to delivery
@@ -1443,6 +1554,116 @@ is still owed, a tracker, and proof of what was handed over,
 
 * <handover time> and <signature> show, not only a delivered flag.
 
+### winner-order-US2-TC9-1: A receipt ID takes the payment month and the receipt shows the breakdown
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_verifying>.
+* admin(holds payment-processing) confirms its proof at <confirm time>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | An HKD order, invoice `INV-202609-LK7P2Q-02`, total <total>, reading Payment Verifying |
+| <total> | HKD 3,170.00 (317000 minor units) |
+| <confirm time> | 2026-09-30T16:30:00Z, October in Hong Kong |
+| <receipt id> | `REC-202610-LK7P2Q-02-P1` |
+
+**Steps:**
+
+1. Download the receipt PDF.
+
+**Expected Results:**
+
+* The receipt ID is <receipt id>.
+* Original Invoice Total <total>; Previous Payments 0.
+* Current Payment Received <total>; Remaining Balance Due 0.
+
+### winner-order-US2-TC10-1: Invoice and receipt PDFs outlive a deleted account
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* <order_paid> is paid, with a replaced invoice, a current invoice and a receipt.
+* Its winner deleted the account a year after payment.
+* The clock is 6 years after payment, inside the 7-year retention.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_paid> | A paid order whose invoice was once reissued |
+
+**Steps:**
+
+1. Retrieve <order_paid>'s documents from the archive.
+
+**Expected Results:**
+
+* The replaced invoice, current invoice and receipt PDFs are all returned.
+
+### winner-order-US2-TC11-1: A repeated payment confirmation keeps one receipt ID
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* <order_paid> was paid by card; its receipt ID is <receipt id>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_paid> | A card-paid order |
+| <receipt id> | `REC-202609-LK7P2Q-01-P1` |
+
+**Steps:**
+
+1. Deliver the same payment confirmation for <order_paid> again.
+2. Open the receipt on <winner order url> for <order_paid>.
+
+**Expected Results:**
+
+* The receipt ID is still <receipt id>.
+* No second receipt ID or audit number exists for <order_paid>.
+
 ---
 
 ## winner-order-US3: Winner checks the buyer's premium on an invoice
@@ -1538,6 +1759,40 @@ Runs once per row of **Test data**.
 
 * Step 1: the order reads Payment Overdue, with Contact Us.
 * Step 2: no card Pay is offered and no payment deadline shows.
+
+### winner-order-US5-TC2-1: A cancelled order shows no stepper and no invoice PDF
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-05
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_cancelled>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_cancelled> | An unpaid order an operator cancelled |
+
+**Steps:**
+
+1. Read the page.
+
+**Expected Results:**
+
+* No progress stepper shows.
+* No invoice PDF control shows.
 
 ---
 
@@ -2459,11 +2714,948 @@ current currency minimum,
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
+### winner-order-US9-TC1-1: A bank-transfer invoice shows three ways to pay and the reference
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Blocked:** Finance - the account details for each way are still open; Product - does the invoice PDF carry them?
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+**Steps:**
+
+1. Open the payment area.
+2. Read the payment instructions.
+
+**Expected Results:**
+
+* SWIFT, FPS and Hong Kong local transfer details show.
+* The bank reference shows, with a copy control and a request to quote it.
+* No card Pay is offered.
+
+### winner-order-US9-TC2-1: Uploading proof stops the deadline and reads Payment Verifying
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <time left> | 3 days 4 hours (273600s) before the payment deadline |
+| <proof> | One PDF under 5 MB |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose <proof>.
+3. Submit, then accept the confirm step.
+
+**Expected Results:**
+
+* The order reads Payment Verifying.
+* The deadline stops with <time left> kept.
+* Card Pay and further upload are hidden.
+* <proof> and its file name are not shown.
+
+### winner-order-US9-TC3-1: One to three files of each allowed type are accepted
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Files |
+| --- |
+| 1 JPEG (lower limit) |
+| 1 PNG |
+| 1 HEIC |
+| 3 files mixing PDF, JPEG and PNG (upper limit) |
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose the row's files.
+3. Submit, then accept the confirm step.
+
+**Expected Results:**
+
+* The upload is accepted, every file kept (HEIC stored as JPEG).
+* The order reads Payment Verifying.
+
+### winner-order-US9-TC4-1: Too few or too many files are refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Files |
+| --- |
+| 0 files |
+| 4 files, each allowed and under 5 MB |
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose the row's files.
+3. Submit.
+
+**Expected Results:**
+
+* The upload is refused and says why.
+* The order still reads Pending Payment; the deadline runs.
+
+### winner-order-US9-TC5-1: A file of exactly 5 MB is accepted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | One PDF of 5242880 bytes (5 MiB), at the limit |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose <proof>.
+3. Submit, then accept the confirm step.
+
+**Expected Results:**
+
+* The upload is accepted.
+* The order reads Payment Verifying.
+
+### winner-order-US9-TC6-1: A file of another type refuses the whole upload
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Files |
+| --- |
+| A GIF image |
+| A Word document |
+| Four PDFs and one HEIC image |
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose the row's files.
+3. Submit.
+
+**Expected Results:**
+
+* The whole upload is refused, naming the allowed types.
+* Nothing is stored; the order still reads Pending Payment.
+
+### winner-order-US9-TC7-1: Backing out of the confirm step uploads nothing
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | Two PNG files |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose <proof>.
+3. Submit, then cancel at the confirm step.
+
+**Expected Results:**
+
+* No proof is stored.
+* The order still reads Pending Payment; the deadline runs.
+* Submit Payment Proof is still offered.
+
+### winner-order-US9-TC8-1: While proof is checked, no deadline runs
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_verifying>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | An order reading Payment Verifying |
+
+**Steps:**
+
+1. Read the progress stepper's Payment step and the deadline.
+
+**Expected Results:**
+
+* Payment is the current step, its subtext naming no date.
+* No payment deadline shows as running.
+
+### winner-order-US9-TC9-1: A second upload is refused while Payment Verifying
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* <order_verifying> reads Payment Verifying for customer A.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | customer A's order, proof uploaded, reading Payment Verifying |
+
+**Steps:**
+
+1. As customer A, send a second proof upload for <order_verifying> through the API.
+
+**Expected Results:**
+
+* The upload is refused.
+* The first proof set is unchanged.
+
+### winner-order-US9-TC10-1: A card payment is refused while Payment Verifying
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* <order_verifying> reads Payment Verifying for customer A.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | customer A's order, proof uploaded, reading Payment Verifying |
+
+**Steps:**
+
+1. As customer A, send a card payment for <order_verifying> through the API.
+
+**Expected Results:**
+
+* The payment is refused; no charge is made.
+* The order still reads Payment Verifying.
+
+### winner-order-US9-TC11-1: Proof upload is not offered where it does not apply
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order>.
+
+**Test data:**
+
+| Order state |
+| --- |
+| Preparing Invoice, bank transfer chosen |
+| Card invoice sent, unpaid |
+| Bank-transfer invoice paid |
+
+**Steps:**
+
+1. Open the payment area.
+
+**Expected Results:**
+
+* No proof upload is offered.
+
+### winner-order-US9-TC12-1: An expired bank-transfer invoice takes no proof
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt_overdue>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt_overdue> | A bank-transfer order past its payment deadline, unpaid |
+
+**Steps:**
+
+1. Open the payment area.
+2. Send a proof upload for <order_bt_overdue> through the API.
+
+**Expected Results:**
+
+* Step 1: no proof upload is offered; the overdue alert shows Contact Us.
+* Step 2: the upload is refused; the order still reads Payment Overdue.
+
+### winner-order-US9-TC13-1: Another collector can neither upload nor read the proof
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* <order_bt> belongs to customer A.
+* customer B is signed in, in a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+**Steps:**
+
+1. As customer B, send a proof upload for <order_bt> through the API.
+2. As customer B, request <order_bt>'s proof.
+
+**Expected Results:**
+
+* Both requests are refused.
+* <order_bt> still reads Pending Payment.
+
+### winner-order-US9-TC14-1: An upload cut off part-way leaves the invoice pending
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+* The connection is set to drop during upload.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | Three allowed files under 5 MB |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose <proof>, submit and accept the confirm step.
+3. Restore the connection and reload the order.
+4. Upload <proof> again.
+
+**Expected Results:**
+
+* Step 3: the order reads Pending Payment; the deadline runs; nothing is stored.
+* Step 4: the upload is accepted.
+
+### winner-order-US9-TC15-1: The bank reference fits every way to pay
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* <order_bt>'s invoice is sent.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <listing code> | LK7P2Q, the listing's code |
+| <reference> | LK7P2Q01: <listing code> then the two-digit invoice count |
+
+**Steps:**
+
+1. Read <order_bt>'s bank reference.
+
+**Expected Results:**
+
+* It reads <reference>.
+* 8 characters, capitals and digits only, no hyphen, space or symbol.
+* It fits one 35-character SWIFT remittance line.
+
+### winner-order-US9-TC16-1: A file over 5 MB refuses the whole upload
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_bt>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | One PDF of 5242881 bytes (5 MiB + 1 byte) with two small PNGs |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose <proof>.
+3. Submit.
+
+**Expected Results:**
+
+* The whole upload is refused, naming the 5 MB limit.
+* None of the three files is stored; the order still reads Pending Payment.
+
+### winner-order-US9-TC17-1: A file whose content is not its extension is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Blocked:** Engineering - is the file type checked by content or by extension?
+
+**Pre-conditions:**
+
+* customer A's <order_bt> reads Pending Payment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | An executable renamed to .pdf |
+
+**Steps:**
+
+1. As customer A, send <proof> as a proof upload through the API.
+
+**Expected Results:**
+
+* The whole upload is refused.
+* Nothing is stored; the order still reads Pending Payment.
+
+### winner-order-US9-TC18-1: A card payment on a bank-transfer invoice is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer A's <order_bt> reads Pending Payment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+**Steps:**
+
+1. As customer A, send a card payment for <order_bt> through the API.
+
+**Expected Results:**
+
+* The payment is refused; no charge is made.
+* The order still reads Pending Payment.
+
+### winner-order-US9-TC19-1: The old deadline passing during the check expires nothing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* <order_verifying> reached Payment Verifying before its payment deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | An order reading Payment Verifying, no operator action yet |
+
+**Steps:**
+
+1. Move the clock past the original payment deadline.
+2. Open <winner order url> for <order_verifying> as its winner.
+
+**Expected Results:**
+
+* The order still reads Payment Verifying, not Payment Overdue.
+
+### winner-order-US9-TC20-1: The reference copy control copies it exactly, on bank transfer only
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner of <order_bt> and <order_card>) is signed in.
+* The browser may use the clipboard.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <reference> | LK7P2Q01, <order_bt>'s bank reference |
+| <order_card> | An order with a sent card invoice, unpaid |
+
+**Steps:**
+
+1. Open <winner order url> for <order_bt>.
+2. Click the copy control beside the bank reference, then paste.
+3. Open <winner order url> for <order_card>.
+
+**Expected Results:**
+
+* Step 2 pastes exactly <reference>, no space.
+* Step 3 shows no bank reference and no copy control.
+
+---
+
 ## winner-order-US10: Winner's payment proof is not accepted
 
 **As a** winner whose payment proof Grade10 could not match,
 **I want** to read why and how long I have left,
 **so that** I can send the right proof or pay again before the deadline.
+
+### winner-order-US10-TC2-1: The operator's internal reason never reaches the winner
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_returned>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_returned> | A bank-transfer order whose proof an operator returned with <external reason> and <internal reason> |
+| <external reason> | Amount received does not match |
+| <internal reason> | A note for operators only |
+
+**Steps:**
+
+1. Read the order.
+2. Download the invoice PDF and read it.
+
+**Expected Results:**
+
+* <external reason> shows.
+* <internal reason> appears on neither.
+
+### winner-order-US10-TC3-1: After a return the winner can upload again
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_returned>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_returned> | A bank-transfer order whose proof was returned, inside its deadline |
+| <proof> | One new PDF under 5 MB |
+
+**Steps:**
+
+1. Click Submit Payment Proof.
+2. Choose <proof>, submit and accept the confirm step.
+
+**Expected Results:**
+
+* The order reads Payment Verifying again.
+* The deadline stops with the time then left.
+
+### winner-order-US10-TC4-1: Time left at the edges survives a return
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* <order_verifying> reads Payment Verifying with the row's <time left> kept.
+
+**Test data:**
+
+| Time left |
+| --- |
+| 60s (1 minute) |
+| 604740s (6 days 23 hours 59 minutes) |
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | A bank-transfer order reading Payment Verifying |
+
+**Steps:**
+
+1. Return the proof at <return time>.
+2. Read the API response for the new deadline.
+
+**Expected Results:**
+
+* The deadline is <return time> plus the row's time left.
+
+### winner-order-US10-TC5-1: A return adds no grace once the time left runs out
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_returned_late>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_returned_late> | A bank-transfer order returned with 60s left, and that minute has passed |
+
+**Steps:**
+
+1. Read the status and the payment area.
+
+**Expected Results:**
+
+* The order reads Payment Overdue.
+* Proof upload is hidden; the overdue alert shows Contact Us.
+
+### winner-order-US10-TC6-1: A second return keeps the time left at the second upload
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* <order_verifying> was returned once, uploaded again with <time left 2> kept, and reads Payment Verifying.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | A bank-transfer order on its second check |
+| <time left 2> | The time left at the second upload |
+
+**Steps:**
+
+1. Return the proof again at <return time>.
+2. Read the API response for the new deadline.
+
+**Expected Results:**
+
+* The deadline is <return time> plus <time left 2>.
 
 ### winner-order-US10-TC8-1: Returned proof shows the reason and the deadline resumes
 
@@ -3225,6 +4417,12 @@ current currency minimum,
 ---
 
 ## Settled
+
+- `winner-order-US3-TC1` is held by `winner-order-US8-TC1`: the same premium claim, under the policy-premium journey.
+- `winner-order-US3-TC2` is held by `winner-order-US8-TC2`: the same premium claim, under the policy-premium journey.
+- `winner-order-US3-TC3` is held by `winner-order-US8-TC3`: the same premium claim, under the policy-premium journey.
+- `winner-order-US3-TC4` is held by `winner-order-US8-TC4`: the same premium claim, under the policy-premium journey.
+- `winner-order-US10-TC1` is held by `winner-order-US10-TC8`, and `winner-order-US10-TC7` by `winner-order-US10-TC9`.
 
 - `winner-order-US9-TC1` is `winner-order-US12-TC4`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
 - `winner-order-US9-TC2` is `winner-order-US12-TC5`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
