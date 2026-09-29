@@ -520,6 +520,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Ready (`G11`) | Ready to collect · Waiting on you; `GradingPickupCard`; `GradingNamedCollector`; `VaultItCard`; the cards; `GradingMoneyBlock`; `GradingUncollectedLadder`; History | `grade10-site-grading-submission-lifecycle-SC-25` |
 | Ready, one card moved up | that card's Moved up a level line with the money it changes; the other three none | `grade10-site-grading-submission-lifecycle-SC-12` |
 | Ready, one card held | the held card's badge with the grader's date; the receipt-names-it line | `grade10-site-grading-submission-lifecycle-SC-14` |
+| Ready, notice posted | `GradingUncollectedLadder` with the reminder rung passed and the notice rung carrying its posting date, the days left of the 30 and the day they end | `grade10-site-grading-submission-lifecycle-SC-36` |
 | Payout reversed | the card back with the reversal line | `grade10-site-grading-submission-lifecycle-SC-43` |
 | Collected (`G12`) | Back with you · Collected <date>; the lead; the graded record with Look up per slab; the slab photographs; `DocumentsList` with the three; `WhatNextCard`; `YourDataLine` | `grade10-site-grading-submission-lifecycle-SC-44` |
 | Collected, one card still out | the record with the card held and the second-hand-back line | `grade10-site-grading-submission-lifecycle-SC-46` |
