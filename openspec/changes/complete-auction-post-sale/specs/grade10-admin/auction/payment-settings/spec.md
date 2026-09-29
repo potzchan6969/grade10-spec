@@ -170,4 +170,4 @@ SHALL open or save Payment Settings.
 - **GIVEN** an operator with payment processing on Payment settings
 - **WHEN** they type an HKD card rule of `3.4`% and `2.35`
 - **THEN** beside the rule the page shows a fee of 3763 on a subtotal of 100000
-  minor units in HKD, read as HK$37.63 on HK$1,000.00
+  minor units in HKD, read as HKD 37.63 on HKD 1,000.00

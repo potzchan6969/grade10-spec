@@ -106,7 +106,7 @@ premium for each auction currency,
 **Expected Results:**
 
 * Before the save, card and bank transfer show no rule in every currency.
-* After the reload, HKD card reads 3.4% and HK$2.35 and HKD bank transfer 0% and HK$0.00, with no rule in USD or JPY.
+* After the reload, HKD card reads 3.4% and HKD 2.35 and HKD bank transfer 0% and HKD 0.00, with no rule in USD or JPY.
 * The schedule records the finance operator and the time of the save.
 
 ### grade10-admin-auction-payment-settings-US2-TC2-1: Each rule shows its fee on an example subtotal, and quotes start from it
@@ -138,7 +138,7 @@ premium for each auction currency,
 
 **Expected Results:**
 
-* The example reads a fee of HK$37.63 on a subtotal of HK$1,000.00.
+* The example reads a fee of HKD 37.63 on a subtotal of HKD 1,000.00, in the console's money format.
 * The quote's fee starts at 11225 and the total at 323225 minor units in HKD.
 
 ### grade10-admin-auction-payment-settings-US2-TC3-1: Half a rule or a percentage out of range is refused
