@@ -34,6 +34,11 @@ import {
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
 
+const AUCTION_CARD_STORY =
+  "?path=/story/my-auctions-auction-card--leading";
+const MY_AUCTIONS_PAGE_STORY =
+  "?path=/story/pages-my-auctions-page--default";
+
 const breadcrumbs = (
   <Breadcrumbs>
     <BreadcrumbItem href="#account">Account</BreadcrumbItem>
@@ -127,7 +132,23 @@ const meta = {
   title: "My Auctions/My Auctions",
   component: AuctionRecord,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: `
+\`AuctionRecord\` owns the page body: table from \`md\`, stacked cards below.
+
+Small-viewport lot card variants:
+[Auction Card](${AUCTION_CARD_STORY}).
+
+Full page with store chrome:
+[My Auctions Page](${MY_AUCTIONS_PAGE_STORY}).
+`,
+      },
+    },
+  },
+
   args: {
     copy: AUCTION_RECORD_COPY,
     breadcrumbs,
@@ -169,9 +190,10 @@ async function auctionRecordSettled(canvasElement: HTMLElement) {
   );
 }
 
-/** Default composition: bid rows first, watch-only after, one table. */
+/** Default composition: bid rows first, watch-only after, one table from md. */
 export const Filled: Story = {
   name: "Filled",
+  globals: { viewport: { value: "tablet" } },
   render: () => <MyAuctions />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -197,6 +219,44 @@ export const Filled: Story = {
     expect(within(rows[0] as HTMLElement).getByText("Leading")).toBeVisible();
     expect(within(rows[2] as HTMLElement).getByText("--")).toBeVisible();
     // Unwatch only on the two watch-only rows.
+    expect(
+      canvas.getAllByRole("button", { name: "Unwatch this lot" }),
+    ).toHaveLength(2);
+  },
+};
+
+/** Below md: stacked cards — same facts, no table header, no sideways pan. */
+export const FilledSmallViewport: Story = {
+  name: "Filled — small viewport",
+  globals: { viewport: { value: "mobile1" } },
+  parameters: {
+    docs: {
+      description: {
+        story: `Card anatomy SoT: [Auction Card](${AUCTION_CARD_STORY}).`,
+      },
+    },
+  },
+  render: () => <MyAuctions />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await auctionRecordSettled(canvasElement);
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector('[data-slot="auction-record-cards"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      canvasElement.querySelectorAll('[data-slot="auction-record-card"]'),
+    ).toHaveLength(4);
+    expect(
+      canvasElement.querySelector('[data-slot="auction-record-row"]'),
+    ).toBeNull();
+    // Column header row is table-only.
+    expect(
+      canvas.queryByRole("columnheader", { name: "Auction" }),
+    ).not.toBeInTheDocument();
+    expect(canvas.getAllByText(/Current Bid/).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("Leading").length).toBeGreaterThan(0);
     expect(
       canvas.getAllByRole("button", { name: "Unwatch this lot" }),
     ).toHaveLength(2);
