@@ -5,7 +5,7 @@
 - [x] 1.3 Make `grade10-admin-auction-featured-SC-09` and `SC-10` pass with `auction:write` gating on Featured admin procedures.
 - [x] 1.4 Verify: focused auction backend repository/router tests for Featured, `pnpm run typecheck`, and `pnpm run lint` in grade10. Record scenario evidence.
 
-## 2. Manage Featured Sub-Page (grade10)
+## 2. Manage Featured Sub-Page (grade10) (owner: @mason5991)
 
 Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 
@@ -13,7 +13,7 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 - [x] 2.2 Make `grade10-admin-auction-featured-SC-01`, `SC-04`, `SC-05`, `SC-07`, `SC-08`, and `SC-12` pass on that sub-page: empty slots, listing pick, front page image upload with no gallery picker, reorder, clear, and cap of three.
 - [x] 2.3 Make `grade10-admin-auction-featured-SC-03` and `SC-10` pass on the sub-page: Ended listings refused; callers without `auction:write` cannot curate.
 - [x] 2.4 Verify: admin-frontend feature tests, `pnpm run typecheck`, `pnpm run lint`. Record UI evidence for Manage Featured entry, fill/reorder/clear, and upload-only front page image.
-- [ ] 2.5 Make `grade10-admin-auction-featured-SC-12` carry the front page image brief on each slot's upload: **2400 × 1500** (8:5), subject centred, JPEG or WebP at most 400 KB, with the preview framed at 8:5.
+- [x] 2.5 Make `grade10-admin-auction-featured-SC-12` carry the front page image brief on each slot's upload: **2400 × 1500** (8:5), subject centred, JPEG or WebP at most 400 KB, with the preview framed at 8:5.
 
 ## 3. Featured Banner Block (grade10-spec)
 
