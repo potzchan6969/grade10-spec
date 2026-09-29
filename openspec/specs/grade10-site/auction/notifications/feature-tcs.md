@@ -1,9 +1,7 @@
 # grade10-site/auction/notifications Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-15, tcs-rules r3.0
-
-**Out of suite:** Progress, bid-activity, delivery, and send-log scenarios this change does not re-accept — existing durable journeys cover them. Close-outcome scenarios SC-37…SC-43 only.
+**Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-notifications-US1: Collector hears a watched lot is opening
 
@@ -598,7 +596,7 @@ Runs once per row of **Test data**.
 **so that** I know the outcome without reopening the lot.
 
 <!-- trace:case id=g10.auction-notifications.TC-gqc rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
-### grade10-site-auction-notifications-US6-TC1-1: Losing bidder receives did-not-win letter
+### grade10-site-auction-notifications-US6-TC1-1: A losing bidder gets one You did not win letter
 
 **Classification:**
 
@@ -615,21 +613,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Collector A bid on lot L with email alerts on.
-* Collector B is the winner of L.
+* customer A bid on <lot_6>, email alerts on, and does not lead.
+* customer B leads <lot_6>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_6> | A lot taking bids, with bids from customer A and customer B, about to close |
+| <customer A bid> | customer A's highest bid on <lot_6> |
+| <winning bid> | customer B's winning bid at the close |
 
 **Steps:**
 
-1. Close lot L with B as winner.
-2. Inspect close-outcome mail for A.
+1. Let <lot_6> close with customer B winning.
+2. Read the mail sent to customer A.
 
 **Expected Results:**
 
-* A receives exactly one did-not-win close letter (campaign `lot_closed_didnt_win`).
-* When amounts are supplied, the letter names the winning bid and A's bid.
+* One You did not win letter for <lot_6>.
+* It names Winning bid as <winning bid> and Their bid as <customer A bid>.
 
 <!-- trace:case id=g10.auction-notifications.TC-ris rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
-### grade10-site-auction-notifications-US6-TC2-1: Watcher who also bid gets one close letter
+### grade10-site-auction-notifications-US6-TC2-1: A losing bidder who also watched gets only the bidder letter
 
 **Classification:**
 
@@ -646,21 +652,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Collector A watches and bid on lot L with email alerts on.
-* Another collector wins L.
+* customer A watched <lot_6>, then bid on it, email alerts on, and does not lead.
+* customer B leads <lot_6>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_6> | A lot taking bids, watched and bid on by customer A, led by customer B, about to close |
 
 **Steps:**
 
-1. Close lot L.
-2. Count close-outcome letters to A.
+1. Let <lot_6> close with customer B winning.
+2. Read the mail sent to customer A.
 
 **Expected Results:**
 
-* A receives exactly one close-outcome letter.
-* It is the did-not-win letter (campaign `lot_closed_didnt_win`), not a watched sold or watched ended letter.
+* Exactly one close letter: You did not win.
+* No Lot watched, sold letter.
 
 <!-- trace:case id=g10.auction-notifications.TC-ua3 rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
-### grade10-site-auction-notifications-US6-TC3-1: Winner gets no close-outcome letter
+### grade10-site-auction-notifications-US6-TC3-1: The winner gets no close-outcome letter from this capability
 
 **Classification:**
 
@@ -677,16 +689,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Collector W wins lot L and also watches it with email alerts on.
+* customer B watches <lot_6>, email alerts on, and leads it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_6> | A lot taking bids, watched and led by customer B, about to close |
 
 **Steps:**
 
-1. Close lot L with W as winner.
-2. Inspect close-outcome mail for W from this capability.
+1. Let <lot_6> close with customer B winning.
+2. Read the mail sent to customer B.
 
 **Expected Results:**
 
-* W receives no close-outcome letter from auction notifications.
+* No You did not win, Lot watched, sold or Lot watched, ended letter.
+* Only the auction-won order letter arrives.
+
+---
 
 ## grade10-site-auction-notifications-US7: Watcher hears a sold lot ended
 
@@ -695,7 +716,7 @@ Runs once per row of **Test data**.
 **so that** I know bidding is over on a lot I followed.
 
 <!-- trace:case id=g10.auction-notifications.TC-gz5 rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
-### grade10-site-auction-notifications-US7-TC1-1: Watch-only sold letter names Sold for
+### grade10-site-auction-notifications-US7-TC1-1: A watch-only collector hears Sold for at the close
 
 **Classification:**
 
@@ -712,21 +733,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Collector W watches lot L with email alerts on and has never bid.
-* L closes with a winning bid amount supplied.
+* customer D watches <lot_7>, email alerts on, and never bid on it.
+* customer B leads <lot_7>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_7> | A lot taking bids, led by customer B, about to close |
+| <winning bid> | customer B's winning bid at the close |
 
 **Steps:**
 
-1. Close lot L with a winner.
-2. Inspect mail for W.
+1. Let <lot_7> close with customer B winning.
+2. Read the mail sent to customer D.
 
 **Expected Results:**
 
-* W receives the watched sold letter (campaign `lot_watched_sold`).
-* The letter names the winning bid as Sold for.
+* One Lot watched, sold letter for <lot_7>.
+* It names Sold for as <winning bid>.
 
 <!-- trace:case id=g10.auction-notifications.TC-icj rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
-### grade10-site-auction-notifications-US7-TC2-1: Muted watcher gets no close letter
+### grade10-site-auction-notifications-US7-TC2-1: A watcher with alerts off hears nothing at the close
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -743,16 +773,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Collector W watches lot L with email alerts off.
+* customer D watches <lot_7>, never bid on it, with alerts as the row gives.
+* customer B leads <lot_7>.
+
+**Test data:**
+
+| Lot email alerts | Auction email alerts master |
+| --- | --- |
+| Off | On |
+| On | Off |
+
+| Field | Value |
+| --- | --- |
+| <lot_7> | A lot taking bids, led by customer B, about to close |
 
 **Steps:**
 
-1. Close lot L with a winner.
-2. Inspect mail for W.
+1. Let <lot_7> close with customer B winning.
+2. Read the mail sent to customer D.
 
 **Expected Results:**
 
-* W receives no watched sold letter.
+* No Lot watched, sold letter was sent.
+
+---
 
 ## grade10-site-auction-notifications-US8: Collector hears a no-bids close as ended only
 
@@ -761,7 +805,7 @@ Runs once per row of **Test data**.
 **so that** I learn the close without being told the lot did not sell.
 
 <!-- trace:case id=g10.auction-notifications.TC-uzv rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->
-### grade10-site-auction-notifications-US8-TC1-1: Watcher no-bids letter is Ended-only
+### grade10-site-auction-notifications-US8-TC1-1: A no-bids close tells the watcher it ended, and nothing more
 
 **Classification:**
 
@@ -773,35 +817,40 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-notifications-US-08
 
 **Pre-conditions:**
 
-* Collector W watches lot L with email alerts on and has never bid.
-* L closes with no bids.
+* customer D watches <lot_8>, email alerts on, and never bid on it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_8> | A lot taking bids with no bids, about to close |
 
 **Steps:**
 
-1. Close lot L with no bids.
-2. Inspect watched ended mail for W (campaign `lot_watched_ended`).
+1. Let <lot_8> close with no bids.
+2. Read the mail sent to customer D.
 
 **Expected Results:**
 
-* W receives the watched ended letter (campaign `lot_watched_ended`).
-* Subject, preheader and body say the lot has ended or bidding has closed.
-* Copy does not contain unsold, did not sell, didn't sell, no sale, or no bids.
-* Letter has no Sold for, Winning bid, or Highest bid highlight.
+* One Lot watched, ended letter for <lot_8>.
+* Subject, preheader and body say the lot ended.
+* None says unsold, did not sell or no sale.
+* No Sold for, Winning bid or Highest bid shows.
 
 <!-- trace:case id=g10.auction-notifications.TC-7zp rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->
-### grade10-site-auction-notifications-US8-TC2-1: No-bids close skips bidder letter and does not send lot_ended
+### grade10-site-auction-notifications-US8-TC2-1: A no-bids close sends no bidder letter to anyone
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
@@ -811,23 +860,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Lot L closes with no bids.
-* At least one enrolled watcher has email alerts on.
+* customer D and customer E watch <lot_8>, email alerts on, and never bid on it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_8> | A lot taking bids with no bids, about to close |
 
 **Steps:**
 
-1. Close lot L with no bids.
-2. Inspect all close-outcome mail for that lot.
+1. Let <lot_8> close with no bids.
+2. Read every letter sent for <lot_8>.
 
 **Expected Results:**
 
-* No bidder close-outcome letter is sent.
-* No letter with campaign `lot_ended` is sent.
-* Each enrolled watcher receives the watched ended letter (campaign
-  `lot_watched_ended`) with no winning amount.
-* That letter has no Sold for, Winning bid, or Highest bid highlight.
-* Its subject, preheader and body do not contain unsold, did not sell,
-  didn't sell, no sale, or no bids.
+* Only Lot watched, ended letters, one each to customer D and customer E.
+* No You did not win letter.
+* No Lot watched, sold letter.
 
 ## Reconciliation
 
