@@ -1,8 +1,13 @@
 # grade10-admin/grading/counter Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
-**Out of suite:** grade10-admin-grading-counter-SC-47, grade10-admin-grading-counter-SC-81
+
+**Out of suite:**
+
+- `grade10-admin-grading-counter-SC-11` - the queue row badging a letter that never went: `grade10-site/grading/submission-lifecycle`'s feature suite, where `grade10-site/grading/collector-notifications` routes its uncollected ladder. This suite reads the flagged letter on the submission, not the row's badge; the review left the badge to that suite.
+- `grade10-admin-grading-counter-SC-47` - a declined signature leaving nothing handed over: `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad. The counter only reads the decline back on its step.
+- `grade10-admin-grading-counter-SC-81` - an act with nowhere to record itself, refused: the grading worker's audit-write test, where the chain refuses the act's row and the act goes back with it (`grade10:packages/grading/backend/src/testing/suites/audit.ts`). No counter act reaches an unwritable audit entry from a screen; the review left it to that test.
 
 ## Background
 
@@ -28,7 +33,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -66,7 +71,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -96,7 +101,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -129,7 +134,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -163,7 +168,7 @@
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -194,7 +199,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -233,7 +238,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -263,7 +268,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -295,7 +300,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -324,7 +329,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
@@ -364,7 +369,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -394,7 +399,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -435,7 +440,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -474,7 +479,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -512,7 +517,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -549,7 +554,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -577,7 +582,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -609,7 +614,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -654,7 +659,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -684,7 +689,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -723,7 +728,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -758,7 +763,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -789,7 +794,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -818,7 +823,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -869,7 +874,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
@@ -915,7 +920,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -952,7 +957,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -983,7 +988,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1020,7 +1025,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
@@ -1063,7 +1068,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1096,7 +1101,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1136,7 +1141,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1173,7 +1178,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1207,7 +1212,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1246,7 +1251,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1274,7 +1279,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1307,7 +1312,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1335,7 +1340,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1402,7 +1407,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1434,7 +1439,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1481,7 +1486,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1520,7 +1525,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke
@@ -1551,7 +1556,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1580,7 +1585,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1616,7 +1621,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1654,7 +1659,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1683,7 +1688,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1714,7 +1719,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1746,7 +1751,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1783,7 +1788,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
@@ -1825,7 +1830,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -1860,7 +1865,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -1889,7 +1894,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1918,7 +1923,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1956,7 +1961,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1999,7 +2004,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2036,13 +2041,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
@@ -2066,13 +2071,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
@@ -2098,7 +2103,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** none
@@ -2138,7 +2143,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -2179,7 +2184,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2217,7 +2222,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -2249,13 +2254,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
@@ -2279,7 +2284,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** none
@@ -2309,7 +2314,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2339,7 +2344,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2370,7 +2375,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -2410,7 +2415,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2445,7 +2450,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2482,7 +2487,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -2511,7 +2516,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2539,7 +2544,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -2569,7 +2574,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
@@ -2610,7 +2615,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2642,7 +2647,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2670,7 +2675,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2701,7 +2706,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -2729,7 +2734,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -2758,7 +2763,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -2788,7 +2793,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2800,7 +2805,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * A submission's grades email has run out of attempts. The stack's mail never fails on its own, so a letter out of attempts is a mocked state.
-* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
+* admin(holds <the row's grant>) is on <grade10 admin grading submission url> for it.
+
+**Test data:**
+
+| Row | Grant | Outcome |
+| --- | --- | --- |
+| A | `grading:operate` | the letter flagged with its reason, Send again offered |
+| B | `grading:read` alone, the grants mocked since no shipped role holds it alone | the letter flagged with its reason, no Send again offered |
 
 **Steps:**
 
@@ -2808,7 +2820,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The failed letter is flagged with its reason; Send again is offered on it.
+* The failed letter is flagged with its reason; Send again is offered on it only to the row's operate holder.
 
 ### grade10-admin-grading-counter-US11-TC8-1: An agreement sealed before the hand-in is not sent again
 
@@ -2816,7 +2828,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2847,7 +2859,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2885,11 +2897,13 @@ Runs once per row of **Test data**.
 
 ### grade10-admin-grading-counter-US12-TC1-1: A submission ready past the notice day asks staff for the notice
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2900,24 +2914,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission is seeded at `ready` with `readyAt` 180 days back, as *Seeding a submission* says, and is not collected.
+* `grading.notice_day` stands at 180, as seeded.
+* A submission is seeded at `ready` with `readyAt` the row's days back, as *Seeding a submission* says, and is not collected.
 * admin(holds `grading:operate`) is on <grade10 admin grading queue url>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Notice day | 180 days after ready |
+| Row | Ready for | Outcome |
+| --- | --- | --- |
+| A | 180 days, the notice day | Notice due |
+| B | 179 days, a day before the notice day | no Notice due |
 
 **Steps:**
 
 1. Click Ready.
 2. Read the submission's row.
 3. Click the row and read the submission page's badges.
+4. Read the collector's last letter, as *Reading a letter* says.
 
 **Expected Results:**
 
-* Step 2's row and step 3's submission page badge read Notice due.
+* Step 2's row and step 3's submission page read the row's outcome: the Notice due badge in row A, no Notice due badge in row B.
+* Step 4 is no notice: nothing has been sent without staff.
 
 ### grade10-admin-grading-counter-US12-TC2-1: Posting the notice records the posting date and tracking; the email goes the same day
 
@@ -2925,7 +2943,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -2965,7 +2983,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2995,7 +3013,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3006,7 +3024,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission is seeded at `ready` with `readyAt` 183 days back, as *Seeding a submission* says, so it first badged Notice due 3 days ago.
+* A submission is seeded at `ready` with `readyAt` 186 days back, as *Seeding a submission* says, so it first badged Notice due 6 days ago.
 * admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it.
 
 **Test data:**
@@ -3014,17 +3032,18 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | Notice day | 180 |
-| Posted | day 183, today, 3 days after Notice due |
+| Posted | day 183, 3 days ago |
+| Recorded | day 186, today |
 | Tracking number | RR123456785HK, any registered-post number |
 
 **Steps:**
 
-1. Click Post the notice, enter today as the posting date and the tracking number, and click Record.
+1. Click Post the notice, enter the date 3 days ago as the posting date and the tracking number, and click Record.
 2. Click the Timeline tab and read the notice entry's 30 days.
 
 **Expected Results:**
 
-* The 30 days are counted from day 183, the posting date, not from day 180.
+* The 30 days are counted from day 183, the posting date, not from day 186, the day it was entered.
 
 ### grade10-admin-grading-counter-US12-TC5-1: Nothing more is offered once the 30 days pass
 
@@ -3032,7 +3051,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -3061,7 +3080,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -3101,7 +3120,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3140,7 +3159,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -3152,6 +3171,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * A submission of one card at Regular, its fee paid at hand-in, is received with that card moved to Express, as *Receiving with an exception* says, and its upcharge of 60000 minor units (HKD 600.00) is waived: asked for by admin A with a reason and approved by admin B.
+* The submission is then collected at the counter, its hand-back closed on a sealed receipt.
 * admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
@@ -3160,7 +3180,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Every event lists its own figures — the paid amount, the upcharge, and the waiver's reason — none summarised away.
+* Every event from booking to collection is listed in order, each with the figures it carried and who did it — the paid amount, the upcharge and the waiver's reason among them.
 
 ### grade10-admin-grading-counter-US13-TC2-1: The grader's stages appear on the timeline in the grader's own words
 
@@ -3168,7 +3188,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3221,11 +3241,13 @@ Runs once per row of **Test data**.
 
 1. Click the Timeline tab.
 2. Reload the collector's page and read it whole.
+3. Read every letter sent about the submission, as *Reading a letter* says.
 
 **Expected Results:**
 
 * Step 1 shows the staff-only entry.
 * Step 2 does not show that entry anywhere on the collector's page.
+* Step 3's letters do not carry the entry.
 
 ### grade10-admin-grading-counter-US13-TC4-1: Every action on the submission is filed under it on the audit chain
 
@@ -3233,7 +3255,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -3244,19 +3266,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge of 60000 minor units (HKD 600.00).
-* admin A(holds `grading:approve`) has asked for its waiver with a reason on the Money tab of <grade10 admin grading submission url>; admin B(holds `grading:approve`) has the same tab open in their own console.
+* A submission of one card is checked in and shipped, then received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge of 60000 minor units (HKD 600.00).
+* Its upcharge is waived on the Money tab of <grade10 admin grading submission url>: asked for by admin A(holds `grading:approve`) with a reason and approved by admin B(holds `grading:approve`) in their own console.
+* The submission is then collected at the counter, its hand-back closed on a sealed receipt.
 * A second submission, seeded at `ready` as *Seeding a submission* says, stands on the same stack.
+* admin(holds `grading:read`) is on <grade10 admin audit url>.
 
 **Steps:**
 
-1. As admin B, click Approve on the request waiting on a second person.
-2. On <grade10 admin audit url>, pull the trail for the first submission's id.
-3. Pull the trail for the second submission's id.
+1. On <grade10 admin audit url>, pull the trail for the first submission's id.
+2. Pull the trail for the second submission's id.
 
 **Expected Results:**
 
-* The waiver appears filed under that submission's own chain, distinct from any other submission's.
+* Step 1's trail lists every one of those acts — checked in, shipped, received, waived and collected — each with who did it, and none from the second submission.
 
 ---
 
@@ -3272,19 +3295,20 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
 
 * A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge.
-* admin(holds `grading:operate`, not `grading:approve`) is on <grade10 admin grading submission url> for it. No shipped role holds `grading:operate` without `grading:approve`, so the operator's grants are mocked.
+* admin(holds `grading:operate`, not `grading:approve`) is on <grade10 admin grading submission url> for it.
+* The operator's grants are mocked to `grading:read` and `grading:operate` without `grading:approve`, since no shipped role holds `grading:operate` without `grading:approve`.
 
 **Steps:**
 
@@ -3301,7 +3325,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -3318,10 +3342,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read every act the header and each tab offer.
+2. Send the cancel directly, outside the console.
 
 **Expected Results:**
 
 * Cancel is not offered on any status from `checked_in` onward.
+* Step 2 is refused by name.
 
 ### grade10-admin-grading-counter-US14-TC3-1: A stale act is refused by name when the submission moved under the operator
 
@@ -3329,7 +3355,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -3359,29 +3385,32 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
 
 * A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it has cards back and an upcharge owed.
-* admin(holds `grading:read` only) is on <grade10 admin grading submission url> for it. No shipped role holds `grading:read` alone, so the operator's grants are mocked.
+* admin(holds `grading:read` only) is on <grade10 admin grading submission url> for it.
+* The operator's grants are mocked to `grading:read` alone, since no shipped role holds that grant alone.
 
 **Steps:**
 
 1. Click the Cards tab.
 2. Click the Money tab.
 3. Click the Documents tab.
+4. Send a request to waive the upcharge directly, outside the console.
 
 **Expected Results:**
 
 * Every tab offers reading only; no act appears on any of the three.
+* Step 4 is refused by name.
 
 ### grade10-admin-grading-counter-US14-TC5-1: An approve-grant holder sees the operate acts as well as the approve-only ones
 
@@ -3389,7 +3418,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -3400,19 +3429,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:approve`) holds the `staff` role, so `grading:operate` as well.
-* A submission is seeded at `checked_in`, as *Seeding a submission* says; a second, of one card, is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge.
-* The admin is on <grade10 admin grading submission url> for the first.
+* admin(holds `grading:operate` and `grading:approve`) holds the `staff` role, which carries both.
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge.
+* The admin is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Click the Cards tab and check a card.
-2. Open the second submission and click the Money tab.
+1. Read the acts the submission offers on its runbook and its tabs.
+2. Click the Money tab and read its acts.
 
 **Expected Results:**
 
-* Step 1 succeeds as it would for `grading:operate`.
-* Step 2 also offers Waive and Payout, the acts of both grants offered together.
+* Step 1 offers the hand-back, the `grading:operate` act, and step 2 offers Waive the upcharge, the `grading:approve` act: the acts of both grants offered together on the one submission.
 
 ### grade10-admin-grading-counter-US14-TC6-1: Production asks for the second factor before any grading surface opens
 
@@ -3420,7 +3448,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -3432,18 +3460,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds `grading:operate`) has a production console account with a second factor enrolled, and no verified session.
-* The same admin has a staging account in the same state.
 
 **Steps:**
 
 1. Sign in to the production console.
 2. Navigate to <grade10 admin grading queue url> on production.
-3. Sign in to the staging console and navigate to its grading queue.
 
 **Expected Results:**
 
 * The second factor is required before the surface opens.
-* The same is optional in staging and development.
 
 ### grade10-admin-grading-counter-US14-TC7-1: One verification covers the next act for twelve hours
 
@@ -3451,7 +3476,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -3480,7 +3505,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -3515,7 +3540,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -3561,7 +3586,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3589,7 +3614,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -3620,7 +3645,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 saves the field in place with no second-person dialog.
-* Step 4 shows the entry filed under the settings subject.
+* Step 4 shows the entry under the settings subject, naming the key, 21, 25 and the writer.
 
 ### grade10-admin-grading-counter-US15-TC3-1: A money setting requires a reason and a second approve holder
 
@@ -3628,7 +3653,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3660,7 +3685,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The change is refused without admin B's approval and saves once given.
+* Step 3's row waits on a second approver; step 5's row reads 3500, carrying admin A's and admin B's names.
 * The audit entry is filed under `settings`, not under any submission.
 
 ### grade10-admin-grading-counter-US15-TC4-1: The recorder cannot approve their own settings change
@@ -3669,13 +3694,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
@@ -3689,7 +3714,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The dialog refuses admin A by name.
+* Step 1 is refused by name, and step 2's row still waits on a second approver.
 
 ### grade10-admin-grading-counter-US15-TC5-1: A changed setting reaches only submissions not yet booked
 
@@ -3697,7 +3722,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3736,27 +3761,30 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`, not `grading:approve`) is signed in to the console. No shipped role holds `grading:operate` without `grading:approve`, so the operator's grants are mocked.
+* admin(holds `grading:operate`, not `grading:approve`) is signed in to the console.
+* The operator's grants are mocked to `grading:read` and `grading:operate` without `grading:approve`, since no shipped role holds `grading:operate` without `grading:approve`.
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading settings url>.
 2. Click a setting's value to edit it.
+3. Send a write of that setting directly, outside the console.
 
 **Expected Results:**
 
 * The table reads, but no field opens for editing.
+* Step 3 is refused by name.
 
 ### grade10-admin-grading-counter-US15-TC7-1: An unset fact is marked on Settings with its readiness owner
 
@@ -3764,7 +3792,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -3793,7 +3821,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -3818,11 +3846,13 @@ Runs once per row of **Test data**.
 
 ### grade10-admin-grading-counter-US15-TC9-1: The reference rate is written by one approve holder, and nought is refused
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -3835,16 +3865,25 @@ Runs once per row of **Test data**.
 
 * admin(holds `grading:approve`) is on <grade10 admin grading settings url>, the reference rate at 7.84 as seeded.
 
+**Test data:**
+
+| Row | Refused rate | Outcome |
+| --- | --- | --- |
+| A | 0 | refused, naming the reference rate |
+| B | −1 | refused, naming the reference rate |
+
 **Steps:**
 
 1. Change the reference rate field to 7.90 and save it.
-2. Change it to 0 and save it.
+2. Change it to the row's refused rate and save it.
 3. Reload the page and read the reference rate row.
+4. As a collector, paste a list with a USD reference sale at <grade10 grading url>/new and read its HKD reading.
 
 **Expected Results:**
 
 * The first save writes 7.90 with no second-person dialog, naming the writer alone.
 * The second save is refused, naming the reference rate, and 7.90 stays.
+* Step 4 reads the USD sale at 7.90.
 
 ### grade10-admin-grading-counter-US15-TC10-1: A fee-sheet change reaches only what is not yet booked
 
@@ -3852,7 +3891,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3921,24 +3960,24 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US4-TC5-1` | Covered | `grade10-admin-grading-counter-SC-32` |
 | `grade10-admin-grading-counter-US4-TC6-1` | Covered | `grade10-admin-grading-counter-SC-33` |
 | `grade10-admin-grading-counter-US4-TC7-1` | Covered | `grade10-admin-grading-counter-SC-33` |
-| `grade10-admin-grading-counter-US4-TC8-1` | Covered | `grade10-admin-grading-counter-SC-43`, `grade10-admin-grading-counter-SC-44` |
+| `grade10-admin-grading-counter-US4-TC8-1` | Covered | `grade10-admin-grading-counter-SC-44`; its run has only an unticked item, so `grade10-admin-grading-counter-SC-43` went to a case of its own at review |
 | `grade10-admin-grading-counter-US4-TC9-1` | Covered | `grade10-admin-grading-counter-SC-35` |
 | `grade10-admin-grading-counter-US4-TC4-1` | Raised, answered, folded | The blind pass could not tell whether repeated wrong codes do anything beyond the field's own refusal. Answered: a wrong code is refused as often as it is typed, nothing closes the field, each refusal is on the timeline, and the ID glance against the collector's own name is the fallback. Folded as `grade10-admin-grading-counter-SC-91` and landed as `Q76` |
-| `grade10-admin-grading-counter-US4-TC10-1` | Raised, answered, folded | The blind pass could not tell whether a second hand-back re-runs who is collecting. Answered: it does, as every hand-back does. Folded as `grade10-admin-grading-counter-SC-90`, added to the case, and landed as `Q78`. The case's own close is `grade10-admin-grading-counter-SC-36` |
+| `grade10-admin-grading-counter-US4-TC10-1` | Raised, answered, folded | The blind pass could not tell whether a second hand-back re-runs who is collecting. Answered: it does, as every hand-back does. Folded as `grade10-admin-grading-counter-SC-90`, added to the case, and landed as `Q78`. The case's own close is `grade10-admin-grading-counter-SC-36`. Deferred at review, still `draft`: no spec names the receive that records the held card back at the shop, so a tester cannot reach the case's starting state; the spec's author owes it |
 | `grade10-admin-grading-counter-US5-TC1-1` | Covered | `grade10-admin-grading-counter-SC-38` |
 | `grade10-admin-grading-counter-US5-TC2-1` | Covered | `grade10-admin-grading-counter-SC-39` |
-| `grade10-admin-grading-counter-US5-TC3-1` | Covered | `grade10-admin-grading-counter-SC-39` |
+| `grade10-admin-grading-counter-US5-TC3-1` | Retired at review, `deprecated` | Every holder of `grading:operate` also holds `grading:approve`, so the case ran the same operator on the same route as `grade10-admin-grading-counter-US5-TC2-1`, which walks it: no override is offered to anyone turned away |
 | `grade10-admin-grading-counter-US5-TC4-1` | Covered | `grade10-admin-grading-counter-SC-38` — the counter reads the person named on the page as it stands at the hand-back; naming them is the collector's own act in `grade10-site/grading/submission-lifecycle` |
 | `grade10-admin-grading-counter-US5-TC5-1` | Folded | The collector collecting while somebody else is also named reached no scenario; the requirement releases to two people and the second is folded as `grade10-admin-grading-counter-SC-92` |
 | `grade10-admin-grading-counter-US6-TC1-1` | Covered | `grade10-admin-grading-counter-SC-41` |
 | `grade10-admin-grading-counter-US6-TC2-1` | Covered | `grade10-admin-grading-counter-SC-40` |
-| `grade10-admin-grading-counter-US6-TC3-1` | Covered | `grade10-admin-grading-counter-SC-40` |
-| `grade10-admin-grading-counter-US6-TC4-1` | Covered | `grade10-admin-grading-counter-SC-33`, `grade10-admin-grading-counter-SC-40` |
-| `grade10-admin-grading-counter-US7-TC1-1` | Covered | `grade10-admin-grading-counter-SC-54` |
-| `grade10-admin-grading-counter-US7-TC2-1` | Covered | `grade10-admin-grading-counter-SC-54` |
-| `grade10-admin-grading-counter-US7-TC3-1` | Covered | `grade10-admin-grading-counter-SC-54` |
+| `grade10-admin-grading-counter-US6-TC3-1` | Covered | `grade10-admin-grading-counter-SC-33`, `grade10-admin-grading-counter-SC-40`; the other item handing over beside the vaulted slab joined from `grade10-admin-grading-counter-US6-TC4-1` at review |
+| `grade10-admin-grading-counter-US6-TC4-1` | Retired at review, `deprecated` | Its result sat on `grade10-admin-grading-counter-US6-TC3-1`'s run: the other item ticking and handing over beside the vaulted slab is joined to that case, which walks it |
+| `grade10-admin-grading-counter-US7-TC1-1` | Covered | `grade10-admin-grading-counter-SC-54` whole; the refund, the withdrawal receipt and the rest staying in the batch joined from `grade10-admin-grading-counter-US7-TC2-1`, `grade10-admin-grading-counter-US7-TC3-1` and `grade10-admin-grading-counter-US7-TC5-1` at review |
+| `grade10-admin-grading-counter-US7-TC2-1` | Retired at review, `deprecated` | One starting state and one route with `grade10-admin-grading-counter-US7-TC1-1`; the refund of the card's own line is joined to that case, which walks it |
+| `grade10-admin-grading-counter-US7-TC3-1` | Retired at review, `deprecated` | One starting state and one route with `grade10-admin-grading-counter-US7-TC1-1`; the card's own withdrawal receipt is joined to that case, which walks it |
 | `grade10-admin-grading-counter-US7-TC4-1` | Covered | `grade10-admin-grading-counter-SC-55` |
-| `grade10-admin-grading-counter-US7-TC5-1` | Covered | `grade10-admin-grading-counter-SC-54` |
+| `grade10-admin-grading-counter-US7-TC5-1` | Retired at review, `deprecated` | One starting state and one route with `grade10-admin-grading-counter-US7-TC1-1`; the rest staying in the batch is joined to that case, which walks it |
 | `grade10-admin-grading-counter-US8-TC1-1` | Covered | `grade10-admin-grading-counter-SC-59` |
 | `grade10-admin-grading-counter-US8-TC2-1` | Covered | `grade10-admin-grading-counter-SC-61` |
 | `grade10-admin-grading-counter-US8-TC3-1` | Covered | `grade10-admin-grading-counter-SC-60` |
@@ -3961,7 +4000,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US11-TC4-1` | Covered | `grade10-admin-grading-counter-SC-45`, `grade10-admin-grading-counter-SC-48` |
 | `grade10-admin-grading-counter-US11-TC5-1` | Covered | `grade10-admin-grading-counter-SC-49` |
 | `grade10-admin-grading-counter-US11-TC6-1` | Folded | A submission with nothing sealed reached no scenario; folded as `grade10-admin-grading-counter-SC-93` |
-| `grade10-admin-grading-counter-US11-TC7-1` | Covered | `grade10-admin-grading-counter-SC-11`, `grade10-admin-grading-counter-SC-49` — the letter's own failure and the reason it carries are `grade10-site/grading/collector-notifications`'s, and this capability offers the send again |
+| `grade10-admin-grading-counter-US11-TC7-1` | Covered | `grade10-admin-grading-counter-SC-49` — the letter's own failure and the reason it carries are `grade10-site/grading/collector-notifications`'s, and this capability offers the send again, to an operate holder only. The case reads the flagged letter, not the queue row's badge, so `grade10-admin-grading-counter-SC-11` went out of suite at review |
 | `grade10-admin-grading-counter-US12-TC1-1` | Covered | `grade10-admin-grading-counter-SC-08`, `grade10-admin-grading-counter-SC-65` |
 | `grade10-admin-grading-counter-US12-TC2-1` | Covered | `grade10-admin-grading-counter-SC-66`, `grade10-admin-grading-counter-SC-67` |
 | `grade10-admin-grading-counter-US12-TC3-1` | Covered | `grade10-admin-grading-counter-SC-66` |
@@ -3969,7 +4008,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US12-TC5-1` | Covered | `grade10-admin-grading-counter-SC-68` |
 | `grade10-admin-grading-counter-US13-TC1-1` | Covered | `grade10-admin-grading-counter-SC-56` |
 | `grade10-admin-grading-counter-US13-TC2-1` | Covered | `grade10-admin-grading-counter-SC-58` |
-| `grade10-admin-grading-counter-US13-TC3-1` | Covered | `grade10-admin-grading-counter-SC-57` |
+| `grade10-admin-grading-counter-US13-TC3-1` | Covered, deferred at review | `grade10-admin-grading-counter-SC-57`; the letters step was added at review. Still `draft`: no act or surface marks a timeline entry staff-only, so no tester can reach the case's starting state; the spec's author owes it |
 | `grade10-admin-grading-counter-US13-TC4-1` | Covered | `grade10-admin-grading-counter-SC-80` |
 | `grade10-admin-grading-counter-US14-TC1-1` | Covered | `grade10-admin-grading-counter-SC-75`, `grade10-admin-grading-counter-SC-82` |
 | `grade10-admin-grading-counter-US14-TC2-1` | Covered | `grade10-admin-grading-counter-SC-83` |
@@ -3980,7 +4019,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US15-TC2-1` | Covered | `grade10-admin-grading-counter-SC-71` |
 | `grade10-admin-grading-counter-US15-TC3-1` | Covered | `grade10-admin-grading-counter-SC-70` |
 | `grade10-admin-grading-counter-US15-TC4-1` | Covered | `grade10-admin-grading-counter-SC-60` |
-| `grade10-admin-grading-counter-US15-TC5-1` | Covered | `grade10-admin-grading-counter-SC-72`, `grade10-admin-grading-counter-SC-73`, `grade10-admin-grading-counter-SC-74` |
+| `grade10-admin-grading-counter-US15-TC5-1` | Covered | `grade10-admin-grading-counter-SC-73`; it walks the storage fee, not the fee sheet, so `grade10-admin-grading-counter-SC-72` and `grade10-admin-grading-counter-SC-74` went to a case of their own at review |
 | `grade10-admin-grading-counter-US15-TC6-1` | Covered | `grade10-admin-grading-counter-SC-76` |
 | `grade10-admin-grading-counter-US15-TC7-1` | Folded | A setting nobody has written being marked on the settings page with its owner reached no scenario; folded as `grade10-admin-grading-counter-SC-98` |
 | `grade10-admin-grading-counter-SC-01` | Case added | `grade10-admin-grading-counter-US1-TC8-1` — the Today cut made on the shop's own day while the date in Coordinated Universal Time is still yesterday's |
@@ -4000,8 +4039,15 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-SC-105` | Case added, added after the run | `grade10-admin-grading-counter-US12-TC6-1`: decided outside the blind pass; the address is personal data, so only a holder who may post the notice reads it, and only while the notice is due |
 | `grade10-admin-grading-counter-SC-106` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC8-1`: decided outside the blind pass; staff cancel on the collector's word inside the collector's own window, the drop-off going with it, filed on the audit chain and no message sent |
 | `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-1`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once the visit's start time comes or a card is checked or refused, a desk that started early included, and the desk refuses the cards instead |
+| `grade10-admin-grading-counter-SC-91` | Case added at review | `grade10-admin-grading-counter-US4-TC12-1` — three wrong codes, each refused on the field and on the timeline, nothing closing the field, and the ID glance as the fallback; `grade10-admin-grading-counter-US4-TC4-1` asserts one wrong code only |
+| `grade10-admin-grading-counter-SC-43` | Case added at review | `grade10-admin-grading-counter-US11-TC9-1` — the receipt refused by name before the iPad while storage is unpaid; `grade10-admin-grading-counter-US4-TC8-1`'s run has only an unticked item |
+| `grade10-admin-grading-counter-SC-07` | Case added at review | `grade10-admin-grading-counter-US12-TC7-1` — a submission read on its 29th and 30th day ready, badged uncollected on the second read with nothing written between; one condition, one case |
+| `grade10-admin-grading-counter-SC-10` | Case added at review | `grade10-admin-grading-counter-US12-TC7-1` — a submission read on its 29th and 30th day ready, badged uncollected on the second read with nothing written between; one condition, one case |
+| `grade10-admin-grading-counter-SC-72` | Case added at review | `grade10-admin-grading-counter-US15-TC10-1` — a fee-sheet row written after one booking and before another, reaching only the one not yet booked; `grade10-admin-grading-counter-US15-TC5-1` walks the storage fee, not the fee sheet |
+| `grade10-admin-grading-counter-SC-74` | Case added at review | `grade10-admin-grading-counter-US15-TC10-1` — a fee-sheet row written after one booking and before another, reaching only the one not yet booked; `grade10-admin-grading-counter-US15-TC5-1` walks the storage fee, not the fee sheet |
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
-| `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test in the application repository — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
+| `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test, `grade10:packages/grading/backend/src/testing/suites/audit.ts` — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
+| `grade10-admin-grading-counter-SC-11` | Out of suite | **Out of suite:** `grade10-site/grading/submission-lifecycle`'s feature suite, where `grade10-site/grading/collector-notifications` routes its uncollected ladder; no counter case reads the queue row's badge |
 
 ### Manual
 
@@ -4016,3 +4062,5 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US12-TC2-1` | The notice goes by registered post; a person posts it and enters the date and tracking the counter clerk gave them |
 | `grade10-admin-grading-counter-US14-TC6-1` | The second factor is the console's own, driven on production by a person with the device |
 | `grade10-admin-grading-counter-US10-TC5-1` | The click-to-chat template opens WhatsApp outside the console, and the test is that nothing sends until staff press it |
+| `grade10-admin-grading-counter-US15-TC10-1` | The till is the shop's own point of sale; a person runs both orders and reads the prices |
+| `grade10-admin-grading-counter-US12-TC7-1` | The badge comes a day later; a person reads the queue on two days |
