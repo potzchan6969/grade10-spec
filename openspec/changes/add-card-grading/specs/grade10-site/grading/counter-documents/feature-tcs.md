@@ -1220,6 +1220,10 @@ Runs once per row of **Test data**.
 
 ---
 
+## Settled
+
+- A document refused for an unset fact, a balance still due or an item unticked is not refused at the sign link: the rules refuse when the document is prepared, before anything is rendered or a link minted, so a case reaches that refusal by preparing the document
+
 ## Reconciliation
 
 **Run:** the blind pass read the isolated bundle — this capability's `## Purpose`
@@ -1228,29 +1232,32 @@ and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and
 dispositions stripped, and the PRD pages the proposal links. It was denied every
 `## Requirements` section, `openspec/specs/` beyond the two included sections,
 `openspec/changes/archive/` and `tech-design.md`. Nothing verifies that line; it
-is the run's own statement. The scenario pass issued `SC-01` to `SC-27` over
+is the run's own statement. The scenario pass wrote its scenarios over
 eight ADDED requirements; the blind suite wrote 23 cases over `US1` to `US5`.
+Scenario ids stripped at review, 2026-09-29.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| Raised: does the receipt's signing block refuse a name mismatch the way the agreement's does? | **Raised, folded in** | It does, against the booking's name or the named person's. Folded as `grade10-site-grading-counter-documents-SC-28` and a line on the ceremony requirement's `**The name**` rule; landed as `Q57`. Case `grade10-site-grading-counter-documents-US3-TC8-1` added |
-| Raised: is the named person's prefilled name editable? | **Raised, folded in** | It is fixed — the collector named them and the counter's ID glance checks it. Folded as `grade10-site-grading-counter-documents-SC-29` and a `**The named person**` rule on the hand-back receipt; landed as `Q58`. Case `grade10-site-grading-counter-documents-US4-TC2-1` added |
-| Raised: do two receipt-worthy exceptions on one submission print one receipt or two? | **Raised, folded in** | One receipt per hand-back, with a line per card stating that card's outcome. Folded as `grade10-site-grading-counter-documents-SC-30` and a `**Several outcomes at once**` rule; landed as `Q59`. Case `grade10-site-grading-counter-documents-US3-TC9-1` added |
-| `grade10-site-grading-counter-documents-US1-TC1-1` — "the fee is charged at the till only after the seal" | **Kept, stated elsewhere** | Grading's money is the counter's and the lifecycle's, not this capability's paper; `Q4` decides it and no scenario is folded here |
-| `grade10-site-grading-counter-documents-US1-TC3-1` — Sign *disabled* rather than refused | **Kept, no change** | The same rule as `grade10-site-grading-counter-documents-SC-06`; the disabled control is that refusal's presentation, and the `Postal address empty` design row carries it |
-| `grade10-site-grading-counter-documents-US1-TC7-1`, `…-US3-TC6-1`, `…-US3-TC7-1` — refusal fired at the sign link | **Amended** | The rules refuse at preparation, before anything is rendered (`grade10-site-grading-counter-documents-SC-23`, `…-SC-02`), so the three cases could not be reached as written. Steps moved to preparing the document; no behaviour claimed beyond the scenarios |
-| `grade10-site-grading-counter-documents-US4-TC1-1` — "with a hint that it was prefilled" | **Kept, presentation** | Not behaviour: the hint is the `Receipt, named person` design row, and the case keeps it as an observation |
-| `grade10-site-grading-counter-documents-SC-05` — signed with no identity record | **Case added** | `grade10-site-grading-counter-documents-US1-TC9-1` |
-| `grade10-site-grading-counter-documents-SC-22` — a figure pinned at signing | **Case added** | `grade10-site-grading-counter-documents-US1-TC10-1` |
-| `grade10-site-grading-counter-documents-SC-26` — a declined document on none of the three | **Case added** | `grade10-site-grading-counter-documents-US5-TC6-1` |
-| `grade10-site-grading-counter-documents-SC-27` — a digest grading never issued | **Case added** | `grade10-site-grading-counter-documents-US5-TC7-1` |
-| `grade10-site-grading-counter-documents-SC-31` — a Bulk list of a hundred cards runs on | **Case added** | `grade10-site-grading-counter-documents-US1-TC11-1`; the paper ran to one page when the suite was drawn, and a Bulk list of 100 could not be printed on it (`Q112`) |
-| `grade10-site-grading-counter-documents-SC-01` — the agreement waits for every card to be checked | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is that capability's `grade10-admin-grading-counter-US-11`; staff at the desk walk it, nobody here |
-| `grade10-site-grading-counter-documents-SC-03` — the intake receipt is issued rather than signed | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; no signer ever meets the intake receipt on a link |
-| `grade10-site-grading-counter-documents-SC-13` — a card refused at the check is off the schedule | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-03`, the refusal staff make |
-| `grade10-site-grading-counter-documents-SC-15` — the intake receipt names every intake id | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; `grade10-site-grading-counter-documents-US5-TC2-1` walks the attachment alone |
-| `grade10-site-grading-counter-documents-SC-20` — a withdrawn card has a receipt of its own | **Case added** | `grade10-site-grading-counter-documents-US5-TC8-1`. It was routed out of suite, serving `grade10-site-grading-submission-lifecycle-US-02`, while the document table named no such document. The table now lists the withdrawal receipt as issued, so the scenario serves `grade10-site-grading-counter-documents-US-05`, the copy the collector keeps |
-| `grade10-site-grading-counter-documents-SC-18` — the second receipt | **Kept, stated elsewhere** | The second receipt prints only its own cards and names the first. `grade10-site-grading-counter-documents-US3-TC3-1` stops at the first receipt, and `grade10-admin-grading-counter-US4-TC10-1` walks the second hand-back |
+| Raised: does the receipt's signing block refuse a name mismatch the way the agreement's does? | Raised, folded | It does, against the booking's name or the named person's. Folded as a scenario and a line on the ceremony requirement's `**The name**` rule; landed as `Q57`. Case `grade10-site-grading-counter-documents-US3-TC8-1` added |
+| Raised: is the named person's prefilled name editable? | Raised, folded | It is fixed — the collector named them and the counter's ID glance checks it. Folded as a scenario and a `**The named person**` rule on the hand-back receipt; landed as `Q58`. Case `grade10-site-grading-counter-documents-US4-TC2-1` added |
+| Raised: do two receipt-worthy exceptions on one submission print one receipt or two? | Raised, folded | One receipt per hand-back, with a line per card stating that card's outcome. Folded as a scenario and a `**Several outcomes at once**` rule; landed as `Q59`. Case `grade10-site-grading-counter-documents-US3-TC9-1` added |
+| `grade10-site-grading-counter-documents-US1-TC1-1` — "the fee is charged at the till only after the seal" | Kept, stated elsewhere | Grading's money is the counter's and the lifecycle's, not this capability's paper; `Q4` decides it and no scenario is folded here |
+| `grade10-site-grading-counter-documents-US1-TC3-1` — Sign *disabled* rather than refused | Kept, no change | The same rule as the agreement taking no signature without the postal address; the disabled control is that refusal's presentation, and the `Postal address empty` design row carries it |
+| `grade10-site-grading-counter-documents-US1-TC7-1`, `…-US3-TC6-1`, `…-US3-TC7-1` — refusal fired at the sign link | Amended | The rules refuse at preparation, before anything is rendered (production refusing paper that names no company; the hand-back receipt waiting for the balance and every tick), so the three cases could not be reached as written. Steps moved to preparing the document; no behaviour claimed beyond the scenarios |
+| `grade10-site-grading-counter-documents-US4-TC1-1` — "with a hint that it was prefilled" | Kept, presentation | Not behaviour: the hint is the `Receipt, named person` design row, and the case keeps it as an observation |
+| Signed with no identity record | Case added | `grade10-site-grading-counter-documents-US1-TC9-1` |
+| A storage fee raised after signing | Case added | `grade10-site-grading-counter-documents-US1-TC10-1` |
+| A declined document on none of the three | Case added | `grade10-site-grading-counter-documents-US5-TC6-1` |
+| A digest grading never issued | Case added | `grade10-site-grading-counter-documents-US5-TC7-1` |
+| A Bulk list of a hundred cards runs on | Case added | `grade10-site-grading-counter-documents-US1-TC11-1`; the paper ran to one page when the suite was drawn, and a Bulk list of 100 could not be printed on it (`Q112`) |
+| The agreement waiting for every card to be checked | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is that capability's `grade10-admin-grading-counter-US-11`; staff at the desk walk it, nobody here |
+| The intake receipt issued rather than signed | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; no signer ever meets the intake receipt on a link |
+| A card refused at the check off the schedule | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-03`, the refusal staff make |
+| The intake receipt naming every intake id | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; `grade10-site-grading-counter-documents-US5-TC2-1` walks the attachment alone |
+| A withdrawn card with a receipt of its own | Case added | `grade10-site-grading-counter-documents-US5-TC8-1`. It was routed out of suite, serving `grade10-site-grading-submission-lifecycle-US-02`, while the document table named no such document. The table now lists the withdrawal receipt as issued, so the scenario serves `grade10-site-grading-counter-documents-US-05`, the copy the collector keeps |
+| The second receipt | Case added at review | The second receipt prints only its own cards and names the first. `grade10-site-grading-counter-documents-US3-TC3-1` stops at the first receipt; `grade10-site-grading-counter-documents-US3-TC10-1` walks the second, and `grade10-admin-grading-counter-US4-TC10-1` the second hand-back's close |
+| The desk reading a declined document back | Case added at review | `grade10-admin/grading/counter` routes its rule for a declined signature leaving nothing handed over to this suite; `grade10-site-grading-counter-documents-US2-TC3-1` walks it |
+| The receipt printing what was paid, refunded and paid out | Aligned at review | Its refund is now a withdrawn card's fee, the author's fix to agree with the fee table; `grade10-site-grading-counter-documents-US3-TC5-1` follows it |
 
 ### Manual
 

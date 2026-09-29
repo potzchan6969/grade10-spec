@@ -2160,3 +2160,8 @@ Runs once per row of **Test data**.
 | `US6-TC2-1` | The ID glance happens at the counter and keeps nothing, so nothing but the page's Bring line is scriptable |
 | `US8-TC3-1` | The written notice is posted by registered post, and its posting date and tracking are typed in from the receipt |
 | `US10-TC4-1` | The refusal and the telling both happen at the counter, and the case asserts no message was sent for them |
+| `US1-TC10-1` | A person refuses the card at the counter after payment and reads the fee and cover lines come back at the till; only the page's refund line is scriptable |
+| `US6-TC6-1` | A person opens the vault case with the collector at the counter and has the receipt signed on the iPad; the page's Vaulted line and the storage count are scriptable |
+| `US7-TC6-1` | A person who is not the collector stands at the counter with a forwarded code, and staff look for a way to release to them; the runbook's refusal is scriptable |
+| `US8-TC7-1` | The storage is taken at the POS, one line per card held, by a person at the till; the Settle step's hold is scriptable |
+| `US8-TC10-1` | The written notice is posted by registered post and its posting date and tracking typed in from the receipt; the email that day is scriptable |
