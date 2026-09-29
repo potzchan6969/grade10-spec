@@ -87,94 +87,98 @@ const SOCIAL_ICON_PROPS = {
   weight: "fill",
 } as const;
 
-const STORE_FOOTER = {
-  copy: {
-    attribution: "A division of MemeStrategy (HKEX: 2440)",
-    copyright: "© 2026 Grade10. All rights reserved.",
+/** Shared chrome matching Components/Footer — Auction only and Store launch. */
+const FOOTER_COPY = {
+  attribution: "A division of MemeStrategy (HKEX: 2440)",
+  copyright: "© 2026 Grade10. All rights reserved.",
+};
+
+const FOOTER_SOCIAL_LINKS = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/grade10hk/",
+    external: true,
+    icon: createElement(InstagramLogo, SOCIAL_ICON_PROPS),
   },
-  logo: FOOTER_LOGO,
-  logoHref: "/",
-  socialLinks: [
-    {
-      label: "Instagram",
-      href: "https://www.instagram.com/grade10hk/",
-      external: true,
-      icon: createElement(InstagramLogo, SOCIAL_ICON_PROPS),
-    },
-    {
-      label: "Facebook",
-      href: "https://www.facebook.com/grade10hk/",
-      external: true,
-      icon: createElement(FacebookLogo, SOCIAL_ICON_PROPS),
-    },
-    {
-      label: "Threads",
-      href: "https://www.threads.com/@grade10hk",
-      external: true,
-      icon: createElement(ThreadsLogo, SOCIAL_ICON_PROPS),
-    },
-  ],
-  legalLinks: [
-    { label: "PRIVACY", href: PRIVACY_POLICY_HREF },
-    { label: "TERMS", href: TERMS_OF_SERVICE_HREF },
-    { label: "SHIPPING", href: "#shipping" },
-  ],
-  columns: [
-    {
-      heading: "SHOP",
-      links: [
-        { label: "ALL COLLECTIONS", href: "#collections" },
-        { label: "POKÉMON", href: "#pokemon" },
-        { label: "DRAGON BALL", href: "#dragon-ball" },
-        { label: "ONE PIECE", href: "#one-piece" },
-      ],
-    },
-    {
-      heading: "HELP",
-      links: [
-        { label: "ORDER STATUS", href: "#order-status" },
-        { label: "STORE LOCATOR", href: STORE_LOCATOR_HREF },
-        { label: "SHIPPING & DELIVERY", href: "#shipping" },
-        { label: "RETURNS & REFUNDS", href: "#returns" },
-        { label: "CONTACT", href: "#contact" },
-      ],
-    },
-    {
-      heading: "LEGAL",
-      links: [
-        { label: "PRIVACY POLICY", href: PRIVACY_POLICY_HREF },
-        { label: "TERMS of SERVICE", href: TERMS_OF_SERVICE_HREF },
-        { label: "ABOUT GRADE10", href: "#about" },
-      ],
-    },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/grade10hk/",
+    external: true,
+    icon: createElement(FacebookLogo, SOCIAL_ICON_PROPS),
+  },
+  {
+    label: "Threads",
+    href: "https://www.threads.com/@grade10hk",
+    external: true,
+    icon: createElement(ThreadsLogo, SOCIAL_ICON_PROPS),
+  },
+];
+
+const FOOTER_DOCS_LINK = {
+  label: "Docs",
+  href: "/docs",
+  external: true,
+};
+
+const FOOTER_LEGAL_COLUMN = {
+  heading: "LEGAL",
+  links: [
+    { label: "Privacy Policy", href: PRIVACY_POLICY_HREF },
+    { label: "Terms of Service", href: TERMS_OF_SERVICE_HREF },
   ],
 };
 
 /**
- * Auction-only footer — brand, social, Docs, Privacy and Terms. No shop
- * column and no bar legal duplicates (Components/Footer → Auction only).
+ * Store-launch footer — Components/Footer → Store launch. Shop destinations
+ * and Store Locator join Docs and Legal; no bar legal duplicates.
  */
-const AUCTION_FOOTER = {
-  copy: {
-    attribution: "A division of MemeStrategy (HKEX: 2440)",
-    copyright: "© 2026 Grade10. All rights reserved.",
-  },
+const STORE_FOOTER = {
+  copy: FOOTER_COPY,
   logo: FOOTER_LOGO,
   logoHref: "/",
-  socialLinks: STORE_FOOTER.socialLinks,
-  legalLinks: [] as typeof STORE_FOOTER.legalLinks,
+  socialLinks: FOOTER_SOCIAL_LINKS,
+  legalLinks: [],
+  columns: [
+    {
+      heading: "SHOP",
+      links: [
+        { label: "All Collections", href: "#collections" },
+        { label: "Pokémon", href: "#pokemon" },
+        { label: "Dragon Ball", href: "#dragon-ball" },
+        { label: "One Piece", href: "#one-piece" },
+        { label: "Disney", href: "#disney" },
+        { label: "NBA", href: "#nba" },
+        { label: "MLB", href: "#mlb" },
+        { label: "Formula 1", href: "#formula-1" },
+      ],
+    },
+    {
+      heading: "HELP",
+      links: [
+        { label: "Store Locator", href: STORE_LOCATOR_HREF },
+        FOOTER_DOCS_LINK,
+      ],
+    },
+    FOOTER_LEGAL_COLUMN,
+  ],
+};
+
+/**
+ * Auction-only footer — Components/Footer → Auction only. Brand, social,
+ * Docs, Privacy and Terms. No shop column and no bar legal duplicates.
+ */
+const AUCTION_FOOTER = {
+  copy: FOOTER_COPY,
+  logo: FOOTER_LOGO,
+  logoHref: "/",
+  socialLinks: FOOTER_SOCIAL_LINKS,
+  legalLinks: [],
   columns: [
     {
       heading: "HELP",
-      links: [{ label: "Docs", href: "/docs", external: true }],
+      links: [FOOTER_DOCS_LINK],
     },
-    {
-      heading: "LEGAL",
-      links: [
-        { label: "Privacy Policy", href: PRIVACY_POLICY_HREF },
-        { label: "Terms of Service", href: TERMS_OF_SERVICE_HREF },
-      ],
-    },
+    FOOTER_LEGAL_COLUMN,
   ],
 };
 const SORT_OPTIONS: SortOption[] = [

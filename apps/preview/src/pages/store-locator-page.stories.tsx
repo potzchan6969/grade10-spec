@@ -204,13 +204,14 @@ export const Default: Story = {
     expect(
       canvas.getByRole("link", { name: STORE_LOCATOR_COPY.openMap }),
     ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
-    expect(
-      canvas.getAllByRole("link", { name: "Store Locator" }).length,
-    ).toBeGreaterThan(0);
-    expect(canvas.getByRole("link", { name: "STORE LOCATOR" })).toHaveAttribute(
-      "href",
-      "?path=/story/pages-store-locator-page--default",
+    const footer = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="footer"]',
     );
+    expect(footer).not.toBeNull();
+    if (footer === null) return;
+    expect(
+      within(footer).getByRole("link", { name: "Store Locator" }),
+    ).toHaveAttribute("href", "?path=/story/pages-store-locator-page--default");
   },
 };
 

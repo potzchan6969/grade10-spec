@@ -3,7 +3,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { SiteHeader } from "@grade10/ui";
 import type { LegalDocument, LegalSurface } from "./legal-content";
 import { PRIVACY_DOCUMENT, TERMS_DOCUMENT } from "./legal-content";
-import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
+import { AUCTION_FOOTER, STORE_SITE_HEADER } from "./store-content";
 
 const DOCUMENTS: Record<LegalSurface, LegalDocument> = {
   terms: TERMS_DOCUMENT,
@@ -61,7 +61,7 @@ function LegalPage({ surface }: { surface: LegalSurface }) {
           </div>
         </VStack>
       </main>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }
