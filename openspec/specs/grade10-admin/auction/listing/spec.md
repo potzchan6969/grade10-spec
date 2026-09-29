@@ -4,9 +4,9 @@
 Lets an authorized Grade10 operator draft, create, and publish an Auction
 listing — incomplete saves first, required fields enforced at create, publish
 now or at a future scheduled time — with an ordered gallery of one to eight
-images or videos (originals stored and served as uploaded), and call one off
-while it has not closed. Named image sizes and optional alt live in
-`grade10-site/auction/listing-media`.
+images or videos from product assets or direct uploads, frozen when saved, and
+call one off while it has not closed. Named image sizes and optional alt live
+in `grade10-site/auction/listing-media`.
 
 ## Feature set
 
@@ -26,6 +26,8 @@ while it has not closed. Named image sizes and optional alt live in
   - Closed is frozen: a closed listing cannot be rewritten here
 - Gallery
   - One to eight uploads: images or videos, stored as uploaded, ordered, first item as the catalogue card
+  - Combined sources: selected product assets and listing-only uploads form one ordered gallery
+  - Saved snapshot: a selected product asset becomes listing media on Save, unaffected by later product-media edits, reordering, or deletion
 - Independent create
   - Listings create: an authorized operator starts a listing from the
     Listings section with no campaign selected

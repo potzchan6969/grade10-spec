@@ -3,8 +3,8 @@
 ## Purpose
 Gives Grade10 one stock snapshot per catalogue product, quantity-based
 application reservations with remaining / sold / vaulted / released tracking,
-admin oversight by explicit `holder_kind`, and an append-only trace of every
-count transition.
+admin oversight by explicit `holder_kind`, an append-only trace of every count
+transition, and an ordered reusable media gallery for Auction listings.
 
 ## Feature set
 
@@ -54,6 +54,10 @@ count transition.
   - Search and filter: universal tags and configured product attributes remain searchable by stable identity
   - Listing attributes: ordered, localized display items belong to one Auction listing and are not searchable
   - Live values: Auction reads the selected unit through Inventory
+
+- Product assets
+  - Reusable gallery: inventory admins prepare ordered images and video on a catalogue product for Auction listings
+  - Auction eligibility: product assets follow the Auction listing media policy, so an operator can select them into a listing
 
 ## Requirements
 

@@ -2080,7 +2080,39 @@ An authorized operator on <grade10 auction admin listings url>.
 
 * There is no Watchers column.
 
+
+### grade10-admin-auction-listing-US2-TC9-1: Listing saves mixed media from its selected product
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-02
+
+**Pre-conditions:**
+
+* An admin(auction operator) edits a listing whose selected product has reusable media.
+
+**Steps:**
+
+1. Select product media, add a direct upload, interleave their order, and save.
+2. Change the source product gallery and reopen the listing.
+
+**Expected Results:**
+
+* The listing retains one ordered mixed gallery.
+* Later product-gallery changes do not alter the saved listing.
+
 ## Settled
+
+- Asset selection uses existing listing-edit authorization; unauthorized requests are refused.
 
 - `grade10-admin-auction-listing-US-08-TC1` is `grade10-admin-auction-listing-US8-TC1`: renamed to the compact id form while still draft.
 - `grade10-admin-auction-listing-US-08-TC2` is `grade10-admin-auction-listing-US8-TC2`: renamed to the compact id form while still draft.

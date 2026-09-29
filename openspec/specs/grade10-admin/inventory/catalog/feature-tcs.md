@@ -828,3 +828,46 @@ product rows separately from stock, then mark valid products created,
 * Validation rejects the RAW row because it has a Cert ID.
 * Validation rejects the graded row because it has no Cert ID.
 * Neither row changes inventory counts, unit facts, or history.
+
+## grade10-admin-inventory-catalog-US74: Inventory admin prepares reusable product media
+
+**As an** inventory admin,
+**I want** to attach, order, replace, and remove photographs and video on a catalogue product,
+**so that** Auction operators can begin a listing with prepared material.
+
+### grade10-admin-inventory-catalog-US74-TC1-1: Product accepts an ordered reusable gallery
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-74
+
+**Pre-conditions:**
+
+* An admin(inventory admin) is editing a product with no media.
+
+**Steps:**
+
+1. Add supported assets, reorder them, and save the product.
+
+**Expected Results:**
+
+* The product retains the selected order and exposes the assets to Auction.
+
+## Settled
+
+- Product-gallery management uses existing inventory-admin authorization; unauthorized requests are refused.
+
+## Reconciliation
+
+**Run:** Blind pass read the inventory outline, journey, decisions, and marked PRD; it was denied requirements and scenarios.
+
+- **Raised, folded into spec:** CRUD, bounds, validation, reuse, and access for product assets are covered.
