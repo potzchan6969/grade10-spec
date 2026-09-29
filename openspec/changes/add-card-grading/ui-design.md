@@ -500,7 +500,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-SC-44` |
 | Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
 | Booked, joined | the visit card names the submission that owns it | `grade10-site-grading-dropoff-booking-SC-20` |
-| Visit detached | the owner cancelled or missed the visit: the joiner back to Not handed in yet, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22` |
+| Visit detached | the owner cancelled or missed the visit: the joiner's page holds no visit and reads that the visit closed, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22` |
 | Move | the picker on the page; the batch line reads again | `grade10-site-grading-dropoff-booking-SC-15` |
 | Cancel visit | `BookingManageCard`'s confirm: the visit closes, the list stays | `grade10-site-grading-dropoff-booking-SC-16` |
 | Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-SC-19` |
