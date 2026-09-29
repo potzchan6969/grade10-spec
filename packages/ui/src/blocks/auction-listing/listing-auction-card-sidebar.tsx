@@ -1,4 +1,5 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import type { ShippedLocale } from "../../lib/format-datetime";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
@@ -69,9 +70,9 @@ function ListingAuctionCardSidebar({
 }: ListingAuctionCardSidebarProps) {
   return (
     <VStack
-      className={LISTING_LOT_SIDEBAR_CLASS}
+      className={cn(LISTING_LOT_SIDEBAR_CLASS, "gap-10 sm:gap-6")}
       data-variant="auction-card"
-      gap="lg"
+      gap="none"
     >
       <VStack className="w-full" gap="sm">
         <ListingAuctionBidCard
