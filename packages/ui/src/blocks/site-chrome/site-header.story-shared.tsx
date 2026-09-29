@@ -2,7 +2,7 @@ import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-
 import { getMessages } from "@grade10/i18n";
 import type { SiteHeaderProps } from "./site-header";
 
-const { chrome, common, locale } = getMessages("grade10", "en");
+const { auctionRecord, chrome, common, locale } = getMessages("grade10", "en");
 
 /** TBC — provisional docs host for collector Help. Keep in sync with Nav
  * `HELP_HREF` and preview chrome. */
@@ -30,7 +30,7 @@ export const COPY = {
   accountMenuLabel: chrome.accountMenuLabel,
   profile: chrome.profile,
   myOrders: chrome.myOrders,
-  myAuctions: "My Auctions",
+  myAuctions: auctionRecord.title,
   membership: chrome.membership,
   signOut: common.signOut,
 };
