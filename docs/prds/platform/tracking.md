@@ -1,6 +1,7 @@
 ---
 title: Product Analytics
 order: 3
+reviewed: 2026-09-29
 ---
 
 Events reach Mixpanel from Grade10's own backends — never from the browser
@@ -69,22 +70,22 @@ Domain signals and the Mixpanel catalog sit on
 - The server resolves the user from the session
 - The wire format has no user field — a client can name its device but never its user
 
-### 🚧 Sign-out and session expiry rotate the device
+### Sign-out and session expiry rotate the device
 
 - The browser client drops the device id and mints a new one so the next guest is not merged onto the last person
 
-### 🚧 Server emits keep `$device_id` when Grade10 still holds it
+### Server emits keep `$device_id` when Grade10 still holds it
 
 - Checkout Started, web Order Paid, and every other server event that continues a browser or till visit attach that `$device_id` when Grade10 still has it, so pre-login browse joins after pay or sign-in
 
-### 🚧 Collector IP for Mixpanel geo
+### Collector IP for Mixpanel geo
 
 - `/import` and `/engage` pass the collector's IP when Grade10 knows it so Mixpanel sets city and country
 - The IP is never stored as an event or profile property; on `/engage`, `$ip` is `0` when none was captured so the worker's location is never written
 
 ## User Profile
 
-### 🚧 Server writes the user-profile snapshot via `/engage`
+### Server writes the user-profile snapshot via `/engage`
 
 - Only for a user id — never an anonymous device
 - Servers that own the fact call `engagePerson` in `packages/mixpanel`; the browser never writes a profile
@@ -139,7 +140,7 @@ Domain signals and the Mixpanel catalog sit on
 3. Wrangler: `MIXPANEL_PROJECT_TOKEN` secret per environment — the empty dev value keeps tracking a logged no-op locally
 4. Route: `handleTrackRequest` behind `withSession` in `src/app.ts`
 5. Web: `createTrackingClient` typed by the catalog, bound through DI under `src/core/analytics/`
-6. 🚧 User profiles, when the product owns user-profile facts: call `engagePerson` from the backend that holds the fact — not from the browser
+6. User profiles, when the product owns user-profile facts: call `engagePerson` from the backend that holds the fact — not from the browser
 
 ## Q & A
 
@@ -148,4 +149,4 @@ Domain signals and the Mixpanel catalog sit on
 - Why one request with no queue?
   - The endpoint already holds the whole validated batch, so it sends it in one `fetch` — no queue table, no scheduler, no Durable Object; the browser client is the retry mechanism and already knows how.
 - Does the tracker sync user profiles or gate on consent?
-  - 🚧 User-profile sync (`/engage`) lands with this change. A consent gate in front of the browser client is not built until Legal requires one.
+  - User-profile sync (`/engage`) is live. A consent gate in front of the browser client is not built until Legal requires one.

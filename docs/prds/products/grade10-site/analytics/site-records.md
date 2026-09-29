@@ -1,6 +1,6 @@
 ---
 title: Site Records
-spec: grade10-site/analytics
+spec: grade10-site/analytics/analytics
 order: 3
 ---
 
