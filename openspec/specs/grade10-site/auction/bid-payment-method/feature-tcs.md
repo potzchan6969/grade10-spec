@@ -334,7 +334,7 @@
 does not exist yet.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-lbz rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
-### grade10-site-auction-bid-payment-method-US-04-TC1-1: Active listing shows the rate without a premium amount
+### grade10-site-auction-bid-payment-method-US4-TC1-1: Active listing shows the rate without a premium amount
 
 **Classification:**
 
@@ -364,7 +364,7 @@ does not exist yet.
 * The panel shows no invoice total.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-nvs rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
-### grade10-site-auction-bid-payment-method-US-04-TC2-1: Supported currencies use the same disclosed rate
+### grade10-site-auction-bid-payment-method-US4-TC2-1: Supported currencies use the same disclosed rate
 
 **Classification:**
 
@@ -397,6 +397,9 @@ does not exist yet.
 - The latest product reading confirms that the bid panel shows the fixed 20% rate only; the calculated premium amount remains invoice-only.
 
 ## Settled
+
+- `grade10-site-auction-bid-payment-method-US-04-TC1` is `grade10-site-auction-bid-payment-method-US4-TC1`: renamed to the compact id form while still draft.
+- `grade10-site-auction-bid-payment-method-US-04-TC2` is `grade10-site-auction-bid-payment-method-US4-TC2`: renamed to the compact id form while still draft.
 
 - Incremental and extended authorization are provider eligibility requests; the provider's returned capture deadline is authoritative for the authorization lifecycle.
 
