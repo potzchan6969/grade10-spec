@@ -10,6 +10,7 @@ import {
   WINNER_ORDER_CONTENTS,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
+import { PROOF_SUBMITTED_TOAST } from "./winner-order-proof-feedback";
 
 const meta = {
   ...winnerOrderMeta(),
@@ -49,7 +50,7 @@ export const PendingPayment: Story = {
         '[data-slot="winner-order-page"][data-status="pending_payment"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
@@ -180,10 +181,8 @@ export const SubmitBankPaymentProof: Story = {
       ).not.toBeNull();
     });
     await waitFor(() => {
-      expect(page.getByText("Proof submitted")).toBeVisible();
-      expect(
-        page.getByText("We’ll verify your payment shortly."),
-      ).toBeVisible();
+      expect(page.getByText(PROOF_SUBMITTED_TOAST.title)).toBeVisible();
+      expect(page.getByText(PROOF_SUBMITTED_TOAST.description)).toBeVisible();
     });
     expect(
       canvas.queryByRole("button", { name: "Submit Payment Proof" }),
@@ -254,7 +253,7 @@ export const PaymentVerifying: Story = {
         '[data-slot="winner-order-page"][data-status="payment_verifying"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
@@ -300,7 +299,7 @@ export const PartiallyPaid: Story = {
         '[data-slot="winner-order-page"][data-status="partially_paid"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     expect(
@@ -356,7 +355,7 @@ export const ExpiredInvoice: Story = {
         '[data-slot="winner-order-page"][data-status="pending_payment_expired"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     const alert = sidebar.getByRole("alert");

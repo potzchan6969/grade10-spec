@@ -56,7 +56,7 @@ export const AwaitingSetup: Story = {
         '[data-slot="winner-order-page"][data-status="awaiting_address"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
@@ -112,7 +112,7 @@ export const ExpiredSetup: Story = {
         '[data-slot="winner-order-page"][data-status="awaiting_address_expired"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     const alert = sidebar.getByRole("alert");
@@ -151,7 +151,7 @@ export const PreparingInvoice: Story = {
         '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText("18 Sep 2026")).toBeVisible();
     expect(

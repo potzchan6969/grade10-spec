@@ -95,9 +95,12 @@ meaning.
   order and delivery before dispatch are refused
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
-- **Shipment** — the carrier, the tracking number and a link to the carrier,
-  then the delivery proof when the carrier provides one; an operator records
-  both — [Auction Management ·
+- 🚧 **Shipment** — while the lot is dispatched (`fulfilled`), Order Progress
+  shows the tracking number as a link to the carrier's tracking page (opens
+  externally); the link stays after Delivered; no separate Track shipment
+  control and no carrier name in that chrome; delivery proof follows when
+  the carrier provides one — an operator records both —
+  [Auction Management ·
   Fulfilment](/p/grade10-admin/auction/management#fulfilment)
 - 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
   the winning bid, and offers Contact Us alone; it gives no reason, and a
@@ -262,9 +265,13 @@ doing, under Edge Cases.
 - 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
   or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
   each and **15 MB** total, uploaded once after paying, behind a confirm
-  step saying nothing can be added later; the order reads Payment Verifying,
-  the deadline stops, and Submit Payment Proof, View Bank Details and further
-  uploads are hidden
+  step saying nothing can be added later; on success a toast reads **Proof
+  submitted** / **We'll verify your payment shortly.**, the order reads
+  Payment Verifying, the deadline stops, and Submit Payment Proof, View Bank
+  Details and further uploads are hidden; on a failed upload the dialog stays
+  open with the draft and a toast reads **Proof not submitted** / **Nothing
+  was saved. Try again.**; while submitting or converting HEIC the form locks
+  and leave is blocked
 - 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
   the transfer and will email when payment is confirmed, placed where the
   Preparing Invoice alert sits
@@ -476,6 +483,8 @@ a second payment provider, and changes to the bid-time rules.
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
+| Proof submit feedback | 🚧 In flight | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
+| Tracking link on Winner Order | 🚧 In flight | While fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as the external carrier link with an arrow. No separate Track shipment button and no carrier name in that chrome. Chosen over carrier name plus a Track shipment CTA. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation at listing creation, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. Receipt identifier format remains unresolved on the Receipt ID row below. | Product and Finance |
 | Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
 | Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |

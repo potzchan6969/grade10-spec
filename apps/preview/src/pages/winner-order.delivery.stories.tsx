@@ -41,7 +41,7 @@ export const Processing: Story = {
         '[data-slot="winner-order-page"][data-status="processing"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
@@ -72,7 +72,7 @@ export const ProcessingOverpaid: Story = {
     const canvas = within(canvasElement);
     await winnerOrderSettled(canvasElement);
     expect(canvas.getByText("Processing")).toBeVisible();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
@@ -146,13 +146,13 @@ export const Shipped: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await winnerOrderSettled(canvasElement);
-    expect(canvas.getByText("Order progress")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Track shipment" }),
-    ).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
+    const trackingLink = canvas.getByRole("link", { name: /SF1234567890/ });
+    expect(trackingLink.getAttribute("href")).toContain("SF1234567890");
+    expect(trackingLink).toHaveAttribute("target", "_blank");
     expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
     expect(canvas.getByText("26 Sep 2026")).toBeVisible();
-    expect(canvas.getByText(/SF Express/)).toBeVisible();
+    expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
@@ -165,9 +165,12 @@ export const Delivered: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await winnerOrderSettled(canvasElement);
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("28 Sep 2026")).toBeVisible();
+    const trackingLink = canvas.getByRole("link", { name: /SF1234567890/ });
+    expect(trackingLink.getAttribute("href")).toContain("SF1234567890");
+    expect(trackingLink).toHaveAttribute("target", "_blank");
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
