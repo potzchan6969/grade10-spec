@@ -5,7 +5,7 @@
 - [ ] 1.3 Answer `1` to `/engage` in the capture helper, and let it refuse named insert ids
 - [ ] 1.4 Verify: `pnpm --dir packages/mixpanel test`, `pnpm run check:handbook`
 
-## 2. Vault adoption (grade10)
+## 2. Vault adoption (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Test each vault send recorded with its transition, including verdicts the sweep settles, none on rollback, and erasure `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [ ] 2.2 Add the outbox tables and migration `0031_mixpanel_outbox`; record every vault send and Identity Standing in its transaction and remove the direct sends; register the send list; erase with the user `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
