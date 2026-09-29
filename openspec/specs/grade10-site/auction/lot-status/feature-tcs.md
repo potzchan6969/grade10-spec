@@ -118,6 +118,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * <lot> is in the state the row names.
+* <lot_5> ended with no winner.
 
 **Test data:**
 
@@ -125,6 +126,10 @@ Runs once per row of **Test data**.
 | --- |
 | A draft lot, never published |
 | A published lot an operator called off |
+
+| Field | Value |
+| --- | --- |
+| <lot_5> | A published lot whose bidding ended with no winner |
 
 **Steps:**
 
@@ -135,6 +140,7 @@ Runs once per row of **Test data**.
 
 * <lot> is not listed.
 * The search does not find <lot>.
+* <lot_5> is listed as Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC2-1: Called-off lot leaves the watchlist, unsold lot stays
