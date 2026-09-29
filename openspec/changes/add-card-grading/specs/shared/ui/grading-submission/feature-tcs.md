@@ -538,9 +538,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -567,9 +569,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -595,9 +599,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -682,9 +688,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reviewing before booking
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -710,9 +718,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reviewing before booking
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -745,9 +755,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reviewing before booking
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -804,9 +816,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Where the submission stands
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-status-rail.stories.tsx`
 
 **Pre-conditions:**
 
@@ -834,9 +848,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Where the submission stands
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-status-rail.stories.tsx`
 
 **Pre-conditions:**
 
@@ -865,9 +881,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Where the submission stands
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-ownership-chip.stories.tsx`
 
 **Pre-conditions:**
 
@@ -904,9 +922,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Where the submission stands
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-ownership-chip.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1105,9 +1125,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Collecting the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-pickup-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1133,9 +1155,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Collecting the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-pickup-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1161,9 +1185,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Collecting the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-pickup-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1191,9 +1217,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Collecting the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-named-collector.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1359,9 +1387,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** If nobody collects
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-uncollected-ladder.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1426,9 +1456,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** If nobody collects
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-uncollected-ladder.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1454,9 +1486,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** If nobody collects
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-uncollected-ladder.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1482,9 +1516,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Content through props
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1836,9 +1872,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1865,9 +1903,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2522,9 +2562,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
