@@ -67,7 +67,7 @@ it SHALL carry its own day an erasure may run.
 | Cancelled | closed before any product erased anything | nothing; a new request may be filed |
 | Completed | closed after every product erased what it held | nothing; a new request may be filed |
 
-#### Scenario: shared-auth-users-SC-28 - A closed request stays closed
+#### Scenario: shared-auth-users-SC-43 - A closed request stays closed
 **Serves:** Erasure requests - a console or a product sending the same cancel twice leaves the person's record as it was
 
 - **GIVEN** a person whose erasure request is already cancelled
@@ -75,7 +75,7 @@ it SHALL carry its own day an erasure may run.
 - **THEN** the system refuses the second close
 - **AND** the request stays cancelled
 
-#### Scenario: shared-auth-users-SC-29 - A person asks again after cancelling
+#### Scenario: shared-auth-users-SC-44 - A person asks again after cancelling
 **Serves:** shared-auth-users-US-05 - somebody who changed their mind once and asks to be forgotten again later
 
 - **GIVEN** a person whose earlier request was cancelled
@@ -109,7 +109,7 @@ day an erasure may run, read on the brand's own zone, which
 `shared/dates-and-times` states, and the request stands until every product has
 erased what it holds.
 
-#### Scenario: shared-auth-users-SC-30 - The account holder files their own request
+#### Scenario: shared-auth-users-SC-45 - The account holder files their own request
 **Serves:** shared-auth-users-US-05 - somebody asking to be forgotten from their own account rather than at an operator's desk
 
 - **GIVEN** a signed-in person with no request open
@@ -118,7 +118,7 @@ erased what it holds.
 - **AND** they are answered with the day it was filed and the day an erasure
   may run, seven days later
 
-#### Scenario: shared-auth-users-SC-31 - A request the person filed themselves bans nothing
+#### Scenario: shared-auth-users-SC-46 - A request the person filed themselves bans nothing
 **Serves:** shared-auth-users-US-05 - somebody who filed the ask and comes back to read it before the window runs out
 
 - **GIVEN** a person whose own erasure request is open
@@ -126,7 +126,7 @@ erased what it holds.
 - **THEN** they are signed in
 - **AND** the product reports that person
 
-#### Scenario: shared-auth-users-SC-32 - The account holder cancels inside the window
+#### Scenario: shared-auth-users-SC-47 - The account holder cancels inside the window
 **Serves:** shared-auth-users-US-05 - somebody changing their mind before anything of theirs is erased
 
 - **GIVEN** a person whose own request is open, on the sixth day after the day
@@ -135,7 +135,7 @@ erased what it holds.
 - **THEN** the request closes as cancelled
 - **AND** no request is open for them
 
-#### Scenario: shared-auth-users-SC-33 - A cancel on the day an erasure may run is refused
+#### Scenario: shared-auth-users-SC-48 - A cancel on the day an erasure may run is refused
 **Serves:** shared-auth-users-US-05 - somebody coming back to the ask on the day the days they could have taken it back in run out
 
 - **GIVEN** a person whose own request was filed seven days ago, so that today
