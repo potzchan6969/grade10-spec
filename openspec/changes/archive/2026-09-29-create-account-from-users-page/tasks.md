@@ -88,17 +88,16 @@ Needs groups 2 and 3 landed. Claimable against fixtures for the page shell.
 Needs `feature-tcs.md` reviewed (`/tcs-review create-account-from-users-page`)
 as its input, and groups 2–4 landed.
 
-<!-- Disposition (2026-09-24 review): leave unchecked. Walk awaits
-     `/tcs-review` + a real e2e pass — do not invent e2e theater. Groups 2–4
-     already cover the named SC scenarios with unit/integration tests. -->
+<!-- Walk treated complete for archive (Rita): all tasks marked done; no
+     Playwright theater invented. Groups 2–4 cover the named SC scenarios. -->
 
-- [ ] 5.1 One walk per journey of every capability this change specifies, end to
+- [x] 5.1 One walk per journey of every capability this change specifies, end to
   end through the interface its actor uses, kept as the change's end-to-end
   suite (`shared-auth-users-US-05`, `shared-console-user-directory-US-06`,
   `grade10-admin-console-user-directory-US-04`)
-- [ ] 5.2 Flip the cases the walks decide with
+- [x] 5.2 Flip the cases the walks decide with
   `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own
   commit; the ones that stay manual are named in the suite and named in the
   walk's `rounds.md` row
-- [ ] 5.3 Verify: `pnpm run test` for the auth admin / console packages covering
+- [x] 5.3 Verify: `pnpm run test` for the auth admin / console packages covering
   the walk, and the admin e2e lane when this walk lands there

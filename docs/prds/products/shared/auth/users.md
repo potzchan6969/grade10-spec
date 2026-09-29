@@ -3,6 +3,7 @@ title: Users
 spec: shared/auth/users
 audience: operator
 order: 5
+reviewed: 2026-09-29
 ---
 
 Only an operator holding the directory grant sees the account list. Search
@@ -31,13 +32,24 @@ on the identity trail. Grade10's page that uses this read is the
 
 ## Create Account
 
-- 🚧 **Create** — an operator holding `user:create` may create a passwordless
+- **Create** — an operator holding `user:create` may create a passwordless
   Auth account with name, email, and roles from the closed set; a duplicate
   email is refused; creating with a non-`user` role also requires
   `user:set-role`; no loyalty enroll or invite mail
 - ❓ **Email verification on create** — what verification standing a newly
   created Auth account starts with (unverified until they prove the address,
   or verified because an operator typed it) — @rita-liu
+
+:::detail{title="Product decisions" for="pm"}
+| Decision | Choice |
+| --- | --- |
+| What create buys | Auth + roles only — simulate ordinary account creation then an elevated grant; not Override's loyalty enroll or opening points |
+| Who may create | Offer Create only with `user:create`; a non-`user` role also needs `user:set-role` |
+| Password | Passwordless — no password field |
+| Tell the new person | Silent create — no invite or magic-link email |
+| Empty roles | Leave the account as `user` only |
+| Name and email | Required; Confirm stays disabled until both are present after trim |
+:::
 
 :::callout{kind="note"}
 Auction bidder bans are a separate thing with a separate switch. The auction
