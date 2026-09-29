@@ -436,8 +436,7 @@
       "badge": "Named",
       "line": "They collect with the pickup code, and the ID the pickup card asks for; the hand-back receipt names them. One person at a time.",
       "change": "Change",
-      "remove": "Remove",
-      "refused": "The cards have already been collected, so nobody else can be named."
+      "remove": "Remove"
     },
     "vaultIt": {
       "title": "Keep it with us instead?",
@@ -476,7 +475,6 @@
       "paidOutNote": "at declared value · {route}",
       "settled": "Settled at collection · POS {reference}",
       "nothingDue": "Nothing due",
-      "includesLine": "the grader’s fee and insured shipping both ways",
       "footnote": "A fee is charged even when a card comes back ungraded. A card refused at our counter is never charged."
     },
     "ladder": {
@@ -685,7 +683,6 @@
       "label": "Postal address",
       "hint": "Used only for the written notice, if the cards are left uncollected."
     },
-    "sign": "Sign",
     "decline": "Decline",
     "declined": "Nothing was signed and nothing was paid. The member of staff with you can help with what happens next.",
     "loading": "Opening your documents…",

@@ -311,7 +311,7 @@ the new `grading` namespace; the words are not written here.
   nextStage, runningLate), grades (headline, settle (title), ungraded (body),
   aboutGrades, cards (the labels, noReason)), pickup (title, items, where,
   open, toSettle, bring (aboveThreshold, named, none)), named (lead, field,
-  placeholder, save, badge, line, change, remove, refused), vaultIt (title,
+  placeholder, save, badge, line, change, remove), vaultIt (title,
   body, howItWorks), money (every line label, footnote), ladder (readyLabel,
   cardsHeldLabel, passedLabel, postedLabel, reminders, storage, notice,
   noticeLine, afterNotice, closing), collected (lead, record, lookUp,
@@ -319,7 +319,7 @@ the new `grading` namespace; the words are not written here.
   loading, error
 - **`grading.ceremony.*`** — the `RefusalWords` entry per
   `DocSignFailureCode`, yourName (label, hint, hintNamed), postalAddress
-  (label, hint), agreeLabel on the e-sign disclosure, sign, decline,
+  (label, hint), agreeLabel on the e-sign disclosure, decline,
   declined
 - **`grading.console.*`** — the WhatsApp templates (seven), and nothing
   else: the console's own words stay the console's English
