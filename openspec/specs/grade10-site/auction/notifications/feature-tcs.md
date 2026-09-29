@@ -180,6 +180,111 @@ Runs once per row of **Test data**.
 scheduled close,
 **so that** a moving deadline does not pass without me.
 
+### grade10-site-auction-notifications-US2-TC5-1: A muted watcher gets no closing warnings
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-notifications-US-02
+
+**Pre-conditions:**
+
+* customer A watches <lot_2>, email alerts off for <lot_2>, master on.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_2> | A lot taking bids, scheduled to close more than 24 hours away |
+
+**Steps:**
+
+1. Move the clock to 86400s (24 hours) before the scheduled close.
+2. Move the clock to 3600s (1 hour) before the scheduled close.
+3. Read the mail sent to customer A.
+
+**Expected Results:**
+
+* No Bidding closes in 24 hours letter for <lot_2>.
+* No closing reminder at the one-hour mark.
+
+### grade10-site-auction-notifications-US2-TC6-1: The account master off blocks the closing warning
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-notifications-US-02
+
+**Pre-conditions:**
+
+* customer A watches <lot_2>, email alerts on for <lot_2>, Auction email alerts master off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_2> | A lot taking bids, scheduled to close more than 24 hours away |
+
+**Steps:**
+
+1. Move the clock to 86400s (24 hours) before the scheduled close.
+2. Read the mail sent to customer A.
+
+**Expected Results:**
+
+* No Bidding closes in 24 hours letter for <lot_2>.
+
+### grade10-site-auction-notifications-US2-TC9-1: No one-hour reminder before a moved close
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-notifications-US-02
+
+**Pre-conditions:**
+
+* customer A watches or bid on <lot_3>, email alerts on.
+* <lot_3> is in extended bidding, its moved close more than an hour away.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_3> | A lot in extended bidding |
+
+**Steps:**
+
+1. Move the clock to 3600s (1 hour) before the moved close.
+2. Read the mail sent to customer A.
+
+**Expected Results:**
+
+* No closing reminder at the one-hour mark before the moved close.
+
 ### grade10-site-auction-notifications-US2-TC11-1: Closes in 24 hours reaches watchers and bidders
 
 Runs once per row of **Test data**.
@@ -886,6 +991,14 @@ Runs once per row of **Test data**.
 - **Uncovered anchors:** none.
 
 ## Settled
+
+- `grade10-site-auction-notifications-US2-TC1` is held by `grade10-site-auction-notifications-US2-TC11`.
+- `grade10-site-auction-notifications-US2-TC2` is held by `grade10-site-auction-notifications-US2-TC13`.
+- `grade10-site-auction-notifications-US2-TC3` is held by `grade10-site-auction-notifications-US2-TC11`.
+- `grade10-site-auction-notifications-US2-TC4` is held by `grade10-site-auction-notifications-US2-TC11`.
+- `grade10-site-auction-notifications-US2-TC7` is held by `grade10-site-auction-notifications-US2-TC12`.
+- `grade10-site-auction-notifications-US2-TC8` is held by `grade10-site-auction-notifications-US2-TC12`.
+- `grade10-site-auction-notifications-US2-TC10` is held by `grade10-site-auction-notifications-US2-TC11`.
 
 - Late enrolment after the scheduled-close − 24h point still receives Bidding closes in 24 hours while enrolled — enrolment requirement, same pattern as opens-in-24h
 - Extended bidding has started sends once per listing per collector on first entry into the window

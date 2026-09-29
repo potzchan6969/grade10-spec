@@ -722,6 +722,78 @@ Runs once per row of **Test data**.
 **I want** to see what I owe and where my card is,
 **so that** I do not have to ask Grade10 what happens next.
 
+### grade10-site-auction-account-record-US3-TC2-1: A Won row follows the proof check's outcome
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-03
+
+**Pre-conditions:**
+
+* customer(signed in) won <lot>, whose proof was under check.
+* An operator then took the row's action.
+
+**Test data:**
+
+| Operator action | Your Standing |
+| --- | --- |
+| Returned the proof | Won, Pending Payment |
+| Confirmed the payment | Won, Processing |
+
+**Steps:**
+
+1. Navigate to <my auctions url>.
+2. Read <lot>'s row.
+
+**Expected Results:**
+
+* Your Standing reads the row's value.
+
+### grade10-site-auction-account-record-US3-TC4-1: Another collector never sees a Payment Verifying row
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-03
+
+**Pre-conditions:**
+
+* customer A won <lot_12>, which reads Payment Verifying.
+* customer B(signed in) uses a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_12> | customer A's won lot, proof under check |
+
+**Steps:**
+
+1. As customer B, navigate to <my auctions url>.
+
+**Expected Results:**
+
+* No <lot_12> row shows.
+
 ### grade10-site-auction-account-record-US3-TC5-1: A Won row reads its order's status
 
 Runs once per row of **Test data**.
@@ -813,6 +885,8 @@ Runs once per row of **Test data**.
 
 
 ## Settled
+
+- `grade10-site-auction-account-record-US3-TC1` and `grade10-site-auction-account-record-US3-TC3` are held by `grade10-site-auction-account-record-US3-TC5`, whose rows read each won status.
 
 - The Won-row control label (View order or Open order) is design copy; either reads as the entry to Winner Order.
 
