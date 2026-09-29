@@ -30,10 +30,7 @@ export default function ProofNotAcceptedEmail({
 }: ProofNotAcceptedProps) {
   return (
     <AuctionLetter
-      body={[
-        "We checked the payment proof you sent and couldn’t accept it.",
-        "Your payment deadline has resumed. Send your payment proof again before it ends.",
-      ]}
+      body="Your payment deadline is running again. Submit your payment proof by the date below."
       brandName={brandName}
       campaign="proof_not_accepted"
       canUnsubscribe={false}
