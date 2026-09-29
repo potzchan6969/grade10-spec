@@ -42,6 +42,11 @@ Runs once per row of **Test data**.
 | Has a winner, order awaiting payment | Ended |
 | Has a winner, order shipped | Ended |
 | Has a winner, order cancelled | Ended |
+| Has a winner, order Awaiting Setup | Ended |
+| Has a winner, order Preparing Invoice | Ended |
+| Has a winner, order Processing | Ended |
+| Has a winner, order Delivered | Ended |
+| Has a winner, order Refunded | Ended |
 | Bidding ended with no winner | Ended |
 
 **Steps:**
