@@ -1,7 +1,7 @@
 # grade10-site/grading/counter-documents Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
 
@@ -22,7 +22,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -54,7 +54,7 @@
 
 **Expected Results:**
 
-* Step 1: the agreement prints the submission, the collector, the grader and level, the cards as a schedule with each declared value, the total declared value, the fee, the estimated return as an estimate, the date, and the complaints contact.
+* Step 1: the agreement prints the submission, the collector, the grader and level, the cards as a schedule with each declared value, the total declared value, the fee, the estimated return as a number of weeks from the day the batch leaves, said to be an estimate and not a promise, the date, and the complaints contact.
 * Step 4: the document seals, showing the sealed outcome and a download of the signed PDF.
 * Step 5: the fee is charged at the till only after the seal.
 
@@ -64,7 +64,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -105,7 +105,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -142,7 +142,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -179,7 +179,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -210,13 +210,15 @@
 * Step 2: signing is refused by name, against the booking's name.
 * Step 3: nothing is sealed and nothing is paid.
 
-### grade10-site-grading-counter-documents-US1-TC6-1: Signing is refused once the sign link has expired
+### grade10-site-grading-counter-documents-US1-TC6-1: The sign link is refused past its 30 minutes, at the limit
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -227,15 +229,25 @@
 
 **Pre-conditions:**
 
-* More than 30 minutes have passed since the agreement's <grade10 grading sign link> was shown on the iPad or copied from the console, and it was never opened.
+* The agreement's <grade10 grading sign link> was shown on the iPad or copied from the console the row's Link age ago, and it was never opened.
+* admin(holds grading:operate) is on the submission's hand-in runbook at <grade10 admin grading submission url>.
+
+**Test data:**
+
+| Link age | Step 1 |
+| --- | --- |
+| 29 minutes | the agreement opens, ready to sign |
+| 31 minutes | signing is refused by name, naming that staff must issue a new link |
 
 **Steps:**
 
 1. Open <grade10 grading sign link> on the shop iPad.
+2. On the runbook, click Show on iPad on the Sign step.
 
 **Expected Results:**
 
-* Signing is refused by name, naming that staff must issue a new link.
+* Step 1: as the row's Step 1 says.
+* Step 2: a new link opens the same agreement.
 
 ### grade10-site-grading-counter-documents-US1-TC7-1: Sealing is refused in production with a fact unset
 
@@ -243,7 +255,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -273,7 +285,7 @@
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -304,7 +316,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -346,7 +358,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -384,7 +396,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -433,7 +445,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -457,6 +469,7 @@
 
 * Steps 2 and 3: the agreement is withdrawn, and the decline is itself recorded on the submission.
 * Step 4: nothing is paid, and nothing is signed in the collector's name.
+* Step 4: the submission still reads Drop-off booked.
 
 ### grade10-site-grading-counter-documents-US2-TC2-1: Declining the receipt withdraws it with nothing handed back
 
@@ -464,7 +477,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -489,6 +502,7 @@
 
 * Steps 2 and 3: the receipt is withdrawn, and the decline is itself recorded on the submission.
 * Step 4: nothing is handed back, and nothing is signed in the collector's name.
+* Step 4: the submission still reads Ready to collect.
 
 ### grade10-site-grading-counter-documents-US2-TC3-1: The desk reads a declined receipt back and can prepare it again
 
@@ -496,7 +510,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -536,7 +550,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -577,7 +591,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -614,7 +628,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -647,7 +661,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -672,13 +686,13 @@
 
 * The receipt says that card went to the vault rather than to the collector.
 
-### grade10-site-grading-counter-documents-US3-TC5-1: Receipt names a card paid out as lost or damaged
+### grade10-site-grading-counter-documents-US3-TC5-1: Receipt prints what was paid, refunded and paid out, and how
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -689,8 +703,10 @@
 
 **Pre-conditions:**
 
-* One card was recorded Not returned or Damaged on its batch's Receive page, and paid out at its declared value from the submission's Money tab at <grade10 admin grading submission url>, approved by a second `grading:approve` holder.
-* The submission is Ready to collect; on its hand-back runbook the balance on the rest is settled, every other item is ticked Handed over, and Copy link was clicked on the Sign step.
+* One card was withdrawn before its batch closed, its fee refunded at the till.
+* One card was recorded moved up a level on its batch, and that upcharge was settled at the till on the hand-back runbook at <grade10 admin grading submission url>.
+* One card was recorded Not returned or Damaged on its batch's Receive page, and paid out at its declared value from the submission's Money tab, approved by a second `grading:approve` holder.
+* The submission is Ready to collect; on its hand-back runbook every other item is ticked Handed over, and Copy link was clicked on the Sign step.
 * The collector has <grade10 grading sign link> for the receipt open on the shop iPad.
 
 **Steps:**
@@ -701,7 +717,7 @@
 
 **Expected Results:**
 
-* The receipt names what was paid out and how.
+* The receipt prints what was paid, what was refunded and what was paid out, each with how it moved.
 
 ### grade10-site-grading-counter-documents-US3-TC6-1: Receipt cannot be prepared while a balance is due
 
@@ -709,7 +725,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -739,7 +755,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -769,7 +785,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -806,7 +822,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -839,7 +855,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -881,7 +897,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -919,7 +935,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -966,7 +982,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -994,7 +1010,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1021,7 +1037,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1048,7 +1064,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1076,7 +1092,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1104,7 +1120,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1134,11 +1150,11 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1170,7 +1186,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression

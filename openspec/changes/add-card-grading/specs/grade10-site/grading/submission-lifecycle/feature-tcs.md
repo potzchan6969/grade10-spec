@@ -1,8 +1,12 @@
 # grade10-site/grading/submission-lifecycle Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
-**Out of suite:** grade10-site-grading-submission-lifecycle-SC-01 - the moves are made from the counter, and `grade10-admin/grading/counter`'s suite walks a move asked of a submission that has already moved
+
+**Out of suite:**
+
+- `grade10-site-grading-submission-lifecycle-SC-01` — the moves are made from the counter, and `grade10-admin/grading/counter`'s suite walks a move asked of a submission that has already moved
+- `grade10-site-grading-submission-lifecycle-SC-45` — the store's catalogue suite: a collector's slab in no catalogue is an absence, checked where the catalogue is (`decisions.md` Q82); no grading screen shows it
 
 ## grade10-site-grading-submission-lifecycle-US1: Collector follows the submission from planned to home on one page
 
@@ -18,7 +22,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -43,6 +47,8 @@ Runs once per row of **Test data**.
 | Back | Back at the shop, being checked | With us | Back, progress |
 | Ready | Ready to collect | Waiting on you | Back, progress |
 | Collected | Back with you | Collected | Home, progress |
+| Cancelled, from Drop-off booked | Cancelled | No chip | Booked, progress |
+| Expired, from Not handed in yet | Expired | No chip | Planned, progress |
 
 **Steps:**
 
@@ -53,6 +59,7 @@ Runs once per row of **Test data**.
 
 * Step 2: the status word, the chip and the rail step in the row all show together.
 * Every rail step before the row's step reads completed, and every step after reads upcoming.
+* No internal status name shows anywhere on the page.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC2-1: The grader's stages reach the page in its own words
 
@@ -60,7 +67,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -82,7 +89,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the grader's stages read in the grader's own words, with the stage it published most recently marked as the next stage.
+* Step 2: the stage staff recorded shows in the grader's own words.
 * Nothing to do shows beside the stages.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC3-1: The estimate reads against the clock rather than a fixed date
@@ -91,7 +98,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -105,6 +112,12 @@ Runs once per row of **Test data**.
 * customer(collector)'s submission is With the grader, its batch shipped inside the level's quoted turnaround counted from the ship day: on the local stack, seeded at With the grader.
 * The collector is on <grade10 grading submission page url> for the submission.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <ship day> | The day the batch shipped, as its row on <grade10 admin grading batches url> reads it |
+
 **Steps:**
 
 1. Load the submission page.
@@ -112,7 +125,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The estimate reads as time remaining against the current clock, not as a date fixed at booking.
+* The estimate reads <ship day> plus the level's quoted turnaround.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC4-1: Running late shows once the estimate passes, with the new date once set
 
@@ -120,7 +133,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -131,7 +144,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is With the grader, its batch shipped longer ago than the level's quoted turnaround: on the local stack, seeded at With the grader with its visit set back further than the turnaround.
+* customer(collector)'s submission is With the grader under <collector email>, its batch shipped longer ago than the level's quoted turnaround: on the local stack, seeded at With the grader with its visit set back further than the turnaround.
 * The collector is on <grade10 grading submission page url> for the submission.
 * admin(holds grading:operate) is on <grade10 admin grading batches url>, where the batch's row reads past its estimate.
 
@@ -146,11 +159,14 @@ Runs once per row of **Test data**.
 1. Load the submission page before staff re-estimate the batch.
 2. On the batch's row, click Re-estimate, pick the stage, enter <new date> and a reason, and confirm.
 3. Reload the submission page.
+4. Open the latest grading email to <collector email>.
 
 **Expected Results:**
 
 * Step 1 shows the chip reading Running late with the grader named, and no new date yet.
+* Step 1: the status word still reads With the grader.
 * Step 3 shows the same chip with the new date.
+* Step 4: the running-late email names the new date, sent that day.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC5-1: A submission id that does not exist shows the not-found page
 
@@ -158,7 +174,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -191,7 +207,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -221,7 +237,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -254,7 +270,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -290,7 +306,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -321,7 +337,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -369,7 +385,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -380,7 +396,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is Handed in through its hand-in runbook, before Thursday 19:00 on the shop's clock. A submission seeded at Handed in will not do: the seed closes its batch at the hand-in.
+* customer(collector)'s submission, at a level whose fee sheet carries a cover rate, is Handed in through its hand-in runbook, before Thursday 19:00 on the shop's clock. A submission seeded at Handed in will not do: the seed closes its batch at the hand-in.
 * One card was withdrawn: admin(holds grading:operate) clicked Withdraw a card on the Cards tab at <grade10 admin grading submission url>, and the collector collected it at the counter against the receipt, its fee refunded at the till.
 * The collector is on <grade10 grading submission page url> for the submission.
 
@@ -392,7 +408,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The withdrawn card shows the Withdrawn badge.
-* The card's line shows its fee refunded the way it was paid.
+* The card's fee and cover lines show refunded the way they were paid.
 
 ### grade10-site-grading-submission-lifecycle-US2-TC2-1: Withdrawing a card is not offered once the batch has closed
 
@@ -400,7 +416,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -411,7 +427,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Sent, after Thursday 19:00: on the local stack, seeded at With the grader.
+* customer(collector)'s submission is Handed in, its batch closed at the week's cut-off and not yet shipped: on the local stack, seeded at Handed in, which closes its batch at once.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
@@ -429,7 +445,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -460,7 +476,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -501,7 +517,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -512,7 +528,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Graded, with one card recorded returned ungraded carrying the grader's code N1 and note when the grades were recorded on its batch.
+* customer(collector)'s submission is Ready to collect, with one card recorded returned ungraded on its batch's Receive page, carrying the grader's code N1 and note.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
@@ -524,6 +540,7 @@ Runs once per row of **Test data**.
 
 * The card shows the Ungraded badge with the grader's code and note.
 * The card's line states the fee stands.
+* No refund is offered on the card.
 
 ### grade10-site-grading-submission-lifecycle-US3-TC2-1: A card below its named minimum grade shows raw with the fee standing
 
@@ -531,7 +548,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -561,7 +578,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -600,7 +617,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -611,18 +628,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Graded, with one card recorded moved up a level when the grades were recorded on its batch; the fee sheet's difference between the two levels for that card is 60000 (HKD, minor units).
+* customer(collector)'s submission of four cards is at Graded under <collector email>, with one card recorded moved up a level when the grades were recorded on its batch; the fee sheet's difference between the two levels for that card is 60000 (HKD, minor units).
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
-2. Read that card, then the money block.
+2. Read that card, then the other three cards, then the money block.
+3. Open the latest grading email to <collector email>.
 
 **Expected Results:**
 
 * The card shows the Moved up a level badge.
+* The other three cards show no Moved up a level line.
 * The money block shows 60000 (HKD, minor units) due at the counter before collection, matching the figure the review step quoted at booking.
+* Step 3: the grades email names the same difference as due at the counter before collection.
 
 ### grade10-site-grading-submission-lifecycle-US4-TC2-1: No card moved up a level shows no upcharge due line
 
@@ -630,7 +650,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -660,7 +680,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -705,7 +725,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -716,7 +736,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Ready, with one card recorded Not returned on its batch's Receive page, declared at 500000 (HKD, minor units), inside the payout window of 14 days from the batch's receipt.
+* customer(collector)'s submission of four cards is at Ready, with one card recorded Not returned on its batch's Receive page, declared at 500000 (HKD, minor units), inside the payout window of 14 days from the batch's receipt.
 * The payout was made from the submission's Money tab at <grade10 admin grading submission url>: Payout by one `grading:approve` holder, approved by a second.
 * The collector is on <grade10 grading submission page url> for the submission.
 
@@ -727,8 +747,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* The submission reads Ready to collect, and the other three cards are collectable.
 * The card shows the Not returned badge with the payout line.
-* The money block shows 500000 (HKD, minor units) paid out, with the card's fee refunded beside it.
+* The money block shows 500000 (HKD, minor units) paid out, with the card's fee and cover refunded beside it, its route and its reference.
 
 ### grade10-site-grading-submission-lifecycle-US5-TC2-1: A payout reaches the collector by either route
 
@@ -738,7 +759,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -774,7 +795,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -804,7 +825,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -841,7 +862,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -852,17 +873,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is Ready to collect: on the local stack, seeded at Ready to collect.
+* customer(collector)'s submission is Ready to collect under <collector email>: on the local stack, seeded at Ready to collect.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
 2. Read the pickup card.
+3. Open the ready email in <collector email>'s grading emails.
 
 **Expected Results:**
 
 * The pickup card shows a four-digit code, the shop's hours, and that no booking is needed.
+* The pickup card shows one figure to settle.
+* Step 3: it carries the same four-digit code.
 
 ### grade10-site-grading-submission-lifecycle-US6-TC2-1: At the ID-glance threshold the page asks for no ID, above it it asks for one
 
@@ -870,7 +894,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -888,11 +912,13 @@ Runs once per row of **Test data**.
 
 1. Load <grade10 grading submission page url> for the submission declared at 1000000, and read the pickup card's Bring line.
 2. Load <grade10 grading submission page url> for the submission declared at 1000100, and read the pickup card's Bring line.
+3. As admin(holds grading:operate), open the hand-back runbook for the submission declared at 1000100 at <grade10 admin grading submission url>, and enter its pickup code and the collector's name.
 
 **Expected Results:**
 
 * At exactly 1000000 the pickup card's Bring line shows nothing: above the threshold is more than the figure, never the figure itself.
 * At 1000100 the pickup card names bringing an ID matching the collector's name.
+* Step 3: at 1000100 the hand-back runbook shows the ID line, and nothing from the ID is kept on the submission.
 
 ### grade10-site-grading-submission-lifecycle-US6-TC3-1: Below the ID-glance threshold, the page asks the collector to bring nothing
 
@@ -900,7 +926,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -918,10 +944,12 @@ Runs once per row of **Test data**.
 
 1. Load the submission page.
 2. Read the pickup card's Bring line.
+3. As admin(holds grading:operate), open the submission's hand-back runbook at <grade10 admin grading submission url>, and enter its pickup code and the collector's name.
 
 **Expected Results:**
 
 * The pickup card's Bring line shows nothing.
+* Step 3: on the hand-back runbook no ID line shows, and the code and the name release the cards.
 
 ### grade10-site-grading-submission-lifecycle-US6-TC4-1: What is due shows nothing owed, or one combined figure
 
@@ -931,7 +959,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -967,7 +995,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -997,7 +1025,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1038,7 +1066,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1049,7 +1077,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Ready with nobody named: on the local stack, seeded at Ready to collect.
+* customer(collector)'s submission is at Ready with nobody named, under <collector email>: on the local stack, seeded at Ready to collect.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Test data:**
@@ -1063,11 +1091,13 @@ Runs once per row of **Test data**.
 1. Enter Their name.
 2. Click Save.
 3. Read History.
+4. Open the latest grading email to <collector email>.
 
 **Expected Results:**
 
 * Step 2: the Named card shows Chan Tai Man with Change and Remove.
 * Step 3: History logs the name against its instant.
+* Step 4: no email is sent for the naming.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC2-1: An empty name cannot be saved
 
@@ -1075,7 +1105,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1097,6 +1127,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Save stays disabled.
+* Nobody is named on the page.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC3-1: Changing the named person replaces the previous name and logs it
 
@@ -1104,7 +1135,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1129,11 +1160,13 @@ Runs once per row of **Test data**.
 1. Click Change on the Named card.
 2. Enter Their name and click Save.
 3. Read History.
+4. As admin(holds grading:operate), open the submission's hand-back runbook at <grade10 admin grading submission url> and read who may collect.
 
 **Expected Results:**
 
 * Step 2: the Named card shows Wong Siu Ming in place of Chan Tai Man.
 * Step 3: History logs the change against its instant.
+* Step 4: on the hand-back runbook, the named person read from the page is Wong Siu Ming alone.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC4-1: Removing the named person returns the page to nobody named and logs it
 
@@ -1141,7 +1174,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -1152,18 +1185,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Ready with Chan Tai Man named in Their name.
+* customer(collector)'s submission is at Ready with Chan Tai Man named in Their name, under <collector email>.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Click Remove on the Named card.
 2. Read History.
+3. Open the latest grading email to <collector email>.
+4. As admin(holds grading:operate), open the submission's hand-back runbook at <grade10 admin grading submission url> and read who may collect.
 
 **Expected Results:**
 
 * Step 1: the page returns to the field and Save, with nobody named.
 * Step 2: History logs the removal against its instant.
+* Step 3: no email is sent for the removal.
+* Step 4: on the hand-back runbook no named person is read from the page.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC5-1: Naming a collector is refused once the cards are already collected
 
@@ -1171,7 +1208,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1182,16 +1219,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Collected: on the local stack, seeded at Back with you.
-* The collector is on <grade10 grading submission page url> for the submission.
+* customer(collector)'s submission was Ready to collect when the collector loaded <grade10 grading submission page url> for it in a second tab, before the hand-back; the cards have since been handed back at the counter, so it is Collected.
+* The collector is on <grade10 grading submission page url> for the submission in a first tab, loaded after the hand-back.
 
 **Steps:**
 
-1. Look for a way to name a collector on the page.
+1. In the first tab, look for a way to name a collector on the page.
+2. In the second tab, type a name in Their name.
+3. Click Save.
 
 **Expected Results:**
 
-* No naming field shows on a Collected submission.
+* Step 1: no naming field shows on a Collected submission.
+* Step 3: refused by name as already collected, what was typed still there.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC6-1: Somebody neither the collector nor the named person is turned away
 
@@ -1199,7 +1239,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1245,7 +1285,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1263,6 +1303,7 @@ Runs once per row of **Test data**.
 
 | Days since ready | Rung |
 | --- | --- |
+| 29 | None passed |
 | 30 | First reminder |
 | 60 | Second reminder |
 
@@ -1273,7 +1314,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The uncollected ladder shows the rung in the row as passed, with no charge against it.
+* The uncollected ladder shows the rung in the row as passed, and none after it, with no charge against it.
+* The ladder shows each rung with the day it falls, counted from the ready day.
 
 ### grade10-site-grading-submission-lifecycle-US8-TC2-1: Storage accrues per card and per month started from day 90
 
@@ -1281,7 +1323,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1311,7 +1353,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1341,7 +1383,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1364,6 +1406,8 @@ Runs once per row of **Test data**.
 
 * The submission still reads Ready to collect, with the cards named as the collector's.
 * No rung or act past the notice shows on the ladder.
+* Storage still accrues on the money block.
+* The page offers the vault instead.
 
 ### grade10-site-grading-submission-lifecycle-US8-TC5-1: A slab vaulted instead of collected is excluded from the storage count
 
@@ -1371,7 +1415,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1401,7 +1445,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1433,7 +1477,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1472,7 +1516,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1508,7 +1552,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1536,7 +1580,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1573,7 +1617,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1610,7 +1654,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1640,7 +1684,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1669,7 +1713,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1690,8 +1734,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* The submission still reads Ready to collect.
 * The three collected cards show their graded record.
 * The held card shows the Held by the grader badge with the expected date, and the record names a second hand-back still to come.
+* The first receipt names the card still out.
 
 ### grade10-site-grading-submission-lifecycle-US9-TC4-1: The held card's return closes the submission, keeping both receipts
 
@@ -1699,7 +1745,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1742,7 +1788,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
@@ -1770,6 +1816,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The submission reads Cancelled, with the rail ended at the row's stage.
+* No chip shows beside the word.
 * Where a drop-off was booked, it closes with the submission.
 * The page states nothing was paid and nothing is owed.
 
@@ -1779,7 +1826,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1790,17 +1837,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Handed in: on the local stack, seeded at Handed in.
+* customer(collector)'s submission is at Handed in, handed in through its hand-in runbook.
+* The collector has the page also open in a second tab, loaded before the hand-in, while Cancel this submission was offered.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
 2. Look for Cancel this submission.
+3. In the second tab, click Cancel this submission and confirm Yes, cancel.
 
 **Expected Results:**
 
 * No Cancel this submission act shows on the page.
+* Step 3: the cancel is refused by name.
 
 ### grade10-site-grading-submission-lifecycle-US10-TC3-1: Backing out of the cancel confirmation leaves the submission unchanged
 
@@ -1837,7 +1887,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -1872,7 +1922,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1910,7 +1960,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1950,7 +2000,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1994,7 +2044,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2036,7 +2086,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression

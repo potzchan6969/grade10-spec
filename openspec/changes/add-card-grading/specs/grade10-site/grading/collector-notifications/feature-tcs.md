@@ -1,10 +1,11 @@
 # grade10-site/grading/collector-notifications Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
 
+- `grade10-site-grading-collector-notifications-SC-01` — grade10's type check: the map from every submission event kind to its message or silence is exhaustive, so no event ships unanswered; no screen shows the map
 - `grade10-site-grading-collector-notifications-SC-08` — the booked message's anchor is `grade10-site/grading/dropoff-booking`'s journey; that suite walks it, and `grade10-site-grading-collector-notifications-US1-TC1-1` reaches the same send here
 - `grade10-site-grading-collector-notifications-SC-10` — `grade10-site/grading/dropoff-booking`'s suite: the collector who missed the visit walks it there
 - `grade10-site-grading-collector-notifications-SC-11` — `grade10-site/grading/submission-lifecycle`'s suite: the uncollected ladder is walked there
@@ -25,7 +26,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -63,7 +64,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
@@ -104,7 +105,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -130,11 +131,13 @@
 
 ### grade10-site-grading-collector-notifications-US1-TC4-1: A message with a document attaches it
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -145,8 +148,15 @@
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is Handed in under <collector email>, the agreement sealed and the intake receipt issued.
-* On the local stack this is a submission seeded at Handed in, whose hand-in sends the handed-in email to the grading outbox for <collector email>.
+* customer(collector)'s submission at the row's level is Handed in under <collector email>, the agreement sealed and the intake receipt issued.
+* On the local stack this is a submission seeded at Handed in at the row's level, whose hand-in sends the handed-in email to the grading outbox for <collector email>.
+
+**Test data:**
+
+| Level | What was paid names |
+| --- | --- |
+| PSA Regular | the fee alone |
+| PSA Express | the cover beside the fee |
 
 **Steps:**
 
@@ -154,7 +164,8 @@
 
 **Expected Results:**
 
-* The email carries the facts the collector would otherwise ask for: paid, cards, estimated back.
+* The email states what was paid and the cards taken in.
+* What was paid names what the row's What was paid names.
 * The signed agreement and the intake receipt are attached.
 
 ### grade10-site-grading-collector-notifications-US1-TC5-1: A message with no document carries no attachment
@@ -163,7 +174,7 @@
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -183,7 +194,7 @@
 
 **Expected Results:**
 
-* The email carries the courier, the grader's order number and the estimate.
+* The on-their-way email arrives.
 * No document is attached.
 
 ### grade10-site-grading-collector-notifications-US1-TC6-1: The footer prints the shop's real facts in production
@@ -192,7 +203,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -216,7 +227,7 @@
 
 * Step 2: the line names the submission id and its summary: the cards, the grader and the level.
 * Step 3: the footer names the custodian's registered name trading as Grade10, the shop and its address, and the complaints contact.
-* Every date and time in the message reads Hong Kong time.
+* Every date and time in the message reads Hong Kong time, and the footer says so.
 
 ### grade10-site-grading-collector-notifications-US1-TC7-1: The footer marks an unset fact outside production
 
@@ -224,7 +235,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -254,7 +265,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -290,7 +301,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -320,7 +331,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -357,7 +368,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -395,7 +406,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -431,7 +442,7 @@
 **Expected Results:**
 
 * Step 3: no email names the refusal; the latest email is still the booked one.
-* Step 7: the handed-in email still arrives, naming only the accepted cards and their estimate.
+* Step 7: the handed-in email still arrives, naming only the accepted cards.
 * Steps 7 and 8: the intake receipt and the submission page carry the refused card's badge and reason.
 
 ### grade10-site-grading-collector-notifications-US2-TC2-1: Naming, changing or removing a collector sends no email
@@ -442,7 +453,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -489,7 +500,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -514,6 +525,7 @@ Runs once per row of **Test data**.
 * Step 2: the queue row carries the Message not sent badge.
 * Step 3: the submission names the failed letter and its reason.
 * Step 3: Send again is offered.
+* No further attempt is made to send the letter.
 
 ### grade10-site-grading-collector-notifications-US3-TC2-1: Staff resend a parked message from the submission
 
@@ -521,7 +533,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -549,7 +561,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -560,12 +572,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission's grades-posted message has run out of send attempts: the mail provider refused every send until the retry ladder was spent.
-* admin(holds grading:operate) is on <grade10 admin grading submission url> for that submission.
+* The mail provider refuses every send.
+* admin(holds grading:operate) is on <grade10 admin grading submission url> for a submission With the grader.
 
 **Steps:**
 
-1. Open the submission's Timeline tab.
+1. Record the stage that puts the grades in on the batch.
+2. Open the submission's Timeline tab.
 
 **Expected Results:**
 
@@ -579,7 +592,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -608,7 +621,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -637,7 +650,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -661,6 +674,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the message leaves the parked list once the channel accepts it.
+* Step 1: the letter reaches the collector.
 * Step 3: the submission's row carries no Message not sent badge.
 * Step 4: the submission's page shows no failed letter.
 
