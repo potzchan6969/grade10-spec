@@ -178,6 +178,42 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
+### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address shows Page not found
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-03
+
+**Pre-conditions:**
+
+* The catalogue published <called-off lot>, then an operator called it off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <called-off lot> | A lot that was published and then called off |
+
+**Steps:**
+
+1. Navigate to <called-off lot url>.
+2. Check the response status.
+3. Check the rendered page.
+
+**Expected Results:**
+
+* Step 2: response status is 404.
+* Step 3: the site's Page not found screen is on screen, not the lot and not the catalogue.
+
 ---
 
 ## grade10-site-auction-listing-page-US4: Collector reads a live lot while scripts load
@@ -388,7 +424,7 @@ None.
 **Steps:**
 
 1. Click the Watch control.
-2. Complete sign-in from the offer.
+2. Sign in using the offered sign-in flow.
 
 **Expected Results:**
 
@@ -432,7 +468,7 @@ None.
 **Steps:**
 
 1. Click the Watching control.
-2. Open My Auctions in a new tab.
+2. Open <grade10 my auctions url> in a new tab.
 
 **Expected Results:**
 
@@ -470,7 +506,7 @@ None.
 
 1. Click the Watching control.
 2. Click Undo in the toast.
-3. Open My Auctions in a new tab.
+3. Open <grade10 my auctions url> in a new tab.
 
 **Expected Results:**
 
@@ -587,7 +623,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <viewer> is on <closed lot url>.
+* <closed lot> is closed as the row states.
 
 **Test data:**
 
@@ -596,13 +632,16 @@ Runs once per row of **Test data**.
 | Sold, with a winner | customer(signed in, never watched or bid on it) |
 | Sold, with a winner | customer(signed in, watched it before the close, no bid) |
 | Sold, with a winner | customer(signed in, bid on it and lost) |
+| Sold, with a winner | customer(signed out) |
 | Ended with no bids | customer(signed in, watched it before the close) |
 | Ended with no bids | customer(signed out) |
 
 **Steps:**
 
-1. Look at the lot image and the bid panel.
+1. Navigate to <closed lot url>.
+2. Check the lot image area and the bid panel area.
 
 **Expected Results:**
 
-* No Watch or Watching control shows anywhere on the lot page.
+* Step 1: the lot page renders.
+* Step 2: no Watch or Watching control shows anywhere on the lot page.

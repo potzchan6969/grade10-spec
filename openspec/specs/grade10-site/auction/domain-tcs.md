@@ -1020,3 +1020,5 @@ finds it.
 * A delayed lower authorization is released rather than becoming the current bid.
 * Each user reads only their own maximum, and every standing change is explained by an event in their own history.
 * Every surprise is written up with the amounts, the order, and the timing that produced it.
+
+<!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->
