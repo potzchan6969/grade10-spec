@@ -44,7 +44,7 @@
 
 ## 7. Admin Workspace (grade10)
 
-- [ ] 7.1 Console: `ActionMenu`, `FormDialog.dismissLabel`, `CursorPager.labels`, `max` on `DateField` and `DateTimeField`, `Notice.actions`, `PromptDialog` moved in from the vault slice; `node scripts/test.mjs packages/frontend-console`
+- [ ] 7.1 Console: `ActionMenu` with keyboard-reachable disabled items, `FormDialog.dismissLabel`, `CursorPager.labels`, `Notice.actions`, `PromptDialog` moved in from the vault slice; `node scripts/test.mjs packages/frontend-console`
 - [ ] 7.2 `features/operations/orders` slice: models, repository, API service with the proof urls, `refusalCopy` over every operator code, the three hooks; `TrpcAuctionAdminProcedureClient` gains `orders` and `testWinners`; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
 - [ ] 7.3 Worklist: segmented counts, search, status and category filters, the row's primary action, URL state, `CursorPager`; `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrdersWorklist.test.tsx`
 - [ ] 7.4 Order page: header with More and the primary action by grant, the status sentence, flag notices, summary strip, the two columns, shipment, timeline with the comment box; `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx`

@@ -469,16 +469,16 @@ Every dialog is a `FormDialog` held open by `useDialogSubject`; a refusal shows 
 | Reissue | `InvoiceQuoteFields`, deadline kept or restarted, reason; `SetupFields` behind a Switch "Change address or payment method" | what changes, old number -> Replaced, new total |
 | Record or Change setup | `SetupFields`: addresses, method, reason | what the winner sees |
 | Check proof | the files inline with Open, the winner's reference beside the expected reference and total; Confirm, or Return with the winner's reason and an internal note | "the winner sees this reason" |
-| Record payment | amount pre-filled with the balance, reference, received on (`max` today), reason, `ProofFilesField`; the close or overpayment choice inline from `paymentOutcome` | balance before and after |
+| Record payment | amount pre-filled with the balance, reference, received on (refused when in the future), reason, `ProofFilesField`; the close or overpayment choice inline from `paymentOutcome` | balance before and after |
 | Cancel | category, required note; destructive confirm, dismiss "Keep order" | the consequence list |
 | Refund | amount, method, destination card (brand, last four) or bank (channel FPS / local / SWIFT, bank name, masked account), reference, refunded on, reason from the fixed list, note, stock choice, proofs | amount, method, destination, lot outcome, "the only refund, cannot be undone" |
 | Dispatch | carrier, tracking, tracker link; the address shown | "the winner gets the shipped letter" |
-| Confirm delivery | delivered on (`max` today), proof | |
+| Confirm delivery | delivered on (refused when in the future), proof | |
 | Reopen setup, Clear flag | `PromptDialog` (reason) | |
 
 ### Console Additions
 
-`ActionMenu` over the Astryx dropdown; `FormDialog.dismissLabel`; `CursorPager.labels` (defaults keep the five callers); `max` on `DateField` and `DateTimeField`; `Notice.actions`; `PromptDialog` promoted from the vault slice into `@grade10/frontend-console`.
+`ActionMenu` over the Astryx menu, whose disabled items stay reachable by keyboard (a `pnpm patch` of Astryx, sent upstream); `FormDialog.dismissLabel`; `CursorPager.labels` (defaults keep the five callers); `Notice.actions`; `PromptDialog` promoted from the vault slice into `@grade10/frontend-console`. A date that must not be in the future is the dialog's own check, fed to the field's `refusal` and the dialog's `valid`, since Astryx drops a date past `max` while it is typed.
 
 ### Payment Settings
 
