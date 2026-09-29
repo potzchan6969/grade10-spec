@@ -109,6 +109,7 @@ The application owner archives after deployment acceptance.
 - [Shared Tender Actions](../../../docs/prds/products/shared/ui/store-cart.md#tender-actions)
 - [Cart Points](../../../docs/prds/products/grade10-site/store/cart.md#points)
 - [Cart Checkout](../../../docs/prds/products/grade10-site/store/cart.md#checkout)
+- [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
 - [Storybook](https://storybook.grade10-stg.com/?path=/story/store-cart-cartdrawer--default)
 
 No platform impact: this changes the existing Grade10 cart-to-checkout path only.

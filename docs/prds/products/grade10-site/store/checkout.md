@@ -18,9 +18,9 @@ In the cart drawer, signed in with Google or a magic link.
 Current price and stock, from Shopify. A line that moved comes back named.
 
 ## Collector — Check the price
-The promo code and the points carried from the drawer, or chosen here, and
-the estimated total they leave — [Cart Drawer](/p/grade10-site/store/cart).
-Pay sends them with the lines.
+The promo code and the points chosen in the drawer, and the estimated
+total they leave — [Cart Drawer](/p/grade10-site/store/cart). Pay sends
+them with the lines.
 
 # On Shopify's page
 
@@ -53,6 +53,10 @@ and settlement run through staging before production enablement.
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
 appears after return.
+
+🚧 **No separate checkout page** - the live review, the price check and the
+verification gate all run in the cart drawer; there is no `/checkout` page
+to navigate to.
 
 - **Members only** — checkout is signed in; there is no guest checkout
 - **The bar** — goods worth **HKD 120,000** or more need a verified buyer;
