@@ -101,7 +101,7 @@
   `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`,
   and the relevant Playwright smoke coverage.
 
-## 5. Staging shop readiness and release walk (grade10)
+## 5. Staging shop readiness and release walk (grade10) (owner: @kinisworking)
 
 - [ ] 5.1 Prepare the staging evidence cases for one normal payment, repeated
   Pay, terminal-intent replay, a crash before dispatch, response-loss recovery,
