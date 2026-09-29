@@ -54,6 +54,19 @@
     "cancelled": "已取消",
     "refunded": "已退款"
   },
+  "refusal": {
+    "NOT_FOUND": "找不到此訂單。",
+    "ADDRESS_LOCKED": "你的訂單設定已確認，無法再在此更改。",
+    "ADDRESS_WINDOW_CLOSED": "設定期限已過，訂單設定已關閉。",
+    "METHOD_UNAVAILABLE": "此訂單不支援銀行轉帳，請選擇信用卡。",
+    "ORDER_NOT_PAYABLE": "此訂單目前無法付款。",
+    "DEADLINE_ELAPSED": "付款期限已過。",
+    "INVOICE_EXPIRED": "此發票已過期，無法再在此付款。",
+    "PROOF_INVALID": "這些檔案無法作為付款證明。請上載 1 至 3 個 PDF、PNG、JPG、HEIC 或 HEIF 檔案，每個不超過 5 MB，合共不超過 15 MB。",
+    "PROOF_UNDER_REVIEW": "你的付款證明正在審核中，請等候結果後再提交。",
+    "UNAVAILABLE": "暫時無法使用，請稍後再試。",
+    "generic": "無法完成此操作，請再試一次或聯絡我們。"
+  },
   "addAddress": {
     "personal": "個人",
     "companyKind": "公司",

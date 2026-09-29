@@ -54,6 +54,19 @@
     "cancelled": "Cancelled",
     "refunded": "Refunded"
   },
+  "refusal": {
+    "NOT_FOUND": "This order was not found.",
+    "ADDRESS_LOCKED": "Your order setup is confirmed and can no longer be changed here.",
+    "ADDRESS_WINDOW_CLOSED": "The setup deadline has passed, so order setup is closed.",
+    "METHOD_UNAVAILABLE": "Bank transfer is not available for this order. Choose card.",
+    "ORDER_NOT_PAYABLE": "This order cannot be paid right now.",
+    "DEADLINE_ELAPSED": "The payment deadline has passed.",
+    "INVOICE_EXPIRED": "This invoice has expired and can no longer be paid here.",
+    "PROOF_INVALID": "These files cannot be used as payment proof. Upload 1 to 3 PDF, PNG, JPG, HEIC or HEIF files, up to 5 MB each and 15 MB in all.",
+    "PROOF_UNDER_REVIEW": "Your payment proof is being checked. Wait for the result before you send more.",
+    "UNAVAILABLE": "This is not available right now. Try again in a moment.",
+    "generic": "This could not be done. Try again, or contact us."
+  },
   "addAddress": {
     "personal": "Personal",
     "companyKind": "Company",
