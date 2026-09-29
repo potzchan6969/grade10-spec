@@ -247,9 +247,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -285,9 +287,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1013,9 +1017,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The cards after hand-in
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-grade-cards.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1292,9 +1298,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** What is paid and due
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1321,9 +1329,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** What is paid and due
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1663,9 +1673,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1691,9 +1703,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1720,9 +1734,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2071,9 +2087,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** What is paid and due
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2108,9 +2126,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** What is paid and due
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2143,9 +2163,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** What is paid and due
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2339,9 +2361,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
