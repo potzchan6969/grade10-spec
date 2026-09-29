@@ -1,0 +1,41 @@
+{
+  "document": {
+    "billToHeading": "Bill To",
+    "shipToHeading": "Ship To",
+    "descriptionLabel": "Description",
+    "amountLabel": "Amount"
+  },
+  "invoice": {
+    "documentTitle": "Invoice",
+    "invoiceNumberLabel": "Invoice number",
+    "sentAtLabel": "Date of issue",
+    "paymentDeadlineLabel": "Date due",
+    "paymentMethodLabel": "Payment method",
+    "bankDetailsHeading": "Bank details",
+    "swiftLabel": "SWIFT",
+    "fpsLabel": "FPS",
+    "hkLocalTransferLabel": "HK local transfer",
+    "beneficiaryLabel": "Beneficiary",
+    "swiftBicLabel": "SWIFT/BIC",
+    "accountIbanLabel": "Account/IBAN",
+    "fpsIdLabel": "FPS ID",
+    "bankAndCodeLabel": "Bank & code",
+    "accountNoLabel": "Account no.",
+    "bankReferenceNoteLabel": "Enter this reference in your bank app’s Memo or Remarks field. Missing it delays verification. Quote this reference on your transfer:"
+  },
+  "receipt": {
+    "documentTitle": "Receipt",
+    "receiptNumberLabel": "Receipt number",
+    "invoiceNumberLabel": "Invoice number",
+    "datePaidLabel": "Date paid",
+    "paymentMethodLabel": "Payment method",
+    "paymentReferenceLabel": "Payment reference",
+    "paymentSectionLabel": "Payment",
+    "transferReferenceLabel": "Transfer reference",
+    "paymentBreakdownLabel": "Payment breakdown",
+    "originalInvoiceTotalLabel": "Original Invoice Total",
+    "previousPaymentsLabel": "Previous Payments",
+    "currentPaymentReceivedLabel": "Current Payment Received",
+    "remainingBalanceDueLabel": "Remaining Balance Due"
+  }
+}
