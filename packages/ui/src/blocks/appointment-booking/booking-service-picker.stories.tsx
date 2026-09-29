@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { BookingServicePicker } from "./booking-service-picker";
@@ -6,6 +7,8 @@ import {
   GRADING_SERVICE,
   SERVICE_PICKER_COPY,
 } from "./fixtures";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Appointment Booking/BookingServicePicker",
@@ -58,7 +61,7 @@ export const Failed: Story = {
     services: {
       status: "error",
       message: "The services could not be read.",
-      action: { label: "Try again", onAction: fn() },
+      action: { label: common.retry, onAction: fn() },
     },
   },
   play: async ({ canvasElement }) => {
@@ -66,6 +69,6 @@ export const Failed: Story = {
     expect(
       canvas.getByText("The services could not be read."),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Try again" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: common.retry })).toBeVisible();
   },
 };

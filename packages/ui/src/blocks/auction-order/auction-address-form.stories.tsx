@@ -1,6 +1,9 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionAddressForm } from "./auction-address-form";
+
+const { common } = getMessages("grade10", "en");
 
 const COPY = {
   personal: "Personal",
@@ -17,8 +20,8 @@ const COPY = {
   state: "State/Province/Region",
   postalCode: "Postal Code",
   optional: "Optional",
-  confirm: "Confirm",
-  cancel: "Cancel",
+  confirm: common.confirm,
+  cancel: common.cancel,
   phonePlaceholder: "+852 12345678",
   countrySearchPlaceholder: "e.g. United States",
 };

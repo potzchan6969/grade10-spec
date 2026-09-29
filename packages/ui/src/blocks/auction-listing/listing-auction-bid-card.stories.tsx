@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
@@ -12,6 +13,8 @@ import {
   formatAutoExtendedTooltip,
 } from "./listing-extension-policy";
 import type { ListingAuctionBidView, ListingBidHistoryRow } from "./types";
+
+const { common } = getMessages("grade10", "en");
 
 const COPY = {
   recentBids: "Recent Bids",
@@ -41,7 +44,7 @@ const COPY = {
   placeBid: "Place Bid",
   signInToBid: "Sign In to Bid",
   linkACardToBid: "Link a card to bid",
-  confirmMaximum: "Confirm",
+  confirmMaximum: common.confirm,
   raiseMaximum: "Raise",
   confirmMaximumTooltip:
     "The most we’ll bid for you. You may pay less if the auction ends below it.",

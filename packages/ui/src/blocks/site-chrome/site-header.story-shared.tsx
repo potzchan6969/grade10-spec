@@ -1,14 +1,17 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
+import { getMessages } from "@grade10/i18n";
 import type { SiteHeaderProps } from "./site-header";
+
+const { chrome, common, locale } = getMessages("grade10", "en");
 
 /** TBC — provisional docs host for collector Help. Keep in sync with Nav
  * `HELP_HREF` and preview chrome. */
 const HELP_HREF = "https://grade10.mintlify.io/";
 
 export const LOCALES = [
-  { value: "en", label: "English" },
-  { value: "zh-Hant", label: "繁體中文" },
-  { value: "zh-Hans", label: "简体中文" },
+  { value: "en", label: locale.en },
+  { value: "zh-Hant", label: locale["zh-Hant"] },
+  { value: "zh-Hans", label: locale["zh-Hans"] },
 ];
 
 /** Auction-first primary nav: no Store, no Store Locator (shop not open yet), no Grade. Help after Auction. */
@@ -18,18 +21,18 @@ export const AUCTION_NAV_ITEMS = [
 ];
 
 export const COPY = {
-  locale: "English",
-  account: "Account",
-  signIn: "Sign In",
-  menu: "Menu",
-  menuTitle: "Menu",
-  language: "Language",
-  accountMenuLabel: "Account",
-  profile: "Profile",
-  myOrders: "My Orders",
+  locale: locale.en,
+  account: chrome.accountLabel,
+  signIn: chrome.signIn,
+  menu: chrome.menu,
+  menuTitle: chrome.menuTitle,
+  language: chrome.language,
+  accountMenuLabel: chrome.accountMenuLabel,
+  profile: chrome.profile,
+  myOrders: chrome.myOrders,
   myAuctions: "My Auctions",
-  membership: "Membership",
-  signOut: "Sign Out",
+  membership: chrome.membership,
+  signOut: common.signOut,
 };
 
 /** Signed-in address shown above the account menu items. */
