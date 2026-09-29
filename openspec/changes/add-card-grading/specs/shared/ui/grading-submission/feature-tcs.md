@@ -29,9 +29,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The export contract
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`
 
 **Pre-conditions:**
 
@@ -60,9 +62,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The export contract
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`
 
 **Pre-conditions:**
 
@@ -118,9 +122,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The export contract
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`, `packages/ui/src/blocks/grading-submission/grading-copy.test.ts`
 
 **Pre-conditions:**
 
@@ -314,7 +320,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1244,7 +1250,7 @@ Runs once per row of **Test data**.
 
 * Save is disabled, and step 3 logs nothing.
 
-### shared-ui-grading-submission-US1-TC38-1: Removing a named person clears the card back to nobody
+### shared-ui-grading-submission-US1-TC38-1: Change and Remove each report through their own callback
 
 **Classification:**
 
@@ -1553,9 +1559,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Content through props
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`
 
 **Pre-conditions:**
 
@@ -2390,7 +2398,7 @@ Runs once per row of **Test data**.
 * Step 1: the save act reads Save changes.
 * Step 2: the save reports through its own callback.
 
-### shared-ui-grading-submission-US1-TC74-1: An open level carrying cover is picked by id
+### shared-ui-grading-submission-US1-TC74-2: An open level carrying cover is picked by id
 
 **Classification:**
 
@@ -2409,19 +2417,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Level Open Cover story gives `GradingLevelPicker` an open level, Express, carrying a cover line, with no level picked and no estimate.
+* The Level Open Cover story gives `GradingLevelPicker` an open level, Express, carrying a cover line, with no level picked.
 
 **Steps:**
 
 1. Open Grading Submission / GradingLevelPicker / Level Open Cover at <grade10 ui workbench url>.
-2. Read Express's level card and the space under the levels.
+2. Read Express's level card.
 3. Clear the Actions panel.
 4. Click Express.
 5. In the Controls panel, set `selectedLevelId` to `express`, as the consumer does on the pick.
 
 **Expected Results:**
 
-* Step 2: Express shows its cover line, and no estimate shows.
+* Step 2: Express shows its cover line.
 * Step 4: `onSelectLevel` logs `express`.
 * Step 5: Express reads as selected.
 
@@ -2726,7 +2734,7 @@ Runs once per row of **Test data**.
 | A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67`; case added at review, `shared-ui-grading-submission-US1-TC78-1` |
 | A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68`; case added at review, `shared-ui-grading-submission-US1-TC76-1` |
 | The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as `shared-ui-grading-submission-SC-69`; case added at review, `shared-ui-grading-submission-US1-TC77-1` |
-| `shared-ui-grading-submission-SC-06` | Case added at review | `shared-ui-grading-submission-US1-TC74-1` — an open level carrying cover, picked by id; no case had asserted the pick |
+| `shared-ui-grading-submission-SC-06` | Case added at review | `shared-ui-grading-submission-US1-TC74-2` — an open level carrying cover, picked by id; no case had asserted the pick. Its no-estimate clause is left to `shared-ui-grading-submission-US1-TC9-1` |
 | `shared-ui-grading-submission-SC-20` | Case added at review | `shared-ui-grading-submission-US1-TC79-1` — nothing read, nothing added; `shared-ui-grading-submission-US1-TC18-1` holds only the loading clause |
 | `shared-ui-grading-submission-SC-59` | Case added at review | `shared-ui-grading-submission-US1-TC75-1` — each block draws the one record it was given; the page passing one record to both stays out of suite, above |
 | `shared-ui-grading-submission-US1-TC15-1` — one case over three stories | Split at review | Adding a card is `shared-ui-grading-submission-US1-TC80-1`; the value field, with its commit-once clauses, is `shared-ui-grading-submission-US1-TC81-1` |
