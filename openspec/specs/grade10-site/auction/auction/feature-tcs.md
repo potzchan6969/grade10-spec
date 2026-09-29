@@ -1,8 +1,7 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** reopened
-**Drafts styled:** 2026-09-29, tcs-rules r4
-**Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-29
+**Status:** approved
+**Reviewed:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-auction-US5: Collector reads the catalogue in one order
 
@@ -18,7 +17,7 @@ shows me a lot twice or skips one.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -55,7 +54,7 @@ shows me a lot twice or skips one.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -96,7 +95,7 @@ shows me a lot twice or skips one.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -131,7 +130,7 @@ shows me a lot twice or skips one.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
