@@ -110,7 +110,8 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 
 | Lot | Amount being beaten | Next minimum | Outcome |
 | --- | ---: | ---: | --- |
-| HKD lot opening at HK$200 | HK$200 | HK$210 | The first bid must reach HK$210 |
+| HKD lot opening at HK$200 | HK$200 | 🚧 HK$200 | 🚧 The first bid may stand on the starting price; HK$210 from the second |
+| 🚧 HKD lot opening at HK$0 | HK$0 | HK$10 | 🚧 The first bid must reach the lowest increment; a lone bidder stands at HK$10, never HK$0 |
 | USD lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
 | USD lot at the ceiling | $10,000,000 | — | Every further bid is refused |
@@ -119,6 +120,9 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
   schedule
 - **A first maximum** — must reach the starting price plus one increment; the
   public price it creates is the starting price itself
+- 🚧 **Opening price** — the first bid must reach the starting price, or the
+  lowest increment when the lot starts at 0, and a lone bidder stands there;
+  one increment above the current bid applies from the second bid
 
 ### Refusals
 

@@ -6,8 +6,8 @@ Each listing SHALL have a scheduled bidding start and a scheduled close. A
 bidder MAY place a bid only from the scheduled start through the recorded
 close. A valid bid SHALL meet or exceed the minimum next amount that
 `grade10-site/auction/bid-increments` sets; before any accepted bid, that is
-the starting price plus its tier increment, on a listing that starts at 0 as
-on any other.
+the listing's opening price - its starting price, or the currency's lowest
+increment when the starting price is 0.
 
 Each listing SHALL carry an **extension duration** in whole seconds, and MAY
 carry an **extension cap** in whole seconds. An extension duration of zero
@@ -162,12 +162,20 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 accepts it
 - **AND** the recorded close becomes the extension duration after that bid
 
-#### Scenario: grade10-site-auction-auction-SC-62 - A first bid at the starting price is refused
+#### Scenario: grade10-site-auction-auction-SC-62 - A first bid may stand on the starting price
 **Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
 
 - **GIVEN** an open `HKD` listing with a starting price of 20000 minor units and no accepted bid
 - **WHEN** a bidder bids 20000 minor units
-- **THEN** Grade10 refuses the bid and names 21000 minor units as the minimum valid amount
+- **THEN** Grade10 accepts the bid and the current bid is 20000 minor units
+- **AND** the next minimum is 21000 minor units
+
+#### Scenario: grade10-site-auction-auction-SC-64 - A first bid below the starting price is refused
+**Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
+
+- **GIVEN** an open `HKD` listing with a starting price of 20000 minor units and no accepted bid
+- **WHEN** a bidder bids 19999 minor units
+- **THEN** Grade10 refuses the bid and names 20000 minor units as the minimum valid amount
 
 #### Scenario: grade10-site-auction-auction-SC-63 - A first bid on a 0 start must reach the lowest increment
 **Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot that starts at nothing
