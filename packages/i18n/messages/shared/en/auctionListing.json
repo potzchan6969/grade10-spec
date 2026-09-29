@@ -58,7 +58,7 @@
   "identityRequired": "Bids this high need a verified identity. Verify from your account, then bid again.",
   "invalidAmount": "Enter a valid amount.",
   "linkACardToBid": "Link a card to bid",
-  "linkCardDescription": "Link a card for bidding. You're only charged if you win.",
+  "linkCardDescription": "Link a card for bidding. You’re only charged if you win.",
   "linkCardEmptyState": "Link a card to place a bid.",
   "linking": "Linking",
   "listingNumber": "Listing {label}",
