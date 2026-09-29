@@ -89,10 +89,7 @@ consoles. ZZZ storefront emit. A consent gate. Bid ticks, KYC payloads,
 coupon codes, and pass serials.
 
 **Measurement.** [Bid conversion](#auction) once auction is live;
-[Identified paid orders](#store) once the store is live. Gap between
-domain Order Paid (or Bid Placed) rows and the same names in Mixpanel over
-a day — should stay near zero across a Mixpanel or worker blip once the
-analytics queue is live.
+[Identified paid orders](#store) once the store is live.
 
 **Decisions.**
 
