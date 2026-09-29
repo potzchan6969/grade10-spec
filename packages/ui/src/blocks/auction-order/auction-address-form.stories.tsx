@@ -17,9 +17,10 @@ const COPY = {
   city: addAddress.city,
   addressLine1: addAddress.addressLine1,
   addressLine2: addAddress.addressLine2,
-  // Not catalogued: production leaves this label blank (apartment: "" in
-  // AuctionAddressForm's own default and in the app's copy assembly).
-  apartment: "Apt./Suite/Building",
+  // Production currently leaves this label blank (apartment: "" in
+  // AuctionAddressForm's own default and in the app's copy assembly); the
+  // catalog carries the full label for a consumer that wants to show it.
+  apartment: addAddress.apartment,
   state: addAddress.state,
   postalCode: addAddress.postalCode,
   optional: addAddress.optional,

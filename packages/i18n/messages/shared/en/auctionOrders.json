@@ -62,6 +62,7 @@
     "city": "Town/City",
     "addressLine1": "Address Line 1",
     "addressLine2": "Address Line 2",
+    "apartment": "Apt./Suite/Building",
     "state": "State/Province/Region",
     "postalCode": "Postal Code",
     "optional": "Optional",

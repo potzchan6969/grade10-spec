@@ -62,6 +62,7 @@
     "city": "시/군/구",
     "addressLine1": "주소 1",
     "addressLine2": "주소 2",
+    "apartment": "호실/스위트/건물",
     "state": "주/도/지역",
     "postalCode": "우편번호",
     "optional": "선택",

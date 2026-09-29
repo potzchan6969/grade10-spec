@@ -62,6 +62,7 @@
     "city": "城市/城鎮",
     "addressLine1": "地址行 1",
     "addressLine2": "地址行 2",
+    "apartment": "室/樓層/大廈",
     "state": "州/省/地區",
     "postalCode": "郵遞區號",
     "optional": "選填",
