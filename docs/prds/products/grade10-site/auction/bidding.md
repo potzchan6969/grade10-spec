@@ -180,6 +180,8 @@ authorization rather than adding a second.
 | **Leading** | Their maximum, the current bid and Leading |
 | **Outbid** | Outbid, and the next valid bid |
 | **Lost** | Did not win, with no hold-release copy; that reads on My Auctions |
+| **Open, no bids** | **No bids yet** under the starting bid |
+| **Closed, no bids** | **Ended** as the result, and **No bids** under it — never **No bids yet** |
 
 - 🚧 **Time left (extended)** — while the lot is in extended bidding the label
   says so, and its tooltip names the extension duration only
