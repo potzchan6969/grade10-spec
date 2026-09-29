@@ -104,7 +104,7 @@ const capabilityModules = Object.fromEntries(
   ),
 );
 
-/** The contract's runtime exports: the thirteen blocks and `fillGradingCopy`. */
+/** The contract's runtime exports: the thirteen blocks and nothing else. */
 const CAPABILITY_EXPORTS = [
   "GradingCardList",
   "GradingCardRecord",
@@ -119,7 +119,6 @@ const CAPABILITY_EXPORTS = [
   "GradingReview",
   "GradingStatusRail",
   "GradingUncollectedLadder",
-  "fillGradingCopy",
 ].sort();
 
 describe("grading submission public entry", () => {
@@ -142,7 +141,7 @@ describe("grading submission public entry", () => {
     ]).toEqual(Array.from({ length: 13 }, () => expect.any(Function)));
   });
 
-  // shared-ui-grading-submission-SC-01, SC-71: every value the public entry
+  // shared-ui-grading-submission-SC-01: every value the public entry
   // publishes from this capability's modules, found by identity rather than
   // by name — no filter on `Grading` — so a helper, a constant or a block
   // the entry starts publishing from here fails until the contract names
