@@ -19,7 +19,11 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    copy: CARD_LIST_COPY,
+    copy: {
+      ...CARD_LIST_COPY,
+      matched: fn(CARD_LIST_COPY.matched),
+      minimumGrade: fn(CARD_LIST_COPY.minimumGrade),
+    },
     cards: [MATCHED_CARD],
     cap: LIST_CAP,
     capReachedLine: CAP_REACHED_LINE,
@@ -84,8 +88,10 @@ export const CardSearch: Story = {
 /** A matched card reads its set line, its declared value, its three sales
  * with the reference note under them, and its minimum grade; editing,
  * removing and pasting each report through a callback of their own, and the
- * list carries none of them out (shared-ui-grading-submission-SC-13,
- * shared-ui-grading-submission-SC-61, shared-ui-grading-submission-SC-76). */
+ * list carries none of them out; the set line and the minimum grade are
+ * filled by the consumer's own formatter (shared-ui-grading-submission-SC-13,
+ * shared-ui-grading-submission-SC-61, shared-ui-grading-submission-SC-71,
+ * shared-ui-grading-submission-SC-76). */
 export const Matched: Story = {
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -121,6 +127,18 @@ export const Matched: Story = {
         name: "Only encapsulate at PSA 9 or above · the fee applies either way",
       }),
     ).toBeInTheDocument();
+    await step(
+      "shared-ui-grading-submission-SC-71 - A line carrying a value is the consumer's to fill",
+      async () => {
+        expect(args.copy.matched).toHaveBeenCalledWith({
+          set: "Base Set",
+          number: "4/102",
+        });
+        expect(args.copy.minimumGrade).toHaveBeenCalledWith({
+          grade: "PSA 9",
+        });
+      },
+    );
     await userEvent.click(canvas.getByRole("button", { name: "Edit" }));
     expect(args.onEdit).toHaveBeenCalledWith("card_charizard");
     await userEvent.click(canvas.getByRole("button", { name: "Remove" }));

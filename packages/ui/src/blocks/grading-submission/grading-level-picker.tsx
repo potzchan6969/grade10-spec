@@ -11,8 +11,8 @@ import { SegmentedControlItem } from "@grade10/design-system/components/forms/se
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useId } from "react";
 import {
-  fillGradingCopy,
   formatGradingMoney,
+  type GradingFormat,
   type GradingLocaleProps,
 } from "./grading-copy";
 import type { GradingGrader, GradingMoney } from "./types";
@@ -57,9 +57,9 @@ type GradingLevelPickerCopy = {
   graderLabel: string;
   /** Leads the highest declared value the levels are read against. */
   highestDeclaredLabel: string;
-  /** Read by an open level: what it takes and what it costs a card. Fills
-   * `{ceiling}` and `{fee}`. */
-  levelOpen: string;
+  /** Read by an open level: what it takes and what it costs a card, handed
+   * both figures as the picker formats them. */
+  levelOpen: GradingFormat<{ ceiling: string; fee: string }>;
   estimateTitle: string;
   totalLabel: string;
   /** Read by a level that reports no pick. */
@@ -257,7 +257,7 @@ function LevelCard({
             size="sm"
             tone="secondary"
           >
-            {fillGradingCopy(copy.levelOpen, {
+            {copy.levelOpen({
               ceiling: formatGradingMoney(level.ceiling, locale),
               fee: formatGradingMoney(level.feePerCard, locale),
             })}
