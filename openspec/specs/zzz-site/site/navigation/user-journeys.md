@@ -4,9 +4,11 @@
 
 **As a** collector,
 **I want** sign-in and the profile to answer at addresses of their own, and an
-address under no surface to answer as not-found,
+address under no surface to answer as not-found with a clear static message
+and a way home,
 **so that** a link or a refresh puts me back on the surface I was on rather
-than at home.
+than at home, and when none answers I know I am still on the site and can
+leave for home.
 
 ### zzz-site-site-navigation-US-02: Collector asks for a session-decided address
 

@@ -33,11 +33,31 @@ const ENTER_VISIBLE_CLASS = "translate-y-0 opacity-100";
 const ROW_EXIT_MS = 200;
 const ROW_EXIT_EASE = ENTER_EASE;
 
+/** Matches Tailwind `md` — table from here; cards below. */
+const MD_UP_MQ = "(min-width: 768px)";
+
 function prefersReducedMotion() {
   return (
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
+}
+
+/** True from the Tailwind `md` breakpoint up — keep one surface mounted. */
+function useIsMdUp() {
+  const [mdUp, setMdUp] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(MD_UP_MQ).matches : true,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(MD_UP_MQ);
+    setMdUp(media.matches);
+    const onChange = () => setMdUp(media.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  return mdUp;
 }
 
 function rowKey(item: AuctionRecordRowProps) {
@@ -109,11 +129,10 @@ function AuctionRecordEmptyBody({
 
 /**
  * My Auctions page body: breadcrumbs, title with watching-count badge, one
- * table of bookmarked lots (bid rows first), or one page-level empty state.
- * Site chrome stays outside, and so does the `<Toast />` the application
- * mounts at its root.
- *
- * Table composition matches Figma `Auction Watchlist` (`6507:5463`).
+ * list of bookmarked lots (bid lots first), or one page-level empty state.
+ * Below `md` each lot is a stacked card; from `md` the five-column table
+ * matches Figma `Auction Watchlist` (`6507:5463`). Site chrome stays outside,
+ * and so does the `<Toast />` the application mounts at its root.
  *
  * Motion: title → header → rows stagger in; Unwatch collapses the row before
  * the application is told to drop it.
@@ -127,6 +146,7 @@ function AuctionRecord({
   className,
 }: AuctionRecordProps) {
   const revealed = useFirstPaintReveal();
+  const mdUp = useIsMdUp();
   const rows = useMemo(
     () => [...biddingItems, ...watchingItems],
     [biddingItems, watchingItems],
@@ -221,7 +241,7 @@ function AuctionRecord({
           copy={copy}
           onBrowseCatalogue={onBrowseCatalogue}
         />
-      ) : (
+      ) : mdUp ? (
         <div className="scroll-fade-x w-full overflow-x-auto overscroll-x-contain">
           <Table className={AUCTION_RECORD_TABLE_LAYOUT.table}>
             <TableHeader
@@ -271,12 +291,49 @@ function AuctionRecord({
                         ? () => requestUnwatch(item)
                         : undefined
                     }
+                    presentation="table"
                   />
                 );
               })}
             </TableBody>
           </Table>
         </div>
+      ) : (
+        <ul
+          className="flex w-full flex-col gap-3"
+          data-slot="auction-record-cards"
+        >
+          {rows.map((item, index) => {
+            const id = rowKey(item);
+            return (
+              <AuctionRecordRow
+                key={id}
+                {...item}
+                className={enterVisibilityClass(revealed)}
+                copy={{
+                  openListing: copy.openListing,
+                  openBidding: copy.openBidding,
+                  noStanding: copy.noStanding,
+                  viewOrder: copy.viewOrder,
+                  ...item.copy,
+                }}
+                enterStyle={enterStyle(index + 2, revealed)}
+                exiting={exitingIds.has(id)}
+                exitEase={ROW_EXIT_EASE}
+                exitMs={ROW_EXIT_MS}
+                factLabels={{
+                  currentBid: copy.currentBidColumn,
+                  standing: copy.standingColumn,
+                  emailAlerts: copy.emailAlertsColumn,
+                }}
+                onWatchToggle={
+                  item.onWatchToggle ? () => requestUnwatch(item) : undefined
+                }
+                presentation="card"
+              />
+            );
+          })}
+        </ul>
       )}
     </VStack>
   );

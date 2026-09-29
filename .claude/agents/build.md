@@ -32,6 +32,13 @@ them. The smaller shape is the simpler thing's, which reads every group.
 | Code smell | Duplication, a function doing two things, a name that says the wrong thing, state held where a pure function would do, a caught error nobody reports |
 | The repository's conventions | The shape the tree already uses: where a module lives, how it is named, how it is tested, and what the store's own rules say about it |
 
+## On a Bug
+
+Dispatched with the same three names on a bug's fix round, [Bug Fixes](../../docs/governance/bug-fixes.md)'s. The diagnosis stands where a group's tasks would. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **Missing pieces** - a sibling the diagnosis says this fix covers that the diff leaves alone, or a test that never reaches the reported path
+- **Code smell and conventions** - read as on a task group
+
 ## Your Stance
 
 Read [the eight principles and the reader's

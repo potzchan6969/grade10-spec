@@ -44,6 +44,8 @@
     "opensIn": "距開拍",
     "endedAt": "已結束",
     "progress": "精選拍品",
-    "slide": "查看精選拍品 {position}：{title}"
+    "slide": "查看精選拍品 {position}：{title}",
+    "previous": "上一件精選拍品",
+    "next": "下一件精選拍品"
   }
 }

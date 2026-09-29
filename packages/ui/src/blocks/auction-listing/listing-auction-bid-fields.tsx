@@ -73,6 +73,8 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   maximumBelowMinimum: string;
   buyerFeeHint: string;
   noBidsYet: string;
+  /** Closed lot with no bids — past tense; live empty state keeps `noBidsYet`. */
+  noBids: string;
   endsLabel: string;
   opensLabel: string;
   closedAt: string;
@@ -229,9 +231,105 @@ type PriceBlockProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
   locale: ShippedLocale;
+  timeZone: string;
+  /**
+   * Below `sm`: one line under the bid count instead of the full time column
+   * (live countdown, or closed summary).
+   */
+  compactTime?: boolean;
 };
 
-function PriceBlock({ copy, view, locale }: PriceBlockProps) {
+function compactClosedSummary(
+  copy: ListingAuctionBidFieldsCopy,
+  view: ListingAuctionBidView,
+  locale: ShippedLocale,
+  timeZone: string,
+): string | null {
+  if (!view.closed || view.deadlineAtMs == null) return null;
+
+  const date = formatLocalDay(view.deadlineAtMs, { locale, timeZone });
+  const time = formatLocalTime(view.deadlineAtMs, { locale, timeZone });
+  const ranDuration =
+    view.opensAtMs != null
+      ? formatAccessibleText(
+          elapsedDurationParts(
+            Math.max(
+              0,
+              Math.floor((view.deadlineAtMs - view.opensAtMs) / 1000),
+            ),
+          ),
+        )
+      : null;
+
+  if (ranDuration == null) {
+    return `${copy.closedAt.replace("{when}", `${date} ${time}`)}`;
+  }
+
+  // Fold the calendar day into `{time}` so the line reads
+  // "Closed at {date} {time}. Ran {duration}".
+  return copy.closedSummary
+    .replace("{time}", `${date} ${time}`)
+    .replace("{duration}", ranDuration);
+}
+
+function CompactTimeLine({
+  copy,
+  view,
+  locale,
+  timeZone,
+}: {
+  copy: ListingAuctionBidFieldsCopy;
+  view: ListingAuctionBidView;
+  locale: ShippedLocale;
+  timeZone: string;
+}) {
+  if (view.opens) return null;
+
+  if (view.closed) {
+    const summary = compactClosedSummary(copy, view, locale, timeZone);
+    if (summary == null) return null;
+    return (
+      <Text className="text-secondary-foreground" size="xs">
+        {summary}
+      </Text>
+    );
+  }
+
+  if (view.countdownSeconds == null) return null;
+
+  return (
+    <span className="inline-flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs leading-4 text-secondary-foreground [--countdown-digit-height:1rem] [&_.countdown-digit-cell]:text-xs [&_.countdown-digit-cell]:leading-4 [&_.countdown-unit]:text-xs">
+      <span className="inline-flex items-center gap-1 font-medium">
+        {view.extended ? copy.timeLeftAutoExtended : copy.timeLeft}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              aria-label={copy.autoExtendedTooltip}
+              className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+              closeOnClick={false}
+            >
+              <Info aria-hidden size={12} />
+            </TooltipTrigger>
+            <TooltipContent>{copy.autoExtendedTooltip}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </span>
+      <ListingCountdownDisplay
+        closesAtMs={view.closesAtMs}
+        format={view.countdownFormat}
+        initialSeconds={view.countdownSeconds}
+      />
+    </span>
+  );
+}
+
+function PriceBlock({
+  copy,
+  view,
+  locale,
+  timeZone,
+  compactTime = false,
+}: PriceBlockProps) {
   return (
     <VStack gap="xs">
       <Text
@@ -254,14 +352,24 @@ function PriceBlock({ copy, view, locale }: PriceBlockProps) {
         )}
       </Text>
       {view.hasBids ? (
-        <Text size="xs" tone="secondary">
+        <Text className="text-secondary-foreground" size="xs">
           {view.bidCountLabel}
         </Text>
       ) : (
-        <Text size="xs" tone="secondary">
-          {copy.noBidsYet}
+        <Text className="text-secondary-foreground" size="xs">
+          {view.closed ? copy.noBids : copy.noBidsYet}
         </Text>
       )}
+      {compactTime ? (
+        <div className="sm:hidden">
+          <CompactTimeLine
+            copy={copy}
+            locale={locale}
+            timeZone={timeZone}
+            view={view}
+          />
+        </div>
+      ) : null}
     </VStack>
   );
 }
@@ -373,9 +481,11 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
             <Tooltip>
               <TooltipTrigger
                 aria-label={copy.autoExtendedTooltip}
-                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                render={<Info aria-hidden size={12} />}
-              />
+                className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+                closeOnClick={false}
+              >
+                <Info aria-hidden size={12} />
+              </TooltipTrigger>
               <TooltipContent>{copy.autoExtendedTooltip}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -393,11 +503,11 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
         )}
       </Text>
       {view.closed && closedSubtext != null ? (
-        <Text size="xs" tone="secondary">
+        <Text className="text-secondary-foreground" size="xs">
           {closedSubtext}
         </Text>
       ) : deadlineLine ? (
-        <Text size="xs" tone="secondary">
+        <Text className="text-secondary-foreground" size="xs">
           {deadlineLine}
         </Text>
       ) : null}

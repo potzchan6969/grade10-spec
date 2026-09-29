@@ -3,7 +3,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { SiteHeader } from "@grade10/ui";
 import type { LegalDocument, LegalSurface } from "./legal-content";
 import { PRIVACY_DOCUMENT, TERMS_DOCUMENT } from "./legal-content";
-import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
+import { AUCTION_FOOTER, STORE_SITE_HEADER } from "./store-content";
 
 const DOCUMENTS: Record<LegalSurface, LegalDocument> = {
   terms: TERMS_DOCUMENT,
@@ -34,25 +34,24 @@ function LegalPage({ surface }: { surface: LegalSurface }) {
               {document.title}
             </h2>
             <p className="text-base leading-6 text-secondary-foreground">
-              <span className="block">{document.lastUpdatedLabel}</span>
-              <span className="block">{document.lastUpdatedDate}</span>
+              {document.lastUpdatedLabel} {document.lastUpdatedDate}
             </p>
           </VStack>
           <div className="mt-20 flex w-full flex-col gap-16">
             {document.sections.map((section) => (
               <VStack className="w-full" gap="sm" key={section.id}>
-                <h3 className="text-3xl font-semibold leading-9 text-foreground">
+                <h3 className="text-xl font-semibold leading-7 text-foreground">
                   {section.heading}
                 </h3>
                 {section.items && section.items.length > 0 ? (
-                  <ul className="list-disc space-y-2 pl-6 text-lg leading-7 text-foreground">
+                  <ul className="list-disc space-y-2 pl-6 text-base leading-6 text-foreground">
                     {section.items.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
                 ) : null}
                 {section.body ? (
-                  <p className="text-lg leading-7 text-foreground">
+                  <p className="text-base leading-6 text-foreground">
                     {section.body}
                   </p>
                 ) : null}
@@ -61,7 +60,7 @@ function LegalPage({ surface }: { surface: LegalSurface }) {
           </div>
         </VStack>
       </main>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }

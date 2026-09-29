@@ -46,7 +46,7 @@ import {
   useFirstPaintReveal,
 } from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
-import { STORE_FOOTER } from "./store-content";
+import { AUCTION_FOOTER } from "./store-content";
 import { WinnerOrderContactDialog } from "./winner-order-contact-dialog";
 import {
   contactReasonFor,
@@ -1302,7 +1302,7 @@ function WinnerOrderPage({
           </RevealGroup>
         </div>
       </main>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
       <Toast position="bottom-right" />
 
       <WinnerOrderSetupDialog

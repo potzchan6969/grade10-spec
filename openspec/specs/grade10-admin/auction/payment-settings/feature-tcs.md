@@ -11,7 +11,7 @@ premium for each auction currency,
 **so that** invoice amounts follow the configured policy.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-q43 rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
-### grade10-admin-auction-payment-settings-US-01-TC1-1: Initial page shows every supported currency
+### grade10-admin-auction-payment-settings-US1-TC1-1: Initial page shows every supported currency
 
 **Classification:**
 
@@ -41,7 +41,7 @@ premium for each auction currency,
 * JPY shows 0 minor units.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-nzx rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
-### grade10-admin-auction-payment-settings-US-01-TC2-1: Complete mapping save persists all values
+### grade10-admin-auction-payment-settings-US1-TC2-1: Complete mapping save persists all values
 
 **Classification:**
 
@@ -71,7 +71,7 @@ premium for each auction currency,
 * The save identifies the operator and timestamp.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
-### grade10-admin-auction-payment-settings-US-01-TC3-1: Invalid save changes nothing
+### grade10-admin-auction-payment-settings-US1-TC3-1: Invalid save changes nothing
 
 **Classification:**
 
@@ -100,7 +100,7 @@ premium for each auction currency,
 * The prior mapping remains unchanged.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-7de rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
-### grade10-admin-auction-payment-settings-US-01-TC4-1: Missing settlement permission refuses access
+### grade10-admin-auction-payment-settings-US1-TC4-1: Missing settlement permission refuses access
 
 **Classification:**
 
@@ -133,6 +133,11 @@ premium for each auction currency,
 - The latest product reading confirms one fixed 20% premium rate and editable currency minimums under `/auction`; no unresolved product question remains.
 
 ## Settled
+
+- `grade10-admin-auction-payment-settings-US-01-TC1` is `grade10-admin-auction-payment-settings-US1-TC1`: renamed to the compact id form while still draft.
+- `grade10-admin-auction-payment-settings-US-01-TC2` is `grade10-admin-auction-payment-settings-US1-TC2`: renamed to the compact id form while still draft.
+- `grade10-admin-auction-payment-settings-US-01-TC3` is `grade10-admin-auction-payment-settings-US1-TC3`: renamed to the compact id form while still draft.
+- `grade10-admin-auction-payment-settings-US-01-TC4` is `grade10-admin-auction-payment-settings-US1-TC4`: renamed to the compact id form while still draft.
 
 ## Reconciliation
 

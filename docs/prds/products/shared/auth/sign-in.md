@@ -2,7 +2,7 @@
 title: Sign-In
 spec: shared/auth/sign-in
 order: 1
-reviewed: 2026-09-25
+reviewed: 2026-09-28
 ---
 
 A person types their email and a sign-in link is emailed to it. Google appears
@@ -68,18 +68,18 @@ session, and the person lands on the brand home with a toast.
 
 ## Google One Tap
 
-🚧 A signed-out collector on a brand that offers Google sign-in sees Google's
+A signed-out collector on a brand that offers Google sign-in sees Google's
 own prompt in the browser corner, without opening sign-in first. Tapping it
 signs them in the same way the Google control does; leaving it alone leaves
 the page exactly as it was.
 
-- 🚧 **Brand-offered** - the prompt follows the Google control's own rule: a
+- **Brand-offered** - the prompt follows the Google control's own rule: a
   brand without Google sign-in never shows it.
-- 🚧 **One ask at a time** - the prompt does not appear while the sign-in
+- **One ask at a time** - the prompt does not appear while the sign-in
   dialog is already open, and opening the dialog dismisses it.
-- 🚧 **Every page** - the prompt can appear on any page a signed-out
+- **Every page** - the prompt can appear on any page a signed-out
   collector visits, not only a sign-in step.
-- 🚧 **Suppressed after a decline** - opening the sign-in dialog while the
+- **Suppressed after a decline** - opening the sign-in dialog while the
   prompt is showing counts as a decline once the dialog is closed with no
   session; the prompt does not appear again for the rest of that visit.
 

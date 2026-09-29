@@ -5,13 +5,15 @@
 **As a** collector opening `/auction`,
 **I want** the operator's Featured slides when any are set — front page image
 (stage and slab), title, status chrome by lot status, relative Ends in /
-Opens in countdown, money, and Bid Now or View Auction —
+Opens in countdown, money on Active only (none on Upcoming until open), and
+Bid Now or View Auction —
 **so that** the lots the house leads with are what I meet first.
 
 ### grade10-site-auction-auction-US-07: Collector advances Featured slides
 
 **As a** collector on `/auction` with more than one Featured slide,
-**I want** to move between slides with the progress control (hidden when only
+**I want** to move between slides with the progress control, and on a small
+viewport also with stage previous/next or a horizontal swipe (hidden when only
 one slide), including mixed Active and Upcoming in one set,
 **so that** I can reach every curated lot without leaving the band.
 
@@ -47,6 +49,8 @@ extended bidding moves that close), without an Extended label on the banner,
 **As a** collector,
 **I want** All auctions to lead with the lots I can bid on, soonest to close
 first, and to keep that order as I read on — below Featured when Featured is
-present, with no category section —
+present, with no category section, loading more by infinite scroll with
+skeleton cards while the next batch settles, and with no money on Upcoming
+cards until those lots open —
 **so that** what I can still bid on is in front of me and reading further never
 shows me a lot twice or skips one.

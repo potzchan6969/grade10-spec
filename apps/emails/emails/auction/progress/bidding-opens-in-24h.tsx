@@ -20,7 +20,7 @@ export default function BiddingOpensIn24hEmail({
 }: BiddingOpensIn24hProps) {
   return (
     <AuctionLetter
-      body="This lot opens for bids soon."
+      body="This auction opens for bids soon."
       brandName={brandName}
       campaign="bidding_opens_in_24h"
       canUnsubscribe
@@ -31,7 +31,7 @@ export default function BiddingOpensIn24hEmail({
       muteUrl={muteUrl}
       preheader={`Starts ${startsAt}. Be ready to bid.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

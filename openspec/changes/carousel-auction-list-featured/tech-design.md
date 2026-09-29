@@ -6,7 +6,7 @@ via `useAllListings`, plus status/IP filter and sort chrome the quiet layout
 must drop. There is no Featured slot store, no public Featured read, and no
 admin curator. The Listings tab toolbar already has **Create listing**
 (`ListingsPanel` `IconButton` with Plus). Preview drafts
-`FeaturedAuctionsBanner` under Storybook `pages-auction-list--carousel-banner`.
+`FeaturedAuctionsBanner` under Storybook `auction-list-featured-auctions--carousel-banner`.
 Listing gallery media stays on `auction_listing_media`; Featured needs its own
 image.
 
@@ -90,18 +90,30 @@ contract lands. Watch stays the existing watchlist control on cards.
 Reuse public listing summary bid facts and
 `ListingRollingMoneyDisplay` / countdown on the same refetch cadence as
 catalogue cards; no banner websocket. On Active, roll the current bid only
-when the served amount **increases** after first paint. Relative **Ends in** /
-**Opens in** uses the list-card short remaining form (not the lot-page rolling
-digit countdown). Extended bidding keeps LIVE BIDDING and Ends in — no Extended
-label — and the recorded close moves with the same freshness as the live bid.
-Active slides offer **Bid Now**; Upcoming slides offer **View Auction**. Either
-opens that lot's details page.
+when the served amount **increases** after first paint. Upcoming slides and All
+auctions Upcoming cards show **no money** until the lot opens. Relative
+**Ends in** / **Opens in** uses the list-card short remaining form (not the
+lot-page rolling digit countdown). Extended bidding keeps LIVE BIDDING and Ends
+in — no Extended label — and the recorded close moves with the same freshness
+as the live bid. Active slides offer **Bid Now**; Upcoming slides offer **View
+Auction**. Either opens that lot's details page. All auctions pages by infinite
+scroll with Boneyard skeletons while the next batch settles.
 
 ### Front page image display fallback
 
 Upload and storage stay slot-owned (never a gallery picker). If the front page
 image URL fails to load in the banner, fall back to the lot’s first gallery
 image, else the stage’s default background colour — no broken-image chrome.
+
+### Front page image canvas and delivery
+
+Operator canvas: **2400 × 1500** (8:5), subject centred; JPEG/WebP ≤ ~400 KB.
+The stage cell changes aspect by viewport (`object-cover object-center`); edges
+crop. Store width/height on the slot as today. The public URL may be a CDN
+transform ladder; `FeaturedAuctionsBanner` accepts optional `imageSrcSet` /
+`imageSizes` (default sizes `(min-width: 768px) 66vw, 100vw`) and marks the
+visible stage `fetchPriority="high"`. A second mobile art-direction crop is out
+of scope until QA shows the subject lost on phone.
 
 ## Database Schema
 

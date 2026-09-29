@@ -36,6 +36,13 @@ Three readings, and the round dispatches you once for each it summons.
   named as out of scope; a state the draft dresses that no outcome on the page
   carries is a finding against the page
 
+## On a Bug
+
+Dispatched as `surface` on a bug whose symptom a reader sees, in both of [Bug Fixes](../../docs/governance/bug-fixes.md)'s rounds. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **The symptom seen** - the evidence shows the width, the state and the theme the report names; one the diagnosis never looked at is a finding
+- **What the design draws** - the fix is checked against the design at every width and state the symptom reaches, with a before and after image of each
+
 ## Your Stance
 
 Read [the reader's stance](../../docs/governance/system-design.md#the-readers-stance)

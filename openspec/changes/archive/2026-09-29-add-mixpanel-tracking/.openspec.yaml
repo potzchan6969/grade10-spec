@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-09-15
+promoted_by: "@rita-liu"
+ui_waived: no collector or admin surface; Mixpanel catalog, ingest, and server emits only
+design_waived: no collector or admin surface; Mixpanel catalog, ingest, and server emits only
+hands:
+  dev: "@rita-liu"
+deploy_waived: "rita: CODE PR #544 merged; archive requested without waiting for deployed_at"
+tasks_waived: "rita: groups 2–8 shipped in grade10 PR #544; store checkmarks never recorded"
+decisions_carried: "Q1–Q8 lasting choices already on Mixpanel Events and Analytics Product decisions; Q9–Q11 remain ❓ Open there"
+journeys_copied: "true"

@@ -187,13 +187,19 @@ function DialogHeader({
  * the viewport, this owns the overflow — matching the Figma body slot.
  * Body copy defaults to primary `text-base` (16px). Overflowing content gets
  * shadcn's scroll-aware top/bottom fade.
+ *
+ * A scroller clips at its own edge, which would cut the focus ring a control
+ * flush against it paints outside its box. So the body pads one spacing unit
+ * inside that edge and takes it back with a negative margin. The width comes
+ * from the parent's stretch, because `w-full` would count the padding and
+ * narrow the column.
  */
 function DialogBody({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-body"
       className={cn(
-        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto overscroll-contain text-base leading-6 font-normal text-foreground",
+        "scroll-fade -m-1 flex min-h-0 flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto overscroll-contain p-1 text-base leading-6 font-normal text-foreground",
         className,
       )}
       {...props}

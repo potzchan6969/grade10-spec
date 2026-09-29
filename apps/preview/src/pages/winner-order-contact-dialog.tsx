@@ -20,6 +20,33 @@ const COPY_FEEDBACK_MS = 1600;
 
 type CopiedField = "to" | "subject" | "email" | null;
 
+/**
+ * Prefer a synchronous `execCommand('copy')` so the click's user-gesture
+ * token is still valid (Storybook iframes deny `clipboard.writeText` and an
+ * `await` before the fallback burns the gesture). Clipboard API is the
+ * async backup when the legacy path is unavailable.
+ */
+function copyWithExecCommand(value: string): boolean {
+  try {
+    const input = document.createElement("textarea");
+    input.value = value;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.top = "0";
+    input.style.left = "0";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.focus();
+    input.select();
+    input.setSelectionRange(0, value.length);
+    const ok = document.execCommand("copy");
+    input.remove();
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 type WinnerOrderContactDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -59,19 +86,32 @@ function WinnerOrderContactDialog({
   const mailtoHref = `mailto:${mail.to}?subject=${encodeURIComponent(mail.subject)}&body=${encodeURIComponent(body)}`;
   const fullEmail = `To: ${mail.to}\nSubject: ${mail.subject}\n\n${body}`;
 
-  async function copyValue(
+  function copyValue(
     field: Exclude<CopiedField, null>,
     value: string,
     successToast: string,
     manualToast: string,
   ) {
-    try {
-      await navigator.clipboard.writeText(value);
+    function succeed() {
       setCopiedField(field);
       toast.success(successToast);
-    } catch {
-      toast.info(manualToast, { description: value });
     }
+
+    // Sync path first — keeps the click gesture (Storybook iframes reject
+    // `clipboard.writeText`, and awaiting it before falling back burns the token).
+    if (copyWithExecCommand(value)) {
+      succeed();
+      return;
+    }
+
+    if (!navigator.clipboard?.writeText) {
+      toast.info(manualToast, { description: value });
+      return;
+    }
+
+    void navigator.clipboard.writeText(value).then(succeed, () => {
+      toast.info(manualToast, { description: value });
+    });
   }
 
   return (
@@ -178,7 +218,7 @@ function CopyableDetailRow({
           aria-label={copied ? copiedAriaLabel : copyAriaLabel}
           className="shrink-0"
           onClick={onCopy}
-          size="xs"
+          size="sm"
           type="button"
           variant="ghost"
         >

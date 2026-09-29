@@ -454,7 +454,7 @@ Runs once per row of **Test data**.
 * **Type:** compatibility
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
 

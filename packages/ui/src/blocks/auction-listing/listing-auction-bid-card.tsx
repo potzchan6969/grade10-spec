@@ -166,29 +166,31 @@ function ListingAuctionBidCard({
 
   return (
     <Card
-      className="w-full gap-0"
+      className="@container w-full gap-0"
       data-slot="listing-auction-bid-card"
       padding={false}
     >
-      <HStack
-        className="w-full border-b border-border px-4 py-2"
-        gap="sm"
-        hAlign="space-between"
-        vAlign="center"
-      >
-        <HStack gap="sm" vAlign="center">
-          {view.live && !view.opens && !view.closed ? <LiveAuctionDot /> : null}
-          <Text size="sm" weight="medium">
-            {view.headerLabel}
-          </Text>
+      {view.opens ? null : (
+        <HStack
+          className="w-full border-b border-border px-4 py-2"
+          gap="sm"
+          hAlign="space-between"
+          vAlign="center"
+        >
+          <HStack gap="sm" vAlign="center">
+            {view.live && !view.closed ? <LiveAuctionDot /> : null}
+            <Text size="sm" weight="medium">
+              {view.headerLabel}
+            </Text>
+          </HStack>
+          <StandingStatusBadge
+            bidEnrollment={bidEnrollment}
+            copy={copy}
+            locale={locale}
+            view={view}
+          />
         </HStack>
-        <StandingStatusBadge
-          bidEnrollment={bidEnrollment}
-          copy={copy}
-          locale={locale}
-          view={view}
-        />
-      </HStack>
+      )}
 
       <StandingBanner
         bidEnrollment={bidEnrollment}
@@ -198,16 +200,13 @@ function ListingAuctionBidCard({
         view={view}
       />
 
-      <div
-        className={cn(
-          "grid w-full grid-cols-2",
-          (hasFooter || showRecentBids) && "border-b border-border",
-        )}
-      >
-        <div className="border-r border-border px-4 py-3">
-          <PriceBlock copy={copy} locale={locale} view={view} />
-        </div>
-        <div className="px-4 py-3">
+      {view.opens ? (
+        <div
+          className={cn(
+            "w-full px-4 py-3",
+            (hasFooter || showRecentBids) && "border-b border-border",
+          )}
+        >
           <TimeBlock
             copy={copy}
             locale={locale}
@@ -215,7 +214,34 @@ function ListingAuctionBidCard({
             view={view}
           />
         </div>
-      </div>
+      ) : (
+        <div
+          className={cn(
+            // Below `sm`: current bid with a one-line time under the bid count.
+            // From `sm`: Current Bid left, Time Left right.
+            "grid w-full grid-cols-1 sm:grid-cols-2",
+            (hasFooter || showRecentBids) && "border-b border-border",
+          )}
+        >
+          <div className="px-4 py-3 sm:border-r sm:border-border">
+            <PriceBlock
+              compactTime
+              copy={copy}
+              locale={locale}
+              timeZone={timeZone}
+              view={view}
+            />
+          </div>
+          <div className="hidden px-4 py-3 sm:block">
+            <TimeBlock
+              copy={copy}
+              locale={locale}
+              timeZone={timeZone}
+              view={view}
+            />
+          </div>
+        </div>
+      )}
 
       <ListingAutoBidReveal open={showRecentBids}>
         <VStack

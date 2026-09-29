@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import type {
   StoreProductDescriptionCopy,
   StoreProductDescriptionProps,
-  StoreProductGalleryProps,
   StoreProductHeaderCopy,
   StoreProductHeaderProps,
   StoreProductImage,
@@ -18,7 +17,6 @@ import type {
 import * as publicEntry from "../../index";
 import {
   StoreProductDescription,
-  StoreProductGallery,
   StoreProductHeader,
   StoreProductMetadata,
   StoreProductPurchasePanel,
@@ -28,7 +26,6 @@ import {
 type PublicStoreProductTypes = [
   StoreProductDescriptionCopy,
   StoreProductDescriptionProps,
-  StoreProductGalleryProps,
   StoreProductHeaderCopy,
   StoreProductHeaderProps,
   StoreProductImage,
@@ -49,13 +46,11 @@ describe("store-product public entry", () => {
   it("exports every named store-product component", () => {
     expect([
       StoreProductDescription,
-      StoreProductGallery,
       StoreProductHeader,
       StoreProductMetadata,
       StoreProductPurchasePanel,
       StoreProductRelatedRail,
     ]).toEqual([
-      expect.any(Function),
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),

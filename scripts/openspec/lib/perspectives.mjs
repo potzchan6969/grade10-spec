@@ -21,6 +21,7 @@ import { join, relative, resolve, sep } from "node:path";
 import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import {
   applyPerspectives,
+  bugPerspectives,
   schemaArtifacts,
 } from "../../../tools/manual/src/store/read-schema.mts";
 
@@ -43,7 +44,11 @@ export function planningSchema(root, schema = SCHEMA) {
     throw new Error(
       `no schema at openspec/schemas/${schema}/schema.yaml — a round reads its readers from there`,
     );
-  return { artifacts, apply: applyPerspectives(root, schema) };
+  return {
+    artifacts,
+    apply: applyPerspectives(root, schema),
+    bug: bugPerspectives(root, schema),
+  };
 }
 
 /**
@@ -287,10 +292,24 @@ export function perspectivesOf(schema, target) {
   const artifact = artifactOf(schema, target);
   if (artifact) return artifact.perspectives;
   if (isGroup(target)) return schema.apply;
+  const round = bugRound(target);
+  if (round) {
+    const readers = schema.bug?.[round] ?? [];
+    if (readers.length === 0)
+      throw new Error(
+        `the schema's \`bug:\` block names no readers for ${round} - a bug round would dispatch nobody`,
+      );
+    return readers;
+  }
   throw new Error(
-    `${target} is neither an artifact of the schema nor a task group`,
+    `${target} is neither an artifact of the schema, a task group, nor a bug round`,
   );
 }
+
+/** A bug's round is named `bug:diagnosis` or `bug:fix`; anything else is not
+ * one. */
+export const bugRound = (target) =>
+  /^bug:(diagnosis|fix)$/.exec(String(target ?? "").trim())?.[1];
 
 /** A task group is named by its number - `3`, `3.`, `group 3` - or by the
  * block its readers sit on; the reading of the whole change, which lands as a
@@ -317,6 +336,7 @@ const artifactOf = (schema, target) => {
  * per capability rather than one file, so it raises nothing on its own; the
  * diff's own `diff --git` headers do that instead. */
 const initialFile = (schema, target) => {
+  if (bugRound(target) === "diagnosis") return "diagnosis.md";
   const artifact = artifactOf(schema, target) ?? taskArtifact(schema, target);
   if (!artifact || artifact.generates.includes("*")) return "";
   return artifact.generates;

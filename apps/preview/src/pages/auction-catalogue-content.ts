@@ -17,6 +17,16 @@ export const CATALOGUE_IMAGE_MEW_EX = new URL(
   import.meta.url,
 ).href;
 
+/**
+ * Featured carousel front page image for the preview demo — bronze stage with
+ * a card-image placeholder. Production uploads target 2400×1500 (8:5) with the
+ * subject centred; this fixture is a lighter stand-in at that ratio.
+ */
+export const FEATURED_BANNER_FRONT_PAGE = new URL(
+  "./auction-catalogue-featured-banner-bg.fixture.jpg",
+  import.meta.url,
+).href;
+
 export const CATALOGUE_TITLE = "Auctions | Grade10";
 
 export const CATALOGUE_DESCRIPTION =
@@ -291,17 +301,21 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
   }),
 ];
 
-/** The whole draw. Seven live categories, so the page is busy. */
-export const BUSY_MANY_LOTS: CatalogueLot[] = COLLECTION_LOTS;
-
-/** Six live lots across Lorcana, Pokémon, and One Piece: tiles, no filter. */
-export const QUIET_TILE_LOTS: CatalogueLot[] = [
-  COLLECTION_LOTS[1],
-  COLLECTION_LOTS[8],
-  COLLECTION_LOTS[2],
-  COLLECTION_LOTS[9],
-  COLLECTION_LOTS[4],
-  COLLECTION_LOTS[11],
+/**
+ * Default `/auction` page draw: the three Featured samples, then the full
+ * collection draw so All auctions can page with infinite scroll. Extra lots
+ * close after the Featured three so the banner keeps those slides.
+ */
+export const CATALOGUE_PAGE_LOTS: CatalogueLot[] = [
+  ...FEW_FEATURED_LOTS,
+  ...COLLECTION_LOTS.map((item, index) => {
+    const day = Math.min(index + 10, 28);
+    return {
+      ...item,
+      closesAt: `2026-10-${String(day).padStart(2, "0")}T18:00:00+08:00`,
+      closeLabel: `${day} Oct 2026, 6:00 pm`,
+    };
+  }),
 ];
 
 /** Closed lots only. Featured stays off, and so does watch. */

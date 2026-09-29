@@ -8,6 +8,7 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { AuctionCatalogueAllAuctionsGrid } from "./auction-catalogue-all-auctions";
 import {
   AuctionCategoryButton,
   AuctionLotCard,
@@ -22,17 +23,16 @@ import {
   type CatalogueLot,
   type CatalogueStatus,
   COLLECTION_LOTS,
+  FEATURED_BANNER_FRONT_PAGE,
 } from "./auction-catalogue-content";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
-import { STORE_FOOTER } from "./store-content";
+import { AUCTION_FOOTER } from "./store-content";
 
 const FEATURED_CAP = 4;
 /** Featured carousel holds at most three complete slides. */
 const FEATURED_BANNER_CAP = 3;
 /** Matches the Product List workbench filter refetch beat. */
 const FILTER_LOAD_MS = 450;
-const REVEAL_STAGGER_MS = 40;
-const REVEAL_STAGGER_CAP = 8;
 const DEFAULT_SKELETON_COUNT = 6;
 const SKELETON_FIXTURE_LOT = COLLECTION_LOTS[0];
 
@@ -50,11 +50,9 @@ const FEATURED_BANNER_COPY: FeaturedAuctionsBannerCopy = {
   endedAt: "Ended",
   progress: "Featured lots",
   slide: "Show featured lot {position}: {title}",
+  previous: "Previous featured lot",
+  next: "Next featured lot",
 };
-
-function bidsLabel(count: number) {
-  return `${count} ${count === 1 ? "bid" : "bids"}`;
-}
 
 function toFeaturedSlide(lot: CatalogueLot): FeaturedAuctionsBannerSlide {
   const status =
@@ -67,12 +65,14 @@ function toFeaturedSlide(lot: CatalogueLot): FeaturedAuctionsBannerSlide {
     id: lot.id,
     title: lot.title,
     status,
-    imageSrc: lot.imageSrc,
+    // Preview demo: bronze front page on the stage; lot photo as gallery
+    // fallback if that asset fails to load.
+    imageSrc: FEATURED_BANNER_FRONT_PAGE,
     imageAlt: lot.imageAlt,
+    fallbackImageSrc: lot.imageSrc,
     href: lotAddress(lot),
     currentBidMinor: lot.currentBidMinor,
     currency: lot.currency,
-    bidCountLabel: bidsLabel(lot.bidCount),
     countdown:
       lot.status === "Ended"
         ? undefined
@@ -112,9 +112,8 @@ function lotAddress(lot: CatalogueLot): string {
 type AuctionCataloguePageProps = {
   lots: readonly CatalogueLot[];
   /**
-   * Featured band layout. `row` is the scrolling cards; `pair` is the
-   * Thanks.co-style overlapping image + info exploration; `banner` is the
-   * full-width Figma carousel (muted copy + bronze stage).
+   * Featured band layout. `banner` is the live full-width carousel (muted copy
+   * + front page image stage). `row` and `pair` are archived explorations.
    */
   featuredLayout?: "row" | "pair" | "banner";
   /** When false, the All Auctions block shows only the lot grid. */
@@ -411,7 +410,7 @@ function AuctionCataloguePage({
                   <ul
                     aria-busy="true"
                     aria-label="Loading auctions"
-                    className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-4"
+                    className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-16 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-12"
                   >
                     {Array.from({ length: skeletonCount }, (_, index) => (
                       // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
@@ -431,40 +430,19 @@ function AuctionCataloguePage({
                     There are no auctions in this category.
                   </p>
                 ) : (
-                  <ul
-                    className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-4"
-                    data-revealed={listRevealed || undefined}
-                  >
-                    {listed.map((lot, index) => (
-                      <li
-                        className={cn(
-                          "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
-                          listRevealed &&
-                            "translate-y-0 opacity-100 filter-none",
-                        )}
-                        key={lot.id}
-                        style={{
-                          transitionDelay: listRevealed
-                            ? `${Math.min(index, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS}ms`
-                            : "0ms",
-                        }}
-                      >
-                        <AuctionLotCard
-                          heading
-                          lot={lot}
-                          onToggle={() => toggleWatch(lot.id)}
-                          watched={watched.has(lot.id)}
-                        />
-                      </li>
-                    ))}
-                  </ul>
+                  <AuctionCatalogueAllAuctionsGrid
+                    lots={listed}
+                    onToggle={toggleWatch}
+                    revealed={listRevealed}
+                    watched={watched}
+                  />
                 )}
               </div>
             )}
           </section>
         </div>
       </main>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }

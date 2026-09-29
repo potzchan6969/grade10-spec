@@ -1,6 +1,7 @@
 ---
 title: Product Analytics
 order: 3
+reviewed: 2026-09-29
 ---
 
 Events reach Mixpanel from Grade10's own backends — never from the browser
@@ -69,22 +70,22 @@ Domain signals and the Mixpanel catalog sit on
 - The server resolves the user from the session
 - The wire format has no user field — a client can name its device but never its user
 
-### 🚧 Sign-out and session expiry rotate the device
+### Sign-out and session expiry rotate the device
 
 - The browser client drops the device id and mints a new one so the next guest is not merged onto the last person
 
-### 🚧 Server emits keep `$device_id` when Grade10 still holds it
+### Server emits keep `$device_id` when Grade10 still holds it
 
 - Checkout Started, web Order Paid, and every other server event that continues a browser or till visit attach that `$device_id` when Grade10 still has it, so pre-login browse joins after pay or sign-in
 
-### 🚧 Collector IP for Mixpanel geo
+### Collector IP for Mixpanel geo
 
 - `/import` and `/engage` pass the collector's IP when Grade10 knows it so Mixpanel sets city and country
 - The IP is never stored as an event or profile property; on `/engage`, `$ip` is `0` when none was captured so the worker's location is never written
 
 ## User Profile
 
-### 🚧 Server writes the user-profile snapshot via `/engage`
+### Server writes the user-profile snapshot via `/engage`
 
 - Only for a user id — never an anonymous device
 - Servers that own the fact call `engagePerson` in `packages/mixpanel`; the browser never writes a profile
@@ -92,33 +93,46 @@ Domain signals and the Mixpanel catalog sit on
   [Mixpanel Events · User Profile](/p/grade10-site/analytics/mixpanel-events#user-profile)
 - No `$email` / `$name` / `$phone` until Consent and Mixpanel erasure settle
 
-## Failure and dedupe
+## Delivery
 
-### Whoever waits, retries
+What happens to a record after a Mixpanel or worker failure depends on who
+sent it.
 
-- Nothing on the server holds an event it failed to send
-- `/api/track` awaits the send; a Mixpanel failure answers 500, and the browser client re-sends the batch with the same `$insert_id`s
-- A backend call site has nobody waiting: hand the promise to `waitUntil` and count the failure (`store.order_paid.track_failed`)
-- Backend events are lost when Mixpanel is down — revenue lives in Postgres, analytics only describes it
+| Sent by | Arrives | After a failure |
+| --- | --- | --- |
+| Browser - client events | Within 5 seconds | Sent again while the page is open; lost if it closes first |
+| Backend - server events and profile writes | 🚧 On the worker's next sweep: within 5 minutes, 15 on the vault | 🚧 Sent again until Mixpanel accepts it |
+| Datadog counters | At once | Lost |
 
-### The browser client is the durable end
+### Browser Events
 
-- It queues events (bounded), flushes in batches, and keeps a batch until it is acked
-- `sendBeacon` drains the queue on page hide
+- **Awaited** - `/api/track` awaits one Mixpanel request for the batch; a failure answers 500
+- **Sent again by the browser** - the client keeps a batch until the route acks it, sends it again with the same `$insert_id`s, and hands what is left to `sendBeacon` as the page closes
+- **Audience with each batch** - the Audience profile write a signed-in batch makes is best effort too; the next batch writes it again
 
-### Dedupe by `$insert_id`, derived from the domain key
+### Backend Sends
 
-- Mixpanel is the only place that dedupes
-- An event mirroring a retryable operation derives its id from the domain key — `deterministicInsertId("order-paid", orderId)` — so a replayed webhook or reconcile pass counts once
+- 🚧 **With the fact** - a backend event is recorded for every fact that commits and for none that rolls back
+- 🚧 **Never dropped** - a record is sent again with no attempt limit; one Mixpanel refuses is held until an engineer sends it again or removes it
+- 🚧 **Latest profile write** - a user's profile ends on the latest write of each property; a held write is never sent over a later one
+- 🚧 **Erasure** - an erased account's unsent records, waiting or held, are deleted with it
+- **Not shaped** - an event with neither a user nor a device is refused with a counter, and the fact it describes still commits
 
-### Drop what can never succeed, loudly
+### Dedupe by `$insert_id`
 
-- A batch Mixpanel rejects with 400 is dropped with a log and metric, never reported as retryable
-- Invalid `$insert_id`s are rewritten before sending (warn + metric); `strict=1` would drop such records silently
+- **Derived from the domain key** - an event mirroring a retryable operation takes `deterministicInsertId("order-paid", orderId)`, so a replayed webhook or reconcile pass counts once
+- **Four fields** - Mixpanel keeps one of any events that share event name, time, distinct_id and `$insert_id`
+- 🚧 **Same record on every attempt** - a backend record is sent again unchanged, so a retry counts once
+
+### Refusals
+
+- **Invalid `$insert_id`s are rewritten** before sending, with a warning and a counter; `strict=1` would drop such records silently
+- **A browser batch Mixpanel refuses** with 400 is dropped with a log and a counter; the same bytes cannot succeed later
 
 ### Observability
 
-- Datadog counters via the tail worker: `mixpanel.submitted`, `mixpanel.event.no_identity`, `mixpanel.import.rejected_batch`, `mixpanel.insert_id.sanitized`, `mixpanel.event.invalid_insert_id`
+- **Counters** - sends, failures and rewritten ids, named in the [tracking architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/tracking.md#observability)
+- 🚧 **Waiting records** - how many backend records wait in each worker, the age of the oldest, and how many are held; a held record raises an alarm
 
 ## Testing
 
@@ -139,13 +153,15 @@ Domain signals and the Mixpanel catalog sit on
 3. Wrangler: `MIXPANEL_PROJECT_TOKEN` secret per environment — the empty dev value keeps tracking a logged no-op locally
 4. Route: `handleTrackRequest` behind `withSession` in `src/app.ts`
 5. Web: `createTrackingClient` typed by the catalog, bound through DI under `src/core/analytics/`
-6. 🚧 User profiles, when the product owns user-profile facts: call `engagePerson` from the backend that holds the fact — not from the browser
+6. User profiles, when the product owns user-profile facts: call `engagePerson` from the backend that holds the fact — not from the browser
 
 ## Q & A
 
 - Why first-party instead of Mixpanel's browser SDK?
   - Content blockers do not filter our own API host, and the session cookie gives the server the real user.
-- Why one request with no queue?
-  - The endpoint already holds the whole validated batch, so it sends it in one `fetch` — no queue table, no scheduler, no Durable Object; the browser client is the retry mechanism and already knows how.
+- Why does `/api/track` send in one request, with no queue?
+  - The route already holds the whole validated batch, and the browser client sends it again until the route acks it; browser events are best effort, so nothing on the server holds them.
+- Why are backend sends kept until Mixpanel accepts them, and browser events not?
+  - 🚧 Backend events carry the money and domain facts the boards count - Order Paid, Bid Placed, a payout - and no browser is waiting to send them again. Browser events describe browsing, and the browser sends them again while the page is open.
 - Does the tracker sync user profiles or gate on consent?
-  - 🚧 User-profile sync (`/engage`) lands with this change. A consent gate in front of the browser client is not built until Legal requires one.
+  - User-profile sync (`/engage`) is live. A consent gate in front of the browser client is not built until Legal requires one.

@@ -35,14 +35,17 @@ This group uses the landed group 4 component and catalog contract and the
 existing typed buyer reads. It adds no Store backend, database, provider,
 webhook, reconciliation, deployment, or order-status rule.
 
-- [x] 5.1 Advance `external/grade10-spec` to the landed group 4 change while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
+- [x] 5.1 Advance `external/grade10-spec` to the landed group 4 shared contract while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
 - [x] 5.2 Align the frontend `Order` model with `orderName`, `discountAppliedMinor`, `shippingMinor`, `taxMinor`, `shippingAddress`, and `paymentInstrument` from `StoreOrder`; keep the repository's direct decoded return and make typed fixture coverage fail on contract drift.
 - [x] 5.3 Extend the pure history and detail projections with the shop-number fallback, supplied settlement rows, partial shipping address, and truthful known, unknown, and wallet payment presentation so `grade10-site-store-order-history-SC-12`, `grade10-site-store-order-history-SC-13`, and `grade10-site-store-order-detail-SC-13` through `grade10-site-store-order-detail-SC-16` pass in unit tests.
 - [x] 5.4 Pass the new projections and localized copy through the existing owner pages, add or update the derived browser cases without exposing address or payment data outside detail, and verify the affected app with focused unit and browser tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:libs`, and `pnpm run check:submodules`.
+- [x] 5.5 Reconcile the Grade10 detail projection with the published `OrderDetails` stories: map only typed Store facts, keep story-only image, line coupon, line issue, order promo code, pickup address, and earned-loyalty values absent when the read omits them, and record a parity review for `ItemCoupon`, `OrderDiscount`, `WithPointsCredit`, `Pickup`, `InStore`, `NoOptionalGroups`, and `PaidTotalWithoutSubtotal`.
+- [x] 5.6 Resolve the points-credit data boundary before claiming `grade10-site-store-order-detail-SC-17`: extend the typed Store order read in approved contract work and make the scenario pass, or mark the change awaiting that dependency rather than claiming completion; never derive the credit or deducted count from discount, eligible goods, or refund. Verify with contract fixtures and page projection tests.
+- [x] 5.7 Correct the application payment projection to preserve an unrecognized provider label and supplied mask without a guessed logo, then make `grade10-site-store-order-detail-SC-16` pass in application tests.
 
-## 6. Settlement row localization (grade10)
+## 6. Settlement row localization (grade10) (owner: @kinisworking)
 
 Uses the landed group 4 catalogs and completes the frontend copy boundary on the existing order pages. Page acceptance remains a separate owner-scheduled verification pass.
 
-- [ ] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
-- [ ] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`
+- [x] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
+- [x] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`

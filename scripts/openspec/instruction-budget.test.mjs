@@ -22,8 +22,9 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // 2500 until the lifecycle grew its eighth artifact. The table of artifacts is
 // the one thing AGENTS.md cannot link away — an agent that reads nothing else
 // reads it — so a row costs what a row costs, and the raise buys a little
-// headroom rather than a blank cheque.
-const AGENTS_BUDGET = 2570;
+// headroom rather than a blank cheque. 2660 once Design Override put the
+// agreed look in the one file every agent reads before it builds.
+const AGENTS_BUDGET = 2660;
 // The `workflow-round` skill loads on every artifact of every change, and the seven
 // line skills load it rather than restating it, so it carries the procedure
 // for all of them. 3200 is its size after the pass that gave the landing,

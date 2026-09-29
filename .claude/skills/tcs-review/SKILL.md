@@ -1,6 +1,6 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - first preparing it (regenerate or restyle, cover every scenario by claim, fill in how to run each case, propose test data), then every draft case in a journey together, with the spec's scenarios quoted on request - record each verdict as actual, deprecated, or still draft, and end by offering what the review taught as conventions. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - first preparing it (regenerate or restyle, cover every scenario by claim, fill in how to run each case, propose test data), then every draft case in a journey together, with the spec's scenarios quoted on request - record each verdict as actual, deprecated, or still draft, and end by offering the writing rules the review taught as conventions. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
 ---
 
 # Reviewing Test Cases With QA
@@ -203,15 +203,22 @@ done, so the verdict commits hold only the reviewer's decisions.
 
 When the verdicts are done, and before the pull request is marked ready:
 
-- **Every edit is a candidate** — each Change the reviewer asked for, each
-  "how do I run this" answer written into a case, each row taken or refused.
-  One line each: what changed, and the pattern it suggests, worded as a rule
+- **Only a writing rule is a candidate** — each Change the reviewer asked
+  for, each "how do I run this" answer written into a case, each row taken or
+  refused, is read for the rule it suggests about how a case is written: a
+  title, a step, a result, a pre-condition, a placeholder, a test-data value,
+  an actor, the case's shape. One line each: what changed, and the rule
+- **A fact is not a candidate** — an edit that names one product's page,
+  control, label, status value or behaviour, where a value is read, or how a
+  state is reached stays in the case it was made to. It is not offered, and
+  not mentioned; `## Setup Recipes` and `## Where Things Are` take no line
+  from a review
 - **One at a time** — the reviewer confirms, rewords or refuses each. A
   confirmed line applies everywhere and lands under `## Store-wide` as
-  `- <YYYY-MM-DD>, <suite path>: <the pattern>`; only a line that cannot hold
-  everywhere is scoped narrower, saying why, and then the reviewer is asked
-  which scope. A setup the reviewer explained lands under `## Setup Recipes`;
-  a refused line lands under `## Refused` with the reviewer's reason
+  `- <YYYY-MM-DD>, <suite path>: <the rule>`; only a line worded in one
+  domain's vocabulary is scoped narrower, saying why, and then the reviewer is
+  asked which scope. A refused line lands under `## Refused` with the
+  reviewer's reason
 - **Never offered twice** — a candidate matching a `## Refused` line is not
   offered again; one that contradicts the rulebook is reported, not offered
 - **Applied at once** — as the conventions file's rule on applying a

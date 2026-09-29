@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-29
+promoted_by: "@seankcw"
+skip_specs: true
+skip_specs_why: grade10-site/store/cart-drawer has no durable spec yet and add-store-cart-drawer-ui is its one owner; this change's requirement, scenario and test-case deltas are folded into that change's spec.md/feature-tcs.md/user-journeys.md instead of issued here as a second owner of its ids. See decisions.md Q5 and add-store-cart-drawer-ui's own decisions.md Q9-Q11.
+deploy_waived: "@seankcw treats PR #658 (grade10) as shipped: reviewed, merged, and functionally equivalent to what a deploy would ship; no deploy run had picked it up yet at archive time"
+decisions_carried: "Q1 (checkout-open read via the drawer's continuous live quote), Q3/Q7 (verification gate shown inline, replacing the Checkout action), and Q6 (bar checked against gross goods) moved to docs/prds/products/grade10-site/store/checkout.md's new Product decisions block. Q2 corrected a false interview premise (no product content to carry). Q4 is already reflected in that page's 'No separate checkout page' line. Q5 is process/change-management only."

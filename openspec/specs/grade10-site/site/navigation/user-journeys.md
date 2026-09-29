@@ -4,9 +4,9 @@
 
 **As a** collector,
 **I want** every address to resolve to one surface — the deepest one naming
-it, or the not-found surface,
-**so that** a link I open lands me on the surface that owns it, and tells me
-which address failed when none does.
+it, or the not-found surface with a clear static message and a way home,
+**so that** a link I open lands me on the surface that owns it, and when none
+does I know I am still on the site and can leave for home.
 
 ### grade10-site-site-navigation-US-02: Collector moves between surfaces without a page load
 

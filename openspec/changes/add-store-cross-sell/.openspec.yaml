@@ -3,9 +3,9 @@ promoted_by: "@htonyl"
 created: 2026-09-21
 hands:
   pm: "@jeffffej0909"
-  design: "@tangconst"
+  design: "@ecchochan"
   tech: "@htonyl"
-  qa: "@chloe9gag"
-  dev: "@htonyl"
+  qa: "@ecchochan"
+  dev: "@ecchochan"
 depends_on:
   - redesign-store-product-detail-page

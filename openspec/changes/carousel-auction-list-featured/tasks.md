@@ -17,7 +17,7 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 ## 3. Featured Banner Block (grade10-spec)
 
 - [x] 3.1 Promote `FeaturedAuctionsBanner` (and quiet `AuctionCataloguePage` composition as needed) into `@grade10/ui` per `ui-design.md`, composing `ListingRollingMoneyDisplay`, `ListingCountdownDisplay`, and `CarouselProgress`. Answer shared i18n keys for banner copy in `en`, `ko`, `zh-Hans`, and `zh-Hant`.
-- [x] 3.2 Make `grade10-site-auction-auction-SC-31`, `SC-32`, `SC-33`, `SC-34`, `SC-35`, `SC-36`, and `SC-58` pass in Storybook (`pages-auction-list--carousel-banner` and related): front page image/title/status/countdown/rolling bid on increase, Bid Now on Active and View Auction on Upcoming, progress for 2–3 slides, single-slide without multi-dot requirement.
+- [x] 3.2 Make `grade10-site-auction-auction-SC-31`, `SC-32`, `SC-33`, `SC-34`, `SC-35`, `SC-36`, `SC-58`, `SC-59`, `SC-60`, and `SC-61` pass in Storybook (`auction-list-featured-auctions--carousel-banner`, All auctions, and lot-card stories): front page image/title/status/countdown/rolling bid on increase, Bid Now on Active and View Auction on Upcoming with no money until open, progress for 2–3 slides, single-slide without multi-dot requirement, All auctions infinite scroll with Boneyard load-more skeletons, Upcoming cards without starting bid.
 - [x] 3.3 Verify: `pnpm --filter @grade10/ui` storybook vitest for the banner stories, `pnpm run typecheck`, `pnpm run lint`, `pnpm check:manual`. Record story evidence.
 
 ## 4. Quiet Catalogue on `/auction` (grade10)
@@ -25,8 +25,8 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 Depends on Groups 1 and 3 (public Featured read + banner export).
 
 - [x] 4.1 Make `grade10-site-auction-auction-SC-43`, `SC-57`, `SC-30`, `SC-37`, `SC-40`, `SC-41`, and `SC-42` pass on `/auction`: Featured from `featured.publicList` when complete slides exist, absent otherwise, quiet layout (no category chrome), Featured lots still in All auctions below Featured, empty All auctions with Featured present, address `/auction` with no category query.
-- [x] 4.2 Make `grade10-site-auction-auction-SC-31` through `SC-36`, `SC-58`, and `SC-38` / `SC-39` pass in the live catalogue: slide facts, Bid Now / View Auction by status, progress, shared watch on open cards and none on closed.
-- [x] 4.3 Verify: auction-frontend and grade10 frontend tests, focused Playwright catalogue flows, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`. Record browser evidence.
+- [ ] 4.2 Make `grade10-site-auction-auction-SC-31` through `SC-36`, `SC-58` through `SC-61`, and `SC-38` / `SC-39` pass in the live catalogue: slide facts, Bid Now / View Auction by status, progress, Upcoming money withheld on Featured and All auctions, All auctions infinite scroll with Boneyard load-more skeletons, shared watch on open cards and none on closed.
+- [ ] 4.3 Verify: auction-frontend and grade10 frontend tests, focused Playwright catalogue flows, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`. Record browser evidence.
 
 ## 5. Product Record Close-Out (grade10-spec)
 

@@ -26,6 +26,10 @@ resolves to one of them.
   [Round Summary and Landing](../../docs/governance/round-summary.md#readers)'s
 - **Read-only** — every definition carries `tools: Read, Grep, Glob, Bash` and
   writes nothing. The round applies what the verifier says stands
+- **A bug's rounds** - a bug fix is no change, but its diagnosis and its fix
+  are read the same way: the schema's `bug:` block names their readers,
+  `node scripts/openspec/bug-readers.mjs` reads them, and each definition's
+  `On a Bug` section says what that round gives it and what it argues
 
 The mapping from an artifact to its perspectives lives once, in
 [`openspec/schemas/grade10-planning/schema.yaml`](../../openspec/schemas/grade10-planning/schema.yaml),

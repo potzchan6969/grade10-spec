@@ -28,8 +28,11 @@ export const TermsOfService: Story = {
         name: TERMS_DOCUMENT.title,
       }),
     ).toBeVisible();
-    expect(canvas.getByText(TERMS_DOCUMENT.lastUpdatedLabel)).toBeVisible();
-    expect(canvas.getByText(TERMS_DOCUMENT.lastUpdatedDate)).toBeVisible();
+    expect(
+      canvas.getByText(
+        `${TERMS_DOCUMENT.lastUpdatedLabel} ${TERMS_DOCUMENT.lastUpdatedDate}`,
+      ),
+    ).toBeVisible();
     expect(
       canvas.getByRole("heading", {
         level: 3,
@@ -37,7 +40,7 @@ export const TermsOfService: Story = {
       }),
     ).toBeVisible();
     expect(
-      canvas.getByRole("link", { name: "TERMS of SERVICE" }),
+      canvas.getByRole("link", { name: "Terms of Service" }),
     ).toHaveAttribute("href", "?path=/story/pages-legal--terms-of-service");
   },
 };
@@ -52,8 +55,11 @@ export const PrivacyPolicy: Story = {
         name: PRIVACY_DOCUMENT.title,
       }),
     ).toBeVisible();
-    expect(canvas.getByText(PRIVACY_DOCUMENT.lastUpdatedLabel)).toBeVisible();
-    expect(canvas.getByText(PRIVACY_DOCUMENT.lastUpdatedDate)).toBeVisible();
+    expect(
+      canvas.getByText(
+        `${PRIVACY_DOCUMENT.lastUpdatedLabel} ${PRIVACY_DOCUMENT.lastUpdatedDate}`,
+      ),
+    ).toBeVisible();
     expect(
       canvas.getByRole("heading", {
         level: 3,
@@ -61,7 +67,7 @@ export const PrivacyPolicy: Story = {
       }),
     ).toBeVisible();
     expect(
-      canvas.getByRole("link", { name: "PRIVACY POLICY" }),
+      canvas.getByRole("link", { name: "Privacy Policy" }),
     ).toHaveAttribute("href", "?path=/story/pages-legal--privacy-policy");
   },
 };

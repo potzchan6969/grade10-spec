@@ -19,7 +19,8 @@ surface, whatever specs that owns it.
   - Deepest surface wins: a surface owns the addresses beneath it unless a
     nested surface names one
   - Not-found fallback: an address under no surface renders a not-found
-    surface naming it, never home
+    surface with a static title, description, and a way home — never naming
+    it, never home
 - Session-decided addresses
   - Session correction: home and sign-in each answer with what the session
     allows
@@ -57,10 +58,11 @@ its own, and SHALL resolve every address to at most one surface. A surface
 SHALL own every address beneath its own, unless a nested surface names that
 address, in which case the nested one renders; where more than one surface
 could own an address, the deepest one naming it SHALL be the one that
-renders. An address under no surface SHALL resolve to a not-found surface
-that names the address, never to home.
+renders. An address under no surface SHALL resolve to a not-found surface,
+never to home. The not-found surface's title and description SHALL be static
+text that never includes the failed address or any other dynamic content, and
+it SHALL offer a control back to home.
 
-<!-- trace:scenario id=zzz.site-navigation.SC-lm3 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-01 - Each view has an address
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -68,7 +70,6 @@ that names the address, never to home.
   refresh
 - **THEN** that surface renders at that address
 
-<!-- trace:scenario id=zzz.site-navigation.SC-epz rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-02 - A refresh keeps the collector's place
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -76,12 +77,19 @@ that names the address, never to home.
 - **WHEN** they refresh
 - **THEN** sign-in renders, not home
 
-<!-- trace:scenario id=zzz.site-navigation.SC-h76 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-03 - An unknown address resolves to not-found
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
 - **WHEN** a collector opens an address under no surface the site answers
-- **THEN** the not-found surface renders, naming the address that failed
+- **THEN** the not-found surface renders, showing its static title and
+  description
+
+#### Scenario: zzz-site-site-navigation-SC-24 - Back to Home leaves the not-found surface for home
+**Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
+
+- **GIVEN** a collector on the not-found surface
+- **WHEN** they choose Back to Home
+- **THEN** home renders
 
 ### Requirement: In-app navigation stays in the page
 

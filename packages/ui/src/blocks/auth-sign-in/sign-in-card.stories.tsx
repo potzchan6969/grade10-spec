@@ -226,6 +226,42 @@ export const WithProviderSlot: Story = {
 };
 
 /**
+ * Google's own button draws in a frame 44px tall at `margin: -2px -10px`
+ * around its 40px slot, and paints its focus ring in that outer band. This
+ * stand-in keeps the frame's box, and its band above and below the slot
+ * stays inside the body's clip.
+ */
+export const GoogleFrameStaysInsideTheClip: Story = {
+  args: {
+    providerSlot: (
+      <div className="flex justify-center" data-slot="sign-in-provider">
+        <div style={{ position: "relative" }}>
+          <div
+            data-slot="google-frame"
+            style={{ height: 44, margin: "-2px -10px", width: 418 }}
+          />
+        </div>
+      </div>
+    ),
+  },
+  play: async () => {
+    const dialog = await within(document.body).findByRole("dialog");
+    await Promise.all(dialog.getAnimations().map((motion) => motion.finished));
+    const box = (slot: string) => {
+      const node = dialog.querySelector(`[data-slot="${slot}"]`);
+      if (node === null) throw new Error(`The card renders no ${slot}`);
+      return node.getBoundingClientRect();
+    };
+    const clip = box("dialog-body");
+    const frame = box("google-frame");
+
+    expect(frame.height).toBe(44);
+    expect(frame.top).toBeGreaterThanOrEqual(clip.top);
+    expect(frame.bottom).toBeLessThanOrEqual(clip.bottom);
+  },
+};
+
+/**
  * A widget a script fills in later — Google's own button — marks its own
  * container, and the divider waits for it. An "or" over blank space is what
  * a collector sees when that script never answers, so the pair hides until

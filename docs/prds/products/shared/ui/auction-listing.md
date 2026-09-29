@@ -17,6 +17,8 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment |
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999** |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
+| Empty bid count | **No bids yet** while the lot is open; **No bids** when it is closed |
+| Lot title under the breadcrumb | Smaller title size on a small viewport; larger from tablet |
 
 ## Gallery
 
@@ -24,10 +26,14 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   zoom source, and falls back to the main source when a thumb or a zoom is
   not given, so one image can be a small file in the strip and a large one
   under the magnifier
-- **The strip** — one item shows no thumbnail strip; several do; no items
-  render nothing and offer no previous or next
+- **The strip** — one item shows no thumbnail strip; 🚧 several show a left
+  rail when the gallery is wide enough for it beside the main frame, and
+  otherwise step with previous/next and progress only; no items render
+  nothing and offer no previous or next
 - **On its own** — the gallery renders without the bid panel, so a lot can
   be shown before it can be bid on
+
+::changes{spec="shared/ui/auction-listing"}
 
 ## Bid History
 
@@ -119,9 +125,11 @@ cancelled; when holds are on it also says the hold matches the maximum.
 ::story{id="auction-listing-listingdetails--default" title="The details section"}
 
 :::detail{title="Code map" for="engineer"}
-- **Blocks** — `ListingGallery`, `ListingAuctionBidCard`, `ListingDetails`,
-  `ListingUserBidHistory`, `ListingBidHistoryList`, `EnrollmentSetupSheet`,
-  `PaymentMethodRow` and `PaymentMethodEmptyState`, in `packages/ui`
+- **Blocks** — `ListingLotHeader`, `ListingGallery`, `ListingAuctionBidCard`,
+  `ListingDetails`, `ListingUserBidHistory`, `ListingBidHistoryList`,
+  `EnrollmentSetupSheet`, `PaymentMethodRow` and `PaymentMethodEmptyState`, in
+  `packages/ui`
+- **Empty bid copy** — `copy.noBidsYet` while open; `copy.noBids` when closed
 - **Signal** — `bidEnrollment`: `signed-out`, `needs-card` or `ready`
 :::
 

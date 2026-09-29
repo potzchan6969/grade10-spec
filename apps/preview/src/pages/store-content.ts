@@ -6,6 +6,11 @@ import type {
   ProductSummary,
   SortOption,
 } from "@grade10/ui";
+import {
+  FacebookLogo,
+  InstagramLogo,
+  ThreadsLogo,
+} from "@phosphor-icons/react";
 import { createElement, type ReactNode } from "react";
 import {
   HELP_NAV_ITEM,
@@ -75,54 +80,105 @@ const STORE_SITE_HEADER = {
   onCartClick: noop,
 };
 
-const STORE_FOOTER = {
-  copy: {
-    description:
-      "Japanese trading cards selected for collectors, openers, and complete-set builders.",
-    attribution: "A division of MemeStrategy (HKEX: 2440)",
-    copyright: "© 2026 Grade10. All rights reserved.",
-    locale: "HONG KONG / HKD",
+/** Each social icon is decorative: its link carries the name. */
+const SOCIAL_ICON_PROPS = {
+  "aria-hidden": true,
+  size: 16,
+  weight: "fill",
+} as const;
+
+/** Shared chrome matching Components/Footer — Auction only and Store launch. */
+const FOOTER_COPY = {
+  attribution: "A division of MemeStrategy (HKEX: 2440)",
+  copyright: "© 2026 Grade10. All rights reserved.",
+};
+
+const FOOTER_SOCIAL_LINKS = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/grade10hk/",
+    external: true,
+    icon: createElement(InstagramLogo, SOCIAL_ICON_PROPS),
   },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/grade10hk/",
+    external: true,
+    icon: createElement(FacebookLogo, SOCIAL_ICON_PROPS),
+  },
+  {
+    label: "Threads",
+    href: "https://www.threads.com/@grade10hk",
+    external: true,
+    icon: createElement(ThreadsLogo, SOCIAL_ICON_PROPS),
+  },
+];
+
+const FOOTER_DOCS_LINK = {
+  label: "Docs",
+  href: "/docs",
+  external: true,
+};
+
+const FOOTER_LEGAL_COLUMN = {
+  heading: "LEGAL",
+  links: [
+    { label: "Privacy Policy", href: PRIVACY_POLICY_HREF },
+    { label: "Terms of Service", href: TERMS_OF_SERVICE_HREF },
+  ],
+};
+
+/**
+ * Store-launch footer — Components/Footer → Store launch. Shop destinations
+ * and Store Locator join Docs and Legal; no bar legal duplicates.
+ */
+const STORE_FOOTER = {
+  copy: FOOTER_COPY,
   logo: FOOTER_LOGO,
   logoHref: "/",
-  socialLinks: [
-    { label: "INSTAGRAM", href: "#instagram" },
-    { label: "YOUTUBE", href: "#youtube" },
-    { label: "THREADS", href: "#threads" },
-  ],
-  legalLinks: [
-    { label: "PRIVACY", href: PRIVACY_POLICY_HREF },
-    { label: "TERMS", href: TERMS_OF_SERVICE_HREF },
-    { label: "SHIPPING", href: "#shipping" },
-  ],
+  socialLinks: FOOTER_SOCIAL_LINKS,
+  legalLinks: [],
   columns: [
     {
       heading: "SHOP",
       links: [
-        { label: "ALL COLLECTIONS", href: "#collections" },
-        { label: "POKÉMON", href: "#pokemon" },
-        { label: "DRAGON BALL", href: "#dragon-ball" },
-        { label: "ONE PIECE", href: "#one-piece" },
+        { label: "All Collections", href: "#collections" },
+        { label: "Pokémon", href: "#pokemon" },
+        { label: "Dragon Ball", href: "#dragon-ball" },
+        { label: "One Piece", href: "#one-piece" },
+        { label: "Disney", href: "#disney" },
+        { label: "NBA", href: "#nba" },
+        { label: "MLB", href: "#mlb" },
+        { label: "Formula 1", href: "#formula-1" },
       ],
     },
     {
       heading: "HELP",
       links: [
-        { label: "ORDER STATUS", href: "#order-status" },
-        { label: "STORE LOCATOR", href: STORE_LOCATOR_HREF },
-        { label: "SHIPPING & DELIVERY", href: "#shipping" },
-        { label: "RETURNS & REFUNDS", href: "#returns" },
-        { label: "CONTACT", href: "#contact" },
+        { label: "Store Locator", href: STORE_LOCATOR_HREF },
+        FOOTER_DOCS_LINK,
       ],
     },
+    FOOTER_LEGAL_COLUMN,
+  ],
+};
+
+/**
+ * Auction-only footer — Components/Footer → Auction only. Brand, social,
+ * Docs, Privacy and Terms. No shop column and no bar legal duplicates.
+ */
+const AUCTION_FOOTER = {
+  copy: FOOTER_COPY,
+  logo: FOOTER_LOGO,
+  logoHref: "/",
+  socialLinks: FOOTER_SOCIAL_LINKS,
+  legalLinks: [],
+  columns: [
     {
-      heading: "LEGAL",
-      links: [
-        { label: "PRIVACY POLICY", href: PRIVACY_POLICY_HREF },
-        { label: "TERMS of SERVICE", href: TERMS_OF_SERVICE_HREF },
-        { label: "ABOUT GRADE10", href: "#about" },
-      ],
+      heading: "HELP",
+      links: [FOOTER_DOCS_LINK],
     },
+    FOOTER_LEGAL_COLUMN,
   ],
 };
 const SORT_OPTIONS: SortOption[] = [
@@ -322,6 +378,7 @@ const STORE_CART_COPY = {
 
 export {
   appliedFiltersFromSelection,
+  AUCTION_FOOTER,
   FILTER_GROUPS,
   FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,

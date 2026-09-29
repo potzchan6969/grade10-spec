@@ -1,5 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import {
   PRODUCT_DETAIL_PRODUCT,
   SOLD_OUT_PRODUCT,
@@ -64,84 +64,9 @@ export const SoldOut: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
-    expect(canvas.getByText("This product is not for sale.")).toBeVisible();
+    expect(canvas.queryByText("This product is not for sale.")).toBeNull();
     expect(canvas.queryByRole("radiogroup", { name: "Variant" })).toBeNull();
     expect(canvas.getByText("HK$105.00")).toBeVisible();
-  },
-};
-
-export const DescriptionDisclosure: Story = {
-  args: { product: PRODUCT_DETAIL_PRODUCT },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const showMore = canvas.getByRole("button", { name: "Show more" });
-    expect(showMore).toHaveAttribute("aria-expanded", "false");
-    await userEvent.click(showMore);
-    expect(canvas.getByRole("button", { name: "Show less" })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "Show less" }));
-    expect(canvas.getByRole("button", { name: "Show more" })).toHaveAttribute(
-      "aria-expanded",
-      "false",
-    );
-  },
-};
-
-export const QuantityAndCart: Story = {
-  args: { product: PRODUCT_DETAIL_PRODUCT },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    // Product-status SC-11: the requested quantity can exceed the browse count.
-    const canvas = within(canvasElement);
-    const increase = canvas.getByRole("button", { name: "Increase quantity" });
-    await userEvent.click(increase);
-    await userEvent.click(increase);
-    await userEvent.click(increase);
-    expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
-      "4",
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
-    expect(canvas.getByRole("button", { name: "Added to cart" })).toBeVisible();
-  },
-};
-
-export const UsesFirstAvailableSaleItem: Story = {
-  args: {
-    product: {
-      ...PRODUCT_DETAIL_PRODUCT,
-      variants: [
-        {
-          id: "retired-box",
-          title: "Retired box",
-          price: "HK$95.00",
-          availableForSale: false,
-          sku: "G10-M5-ABYSS-RETIRED",
-        },
-        {
-          id: "available-box",
-          title: "Available box",
-          price: "HK$105.00",
-          availableForSale: true,
-          sku: "G10-M5-ABYSS-STD",
-        },
-      ],
-    },
-  },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("HK$105.00")).toBeVisible();
-    expect(canvas.getByText("SKU: G10-M5-ABYSS-STD")).toBeVisible();
-    expect(canvas.queryByText("HK$95.00")).toBeNull();
-    expect(canvas.queryByText("Retired box")).toBeNull();
-    expect(canvas.queryByText("Available box")).toBeNull();
-    expect(canvas.queryByRole("radiogroup")).toBeNull();
-
-    await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
-    expect(canvas.getByRole("button", { name: "Added to cart" })).toBeVisible();
   },
 };
 

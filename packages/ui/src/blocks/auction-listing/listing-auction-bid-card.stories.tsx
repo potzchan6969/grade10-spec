@@ -19,10 +19,10 @@ const COPY = {
   auctionWon: "Auction won",
   completePurchase: "Confirm delivery address",
   completePurchaseBody:
-    "Confirm where we ship this lot. Grade10 prepares the invoice next — nothing is due yet.",
+    "Confirm where we ship this auction. Grade10 prepares the invoice next — nothing is due yet.",
   completePurchaseAction: "Confirm address",
   paid: "Paid",
-  paidBody: "Track shipping and delivery for this lot.",
+  paidBody: "Track shipping and delivery for this auction.",
   viewOrderDetails: "View order details",
   didNotWin: "Did not win",
   outbid: "Outbid",
@@ -60,7 +60,7 @@ const COPY = {
     "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
     "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
-  customAmountPlaceholder: "Custom amount (min. {amount})",
+  customAmountPlaceholder: "{amount} min.",
   stepperMessage: "Min.: {amount}",
   invalidAmount: "Enter a valid amount.",
   useMinimum: "Use minimum",
@@ -75,6 +75,7 @@ const COPY = {
     "At least {amount} (your maximum + {increment})",
   maximumBelowMinimum: "Enter at least {amount}",
   buyerFeeHint: "20% buyer fee is added on top of the winning bid",
+  noBids: "No bids",
   noBidsYet: "No bids yet",
   endsLabel: "Ends",
   opensLabel: "Opens",
@@ -202,7 +203,7 @@ export const Default: Story = {
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
     expect(
-      canvas.getByPlaceholderText(/Custom amount \(min\./),
+      canvas.getByPlaceholderText("60,500 min."),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Set maximum to/ }),
@@ -246,7 +247,7 @@ export const NeedsCard: Story = {
       expect(preset).toBeDisabled();
     }
     expect(
-      canvas.getByRole("spinbutton", { name: /Custom amount \(min\./ }),
+      canvas.getByRole("spinbutton", { name: "60,500 min." }),
     ).toBeDisabled();
 
     await userEvent.click(
@@ -314,7 +315,7 @@ export const Leading: Story = {
     expect(canvas.getByText("HK$105,000")).toBeInTheDocument();
     expect(canvas.queryByText("HK$95,001")).not.toBeInTheDocument();
     expect(
-      canvas.getByPlaceholderText(/Custom amount \(min\. 95,001\)/),
+      canvas.getByPlaceholderText("95,001 min."),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
@@ -346,6 +347,41 @@ export const ExtendedBidding: Story = {
         /After the scheduled close, each bid restarts a 30-minute timer/,
       ),
     ).toBeInTheDocument();
+  },
+};
+
+export const Opens: Story = {
+  args: {
+    history: [],
+    bidEnrollment: undefined,
+    view: liveView({
+      headerLabel: "Opens soon",
+      live: false,
+      opens: true,
+      hasBids: false,
+      showBidActions: false,
+      priceLabel: "",
+      currentBidMinor: 4_800_000,
+      bidCount: 0,
+      bidCountLabel: "0 bids",
+      countdown: "2D 4H 12M 0S",
+      countdownSeconds: 2 * 24 * 60 * 60 + 4 * 60 * 60 + 12 * 60,
+      countdownFormat: "long",
+      closesAtMs: null,
+      deadlineAtMs: NOW_MS + 2 * 24 * 60 * 60 * 1000,
+      standing: "none",
+      minBidMinor: 4_800_000,
+    }),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Opens soon")).not.toBeInTheDocument();
+    expect(canvas.getByText("Opens in")).toBeInTheDocument();
+    expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
+    const reachable = canvas
+      .queryAllByText("No bids yet")
+      .filter((element) => element.closest("[inert]") == null);
+    expect(reachable).toHaveLength(0);
   },
 };
 
@@ -386,7 +422,7 @@ export const CustomMaximumCeiling: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("spinbutton", {
-      name: /Custom amount \(min\./,
+      name: "60,500 min.",
     });
     await userEvent.clear(field);
     await userEvent.type(field, "500");

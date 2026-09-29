@@ -1,0 +1,139 @@
+name: Bug fix
+
+# A person labels a bug report `agent-fix` once it reads as a bug, and this
+# runs `docs/governance/bug-fixes.md`'s rounds on it through
+# `scripts/bug-fix/run.mjs`: a diagnosis challenged by its readers, a red
+# test, a green fix, a review, and the symptom walked again. Every round is
+# posted on the report; a fix that clears them all opens a draft pull request
+# that closes it. The label comes off whatever the outcome, so labelling again
+# is a fresh run.
+
+on:
+  issues:
+    types: [labeled]
+
+permissions: {}
+
+concurrency:
+  group: bug-fix-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.14.1
+  CURSOR_CLI_VERSION: 2026.08.11-e8db854
+  CURSOR_CLI_SHA256: bfff4bf6f4e9dd30c1d0ef0a70b6077b074015dd2948e4c50685d53afdcfce5a
+  CURSOR_MODEL: composer-2.5
+
+jobs:
+  fix:
+    if: github.event.label.name == 'agent-fix'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - name: Check the run is configured
+        env:
+          CLIENT_ID: ${{ vars.BUG_FIX_APP_CLIENT_ID }}
+          PRIVATE_KEY: ${{ secrets.BUG_FIX_APP_PRIVATE_KEY }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          missing=""
+          [ -n "$CLIENT_ID" ] || missing="$missing BUG_FIX_APP_CLIENT_ID"
+          [ -n "$PRIVATE_KEY" ] || missing="$missing BUG_FIX_APP_PRIVATE_KEY"
+          [ -n "$CURSOR_API_KEY" ] || missing="$missing CURSOR_API_KEY"
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Create bug-fix App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.BUG_FIX_APP_CLIENT_ID }}
+          private-key: ${{ secrets.BUG_FIX_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Cursor CLI
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://downloads.cursor.com/lab/${CURSOR_CLI_VERSION}/linux/x64/agent-cli-package.tar.gz" -o "$RUNNER_TEMP/cursor.tgz"
+          echo "${CURSOR_CLI_SHA256}  $RUNNER_TEMP/cursor.tgz" | sha256sum --check --status
+          mkdir -p "$RUNNER_TEMP/cursor" "$HOME/.local/bin"; tar --strip-components=1 -xzf "$RUNNER_TEMP/cursor.tgz" -C "$RUNNER_TEMP/cursor"
+          ln -sf "$RUNNER_TEMP/cursor/cursor-agent" "$HOME/.local/bin/agent"; echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      # The report is read into a file and never into a shell word: its title
+      # and body are whatever the reporter typed.
+      - name: Read the report
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue view "$ISSUE" --repo "$GITHUB_REPOSITORY" --json title,body --jq '"# " + .title + "\n\n" + .body' > "$RUNNER_TEMP/report.md"
+          git config user.name 'grade10-bug-fix[bot]'
+          git config user.email 'grade10-bug-fix[bot]@users.noreply.github.com'
+          git switch -c "bug/$ISSUE"
+
+      - name: Run the rounds
+        id: rounds
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          node scripts/bug-fix/run.mjs \
+            --report "$RUNNER_TEMP/report.md" \
+            --agent scripts/bug-fix/cursor-agent.sh \
+            --out "$RUNNER_TEMP/bug-fix" \
+            --check 'pnpm run lint && pnpm run typecheck'
+          echo "outcome=$(jq -r .outcome "$RUNNER_TEMP/bug-fix/result.json")" >> "$GITHUB_OUTPUT"
+
+      - name: Post the rounds on the report
+        if: always() && hashFiles(format('{0}/bug-fix/comments/*', runner.temp)) != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          for comment in "$RUNNER_TEMP"/bug-fix/comments/*.md; do
+            gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body-file "$comment"
+          done
+
+      - name: Push and open the pull request
+        if: steps.rounds.outputs.outcome == 'fixed'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/bug/$ISSUE"
+          printf '\n\nFixes #%s\n' "$ISSUE" >> "$RUNNER_TEMP/bug-fix/pr.md"
+          gh pr create --repo "$GITHUB_REPOSITORY" --draft --base main --head "bug/$ISSUE" --label bug \
+            --title "$(jq -r .subject "$RUNNER_TEMP/bug-fix/result.json")" --body-file "$RUNNER_TEMP/bug-fix/pr.md"
+
+      - name: Say how the run ended
+        if: always()
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ISSUE: ${{ github.event.issue.number }}
+          OUTCOME: ${{ steps.rounds.outputs.outcome || 'failed' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "Bug-fix run ended: **${OUTCOME}**. [Run log](${RUN_URL})."
+          gh issue edit "$ISSUE" --repo "$GITHUB_REPOSITORY" --remove-label agent-fix

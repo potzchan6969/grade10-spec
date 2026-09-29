@@ -56,7 +56,7 @@ export default function PaymentReceivedPartialEmail({
   return (
     <AuctionLetter
       body={[
-        "We have received this payment for this lot. Your order is not fully settled yet.",
+        "We have received this payment for this auction. Your order is not fully settled yet.",
         "Email support@grade10.com if you have questions about what remains.",
       ]}
       brandName={brandName}

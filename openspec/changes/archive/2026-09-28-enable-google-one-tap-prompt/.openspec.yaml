@@ -1,0 +1,15 @@
+schema: grade10-planning
+created: 2026-09-25
+promoted_by: "@seankcw"
+hands:
+  pm: "@seankcw"
+  dev: "@seankcw"
+reviewed:
+  user-journeys: 5204ac94
+  specs: 431bf1a4
+  test-cases: 431bf1a4
+  tasks: 91f67485
+landed_by:
+  tasks: seankcw
+deploy_waived: "sean: staging/staging-2/uat verification sufficient; behavior confirmed via the walk (US-11) on staging, no production/preview deploy has run since PR #618/#637 merged"
+decisions_carried: "none"

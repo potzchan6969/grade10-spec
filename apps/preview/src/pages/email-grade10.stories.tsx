@@ -2,6 +2,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
@@ -84,6 +85,7 @@ function EmailGrade10Demo(props: EmailGrade10DemoProps) {
         onOpenChange={setOpen}
         open={open}
       />
+      <Toast position="bottom-right" />
     </div>
   );
 }

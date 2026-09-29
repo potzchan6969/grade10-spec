@@ -25,7 +25,7 @@ export default function OutbidEmail({
 }: OutbidProps) {
   return (
     <AuctionLetter
-      body="Another bid took the lead on this lot."
+      body="Another bid took the lead on this auction."
       brandName={brandName}
       campaign="outbid"
       canUnsubscribe
@@ -39,7 +39,7 @@ export default function OutbidEmail({
       preheader={`Leading bid is now ${currentBid}. Closes ${effectiveClosesAt}.`}
       primaryImageUrl={primaryImageUrl}
       secondary={yourBid ? { label: "Your bid", value: yourBid } : undefined}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

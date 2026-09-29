@@ -56,7 +56,7 @@ type ListingQuickMaximumBidActionsCopy = {
    * maximum.
    */
   maximumMechanismSubtext: string;
-  /** Placeholder when the custom field is empty, e.g. "Custom amount (min. {amount})". */
+  /** Placeholder when the custom field is empty, e.g. "{amount} min.". */
   customAmountPlaceholder: string;
   /** Shown under the custom field when the typed amount is below the floor, e.g. "Min.: {amount}". */
   stepperMessage: string;
@@ -393,10 +393,11 @@ function ListingQuickMaximumBidActions({
             <Tooltip>
               <TooltipTrigger
                 aria-label={copy.privateMaximumTooltip}
-                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                onPointerDown={(event) => event.preventDefault()}
-                render={<Info aria-hidden size={12} />}
-              />
+                className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+                closeOnClick={false}
+              >
+                <Info aria-hidden size={12} />
+              </TooltipTrigger>
               <TooltipContent>{copy.privateMaximumTooltip}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -416,7 +417,11 @@ function ListingQuickMaximumBidActions({
       </VStack>
 
       <VStack className="w-full" gap="sm">
-        <HStack className="w-full" gap="sm" role="group">
+        <HStack
+          className="w-full max-w-full overflow-x-auto overscroll-x-contain sm:overflow-visible"
+          gap="sm"
+          role="group"
+        >
           {presets.map((preset) => {
             const amountLabel = formatMoney(preset.amountMinor, view.currency, {
               locale,
@@ -435,7 +440,10 @@ function ListingQuickMaximumBidActions({
                 // control and keeps its text at AA. Locked, the Button's own
                 // disabled style dims it once.
                 className={cn(
-                  "h-auto min-w-0 flex-1 flex-col items-center gap-0.5 rounded-(--radius-xl) px-1.5 py-3 text-center whitespace-normal",
+                  // Below `sm`: grow with the amount (min width), scroll the row.
+                  // From `sm`: equal columns again.
+                  "h-auto shrink-0 flex-col items-center gap-0.5 rounded-(--radius-xl) px-2.5 py-3 text-center whitespace-nowrap min-w-20",
+                  "sm:min-w-0 sm:flex-1 sm:px-1.5 sm:whitespace-normal",
                   selected &&
                     "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
                 )}
@@ -445,7 +453,7 @@ function ListingQuickMaximumBidActions({
                 size="md"
                 variant="outline"
               >
-                <span className="text-xs font-normal leading-tight text-secondary-foreground text-balance">
+                <span className="text-xs font-normal leading-tight text-secondary-foreground sm:text-balance">
                   {preset.caption}
                 </span>
                 <span className="text-sm font-medium leading-tight tabular-nums">

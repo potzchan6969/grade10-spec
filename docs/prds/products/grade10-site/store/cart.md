@@ -17,7 +17,7 @@ back to that page.
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
 | Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
-| Carried to checkout | The code and the points, held with the cart; `/checkout` shows the same figures and Pay sends them; a paid order clears them |
+| Carried to checkout | 🚧 The code and the points, held with the cart; Proceed to Checkout sends them straight to Shopify; a paid order clears them |
 
 ## Reviewing the Cart
 
@@ -73,10 +73,11 @@ The refusals are the coupon's own —
 
 ## Checkout
 
-- 🚧 **Carried** — Checkout opens `/checkout` with the same code and
-  points; that page reads the cart again and shows the same figures
-- 🚧 **Sent** — Pay sends the code and the points, and the order is
-  promised with them —
+- 🚧 **Created from the drawer** — Proceed to Checkout sends the reviewed
+  lines, the code and the points straight to Shopify; there is no separate
+  checkout page to reopen or re-read them
+- 🚧 **Sent** — the order is promised with the same code and points the
+  drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
@@ -110,9 +111,8 @@ considering. Its value is a total they can trust before they go to pay.
 | Signed-out collector | Presses Add to cart on the listing or product page | Meets the sign-in dialog; no guest cart is built. |
 | Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
 
-**Not in scope.** A dedicated cart page. Creating the order from the
-drawer. Product-image enrichment. Shipping and tax before the invoice. A
-second code on one cart.
+**Not in scope.** A dedicated cart page. Product-image enrichment. Shipping
+and tax before the invoice. A second code on one cart.
 
 **Measurement.**
 
@@ -136,7 +136,7 @@ second code on one cart.
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
-| Existing checkout surface | Decided | The drawer opens `/checkout`; that surface keeps ownership of its live read and checkout creation. | Engineering |
+| Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
 | The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::

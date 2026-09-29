@@ -110,7 +110,8 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 
 | Lot | Amount being beaten | Next minimum | Outcome |
 | --- | ---: | ---: | --- |
-| HKD lot opening at HK$200 | HK$200 | HK$210 | The first bid must reach HK$210 |
+| HKD lot opening at HK$200 | HK$200 | 🚧 HK$200 | 🚧 The first bid may stand on the starting price; HK$210 from the second |
+| 🚧 HKD lot opening at HK$0 | HK$0 | HK$10 | 🚧 The first bid must reach the lowest increment; a lone bidder stands at HK$10, never HK$0 |
 | USD lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
 | USD lot at the ceiling | $10,000,000 | — | Every further bid is refused |
@@ -119,6 +120,9 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
   schedule
 - **A first maximum** — must reach the starting price plus one increment; the
   public price it creates is the starting price itself
+- 🚧 **Opening price** — the first bid must reach the starting price, or the
+  lowest increment when the lot starts at 0, and a lone bidder stands there;
+  one increment above the current bid applies from the second bid
 
 ### Refusals
 
@@ -180,6 +184,8 @@ authorization rather than adding a second.
 | **Leading** | Their maximum, the current bid and Leading |
 | **Outbid** | Outbid, and the next valid bid |
 | **Lost** | Did not win, with no hold-release copy; that reads on My Auctions |
+| **Open, no bids** | **No bids yet** under the starting bid |
+| **Closed, no bids** | **Ended** as the result, and **No bids** under it — never **No bids yet** |
 
 - 🚧 **Time left (extended)** — while the lot is in extended bidding the label
   says so, and its tooltip names the extension duration only
@@ -258,9 +264,12 @@ the letters that follow those lots.
 
 ### My Auctions
 
-🚧 One table holds every bookmarked lot once — bid rows before watch-only,
+🚧 One list holds every bookmarked lot once — bid lots before watch-only,
 soonest close first in each band, closed lots after open ones — with the row
 count in the title. The former Bidding and Watching sections do not appear.
+On a small viewport each lot is a stacked card; the whole card opens the lot
+or Winner Order, and Unwatch and Email alerts stay on the card. From tablet
+the same facts sit in the five-column table.
 
 | Column | What it shows |
 | --- | --- |
@@ -356,9 +365,10 @@ the account's registered address, and the letters about a won lot are
   letter that would state something no longer true is not sent late
 - **Send log** — operators answer "I was never told" from message type,
   recipient, lot and when it was sent, never the body
+- **Log retention** — **90 days**; troubleshooting only. Resend keeps the
+  durable trail
 - ❓ **Hold line on the non-winner letter** — whether the body also says the
   card hold is being released; Product confirms
-- ❓ **Log retention** — how long send-log rows are kept; Engineering confirms
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the bid, maximum and close invariants, and the sweeps
@@ -452,6 +462,6 @@ surface.
 | Unsubscribe | Decided | Stop means mute for this lot: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
 | Hold line on the non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
-| Send-log retention | ❓ Open | How long rows are kept. | Engineering |
+| Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
 :::

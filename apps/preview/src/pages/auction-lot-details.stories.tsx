@@ -52,7 +52,21 @@ export const LiveAutoLeading: Story = {
   },
 };
 
-export const Opens: Story = { args: { state: "opens" } };
+export const Opens: Story = {
+  args: { state: "opens" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Auction Details")).toBeVisible();
+    expect(canvas.getByText("About This Auction")).toBeVisible();
+    expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
+    const reachable = canvas
+      .queryAllByText("No bids yet")
+      .filter((element) => element.closest("[inert]") == null);
+    expect(reachable).toHaveLength(0);
+    expect(canvas.queryByText("Opens soon")).not.toBeInTheDocument();
+    expect(canvas.getByText("Opens in")).toBeVisible();
+  },
+};
 export const LiveNoBids: Story = {
   args: { state: "live-no-bids" },
   play: async ({ canvasElement }) => {
@@ -129,5 +143,7 @@ export const ClosedUnsold: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.getAllByText("Ended").length).toBeGreaterThan(0);
     expect(canvas.queryByText("Unsold")).not.toBeInTheDocument();
+    expect(canvas.getByText("No bids")).toBeInTheDocument();
+    expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
   },
 };

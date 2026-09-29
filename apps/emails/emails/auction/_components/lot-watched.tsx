@@ -37,12 +37,12 @@ export function LotWatchedEmail({
 
   return (
     <AuctionLetter
-      body="Bidding has closed on a lot you were watching."
+      body="Bidding has closed on an auction you were watching."
       brandName={brandName}
       campaign={campaign}
       canUnsubscribe
-      ctaLabel="View lot"
-      heading="This lot has ended"
+      ctaLabel="View auction"
+      heading="This auction has ended"
       highlight={
         sold && winningBid
           ? { label: "Sold for", value: winningBid }
@@ -52,9 +52,9 @@ export function LotWatchedEmail({
       lotSubtext={`Ended ${closedAt}`}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
-      preheader={sold ? `Sold for ${winningBid}.` : "This lot has ended."}
+      preheader={sold ? `Sold for ${winningBid}.` : "This auction has ended."}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

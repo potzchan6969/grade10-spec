@@ -110,7 +110,7 @@ const WON_AWAITING_ADDRESS = biddingItem({
   href: storyHref(WINNER_ORDER_AWAITING_ADDRESS_STORY_ID),
   copy: {
     ...ORDER_ROW_COPY,
-    viewOrder: "Complete Order Setup",
+    viewOrder: "Setup",
   },
 });
 

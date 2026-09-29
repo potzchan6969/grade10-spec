@@ -8,17 +8,32 @@ hooks use the typed `checkout.listOrders` and `checkout.getOrder` reads.
 The typed buyer order now carries id, shop order number, lifecycle status,
 origin, currency, quoted subtotal, eligible goods, discount, shipping charge,
 tax, paid total, refunded amount, fulfilment status, fulfilments, shipping
-address, payment instrument, timestamps, and line items. The frontend `Order`
-model still exposes the earlier subset, so TypeScript permits the decoded
-`StoreOrder` to pass through the repository while the new fields disappear at
-the domain and presentation boundaries. The typed buyer order still carries no
-product image or loyalty amount.
+address, payment instrument, timestamps, and line items. It does not currently
+carry a settled points credit or deducted points count, an order-level promo
+code, line-level coupon or issue facts, product media, pickup address or
+fulfilment kind, or a loyalty amount. The frontend `Order` model still exposes
+the earlier subset, so TypeScript permits the decoded `StoreOrder` to pass
+through the repository while the new fields disappear at the domain and
+presentation boundaries.
 
 `@grade10/ui` already exports both page blocks. `OrderHistory` accepts supplied
-active and past lists. The completed optional-section work lets `OrderDetails`
-omit summary, delivery, payment, address, and loyalty, but its address type
-still requires a recipient name and its payment type still requires a
-recognized brand.
+active and past lists. The shared component implementation omits absent
+summary groups and money rows, but its current address type still requires a
+recipient name and its payment type still requires a recognized brand. The
+widened address and payment contract described by this change is therefore not
+complete until its implementation and stories land together.
+
+The published composed Order Details stories exercise richer fixture props than
+the current Store read. `ItemCoupon` and `OrderDiscount` demonstrate line and
+order promo labels, refunded line presentation, and product media. `Pickup`
+demonstrates an explicit pickup fulfilment and address. `InStore`,
+`NoOptionalGroups`, and `PaidTotalWithoutSubtotal` demonstrate optional-group
+shapes. These are shared UI fixtures, not values the Grade10 page may copy into
+an order. The application maps them only when the typed Store contract supplies
+the corresponding fact. Until then, it preserves the existing honest omission
+rules. `WithPointsCredit` is an application requirement when the read supplies
+both the money credit and deducted count, but the current read has no source for
+either value.
 
 ## Goals / Non-Goals
 
@@ -97,13 +112,20 @@ same rendering and type compatibility.
 
 The Grade10 detail projection supplies only facts present on `Order`:
 
-- **Lines:** title, quantity, captured unit price, and derived line total.
+- **Lines:** title, quantity, captured unit price, and derived line total. It
+  does not copy story-only image, line coupon, line status, status message, or
+  strike-through values. A later typed contract change may map each optional
+  fact without changing the page boundary.
 - **Money:** quoted subtotal, discount, points credit, shipping, tax, and paid
   total when each is non-null, plus refund when positive. Format discount,
   points, and refund as deductions; normalize a zero deduction before
   formatting so it does not become negative zero. Pass points on
   `OrderDetailsSummary.points` separately from `discount` so the sidebar can
-  keep the cart-drawer Points line.
+  keep the cart-drawer Points line. A points row requires a typed money credit
+  and deducted count; the projection does not derive either from discount,
+  eligible goods, or refund. When a typed order-level promo code exists, the
+  discount label includes it. A typed item-level coupon remains on its line and
+  is not repeated in the summary.
 - **Address:** join the supplied first and last names only when present, then
   render non-empty street, locality, country, and phone lines in postal order.
   Keep the address on the owner-only detail and never project it into history.
@@ -113,12 +135,15 @@ The Grade10 detail projection supplies only facts present on `Order`:
   known Visa, Mastercard, and American Express values to their shared logo.
   For every other value, use the first non-empty company or provider method as
   a text label beside the supplied mask.
-- **Fulfilment:** status, display status, estimated delivery, and tracking.
+- **Fulfilment:** status, display status, estimated delivery, and tracking. A
+  pickup step or address requires an explicit typed pickup fact. The projection
+  does not turn a web shipping address into pickup or infer pickup from a point-
+  of-sale origin.
 
 Null discount, shipping, tax, address, and payment values remain absent. A
 supplied numeric zero remains a visible statement. No generic card brand, zero
-subtotal, empty line, pickup address, delivery event, product image, or loyalty
-value stands in for a missing fact.
+subtotal, empty line, pickup address, delivery event, product image, loyalty
+value, promo code, line coupon, or line issue stands in for a missing fact.
 
 Extend `OrderDetailsAddress.name` to be optional. Extend
 `OrderDetailsPayment` so `brand`, `label`, and `maskedNumber` are independently
@@ -173,6 +198,14 @@ no Korean entries are added because Korean is a ZZZ locale.
 - **[Risk] Provider payment names do not match the shared brand union.** → Keep
   normalization explicit and case-insensitive, then fall back to supplied text
   without a guessed logo.
+- **[Risk] Shared stories carry facts the Store read does not carry.** - Keep
+  story fixtures in `@grade10/ui`, map only typed order facts in Grade10, and
+  make a later contract change the prerequisite for line promos, line issues,
+  product media, pickup facts, loyalty amounts, or order promo labels.
+- **[Risk] The points acceptance has no current Store source field.** - Do not
+  derive the credit or deducted count from another money field. Resolve the
+  typed contract boundary before claiming the points scenario; otherwise keep
+  the Points row absent and record the dependency.
 - **[Risk] Shipping address and payment data escape the owner surface.** → Keep
   both projections detail-only, exclude them from logs and analytics, and rely
   on the existing owner-scoped read and not-found treatment.
@@ -192,11 +225,14 @@ no Korean entries are added because Korean is a ZZZ locale.
    tests.
 2. Advance the Grade10 app's `external/grade10-spec` pointer to that landed
    commit.
-3. Align the frontend order model, fixtures, and projections, then pass the new
+3. Confirm the typed Store read supplies every field required by the page
+   scenarios. If it does not, keep the corresponding story-only data absent and
+   hold the affected acceptance behind the contract change that supplies it.
+4. Align the frontend order model, fixtures, and projections, then pass the new
    optional props through the existing history and detail pages.
-4. Land the separate `add-store-order-status` dependency before claiming the
+5. Land the separate `add-store-order-status` dependency before claiming the
    customer pages complete; this change continues to consume that capability
    rather than defining a temporary status rule.
-5. Roll back the rich-field presentation by reverting the app projections and
+6. Roll back the rich-field presentation by reverting the app projections and
    gitlink together; the existing owner-scoped reads remain unchanged. No data
    migration or backend rollout is involved.

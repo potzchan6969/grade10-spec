@@ -15,7 +15,7 @@ import {
   POST_AUCTION_BIDDING,
   POST_AUCTION_WATCHING,
 } from "./my-auctions-content";
-import { STORE_FOOTER } from "./store-content";
+import { AUCTION_FOOTER } from "./store-content";
 import {
   storyHref,
   WINNER_ORDER_AWAITING_ADDRESS_STORY_ID,
@@ -51,7 +51,7 @@ function MyAuctionsPage({
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Toast position="bottom-right" />
       <SiteHeader {...AUCTION_SITE_HEADER} />
-      <div className="flex w-full flex-1 justify-center px-4 py-8 sm:px-8">
+      <div className="flex w-full flex-1 justify-center">
         <AuctionRecord
           biddingItems={biddingItems.map((item) => ({
             ...item,
@@ -89,7 +89,7 @@ function MyAuctionsPage({
           }))}
         />
       </div>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }
@@ -98,7 +98,19 @@ const meta = {
   title: "Pages/My Auctions Page",
   component: MyAuctionsPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: `
+Store chrome around shared \`AuctionRecord\`. Small-viewport lot card variants:
+[Auction Card](?path=/story/my-auctions-auction-card--leading).
+Full card stack without chrome:
+[Filled — small viewport](?path=/story/my-auctions-my-auctions--filled-small-viewport).
+`,
+      },
+    },
+  },
 } satisfies Meta<typeof MyAuctionsPage>;
 
 export default meta;
@@ -217,7 +229,7 @@ export const PostAuction: Story = {
     ).toHaveAttribute("href", storyHref(WINNER_ORDER_REFUNDED_STORY_ID));
     expect(
       canvas.getByRole("link", {
-        name: "Complete Order Setup: 1999 Base Set Charizard PSA 9",
+        name: "Setup: 1999 Base Set Charizard PSA 9",
       }),
     ).toHaveAttribute(
       "href",
@@ -299,5 +311,30 @@ export const PostAuction: Story = {
         name: "Open listing: 1999 Base Set Venusaur PSA 9",
       }),
     ).toHaveAttribute("href", "#lot-venusaur");
+  },
+};
+
+/** Below md: stacked lot cards — same post-auction facts without sideways pan. */
+export const PostAuctionSmallViewport: Story = {
+  name: "Post-auction — small viewport",
+  globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await myAuctionsSettled(canvasElement);
+    const { waitFor } = await import("storybook/test");
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector('[data-slot="auction-record-cards"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      canvasElement.querySelector('[data-slot="auction-record-row"]'),
+    ).toBeNull();
+    expect(canvas.getByText("Awaiting Setup")).toBeVisible();
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Base Set Charizard PSA 9",
+      }),
+    ).toBeVisible();
   },
 };

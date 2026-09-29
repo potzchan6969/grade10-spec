@@ -19,6 +19,25 @@ import type {
   AuctionAddressKind,
 } from "./types";
 
+/** Tailwind `sm` — default kind control from here; `sm` size below. */
+const SM_UP_MQ = "(min-width: 640px)";
+
+function useIsSmUp() {
+  const [smUp, setSmUp] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(SM_UP_MQ).matches : true,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(SM_UP_MQ);
+    setSmUp(media.matches);
+    const onChange = () => setSmUp(media.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  return smUp;
+}
+
 const EMPTY_VALUES: AuctionAddressFormValues = {
   addressKind: "personal",
   firstName: "",
@@ -64,6 +83,7 @@ function AuctionAddressForm({
   const resolvedFormId = formId ?? generatedFormId;
   const formRef = useRef<HTMLFormElement>(null);
   const focusInvalidRef = useRef(false);
+  const smUp = useIsSmUp();
   const [values, setValues] = useState<AuctionAddressFormValues>({
     ...EMPTY_VALUES,
     ...initialValues,
@@ -203,6 +223,7 @@ function AuctionAddressForm({
               const kind = next[0];
               if (kind === "personal" || kind === "company") setKind(kind);
             }}
+            size={smUp ? "default" : "sm"}
             value={[values.addressKind]}
           >
             <SegmentedControlItem value="personal">
@@ -214,8 +235,10 @@ function AuctionAddressForm({
           </SegmentedControl>
         </div>
 
+        {/* The fields scroll, so they clip at their own edge: `p-1` keeps a
+            focus ring's room inside it, `-m-1` keeps the column. */}
         <div
-          className="scroll-fade flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain"
+          className="scroll-fade -m-1 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-1"
           data-slot="auction-address-fields"
         >
           <div className="grid gap-3 sm:grid-cols-2">

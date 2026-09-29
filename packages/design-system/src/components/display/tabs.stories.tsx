@@ -27,6 +27,22 @@ export const Default: Story = {
   ),
 };
 
+/** `size="sm"` — 32px pills in a 36px track with `text-xs`. */
+export const Small: Story = {
+  render: () => (
+    <Tabs defaultValue="overview" className="w-80">
+      <TabsList size="sm">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="activity">Activity</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview" />
+      <TabsContent value="activity" />
+      <TabsContent value="settings" />
+    </Tabs>
+  ),
+};
+
 /** The `list` variant drops the track for an underline on the active tab. */
 export const List: Story = {
   render: () => (

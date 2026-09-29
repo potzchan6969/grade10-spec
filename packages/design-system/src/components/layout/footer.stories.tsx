@@ -1,3 +1,8 @@
+import {
+  FacebookLogo,
+  InstagramLogo,
+  ThreadsLogo,
+} from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { G10LogoMono } from "../display/g10-logo-mono";
@@ -5,59 +10,92 @@ import { Footer } from "./footer";
 
 /* Grade10's own footer content. It lives here, in an example, rather than in
  * the component as a default — a second store renders the same shell and must
- * not inherit this. */
+ * not inherit this.
+ *
+ * Links follow page-shell and carried-surfaces: only destinations the build
+ * answers. Auction-only drops the shop column and every store/help page that
+ * does not answer yet. Store launch restores shop destinations and Store
+ * Locator once that page answers. Docs (`/docs`) covers auction and store
+ * tutorials on both compositions.
+ *
+ * Privacy and Terms live only in the LEGAL column — not again on the bar.
+ * Country/currency is omitted until selection exists. Link labels are Title
+ * Case; column headings stay as supplied. */
 const SOCIAL_LINKS = [
-  { label: "INSTAGRAM", href: "#instagram" },
-  { label: "YOUTUBE", href: "#youtube" },
-  { label: "THREADS", href: "#threads" },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/grade10hk/",
+    external: true,
+    icon: <InstagramLogo aria-hidden size={16} weight="fill" />,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/grade10hk/",
+    external: true,
+    icon: <FacebookLogo aria-hidden size={16} weight="fill" />,
+  },
+  {
+    label: "Threads",
+    href: "https://www.threads.com/@grade10hk",
+    external: true,
+    icon: <ThreadsLogo aria-hidden size={16} weight="fill" />,
+  },
 ];
 
-const COLUMNS = [
+/** Same-origin documentation site — auction and store tutorials. */
+const DOCS_LINK = { label: "Docs", href: "/docs", external: true };
+
+const LEGAL_COLUMN = {
+  heading: "LEGAL",
+  links: [
+    { label: "Privacy Policy", href: "#privacy" },
+    { label: "Terms of Service", href: "#terms" },
+  ],
+};
+
+/** Production today: brand, social, docs, and the two legal pages every lane carries. */
+const AUCTION_ONLY_COLUMNS = [
+  {
+    heading: "HELP",
+    links: [DOCS_LINK],
+  },
+  LEGAL_COLUMN,
+];
+
+/** Once Store answers: shop destinations and Store Locator join docs and legal. */
+const STORE_LAUNCH_COLUMNS = [
   {
     heading: "SHOP",
     links: [
-      { label: "ALL COLLECTIONS", href: "#collections" },
-      { label: "POKÉMON", href: "#pokemon" },
-      { label: "DRAGON BALL", href: "#dragon-ball" },
-      { label: "ONE PIECE", href: "#one-piece" },
-      { label: "DISNEY", href: "#disney" },
+      { label: "All Collections", href: "#collections" },
+      { label: "Pokémon", href: "#pokemon" },
+      { label: "Dragon Ball", href: "#dragon-ball" },
+      { label: "One Piece", href: "#one-piece" },
+      { label: "Disney", href: "#disney" },
       { label: "NBA", href: "#nba" },
       { label: "MLB", href: "#mlb" },
-      { label: "FORMULA 1", href: "#formula-1" },
+      { label: "Formula 1", href: "#formula-1" },
     ],
   },
   {
     heading: "HELP",
     links: [
-      { label: "CARD SUBMISSION", href: "#submission" },
-      { label: "ORDER STATUS", href: "#order-status" },
       {
-        label: "STORE LOCATOR",
+        label: "Store Locator",
         href: "?path=/story/pages-store-locator-page--default",
       },
-      { label: "SHIPPING & DELIVERY", href: "#shipping" },
-      { label: "RETURNS & REFUNDS", href: "#returns" },
-      { label: "FAQ", href: "#faq" },
-      { label: "CONTACT", href: "#contact" },
+      DOCS_LINK,
     ],
   },
-  {
-    heading: "LEGAL",
-    links: [
-      { label: "PRIVACY POLICY", href: "#privacy" },
-      { label: "TERMS of SERVICE", href: "#terms" },
-      { label: "ABOUT GRADE10", href: "#about" },
-    ],
-  },
-];
-
-const LEGAL_LINKS = [
-  { label: "PRIVACY", href: "#privacy" },
-  { label: "TERMS", href: "#terms" },
-  { label: "SHIPPING", href: "#shipping" },
+  LEGAL_COLUMN,
 ];
 
 const GRADE10_LOGO = <G10LogoMono className="h-5 w-auto" />;
+
+const COPY = {
+  attribution: "A division of MemeStrategy (HKEX: 2440)",
+  copyright: "© 2026 Grade10. All rights reserved.",
+};
 
 const meta = {
   title: "Components/Footer",
@@ -65,53 +103,100 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
-    copy: {
-      description:
-        "Japanese trading cards selected for collectors, openers, and complete-set builders.",
-      attribution: "A division of MemeStrategy (HKEX: 2440)",
-      copyright: "© 2026 Grade10. All rights reserved.",
-      locale: "HONG KONG / HKD",
-    },
+    copy: COPY,
     logo: GRADE10_LOGO,
     logoHref: "/",
     socialLinks: SOCIAL_LINKS,
-    columns: COLUMNS,
-    legalLinks: LEGAL_LINKS,
+    columns: AUCTION_ONLY_COLUMNS,
+    legalLinks: [],
   },
 } satisfies Meta<typeof Footer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+/**
+ * Auction-only: brand, social, Docs (`/docs`), Privacy and Terms. No shop
+ * column, no bar legal duplicates, and no locale until selection exists.
+ */
+export const AuctionOnly: Story = {
+  name: "Auction only",
   play: async ({ canvasElement }) => {
     const footer = canvasElement.querySelector<HTMLElement>(
       '[data-slot="footer"]',
     );
     expect(footer).not.toBeNull();
     if (footer === null) return;
-    // The dark surface, and no stroke on the outer frame: the design draws
-    // its only one on the bottom bar, asserted below. This used to assert a
-    // top border here, which is how the drift outlived the component.
     expect(footer).toHaveClass("bg-background-inverse");
     expect(footer).not.toHaveClass("border-t");
-    expect(footer.firstElementChild).toHaveClass("gap-6", "p-8");
+    expect(footer.firstElementChild).toHaveClass(
+      "gap-6",
+      "px-4",
+      "py-8",
+      "sm:px-8",
+    );
     const bar = footer.querySelector('[data-slot="footer-bar"]');
-    expect(bar).toHaveClass("px-8");
+    expect(bar).toHaveClass("px-4", "sm:px-8");
     expect(bar).toHaveClass("border-t");
+    expect(footer.querySelector('[data-slot="footer-legal"]')).toBeNull();
 
     const canvas = within(canvasElement);
-    for (const heading of ["SHOP", "HELP", "LEGAL"]) {
-      expect(canvas.getByText(heading)).toBeInTheDocument();
-    }
-    expect(canvas.getByRole("link", { name: "INSTAGRAM" })).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "PRIVACY" })).toBeInTheDocument();
+    expect(canvas.getByText("HELP")).toBeInTheDocument();
+    expect(canvas.getByText("LEGAL")).toBeInTheDocument();
+    expect(canvas.queryByText("SHOP")).toBeNull();
+    expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/grade10hk/",
+    );
+    expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(canvas.getByRole("link", { name: "Facebook" })).toHaveAttribute(
+      "href",
+      "https://www.facebook.com/grade10hk/",
+    );
+    expect(canvas.getByRole("link", { name: "Facebook" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Threads" })).toHaveAttribute(
+      "href",
+      "https://www.threads.com/@grade10hk",
+    );
+    expect(canvas.getByRole("link", { name: "Threads" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "href",
+      "/docs",
+    );
+    expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(
+      canvas.getByRole("link", { name: "Privacy Policy" }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Terms of Service" }),
+    ).toBeInTheDocument();
+    expect(canvas.queryByRole("link", { name: "Privacy" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Terms" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Store Locator" })).toBeNull();
     expect(
       canvas.getByText("© 2026 Grade10. All rights reserved."),
     ).toBeInTheDocument();
-    expect(canvas.getByText("HONG KONG / HKD")).toBeInTheDocument();
-    // Annotation: logo click redirects to the homepage. The mark itself is
-    // decorative inside the named home link (`Size/size-9` frame).
+    expect(canvas.queryByText(/HONG KONG/)).toBeNull();
     const logo = footer.querySelector('[data-slot="footer-logo"]');
     expect(logo).toHaveAttribute("href", "/");
     expect(logo).toHaveClass("h-9");
@@ -119,24 +204,52 @@ export const Default: Story = {
 };
 
 /**
- * A store with nowhere to link yet: the brand block, the copyright and the
- * locale, and nothing standing in for the sections it has no content for.
+ * Store launch: shop destinations and Store Locator join Docs, Privacy and
+ * Terms. HELP holds Store Locator and Docs; unanswered help pages stay out.
+ * The bar carries copyright only — no duplicated legal links, no locale.
  */
-export const WithoutLinks: Story = {
-  args: { socialLinks: [], columns: [], legalLinks: [] },
+export const StoreLaunch: Story = {
+  name: "Store launch",
+  args: { columns: STORE_LAUNCH_COLUMNS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Only the homepage logo link remains — annotation: click goes home.
-    expect(canvas.getAllByRole("link")).toHaveLength(1);
-    expect(canvas.getByRole("link", { name: "Grade10" })).toHaveAttribute(
-      "href",
-      "/",
-    );
-    // Absent, not empty: an empty row still reserves its padding.
-    for (const slot of ["footer-social", "footer-legal"]) {
-      expect(canvasElement.querySelector(`[data-slot="${slot}"]`)).toBeNull();
+    for (const heading of ["SHOP", "HELP", "LEGAL"]) {
+      expect(canvas.getByText(heading)).toBeInTheDocument();
     }
-    expect(canvas.getByText("HONG KONG / HKD")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "All Collections" }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Store Locator" }),
+    ).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "href",
+      "/docs",
+    );
+    expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(
+      canvas.getByRole("link", { name: "Privacy Policy" }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Terms of Service" }),
+    ).toBeInTheDocument();
+    expect(canvas.queryByRole("link", { name: "Privacy" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Terms" })).toBeNull();
+    expect(
+      canvasElement.querySelector('[data-slot="footer-legal"]'),
+    ).toBeNull();
+    expect(canvas.queryByText(/HONG KONG/)).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Order Status" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Card Submission" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "FAQ" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Contact" })).toBeNull();
   },
 };
 
@@ -145,6 +258,7 @@ export const WithoutLinks: Story = {
  * a phone, and the legal bar wraps rather than clipping at its fixed height.
  */
 export const Narrow: Story = {
+  args: { columns: STORE_LAUNCH_COLUMNS },
   decorators: [
     (Story) => (
       <div style={{ width: 375 }}>
@@ -161,10 +275,12 @@ export const Narrow: Story = {
     expect(footer.scrollWidth).toBeLessThanOrEqual(footer.clientWidth);
 
     // Squeezing four columns onto a phone is what the width alone does not
-    // catch: the blurb ends up one word per line inside an 80px column.
+    // catch: a long brand line ends up one word per line inside an 80px column.
     const canvas = within(canvasElement);
-    const description = canvas.getByText(/Japanese trading cards/);
-    expect(description.clientWidth).toBeGreaterThan(240);
+    // The column is measured, not the line: the paragraph is only as wide as
+    // its words, which fit in a line on their own.
+    const attribution = canvas.getByText(/MemeStrategy/);
+    expect(attribution.parentElement?.clientWidth).toBeGreaterThan(240);
 
     const bar = footer.querySelector<HTMLElement>('[data-slot="footer-bar"]');
     expect(bar).not.toBeNull();
@@ -172,17 +288,3 @@ export const Narrow: Story = {
     expect(bar.scrollHeight).toBeLessThanOrEqual(bar.clientHeight);
   },
 };
-
-/** A column whose destinations do not exist yet is absent, heading and all. */
-export const ColumnWithNoLinks: Story = {
-  args: { columns: [COLUMNS[0], { heading: "HELP", links: [] }] },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("SHOP")).toBeInTheDocument();
-    expect(canvas.queryByText("HELP")).toBeNull();
-  },
-};
-
-/** The grid is four columns wide; supplying fewer leaves the brand block and
- * the columns it was given, rather than stretching them. */
-export const FewerColumns: Story = { args: { columns: COLUMNS.slice(0, 2) } };
