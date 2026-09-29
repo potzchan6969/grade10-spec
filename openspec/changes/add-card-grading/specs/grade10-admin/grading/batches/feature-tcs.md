@@ -1,13 +1,13 @@
 # grade10-admin/grading/batches Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
 
-- `grade10-admin-grading-batches-SC-14` - two operators marking one parcel sent: the backend's concurrency test over the ship act, where the second act meets the batch's shipped stamp under `lockBatch` and is refused by name.
-- `grade10-admin-grading-batches-SC-33` - finishing a box already finished: the backend's idempotency test over finishing, which the panel offers no second time.
-- `grade10-admin-grading-batches-SC-42` - two desks handing in against one shelf: the backend's concurrency test over the hand-in, which takes the safe's cap row for update before it counts.
+- `grade10-admin-grading-batches-SC-14` - two operators marking one parcel sent: the backend's concurrency test over the ship act, where the second act meets the batch's shipped stamp under `lockBatch` and is refused by name (`grade10:packages/grading/backend/test/batches/ship.repo.test.ts`). Two admins in two browsers could walk it by hand; the review left it to that test.
+- `grade10-admin-grading-batches-SC-33` - finishing a box already finished: the backend's idempotency test over finishing, which the panel offers no second time (`grade10:packages/grading/backend/test/receiving/finish.repo.test.ts`). A finish sent to the worker directly could walk it; the review left it to that test.
+- `grade10-admin-grading-batches-SC-42` - two desks handing in against one shelf: the backend's concurrency test over the hand-in, which takes the safe's cap row for update before it counts (`grade10:packages/grading/backend/src/testing/suites/contention.ts`). Two hand-ins at the same moment are timing no person can walk.
 
 ## Background
 
@@ -35,7 +35,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -83,7 +83,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -119,7 +119,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -164,7 +164,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -207,7 +207,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -249,7 +249,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -297,7 +297,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -339,7 +339,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -374,7 +374,7 @@
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** none
@@ -416,7 +416,7 @@
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -454,7 +454,7 @@
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -493,7 +493,7 @@
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -532,7 +532,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -572,7 +572,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -618,7 +618,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -664,7 +664,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -711,7 +711,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -757,7 +757,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -794,7 +794,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -834,7 +834,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -873,7 +873,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -906,6 +906,7 @@
 
 * Step 2: the scan is refused, naming the submission that already holds the cert.
 * Step 2: the second card stays unmatched.
+* Step 2: nothing changes on <a submission it belongs to>'s card.
 
 ---
 
@@ -915,7 +916,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -954,7 +955,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -994,7 +995,7 @@
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1023,7 +1024,7 @@
 **Expected Results:**
 
 * Step 2: the card is recorded ungraded, with the grader's code and note.
-* Step 2: the ungraded counter rises by one; the card's fee stands.
+* Step 2: the ungraded counter rises by one.
 
 ---
 
@@ -1033,7 +1034,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1075,7 +1076,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1104,7 +1105,8 @@
 
 **Expected Results:**
 
-* Step 2: the gap between the invoice's figure and the sheet's is shown, marked Commercial's.
+* Step 2: the invoice's 8000 USD and the sheet's 60000 HKD (minor units) are shown against each other, each with its currency, the gap marked Commercial's.
+* Step 2: the card still owes the sheet's difference, 60000 (HKD, minor units).
 
 ---
 
@@ -1114,7 +1116,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1159,7 +1161,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1178,6 +1180,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | An unmatched manifest line | the manifest typed with a third line naming an intake id no card in the batch carries |
 | A manifest slab not yet scanned | the manifest typed with a line per card, and the second card's cert not scanned |
+| Both: an unmatched line and an unscanned card | the manifest typed with a line per card and a third line naming an intake id no card in the batch carries, and the second card's cert not scanned |
 
 **Steps:**
 
@@ -1185,7 +1188,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: Finish is disabled, naming <Unresolved>.
+* Step 1: Finish is disabled, naming <Unresolved>, each one named where there are two; no submission moves.
 
 ---
 
@@ -1195,7 +1198,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1223,7 +1226,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: every submission in the batch moves to Ready to collect together, none left behind.
-* Step 3: each collector is emailed the pickup code and what is due.
+* Step 3: each collector is emailed the pickup code and what is due, once.
 * Step 2: the batch closes with its received date.
 
 ---
@@ -1234,7 +1237,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1269,7 +1272,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1307,7 +1310,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1349,7 +1352,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1395,7 +1398,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1435,7 +1438,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1485,7 +1488,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
@@ -1517,6 +1520,7 @@ Runs once per row of **Test data**.
 
 * Step 3: the card reads held by the grader, with the expected date.
 * Step 3: the collector is emailed the same day.
+* Step 3: the letter names the expected back date.
 
 ---
 
@@ -1526,7 +1530,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1554,7 +1558,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the card reads not returned, carrying the payout it owes.
+* Step 2: the card reads not returned, owing a payout of 800000 (HKD, minor units), its declared value.
 * Step 2: the collector is emailed the same day.
 
 ---
@@ -1565,7 +1569,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1587,14 +1591,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Photograph the slab inside the box.
-2. Click Damaged on the card's line, attach the photograph from step 1 as the photograph in the box, and confirm.
-3. Read the card's line, and read the letter to the submission's collector.
+1. Click Damaged on the card's line and confirm with no photograph.
+2. Photograph the slab inside the box.
+3. Click Damaged on the card's line, attach the photograph from step 2 as the photograph in the box, and confirm.
+4. Read the card's line, and read the letter to the submission's collector.
 
 **Expected Results:**
 
-* Step 3: the photograph is attached to the card, taken before it left the box.
-* Step 3: the card reads damaged; the collector is emailed the same day.
+* Step 1: the record is refused until the slab is photographed in the box.
+* Step 4: the photograph is attached to the card, taken before it left the box.
+* Step 4: the card reads damaged, and owes a payout of 500000 (HKD, minor units), its declared value; the collector is emailed the same day.
 
 ---
 
@@ -1604,7 +1610,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1646,7 +1652,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1675,6 +1681,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: the record is refused, naming the missing expected date.
+* Step 2: nothing is recorded on the card; its line still reads on the manifest, not scanned.
 
 ---
 
@@ -1684,7 +1691,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1733,7 +1740,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1774,7 +1781,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1801,6 +1808,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the batch's row reads Due back in the warning tone, read from the clock.
+* Step 1: the With graders tile counts the batch among those past their estimate.
 
 ---
 
@@ -1810,7 +1818,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1852,7 +1860,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1882,6 +1890,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: the re-estimate is refused, naming the missing reason.
+* Step 2: the due date does not move, and no collector is emailed.
 
 ---
 
@@ -1891,7 +1900,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1926,7 +1935,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1965,7 +1974,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2004,7 +2013,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2045,7 +2054,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2092,7 +2101,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2103,15 +2112,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) is on <grade10 admin grading batches url>, with a batch closing today, a batch with a grader, and a batch back unchecked, on a stack holding no other batch.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, with one batch closed and shipping today, two batches with graders of which one is past its estimate, one batch back and unchecked, and 24000000 (HKD, minor units) of declared value held, on a stack holding no other batch and no other card.
+* <the safe's cap> is written as 30000000, as *Writing a money setting* says.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| A batch closing today | a submission seeded at `checked_in`, handed in yesterday |
-| A batch with a grader | a submission seeded at `sent` |
-| A batch back unchecked | a submission seeded at `graded`, Arrived pressed on its row |
+| <the safe's cap> | 30000000 (HKD, minor units) |
+| A batch closed and shipping today | a submission seeded at `checked_in` at Super Express, handed in yesterday, 3 cards declared 3500000, 3500000 and 3000000 (HKD, minor units): 10000000 held |
+| A batch with a grader | a submission seeded at `sent` at Regular, 1 card declared 500000 (HKD, minor units), not held in the shop |
+| A batch with a grader, past its estimate | a submission seeded at `sent` at Regular, 1 card declared 500000 (HKD, minor units), handed in 60 days back and `readyAt` 50 days back, not held in the shop |
+| A batch back and unchecked | a submission seeded at `graded` at Super Express, 4 cards declared 3500000 each (HKD, minor units), Arrived pressed on its row: 14000000 held |
+| Declared value held | 24000000 (HKD, minor units), 10000000 plus 14000000 |
 
 **Steps:**
 
@@ -2119,9 +2132,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the Ship today tile names the grader, level, cards and submissions closing.
-* Step 1: the With graders tile counts submissions, and how many are past their estimate.
-* Step 1: the Back unchecked tile counts what has not been received.
+* Step 1: Ship today reads 1.
+* Step 1: With graders reads 2, with 1 past its estimate.
+* Step 1: Back, unchecked reads 1.
+* Step 1: Declared value in the safe reads 24000000 against 30000000 (HKD, minor units).
 
 ---
 
@@ -2131,7 +2145,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2150,7 +2164,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | <a batch checked in and not yet shipped> | a submission seeded at `checked_in` at Super Express, 3 cards declared 3500000, 3500000 and 3000000 (HKD, minor units): 10000000 |
 | <several slabs ready and uncollected> | a submission seeded at `ready` at Super Express, 2 cards declared 3000000 each (HKD, minor units): 6000000 |
-| <safe total> | 16000000 (HKD, minor units), 10000000 plus 6000000 |
+| <cards back at the shop> | a submission seeded at `returned` at Super Express, 3 cards declared 3500000, 3500000 and 1000000 (HKD, minor units): 8000000 |
+| <a card collected> | a submission seeded at `collected` at Super Express, 1 card declared 2000000 (HKD, minor units), left out |
+| <safe total> | 24000000 (HKD, minor units), 10000000 plus 8000000 plus 6000000 |
 
 **Steps:**
 
@@ -2158,7 +2174,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the safe's tile sums the declared value of both the checked-in cards and the ready slabs still held, <safe total>.
+* Step 1: the safe's tile sums the declared value of the checked-in cards, the cards back at the shop and the ready slabs still held, leaving out <a card collected>: <safe total>.
 
 ---
 
@@ -2168,7 +2184,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2206,7 +2222,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
@@ -2238,6 +2254,7 @@ Runs once per row of **Test data**.
 
 * Step 2: check-in is refused, naming the safe's cap.
 * Step 2: the next drop-off is booked for the submission instead.
+* Step 2: the collector is told the shop is at its cap.
 
 ---
 
@@ -2247,7 +2264,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2273,72 +2290,80 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Check in <a submission> from the Hand-in runbook.
+2. Open <grade10 admin grading batches url>.
+3. Read the Declared value in the safe tile.
 
 **Expected Results:**
 
 * Step 1: check-in proceeds; no cap refusal is shown.
+* Step 3: the safe reads 30000000 (HKD, minor units), and the tile says it is at its cap.
+
+## Settled
+
+- A read-grant holder offered no act on the batches and receive pages is not this capability's rule: it is `grade10-admin/grading/counter`'s grant rule (the console shows only what the operator may do), walked in the counter suite; the batches spec never stated it
 
 ## Reconciliation
 
-**Run:** 2026-09-22, in the change `add-card-grading`. The blind pass read the isolated bundle its caller built - this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD pages the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Nothing here verifies that; it is the run's own word. The scenario pass issued `grade10-admin-grading-batches-SC-01` to `grade10-admin-grading-batches-SC-42` over sixteen ADDED requirements, and the blind suite wrote 37 cases over US1 to US5.
+**Run:** 2026-09-22, in the change `add-card-grading`. The blind pass read the isolated bundle its caller built - this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD pages the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Nothing here verifies that; it is the run's own word. The scenario pass wrote its scenarios over sixteen ADDED requirements, and the blind suite wrote 37 cases over US1 to US5. Scenario ids stripped at review, 2026-09-29.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `grade10-admin-grading-batches-US1-TC1-1` | Reached | `grade10-admin-grading-batches-SC-11`, and the packing list of `grade10-admin-grading-batches-SC-10` |
-| `grade10-admin-grading-batches-US1-TC2-1` | Folded | No scenario said a batch still taking cards offers no way to ship it; folded as `grade10-admin-grading-batches-SC-45`, with the rule on the shipping requirement |
-| `grade10-admin-grading-batches-US1-TC3-1` | Reached | `grade10-admin-grading-batches-SC-12` |
-| `grade10-admin-grading-batches-US1-TC4-1` | Reached | `grade10-admin-grading-batches-SC-13` |
-| `grade10-admin-grading-batches-US1-TC5-1` | Reached | `grade10-admin-grading-batches-SC-15`. The case reads the warning tone, the scenario the refusal: the same rule at two altitudes. Whether a batch over the cover is split or held is Q29's open ❓ and is not in either |
-| `grade10-admin-grading-batches-US1-TC6-1` | Reached | `grade10-admin-grading-batches-SC-11` |
-| `grade10-admin-grading-batches-US1-TC7-1` | Folded | The console opens a batch for a trio before its first card, which no scenario said; folded as `grade10-admin-grading-batches-SC-44`, with the rule beside `Opened on first use`. Its second reading is `grade10-admin-grading-batches-SC-03` |
-| `grade10-admin-grading-batches-US1-TC8-1` | Kept, stated elsewhere | The read grant is `grade10-admin/grading/counter`'s `Every act sits behind one of three grants`, walked by its US-14; no scenario folded here |
-| `grade10-admin-grading-batches-US1-TC9-1` | Kept, out of the requirements | The in-flight form is presentation; the panel's colocated test decides it, and the ui-design row closes the same way |
-| `grade10-admin-grading-batches-US2-TC1-1` | Reached | `grade10-admin-grading-batches-SC-23` |
-| `grade10-admin-grading-batches-US2-TC2-1` | Reached | `grade10-admin-grading-batches-SC-23` |
-| `grade10-admin-grading-batches-US2-TC3-1` | Reached | `grade10-admin-grading-batches-SC-25`, and the counters of `grade10-admin-grading-batches-SC-29` |
-| `grade10-admin-grading-batches-US2-TC4-1` | Reached, and raised | `grade10-admin-grading-batches-SC-26`. The case asked how far `held elsewhere` reaches; Q74 settles it as one cert per grader across every batch and submission, the scan requirement now says so, and `grade10-admin-grading-batches-SC-46` states the reach |
-| `grade10-admin-grading-batches-US2-TC5-1` | Reached | `grade10-admin-grading-batches-SC-27` |
-| `grade10-admin-grading-batches-US2-TC6-1` | Reached | `grade10-admin-grading-batches-SC-24` |
-| `grade10-admin-grading-batches-US2-TC7-1` | Reached | `grade10-admin-grading-batches-SC-28`. The case's `the card's fee stands` is the fee's fate per outcome, `grade10-site/grading/submission-lifecycle`'s and Q5's open ❓, not this capability's |
-| `grade10-admin-grading-batches-US2-TC8-1` | Reached | `grade10-admin-grading-batches-SC-38`, and the reconciliation of `grade10-admin-grading-batches-SC-39` |
-| `grade10-admin-grading-batches-US2-TC9-1` | Reached | `grade10-admin-grading-batches-SC-39` |
-| `grade10-admin-grading-batches-US2-TC10-1` | Reached | `grade10-admin-grading-batches-SC-30` |
-| `grade10-admin-grading-batches-US2-TC11-1` | Reached | `grade10-admin-grading-batches-SC-31` |
-| `grade10-admin-grading-batches-US2-TC12-1` | Reached | `grade10-admin-grading-batches-SC-32`, and the batch's close in `grade10-admin-grading-batches-SC-06` |
-| `grade10-admin-grading-batches-US2-TC13-1` | Kept, stated elsewhere | The read grant is the counter capability's, as `grade10-admin-grading-batches-US1-TC8-1` |
-| `grade10-admin-grading-batches-US3-TC1-1` | Reached | `grade10-admin-grading-batches-SC-34`, and the same-day letter of `grade10-admin-grading-batches-SC-37` |
-| `grade10-admin-grading-batches-US3-TC2-1` | Reached | `grade10-admin-grading-batches-SC-35`, and `grade10-admin-grading-batches-SC-37` |
-| `grade10-admin-grading-batches-US3-TC3-1` | Reached | `grade10-admin-grading-batches-SC-36`, and `grade10-admin-grading-batches-SC-37` |
-| `grade10-admin-grading-batches-US3-TC4-1` | Reached | `grade10-admin-grading-batches-SC-34` |
-| `grade10-admin-grading-batches-US3-TC5-1` | Folded | No scenario refused a held card with no date the grader expects it; folded as `grade10-admin-grading-batches-SC-47`, with the rule on the exceptions requirement |
-| `grade10-admin-grading-batches-US4-TC1-1` | Reached | `grade10-admin-grading-batches-SC-17` |
-| `grade10-admin-grading-batches-US4-TC2-1` | Reached | `grade10-admin-grading-batches-SC-20` |
-| `grade10-admin-grading-batches-US4-TC3-1` | Reached | `grade10-admin-grading-batches-SC-21` |
-| `grade10-admin-grading-batches-US4-TC4-1` | Folded | The requirement refused a re-estimate with no reason and no scenario stated it; folded as `grade10-admin-grading-batches-SC-48` |
-| `grade10-admin-grading-batches-US4-TC5-1` | Kept, stated elsewhere | The read grant is the counter capability's, as `grade10-admin-grading-batches-US1-TC8-1` |
-| `grade10-admin-grading-batches-US5-TC1-1` | Reached | `grade10-admin-grading-batches-SC-09` |
-| `grade10-admin-grading-batches-US5-TC2-1` | Reached | `grade10-admin-grading-batches-SC-40` |
-| `grade10-admin-grading-batches-US5-TC3-1` | Folded | The tile at the cap was a rule with no scenario; folded as `grade10-admin-grading-batches-SC-49` |
-| `grade10-admin-grading-batches-US5-TC4-1` | Reached | `grade10-admin-grading-batches-SC-41` |
-| `grade10-admin-grading-batches-US5-TC5-1` | Folded | A hand-in that leaves the safe exactly at its cap is taken, which no scenario stated; folded as `grade10-admin-grading-batches-SC-49` with `grade10-admin-grading-batches-US5-TC3-1` |
-| Raised: the ship form's insured total | Landed as Q73, and folded | Read-only, the sum of the batch's cards' declared values at ship, recorded as the figure declared to the courier. The shipping act no longer lists it among the fields that can be unset, the insured-total requirement carries `Derived, never typed`, and `grade10-admin-grading-batches-SC-43` states it; `grade10-admin-grading-batches-US1-TC15-1` walks it |
-| Raised: how far `a cert already held elsewhere` reaches | Landed as Q74, and folded | Any card at the same grader carrying that cert, in any submission and any batch, batches already received included. The scan requirement now says so and `grade10-admin-grading-batches-SC-46` states it; `grade10-admin-grading-batches-US2-TC15-1` walks it |
-| `grade10-admin-grading-batches-SC-01` | Case added | `grade10-admin-grading-batches-US1-TC10-1` - the first hand-in for a trio opens the batch |
-| `grade10-admin-grading-batches-SC-02` | Case added | `grade10-admin-grading-batches-US1-TC11-1` - the second hand-in joins the standing batch |
-| `grade10-admin-grading-batches-SC-04`, `grade10-admin-grading-batches-SC-08` | Case added | `grade10-admin-grading-batches-US1-TC12-1` - the cut-off passes, the row reads Closed with nothing written, and it ships the next day |
-| `grade10-admin-grading-batches-SC-05` | Case added | `grade10-admin-grading-batches-US2-TC14-1` - the box arrives, the row reads back unchecked, and the badge turns after a day |
-| `grade10-admin-grading-batches-SC-07` | Case added | `grade10-admin-grading-batches-US1-TC13-1` - a hand-in after the cut-off joins the next batch |
-| `grade10-admin-grading-batches-SC-16` | Case added | `grade10-admin-grading-batches-US1-TC14-1` - a cover figure in another currency, refused and never converted |
-| `grade10-admin-grading-batches-SC-18` | Case added | `grade10-admin-grading-batches-US4-TC6-1` - the stage that is the move carries the whole batch |
-| `grade10-admin-grading-batches-SC-19` | Case added | `grade10-admin-grading-batches-US4-TC7-1` - the same stage on a second morning tells nobody again |
-| `grade10-admin-grading-batches-SC-22` | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
-| `grade10-admin-grading-batches-SC-50` | Case added | `grade10-admin-grading-batches-US4-TC9-1` - the due-back badge stands from the estimated day, gives way to running late the day after, and stands no longer once the batch is received |
-| `grade10-admin-grading-batches-SC-51` | Case added | `grade10-admin-grading-batches-US2-TC16-1` - an unmatched line resolved by naming the card it meant, a second closed as the grader's error with a reason, and neither holding the finish |
-| `grade10-admin-grading-batches-SC-52` | Case added, added after the run | `grade10-admin-grading-batches-US2-TC17-1`: decided outside the blind pass, from the worker refusing an arrival while a submission is not yet graded; the row offers no Arrived, and one sent anyway is refused by name |
-| `grade10-admin-grading-batches-SC-53` | Case added, added after the run | `grade10-admin-grading-batches-US3-TC6-1`: decided outside the blind pass, from the worker holding the finish on a travelled card no manifest line names |
-| `grade10-admin-grading-batches-SC-54` | Case added, added after the run | `grade10-admin-grading-batches-US2-TC18-1`: decided outside the blind pass, and Operations' open ❓ on the console page; a slab no line names is added to the manifest as the grader's omission, then scanned |
-| `grade10-admin-grading-batches-SC-55` | Case added, added after the run | `grade10-admin-grading-batches-US1-TC16-1`: decided outside the blind pass, and Product's open ❓ on the console page; every batch not yet received on each page in that order, the rest paged newest first |
-| `grade10-admin-grading-batches-SC-14`, `grade10-admin-grading-batches-SC-33`, `grade10-admin-grading-batches-SC-42` | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
+| `grade10-admin-grading-batches-US1-TC1-1` | Reached | Marking it shipped moves every submission and tells every collector, and the packing list |
+| `grade10-admin-grading-batches-US1-TC2-1` | Folded | No scenario said a batch still taking cards offers no way to ship it; folded as a scenario, with the rule on the shipping requirement |
+| `grade10-admin-grading-batches-US1-TC3-1` | Reached | A ship date ahead of today refused |
+| `grade10-admin-grading-batches-US1-TC4-1` | Reached | The act held while a field it needs is unset |
+| `grade10-admin-grading-batches-US1-TC5-1` | Reached | A declared total above the courier's cover refused. The case reads the warning tone, the scenario the refusal: the same rule at two altitudes. Whether a batch over the cover is split or held is Q29's open ❓ and is not in either |
+| `grade10-admin-grading-batches-US1-TC6-1` | Reached | Marking it shipped moves every submission and tells every collector |
+| `grade10-admin-grading-batches-US1-TC7-1` | Folded | The console opens a batch for a trio before its first card, which no scenario said; folded as a scenario, with the rule beside `Opened on first use`. Its second reading, a card at another level, is walked by `grade10-admin-grading-batches-US1-TC17-1` |
+| `grade10-admin-grading-batches-US1-TC8-1` | Retired at review, `deprecated` | The read grant is `grade10-admin/grading/counter`'s grant rule (the console shows only what the operator may do), walked in the counter suite; the batches spec never stated it |
+| `grade10-admin-grading-batches-US1-TC9-1` | Kept, out of the requirements | The in-flight form is presentation; the panel's colocated test decides it, and a walk exercises it beside that test |
+| `grade10-admin-grading-batches-US2-TC1-1` | Reached | Nothing scanned until the manifest and the invoice are in |
+| `grade10-admin-grading-batches-US2-TC2-1` | Reached | Nothing scanned until the manifest and the invoice are in |
+| `grade10-admin-grading-batches-US2-TC3-1` | Reached | A scan matching the cert to the card the manifest names, and the counters |
+| `grade10-admin-grading-batches-US2-TC4-1` | Reached, and raised | A cert another submission holds, refused by name. The case asked how far `held elsewhere` reaches; Q74 settles it as one cert per grader across every batch and submission, the scan requirement now says so, and a scenario states the reach |
+| `grade10-admin-grading-batches-US2-TC5-1` | Reached | A cert the manifest does not carry, refused |
+| `grade10-admin-grading-batches-US2-TC6-1` | Reached | A manifest line naming no intake id in the batch, held unmatched |
+| `grade10-admin-grading-batches-US2-TC7-1` | Reached | A card returned raw, recorded ungraded with the grader's code. The case's `the card's fee stands` was the fee's fate per outcome, `grade10-site/grading/submission-lifecycle`'s and Q5's open ❓, not this capability's; dropped from the case at review |
+| `grade10-admin-grading-batches-US2-TC8-1` | Reached | A card moved up a level owing the sheet's difference, and the invoice reconciled against it |
+| `grade10-admin-grading-batches-US2-TC9-1` | Reached | An invoice that disagrees with the sheet, the shop's to settle |
+| `grade10-admin-grading-batches-US2-TC10-1` | Reached | A half-scanned box put down and taken up again, and the counters read on it |
+| `grade10-admin-grading-batches-US2-TC11-1` | Reached | Finishing held while a line or a slab is unresolved |
+| `grade10-admin-grading-batches-US2-TC12-1` | Reached | Finishing making every submission ready and telling each collector once, and the batch reading received |
+| `grade10-admin-grading-batches-US2-TC13-1` | Retired at review, `deprecated` | The read grant is the counter capability's, as `grade10-admin-grading-batches-US1-TC8-1` |
+| `grade10-admin-grading-batches-US3-TC1-1` | Reached | A card held by the grader recorded with its expected date, and the same-day letter |
+| `grade10-admin-grading-batches-US3-TC2-1` | Reached | A card that did not come back owing its declared value, and the same-day letter |
+| `grade10-admin-grading-batches-US3-TC3-1` | Reached | A damaged slab photographed in the box before it leaves it, and the same-day letter |
+| `grade10-admin-grading-batches-US3-TC4-1` | Reached | A card held by the grader while the batch can still be finished |
+| `grade10-admin-grading-batches-US3-TC5-1` | Folded | No scenario refused a held card with no date the grader expects it; folded as a scenario, with the rule on the exceptions requirement |
+| `grade10-admin-grading-batches-US4-TC1-1` | Reached | The morning read recording the grader's stage in its own words |
+| `grade10-admin-grading-batches-US4-TC2-1` | Reached | A batch past its estimate reading late with nothing written |
+| `grade10-admin-grading-batches-US4-TC3-1` | Reached | A re-estimate taking a reason and telling every collector that day |
+| `grade10-admin-grading-batches-US4-TC4-1` | Folded | The requirement refused a re-estimate with no reason and no scenario stated it; folded as a scenario |
+| `grade10-admin-grading-batches-US4-TC5-1` | Retired at review, `deprecated` | The read grant is the counter capability's, as `grade10-admin-grading-batches-US1-TC8-1` |
+| `grade10-admin-grading-batches-US5-TC1-1` | Reached | The tiles reading the day over the counter |
+| `grade10-admin-grading-batches-US5-TC2-1` | Reached | The safe's total counting the ready slabs still held |
+| `grade10-admin-grading-batches-US5-TC3-1` | Folded | The tile at the cap was a rule with no scenario; folded as a scenario |
+| `grade10-admin-grading-batches-US5-TC4-1` | Reached | A hand-in that would carry the safe past its cap, refused |
+| `grade10-admin-grading-batches-US5-TC5-1` | Folded | A hand-in that leaves the safe exactly at its cap is taken, which no scenario stated; folded as a scenario with `grade10-admin-grading-batches-US5-TC3-1` |
+| Raised: the ship form's insured total | Landed as Q73, and folded | Read-only, the sum of the batch's cards' declared values at ship, recorded as the figure declared to the courier. The shipping act no longer lists it among the fields that can be unset, the insured-total requirement carries `Derived, never typed`, and a scenario states it; `grade10-admin-grading-batches-US1-TC15-1` walks it |
+| Raised: how far `a cert already held elsewhere` reaches | Landed as Q74, and folded | Any card at the same grader carrying that cert, in any submission and any batch, batches already received included. The scan requirement now says so and a scenario states it; `grade10-admin-grading-batches-US2-TC15-1` walks it |
+| The first card handed in opening the batch | Case added | `grade10-admin-grading-batches-US1-TC10-1` - the first hand-in for a trio opens the batch |
+| A second batch never opening beside an open one | Case added | `grade10-admin-grading-batches-US1-TC11-1` - the second hand-in joins the standing batch |
+| The cut-off passing, and the next day's ship | Case added | `grade10-admin-grading-batches-US1-TC12-1` - the cut-off passes, the row reads Closed with nothing written, and it ships the next day |
+| The box arriving, back and unchecked | Case added | `grade10-admin-grading-batches-US2-TC14-1` - the box arrives, the row reads back unchecked, and the badge turns after a day |
+| A card handed in after the cut-off | Case added | `grade10-admin-grading-batches-US1-TC13-1` - a hand-in after the cut-off joins the next batch |
+| A cover figure in another currency | Case added | `grade10-admin-grading-batches-US1-TC14-1` - a cover figure in another currency, refused and never converted |
+| The stage that is the move | Case added | `grade10-admin-grading-batches-US4-TC6-1` - the stage that is the move carries the whole batch |
+| The same stage recorded twice | Case added | `grade10-admin-grading-batches-US4-TC7-1` - the same stage on a second morning tells nobody again |
+| A re-estimate to the date already set | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
+| The due-back badge | Case added | `grade10-admin-grading-batches-US4-TC9-1` - the due-back badge stands from the estimated day, gives way to running late the day after, and stands no longer once the batch is received |
+| An unmatched line resolved | Case added | `grade10-admin-grading-batches-US2-TC16-1` - an unmatched line resolved by naming the card it meant, a second closed as the grader's error with a reason, and neither holding the finish |
+| The box not recorded arrived before its grades are in | Case added, added after the run | `grade10-admin-grading-batches-US2-TC17-1`: decided outside the blind pass, from the worker refusing an arrival while a submission is not yet graded; the row offers no Arrived, and one sent anyway is refused by name |
+| A card no manifest line names holding finishing | Case added, added after the run | `grade10-admin-grading-batches-US3-TC6-1`: decided outside the blind pass, from the worker holding the finish on a travelled card no manifest line names |
+| A slab the manifest leaves out | Case added, added after the run | `grade10-admin-grading-batches-US2-TC18-1`: decided outside the blind pass, and Operations' open ❓ on the console page; a slab no line names is added to the manifest as the grader's omission, then scanned |
+| The list putting what waits on the shop first | Case added, added after the run | `grade10-admin-grading-batches-US1-TC16-1`: decided outside the blind pass, and Product's open ❓ on the console page; every batch not yet received on each page in that order, the rest paged newest first |
+| A card at another level waiting for its own batch | Case added at review | `grade10-admin-grading-batches-US1-TC17-1`: no case walked it; the case at the other level joins its own batch and leaves the open one unchanged |
+| Two operators shipping one parcel, a box finished twice, two desks against one shelf | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
 
 ### Manual
 
