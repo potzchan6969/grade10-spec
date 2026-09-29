@@ -1,8 +1,7 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** reopened
-**Reviewed:** 2026-09-25, lapsed 2026-09-29
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -1040,7 +1039,7 @@ withdrawn.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -1058,8 +1057,8 @@ withdrawn.
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A lot that was published, listed in the catalogue, then called off by an operator |
-| <lot_1 address> | The address of <lot_1> from when it was published |
+| `<lot_1>` | A lot that was published, listed in the catalogue, then called off by an operator |
+| `<lot_1 address>` | The address of `<lot_1>` from when it was published |
 
 **Steps:**
 
