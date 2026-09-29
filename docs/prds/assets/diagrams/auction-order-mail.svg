@@ -193,8 +193,8 @@ svg[data-diagram="auction-order-mail"] .c-lane{fill: var(--lane-fill); stroke: v
           <text data-node-label="" data-detail-anchor="" x="331" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Grade10</text>
           <text data-detail="context" x="331" y="111" class="t-muted" font-size="7" text-anchor="middle">order mail</text>
         </g>
-        <g data-step="operator" id="auction-order-mail-node-operator" data-node-id="operator" data-node-label="Operator" aria-label="Focus Operator, the post-sale queue, Sequence participant" data-node-kind="external" data-node-sublabel="the post-sale queue" data-node-context="Sequence participant">
-          <title>Operator · the post-sale queue · Sequence participant</title>
+        <g data-step="operator" id="auction-order-mail-node-operator" data-node-id="operator" data-node-label="Operator" aria-label="Focus Operator, Orders, Sequence participant" data-node-kind="external" data-node-sublabel="Orders" data-node-context="Sequence participant">
+          <title>Operator · Orders · Sequence participant</title>
           <rect x="452" y="72" width="148" height="54" rx="6" class="c-mask"/>
           <rect x="452" y="72" width="148" height="54" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(458 78) scale(0.6875)">
@@ -202,7 +202,7 @@ svg[data-diagram="auction-order-mail"] .c-lane{fill: var(--lane-fill); stroke: v
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="526" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Operator</text>
-          <text data-detail="context" x="526" y="111" class="t-muted" font-size="7" text-anchor="middle">the post-sale queue</text>
+          <text data-detail="context" x="526" y="111" class="t-muted" font-size="7" text-anchor="middle">Orders</text>
         </g>
         
       </svg>

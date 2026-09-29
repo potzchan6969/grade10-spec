@@ -197,7 +197,7 @@ never the collector's bid or order, and every page reads the same value.
 ## Admin Panel
 
 An operator drafts a lot, fills it, prices and schedules it, holds its stock
-and publishes it; from the close on, the sale is worked in the post-sale queue
+and publishes it; from the close on, the sale is worked in Orders
 — [Auction Management](/p/grade10-admin/auction/management).
 
 ::image{src="assets/diagrams/auction-listing-status.svg" alt="A listing from Draft to Created, Published, Closed and Settled, with Canceled beneath, reached by calling off a created or published listing"}
