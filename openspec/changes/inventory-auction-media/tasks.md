@@ -1,8 +1,8 @@
 # Tasks: Inventory product assets in Auction listings
 
-## 1. Planning records (grade10-spec)
+## 1. Planning records (grade10-spec) (owner: @mason5991)
 
-- [ ] 1.1 Verify the Product Assets and Auction Listings PRDs, QA suites, and delivery plan with `pnpm check:manual`, `pnpm run tcs:validate`, and `openspec validate inventory-auction-media --strict`.
+- [x] 1.1 Verify the Product Assets and Auction Listings PRDs, QA suites, and delivery plan with `pnpm check:manual`, `pnpm run tcs:validate`, and `openspec validate inventory-auction-media --strict`.
 
 ## 2. Inventory source media (grade10) (owner: @htonyl)
 
