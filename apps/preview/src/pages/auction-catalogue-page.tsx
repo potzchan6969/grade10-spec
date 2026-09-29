@@ -410,7 +410,7 @@ function AuctionCataloguePage({
                   <ul
                     aria-busy="true"
                     aria-label="Loading auctions"
-                    className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-4"
+                    className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-16 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-12"
                   >
                     {Array.from({ length: skeletonCount }, (_, index) => (
                       // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.

@@ -16,8 +16,9 @@ const REVEAL_STAGGER_MS = 40;
 const REVEAL_STAGGER_CAP = 8;
 const SKELETON_FIXTURE_LOT = COLLECTION_LOTS[0];
 
+/** One column below `sm`; column gap tracks page inset from `sm` up. */
 const GRID_CLASS =
-  "grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-4";
+  "grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-16 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-12";
 
 type AuctionCatalogueAllAuctionsGridProps = {
   lots: readonly CatalogueLot[];
