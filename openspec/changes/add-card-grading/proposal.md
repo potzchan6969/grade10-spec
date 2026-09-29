@@ -163,10 +163,11 @@ first submission owns (`decisions.md` Q18, Q19).
   laid out as the vault's are; `packages/ui` gains the `grading-submission`
   block set and its stories; `packages/i18n` gains a `grading` namespace in
   every shared catalog and head entries for the collector's surfaces.
-  `packages/grading/admin-frontend` is also a consumer of `@grade10/ui`: its
-  console-side WhatsApp templates fill through the block set's own
-  `fillGradingCopy`, the one filler both the collector's page and the
-  console hold to the same "never a literal placeholder" rule.
+  The blocks take their formatted lines as functions and fill no
+  placeholder themselves: each app fills its words through its own
+  catalog, so the collector's page and the console's WhatsApp templates
+  hold to the same "never a literal placeholder" rule with one filler
+  apiece.
 - **Worker** — `apps/backend/grade10/grading`, its own Neon database, one
   writer of the status, sweeps for the plan's clocks, the missed visit, the
   uncollected ladder and the grader's morning read, and a `grading_settings`
