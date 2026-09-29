@@ -10,6 +10,7 @@ import {
   WINNER_ORDER_CONTENTS,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
+import { PROOF_SUBMITTED_TOAST } from "./winner-order-proof-feedback";
 
 const meta = {
   ...winnerOrderMeta(),
@@ -180,10 +181,8 @@ export const SubmitBankPaymentProof: Story = {
       ).not.toBeNull();
     });
     await waitFor(() => {
-      expect(page.getByText("Proof submitted")).toBeVisible();
-      expect(
-        page.getByText("We’ll verify your payment shortly."),
-      ).toBeVisible();
+      expect(page.getByText(PROOF_SUBMITTED_TOAST.title)).toBeVisible();
+      expect(page.getByText(PROOF_SUBMITTED_TOAST.description)).toBeVisible();
     });
     expect(
       canvas.queryByRole("button", { name: "Submit Payment Proof" }),
