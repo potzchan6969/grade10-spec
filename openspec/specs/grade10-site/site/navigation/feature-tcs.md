@@ -66,7 +66,7 @@ The catalogue publishes <a published lot>.
 
 * The nested lot surface renders, not the auction above it.
 
-<!-- trace:case id=g10.site-navigation.TC-68k rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
+<!-- trace:case id=g10.site-navigation.TC-68k rev=2 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
 ### grade10-site-site-navigation-US1-TC3-2: Unknown address resolves to not-found, without naming it
 
 **Classification:**

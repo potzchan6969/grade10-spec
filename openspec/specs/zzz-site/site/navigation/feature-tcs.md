@@ -70,7 +70,7 @@ A collector who moved from home to sign-in.
 
 * Sign-in renders, not home.
 
-<!-- trace:case id=zzz.site-navigation.TC-c5s rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
+<!-- trace:case id=zzz.site-navigation.TC-c5s rev=2 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
 ### zzz-site-site-navigation-US1-TC3-2: Unknown address resolves to not-found, never home, never naming it
 
 **Classification:**
