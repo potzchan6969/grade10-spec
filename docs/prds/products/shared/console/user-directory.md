@@ -31,9 +31,13 @@ submits an empty list, leaving what an empty list means to the console.
   does not reorder the rows it was given
 - 🚧 **Create** — offered only when the console supplies a create handler; the
   create dialog collects name, email, and roles from the console-supplied
-  vocabulary; success reports the created account for the console to open; a
-  duplicate email shows a refusal and an open-existing action that reports the
-  existing account
+  vocabulary; Create stays disabled until a role is selected; every create is
+  confirmed against a preview of the trimmed name, email, and roles; a note
+  sits on that confirmation only when the email is malformed or off the
+  console's list, or a chosen role is locked; the typed email is in bold only
+  for an email note, and a locked role label is in bold only for a role note;
+  confirming the preview reports the created account, or a duplicate email
+  shows a refusal and an open-existing action
 
 ## Account Panel
 

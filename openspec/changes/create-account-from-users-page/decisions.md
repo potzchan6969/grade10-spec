@@ -39,6 +39,9 @@
 | Q14 | Are name and email required on create? | Name and email are required. - decided by the round | Optional name, or accept any string including blank |
 | Q15 | Required name and email — Confirm disabled until both present, or refuse on submit with an inline message? | Confirm disabled until both name and email are present. - decided by the round | Refuse on submit with an inline required message |
 | Q16 | When the session lacks `user:set-role`, offer only `user` in the create dialog, or offer every role and refuse after submit? | Console offers only `user` in the role options when the session lacks `user:set-role`; server still refuses a non-`user` role (stale session). - decided by the round | Offer every closed-set role and refuse after submit |
+| Q17 | Off-list or malformed email on create — refuse, warn, or create silently? | Warning confirmation, not a refuse. Grade10 domains are `9gag.com` and `memestrategy.com` (exact host after the last `@`, without letter case). Confirming still creates. Server accepts any email. | Refusing off-list or malformed, or silently creating |
+| Q18 | Warn when creating admin? | Warn on admin create — that role cannot be demoted once created. The same confirmation holds the email check when both apply. The console supplies the locked role ids; the dialog does not hardcode `admin`. - decided by this request | Silent create of admin, or a second dialog after the email warning |
+| Q19 | Always confirm create, or only when email or a locked role looks wrong? | Always confirm against a preview, even when the draft looks fine. Email and locked-role notes sit on that same confirmation when they apply. Copy is a double-check, not an alarm. - decided by this request | Create immediately when the email and roles look fine |
 
 ## Raised
 

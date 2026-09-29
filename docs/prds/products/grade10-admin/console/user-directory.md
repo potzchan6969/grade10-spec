@@ -37,10 +37,16 @@ Shared rules for the read and the components:
 
 🚧 An operator holding `user:create` creates a passwordless Auth account from
 Users — name, email, and roles from the closed set — for someone who has never
-signed in. Create is offered only with that grant. Without `user:set-role`, the
-create dialog offers only `user`. A successful create opens the new account's
-panel. A duplicate email is refused in the create dialog, with a control there
-that opens the existing account.
+signed in.
+
+- **Grant** — offered only with `user:create`
+- **Roles** — Create stays disabled until at least one role is selected. Without `user:set-role`, the dialog offers only `user`
+- **Success** — the new account's panel opens
+- **Duplicate** — refused in the dialog, with a control that opens the existing account
+- 🚧 **Confirm** — every create is confirmed against a preview of the trimmed name, email, and roles
+- 🚧 **Email** — expects `@9gag.com` or `@memestrategy.com`. A malformed address or one outside those domains adds a note on that confirmation; the email is in bold; the usual addresses are listed
+- 🚧 **Admin** — creating `admin` adds a note on that same confirmation — `admin` cannot be removed from the account once created; the role name is in bold
+- 🚧 **Trim** — name and email are trimmed before the confirmation and before create
 
 :::detail{title="Product decisions" for="pm"}
 An operator holding a ticket that names a person could not find them by name,

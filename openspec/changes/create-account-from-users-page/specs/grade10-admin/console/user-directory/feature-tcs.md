@@ -43,13 +43,15 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). No Au
 1. Navigate to <grade10 admin users url>.
 2. Choose Create.
 3. Enter <new name>, <new email>, and <roles>, and confirm.
-4. Read the open panel and the page address.
+4. Confirm the review.
+5. Read the open panel and the page address.
 
 **Expected Results:**
 
 * Step 2 offers Create.
-* Step 3 creates the account.
-* Step 4 opens that account's panel beside the list, addressed like picking a row.
+* Step 3 shows a confirmation with the admin note and does not create.
+* Step 4 creates the account.
+* Step 5 opens that account's panel beside the list, addressed like picking a row.
 
 ### grade10-admin-console-user-directory-US4-TC2-1: Create is not offered without user:create
 
@@ -107,12 +109,14 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). Auth 
 1. Navigate to <grade10 admin users url>.
 2. Choose Create.
 3. Enter a name, <taken email>, and role `user`, and confirm.
-4. Choose the way offered to open the existing account.
+4. Confirm the review.
+5. Choose the way offered to open the existing account.
 
 **Expected Results:**
 
-* Step 3 is refused with a clear message and a way to open the existing account.
-* Step 4 opens <existing account>'s panel.
+* Step 3 shows a confirmation of the draft and does not create.
+* Step 4 is refused with a clear message and a way to open the existing account.
+* Step 5 opens <existing account>'s panel.
 * No second Auth row holds <taken email>.
 
 ### grade10-admin-console-user-directory-US4-TC4-1: Create with only user:create offers plain user
@@ -146,11 +150,57 @@ Signed in as admin(holds `user:list` and `user:create`, not `user:set-role`). No
 1. Navigate to <grade10 admin users url>.
 2. Choose Create.
 3. Enter <plain name>, <plain email>, and <roles>, and confirm.
+4. Confirm the review.
 
 **Expected Results:**
 
 * Create is offered.
-* Step 3 succeeds and opens that account's panel with roles `user` only.
+* Step 3 shows a confirmation of the draft and does not create.
+* The confirmation has no email note and no admin note.
+* Step 4 succeeds and opens that account's panel with roles `user` only.
+
+### grade10-admin-console-user-directory-US4-TC5-1: Create review notes when the role is admin, and combines with an email check
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-console-user-directory-US-04
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create` and `user:set-role`). Users create expects `@9gag.com` or `@memestrategy.com`. No Auth account holds <fine email> or <off-list email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <fine email> | someone@9gag.com |
+| <off-list email> | someone@example.com |
+| <roles> | `admin` |
+
+**Steps:**
+
+1. Navigate to <grade10 admin users url>.
+2. Choose Create.
+3. Enter a name, <fine email>, and <roles>, and confirm.
+4. Read the review and go back.
+5. Confirm Create again, then confirm the review.
+6. Repeat from Create with <off-list email> and <roles>, and confirm.
+
+**Expected Results:**
+
+* Step 3 shows a confirmation with the admin note and does not create.
+* The note says `admin` cannot be removed once created; that role is in bold; there is no email note.
+* Step 4 returns to the create form and creates nothing.
+* Step 5 creates the account.
+* Step 6 shows the email check and the admin note on the same confirmation.
 
 ## Settled
 
@@ -161,6 +211,7 @@ Signed in as admin(holds `user:list` and `user:create`, not `user:set-role`). No
 **Raised, folded into spec**
 
 - None beyond the journey: create opens panel, Create gated on `user:create`, duplicate opens existing, plain-user create with `user:create` alone — folded as `grade10-admin-console-user-directory-SC-20` through `SC-23`.
+- Review notes when the role is `admin`; email and admin on one confirmation — folded as `grade10-admin-console-user-directory-SC-25`.
 
 **Uncovered anchors**
 

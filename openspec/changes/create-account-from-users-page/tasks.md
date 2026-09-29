@@ -47,8 +47,8 @@ Claimable against fixtures; no running backend.
   `UserCreateDialogCopy` from `@grade10/frontend-console`
   (`shared-console-user-directory-SC-01`)
 - [x] 3.3 Dialog collects name, email, and console-supplied roles on
-  `FormDialog`; Confirm disabled until name and email are present; no password
-  field; empty role selection submits an empty list
+  `FormDialog`; Confirm disabled until name, email, and at least one role
+  are present; no password field; no empty submit
   (`shared-console-user-directory-SC-34`)
 - [x] 3.4 Success reports the created account identifier; duplicate refusal
   offers open-existing that calls `onOpenExisting` with the existing id; the

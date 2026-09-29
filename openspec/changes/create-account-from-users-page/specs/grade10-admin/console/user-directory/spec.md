@@ -12,6 +12,7 @@ everything access is not.
   - Create offered only with `user:create`
   - Success opens the new account's panel
   - Duplicate email opens the existing account
+  - Review before create: every Create opens a confirmation of the trimmed draft; a note is added when the email is malformed or outside `9gag.com` and `memestrategy.com`, or when the role is `admin`
 
 ## ADDED Requirements
 
@@ -33,6 +34,17 @@ the create grant.
 4. When the email is already taken, create is refused with a clear message and
    a way to open the existing account; choosing that way opens that account's
    panel. No second Auth row is created.
+5. After Create, a confirmation always previews the trimmed name, email, and
+   roles. Grade10 create expects `@9gag.com` or `@memestrategy.com` (exact host
+   after the last `@`, without letter case). A malformed address or one outside
+   those domains adds a note on that same confirmation. Confirming still
+   creates. Going back returns to the create form and creates nothing. The
+   server still accepts any email. A well-formed on-list email still shows the
+   confirmation; confirming it then creates.
+6. Creating `admin` adds a note on that same confirmation — that role cannot
+   be removed once created; the role name is in bold. Confirming still creates.
+   An email that also needs a check sits on the same confirmation. Name and
+   email are trimmed before the confirmation and before create.
 
 **Server** - Grade10 SHALL refuse create on the server when the session lacks
 `user:create`, and SHALL refuse a non-`user` role when the session lacks
@@ -44,7 +56,8 @@ the create grant.
 - **GIVEN** a signed-in operator who holds `user:list`, `user:create`, and `user:set-role`
 - **AND** no Auth account holds the email
 - **WHEN** they choose Create on Users, enter a name, that email, and role `admin`, and confirm
-- **THEN** that account's panel opens beside the list
+- **THEN** a confirmation is shown with the admin note
+- **AND** confirming the review opens that account's panel beside the list
 - **AND** the panel shows that name, email, and `admin`
 
 #### Scenario: grade10-admin-console-user-directory-SC-21 - Create is not offered without user:create
@@ -70,8 +83,29 @@ the create grant.
 - **GIVEN** a signed-in operator who holds `user:list` and `user:create` but not `user:set-role`
 - **AND** no Auth account holds the email
 - **WHEN** they choose Create, enter a name, that email, and role `user`, and confirm
-- **THEN** that account's panel opens beside the list
+- **THEN** a confirmation is shown and no account is created yet
+- **AND** confirming the review opens that account's panel beside the list
 - **AND** the panel shows roles `user` only
+
+#### Scenario: grade10-admin-console-user-directory-SC-24 - Users create review notes a malformed or off-list email
+**Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
+
+- **GIVEN** a signed-in operator who holds `user:create`
+- **AND** Users create expects `@9gag.com` or `@memestrategy.com`
+- **WHEN** they choose Create, enter a name and an email that is malformed or whose host is not those domains, and confirm
+- **THEN** the confirmation shows the email note and no account is created
+- **AND** confirming the review creates the account
+- **AND** going back returns to the create form and creates nothing
+
+#### Scenario: grade10-admin-console-user-directory-SC-25 - Users create review notes when the role is admin
+**Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
+
+- **GIVEN** a signed-in operator who holds `user:create`
+- **WHEN** they choose Create, enter a name, an email that needs no email note, and role `admin`, and confirm
+- **THEN** the confirmation is shown with the admin note and no account is created
+- **AND** the note says `admin` cannot be removed once created, with that role in bold
+- **AND** confirming the review creates the account
+- **AND** an email that also needs a check sits on the same confirmation
 
 ## MODIFIED Requirements
 

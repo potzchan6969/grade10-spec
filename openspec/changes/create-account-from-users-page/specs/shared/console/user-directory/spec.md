@@ -16,6 +16,7 @@ requirements of `shared-ui/auth-user-directory` forward; only the home moved.
   - Create dialog: collects name, email, and roles from the console-supplied vocabulary
   - Success reports the created account: the components decide nothing about what shows next
   - Duplicate open-existing: when create is refused as taken and the consumer supplies the existing account id, the dialog offers `onOpenExisting`
+  - Create review: after Create, a confirmation always previews the trimmed draft; a malformed or off-list email, or a chosen locked role, adds a note on that same confirmation; a clean draft still shows the confirmation; confirming then creates
 
 ## ADDED Requirements
 
@@ -30,8 +31,9 @@ appear.
 
 **The dialog** - `UserCreateDialog` SHALL collect a name, an email, and roles
 from the role vocabulary the consumer supplied. It SHALL NOT offer a password
-field. A submitted role list SHALL keep the offered order, and an empty
-selection SHALL be submitted as an empty list.
+field. Confirm SHALL stay disabled until name and email are present after
+trim, and at least one role is present. A submitted role list SHALL keep the
+offered order and SHALL NOT be empty.
 
 **Success** - On a successful create the dialog SHALL report the created
 account's identifier to the consumer. It SHALL decide nothing about what is
@@ -41,6 +43,25 @@ shown next.
 consumer supplies the existing account's identifier, the dialog SHALL offer an
 open-existing action. Choosing that action SHALL call `onOpenExisting` with
 that identifier. The dialog SHALL decide nothing about what is shown next.
+
+**Review** - `UserCreateDialog` SHALL show a confirmation that previews the
+trimmed draft before calling the create handler, after every Create. Name and
+email SHALL be trimmed before the confirmation and before create; Confirm
+SHALL stay disabled when either trims to empty. The confirmation SHALL
+preview the trimmed name, email, and chosen roles in a table. Email and
+locked-role notes SHALL appear on the same confirmation when they apply: the
+consumer supplies a non-empty list of allowed email domains and the email is
+malformed or the host after the last `@` is not on that list (compared
+without letter case); or any chosen role id is on the consumer-supplied
+locked-role list. Empty or omitted locked-role list SHALL skip the role note.
+The typed email SHALL be shown in bold only when there is an email note. A
+locked role label SHALL be shown in bold only when that role is in the note.
+An email note SHALL name the email issue and SHALL list the allowed domains.
+A locked-role note SHALL name each locked role. Confirming the review SHALL
+call the create handler. Going back SHALL return to the create form with the
+trimmed values and SHALL NOT call the create handler. A well-formed email
+whose host is on the list, with no chosen locked role, SHALL still show the
+confirmation; confirming that review SHALL then call the create handler.
 
 #### Scenario: shared-console-user-directory-SC-33 - Create appears only with a create handler
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
@@ -56,6 +77,7 @@ that identifier. The dialog SHALL decide nothing about what is shown next.
 - **WHEN** an operator opens Create
 - **THEN** the dialog offers name, email, and only the roles the console supplied
 - **AND THEN** the dialog offers no password field
+- **AND THEN** Confirm stays disabled until name, email, and at least one role are present
 
 #### Scenario: shared-console-user-directory-SC-35 - Create success reports the account
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
@@ -74,6 +96,34 @@ that identifier. The dialog SHALL decide nothing about what is shown next.
 - **WHEN** the operator chooses the open-existing action
 - **THEN** the dialog calls `onOpenExisting` with that identifier
 - **AND THEN** the dialog decides nothing about what is shown next
+
+#### Scenario: shared-console-user-directory-SC-37 - Review notes when the email is malformed or off the console list
+**Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
+
+- **GIVEN** a console that supplies a create handler and a non-empty list of allowed email domains
+- **WHEN** an operator confirms Create with a malformed email, or a well-formed email whose host is not on that list
+- **THEN** the dialog shows a confirmation with the email notes and does not call the create handler
+- **AND THEN** the confirmation previews the typed values, shows the typed email in bold, and lists the allowed domains
+- **AND THEN** confirming the review calls the create handler
+- **AND THEN** going back from the confirmation returns to the create form and creates nothing
+
+#### Scenario: shared-console-user-directory-SC-38 - Review notes when a locked role is selected
+**Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
+
+- **GIVEN** a console that supplies a create handler and a locked-role list
+- **WHEN** an operator confirms Create with a chosen role on that list and an email that needs no email note
+- **THEN** the dialog shows a confirmation with the locked-role note and does not call the create handler
+- **AND THEN** the confirmation shows the locked role label in bold and a note that the role cannot be removed once created
+- **AND THEN** confirming the review calls the create handler
+- **AND THEN** when the email also needs a note, email and locked-role notes appear on the same confirmation
+
+#### Scenario: shared-console-user-directory-SC-39 - Review still opens for a well-formed on-list email with no locked role
+**Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
+
+- **GIVEN** a console that supplies a create handler and a non-empty list of allowed email domains
+- **WHEN** an operator confirms Create with a well-formed email whose host is on that list and no locked role
+- **THEN** the confirmation still opens and the create handler has not run
+- **AND THEN** confirming the review calls the create handler
 
 ## MODIFIED Requirements
 

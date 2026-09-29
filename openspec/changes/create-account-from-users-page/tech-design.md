@@ -66,11 +66,11 @@ _Rejected:_ leaving the operator to search the list alone (Q4).
 
 ### Empty roles on the wire
 
-`UserCreateDialog` submits an empty list when nothing is selected
-(`shared-console-user-directory`). The repository maps empty → Auth
-`role: ["user"]` before `createUser`, so BetterAuth always receives a closed
-role and SC-33 still holds. Grant check uses the pre-map / post-map rule
-above (no non-`user` → no `user:set-role`).
+The dialog does not submit empty — Create stays disabled until at least one
+role is selected. The repository may still map empty → Auth `role: ["user"]`
+if the wire is empty, so BetterAuth always receives a closed role and
+`shared-auth-users-SC-33` still holds as the Auth safety net. Grant check
+uses the pre-map / post-map rule above (no non-`user` → no `user:set-role`).
 
 ### Console: new `UserCreateDialog`, reuse FormDialog + role checkboxes
 
@@ -80,7 +80,7 @@ Land in `@grade10/frontend-console` beside `UserRolesDialog`:
 | --- | --- |
 | Shell | Existing `FormDialog` |
 | Fields | Name + email `TextField`s; role checkboxes via `UserRoleOption` (same pattern as `UserRolesDialog`) |
-| Valid | Confirm disabled until name and email are both non-empty (Q15) |
+| Valid | Confirm disabled until name, email, and at least one role are present |
 | Password | Absent |
 | Success | Report created id via `onCreated` (name as ui-design / props dictate) |
 | Duplicate | Refusal copy + open-existing control → `onOpenExisting(existingUserId)` |
@@ -92,6 +92,17 @@ the package public entry (`shared-console-user-directory-SC-01`).
 _Rejected:_ a `mode` flag on Override's `CreateMemberDialog` (Q9).
 _Rejected:_ building the dialog in `grade10-spec` packages — ui-design places
 it in the application console package.
+
+### Email domain warning: console-supplied, Auth unchanged
+
+`UserCreateDialog` accepts optional `allowedEmailDomains` and optional
+`lockedRoleIds`. Every Create opens one confirmation of the trimmed draft
+before `onCreate`. A malformed address, an off-list host, or a chosen locked
+role adds notes on that same confirmation. Name and email are trimmed before
+the confirmation and before create. Confirming proceeds; back clears the
+confirmation only. Grade10 Users supplies `9gag.com` and `memestrategy.com`,
+and `lockedRoleIds={["admin"]}`. The dialog does not hardcode `admin`. Auth
+create is unchanged and still accepts any email.
 
 ### Grade10 wiring: section + page grants
 
