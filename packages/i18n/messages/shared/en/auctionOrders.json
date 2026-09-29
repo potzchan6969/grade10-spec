@@ -68,5 +68,17 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "countrySearchPlaceholder": "e.g. United States"
+  },
+  "detail": {
+    "orderInformation": "Order Information",
+    "collectionMethod": "Collection Method",
+    "orderStatus": "Order Status",
+    "lots": "Lots",
+    "orderNumber": "Order No.",
+    "auction": "Auction",
+    "currency": "Currency",
+    "date": "Date",
+    "invoiceStatus": "Invoice Status",
+    "payNow": "Pay Now"
   }
 }

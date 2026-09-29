@@ -68,5 +68,17 @@
     "confirm": "確認",
     "cancel": "取消",
     "countrySearchPlaceholder": "例如 United States"
+  },
+  "detail": {
+    "orderInformation": "訂單資訊",
+    "collectionMethod": "收貨方式",
+    "orderStatus": "訂單狀態",
+    "lots": "拍品",
+    "orderNumber": "訂單編號",
+    "auction": "拍賣",
+    "currency": "貨幣",
+    "date": "日期",
+    "invoiceStatus": "發票狀態",
+    "payNow": "立即付款"
   }
 }

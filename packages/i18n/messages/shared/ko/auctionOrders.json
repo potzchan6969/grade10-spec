@@ -68,5 +68,17 @@
     "confirm": "확인",
     "cancel": "취소",
     "countrySearchPlaceholder": "예: United States"
+  },
+  "detail": {
+    "orderInformation": "주문 정보",
+    "collectionMethod": "수령 방법",
+    "orderStatus": "주문 상태",
+    "lots": "상품",
+    "orderNumber": "주문 번호",
+    "auction": "경매",
+    "currency": "통화",
+    "date": "날짜",
+    "invoiceStatus": "청구서 상태",
+    "payNow": "지금 결제"
   }
 }
