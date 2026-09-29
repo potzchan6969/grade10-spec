@@ -11,7 +11,7 @@
 - [ ] 2.2 Add the outbox tables and migration `0031_mixpanel_outbox`; record every vault send and Identity Standing in its transaction and remove the direct sends; register the send list; erase with the user `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [ ] 2.3 Verify: the vault package tests and the vault app's db lane
 
-## 3. Loyalty adoption (grade10)
+## 3. Loyalty adoption (grade10) (owner: @ecchochan)
 
 - [ ] 3.1 Test Reward Redeemed and the Member and Tier writes recorded with their facts, none on rollback, and an erasure that records the end of membership once `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [ ] 3.2 Add the outbox tables and migrations `0021_mixpanel_outbox` and `0022_member_erased_at`; record Reward Redeemed in the redemption and Member and Tier on enrolment, every tier change and the end of membership; remove the direct sends and the store's Member and Tier writes; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
