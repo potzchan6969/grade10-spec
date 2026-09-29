@@ -1,30 +1,14 @@
+import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 import type { InvoicePdfBankRails } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 
+const { auctionInvoicePdf } = getMessages("grade10", "en");
+
 const COPY = {
-  documentTitle: "Invoice",
-  billToHeading: "Bill To",
-  shipToHeading: "Ship To",
-  descriptionLabel: "Description",
-  amountLabel: "Amount",
-  invoiceNumberLabel: "Invoice number",
-  sentAtLabel: "Date of issue",
-  paymentDeadlineLabel: "Date due",
-  paymentMethodLabel: "Payment method",
-  bankDetailsHeading: "Bank details",
-  swiftLabel: "SWIFT",
-  fpsLabel: "FPS",
-  hkLocalTransferLabel: "HK local transfer",
-  beneficiaryLabel: "Beneficiary",
-  swiftBicLabel: "SWIFT/BIC",
-  accountIbanLabel: "Account/IBAN",
-  fpsIdLabel: "FPS ID",
-  bankAndCodeLabel: "Bank & code",
-  accountNoLabel: "Account no.",
-  bankReferenceNoteLabel:
-    "Enter this reference in your bank app's Memo or Remarks field. Missing it delays verification. Quote this reference on your transfer:",
+  ...auctionInvoicePdf.document,
+  ...auctionInvoicePdf.invoice,
 } as const;
 
 const BANK_RAILS: InvoicePdfBankRails = {

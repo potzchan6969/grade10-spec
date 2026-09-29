@@ -1,25 +1,13 @@
+import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 import { ReceiptPdf, receiptBreakdown } from "./receipt-pdf";
 
+const { auctionInvoicePdf } = getMessages("grade10", "en");
+
 const COPY = {
-  documentTitle: "Receipt",
-  billToHeading: "Bill To",
-  shipToHeading: "Ship To",
-  descriptionLabel: "Description",
-  amountLabel: "Amount",
-  receiptNumberLabel: "Receipt number",
-  invoiceNumberLabel: "Invoice number",
-  datePaidLabel: "Date paid",
-  paymentMethodLabel: "Payment method",
-  paymentReferenceLabel: "Payment reference",
-  paymentSectionLabel: "Payment",
-  transferReferenceLabel: "Transfer reference",
-  paymentBreakdownLabel: "Payment breakdown",
-  originalInvoiceTotalLabel: "Original Invoice Total",
-  previousPaymentsLabel: "Previous Payments",
-  currentPaymentReceivedLabel: "Current Payment Received",
-  remainingBalanceDueLabel: "Remaining Balance Due",
+  ...auctionInvoicePdf.document,
+  ...auctionInvoicePdf.receipt,
 } as const;
 
 const DATA = {
