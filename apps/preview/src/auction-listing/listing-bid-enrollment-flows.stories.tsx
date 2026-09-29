@@ -9,6 +9,10 @@ const meta = {
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 
+/** The bid panel renders its compact and full layouts together; one shows. */
+const anyVisible = (elements: HTMLElement[]) =>
+  elements.some((element) => element.checkVisibility());
+
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -31,7 +35,7 @@ export const Countdown: Story = {
     expect(
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeVisible();
-    expect(canvas.getByText("Time left")).toBeVisible();
+    expect(anyVisible(canvas.getAllByText("Time left"))).toBe(true);
     expect(canvas.getByText("Recent Bids")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /^Set maximum/ }),
@@ -42,13 +46,13 @@ export const Countdown: Story = {
 
     await userEvent.click(next);
     expect(canvas.getByText("1 day 5 seconds · zero day")).toBeVisible();
-    expect(canvas.getByText(/\dd/)).toBeVisible();
+    expect(anyVisible(canvas.getAllByText(/\dd/))).toBe(true);
 
     await userEvent.click(next);
     await userEvent.click(next);
     await userEvent.click(next);
     expect(canvas.getByText("15 minutes · extended bidding")).toBeVisible();
-    expect(canvas.getByText("Time left (extended)")).toBeVisible();
+    expect(anyVisible(canvas.getAllByText("Time left (extended)"))).toBe(true);
     expect(
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeVisible();
