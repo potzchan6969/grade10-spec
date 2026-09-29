@@ -915,6 +915,15 @@ erDiagram
   leave and the day back at the pinned level's weeks. `batch.shipDate` stays
   null until the batch ships, so the hand-in lead never waits on it.
   **Decided**.
+- **What the page reads of the ladder** — `ladder` on the detail:
+  `{ readyOn, cardsHeld, storageFeePerCardMonth, rungs: { rung, on, passed }[],
+  notice: { postedOn, endsOn, daysLeft } | null } | null`, null before
+  `ready`. `read.ts` derives it at the read by the one
+  `uncollectedLadder(readyAt, pinnedTerms, zone)` the letters read, from the
+  pinned terms; `passed` and `daysLeft` come from the read's own clock, the
+  instant every other clock-read fact on the detail uses, and `cardsHeld`
+  counts the cards `storageRunsOn` counts. It writes nothing. The collector
+  composes `GradingUncollectedLadder` from it and counts nothing. **Decided**.
 - **History in words** — `historyValues` (`@grade10/grading-contracts`) is the
   one derivation from an entry and the detail to its message's values, read
   by the collector's history and the console's timeline alike, each in its

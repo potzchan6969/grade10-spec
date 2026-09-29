@@ -1903,7 +1903,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-14`,
       `grade10-site-grading-submission-lifecycle-SC-17`,
       `grade10-site-grading-submission-lifecycle-SC-19`)
-- [x] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
+- [ ] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
       submission: the code, the hours and the one figure to settle or none, a
       name saved and replaced, an empty name naming nobody, Remove leaving
       nobody named, and naming refused once the cards are collected
@@ -1914,6 +1914,16 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-33`,
       `grade10-site-grading-submission-lifecycle-SC-55`,
       `grade10-site-grading-submission-lifecycle-SC-56`)
+      Reopened: the page renders no ladder, since the detail carries none;
+      ruled after group 34's walk, the page composes
+      `GradingUncollectedLadder` from `SubmissionDetail.ladder`, counting
+      nothing: each rung with its day and passed once reached, the cards
+      held, and the notice's posting date, the days left of the 30 and the
+      day they end. Test red first
+      (`grade10-site-grading-submission-lifecycle-SC-35`,
+      `grade10-site-grading-submission-lifecycle-SC-36`,
+      `grade10-site-grading-submission-lifecycle-SC-37`,
+      `grade10-site-grading-submission-lifecycle-SC-57`)
 - [x] 27.6 Build `WhatNextCard` and `YourDataLine` on the collected page, the
       record carrying the grade, the cert and the papers, and no collected slab
       reading as the shop's stock

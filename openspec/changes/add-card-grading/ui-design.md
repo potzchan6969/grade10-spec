@@ -173,8 +173,8 @@ or an instant through `formatLocalTime` in the zone given.
   row in the `warning` tone
 - **`GradingUncollectedLadder`** — `rungs` (the reminder days, the storage
   day with the fee a card a month, the notice day with the posting date once
-  posted and the 30 days), `readyOn`, `cardsHeld`, `vaultLine`; a `List` of
-  three rungs, a passed rung marked
+  posted, the days left of the 30 and the day they end), `readyOn`,
+  `cardsHeld`, `vaultLine`; a `List` of three rungs, a passed rung marked
 
 ### `@grade10/ui` — existing, reused unchanged
 
@@ -308,8 +308,9 @@ the new `grading` namespace; the words are not written here.
   aboutGrades), pickup (title, items, where, open, toSettle, bring
   (aboveThreshold, named, none)), named (lead, field, placeholder, save,
   badge, namedAt, line, change, remove), vaultIt (title, body, howItWorks),
-  money (every line label, includes, footnote), ladder (reminders, storage,
-  notice, afterNotice, closing), collected (lead, record, lookUp,
+  money (every line label, includes, footnote), ladder (readyLabel,
+  cardsHeldLabel, passedLabel, postedLabel, reminders, storage, notice,
+  noticeLine, afterNotice, closing), collected (lead, record, lookUp,
   photographs, documents, whatNext (vault, auction, yourData)), history
   (title, events), notFound, loading, error
 - **`grading.ceremony.*`** — the `RefusalWords` entry per
@@ -577,7 +578,7 @@ Stories `grading-submission-gradingpickupcard--`, the naming rows `grading-submi
 | Ladder, none reached (`G11`) | the three rungs with their dates, none reached; the vault line | `shared-ui-grading-submission-SC-51` |
 | Ladder, reminded | the reminder rung passed | `shared-ui-grading-submission-SC-52` |
 | Ladder, storage | the storage rung reached; the fee accruing per card | `shared-ui-grading-submission-SC-52` |
-| Ladder, notice | the notice rung with the posting date and the 30 days; after it | `shared-ui-grading-submission-SC-53` |
+| Ladder, notice | the notice rung passed, with the posting date, the days left of the 30 and the day they end; after it | `shared-ui-grading-submission-SC-53` |
 | Ladder, cards excluded | a card withdrawn, paid out or vaulted not counted | `shared-ui-grading-submission-SC-51` |
 
 ### Money on the submission page
