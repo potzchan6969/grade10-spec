@@ -161,7 +161,7 @@ const LEVEL_PICKER_COPY: GradingLevelPickerCopy = {
   title: "Pick a service",
   graderLabel: "Grader",
   highestDeclaredLabel: "Your highest declared value is",
-  levelOpen: "Value up to {ceiling} a card · {fee} a card",
+  levelOpen: ({ ceiling, fee }) => `Value up to ${ceiling} a card · ${fee} a card`,
   estimateTitle: "Your estimate",
   totalLabel: "Total",
   unavailable: "Not available",
@@ -215,7 +215,7 @@ const CARD_LIST_COPY: GradingCardListCopy = {
   paste: "Paste a list",
   emptyTitle: "No cards yet",
   emptyBody: "Add them one at a time, or paste a list you already have.",
-  matched: "{set} · {number} · matched in the catalogue",
+  matched: ({ set, number }) => `${set} · ${number} · matched in the catalogue`,
   matchedNoDetail: "Matched in the catalogue",
   keptAsTyped: "Kept as you typed it · no reference",
   catalogueUnavailable:
@@ -225,8 +225,8 @@ const CARD_LIST_COPY: GradingCardListCopy = {
   referenceSalesLabel: "Recent sales:",
   referenceNote:
     "PSA asks for the value at the grade you expect. A reference, not a valuation.",
-  minimumGrade:
-    "Only encapsulate at {grade} or above · the fee applies either way",
+  minimumGrade: ({ grade }) =>
+    `Only encapsulate at ${grade} or above · the fee applies either way`,
   edit: "Edit",
   remove: "Remove",
 };

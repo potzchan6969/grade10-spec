@@ -69,7 +69,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    copy: LEVEL_PICKER_COPY,
+    copy: { ...LEVEL_PICKER_COPY, levelOpen: fn(LEVEL_PICKER_COPY.levelOpen) },
     graders: GRADERS,
     selectedGraderId: "psa",
     levels: OPEN_LEVELS,
@@ -109,7 +109,8 @@ export const Grader: Story = {
 /** An open level carrying cover, picked by id and marked as the one radio of
  * the group; before the pick it read its cover line and no estimate. Each
  * open level reads its figures inside the open line it was given, the fee
- * once (shared-ui-grading-submission-SC-06,
+ * once, filled by the consumer's own formatter
+ * (shared-ui-grading-submission-SC-06, shared-ui-grading-submission-SC-71,
  * shared-ui-grading-submission-SC-78). */
 export const LevelOpen: Story = {
   render: (args) => <Consumer {...args} />,
@@ -128,6 +129,15 @@ export const LevelOpen: Story = {
         ).toBeInTheDocument();
         expect(regular.getAllByText(/HK\$400/)).toHaveLength(1);
         expect(regular.getByText("Back in about 6 weeks")).toBeInTheDocument();
+      },
+    );
+    await step(
+      "shared-ui-grading-submission-SC-71 - A line carrying a value is the consumer's to fill",
+      async () => {
+        expect(args.copy.levelOpen).toHaveBeenCalledWith({
+          ceiling: "HK$4,000",
+          fee: "HK$400",
+        });
       },
     );
     const express = canvas.getByRole("radio", {

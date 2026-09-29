@@ -21,8 +21,8 @@ import { useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import {
-  fillGradingCopy,
   formatGradingMoney,
+  type GradingFormat,
   type GradingLocaleProps,
 } from "./grading-copy";
 import type { GradingCardMatch, GradingListedCard } from "./types";
@@ -43,7 +43,7 @@ type GradingCardListCap = {
 };
 
 /** One key of the catalog's `plan` family, one prop. A key that words a whole
- * sentence around a value arrives whole and the block fills it. */
+ * sentence around a value arrives as the consumer's formatter for it. */
 type GradingCardListCopy = {
   title: string;
   /** Labels the field a card is added through. */
@@ -54,9 +54,8 @@ type GradingCardListCopy = {
   paste: string;
   emptyTitle: string;
   emptyBody: string;
-  /** Read by a matched card that carries a set and a number. Fills `{set}`
-   * and `{number}`. */
-  matched: string;
+  /** Read by a matched card that carries a set and a number. */
+  matched: GradingFormat<{ set: string; number: string }>;
   /** Read by a matched card that carries neither: the reference names
    * nothing beyond the card itself. */
   matchedNoDetail: string;
@@ -69,8 +68,8 @@ type GradingCardListCopy = {
   /** Read under a matched card's reference sales: the sales are a reference,
    * not a valuation. Arrives whole; the consumer names the grader in it. */
   referenceNote: string;
-  /** The minimum-grade option and what it costs. Fills `{grade}`. */
-  minimumGrade: string;
+  /** The minimum-grade option and what it costs. */
+  minimumGrade: GradingFormat<{ grade: string }>;
   edit: string;
   remove: string;
 };
@@ -252,10 +251,7 @@ function originLine(
   if (unreachable) return copy.catalogueUnavailable;
   if (!card.matched) return copy.keptAsTyped;
   if (card.set == null || card.number == null) return copy.matchedNoDetail;
-  return fillGradingCopy(copy.matched, {
-    set: card.set,
-    number: card.number,
-  });
+  return copy.matched({ set: card.set, number: card.number });
 }
 
 function ListedCard({
@@ -374,7 +370,7 @@ function ListedCard({
               onCheckedChange={(next) => onMinimumGrade(card.id, next)}
               size="sm"
             >
-              {fillGradingCopy(copy.minimumGrade, { grade: card.minimumGrade })}
+              {copy.minimumGrade({ grade: card.minimumGrade })}
             </CheckboxListInput>
           ) : null}
         </VStack>
