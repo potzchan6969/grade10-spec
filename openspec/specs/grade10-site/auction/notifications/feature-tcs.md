@@ -1,7 +1,7 @@
 # grade10-site/auction/notifications Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-09-15, tcs-rules r3.0
 
 **Out of suite:** Progress, bid-activity, delivery, and send-log scenarios this change does not re-accept — existing durable journeys cover them. Close-outcome scenarios SC-37…SC-43 only.
 

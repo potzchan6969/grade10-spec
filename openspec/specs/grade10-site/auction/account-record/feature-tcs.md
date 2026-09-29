@@ -1,7 +1,7 @@
 # grade10-site/auction/account-record Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-09-15, tcs-rules r3.0
 
 ## grade10-site-auction-account-record-US8: Winner opens settlement from My Auctions
 
