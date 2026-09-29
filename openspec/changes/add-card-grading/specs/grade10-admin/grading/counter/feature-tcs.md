@@ -3228,9 +3228,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-13
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
