@@ -210,6 +210,12 @@ The spec governs the confirmations; this is what changes.
   offer replaced under the open dialog is refused and never accepted unseen.
   Decline, Cancel and Ask for it back are words and one effect, so each is a
   `useConfirm` ask
+- **Ask for it back is one rule** — the contract's `mayAskForItBack` over
+  `RELEASABLE_CASE_STATUSES` (`vaulted`, `repaid`: the statuses a release runs
+  from) and `releaseAskStands` over `ANSWERS_RELEASE`; the page, the worker's
+  `requestRelease`, the staff queue's `openReleaseRequests` and both fixture
+  transports read them, so a loan still running is offered no ask and refused
+  one `CASE_CONFLICT`
 - **The figure cannot move under an open dialog** — each act carries the
   detail's `asOf` into the mutation, and the worker refuses `QUOTE_STALE` when
   the balance moved, the failure `recordRepayment` already raises
@@ -219,7 +225,7 @@ The spec governs the confirmations; this is what changes.
   `latestForfeitureNotice`, `forfeiture: NullOr({ at, settledMinor })`,
   `ended: NullOr({ kind, at, actorKind, reason })`, and
   `reminders: CaseReminder[]` folded beside `money/computeDue.ts` from the due
-  date, the offsets in `sweeps/remind.ts` and the notice — one flat list of the
+  date, the contract's `REMINDER_LADDER` and the notice — one flat list of the
   rungs sent, each with its day, and the ones still ahead. A rung the sweep
   never sent and whose day has passed is neither
 - Alternative rejected: a second `cases.repayments` procedure — the bundle
@@ -228,9 +234,13 @@ The spec governs the confirmations; this is what changes.
 ### The review step records the tick on the event that already records the send
 
 - **The input** — `cases.submit` gains
-  `collectionStatement: { acknowledged: true }`; the worker refuses without it
-  and writes `{ collectionStatementVersion }` into the `intake_submitted`
-  event's `details`, the stamp that already records the send
+  `collectionStatement: { version }`, the version the review step showed and
+  the tick answered; the worker refuses `COLLECTION_STATEMENT_REQUIRED` any
+  version but the one in force and writes it as
+  `{ collectionStatementVersion }` into the `intake_submitted` event's
+  `details`, the stamp that already records the send. A constant
+  `acknowledged: true` would answer for whatever the worker stamps, not what
+  the collector read
 - **The version is the documents' decision, not the legal identity's** —
   `documents/plan.ts` holds `COLLECTION_STATEMENT_VERSION`, owned by Legal. The
   review step shows the statement, or "Being prepared" until Legal writes it,
@@ -247,11 +257,13 @@ The spec governs the confirmations; this is what changes.
 
 - **The route** — `GET /api/cases/:caseId/visit.ics`
   (`VAULT_PATHS.visitCalendar`) in `routes/visit.ts`, a session route on
-  `caseOwner`, answers `text/calendar` from `buildCalendarFile` over the
+  `ownedCase`, the one ownership read `caseOwner` gates the other byte routes
+  on, answers `text/calendar` from `buildCalendarFile` over the
   booking `appointments.getBooking(caseId)` answers:
   `uid: <bookingId>@grade10-appointments` and the diary's own revision as
   `sequence`, the two the diary's `calendarAttachment` already mints, so one
-  visit has one `UID` and not two
+  visit has one `UID` and not two. Not `elevatedRoute`: it admits a holder of
+  a grant, and the file is the case owner's alone
 - **A cancelled visit still answers** — the diary keeps the booking and answers
   it `cancelled` after `cancelVisit` clears the vault's cache, so
   `METHOD:CANCEL` goes out against the `UID` and `DTSTART` the phone holds. The
@@ -337,7 +349,11 @@ The spec governs what the page names and refuses; this is who answers.
   `elevatedRoute` under `vault:payout`, the one mechanism the vault already
   uses for grant-gated bytes. The console passes the ledger's own filter,
   cursor and limit as query scalars and gets the page it shows; the chain row
-  writes the filter and the row count, the search's mechanism
+  writes the filter and the row count, the search's mechanism. The filter is
+  the contract's `moneyLedgerQuerySchema`, which `admin.moneyLedger` takes as
+  its input, and `moneyLedgerSearch` / `moneyLedgerQueryOfSearch` are its one
+  URL codec on both ends; the zip's cursor rides `documentsZipSearch` the same
+  way
 - **`admin.policy`** (`vault:read`) answers `lendingPolicy(brand)`,
   `accrualOf`, the reminder ladder's days and `REQUIRED_FOR_OFFER`'s unset
   fields, so the three dialogs state the rule from the worker's own table
@@ -349,7 +365,9 @@ The spec governs what the page names and refuses; this is who answers.
 - **The visit checklist and Forfeit's reason are `caseStanding`'s** — the Case
   tab walks `stage` and the events in order, and the Custody tab prints
   `notice.cureBy` and the `FORFEITURE_NOTICE_REQUIRED` refusal
-  (`contracts/src/failures.ts`) in words before the button
+  (`contracts/src/failures.ts`) in words before the button, from the
+  contract's `forfeitHold` — the one rule the worker's notice and forfeiture
+  refuse by, as `offerGates` is the offer's
 - Alternatives rejected: a tRPC `moneyLedgerCsv` query, which cannot answer
   `text/csv` and would be a third download mechanism; an arrears count on
   `queueCounts`, two numbers for one fact at two instants; the console
@@ -411,7 +429,9 @@ The spec governs what each message names; this is the shape.
   `site` mounts the grade10 site theme root and the design-system Theme
   toolbar, `console` mounts `apps/admin/grade10/src/AppProviders` and the
   Astryx theme and takes no toolbar. `check-astryx-boundary`'s allowlist gains
-  that one preview path
+  that one preview path. Every `site` story fails on a message the catalogue
+  does not answer — `use-intl` only logs one — so a bad key reads red in the
+  story that renders it, whichever product's it is
 - **Named by the screen table** — every story sets `title` to
   `Vault/<Feature>/<View>`, so the ids are the
   `vault-<feature>-<view>--<state>` the `ui-design.md` screen table writes; one
@@ -540,7 +560,7 @@ counts, the sums, the net out.
 | `printedValue(ports, field)` | brand, deployEnv, field | the value, a placeholder, or `LEGAL_IDENTITY_UNSET` | pure over `legalIdentity(brand)`; `printedEntity` composes it |
 | `renderVaultLetter(kind, facts)` | a `LetterFacts` member | `{ subject, html, text, attachments? }` or `LEGAL_IDENTITY_UNSET` | pure; run at the head of the act, before its transaction |
 | `letterFacts(db, vaultCase, kind, extra)` | the case and the send's own figures | one `LetterFacts` member | one builder for the send and the retry |
-| `cases.submit` | `{ caseId, collectionStatement: { acknowledged: true } }` | the case | writes the version shown into the event details |
+| `cases.submit` | `{ caseId, collectionStatement: { version } }` | the case, or `COLLECTION_STATEMENT_REQUIRED` for a version not in force | writes the version shown into the event details |
 | `cases.yourData` | a cursor | classes, standing, documents, holds, the open request | one binding read; no write |
 | `cases.requestErasure` | none | `{ executeAfter }` or `ERASURE_HELD { holds }` | reads holds, then one binding call; no local write |
 | `cases.cancelErasure` | none | void | one binding call |
