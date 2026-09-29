@@ -123,7 +123,7 @@ function AutocompleteInput({
           id={inputId}
           type="search"
           className={cn(
-            "w-full min-w-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:text-foreground [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
+            "w-full min-w-0 bg-transparent text-base text-foreground outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:text-foreground md:text-sm [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
           )}
           {...props}
         />

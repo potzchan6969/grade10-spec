@@ -200,33 +200,33 @@ export const AUCTION_LISTING_HREF = "#auction";
 export const AUCTION_LOT_DETAILS_COPY = {
   header: {
     auctionBreadcrumb: "Auctions",
-    lotBreadcrumb: "Lot",
+    lotBreadcrumb: "Auction Details",
     watch: "Watch",
     watching: "Watching",
-    watchAriaLabel: "Watch this lot",
-    unwatchAriaLabel: "Unwatch this lot",
+    watchAriaLabel: "Watch this auction",
+    unwatchAriaLabel: "Unwatch this auction",
     watchedToast: {
-      title: "Email alerts on for this lot",
+      title: "Email alerts on for this auction",
       actionLabel: "View My Auctions",
     },
     unwatchedToast: {
-      title: "Unwatched this lot",
-      description: "Email alerts for this lot are off too.",
+      title: "Unwatched this auction",
+      description: "Email alerts for this auction are off too.",
       actionLabel: "Undo",
     },
   },
   gallery: {
     previous: "Previous image",
     next: "Next image",
-    images: "Lot images",
+    images: "Auction images",
   },
   sidebar: {
     ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
     autoExtendedTooltip: formatAutoExtendedTooltip(
       AUCTION_LOT_EXTENSION_POLICY,
     ),
-    aboutThisLot: "About this lot",
-    vaultShipping: "Vault shipping",
+    aboutThisLot: "About This Auction",
+    vaultShipping: "Vault Shipping",
     showMore: "Show more",
     showLess: "Show less",
   },

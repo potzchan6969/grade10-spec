@@ -34,7 +34,7 @@ export default function AuctionWonEmail({
       canUnsubscribe={false}
       ctaLabel="Complete Order Setup"
       details={[{ label: "Confirm by", value: setupDeadline }]}
-      heading="You won this lot"
+      heading="You won this auction"
       highlight={{
         label: "Winning bid",
         value: winningBid,
@@ -45,7 +45,7 @@ export default function AuctionWonEmail({
       points={[...previewLot.setupFields]}
       preheader={`Complete Order Setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="You won this auction lot on Grade10."
+      whyYouGotThis="You won this auction on Grade10."
     />
   );
 }

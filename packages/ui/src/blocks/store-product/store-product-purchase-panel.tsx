@@ -1,21 +1,19 @@
-import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { ShoppingCartSimple } from "@phosphor-icons/react";
 import type { StoreProductPurchaseItem } from "./types";
 
 type StoreProductPurchasePanelCopy = {
-  addedToCart: string;
+  adding: string;
   addToCart: string;
   decreaseQuantity: string;
   increaseQuantity: string;
-  notForSaleNote: string;
   quantityLabel: string;
   soldOut: string;
 };
 
 type StoreProductPurchasePanelProps = {
-  added: boolean;
   copy: StoreProductPurchasePanelCopy;
   loading?: boolean;
   onAddToCart: () => void;
@@ -25,7 +23,6 @@ type StoreProductPurchasePanelProps = {
 };
 
 function StoreProductPurchasePanel({
-  added,
   copy,
   loading = false,
   onAddToCart,
@@ -34,15 +31,23 @@ function StoreProductPurchasePanel({
   saleItem,
 }: StoreProductPurchasePanelProps) {
   const forSale = saleItem?.availableForSale === true;
+  const label = forSale
+    ? loading
+      ? copy.adding
+      : copy.addToCart
+    : copy.soldOut;
 
   return (
-    <VStack data-slot="store-product-purchase-panel" gap="lg">
+    <VStack
+      className="gap-3"
+      data-slot="store-product-purchase-panel"
+      gap="none"
+    >
       <StepperInput
         aria-label={copy.quantityLabel}
         decrementLabel={copy.decreaseQuantity}
         disabled={!forSale || loading}
         incrementLabel={copy.increaseQuantity}
-        label={copy.quantityLabel}
         max={saleItem?.quantityAvailable ?? undefined}
         min={1}
         onValueChange={onQuantityChange}
@@ -53,16 +58,16 @@ function StoreProductPurchasePanel({
       <Button
         className="w-full"
         disabled={!forSale}
+        leading={
+          forSale ? (
+            <ShoppingCartSimple aria-hidden size={16} weight="bold" />
+          ) : undefined
+        }
         loading={loading}
         onClick={onAddToCart}
       >
-        {forSale ? (added ? copy.addedToCart : copy.addToCart) : copy.soldOut}
+        {label}
       </Button>
-      {!forSale ? (
-        <Text size="sm" tone="secondary">
-          {copy.notForSaleNote}
-        </Text>
-      ) : null}
     </VStack>
   );
 }

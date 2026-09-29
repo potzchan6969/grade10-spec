@@ -122,6 +122,7 @@ function ProductList({
                   badges={product.badges}
                   cartCount={product.cartCount}
                   copy={copy.card}
+                  href={product.href}
                   imageAlt={product.imageAlt}
                   imageSrc={product.imageSrc}
                   inCart={product.inCart}

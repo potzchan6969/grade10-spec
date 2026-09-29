@@ -7,8 +7,13 @@ order: 1
 ZZZ has three surfaces — home, sign-in and the profile — and each answers at an
 address of its own, whether it is reached by a link or by a refresh. A surface
 owns the addresses beneath it unless a nested surface names one, and an address
-under no surface renders a not-found surface naming it. Falling back to home is
-the specific mistake this rules out.
+under no surface renders a not-found surface. Falling back to home is the
+specific mistake this rules out.
+
+## Not Found
+
+The not-found page shares catalogs with grade10: a static title and
+description with Back to Home; the page does not name the failed path.
 
 Home and sign-in are session-decided: a signed-in collector who opens either is
 sent on to the profile, replacing the history entry so going back never returns

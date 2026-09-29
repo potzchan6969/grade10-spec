@@ -44,6 +44,8 @@
     "opensIn": "Opens in",
     "endedAt": "Ended",
     "progress": "Featured lots",
-    "slide": "Show featured lot {position}: {title}"
+    "slide": "Show featured lot {position}: {title}",
+    "previous": "Previous featured lot",
+    "next": "Next featured lot"
   }
 }

@@ -36,6 +36,12 @@ beside you.
   values first, items leading with the key term in bold, no flourish, present
   tense, and the marks the style allows
 
+## On a Bug
+
+Dispatched as `reader` on a bug's fix round, [Bug Fixes](../../docs/governance/bug-fixes.md)'s, where the fix lands words. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **The words fixed** - the new words say what the settled source says, in every language the catalog speaks
+
 ## Your Stance
 
 Read [the reader's stance](../../docs/governance/system-design.md#the-readers-stance)

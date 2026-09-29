@@ -24,12 +24,12 @@ export default function LotClosedDidntWinEmail({
 }: LotClosedDidntWinProps) {
   return (
     <AuctionLetter
-      body="Bidding has ended. Someone else won this lot."
+      body="Bidding has ended. Someone else won this auction."
       brandName={brandName}
       campaign="lot_closed_didnt_win"
       canUnsubscribe
-      ctaLabel="View lot"
-      heading="This lot closed"
+      ctaLabel="View auction"
+      heading="This auction closed"
       highlight={{ label: "Winning bid", value: winningBid }}
       listingUrl={listingUrl}
       lotSubtext={`Ended ${closedAt}`}
@@ -38,7 +38,7 @@ export default function LotClosedDidntWinEmail({
       preheader={`Winning bid ${winningBid}. Your bid was ${yourBid}.`}
       primaryImageUrl={primaryImageUrl}
       secondary={{ label: "Your bid", value: yourBid }}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

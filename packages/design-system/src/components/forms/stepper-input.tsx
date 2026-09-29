@@ -60,7 +60,9 @@ const stepperInputControlVariants = cva(
       // They are not in this string: the checker compares them to the variant
       // frame, which also includes the label and message (88px / 96px).
       size: {
-        md: "px-[3px] [&_input]:text-sm",
+        // 16px below `md` so iOS does not zoom the focused field; Figma's
+        // Typeset `sm` from `md` up.
+        md: "px-[3px] [&_input]:text-base md:[&_input]:text-sm",
         lg: "px-[4px] [&_input]:text-base",
       },
     },
@@ -183,6 +185,7 @@ function StepperInput({
   formatValue,
   onBlur,
   onFocus,
+  "aria-label": ariaLabel,
   ...props
 }: StepperInputProps) {
   const generatedId = useId();
@@ -336,8 +339,7 @@ function StepperInput({
           }
           aria-invalid={status === "error" || undefined}
           aria-label={
-            props["aria-label"] ??
-            (typeof label === "string" ? label : undefined)
+            ariaLabel ?? (typeof label === "string" ? label : undefined)
           }
           aria-valuemax={max}
           aria-valuemin={min}

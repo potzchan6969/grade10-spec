@@ -17,14 +17,17 @@ than filling the designed page with claims the frontend cannot prove.
 ## Order
 
 🚧 **Owner-only address** — a signed-in collector sees one order at
-`grade10.com/profile/orders/<order-id>`; an unknown order and another
-collector's order look the same
+`grade10.com/profile/orders/<order-id>`; sign-in keeps the collector at that
+address; an unknown order and another collector's order look the same
 
 🚧 **Known facts** — the page shows the supplied order identity, items, money,
 address, payment and refund facts, and leaves each missing fact absent
 
 🚧 **Progress and tracking** — a collector sees the Store-supplied fulfilment
 state and can follow a safe carrier address when one is supplied
+
+🚧 **Read states** — loading, localized failure with Retry, and not-found stay
+distinct at the same address
 
 ## Order Summary
 

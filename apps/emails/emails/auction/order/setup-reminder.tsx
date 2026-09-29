@@ -32,7 +32,7 @@ export default function SetupReminderEmail({
   return (
     <AuctionLetter
       afterPoints="Nothing is due until the invoice is sent."
-      body="You won this lot. Grade10 still needs your order setup before it can prepare your invoice. Complete these by the deadline below."
+      body="You won this auction. Grade10 still needs your order setup before it can prepare your invoice. Complete these by the deadline below."
       brandName={brandName}
       campaign="setup_reminder"
       canUnsubscribe={false}
@@ -49,7 +49,7 @@ export default function SetupReminderEmail({
       points={[...previewLot.setupFields]}
       preheader={`Complete Order Setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="You won this auction lot and have not finished order setup yet."
+      whyYouGotThis="You won this auction and have not finished order setup yet."
     />
   );
 }

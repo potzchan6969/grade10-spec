@@ -1,0 +1,40 @@
+name: Design Override
+
+# Tells the designer of every commit on main that changes the agreed UI design,
+# with or without its Design-Override line. Never blocks, never reverts.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: 24.14.1
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Tell the designer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/design-override/report.mjs "${{ github.event.before }}" "${{ github.sha }}"

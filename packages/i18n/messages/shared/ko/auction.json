@@ -44,6 +44,8 @@
     "opensIn": "시작까지",
     "endedAt": "종료",
     "progress": "추천 출품작",
-    "slide": "추천 출품작 {position} 보기: {title}"
+    "slide": "추천 출품작 {position} 보기: {title}",
+    "previous": "이전 추천 출품작",
+    "next": "다음 추천 출품작"
   }
 }

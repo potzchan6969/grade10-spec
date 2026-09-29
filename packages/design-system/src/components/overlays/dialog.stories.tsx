@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { Button } from "../forms/button";
 import { Input } from "../forms/input";
 import { Label } from "../forms/label";
@@ -194,6 +195,81 @@ export const WithoutCloseButton: Story = {
       </DialogContent>
     </Dialog>
   ),
+};
+
+/** How far a focused control paints past its own box: the widest outer
+ * `box-shadow` it computes once its focus transition ends. */
+async function ringOf(control: HTMLElement) {
+  control.focus();
+  await Promise.all(control.getAnimations().map((motion) => motion.finished));
+  const reach = [
+    ...getComputedStyle(control).boxShadow.matchAll(
+      /(-?[\d.]+)px (-?[\d.]+)px ([\d.]+)px (-?[\d.]+)px(?! inset)/g,
+    ),
+  ].map(
+    ([, x, y, blur, spread]) =>
+      Math.max(Math.abs(Number(x)), Math.abs(Number(y))) +
+      Number(blur) +
+      Number(spread),
+  );
+  return Math.max(0, ...reach);
+}
+
+/**
+ * Controls flush against the body's edges keep their whole focus ring. The
+ * body scrolls, so it clips at its own edge; the ring has to fit inside that
+ * edge on every side, and the controls still span the header's column.
+ */
+export const FullWidthControls: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Sign In</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          <Button className="w-full" size="md" variant="outline">
+            Continue With Google
+          </Button>
+          <DialogDescription>
+            Or have a sign-in link sent to your email.
+          </DialogDescription>
+          <Button className="w-full" size="md">
+            Send Link
+          </Button>
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
+  ),
+  play: async ({ canvasElement }) => {
+    const dialog = await within(canvasElement.ownerDocument.body).findByRole(
+      "dialog",
+    );
+    await Promise.all(dialog.getAnimations().map((motion) => motion.finished));
+    const slot = (name: string) => {
+      const node = dialog.querySelector(`[data-slot="${name}"]`);
+      if (node === null) throw new Error(`The dialog renders no ${name}`);
+      return node.getBoundingClientRect();
+    };
+    const button = (name: string) =>
+      within(dialog).getByRole("button", { name });
+    const clip = slot("dialog-body");
+    const column = slot("dialog-header");
+    const first = button("Continue With Google");
+    const last = button("Send Link");
+    const top = first.getBoundingClientRect();
+    const bottom = last.getBoundingClientRect();
+    const ring = await ringOf(first);
+
+    expect(ring).toBeGreaterThan(0);
+    expect(await ringOf(last)).toBe(ring);
+    expect(top.left).toBeCloseTo(column.left, 1);
+    expect(top.right).toBeCloseTo(column.right, 1);
+    expect(top.top - ring).toBeGreaterThanOrEqual(clip.top);
+    expect(top.left - ring).toBeGreaterThanOrEqual(clip.left);
+    expect(top.right + ring).toBeLessThanOrEqual(clip.right);
+    expect(bottom.bottom + ring).toBeLessThanOrEqual(clip.bottom);
+  },
 };
 
 /** Tall body content scrolls between the pinned header and footer. */

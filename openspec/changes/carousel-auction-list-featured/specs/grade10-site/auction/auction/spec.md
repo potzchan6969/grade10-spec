@@ -3,13 +3,15 @@
 - Featured catalogue band
   - Dedicated Featured read: `/auction` loads Featured from its own public answer, separate from All auctions
   - Operator slides: when at least one complete slot is set, `/auction` leads with a full-width carousel of those slides in operator order
-  - Slide facts: each slide shows the slot's front page image as banner and slab (load failure falls back to the lot's first gallery image, else the stage default background), lot title, status chrome by lot status, relative Ends in / Opens in from served close or open, and money (Active current bid rolls when the amount increases after first paint; Upcoming starting bid is static)
+  - Slide facts: each slide shows the slot's front page image as banner and slab (load failure falls back to the lot's first gallery image, else the stage default background), lot title, status chrome by lot status, relative Ends in / Opens in from served close or open, and money on Active only (current bid rolls when the amount increases after first paint; Upcoming shows no money until the lot opens)
   - Open lot: Bid Now on Active or View Auction on Upcoming opens that lot's details page
-  - Progress: dots advance among two or three slides; a single slide needs no multi-dot advance
+  - Progress: dots advance among two or three slides; on a small viewport stage previous/next and swipe also advance; a single slide needs no multi-dot advance or stage previous/next
 - Quiet catalogue
   - Featured then All auctions: the only sections on `/auction` in this layout; Featured is absent when no complete slot is set
   - No category section: no Categories heading, tiles, or busy filter chrome
   - Resting All auctions: every visible lot including featured ones, in the catalogue resting order below Featured when Featured is present
+  - All auctions load more: infinite scroll appends the next batch; Boneyard skeleton cards while that batch settles; no pagination
+  - Upcoming cards hide money: an Upcoming All auctions card shows no starting bid until the lot is Active
 - Catalogue watch
   - Shared watch on cards: All auctions cards use the same watch as the lot page and My Auctions; closed lots show none
 
@@ -65,7 +67,7 @@ and `ListingCountdownDisplay`.
 | Title | The lot's title |
 | Status | Active: LIVE BIDDING with a live status dot. Upcoming: UPCOMING with no live status dot |
 | Countdown | Relative **Ends in** (Active) or **Opens in** (Upcoming) with the All auctions short remaining form; no Extended label; recorded close moves with the same freshness as the live current bid |
-| Money | Active: served current bid; rolls when that amount **increases** after first paint. Upcoming: starting bid, static |
+| Money | Active: served current bid; rolls when that amount **increases** after first paint. Upcoming: no money until the lot opens |
 | Open lot | Active: Bid Now. Upcoming: View Auction. Either opens that lot's details page |
 
 #### Scenario: grade10-site-auction-auction-SC-31 - A Featured slide shows front page image, title, status, countdown and bid
@@ -93,8 +95,9 @@ and `ListingCountdownDisplay`.
 - **GIVEN** a complete Featured slide for a published Upcoming lot with a
   served open time
 - **WHEN** a collector views that slide
-- **THEN** the slide shows UPCOMING with no live status dot, STARTING BID, View
-  Auction, and Opens in from the served open
+- **THEN** the slide shows UPCOMING with no live status dot, View Auction, and
+  Opens in from the served open
+- **AND** the slide shows no starting bid and no money amount
 
 ### Requirement: Bid Now or View Auction opens the lot details page
 
@@ -118,14 +121,17 @@ offer View Auction. Activating either SHALL open that lot's details page.
 ### Requirement: Progress advances among two or three Featured slides
 
 When Featured holds two or three complete slides, `/auction` SHALL show
-progress that advances among them. A single complete slide SHALL NOT require
-multi-dot advance. Progress MAY use `CarouselProgress`.
+progress that advances among them. On a small viewport the stage SHALL also
+offer previous/next and horizontal swipe to advance among those slides. A
+single complete slide SHALL NOT require multi-dot advance or stage previous/next.
+Progress MAY use `CarouselProgress`.
 
 #### Scenario: grade10-site-auction-auction-SC-35 - Progress advances among two or three slides
 **Serves:** grade10-site-auction-auction-US-07 - Collector advances Featured slides
 
 - **GIVEN** two or three complete Featured slides on `/auction`
-- **WHEN** the collector advances with the progress control
+- **WHEN** the collector advances with the progress control, or on a small
+  viewport with stage previous/next or a horizontal swipe
 - **THEN** each curated slide becomes visible in turn without leaving Featured
 
 #### Scenario: grade10-site-auction-auction-SC-36 - One Featured slide needs no multi-dot advance
@@ -135,6 +141,7 @@ multi-dot advance. Progress MAY use `CarouselProgress`.
 - **WHEN** a collector views Featured
 - **THEN** that slide is shown
 - **AND** multi-dot advance among slides is not required
+- **AND** stage previous/next is not required
 
 ### Requirement: The catalogue layout is Featured then All auctions only
 
@@ -189,6 +196,45 @@ compose `AuctionCard` with `WatchButton`.
 - **WHEN** a collector opens `/auction`
 - **THEN** Featured is shown
 - **AND** All auctions shows that there are no auctions
+
+### Requirement: All auctions loads more as the collector scrolls
+
+All auctions SHALL NOT show pagination controls. When more lots remain than the
+list has shown, scrolling near the end of All auctions SHALL load the next
+batch. While that batch is loading, All auctions SHALL append Boneyard skeleton
+cards below the lots already shown and SHALL keep those lots visible. When no
+further lots remain, no load trigger SHALL appear.
+
+#### Scenario: grade10-site-auction-auction-SC-59 - More All auctions lots load on scroll
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** All auctions holds more lots than the first batch shows
+- **WHEN** the collector scrolls near the end of the shown lots
+- **THEN** the next batch of lots is loaded
+- **AND** lots already shown stay visible
+- **AND** the combined list stays in the catalogue resting order
+
+#### Scenario: grade10-site-auction-auction-SC-60 - Loading more shows skeleton cards
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** All auctions is loading the next batch
+- **WHEN** the collector reads the list
+- **THEN** Boneyard skeleton cards appear below the lots already shown
+- **AND** those lots remain visible above the skeletons
+
+### Requirement: Upcoming catalogue cards withhold money until open
+
+An Upcoming lot on Featured or on an All auctions card SHALL NOT show a starting
+bid or other money amount. Money SHALL appear once the lot is Active (Featured
+current bid; All auctions current bid).
+
+#### Scenario: grade10-site-auction-auction-SC-61 - An Upcoming All auctions card shows no money
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** an Upcoming lot on All auctions
+- **WHEN** a collector reads its card
+- **THEN** the card shows no starting bid and no money amount
+- **AND** the card still shows Opens in from the served open
 
 ## MODIFIED Requirements
 

@@ -124,7 +124,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     "Complete Order Setup so Grade10 can prepare the invoice. Nothing is due yet.",
   completePurchaseAction: "Complete Order Setup",
   paid: "Paid",
-  paidBody: "Track shipping and delivery for this lot.",
+  paidBody: "Track shipping and delivery for this auction.",
   viewOrderDetails: "View order details",
   didNotWin: "Did not win",
   outbid: "Outbid",
@@ -224,7 +224,7 @@ export function stateMeta(state: BiddingState) {
     showBidActions: live,
     isUnsold: state === "closed-unsold",
     priceLabel: opens
-      ? "Starting bid"
+      ? ""
       : closed
         ? state === "closed-unsold"
           ? "Result"
@@ -530,8 +530,9 @@ export function buildListingAuctionBidView(
         ? liveTiming.closesAtMs
         : meta.deadlineAtMs;
   const viewerMaximumMinor = viewerMaximumForState(state);
-  const priceLabel =
-    meta.closed || meta.isUnsold
+  const priceLabel = meta.opens
+    ? ""
+    : meta.closed || meta.isUnsold
       ? meta.priceLabel
       : hasBids
         ? "Current Bid"

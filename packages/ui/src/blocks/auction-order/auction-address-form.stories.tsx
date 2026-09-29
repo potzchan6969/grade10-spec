@@ -80,6 +80,52 @@ export const ShowsSuppliedFieldError: Story = {
 
 export const Default: Story = { args: { errors: undefined } };
 
+/** How far a focused control paints past its own box: the widest outer
+ * `box-shadow` it computes once its focus transition ends. */
+async function ringOf(control: HTMLElement) {
+  control.focus();
+  await Promise.all(control.getAnimations().map((motion) => motion.finished));
+  const reach = [
+    ...getComputedStyle(control).boxShadow.matchAll(
+      /(-?[\d.]+)px (-?[\d.]+)px ([\d.]+)px (-?[\d.]+)px(?! inset)/g,
+    ),
+  ].map(
+    ([, x, y, blur, spread]) =>
+      Math.max(Math.abs(Number(x)), Math.abs(Number(y))) +
+      Number(blur) +
+      Number(spread),
+  );
+  return Math.max(0, ...reach);
+}
+
+/**
+ * The fields scroll, so their region clips at its own edge. Confirm sits in
+ * its bottom-left corner, still lines up with the address kind above it, and
+ * keeps room for its whole focus ring.
+ */
+export const ActionsKeepTheirFocusRing: Story = {
+  args: { errors: undefined },
+  play: async ({ canvasElement }) => {
+    const slot = (name: string) => {
+      const node = canvasElement.querySelector(`[data-slot="${name}"]`);
+      if (node === null) throw new Error(`The form renders no ${name}`);
+      return node.getBoundingClientRect();
+    };
+    const clip = slot("auction-address-fields");
+    const kind = slot("auction-address-kind");
+    const control = within(canvasElement).getByRole("button", {
+      name: "Confirm",
+    });
+    const confirm = control.getBoundingClientRect();
+    const ring = await ringOf(control);
+
+    expect(ring).toBeGreaterThan(0);
+    expect(confirm.left).toBeCloseTo(kind.left, 1);
+    expect(confirm.left - ring).toBeGreaterThanOrEqual(clip.left);
+    expect(confirm.bottom + ring).toBeLessThanOrEqual(clip.bottom);
+  },
+};
+
 /** Personal default — Company Name hidden; Confirm clears company (SC-09, SC-12). */
 export const Personal: Story = {
   args: {

@@ -39,7 +39,7 @@ visible before the collector can leave for Shopify.
 ## Components
 
 - **Store listing:** `ProductBrowse`, `ProductCard` from `@grade10/ui`.
-- **Product details:** `StoreProductGallery`, `StoreProductHeader`,
+- **Product details:** `ListingLotGallery`, `StoreProductHeader`,
   `StoreProductDescription`, `StoreProductMetadata`,
   `StoreProductPurchasePanel` from `@grade10/ui`.
 - **Cart drawer:** `CartDrawer` from `@grade10/ui`.

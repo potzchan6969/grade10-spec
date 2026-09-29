@@ -72,13 +72,16 @@ type OrderDetailsPaymentBrand =
   | "google-pay";
 
 type OrderDetailsPayment = {
-  brand: OrderDetailsPaymentBrand;
+  /** Recognized card or wallet mark. Omit when the provider is not known. */
+  brand?: OrderDetailsPaymentBrand;
+  /** Provider or wallet name when no recognized mark is available. */
+  label?: ReactNode;
   /** Masked card number (e.g. `···· 0561`). Omit for wallet-only rows. */
   maskedNumber?: ReactNode;
 };
 
 type OrderDetailsAddress = {
-  name: ReactNode;
+  name?: ReactNode;
   lines: readonly ReactNode[];
   /** When set, the address block links here (e.g. Google Maps). Pickup only. */
   mapsHref?: string;

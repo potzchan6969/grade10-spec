@@ -114,7 +114,7 @@ Runs once per row of **Test data**.
 | Lot status | Served time | Countdown |
 | --- | --- | --- |
 | Active | Served close | Relative Ends in to the served close |
-| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction |
+| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
 
 **Steps:**
 
@@ -124,7 +124,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The countdown matches the row (Ends in or Opens in).
-* Upcoming shows UPCOMING with no live status dot and View Auction.
+* Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount.
 
 ### grade10-site-auction-auction-US6-TC04-1: Three Featured slides appear in operator order
 
@@ -198,7 +198,8 @@ Runs once per row of **Test data**.
 ## grade10-site-auction-auction-US7: Collector advances Featured slides
 
 **As a** collector on `/auction` with more than one Featured slide,
-**I want** to move between slides with the progress control,
+**I want** to move between slides with the progress control, and on a small
+viewport also with stage previous/next or a horizontal swipe,
 **so that** I can reach every curated lot without leaving the band.
 
 ### grade10-site-auction-auction-US7-TC01-1: Progress advances between two Featured slides
@@ -239,6 +240,46 @@ Runs once per row of **Test data**.
 * Step 1 shows `<lot A>`.
 * Step 3 shows `<lot B>`.
 * Progress dots are present for the two slides.
+
+### grade10-site-auction-auction-US7-TC01-2: On a small viewport, stage next advances between two Featured slides
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-07
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` at a small viewport (below `md`).
+* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published lot in Featured slot 1 |
+| `<lot B>` | Published lot in Featured slot 2 |
+
+**Steps:**
+
+1. Read the visible Featured lot.
+2. Activate stage next on the Featured image.
+3. Read the visible Featured lot.
+
+**Expected Results:**
+
+* Step 1 shows `<lot A>`.
+* Step 3 shows `<lot B>`.
+* The stage image pages horizontally to `<lot B>`.
+* Progress dots mark `<lot B>` current.
 
 ### grade10-site-auction-auction-US7-TC02-1: Progress reaches every slide when three are set
 
@@ -307,6 +348,7 @@ Runs once per row of **Test data**.
 
 * The single slide is shown.
 * There is no multi-dot advance among slides.
+* Stage previous/next is not required.
 
 ---
 
@@ -705,10 +747,80 @@ to open that lot's details page,
 
 * Canonical and share address are `/auction` with no category query.
 
+### grade10-site-auction-auction-US5-TC06-1: More All auctions lots load on scroll
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* All auctions holds more lots than the first batch shows.
+
+**Steps:**
+
+1. Read the first batch of All auctions cards.
+2. Scroll near the end of the shown lots.
+3. Wait for the next batch.
+
+**Expected Results:**
+
+* Step 2 shows Boneyard skeleton cards below the lots already shown, or the next batch lands without pagination controls.
+* Step 3 shows additional lots below the first batch.
+* Lots from step 1 stay visible.
+* The combined list stays in the catalogue resting order.
+* No pagination controls appear.
+
+### grade10-site-auction-auction-US5-TC07-1: An Upcoming All auctions card shows no money
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* An Upcoming lot is among All auctions.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<upcoming lot>` | A published Upcoming lot on All auctions |
+
+**Steps:**
+
+1. Find `<upcoming lot>` on All auctions.
+2. Read its card for money and countdown.
+
+**Expected Results:**
+
+* The card shows no starting bid and no money amount.
+* The card shows Opens in from the served open.
+
 ## Settled
 
-- Progress advances by the progress control; CarouselProgress auto-play is allowed presentation, not a separate product rule for this change
-- One Featured slide need not offer multi-dot advance; progress may be absent or a single item
+- Progress advances by the progress control; on a small viewport stage previous/next and horizontal swipe also advance. CarouselProgress auto-play is allowed presentation, not a separate product rule for this change
+- One Featured slide need not offer multi-dot advance or stage previous/next; progress may be absent or a single item
 - A Featured lot that is no longer Active or Upcoming leaves the public Featured band at read time; the admin slot remains until cleared or replaced
 - One lot may not occupy two Featured slots
 - Signed-out watch on catalogue cards is owned by `grade10-site/auction/watchlist` (offer sign-in)
@@ -728,9 +840,11 @@ to open that lot's details page,
 - Replace in place → stated on fill requirement; covered by fill scenarios
 - View Auction on Upcoming Featured → `grade10-site-auction-auction-SC-58`
 - Bid rolls only on increase after first paint → `grade10-site-auction-auction-SC-32`
+- All auctions infinite scroll and load-more skeletons → `grade10-site-auction-auction-SC-59`, `SC-60`
+- Upcoming hides money on Featured and All auctions → `grade10-site-auction-auction-SC-33`, `SC-61`
 
 ### Raised, rejected
-- Auto-advance as a required product behaviour — journey and decisions name the progress control; auto-play is CarouselProgress presentation only
+- Auto-advance as a required product behaviour — journey and decisions name collector advance (progress; on small viewports stage previous/next or swipe); auto-play is CarouselProgress presentation only
 - Signed-out watch behaviour on All auctions cards — already required by `grade10-site/auction/watchlist`; not restated here
 
 ### Uncovered anchors

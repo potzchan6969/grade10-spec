@@ -72,24 +72,28 @@ the one a search engine keeps.
   auctions. The slide shows that image, the lot title, its status (LIVE BIDDING
   with a live dot when Active; UPCOMING with no dot when Upcoming), a client
   countdown from the served close or open as relative **Ends in** / **Opens in**
-  in the same short form as All auctions cards, the current or starting bid
-  (Active rolls when the amount increases after first paint), and Bid Now when
-  Active or View Auction otherwise — either opens that lot's details page.
+  in the same short form as All auctions cards, the current bid when Active
+  (rolls when the amount increases after first paint; Upcoming shows no money
+  until the lot opens), and Bid Now when Active or View Auction otherwise —
+  either opens that lot's details page.
   Extended bidding keeps LIVE BIDDING and
   Ends in to the recorded close — no Extended label — and that close moves with
   the same freshness as the live current bid. Progress dots advance the slides
-  when more than one is set. The section is headed Featured auctions —
+  when more than one is set; on a small viewport, previous/next on the stage and
+  a horizontal swipe also advance. The section is headed Featured auctions —
   [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
 - 🚧 **No category section** — category tiles and the busy filter stay off this
   page until a later change; quiet layout is the only layout
 - **All auctions** — every lot a collector can see, including those in Featured,
   in the resting order, below Featured when Featured is present. Each card
-  follows the store product card: the image well, the title, the current bid,
-  then a countdown. An active lot counts down to its close. An upcoming lot
-  counts down to its open. A closed lot names when it ended. Watch sits at the
-  bottom right of the image, and a closed lot shows none — the same watch as
-  the lot page and My Auctions —
-  [Watchlist](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications)
+  follows the store product card: the image well, the title, then a countdown.
+  An active lot shows the current bid and counts down to its close. An upcoming
+  lot counts down to its open and shows no money until it is Active. A closed
+  lot names when it ended. Watch sits at the bottom right of the image, and a
+  closed lot shows none — the same watch as the lot page and My Auctions —
+  [Watchlist](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications).
+  More lots load as the collector scrolls; Boneyard skeleton cards show while
+  the next batch settles — no pagination
 - **Headings** — one `h1`, Auctions, which is not shown. `h2` for Featured
   auctions and All auctions, and only for a section that is on the page. A lot
   title is an `h3` in the list
@@ -98,15 +102,19 @@ the one a search engine keeps.
   addresses, images and current bids. A closed lot's offer stays on the lot
   page
 
-::story{id="pages-auction-list--carousel-banner" title="Carousel banner"}
+::story{id="pages-auction-list--default" title="Auction list"}
 
-::story{id="auction-list-lot-card--active" title="An active lot"}
+::story{id="auction-list-featured-auctions--carousel-banner" title="Featured carousel"}
 
-::story{id="auction-list-lot-card--upcoming" title="An upcoming lot"}
+::story{id="auction-list-all-auctions--default" title="All auctions"}
 
-::story{id="auction-list-lot-card--ended" title="A closed lot"}
+::story{id="auction-list-all-auctions--empty" title="No auctions"}
 
-::story{id="pages-auction-list--empty" title="No auctions"}
+::story{id="auction-list-all-auctions-lot-card--active" title="Active"}
+
+::story{id="auction-list-all-auctions-lot-card--upcoming" title="Upcoming"}
+
+::story{id="auction-list-all-auctions-lot-card--ended" title="Closed"}
 
 ## Auction Details
 
@@ -151,13 +159,17 @@ lot before any script runs.
 - **One gallery** — no front and back slots; the first item is the card's
   picture, and a lot whose first item is a video still appears, with no
   placeholder
-- **The strip** — one image shows no thumbnail strip; several do
+- **The strip** — one image shows no thumbnail strip; 🚧 several show a left
+  rail when the gallery is wide enough for it beside the main frame, and
+  otherwise step with previous/next and progress only
 - **Made from the original** — a larger image is transformed to the size
   asked for and a smaller one answered as it is, never upscaled; videos keep
   their original path
 - **Until the close** — an operator adds, replaces, removes or re-captions an
   item while the listing is draft, created or published, never after it
   closes — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+
+::changes{spec="grade10-site/auction/listing-media"}
 
 ### Lot Status
 

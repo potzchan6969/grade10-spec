@@ -50,7 +50,7 @@ export default function PaymentReceivedEmail({
 }: PaymentReceivedProps) {
   return (
     <AuctionLetter
-      body="We have received your payment for this lot. Your order is now being processed."
+      body="We have received your payment for this auction. Your order is now being processed."
       brandName={brandName}
       campaign="payment_received"
       canUnsubscribe={false}

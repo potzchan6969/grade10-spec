@@ -38,6 +38,13 @@ group. On `tasks.md` you always read the order the plan lands in too.
 - **Observability** — a failure stops the run and says so; nothing is caught
   and dropped
 
+## On a Bug
+
+Dispatched as `operations` on a bug's fix round, [Bug Fixes](../../docs/governance/bug-fixes.md)'s, where the fix lands a migration, a flag, money or a deploy step. Given the report and its evidence, the diagnosis, the spec, page or design the diagnosis cites, and in the fix round the landed diff - its test commit, then its fix. Never another reader's findings.
+
+- **What the bug already wrote** - data the defect left wrong is repaired or named; a fix that only stops new damage says so
+- **The order** - the fix lands in an order that never leaves a deploy half fixed
+
 ## Your Stance
 
 Read [the eight principles and the reader's

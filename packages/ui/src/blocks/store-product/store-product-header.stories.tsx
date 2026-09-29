@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import {
-  HEADER_COPY,
-  PRODUCT_DETAIL_STORY,
-  SOLD_OUT_PRODUCT_STORY,
-} from "./fixtures";
+import { HEADER_COPY, PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductHeader } from "./store-product-header";
 
 const meta = {
@@ -14,8 +10,6 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     copy: HEADER_COPY,
-    homeHref: "#home",
-    shopHref: "#shop",
   },
 } satisfies Meta<typeof StoreProductHeader>;
 
@@ -36,19 +30,6 @@ export const Default: Story = {
       }),
     ).toBeVisible();
     expect(canvas.getByText("HK$105.00")).toBeVisible();
-    expect(canvas.queryByText("For sale")).toBeNull();
-    expect(canvas.queryByText(/Only .* left/)).toBeNull();
-  },
-};
-
-export const SoldOut: Story = {
-  args: {
-    title: SOLD_OUT_PRODUCT_STORY.title,
-    saleItem: SOLD_OUT_PRODUCT_STORY.saleItem,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("heading", { level: 1 })).toBeVisible();
     expect(canvas.queryByText("For sale")).toBeNull();
     expect(canvas.queryByText(/Only .* left/)).toBeNull();
   },

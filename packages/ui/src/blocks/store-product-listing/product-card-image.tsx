@@ -1,6 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
+import { ProductCardActivation } from "./product-card-activation";
 import {
   ProductCardCartControl,
   parseCartQuantity,
@@ -49,6 +50,9 @@ type ProductCardImageProps = {
   /** Tile activation for the photo well. The card passes none for a sold-out
    * tile on a surface that sells, so a well with a handler always opens. */
   onClick?: () => void;
+  /** The product's own address. Given one, the well is a link to it; the card
+   * passes none for a tile that does not open. */
+  href?: string;
   /** The product's own name, which names the well for a screen reader. */
   name?: string;
   className?: string;
@@ -58,6 +62,8 @@ type ProductCardImageProps = {
  * Product photo well. Figma set `Product / Product Card Image` (`4274:10074`)
  * has `state` (hover, CSS) and `soldOut`, plus the BOOLEAN `sale`. In-cart
  * chrome is an annotation on the set, not an axis, so `inCart` is code-only.
+ * The set draws no hover on a sold-out well; one that opens grows on hover
+ * like an available well, over its dim photo (Q50).
  *
  * Cart sits outside the well's activation target so nested buttons stay valid.
  * It is drawn only where a quantity-change handler was supplied, so a surface
@@ -78,15 +84,17 @@ function ProductCardImage({
   maxCartQuantity,
   onCartQuantityChange,
   onClick,
+  href,
   name,
 }: ProductCardImageProps) {
   const showCart = !soldOut && onCartQuantityChange != null;
   const quantity = parseCartQuantity(cartCount, inCart);
+  const opens = onClick != null || href != null;
 
   const photoClassName = cn(
     "size-full rounded-(--radius-3xl) object-contain",
     soldOut && "opacity-50",
-    !soldOut &&
+    (!soldOut || opens) &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
   );
 
@@ -98,8 +106,8 @@ function ProductCardImage({
       >
         {imageSrc ? (
           <img
-            alt={onClick ? "" : imageAlt}
-            aria-hidden={onClick ? true : undefined}
+            alt={opens ? "" : imageAlt}
+            aria-hidden={opens ? true : undefined}
             className={photoClassName}
             src={imageSrc}
           />
@@ -145,19 +153,19 @@ function ProductCardImage({
         className,
       )}
     >
-      {!onClick ? (
+      {!opens ? (
         <div className="absolute inset-0 overflow-hidden rounded-(--radius-3xl)">
           {well}
         </div>
       ) : (
-        <button
+        <ProductCardActivation
           aria-label={name}
           className="absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          href={href}
           onClick={onClick}
-          type="button"
         >
           {well}
-        </button>
+        </ProductCardActivation>
       )}
       {showCart ? (
         <ProductCardCartControl

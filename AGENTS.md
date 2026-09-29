@@ -17,7 +17,7 @@ This repository is the versioned source of truth for product requirements and th
 | Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The production shape: what runs, rewritten only by a change's fold at archive. An implementing engineer builds from this alone. The four applications - `grade10-site`, `grade10-admin`, `zzz-site`, `zzz-admin` - and the `shared` layer are listed in `openspec/specs/README.md`. |
 | The PRD: what a capability is and should be, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | Written first, and moved first by whoever learns a product detail — PM, designer, QA or engineer; the product manager keeps it whole. The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose — what runs unmarked, 🚧 on what an active change delivers, ❓ on what nobody has confirmed — with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Never restates a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
-| Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
+| Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. Not for bugs: `docs/governance/bug-fixes.md`. |
 | Who walks a capability | `user-journeys.md` beside its `spec.md` | The INVEST journeys. It names no scenario: a scenario names the journey it serves. A capability nobody reaches on its own — a policy, a package contract, a makers-only surface — writes `**Walked by:** nobody` instead, routing its anchors to the feature set without excusing it a suite. |
 | Test cases for a capability | `feature-tcs.md` beside its `spec.md` | An independent blind reading of that capability's anchors, written without sight of the scenarios and reconciled against them after. Its name carries its level — one domain's is `domain-tcs.md` beside them, the wider smoke passes `product-tcs.md` and `platform-tcs.md`. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
@@ -69,6 +69,13 @@ For a new product feature:
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
 
 Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
+
+## Design Override
+
+The agreed look is what `main` holds in `packages/ui/src/blocks`, `packages/design-system/src/components`, its `tokens.json` and `apps/preview/src/pages`. The hooks `pnpm install` sets stop a commit that changes it, or a merge that drops its lines.
+
+- **Never restyle it on the way** — a missing state or variant is the designer's; never pass `--no-verify`.
+- **A stop is your person's** — show them its lines; only on their yes, end the message with `Design-Override: <what changes and why>` — [Design Override](docs/prds/products/shared/design-sync/design-override.md).
 
 ## Product UI component contracts
 

@@ -35,7 +35,7 @@ export default function SetupOverdueEmail({
 }: SetupOverdueProps) {
   return (
     <AuctionLetter
-      body="The deadline to complete order setup has passed. This order has expired. You can no longer finish setup on Grade10. Email support@grade10.com if you still want to claim this lot."
+      body="The deadline to complete order setup has passed. This order has expired. You can no longer finish setup on Grade10. Email support@grade10.com if you still want to claim this auction."
       brandName={brandName}
       campaign="setup_overdue"
       canUnsubscribe={false}
@@ -53,13 +53,13 @@ export default function SetupOverdueEmail({
       points={[
         "We review your requests manually and decide whether the order can still be completed.",
         "Your account may face penalties or extra charges.",
-        "If we do not hear from you soon, the order may be cancelled permanently and the lot re-listed.",
+        "If we do not hear from you soon, the order may be cancelled permanently and the auction re-listed.",
       ]}
-      preheader={`Setup deadline passed on ${setupDeadline}. Contact Grade10 to claim this lot.`}
+      preheader={`Setup deadline passed on ${setupDeadline}. Contact Grade10 to claim this auction.`}
       primaryImageUrl={primaryImageUrl}
       secondaryCtaHref={orderUrl}
       secondaryCtaLabel="View order"
-      whyYouGotThis="You won this auction lot and did not finish order setup before the deadline."
+      whyYouGotThis="You won this auction and did not finish order setup before the deadline."
     />
   );
 }

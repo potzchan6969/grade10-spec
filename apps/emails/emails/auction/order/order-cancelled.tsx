@@ -33,7 +33,7 @@ export default function OrderCancelledEmail({
 }: OrderCancelledProps) {
   return (
     <AuctionLetter
-      body="Your order for this lot has been cancelled. If you have questions, email support@grade10.com."
+      body="Your order for this auction has been cancelled. If you have questions, email support@grade10.com."
       brandName={brandName}
       campaign="order_cancelled"
       canUnsubscribe={false}
@@ -47,7 +47,7 @@ export default function OrderCancelledEmail({
       primaryImageUrl={primaryImageUrl}
       secondaryCtaHref={orderUrl}
       secondaryCtaLabel="View order"
-      whyYouGotThis="You won this auction lot on Grade10."
+      whyYouGotThis="You won this auction on Grade10."
     />
   );
 }

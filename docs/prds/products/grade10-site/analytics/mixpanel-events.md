@@ -1,7 +1,8 @@
 ---
 title: Mixpanel Events
-spec: grade10-site/analytics
+spec: grade10-site/analytics/analytics
 order: 1
+reviewed: 2026-09-29
 ---
 
 Who did what in Mixpanel, and the user-profile snapshot that filters
@@ -13,9 +14,6 @@ that use these names sit on [Analytics](/p/grade10-site/analytics).
 Properties and who may send each name live in the capability spec.
 The browser may submit client event names only; ingest rejects a server
 event name from the client.
-
-🚧 The events below are what Mixpanel holds once this change archives —
-Order Paid already runs; the rest land with the same change.
 
 ### Client events
 
@@ -60,7 +58,7 @@ Workers send these when the domain fact lands. The browser cannot.
 - **Once per order** — a replay or claim does not send Order Paid twice
 - **Points on the paid order** — earn and spend sit there, not a second
   earn event
-- 🚧 **First-touch campaign on the landing** — Page Viewed and Lot Viewed
+- **First-touch campaign on the landing** — Page Viewed and Lot Viewed
   carry UTM when the address had those keys; the first Page Viewed on a
   device may also carry Initial Referrer
 
@@ -72,19 +70,19 @@ Workers send these when the domain fact lands. The browser cannot.
   [Product Analytics · Identity](/platform/tracking#simplified-id-merge)
 - **Member or device** — signed-in on the person; anonymous on the device;
   ownerless paid on the order alone
-- 🚧 **Session end starts a new device** — sign-out and session expiry both
+- **Session end starts a new device** — sign-out and session expiry both
   rotate the device, so the next guest is not merged onto the last person
-- 🚧 **Server emits keep the collector device** — Checkout Started, web
+- **Server emits keep the collector device** — Checkout Started, web
   Order Paid, and every other server event that continues a browser or
   till visit name that `$device_id` when Grade10 still has it; browse
   then joins the account after pay or sign-in
-- 🚧 **Collector IP for geo** — every Mixpanel send, client or server,
+- **Collector IP for geo** — every Mixpanel send, client or server,
   carries the collector's IP when Grade10 knows it so Mixpanel can set
   city and country; the IP is not stored as a property
 
 ## User Profile
 
-🚧 Mixpanel holds a user profile for a **user id only** — the latest
+Mixpanel holds a user profile for a **user id only** — the latest
 snapshot used to filter events and build cohorts.
 
 | Property          | Values                                | Source                                                           | Written when                                              |
@@ -99,7 +97,7 @@ snapshot used to filter events and build cohorts.
 - **Server only** — each property is written when that fact changes and
   overwrites the previous value; the browser never writes a profile
 - **No anonymous device** — an unsigned visit has events, not a profile
-- 🚧 **Collector IP for geo** — engage sets `$ip` to the collector's
+- **Collector IP for geo** — engage sets `$ip` to the collector's
   address when known; `$ip` is `0` only when none was captured, so the
   worker's location is never written
 - **Audience on events too** — staff traffic can be filtered before a

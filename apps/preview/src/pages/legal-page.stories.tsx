@@ -37,7 +37,7 @@ export const TermsOfService: Story = {
       }),
     ).toBeVisible();
     expect(
-      canvas.getByRole("link", { name: "TERMS of SERVICE" }),
+      canvas.getByRole("link", { name: "Terms of Service" }),
     ).toHaveAttribute("href", "?path=/story/pages-legal--terms-of-service");
   },
 };
@@ -61,7 +61,7 @@ export const PrivacyPolicy: Story = {
       }),
     ).toBeVisible();
     expect(
-      canvas.getByRole("link", { name: "PRIVACY POLICY" }),
+      canvas.getByRole("link", { name: "Privacy Policy" }),
     ).toHaveAttribute("href", "?path=/story/pages-legal--privacy-policy");
   },
 };

@@ -24,13 +24,13 @@ const VAULT_SHIPPING_BODY =
   "Stored in Grade10 Vault. Ships from our facility within 1 business day of payment.";
 
 const MARKET_COMPS = {
-  title: "Market price",
+  title: "Market Price",
   range: "HK$46,800–HK$171,600",
 } as const;
 
 const COPY = {
-  aboutThisLot: "About this lot",
-  vaultShipping: "Vault shipping",
+  aboutThisLot: "About This Auction",
+  vaultShipping: "Vault Shipping",
   showMore: "Show more",
   showLess: "Show less",
 } as const;
@@ -44,7 +44,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "About-this-lot block under the auction bid card. Same content as Pages/Auction Lot Details. While live, market comps sit under About this lot; after sale they are omitted — the hammer price is on the bid card.",
+          "About-this-auction block under the auction bid card. Same content as Pages/Auction Lot Details. While live, market comps sit under About this auction; after sale they are omitted — the hammer price is on the bid card.",
       },
     },
   },
@@ -71,13 +71,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.getByText("About This Auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
     expect(canvas.getByText("Cert number")).toBeInTheDocument();
     expect(canvas.getByText("95109007")).toBeInTheDocument();
-    expect(canvas.getByText("Market price")).toBeInTheDocument();
-    expect(canvas.getByText("Vault shipping")).toBeInTheDocument();
+    expect(canvas.getByText("Market Price")).toBeInTheDocument();
+    expect(canvas.getByText("Vault Shipping")).toBeInTheDocument();
     expect(canvas.getByText(/Bandai Carddass checklist/)).toBeInTheDocument();
     expect(canvas.queryByText("Result")).not.toBeInTheDocument();
   },
@@ -119,9 +119,9 @@ export const AfterSale: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
-    expect(canvas.getByText("Vault shipping")).toBeInTheDocument();
-    expect(canvas.queryByText("Market price")).not.toBeInTheDocument();
+    expect(canvas.getByText("About This Auction")).toBeInTheDocument();
+    expect(canvas.getByText("Vault Shipping")).toBeInTheDocument();
+    expect(canvas.queryByText("Market Price")).not.toBeInTheDocument();
     expect(canvas.queryByText("Result")).not.toBeInTheDocument();
   },
 };

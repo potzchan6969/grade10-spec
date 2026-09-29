@@ -34,7 +34,7 @@ export default function PaymentOverdueEmail({
 }: PaymentOverdueProps) {
   return (
     <AuctionLetter
-      body="The payment deadline has passed. This order has expired. You can no longer pay on Grade10. Email support@grade10.com if you still want to claim this lot."
+      body="The payment deadline has passed. This order has expired. You can no longer pay on Grade10. Email support@grade10.com if you still want to claim this auction."
       brandName={brandName}
       campaign="payment_overdue"
       canUnsubscribe={false}
@@ -48,7 +48,7 @@ export default function PaymentOverdueEmail({
       points={[
         "We review your requests manually and decide whether the order can still be completed.",
         "Your account may face penalties or extra charges.",
-        "If we do not hear from you soon, the order may be cancelled permanently and the lot re-listed.",
+        "If we do not hear from you soon, the order may be cancelled permanently and the auction re-listed.",
       ]}
       preheader={`Payment deadline passed on ${paymentDeadline}. ${invoiceTotal} still owed.`}
       primaryImageUrl={primaryImageUrl}

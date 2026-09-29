@@ -1,0 +1,25 @@
+schema: grade10-planning
+promoted_by: "@ecchochan"
+created: 2026-09-28
+hands:
+  pm: "@ecchochan"
+  design: "@tangconst"
+  tech: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: no surface a user meets; the stop is a message in a terminal
+awaiting:
+  specs: "2026-09-28, the outline, the blind suite and the requirements for
+    shared/design-sync/design-override - @ecchochan"
+landed_by:
+  proposal: ecchochan
+  decisions: ecchochan
+  tech-design: ecchochan
+  specs: ecchochan
+  test-cases: ecchochan
+  tasks: ecchochan
+reviewed:
+  tech-design: c0784633
+  specs: 2971c3ea
+  test-cases: 2971c3ea
+  tasks: f6800cfd
+  user-journeys: 4f0e2b73
