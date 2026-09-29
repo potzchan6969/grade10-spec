@@ -28,6 +28,7 @@
 | Q12 | Two specs disagree on the first bid: `grade10-site/auction/auction` says it meets the starting price, `grade10-site/auction/bid-increments` says the starting price plus its tier increment, and the app takes the first. Which holds, on every start? | The opening price (Q4): the starting price, or the lowest increment on a 0 start. `grade10-site/auction/bid-increments` and the Bidding page's worked example are rewritten, and the app's floor moves only on a 0 start; the page's unmarked "A first maximum" line drops "plus one increment" when the 🚧 comes off at archive (author's choice via Q4, reversing the round's first call) | The starting price plus its tier increment on every start - the round's first call, reversed by Q4: it moved every unbid lot's floor and contradicted what the author wants a non-zero start to do |
 | Q13 | Before any bid, what does quick-bid chip 1x read? | The opening price plus one increment: the chips count from the opening price before any bid, as from the current bid after - decided by the round | Chip 1x at the opening price itself - rejected: the chips are steps above what stands, and the custom field already takes the opening price |
 | Q14 | The first-bid rule has no journey of its own. Is `grade10-site-auction-auction-US-02` its walk? | Yes - placing a bid inside the window is where a collector meets the minimum; no new journey - decided by the round | A first-bid journey of its own - rejected: it would restate US-02's walk |
+| Q15 | With the opening price as the first-bid minimum, what does a lot starting at the currency ceiling take? | One first bid at the ceiling, and every further bid is refused - what the service does today; create does not check a starting price against the ceiling, unchanged by this change - decided by the round | Refusing every bid on such a lot - rejected: it would make a lot at the ceiling unsellable |
 
 ## Raised
 
@@ -42,3 +43,4 @@
 | `grade10-site/auction/auto-bidding` | Whether a starting price of 0 beside a current bid at the lowest increment is the intended pair | Q11 |
 | `grade10-site/auction/auction` | What quick-bid chip 1x reads before any bid | Q13 |
 | `grade10-site/auction/auction` | Whether US-02 is the walk for the first-bid rule | Q14 |
+| `grade10-site/auction/bid-increments` | What a lot starting at the currency ceiling takes as a first bid | Q15 |

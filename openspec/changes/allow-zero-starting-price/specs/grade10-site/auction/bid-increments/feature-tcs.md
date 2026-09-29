@@ -152,3 +152,9 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 **Run:** blind feature pass, 2026-09-29. Read: the bundle's `outline.md` (Purpose and Feature set), `durable-user-journeys.md`, `change-user-journeys.md`, `proposal.md`, `decisions.md`, `prd-bidding.md`, `existing-feature-tcs.md` (Reconciliation stripped), `domain-tcs.md` (Reconciliation stripped); `docs/governance/specs-to-test-cases.md`, `docs/governance/tcs-conventions.md`, the `spec-to-tcs` skill, `openspec/config.yaml`; this change's auto-bidding suite for shape only, its Reconciliation ignored. Denied: every `## Requirements` section, every `spec.md`, the rest of `openspec/`, `openspec/changes/archive/` and every other change.
+
+- **Joined:** `grade10-site-auction-bid-increments-US1-TC1-2` decides the revised `grade10-site-auction-bid-increments-SC-01` and `grade10-site-auction-bid-increments-SC-12`.
+- **Kept, no new scenario:** `grade10-site-auction-bid-increments-US1-TC6-1` walks `grade10-site-auction-auction-SC-62` and `grade10-site-auction-bid-increments-US1-TC7-1` walks `grade10-site-auction-auction-SC-64` from the minimum's side; the rules sit in `grade10-site/auction/auction`, whose suite walks them too.
+- **Raised, decided by the round:** a lot starting at the currency ceiling (Q15). It moves no scenario.
+- **Raised, rejected:** none.
+- **Uncovered anchors:** none.
