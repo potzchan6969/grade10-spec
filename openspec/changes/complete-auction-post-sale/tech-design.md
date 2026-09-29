@@ -257,6 +257,19 @@ Codes travel as values (`{ success: false, errorCode }`) through every layer; a 
 
 `WINNER_REFUSAL_CODES` names what a winner procedure can return, and the site translates exactly these: `NOT_FOUND`, `ADDRESS_LOCKED`, `ADDRESS_WINDOW_CLOSED`, `METHOD_UNAVAILABLE`, `ORDER_NOT_PAYABLE`, `DEADLINE_ELAPSED`, `INVOICE_EXPIRED`, `PROOF_INVALID`, `PROOF_UNDER_REVIEW`, `UNAVAILABLE`. Every other code is the console's alone.
 
+### Procedures
+
+| Caller | Procedures | Answer |
+| --- | --- | --- |
+| Console, `orders.*` | `queue` | `OperatorOrderPage`: rows, a count per segment, the cursor |
+| Console, `orders.*` | `detail` | `OperatorOrderView` |
+| Console, `orders.*` | `comment`, `sendInvoice`, `reissueInvoice`, `recordPayment`, `reviewProof`, `reopenSetup`, `recordSetup`, `clearPaymentFlag`, `cancel`, `refund`, `dispatch`, `confirmDelivery` | `OperatorCommandOutcome`: the order as it now stands, or the refusal |
+| Console, `testWinners.*` | `create`, `list` | `CreateTestWinnerOutcome`, `TestWinnerList` |
+| Site, through the store router under the same names | `readWinnerOrder`, `confirmSetup`, `confirmCheckout`, `submitProof` | `WinnerOrderOutcome` |
+| Site, through the store router | `prepareCheckout` | `PayByCardOutcome`: the Checkout URL |
+| Site, through the store router | `uploadProofFile` | `UploadProofFileOutcome` |
+| Site | `readDeliveryProof` | the file, from the store worker's GET route for the owned order |
+
 ## Backend Modules
 
 `packages/grade10-auction/backend/src`. `services/auctions/winnerInvoice.ts` (3082 lines) splits at its exported seams before any behaviour changes; the moves are mechanical and keep every test green.
