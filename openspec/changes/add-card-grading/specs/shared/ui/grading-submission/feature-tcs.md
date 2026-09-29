@@ -1,6 +1,6 @@
 # shared/ui/grading-submission Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## Background
@@ -24,7 +24,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -46,6 +46,7 @@
 **Expected Results:**
 
 * `GradingFeeSheet`, `GradingCardList`, `GradingCardRecord`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `GradingStatusRail`, `GradingOwnershipChip`, `GradingPickupCard`, `GradingNamedCollector`, `GradingGradeCards`, `GradingMoneyBlock` and `GradingUncollectedLadder` are all exported.
+* No other component is exported under that comment.
 * Each export carries its own `<Name>Props` type and a `<Name>Copy` type for its words.
 
 ### shared-ui-grading-submission-US1-TC2-1: The booking set is imported unchanged, not redrawn
@@ -54,7 +55,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -75,6 +76,7 @@
 
 **Expected Results:**
 
+* The five booking blocks resolve from the package's public entry.
 * No grading export duplicates a booking block.
 
 ### shared-ui-grading-submission-US1-TC3-1: No console-shaped component ships from the package
@@ -83,7 +85,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -111,7 +113,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -147,7 +149,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -176,7 +178,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -205,11 +207,11 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
@@ -228,6 +230,7 @@
 
 * Step 1: the grader control lists all three graders.
 * Step 3: `onSelectGrader` logs `cgc`, and CGC's own table replaces PSA's.
+* Step 3: CGC reads as selected.
 
 ### shared-ui-grading-submission-US1-TC7-1: A closed level names what closes it
 
@@ -237,7 +240,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -275,7 +278,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -296,6 +299,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The estimate shows cards × fee, the cover line and the total, each as the estimate gives it.
+* The weeks back read as given.
+* No figure of the picker's own shows, such as the fee times the cards alone.
 
 ### shared-ui-grading-submission-US1-TC9-1: No level picked shows no estimate
 
@@ -330,7 +335,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -351,6 +356,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The card shows its set, number and matched line, the declared value and the three reference sales.
+* The minimum grade reads on the card, with the line that the fee applies either way.
 
 ### shared-ui-grading-submission-US1-TC11-1: A card kept as typed shows no reference row
 
@@ -358,7 +364,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -374,12 +380,16 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open Grading Submission / GradingCardList / Kept As Typed at <grade10 ui workbench url>.
-2. Read the card.
+2. Return the story to its start and clear the Actions panel.
+3. Click Add as typed.
+4. Read the card.
 
 **Expected Results:**
 
-* The card shows the name as typed.
-* No reference sales row renders.
+* Step 3: `onAdd` logs the typed name.
+* Step 4: the card shows the name as typed.
+* Step 4: the card reads as kept as typed.
+* Step 4: no reference sales row renders.
 
 ### shared-ui-grading-submission-US1-TC12-1: A card with no declared value is named on the list
 
@@ -387,7 +397,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -415,7 +425,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -436,6 +446,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The list names Lugia first edition as above the ceiling.
+* The line naming a second submission on the same drop-off shows.
 
 ### shared-ui-grading-submission-US1-TC14-1: An empty card list shows no card
 
@@ -443,7 +454,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -465,52 +476,40 @@ Runs once per row of **Test data**.
 * No card renders.
 * Add a card and Paste a list remain available.
 
-### shared-ui-grading-submission-US1-TC15-1: Adding, editing and removing a card fire their callbacks
+### shared-ui-grading-submission-US1-TC15-1: Editing, removing, the minimum grade and the paste fire their callbacks
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
 
 **Pre-conditions:**
 
-* The Card Search story gives `GradingCardList` a search for `Blast` whose matches read as ready.
-* The Matched story gives `GradingCardList` one card, Charizard, with its value declared.
-* The No Value story gives `GradingCardList` a card, Pikachu Illustrator, with an empty value field.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <declared value typed> | 8500 |
+* The Matched story gives `GradingCardList` one card, Charizard, with its value declared and a minimum grade set.
 
 **Steps:**
 
-1. Open Grading Submission / GradingCardList / Card Search at <grade10 ui workbench url>.
+1. Open Grading Submission / GradingCardList / Matched at <grade10 ui workbench url>.
 2. Return the story to its start and clear the Actions panel.
-3. Click the Add a card search field.
-4. Click the Blastoise match.
-5. Open the Matched story, return it to its start and clear the Actions panel.
-6. Click the edit button on Charizard's card.
-7. Click Remove on Charizard's card.
-8. Open the No Value story, return it to its start and clear the Actions panel.
-9. Type <declared value typed> in Pikachu Illustrator's value field.
-10. Press Tab to leave the field.
+3. Click the edit button on Charizard's card.
+4. Click Remove on Charizard's card.
+5. Click the minimum grade tick on Charizard's card.
+6. Click Paste a list.
 
 **Expected Results:**
 
-* Step 4: `onAdd` logs the Blastoise match.
-* Step 6: `onEdit` logs Charizard's id, opening it for editing.
-* Step 7: `onRemove` logs Charizard's id.
-* Step 10: `onDeclare` logs once, when the field is left, with Pikachu Illustrator's id and <declared value typed>.
+* Step 3: `onEdit` logs Charizard's id, opening it for editing.
+* Step 4: `onRemove` logs Charizard's id.
+* Step 5: `onMinimumGrade` logs Charizard's id and the tick's new state.
+* Step 6: `onPaste` logs once.
 
 ### shared-ui-grading-submission-US1-TC16-1: The paste result names each outcome's count and line
 
@@ -518,7 +517,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -539,6 +538,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Each of the five outcomes shows its own count and line.
+* The counts read against the 20 lines read.
 
 ### shared-ui-grading-submission-US1-TC17-1: The Bulk notice renders once the pasted list carries it
 
@@ -546,7 +546,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -566,7 +566,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The Bulk line the story gives renders in the sheet.
+* The Bulk line names the level, its fee, its ceiling, its weeks and the longer drop-off.
 
 ### shared-ui-grading-submission-US1-TC18-1: Add stays disabled while the paste is matching
 
@@ -574,7 +574,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -590,14 +590,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open Grading Submission / GradingPasteSheet / Matching at <grade10 ui workbench url>.
-2. Read the line counter.
-3. Clear the Actions panel.
-4. Click the add button at the foot of the sheet.
+2. Clear the Actions panel.
+3. Click the add button at the foot of the sheet.
 
 **Expected Results:**
 
-* Step 2: the line counter reads matching.
-* Step 4: the add button is disabled, and nothing logs under `onApply`.
+* Step 3: the add button is disabled, and nothing logs under `onApply`.
 
 ### shared-ui-grading-submission-US1-TC19-1: The review schedule lists every card handed in
 
@@ -605,7 +603,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -625,7 +623,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Every card's row names its declared value, fee and cover.
+* One row per card, each naming its name, set line, declared value and cover; Charizard's minimum grade beside it.
+* The declared total and the fee read as given.
+* The good-to-know lines read in the order given.
 
 ### shared-ui-grading-submission-US1-TC20-1: The upcharge warning names both prices per card
 
@@ -633,7 +633,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -661,7 +661,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -689,11 +689,11 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
@@ -709,12 +709,14 @@ Runs once per row of **Test data**.
 3. Click Book the drop-off.
 4. Tick the collection statement.
 5. In the Controls panel, set `consented` to true, as the consumer does on the tick.
+6. Click Book the drop-off.
 
 **Expected Results:**
 
 * Step 3: Book the drop-off is disabled, and nothing logs.
 * Step 4: `onConsent` logs true.
 * Step 5: Book the drop-off is enabled.
+* Step 6: `onBook` logs.
 
 ### shared-ui-grading-submission-US1-TC23-1: Booking pending disables both action buttons
 
@@ -722,7 +724,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -750,7 +752,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -767,10 +769,13 @@ Runs once per row of **Test data**.
 
 1. Open Grading Submission / GradingReview / Plan Expired Meanwhile at <grade10 ui workbench url>.
 2. Read the review above the two buttons.
+3. Clear the Actions panel.
+4. Click Book the drop-off.
 
 **Expected Results:**
 
-* The refusal the story gives renders in the error tone.
+* Step 2: the refusal the story gives renders in the error tone.
+* Step 4: nothing logs under `onBook`.
 
 ### shared-ui-grading-submission-US1-TC25-1: The status rail marks the reached stage among seven
 
@@ -778,7 +783,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -808,7 +813,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -833,11 +838,13 @@ Runs once per row of **Test data**.
 
 ### shared-ui-grading-submission-US1-TC27-1: The status word and the chip read as one pair
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -848,11 +855,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The With The Grader story gives `GradingOwnershipChip` the status word With the grader, and a chip naming the grader, each with its tone.
+* The row's story gives `GradingOwnershipChip` the row's status word and chip, each with its tone.
+
+**Test data:**
+
+| Submission | Story |
+| --- | --- |
+| Waiting on the collector | Waiting On You |
+| Booked for a drop-off | Drop Off |
+| With the shop | With Us |
+| With the grader, the chip naming the grader | With The Grader |
+| On its way back | On Their Way Back |
+| Collected | Collected |
 
 **Steps:**
 
-1. Open Grading Submission / GradingOwnershipChip / With The Grader at <grade10 ui workbench url>.
+1. Open Grading Submission / GradingOwnershipChip / the row's story at <grade10 ui workbench url>.
 2. Inspect the two badges; each tone is its variant.
 
 **Expected Results:**
@@ -865,7 +883,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -892,7 +910,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -904,15 +922,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The Handed In story gives `GradingCardRecord` one card, Charizard, with an intake id and a front-and-back photograph pair.
+* The Minimum Grade story gives `GradingCardRecord` the same card carrying a minimum grade.
 
 **Steps:**
 
 1. Open Grading Submission / GradingCardRecord / Handed In at <grade10 ui workbench url>.
 2. Read Charizard's card.
+3. Open the Minimum Grade story.
+4. Read the card's set line.
 
 **Expected Results:**
 
-* The card shows its intake id and both photographs.
+* Step 2: the card shows its intake id and both photographs.
+* Step 2: no control that changes the card is drawn.
+* Step 4: the minimum grade reads on the set line.
 
 ### shared-ui-grading-submission-US1-TC30-1: Every recorded outcome pairs its badge with its line
 
@@ -922,7 +945,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -939,12 +962,14 @@ Runs once per row of **Test data**.
 
 | Outcome | Story | Badge tone |
 | --- | --- | --- |
+| Listed | Listed | outline |
+| Handed in | Handed In | outline |
 | Refused at the counter | Refused At The Counter | error |
 | Withdrawn | Withdrawn | default |
 | Graded | Graded | success |
 | Moved up a level | Moved Up A Level | warning |
 | Ungraded | Ungraded | error |
-| Minimum grade not met | Minimum Grade Not Met | error |
+| Minimum grade not met | Minimum Grade Not Met | warning |
 | Held by the grader | Held By The Grader | warning |
 | Not returned | Not Returned | error |
 | Damaged | Damaged | error |
@@ -967,7 +992,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -987,7 +1012,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The card names the grade in the grader's words, the label word and the cert.
+* The card names the grade in the grader's words, the label word, the grader and the cert.
 
 ### shared-ui-grading-submission-US1-TC32-1: An ungraded card names the grader's code and note
 
@@ -995,7 +1020,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1017,6 +1042,7 @@ Runs once per row of **Test data**.
 
 * The card renders in the `error` tone.
 * The card names the code and the note in place of a grade.
+* Umbreon holo's card is drawn apart from the graded card.
 
 ### shared-ui-grading-submission-US1-TC33-1: A listed card shows no photograph pair before hand-in
 
@@ -1024,7 +1050,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1052,7 +1078,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -1080,7 +1106,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -1100,7 +1126,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No bring-an-ID line renders.
+* The card says nothing beyond the code is needed.
 
 ### shared-ui-grading-submission-US1-TC36-1: The pickup card names an ID for the named person
 
@@ -1108,7 +1134,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -1132,11 +1158,13 @@ Runs once per row of **Test data**.
 
 ### shared-ui-grading-submission-US1-TC37-1: Naming a person is blocked until a name is entered
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1147,17 +1175,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Name Empty story gives `GradingNamedCollector` nobody named and an empty name field.
+* The row's story gives `GradingNamedCollector` nobody named and an empty name field, in the row's state.
+
+**Test data:**
+
+| State | Story |
+| --- | --- |
+| Name empty | Name Empty |
+| Pending | Saving |
 
 **Steps:**
 
-1. Open Grading Submission / GradingNamedCollector / Name Empty at <grade10 ui workbench url>.
+1. Open Grading Submission / GradingNamedCollector / the row's story at <grade10 ui workbench url>.
 2. Clear the Actions panel.
 3. Click Save.
 
 **Expected Results:**
 
-* Save is disabled while the field is empty, and step 3 logs nothing.
+* Save is disabled, and step 3 logs nothing.
 
 ### shared-ui-grading-submission-US1-TC38-1: Removing a named person clears the card back to nobody
 
@@ -1165,11 +1200,11 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Collecting the cards
@@ -1182,12 +1217,14 @@ Runs once per row of **Test data**.
 
 1. Open Grading Submission / GradingNamedCollector / Named at <grade10 ui workbench url>.
 2. Return the story to its start and clear the Actions panel.
-3. Click Remove.
+3. Click Change.
+4. Click Remove.
 
 **Expected Results:**
 
 * Step 2: the Named badge, the name and the day render.
-* Step 3: `onRemove` logs, and the card returns to nobody named.
+* Step 3: `onChange` logs once.
+* Step 4: `onRemove` logs once.
 
 ### shared-ui-grading-submission-US1-TC39-1: The money block lists its lines in the fixed order
 
@@ -1195,7 +1232,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1224,6 +1261,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* The settle lead reads above the lines.
 * The lines render in the fixed order: fee as n × fee = total, cover, paid, moved up, storage, due.
 * The due line renders in the `warning` tone.
 
@@ -1233,7 +1271,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1253,6 +1291,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* The waived line and the settled line with its till reference show.
 * No settle lead renders above the lines.
 
 ### shared-ui-grading-submission-US1-TC41-1: The storage line reads the fee per card per month
@@ -1261,7 +1300,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1289,7 +1328,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1310,15 +1349,18 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The reminder, storage and notice rungs each render with their day.
+* The ready day and the count of cards held read as given.
 * None is marked passed.
 
 ### shared-ui-grading-submission-US1-TC43-1: A passed rung is marked once its day is reached
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1329,16 +1371,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Reminded story gives `GradingUncollectedLadder` the first reminder rung's day as passed.
+* The row's story gives `GradingUncollectedLadder` the row's rungs as reached.
+
+**Test data:**
+
+| Reached | Story | Passed | Not passed |
+| --- | --- | --- | --- |
+| The first reminder | Reminded | The first reminder | The rungs after it, storage and the notice among them |
+| The reminders and storage | Storage | Both reminders and storage | The notice |
 
 **Steps:**
 
-1. Open Grading Submission / GradingUncollectedLadder / Reminded at <grade10 ui workbench url>.
+1. Open Grading Submission / GradingUncollectedLadder / the row's story at <grade10 ui workbench url>.
 2. Read each rung.
 
 **Expected Results:**
 
-* The first reminder rung is marked passed; the rungs after it, storage and the notice among them, are not.
+* The rungs the row names as passed are marked passed; the rungs it names as not passed are not.
 
 ### shared-ui-grading-submission-US1-TC44-1: The notice rung names the posting date and its window
 
@@ -1346,7 +1395,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1374,7 +1423,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1402,7 +1451,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1437,7 +1486,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -1460,11 +1509,13 @@ Runs once per row of **Test data**.
 
 ### shared-ui-grading-submission-US1-TC48-1: An amount renders in its minor units and ISO code
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1479,19 +1530,22 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Amount | 100000 minor units, HKD |
-| Reads as | HK$1,000 (100000 ÷ 100, in `en`) |
+| Amount | Currency | Locale | Reads as |
+| --- | --- | --- | --- |
+| 100000 minor units | HKD | `en` | HK$1,000 (100000 ÷ 100, in `en`) |
+| 100000 minor units | JPY | `en` | ¥100,000 (JPY carries no minor digit) |
+| 100000 minor units | HKD | `zh-Hant` | HK$1,000 (100000 ÷ 100, in `zh-Hant`) |
 
 **Steps:**
 
 1. Open Grading Submission / GradingMoneyBlock / Estimate at <grade10 ui workbench url>.
-2. Read the fee line's amount.
+2. In the Controls panel, set the fee line's amount and currency and the block's `locale` to the row's.
+3. Read the fee line's amount.
 
 **Expected Results:**
 
-* The amount reads as **Test data**'s reading of it, in HKD.
+* The amount reads as the row's reading of it, in the row's currency.
+* No other amount shows than the ones the block was given.
 
 ### shared-ui-grading-submission-US1-TC49-1: A day renders in the locale and zone supplied
 
@@ -1507,6 +1561,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Content through props
+
+**Blocked:** The spec's author - SC-56 speaks of an instant's time of day in the zone given, and no grading block renders a time; only days are rendered, so the case reads a day until the scenario or a block settles which.
 
 **Pre-conditions:**
 
@@ -1527,7 +1583,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1556,7 +1612,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1586,7 +1642,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1614,7 +1670,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1643,7 +1699,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1668,13 +1724,13 @@ Runs once per row of **Test data**.
 * Step 2: the highest declared value renders as it was given.
 * Step 3: `onSelectGrader` logs `bgs`.
 
-### shared-ui-grading-submission-US1-TC55-1: The cap refuses the card past it and names the level the count closes
+### shared-ui-grading-submission-US1-TC55-1: The cap refuses the card past it
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1685,23 +1741,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `GradingCardList` carries 100 cards, its `cap` at 100, and the level the count closes.
-* The Over The Cap story gives `GradingCardList` a list at its cap, with a name typed in the search.
-* The Cap Notice story gives `GradingCardList` a cap and the level the count closes.
+* The Over The Cap story gives `GradingCardList` a list at <cap>, with a name typed in the search.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <cap> | 2 cards, the story's; it stands for the cap the list is given |
 
 **Steps:**
 
 1. Open Grading Submission / GradingCardList / Over The Cap at <grade10 ui workbench url>.
 2. Clear the Actions panel.
 3. Click Add as typed.
-4. Open the Cap Notice story.
-5. Read the cap line above the cards.
 
 **Expected Results:**
 
+* The line naming a second submission on another day shows.
 * Step 3: `onAdd` logs nothing.
-* Step 3: the line naming a second submission on another day renders.
-* Step 5: the cap and the level the count closes read as they were given.
 
 ### shared-ui-grading-submission-US1-TC56-1: The reference out of reach keeps the list working
 
@@ -1709,7 +1766,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1738,7 +1795,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1767,7 +1824,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1797,7 +1854,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1826,7 +1883,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1855,7 +1912,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1886,7 +1943,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1926,7 +1983,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1964,6 +2021,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Collecting the cards
 
+**Blocked:** Engineering - a product defect: Save stays enabled beside a refusal with a name typed, and a click reports a save; the case is walked again once the block reports nothing under a refusal.
+
 **Pre-conditions:**
 
 * The Refused story gives `GradingNamedCollector` a name typed and the refusal that the cards were already collected.
@@ -1985,7 +2044,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2022,7 +2081,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2057,7 +2116,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2094,7 +2153,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2123,7 +2182,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2156,7 +2215,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2185,7 +2244,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2219,7 +2278,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2251,7 +2310,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2284,7 +2343,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2315,7 +2374,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2344,7 +2403,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2376,7 +2435,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2406,7 +2465,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2430,6 +2489,111 @@ Runs once per row of **Test data**.
 
 * Step 2: the lines-read count reads none.
 * Step 4: the add button is disabled, and nothing logs under `onApply`.
+
+### shared-ui-grading-submission-US1-TC80-1: Adding a card from the search reports the match
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The Card Search story gives `GradingCardList` a search for `Blast` whose matches read as ready.
+
+**Steps:**
+
+1. Open Grading Submission / GradingCardList / Card Search at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Click the Add a card search field.
+4. Click the Blastoise match.
+
+**Expected Results:**
+
+* Step 4: `onAdd` logs the Blastoise match.
+
+### shared-ui-grading-submission-US1-TC81-1: The value field reports once, on leaving it or Enter
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The No Value story gives `GradingCardList` a card, Pikachu Illustrator, with an empty value field.
+* The Editing Value story gives `GradingCardList` a card, Charizard, reopened for editing.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <declared value typed> | 8500 |
+| <reopened value typed> | 4200 |
+
+**Steps:**
+
+1. Open Grading Submission / GradingCardList / No Value at <grade10 ui workbench url>.
+2. Return the story to its start and clear the Actions panel.
+3. Type <declared value typed> in Pikachu Illustrator's value field.
+4. Press Tab to leave the field.
+5. Open the Editing Value story, return it to its start and clear the Actions panel.
+6. Click Charizard's value field.
+7. Press Tab to leave it untouched.
+8. Click Charizard's value field again.
+9. Type <reopened value typed>.
+10. Press Enter.
+
+**Expected Results:**
+
+* Step 3: the field holds <declared value typed>, and nothing logs.
+* Step 4: `onDeclare` logs once, with Pikachu Illustrator's id and <declared value typed>.
+* Step 7: nothing logs.
+* Step 10: `onDeclare` logs once, with Charizard's id and <reopened value typed>.
+
+### shared-ui-grading-submission-US1-TC82-1: The cap reads with the level the count closes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* The Cap Notice story gives `GradingCardList` a cap and the level the count closes.
+
+**Steps:**
+
+1. Open Grading Submission / GradingCardList / Cap Notice at <grade10 ui workbench url>.
+2. Read the cap line above the cards.
+
+**Expected Results:**
+
+* The cap and the level the count closes read as they were given.
 
 ## Reconciliation
 
@@ -2465,9 +2629,14 @@ Runs once per row of **Test data**.
 | `shared-ui-grading-submission-SC-72` | Case added | `shared-ui-grading-submission-US1-TC71-1` — no Open row where the shop names no hours |
 | `shared-ui-grading-submission-SC-73` | Case added | `shared-ui-grading-submission-US1-TC72-1` — a card's payout or reversal line on the collected page |
 | `shared-ui-grading-submission-US1-TC15-1` — the edit step | Fixed | The case's step and expected result named `onEdit` for the value it now carries; the value field's blur-or-Enter commit and its own reopen-with-the-kept-figure rule (added by the block change that split editing from declaring) named no scenario. Folded as `shared-ui-grading-submission-SC-66`; the case's step, pre-condition and expected result rewritten to name `onEdit` and `onDeclare` separately |
-| A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67` |
-| A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68` |
-| The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as `shared-ui-grading-submission-SC-69` |
+| A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67`; case added at review, `shared-ui-grading-submission-US1-TC78-1` |
+| A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68`; case added at review, `shared-ui-grading-submission-US1-TC76-1` |
+| The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as `shared-ui-grading-submission-SC-69`; case added at review, `shared-ui-grading-submission-US1-TC77-1` |
+| `shared-ui-grading-submission-SC-06` | Case added at review | `shared-ui-grading-submission-US1-TC74-1` — an open level carrying cover, picked by id; no case had asserted the pick |
+| `shared-ui-grading-submission-SC-20` | Case added at review | `shared-ui-grading-submission-US1-TC79-1` — nothing read, nothing added; `shared-ui-grading-submission-US1-TC18-1` holds only the loading clause |
+| `shared-ui-grading-submission-SC-59` | Case added at review | `shared-ui-grading-submission-US1-TC75-1` — each block draws the one record it was given; the page passing one record to both stays out of suite, above |
+| `shared-ui-grading-submission-US1-TC15-1` — one case over three stories | Split at review | Adding a card is `shared-ui-grading-submission-US1-TC80-1`; the value field, with its commit-once clauses, is `shared-ui-grading-submission-US1-TC81-1` |
+| `shared-ui-grading-submission-US1-TC55-1` — two starting states | Split at review | The cap and the level the count closes are `shared-ui-grading-submission-US1-TC82-1`; the story's cap stands for the cap the list is given |
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
 | `shared-ui-grading-submission-SC-74` | Case added, added after the run | `shared-ui-grading-submission-US1-TC73-1`: decided outside the blind pass; the editor keeps the review for its totals and warning, so the booking and the tick are left out together and the save reads the consumer's words |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
