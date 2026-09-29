@@ -19,9 +19,10 @@ import { useCallback, useLayoutEffect, useRef } from "react";
  * instead — tabs are for in-place content, not page navigation.
  *
  * Figma set `Tab` (`2121:1139`) owns the trigger axes (`variant`, `selected`,
- * `state`, `isDisabled`); set `Tab List` (`6586:6340`) owns the list
- * `variant` (`pill` | `list`). The root owns the selected value and renders
- * a `<div>`. Tabs are horizontal only — Figma does not draw a vertical list.
+ * `state`, `isDisabled`, `size`); set `Tab List` (`6586:6340`) owns the list
+ * `variant` (`pill` | `list`) and `size` (`md` | `sm`). The root owns the
+ * selected value and renders a `<div>`. Tabs are horizontal only — Figma does
+ * not draw a vertical list.
  */
 function Tabs({
   className,
@@ -37,28 +38,40 @@ function Tabs({
   );
 }
 
-// Figma set `Tab List` (`6586:6340`). One VARIANT axis: `variant`
-// (`pill` | `list`).
+// Figma set `Tab List` (`6586:6340`). VARIANT axes: `variant` (`pill` |
+// `list`) and `size` (`md` | `sm`).
 //
 // `pill` — `Base/muted` track, `Radius/radius-full`, `2px` inset padding,
 // `2px` gap between triggers. Active surface is a sliding `Base/background`
 // pill with the shared drop shadow (tabs-sliding), not a fill on each
-// trigger. Height is `Size/size-10` (40) + pad → 44.
+// trigger. Height is `Size/size-10` (40) + pad → 44 at `md`, `Size/size-8`
+// (32) + pad → 36 at `sm`.
 //
 // `list` — no track; `Gap/gap-6` between triggers and `Gap/gap-2` horizontal
 // padding. Active state is a sliding `Base/foreground` underline (2px), not a
-// border on each trigger.
+// border on each trigger. Height matches the trigger rung (`size-10` / `size-8`).
 const tabsListVariants = cva(
   "group/tabs-list relative inline-flex items-center justify-center text-foreground",
   {
     variants: {
       variant: {
-        pill: "h-11 gap-0.5 rounded-(--radius-full) bg-muted p-0.5",
-        list: "h-10 gap-6 rounded-none bg-transparent px-2",
+        pill: "gap-0.5 rounded-(--radius-full) bg-muted p-0.5",
+        list: "gap-6 rounded-none bg-transparent px-2",
+      },
+      size: {
+        md: "",
+        sm: "",
       },
     },
+    compoundVariants: [
+      { variant: "pill", size: "md", class: "h-11" },
+      { variant: "pill", size: "sm", class: "h-9" },
+      { variant: "list", size: "md", class: "h-10" },
+      { variant: "list", size: "sm", class: "h-8" },
+    ],
     defaultVariants: {
       variant: "pill",
+      size: "md",
     },
   },
 );
@@ -87,8 +100,9 @@ type TabsListProps = TabsPrimitive.List.Props &
  * Figma (`6586:6340`): `pill` is a filled track with a sliding white pill
  * behind the active tab; `list` drops the track for a minimal underline that
  * slides under the active tab. Pick `list` for dense layouts or when the
- * tabs sit directly above their content. The indicator and panel transitions
- * honor `prefers-reduced-motion`.
+ * tabs sit directly above their content. `size` is `md` (default — 40px
+ * triggers in a 44px track) or `sm` (32px triggers in a 36px track, `text-xs`).
+ * The indicator and panel transitions honor `prefers-reduced-motion`.
  *
  * Width is code-owned (Figma draws the hug list only): omit `fullWidth` to
  * size the list to its tabs, or set `fullWidth` to flush the list and share
@@ -97,6 +111,7 @@ type TabsListProps = TabsPrimitive.List.Props &
 function TabsList({
   className,
   variant = "pill",
+  size = "md",
   fullWidth = false,
   children,
   ...props
@@ -105,6 +120,7 @@ function TabsList({
   const indicatorRef = useRef<HTMLSpanElement>(null);
   const didMountRef = useRef(false);
   const variantRef = useRef(variant);
+  const sizeRef = useRef(size);
   const fullWidthRef = useRef(fullWidth);
   const fromRef = useRef({ x: 0, w: 0, h: 0 });
   const animatingRef = useRef(false);
@@ -168,8 +184,11 @@ function TabsList({
 
   useLayoutEffect(() => {
     const layoutChanged =
-      variantRef.current !== variant || fullWidthRef.current !== fullWidth;
+      variantRef.current !== variant ||
+      sizeRef.current !== size ||
+      fullWidthRef.current !== fullWidth;
     variantRef.current = variant;
+    sizeRef.current = size;
     fullWidthRef.current = fullWidth;
     // `children` rebinds when the trigger list is replaced.
     void children;
@@ -177,7 +196,7 @@ function TabsList({
       moveIndicator(false);
     }
     didMountRef.current = true;
-  }, [moveIndicator, variant, fullWidth, children]);
+  }, [moveIndicator, variant, size, fullWidth, children]);
 
   useLayoutEffect(() => {
     const list = listRef.current;
@@ -215,9 +234,10 @@ function TabsList({
       ref={listRef}
       data-slot="tabs-list"
       data-variant={variant}
+      data-size={size}
       data-full-width={fullWidth ? "" : undefined}
       className={cn(
-        tabsListVariants({ variant }),
+        tabsListVariants({ variant, size }),
         fullWidth ? "w-full" : "w-fit",
         className,
       )}
@@ -243,18 +263,20 @@ function TabsList({
  * One trigger in a `TabsList`. Matched to a `TabsContent` by `value`.
  *
  * Figma set `Tab` (`2121:1139`): axes `variant` (`pill` | `line`),
- * `selected`, `state` (`default` | `hover`), `isDisabled`. Selection is
- * owned by `Tabs`; hover is CSS only. Disabled triggers are removed from
- * the tab order and skipped by arrow navigation (`Opacity/opacity-50`).
- * Geometry is `Size/size-10` tall with `text-sm/medium` and `Gap/gap-4`
- * horizontal padding; the list's `variant` draws the active surface.
+ * `selected`, `state` (`default` | `hover`), `isDisabled`, `size`
+ * (`md` | `sm`). Selection is owned by `Tabs`; hover is CSS only. Disabled
+ * triggers are removed from the tab order and skipped by arrow navigation
+ * (`Opacity/opacity-50`). Geometry follows the list's `size`: `md` is
+ * `Size/size-10` tall with `text-sm/medium` and `Gap/gap-4` horizontal
+ * padding; `sm` is `Size/size-8` tall with `text-xs/medium` and `Gap/gap-3`
+ * horizontal padding. The list's `variant` draws the active surface.
  */
 function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative z-[1] inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-(--radius-full) border border-transparent px-4 text-sm font-medium whitespace-nowrap text-foreground transition-[background-color,color,opacity] duration-150 ease-out group-data-full-width/tabs-list:min-w-0 group-data-full-width/tabs-list:flex-1 hover:bg-background-subtle focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-active:hover:bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative z-[1] inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-(--radius-full) border border-transparent px-4 text-sm font-medium whitespace-nowrap text-foreground transition-[background-color,color,opacity] duration-150 ease-out group-data-full-width/tabs-list:min-w-0 group-data-full-width/tabs-list:flex-1 group-data-[size=sm]/tabs-list:h-8 group-data-[size=sm]/tabs-list:gap-1 group-data-[size=sm]/tabs-list:px-3 group-data-[size=sm]/tabs-list:text-xs hover:bg-background-subtle focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-active:hover:bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/tabs-list:[&_svg:not([class*='size-'])]:size-3",
         // `list` (Figma line): no track fill; the list owns the sliding underline.
         "group-data-[variant=list]/tabs-list:rounded-none group-data-[variant=list]/tabs-list:px-0 group-data-[variant=list]/tabs-list:hover:bg-transparent",
         className,

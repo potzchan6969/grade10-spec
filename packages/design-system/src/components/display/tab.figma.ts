@@ -20,6 +20,13 @@ instance.getEnum("variant", {
   line: false,
 });
 
+// Size is owned by `TabsList` — the list's `data-size` scales every trigger.
+// Emitting `size` on the trigger would print a prop it does not accept.
+instance.getEnum("size", {
+  md: false,
+  sm: false,
+});
+
 // `selected` is a two-option VARIANT, but nothing on the trigger drives it:
 // which tab is active is owned by `Tabs`, through `value` / `defaultValue`.
 // Emitting a `selected` prop would print one `TabsTrigger` does not accept, so
