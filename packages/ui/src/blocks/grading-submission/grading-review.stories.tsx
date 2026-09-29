@@ -190,7 +190,13 @@ export const PlanExpiredMeanwhile: Story = {
         "This plan expired on 1 June. Start a submission again.",
       ),
     ).toBeInTheDocument();
+    const book = canvas.getByRole("button", { name: "Book the drop-off" });
+    expect(book).toBeDisabled();
+    await userEvent.click(book, { pointerEventsCheck: 0 });
     expect(args.onBook).not.toHaveBeenCalled();
+    expect(
+      canvas.getByRole("button", { name: "Save and book later" }),
+    ).toBeEnabled();
   },
 };
 
@@ -213,7 +219,7 @@ export const KeptPlanEditor: Story = {
       async () => {
         expect(canvas.queryByRole("checkbox")).toBeNull();
         expect(
-          canvas.queryByRole("button", { name: REVIEW_COPY.book }),
+          canvas.queryByRole("button", { name: "Book the drop-off" }),
         ).toBeNull();
         expect(
           itemsUnder(canvasElement, REVIEW_COPY.scheduleTitle),

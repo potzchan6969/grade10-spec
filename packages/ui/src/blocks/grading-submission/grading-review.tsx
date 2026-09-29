@@ -90,7 +90,8 @@ type GradingReviewProps = GradingLocaleProps &
  * Nothing is booked before the collection statement is ticked, and neither
  * booking nor saving is offered while the review reads as pending: both
  * controls are disabled rather than removed, so the page does not move under
- * the collector while the shop answers.
+ * the collector while the shop answers. A refusal withdraws the booking it
+ * answers and leaves saving offered.
  *
  * Given no booking, the review offers neither the statement nor Book, and its
  * save act reads `copy.saveForLater`, whatever the caller names it.
@@ -112,6 +113,8 @@ function GradingReview({
   locale = "en",
   className,
 }: GradingReviewProps) {
+  const bookOffered = consented === true && !pending && !error;
+
   return (
     <VStack className={className} data-slot="grading-review" gap="md">
       <Card>
@@ -244,7 +247,7 @@ function GradingReview({
         {onBook ? (
           <Button
             data-slot="grading-review-book"
-            disabled={consented !== true || pending}
+            disabled={!bookOffered}
             loading={pending}
             onClick={onBook}
           >

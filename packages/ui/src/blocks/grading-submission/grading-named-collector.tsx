@@ -50,6 +50,7 @@ type GradingNamedCollectorProps = GradingZonedProps & {
 /**
  * Nobody named, or one person with the day they were named. An empty name
  * reports no save, and no save is offered while the card reads as pending.
+ * A refusal answers every act on the card, so beside one nothing is offered.
  *
  * The field is controlled: the name is the consumer's, so a Change prefills
  * the person already named and a refused save keeps what was typed.
@@ -68,6 +69,10 @@ function GradingNamedCollector({
   timeZone,
   className,
 }: GradingNamedCollectorProps) {
+  const refused = Boolean(error);
+  const trimmed = name.trim();
+  const saveOffered = !refused && !pending && trimmed.length > 0;
+
   return (
     <Card className={className} data-slot="grading-named-collector">
       <CardHeader>
@@ -105,10 +110,20 @@ function GradingNamedCollector({
               </Text>
             ) : null}
             <HStack gap="sm" vAlign="center">
-              <Button onClick={onChange} size="sm" variant="secondary">
+              <Button
+                disabled={refused}
+                onClick={onChange}
+                size="sm"
+                variant="secondary"
+              >
                 {copy.change}
               </Button>
-              <Button onClick={onRemove} size="sm" variant="ghost">
+              <Button
+                disabled={refused}
+                onClick={onRemove}
+                size="sm"
+                variant="ghost"
+              >
                 {copy.remove}
               </Button>
             </HStack>
@@ -128,13 +143,9 @@ function GradingNamedCollector({
             />
             <Button
               data-slot="grading-named-collector-save"
-              disabled={pending || name.trim().length === 0}
+              disabled={!saveOffered}
               loading={pending}
-              onClick={() => {
-                const trimmed = name.trim();
-                if (trimmed.length === 0) return;
-                onSave(trimmed);
-              }}
+              onClick={() => onSave(trimmed)}
             >
               {copy.save}
             </Button>

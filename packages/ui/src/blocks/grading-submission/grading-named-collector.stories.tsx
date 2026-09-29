@@ -116,6 +116,34 @@ export const Refused: Story = {
       ),
     ).toBeInTheDocument();
     expect(canvas.getByLabelText("Their name")).toHaveValue("Wong Siu Ming");
+    const save = canvas.getByRole("button", { name: "Save" });
+    expect(save).toBeDisabled();
+    await userEvent.click(save, { pointerEventsCheck: 0 });
     expect(args.onSave).not.toHaveBeenCalled();
+  },
+};
+
+/** A refusal beside the person named offers neither changing nor removing
+ * them: a refused card reports nothing further. */
+export const RefusedWhileNamed: Story = {
+  args: {
+    named: { name: "Wong Siu Ming", namedAt: NAMED_AT },
+    error:
+      "These cards were collected on 20 September, so nobody can be removed.",
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText(
+        "These cards were collected on 20 September, so nobody can be removed.",
+      ),
+    ).toBeInTheDocument();
+    for (const act of ["Change", "Remove"]) {
+      const button = canvas.getByRole("button", { name: act });
+      expect(button).toBeDisabled();
+      await userEvent.click(button, { pointerEventsCheck: 0 });
+    }
+    expect(args.onChange).not.toHaveBeenCalled();
+    expect(args.onRemove).not.toHaveBeenCalled();
   },
 };

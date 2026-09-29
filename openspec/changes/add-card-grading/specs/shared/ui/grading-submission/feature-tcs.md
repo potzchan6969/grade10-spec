@@ -791,9 +791,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reviewing before booking
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2098,16 +2100,17 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Collecting the cards
 
-**Blocked:** Engineering - a product defect: Save stays enabled beside a refusal with a name typed, and a click reports a save; the case is walked again once the block reports nothing under a refusal.
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-named-collector.stories.tsx`
+
 
 **Pre-conditions:**
 
