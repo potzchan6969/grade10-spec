@@ -38,6 +38,8 @@ the card is in the winner's hands. The collector's half is
   half-written for a week; create's requirements are checked on the form and
   again at the API, so a script cannot slip past what the form refuses
 - **Prices read back** — each price shows as a formatted decimal amount
+- 🚧 **Starting price of 0** — a listing in USD, HKD or JPY can start at
+  **0**; its first bid must still reach the currency's lowest increment
   before saving, so its decimal placement can be checked
 - **Sandbox** — set only while draft: the listing runs on test-mode payment
   credentials, so the house can rehearse a sale
