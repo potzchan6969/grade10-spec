@@ -1,7 +1,8 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-25, tcs-rules r4
+**Status:** reopened
+**Reviewed:** 2026-09-25, lapsed 2026-09-29
+**Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -636,6 +637,8 @@ hold is being let go.
 * Time left reads <new time left> and the recorded close does not move past the cap.
 * The history shows the accepted bid beside an unchanged close.
 
+<!-- archive fold: grade10-site-auction-e2e-US07-TC01 (2026-09-17-revise-auction-extended-bidding) replaced by US07-TC03-1 -->
+
 ### grade10-site-auction-e2e-US07-TC03-1: Auto-bid during extended bidding restarts the timer on the live page
 
 **Classification:**
@@ -764,6 +767,8 @@ them.
 
 * No private history is shown before sign-in.
 * Step 2 lands back on the bids index, showing that account's Active list with <listing_11> in it.
+
+<!-- archive fold: grade10-site-auction-e2e-US08-TC1 (2026-09-16-default-auction-bid-holds-off) replaced by US08-TC03-1 -->
 
 ### grade10-site-auction-e2e-US08-TC03-1: A linked collector places and resolves a no-hold bid
 
@@ -1020,5 +1025,51 @@ finds it.
 * A delayed lower authorization is released rather than becoming the current bid.
 * Each user reads only their own maximum, and every standing change is explained by an event in their own history.
 * Every surprise is written up with the amounts, the order, and the timing that produced it.
+---
+
+## grade10-site-auction-e2e-US11: Collector follows an old link to a hidden lot
+
+**As a** collector,
+**I want** a called-off lot to be gone everywhere,
+**so that** a saved link or an old search never shows me a lot that was
+withdrawn.
+
+### grade10-site-auction-e2e-US11-TC01-1: Called-off lot is removed from the catalogue and its link
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-lot-status-US-02, grade10-site-auction-listing-page-US-03
+
+**Pre-conditions:**
+
+* <lot_1> was published and listed in the catalogue, then an operator called it off.
+* customer has <lot_1 address> saved from when <lot_1> was published.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | A lot that was published, listed in the catalogue, then called off by an operator |
+| <lot_1 address> | The address of <lot_1> from when it was published |
+
+**Steps:**
+
+1. Navigate to <grade10 auction url>.
+2. Search the catalogue for the title of <lot_1>.
+3. Navigate to <lot_1 address>.
+
+**Expected Results:**
+
+* Step 2: <lot_1> does not appear in the catalogue.
+* Step 3: response status is 404 and the Page not found screen is on screen.
 
 <!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->
