@@ -18,17 +18,17 @@ opened from the page secondary control.
 Title **View Bank Details**. Subtext: choose a transfer method and use the
 details below. Amount due as medium emphasis type only. Tabs (default pill
 variant, `defaultValue="fps"`): FPS, HK Local, International. From `sm` up
-the list is full-width and shares the track; below `sm` it hugs each label
-and scrolls horizontally so the three names stay readable. Each panel
-scrolls inside the dialog (tab list stays put). FPS: scan QR (solid
-border frame) beside manual FPS ID / account name. HK Local: bank name, bank
-code, branch code, full account number (bank and branch code included). SWIFT:
-beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC,
-full account number or IBAN. Each tab ends with a payment-reference band
-(label, code, memo warning, tight code-to-hint gap) in the same field rhythm
-as the rail rows. SWIFT places the OUR alert **after** that band so destination
-fields stay continuous. Preview samples use Grade10 Finance Limited / HSBC Hong
-Kong. Footer **Done**.
+the list is full-width and shares the track at `size="md"`; below `sm` it
+hugs each label at `size="sm"` and scrolls horizontally so the three names
+stay readable. Each panel scrolls inside the dialog (tab list stays put).
+FPS: scan QR (solid border frame) beside manual FPS ID / account name. HK
+Local: bank name, bank code, branch code, full account number (bank and
+branch code included). SWIFT: beneficiary name, beneficiary address, bank
+name, bank address, SWIFT/BIC, full account number or IBAN. Each tab ends
+with a payment-reference band (label, code, memo warning, tight code-to-hint
+gap) in the same field rhythm as the rail rows. SWIFT places the OUR alert
+**after** that band so destination fields stay continuous. Preview samples
+use Grade10 Finance Limited / HSBC Hong Kong. Footer **Done**.
 
 ### Winner Order — Submit Payment Proof
 
@@ -47,7 +47,7 @@ in `@grade10/design-system`.
 | Export | Package | Role |
 | --- | --- | --- |
 | `Dialog`, `DialogHeader`, `DialogTitle`, `DialogSubtext`, `DialogBody`, `DialogFooter`, `DialogClose` | `@grade10/design-system` | Both modals |
-| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | `@grade10/design-system` | Rail switch in View Bank Details (pill; full-width from `sm`, hug + scroll below) |
+| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | `@grade10/design-system` | Rail switch in View Bank Details (pill; `size="md"` + full-width from `sm`, `size="sm"` + hug + scroll below) |
 | `Button` | `@grade10/design-system` | Submit Payment Proof / View Bank Details / Done / Submit |
 | `Alert` | `@grade10/design-system` | OUR note on SWIFT (inline, not dismissible) |
 | `FileDropzoneTarget`, `FileDropzoneFileList` | `@grade10/design-system` | Proof upload |
