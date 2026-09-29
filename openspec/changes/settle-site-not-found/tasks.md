@@ -62,8 +62,8 @@ Needs group 1. Independent of group 2 — claim and land in parallel.
 Needs groups 2 and 3 deployed — the PRD states what is live, not what has
 merged.
 
-- [ ] 4.1 Remove the `🚧 **Not-found words**` line from
+- [x] 4.1 Remove the `🚧 **Not-found words**` line from
       `docs/prds/products/grade10-site/site/navigation.md` and
       `docs/prds/products/zzz-site/site/navigation.md`, folding each into
       its surrounding prose as settled fact.
-- [ ] 4.2 Verify: `pnpm check:manual`
+- [x] 4.2 Verify: `pnpm check:manual`
