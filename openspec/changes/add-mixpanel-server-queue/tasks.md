@@ -17,7 +17,7 @@
 - [ ] 3.2 Add the outbox tables and migrations `0021_mixpanel_outbox` and `0022_member_erased_at`; record Reward Redeemed in the redemption and Member and Tier on enrolment, every tier change and the end of membership; remove the direct sends and the store's Member and Tier writes; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [ ] 3.3 Verify: the loyalty package tests and the loyalty app's db lane
 
-## 4. Store adoption (grade10)
+## 4. Store adoption (grade10) (owner: @ecchochan)
 
 - [ ] 4.1 Test Order Paid in the drain's commit and once per order under one identity, Account Created with the order owner, Checkout Started with the payment refs, the counter sale, Member Identified, Wallet Pass, the cron pass with a token, erasure, and no token `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-48`, `grade10-site-analytics-SC-56`, `grade10-site-analytics-SC-57`, `grade10-site-analytics-SC-58`
 - [ ] 4.2 Add the outbox tables and migrations for Grade10 and ZZZ, and the Order Paid mark; add the send pass to the cron; record every store send with its fact and remove the direct sends `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-48`, `grade10-site-analytics-SC-56`, `grade10-site-analytics-SC-57`, `grade10-site-analytics-SC-58`
