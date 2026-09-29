@@ -8,6 +8,14 @@ import { normalize, removedLines } from "./lines.mjs";
 
 const SKIPPED = /^(?:[[\](){}<>/;,]+|<{7}.*|={7}|>{7}.*)$/;
 
+/** The merge commit is scratch, never pushed, so a runner with no identity still makes it. */
+const SCRATCH_IDENTITY = {
+  GIT_AUTHOR_NAME: "design-override",
+  GIT_AUTHOR_EMAIL: "design-override@localhost",
+  GIT_COMMITTER_NAME: "design-override",
+  GIT_COMMITTER_EMAIL: "design-override@localhost",
+};
+
 /** Git's merge of the parents, as a tree; a conflict leaves its markers in. */
 function gitMerge([head, ...rest]) {
   let tree;
@@ -17,16 +25,10 @@ function gitMerge([head, ...rest]) {
       { ok: [0, 1] },
     );
     tree = out.split("\0")[0];
-    head = git([
-      "commit-tree",
-      tree,
-      "-p",
-      head,
-      "-p",
-      other,
-      "-m",
-      "design-override",
-    ]).trim();
+    head = git(
+      ["commit-tree", tree, "-p", head, "-p", other, "-m", "design-override"],
+      { env: SCRATCH_IDENTITY },
+    ).trim();
   }
   return tree;
 }
