@@ -30,7 +30,7 @@
 - [ ] 5.2 Add the outbox tables and migration `0006_mixpanel_outbox`; record every auction send in its fact's transaction and remove the direct sends; register the send list `grade10-site-analytics-SC-46`, `grade10-site-analytics-SC-47`, `grade10-site-analytics-SC-56`
 - [ ] 5.3 Verify: the auction package tests and the auction app's db lane
 
-## 6. Operations (grade10)
+## 6. Operations (grade10) (owner: @ecchochan)
 
 - [ ] 6.1 Test: `check-best-effort` finds no unmarked `waitUntil` above the lowered baseline
 - [ ] 6.2 Lower the baseline, describe the outbox in `docs/architecture/tracking.md`, and name the held, oldest-age and no-data monitors in `docs/operations.md`
