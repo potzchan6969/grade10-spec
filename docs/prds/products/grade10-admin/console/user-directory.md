@@ -2,7 +2,7 @@
 title: Users (access desk)
 spec: grade10-admin/console/user-directory
 order: 3
-reviewed: 2026-09-15
+reviewed: 2026-09-29
 ---
 
 The Grade10 Users page is the **access desk** — who holds what, standing,
@@ -35,7 +35,7 @@ Shared rules for the read and the components:
 
 ## Create Account
 
-🚧 An operator holding `user:create` creates a passwordless Auth account from
+An operator holding `user:create` creates a passwordless Auth account from
 Users — name, email, and roles from the closed set — for someone who has never
 signed in.
 
@@ -43,10 +43,10 @@ signed in.
 - **Roles** — Create stays disabled until at least one role is selected. Without `user:set-role`, the dialog offers only `user`
 - **Success** — the new account's panel opens
 - **Duplicate** — refused on the create form before review; the refuse steers the operator to change roles on the existing account's panel
-- 🚧 **Confirm** — when the email is free, create is confirmed against a preview of the trimmed name, email, and roles; Back returns to the form
-- 🚧 **Email** — expects `@9gag.com` or `@memestrategy.com`. A malformed address or one outside those domains adds a note on that confirmation; the email is in bold; the usual addresses are listed
-- 🚧 **Admin** — creating `admin` adds a note on that same confirmation — `admin` cannot be removed from the account once created; the role name is in bold
-- 🚧 **Trim** — name and email are trimmed before the confirmation and before create
+- **Confirm** — when the email is free, create is confirmed against a preview of the trimmed name, email, and roles; Back returns to the form
+- **Email** — expects `@9gag.com` or `@memestrategy.com`. A malformed address or one outside those domains adds a note on that confirmation; the email is in bold; the usual addresses are listed
+- **Admin** — creating `admin` adds a note on that same confirmation — `admin` cannot be removed from the account once created; the role name is in bold
+- **Trim** — name and email are trimmed before the confirmation and before create
 
 :::detail{title="Product decisions" for="pm"}
 An operator holding a ticket that names a person could not find them by name,
@@ -69,6 +69,11 @@ but is the wrong shape for an access desk.
 | Decision | Choice |
 | --- | --- |
 | Create on Users | Auth-only access desk — name, email, roles; not loyalty enroll or opening points. Override keeps Create user and member for non-prod loyalty provisioning |
+| Brand scope | Grade10 Users + shared Auth create; ZZZ adopts when it chooses |
+| Email expect | Warn (not refuse) when host is not `9gag.com` or `memestrategy.com`; server accepts any email |
+| Admin at create | Warn on the same confirmation — `admin` cannot be demoted once created |
+| Always confirm | Always confirm when the email is free, even for a clean draft |
+| Taken email | Refuse on the create form before review; open-existing opens that panel |
 
 Non-goals:
 
