@@ -1013,7 +1013,7 @@ function SlideCopy({
         className="max-w-xl font-semibold text-2xl text-foreground leading-8 sm:text-3xl sm:leading-10 md:text-4xl"
         id={headingId}
       >
-        <OpenLot className="line-clamp-3" slide={slide}>
+        <OpenLot className="line-clamp-4 md:line-clamp-3" slide={slide}>
           {slide.title}
         </OpenLot>
       </h2>
