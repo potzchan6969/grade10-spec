@@ -27,8 +27,8 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 Depends on Groups 1 and 3 (public Featured read + banner export).
 
 - [x] 4.1 Make `grade10-site-auction-auction-SC-43`, `SC-57`, `SC-30`, `SC-37`, `SC-40`, `SC-41`, and `SC-42` pass on `/auction`: Featured from `featured.publicList` when complete slides exist, absent otherwise, quiet layout (no category chrome), Featured lots still in All auctions below Featured, empty All auctions with Featured present, address `/auction` with no category query.
-- [ ] 4.2 Make `grade10-site-auction-auction-SC-31` through `SC-36`, `SC-58` through `SC-61`, and `SC-38` / `SC-39` pass in the live catalogue: slide facts, Bid Now / View Auction by status, progress and small-viewport stage previous/next and swipe, Upcoming money withheld on Featured and All auctions, All auctions infinite scroll with Boneyard load-more skeletons, shared watch on open cards and none on closed.
-- [ ] 4.3 Verify: auction-frontend and grade10 frontend tests, focused Playwright catalogue flows, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`. Record browser evidence.
+- [x] 4.2 Make `grade10-site-auction-auction-SC-31` through `SC-36`, `SC-58` through `SC-61`, and `SC-38` / `SC-39` pass in the live catalogue: slide facts, Bid Now / View Auction by status, progress and small-viewport stage previous/next and swipe, Upcoming money withheld on Featured and All auctions, All auctions infinite scroll with Boneyard load-more skeletons, shared watch on open cards and none on closed.
+- [x] 4.3 Verify: auction-frontend and grade10 frontend tests, focused Playwright catalogue flows, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`. Record browser evidence.
 
 ## 5. Product Record Close-Out (grade10-spec)
 
