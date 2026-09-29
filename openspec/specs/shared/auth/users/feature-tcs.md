@@ -21,7 +21,7 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
@@ -50,7 +50,7 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
@@ -78,7 +78,7 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
@@ -115,7 +115,7 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
@@ -151,7 +151,7 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
@@ -196,7 +196,7 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
@@ -238,7 +238,7 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
@@ -274,7 +274,7 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
@@ -309,7 +309,7 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
@@ -340,7 +340,7 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
@@ -414,7 +414,7 @@ peer lockout does not.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
 
@@ -448,7 +448,7 @@ peer lockout does not.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
@@ -482,7 +482,7 @@ peer lockout does not.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
@@ -518,7 +518,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
@@ -589,7 +589,7 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
@@ -634,7 +634,7 @@ without reading every account.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
@@ -671,7 +671,7 @@ without reading every account.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
@@ -701,7 +701,7 @@ without reading every account.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
@@ -734,7 +734,7 @@ without reading every account.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
