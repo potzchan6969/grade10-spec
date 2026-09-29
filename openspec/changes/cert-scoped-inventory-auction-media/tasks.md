@@ -73,11 +73,11 @@
 - [x] 3.3 Verify: run the Grade10 Admin cross-domain media E2E suite and the
   application build.
 
-## 4. Planning review (grade10-spec)
+## 4. Planning review (grade10-spec) (owner: @htonyl)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review cert-scoped-inventory-auction-media`) as its input.
 
-- [ ] 4.1 Review the Inventory and Auction feature suites and the Grade10
+- [x] 4.1 Review the Inventory and Auction feature suites and the Grade10
   Admin cross-domain smoke suite before implementation begins.
-- [ ] 4.2 Verify: run `pnpm run tcs:validate`, `pnpm run validate:changes
+- [x] 4.2 Verify: run `pnpm run tcs:validate`, `pnpm run validate:changes
   cert-scoped-inventory-auction-media`, and `pnpm check:manual`.
