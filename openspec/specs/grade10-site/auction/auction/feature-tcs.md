@@ -1,7 +1,160 @@
 # grade10-site/auction/auction Test Cases
 
 **Status:** approved
-**Reviewed:** 2026-09-25, tcs-rules r4
+**Reviewed:** 2026-09-29, tcs-rules r4
+
+## grade10-site-auction-auction-US5: Collector reads the catalogue in one order
+
+**As a** collector,
+**I want** the catalogue to lead with the lots I can bid on, soonest to close
+first, and to keep that order as I read on,
+**so that** what I can still bid on is in front of me and reading further never
+shows me a lot twice or skips one.
+
+### grade10-site-auction-auction-US5-TC1-1: Open lots lead the catalogue
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* The catalogue lists `<listing_14>`, `<listing_15>` and `<listing_16>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_14>` | An Active lot whose close is 18:00 UTC |
+| `<listing_15>` | An Upcoming lot whose start is 19:00 UTC |
+| `<listing_16>` | An Ended lot that closed at 12:00 UTC, before `<listing_14>` closes |
+
+**Steps:**
+
+1. Navigate to <grade10 auction catalogue url>.
+2. Read the lots in listed order.
+
+**Expected Results:**
+
+* `<listing_14>` is listed before `<listing_15>`.
+* `<listing_15>` is listed before `<listing_16>`.
+
+### grade10-site-auction-auction-US5-TC2-1: Each status has its own order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* The catalogue lists the six lots in **Test data**.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_17>` | An Active lot closing at 18:00 UTC |
+| `<listing_18>` | An Active lot closing at 19:00 UTC |
+| `<listing_19>` | An Upcoming lot starting on 2026-10-01 |
+| `<listing_20>` | An Upcoming lot starting on 2026-10-02 |
+| `<listing_21>` | An Ended lot that closed on 2026-09-22 |
+| `<listing_22>` | An Ended lot that closed on 2026-09-15 |
+
+**Steps:**
+
+1. Navigate to <grade10 auction catalogue url>.
+2. Read the lots in listed order.
+
+**Expected Results:**
+
+* `<listing_17>` is listed before `<listing_18>`.
+* `<listing_19>` is listed before `<listing_20>`.
+* `<listing_21>` is listed before `<listing_22>`.
+
+### grade10-site-auction-auction-US5-TC3-1: A tie is settled the same way every read
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* `<listing_23>` and `<listing_24>` are both Active and close at the same time.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_23>` | An Active lot closing at 18:00 UTC |
+| `<listing_24>` | An Active lot closing at 18:00 UTC, a different lot record from `<listing_23>` |
+
+**Steps:**
+
+1. Read the API response for the Auction catalogue.
+2. Read the API response for the Auction catalogue again.
+
+**Expected Results:**
+
+* `<listing_23>` and `<listing_24>` are in the same order both times.
+
+### grade10-site-auction-auction-US5-TC4-1: Paging does not change the order
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* The Auction catalogue holds more lots than one page lists.
+
+**Steps:**
+
+1. Read the API response one page at a time to the end.
+2. Read the API response for the whole catalogue.
+
+**Expected Results:**
+
+* Both readings list the lots in the same order.
+* No lot is listed twice.
+* No lot is missing.
+
+---
 
 ## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
