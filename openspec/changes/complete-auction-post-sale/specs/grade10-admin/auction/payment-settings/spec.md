@@ -114,9 +114,8 @@ nothing stored, when a rule breaks the ranges above or has only one part, or
 names a currency or method Grade10 does not support.
 
 **Applies forward** - A saved schedule SHALL be where the fee on a quote or a
-reissue made after it starts, per `grade10-admin/auction/post-sale`, and what
-the winner reads at the payment method choice, per
-`grade10-site/auction/winner-order`. It SHALL NOT change a sent invoice.
+reissue made after it starts, per `grade10-admin/auction/post-sale`. It SHALL
+NOT change a sent invoice or anything the winner reads.
 
 **Access** - Only an operator with payment processing, `auction:payment`,
 SHALL open or save Payment Settings.

@@ -24,8 +24,9 @@ from the chain of invoices on the order.
 | --- | --- |
 | `not_issued` | No invoice has been sent. The value at auction order creation |
 | `pending` | An operator has sent the invoice and it is unpaid. A reissued invoice is `pending`, and so is an invoice whose proof an operator returned |
+| `partially_paid` | An operator recorded a payment short of the order total on a `pending` or `expired` bank transfer invoice; no deadline runs |
 | `payment_verifying` | The winner uploaded payment proof on a `pending` bank transfer invoice, and an operator has not yet confirmed or returned it. The deadline is stopped |
-| `expired` | The payment deadline passed with the invoice `pending`. Written by Grade10 at the deadline. Winner self-service payment ends; an operator may reissue, settle manually, or cancel |
+| `expired` | The payment deadline passed with the invoice `pending`. Written by Grade10 at the deadline. Winner self-service payment ends; an operator may reissue, record a payment, or cancel |
 | `paid` | Payment is received in full, whether by the winner's card, by an operator confirming the winner's proof, or recorded by an operator |
 | `cancelled` | An operator cancels an order that is unpaid. Terminal |
 | `refunded` | A paid invoice is subsequently refunded. Terminal |
@@ -82,18 +83,22 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | Field | From | To | Trigger |
 | --- | --- | --- | --- |
 | Invoice status | `not_issued` | `pending` | An operator sends the invoice, with `address_confirmed` already true |
-| Invoice status | `not_issued` | `cancelled` | An operator cancels an order before its invoice is sent; the lot reopens |
+| Invoice status | `not_issued` | `cancelled` | An operator cancels an order before its invoice is sent. The listing stays Closed and its stock hold is released, so the item is back in stock. |
 | Invoice status | `pending` | `paid` | The winner's card payment is confirmed, or an operator commits a manual settlement |
 | Invoice status | `pending` | `payment_verifying` | The winner uploads payment proof on a bank transfer invoice |
 | Invoice status | `pending` | `pending` | An operator reissues the invoice; the new invoice replaces it |
-| Invoice status | `pending` | `cancelled` | An operator cancels an unpaid invoice; the lot reopens |
 | Invoice status | `pending` | `expired` | Grade10, at the payment deadline, with the invoice unpaid |
+| Invoice status | `pending` | `partially_paid` | An operator records a payment short of the order total on a bank transfer invoice |
 | Invoice status | `payment_verifying` | `paid` | An operator confirms the proof |
 | Invoice status | `payment_verifying` | `pending` | An operator returns the proof; the deadline restarts with the time left |
 | Invoice status | `expired` | `paid` | An operator commits a manual settlement |
-| Invoice status | `expired` | `paid` | A card payment started in time completes, or one lands after the deadline, flagged Paid late |
+| Invoice status | `expired` | `paid` | A card payment lands on it anyway, flagged Paid late; a payment started in time keeps the invoice `pending` instead |
 | Invoice status | `expired` | `pending` | An operator reissues the invoice with a new deadline |
-| Invoice status | `expired` | `cancelled` | An operator cancels the order; the lot reopens |
+| Invoice status | `expired` | `partially_paid` | An operator records a payment short of the order total on a bank transfer invoice |
+| Invoice status | `expired` | `cancelled` | An operator cancels the order. The listing stays Closed and its stock hold is released, so the item is back in stock. |
+| Invoice status | `partially_paid` | `partially_paid` | An operator records another payment short of the balance |
+| Invoice status | `partially_paid` | `paid` | An operator records a payment that meets the balance, or closes the invoice within tolerance |
+| Invoice status | `partially_paid` | `refunded` | A refund is recorded |
 | Invoice status | `paid` | `refunded` | A refund is completed. Refund mechanics are not specified at MVP |
 | Fulfilment status | `unfulfilled` | `fulfilled` | The warehouse dispatches, with invoice status already `paid` |
 | `delivery_confirmed` | false | true | The carrier confirms delivery, with fulfilment status already `fulfilled` |
@@ -104,6 +109,9 @@ settlement on it, and SHALL NOT start a card payment on it; a card payment
 that completes anyway is recorded per "Money that lands is always recorded"
 and moves nothing. Proof upload SHALL enter `payment_verifying` only from
 `pending`.
+
+Grade10 SHALL refuse a cancel on a `pending` invoice; it is reissued or left
+to expire.
 
 A card payment that completes SHALL be recorded, per "Money that lands is
 always recorded" in `grade10-admin/auction/post-sale`. It SHALL move the

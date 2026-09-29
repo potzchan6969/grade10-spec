@@ -80,7 +80,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | No change: the winner's page keeps its design and its procedures |
+| `apps/frontend/grade10` | Reads `Awaiting Setup`; My auction orders names all twelve statuses from the catalog; the winner's page keeps its design and procedures |
 | `apps/admin/grade10` | Orders replaces the Queue and Winner orders tabs, with a page per order at its own address and a dialog per action; Payment Settings gains the fee schedule; the Test tab gains test winners |
 | Auction service | Fee schedule; the fee stored as the operator set it; send and reissue priced again against the total read; order status read from the order's facts; money that lands recorded and flagged; proof files served to operators; order-level dispatch and delivery; the worklist query; the listing-level post-sale actions removed; test winners |
 | Store service | Passes the winner procedures through unchanged, with the session's user |
@@ -104,9 +104,9 @@ See [Non-Goals](decisions.md#non-goals).
   reasons and reopening the address form add their own requirements, and the
   order page carries their actions. The worklist places Partially Paid under
   Waiting on winner and keeps the cancellation category filter. Card money
-  that lands on a partly paid invoice counts toward its balance under
-  `add-winner-partial-payment`'s rule, and a payment started before the
-  deadline counts, as `close-overdue-address-confirmation` writes it
+  counts toward a balance only where "Money that lands is always recorded"
+  says it does; money that counts toward nothing never makes an order
+  Partially Paid
 - **Feature sets are hand-merged at archive.** In post-sale, the Queue group's
   extended-bidding leaf goes, and the Quote and send group's bank transfer fee
   leaf gives way to the fee from the schedule

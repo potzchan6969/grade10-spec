@@ -228,7 +228,7 @@ an auction order that is unpaid.
 | Reissue | Replaces the current invoice with a new `pending` one, per "An operator reissues a sent invoice". The order reads Pending Payment | On an order whose invoice is `pending` or `expired` |
 | Check proof | Confirms the payment or returns the invoice to `pending`, per "An operator checks payment proof" | On an order whose invoice is `payment_verifying` |
 | Record payment | Records money received outside the card checkout, per "Manual settlement records the method and its proof" | On an order whose bank transfer invoice is `pending` or `expired`, or that reads Partially Paid |
-| Cancel order | The order derives as Cancelled, per `grade10-site/auction/order-status`. The lot returns to available | On an order in Awaiting Setup, Setup Overdue, Preparing Invoice or Payment Overdue |
+| Cancel order | The order derives as Cancelled, per `grade10-site/auction/order-status`. The listing stays Closed and its stock hold is released, so the item is back in stock. | On an order in Awaiting Setup, Setup Overdue, Preparing Invoice or Payment Overdue |
 
 While an invoice is `payment_verifying`, Grade10 SHALL offer only Confirm and
 Return, and SHALL refuse Reissue, Record payment and Cancel.
@@ -265,7 +265,7 @@ explicit action.
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an order whose invoice is `expired`
-- **THEN** the reissue, settle and cancel controls are visible and disabled
+- **THEN** the reissue, record payment and cancel controls are visible and disabled
 - **AND** Grade10 refuses those actions on the server if they are attempted
 
 #### Scenario: grade10-admin-auction-post-sale-SC-54 - An overdue order waiting on an address can be cancelled
@@ -274,7 +274,8 @@ explicit action.
 - **GIVEN** an auction order in Setup Overdue
 - **AND** an operator holding payment processing
 - **WHEN** they cancel it with a reason
-- **THEN** the order derives as Cancelled and the lot returns to available
+- **THEN** the order derives as Cancelled, the listing stays Closed and its
+  stock hold is released, so the item is back in stock
 - **AND** the winner's account is not suspended
 
 #### Scenario: grade10-admin-auction-post-sale-SC-122 - A pending invoice offers reissue and settlement
@@ -1321,10 +1322,13 @@ the first row that fits says:
 
 Only a card invoice opens a card payment, so the last row is a backstop. A
 flagged payment SHALL write a flagged payment entry to the invoice log.
+Grade10 starts no card payment on an expired invoice. The Paid late row covers
+only money the provider captured anyway.
 
 **Counts toward nothing** - Such a payment SHALL count toward no balance, SHALL
 move no status, and SHALL NOT block a reissue or a cancel. Finance returns it
-outside Grade10, and an operator then clears its flag.
+outside Grade10, and an operator then clears its flag. A payment counts toward
+the balance when it carries no flag, or is flagged Paid late or Overpaid.
 
 **A flagged order** - An order SHALL be flagged while any of its payments
 carries a flag not yet cleared. The flag itself SHALL change no status. The
