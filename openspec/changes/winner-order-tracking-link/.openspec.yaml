@@ -1,4 +1,5 @@
 schema: grade10-planning
+promoted_by: "@tangconst"
 created: 2026-09-29
 design_waived: "Preview composition of existing Link/Stepper; no application-repo task group and no new Figma-owned component"
 hands:
