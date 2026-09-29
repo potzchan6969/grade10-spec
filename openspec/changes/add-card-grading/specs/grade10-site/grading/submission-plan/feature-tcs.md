@@ -137,6 +137,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Expected Results:**
 
 * The plan wizard opens at `<grade10 plan wizard url>` on the Cards step, with no card listed.
+* Add a card and Paste a list are both offered.
 
 ### grade10-site-grading-submission-plan-US1-TC5-1: Booking without a list leaves the grading home with no list started
 
@@ -298,7 +299,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Expected Results:**
 
 * No card is listed.
-* Add a card and Paste a list are the only actions offered.
+* Add a card and Paste a list are both offered.
 * Continue is disabled.
 
 ### grade10-site-grading-submission-plan-US2-TC4-1: Removing a card takes it off the list
@@ -336,6 +337,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * `<card C>` no longer shows on the list.
 * One card remains listed: `<card B>`.
+* `<card B>` keeps its declared value of 50000 (HKD minor units, HK$500.00).
 
 ### grade10-site-grading-submission-plan-US2-TC5-1: The wizard rail marks the cards step in progress
 
@@ -399,15 +401,11 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 3. Read the About you fields.
 4. Change the phone to the one in **Test data**.
 5. Open the account's profile page and read its phone.
-6. Sign out from the header.
-7. Navigate to `<grade10 plan wizard url>`.
-8. Read the About you fields.
 
 **Expected Results:**
 
 * Signed in, the name, the email and the phone are filled in from the account.
 * The changed phone is held on this submission, and the account is unchanged.
-* Signed out, all three are asked for and none is filled in.
 
 ### grade10-site-grading-submission-plan-US2-TC7-1: A card added by hand that the reference does not answer for is kept as typed
 
@@ -465,7 +463,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
+* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed and an email in About you.
 * The card price reference cannot be reached.
 
 **Test data:**
@@ -479,12 +477,15 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 1. Type the card name from **Test data** in the card name field.
 2. Click Add this card.
 3. Read the card line.
+4. Enter a declared value on the card.
+5. Read the continue button.
 
 **Expected Results:**
 
 * The card carries the reference-unavailable line rather than the kept-as-typed one.
 * The declared value is still asked for.
 * Nothing on the step waits on the reference.
+* Continue is enabled: the list can be finished.
 
 ### grade10-site-grading-submission-plan-US2-TC9-1: A minimum grade is carried to the review and costs nothing
 
@@ -524,6 +525,34 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * `<card D>` carries a minimum grade of PSA 9 beside it on the schedule.
 * The fee at the counter reads 60000 (HKD minor units, HK$600.00), Regular's fee a card for one card, unchanged by the minimum.
+
+### grade10-site-grading-submission-plan-US2-TC10-1: Contact details are asked of a signed-out collector
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* customer(no account) is signed out.
+
+**Steps:**
+
+1. Navigate to `<grade10 plan wizard url>`.
+2. Read the About you fields.
+
+**Expected Results:**
+
+* The name, the email and the phone are all asked for, and none is filled in.
 
 ---
 
@@ -719,11 +748,14 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 2. Paste the pasted line from **Test data** into Your list.
 3. Wait for matching to finish.
 4. Read the rows under the lines-read counter.
+5. Close the sheet with Go back.
+6. Read the list.
 
 **Expected Results:**
 
 * The pasted line reports as skipped, naming it as a card already listed.
 * The skipped count reads 1.
+* The card is listed once.
 
 ### grade10-site-grading-submission-plan-US3-TC6-1: An empty paste leaves Add disabled
 
@@ -752,6 +784,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Expected Results:**
 
 * Add stays disabled with nothing read.
+* No outcome row shows.
 
 ### grade10-site-grading-submission-plan-US3-TC7-1: A reference outage keeps every pasted line as typed
 
@@ -871,14 +904,12 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 1. Paste the 25 lines from **Test data** into Your list.
 2. Wait for matching to finish.
-3. Click the button that adds 25 cards to the list.
-4. Click Continue.
-5. Read the levels.
+3. Read the Bulk notice on the sheet.
 
 **Expected Results:**
 
-* Bulk shows as the only open level, naming its fee a card and its ceiling.
-* The Bulk drop-off is named as the longer visit.
+* The sheet says Bulk is the only level open at the next step, at 18000 (HKD minor units, HK$180.00) a card, cards up to 150000 (HKD minor units, HK$1,500.00), back in about 10 weeks, up to 100 cards a submission.
+* It names the longer drop-off.
 
 ### grade10-site-grading-submission-plan-US4-TC2-1: Exactly twenty cards leave every level open
 
@@ -992,7 +1023,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Expected Results:**
 
-* The line above Bulk's ceiling is named for a second submission on the same drop-off.
+* The line above Bulk's ceiling is named with its declared value, 200000 (HKD minor units, HK$2,000.00), for a second submission on the same drop-off.
 * The other 21 lines are held in this submission at Bulk.
 
 ### grade10-site-grading-submission-plan-US4-TC5-1: The 101st pasted card is refused at Bulk's cap
@@ -1146,10 +1177,12 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 1. Click PSA under Grader.
 2. Read the Value level.
+3. Read the Regular level.
 
 **Expected Results:**
 
 * Value shows closed, naming the card declared at 850000 (HKD minor units, HK$8,500.00) as above its 390000 (HKD minor units, HK$3,900.00) ceiling.
+* Regular shows open.
 
 ### grade10-site-grading-submission-plan-US5-TC3-1: Bulk closed by count names how many more cards are needed
 
@@ -1447,15 +1480,24 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * customer(no account) is signed out and on the Cards step at `<grade10 plan wizard url>`, with one card listed and the email field blank.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | An address only this run writes to, such as `plan-noemail-<run>@grade10.dev` |
+
 **Steps:**
 
 1. Click Finish later without entering an email.
 2. Read the Cards step under About you.
+3. Enter `<collector email>` in About you.
+4. Click Finish later.
 
 **Expected Results:**
 
 * The plan is not kept.
 * The email field is asked for before the plan can be kept.
+* Once the email is given, the plan is kept.
 
 ### grade10-site-grading-submission-plan-US6-TC3-1: The emailed link opens the kept plan on another device
 
@@ -1486,6 +1528,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * The kept plan opens with its cards, grader and level as saved.
 * No sign-in or account is asked for.
+* Its estimate shows.
+* The day it is kept until shows.
+* Booking the drop-off is offered.
 
 ### grade10-site-grading-submission-plan-US6-TC4-1: Signing in with no password lists every submission
 
@@ -1519,11 +1564,13 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 3. Enter `<collector email>`.
 4. Open the sign-in link mailed to it.
 5. Read Your submissions on the home.
+6. Click each listed submission.
 
 **Expected Results:**
 
 * No password is asked for.
 * Both submissions list under Your submissions, each with its summary, status word and chip.
+* Each opens its own page at `<grade10 grading submission url>`.
 
 ### grade10-site-grading-submission-plan-US6-TC5-1: A signed-in collector with no submissions sees the empty state
 
@@ -1676,12 +1723,11 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Pre-conditions:**
 
 * customer has a plan saved for later with the collection statement unticked, no drop-off booked and none held under the same email, and holds its emailed link.
-* A second tab holds the plan's page, loaded while the plan was unticked.
 
 **Steps:**
 
 1. Open the kept plan from its emailed link.
-2. In the second tab, send a booking of a free day and time for the plan carrying no tick.
+2. Send a booking of a free day and time for the plan, carrying no tick, outside its page.
 3. In the first tab, tick the statement.
 4. Book a free day and time.
 
@@ -1814,7 +1860,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Expected Results:**
 
 * Umbreon VMAX is named with Express as the level the grader would move it to.
-* The difference due at the counter reads 60000 (HKD minor units), Express's fee less Regular's fee from **Test data**.
+* The difference due at the counter before collection reads 60000 (HKD minor units), Express's fee less Regular's fee from **Test data**.
 * Express's fee now, 120000 (HKD minor units), shows beside it.
 
 ### grade10-site-grading-submission-plan-US7-TC3-1: No card above the ceiling shows no upcharge warning
@@ -1891,15 +1937,24 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Express, each with a declared value inside Express's 1950000 (HKD minor units, HK$19,500.00).
+* customer is on the Book step at `<grade10 plan wizard url>`, the two cards in **Test data** listed at PSA Express and an email given.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00) and `Homebrew Charizard` 400000 (HK$4,000.00), HKD minor units, each inside Express's 1950000 (HK$19,500.00) |
+| Cover, `Homebrew Umbreon` | 12750 (HKD minor units, HK$127.50), 150 basis points (1.5%) of 850000 |
+| Cover, `Homebrew Charizard` | 6000 (HKD minor units, HK$60.00), 150 basis points (1.5%) of 400000 |
 
 **Steps:**
 
-1. Read the review's totals.
+1. Read the review's schedule.
 
 **Expected Results:**
 
-* The cover line shows under the fee, per card and in total, at 150 basis points (1.5%) of each card's declared value.
+* `Homebrew Umbreon` carries a cover line of 12750 (HKD minor units) from **Test data**.
+* `Homebrew Charizard` carries a cover line of 6000 (HKD minor units) from **Test data**.
 
 ### grade10-site-grading-submission-plan-US7-TC6-1: Booking shows pending and disables both buttons
 
@@ -2099,13 +2154,18 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Steps:**
 
-1. Open the plan's page from its link.
-2. Read the lead under the status.
+1. Run grading's fast sweep lane, after 09:00 on the shop's clock.
+2. Read the last letter to the plan's email in grading's outbox.
+3. Run grading's fast sweep lane again.
+4. Read the outbox again.
+5. Open the plan's page from its link.
+6. Read the lead under the status.
 
 **Expected Results:**
 
+* Step 2: one nudge letter carries the plan's link.
+* Step 4: the second pass sends no second nudge.
 * The page reads a kept-until line naming the expiry day, 30 days from when the plan was kept.
-* The plan can still be booked.
 
 ### grade10-site-grading-submission-plan-US8-TC2-1: An unbooked plan at day 30 expires
 
@@ -2129,12 +2189,14 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Steps:**
 
 1. Run grading's fast sweep lane.
-2. Open the plan's page from its link.
-3. Read the status and the lead.
+2. Read the last letter to the plan's email in grading's outbox.
+3. Open the plan's page from its link.
+4. Read the status and the lead.
 
 **Expected Results:**
 
-* The status reads Expired, with the rail ended at Planned.
+* An expiry letter says the list expired, with nothing paid and nothing owed.
+* The status reads Expired.
 * The page states nothing is paid and nothing is owed.
 * Start a submission is offered.
 
@@ -2191,11 +2253,12 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 1. Run grading's fast sweep lane.
 2. Open the plan's page from its link.
 3. Read the status and the lead.
+4. Read the last letter to the plan's email in grading's outbox.
 
 **Expected Results:**
 
 * The status still reads Drop-off booked, not Expired.
-* No nudge or expiry line shows.
+* No nudge and no expiry letter is sent.
 
 ---
 

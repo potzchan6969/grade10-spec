@@ -654,7 +654,7 @@ Runs once per row of **Test data**.
 * No card shows the Moved up a level badge.
 * The money block shows no due-at-the-counter line.
 
-### grade10-site-grading-submission-lifecycle-US4-TC3-1: A grader invoice with another figure leaves the upcharge at the sheet's difference
+### grade10-site-grading-submission-lifecycle-US4-TC3-1: A different invoice figure leaves the upcharge at the sheet's difference
 
 **Classification:**
 
@@ -1427,7 +1427,7 @@ Runs once per row of **Test data**.
 * The storage figure still accrues at 4 cards times 3000 (HKD, minor units) a month started.
 * Nothing on the ladder reads as paused, held or waiting on the booked visit.
 
-### grade10-site-grading-submission-lifecycle-US8-TC7-1: Storage accrued is taken at the till, a line per card, before the hand-back
+### grade10-site-grading-submission-lifecycle-US8-TC7-1: Storage is taken at the till, a line per card, before hand-back
 
 **Classification:**
 
@@ -1464,7 +1464,7 @@ Runs once per row of **Test data**.
 * Step 1: nothing can be handed over yet.
 * Step 3: the storage accrued to that day is taken at the till, one line per card held.
 
-### grade10-site-grading-submission-lifecycle-US8-TC8-1: Each reminder names the code, what is due and the days ahead, and costs nothing
+### grade10-site-grading-submission-lifecycle-US8-TC8-1: A reminder names the code, what is due and the days ahead
 
 Runs once per row of **Test data**.
 
@@ -1693,7 +1693,7 @@ Runs once per row of **Test data**.
 * The three collected cards show their graded record.
 * The held card shows the Held by the grader badge with the expected date, and the record names a second hand-back still to come.
 
-### grade10-site-grading-submission-lifecycle-US9-TC4-1: The held card's return closes the submission with both receipts on the record
+### grade10-site-grading-submission-lifecycle-US9-TC4-1: The held card's return closes the submission, keeping both receipts
 
 **Classification:**
 

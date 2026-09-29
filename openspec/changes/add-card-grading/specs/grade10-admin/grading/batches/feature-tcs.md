@@ -72,7 +72,7 @@
 **Expected Results:**
 
 * Step 4: every submission in the batch moves to With the grader.
-* Step 5: every collector in the batch is emailed the courier and the estimate.
+* Step 5: every collector in the batch is emailed the tracking and the estimate.
 * Step 5: the batch's row reads shipped, with its tracking and estimate.
 
 ---
@@ -109,7 +109,7 @@
 
 **Expected Results:**
 
-* Step 1: the row reads building until its cut-off, with no Ship offered.
+* Step 1: the row reads Open, building until its cut-off, with no Ship offered, so the ship form cannot be opened on it.
 
 ---
 
@@ -197,6 +197,7 @@
 **Expected Results:**
 
 * Step 3: Mark as shipped is disabled, naming the tracking number field.
+* Step 3: the batch's submission still reads Handed in.
 
 ---
 
@@ -232,10 +233,13 @@
 1. Click Ship on <closed batch of three cards>'s row.
 2. Enter <the courier's written cover figure> and its currency.
 3. Read the insured line.
+4. Click Mark as shipped, where it is offered.
+5. Read the form and the batch's row.
 
 **Expected Results:**
 
 * Step 3: the insured line reads in the warning tone.
+* Step 5: the act is refused naming 1000000 against 800000 (HKD, minor units), and no submission moves.
 
 ---
 
@@ -263,7 +267,7 @@
 
 | Field | Value |
 | --- | --- |
-| <closed batch of three collectors> | three submissions at PSA · Regular, one each from collectors A, B and C, handed in as *A batch of several submissions* says; walked on the Friday after the cut-off |
+| <closed batch of three collectors> | three submissions at PSA · Regular of 2, 1 and 5 cards, one each from collectors A, B and C, handed in as *A batch of several submissions* says; walked on the Friday after the cut-off |
 | Grader's order number | PSA-ORDER-0006 |
 | Courier | SF Express |
 | Tracking number | SF1000000006 |
@@ -273,15 +277,17 @@
 **Steps:**
 
 1. Click Ship on <closed batch of three collectors>'s row.
-2. Tick each check under Before it leaves, and enter the fields from **Test data**.
-3. Click Mark as shipped.
-4. Read each of the three submissions on the queue at <grade10 admin grading queue url>.
-5. Read the letter to each of collectors A, B and C.
+2. Read the packing list.
+3. Tick each check under Before it leaves, and enter the fields from **Test data**.
+4. Click Mark as shipped.
+5. Read each of the three submissions on the queue at <grade10 admin grading queue url>.
+6. Read the letter to each of collectors A, B and C.
 
 **Expected Results:**
 
-* Step 4: every submission in the batch, not only one, moves to With the grader.
-* Step 5: every collector among them is emailed; none is skipped.
+* Step 2: the packing list carries one line per intake id, 8 lines in all.
+* Step 5: every submission in the batch, not only one, moves to With the grader.
+* Step 6: every collector among them is emailed once; none is skipped.
 
 ---
 
@@ -317,11 +323,13 @@
 1. Click New batch.
 2. Pick the shop, <Grader> and <Level>, and confirm the dialog.
 3. Read the batches list.
+4. Hand in a submission of 1 card at <Grader> · <Level> at the counter, from its Hand-in runbook.
+5. Read the batches list.
 
 **Expected Results:**
 
 * Step 3: a batch opens for that grader and that level.
-* A card at another grader or another level is not offered into it.
+* Step 5: the submission joins the batch opened at step 2, and no second batch is listed for the trio.
 
 ---
 
@@ -1117,26 +1125,29 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has scanned some, not all, of <batch back with three cards>'s cards on its Receive page.
+* admin(holds grading:operate) has scanned some, not all, of <batch back of ten cards>'s cards on its Receive page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <batch back with three cards> | one submission of 3 cards at Regular, each declared 500000 (HKD, minor units), seeded at `returned`; its invoice entered as reference INV-0010, USD, 4500 |
-| Scanned before leaving | the first two cards' certs, as the scan table reads them |
+| <batch back of ten cards> | three submissions at PSA · Regular of 3, 3 and 4 cards (10 in all), each card declared 500000 (HKD, minor units), handed in as *A batch of several submissions* says, then shipped, Completed recorded and Arrived; the manifest typed with a line per card, one line with code N1 and no grade and two at `express`; its invoice entered as reference INV-0010, USD, 15000 |
+| Scanned before leaving | 6 certs: the N1 line's, both `express` lines', and three others, as the scan table reads them |
+| Upcharge each | 60000 (HKD, minor units), Express's fee less Regular's on the pinned sheet |
 
 **Steps:**
 
 1. Save the batch part-scanned, to finish later.
 2. Click Back to the batches.
 3. Click Receive on the same batch's row again.
-4. Read the scan table and the batch's word.
+4. Read the scan table, the counters and the batch's word.
 
 **Expected Results:**
 
 * Step 4: every earlier scan is still recorded.
 * Step 4: the batch still reads Back, unchecked.
+* Step 4: the counters read 6 scanned of 10, 6 matched, 1 ungraded, 2 upcharges summing to 120000 (HKD, minor units), and 3 submissions ready when finished.
+* Step 4: no collector has been emailed for a plain scan.
 
 ---
 

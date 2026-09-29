@@ -833,7 +833,7 @@
 * Step 1: one receipt is prepared for the hand-back, not one per exception.
 * Step 3: it carries a line per card stating that card's outcome: the two handed back, the one still held by the grader, and the one that went to the vault.
 
-### grade10-site-grading-counter-documents-US3-TC10-1: The second hand-back receipt prints the late card alone and names the first
+### grade10-site-grading-counter-documents-US3-TC10-1: The second receipt prints the late card alone and names the first
 
 **Classification:**
 
