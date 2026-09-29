@@ -542,7 +542,7 @@ Every panel carries Contact Us with the order status as the reason; the table na
 
 ### Copy
 
-Namespace `auctionOrders` in `external/grade10-spec/packages/i18n/messages/shared/<locale>/auctionOrders.json` for `en`, `zh-Hant`, `zh-Hans`, `ko` (every shared locale answers every key); only the lines naming Grade10 go to `messages/grade10/<locale>/auctionOrders.json`. Keys nest by section: `nextStep.<kind>.*`, `summary.*`, `stepper.*`, `setup.{steps,review,locked}.*`, `method.fee.{rateAndFixed,rate,fixed,free,unset}`, `pay.*`, `proof.*`, `refund.*`, `errors.<WinnerRefusalCode>`, `status.<status>`.
+Namespace `auctionOrders` in `external/grade10-spec/packages/i18n/messages/shared/<locale>/auctionOrders.json` for `en`, `zh-Hant`, `zh-Hans`, `ko` (every shared locale answers every key); only the lines naming Grade10 go to `messages/grade10/<locale>/auctionOrders.json`. Keys nest by section: `nextStep.<kind>.*`, `summary.*`, `stepper.*`, `setup.{steps,review,locked}.*`, `method.fee.{rateAndFixed,rate,fixed,free,unset}`, `pay.*`, `proof.*`, `refund.*`, `errors.<WinnerRefusalCode>`, `status.<status>`. The Contact Us email's subject and body stay English, built in code from the status (`Auction order <invoice ID>: <status>`), since Grade10's support reads them.
 
 ### Links
 
