@@ -159,7 +159,9 @@ function TooltipContent({
         arrowPadding={16}
         // Prefer the visual viewport so long tips inset on phone-width frames
         // instead of measuring as wide as `max-w-xs` (320px) and flush-cropping.
-        collisionBoundary="viewport"
+        // Base UI 1.7 dropped the "viewport" keyword; "clipping-ancestors" is
+        // its default and resolves to the viewport absent a clipping wrapper.
+        collisionBoundary="clipping-ancestors"
         collisionPadding={collisionPadding}
         side={side}
         sideOffset={resolvePositionerSideOffset(sideOffset)}
