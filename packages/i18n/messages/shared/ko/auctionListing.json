@@ -114,6 +114,8 @@
   "share": "공유",
   "shareUnavailable": "공유 기능은 아직 제공되지 않습니다.",
   "showBidHistory": "입찰 내역 보기",
+  "showLess": "간략히",
+  "showMore": "더 보기",
   "signInToBid": "로그인 후 입찰",
   "standingAs": "{pseudonym}(으)로 {amount}",
   "startingBid": "시작가",

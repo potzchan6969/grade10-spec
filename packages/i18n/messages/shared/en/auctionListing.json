@@ -114,6 +114,8 @@
   "share": "Share",
   "shareUnavailable": "Sharing is not available yet.",
   "showBidHistory": "Show bid history",
+  "showLess": "Show less",
+  "showMore": "Show more",
   "signInToBid": "Sign In to Bid",
   "standingAs": "{amount} as {pseudonym}",
   "startingBid": "Starting bid",

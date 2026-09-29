@@ -114,6 +114,8 @@
   "share": "分享",
   "shareUnavailable": "分享功能尚未开放。",
   "showBidHistory": "显示出价记录",
+  "showLess": "显示更少",
+  "showMore": "显示更多",
   "signInToBid": "登录后出价",
   "standingAs": "{amount}（以 {pseudonym} 名义）",
   "startingBid": "起拍价",

@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { ListingLotMeta } from "./listing-lot-meta";
 
-const { auctionListing, product } = getMessages("grade10", "en");
+const { auctionListing } = getMessages("grade10", "en");
 
 /** Matches Pages/Auction Lot Details fixture content. */
 const LOT_DESCRIPTION =
@@ -34,8 +34,8 @@ const MARKET_COMPS = {
 const COPY = {
   aboutThisLot: auctionListing.aboutThisAuction,
   vaultShipping: auctionListing.vaultShippingLabel,
-  showMore: product.showMore,
-  showLess: product.showLess,
+  showMore: auctionListing.showMore,
+  showLess: auctionListing.showLess,
 } as const;
 
 const meta = {
