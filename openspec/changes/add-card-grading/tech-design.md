@@ -129,9 +129,11 @@ both products call it.
   attempt; `scanCard`'s `CERT_HELD_ELSEWHERE` is a read under the submission
   lock before the insert; the open batch is created
   `ON CONFLICT DO NOTHING … RETURNING` and re-read
-- **Intake ids** `<reference>-<n>`, `n` the card's position, written to
-  `submission_cards.intake_id` at hand-in, unique across the table: the
-  grader's manifest names them, so they are never reissued
+- **Intake ids** `<reference>-<n>`, `n` the card's position, derived at the
+  read from the submission's reference and the card's position once the
+  hand-in gives the submission a batch, and never on a card refused at the
+  desk: both inputs are fixed from then on, so an id the grader's manifest
+  names is never reissued
 - **The pickup code** is four digits, unique among submissions currently
   `ready` through a partial unique index; ten thousand codes against a shop's
   dozens ready
@@ -173,10 +175,11 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   is at the desk — booked for today or being handed in, in the same shop,
   under the same email — refusing `VISIT_NOT_AT_DESK` otherwise
 - **Grades in** — `admin.recordBatchStage({ batchId, stage })` over a closed
-  `GraderStage` set, one member flagged as the move: under `lockBatch`,
-  `grader_stage` set, `recordGrades` per submission in id order, one event
-  each, the letters after commit. The same stage twice is a no-op because its
-  event already names it, and a re-estimate to the same date the same way
+  `GraderStage` set, one member flagged as the move: under `lockBatch`, the
+  stage appended as a `batch_readings` row, `recordGrades` per submission in
+  id order, one event each, the letters after commit. The same stage twice is
+  a no-op because the batch's latest reading already names it, and a
+  re-estimate to the same date the same way
 - **Running late**, the queue badges, the chip and the rail are
   `submissionStanding(input, asOf, timeZone)` in
   `packages/grading/contracts/src/standing.ts` over a declared
@@ -372,14 +375,14 @@ this is how the paid order reaches the submission.
 - `GradingInventoryService` on the inventory worker, `GradingInventoryServiceApi`
   in `@grade10/inventory-contracts`: `matchCards(lines)` answering per line
   a product id with title and reference sales, or `unmatched`, or
-  `unavailable`; `referenceSales(productIds)` for the card block
+  `unavailable`; the one call grading makes
 - `submissions.paste` calls it once outside any transaction. **A fault is
   never silence**: every line answers `unavailable`, distinct from
   `unmatched`, the count and the provider's error are logged by name and the
   degrade written as a `reference_unavailable` event, so a day of unmatched
   pastes is visible and a level chosen on the declared value alone is
   traceable. The product id lands on
-  `submission_cards.reference_product_id`; sales are re-read, never stored
+  `submission_cards.reference_product_id`; sales are never stored
 - **The sale in HKD** — the reference sells in USD and the ceilings are in
   HKD, so `submissions.paste` reads the setting `reference_usd_rate` and
   answers each matched card's PSA 10 sale in HKD beside the USD one,
@@ -590,8 +593,9 @@ answering the question it was for.
   refuses every UPDATE unless the columns are listed, so
   `0001_append_only.sql` carries `redactable` and `erasable` per table —
   `submission_events` `redactable: ["actor"]`, `sign_events`
-  `erasable: ["ip","user_agent"]`, the notes columns likewise — pinned by a
-  schema spec. `src/testing/suites/erasure.ts` joins the portable suite: the
+  `erasable: ["ip","user_agent"]`, `batch_readings` `redactable: ["words"]`,
+  `approval_requests` `erasable: ["bank_ref","reason"]` - pinned by a schema
+  spec. `src/testing/suites/erasure.ts` joins the portable suite: the
   three holds by name, the `collected` packet-keeping arm and the
   never-signed whole purge, against the committed migrations
 - The self-filed ask stays the vault's `cases.requestErasure`; Your data
@@ -606,7 +610,8 @@ answering the question it was for.
 
 - `packages/grading/frontend/src/features/{home,plan,dropoff,submission,sign}`
   behind `gradingModules.ts`; `core/api/GradingApi.ts` over the site's
-  `gradingTrpcClient`, a fixture transport beside it; the views compose
+  `gradingTrpcClient`, through a transport whose answers are typed off the
+  pinned router as the console's are, never `unknown`; the views compose
   `@grade10/ui`'s `grading-submission` blocks and the `appointment-booking`
   exports, every word from the `grading` namespace
 - **The emailed link is doc-sign's token, one size down.** `newBearerSecret(32)`
@@ -780,8 +785,9 @@ outcome, a grader's own stage — is rendered from `SUBMISSION_STATUSES`,
 `GRADERS`, `CARD_OUTCOMES`, `GRADER_STAGES` and `SUBMISSION_EVENT_KINDS` in
 `@grade10/grading-contracts`' `vocabulary.ts`, through a shared `sqlInList`
 helper next to the schema, rather than typed a second time in the migration.
-`batches.grader_stage` is a pair CHECK generated from `GRADER_STAGES`, so a
-stage read off PSA's order page can never sit on a CGC or BGS batch.
+`batch_readings.stage` is a pair CHECK with the reading's `grader`, generated
+from `GRADER_STAGES`, so a stage read off PSA's order page can never sit on a
+CGC or BGS batch.
 
 ### `submissions`
 
@@ -817,7 +823,6 @@ index, not a stamp column.
 | Column | Definition | Meaning |
 | --- | --- | --- |
 | `id`, `submission_id`, `position` | `text PK`; `FK NOT NULL`; `integer NOT NULL` | `gc_<uuid>`; position unique with the submission |
-| `intake_id` | `text UNIQUE` | `<reference>-<n>`, from `handIn` |
 | `grader` | `text CHECK` | written from the submission at `handIn`; FK `(submission_id, grader)` |
 | `name`, `set_name`, `card_number` | `text` | as typed or matched |
 | `reference_product_id` | `text` | the inventory product; null kept-as-typed or unavailable |
@@ -831,6 +836,11 @@ index, not a stamp column.
 | `handed_back_packet_id`, `handed_back_at` | `text`; `timestamptz`; both or neither | the receipt that closed the card, and the instant its figure was fixed |
 | `withdrawal_receipt_key`, `withdrawal_receipt_sha256` | `text`; unique digest; both or neither | the withdrawal receipt, only on `withdrawn` |
 
+A card's intake id, `<reference>-<position>`, is derived at the read
+(`intakeIdSql`) from its submission's `reference` and `batch_id` and its own
+`position` and `outcome`: set once the submission has a batch, never on a card
+refused at the desk, and never stored.
+
 `card_photos`: `id`, `card_id FK`, `kind CHECK (intake_front, intake_back,
 handback, damaged)`, `object_key UNIQUE`, `taken_by`, `at`; the
 `ITEM_PHOTOS` area's `referenced` answers these keys.
@@ -843,8 +853,7 @@ handback, damaged)`, `object_key UNIQUE`, `taken_by`, `at`; the
 | `location_id`, `grader`, `level` | `text NOT NULL`, `grader` CHECK | the shop and the pair; unique with `cutoff_at` |
 | `cutoff_at` | `timestamptz(3) NOT NULL` | derived by `openBatchFor(location, grader, level, now)` from `settings.batch_cutoff` on `Asia/Hong_Kong` |
 | `ship_date`, `courier`, `tracking`, `order_number` | `date`; `text` | the ship date never in the future |
-| `insured_minor`, `cover_figure_minor`, `cover_currency` | `bigint`; `bigint`, `text` | the figure declared to the courier at ship; the courier's written cover and its currency |
-| `estimate_at`, `grader_stage` | `date`; `text`, pair CHECK with `grader` | the level's weeks from the ship day, moved by a re-estimate; the last `GraderStage` recorded, from that row's own grader's set |
+| `cover_figure_minor`, `cover_currency` | `bigint`, `text` | the courier's written cover and its currency |
 | `invoice_ref`, `invoice_total_minor`, `invoice_currency` | `text`, `bigint`, `text` | entered before the first scan |
 | `manifest_entered_at`, `received_at`, `finished_at` | `timestamptz(3)` | |
 
@@ -857,16 +866,25 @@ the hand-in's instant, so one open batch stands per `(location_id, grader,
 level)` while a closed one waits to ship; the row is
 created on first use by `handIn`, `ON CONFLICT DO NOTHING … RETURNING`.
 
+The batch's stage and its day back are its latest `batch_readings` of each
+kind, read beside the row (`BATCH`) and never stored on it. A locked read takes
+the row `FOR UPDATE` first and reads the batch again in a statement of its own:
+a statement reads the readings at the snapshot it began with, so an operator
+who waited on the lock would otherwise read the holder's reading as never
+written and write it again.
+
 `batch_manifest_lines`: `batch_id FK`, `line_no`, `intake_id`, `cert`,
 `grade`, `grader_code`, `note`, `level_charged`, `card_id FK` (null
 unmatched), `resolved_by`, `resolved_at`; PK `(batch_id, line_no)`; an
 unmatched line holds `finishReceiving`.
 
-`batch_readings`: `id` identity, `batch_id FK`, `kind CHECK (stage,
-estimate)`, `stage` on a stage, `estimate_at` on an estimate, `words` (the
-grader's words or the reason), `recorded_by`, `at`; index `(batch_id, id)`.
-Append-only, with `words` the one column erasure may rewrite, as migration
-0011 lists it: the words are keyed by batch rather than by person, so nothing
+`batch_readings`: `id` identity, `batch_id FK`, `grader`, `kind CHECK (stage,
+estimate)`, `stage` on a stage, pair CHECK with `grader`, `estimate_at` on an
+estimate, `words` (the grader's words on a stage, the reason on a re-estimate,
+none on the ship's first estimate), `recorded_by`, `at`; index `(batch_id,
+id)`. The ship writes the first estimate, the level's weeks from the ship day.
+Append-only, with `words` the one column erasure may rewrite, as
+`0001_append_only.sql` lists it: the words are keyed by batch rather than by person, so nothing
 here is erased by default, and a reason that ever names somebody is put right
 by one UPDATE. A stage's words and a new day back are read from here, and each
 event names its reading.
@@ -875,28 +893,49 @@ event names its reading.
 
 | Table | Columns | Guard |
 | --- | --- | --- |
-| `fee_sheet` | `grader` CHECK, `level` (PK); `ceiling_minor`, `fee_minor`, `cover_bps`, `estimate_weeks`, `cards_min`, `cards_max`, `pos_variant_id`, `active`, `updated_by`, `approved_by`, `updated_at` | the four-eyes CHECK |
-| `settings` | `key` (PK); `value jsonb NOT NULL`; `updated_by`, `approved_by`, `updated_at` | the four-eyes CHECK; the console's keys plus the three variants, `batch_cutoff { weekday, time }` and `booked_expiry_days` |
-| `money_lines` | `id`, `submission_id FK NOT NULL`, `card_id FK NOT NULL`, `kind CHECK (fee, cover, upcharge, storage, refund)`, `amount_minor > 0`, `pos_order_ref NOT NULL`, `pos_order_name`, `pos_line_ref` (nullable, recorded), `refund_of_line_id FK`, `paid_at`, `recorded_by`, `recorded_at` | append-only; unique `(submission_id, card_id, kind, pos_order_ref)`, written `ON CONFLICT DO NOTHING` |
-| `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `route CHECK (till, transfer)`, `bank_ref`, `recorded_by`, `approved_by`, `recorded_at`, `received_at` | append-only; the four-eyes CHECK; plain index on `card_id` |
-| `payout_reversals` | `payout_id PK FK`, `reason`, `recorded_by`, `approved_by`, `at` | append-only; the same CHECK |
-| `upcharge_waivers` | `id`, `submission_id`, `card_id`, `amount_minor`, `reason`, `recorded_by`, `approved_by`, `at` | append-only; the same CHECK; plain index on `card_id` |
+| `fee_sheet` | `grader` CHECK, `level` (PK); `ceiling_minor`, `fee_minor`, `cover_bps`, `estimate_weeks`, `cards_min`, `cards_max`, `pos_variant_id`, `active`, `updated_by`, `approved_by`, `updated_at`, `version integer NOT NULL DEFAULT 1` | the four-eyes CHECK |
+| `settings` | `key` (PK); `value jsonb NOT NULL`; `updated_by`, `approved_by`, `updated_at`, `version integer NOT NULL DEFAULT 1` | the four-eyes CHECK; the console's keys plus the three variants, `batch_cutoff { weekday, time }` and `booked_expiry_days` |
+| `pos_orders` | `order_ref` (PK), `submission_id FK NOT NULL`, `order_name NOT NULL`, `method` | append-only; the claim: one order pays one submission, its receipt number and how it was paid kept once |
+| `money_lines` | `id`, `submission_id FK NOT NULL`, `card_id FK NOT NULL`, `kind CHECK (fee, cover, upcharge, storage, refund)`, `amount_minor > 0`, `pos_order_ref FK pos_orders NOT NULL`, `pos_line_ref` (nullable, recorded), `pos_line_no` (null on a refund), `refund_of_line_id FK`, `paid_at`, `recorded_by`, `recorded_at` | append-only; unique `(pos_order_ref, pos_line_no)` on a paid line, unique `refund_of_line_id` on a refund |
+| `approval_requests` | `id`, `act CHECK (payout, reversal, waiver, setting, fee_sheet)`, `submission_id`, `card_id`, `params jsonb NOT NULL` (a payout's route, a reversal's found card), `bank_ref`, `reason`, `expected_updated_at`, `expected_version`, `setting_key`, `setting_value`, `fee_sheet_grader`, `fee_sheet_level`, `fee_sheet_row`, `requested_by`, `requested_at` | append-only, `bank_ref` and `reason` the only columns erasure may clear; the shape CHECK gives each act its own columns |
+| `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `recorded_at` | append-only; the four-eyes CHECK; plain index on `card_id` |
+| `payout_reversals` | `payout_id PK FK`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK |
+| `upcharge_waivers` | `id`, `submission_id`, `card_id`, `amount_minor`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK; plain index on `card_id` |
 | `notices` | `submission_id PK FK`, `posted_on date`, `tracking NOT NULL`, `recorded_by`, `at` | one per submission, which is the replay guard a double-click needs |
+
+- **A record reads its request** - a payout's route and transfer reference,
+  and the reason on a reversal or a waiver, are the approval request's, read
+  through `approval_request_id` and never copied onto the record, so erasure
+  clears them in one place
+- **A request is asked at a version** - a money act at its submission's
+  `updated_at` (`expected_updated_at`), a setting or a fee-sheet row at that
+  row's `version` (`expected_version`, 0 where nobody wrote the row). Every
+  write moves `version` by one, and the approval refuses `APPROVAL_STALE`
+  once it has moved
+- **A receipt is kept on its order** - a line names its order
+  (`pos_order_ref`), and the receipt number and the method are read from
+  `pos_orders`
+- **The detail answers the money once** - `moneyTotals` on the detail is the
+  paid lines summed by kind, what was paid, what came back and the net,
+  folded by the contracts' `moneyTotalsOf`; the collector's page and the
+  console read it and fold no line again
 
 ### History, mail, evidence
 
 | Table | Shape |
 | --- | --- |
 | `submission_events` | the vault's `case_events`; `kind`, `from_status`, `to_status` CHECK against the same contract lists as `submissions.status`; `details` references and figures only; indexes `(submission_id, id)`, `(submission_id, to_status, at)`, `(submission_id, kind)` for every sweep's key. Who sees an event is `isCustomerEvent`, derived |
-| `notification_retries` | the vault's, keyed `submission_id`, `packet_id` for the sealed copies |
+| `notification_retries` | the vault's, keyed `submission_id`; `letter jsonb NOT NULL` holds the drafted letter it sends again |
 | `sign_packets`, `sign_documents`, `sign_signers`, `sign_tokens`, `sign_signatures`, `sign_events` | `createDocSignTables(gradingSchema)` |
-| `audit_logs`, `audit_verify_cursors`, `sealed_archive`, `storage_cursors` | the vault's four |
+| `audit_logs`, `audit_verify_cursors`, `sealed_archive`, `storage_cursors` | the vault's four; `sealed_archive` is doc-sign's `createSealedArchiveTable`, walked by its `sealedArchiveQueries` |
 
 ```mermaid
 erDiagram
-  submissions ||--o{ submission_cards : "position, intake_id"
+  submissions ||--o{ submission_cards : "position"
   submissions ||--o{ submission_events : "one history"
   submissions ||--o{ money_lines : "by card and kind"
+  pos_orders ||--o{ money_lines : "pos_order_ref"
+  approval_requests ||--o| payouts : "approval_request_id"
   submissions ||--o| notices : ""
   submissions }o--o| batches : "batch_id"
   submissions }o--o| submissions : "visit_owner_id"
@@ -989,14 +1028,15 @@ Example — a hand-in of four PSA Regular cards at a pinned fee of 15 000.
 orderName: "#48213", paidAt, lines: [{ ref: "l1", variantId: "v_reg",
 subtotalMinor: 15000, productType: "Grading Service" }, … "l4"] }` → four
 fee-variant lines for four cards owing a fee, each at the pinned figure →
-four `money_lines` rows, one per card in `position` order,
+the `pos_orders` claim `{ order_ref: "gid://…/9001", order_name: "#48213" }`
+and four `money_lines` rows, one per card in `position` order,
 `{ kind: fee, amount_minor: 15000, pos_order_ref: "gid://…/9001",
-pos_order_name: "#48213", pos_line_ref: "l1" … "l4" }`; the same call again
+pos_line_ref: "l1" … "l4" }`; the same call again
 writes nothing and answers those four rows. Then `handIn("gs_1")` →
 `safe_declared_cap` `FOR UPDATE` → the open batch for
 `(loc_hkcwb, psa, regular)` → `gs_1`'s lock → safe total 18 400 000 +
-3 400 000 < 30 000 000 → cards get `5TW8HN-1 … -4` and `grader: psa`,
-`batch_id` set, `booked → checked_in`, event `handed_in { intakeIds,
+3 400 000 < 30 000 000 → cards get `grader: psa`, `batch_id` set, so they
+read `5TW8HN-1 … -4`, `booked → checked_in`, event `handed_in { intakeIds,
 posOrderName }`, the intake receipt stored → the `handed_in` letter with the
 receipt, the sealed agreement and the re-minted access link.
 
@@ -1008,7 +1048,7 @@ receipt, the sealed agreement and the re-minted access link.
 | admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
-| `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.{matchCards,referenceSales}`; `GradingInventoryService` |
+| `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.matchCards`; `GradingInventoryService` |
 | `@grade10/appointment-contracts` | `APPOINTMENT_PRODUCTS` gains `grading`; `rescheduleInputSchema` gains an optional `serviceId`; `GradingAppointmentService` |
 | `@grade10/doc-sign-backend` | **BREAKING** `TemplateLayout.identity` required on every template; `TemplateLayout.pageCount` takes `"fitted"` and `SignatureFieldBox.page` takes `"last"`, resolved after the render; `renderIssuedDocument` over an `IssuedTemplate`, which `renderPacket` calls per document; `storedFontPort`; `./testing` gains `fixtureFace` |
 | `@grade10/doc-sign-frontend` | **BREAKING** `createDocSignCoreModule({ ceremonyClients })`; `CeremonyFlow` takes `host` at mount |
@@ -1162,8 +1202,9 @@ change creates are imported from their shared home by both products.
 - **[A money setting changes under a booked submission]** → the pinned JSON
   is what every figure prints from; the live row is read at `book` and at
   the mint only
-- **[A payout is approved and never paid]** → a queue cut and a badge on an
-  approved payout with `received_at` null past the pinned `settlement_days`
+- **[A payout is owed and never made]** → a queue cut and a badge on a card
+  owed a payout with none recorded past the pinned `settlement_days` from the
+  batch's receipt
 
 ## Migration Plan
 
@@ -1195,9 +1236,10 @@ change creates are imported from their shared home by both products.
 5. **The grading worker** — the four packages and the app; migrations in
    `apps/backend/grade10/grading/src/db/migrations/`: `0000_grading_schema.sql`
    (generated, every table above), `0001_append_only.sql` (`sign_events`,
-   `submission_events`, `money_lines`, `payouts`, `payout_reversals`,
-   `upcharge_waivers`, `audit_logs`, each with its `redactable` and `erasable`
-   lists, armed always), `0002_sign_lifecycle_guards.sql`
+   `submission_events`, `batch_readings`, `pos_orders`, `money_lines`,
+   `approval_requests`, `payouts`, `payout_reversals`, `upcharge_waivers`,
+   `audit_logs`, each with its `redactable` and `erasable` lists, armed
+   always), `0002_sign_lifecycle_guards.sql`
    (`docSignProtectionSql`), `0003_seed_settings.sql`. They create tables in
    their own file and touch no `DESTRUCTIVE` or `LOCKING` pattern, so none
    owes an annotation. The registries: `packages/app-env/src/services.ts`;
