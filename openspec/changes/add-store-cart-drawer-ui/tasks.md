@@ -59,12 +59,12 @@ Follows Group 5 delivery; Group 7 is the shared prerequisite, not a later phase.
 
 - [ ] 6.1 Keep the Cart Points and Checkout product record aligned with Group 5 delivery; validate the change, feature suite and manual. Preserve construction marks until deployment acceptance; do not archive as part of this increment.
 
-## 7. Shared pending tender contract (grade10-spec)
+## 7. Shared pending tender contract (grade10-spec) (owner: @kinisworking)
 
 Prerequisite for Group 5; appended to preserve existing task ids.
 
-- [ ] 7.1 Make `shared-ui-store-cart-SC-37` through `shared-ui-store-cart-SC-39` pass with optional `tenderPending` on `CartDrawerProps` and `CartDrawerFooterProps`, forwarding it through the compound and disabling existing tender inputs/actions and Checkout, including an open promo sheet. Preserve callback absence guards and existing appearance; add focused component tests and pending stories in `cart-drawer.stories.tsx` and `cart-drawer-footer.stories.tsx`.
-- [ ] 7.2 Verify the affected shared component tests, typecheck and UI Storybook build; keep the shared Tender Actions product record aligned and validate this change and its suites before Group 5 consumes the shared package.
+- [x] 7.1 Make `shared-ui-store-cart-SC-37` through `shared-ui-store-cart-SC-39` pass with optional `tenderPending` on `CartDrawerProps` and `CartDrawerFooterProps`, forwarding it through the compound and disabling existing tender inputs/actions and Checkout, including an open promo sheet. Preserve callback absence guards and existing appearance; add focused component tests and pending stories in `cart-drawer.stories.tsx` and `cart-drawer-footer.stories.tsx`.
+- [x] 7.2 Verify the affected shared component tests, typecheck and UI Storybook build; keep the shared Tender Actions product record aligned and validate this change and its suites before Group 5 consumes the shared package.
 
 ## 8. Checkout creation in the drawer (grade10) (owner: @sean)
 
