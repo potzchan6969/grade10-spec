@@ -341,6 +341,30 @@ test("shared-planning-agent-rounds-SC-78 - a bare path keeps its meaning with a 
   assert.match(bare.stdout, /which does not exist in this checkout/);
 });
 
+test("shared-planning-agent-rounds-SC-78 - `--app-paths-only` reports the paths into the clone and nothing the store owns", () => {
+  const app = appClone();
+  const gone = "grade10:apps/frontend/grade10/e2e/tests/vault/gone.spec.ts";
+  const storeMissing = "scripts/openspec/nowhere.test.mjs";
+
+  const both = run(store(CHANGE, { decidedBy: `${gone}, ${storeMissing}` }), {
+    appRoot: app,
+    args: ["--app-paths-only"],
+  });
+  assert.equal(both.status, 1, both.stdout + both.stderr);
+  assert.match(
+    both.stdout,
+    /gone\.spec\.ts`, which does not exist in the grade10 clone/,
+  );
+  assert.doesNotMatch(both.stdout, /nowhere\.test\.mjs/);
+
+  // The store's own problem alone leaves an application repository nothing to fix.
+  const storeOnly = run(
+    store(CHANGE, { decidedBy: `grade10:${WALK}, ${storeMissing}` }),
+    { appRoot: app, args: ["--app-paths-only"] },
+  );
+  assert.equal(storeOnly.status, 0, storeOnly.stdout + storeOnly.stderr);
+});
+
 test("shared-planning-agent-rounds-SC-78 - a clone variable naming no directory stops the run", () => {
   const result = run(store(CHANGE, { decidedBy: DECIDER }), {
     appRoot: join(tmpdir(), "decided-by-no-such-clone"),

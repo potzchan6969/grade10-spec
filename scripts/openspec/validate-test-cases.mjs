@@ -113,6 +113,10 @@ Flags:
                     The clone a \`<repository>:<path>\` Decided-by path is
                     checked against, over its variable below. With neither,
                     those paths are a warning
+  --app-paths-only  Report only what a clone's own repository can fix: the
+                    prefixed Decided-by paths it does not hold. An application
+                    repository's CI runs this, so the store's own findings
+                    stay the store's
   --help            Print this help and exit
 
 Environment:
@@ -125,8 +129,8 @@ ${Object.entries(REPOSITORIES)
 `;
 
 const problems = [];
-const record = (severity, file, line, message) =>
-  problems.push({ severity, file, line, message });
+const record = (severity, file, line, message, app = false) =>
+  problems.push({ severity, file, line, message, app });
 
 /**
  * Where the Manual table sits. It belongs under `## Reconciliation`, where the
@@ -232,6 +236,7 @@ function checkSuite(root, filePath, rulesRev) {
           ? domainPrefix(root, dir)
           : (issuedPrefix(spec) ?? basename(dir));
   const err = (line, msg) => record("error", rel, line, msg);
+  const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
   // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
@@ -553,17 +558,17 @@ function checkSuite(root, filePath, rulesRev) {
           unchecked[repo] ??= [];
           unchecked[repo].push(path);
         } else if (verdict === "outside")
-          err(
+          (repo === null ? err : errApp)(
             line,
             `${said}, which resolves outside ${tree} — write it relative to the repository root`,
           );
         else if (verdict === "missing")
-          err(
+          (repo === null ? err : errApp)(
             line,
             `${said}, which does not exist in ${repo === null ? "this checkout" : `the ${repo} clone at ${APP_ROOTS[repo]}`}`,
           );
         else if (verdict === "directory")
-          err(
+          (repo === null ? err : errApp)(
             line,
             `${said}, which is not a file — name the test, not the directory holding it`,
           );
@@ -667,7 +672,13 @@ function checkSuite(root, filePath, rulesRev) {
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["app-root", "capture-baseline", "root", "swept"],
-  booleans: ["require-suites", "stale-report", "strict", "quiet"],
+  booleans: [
+    "app-paths-only",
+    "require-suites",
+    "stale-report",
+    "strict",
+    "quiet",
+  ],
   usage: USAGE,
 });
 const args = {
@@ -678,6 +689,7 @@ const args = {
   captureBaseline: flags["capture-baseline"] ?? null,
   swept: flags.swept ?? null,
   quiet: Boolean(flags.quiet),
+  appPathsOnly: Boolean(flags["app-paths-only"]),
 };
 // The store this run reads. `--root <dir>` names another one - a fixture a
 // test writes - the way `archive-preflight.mjs` and `tcs-automated.mjs` take
@@ -1147,6 +1159,10 @@ if (!args.quiet) {
   }
 }
 
+if (args.appPathsOnly) {
+  const kept = problems.filter((p) => p.app);
+  problems.splice(0, problems.length, ...kept);
+}
 const errors = problems.filter((p) => p.severity === "error");
 const warnings = problems.filter((p) => p.severity === "warning");
 
