@@ -275,9 +275,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -522,9 +524,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -583,9 +587,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -622,9 +628,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -730,9 +738,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -764,9 +774,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -800,9 +812,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -867,9 +881,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -899,9 +915,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -931,9 +949,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1071,9 +1091,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1110,9 +1132,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1140,9 +1164,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1179,9 +1205,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1213,9 +1241,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1290,9 +1320,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -1328,9 +1360,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -1358,9 +1392,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -1388,9 +1424,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -1659,9 +1697,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1689,9 +1729,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1793,9 +1835,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -1831,9 +1875,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -1892,9 +1938,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -2091,9 +2139,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-lifecycle-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 

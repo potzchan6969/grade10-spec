@@ -445,9 +445,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -587,9 +589,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -733,9 +737,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -925,9 +931,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -1030,9 +1038,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -1146,9 +1156,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1183,9 +1195,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1256,9 +1270,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1284,9 +1300,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1345,9 +1363,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1412,9 +1432,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1491,9 +1513,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1530,9 +1554,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1590,9 +1616,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1626,9 +1654,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1693,9 +1723,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1724,9 +1756,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -1966,9 +2000,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -2009,9 +2045,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -2046,9 +2084,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -2148,9 +2188,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2227,9 +2269,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2259,9 +2303,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2349,9 +2395,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2380,9 +2428,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2579,9 +2629,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2680,9 +2732,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2739,9 +2793,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
@@ -2908,9 +2964,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -2988,9 +3046,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -3018,9 +3078,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -3056,9 +3118,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
@@ -3193,9 +3257,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-13
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
 
 **Pre-conditions:**
 
@@ -3330,9 +3396,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -3510,9 +3578,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
