@@ -62,6 +62,7 @@ import {
 } from "./winner-order-content";
 import { WinnerOrderHowToPayDialog } from "./winner-order-how-to-pay-dialog";
 import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
+import { toastProofSubmitted } from "./winner-order-proof-feedback";
 import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
 import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
 import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
@@ -69,11 +70,6 @@ import {
   AUCTION_LOT_DETAILS_HREF,
   MY_AUCTIONS_PAGE_HREF,
 } from "./workbench-story-nav";
-
-const PROOF_SUBMITTED_TOAST = {
-  title: "Proof submitted",
-  description: "We’ll verify your payment shortly.",
-} as const;
 
 const PAYMENT_RECEIVED_TOAST = {
   title: "Payment received",
@@ -1166,9 +1162,7 @@ function WinnerOrderPage({
 
   function handleProofSubmit() {
     setStatus("payment_verifying");
-    toast.success(PROOF_SUBMITTED_TOAST.title, {
-      description: PROOF_SUBMITTED_TOAST.description,
-    });
+    toastProofSubmitted();
     onPrimaryAction?.();
   }
 

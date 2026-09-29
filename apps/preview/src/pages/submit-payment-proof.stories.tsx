@@ -10,13 +10,20 @@ import {
   WINNER_ORDER_PROOF_FILE_HINT,
   WinnerOrderPaymentProofDialog,
 } from "./winner-order-payment-proof-dialog";
+import {
+  PROOF_NOT_SUBMITTED_TOAST,
+  PROOF_SUBMITTED_TOAST,
+  toastProofSubmitted,
+} from "./winner-order-proof-feedback";
 
 type SubmitPaymentProofDemoProps = {
   onSubmit?: () => void;
+  forceFailure?: boolean;
 };
 
 function SubmitPaymentProofDemo({
   onSubmit = fn(),
+  forceFailure = false,
 }: SubmitPaymentProofDemoProps) {
   const [open, setOpen] = useState(true);
   const [submitted, setSubmitted] = useState(false);
@@ -41,9 +48,11 @@ function SubmitPaymentProofDemo({
       </VStack>
 
       <WinnerOrderPaymentProofDialog
+        forceFailure={forceFailure}
         onOpenChange={setOpen}
         onSubmit={() => {
           setSubmitted(true);
+          toastProofSubmitted();
           onSubmit();
         }}
         open={open}
@@ -62,7 +71,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order Submit Payment Proof — proof form only (no amount/reference chrome); multi-file dropzone (PDF, PNG, JPG, HEIC); and irreversible-submit microcopy. Bank rails live under View Bank Details.",
+          "Standalone Storybook preview of Winner Order Submit Payment Proof — proof form only (no amount/reference chrome); multi-file dropzone (PDF, PNG, JPG, HEIC); irreversible-submit microcopy; success and failure toasts. Bank rails live under View Bank Details.",
       },
     },
   },
@@ -79,6 +88,33 @@ async function findVisibleDialog(
     const dialog = page.getByRole("dialog", { name });
     expect(dialog).toBeVisible();
     return dialog;
+  });
+}
+
+async function fillProofForm(modal: ReturnType<typeof within>) {
+  await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
+  const transferDate = modal.getByLabelText("Transfer Date");
+  Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    "value",
+  )?.set?.call(transferDate, "2026-09-20");
+  transferDate.dispatchEvent(new Event("input", { bubbles: true }));
+  transferDate.dispatchEvent(new Event("change", { bubbles: true }));
+  await userEvent.type(
+    modal.getByLabelText("Transaction Reference / ID"),
+    "TXN-998877",
+  );
+  const file = new File(["preview-proof"], "transfer-receipt.pdf", {
+    type: "application/pdf",
+  });
+  const fileInput = modal
+    .getByRole("button", { name: "Choose Files" })
+    .closest('[data-slot="file-dropzone"]')
+    ?.querySelector('input[type="file"]');
+  expect(fileInput).toBeTruthy();
+  await userEvent.upload(fileInput as HTMLInputElement, file);
+  await waitFor(() => {
+    expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
   });
 }
 
@@ -114,7 +150,7 @@ export const Form: Story = {
   },
 };
 
-/** Required fields + one file → submit closes the dialog. */
+/** Required fields + one file → submit closes the dialog and toasts success. */
 export const SubmitProof: Story = {
   name: "Submit proof",
   args: { onSubmit: fn() },
@@ -124,31 +160,7 @@ export const SubmitProof: Story = {
     const dialog = await findVisibleDialog(page, "Submit Payment Proof");
     const modal = within(dialog);
 
-    await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
-    const transferDate = modal.getByLabelText("Transfer Date");
-    Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      "value",
-    )?.set?.call(transferDate, "2026-09-20");
-    transferDate.dispatchEvent(new Event("input", { bubbles: true }));
-    transferDate.dispatchEvent(new Event("change", { bubbles: true }));
-    await userEvent.type(
-      modal.getByLabelText("Transaction Reference / ID"),
-      "TXN-998877",
-    );
-    const file = new File(["preview-proof"], "transfer-receipt.pdf", {
-      type: "application/pdf",
-    });
-    const fileInput = modal
-      .getByRole("button", { name: "Choose Files" })
-      .closest('[data-slot="file-dropzone"]')
-      ?.querySelector('input[type="file"]');
-    expect(fileInput).toBeTruthy();
-    await userEvent.upload(fileInput as HTMLInputElement, file);
-    // The row fades in over 200ms, as the dropzone's own story waits for.
-    await waitFor(() => {
-      expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
-    });
+    await fillProofForm(modal);
 
     await userEvent.click(
       modal.getByRole("button", { name: "Submit Payment Proof" }),
@@ -158,6 +170,36 @@ export const SubmitProof: Story = {
       expect(page.queryByRole("dialog")).not.toBeInTheDocument();
     });
     expect(canvas.getByText("Proof submitted (preview).")).toBeVisible();
+    await waitFor(() => {
+      expect(page.getByText(PROOF_SUBMITTED_TOAST.title)).toBeVisible();
+      expect(page.getByText(PROOF_SUBMITTED_TOAST.description)).toBeVisible();
+    });
     expect(args.onSubmit).toHaveBeenCalled();
+  },
+};
+
+/** Forced failure — dialog stays open, draft kept, failure toast. */
+export const SubmitFailure: Story = {
+  name: "Submit failure",
+  args: { forceFailure: true, onSubmit: fn() },
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+
+    await fillProofForm(modal);
+
+    await userEvent.click(
+      modal.getByRole("button", { name: "Submit Payment Proof" }),
+    );
+
+    await waitFor(() => {
+      expect(page.getByText(PROOF_NOT_SUBMITTED_TOAST.title)).toBeVisible();
+      expect(page.getByText(PROOF_NOT_SUBMITTED_TOAST.description)).toBeVisible();
+    });
+    expect(page.getByRole("dialog", { name: "Submit Payment Proof" })).toBeVisible();
+    expect(modal.getByDisplayValue("Alex Chan")).toBeVisible();
+    expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
+    expect(args.onSubmit).not.toHaveBeenCalled();
   },
 };

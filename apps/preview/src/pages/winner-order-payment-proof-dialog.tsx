@@ -23,6 +23,7 @@ import {
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { Warning } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
+import { toastProofNotSubmitted } from "./winner-order-proof-feedback";
 
 /** Preview-only bank details — Grade10 / HSBC Hong Kong sample until Finance confirms live values. */
 export const WINNER_ORDER_BANK_DETAILS = {
@@ -92,6 +93,11 @@ type WinnerOrderPaymentProofDialogProps = {
   onOpenChange: (open: boolean) => void;
   /** Called after a successful submit (dialog already closing). */
   onSubmit: () => void;
+  /**
+   * Preview only — simulated submit fails: dialog stays open, draft kept,
+   * failure toast. Default succeeds after the short beat.
+   */
+  forceFailure?: boolean;
 };
 
 /**
@@ -103,6 +109,7 @@ function WinnerOrderPaymentProofDialog({
   open,
   onOpenChange,
   onSubmit,
+  forceFailure = false,
 }: WinnerOrderPaymentProofDialogProps) {
   const formId = useId();
   const [draft, setDraft] = useState<ProofDraft>(EMPTY_PROOF);
@@ -155,17 +162,14 @@ function WinnerOrderPaymentProofDialog({
     setConverting(false);
   }
 
-  function abandonInFlightSubmit() {
-    submitGenerationRef.current += 1;
-    clearSubmitTimer();
-    setSubmitting(false);
-  }
-
   function handleOpenChange(next: boolean) {
-    if (!next && open && (hasDraft || submitting || converting)) {
-      const leave = window.confirm(LEAVE_PROOF_CONFIRM);
-      if (!leave) return;
-      abandonInFlightSubmit();
+    if (!next && open) {
+      // Submitting / converting: leave is blocked — no confirm, no dismiss.
+      if (formLocked) return;
+      if (hasDraft) {
+        const leave = window.confirm(LEAVE_PROOF_CONFIRM);
+        if (!leave) return;
+      }
     }
     if (!next) resetDraft();
     onOpenChange(next);
@@ -212,6 +216,10 @@ function WinnerOrderPaymentProofDialog({
       submitTimerRef.current = null;
       if (generation !== submitGenerationRef.current) return;
       setSubmitting(false);
+      if (forceFailure) {
+        toastProofNotSubmitted();
+        return;
+      }
       resetDraft();
       onOpenChange(false);
       onSubmit();
@@ -229,7 +237,7 @@ function WinnerOrderPaymentProofDialog({
           <VStack className="w-full" gap="md" hAlign="stretch" id={formId}>
             <TextInput
               autoComplete="name"
-              disabled={submitting}
+              disabled={formLocked}
               label="Sender Name"
               message={
                 attempted && !draft.senderName.trim()
@@ -245,7 +253,7 @@ function WinnerOrderPaymentProofDialog({
               value={draft.senderName}
             />
             <TextInput
-              disabled={submitting}
+              disabled={formLocked}
               label="Transfer Date"
               message={
                 attempted && !draft.transferDate.trim()
@@ -262,7 +270,7 @@ function WinnerOrderPaymentProofDialog({
               value={draft.transferDate}
             />
             <TextInput
-              disabled={submitting}
+              disabled={formLocked}
               label="Transaction Reference / ID"
               message={
                 attempted && !draft.transactionReference.trim()
@@ -295,7 +303,7 @@ function WinnerOrderPaymentProofDialog({
                     chooseFiles: "Choose Files",
                     converting: "Converting HEIC…",
                   }}
-                  disabled={submitting}
+                  disabled={formLocked}
                   files={draft.files}
                   limits={{
                     minFiles: WINNER_ORDER_PROOF_MIN_FILES,
@@ -327,7 +335,7 @@ function WinnerOrderPaymentProofDialog({
               </VStack>
             </VStack>
             <TextInput
-              disabled={submitting}
+              disabled={formLocked}
               label="Additional Notes (optional)"
               onChange={(event) => patch("notes", event.currentTarget.value)}
               value={draft.notes}
@@ -347,6 +355,7 @@ function WinnerOrderPaymentProofDialog({
             render={
               <Button
                 className="w-full sm:w-auto"
+                disabled={formLocked}
                 size="md"
                 variant="outline"
               />
