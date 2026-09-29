@@ -50,7 +50,7 @@ export const PendingPayment: Story = {
         '[data-slot="winner-order-page"][data-status="pending_payment"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
@@ -253,7 +253,7 @@ export const PaymentVerifying: Story = {
         '[data-slot="winner-order-page"][data-status="payment_verifying"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
@@ -299,7 +299,7 @@ export const PartiallyPaid: Story = {
         '[data-slot="winner-order-page"][data-status="partially_paid"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     expect(
@@ -355,7 +355,7 @@ export const ExpiredInvoice: Story = {
         '[data-slot="winner-order-page"][data-status="pending_payment_expired"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     const alert = sidebar.getByRole("alert");
