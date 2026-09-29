@@ -74,3 +74,11 @@ to navigate to.
 :::detail{title="Test page" for="engineer"}
 - **Test page** — under an **Overrider** nav heading, development and staging only; drives the real checkout procedures against a real shop, as the signed-in buyer or with a typed email
 :::
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Checkout-open read | Decided | The cart drawer's own continuous live quote, kept current while the drawer is open, stands in for a separate checkout-open read; no second client-side re-read is added before Pay. | Engineering |
+| Verification gate | Decided | Shown inline in the cart drawer — the same threshold-and-account-link message the former checkout page showed, replacing the checkout action rather than sitting disabled beside it. The identity check itself still runs only on the account page. | Product |
+| The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
+:::
