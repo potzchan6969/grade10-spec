@@ -30,7 +30,8 @@ worker, queue or binding; no console for held records.
 
 A new subpath, so the browser and catalog paths never load drizzle.
 
-- **`createMixpanelOutboxTables(schema)`** - `mixpanel_events` and
+- **`createMixpanelOutboxTables(schema)`**, from `@grade10/mixpanel/schema`
+  so a drizzle config loads no send pass - `mixpanel_events` and
   `mixpanel_profiles` in the product's schema, the `createWalletPassTables`
   precedent
 - **`createMixpanelOutbox<C>(env, tables, { product, clock })`** -
@@ -68,7 +69,9 @@ event's `occurred_at`), else the clock at write - never at send (Q5b).
 insert, so a fact transaction never waits on a row a send has locked. The
 send takes every waiting row of a due user in `seq` order and folds them:
 `$set k` sets k and clears its unset, `$unset k` the reverse, `$set_once`
-keeps the first. Held rows are never folded in, so a held write is never
+keeps the first. `seq` follows insert order, not commit order, so a writer
+records the profile write after the statement that serialises its fact.
+Held rows are never folded in, so a held write is never
 sent over a later one, and a later write is a new waiting row that is never
 held up (Q12). When Mixpanel refuses a fold of several writes, the pass
 splits it by `seq` and folds each half again, so only a write refused alone
@@ -95,7 +98,7 @@ auction's operator test bid, which records nothing by design.
   transitions and Identity Standing, Auction Won, Invoice Paid, Card Linked,
   Lot Watched, Bid Placed and Bidder Outbid, Wallet Pass, Account Created
   with the order owner it settles, Checkout Started with the payment refs
-  `createCheckout` records
+  `createCheckout` records, Member Identified with the till session it opens
 - **In the drain's commit** - Order Paid: the `order_events` sink answers a
   `commit(tx)` that runs in the transaction settling the event, and stamps
   `orders.order_paid_recorded_at` in it; the till-sale report takes the same
@@ -106,8 +109,8 @@ auction's operator test bid, which records nothing by design.
   unmarked order the old direct path already sent - a till sale, which
   reported at ingestion, or one with a delivered paid event - is marked
   and not recorded again when a claim mints a new paid event
-- **In its own transaction** - Member Identified, Pass Added, and the
-  vault's expired standing on a throw path: no stored fact
+- **In its own transaction** - Pass Added and the vault's expired standing
+  on a throw path: no stored fact
 
 ### The send pass
 
@@ -122,20 +125,30 @@ for `sweep.backlog`.
 | --- | --- |
 | 200, `code: 200` | Accepted - rows deleted |
 | 400 on `/import?strict=1` naming records in `failed_records` | The named rows held; the rest deleted |
-| 400 naming none of the batch, or 413 | Batch split in half and sent again; one record refused alone is held |
-| `/engage` 400, 413, or 200 with `status: 0` | Batch split in half and sent again; one user's fold of several writes split by `seq`; one write refused alone is held |
-| 401, 403, 429, 5xx, timeout, other body | Sent again: `attempts + 1`, `next_attempt_at` on `MIXPANEL_LADDER` (60 s to 1 h), no cap; 401, 403 and 429 stop the pass |
+| 400 naming none of the batch, or 413 | Batch split in half and sent again; one record refused alone is held only if another post of that split was accepted, else sent again |
+| `/engage` 400, 413, or 200 with `status: 0` | Batch split in half and sent again; one user's fold of several writes split by `seq`; one write refused alone is held only if another post of that split was accepted, else sent again |
+| 401, 403, 429, 5xx, timeout, other body | Sent again: `attempts + 1`, `next_attempt_at` on `MIXPANEL_LADDER` (60 s to 15 min), no cap; 401, 403 and 429 stop the pass |
 | No token | Nothing sent; rows keep waiting (Q18); gauges still reported, and a log line only while rows wait |
 
 Batches hold at most 2000 records and under 10 MB. A pass sends up to its
 budget of events and, separately, of profile users, and the next resumes
-(Q16). Every pass reports
+(Q16). A pass also caps its posts, splits included; the rows a split leaves
+unsent when the cap is reached are sent again on the ladder, so a request
+Mixpanel refuses whole backs off and alarms on age rather than holding the
+backlog. Every pass reports
 `mixpanel.outbox.waiting`, `mixpanel.outbox.oldest_age_seconds` and
 `mixpanel.outbox.held`, tagged `product` and `kind`, so a lost gauge is
 corrected by the next. The application repository's `docs/operations.md`
 names three monitors per product and kind, with who they page:
 `mixpanel.outbox.held` above zero, `mixpanel.outbox.oldest_age_seconds` past
 an hour, and no data.
+
+### Every `waitUntil` says it is best effort
+
+The application repository's `docs/conventions/backend.md` asks each
+`waitUntil` to be marked best effort, and `check-best-effort` fails a new
+unmarked one against a baseline of today's; an unmarked one is either moved
+to a due row or marked. The `AGENTS.md` principle names the rule.
 
 ### Erasure
 
@@ -152,6 +165,9 @@ one left is the erasure's own write, which is sent however long it waits.
 - **Partial acceptance** - the pass assumes a strict 400 imports the valid
   records and names the rest; sending the unnamed ones again is safe either
   way, since they dedupe
+- **A held record is released by hand** - an engineer sends a held event
+  again once its record or Mixpanel's side is fixed; a held profile write is
+  only ever deleted, since a later write may already have landed (Q20)
 - **Minutes, not seconds** - an event arrives on the next sweep; a
   best-effort wake after commit can be added later (Q11)
 - **Signature threading** - every path recording a guaranteed send takes the
@@ -168,6 +184,13 @@ one left is the erasure's own write, which is sent however long it waits.
   old code wrote directly; the next write of that property corrects it
 - **Held rows grow** until an engineer acts; they alarm and are never
   deleted by the pass
+- **Wallet Pass across platforms** - two pass changes for one member on
+  different platforms in the same moment can each miss the other's
+  uncommitted row, so `Wallet Pass` reads `apple` or `google` where it is
+  `both` until the next change; the old direct sends raced the same way
+- **Tier after erasure** - loyalty records no profile write for a member
+  whose `erased_at` is set, so a late spend never sends `Tier` after
+  `Member: false`
 
 ## Migration Plan
 
@@ -177,12 +200,19 @@ nullable `account_member.erased_at`, and the store's
 `orders.order_paid_recorded_at` (`0047`, Grade10 and ZZZ), both with no
 default, so code rolled back ignores them. `0047` also marks the orders
 whose paid event the old drain withheld after sending Order Paid anonymously
-(no owner, at least one attempt); the other two proofs the old path sent - a
+(no owner, at least one attempt, and not a single lap that threw); the
+other two proofs the old path sent - a
 till sale, a delivered paid event - are read by the drain itself, so orders
 paid between the migration and the deploy stay covered. A withheld send in
-that window still counts twice: accepted. No lock
+that window still counts twice: accepted. Stored state cannot tell two
+kinds of ownerless paid event apart: one released from stuck (attempts back
+to 0) and one with several laps and an error. Both are counted in production
+before `0047` applies, and settled by hand against Mixpanel's insert ids. A
+paid event closed as stuck keeps its error, so the drain never reads it as
+proof of a send. No lock
 or contract line. Migrations apply before the code ships (`force-deploy`,
-the pending-migrations check). Loyalty deploys no later than the store, so
+the pending-migrations check). The held, oldest-age and no-data monitors
+exist before the release, and `archive-change` confirms them. Loyalty deploys no later than the store, so
 `Member` and `Tier` always have a writer: `scripts/deploy/components.mjs`
 ranks loyalty first, and production rolls every flipped app back when one
 flip fails. Staging's `report` mode can leave the store flipped over an old

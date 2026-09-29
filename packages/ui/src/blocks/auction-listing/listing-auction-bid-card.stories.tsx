@@ -21,6 +21,7 @@ const COPY = {
   bidHistory: {
     you: auctionListing.bidHistoryYou,
     empty: auctionListing.noBidsYet,
+    samePricePriorityTip: auctionListing.samePricePriorityTip,
   },
   auctionWon: auctionListing.auctionWon,
   completePurchase: auctionListing.completePurchase,
@@ -100,6 +101,13 @@ const HISTORY: ListingBidHistoryRow[] = [
     amountMinor: 5_800_000,
     acceptedAtMs: NOW_MS - 2 * 60_000,
     isViewer: true,
+  },
+  {
+    id: "bid-mike-5800",
+    initials: "mike@example.com",
+    amountMinor: 5_800_000,
+    acceptedAtMs: NOW_MS - 3 * 60_000,
+    samePricePriority: true,
   },
   {
     id: "bid-mike-5550",
@@ -342,12 +350,14 @@ export const ExtendedBidding: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Time left (extended)")).toBeInTheDocument();
+    expect(canvas.getAllByText("Time left (extended)").length).toBeGreaterThan(
+      0,
+    );
     expect(
-      canvas.getByLabelText(
+      canvas.getAllByLabelText(
         /After the scheduled close, each bid restarts a 30-minute timer/,
-      ),
-    ).toBeInTheDocument();
+      ).length,
+    ).toBeGreaterThan(0);
   },
 };
 

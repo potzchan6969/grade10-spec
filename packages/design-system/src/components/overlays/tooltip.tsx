@@ -145,11 +145,7 @@ function TooltipContent({
 }: TooltipPrimitive.Popup.Props &
   Pick<
     TooltipPrimitive.Positioner.Props,
-    | "align"
-    | "alignOffset"
-    | "side"
-    | "sideOffset"
-    | "collisionPadding"
+    "align" | "alignOffset" | "side" | "sideOffset" | "collisionPadding"
   >) {
   return (
     <TooltipPrimitive.Portal>

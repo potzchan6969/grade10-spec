@@ -98,6 +98,7 @@
   "raiseMaximumWithAmount": "최대 금액을 {amount}(으)로 올리기",
   "raisePrivateMaximum": "비공개 최대 금액 올리기",
   "recentBids": "최근 입찰",
+  "samePricePriorityTip": "같은 가격이면 먼저 제출한 입찰이 앞섭니다.",
   "recentSales": "최근 낙찰",
   "recentSalesEmpty": "이 로트의 최근 낙찰 기록은 아직 제공되지 않습니다.",
   "registerCard": "입찰하려면 결제 카드를 등록해 주세요.",

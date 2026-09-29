@@ -195,9 +195,13 @@ export const SubmitFailure: Story = {
 
     await waitFor(() => {
       expect(page.getByText(PROOF_NOT_SUBMITTED_TOAST.title)).toBeVisible();
-      expect(page.getByText(PROOF_NOT_SUBMITTED_TOAST.description)).toBeVisible();
+      expect(
+        page.getByText(PROOF_NOT_SUBMITTED_TOAST.description),
+      ).toBeVisible();
     });
-    expect(page.getByRole("dialog", { name: "Submit Payment Proof" })).toBeVisible();
+    expect(
+      page.getByRole("dialog", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
     expect(modal.getByDisplayValue("Alex Chan")).toBeVisible();
     expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
     expect(args.onSubmit).not.toHaveBeenCalled();

@@ -156,7 +156,7 @@ Runs once per row of **Test data**.
 1. Pay each of `<paid orders>` as customer(collector) during the outage.
 2. Read the store worker's waiting records count and the oldest record's age before the outage ends.
 3. End the outage.
-4. Wait 5 minutes.
+4. Wait 20 minutes.
 5. Read Order Paid for each of `<paid orders>` in the Mixpanel project.
 6. Read the store worker's waiting records count.
 

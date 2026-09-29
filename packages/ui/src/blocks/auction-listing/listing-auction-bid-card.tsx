@@ -39,6 +39,7 @@ type ListingAuctionBidCardCopy = ListingAuctionBidFieldsCopy & {
   bidHistory: {
     you?: string;
     empty?: string;
+    samePricePriorityTip?: string;
   };
   activityTimeCopy: ActivityTimeCopy;
 };

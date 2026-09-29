@@ -211,8 +211,7 @@ function AuctionLotCardContent({
   eager,
   lift,
 }: Omit<AuctionLotCardProps, "loading">) {
-  const imageRadius =
-    "rounded-(--radius-2xl) md:rounded-(--radius-3xl)";
+  const imageRadius = "rounded-(--radius-2xl) md:rounded-(--radius-3xl)";
   const title = (
     <a
       className={cn(

@@ -24,4 +24,4 @@ function toastProofNotSubmitted() {
   });
 }
 
-export { toastProofSubmitted, toastProofNotSubmitted };
+export { toastProofNotSubmitted, toastProofSubmitted };

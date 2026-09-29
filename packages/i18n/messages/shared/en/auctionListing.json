@@ -98,6 +98,7 @@
   "raiseMaximumWithAmount": "Raise maximum to {amount}",
   "raisePrivateMaximum": "Raise your private maximum",
   "recentBids": "Recent Bids",
+  "samePricePriorityTip": "When two people reach the same price, the earlier bid leads.",
   "recentSales": "Recent sales",
   "recentSalesEmpty": "Recent sales for this auction are not available yet.",
   "registerCard": "Register a card to bid.",

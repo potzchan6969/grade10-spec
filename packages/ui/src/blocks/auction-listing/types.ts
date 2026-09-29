@@ -6,6 +6,11 @@ export type ListingBidHistoryRow = {
   acceptedAtMs: number;
   timeOverride?: string;
   isViewer?: boolean;
+  /**
+   * When true, the row matches the leading price but is not the accepted
+   * (earlier) bid — the list shows a tip explaining time priority.
+   */
+  samePricePriority?: boolean;
 };
 
 export type ListingUserBidHistoryRow = {

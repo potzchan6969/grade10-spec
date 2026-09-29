@@ -156,9 +156,67 @@
 * Irreversible microcopy says nothing can be added or changed after submit.
 * No second confirm screen is shown.
 
+### winner-order-US9-TC26-1: No card payment starts while proof is checked
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) holds an auction order whose bank transfer invoice is `payment_verifying`.
+
+**Steps:**
+
+1. As the winner, try to start a card payment for the invoice.
+
+**Expected Results:**
+
+* No card payment starts, and no card is charged.
+* The invoice is still `payment_verifying`.
+
+### winner-order-US9-TC27-1: A file whose content is not a type Grade10 takes is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) holds an auction order whose bank transfer invoice is `pending`.
+
+**Steps:**
+
+1. Send Grade10 an upload carrying a GIF file named `slip.jpg`.
+
+**Expected Results:**
+
+* Grade10 refuses the whole upload.
+* No file is stored.
+* The invoice is still `pending`.
+
 ## Reconciliation
 
 - **Covered:** `winner-order-SC-218` ← `US9-TC5-1`; `winner-order-SC-119`
   (modified) ← `US9-TC6-1`; `winner-order-SC-219` ← `US9-TC7-1`;
-  `winner-order-SC-220` ← `US9-TC8-1`.
+  `winner-order-SC-220` ← `US9-TC8-1`; `winner-order-SC-117` ← `US9-TC26-1`;
+  `winner-order-SC-239` ← `US9-TC27-1`.
 - **Raised:** none.

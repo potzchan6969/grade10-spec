@@ -16,8 +16,8 @@ import {
   type CSSProperties,
   type FocusEvent,
   type MouseEvent as ReactMouseEvent,
-  type PointerEvent as ReactPointerEvent,
   type ReactNode,
+  type PointerEvent as ReactPointerEvent,
   useEffect,
   useId,
   useRef,
@@ -859,9 +859,7 @@ function StageTrack({
 }) {
   const count = slides.length;
   const loop = count > 1;
-  const cells = loop
-    ? [slides[count - 1], ...slides, slides[0]]
-    : [...slides];
+  const cells = loop ? [slides[count - 1], ...slides, slides[0]] : [...slides];
   const [pos, setPos] = useState(loop ? activeIndex + 1 : activeIndex);
   const [instant, setInstant] = useState(false);
   const prevActiveRef = useRef(activeIndex);
@@ -907,6 +905,7 @@ function StageTrack({
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a jump to a new pos re-arms the two-frame release
   useEffect(() => {
     if (!instant) return;
     const raf = window.requestAnimationFrame(() => {
@@ -924,7 +923,8 @@ function StageTrack({
       onTransitionEnd={onTransitionEnd}
       style={{
         transform: `translate3d(calc(${-pos * 100}% + ${dragPx}px), 0, 0)`,
-        transitionProperty: instant || dragging || reduceMotion ? "none" : "transform",
+        transitionProperty:
+          instant || dragging || reduceMotion ? "none" : "transform",
         transitionDuration: `${SLIDE_MS}ms`,
         transitionTimingFunction: SLIDE_EASE,
       }}
@@ -937,11 +937,16 @@ function StageTrack({
               ? 0
               : cellIndex - 1
           : cellIndex;
+        const clone = loop && (cellIndex === 0 || cellIndex === count + 1);
         return (
           <div
             aria-hidden={realIndex !== activeIndex}
             className="relative h-full w-full shrink-0 grow-0 basis-full"
-            key={`${item.id}:${cellIndex}`}
+            key={
+              clone
+                ? `${item.id}:${cellIndex === 0 ? "head" : "tail"}`
+                : item.id
+            }
           >
             <OpenLot
               className="absolute inset-0 block size-full"

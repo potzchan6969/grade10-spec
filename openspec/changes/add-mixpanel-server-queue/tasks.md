@@ -33,7 +33,7 @@
 ## 6. Operations (grade10) (owner: @ecchochan)
 
 - [x] 6.1 Test: `check-best-effort` finds no unmarked `waitUntil` above the lowered baseline
-- [x] 6.2 Lower the baseline, describe the outbox in `docs/architecture/tracking.md`, and name the held, oldest-age and no-data monitors in `docs/operations.md`
+- [x] 6.2 Add `check-best-effort` and its baseline, describe the outbox in `docs/architecture/tracking.md`, and name the held, oldest-age and no-data monitors in `docs/operations.md`
 - [x] 6.3 Verify: `pnpm run check:libs`, `pnpm run check:handbook`
 
 ## 7. Walk the suite (grade10-spec)

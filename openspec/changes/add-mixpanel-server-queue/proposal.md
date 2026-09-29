@@ -71,7 +71,9 @@ None.
 - Datadog: waiting records, the oldest one's age, and held records per
   worker - best effort, like every counter.
 - `docs/architecture/tracking.md` · Failure and dedupe and its Q & A, and
-  the Analytics row of `docs/conventions/backend.md`, are rewritten.
+  the Analytics row of `docs/conventions/backend.md`, are rewritten;
+  `backend.md` also asks every `waitUntil` to say it is best effort, which
+  `check-best-effort` holds against a baseline.
 - No collector or admin UI; no Figma or design-system change.
 
 ## Open questions

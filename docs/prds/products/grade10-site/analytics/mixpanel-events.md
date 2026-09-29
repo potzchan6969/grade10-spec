@@ -120,7 +120,7 @@ snapshot used to filter events and build cohorts.
 - **Store catalog + ingest** — `packages/grade10-store/backend/src/services/analytics/events.ts`, `…/track.ts`, `…/routes/track.ts` (`POST /api/track`)
 - **Storefront client** — `apps/frontend/grade10/src/core/analytics/` (`createTrackingClient`, device reset); feature call sites under `packages/grade10-store/frontend`
 - **Auction / vault / loyalty emits** — `packages/grade10-auction/backend/src/services/analytics/`, `packages/vault/backend/src/services/analytics/`, `packages/loyalty/backend/src/services/analytics/`
-- **Shared library** — `packages/mixpanel` (`createTracker`, `engagePerson`, browser client)
+- **Shared library** — `packages/mixpanel` (🚧 `/outbox` for backend sends, `/ingest` for `/api/track`, browser client)
 :::
 
 :::detail{title="Product decisions" for="pm"}
