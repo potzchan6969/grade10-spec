@@ -183,10 +183,10 @@ export const OneRecordTwoDrawings: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     for (const [level, fee, picked] of [
-      ["Value", "HK$250", /Value\s*HK\$250/],
-      ["Regular", "HK$400", /Regular\s*HK\$400/],
-      ["Express", "HK$550", /Express\s*HK\$550/],
-      ["Super Express", "HK$1,200", /Super Express\s*HK\$1,200/],
+      ["Value", "HK$250", /^Value .*HK\$250/],
+      ["Regular", "HK$400", /^Regular .*HK\$400/],
+      ["Express", "HK$550", /^Express .*HK\$550/],
+      ["Super Express", "HK$1,200", /^Super Express .*HK\$1,200/],
     ] as const) {
       expect(
         within(levelRow(canvasElement, level)).getByRole("cell", {
