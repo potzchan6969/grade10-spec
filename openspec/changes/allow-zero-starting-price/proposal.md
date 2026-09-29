@@ -31,13 +31,15 @@ See `decisions.md`.
 ### Modified Capabilities
 
 - `grade10-admin/auction/listing` — starting price may be 0
+- `grade10-site/auction/auto-bidding` — a lone maximum on a 0 start stands
+  at the lowest increment, not at 0 (Q4, held)
 
 ## Impact
 
 - **grade10-admin** — listing form and API validation accept 0
 - **No `@grade10/ui` export change**
-- **grade10-site** — no change; the bid-increments rule already covers a 0
-  start
+- **grade10-site** — the first-bid minimum already covers a 0 start; the
+  price a lone maximum stands at does not, and follows Q4
 
 ## Open questions
 
