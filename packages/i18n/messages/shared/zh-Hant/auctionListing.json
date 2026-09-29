@@ -66,6 +66,7 @@
   "minimumMaximumLeadingNudge": "至少 {amount}（你的最高出價 + {increment}）",
   "nextImage": "下一張圖片",
   "nextLot": "下一件拍品",
+  "noBids": "沒有出價",
   "noBidsYet": "尚未有出價",
   "opensIn": "距開拍",
   "opensLabel": "開始",

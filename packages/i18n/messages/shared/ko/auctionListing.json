@@ -66,6 +66,7 @@
   "minimumMaximumLeadingNudge": "최소 {amount}(최고 입찰가 + {increment})",
   "nextImage": "다음 이미지",
   "nextLot": "다음 로트",
+  "noBids": "입찰이 없습니다",
   "noBidsYet": "아직 입찰이 없습니다",
   "opensIn": "시작까지",
   "opensLabel": "시작",

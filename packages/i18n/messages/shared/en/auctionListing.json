@@ -66,6 +66,7 @@
   "minimumMaximumLeadingNudge": "At least {amount} (your maximum + {increment})",
   "nextImage": "Next image",
   "nextLot": "Next lot",
+  "noBids": "No bids",
   "noBidsYet": "No bids yet",
   "opensIn": "Opens in",
   "opensLabel": "Opens",
