@@ -843,7 +843,8 @@ Lands once every other group is green and the change is deployed.
       production until they are set
 - [x] 20.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes complete-vault-collector-flow`
-- [ ] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/vault-case.md`
+- [ ] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/page-blocks.md`,
+      `docs/prds/products/shared/ui/vault-case.md`
       and the Blocks line of `collector-pages.md`'s code map once group 25
       is deployed
 
@@ -992,30 +993,35 @@ makes nothing a scenario names.
 - [x] 23.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the isolated stack
       coming up and `GET /dev/outbox` answering
 
-## 24. The vault blocks (grade10-spec)
+## 24. The page blocks and the vault blocks (grade10-spec)
 
 Lands before group 25, which composes them. No existing block changes: every
-file is new under `packages/ui/src/blocks/vault-case/`, and the public entry
-gains one group.
+file is new under `packages/ui/src/blocks/page-blocks/` and
+`packages/ui/src/blocks/vault-case/`, and the public entry gains a group
+for each.
 
-- [ ] 24.1 Write the six blocks' stories and the capability's
+- [ ] 24.1 Write the seven blocks' stories and each capability's
       `public-exports.test.ts` first, each story that proves a scenario with
       its play function, and see them fail
-- [ ] 24.2 `VaultFactCard` and `VaultFactCardSkeleton`: the parts in order,
+- [ ] 24.2 `FactCard` and `FactCardSkeleton`: the parts in order,
       the region and the table by name, no table for no rows, one busy
       status, a count below one refused
-      (`shared-ui-vault-case-SC-04`, `shared-ui-vault-case-SC-05`,
-      `shared-ui-vault-case-SC-06`, `shared-ui-vault-case-SC-07`,
-      `shared-ui-vault-case-SC-08`)
-- [ ] 24.3 `VaultNoteList`: the lines in order, a divider under every line
+      (`shared-ui-page-blocks-SC-03`, `shared-ui-page-blocks-SC-04`,
+      `shared-ui-page-blocks-SC-05`, `shared-ui-page-blocks-SC-06`,
+      `shared-ui-page-blocks-SC-07`)
+- [ ] 24.3 `NoteList`: the lines in order, a divider under every line
       but the last, a link kept, nothing for no lines
-      (`shared-ui-vault-case-SC-09`, `shared-ui-vault-case-SC-10`,
-      `shared-ui-vault-case-SC-11`)
-- [ ] 24.4 `VaultStageRail`: done, in progress and to come, the ending's
+      (`shared-ui-page-blocks-SC-08`, `shared-ui-page-blocks-SC-09`,
+      `shared-ui-page-blocks-SC-10`)
+- [ ] 24.4 `StageRail`: done, in progress and to come, the ending's
       word, a stage it does not hold refused, the sideways scroll inside the
-      rail (`shared-ui-vault-case-SC-12`, `shared-ui-vault-case-SC-13`,
-      `shared-ui-vault-case-SC-14`, `shared-ui-vault-case-SC-15`,
-      `shared-ui-vault-case-SC-16`, `shared-ui-vault-case-SC-17`)
+      rail (`shared-ui-page-blocks-SC-11`, `shared-ui-page-blocks-SC-12`,
+      `shared-ui-page-blocks-SC-13`, `shared-ui-page-blocks-SC-14`,
+      `shared-ui-page-blocks-SC-15`, `shared-ui-page-blocks-SC-16`)
+- [ ] 24.9 `EmptyPanel`: the title, the line and the way out, each only
+      when given, and every page block found by the slot it is given or by
+      the design system's own (`shared-ui-page-blocks-SC-17`,
+      `shared-ui-page-blocks-SC-18`)
 - [ ] 24.5 `VaultAcceptOfferDialog`: the terms, Accept and going back, held
       while in flight, the refusal beside the terms, `open` forwarded
       (`shared-ui-vault-case-SC-18`, `shared-ui-vault-case-SC-19`,
@@ -1023,9 +1029,11 @@ gains one group.
       `shared-ui-vault-case-SC-22`)
 - [ ] 24.6 `VaultCasesEmpty`: the empty home in order, the start reported
       (`shared-ui-vault-case-SC-23`)
-- [ ] 24.7 Export the six blocks and their types from `src/index.ts` under
+- [ ] 24.7 Export the page blocks and their types from `src/index.ts` under
+      `// shared/ui/page-blocks` and the vault's two under
       `// shared/ui/vault-case`, reading no catalogue and reaching past no
-      prop (`shared-ui-vault-case-SC-01`, `shared-ui-vault-case-SC-02`,
+      prop (`shared-ui-page-blocks-SC-01`, `shared-ui-page-blocks-SC-02`,
+      `shared-ui-vault-case-SC-01`, `shared-ui-vault-case-SC-02`,
       `shared-ui-vault-case-SC-03`)
 - [ ] 24.8 Verify: `pnpm run typecheck`, `pnpm run lint`, each stories file
       under `npx vitest run --project storybook`, `pnpm run tcs:validate`,
@@ -1040,20 +1048,20 @@ their words, their tests and their story ids; only what draws them moves.
 - [ ] 25.1 Bring `origin/main` into the branch, then move
       `external/grade10-spec` to the store commit carrying group 24
 - [ ] 25.2 `CaseStepper` and `RequestStepper` hand their stages to
-      `VaultStageRail`; `CaseStepper` keeps `LANE_STAGES` and drops its
+      `StageRail`; `CaseStepper` keeps `LANE_STAGES` and drops its
       overflow wrapper, which the rail now owns
-- [ ] 25.3 `CaseFactCard` and `FactTable` give way to `VaultFactCard`, and
+- [ ] 25.3 `CaseFactCard` and `FactTable` give way to `FactCard`, and
       `RetentionTable` to the rows and the reviewed line it hands one;
       `OfferCard`, `WhatIsOwedCard`, `RemindersCard`, `RepaymentsList`,
       `EndingCard`, `FinalNoticeCard`, `StandingFactCard`, `HowToPayBlock`,
       `CaseDetailView` and `YourDataView` compose it, the lists in them a
-      `VaultNoteList`
+      `NoteList`
 - [ ] 25.4 `AcceptOfferDialog` words `VaultAcceptOfferDialog`, which the case
       page still mounts through `useDialogSubject`
 - [ ] 25.5 `VisitBooked`'s Before you come and `RequestWizard`'s photo tips
-      become `VaultNoteList`s
-- [ ] 25.6 `CaseList`'s cards compose `VaultFactCard`, its loading
-      `VaultFactCardSkeleton` and its empty home `VaultCasesEmpty`;
+      become `NoteList`s
+- [ ] 25.6 `CaseList`'s cards compose `FactCard`, its loading
+      `FactCardSkeleton` and its empty home `VaultCasesEmpty`;
       `SkeletonCards` is deleted
 - [ ] 25.7 Take `CaseDetailView` and `CaseList` out of
       `design-override.config.json`'s `exempt`

@@ -68,11 +68,14 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### New Capabilities
 
-- `shared/ui/vault-case`: the collector's blocks in `@grade10/ui` -
-  `VaultFactCard`, `VaultFactCardSkeleton`, `VaultNoteList`,
-  `VaultStageRail`, `VaultAcceptOfferDialog` and `VaultCasesEmpty`, with
-  their `<Name>Props` and `<Name>Copy` types. None exists yet; no existing
-  block changes
+- `shared/ui/page-blocks`: the parts every site page composes, in
+  `@grade10/ui` - `FactCard`, `FactCardSkeleton`, `NoteList`, `StageRail`
+  and `EmptyPanel`, with their `<Name>Props` and `<Name>Copy` types. The
+  vault's pages and grading's collector pages (`add-card-grading`) compose
+  them. None exists yet; no existing block changes
+- `shared/ui/vault-case`: the collector's own blocks in `@grade10/ui` -
+  `VaultAcceptOfferDialog` and `VaultCasesEmpty`, with their `<Name>Props`
+  and `<Name>Copy` types
 
 ### Modified Capabilities
 
@@ -154,6 +157,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## References
 
+- [Page Blocks](../../../docs/prds/products/shared/ui/page-blocks.md)
 - [Vault Blocks](../../../docs/prds/products/shared/ui/vault-case.md)
 - [Collector Pages · Request wizard](../../../docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard)
 - [Collector Pages · Case page](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-page)

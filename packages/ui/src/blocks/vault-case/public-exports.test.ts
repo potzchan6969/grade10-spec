@@ -10,21 +10,6 @@ import {
   VaultCasesEmpty,
   type VaultCasesEmptyCopy,
   type VaultCasesEmptyProps,
-  VaultFactCard,
-  type VaultFactCardCopy,
-  type VaultFactCardProps,
-  VaultFactCardSkeleton,
-  type VaultFactCardSkeletonCopy,
-  type VaultFactCardSkeletonProps,
-  type VaultFactRow,
-  type VaultNote,
-  VaultNoteList,
-  type VaultNoteListCopy,
-  type VaultNoteListProps,
-  type VaultStage,
-  VaultStageRail,
-  type VaultStageRailCopy,
-  type VaultStageRailProps,
 } from "../../index";
 
 // Each block carries a `<Name>Props` and a `<Name>Copy` beside it; a type the
@@ -34,17 +19,6 @@ type PublicVaultTypes = [
   VaultAcceptOfferDialogProps,
   VaultCasesEmptyCopy,
   VaultCasesEmptyProps,
-  VaultFactCardCopy,
-  VaultFactCardProps,
-  VaultFactCardSkeletonCopy,
-  VaultFactCardSkeletonProps,
-  VaultFactRow,
-  VaultNote,
-  VaultNoteListCopy,
-  VaultNoteListProps,
-  VaultStage,
-  VaultStageRailCopy,
-  VaultStageRailProps,
 ];
 
 const publicVaultTypes: PublicVaultTypes | undefined = undefined;
@@ -68,26 +42,14 @@ const capabilityModules = import.meta.glob<Record<string, unknown>>(
   { eager: true },
 );
 
-const CAPABILITY_EXPORTS = [
-  "VaultAcceptOfferDialog",
-  "VaultCasesEmpty",
-  "VaultFactCard",
-  "VaultFactCardSkeleton",
-  "VaultNoteList",
-  "VaultStageRail",
-].sort();
+const CAPABILITY_EXPORTS = ["VaultAcceptOfferDialog", "VaultCasesEmpty"].sort();
 
 describe("vault case public entry", () => {
   // shared-ui-vault-case-SC-01
-  it("exports the six named vault blocks", () => {
-    expect([
-      VaultFactCard,
-      VaultFactCardSkeleton,
-      VaultNoteList,
-      VaultStageRail,
-      VaultAcceptOfferDialog,
-      VaultCasesEmpty,
-    ]).toEqual(Array.from({ length: 6 }, () => expect.any(Function)));
+  it("exports the two named vault blocks", () => {
+    expect([VaultAcceptOfferDialog, VaultCasesEmpty]).toEqual(
+      Array.from({ length: 2 }, () => expect.any(Function)),
+    );
   });
 
   // shared-ui-vault-case-SC-01: every value the entry publishes from this

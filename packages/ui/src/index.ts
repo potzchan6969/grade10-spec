@@ -447,6 +447,35 @@ export {
   type WalletPassState,
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
+// shared/ui/page-blocks
+export {
+  EmptyPanel,
+  type EmptyPanelCopy,
+  type EmptyPanelProps,
+} from "./blocks/page-blocks/empty-panel";
+export {
+  FactCard,
+  type FactCardCopy,
+  type FactCardProps,
+  type FactRow,
+} from "./blocks/page-blocks/fact-card";
+export {
+  FactCardSkeleton,
+  type FactCardSkeletonCopy,
+  type FactCardSkeletonProps,
+} from "./blocks/page-blocks/fact-card-skeleton";
+export {
+  NoteList,
+  type NoteListCopy,
+  type NoteListItem,
+  type NoteListProps,
+} from "./blocks/page-blocks/note-list";
+export {
+  StageRail,
+  type StageRailCopy,
+  type StageRailProps,
+  type StageRailStage,
+} from "./blocks/page-blocks/stage-rail";
 export {
   PaymentMethodCard,
   type PaymentMethodCardProps,
@@ -688,29 +717,6 @@ export {
   type VaultCasesEmptyProps,
   type VaultCasesEmptyStep,
 } from "./blocks/vault-case/vault-cases-empty";
-export {
-  VaultFactCard,
-  type VaultFactCardCopy,
-  type VaultFactCardProps,
-  type VaultFactRow,
-} from "./blocks/vault-case/vault-fact-card";
-export {
-  VaultFactCardSkeleton,
-  type VaultFactCardSkeletonCopy,
-  type VaultFactCardSkeletonProps,
-} from "./blocks/vault-case/vault-fact-card-skeleton";
-export {
-  type VaultNote,
-  VaultNoteList,
-  type VaultNoteListCopy,
-  type VaultNoteListProps,
-} from "./blocks/vault-case/vault-note-list";
-export {
-  type VaultStage,
-  VaultStageRail,
-  type VaultStageRailCopy,
-  type VaultStageRailProps,
-} from "./blocks/vault-case/vault-stage-rail";
 export {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_NOW_MS,

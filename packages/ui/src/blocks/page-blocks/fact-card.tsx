@@ -17,9 +17,9 @@ import { type ReactNode, useId } from "react";
 
 /** One fact: its label, unique on its card, and its value as the consumer
  * formatted it. */
-type VaultFactRow = { label: string; value: ReactNode };
+type FactRow = { label: string; value: ReactNode };
 
-type VaultFactCardCopy = {
+type FactCardCopy = {
   title: string;
   /** The line under the title. */
   description?: string;
@@ -27,17 +27,20 @@ type VaultFactCardCopy = {
   rowsLabel?: string;
 };
 
-type VaultFactCardProps = {
-  copy: VaultFactCardCopy;
+type FactCardProps = {
+  copy: FactCardCopy;
   /** What reads first under the title, before the rows. */
   lead?: ReactNode;
-  rows?: readonly VaultFactRow[];
+  rows?: readonly FactRow[];
   /** What reads after the rows. */
   children?: ReactNode;
   /** The card's controls, after everything else. */
   actions?: ReactNode;
   /** The space between the lead, the rows and the body. */
   gap?: "sm" | "md";
+  /** The `data-slot` the consumer finds this card by; the design system
+   * card's own `card` when omitted. */
+  slot?: string;
   className?: string;
 };
 
@@ -50,20 +53,26 @@ type VaultFactCardProps = {
  * The card keeps the design system's own `card` slot, which the vault's
  * pages find a case card by.
  */
-function VaultFactCard({
+function FactCard({
   copy,
   lead,
   rows = [],
   children,
   actions,
   gap = "sm",
+  slot,
   className,
-}: VaultFactCardProps) {
+}: FactCardProps) {
   const titleId = useId();
   const hasContent = lead != null || rows.length > 0 || children != null;
 
   return (
-    <Card aria-labelledby={titleId} className={className} role="region">
+    <Card
+      aria-labelledby={titleId}
+      className={className}
+      data-slot={slot ?? "card"}
+      role="region"
+    >
       <CardHeader>
         <CardTitle id={titleId}>{copy.title}</CardTitle>
         {copy.description ? (
@@ -97,5 +106,5 @@ function VaultFactCard({
   );
 }
 
-export type { VaultFactCardCopy, VaultFactCardProps, VaultFactRow };
-export { VaultFactCard };
+export type { FactCardCopy, FactCardProps, FactRow };
+export { FactCard };

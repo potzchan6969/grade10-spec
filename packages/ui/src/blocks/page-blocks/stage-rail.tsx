@@ -3,19 +3,21 @@ import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { cn } from "@grade10/design-system/lib/utils";
 
 /** One stage: its id, and its label in the consumer's words. */
-type VaultStage = { id: string; label: string };
+type StageRailStage = { id: string; label: string };
 
-type VaultStageRailCopy = {
+type StageRailCopy = {
   /** Every stage, in the order a case or a request walks them. */
-  stages: readonly VaultStage[];
+  stages: readonly StageRailStage[];
   /** The word that says the case ended, read under the stage it ended at. */
   ended?: string;
 };
 
-type VaultStageRailProps = {
-  copy: VaultStageRailCopy;
+type StageRailProps = {
+  copy: StageRailCopy;
   /** The id of the stage reached. */
   current: string;
+  /** The `data-slot` the consumer finds this rail by. */
+  slot?: string;
   className?: string;
 };
 
@@ -28,19 +30,23 @@ type VaultStageRailProps = {
  * nothing reached. On a screen narrower than its labels the rail scrolls
  * sideways inside itself, so the page never does.
  */
-function VaultStageRail({ copy, current, className }: VaultStageRailProps) {
+function StageRail({ copy, current, slot, className }: StageRailProps) {
   const reached = copy.stages.findIndex((stage) => stage.id === current);
   if (reached < 0) {
     throw new Error(
-      `VaultStageRail: stage "${current}" is not one of ${copy.stages
+      `StageRail: stage "${current}" is not one of ${copy.stages
         .map((stage) => stage.id)
         .join(", ")}`,
     );
   }
 
   return (
-    // biome-ignore lint/a11y/noNoninteractiveTabindex: the rail scrolls sideways on a narrow screen, and a scroll container takes focus so a keyboard can scroll it.
-    <div className={cn("w-full overflow-x-auto", className)} tabIndex={0}>
+    <div
+      className={cn("w-full overflow-x-auto", className)}
+      data-slot={slot}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: the rail scrolls sideways on a narrow screen, and a scroll container takes focus so a keyboard can scroll it.
+      tabIndex={0}
+    >
       <Stepper className="min-w-max">
         {copy.stages.map((stage, index) => (
           <Step
@@ -63,5 +69,5 @@ function VaultStageRail({ copy, current, className }: VaultStageRailProps) {
   );
 }
 
-export type { VaultStage, VaultStageRailCopy, VaultStageRailProps };
-export { VaultStageRail };
+export type { StageRailCopy, StageRailProps, StageRailStage };
+export { StageRail };

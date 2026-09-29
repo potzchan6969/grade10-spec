@@ -8,15 +8,15 @@ import {
   VERIFY_HREF,
   VERIFY_LABEL,
 } from "./fixtures";
-import { VaultNoteList } from "./vault-note-list";
+import { NoteList } from "./note-list";
 
 const meta = {
-  title: "Vault Case/VaultNoteList",
-  component: VaultNoteList,
+  title: "Page Blocks/NoteList",
+  component: NoteList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: { notes: BEFORE_STORAGE },
-} satisfies Meta<typeof VaultNoteList>;
+} satisfies Meta<typeof NoteList>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -29,7 +29,7 @@ function dividers(canvasElement: HTMLElement): boolean[] {
 }
 
 /** Before you come on the storage lane: its last line carries no divider
- * (shared-ui-vault-case-SC-09). */
+ * (shared-ui-page-blocks-SC-08). */
 export const BeforeYouComeStorage: Story = {
   play: async ({ canvasElement }) => {
     const items = within(canvasElement).getAllByRole("listitem");
@@ -41,7 +41,7 @@ export const BeforeYouComeStorage: Story = {
 };
 
 /** Before you come on the financed lane: the third line keeps its divider
- * above the fourth (shared-ui-vault-case-SC-09). */
+ * above the fourth (shared-ui-page-blocks-SC-08). */
 export const BeforeYouComeFinanced: Story = {
   args: { notes: BEFORE_FINANCED },
   play: async ({ canvasElement }) => {
@@ -53,7 +53,7 @@ export const BeforeYouComeFinanced: Story = {
   },
 };
 
-/** One line, no divider (shared-ui-vault-case-SC-09). */
+/** One line, no divider (shared-ui-page-blocks-SC-08). */
 export const One: Story = {
   args: { notes: BEFORE_STORAGE.slice(0, 1) },
   play: async ({ canvasElement }) => {
@@ -61,7 +61,7 @@ export const One: Story = {
   },
 };
 
-/** A line holding a link keeps it (shared-ui-vault-case-SC-10). */
+/** A line holding a link keeps it (shared-ui-page-blocks-SC-09). */
 export const WithLinkItem: Story = {
   args: {
     notes: [
@@ -84,7 +84,7 @@ export const WithLinkItem: Story = {
   },
 };
 
-/** No lines draws nothing (shared-ui-vault-case-SC-11). */
+/** No lines draws nothing (shared-ui-page-blocks-SC-10). */
 export const Empty: Story = {
   args: { notes: [] },
   play: async ({ canvasElement }) => {

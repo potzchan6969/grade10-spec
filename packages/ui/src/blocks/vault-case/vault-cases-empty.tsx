@@ -1,9 +1,9 @@
-import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { EmptyPanel } from "../page-blocks/empty-panel";
 
 /** One How it works step: a stable id, its title and its line. */
 type VaultCasesEmptyStep = { id: string; title: string; body: string };
@@ -57,7 +57,9 @@ function VaultCasesEmpty({
           </VStack>
         ))}
       </VStack>
-      <EmptyState description={copy.emptyBody} title={copy.emptyTitle} />
+      <EmptyPanel
+        copy={{ title: copy.emptyTitle, description: copy.emptyBody }}
+      />
       <Text size="sm" tone="secondary">
         {copy.draftCap}
       </Text>
