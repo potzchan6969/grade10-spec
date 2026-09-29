@@ -324,7 +324,7 @@ persist with the member cart for reload and checkout. Selecting points SHALL
 NOT mutate the loyalty ledger.
 
 While a points quote or persistence operation is unresolved, the drawer SHALL
-prevent duplicate tender submissions and Checkout navigation. A quote,
+prevent duplicate tender submissions and activating Checkout. A quote,
 refusal or persistence failure SHALL show a localized error and keep the last
 accepted choice and total for the same reviewed basket. Once the failed
 operation resolves, Checkout MAY use that still-current accepted quote.
@@ -398,6 +398,6 @@ authoritative reread resolves the accepted choice.
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
 - **GIVEN** a successfully persisted points choice with its existing code
-- **WHEN** the collector reloads or continues to checkout
-- **THEN** the choice is read from the member cart and checkout re-quotes both points and code
-- **AND** only accepted spendPoints reach checkout creation and the drawer creates no checkout
+- **WHEN** the collector reloads or activates Checkout
+- **THEN** the choice is read from the member cart and the drawer's live quote re-quotes both points and code
+- **AND** only accepted spendPoints and the existing code reach the checkout session the drawer creates
