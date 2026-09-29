@@ -48,12 +48,16 @@
 2. Click Booked.
 3. Click Ready.
 4. Click Closed.
+5. Click Handed in.
+6. Click With the grader.
+7. Click Back.
 
 **Expected Results:**
 
 * Step 2 lists the `booked` submission and no other seeded one, with the view's own count.
 * Step 3 lists the `ready` submission and no other seeded one.
 * Step 4 lists the `collected`, `cancelled` and `expired` submissions together, and none of them appears in another view.
+* Each seeded submission is listed by exactly one of the six status views.
 * Every row carries the submission id, the collector, the cards, the grader and level, the status word, the visit, when it was last touched and what it is waiting on.
 
 ### grade10-admin-grading-counter-US1-TC2-1: The Today strip lists the day's drop-offs in slot order
@@ -83,7 +87,7 @@
 
 **Expected Results:**
 
-* The strip lists the two drop-offs in slot order, each with its time, collector, id, cards and grader.
+* The strip lists the two drop-offs in slot order, each with its time, collector, id, cards, and grader and level.
 * One line under them says that pickups walk in.
 
 ### grade10-admin-grading-counter-US1-TC3-1: A row's badge names the wait and clears once it no longer applies
@@ -148,7 +152,7 @@
 
 **Expected Results:**
 
-* The Batch closing tile names PSA Regular, its 2 cards, its 2 submissions and the day it ships.
+* The Batch closing tile names PSA Regular, its 2 cards, its 2 submissions, how many more may still join today, and the day it ships.
 * The With graders tile reads 3, of which 1 is past its estimate.
 * The Ready, uncollected tile reads 4, of which 1 is past 30 days.
 * The To settle tile reads 95000 minor units (HKD 950.00), 35000 plus 60000, over 2 submissions.
@@ -180,9 +184,11 @@
 
 **Expected Results:**
 
-* Closed shows its empty state rather than a blank table.
+* Closed shows its empty state rather than a blank table, and every other view is still offered.
 
 ### grade10-admin-grading-counter-US1-TC6-1: A view past 50 rows pages instead of overflowing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -200,18 +206,26 @@
 **Pre-conditions:**
 
 * admin(holds `grading:read`) is on <grade10 admin grading queue url>.
-* 51 submissions are seeded at `booked`, as *Seeding a submission* says, and no other submission is booked.
+* The row's number of submissions are seeded at `booked`, as *Seeding a submission* says, and no other submission is booked.
+
+**Test data:**
+
+| Row | Booked submissions | Outcome |
+| --- | --- | --- |
+| A | 51 | two pages; the 51st row on the second |
+| B | 50, exactly the page | one page; no more remain |
 
 **Steps:**
 
 1. Navigate to <grade10 admin grading queue url>.
 2. Click Booked.
-3. Click the pager's next page.
+3. Click the pager's next page, where one is offered.
 
 **Expected Results:**
 
 * Step 2 lists the newest-touched 50 rows.
-* Step 3 loads the 51st row without repeating any row already shown.
+* Step 3, in row A, loads the 51st row without repeating any row already shown; in row B, no next page is offered.
+* Each page shows how many rows stand behind the cut and whether more remain.
 
 ### grade10-admin-grading-counter-US1-TC7-1: A read-grant holder sees no row action beyond Open
 
@@ -223,14 +237,15 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
 
-* admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <grade10 admin grading queue url>. No shipped role holds that grant alone, so the operator's grants are mocked.
+* admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <grade10 admin grading queue url>.
+* The operator's grants are mocked to `grading:read` alone, since no shipped role holds that grant alone.
 * A submission is seeded at `booked`, as *Seeding a submission* says.
 
 **Steps:**
@@ -412,6 +427,7 @@
 * Step 1 takes one card, and neither step offers a paste of a list.
 * Step 3 adds the second card, one at a time with the collector.
 * The runbook proceeds from Not handed in yet with the two cards listed.
+* The Money tab prices the cards on PSA Regular's fee as it stands at the hand-in.
 
 ### grade10-admin-grading-counter-US2-TC3-1: A card is checked present, condition-noted and photographed front and back
 
@@ -490,6 +506,8 @@
 
 ### grade10-admin-grading-counter-US2-TC5-1: A card above the level's ceiling is marked and moves to a second submission or is refused
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
@@ -505,25 +523,24 @@
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with two cards of 300000 minor units each, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with two cards of 300000 minor units (HKD 3,000.00) each, as *Seeding a submission* says, its visit started with Start at the desk.
+* Value's ceiling is 390000 minor units (HKD 3,900.00), as the stack seeds it.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Level | Value |
-| Ceiling | 390000 minor units (HKD 3,900.00) |
-| Card's value on the list | 300000 minor units (HKD 3,000.00) |
-| Card's value declared at the desk | 400000 minor units (HKD 4,000.00), any value above the ceiling |
+| Row | Card's value declared at the desk | Outcome |
+| --- | --- | --- |
+| A | 400000 minor units (HKD 4,000.00), any value above the ceiling | marked above Value's ceiling, refused at Value |
+| B | 390001 minor units (HKD 3,900.01), one above the ceiling | marked above Value's ceiling, refused at Value |
 
 **Steps:**
 
-1. On the first card's row, tick Present and change the declared value to the one declared at the desk.
+1. On the first card's row, tick Present and change the declared value to the row's value declared at the desk.
 2. Read the level check and the first card's row.
 
 **Expected Results:**
 
-* The row is marked as above the ceiling, at the limit of what the level accepts.
+* The row is marked above Value's ceiling and refused at Value by name.
 * Staff are offered to move the card to a second submission or refuse it; the rest of the list is unaffected.
 
 ### grade10-admin-grading-counter-US2-TC6-1: The agreement is not mintable while a card is unchecked
@@ -623,11 +640,13 @@
 1. Read Take payment before the agreement is sealed.
 2. Click Show on iPad, and have the collector sign the agreement on the iPad.
 3. Click Take payment.
+4. Record the paid order.
 
 **Expected Results:**
 
-* Step 1 shows Take payment disabled.
+* Step 1 shows Take payment disabled, the unsealed agreement named as the reason.
 * Step 3 opens the till with one Grading Service line per card at 120000 minor units (HKD 1,200.00) and one cover line per card at 1.5% of its declared value, 3000 and 6000 minor units.
+* Step 4 writes the order back one fee line to each card in list order, a cover line beside each.
 
 ### grade10-admin-grading-counter-US2-TC9-1: No hand-in without a paid line leaves the submission booked and the cards with the collector
 
@@ -652,11 +671,11 @@
 **Steps:**
 
 1. Close the till without taking payment, so no paid order is recorded.
-2. Read the runbook.
+2. Click Print n labels and check in.
 
 **Expected Results:**
 
-* The submission stays `booked`, the seal still stands, and the cards go home with the collector.
+* Step 2 is refused by name; the submission stays `booked`, the seal still stands, and the cards go home with the collector.
 * The runbook offers to run the till again or wait for another drop-off.
 
 ### grade10-admin-grading-counter-US2-TC10-1: The safe's cap refuses a hand-in that would carry it past the cap
@@ -679,6 +698,7 @@
 * The safe's declared cap is written as below, as *Writing a money setting* says, on a stack holding no other `checked_in`, `returned` or `ready` submission.
 * The safe holds the declared value below: one submission seeded at `checked_in` at Super Express, as *Seeding a submission* says, with eight cards, seven of 3900000 minor units and one of 2600000.
 * admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a further submission seeded at `booked` with one card of the declared total below, every card checked at the desk and the agreement sealed on the iPad.
+* The fee is paid at the till.
 
 **Test data:**
 
@@ -691,11 +711,11 @@
 
 **Steps:**
 
-1. Attempt to take the fee with Take payment.
+1. Click Print 1 label and check in.
 
 **Expected Results:**
 
-* The hand-in is refused; the collector is told the safe is full and the next drop-off is booked instead.
+* Step 1 is refused by name, naming the safe's cap, and the counter offers Book the next drop-off.
 
 ### grade10-admin-grading-counter-US2-TC11-1: Labels, seal and check-in move the submission from Booked to Handed in
 
@@ -761,6 +781,7 @@
 **Expected Results:**
 
 * The second submission runs its own hand-in runbook, its own level check and its own till line, without depending on the first submission's state.
+* Each runbook names the other submission under the visit.
 
 ### grade10-admin-grading-counter-US2-TC13-1: Check in is refused while the agreement is unsealed
 
@@ -772,9 +793,9 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-02
 
 **Pre-conditions:**
@@ -888,6 +909,8 @@ Runs once per row of **Test data**.
 
 ### grade10-admin-grading-counter-US3-TC2-1: Refuse stays disabled until a reason and the collector's words are given
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
@@ -905,10 +928,18 @@ Runs once per row of **Test data**.
 
 * admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, its visit started with Start at the desk.
 
+**Test data:**
+
+| Row | Reason | Collector's words | Outcome |
+| --- | --- | --- | --- |
+| A | none picked | empty | Refuse this card disabled |
+| B | The grader would not take it | empty | Refuse this card disabled |
+| C | none picked | Corner crease along the top edge | Refuse this card disabled |
+
 **Steps:**
 
 1. On a card's row, click Refuse.
-2. Leave the reason unpicked and the collector's-words field empty.
+2. Pick the row's reason and type the row's words, leaving unpicked or empty what the row leaves so.
 3. Read Refuse this card.
 
 **Expected Results:**
@@ -939,10 +970,12 @@ Runs once per row of **Test data**.
 
 1. On the first card's row, click Refuse, choose The grader would not take it, type Corner crease along the top edge, and click Refuse this card.
 2. Click Take payment.
+3. Take the payment, then click Print 2 labels and check in.
 
 **Expected Results:**
 
 * The till lists one Grading Service line per remaining card only; the refused card is never charged.
+* Step 3 labels, seals in and checks in the other two cards, the fee standing for those two alone.
 
 ### grade10-admin-grading-counter-US3-TC4-1: A refused line already paid is refunded at the till
 
@@ -974,10 +1007,12 @@ Runs once per row of **Test data**.
 
 1. On the first card's row, click Refuse, choose The collector withdrew it and type Collector wants to keep this one for now.
 2. Read the notice in the dialog.
+3. Click Refuse this card.
 
 **Expected Results:**
 
 * The Notice adds a refund line of 60000 minor units (HKD 600.00) at the till, back the way it was paid.
+* Step 3 takes the refund of 60000 minor units at the till against the submission, naming the card and the line it refunds.
 
 ### grade10-admin-grading-counter-US3-TC5-1: Refusing a submission's only remaining card is named on the Notice
 
@@ -1051,8 +1086,11 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 matches the code to the submission and the given name to the collector on the page.
+* Step 3 opens the runbook at Settle, what is due.
 
 ### grade10-admin-grading-counter-US4-TC2-1: Above the threshold, the counter glances at an ID and keeps nothing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1069,16 +1107,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The ID glance threshold is written as below, as *Writing a money setting* says, before the submission is seeded, since the agreement pins it.
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` at Express with one card of the declared total below, as *Seeding a submission* says, its hand-back runbook at who is collecting.
+* The ID glance threshold is written at 1000000 minor units (HKD 10,000.00), as *Writing a money setting* says, before the submission is seeded, since the agreement pins it.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `ready` at Express with one card of the row's declared total, as *Seeding a submission* says, its hand-back runbook at who is collecting.
 * The collector is at the desk with the pickup code and an identity document in the name on the submission.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| ID glance threshold | 1000000 minor units (HKD 10,000.00) |
-| Declared total | 1200000 minor units (HKD 12,000.00), any total above the threshold |
+| Row | Declared total | Outcome |
+| --- | --- | --- |
+| A | 1200000 minor units (HKD 12,000.00), any total above the threshold | ID asked for |
+| B | 1000001 minor units (HKD 10,000.01), one above the threshold | ID asked for |
 
 **Steps:**
 
@@ -1090,7 +1128,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 shows the ID line.
-* Step 4's receipt records that an ID was matched to the name, keeping no document number or photograph.
+* Step 4's receipt records that an ID was matched to the name, keeping no document number, no photograph and no document kind.
 
 ### grade10-admin-grading-counter-US4-TC3-1: At the threshold, the code and the name alone release the cards
 
@@ -1193,12 +1231,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read the Settle step.
-2. Click Take payment and take the payment at the till.
+2. Open Hand over and inspect before taking payment.
+3. Click Take payment and take the payment at the till.
 
 **Expected Results:**
 
 * Step 1 lists the upcharge and storage lines separately, totalling 72000 minor units (HKD 720.00).
-* Step 2 takes payment before any item can be ticked over.
+* Step 2 ticks nothing and names 72000 minor units still due.
+* Step 3 takes payment before any item can be ticked over.
 
 ### grade10-admin-grading-counter-US4-TC6-1: Nothing due ticks the Settle step through without opening the till
 
@@ -1253,11 +1293,13 @@ Runs once per row of **Test data**.
 1. On the first slab's row, tick Handed over.
 2. Photograph the slab.
 3. On the raw card's row, tick Handed over.
+4. Reload the collector's page at <grade10 grading submission url>.
 
 **Expected Results:**
 
 * Steps 1 and 3 tick each item as inspected.
 * Step 2 attaches one photograph to the slab; the raw card takes no photograph.
+* Step 4 shows the slab's photograph and each item as handed over.
 
 ### grade10-admin-grading-counter-US4-TC8-1: The receipt is refused while anything is due or an item is unticked
 
@@ -1501,7 +1543,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The name matches neither the collector nor the named person; the runbook turns them away even though the code is correct, with no override offered.
+* The name matches neither the collector nor the named person; the runbook turns them away even though the code is correct, offers no override, and says the collector can name a person from their own page.
 
 ### grade10-admin-grading-counter-US5-TC3-1: No release override is offered to any grant
 
@@ -1633,7 +1675,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Open a vault case is disabled until the balance is settled.
+* Open a vault case is disabled, the unpaid upcharge named on the step as the reason.
 
 ### grade10-admin-grading-counter-US6-TC2-1: A slab opens a vault case from the same hand-back step once settled
 
@@ -1696,6 +1738,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The receipt names the vaulted card as gone to the vault and the other item as collected in person.
+* The other item ticks and hands over independently of the vaulted slab.
 
 ### grade10-admin-grading-counter-US6-TC4-1: Vaulting one item does not block ticking the rest of the submission's items
 
@@ -1751,18 +1794,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission of two cards is handed in at the desk this week as a walk-in at <grade10 admin grading walk-in url>, so it is `checked_in` in a batch still open until its cut-off. A seeded `checked_in` submission will not do: its batch closes at the hand-in.
+* A submission of three cards at Regular is handed in at the desk this week as a walk-in at <grade10 admin grading walk-in url>, its fee paid at the till, so it is `checked_in` in a batch still open until its cut-off. A seeded `checked_in` submission will not do: its batch closes at the hand-in.
 * admin(holds `grading:operate`) is on the Cards tab of <grade10 admin grading submission url> for it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Card's paid fee | 60000 minor units (HKD 600.00), Regular's fee |
 
 **Steps:**
 
 1. On the first card's row, click Withdraw.
 2. Confirm the withdrawal in the dialog.
-3. Read both card rows.
+3. Read the card rows.
+4. Open the Money tab and read the refund line.
+5. Read the receipt the withdrawal offers, and the Documents tab.
+6. On <grade10 admin grading batches url>, open the submission's batch and read its cards.
 
 **Expected Results:**
 
-* The card is marked withdrawn and released; the other card stays checked in unaffected.
+* Step 3: the card is marked withdrawn and released; the other two cards stay checked in unaffected.
+* Step 4: a refund of 60000 minor units (HKD 600.00) is recorded at the till, back the way the fee was paid.
+* Step 5: the card is released against its own withdrawal receipt naming that one card, separate from the submission's eventual full receipt.
+* Step 6: the remaining two cards stay in the batch and go on to the grader.
 
 ### grade10-admin-grading-counter-US7-TC2-1: Withdrawing refunds the card's own POS line
 
@@ -1933,10 +1988,12 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 leaves the due as it was and shows the request waiting for a second approve holder.
-* Step 4 records the waiver with the reason, admin A as the recorder and admin B as the approver.
+* Step 4 records the waiver against the card, with the reason, admin A as the recorder and admin B as the approver.
 * The collector's due drops by 60000 minor units (HKD 600.00) before collection.
 
 ### grade10-admin-grading-counter-US8-TC2-1: Waive is absent until the cards are back
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1953,8 +2010,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission is seeded at `sent`, as *Seeding a submission* says, so its cards are with the grader.
+* A submission is seeded at the row's status, as *Seeding a submission* says, so its cards are not yet back.
 * admin(holds `grading:approve`) is on <grade10 admin grading submission url> for it.
+
+**Test data:**
+
+| Row | Status | Outcome |
+| --- | --- | --- |
+| A | `sent`, the cards with the grader | Waive the upcharge absent |
+| B | `checked_in`, the cards at the shop before shipping | Waive the upcharge absent |
+| C | `graded`, the grades in and the cards not yet back | Waive the upcharge absent |
 
 **Steps:**
 
@@ -2014,7 +2079,8 @@ Runs once per row of **Test data**.
 
 * A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 60000 minor units (HKD 600.00).
 * admin A(holds `grading:approve`) has asked for the upcharge's waiver on its Money tab at <grade10 admin grading submission url>, with a reason, and nobody has approved it.
-* admin C(holds `grading:operate`, not `grading:approve`) is signed in to their own console. No shipped role holds `grading:operate` without `grading:approve`, so admin C's grants are mocked.
+* admin C(holds `grading:operate`, not `grading:approve`) is signed in to their own console.
+* admin C's grants are mocked to `grading:read` and `grading:operate` without `grading:approve`, since no shipped role holds `grading:operate` without `grading:approve`.
 
 **Steps:**
 
@@ -2089,10 +2155,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Row | Route | Declared value | Fee refunded |
-| --- | --- | --- | --- |
-| A | Till | 300000 minor units (HKD 3,000.00) | 60000 minor units (HKD 600.00) |
-| B | Bank transfer | 300000 minor units (HKD 3,000.00) | 60000 minor units (HKD 600.00) |
+| Row | Route | Declared value | Fee refunded | Reference |
+| --- | --- | --- | --- | --- |
+| A | Till | 300000 minor units (HKD 3,000.00) | 60000 minor units (HKD 600.00) | none |
+| B | Bank transfer | 300000 minor units (HKD 3,000.00) | 60000 minor units (HKD 600.00) | TRF-0001, any reference the bank gives |
 
 **Steps:**
 
@@ -2105,6 +2171,7 @@ Runs once per row of **Test data**.
 
 * Step 3 records no payout and no refund.
 * Step 4 records the row's declared value and refunds the row's fee, on its own record with admin A as the recorder and admin B as the approver, by the row's route.
+* Row B's record carries the transfer's reference.
 
 ### grade10-admin-grading-counter-US9-TC2-1: A payout past its settlement window is marked on the dialog
 
@@ -2136,10 +2203,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click the act that records a payout on the not-returned card.
+2. Choose the till and type the reason.
+3. Click Ask for approval.
 
 **Expected Results:**
 
 * The dialog marks that the window has passed.
+* Step 3 asks for the payout although the window has passed.
 
 ### grade10-admin-grading-counter-US9-TC3-1: A payout is reversed on its own record when the card turns up
 
@@ -2171,7 +2241,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The reversal is written on the same payout record; the card's outcome returns to the submission rather than staying paid out.
+* Step 4 shows the reversal written on the same record, the payout itself left as it was, and the card back on the submission.
 
 ### grade10-admin-grading-counter-US9-TC4-1: The recorder cannot approve their own payout
 

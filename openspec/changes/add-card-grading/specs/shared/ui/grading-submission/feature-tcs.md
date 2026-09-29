@@ -183,9 +183,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-fee-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -340,9 +342,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -402,9 +406,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -430,9 +436,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -459,9 +467,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -487,9 +497,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -915,9 +927,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The cards after hand-in
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-record.stories.tsx`
 
 **Pre-conditions:**
 
@@ -950,9 +964,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The cards after hand-in
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-record.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1735,9 +1751,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1771,9 +1789,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1917,9 +1937,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The cards after hand-in
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-record.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2158,9 +2180,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2348,9 +2372,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reading what it costs
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-fee-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2440,9 +2466,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Listing the cards
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
