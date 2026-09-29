@@ -82,12 +82,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 my auctions url>.
-2. Find the row for <lot_1>.
+2. Read the row for <lot_1>.
 
 **Expected Results:**
 
-* External lot status is Ended.
-* Order status is shown apart from that status.
+* The lot status is Ended.
+* Your Standing shows the order status.
 
 ---
 
@@ -134,13 +134,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 auction catalogue url>.
-2. Search the catalogue for the title of <lot>.
+2. Read the All auctions list.
+3. Search the catalogue for the title of <lot>.
 
 **Expected Results:**
 
-* <lot> is not listed.
-* The search does not find <lot>.
-* <lot_5> is listed as Ended.
+* <lot> is not in All auctions.
+* Search does not find <lot>.
+* <lot_5> is in All auctions, status Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC2-1: Called-off lot leaves the watchlist, unsold lot stays
@@ -174,12 +175,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 my auctions url>.
-2. Open the watchlist.
+2. Read the list.
 
 **Expected Results:**
 
-* <lot_3> is not listed.
-* <lot_2> is listed as Ended.
+* <lot_3> is not in the list.
+* <lot_2> is in the list, status Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-k90 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC3-1: Listing data leaves out called-off lots
@@ -199,19 +200,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <lot_2> ended with no winner.
-* <lot_3> was called off.
+* <lot_2> ended with no winner, and a collector watches it.
+* <lot_3> was called off, and that collector watches it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | A lot whose bidding ended with no winner |
-| <lot_3> | A lot an operator called off |
+| <lot_2> | A watched lot whose bidding ended with no winner |
+| <lot_3> | A watched lot an operator called off |
 
 **Steps:**
 
-1. Read the API response.
+1. Read the API response for the public listing data.
 
 **Expected Results:**
 
@@ -245,7 +246,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer A and customer B are signed in on separate sessions.
-* customer A bid on <lot_4>. customer B watched <lot_4> and did not bid.
+* customer A bid on <lot_4>, and that bid holds a bid-time authorization.
+* customer B watched <lot_4> and did not bid.
 * <lot_4> was called off.
 
 **Test data:**
@@ -261,5 +263,5 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 lists <lot_4>, with the note that the card hold was released.
+* Step 1 lists <lot_4>, and the row says the card hold was released.
 * Step 2 does not list <lot_4>.
