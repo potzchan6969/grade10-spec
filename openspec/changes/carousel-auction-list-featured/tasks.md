@@ -22,7 +22,7 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 - [x] 3.3 Verify: `pnpm --filter @grade10/ui` storybook vitest for the banner stories, `pnpm run typecheck`, `pnpm run lint`, `pnpm check:manual`. Record story evidence.
 - [x] 3.4 Make `grade10-site-auction-auction-SC-35` and `SC-36` pass in Storybook on a small viewport: below `md`, stage previous/next and horizontal swipe page the stage among two or three slides and are absent for one; countdown beside the CTA; progress under the copy stack; band height holds the tallest slide; lot title clamps to four lines below `md` and three from `md`. Answer `auction.featured.previous` and `next` in `en`, `ko`, `zh-Hans`, and `zh-Hant`.
 
-## 4. Quiet Catalogue on `/auction` (grade10)
+## 4. Quiet Catalogue on `/auction` (grade10) (owner: @mason5991)
 
 Depends on Groups 1 and 3 (public Featured read + banner export).
 
