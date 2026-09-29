@@ -1,0 +1,8 @@
+# Rounds
+
+One row per round: what it read, who read it, what stood and what it asked.
+Written by the landing, in the landing's own commit.
+
+| Round | Artifact | Perspectives | Stood | Asked | Tests |
+| --- | --- | --- | --- | --- | --- |
+| 1 | proposal | backend, integration, operations, simpler, verifier | Order Paid follows the order_events drain and some sends have no stored fact, so Q10 names where each writes its record; the ZZZ store is a fifth database; erasure and the metric cover held records; a held profile write never overrides a later one; Q6, Q8 and Q9 fold into Q1; fallen to the tech design: response handling, batch limits, record fields, the owner of each profile property | `Q12` | - |

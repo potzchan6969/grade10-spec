@@ -61,6 +61,9 @@ Workers send these when the domain fact lands. The browser cannot.
 - **First-touch campaign on the landing** — Page Viewed and Lot Viewed
   carry UTM when the address had those keys; the first Page Viewed on a
   device may also carry Initial Referrer
+- 🚧 **Never lost** - a server event reaches Mixpanel however long Mixpanel
+  or the worker that sent it is down, and counts once -
+  [Product Analytics · Delivery](/platform/tracking#delivery)
 
 ## Identity
 
@@ -96,6 +99,9 @@ snapshot used to filter events and build cohorts.
 
 - **Server only** — each property is written when that fact changes and
   overwrites the previous value; the browser never writes a profile
+- 🚧 **Latest write, whatever the outage** - the profile ends on the latest
+  write of each property; a held write is never sent over a later one -
+  [Product Analytics · Delivery](/platform/tracking#delivery)
 - **No anonymous device** — an unsigned visit has events, not a profile
 - **Collector IP for geo** — engage sets `$ip` to the collector's
   address when known; `$ip` is `0` only when none was captured, so the
@@ -132,4 +138,5 @@ snapshot used to filter events and build cohorts.
 | Checkout Started           | Decided | The worker sends it when checkout is accepted. The browser has already left for Shopify.                                                                                    | Product         |
 | Ownerless then claimed     | Decided | Order Paid is sent once, on the order. A later claim does not send it again and does not merge the order device onto the member.                                            | Product         |
 | Collector IP for geo       | Decided | Client and server Mixpanel sends carry the collector IP when known so Mixpanel geolocates the person, not the worker. IP is never stored as a property.                     | Product         |
+| Backend delivery           | Decided | Every backend send reaches Mixpanel and counts once, whatever the outage. Browser events and Datadog counters are best effort.                                              | Product         |
 :::

@@ -1,0 +1,18 @@
+schema: grade10-planning
+created: 2026-09-23
+hands:
+  pm: "@ecchochan"
+  tech: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: no collector or admin surface; backend Mixpanel delivery only
+awaiting:
+  specs: 2026-09-29, the requirements and the blind suite are drafted on the
+    branch and land after the tech design
+landed_by:
+  proposal: ecchochan
+reviewed:
+  user-journeys: 88b7d170
+  tech-design: 54ed4ce9
+  specs: 422f8a2e
+  test-cases: 422f8a2e
+  tasks: 5dea89f1
