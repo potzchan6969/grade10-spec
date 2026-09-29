@@ -2743,6 +2743,266 @@ An authenticated winner account with six saved shipping addresses, held from bef
 * Note is not shown.
 * Proof and the full account number are not shown.
 
+## winner-order-US3: Winner checks the buyer's premium on an invoice
+
+**As a** winner,
+**I want** the buyer's premium on my invoice to follow one published rule,
+**so that** I can check what I am charged on top of my winning bid.
+
+### winner-order-US3-TC5-1: The invoice's Buyer's Premium follows the published rule
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-03
+
+**Pre-conditions:**
+
+* customer(winner) won a lot at <winning bid>, and its invoice was sent.
+* The currency's premium minimum in Auction Payment settings is <minimum> at send.
+* customer is on the order's Winner Order page.
+
+**Test data:**
+
+| Winning bid | Minimum | Buyer's Premium | Rule |
+| --- | --- | --- | --- |
+| HKD 10,000.00 (1000000 minor units) | HKD 0.00 | HKD 2,000.00 | 20% of the winning bid |
+| JPY 1003 | JPY 0 | JPY 201 | 20% is 200.6, rounded half up |
+| JPY 1002 | JPY 0 | JPY 200 | 20% is 200.4, rounded half up |
+| HKD 500.00 (50000 minor units) | HKD 200.00 (20000 minor units) | HKD 200.00 | The minimum, higher than 20% (HKD 100.00) |
+
+**Steps:**
+
+1. Read Order Summary.
+2. Hover the Buyer's Premium info tooltip.
+
+**Expected Results:**
+
+* Step 1: the winning bid line reads <winning bid>.
+* Step 1: Buyer's Premium reads the row's value.
+* Step 1: the total equals the sum of the lines shown.
+* Step 2: a brief tooltip explains Buyer's Premium.
+
+---
+
+## winner-order-US6: Losing bidder gets their hold back when the lot closes
+
+**As a** bidder who did not win,
+**I want** the card hold my bids put there lifted as soon as the lot closes,
+**so that** losing an auction does not leave my money reserved until the
+authorization expires on its own.
+
+### winner-order-US6-TC1-1: A losing bidder's card hold is released at the close
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-06
+
+**Pre-conditions:**
+
+* customer A holds a card authorization for their bid on <lot_1>.
+* customer B leads <lot_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | A lot taking bids, bid on by customer A and led by customer B, about to close |
+
+**Steps:**
+
+1. Let <lot_1> close with customer B winning.
+2. Read the authorization for customer A and <lot_1> at the card provider.
+
+**Expected Results:**
+
+* customer A's authorization is released, not left to expire.
+* No charge is captured on customer A's card.
+
+### winner-order-US6-TC2-1: Every hold a losing bidder's bids placed is released
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-06
+
+**Pre-conditions:**
+
+* customer A bid on <lot_1> more than once, each bid authorized on their card.
+* customer B leads <lot_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | A lot taking bids, with several bids from customer A, led by customer B, about to close |
+
+**Steps:**
+
+1. Let <lot_1> close with customer B winning.
+2. Read every authorization for customer A and <lot_1> at the card provider.
+
+**Expected Results:**
+
+* No authorization for customer A and <lot_1> is left held.
+
+---
+
+## winner-order-US10: Winner's payment proof is not accepted
+
+**As a** winner whose payment proof Grade10 could not match,
+**I want** to read why and how long I have left,
+**so that** I can send the right proof or pay again before the deadline.
+
+### winner-order-US10-TC8-1: Returned proof shows the reason and the deadline resumes
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner) chose bank transfer and uploaded proof for <order_verifying>.
+* An operator returned the proof with <return reason>.
+* customer is on <order_verifying>'s Winner Order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | An order whose invoice was sent, proof uploaded <time left> before its payment deadline |
+| <time left> | 3 days (259200s), a time inside the 7-day payment window |
+| <return reason> | The reason text the operator entered for the winner |
+| <return time> | 1 day after the upload |
+
+**Steps:**
+
+1. Read the order status and the alert.
+2. Read the payment deadline.
+
+**Expected Results:**
+
+* Step 1: the order no longer reads Payment Verifying.
+* Step 1: <return reason> is shown to the winner.
+* Step 2: Pay by reads <return time> plus <time left>.
+* Step 2: Submit Payment Proof and View Bank Details are offered again.
+
+### winner-order-US10-TC9-1: Only the latest return reason is shown
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner)'s proof for <order_verifying> was returned with <first reason>.
+* The winner uploaded proof again, and it was returned with <second reason>.
+* customer is on <order_verifying>'s Winner Order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | An order paid by bank transfer, inside its payment window |
+| <first reason> | Amount does not match |
+| <second reason> | Reference missing from the transfer |
+
+**Steps:**
+
+1. Read the page.
+
+**Expected Results:**
+
+* <second reason> is shown.
+* <first reason> is not shown.
+* No proof file or file name is shown.
+
+### winner-order-US10-TC10-1: Returned proof sends Proof not accepted with the new Pay by
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner) uploaded proof for <order_verifying>; no letter was sent on upload.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_verifying> | An order paid by bank transfer, <time left> before its payment deadline at upload |
+| <time left> | 3 days (259200s) |
+| <return reason> | The reason text the operator enters for the winner |
+
+**Steps:**
+
+1. Have an operator return the proof with <return reason>.
+2. Read the mail sent to the winner's registered email.
+
+**Expected Results:**
+
+* One Proof not accepted letter carrying <return reason>.
+* Its Pay by equals the return time plus <time left>.
+* No payment reminder was sent while the proof was under check.
+
+---
+
+
 ## Settled
 
 - Non-parseable phone still applies with the entered value; E.164 only when parseable
