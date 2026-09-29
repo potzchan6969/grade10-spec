@@ -1,7 +1,7 @@
 # shared/auth/users Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** approved
+**Reviewed:** 2026-09-29, tcs-rules r4
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 
@@ -9,14 +9,13 @@
 **I want** to search and open accounts by user id,
 **so that** I can find a person without seeing records I am not granted.
 
-<!-- trace:case id=g10.shared-users.TC-oy8 rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC1-1: Granted operator lists accounts by user id
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -26,131 +25,155 @@
 * **Trace:** shared-auth-users-US-01
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:list`.
+
+* admin(holds `user:list`) is signed in.
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Check the listed accounts.
+1. Open <grade10 admin users url>.
+2. Read the listed accounts.
 
 **Expected Results:**
 
-* Accounts from this brand's identity system are listed.
-* Each account is named by user id.
+* The directory lists accounts from this brand.
+* Each account is named by its user id.
 
-<!-- trace:case id=g10.shared-users.TC-caj rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC2-1: Caller without the list grant is refused
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
 **Pre-conditions:**
-Signed in as a person who does not hold `user:list`.
+
+* admin(does not hold `user:list`) is signed in.
 
 **Steps:**
 
-1. Try to list accounts.
+1. Open <grade10 admin users url>.
 
 **Expected Results:**
 
-* The system refuses the request.
-* No account records are returned.
+* The directory refuses the list.
+* No account is shown.
 
-<!-- trace:case id=g10.shared-users.TC-2wn rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC3-1: Search matches email without letter case
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
 **Pre-conditions:**
-Signed in as an operator who can list users. An account email is known.
+
+* admin(holds `user:list`) is signed in.
+* The directory holds <subject email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Search fragment | <email fragment in a different letter case than the account> |
+| <subject email> | collector@example.com |
+| <email fragment> | COLLECTOR |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Search the directory with that fragment.
+1. Open <grade10 admin users url>.
+2. Search the directory for <email fragment>.
 
 **Expected Results:**
 
-* Results are accounts whose email contains that fragment.
+* The account for <subject email> is listed.
+* Every listed email contains that fragment, ignoring letter case.
 
-<!-- trace:case id=g10.shared-users.TC-b3k rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC4-1: Account opens by user id
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
 **Pre-conditions:**
-Signed in as an operator who can list users.
+
+* admin(holds `user:list`) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | The account to open |
+| <other user id> | A different account that shares an email attribute with <subject user id> |
 
 **Steps:**
 
-1. Open the account for <a subject user id>.
+1. Open <grade10 admin users url>.
+2. Open the account for <subject user id>.
 
 **Expected Results:**
 
-* That account is received.
-* A different account that shares an email attribute is not received.
+* The account shown is <subject user id>.
+* <other user id> is not the account shown.
 
-<!-- trace:case id=g10.shared-users.TC-jkd rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC5-1: Banned account stays in the directory
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
 **Pre-conditions:**
-<a subject user id> is banned. Signed in as an operator who can list users.
+
+* admin(holds `user:list`) is signed in.
+* <subject user id> is banned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | A banned account |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Check whether that account is listed.
+1. Open <grade10 admin users url>.
+2. Find <subject user id>.
 
 **Expected Results:**
 
-* That account is still listed.
+* <subject user id> is listed.
+* The account is marked banned.
 
 ---
 
@@ -158,17 +181,17 @@ Signed in as an operator who can list users.
 
 **As an** operator who can ban,
 **I want** a ban to stop money-moving and sign-in, and an unban to restore them,
-**so that** a person who must leave cannot keep acting, and a mistaken ban is reversible.
+**so that** a person who must leave cannot keep acting, a mistaken ban is
+reversible, and a compromised admin cannot lock peer admins out by ban.
 
-<!-- trace:case id=g10.shared-users.TC-lde rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC1-1: Ban stops money-moving and sign-in
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
+* **Status:** actual
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
@@ -177,146 +200,187 @@ Signed in as an operator who can list users.
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned and signed in.
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is unbanned and signed in on <grade10 store url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An unbanned account |
+| <subject email> | That account's email |
+| <ban reason> | Account closed after a ticket |
 
 **Steps:**
 
-1. Ban <a subject user id>.
-2. Try a money-moving action as that person.
-3. Complete a sign-in method as that person.
-4. Ask a product who is calling on that person's existing session.
+1. On <grade10 admin users url>, ban <subject user id> with <ban reason> and confirm.
+2. In the pre-ban store session, start a payment.
+3. Sign in as <subject email> on <grade10 sign-in url>.
+4. Reopen <grade10 store url> in the pre-ban session.
 
 **Expected Results:**
 
-* That person cannot complete a money-moving action.
-* Completing a sign-in method does not sign them in.
-* A product reading who is calling reports no person.
+* The payment does not complete.
+* Sign-in does not start a session.
+* The store shows nobody signed in.
+* <subject user id> stays listed, marked banned.
 
-<!-- trace:case id=g10.shared-users.TC-v0p rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC2-1: Unban lets the person sign in again
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-<a subject user id> is banned. Signed in as an operator who can ban.
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is banned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | A banned account |
+| <subject email> | That account's email |
 
 **Steps:**
 
-1. Unban <a subject user id>.
-2. Complete a sign-in method as that person.
+1. On <grade10 admin users url>, unban <subject user id>.
+2. Complete sign-in as <subject email> on <grade10 sign-in url>.
 
 **Expected Results:**
 
-* That person can sign in again.
+* <subject email> is signed in.
 
-<!-- trace:case id=g10.shared-users.TC-hx1 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC3-1: Caller without the ban grant is refused
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who does not hold `user:ban`. <a subject user id> is unbanned.
+
+* admin(does not hold `user:ban`) is signed in.
+* <subject user id> is unbanned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An unbanned account |
 
 **Steps:**
 
-1. Try to ban <a subject user id>.
+1. On <grade10 admin users url>, try to ban <subject user id>.
 
 **Expected Results:**
 
-* The system refuses the request.
-* The account remains unbanned.
+* The directory refuses the ban.
+* <subject user id> stays unbanned.
 
-<!-- trace:case id=g10.shared-users.TC-3i2 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC4-1: Operator cannot ban themselves
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:ban`.
+
+* admin(holds `user:ban`) is signed in.
+* The signed-in account is unbanned.
 
 **Steps:**
 
-1. Try to ban the operator's own account.
+1. On <grade10 admin users url>, try to ban the signed-in account.
 
 **Expected Results:**
 
-* The system refuses the request.
-* Their account remains unbanned.
+* The directory refuses the ban.
+* The signed-in account stays unbanned.
 
-<!-- trace:case id=g10.shared-users.TC-wwa rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
-### shared-auth-users-US2-TC5-1: Support cannot ban an admin
+### shared-auth-users-US2-TC5-1: No caller bans an account that holds admin
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator whose role is `support`. <an admin user id> holds `admin`.
+
+* The row's caller is signed in and holds `user:ban`.
+* The row's subject holds `admin` and is unbanned.
+
+**Test data:**
+
+| Caller | Subject | Outcome |
+| --- | --- | --- |
+| admin(role `support`, holds `user:ban`) | <admin user id> | Ban is refused. The account stays unbanned. |
+| admin(holds `admin` and `user:ban`) | <peer admin user id>, a different account | Ban is refused. The account stays unbanned. |
 
 **Steps:**
 
-1. Try to ban <an admin user id>.
+1. On <grade10 admin users url>, try to ban the row's subject.
 
 **Expected Results:**
 
-* The system refuses the request.
-* The account remains unbanned.
+* The directory answers as the row's outcome states.
 
-<!-- trace:case id=g10.shared-users.TC-ka8 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC6-1: Last admin cannot be banned
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who can ban. <an admin user id> is the only account that holds `admin`.
+
+* Signed in as an operator who can ban. <an admin user id> is the only account that holds `admin`.
 
 **Steps:**
 
@@ -329,20 +393,22 @@ Signed in as an operator who can ban. <an admin user id> is the only account tha
 
 ---
 
-## shared-auth-users-US3: Operator changes another person's roles
+## shared-auth-users-US3: Operator changes roles
 
 **As an** admin,
-**I want** to set another person's roles without changing my own or stranding the last admin,
-**so that** grants stay a closed set I cannot widen from the call site.
+**I want** to set roles on any account I can open — including my own — and to
+strip my own `admin` when another admin remains, without stripping `admin`
+from a peer,
+**so that** ordinary grants and cooperative offboarding stay in the console and
+peer lockout does not.
 
-<!-- trace:case id=g10.shared-users.TC-g0n rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC1-1: Admin sets another account to staff
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -352,121 +418,201 @@ Signed in as an operator who can ban. <an admin user id> is the only account tha
 * **Trace:** shared-auth-users-US-03
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:set-role`.
+
+* admin(holds `user:set-role`) is signed in.
+* <subject user id> does not hold `staff`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An account that does not hold `staff` |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url> for <a subject user id>.
-2. Set that account to `staff`.
+1. On <grade10 admin users url>, save <subject user id> with `staff` among its roles.
 
 **Expected Results:**
 
-* That account's roles include `staff`.
+* <subject user id> holds `staff`.
 
-<!-- trace:case id=g10.shared-users.TC-3wy rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC2-1: Clearing operator roles leaves a user
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
 **Pre-conditions:**
-Signed in as an operator who can set roles. <a subject user id> holds an operator role.
+
+* admin(holds `user:set-role`) is signed in.
+* <subject user id> holds an operator role and does not hold `admin`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An account with an operator role and no `admin` |
 
 **Steps:**
 
-1. Save that account with no operator role selected.
+1. On <grade10 admin users url>, save <subject user id> with no operator role selected.
 
 **Expected Results:**
 
-* That account's roles are `user` only.
+* <subject user id> holds `user` only.
 
-<!-- trace:case id=g10.shared-users.TC-g3z rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC3-1: Support cannot set roles
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:ban` but not `user:set-role`.
+
+* admin(role `support`, holds `user:ban`, does not hold `user:set-role`) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | Another account |
 
 **Steps:**
 
-1. Try to change another account's roles.
+1. On <grade10 admin users url>, try to change <subject user id>'s roles.
 
 **Expected Results:**
 
-* The system refuses the request.
-* The roles are unchanged.
+* The directory refuses the change.
+* <subject user id>'s roles are unchanged.
 
-<!-- trace:case id=g10.shared-users.TC-j1l rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC4-1: Operator may change their own roles
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:set-role` and `admin`. At least one other account holds `admin`.
+
+* admin(holds `user:set-role` and `admin`) is signed in.
+* At least one other account holds `admin`.
+
+**Test data:**
+
+| Roles saved | Result |
+| --- | --- |
+| `staff` and `admin` | The account holds `staff` and `admin`. |
+| no `admin` | The account does not hold `admin`. |
 
 **Steps:**
 
-1. Save the operator's own account with `staff` and still with `admin`.
+1. On <grade10 admin users url>, save the signed-in account with the row's roles.
 
 **Expected Results:**
 
-* Their account's roles include `staff` and `admin`.
+* The account answers as the row's result states.
 
-<!-- trace:case id=g10.shared-users.TC-60a rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC5-1: Last admin keeps admin
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
 **Pre-conditions:**
-Signed in as an operator who can set roles. <an admin user id> is the only account that holds `admin`.
+
+* Exactly one account holds `admin`.
+
+**Test data:**
+
+| Caller | Account saved |
+| --- | --- |
+| admin(holds `user:set-role`, does not hold `admin`) | <only admin user id> |
+| admin(holds `admin` and `user:set-role`), the only admin | The signed-in account |
 
 **Steps:**
 
-1. Save that account without `admin`.
+1. On <grade10 admin users url>, save the row's account without `admin`.
 
 **Expected Results:**
 
 * That account still holds `admin`.
+
+### shared-auth-users-US3-TC6-1: Peer admin keeps admin
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-users-US-03
+
+**Pre-conditions:**
+
+* admin(holds `admin` and `user:set-role`) is signed in.
+* <peer admin user id> holds `admin` and is not the signed-in account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <peer admin user id> | An admin other than the signed-in account |
+
+**Steps:**
+
+1. On <grade10 admin users url>, save <peer admin user id> without `admin`.
+
+**Expected Results:**
+
+* The directory refuses the save.
+* <peer admin user id> still holds `admin`.
+
+---
 
 ## shared-auth-users-US4: Operator finds the accounts they mean
 
@@ -476,14 +622,13 @@ accounts I mean,
 **so that** I can reach one person from a ticket, and answer who holds a role,
 without reading every account.
 
-<!-- trace:case id=g10.shared-users.TC-axp rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC1-1: Search matches a name without letter case
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -493,31 +638,34 @@ without reading every account.
 * **Trace:** shared-auth-users-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory holds <account whose name is not in its email>.
+
+* admin(holds `user:list`) is signed in.
+* The directory holds <account name>, and that name is not part of the account's email.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <name fragment> | Part of that account's name, different letter case |
+| <account name> | Alex Collector |
+| <name fragment> | ALEX |
+| <subject email> | collector@example.com |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Search with <name fragment>.
+1. Open <grade10 admin users url>.
+2. Search the directory for <name fragment>.
 
 **Expected Results:**
 
-* That account is among the results.
+* The account named <account name> is listed.
 
-<!-- trace:case id=g10.shared-users.TC-1nn rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC2-1: Directory narrows to a role
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -527,46 +675,79 @@ Signed in as admin(holds `user:list`). Directory holds <account whose name is no
 * **Trace:** shared-auth-users-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory holds accounts with and without `admin`.
+
+* admin(holds `user:list`) is signed in.
+* The directory holds an account with `admin` and an account with no elevated role.
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Narrow to accounts that hold `admin`.
+1. Open <grade10 admin users url>.
+2. Narrow the directory to accounts that hold `admin`.
 
 **Expected Results:**
 
 * Every listed account holds `admin`.
-* An account that holds no elevated role is not listed.
+* An account with no elevated role is not listed.
 
-<!-- trace:case id=g10.shared-users.TC-xq6 rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC3-1: Two narrowings and chosen order apply
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** none
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory holds banned and unbanned `support` accounts, and accounts that joined on different days.
+
+* admin(holds `user:list`) is signed in.
+* The directory holds banned and unbanned `support` accounts that joined on different days.
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
+1. Open <grade10 admin users url>.
 2. Narrow to banned accounts that hold `support`.
 3. Order by when the account joined, oldest first.
-4. Clear the order choice.
+4. Clear the order.
 
 **Expected Results:**
 
-* After step 2 every listed account is banned and holds `support`.
-* After step 3 accounts are oldest first.
-* After step 4 accounts are newest first.
+* Step 2 lists only banned accounts that hold `support`.
+* Step 3 lists the oldest account first.
+* Step 4 lists the newest account first.
+
+### shared-auth-users-US4-TC4-1: Directory narrows to the user population
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-04
+
+**Pre-conditions:**
+
+* admin(holds `user:list`) is signed in.
+* The directory holds an account with `admin` and an account with no elevated role.
+
+**Steps:**
+
+1. Open <grade10 admin users url>.
+2. Narrow the directory to the user population.
+
+**Expected Results:**
+
+* Every listed account holds no elevated role.
+* An account that holds `admin` is not listed.
