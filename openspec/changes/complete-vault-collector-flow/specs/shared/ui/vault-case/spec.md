@@ -208,7 +208,8 @@ against the current one:
 An ending's word, when given, SHALL read under the current stage; no later
 stage reads as reached. A current stage the list does not hold SHALL be
 refused with an error naming it. On a screen narrower than its stages, the
-rail SHALL scroll sideways inside itself, never the page.
+rail SHALL scroll sideways inside itself, never the page, and SHALL take
+focus so a keyboard can scroll it.
 
 #### Scenario: shared-ui-vault-case-SC-12 - The financed lane at Signed
 **Serves:** Where a case stands - a borrower reads how far the case has come
