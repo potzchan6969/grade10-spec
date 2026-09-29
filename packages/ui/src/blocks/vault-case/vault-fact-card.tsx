@@ -15,7 +15,8 @@ import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { type ReactNode, useId } from "react";
 
-/** One fact: its label, and its value as the consumer formatted it. */
+/** One fact: its label, unique on its card, and its value as the consumer
+ * formatted it. */
 type VaultFactRow = { label: string; value: ReactNode };
 
 type VaultFactCardCopy = {
@@ -76,8 +77,8 @@ function VaultFactCard({
             {rows.length > 0 ? (
               <Table aria-label={copy.rowsLabel ?? copy.title}>
                 <TableBody>
-                  {rows.map((row, at) => (
-                    <TableRow key={`${at}-${row.label}`}>
+                  {rows.map((row) => (
+                    <TableRow key={row.label}>
                       <TableCell className="flex-1">{row.label}</TableCell>
                       <TableCell align="end" className="flex-1">
                         {row.value}
