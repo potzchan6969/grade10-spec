@@ -1960,7 +1960,7 @@ A signed-in operator without `auction:operate` on <grade10 auction admin listing
 * Create listing is not offered.
 * The draft save is refused.
 
-## grade10-admin-auction-listing-US-08: Operator checks a listing's watchers
+## grade10-admin-auction-listing-US8: Operator checks a listing's watchers
 
 **As an** auction operator,
 **I want** to see how many collectors watch a listing from its Stats dialog,
@@ -1968,7 +1968,7 @@ A signed-in operator without `auction:operate` on <grade10 auction admin listing
 surface for the same figure.
 
 <!-- trace:case id=g10adm.auction-listing.TC-wkx rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
-### grade10-admin-auction-listing-US-08-TC1-1: Stats counts watches across both brands
+### grade10-admin-auction-listing-US8-TC1-1: Stats counts watches across both brands
 
 **Classification:**
 
@@ -1998,7 +1998,7 @@ A published listing watched by two collectors on Grade10 and one collector on ZZ
 * No watcher is named.
 
 <!-- trace:case id=g10adm.auction-listing.TC-gl0 rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
-### grade10-admin-auction-listing-US-08-TC2-1: An unwatched listing shows zero in Stats
+### grade10-admin-auction-listing-US8-TC2-1: An unwatched listing shows zero in Stats
 
 **Classification:**
 
@@ -2026,7 +2026,7 @@ A published listing with no watches. An authorized operator is on <grade10 aucti
 * Stats shows 0 watchers, not a blank or "-".
 
 <!-- trace:case id=g10adm.auction-listing.TC-6o9 rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
-### grade10-admin-auction-listing-US-08-TC3-1: A closed listing keeps its watchers in Stats
+### grade10-admin-auction-listing-US8-TC3-1: A closed listing keeps its watchers in Stats
 
 **Classification:**
 
@@ -2054,7 +2054,7 @@ A closed listing still watched by two collectors. An authorized operator is on <
 * Stats shows 2 watchers.
 
 <!-- trace:case id=g10adm.auction-listing.TC-otd rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
-### grade10-admin-auction-listing-US-08-TC4-1: The Listings table has no Watchers column
+### grade10-admin-auction-listing-US8-TC4-1: The Listings table has no Watchers column
 
 **Classification:**
 
@@ -2079,3 +2079,10 @@ An authorized operator on <grade10 auction admin listings url>.
 **Expected Results:**
 
 * There is no Watchers column.
+
+## Settled
+
+- `grade10-admin-auction-listing-US-08-TC1` is `grade10-admin-auction-listing-US8-TC1`: renamed to the compact id form while still draft.
+- `grade10-admin-auction-listing-US-08-TC2` is `grade10-admin-auction-listing-US8-TC2`: renamed to the compact id form while still draft.
+- `grade10-admin-auction-listing-US-08-TC3` is `grade10-admin-auction-listing-US8-TC3`: renamed to the compact id form while still draft.
+- `grade10-admin-auction-listing-US-08-TC4` is `grade10-admin-auction-listing-US8-TC4`: renamed to the compact id form while still draft.

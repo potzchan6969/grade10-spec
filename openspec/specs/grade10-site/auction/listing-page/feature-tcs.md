@@ -1,7 +1,8 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-01
+**Status:** reopened
+**Drafts styled:** 2026-09-29, tcs-rules r4
+**Reviewed:** 2026-09-01, lapsed 2026-09-29
 
 ## grade10-site-auction-listing-page-US1: Collector opens a lot at its own address
 
@@ -177,6 +178,42 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
+### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address shows Page not found
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-03
+
+**Pre-conditions:**
+
+* The catalogue published <called-off lot>, then an operator called it off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <called-off lot> | A lot that was published and then called off |
+
+**Steps:**
+
+1. Navigate to <called-off lot url>.
+2. Check the response status.
+3. Check the rendered page.
+
+**Expected Results:**
+
+* Step 2: response status is 404.
+* Step 3: the site's Page not found screen is on screen, not the lot and not the catalogue.
+
 ---
 
 ## grade10-site-auction-listing-page-US4: Collector reads a live lot while scripts load
@@ -311,3 +348,300 @@ None.
 
 * No entry is a lot address.
 * None carries an unfilled parameter in place of one.
+
+---
+
+## grade10-site-auction-listing-page-US6: Watch a lot and open My Auctions from the toast
+
+**As a** collector on a lot I have not bid on,
+**I want** Watching to tell me email alerts are on and offer My Auctions,
+**so that** I know how to manage that lot without hunting for the account page.
+
+### grade10-site-auction-listing-page-US6-TC1-1: Watch announces alerts on and opens My Auctions
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-06
+
+**Pre-conditions:**
+
+* customer(signed in, no bid on <lot_1>, not watching <lot_1>) is on <lot_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
+
+**Steps:**
+
+1. Note the current bid, time left and bid panel.
+2. Click the Watch control.
+3. Click View My Auctions in the toast.
+
+**Expected Results:**
+
+* Step 2: the control reads Watching.
+* Step 2: a toast says email alerts are on, with View My Auctions.
+* Step 2: current bid, time left and bid panel are unchanged.
+* Step 3: My Auctions opens and lists <lot_1> once, Your Standing `--`.
+* Step 3: <lot_1>'s email alerts switch is on.
+
+### grade10-site-auction-listing-page-US6-TC2-1: Signed-out viewer is offered sign-in, no watch
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-06
+
+**Pre-conditions:**
+
+* customer(signed out) is on <lot_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | An open lot taking bids |
+
+**Steps:**
+
+1. Click the Watch control.
+2. Sign in using the offered sign-in flow.
+
+**Expected Results:**
+
+* Step 1: sign-in is offered; no toast says email alerts are on.
+* Step 2: the collector returns to <lot_1 url>.
+* Step 2: the control reads Watch; nothing was watched before sign-in.
+
+---
+
+## grade10-site-auction-listing-page-US7: Unwatch from the lot and undo
+
+**As a** collector who watched a lot without bidding,
+**I want** Unwatch to confirm alerts are off and let me Undo,
+**so that** a mis-tap does not force me to find the lot again.
+
+### grade10-site-auction-listing-page-US7-TC1-1: Unwatch removes the lot and turns alerts off
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-07
+
+**Pre-conditions:**
+
+* customer(signed in, watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_2> | An open lot taking bids, watched with email alerts on, not bid on by this collector |
+
+**Steps:**
+
+1. Click the Watching control.
+2. Open <grade10 my auctions url> in a new tab.
+
+**Expected Results:**
+
+* Step 1: the control reads Watch.
+* Step 1: a toast says the lot left My Auctions, with Undo.
+* Step 1: current bid, time left and bid panel are unchanged.
+* Step 2: <lot_2> is not listed.
+
+### grade10-site-auction-listing-page-US7-TC2-1: Undo restores the watch with alerts on
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-07
+
+**Pre-conditions:**
+
+* customer(signed in, watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_2> | An open lot taking bids, watched with email alerts on, not bid on by this collector |
+
+**Steps:**
+
+1. Click the Watching control.
+2. Click Undo in the toast.
+3. Open <grade10 my auctions url> in a new tab.
+
+**Expected Results:**
+
+* Step 2: the control reads Watching again.
+* Step 3: <lot_2> is listed once, Your Standing `--`.
+* Step 3: <lot_2>'s email alerts switch is on.
+
+---
+
+## grade10-site-auction-listing-page-US8: After bidding, Watching stays locked
+
+**As a** bidder on this lot,
+**I want** the watch control locked as Watching and one alerts toast when the bid bookmarks the lot,
+**so that** I am not invited to unwatch money I already put down, and I am not toasted on every revisit.
+
+### grade10-site-auction-listing-page-US8-TC1-1: First bid locks Watching and toasts alerts once
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-08
+
+**Pre-conditions:**
+
+* customer(signed in, enrolled to bid, not watching <lot_3>, no bid on <lot_3>) is on <lot_3 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_3> | An open lot taking bids, with no bid from this collector |
+| <first bid> | The next valid bid shown on the bid panel |
+
+**Steps:**
+
+1. Place <first bid> from the bid panel.
+2. Click the Watching control.
+3. Reload <lot_3 url>.
+
+**Expected Results:**
+
+* Step 1: a toast says email alerts are on.
+* Step 1: the control reads Watching, disabled.
+* Step 2: nothing changes; no Unwatch toast.
+* Step 3: the control still reads Watching, disabled; no alerts toast.
+
+### grade10-site-auction-listing-page-US8-TC2-1: A second bid on the lot shows no alerts toast
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-08
+
+**Pre-conditions:**
+
+* customer A(signed in, has bid on <lot_4>, outbid) is on <lot_4 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_4> | An open lot taking bids, where customer A bid before and customer B now leads |
+| <raise> | The next valid bid shown on the bid panel |
+
+**Steps:**
+
+1. Place <raise> from the bid panel.
+
+**Expected Results:**
+
+* No toast says email alerts are on.
+* The control reads Watching, disabled.
+
+---
+
+## grade10-site-auction-listing-page-US9: Closed lot has no watch control
+
+**As a** collector on a closed lot (sold or unsold),
+**I want** no Watch / Watching control,
+**so that** I am not invited to watch a sale that has already ended.
+
+### grade10-site-auction-listing-page-US9-TC1-1: A closed lot shows no watch control
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-09
+
+**Pre-conditions:**
+
+* <closed lot> is closed as the row states.
+
+**Test data:**
+
+| Closed lot | Viewer |
+| --- | --- |
+| Sold, with a winner | customer(signed in, never watched or bid on it) |
+| Sold, with a winner | customer(signed in, watched it before the close, no bid) |
+| Sold, with a winner | customer(signed in, bid on it and lost) |
+| Sold, with a winner | customer(signed out) |
+| Ended with no bids | customer(signed in, watched it before the close) |
+| Ended with no bids | customer(signed out) |
+
+**Steps:**
+
+1. Navigate to <closed lot url>.
+2. Check the lot image area and the bid panel area.
+
+**Expected Results:**
+
+* Step 1: the lot page renders.
+* Step 2: no Watch or Watching control shows anywhere on the lot page.
