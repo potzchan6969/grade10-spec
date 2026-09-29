@@ -1,6 +1,6 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## Background
@@ -304,7 +304,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -315,7 +315,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(closed account) is signed in and on `<grade10 vault your data url>`.
+* customer is signed in and on `<grade10 vault your data url>`.
 * The account holds `<submission_8>` and no open vault case.
 * `<submission_8>` is seeded at `sent` through grading's dev seed, under the account's email and user id.
 
@@ -342,11 +342,11 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -381,7 +381,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -415,7 +415,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
