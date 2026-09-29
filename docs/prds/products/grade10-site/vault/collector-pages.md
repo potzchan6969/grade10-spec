@@ -161,6 +161,9 @@ What a collector reads on one case, top to bottom.
   `NOTIFY_FOR_EVENT`; copy in `email/messages.ts`; reminders in
   `sweeps/remind.ts`; retries in `db/schema/notificationRetries.ts`,
   `notify/sealed.ts` and `sweeps/notify.ts`
+- 🚧 **Blocks** — `packages/ui/src/blocks/vault-case` in this store,
+  [Vault Blocks](/p/shared/ui/vault-case); the slices word them and compose
+  them
 - **Copy** — `packages/i18n/messages/shared/{en,zh-Hant,zh-Hans,ko}/vault.json`
   in this store; the app reads the pinned submodule, so a catalogue change
   reaches it with the next submodule bump

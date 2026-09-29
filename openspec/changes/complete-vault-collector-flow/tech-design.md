@@ -341,9 +341,11 @@ The spec governs what the page names and refuses; this is who answers.
 - **`admin.policy`** (`vault:read`) answers `lendingPolicy(brand)`,
   `accrualOf`, the reminder ladder's days and `REQUIRED_FOR_OFFER`'s unset
   fields, so the three dialogs state the rule from the worker's own table
-- **`admin.keyTerms`** answers the loan agreement's clause ids and headings
-  from `documents/templates/loanAgreement.ts`, and `recordTermsExplained` takes
-  `terms: string[]`, refusing any set short of the plan's
+- **`admin.policy.keyTerms`** answers the loan agreement's clause ids and
+  headings from `documents/templates/loanAgreement.ts`, one field of the same
+  read rather than a second query returning a constant, and
+  `recordTermsExplained` takes `terms: string[]`, refusing any set short of the
+  plan's
 - **The visit checklist and Forfeit's reason are `caseStanding`'s** — the Case
   tab walks `stage` and the events in order, and the Custody tab prints
   `notice.cureBy` and the `FORFEITURE_NOTICE_REQUIRED` refusal
@@ -570,7 +572,7 @@ applies the ban.
 | `cases.submit` | input gains `collectionStatement` | the wizard's third step |
 | `cases.yourData`, `cases.requestErasure`, `cases.cancelErasure` | new, authed | the Your data page |
 | `GET /api/cases/:caseId/visit.ics`, `GET /api/cases/documents.zip`, `GET /api/admin/money-ledger.csv` | new byte routes, all three in `VAULT_PATHS` | the Booked screen, Your data, the ledger view |
-| `admin.queueCounts`, `admin.arrearsSummary`, `admin.policy`, `admin.keyTerms` | new admin reads | the landing view and the three dialogs |
+| `admin.queueCounts`, `admin.arrearsSummary`, `admin.policy` (with `keyTerms`) | new admin reads | the landing view and the three dialogs |
 | `admin.list`, `admin.moneyLedger`, `admin.custodyList`, `admin.overdueLoans`, `admin.recordTermsExplained` | the additive inputs and fields above | `packages/vault/admin-frontend/src/features/custody/compliance` for the terms set |
 | `searchCases` | `termKind` gains `reference` | the counter search panel |
 | `requestErasure`, `cancelErasure` | the ban conditioned on `actor.id === userId`; no new parameter | auth's admin router call site, `readSession.ts` |

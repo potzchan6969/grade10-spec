@@ -113,14 +113,13 @@ SHALL export neither.
 **Nothing console-shaped** - the package SHALL export no block drawing the
 operator's queue, runbooks, batches, receiving or settings.
 
-**Copy filling** - the package SHALL export `fillGradingCopy` and
-`GradingLocaleProps` from its public entry. `fillGradingCopy(template,
-values)` SHALL replace every `{name}` in a catalogue template with
-`values[name]`, and SHALL throw an error naming the placeholder where
-`values` carries no value for it, so no consumer shows a literal placeholder.
-This is the one filler for a flat template; a template that also carries a
-`{count, plural, …}` clause is outside its reach and is the consumer's own
-ICU translator's to fill.
+**Copy filling** - the package SHALL export `GradingLocaleProps` from its
+public entry and SHALL export no placeholder filler. A copy line whose words
+carry a value the block works out - `GradingLevelPickerCopy.levelOpen`,
+`GradingCardListCopy.matched` and `GradingCardListCopy.minimumGrade` - SHALL
+be a function `(values) => string` the consumer answers from its own ICU
+translator; the block SHALL call it with every value the line names and
+SHALL render what it returns. Every other copy line SHALL arrive filled.
 
 #### Scenario: shared-ui-grading-submission-SC-01 - An application imports the grading blocks
 **Serves:** The export contract - a brand builds its grading pages from one set rather than drawing its own
@@ -140,12 +139,16 @@ ICU translator's to fill.
 - **AND** no grading-named shop picker, day and time picker, details form,
   confirmation or manage card is exported
 
-#### Scenario: shared-ui-grading-submission-SC-71 - A template missing a value refuses by name
-**Serves:** The export contract - a consumer never shows a collector a literal placeholder
+#### Scenario: shared-ui-grading-submission-SC-71 - A line carrying a value is the consumer's to fill
+**Serves:** The export contract - a consumer fills every line in its own translator, so no collector reads a literal placeholder
 
-- **WHEN** a consumer fills a template naming `{shop}` with no `shop` value
-- **THEN** the fill throws naming `{shop}`
-- **AND** no text is returned
+- **GIVEN** `GradingLevelPicker` given an open level with a ceiling of 400000
+  HKD minor units and a fee of 40000 HKD minor units a card
+- **WHEN** it renders in the `en` locale
+- **THEN** it calls the consumer's `levelOpen` with `HK$4,000` as the ceiling
+  and `HK$400` as the fee
+- **AND** the level reads what that call returned
+- **AND** the package's public entry exports no placeholder filler
 
 ### Requirement: The fee sheet draws every grader's levels
 
@@ -235,10 +238,11 @@ The grader and the level for the whole list, and the estimate that follows.
 given, mark the selected one and report a pick by its id, then render that
 grader's levels.
 
-**Open** - an open level SHALL show its name, the open line it is given
-filled with the declared value it takes up to and the fee a card, the cover
-line where the level carries one, and the weeks back, and SHALL report a pick
-by its id. The fee a card SHALL read once on the level, inside the open line.
+**Open** - an open level SHALL show its name, the open line the consumer's
+`levelOpen` returns for the declared value it takes up to and the fee a card,
+the cover line where the level carries one, and the weeks back, and SHALL
+report a pick by its id. The fee a card SHALL read once on the level, inside
+the open line.
 
 **Closed** - a closed level SHALL report no pick and SHALL name what closes
 it: the card declared above its ceiling, or the count of cards against the
@@ -1124,7 +1128,9 @@ rendered in the locale it is given; no block SHALL total, convert or round
 one.
 
 **Days and instants** - a day or an instant SHALL read in the locale and the
-zone it is given.
+zone it is given. A block that renders one SHALL take `timeZone` as a
+required prop - `GradingNamedCollectorProps` and
+`GradingUncollectedLadderProps` - and SHALL carry no zone of its own.
 
 **Async regions** - a region read asynchronously SHALL render its loading,
 empty, error and ready conditions distinctly, each in the words it is given,

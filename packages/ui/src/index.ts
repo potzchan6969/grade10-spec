@@ -676,6 +676,41 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
+// shared/ui/vault-case
+export {
+  VaultAcceptOfferDialog,
+  type VaultAcceptOfferDialogCopy,
+  type VaultAcceptOfferDialogProps,
+} from "./blocks/vault-case/vault-accept-offer-dialog";
+export {
+  VaultCasesEmpty,
+  type VaultCasesEmptyCopy,
+  type VaultCasesEmptyProps,
+  type VaultCasesEmptyStep,
+} from "./blocks/vault-case/vault-cases-empty";
+export {
+  VaultFactCard,
+  type VaultFactCardCopy,
+  type VaultFactCardProps,
+  type VaultFactRow,
+} from "./blocks/vault-case/vault-fact-card";
+export {
+  VaultFactCardSkeleton,
+  type VaultFactCardSkeletonCopy,
+  type VaultFactCardSkeletonProps,
+} from "./blocks/vault-case/vault-fact-card-skeleton";
+export {
+  type VaultNote,
+  VaultNoteList,
+  type VaultNoteListCopy,
+  type VaultNoteListProps,
+} from "./blocks/vault-case/vault-note-list";
+export {
+  type VaultStage,
+  VaultStageRail,
+  type VaultStageRailCopy,
+  type VaultStageRailProps,
+} from "./blocks/vault-case/vault-stage-rail";
 export {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_NOW_MS,

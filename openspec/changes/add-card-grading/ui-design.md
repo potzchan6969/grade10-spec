@@ -107,7 +107,14 @@ Every export below has a story per state, with `packages/ui/src/index.ts`
 re-exporting it under a `shared/ui/grading-submission` comment, and takes
 `copy` (its words as one typed group), `locale` and `className`; money is
 minor units and an ISO 4217 code through the package's `formatMoney`, a day
-or an instant through `formatLocalTime` in the zone given.
+or an instant through `formatLocalTime` in the `timeZone` the consumer gives,
+required on every block that prints one and never defaulted.
+
+- **Words carrying a value** - `levelOpen`, `matched` and `minimumGrade` are
+  `(values) => string`, answered from the consumer's own ICU translator,
+  and the package exports no filler. Chosen over filled strings as the
+  smaller change: three copy members change type, no level or card record
+  gains a line, and the block still formats the money it hands over
 
 - **`GradingFeeSheet`** — `graders` (each with its name and its levels:
   name, ceiling, cards a submission, fee, cover rate or none, weeks),
@@ -133,7 +140,7 @@ or an instant through `formatLocalTime` in the zone given.
   `onClose`; a `Drawer` with a `Textarea`, the line counter reading the
   matching word while the result loads, and a `List` of result rows
 - **`GradingLevelPicker`** — `graders`, `selectedGraderId`, `levels` (each
-  open with the open line filled with its ceiling and its fee a card, or
+  open with its ceiling and its fee a card, read through `levelOpen`, or
   closed with the card or the count that closes it), `selectedLevelId`,
   `highestDeclared`, `estimate` (cards × fee, the cover line or none, the
   total, the weeks, the includes line or none, the footnote or none) or
@@ -164,8 +171,8 @@ or an instant through `formatLocalTime` in the zone given.
   `GradingMoneyBlock`'s
 - **`GradingNamedCollector`** — `named` (name, named at) or none, `name` and
   `onNameChange` for the field the consumer holds, `pending`, `error`,
-  `onSave`, `onChange`, `onRemove`; the field, Save, or the Named card with
-  Change and Remove
+  `onSave`, `onChange`, `onRemove`, `timeZone`; the field, Save, or the
+  Named card with Change and Remove
 - **`GradingGradeCards`** — `cards` (grade or none, label word, grader, name,
   cert or none, outcome badge or none, the ungraded code and note or none);
   one `Card` per card, the ungraded in the `error` tone
@@ -178,7 +185,8 @@ or an instant through `formatLocalTime` in the zone given.
 - **`GradingUncollectedLadder`** — `rungs` (the reminder days, the storage
   day with the fee a card a month, the notice day with the posting date once
   posted, the days left of the 30 and the day they end), `readyOn`,
-  `cardsHeld`, `vaultLine`; a `List` of three rungs, a passed rung marked
+  `cardsHeld`, `vaultLine`, `timeZone`; a `List` of three rungs, a passed
+  rung marked
 
 ### `@grade10/ui` — existing, reused unchanged
 

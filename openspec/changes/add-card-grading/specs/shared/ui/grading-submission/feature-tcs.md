@@ -111,14 +111,14 @@
 
 * No export renders a console view; every export is collector-facing.
 
-### shared-ui-grading-submission-US1-TC70-1: A template missing a value refuses by name, never a literal placeholder
+### shared-ui-grading-submission-US1-TC70-1: A line carrying a value is filled by the consumer's formatter, never by the block
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
 * **Status:** actual
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
@@ -126,28 +126,24 @@
 * **Testability:** automation
 * **Trace:** The export contract
 
-**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`, `packages/ui/src/blocks/grading-submission/grading-copy.test.ts`
+**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`, `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`, `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
-* `fillGradingCopy` and `GradingLocaleProps` are imported from the store's `packages/ui/src/index.ts`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <template missing a value> | `Collect at {shop}`, with values `{}` |
-| <template answered> | `{set} · {number}`, with values `{ set: "Base Set", number: "4/102" }` |
+* The Level Open story gives `GradingLevelPicker` a `levelOpen` formatter that logs each call in the Actions panel.
+* The Matched story gives `GradingCardList` `matched` and `minimumGrade` formatters that log each call in the Actions panel.
 
 **Steps:**
 
-1. Call `fillGradingCopy` with <template missing a value>.
-2. Call `fillGradingCopy` with <template answered>.
+1. List every export of the store's `packages/ui/src/index.ts` whose name starts with `fill`.
+2. Open Grading Submission / GradingLevelPicker / Level Open at <grade10 ui workbench url> and read the Actions panel.
+3. Open Grading Submission / GradingCardList / Matched and read the Actions panel.
 
 **Expected Results:**
 
-* Step 1 throws an error naming `{shop}` and returns no text.
-* Step 2 returns the template with every placeholder replaced.
+* Step 1: the list is empty.
+* Step 2: `levelOpen` was called with `{ ceiling: "HK$4,000", fee: "HK$400" }` for Regular, and Regular reads what it returned.
+* Step 3: `matched` was called with `{ set: "Base Set", number: "4/102" }` and `minimumGrade` with `{ grade: "PSA 9" }`.
 
 ### shared-ui-grading-submission-US1-TC4-1: The fee sheet lists one grader's levels and figures
 
@@ -2829,7 +2825,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Level Open story gives `GradingLevelPicker` three open levels and the open line `Value up to {ceiling} a card · {fee} a card`.
+* The Level Open story gives `GradingLevelPicker` three open levels and a `levelOpen` formatter that words the ceiling and the fee a card into one line.
 
 **Steps:**
 
