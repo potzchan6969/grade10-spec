@@ -161,7 +161,8 @@ const LEVEL_PICKER_COPY: GradingLevelPickerCopy = {
   title: "Pick a service",
   graderLabel: "Grader",
   highestDeclaredLabel: "Your highest declared value is",
-  levelOpen: ({ ceiling, fee }) => `Value up to ${ceiling} a card · ${fee} a card`,
+  levelOpen: ({ ceiling, fee }) =>
+    `Value up to ${ceiling} a card · ${fee} a card`,
   estimateTitle: "Your estimate",
   totalLabel: "Total",
   unavailable: "Not available",

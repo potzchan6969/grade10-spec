@@ -254,6 +254,10 @@ photograph pair is two `MediaFrame`s. Nothing the console package lacks.
 - **`HandbackRunbook`** — the six `Check`s, the items table with Handed over
   and Vault instead per row, the sign `Panel`, the money `Panel`, the vault
   `Panel`, the photographs; `recordHref` is the one press to the record
+- **`SignStep`**, **`CardPhotoSlot`** — one sign step and one photograph
+  frame, which both runbooks compose: the step reads the paper for the
+  agreement or the receipt in that document's words, and the frame holds its
+  shape while a photograph loads
 - **`SubmissionPanel`** — the header chips, the pickup or drop-off block,
   the collector block with the WhatsApp templates, the four tabs,
   `runbookHref` where a runbook is offered, Cancel behind `useConfirm`;

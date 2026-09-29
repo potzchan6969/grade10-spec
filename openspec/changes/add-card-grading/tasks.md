@@ -1682,11 +1682,12 @@ Stage (b).
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10)
 
-Needs group 10's exports; the fixture transport of 25.2 stands in for groups 11
-and 24. `packages/storybook` arrives with `complete-vault-collector-flow`, and
-its globs over `packages/*/frontend/src/**` and
-`packages/*/admin-frontend/src/**` already read this group's stories. Stage
-(b).
+Needs group 10's exports and the worker of groups 11 and 24: the tests run
+25.2's transport on the real router in-process, and the stories replay
+recordings of those runs. `packages/storybook` arrives with
+`complete-vault-collector-flow`, and its globs over
+`packages/*/frontend/src/**` and `packages/*/admin-frontend/src/**` already
+read this group's stories. Stage (b).
 
 - [x] 25.1 Cover the home and the three steps: the signed-out price read, the
       home still reading and the home that cannot read, the wizard's step
@@ -1727,8 +1728,8 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-60`)
 - [x] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
       lifting the raw token out of the address's `#t=` fragment and sending it
-      as a header, with the fixture transport and its fixture state beside it,
-      so groups 25 to 30 run against no worker
+      as a header, so groups 25 to 30 test on the worker in-process and their
+      stories replay its recordings
 - [x] 25.3 Build the grading home over `GradingFeeSheet`: the lead and the four
       how-it-works lines, every grader with active levels, the price read
       before a name is given, the counter line for a card above the top
@@ -1815,7 +1816,7 @@ its globs over `packages/*/frontend/src/**` and
 
 ## 26. The collector's drop-off screens (grade10)
 
-Needs group 10's exports and group 25's `GradingApi` and fixture transport.
+Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
 
 - [x] 26.1 Cover the picker and the booked page: the four Before you come
@@ -1849,7 +1850,7 @@ Stage (b).
 
 ## 27. The collector's submission page (grade10)
 
-Needs group 10's exports and group 25's `GradingApi` and fixture transport.
+Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
 
 - [x] 27.1 Cover the page per status: the word, the chip and the rail, the
@@ -1972,7 +1973,7 @@ Stage (b).
 
 ## 28. The console's queue, tiles and one submission (grade10)
 
-Needs group 10's exports and group 25's fixture transport. Stage (b).
+Needs group 10's exports and group 25's recorded worker. Stage (b).
 
 - [x] 28.1 Cover the console's reads and tabs: a view with nothing in it, the
       header and the four tabs, the money tab against the till, the id that
@@ -2050,7 +2051,7 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
-Needs group 10's exports and group 25's fixture transport. Stage (b).
+Needs group 10's exports and group 25's recorded worker. Stage (b).
 
 - [x] 29.1 Cover both runbooks: the day's booking opening its submission, the
       till step held until the agreement is sealed, a second submission on one
@@ -2105,7 +2106,7 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 
 ## 30. The console's batches, receiving, the notice and the settings (grade10)
 
-Needs group 10's exports and group 25's fixture transport; types against
+Needs group 10's exports and group 25's recorded worker; types against
 36.1 from the start, and its reads and acts answer once the rest of group 36
 lands. Stage (c).
 
@@ -2227,7 +2228,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 - [x] 31.4 Install `gradingModules.ts` in
       `apps/frontend/grade10/src/di/container.ts` and bind `gradingTrpcClient`
       there and in the console's container, so the pages groups 25 to 30 built
-      read the worker rather than the fixture transport
+      read the deployed worker through the transports their tests ran
 - [x] 31.5 Register the console's `grading`, `gradingSubmission`,
       `gradingBatches`, `gradingBatch`, `gradingSettings` and `gradingWalkIn`
       (`/grading/walk-in`) surfaces and their routes, grant-gated on
@@ -2421,8 +2422,8 @@ rest lands. Stage (c).
       `shipsToday`, the notice-due predicate, and the inputs and answers of
       `admin.batches`, `admin.openBatch`, `admin.addManifestLine` and
       `admin.noticeForm`; their entries in `contracts/src/permissions.ts`,
-      and group 25's fixture transport answering each from fixtures, so
-      group 30 types against them while the worker's side is built
+      and the console transport's methods for each, so group 30 types against
+      them while the worker's side is built
       (`grade10-admin-grading-batches-SC-08`,
       `grade10-admin-grading-batches-SC-24`,
       `grade10-admin-grading-batches-SC-51`,
