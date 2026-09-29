@@ -4,8 +4,9 @@ How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.m
 
 ## How This File Grows
 
-- **Every edit is a candidate** — when a `/tcs-review` ends, each change the reviewer made to a case is offered back as one line: what was changed, and the pattern it suggests. The reviewer confirms, rewords or refuses each one; nothing lands unasked
-- **A confirmed line applies everywhere** — it lands under `## Store-wide` by default. Only a line that cannot hold everywhere — it names one domain's vocabulary or one capability's surface — is scoped narrower, and then the review says why and asks the reviewer which scope
+- **Only a writing rule is a candidate** — when a `/tcs-review` ends, each change the reviewer made to a case is read for the rule it suggests about how a case is written, and that rule is offered back as one line: what was changed, and the rule. The reviewer confirms, rewords or refuses each one; nothing lands unasked
+- **A fact is not a candidate** — a change naming one product's page, control, label, status value or behaviour, where a value is read, or how a state is reached stays in the case it was made to, and is not offered. `## Setup Recipes` and `## Where Things Are` take no line from a review
+- **A confirmed line applies everywhere** — it lands under `## Store-wide` by default. Only a line worded in one domain's vocabulary is scoped narrower, and then the review says why and asks the reviewer which scope
 - **Refused lines land under `## Refused`** — the next review reads that section and does not offer the same pattern again
 - **One line per convention** — `- <YYYY-MM-DD>, <suite path>: <the pattern, as a rule>`. A line that needs an example names an approved case id rather than pasting one
 - **Narrower wins** — a capability line beats a store-wide one for that capability's suites
