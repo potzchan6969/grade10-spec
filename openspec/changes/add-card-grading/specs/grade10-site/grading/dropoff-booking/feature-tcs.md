@@ -1,7 +1,17 @@
 # grade10-site/grading/dropoff-booking Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
+
+## Background
+
+* The stack is a Grade10 dev or isolated end-to-end stack, started so grading's dev settings and the diary's shop and services stand: PSA's levels as seeded (Regular: ceiling 1170000 minor units a card, back in 5 weeks; Express: ceiling 1950000, a cover line, back in 3 weeks; Bulk: ceiling 150000, twenty cards or more), the batch cut-off Thursday 19:00 `Asia/Hong_Kong`, and the drop-off's horizon of 30 days as the diary seeds it.
+* A kept plan is made from Start a submission on <grade10 grading url>: the cards typed one by one, or pasted where there are more than three, About you giving the collector's email, the level picked at the service step, and Book on the review; the page opens at <grade10 grading submission page url> on its Book the drop-off step, which asks for the collection statement's tick first.
+* *Seeding a submission* - `POST <grade10 api origin>/grading/dev/submissions/seed` with a fresh `seed`, the `status` the case names, `cards` (one declared value per card, in minor units), an `email` only this run uses, and `createdAt`, `appointmentAt` (the visit) and `readyAt`, all in the past. A seed at `booked` holds a visit the diary does not hold, so the sweep's fast lane closes it as missed. It answers the submission's id and an access token; its page is <grade10 grading submission page url> with that id and `#t=<token>`.
+* *Running the sweep* - `POST <grade10 api origin>/grading/dev/sweep` with `lane` `fast`.
+* *Reading a letter* - `GET <grade10 api origin>/grading/dev/outbox?email=<collector email>` answers the last letter grading sent that address, where the tester has no inbox for it.
+
+---
 
 ## grade10-site-grading-dropoff-booking-US1: Collector books the drop-off from the plan
 
@@ -52,7 +62,12 @@
 
 * Step 3: the batch line names hand-in by that Thursday's cut-off and the cards leaving the next day.
 * Step 5: the booked page shows the day, the time, the shop and its address, with Add to calendar, Move and Cancel.
+* Step 4: the times read in the shop's own zone, Asia/Hong_Kong.
 * Step 5: the booked page lists the four Before you come items.
+* Step 5: nothing was paid, held or deposited.
+* Step 5: the four Before you come items read in order: the cards each in a sleeve, the list, the signature then the fee, the day the cards leave.
+* Step 5: the third item names the fee with the cover line beside it.
+* Step 5: the fourth item names the day the cards leave and the estimated day back.
 * Step 6: a confirmation email has arrived.
 * Step 6: the email is grading's own; no message from the diary about the visit arrives.
 
@@ -138,7 +153,7 @@
 * **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
 
 **Pre-conditions:**
@@ -263,6 +278,7 @@ Runs once per row of **Test data**.
 
 * Step 2: the page reads <Diary's refusal> in the diary's own words.
 * Step 2: another day is offered, and the day's times are read again.
+* Step 2: the submission holds no visit: no visit card shows on the page.
 
 ### grade10-site-grading-dropoff-booking-US1-TC8-1: Diary failure reads in the error tone with no free day
 
@@ -292,7 +308,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: the failure reads in the page's error tone.
-* Step 2: no day reads as free.
+* Step 2: no day reads as free, and none can be picked.
 
 ### grade10-site-grading-dropoff-booking-US1-TC9-1: The estimated day back counts from the day the batch leaves
 
@@ -408,6 +424,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Steps 2 and 4: the visit reads <new day> and <new time>, and the batch line reads again for <new day>.
+* Steps 2 and 3: the visit card reads the old day and time until step 3 books the new one; the page never holds no visit.
 * Step 5: a moved email has arrived naming <new day> and <new time>.
 
 ### grade10-site-grading-dropoff-booking-US2-TC4-1: Moving the drop-off never offers its own current slot back
@@ -482,8 +499,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 4: the visit closes and the submission reads Not handed in yet.
+* Step 4: the visit closes: no visit card shows, and the page reads that the visit closed.
 * Step 4: the list and the estimate stay as they were at step 1.
+* Step 4: Book another drop-off is offered.
 * Step 5: a cancelled email has arrived.
 
 ### grade10-site-grading-dropoff-booking-US2-TC3-1: Neither Move nor Cancel is offered once the visit has started

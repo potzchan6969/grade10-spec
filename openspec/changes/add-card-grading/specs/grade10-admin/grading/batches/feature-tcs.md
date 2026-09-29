@@ -17,7 +17,7 @@
 * *Seeding a submission* - `POST <grade10 api origin>/grading/dev/submissions/seed` with a fresh `seed`, the `status` the case names, `level`, `cards` (one declared value per card, in minor units), an `email` only this run uses, and, where the case gives them, `appointmentAt` (the hand-in) and `readyAt`, all in the past. It walks the submission to that status through the desk's own acts; its hand-in joins a batch of its own, closed at the hand-in's instant, and the batch ships a quarter of the way from the hand-in to `readyAt`. `checked_in` leaves the batch closed and not shipped; `sent` shipped; `graded` shipped with the grades in; `returned` back, unchecked, with the grader's manifest entered whole, a line per card, and no invoice; `ready` received.
 * *A batch of several submissions* - each submission is handed in at the counter, from its Hand-in runbook at <grade10 admin grading submission url>, for one grader and one level at the shop before that week's Thursday 19:00 cut-off; each joins the trio's open batch. Seeded submissions never share a batch.
 * *Arriving a seeded batch* - a submission seeded at `graded`; on <grade10 admin grading batches url>, Arrived on its batch's row. The batch reads Back, unchecked, with no manifest entered.
-* *Typing a manifest* - on the batch's Receive page, one line per card in the manifest lines: intake id, cert, grade, level charged, the grader's code, note, separated by commas, then Enter the manifest. The intake ids are read off the batch's cards on each submission's console page.
+* *Typing a manifest* - on the batch's Receive page, one line per card in the manifest lines: intake id, cert, grade, level charged as the sheet's level id (`regular`, `express`), the grader's code, note, separated by commas, then Enter the manifest. The intake ids are read off the batch's cards on each submission's console page.
 * *Writing a money setting* - admin A edits the row on <grade10 admin grading settings url>, gives a reason and asks for approval; admin B approves the waiting row in their own console.
 * *Reading a letter* - `GET <grade10 api origin>/grading/dev/outbox?email=<collector email>` answers the last letter grading sent that address, and 404 where it sent none.
 
@@ -377,7 +377,7 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has the ship form of <closed batch of one card> filled, every check ticked and every field set as US1-TC1-1's **Test data** lists.
+* admin(holds grading:operate) has the ship form of <closed batch of one card> open, every check under Before it leaves ticked and every field set as **Test data** lists.
 * Network conditions are manipulated to hold the ship act's answer pending.
 
 **Test data:**
@@ -385,6 +385,11 @@
 | Field | Value |
 | --- | --- |
 | <closed batch of one card> | one submission seeded at `checked_in` at Regular, its one card declared 500000 (HKD, minor units) |
+| Grader's order number | PSA-ORDER-0009 |
+| Courier | SF Express |
+| Tracking number | SF1000000009 |
+| Courier's written cover | 30000000, HKD |
+| Shipped on | today |
 
 **Steps:**
 
@@ -2041,14 +2046,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds grading:operate) is on <grade10 admin grading queue url>.
-* <a batch with the grader> carries an estimated day back of the shop's own day and holds <a submission>.
+* <a batch due back today> carries an estimated day back of the shop's own day and holds <a submission>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | <a submission> | one submission of 2 cards at Regular, each declared 500000 (HKD, minor units), seeded at `graded` with its hand-in 35 days and 5 minutes back and `readyAt` 35 days back, so it shipped 35 days back and Regular's 5 weeks end today |
-| <a batch with the grader> | <a submission>'s own batch |
+| <a batch due back today> | <a submission>'s own batch, shipped and not arrived |
 
 **Steps:**
 
@@ -2132,7 +2137,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <a batch checked in and not yet shipped> | a submission seeded at `checked_in` at Super Express, 3 cards declared 3900000, 3900000 and 2200000 (HKD, minor units): 10000000 |
+| <a batch checked in and not yet shipped> | a submission seeded at `checked_in` at Super Express, 3 cards declared 3500000, 3500000 and 3000000 (HKD, minor units): 10000000 |
 | <several slabs ready and uncollected> | a submission seeded at `ready` at Super Express, 2 cards declared 3000000 each (HKD, minor units): 6000000 |
 | <safe total> | 16000000 (HKD, minor units), 10000000 plus 6000000 |
 
@@ -2172,7 +2177,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <the safe's cap> | 30000000 (HKD, minor units) |
-| Cards held | 3 submissions seeded at `checked_in` at Super Express, each of 3 cards declared 3900000, 3900000 and 2200000 (HKD, minor units): 30000000 in all |
+| Cards held | 3 submissions seeded at `checked_in` at Super Express, each of 3 cards declared 3500000, 3500000 and 3000000 (HKD, minor units): 30000000 in all |
 
 **Steps:**
 
@@ -2210,7 +2215,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <the safe's cap> | 30000000 (HKD, minor units) |
-| <safe held> | 29000000 (HKD, minor units): 3 submissions seeded at `checked_in` at Super Express, of cards declared 3900000, 3900000 and 2200000; 3900000, 3900000 and 2200000; 3900000, 3900000 and 1200000, on a stack holding no other card |
+| <safe held> | 29000000 (HKD, minor units): 3 submissions seeded at `checked_in` at Super Express, of cards declared 3500000, 3500000 and 3000000; 3500000, 3500000 and 3000000; 3500000, 3500000 and 2000000, on a stack holding no other card |
 | <a submission> | a booked submission of 1 card at Super Express, declared 2000000 (HKD, minor units): <safe held> plus 2000000 passes <the safe's cap> |
 
 **Steps:**
@@ -2251,7 +2256,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <the safe's cap> | 30000000 (HKD, minor units) |
-| <safe held> | 29000000 (HKD, minor units): 3 submissions seeded at `checked_in` at Super Express, of cards declared 3900000, 3900000 and 2200000; 3900000, 3900000 and 2200000; 3900000, 3900000 and 1200000, on a stack holding no other card |
+| <safe held> | 29000000 (HKD, minor units): 3 submissions seeded at `checked_in` at Super Express, of cards declared 3500000, 3500000 and 3000000; 3500000, 3500000 and 3000000; 3500000, 3500000 and 2000000, on a stack holding no other card |
 | <a submission> | a booked submission of 1 card at Super Express, declared 1000000 (HKD, minor units): <safe held> plus 1000000 reaches <the safe's cap> exactly |
 
 **Steps:**

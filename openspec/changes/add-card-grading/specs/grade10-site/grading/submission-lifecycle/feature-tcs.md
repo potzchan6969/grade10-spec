@@ -1,7 +1,7 @@
 # grade10-site/grading/submission-lifecycle Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r4
 **Out of suite:** grade10-site-grading-submission-lifecycle-SC-01 - the moves are made from the counter, and `grade10-admin/grading/counter`'s suite walks a move asked of a submission that has already moved
 
 ## grade10-site-grading-submission-lifecycle-US1: Collector follows the submission from planned to home on one page
@@ -29,7 +29,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at the status in the row.
+* customer(collector) is on <grade10 grading submission page url> for a PSA submission at the status in the row: on the local stack, seeded at that status and opened from the link its latest grading email carries.
 
 **Test data:**
 
@@ -47,10 +47,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Load the submission page.
+2. Read the status word, the chip beside it and the rail.
 
 **Expected Results:**
 
-* The status word, the chip and the rail step in the row all show together.
+* Step 2: the status word, the chip and the rail step in the row all show together.
 * Every rail step before the row's step reads completed, and every step after reads upcoming.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC2-1: The grader's stages reach the page in its own words
@@ -70,15 +71,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Sent with PSA, and the grader's order has published a stage beyond the first.
+* customer(collector)'s submission is With the grader at PSA: on the local stack, seeded at With the grader.
+* admin(holds grading:operate) has recorded, on the batch's row at <grade10 admin grading batches url>, a stage beyond the first, picked from PSA's stages, with PSA's words in the note.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the grader's stages.
 
 **Expected Results:**
 
-* The grader's stages read in the grader's own words, with the stage it published most recently marked as the next stage.
+* Step 2: the grader's stages read in the grader's own words, with the stage it published most recently marked as the next stage.
 * Nothing to do shows beside the stages.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC3-1: The estimate reads against the clock rather than a fixed date
@@ -98,11 +102,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Sent, inside the grader's quoted turnaround counted from the ship day.
+* customer(collector)'s submission is With the grader, its batch shipped inside the level's quoted turnaround counted from the ship day: on the local stack, seeded at With the grader.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the estimate.
 
 **Expected Results:**
 
@@ -125,17 +131,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Sent, past the grader's quoted turnaround.
+* customer(collector)'s submission is With the grader, its batch shipped longer ago than the level's quoted turnaround: on the local stack, seeded at With the grader with its visit set back further than the turnaround.
+* The collector is on <grade10 grading submission page url> for the submission.
+* admin(holds grading:operate) is on <grade10 admin grading batches url>, where the batch's row reads past its estimate.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <new date> | Any day at least a week after today |
 
 **Steps:**
 
 1. Load the submission page before staff re-estimate the batch.
-2. Reload the page after staff set a new date on the batch.
+2. On the batch's row, click Re-estimate, pick the stage, enter <new date> and a reason, and confirm.
+3. Reload the submission page.
 
 **Expected Results:**
 
 * Step 1 shows the chip reading Running late with the grader named, and no new date yet.
-* Step 2 shows the same chip with the new date.
+* Step 3 shows the same chip with the new date.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC5-1: A submission id that does not exist shows the not-found page
 
@@ -156,9 +171,15 @@ Runs once per row of **Test data**.
 
 * None.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <unissued id> | gs_never_issued_0001, or any id the shop never issued |
+
 **Steps:**
 
-1. Navigate to <grade10 grading submission page url> with a submission id that does not exist.
+1. Navigate to <grade10 grading submission page url> with <unissued id> as the submission id.
 
 **Expected Results:**
 
@@ -182,15 +203,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The submission record request is stubbed to fail.
+* customer(collector) holds the link to a submission of theirs, at any status.
 
 **Steps:**
 
 1. Load the submission page.
+2. Let the request through again and retry.
 
 **Expected Results:**
 
-* The failure shows in the error tone, with no status, chip or rail rendered.
-* The page reads again once the request is retried.
+* Step 1: the failure shows in the error tone, with no status, chip or rail rendered.
+* Step 2: the page reads again once the request is retried.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC7-1: A reader who is neither the collector nor the link reads not found
 
@@ -209,12 +232,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission exists at Handed in, booked under another collector's email.
+* A submission exists at Handed in, booked under customer A's email: on the local stack, seeded at Handed in.
+* The tester holds its address, <grade10 grading submission page url>, without the access token the emailed link carries.
+* customer B holds an account under a different email.
 
 **Steps:**
 
-1. Open <grade10 grading submission page url> for that submission, signed out and without the emailed link's token.
-2. Open the same address signed in as a different collector.
+1. Open <grade10 grading submission page url> for that submission in a private window, signed out.
+2. Open the same address signed in as customer B.
 
 **Expected Results:**
 
@@ -240,7 +265,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is signed out, on the wizard at <grade10 grading url>/new, at the review with an email given and a level picked.
+* customer(collector) is signed out, on the wizard at <grade10 grading url>/new, at the review with <collector email> given and a level picked.
 
 **Test data:**
 
@@ -252,12 +277,83 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Keep the plan as in the row.
-2. Open the plan's link from the email it sent, in a second browser that has never signed in.
+2. Open the plan's link from the email it sent to <collector email>, in a second browser that has never signed in.
 
 **Expected Results:**
 
 * Step 1: the plan's submission page opens, with no sign-in asked for and no not-found page.
 * Step 2: the same submission page opens.
+
+### grade10-site-grading-submission-lifecycle-US1-TC9-1: One card back ungraded leaves the submission ready to collect
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector)'s submission of four cards is Ready to collect, one card recorded returned ungraded on its batch's Receive page before Finish receiving.
+* The collector is on <grade10 grading submission page url> for the submission.
+
+**Steps:**
+
+1. Load the submission page.
+2. Read the status word.
+3. Read each of the four cards.
+
+**Expected Results:**
+
+* Step 2: the submission still reads Ready to collect.
+* Step 3: the ungraded return shows on that card alone; the other three carry no ungraded line.
+
+### grade10-site-grading-submission-lifecycle-US1-TC10-1: A card refused after payment has its fee and cover back
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector)'s submission at <cover level> is at the counter: every card ticked Present on its hand-in runbook at <grade10 admin grading submission url>, the agreement sealed and the fee paid at the till, not yet checked in.
+* admin(holds grading:operate) is on that runbook.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <cover level> | A level whose fee sheet row carries a cover rate: PSA Express or Super Express as seeded |
+| <reason> | Any of the three reasons the Refuse dialog offers |
+| <collector's words> | Surface scratch the grader will not take |
+
+**Steps:**
+
+1. Click Refuse on the first card's row.
+2. Pick <reason>, type <collector's words>, and click Refuse this card.
+3. Read the till's lines for the submission.
+4. Open <grade10 grading submission page url> for the submission.
+
+**Expected Results:**
+
+* Step 3: that card's fee and cover come back at the till.
+* Step 4: the page names the refund and the refusal it came back for.
 
 ---
 
@@ -284,11 +380,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Handed in, before Thursday 19:00, with one card withdrawn against a counter receipt.
+* customer(collector)'s submission is Handed in through its hand-in runbook, before Thursday 19:00 on the shop's clock. A submission seeded at Handed in will not do: the seed closes its batch at the hand-in.
+* One card was withdrawn: admin(holds grading:operate) clicked Withdraw a card on the Cards tab at <grade10 admin grading submission url>, and the collector collected it at the counter against the receipt, its fee refunded at the till.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the withdrawn card.
 
 **Expected Results:**
 
@@ -312,11 +411,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Sent, after Thursday 19:00.
+* customer(collector)'s submission is at Sent, after Thursday 19:00: on the local stack, seeded at With the grader.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read each card for a withdraw act.
 
 **Expected Results:**
 
@@ -339,11 +440,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of four cards at Handed in, before Thursday 19:00, with one card withdrawn.
+* customer(collector)'s submission of four cards is Handed in through its hand-in runbook, before Thursday 19:00 on the shop's clock.
+* One card was withdrawn: admin(holds grading:operate) clicked Withdraw a card on the Cards tab at <grade10 admin grading submission url>.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read each of the four cards.
 
 **Expected Results:**
 
@@ -367,17 +471,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of two cards at Handed in, before Thursday 19:00, with one card already withdrawn.
+* customer(collector)'s submission of two cards is Handed in through its hand-in runbook under <collector email>, before Thursday 19:00 on the shop's clock, with one card already withdrawn.
+* admin(holds grading:operate) is on the submission's Cards tab at <grade10 admin grading submission url>.
 
 **Steps:**
 
-1. Load the submission page after the second card is withdrawn and collected at the counter.
+1. Click Withdraw a card on the second card, and confirm the refund and the receipt.
+2. Hand the card back at the counter, its fee refunded at the till.
+3. Load <grade10 grading submission page url> for the submission.
+4. Open the latest grading email to <collector email>.
 
 **Expected Results:**
 
-* Both cards show the Withdrawn badge with their refund lines.
-* The submission reads Cancelled, with the rail ended where it stood.
-* The collector is told the submission is cancelled.
+* Step 3: both cards show the Withdrawn badge with their refund lines.
+* Step 3: the submission reads Cancelled, with the rail ended where it stood.
+* Step 4: the collector is told the submission is cancelled.
 
 ---
 
@@ -404,11 +512,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Graded, with one card returned ungraded carrying the grader's code N1 and note.
+* customer(collector)'s submission is at Graded, with one card recorded returned ungraded carrying the grader's code N1 and note when the grades were recorded on its batch.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the ungraded card.
 
 **Expected Results:**
 
@@ -432,11 +542,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Graded, with one card listed at a minimum grade of PSA 9 that graded PSA 8.
+* customer(collector)'s submission is at Graded, with one card listed at a minimum grade of PSA 9 that graded PSA 8, recorded when the grades were recorded on its batch.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read that card.
 
 **Expected Results:**
 
@@ -460,17 +572,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Graded, with one card returned ungraded.
+* customer(collector)'s submission is at Graded, with one card recorded returned ungraded when the grades were recorded on its batch.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
 2. Read the About the grades text beside the ungraded card.
+3. Look for any act on the page.
 
 **Expected Results:**
 
 * Step 2 states the grade is the grader's decision, and that a review is a new submission at the grader's review fee, asked for at the counter.
-* No act on this submission offers to reopen the grade.
+* Step 3: no act on this submission offers to reopen the grade.
 
 ---
 
@@ -497,11 +611,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Graded, with one card moved up a level; the fee sheet's difference between the two levels for that card is 60000 (HKD, minor units).
+* customer(collector)'s submission is at Graded, with one card recorded moved up a level when the grades were recorded on its batch; the fee sheet's difference between the two levels for that card is 60000 (HKD, minor units).
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read that card, then the money block.
 
 **Expected Results:**
 
@@ -525,16 +641,55 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Graded, with every card graded at or under its booked level.
+* customer(collector)'s submission is at Graded, with every card graded at or under its booked level: on the local stack, seeded at Grades are in.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the cards, then the money block.
 
 **Expected Results:**
 
 * No card shows the Moved up a level badge.
 * The money block shows no due-at-the-counter line.
+
+### grade10-site-grading-submission-lifecycle-US4-TC3-1: A grader invoice with another figure leaves the upcharge at the sheet's difference
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-04
+
+**Pre-conditions:**
+
+* customer(collector)'s submission is in a batch back from the grader, one card moved up a level; the fee sheet pinned to the submission puts 60000 HKD minor units between the level booked and the level charged.
+* admin(holds grading:operate) is on the batch's Receive page from <grade10 admin grading batches url>, the invoice not yet entered.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Sheet difference | 60000 HKD minor units (HKD 600.00) |
+| <invoice figure> | The grader's invoice line for that card at any figure other than the sheet difference, for example USD 90.00 |
+
+**Steps:**
+
+1. Enter the manifest, then the invoice with <invoice figure> on that card's line.
+2. Scan every card's cert, then click Finish receiving.
+3. Open <grade10 grading submission page url> for the submission and read the money block.
+
+**Expected Results:**
+
+* Step 3: the collector owes 60000 HKD minor units for the upcharge.
 
 ---
 
@@ -561,11 +716,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready, with one card marked Not returned, declared at 500000 (HKD, minor units), inside the payout window of 14 days from the batch's receipt.
+* customer(collector)'s submission is at Ready, with one card recorded Not returned on its batch's Receive page, declared at 500000 (HKD, minor units), inside the payout window of 14 days from the batch's receipt.
+* The payout was made from the submission's Money tab at <grade10 admin grading submission url>: Payout by one `grading:approve` holder, approved by a second.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read that card, then the money block.
 
 **Expected Results:**
 
@@ -591,7 +749,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready, with one card marked Damaged and paid out by the route in the row.
+* customer(collector)'s submission is at Ready, with one card recorded Damaged on its batch's Receive page and paid out from the Money tab at <grade10 admin grading submission url> by the route in the row, approved by a second `grading:approve` holder.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Test data:**
 
@@ -603,6 +762,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Load the submission page.
+2. Read the money block.
 
 **Expected Results:**
 
@@ -625,16 +785,47 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready, with a card whose earlier Not returned payout has been reversed on that record.
+* customer(collector)'s submission is at Ready, with a card paid out as Not returned whose payout was then reversed on the Money tab at <grade10 admin grading submission url> when the card turned up.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read that card, then the money block.
 
 **Expected Results:**
 
 * The card shows back on the submission with the reversal line, in place of the Not returned badge.
 * The money block shows the payout reversed on the same record.
+
+### grade10-site-grading-submission-lifecycle-US5-TC4-1: A card recorded damaged is told the same day, with its payout
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector)'s card, planned under <collector email>, is in a batch back from the grader and being received.
+* admin(holds grading:operate) is on the batch's Receive page from <grade10 admin grading batches url>.
+
+**Steps:**
+
+1. Photograph the slab in the box and record the card Damaged, before its cert is scanned.
+2. The same day, open the latest grading email to <collector email>.
+
+**Expected Results:**
+
+* Step 2: the collector is told that day that the card came back damaged, with the payout it owes.
 
 ---
 
@@ -661,11 +852,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready.
+* customer(collector)'s submission is Ready to collect: on the local stack, seeded at Ready to collect.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the pickup card.
 
 **Expected Results:**
 
@@ -688,13 +881,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready with a total declared value of 1000000 (HKD, minor units).
-* The same collector holds a second submission at Ready with a total declared value of 1000100 (HKD, minor units).
+* customer(collector) holds a submission at Ready with a total declared value of 1000000 (HKD, minor units): on the local stack, seeded at Ready to collect with cards declared to that total.
+* The same collector holds a second submission at Ready with a total declared value of 1000100 (HKD, minor units), seeded the same way.
 
 **Steps:**
 
-1. Load the submission page of the submission declared at 1000000.
-2. Load the submission page of the submission declared at 1000100.
+1. Load <grade10 grading submission page url> for the submission declared at 1000000, and read the pickup card's Bring line.
+2. Load <grade10 grading submission page url> for the submission declared at 1000100, and read the pickup card's Bring line.
 
 **Expected Results:**
 
@@ -718,11 +911,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready with a total declared value of 999900 (HKD, minor units).
+* customer(collector)'s submission is at Ready with a total declared value of 999900 (HKD, minor units): on the local stack, seeded at Ready to collect with cards declared to that total.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the pickup card's Bring line.
 
 **Expected Results:**
 
@@ -747,7 +942,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready in the state the row names.
+* customer(collector)'s submission of four cards is at Ready in the state the row names: the first row seeded at Ready to collect on the local stack; the second needs the upcharge recorded at receiving and the ready day 100 days back, which only a manipulated clock gives.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Test data:**
 
@@ -759,10 +955,74 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Load the submission page.
+2. Read the pickup card's To settle line.
 
 **Expected Results:**
 
 * The pickup card's To settle line matches the row.
+
+### grade10-site-grading-submission-lifecycle-US6-TC5-1: Nothing is handed back while an upcharge is unsettled
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-06
+
+**Pre-conditions:**
+
+* customer(collector)'s submission is Ready to collect with an unsettled upcharge: a card recorded moved up a level on its batch.
+* The collector is at the counter with the pickup code, and admin(holds grading:operate) is on the submission's hand-back runbook at <grade10 admin grading submission url>.
+
+**Steps:**
+
+1. Enter the pickup code and the collector's name.
+2. Tick Handed over on every item.
+3. Read the Sign step and Hand over, without taking payment.
+
+**Expected Results:**
+
+* Step 3: the hand-back is refused by name until the figure is settled at the counter.
+
+### grade10-site-grading-submission-lifecycle-US6-TC6-1: A slab put into a vault case at the counter reads Vaulted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-lifecycle-US-06
+
+**Pre-conditions:**
+
+* customer(collector)'s submission of four slabs is Ready to collect with its storage accruing: on the local stack, seeded at Ready to collect with its ready day 100 days back.
+* admin(holds grading:operate) is on the hand-back runbook at <grade10 admin grading submission url>, the pickup code and the collector's name entered and the balance settled.
+
+**Steps:**
+
+1. Click Vault instead on the first slab's row, and open its vault case with the collector.
+2. Tick Handed over on the other three items.
+3. Click Copy link on the Sign step, and have the collector sign the receipt on <grade10 grading sign link>.
+4. Open <grade10 grading submission page url> for the submission.
+
+**Expected Results:**
+
+* Step 3: the receipt says the card went to the vault.
+* Step 4: that card reads Vaulted and links its case.
+* Step 4: it is not counted for storage on the submission.
 
 ---
 
@@ -789,7 +1049,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready with nobody named.
+* customer(collector)'s submission is at Ready with nobody named: on the local stack, seeded at Ready to collect.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Test data:**
 
@@ -801,11 +1062,12 @@ Runs once per row of **Test data**.
 
 1. Enter Their name.
 2. Click Save.
+3. Read History.
 
 **Expected Results:**
 
-* The Named card shows Chan Tai Man with Change and Remove.
-* History logs the name against its instant.
+* Step 2: the Named card shows Chan Tai Man with Change and Remove.
+* Step 3: History logs the name against its instant.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC2-1: An empty name cannot be saved
 
@@ -824,11 +1086,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready with nobody named.
+* customer(collector)'s submission is at Ready with nobody named: on the local stack, seeded at Ready to collect.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Leave Their name empty.
+2. Read Save.
 
 **Expected Results:**
 
@@ -851,7 +1115,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready with Chan Tai Man named.
+* customer(collector)'s submission is at Ready with Chan Tai Man named in Their name.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Test data:**
 
@@ -863,11 +1128,12 @@ Runs once per row of **Test data**.
 
 1. Click Change on the Named card.
 2. Enter Their name and click Save.
+3. Read History.
 
 **Expected Results:**
 
-* The Named card shows Wong Siu Ming in place of Chan Tai Man.
-* History logs the change against its instant.
+* Step 2: the Named card shows Wong Siu Ming in place of Chan Tai Man.
+* Step 3: History logs the change against its instant.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC4-1: Removing the named person returns the page to nobody named and logs it
 
@@ -886,16 +1152,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready with Chan Tai Man named.
+* customer(collector)'s submission is at Ready with Chan Tai Man named in Their name.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Click Remove on the Named card.
+2. Read History.
 
 **Expected Results:**
 
-* The page returns to the field and Save, with nobody named.
-* History logs the removal against its instant.
+* Step 1: the page returns to the field and Save, with nobody named.
+* Step 2: History logs the removal against its instant.
 
 ### grade10-site-grading-submission-lifecycle-US7-TC5-1: Naming a collector is refused once the cards are already collected
 
@@ -914,7 +1182,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Collected.
+* customer(collector)'s submission is at Collected: on the local stack, seeded at Back with you.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
@@ -923,6 +1192,42 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No naming field shows on a Collected submission.
+
+### grade10-site-grading-submission-lifecycle-US7-TC6-1: Somebody neither the collector nor the named person is turned away
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-lifecycle-US-07
+
+**Pre-conditions:**
+
+* customer(collector)'s submission is Ready to collect with nobody named: on the local stack, seeded at Ready to collect, which prints its pickup code.
+* A person who is not the collector is at the counter with that pickup code, and admin(holds grading:operate) is on the submission's hand-back runbook at <grade10 admin grading submission url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <other person> | Lee Ka Yan, a name that is neither the booking's nor a named person's |
+
+**Steps:**
+
+1. Enter the pickup code and <other person> as who is collecting.
+2. Look for any way on the runbook to release the cards to <other person>.
+
+**Expected Results:**
+
+* Step 1: the cards are not released.
+* Step 2: staff have no way to release them.
 
 ---
 
@@ -951,7 +1256,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready, the number of days in the row since the ready date.
+* customer(collector)'s submission is at Ready, the number of days in the row since the ready date: on the local stack, seeded at Ready to collect with its ready day that many days back.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Test data:**
 
@@ -963,6 +1269,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Load the submission page.
+2. Read the uncollected ladder.
 
 **Expected Results:**
 
@@ -985,11 +1292,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of four cards at Ready, 95 days since the ready date.
+* customer(collector)'s submission of four cards is at Ready, 95 days since the ready date: on the local stack, seeded at Ready to collect with its ready day 95 days back.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the uncollected ladder, then the money block.
 
 **Expected Results:**
 
@@ -1013,11 +1322,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready, 185 days since the ready date, with the written notice posted 3 days ago.
+* customer(collector)'s submission is at Ready, 185 days since the ready date: on the local stack, seeded at Ready to collect with its ready day 185 days back.
+* The written notice was posted 3 days ago: admin(holds grading:operate) clicked Post the notice on <grade10 admin grading submission url> and recorded a posting date 3 days back with its tracking.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the uncollected ladder's notice rung.
 
 **Expected Results:**
 
@@ -1040,11 +1352,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Ready, 40 days past the notice's posting date.
+* customer(collector)'s submission is at Ready, 40 days past the notice's posting date: on the local stack, seeded at Ready to collect with its ready day 230 days back, the notice recorded with Post the notice with a posting date 40 days back.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the status word and the uncollected ladder.
 
 **Expected Results:**
 
@@ -1068,11 +1382,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of four cards at Ready, 95 days since the ready date, with one card vaulted.
+* customer(collector)'s submission of four cards is at Ready, 95 days since the ready date, with one card put into a vault case with Vault instead on its hand-back runbook and the other three not handed over.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the uncollected ladder, then the storage figure.
 
 **Expected Results:**
 
@@ -1096,17 +1412,189 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of four cards at Ready, 95 days since the ready date, with a person named and a visit booked at the shop.
+* customer(collector)'s submission of four cards is at Ready, 95 days since the ready date: on the local stack, seeded at Ready to collect with its ready day 95 days back.
+* A person is named in Their name on the submission page, and a Grading visit is booked at the shop at <grade10 url>/book under the collector's email.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the uncollected ladder, then the storage figure.
 
 **Expected Results:**
 
 * The uncollected ladder still counts its rungs from the ready date, with the storage rung passed.
 * The storage figure still accrues at 4 cards times 3000 (HKD, minor units) a month started.
 * Nothing on the ladder reads as paused, held or waiting on the booked visit.
+
+### grade10-site-grading-submission-lifecycle-US8-TC7-1: Storage accrued is taken at the till, a line per card, before the hand-back
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* customer(collector)'s submission of four cards is Ready to collect with storage accrued: on the local stack, seeded at Ready to collect with its ready day 100 days back.
+* The collector is at the counter, and admin(holds grading:operate) is on the hand-back runbook at <grade10 admin grading submission url>, the pickup code and the name entered.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Storage accrued | 12000 HKD minor units: 4 cards times 3000, one month started |
+
+**Steps:**
+
+1. Read the Settle step and Hand over.
+2. Click Take payment.
+3. Read the till's lines.
+
+**Expected Results:**
+
+* Step 1: nothing can be handed over yet.
+* Step 3: the storage accrued to that day is taken at the till, one line per card held.
+
+### grade10-site-grading-submission-lifecycle-US8-TC8-1: Each reminder names the code, what is due and the days ahead, and costs nothing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* On the local stack, after 09:00 on the shop's clock, customer(collector)'s submission is Ready to collect under <collector email>, seeded with its ready day the row's days back.
+
+**Test data:**
+
+| Days since ready | Rung |
+| --- | --- |
+| 30 | First reminder |
+| 60 | Second reminder |
+
+**Steps:**
+
+1. Run grading's reminder sweep once.
+2. Open the latest grading email to <collector email>.
+
+**Expected Results:**
+
+* Step 2: a reminder has gone, naming the pickup code, what is due, the storage day and the notice day.
+* It says the reminder itself adds nothing.
+
+### grade10-site-grading-submission-lifecycle-US8-TC9-1: The storage fee is told the day it starts
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* On the local stack, after 09:00 on the shop's clock, customer(collector)'s submission of four cards is Ready to collect under <collector email>, seeded with its ready day 90 days back.
+
+**Steps:**
+
+1. Run grading's reminder sweep once.
+2. Open the latest grading email to <collector email>.
+
+**Expected Results:**
+
+* Step 2: the storage email names the fee for each card for each month, what is due now and the notice day.
+
+### grade10-site-grading-submission-lifecycle-US8-TC10-1: The written notice is emailed the day it is posted
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* customer(collector)'s submission is Ready to collect under <collector email>, 181 days since the ready date, its row badged Notice due: on the local stack, seeded at Ready to collect with its ready day 181 days back.
+* admin(holds grading:operate) is on <grade10 admin grading submission url> for the submission.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Posting date | Today, on the shop's clock |
+| Tracking | RR123456789HK |
+
+**Steps:**
+
+1. Click Post the notice.
+2. Enter the posting date and the tracking, and click Record.
+3. Open the latest grading email to <collector email>.
+
+**Expected Results:**
+
+* Step 3: the collector is sent the notice that day, naming what is due, the pickup code, the 30 days it gives from the posting date, and the clause it acts under.
+
+### grade10-site-grading-submission-lifecycle-US8-TC11-1: Nothing is sent about the uncollected cards after the notice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* On the local stack, after 09:00 on the shop's clock, customer(collector)'s submission is Ready to collect under <collector email>, seeded with its ready day 220 days back.
+* Its written notice is posted: recorded with Post the notice on <grade10 admin grading submission url>.
+
+**Steps:**
+
+1. Run grading's reminder sweep.
+2. Within five minutes, open the latest grading email to <collector email>.
+
+**Expected Results:**
+
+* Step 2: no further message is sent about the cards being uncollected.
 
 ---
 
@@ -1133,11 +1621,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Collected.
+* customer(collector)'s submission is at Collected: on the local stack, seeded at Back with you.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read each slab, then the documents.
 
 **Expected Results:**
 
@@ -1161,11 +1651,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is signed in with the same email the submission was booked under, which is now Collected.
+* customer(collector)'s submission under <collector email> is Collected: on the local stack, seeded at Back with you.
+* The collector is signed in with <collector email>, the same email the submission was booked under.
 
 **Steps:**
 
-1. Open the signed-in home.
+1. Open the signed-in home at <grade10 grading url>.
+2. Read Your submissions.
 
 **Expected Results:**
 
@@ -1188,16 +1680,51 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of four cards, three Collected and one Held by the grader with the grader's expected date.
+* customer(collector)'s submission of four cards has one card recorded Held by the grader, with the grader's expected date, on its batch's Receive page, and the other three handed back on a sealed first receipt.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Read the three handed-back cards, then the held card.
 
 **Expected Results:**
 
 * The three collected cards show their graded record.
 * The held card shows the Held by the grader badge with the expected date, and the record names a second hand-back still to come.
+
+### grade10-site-grading-submission-lifecycle-US9-TC4-1: The held card's return closes the submission with both receipts on the record
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-09
+
+**Pre-conditions:**
+
+* customer(collector)'s submission is Ready to collect: its other cards were handed back on a sealed first receipt, and the one card the grader held has come back.
+* admin(holds grading:operate) is on the second hand-back's runbook at <grade10 admin grading submission url>.
+
+**Steps:**
+
+1. Enter the pickup code and the collector's name.
+2. Tick Handed over on the one item.
+3. Click Copy link on the Sign step, and have the collector sign the second receipt on <grade10 grading sign link>.
+4. Click Hand over.
+5. Open <grade10 grading submission page url> for the submission.
+
+**Expected Results:**
+
+* Step 5: the submission is collected: it reads Back with you.
+* Step 5: the record carries both hand-backs and both receipts.
 
 ---
 
@@ -1226,7 +1753,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at the status in the row.
+* customer(collector) is on <grade10 grading submission page url> for a submission at the status in the row: Planned seeded on the local stack; Booked with its drop-off booked from the page's drop-off picker.
 
 **Test data:**
 
@@ -1263,11 +1790,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Handed in.
+* customer(collector)'s submission is at Handed in: on the local stack, seeded at Handed in.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Look for Cancel this submission.
 
 **Expected Results:**
 
@@ -1290,7 +1819,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at Booked with a drop-off booked.
+* customer(collector)'s submission is at Booked, its drop-off booked from the page's drop-off picker.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
@@ -1318,18 +1848,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of one card at Booked, whose only card the counter refused at hand-in.
+* customer(collector)'s submission of one card was at Booked under <collector email>, its drop-off booked from the page's drop-off picker, so the booked email is the latest grading email to that address.
+* At hand-in, admin(holds grading:operate) clicked Refuse on its only card on the hand-in runbook, picked a reason, typed the collector's words, and clicked Refuse this card.
+* The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
 
 1. Load the submission page.
+2. Open the latest grading email to <collector email>.
 
 **Expected Results:**
 
-* The card shows the Refused at the counter badge with the reason as staff typed it, never charged.
-* The submission reads Cancelled, with the rail ended at Booked.
-* The page states nothing was paid and nothing is owed.
-* No message about the cancellation is in the submission's messages: the collector was told at the counter.
+* Step 1: the card shows the Refused at the counter badge with the reason as staff typed it, never charged.
+* Step 1: the submission reads Cancelled, with the rail ended at Booked.
+* Step 1: the page states nothing was paid and nothing is owed.
+* Step 2: no message about the cancellation is in the submission's messages: the collector was told at the counter.
 
 ### grade10-site-grading-submission-lifecycle-US10-TC5-1: Cancel is withheld once the visit's start time comes or the counter checks or refuses a card
 
@@ -1350,15 +1883,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, loaded before the state in the row was reached.
+* customer(collector) has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, loaded before the state in the row was reached.
+* The row's state is reached as its How column says; admin(holds grading:operate) acts on the submission's hand-in runbook at <grade10 admin grading submission url>.
 
 **Test data:**
 
-| State | The desk |
-| --- | --- |
-| Start time come | the visit's start time has come; no card checked or refused |
-| Card checked early | before the visit's start time, the desk started early and checked the first card |
-| Card refused early | before the visit's start time, the desk started early and refused the first card |
+| State | The desk | How |
+| --- | --- | --- |
+| Start time come | the visit's start time has come; no card checked or refused | on the local stack, seeded at Drop-off booked with its visit 30 minutes past, and the sweep not run |
+| Card checked early | before the visit's start time, the desk started early and checked the first card | booked from the page for a later time; Start at the desk, then Present ticked on the first card |
+| Card refused early | before the visit's start time, the desk started early and refused the first card | booked from the page for a later time; Start at the desk, then Refuse on the first card |
 
 **Steps:**
 
@@ -1369,6 +1903,36 @@ Runs once per row of **Test data**.
 
 * Step 1: no Cancel this submission shows.
 * Step 2: the cancel is refused by name, and the submission is not cancelled.
+
+### grade10-site-grading-submission-lifecycle-US10-TC6-1: A plan nobody books expires on its own
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-10
+
+**Pre-conditions:**
+
+* On the local stack, customer(collector)'s submission is Planned with no drop-off booked, kept longer ago than the plan's expiry: seeded at Planned with its kept day 31 days back.
+* The collector holds the link to its page, <grade10 grading submission page url>.
+
+**Steps:**
+
+1. Run grading's sweep once.
+2. Load the submission page.
+
+**Expected Results:**
+
+* Step 2: the submission is expired, the rail stands at Planned.
+* Step 2: nothing was paid, nothing is owed, and the cards were never handed in.
 
 ---
 
@@ -1397,7 +1961,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission at the status in the row.
+* customer(collector) is on <grade10 grading submission page url> for a submission at the status in the row: on the local stack, seeded at that status, except Booked and Handed in, which need a drop-off booked from the page and a hand-in through the runbook before the week's cut-off.
 
 **Test data:**
 
@@ -1415,13 +1979,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Load the submission page.
+2. Read every act, control and button on the page.
 
 **Expected Results:**
 
 * Only the acts listed for that status show on the page.
 * No other act, control or button shows.
-
----
 
 ### grade10-site-grading-submission-lifecycle-US11-TC2-2: The edit of the list and the cancel go once the counter checks or refuses a card
 
@@ -1442,8 +2005,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, loaded before the counter acted.
-* At the counter, before the visit's start time, the desk started early and staff acted on the first card as in the row, and on nothing else.
+* customer(collector) has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, its drop-off booked from the page for a later time, loaded before the counter acted.
+* At the counter, before the visit's start time, admin(holds grading:operate) clicked Start at the desk on the hand-in runbook at <grade10 admin grading submission url> and acted on the first card as in the row, and on nothing else.
 
 **Test data:**
 
@@ -1484,7 +2047,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on <grade10 grading submission page url> for a submission of three cards at the status in the row, and the counter has checked or refused none of them.
+* customer(collector) is on <grade10 grading submission page url> for a submission of three cards at the status in the row, and the counter has checked or refused none of them: Planned seeded on the local stack; Booked with its drop-off booked from the page's drop-off picker.
 
 **Test data:**
 

@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
+**Out of suite:** grade10-admin-grading-counter-SC-47, grade10-admin-grading-counter-SC-81
 
 ## Background
 
@@ -2349,11 +2350,19 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-admin-grading-counter-US-10
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens the Cards tab of a `returned` submission with one card moved up a level.
+
+* A submission of two cards at Regular is received with the first card moved to Express, as *Receiving with an exception* says, the grades entered in the grader's words; it reads Ready to collect, its cards back.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Moved-up card's grade | PSA 10 GEM MT, as the grader wrote it |
 
 **Steps:**
 
-1. Open the Cards tab.
+1. Click the Cards tab.
 2. Read the moved-up card's row.
 
 **Expected Results:**
@@ -2375,20 +2384,22 @@ Admin(holds `grading:read`) opens the Cards tab of a `returned` submission with 
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
 
+**Pre-conditions:**
+
+* A `ready` submission of four cards at Regular, its fee paid at hand-in, owes an upcharge on one card moved to Express and storage accrued. The upcharge comes from *Receiving with an exception*, and the storage only past day 90 of ready, so a submission owing both is a mocked state.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Paid at hand-in | 240000 minor units (HKD 2,400.00) |
-| Upcharge due | 60000 minor units (HKD 600.00) |
+| Paid at hand-in | 240000 minor units (HKD 2,400.00), four cards at Regular's 60000 |
+| Upcharge due | 60000 minor units (HKD 600.00), Express's fee less Regular's |
 | Storage accrued | 12000 minor units (HKD 120.00) |
-
-**Pre-conditions:**
-Admin(holds `grading:read`) opens the Money tab of a `ready` submission with a paid hand-in fee, an upcharge due and storage accrued.
 
 **Steps:**
 
-1. Open the Money tab.
+1. Click the Money tab.
 
 **Expected Results:**
 
@@ -2411,12 +2422,14 @@ Admin(holds `grading:read`) opens the Money tab of a `ready` submission with a p
 * **Trace:** grade10-admin-grading-counter-US-10
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is comparing the Money tab's paid line against the POS reference it names.
+
+* A submission of four cards at Regular is handed in at the desk, its fee paid at the till with Take payment.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it, and can read the till's orders.
 
 **Steps:**
 
-1. Open the Money tab.
-2. Open the POS order by its reference.
+1. Click the Money tab and note the paid amount and the till's reference.
+2. In the till, open the order by that reference and read its total.
 
 **Expected Results:**
 
@@ -2438,7 +2451,9 @@ Admin(holds `grading:read`) is comparing the Money tab's paid line against the P
 * **Trace:** grade10-admin-grading-counter-US-10
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens a `returned` submission with an upcharge due and one card ungraded, in a named batch.
+
+* A submission of three cards at Regular is received with the first card moved to Express and the second returned ungraded, as *Receiving with an exception* says, so it owes an upcharge and has one card back ungraded, in its batch.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
@@ -2464,12 +2479,14 @@ Admin(holds `grading:read`) opens a `returned` submission with an upcharge due a
 * **Trace:** grade10-admin-grading-counter-US-10
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens a submission whose collector gave an email and a phone number.
+
+* A submission is seeded at `ready`, as *Seeding a submission* says, its collector having given an email and a phone number.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it, on a device that opens WhatsApp.
 
 **Steps:**
 
-1. Read the collector block.
-2. Open a click-to-chat template.
+1. Read the collector block in the header.
+2. Click one of the WhatsApp templates.
 
 **Expected Results:**
 
@@ -2492,11 +2509,18 @@ Admin(holds `grading:read`) opens a submission whose collector gave an email and
 * **Trace:** grade10-admin-grading-counter-US-10
 
 **Pre-conditions:**
-Admin(holds `grading:read`) has a link to a submission id that does not exist.
+
+* admin(holds `grading:read`) is signed in to the console.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Submission id | gs_dev_nosuchsubmission, any id no submission holds |
 
 **Steps:**
 
-1. Open that address.
+1. Navigate to <grade10 admin grading submission url> with the submission id.
 
 **Expected Results:**
 
@@ -2526,18 +2550,21 @@ Admin(holds `grading:read`) has a link to a submission id that does not exist.
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) mints the agreement's link for a checked, unsealed submission.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, every card checked at the desk and the agreement not sealed.
+* The shop's iPad is at the desk with a browser open.
 
 **Steps:**
 
-1. Show on iPad.
-2. Read the timer.
-3. Wait past 30 minutes without signing.
+1. Click Show on iPad.
+2. Read the link's timer on the Sign the agreement step.
+3. Wait 31 minutes without signing, then reload the link on the iPad.
+4. Mint the agreement again and read the step.
 
 **Expected Results:**
 
 * Step 2 shows a 30-minute countdown.
-* Step 3 expires the link; minting again issues a new one, never two live links at once.
+* Step 3 shows the link expired; step 4 issues a new one, never two live links at once.
 
 ### grade10-admin-grading-counter-US11-TC2-1: Minting is refused in production while a fact the document prints is unset
 
@@ -2555,11 +2582,13 @@ Admin(holds `grading:operate`) mints the agreement's link for a checked, unseale
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is minting the agreement in production, where the custodian's registered name is unset.
+
+* The console runs in production, where the custodian's registered name, a fact the agreement prints, is unset. A stack outside production does not refuse, so this is a manipulated environment.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a `booked` submission, every card checked at the desk.
 
 **Steps:**
 
-1. Attempt to show on iPad.
+1. Click Show on iPad on the Sign the agreement step.
 
 **Expected Results:**
 
@@ -2581,12 +2610,15 @@ Admin(holds `grading:operate`) is minting the agreement in production, where the
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens the Documents tab of a submission with a sealed agreement.
+
+* A submission is seeded at `checked_in`, as *Seeding a submission* says, so its agreement is sealed.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it, and the shop's iPad is at the desk.
 
 **Steps:**
 
-1. Open the Documents tab.
-2. Show the agreement on iPad again.
+1. Click the Documents tab and note the agreement's fingerprint.
+2. Click Show on iPad on the agreement.
+3. Read the fingerprint of the copy shown on the iPad.
 
 **Expected Results:**
 
@@ -2609,11 +2641,13 @@ Admin(holds `grading:read`) opens the Documents tab of a submission with a seale
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on a checked, unsealed submission's sign step.
+
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, every card checked at the desk and the agreement not sealed.
 
 **Steps:**
 
-1. Copy link instead of Show on iPad.
+1. On the Sign the agreement step, click Copy link.
+2. Paste the clipboard into a new browser tab.
 
 **Expected Results:**
 
@@ -2635,11 +2669,14 @@ Admin(holds `grading:operate`) is on a checked, unsealed submission's sign step.
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens the Documents tab of a submission with a sealed hand-back receipt, after the collector says they lost the email.
+
+* A submission is seeded at `collected`, as *Seeding a submission* says, so its hand-back receipt is sealed and sent with the letter at collection; the collector says they lost that email.
+* admin(holds `grading:operate`) is on the Documents tab of <grade10 admin grading submission url> for it, and has noted the hand-back receipt's fingerprint.
 
 **Steps:**
 
-1. Open Send again on the hand-back receipt.
+1. Click Send again on the hand-back receipt.
+2. Read the collector's last letter, as *Reading a letter* says, and its attached receipt's fingerprint.
 
 **Expected Results:**
 
@@ -2661,11 +2698,13 @@ Admin(holds `grading:operate`) opens the Documents tab of a submission with a se
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens the Documents tab of a `booked` submission before any card is checked.
+
+* A submission is seeded at `booked`, as *Seeding a submission* says, and no card is checked.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open the Documents tab.
+1. Click the Documents tab.
 
 **Expected Results:**
 
@@ -2687,11 +2726,13 @@ Admin(holds `grading:read`) opens the Documents tab of a `booked` submission bef
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens a submission whose grades email failed to send.
+
+* A submission's grades email has run out of attempts. The stack's mail never fails on its own, so a letter out of attempts is a mocked state.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Read the flagged letter.
+1. Click the Documents tab and read the flagged letter.
 
 **Expected Results:**
 
@@ -2713,17 +2754,54 @@ Admin(holds `grading:read`) opens a submission whose grades email failed to send
 * **Trace:** grade10-admin-grading-counter-US-11
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is at a `booked` submission whose agreement the collector has just sealed on the iPad, before the cards are checked in.
+
+* A submission is seeded at `booked`, as *Seeding a submission* says; at the desk every card is checked and the collector has just sealed the agreement on the iPad, before the cards are checked in.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, and the collector's last letter is noted, as *Reading a letter* says.
 
 **Steps:**
 
-1. Open the Documents tab.
-2. Call the send for the agreement directly, outside the tab.
+1. Click the Documents tab.
+2. Send the agreement again directly, outside the tab.
+3. Read the collector's last letter again.
 
 **Expected Results:**
 
 * Step 1 lists the agreement with its fingerprint and offers no Send again on it.
 * Step 2 is refused by name, and the collector's mailbox receives nothing.
+
+### grade10-admin-grading-counter-US11-TC9-1: The hand-back receipt is refused while a balance is due
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-11
+
+**Pre-conditions:**
+
+* A submission is seeded at `ready` with `readyAt` 150 days back, as *Seeding a submission* says, so storage has accrued past day 90 and is unpaid.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, its hand-back runbook past who is collecting, the storage not taken at Settle.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Storage accrued | whatever the 60 days past day 90 come to at 3000 minor units a card a month; any amount above nought |
+
+**Steps:**
+
+1. Mint the hand-back receipt from the Sign the receipt step.
+
+**Expected Results:**
+
+* Step 1 is refused by name before the iPad is offered.
 
 ---
 
@@ -2748,23 +2826,26 @@ Admin(holds `grading:operate`) is at a `booked` submission whose agreement the c
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
 
+**Pre-conditions:**
+
+* A submission is seeded at `ready` with `readyAt` 180 days back, as *Seeding a submission* says, and is not collected.
+* admin(holds `grading:operate`) is on <grade10 admin grading queue url>.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Notice day | 180 days after ready |
 
-**Pre-conditions:**
-Admin(holds `grading:operate`) is on the Ready view with a submission ready 180 days and not collected.
-
 **Steps:**
 
-1. Open the Ready view.
-2. Read the submission's badge.
+1. Click Ready.
+2. Read the submission's row.
+3. Click the row and read the submission page's badges.
 
 **Expected Results:**
 
-* The row and the submission page badge read Notice due.
+* Step 2's row and step 3's submission page badge read Notice due.
 
 ### grade10-admin-grading-counter-US12-TC2-1: Posting the notice records the posting date and tracking; the email goes the same day
 
@@ -2782,13 +2863,24 @@ Admin(holds `grading:operate`) is on the Ready view with a submission ready 180 
 * **Trace:** grade10-admin-grading-counter-US-12
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens Post the notice on a submission badged Notice due.
+
+* A submission is seeded at `ready` with `readyAt` 180 days back, as *Seeding a submission* says, so it is badged Notice due.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Posting date | today |
+| Tracking number | RR123456785HK, any registered-post number |
 
 **Steps:**
 
-1. Open Post the notice.
+1. Click Post the notice.
 2. Enter the posting date and the tracking number.
-3. Record.
+3. Click Record.
+4. Click the Timeline tab.
+5. Read the collector's last letter, as *Reading a letter* says.
 
 **Expected Results:**
 
@@ -2811,12 +2903,15 @@ Admin(holds `grading:operate`) opens Post the notice on a submission badged Noti
 * **Trace:** grade10-admin-grading-counter-US-12
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens Post the notice and enters only the posting date.
+
+* A submission is seeded at `ready` with `readyAt` 180 days back, as *Seeding a submission* says, so it is badged Notice due.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open Post the notice.
-2. Enter only the posting date.
+1. Click Post the notice.
+2. Enter today as the posting date and leave the tracking number empty.
+3. Read Record.
 
 **Expected Results:**
 
@@ -2837,20 +2932,23 @@ Admin(holds `grading:operate`) opens Post the notice and enters only the posting
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
 
+**Pre-conditions:**
+
+* A submission is seeded at `ready` with `readyAt` 183 days back, as *Seeding a submission* says, so it first badged Notice due 3 days ago.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Notice day | 180 |
-| Posted | day 183, 3 days after Notice due |
-
-**Pre-conditions:**
-Admin(holds `grading:operate`) posts the notice 3 days after the submission first badged Notice due.
+| Posted | day 183, today, 3 days after Notice due |
+| Tracking number | RR123456785HK, any registered-post number |
 
 **Steps:**
 
-1. Post the notice on day 183.
-2. Read the 30-day count.
+1. Click Post the notice, enter today as the posting date and the tracking number, and click Record.
+2. Click the Timeline tab and read the notice entry's 30 days.
 
 **Expected Results:**
 
@@ -2872,11 +2970,14 @@ Admin(holds `grading:operate`) posts the notice 3 days after the submission firs
 * **Trace:** grade10-admin-grading-counter-US-12
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens a submission whose posted notice's 30 days have passed.
+
+* A submission is seeded at `ready` with `readyAt` 211 days back, as *Seeding a submission* says, and its notice is recorded with a posting date 31 days ago and a tracking number, the cards still uncollected.
+* admin(holds `grading:operate`) is signed in to the console.
 
 **Steps:**
 
-1. Open the submission.
+1. Navigate to <grade10 admin grading submission url> for the submission.
+2. Read every act the page offers, and the Money tab's storage.
 
 **Expected Results:**
 
@@ -2897,6 +2998,12 @@ Admin(holds `grading:operate`) opens a submission whose posted notice's 30 days 
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-12
 
+**Pre-conditions:**
+
+* <submission_1> and <submission_2> are seeded at `ready`, as *Seeding a submission* says, with `readyAt` 180 and 179 days back.
+* admin A(holds `grading:operate`) is on <grade10 admin grading queue url>, Ready clicked.
+* admin C(holds `grading:read` alone) is signed in to their own console. No shipped role holds `grading:read` alone, so admin C's grants are mocked.
+
 **Test data:**
 
 | Field | Value |
@@ -2904,20 +3011,48 @@ Admin(holds `grading:operate`) opens a submission whose posted notice's 30 days 
 | <submission_1> | ready 180 days, the notice due and not posted |
 | <submission_2> | ready 179 days, its notice day tomorrow |
 
-**Pre-conditions:**
-Admin(holds `grading:operate`) is on the Ready view with <submission_1> and <submission_2>; a second operator holds `grading:read` alone.
-
 **Steps:**
 
-1. As the operate holder, open Post the notice on <submission_1>.
-2. As the operate holder, ask for the notice's address on <submission_2>.
-3. As the read holder, ask for the notice's address on <submission_1>.
+1. As admin A, click Post the notice on <submission_1>'s row.
+2. As admin A, ask for the notice's address on <submission_2> directly, outside the console, which offers no Post the notice before the notice day.
+3. As admin C, ask for the notice's address on <submission_1> directly, outside the console.
 
 **Expected Results:**
 
 * Step 1: the dialog shows the postal address taken at signing.
 * Step 2: refused by name, with the day the notice falls due.
 * Step 3: refused by name.
+
+### grade10-admin-grading-counter-US12-TC7-1: Cards ready a month badge as uncollected, worked out at the read
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-12
+
+**Pre-conditions:**
+
+* A submission is seeded at `ready` with `readyAt` 29 days back, as *Seeding a submission* says, and is not collected.
+* admin(holds `grading:read`) is on <grade10 admin grading queue url>.
+
+**Steps:**
+
+1. Click Ready and read the submission's row.
+2. The next day, with nothing done to the submission, click Ready again and read the same row.
+3. Open the submission and click the Timeline tab.
+
+**Expected Results:**
+
+* Step 2's row badges Uncollected 30 d.
+* Step 3 shows no entry between the two reads: the badge came with no write.
 
 ---
 
@@ -2943,11 +3078,13 @@ Admin(holds `grading:operate`) is on the Ready view with <submission_1> and <sub
 * **Trace:** grade10-admin-grading-counter-US-13
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens the Timeline tab of a submission with a paid hand-in, an upcharge and a waiver on it.
+
+* A submission of one card at Regular, its fee paid at hand-in, is received with that card moved to Express, as *Receiving with an exception* says, and its upcharge of 60000 minor units (HKD 600.00) is waived: asked for by admin A with a reason and approved by admin B.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open the Timeline tab.
+1. Click the Timeline tab.
 
 **Expected Results:**
 
@@ -2969,11 +3106,20 @@ Admin(holds `grading:read`) opens the Timeline tab of a submission with a paid h
 * **Trace:** grade10-admin-grading-counter-US-13
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens the Timeline tab of a `sent` submission whose stage was read from the grader's order status that morning.
+
+* A submission is seeded at `sent`, as *Seeding a submission* says.
+* That morning a stage is recorded on its batch at <grade10 admin grading batches url>, picked from the grader's stages with the grader's words below in the note beside it.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| The grader's words | Research & ID, as PSA's order page wrote it |
 
 **Steps:**
 
-1. Open the Timeline tab.
+1. Click the Timeline tab.
 
 **Expected Results:**
 
@@ -2995,12 +3141,14 @@ Admin(holds `grading:read`) opens the Timeline tab of a `sent` submission whose 
 * **Trace:** grade10-admin-grading-counter-US-13
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens the Timeline tab of a submission with a staff-only note.
+
+* A submission carries an entry marked staff-only on its timeline.
+* admin(holds `grading:read`) is on <grade10 admin grading submission url> for it, and the collector has its page open at <grade10 grading submission url>.
 
 **Steps:**
 
-1. Open the Timeline tab as staff.
-2. Open the same submission's page as the collector would see it.
+1. Click the Timeline tab.
+2. Reload the collector's page and read it whole.
 
 **Expected Results:**
 
@@ -3023,12 +3171,16 @@ Admin(holds `grading:read`) opens the Timeline tab of a submission with a staff-
 * **Trace:** grade10-admin-grading-counter-US-13
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) records a waiver on a submission.
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge of 60000 minor units (HKD 600.00).
+* admin A(holds `grading:approve`) has asked for its waiver with a reason on the Money tab of <grade10 admin grading submission url>; admin B(holds `grading:approve`) has the same tab open in their own console.
+* A second submission, seeded at `ready` as *Seeding a submission* says, stands on the same stack.
 
 **Steps:**
 
-1. Complete the waiver.
-2. Open the audit chain for that submission.
+1. As admin B, click Approve on the request waiting on a second person.
+2. On <grade10 admin audit url>, pull the trail for the first submission's id.
+3. Pull the trail for the second submission's id.
 
 **Expected Results:**
 
@@ -3058,12 +3210,14 @@ Admin(holds `grading:approve`) records a waiver on a submission.
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`, not `grading:approve`) opens the Money tab of a `returned` submission owing an upcharge.
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge.
+* admin(holds `grading:operate`, not `grading:approve`) is on <grade10 admin grading submission url> for it. No shipped role holds `grading:operate` without `grading:approve`, so the operator's grants are mocked.
 
 **Steps:**
 
-1. Open the Money tab.
-2. Check for Waive the upcharge and Payout.
+1. Click the Money tab.
+2. Read its acts for Waive the upcharge and for recording a payout.
 
 **Expected Results:**
 
@@ -3085,11 +3239,13 @@ Admin(holds `grading:operate`, not `grading:approve`) opens the Money tab of a `
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) opens a `checked_in` submission whose cards are sealed in the intake bag.
+
+* A submission is seeded at `checked_in`, as *Seeding a submission* says, its cards sealed in the intake bag.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, with `?view=record`.
 
 **Steps:**
 
-1. Open the submission's actions.
+1. Read every act the header and each tab offer.
 
 **Expected Results:**
 
@@ -3111,12 +3267,15 @@ Admin(holds `grading:operate`) opens a `checked_in` submission whose cards are s
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Two admins, A and B, both holding `grading:operate`, open the same `booked` submission's hand-in runbook at the same time. Admin A checks the submission in first.
+
+* A submission of two cards is seeded at `booked`, as *Seeding a submission* says.
+* admin A(holds `grading:operate`) and admin B(holds `grading:operate`) each have its hand-in runbook open at <grade10 admin grading submission url>, in their own consoles, after both cards are checked.
+* Admin A has then sealed the agreement, taken the fee and checked the submission in; admin B's page has not reloaded since.
 
 **Steps:**
 
-1. Admin B, working from the state before A's check-in, attempts to refuse a card.
-2. Read the refusal.
+1. As admin B, on the unreloaded runbook, click Refuse on the first card, choose a reason, type the words and click Refuse this card.
+2. Read the refusal and the runbook.
 
 **Expected Results:**
 
@@ -3138,13 +3297,15 @@ Two admins, A and B, both holding `grading:operate`, open the same `booked` subm
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:read` only) opens each tab of a `returned` submission.
+
+* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it has cards back and an upcharge owed.
+* admin(holds `grading:read` only) is on <grade10 admin grading submission url> for it. No shipped role holds `grading:read` alone, so the operator's grants are mocked.
 
 **Steps:**
 
-1. Open the Cards tab.
-2. Open the Money tab.
-3. Open the Documents tab.
+1. Click the Cards tab.
+2. Click the Money tab.
+3. Click the Documents tab.
 
 **Expected Results:**
 
@@ -3166,12 +3327,15 @@ Admin(holds `grading:read` only) opens each tab of a `returned` submission.
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) opens a `checked_in` submission with a card to check and a `returned` submission's upcharge to settle.
+
+* admin(holds `grading:approve`) holds the `staff` role, so `grading:operate` as well.
+* A submission is seeded at `checked_in`, as *Seeding a submission* says; a second, of one card, is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge.
+* The admin is on <grade10 admin grading submission url> for the first.
 
 **Steps:**
 
-1. Open the Cards tab and check a card.
-2. Open the Money tab on the other submission.
+1. Click the Cards tab and check a card.
+2. Open the second submission and click the Money tab.
 
 **Expected Results:**
 
@@ -3194,12 +3358,15 @@ Admin(holds `grading:approve`) opens a `checked_in` submission with a card to ch
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) signs in to production without a verified session.
+
+* admin(holds `grading:operate`) has a production console account with a second factor enrolled, and no verified session.
+* The same admin has a staging account in the same state.
 
 **Steps:**
 
 1. Sign in to the production console.
-2. Open a grading surface.
+2. Navigate to <grade10 admin grading queue url> on production.
+3. Sign in to the staging console and navigate to its grading queue.
 
 **Expected Results:**
 
@@ -3222,12 +3389,14 @@ Admin(holds `grading:operate`) signs in to production without a verified session
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) verified their session an hour ago in production.
+
+* admin(holds `grading:operate`) verified their session with the second factor an hour ago in the production console.
+* A `ready` submission in production owes a balance at the hand-back, and the admin has its hand-back runbook open at <grade10 admin grading submission url>, the collector matched.
 
 **Steps:**
 
-1. Record a payment at the counter.
-2. Work another act on the same submission.
+1. On the Settle step, click Take payment and take the payment at the till.
+2. Tick Handed over on an item.
 
 **Expected Results:**
 
@@ -3249,14 +3418,16 @@ Admin(holds `grading:operate`) verified their session an hour ago in production.
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a `booked` submission whose visit has not started, none of whose cards the counter has checked or refused; the collector has asked the shop to call it off.
+
+* The collector has booked a drop-off for later today on the site, at <grade10 grading url>, so its submission is `booked`, its visit not started and none of its cards checked or refused; the collector has asked the shop to call it off.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, with `?view=record`, and has noted the collector's last letter, as *Reading a letter* says.
 
 **Steps:**
 
 1. Click Cancel on the submission.
-2. Confirm the cancel.
-3. Pull the submission's audit trail by its id.
-4. Open the collector's messages for the submission.
+2. Click Yes, cancel in the confirm.
+3. On <grade10 admin audit url>, pull the trail for the submission's id.
+4. Read the collector's last letter again.
 
 **Expected Results:**
 
@@ -3282,7 +3453,9 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) has <grade10 admin grading submission url> open in a second tab for a `booked` submission, loaded before the state in the row was reached.
+
+* A `booked` submission stands in the row's state. For Start time come it is seeded at `booked`, as *Seeding a submission* says, with the default anchors, its visit's start time an hour or more past; for the other two rows the collector booked a drop-off for later today on the site, at <grade10 grading url>, and the desk clicked Start at the desk early and acted as the row says.
+* admin(holds `grading:operate`) has <grade10 admin grading submission url> for it open with `?view=record` in a second tab, loaded before the row's state was reached.
 
 **Test data:**
 
@@ -3294,8 +3467,8 @@ Admin(holds `grading:operate`) has <grade10 admin grading submission url> open i
 
 **Steps:**
 
-1. Load the submission in the first tab.
-2. In the second tab, click Cancel on the submission and confirm.
+1. Load the submission with `?view=record` in the first tab.
+2. In the second tab, click Cancel on the submission and click Yes, cancel.
 
 **Expected Results:**
 
@@ -3326,12 +3499,13 @@ Admin(holds `grading:operate`) has <grade10 admin grading submission url> open i
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) opens Settings.
+
+* admin(holds `grading:approve`) is signed in to the console.
 
 **Steps:**
 
-1. Open Settings.
-2. Read the notice-day row.
+1. Navigate to <grade10 admin grading settings url>.
+2. Read the table, then the notice-day row.
 
 **Expected Results:**
 
@@ -3352,6 +3526,10 @@ Admin(holds `grading:approve`) opens Settings.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
 
+**Pre-conditions:**
+
+* admin(holds `grading:approve`) is on <grade10 admin grading settings url>, `grading.plan_nudge_days` standing at 21 as seeded.
+
 **Test data:**
 
 | Field | Value |
@@ -3360,19 +3538,17 @@ Admin(holds `grading:approve`) opens Settings.
 | Old value | 21 |
 | New value | 25 |
 
-**Pre-conditions:**
-Admin(holds `grading:approve`) is on Settings.
-
 **Steps:**
 
-1. Open `grading.plan_nudge_days`.
+1. Click the `grading.plan_nudge_days` field.
 2. Change it to 25.
-3. Save.
+3. Save the field.
+4. On <grade10 admin audit url>, pull the trail for the `settings` subject.
 
 **Expected Results:**
 
-* The field saves in place with no second-person dialog.
-* The audit entry is filed under the settings subject.
+* Step 3 saves the field in place with no second-person dialog.
+* Step 4 shows the entry filed under the settings subject.
 
 ### grade10-admin-grading-counter-US15-TC3-1: A money setting requires a reason and a second approve holder
 
@@ -3389,6 +3565,11 @@ Admin(holds `grading:approve`) is on Settings.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
 
+**Pre-conditions:**
+
+* admin A(holds `grading:approve`) is on <grade10 admin grading settings url>, the storage fee standing at 3000 minor units as the dev settings write it.
+* admin B(holds `grading:approve`) has the same page open in their own console.
+
 **Test data:**
 
 | Field | Value |
@@ -3397,15 +3578,13 @@ Admin(holds `grading:approve`) is on Settings.
 | Old value | 3000 minor units (HKD 30.00) |
 | New value | 3500 minor units (HKD 35.00) |
 
-**Pre-conditions:**
-Admin A(holds `grading:approve`) opens the storage fee setting; admin B also holds `grading:approve`.
-
 **Steps:**
 
-1. Change the value to 3500 minor units (HKD 35.00).
-2. Type a reason.
-3. Name admin B as the second person.
-4. Save.
+1. As admin A, change the storage fee to 3500 minor units (HKD 35.00).
+2. Type the reason, Storage fee reviewed for the new year, in the second-person dialog.
+3. Ask for approval, and read the row.
+4. As admin B, reload the page and click Approve on the waiting row.
+5. Read the row, then pull the trail for the `settings` subject on <grade10 admin audit url>.
 
 **Expected Results:**
 
@@ -3428,11 +3607,13 @@ Admin A(holds `grading:approve`) opens the storage fee setting; admin B also hol
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) edits a money setting and names themself as the second person.
+
+* admin A(holds `grading:approve`) has asked for a change to the storage fee on <grade10 admin grading settings url>, with a reason, and nobody has approved it.
 
 **Steps:**
 
-1. Name admin A as the second approve holder.
+1. As admin A, send the approval of admin A's own request directly, outside the console, which offers the recorder no Approve on their own request.
+2. Reload the page and read the storage fee row.
 
 **Expected Results:**
 
@@ -3453,6 +3634,12 @@ Admin A(holds `grading:approve`) edits a money setting and names themself as the
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
 
+**Pre-conditions:**
+
+* The storage fee stands at 3000 minor units, as the dev settings write it.
+* A submission is seeded at `checked_in`, as *Seeding a submission* says, so its agreement is sealed with the old fee printed.
+* admin(holds `grading:approve`) is on <grade10 admin grading settings url>.
+
 **Test data:**
 
 | Field | Value |
@@ -3460,14 +3647,11 @@ Admin A(holds `grading:approve`) edits a money setting and names themself as the
 | Old storage fee | 3000 minor units (HKD 30.00) |
 | New storage fee | 3500 minor units (HKD 35.00) |
 
-**Pre-conditions:**
-Admin(holds `grading:approve`) changes the storage fee setting. A submission was already booked on the old fee before the change; a new submission books after it.
-
 **Steps:**
 
-1. Change the storage fee with a second approval.
-2. Read the already-booked submission's pinned fee.
-3. Book a new submission and read its fee.
+1. Change the storage fee to 3500 minor units, as *Writing a money setting* says.
+2. On the first submission's Documents tab, show the agreement and read the storage fee it prints.
+3. Seed a new submission at `checked_in`, then show its agreement and read the storage fee it prints.
 
 **Expected Results:**
 
@@ -3490,12 +3674,13 @@ Admin(holds `grading:approve`) changes the storage fee setting. A submission was
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
-Admin(holds `grading:operate`, not `grading:approve`) opens Settings.
+
+* admin(holds `grading:operate`, not `grading:approve`) is signed in to the console. No shipped role holds `grading:operate` without `grading:approve`, so the operator's grants are mocked.
 
 **Steps:**
 
-1. Open Settings.
-2. Try to open a field to edit.
+1. Navigate to <grade10 admin grading settings url>.
+2. Click a setting's value to edit it.
 
 **Expected Results:**
 
@@ -3517,11 +3702,13 @@ Admin(holds `grading:operate`, not `grading:approve`) opens Settings.
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) opens Settings before Commercial has supplied a fee sheet row.
+
+* A fee-sheet row stands unwritten, as on a stack where the grading dev settings were not written, only the migrations. The dev launcher writes every row, so an unwritten one is a manipulated environment.
+* admin(holds `grading:approve`) is signed in to the console.
 
 **Steps:**
 
-1. Open Settings.
+1. Navigate to <grade10 admin grading settings url>.
 2. Read the fee sheet section.
 
 **Expected Results:**
@@ -3544,11 +3731,13 @@ Admin(holds `grading:approve`) opens Settings before Commercial has supplied a f
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
-Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_card_month`, which no owner has written.
+
+* `grading.storage_fee_per_card_month` stands unwritten by its owner, as on a stack where the grading dev settings were not written, only the migrations. The dev launcher writes it, so an unwritten one is a manipulated environment.
+* A `ready` submission stands on that stack, and admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Open the submission's Money tab.
+1. Click the Money tab.
 
 **Expected Results:**
 
@@ -3571,17 +3760,58 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 * **Trace:** grade10-admin-grading-counter-US-15
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) opens Settings, with the reference rate at 7.84.
+
+* admin(holds `grading:approve`) is on <grade10 admin grading settings url>, the reference rate at 7.84 as seeded.
 
 **Steps:**
 
-1. Change the reference rate to 7.90 and save.
-2. Change it to 0 and save.
+1. Change the reference rate field to 7.90 and save it.
+2. Change it to 0 and save it.
+3. Reload the page and read the reference rate row.
 
 **Expected Results:**
 
 * The first save writes 7.90 with no second-person dialog, naming the writer alone.
 * The second save is refused, naming the reference rate, and 7.90 stays.
+
+### grade10-admin-grading-counter-US15-TC10-1: A fee-sheet change reaches only what is not yet booked
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-15
+
+**Pre-conditions:**
+
+* PSA Regular's fee stands at 60000 minor units, as the dev settings write it.
+* One submission at Regular is seeded at `booked` and a second at `planned`, as *Seeding a submission* says.
+* admin(holds `grading:approve`) is on <grade10 admin grading settings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Regular's fee before | 60000 minor units (HKD 600.00) |
+| Regular's fee after | 70000 minor units (HKD 700.00), any other fee |
+
+**Steps:**
+
+1. Write Regular's fee-sheet row with the fee after, as *Writing a money setting* says.
+2. On the booked submission, check its cards at the desk, seal the agreement on the iPad and click Take payment.
+3. Walk the planned submission on to `booked`, as *Seeding a submission* says, then at the desk check its cards, seal the agreement and click Take payment.
+
+**Expected Results:**
+
+* Step 2's till prices each card at the fee before, 60000 minor units: the booked submission is untouched.
+* Step 3's till prices each card at the fee after, 70000 minor units: the planned submission is priced on the new row when it books.
 
 ## Reconciliation
 
