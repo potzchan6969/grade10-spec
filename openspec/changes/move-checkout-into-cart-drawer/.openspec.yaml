@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-29
+promoted_by: "@seankcw"
+skip_specs: true
+skip_specs_why: grade10-site/store/cart-drawer has no durable spec yet and add-store-cart-drawer-ui is its one owner; this change's requirement, scenario and test-case deltas are folded into that change's spec.md/feature-tcs.md/user-journeys.md instead of issued here as a second owner of its ids. See decisions.md Q5 and add-store-cart-drawer-ui's own decisions.md Q9-Q11.

@@ -12,10 +12,10 @@
 **I want** to change or remove lines after the shop checks them,
 **so that** the cart I continue with contains what I intend to buy.
 
-### grade10-site-store-cart-drawer-US-03: Signed-in collector continues from the cart drawer
+### grade10-site-store-cart-drawer-US-03: Signed-in collector continues to a product from the cart drawer
 
 **As a** signed-in collector,
-**I want** the cart to take me to a product or checkout,
+**I want** the cart to take me to a product I select from it,
 **so that** I can continue the shopping path I chose.
 
 ### grade10-site-store-cart-drawer-US-04: Signed-in collector reads tender choices for the reviewed basket
@@ -29,3 +29,9 @@
 **As a** signed-in collector,
 **I want** to apply, maximise or remove points against the reviewed cart and keep that choice at checkout,
 **so that** I can see the accepted saving before leaving the page.
+
+### grade10-site-store-cart-drawer-US-06: Signed-in collector completes checkout without leaving the drawer
+
+**As a** signed-in collector,
+**I want** to pay for my reviewed cart from the drawer itself,
+**so that** I reach Shopify's hosted invoice without a second page.

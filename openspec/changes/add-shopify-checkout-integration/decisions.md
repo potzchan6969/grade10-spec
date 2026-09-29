@@ -21,7 +21,7 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | When is the basket read? | Read every line from the live shop at checkout open and again at Pay; block a failed, stale or contradictory read and name the affected line | Trusting the cart drawer or reading only once |
+| Q1 | When is the basket read? | Read every line from the live shop at checkout open and again at Pay; block a failed, stale or contradictory read and name the affected line. **Narrowed 2026-09-29 by `move-checkout-into-cart-drawer`:** that change removes the separate checkout page, so the cart drawer's own continuous live quote now serves the checkout-open read; the Pay-time server recheck this row decided is unchanged | Trusting the cart drawer or reading only once |
 | Q2 | Which Shopify flow is used? | Use one Shopify Draft Order and its hosted invoice page for each new checkout intent; Shopify owns address, shipping, tax, discount entry and payment | An embedded card form or public Storefront checkout |
 | Q3 | Who may start public checkout? | Require a signed-in member; keep typed-email checkout only on the elevated development and staging operator test surface | Public guest checkout or treating a typed email as identity proof |
 | Q4 | Where are shipping and tax calculated? | Shopify calculates them after the buyer supplies an address; Grade10 shows an estimate and does not present its subtotal as the final charge | Calculating shipping or tax in Grade10 |
