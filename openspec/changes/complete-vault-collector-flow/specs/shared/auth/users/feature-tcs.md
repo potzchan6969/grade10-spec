@@ -641,29 +641,29 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 
 ## Reconciliation
 
-**Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` and `openspec/changes/archive/` entirely, and `tech-design.md`. Fourteen cases came back over two journeys; the scenario pass issued `shared-auth-users-SC-28` to `shared-auth-users-SC-39`.
+**Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` and `openspec/changes/archive/` entirely, and `tech-design.md`. Fourteen cases came back over two journeys; the scenario pass issued `shared-auth-users-SC-34` to `shared-auth-users-SC-39` and `shared-auth-users-SC-43` to `shared-auth-users-SC-48`.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `shared-auth-users-US2-TC1-1` to `shared-auth-users-US2-TC6-1` | Carried | ban and unban behaviour the durable spec already states and this delta does not touch; the cases came across with the journey |
-| `shared-auth-users-US5-TC1-1` | Joined | `shared-auth-users-SC-30` |
-| `shared-auth-users-US5-TC2-1` | Joined | `shared-auth-users-SC-31` |
-| `shared-auth-users-US5-TC3-1` | Joined | `shared-auth-users-SC-32` |
-| `shared-auth-users-US5-TC4-1` | Joined | `shared-auth-users-SC-29` |
+| `shared-auth-users-US5-TC1-1` | Joined | `shared-auth-users-SC-45` |
+| `shared-auth-users-US5-TC2-1` | Joined | `shared-auth-users-SC-46` |
+| `shared-auth-users-US5-TC3-1` | Joined | `shared-auth-users-SC-47` |
+| `shared-auth-users-US5-TC4-1` | Joined | `shared-auth-users-SC-44` |
 | `shared-auth-users-US5-TC5-1` | Joined | `shared-auth-users-SC-37` |
 | `shared-auth-users-US5-TC6-1` | Joined | `shared-auth-users-SC-38` |
-| `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-33`; the cancel is refused from the first instant of the day an erasure may run and the request stays open, which the author confirmed as Q50 |
+| `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-48`; the cancel is refused from the first instant of the day an erasure may run and the request stays open, which the author confirmed as Q50 |
 | `shared-auth-users-US5-TC8-1` | Joined | `shared-auth-users-SC-36`; the take-over keeps the day an erasure may run, confirmed as Q51 |
 | Raised: what the account holder sees once a filing takes their request over | Escalated, then folded, then corrected | settled as Q48 and Q65: the request is the shop's from the take-over on, and the account holder's own cancel is refused. Folded as `shared-auth-users-SC-40`. The first fold read the page after a lifted ban, which nothing reaches: no standing changes while an erasure request is open. `shared-auth-users-SC-40` now sends the own cancel instead, walked by `shared-auth-users-US5-TC9-2`, the case's version bumped because the requirement changed what it verifies |
-| Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond `shared-auth-users-SC-29`, which already lets a new request be filed once none is open |
-| Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-33`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
-| `shared-auth-users-SC-28` | Case added | `shared-auth-users-US5-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
+| Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond `shared-auth-users-SC-44`, which already lets a new request be filed once none is open |
+| Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-48`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
+| `shared-auth-users-SC-43` | Case added | `shared-auth-users-US5-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
 | `shared-auth-users-SC-34` | Case added | `shared-auth-users-US2-TC7-1` |
 | `shared-auth-users-SC-35` | Case added | `shared-auth-users-US2-TC8-1` |
 | `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC9-1` |
 | `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC10-1` |
 | `shared-auth-users-SC-42` | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC11-1` walks it, a row per filer |
-| Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-30`, `shared-auth-users-SC-31`, `shared-auth-users-SC-32`, `shared-auth-users-SC-29` and `shared-auth-users-SC-33`, beside the vault scenarios that state what the same rows render |
+| Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-45`, `shared-auth-users-SC-46`, `shared-auth-users-SC-47`, `shared-auth-users-SC-44` and `shared-auth-users-SC-48`, beside the vault scenarios that state what the same rows render |
 
 ### Manual
 

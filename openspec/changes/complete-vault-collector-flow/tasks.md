@@ -269,10 +269,10 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 7.1 Cover both workers: self files with no ban, self cancels without
       lifting a conduct ban, an operator filing converts an open self-filed
       row, `enforceOpenErasure` leaves a self-filed session alone, and a held
-      case refuses the ask in words (`shared-auth-users-SC-28`,
-      `shared-auth-users-SC-29`, `shared-auth-users-SC-30`,
-      `shared-auth-users-SC-31`, `shared-auth-users-SC-32`,
-      `shared-auth-users-SC-33`, `shared-auth-users-SC-34`,
+      case refuses the ask in words (`shared-auth-users-SC-43`,
+      `shared-auth-users-SC-44`, `shared-auth-users-SC-45`,
+      `shared-auth-users-SC-46`, `shared-auth-users-SC-47`,
+      `shared-auth-users-SC-48`, `shared-auth-users-SC-34`,
       `shared-auth-users-SC-35`, `shared-auth-users-SC-36`,
       `shared-auth-users-SC-37`, `shared-auth-users-SC-38`,
       `shared-auth-users-SC-39`, `shared-auth-users-SC-40`,
@@ -282,14 +282,14 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       a self-filed row bans nothing, a cancel lifts the ban only where
       `open.requestedBy !== userId`, an operator filing over a self-filed row
       takes it over — and give `readSession.ts`'s `enforceOpenErasure` the
-      same branch (`shared-auth-users-SC-30`, `shared-auth-users-SC-31`,
-      `shared-auth-users-SC-32`, `shared-auth-users-SC-34`,
+      same branch (`shared-auth-users-SC-45`, `shared-auth-users-SC-46`,
+      `shared-auth-users-SC-47`, `shared-auth-users-SC-34`,
       `shared-auth-users-SC-35`, `shared-auth-users-SC-36`,
       `shared-auth-users-SC-40`, `shared-auth-users-SC-41`)
 - [x] 7.3 Make a second filing answer the open row's `executeAfter` and a
       cancel with no open row a no-op, in place of `ERASURE_ALREADY_REQUESTED`
-      and `ERASURE_NO_REQUEST` (`shared-auth-users-SC-28`,
-      `shared-auth-users-SC-29`, `shared-auth-users-SC-33`,
+      and `ERASURE_NO_REQUEST` (`shared-auth-users-SC-43`,
+      `shared-auth-users-SC-44`, `shared-auth-users-SC-48`,
       `shared-auth-users-SC-37`, `shared-auth-users-SC-38`,
       `shared-auth-users-SC-39`)
 - [x] 7.4 Add `ownErasureStatus`, `requestOwnErasure` and `cancelOwnErasure`

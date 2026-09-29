@@ -360,13 +360,13 @@ beside them.
 | Download, none | the button absent; nothing signed yet | `grade10-site-vault-documents-and-signing-SC-27` |
 | Download in flight | the button pending | **Out of suite:** the view's colocated test |
 | Download failed | the error line under the button | `grade10-site-vault-documents-and-signing-SC-28` |
-| Ask available | the window, what goes and what stays; Ask to be forgotten | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-30` |
+| Ask available | the window, what goes and what stays; Ask to be forgotten | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-45` |
 | Ask refused | the button withheld with the reason in words: an item in the vault or a loan running | `grade10-site-vault-retention-and-erasure-SC-23` |
-| Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-30` |
-| Ask filed | filed on the date, erased from the date; Cancel the request; the still-signed-in line | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-30`, `shared-auth-users-SC-31` |
+| Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-45` |
+| Ask filed | filed on the date, erased from the date; Cancel the request; the still-signed-in line | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-45`, `shared-auth-users-SC-46` |
 | Ask filed, held | filed on the date; the hold in words beside it — an item in the vault or a loan running — and that erasure waits until it lifts; Cancel the request | `grade10-site-vault-retention-and-erasure-SC-26` |
-| Ask cancelled | back to Ask available | `grade10-site-vault-retention-and-erasure-SC-25`, `shared-auth-users-SC-32`, `shared-auth-users-SC-29` |
-| Window passed | filed on the date, the window passed; no cancel; each product erases | `grade10-site-vault-retention-and-erasure-SC-27`, `shared-auth-users-SC-33` |
+| Ask cancelled | back to Ask available | `grade10-site-vault-retention-and-erasure-SC-25`, `shared-auth-users-SC-47`, `shared-auth-users-SC-44` |
+| Window passed | filed on the date, the window passed; no cancel; each product erases | `grade10-site-vault-retention-and-erasure-SC-27`, `shared-auth-users-SC-48` |
 | Error | the message; the cards stay | `grade10-site-vault-retention-and-erasure-SC-15` |
 
 ### Queue
