@@ -253,8 +253,9 @@ function WinnerOrderHowToPayDialog({
             }}
             value={rail}
           >
-            {/* Narrow: hug labels and scroll. Wide (sm+): full-width shared
-                track. Inner/bleed padding keeps the pill shadow visible. */}
+            {/* Narrow: hug labels, size=sm, scroll. Wide (sm+): full-width
+                shared track at size=md. Inner/bleed padding keeps the pill
+                shadow visible. */}
             <div
               className={
                 wideTrack
@@ -273,6 +274,7 @@ function WinnerOrderHowToPayDialog({
                       : "w-max overflow-visible"
                   }
                   fullWidth={wideTrack}
+                  size={wideTrack ? "md" : "sm"}
                 >
                   <TabsTrigger
                     className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
