@@ -11,6 +11,7 @@ landed_by:
   user-journeys: ecchochan
   tech-design: ecchochan
   specs: ecchochan
+  test-cases: ecchochan
 reviewed:
   user-journeys: 88b7d170
   tech-design: 54ed4ce9
