@@ -260,9 +260,12 @@ the letters that follow those lots.
 
 ### My Auctions
 
-🚧 One table holds every bookmarked lot once — bid rows before watch-only,
+🚧 One list holds every bookmarked lot once — bid lots before watch-only,
 soonest close first in each band, closed lots after open ones — with the row
 count in the title. The former Bidding and Watching sections do not appear.
+On a small viewport each lot is a stacked card; the whole card opens the lot
+or Winner Order, and Unwatch and Email alerts stay on the card. From tablet
+the same facts sit in the five-column table.
 
 | Column | What it shows |
 | --- | --- |
