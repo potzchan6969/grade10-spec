@@ -1,9 +1,12 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, within } from "storybook/test";
 import { FIXTURE_MEMBER_SINCE } from "../../lib/datetime-fixtures";
 import { ProfileCard } from "./profile-card";
 import { ProfileDetails } from "./profile-details";
 import { ProfileForm } from "./profile-form";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Store Profile/ProfileCard",
@@ -43,7 +46,7 @@ export const ErrorState: Story = {
     state: {
       status: "error",
       message: "Could not load your profile.",
-      action: { label: "Try again", onAction: fn() },
+      action: { label: common.retry, onAction: fn() },
     },
   },
 };
@@ -56,7 +59,11 @@ export const EditingBody: Story = {
       status: "ready",
       data: (
         <ProfileForm
-          copy={{ displayName: "Display name", bio: "Bio", submit: "Save" }}
+          copy={{
+            displayName: "Display name",
+            bio: "Bio",
+            submit: common.save,
+          }}
           initialBio=""
           initialDisplayName="Collector"
           onSubmit={fn()}

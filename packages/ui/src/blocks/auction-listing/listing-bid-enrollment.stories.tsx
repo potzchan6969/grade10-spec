@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
@@ -6,18 +7,18 @@ import {
   PaymentMethodRow,
 } from "./listing-bid-enrollment";
 
+const { auctionListing } = getMessages("grade10", "en");
+
 const COPY = {
-  paymentMethod: "Linked Card",
-  paymentMethodTooltip:
-    "We authorize your card for bidding. You're only charged if you win.",
-  changeCard: "Change",
-  linkCardEmptyState: "Link a card to place a bid.",
-  getReadyToBid: "Link a card to bid",
-  linkCardDescription:
-    "Link a card for bidding. You're only charged if you win.",
-  ageAttestation: "I confirm I am 18 years of age or older.",
-  continue: "Link Card",
-  linking: "Linking",
+  paymentMethod: auctionListing.paymentMethod,
+  paymentMethodTooltip: auctionListing.paymentMethodTooltip,
+  changeCard: auctionListing.changeCard,
+  linkCardEmptyState: auctionListing.linkCardEmptyState,
+  getReadyToBid: auctionListing.linkACardToBid,
+  linkCardDescription: auctionListing.linkCardDescription,
+  ageAttestation: auctionListing.ageAttestation,
+  continue: auctionListing.continue,
+  linking: auctionListing.linking,
   iframePlaceholder: "Stripe card link (iframe)",
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
@@ -113,7 +114,7 @@ export const EmptyLinkedCard: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
-      canvas.getByRole("button", { name: "Link a card to place a bid." }),
+      canvas.getByRole("button", { name: "Link a card to bid." }),
     );
     expect(onLinkEmpty).toHaveBeenCalledOnce();
   },

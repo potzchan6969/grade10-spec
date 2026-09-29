@@ -68,9 +68,9 @@ emails/
                            lot-watched-ended = no-bids Ended-only)
     order/                 winner success, setup reminder (first / second),
                            payment reminder (send / day-three / day-six /
-                           final), setup overdue, payment overdue, payment
-                           received (+ draft partial), shipped, delivered,
-                           order cancelled (post-sale)
+                           final), setup overdue, payment overdue, proof not
+                           accepted, payment received (+ draft partial),
+                           shipped, delivered, order cancelled (post-sale)
   grading/                 the collector's letters about a submission
     _components/           GradingLetter, SubmissionLine, CardLines,
                            PickupBlock, preview fixture

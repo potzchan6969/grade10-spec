@@ -28,7 +28,7 @@
       "id": "operator",
       "type": "external",
       "label": "Operator",
-      "sublabel": "the post-sale queue"
+      "sublabel": "Orders"
     }
   ],
   "segments": [

@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, within } from "storybook/test";
 import { ProductBrowse } from "./product-browse";
@@ -7,6 +8,8 @@ import {
   productBrowseArgs,
   SELECTION,
 } from "./product-browse.story-shared";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Store Product Listing/ProductBrowse/States",
@@ -44,7 +47,7 @@ export const ResultsError: Story = {
     results: {
       status: "error",
       message: "We could not load these products.",
-      action: { label: "Try again", onAction: fn() },
+      action: { label: common.retry, onAction: fn() },
     },
   },
   play: async ({ canvasElement }) => {

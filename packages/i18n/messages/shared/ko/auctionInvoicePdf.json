@@ -1,0 +1,41 @@
+{
+  "document": {
+    "billToHeading": "청구지",
+    "shipToHeading": "배송지",
+    "descriptionLabel": "설명",
+    "amountLabel": "금액"
+  },
+  "invoice": {
+    "documentTitle": "청구서",
+    "invoiceNumberLabel": "청구서 번호",
+    "sentAtLabel": "발행일",
+    "paymentDeadlineLabel": "결제 기한",
+    "paymentMethodLabel": "결제 방법",
+    "bankDetailsHeading": "은행 정보",
+    "swiftLabel": "SWIFT",
+    "fpsLabel": "FPS",
+    "hkLocalTransferLabel": "홍콩 국내 송금",
+    "beneficiaryLabel": "수취인",
+    "swiftBicLabel": "SWIFT/BIC",
+    "accountIbanLabel": "계좌/IBAN",
+    "fpsIdLabel": "FPS ID",
+    "bankAndCodeLabel": "은행 및 코드",
+    "accountNoLabel": "계좌 번호",
+    "bankReferenceNoteLabel": "은행 앱의 메모 또는 참고 항목에 이 참조 번호를 입력하세요. 누락하면 확인이 지연됩니다. 이체 시 이 참조 번호를 기재해 주세요:"
+  },
+  "receipt": {
+    "documentTitle": "영수증",
+    "receiptNumberLabel": "영수증 번호",
+    "invoiceNumberLabel": "청구서 번호",
+    "datePaidLabel": "결제일",
+    "paymentMethodLabel": "결제 방법",
+    "paymentReferenceLabel": "결제 참조 번호",
+    "paymentSectionLabel": "결제",
+    "transferReferenceLabel": "송금 참조 번호",
+    "paymentBreakdownLabel": "결제 내역",
+    "originalInvoiceTotalLabel": "원 청구서 총액",
+    "previousPaymentsLabel": "이전 결제 금액",
+    "currentPaymentReceivedLabel": "이번 수령 결제 금액",
+    "remainingBalanceDueLabel": "남은 미결제 금액"
+  }
+}

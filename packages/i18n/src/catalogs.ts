@@ -25,6 +25,7 @@
  */
 
 import grade10EnAuctionListing from "../messages/grade10/en/auctionListing.json";
+import grade10EnAuctionOrders from "../messages/grade10/en/auctionOrders.json";
 import grade10EnChrome from "../messages/grade10/en/chrome.json";
 import grade10EnEmail from "../messages/grade10/en/email.json";
 import grade10EnHead from "../messages/grade10/en/head.json";
@@ -38,6 +39,7 @@ import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
 import grade10EnVault from "../messages/grade10/en/vault.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
+import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
 import grade10ZhHansEmail from "../messages/grade10/zh-Hans/email.json";
 import grade10ZhHansHead from "../messages/grade10/zh-Hans/head.json";
@@ -51,6 +53,7 @@ import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
 import grade10ZhHansVault from "../messages/grade10/zh-Hans/vault.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
+import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
 import grade10ZhHantEmail from "../messages/grade10/zh-Hant/email.json";
 import grade10ZhHantHead from "../messages/grade10/zh-Hant/head.json";
@@ -66,6 +69,7 @@ import grade10ZhHantVault from "../messages/grade10/zh-Hant/vault.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
+import sharedEnAuctionInvoicePdf from "../messages/shared/en/auctionInvoicePdf.json";
 import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
 import sharedEnAuctionOrders from "../messages/shared/en/auctionOrders.json";
 import sharedEnAuctionRecord from "../messages/shared/en/auctionRecord.json";
@@ -92,6 +96,7 @@ import sharedEnVault from "../messages/shared/en/vault.json";
 import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
+import sharedKoAuctionInvoicePdf from "../messages/shared/ko/auctionInvoicePdf.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
 import sharedKoAuctionOrders from "../messages/shared/ko/auctionOrders.json";
 import sharedKoAuctionRecord from "../messages/shared/ko/auctionRecord.json";
@@ -118,6 +123,7 @@ import sharedKoVault from "../messages/shared/ko/vault.json";
 import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json";
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
 import sharedZhHansAuctionBiddingHistory from "../messages/shared/zh-Hans/auctionBiddingHistory.json";
+import sharedZhHansAuctionInvoicePdf from "../messages/shared/zh-Hans/auctionInvoicePdf.json";
 import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListing.json";
 import sharedZhHansAuctionOrders from "../messages/shared/zh-Hans/auctionOrders.json";
 import sharedZhHansAuctionRecord from "../messages/shared/zh-Hans/auctionRecord.json";
@@ -144,6 +150,7 @@ import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
 import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json";
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
 import sharedZhHantAuctionBiddingHistory from "../messages/shared/zh-Hant/auctionBiddingHistory.json";
+import sharedZhHantAuctionInvoicePdf from "../messages/shared/zh-Hant/auctionInvoicePdf.json";
 import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListing.json";
 import sharedZhHantAuctionOrders from "../messages/shared/zh-Hant/auctionOrders.json";
 import sharedZhHantAuctionRecord from "../messages/shared/zh-Hant/auctionRecord.json";
@@ -184,6 +191,7 @@ export const sharedEn = {
   appointment: sharedEnAppointment,
   auction: sharedEnAuction,
   auctionBiddingHistory: sharedEnAuctionBiddingHistory,
+  auctionInvoicePdf: sharedEnAuctionInvoicePdf,
   auctionRecord: sharedEnAuctionRecord,
   auctionListing: sharedEnAuctionListing,
   auctionOrders: sharedEnAuctionOrders,
@@ -213,6 +221,7 @@ export const sharedZhHant = {
   appointment: sharedZhHantAppointment,
   auction: sharedZhHantAuction,
   auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
+  auctionInvoicePdf: sharedZhHantAuctionInvoicePdf,
   auctionRecord: sharedZhHantAuctionRecord,
   auctionListing: sharedZhHantAuctionListing,
   auctionOrders: sharedZhHantAuctionOrders,
@@ -242,6 +251,7 @@ export const sharedZhHans = {
   appointment: sharedZhHansAppointment,
   auction: sharedZhHansAuction,
   auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
+  auctionInvoicePdf: sharedZhHansAuctionInvoicePdf,
   auctionRecord: sharedZhHansAuctionRecord,
   auctionListing: sharedZhHansAuctionListing,
   auctionOrders: sharedZhHansAuctionOrders,
@@ -271,6 +281,7 @@ export const sharedKo = {
   appointment: sharedKoAppointment,
   auction: sharedKoAuction,
   auctionBiddingHistory: sharedKoAuctionBiddingHistory,
+  auctionInvoicePdf: sharedKoAuctionInvoicePdf,
   auctionRecord: sharedKoAuctionRecord,
   auctionListing: sharedKoAuctionListing,
   auctionOrders: sharedKoAuctionOrders,
@@ -299,6 +310,7 @@ export const sharedKo = {
 /** What each brand says for itself, one language at a time. */
 export const grade10En = {
   auctionListing: grade10EnAuctionListing,
+  auctionOrders: grade10EnAuctionOrders,
   chrome: grade10EnChrome,
   email: grade10EnEmail,
   head: grade10EnHead,
@@ -315,6 +327,7 @@ export const grade10En = {
 
 export const grade10ZhHant = {
   auctionListing: grade10ZhHantAuctionListing,
+  auctionOrders: grade10ZhHantAuctionOrders,
   chrome: grade10ZhHantChrome,
   email: grade10ZhHantEmail,
   head: grade10ZhHantHead,
@@ -331,6 +344,7 @@ export const grade10ZhHant = {
 
 export const grade10ZhHans = {
   auctionListing: grade10ZhHansAuctionListing,
+  auctionOrders: grade10ZhHansAuctionOrders,
   chrome: grade10ZhHansChrome,
   email: grade10ZhHansEmail,
   head: grade10ZhHansHead,

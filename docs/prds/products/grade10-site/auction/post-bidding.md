@@ -39,7 +39,7 @@ winner of three lots has three orders, each with its own deadlines.
 | Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address; an operator reopen starts a fresh **48 hours** |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
-| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG or HEIC files of up to **5 MB** each, **15 MB** total, uploaded once |
+| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
 - **Sections** — Order Information with Invoice Status and Collection Method,
@@ -138,8 +138,8 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
+| 🚧 Payment method | Card in every currency; bank transfer where Grade10 holds bank details for the order's currency; each choice shows its fee range | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
-| 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
 
 - **Form** — Personal or Company; first and last name, phone (country and
   digits), country or region, town or city, address line 1 and postal code are
@@ -189,8 +189,8 @@ by card, reads:
 | Insurance | 500 | Optional and above zero; absent when none |
 | 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
 | Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
-| Payment Processing Fee | 4,272 | Priced by method and fixed at send; for card, grossed up from the Subtotal at the provider's live fees, so Grade10 keeps the Subtotal whole |
-| Order Total | 125,572 | Subtotal plus the fee — what the winner pays |
+| 🚧 Payment Processing Fee | 4,271.80 | Set by the operator, pre-filled from the fee schedule in Payment Settings — here card at 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
+| Order Total | 125,571.80 | Subtotal plus the fee — what the winner pays |
 
 - 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
   fee rows as TBD; after send it carries a brief info tooltip (`0.9% of the
@@ -200,8 +200,8 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
-- 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
-  Free when zero
+- 🚧 **Payment Processing Fee** — set by the operator on every invoice, card
+  or bank transfer, from the schedule's suggestion; zero reads Free
 - 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
   the document names it rather than leaving it to the fee amount alone
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
@@ -244,9 +244,8 @@ doing, under Edge Cases.
 - 🚧 **Unfinished payment** — a payment that times out or is abandoned says
   so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
-- 🚧 **Started in time** — a payment received before the deadline completes
-  even if it confirms after; one received at or after it is refused, and the
-  card is not charged
+- 🚧 **Started in time** — one tried at or after the deadline cannot start, so
+  the card is not charged; one started in time still counts
 
 ### By Bank Transfer
 
@@ -263,7 +262,7 @@ doing, under Edge Cases.
   reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
 - 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
-  or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
+  or transfer reference); **1 to 3** PDF, PNG, JPG, HEIC or HEIF files, **5 MB**
   each and **15 MB** total, uploaded once after paying, behind a confirm
   step saying nothing can be added later; on success a toast reads **Proof
   submitted** / **We'll verify your payment shortly.**, the order reads
@@ -279,11 +278,13 @@ doing, under Edge Cases.
   with a reason the winner reads, the latest only; the deadline runs again
   with the time that was left, and the winner uploads again — [Auction
   Management · Payment](/p/grade10-admin/auction/management#payment)
-- 🚧 **Proof stays private** — the winner never sees a proof file or its name;
-  the order shows only that proof was sent
-- ❓ **The accounts** — the details for each of the three ways; Finance
-  confirms. Preview uses Grade10 Finance Limited / HSBC Hong Kong samples
-  until then
+- 🚧 **Proof stays private** — the winner never sees a payment proof file or
+  its name; the order shows only that proof was sent
+- 🚧 **Bank details by lane** — the Grade10 Finance Limited / HSBC Hong Kong
+  sample outside production; none in production, so card only there until
+  Finance confirms Grade10's account
+- ❓ **The accounts** — Grade10's HKD account for each of the three ways;
+  Finance confirms
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -364,9 +365,9 @@ at expiry, then shipped, delivered, and order cancelled.
 | The 48-hour address deadline | Confirm hidden, Missed setup deadline with Contact Us; the order reads Setup Overdue | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
 | The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the order reads Payment Overdue | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
 
-- **Overdue penalties** — a missed payment deadline suspends the bidder,
-  below; ❓ what "penalties or extra charges" in the overdue letters means
-  beyond that, Product confirms
+- **Overdue penalties** — a missed payment deadline suspends the bidder, below
+- ❓ **Other penalties** — what else "penalties or extra charges" in the
+  overdue letters means; Product confirms
 
 ### Partial Payment
 
@@ -377,9 +378,9 @@ balance. The invoice above, settled in three payments:
 
 | Payment | Amount | Its receipt shows | The operator |
 | --- | --- | --- | --- |
-| `-P1` | 50,000 | Invoice total 125,572 · previous payments 0 · this payment 50,000 · balance due 75,572 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
-| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,572 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
-| `-P3` | 10,572 | Previous 115,000 · this payment 10,572 · balance due 0 | An exact match closes on its own; the order reads Processing |
+| `-P1` | 50,000 | Invoice total 125,571.80 · previous payments 0 · this payment 50,000 · balance due 75,571.80 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
+| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
+| `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Processing |
 
 - 🚧 **The close prompt** — from the payment that brings the total to 90% of
   the invoice, every payment asks the operator to close as Paid or keep it
@@ -468,8 +469,9 @@ a second payment provider, and changes to the bid-time rules.
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
-| Payment processing fee | 🚧 In flight | On every invoice, priced by method: card grossed up from the Subtotal at send from the provider's live fees, never from an admin rate; bank transfer entered by the operator, no cap. A fee that costs more than quoted is absorbed; the sent invoice never re-prices. | Product (@jeffffej0909) |
+| Payment processing fee | 🚧 In flight | On every invoice, card or bank transfer, the operator sets the fee, pre-filled from a fee schedule in Payment Settings: a percentage and a fixed amount per currency and method, the card rule grossed up from the Subtotal. No cap; a fee that costs more than quoted is absorbed; the sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
+| Bank details | 🚧 In flight | Grade10 holds bank details per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account, so production offers card only until then. Chosen over a sample account in the site's code, which showed on every lane and on every invoice PDF, production included. | Product and Finance |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
 | Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address and method, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
 | Address deadline | Decided | 48 hours from lot close. A miss hides Confirm, shows Contact Us, and the order reads Setup Overdue; no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |

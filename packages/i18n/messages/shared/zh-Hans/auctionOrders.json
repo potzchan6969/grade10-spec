@@ -14,13 +14,11 @@
   "viewDetail": "查看详情",
   "contactUs": "联系我们",
   "insuranceTooltip": "运输途中按订单金额的 0.9% 计算。",
-  "taxTooltip": "由 Grade10 按订单送达地点设定。部分订单不设税费。",
   "taxLabel": "税费",
-  "buyersPremiumTooltip": "得标价的 20%，或该货币的最低额（取较高者）。",
+  "buyersPremiumTooltip": "成交价的 20%，或该货币的最低额（取较高者）。",
   "shippingHandlingTooltip": "按你确认的收货地址计算的包装、承运与处理费用。",
   "processingFeeTooltip": "按此发票发出时的付款方式而定。",
   "contactDialog": {
-    "title": "给 Grade10 发邮件",
     "to": "收件人",
     "subject": "主题",
     "message": "正文",
@@ -42,13 +40,31 @@
   },
   "status": {
     "awaitingSetup": "等待设置",
+    "setupOverdue": "设置逾期",
     "preparingInvoice": "准备发票中",
     "pendingPayment": "待付款",
+    "paymentOverdue": "付款逾期",
+    "paymentVerifying": "付款核实中",
+    "partiallyPaid": "已部分付款",
     "processing": "处理中",
     "shipped": "已发货",
     "delivered": "已送达",
     "cancelled": "已取消",
     "refunded": "已退款"
+  },
+  "refusal": {
+    "NOT_FOUND": "找不到此订单。",
+    "ADDRESS_LOCKED": "你的订单设置已确认，无法再在此更改。",
+    "ADDRESS_UNCONFIRMED": "请先确认你的收货地址。",
+    "ADDRESS_WINDOW_CLOSED": "设置期限已过，订单设置已关闭。",
+    "METHOD_UNAVAILABLE": "此订单不支持银行转账，请选择信用卡。",
+    "ORDER_NOT_PAYABLE": "此订单目前无法付款。",
+    "DEADLINE_ELAPSED": "付款期限已过。",
+    "INVOICE_EXPIRED": "此发票已过期，无法再在此付款。",
+    "PROOF_INVALID": "这些文件无法作为付款凭证。请上传 1 至 3 个 PDF、PNG、JPG、HEIC 或 HEIF 文件，每个不超过 5 MB，合计不超过 15 MB。",
+    "PROOF_UNDER_REVIEW": "你的付款凭证正在审核中，请等待结果后再提交。",
+    "UNAVAILABLE": "暂时无法使用，请稍后再试。",
+    "generic": "无法完成此操作，请重试或联系我们。"
   },
   "addAddress": {
     "personal": "个人",
@@ -62,11 +78,24 @@
     "city": "城市/城镇",
     "addressLine1": "地址行 1",
     "addressLine2": "地址行 2",
+    "apartment": "单元/楼层/大厦",
     "state": "州/省/地区",
     "postalCode": "邮政编码",
     "optional": "可选",
     "confirm": "确认",
     "cancel": "取消",
     "countrySearchPlaceholder": "例如 United States"
+  },
+  "detail": {
+    "orderInformation": "订单信息",
+    "collectionMethod": "收货方式",
+    "orderStatus": "订单状态",
+    "lots": "拍品",
+    "orderNumber": "订单编号",
+    "auction": "拍卖",
+    "currency": "货币",
+    "date": "日期",
+    "invoiceStatus": "发票状态",
+    "payNow": "立即付款"
   }
 }

@@ -15,7 +15,7 @@ buyer has between paying and holding the card.
 The order of record carries a shipment state the order page and the order
 history both render, a tracking reference lands on the order when the parcel
 does, and pickup at the physical shop is a first-class choice rather than a
-note in an email. The auction's post-sale queue is the operator half of the
+note in an email. The auction's Orders workspace is the operator half of the
 same story; the store's version should not invent a second vocabulary for
 it.
 

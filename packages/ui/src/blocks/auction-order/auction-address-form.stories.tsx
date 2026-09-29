@@ -1,26 +1,33 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionAddressForm } from "./auction-address-form";
 
+const { common, auctionOrders } = getMessages("grade10", "en");
+const { addAddress } = auctionOrders;
+
 const COPY = {
-  personal: "Personal",
-  companyKind: "Company",
-  firstName: "First Name",
-  lastName: "Last Name",
-  phone: "Phone",
-  company: "Company Name",
-  country: "Country/Region",
-  city: "Town/City",
-  addressLine1: "Address Line 1",
-  addressLine2: "Address Line 2",
-  apartment: "Apt./Suite/Building",
-  state: "State/Province/Region",
-  postalCode: "Postal Code",
-  optional: "Optional",
-  confirm: "Confirm",
-  cancel: "Cancel",
-  phonePlaceholder: "+852 12345678",
-  countrySearchPlaceholder: "e.g. United States",
+  personal: addAddress.personal,
+  companyKind: addAddress.companyKind,
+  firstName: addAddress.firstName,
+  lastName: addAddress.lastName,
+  phone: addAddress.phone,
+  company: addAddress.company,
+  country: addAddress.country,
+  city: addAddress.city,
+  addressLine1: addAddress.addressLine1,
+  addressLine2: addAddress.addressLine2,
+  // Production currently leaves this label blank (apartment: "" in
+  // AuctionAddressForm's own default and in the app's copy assembly); the
+  // catalog carries the full label for a consumer that wants to show it.
+  apartment: addAddress.apartment,
+  state: addAddress.state,
+  postalCode: addAddress.postalCode,
+  optional: addAddress.optional,
+  confirm: common.confirm,
+  cancel: common.cancel,
+  phonePlaceholder: addAddress.phonePlaceholder,
+  countrySearchPlaceholder: addAddress.countrySearchPlaceholder,
 };
 
 const COMPLETE_PERSONAL = {

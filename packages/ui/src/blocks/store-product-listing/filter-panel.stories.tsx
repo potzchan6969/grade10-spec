@@ -1,7 +1,10 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { FilterPanel } from "./filter-panel";
 import { FILTER_GROUPS, UTILITY_LINKS } from "./fixtures";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Store Product Listing/FilterPanel",
@@ -49,7 +52,7 @@ export const ErrorState: Story = {
     groups: {
       status: "error",
       message: "Filters could not be loaded.",
-      action: { label: "Try again", onAction: fn() },
+      action: { label: common.retry, onAction: fn() },
     },
   },
 };

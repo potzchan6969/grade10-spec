@@ -1,5 +1,6 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
@@ -8,6 +9,8 @@ import { ProductCard } from "../store-product-listing/product-card";
 import { SignInCard } from "./sign-in-card";
 import { SignInEmailForm } from "./sign-in-email-form";
 import { SignInLinkSent } from "./sign-in-link-sent";
+
+const { common } = getMessages("grade10", "en");
 
 const LISTING_IMAGE = new URL(
   "../store-product-listing/product-card.fixture.png",
@@ -58,7 +61,7 @@ const meta = {
     onOpenChange: fn(),
     copy: {
       title: "Sign In to Grade10",
-      providerDivider: "or",
+      providerDivider: common.or,
       legal: figmaLegal,
     },
     providerSlot: googleContinue,
@@ -196,7 +199,7 @@ export const WithProviderSlot: Story = {
   args: {
     copy: {
       title: "Sign In to Grade10",
-      providerDivider: "or",
+      providerDivider: common.or,
       legal: figmaLegal,
     },
     providerSlot: (
@@ -272,7 +275,7 @@ export const ProviderThatHasNotDrawnYet: Story = {
   args: {
     copy: {
       title: "Sign In to Grade10",
-      providerDivider: "or",
+      providerDivider: common.or,
       legal: figmaLegal,
     },
     providerSlot: <div data-slot="sign-in-provider" />,
@@ -466,7 +469,7 @@ export const FromAddToCart: Story = {
     open: false,
     copy: {
       title: "Sign In to Add to Cart",
-      providerDivider: "or",
+      providerDivider: common.or,
       legal: figmaLegal,
     },
     providerSlot: googleContinue,
