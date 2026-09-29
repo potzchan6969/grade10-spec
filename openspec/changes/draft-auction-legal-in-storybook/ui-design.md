@@ -10,7 +10,7 @@ adjacent surfaces settled in Storybook rather than Figma.
 
 ::story{id="pages-legal--terms-of-service" title="Terms of Service"}
 
-Site header, centred document title, two-line last-updated block, section
+Site header, centred document title, one-line last-updated block, section
 list, footer. Footer LEGAL links reach this story and Privacy.
 
 ### Privacy Policy
@@ -38,10 +38,10 @@ catalogs until a publish change.
 | Element | Treatment |
 | --- | --- |
 | Page title | `text-4xl` → `sm:text-5xl` → `lg:text-6xl`, bold, centred |
-| Last updated | Two lines — label then date; `text-base`; `text-secondary-foreground`; centred; `gap-lg` under the title |
+| Last updated | Label and date on one line; `text-base`; `text-secondary-foreground`; centred; `gap-lg` under the title |
 | After last updated | `mt-20` (80px) before the first section |
-| Section headings | `text-3xl font-semibold` |
-| Section body | `text-lg`; `text-foreground` |
+| Section headings | `text-xl font-semibold` |
+| Section body | `text-base`; `text-foreground` |
 | Between sections | `gap-16` (64px) |
 | Page padding | `py-20` (80px) top and bottom |
 
