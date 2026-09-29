@@ -308,7 +308,7 @@ receipt's receipt ID and internal audit number, per
 | Field | Notes |
 | --- | --- |
 | Log type | Address reopened, address recorded, order edited before send, sent, expired, reissued, proof uploaded, proof confirmed, proof returned, paid, payment recorded, cancelled, refunded, payment attempt failed, flagged payment, flag cleared |
-| Timestamp | Stored in UTC, displayed in the operator's own timezone |
+| Timestamp | Stored in UTC, displayed in Hong Kong time for every operator |
 | Invoice ID | The invoice the entry concerns |
 | Internal audit number | Sent, reissued, paid and payment recorded entries: the number of the invoice or receipt the entry issued |
 | Invoice status after the log entry | |
@@ -1236,7 +1236,7 @@ moment of send, or the current deadline on a reissue that keeps it.
 - **WHEN** an operator reads its send dialog at 2026-09-12T09:00:00Z and sends
   it then
 - **THEN** the dialog showed a payment deadline of 2026-09-19T09:00:00Z, to the
-  minute, in the operator's own time zone
+  minute, in Hong Kong time
 - **AND** the invoice carries that deadline
 
 ### Requirement: Dispatch and delivery are recorded on the order
