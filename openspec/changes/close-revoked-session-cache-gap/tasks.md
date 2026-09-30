@@ -32,11 +32,11 @@ as its input, and group 1 landed.
   admin console, each with a browse read on the collector site warmed
   beforehand, confirming the next read closes without waiting on the
   five-minute cache
-- [ ] 2.2 Flip the cases the walks decide with
+- [x] 2.2 Flip the cases the walks decide with
   `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks'
   own commit; name any case that stays manual in the suite and in the
   walk's `rounds.md` row
-- [ ] 2.3 Verify: `pnpm run tcs:validate`, `pnpm run validate:changes close-revoked-session-cache-gap`
+- [x] 2.3 Verify: `pnpm run tcs:validate`, `pnpm run validate:changes close-revoked-session-cache-gap`
 
 ## 3. Bound the close to 70 seconds everywhere (grade10) (owner: @sean)
 
