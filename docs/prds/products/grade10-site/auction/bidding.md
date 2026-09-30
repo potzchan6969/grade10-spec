@@ -2,6 +2,7 @@
 title: Bidding
 spec: grade10-site/auction/auction
 order: 3
+reviewed: 2026-09-30
 ---
 
 How a lot is won: the rules every bid is held to, the panel a collector bids
@@ -284,6 +285,9 @@ the same facts sit in the five-column table.
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
 
+- **Tabs** — Active, Upcoming and Ended by bidding window, opening on
+  Active; the title count stays the total, and an empty tab says it has no
+  lots
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
