@@ -42,10 +42,10 @@
 **I want** to withdraw one card until the batch closes, refunding its POS line and releasing it against a hand-back receipt,
 **so that** the card leaves the intake bag with a record and the rest go on.
 
-### grade10-admin-grading-counter-US-08: Approver waives an upcharge with a second person
+### grade10-admin-grading-counter-US-08: Approver waives an upcharge or a card's storage with a second person
 
 **As a** member of shop staff holding `grading:approve`,
-**I want** to waive the difference the sheet charged with a reason and a second approve holder who is not me, once the cards are back,
+**I want** to waive the difference the sheet charged, or a card's storage, with a reason and a second approve holder who is not me, once the cards are back,
 **so that** nobody can write off money alone and the collector's due drops to nothing before they collect.
 
 ### grade10-admin-grading-counter-US-09: Approver records a payout for a card that did not come back
@@ -69,7 +69,7 @@
 ### grade10-admin-grading-counter-US-12: Operator posts the written notice from the Notice due rung
 
 **As a** member of shop staff working the Ready view,
-**I want** a submission uncollected past the notice day to ask me for the notice, and to record the posting date and the tracking once it is in the post, the email going the same day and the 30 days counting from that date,
+**I want** a submission uncollected past the notice day to ask me for the notice, and to record the posting date and the tracking once it is in the post, the email going the same day and the notice period counting from that date,
 **so that** the notice is a fact with a date on it and nothing after it runs off a guess.
 
 ### grade10-admin-grading-counter-US-13: Admin reconstructs one submission's history on the audit chain

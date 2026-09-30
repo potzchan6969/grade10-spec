@@ -461,6 +461,14 @@ pass it.
 - **WHEN** the operator checks the cards in
 - **THEN** it is refused by name and the counter offers the next drop-off
 
+#### Scenario: grade10-admin-grading-counter-SC-108 - The desk reads the safe before the first card is checked
+**Serves:** grade10-admin/grading/batches#grade10-admin-grading-batches-US-05 - the operator keeps the declared value in the safe under its cap
+
+- **GIVEN** a cap of 30000000 HKD minor units, 29900000 HKD minor units already held, and a booked submission declaring 200000 HKD minor units
+- **WHEN** the operator opens its hand-in
+- **THEN** before any card is checked the desk says the list would carry the safe past its cap, by name
+- **AND** it offers the next drop-off, and the till is not opened
+
 ### Requirement: A refused card carries its reason in the collector's words and is never charged
 
 Refusing a card takes it off the list and leaves the rest of the hand-in
@@ -812,7 +820,7 @@ the jobs.
 | --- | --- |
 | Header | read the summary, the status word, the declared total, what is due, what came back ungraded and the batch it is in; reach the collector by email, phone and click-to-chat templates; work the drop-off or the pickup |
 | Cards | read each card's intake id, declared value, level and the level it was moved to, grade and certificate in the grader's words, and its outcome; check, add, refuse or withdraw a card where the status allows |
-| Money | read what was paid at hand-in with the till's reference, the upcharge, the storage accrued, what is still to settle, refunds and payouts; record a settlement, waive an upcharge, record or reverse a payout |
+| Money | read what was paid at hand-in with the till's reference, the upcharge, the storage accrued, what is still to settle, refunds and payouts; record a settlement, waive an upcharge or a card's storage, record or reverse a payout |
 | Documents | read the sealed documents with their fingerprints; show one on the iPad, copy its link, or send it again |
 | Timeline | read every event with the figures it carried |
 
@@ -922,8 +930,8 @@ read, and a staff-only entry SHALL reach no collector surface and no letter.
 No one person writes money off, pays it out, or changes what the counter
 charges.
 
-**Two people** - waiving an upcharge, recording or reversing a payout, and
-writing a money setting SHALL each take a reason and a second holder of
+**Two people** - waiving an upcharge or a card's storage, recording or
+reversing a payout, and writing a money setting SHALL each take a reason and a second holder of
 `grading:approve` who is not the person recording it. A second approver who is
 the recorder SHALL be refused by name.
 
@@ -933,35 +941,46 @@ under their own sign-in, on their own console. A request alone SHALL move no
 money, and the approval SHALL record the request's figures unchanged. No act
 SHALL take the second person's name or grants from the recorder.
 
-**Not before the cards are back** - waiving an upcharge SHALL be offered only
-once the submission's cards are back at the shop, because there is nothing to
-write off before.
+**Not before the cards are back** - a waiver SHALL be offered only once the
+submission's cards are back at the shop, because there is nothing to write
+off before.
 
 **Its own record** - a waiver SHALL be written as a record of its own beside
-what the till took, never as an edit of it, and SHALL name the card it waives.
+what the till took, never as an edit of it, and SHALL name the card it waives
+and its kind, upcharge or storage, so that what is due nets each kind against
+its own waivers. A storage waiver SHALL be at most the storage accrued and
+unsettled on that card when it is asked; storage accruing after it stays due.
 
 #### Scenario: grade10-admin-grading-counter-SC-59 - A waiver takes a second approve holder
-**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
+**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
 - **GIVEN** a `ready` submission with an upcharge of 20000 HKD minor units
 - **WHEN** an approve holder waives it with a reason and a second approve holder who is not them
 - **THEN** the waiver is recorded against the card, and what is due drops to nothing
 
 #### Scenario: grade10-admin-grading-counter-SC-60 - The recorder cannot be the approver
-**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
+**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
 - **WHEN** an approve holder approves a waiver they asked for themselves
 - **THEN** it is refused by name and nothing is written
 
 #### Scenario: grade10-admin-grading-counter-SC-61 - Nothing is waived before the cards are back
-**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
+**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
 - **GIVEN** a submission whose cards are still with the grader
 - **WHEN** an approve holder reads the money tab
 - **THEN** waiving the upcharge is not offered
 
+#### Scenario: grade10-admin-grading-counter-SC-109 - A card's storage is waived as an upcharge is, and the waiver names its kind
+**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
+
+- **GIVEN** a `ready` submission of four cards, each owing 3000 HKD minor units of storage, one of them owing an upcharge of 20000 too
+- **WHEN** an approve holder waives that card's storage with a reason and a second approve holder who is not them
+- **THEN** the waiver is recorded against that card as a storage waiver
+- **AND** that card's storage drops to nothing, its upcharge is still due, and the other three cards' storage is still due
+
 #### Scenario: grade10-admin-grading-counter-SC-95 - A second approver without the grant is refused
-**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
+**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
 - **GIVEN** a member of staff whose roles do not hold `grading:approve`, and a waiver an approve holder asked for
 - **WHEN** they approve that waiver on their own console
@@ -1052,10 +1071,13 @@ a holder of `grading:read` alone, it SHALL be refused by name.
 **The email** - the same notice SHALL be emailed to the collector on the day it
 is recorded.
 
-**The clock** - the 30 days the notice gives SHALL run from the posting date
-recorded, and one submission SHALL carry one notice.
+**The clock** - the days the notice gives SHALL be the notice period pinned
+at signing, `grading.notice_period_days`, counted from the posting date
+recorded.
 
-**After it** - once those 30 days have passed the counter SHALL offer nothing
+**One notice** - one submission SHALL carry one notice.
+
+**After it** - once that period has passed the counter SHALL offer nothing
 further, the cards stay the collector's at the shop, and the storage fee goes
 on accruing.
 
@@ -1084,18 +1106,18 @@ on accruing.
   refused by name with the day its notice falls due, and the read holder is
   refused by name
 
-#### Scenario: grade10-admin-grading-counter-SC-67 - The thirty days run from the posting date
+#### Scenario: grade10-admin-grading-counter-SC-67 - The notice period runs from the posting date
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
-- **GIVEN** a notice recorded as posted on a date three days before it was entered
+- **GIVEN** a submission whose pinned notice period is 90 days, and its notice recorded as posted on a date three days before it was entered
 - **WHEN** the submission is read
-- **THEN** the 30 days are counted from the posting date, not from the day it was entered
+- **THEN** the 90 days are counted from the posting date, not from the day it was entered
 - **AND** the collector is emailed the notice on the day it is recorded
 
-#### Scenario: grade10-admin-grading-counter-SC-68 - Nothing further is offered after the thirty days
+#### Scenario: grade10-admin-grading-counter-SC-68 - Nothing further is offered after the notice period
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
-- **GIVEN** a notice posted 31 days ago with the cards still uncollected
+- **GIVEN** a submission whose pinned notice period is 90 days, its notice posted 91 days ago with the cards still uncollected
 - **WHEN** the operator opens the submission
 - **THEN** the counter offers no act beyond the hand-back, and the storage fee goes on accruing
 
@@ -1107,8 +1129,8 @@ waits for.
 **What is a setting** - every clock, cap, threshold, fee-sheet row and diary
 service the counter runs on SHALL be a setting the console reads: the plan's
 nudge and expiry days, the reminder days, the day the storage fee starts and
-its amount per card per month, the notice day, the settlement days, the ID
-glance threshold, the safe's declared cap, the batch cut-off, the reference
+its amount per card per month, the notice day, the notice period the notice
+gives, the settlement days, the ID glance threshold, the safe's declared cap, the batch cut-off, the reference
 rate that reads a USD reference sale in HKD, and the fee sheet one row per
 grader and level with its ceiling, fee, cover rate, estimate and cards a
 submission.
@@ -1313,7 +1335,7 @@ An act absent is better than an act refused, and the console is never the guard.
 | Mint the hand-back receipt, hand over, open a vault case for a slab | operate | `ready` |
 | Post the written notice | operate | `ready`, from the notice day |
 | Show, copy or send a sealed document or the grades message again | operate | once the document is sealed |
-| Waive an upcharge | approve | `returned`, `ready` |
+| Waive an upcharge or a card's storage | approve | `returned`, `ready` |
 | Record or reverse a payout | approve | `returned`, `ready`, `collected` |
 | Write a setting or a fee-sheet row | approve | every status |
 

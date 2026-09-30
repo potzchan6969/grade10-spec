@@ -32,9 +32,11 @@ time to find one collector's cases, read by observing the counter.
   `complete-vault-collector-flow` Q111 for these two lists
 - **One collector's cases** - a name narrows the queue and the held items to
   that collector; nobody is searched by name
-- **A page per collector** - the console's `/collectors/<user id>`: the
-  account's name and email, and every vault case they hold; a first version
-  on the console's own blocks until the designer's page lands
+- **A page per collector** - the console's `/vault/collectors/<user id>`,
+  under the Vault entry, reached from the queue's exact email, phone or case
+  reference search: the account's name and email, and every vault case they
+  hold; a first version on the console's own blocks until the designer's
+  page lands
 
 ## Non-Goals
 

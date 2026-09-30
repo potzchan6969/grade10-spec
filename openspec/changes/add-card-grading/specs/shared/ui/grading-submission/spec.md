@@ -1105,9 +1105,9 @@ into a vault case instead.
 #### Scenario: shared-ui-grading-submission-SC-53 - The posted notice reads its posting day
 **Serves:** If nobody collects - a collector whose cards have been written to about
 
-- **GIVEN** a notice rung posted on a given day, giving 30 days from it
+- **GIVEN** a notice rung posted on a given day, giving 90 days from it
 - **WHEN** `GradingUncollectedLadder` renders
-- **THEN** the posting day and the 30 days are shown
+- **THEN** the posting day and the 90 days are shown
 
 ### Requirement: Every word, figure and act arrives through props
 

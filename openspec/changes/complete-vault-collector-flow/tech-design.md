@@ -241,18 +241,68 @@ The spec governs the confirmations; this is what changes.
   `details`, the stamp that already records the send. A constant
   `acknowledged: true` would answer for whatever the worker stamps, not what
   the collector read
-- **The version is the documents' decision, not the legal identity's** —
-  `documents/plan.ts` holds `COLLECTION_STATEMENT_VERSION`, owned by Legal. The
-  review step shows the statement, or "Being prepared" until Legal writes it,
-  and records the version it showed
+- **The version is the legal-copy table's, not the legal identity's** —
+  `cases.collectionStatement` answers `legalCopy(brand, "collectionStatement")`
+  off the table below, `{ version, text }`, or `{ version: UNWRITTEN_VERSION,
+  text: null }` while Legal has written none; the review step shows the text,
+  or "Being prepared", and sends the version it showed. `documents/plan.ts`
+  holds no version of its own
 - **Production refuses the send while the statement is unwritten** — Q8 as
-  changed at landing: `submitIntake` refuses by name in production while
-  `COLLECTION_STATEMENT` in `documents/plan.ts` is not written, before it
-  writes, so the request stays a draft; outside production the step reads
-  "Being prepared" and the send goes through
+  changed at landing: `submitIntake` refuses `COLLECTION_STATEMENT_UNWRITTEN`
+  in production while the table holds no statement for the brand, before it
+  writes, so the request stays a draft, and the review step shows the
+  refusal by name; outside production the step reads "Being prepared", the
+  send is accepted, and the event records `UNWRITTEN_VERSION` as the version
+  shown
 - Alternatives rejected: the version as an eighth `LEGAL_IDENTITY` field, which
   is not an identity; `pics_acknowledged_at` on `vault_cases`, a second column
-  for a fact one event row already dates
+  for a fact one event row already dates; a `written: false` flag beside a
+  version constant, which says a text exists that nobody can read back
+
+### Legal copy is one versioned table per brand
+
+Counsel's texts are legal wording a record has to be able to quote back, so
+they live where the legal identity does and carry a version the way
+`consentCopy` carries a hash.
+
+- `packages/app-env/src/legalCopy.ts`, beside `legalIdentity.ts` and
+  `consentCopy.ts`: `LEGAL_COPY: Record<Brand, Partial<Record<LegalCopyKind, { version, text }>>>`
+  over the closed set `LEGAL_COPY_KINDS = ["collectionStatement"]`, one
+  entry per brand and kind holding the text in force and its version; a
+  rewrite is a new version on the same entry in one pull request, as
+  Migration Plan step 4 says, and git holds the text a version named
+- `legalCopy(brand, kind)` answers the entry, or
+  `{ version: UNWRITTEN_VERSION, text: null }` for a brand with none —
+  no fallback across brands, as `consentCopy` refuses one, because a
+  fallback puts one brand's legal words on another's paper.
+  `UNWRITTEN_VERSION` is the module's exported constant, since the
+  `cases.submit` input and the event carry a version string
+- **A record keeps the version it printed** — the intake event's
+  `collectionStatementVersion`, and a sealed document through doc-sign's
+  hash of its text
+- Alternatives rejected: a `legal_copy` database table with an admin write —
+  a text nobody reviews in a pull request, and a deploy is already what Legal's
+  other values take; every version kept under its own key — no record reads
+  an old text back, and git holds it; the table in `packages/vault/backend` —
+  grading's agreement and any later product print the same brand's texts, and
+  `consentCopy` already moved out for the same reason; the forfeiture
+  notice's sentences and the money letters' footer on the table — they are
+  the letters' own catalog copy, and no scenario makes them counsel's
+
+### One stored number for every way it is typed
+
+- `canonicalPhone` in `packages/utils/src/phone.ts` folds full-width digits
+  (U+FF10 to U+FF19) and the full-width plus (U+FF0B) to their ASCII forms
+  before it strips spacing, and reads bare digits that are the brand's dial
+  code followed by a number matching its national plan as that number with
+  its `+` — `852 9876 5432` stores as `+85298765432`; any other bare number
+  still answers `needsCountryCode`, and `E164_PATTERN`, with the store's
+  generated `account_profile` CHECK, does not move (Q121)
+- **Platform, not vault** — the store's profile and the till's identify read
+  the same codec, so a number typed one way is one customer in every product;
+  `requireCanonicalPhone` and `searchablePhone` change nothing
+- Alternative rejected: folding in the vault's `cases/phone.ts` alone, which
+  would find at the counter a number the store's profile had refused
 
 ### The calendar file is the booking's own, served and attached
 
@@ -561,7 +611,8 @@ counts, the sums, the net out.
 | `printedValue(ports, field)` | brand, deployEnv, field | the value, a placeholder, or `LEGAL_IDENTITY_UNSET` | pure over `legalIdentity(brand)`; `printedEntity` composes it |
 | `renderVaultLetter(kind, facts)` | a `LetterFacts` member | `{ subject, html, text, attachments? }` or `LEGAL_IDENTITY_UNSET` | pure; run at the head of the act, before its transaction |
 | `letterFacts(db, vaultCase, kind, extra)` | the case and the send's own figures | one `LetterFacts` member | one builder for the send and the retry |
-| `cases.submit` | `{ caseId, collectionStatement: { version } }` | the case, `COLLECTION_STATEMENT_REQUIRED` for a version not in force, or a refusal by name in production while the statement is unwritten | writes the version shown into the event details |
+| `legalCopy(brand, kind)` | brand, kind | `{ version, text }`, or `{ version: UNWRITTEN_VERSION, text: null }` | pure over `LEGAL_COPY`; no default across brands |
+| `cases.submit` | `{ caseId, collectionStatement: { version } }` | the case, `COLLECTION_STATEMENT_REQUIRED` for a version not in force, or `COLLECTION_STATEMENT_UNWRITTEN` in production while the table holds no statement | writes the version shown into the event details |
 | `cases.yourData` | a cursor | classes, standing, documents, holds, the open request | one binding read; no write |
 | `cases.requestErasure` | none | `{ executeAfter }` or `ERASURE_HELD { holds }` | reads holds, then one binding call; no local write |
 | `cases.cancelErasure` | none | void | one binding call |
@@ -598,6 +649,7 @@ changed.
 | `caseDetailSchema` | **BREAKING** `paymentInstructions: string \| null` → `howToPay: { payee, fpsId, bankAccount, reference } \| null`; additive `repayments[].balanceAfterMinor`, `notice`, `forfeiture`, `ended`, `reminders` | `packages/vault/frontend/src/features/custody/cases/{domain,data}` — the model, the mapper, the fixture transport |
 | `vaultCaseSchema` | additive `reference`, `offerExpiresAt`, `dueAt`, `endedAs` | the `cases.mine` and `admin.list` readers in both SPAs |
 | `cases.submit` | input gains `collectionStatement` | the wizard's third step |
+| `@grade10/vault-contracts` `collectionStatementSchema` | **BREAKING** `{ version, written: boolean }` → `{ version, text: string \| null }` | the review step's reader and the fixture transport's `collectionStatement` |
 | `cases.yourData`, `cases.requestErasure`, `cases.cancelErasure` | new, authed | the Your data page |
 | `GET /api/cases/:caseId/visit.ics`, `GET /api/cases/documents.zip`, `GET /api/admin/money-ledger.csv` | new byte routes, all three in `VAULT_PATHS` | the Booked screen, Your data, the ledger view |
 | `admin.queueCounts`, `admin.arrearsSummary`, `admin.policy` (with `keyTerms`) | new admin reads | the landing view and the three dialogs |
@@ -607,6 +659,8 @@ changed.
 | `AuthServiceBinding` | `ownErasureStatus`, `requestOwnErasure`, `cancelOwnErasure` | the vault's erasure router |
 | `@grade10/vault-contracts` | `caseStanding`, `caseEnding`, `offerLapsed`, `identityStanding`, `CASE_REFERENCE_ALPHABET` | both SPAs |
 | `@grade10/app-env` `LEGAL_IDENTITY_FIELDS` | **BREAKING** `paymentInstructions` → `fpsId`, `bankAccount` | `packages/vault/backend/src/cases/read.ts`, `documents/legalEntity.ts`, `check:libs` finding keys |
+| `@grade10/app-env` | `LEGAL_COPY_KINDS`, `legalCopy`, `UNWRITTEN_VERSION` | `documents/plan.ts`, `cases/intake.ts`, `trpc/routers/cases.ts`; grading's agreement, which keeps its template clauses |
+| `@grade10/utils/phone` | `canonicalPhone` folds full-width digits and reads a bare dial code | the store's profile and the till's identify, which accept what they refused and change nothing they accepted |
 | `@grade10/email/render` | the generic letter blocks hoisted beside `BaseLayout` | the auction's letter, unchanged in output |
 | `@grade10/worker` | the dev outbox beside `devOnly` | auth's `magicLinkOutbox`, moved |
 | `@grade10/utils/zip` | new export and its Handbook card line | `packages/wallet-pass`, which loses its copy |
@@ -640,6 +694,9 @@ changed.
 - **[A CSV becomes an unbounded export]** → the route takes the ledger's cursor
   and limit, so it can answer no more than one page, and the chain row says the
   filter and how many
+- **[A number the store's profile refused is found at the counter]** → one
+  codec in `@grade10/utils/phone` for every product; the vault folds nothing of
+  its own
 
 ## Migration Plan
 
@@ -655,8 +712,8 @@ changed.
    migration row leaves `pnpm db:status` diverged
 4. One pull request per Legal-owed value, each redeploying every `app-env`
    reader: Finance owns `fpsId` and `bankAccount` in `legalIdentity.ts`, Legal
-   owns `licenceWording` and `licenceNumber` there and
-   `COLLECTION_STATEMENT_VERSION` in `documents/plan.ts`, and the Owner the
+   owns `licenceWording` and `licenceNumber` there and the text in
+   `legalCopy.ts`, each rewrite a new version, and the Owner the
    complaints contact. Until they answer the
    block prints its placeholders outside production and the money acts refuse
    in it; production intake is held until the collection statement is

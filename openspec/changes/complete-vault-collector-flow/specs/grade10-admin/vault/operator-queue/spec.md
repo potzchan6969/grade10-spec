@@ -151,6 +151,13 @@ queue with nothing in it.
 - **WHEN** an operator searches for the same number with spaces in it
 - **THEN** the case is found
 
+#### Scenario: grade10-admin-vault-operator-queue-SC-07a - A number typed in full-width digits or with a bare dial code is found
+**Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
+
+- **GIVEN** a case stored under `+85298765432`
+- **WHEN** an operator searches for `９８７６ ５４３２`, or for `852 9876 5432` with no `+`
+- **THEN** the case is found, and the search records neither term
+
 #### Scenario: grade10-admin-vault-operator-queue-SC-08 - A search records itself without the term
 **Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
 

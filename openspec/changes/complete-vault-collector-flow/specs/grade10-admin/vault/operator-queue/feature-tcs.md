@@ -293,6 +293,8 @@ Runs once per row of **Test data**.
 | with spaces between the groups |
 | with a leading + and the country code |
 | with the country code's leading zeros instead of + |
+| with the country code and no + before it |
+| in full-width digits, as a Chinese keyboard types them |
 
 **Steps:**
 
@@ -1757,6 +1759,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US1-TC4-1` | Corrected | the durable rule badges a valuation untouched for *more* than 7 days, which `grade10-admin-vault-operator-queue-SC-03` walks at 8; the row expecting the badge at exactly 7 days moved past it |
 | `grade10-admin-vault-operator-queue-US1-TC5-1`, `grade10-admin-vault-operator-queue-US1-TC6-1`, `grade10-admin-vault-operator-queue-US4-TC7-1` | Kept, no scenario | presentation only: a pending or failed read is decided by the panel's colocated test, and the ui-design Loading and Error rows carry that same disposition |
 | `grade10-admin-vault-operator-queue-US2-TC1-1`, `grade10-admin-vault-operator-queue-US2-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-07` |
+| `grade10-admin-vault-operator-queue-SC-07a` | Scenario added | `grade10-admin-vault-operator-queue-US2-TC2-1`'s full-width and bare-dial-code rows: decided at landing, one codec for every way a number is typed |
 | `grade10-admin-vault-operator-queue-US2-TC3-1` | Folded | `grade10-admin-vault-operator-queue-SC-47`: the case-id prefix was required and proved by no scenario |
 | `grade10-admin-vault-operator-queue-US2-TC4-1` | Folded | `grade10-admin-vault-operator-queue-SC-48`: the refusal to match part of a contact column, likewise |
 | `grade10-admin-vault-operator-queue-US2-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-26` |

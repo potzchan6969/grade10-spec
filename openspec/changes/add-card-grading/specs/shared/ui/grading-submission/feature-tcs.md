@@ -1468,7 +1468,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Notice story gives `GradingUncollectedLadder` a notice rung carrying a posting day and the 30 days it gives.
+* The Notice story gives `GradingUncollectedLadder` a notice rung carrying a posting day and the 90 days it gives.
 
 **Steps:**
 
@@ -1477,7 +1477,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The notice rung names the posting date and the 30 days.
+* The notice rung names the posting date and the 90 days.
 
 ### shared-ui-grading-submission-US1-TC45-1: A withdrawn, paid out or vaulted card is not counted held
 

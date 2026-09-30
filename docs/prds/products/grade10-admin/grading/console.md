@@ -116,6 +116,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
   payouts; once the cards are back, a waiver or a payout, its own record by till or transfer, reversed if the card turns up
 - ❓ **After a reversal** — whether the collector repays the payout and the refunded fee at the till — Operations
 - ❓ **A payout received** — stamped when a till payout is recorded; a transfer by a later act, or not at all — Operations
+- ❓ **A storage waiver for the whole submission** — one ceremony for four cards, or per card as the upcharge is — Operations
 - 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter carried it
 - 🚧 **Timeline tab** — every event with its figures and the grader's stages in its words; staff-only entries stay here
 - 🚧 **Cancel** — staff cancel a planned or booked submission from its page on the collector's word, the drop-off going

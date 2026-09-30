@@ -864,6 +864,47 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name, naming the Express submission as the one holding the order, and the Regular submission shows no fee line and no new timeline entry.
 * Step 3 writes nothing and shows the Express submission's own line from step 1.
 
+### grade10-admin-grading-counter-US2-TC15-1: The desk reads the safe before the first card is checked
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-02
+
+**Pre-conditions:**
+
+* The safe's declared cap is written as below, as *Writing a money setting* says, on a stack holding no other `checked_in`, `returned` or `ready` submission.
+* The safe holds the declared value below: one submission seeded at `checked_in` at Super Express, as *Seeding a submission* says, with eight cards, seven of 3900000 minor units and one of 2600000.
+* A further submission is seeded at `booked` with one card of the declared total below, its visit today, no card checked.
+* admin(holds `grading:operate`) is on <grade10 admin grading url>'s Today strip.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Safe declared cap | 30000000 minor units (HKD 300,000.00) |
+| Safe currently holds | 29900000 minor units (HKD 299,000.00) |
+| This list's declared total | 200000 minor units (HKD 2,000.00) |
+| Held if handed in | 30100000 minor units (HKD 301,000.00), past the cap |
+
+**Steps:**
+
+1. Click the booked submission on the Today strip to open its hand-in.
+2. Read the runbook's first step.
+
+**Expected Results:**
+
+* Step 2 reads, by name, that the list would carry the safe past its cap, and offers Book the next drop-off.
+* No card can be checked, and the till step is not offered.
+
 ---
 
 ## grade10-admin-grading-counter-US3: Operator refuses one card and the rest go on
@@ -1983,7 +2024,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-grading-counter-US8: Approver waives an upcharge with a second person
+## grade10-admin-grading-counter-US8: Approver waives an upcharge or a card's storage with a second person
 
 **As a** member of shop staff holding `grading:approve`,
 **I want** to waive the difference the sheet charged with a reason and a second approve holder who is not me, once the cards are back,
@@ -2166,6 +2207,48 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The waiver, its reason and both admins' names appear as an event filed under the submission.
+
+### grade10-admin-grading-counter-US8-TC6-1: A card's storage is waived as an upcharge is, and the waiver names its kind
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-08
+
+**Pre-conditions:**
+
+* A submission of four cards is `ready` with its ready day 100 days back, as *Seeding a submission* says, so each card owes one month's storage; one of them was moved from Regular to Express at receiving, so it owes the upcharge below too.
+* admin A(holds `grading:approve`) is on the Money tab of <grade10 admin grading submission url> for it.
+* admin B(holds `grading:approve`) has the same submission's Money tab open in their own console.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Storage per card | 3000 minor units (HKD 30.00), one month started |
+| Upcharge on the moved card | 60000 minor units (HKD 600.00) |
+| Reason | The collector was in hospital for the month |
+
+**Steps:**
+
+1. As admin A, click Waive the storage on the moved card.
+2. Type the reason.
+3. Click Ask for approval.
+4. As admin B, reload the Money tab and click Approve on the request waiting on a second person.
+
+**Expected Results:**
+
+* Step 3 leaves the due as it was and shows the request waiting for a second approve holder, named as a storage waiver.
+* Step 4 records a storage waiver against the moved card, with the reason, admin A as the recorder and admin B as the approver.
+* The moved card's storage drops to nothing, its upcharge of 60000 minor units (HKD 600.00) is still due, and the other three cards still owe 3000 minor units each.
 
 ---
 
@@ -2948,7 +3031,7 @@ Runs once per row of **Test data**.
 ## grade10-admin-grading-counter-US12: Operator posts the written notice from the Notice due rung
 
 **As a** member of shop staff working the Ready view,
-**I want** a submission uncollected past the notice day to ask me for the notice, and to record the posting date and the tracking once it is in the post, the email going the same day and the 30 days counting from that date,
+**I want** a submission uncollected past the notice day to ask me for the notice, and to record the posting date and the tracking once it is in the post, the email going the same day and the notice period counting from that date,
 **so that** the notice is a fact with a date on it and nothing after it runs off a guess.
 
 ### grade10-admin-grading-counter-US12-TC1-1: A submission ready past the notice day asks staff for the notice
@@ -3067,13 +3150,13 @@ Runs once per row of **Test data**.
 
 * Record stays disabled, naming the missing tracking field.
 
-### grade10-admin-grading-counter-US12-TC4-1: The 30 days run from the posting date, not the notice day
+### grade10-admin-grading-counter-US12-TC4-2: The notice period runs from the posting date, not the notice day
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -3094,6 +3177,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | Notice day | 180 |
+| Notice period | 90 days, as seeded and pinned at signing |
 | Posted | day 183, 3 days ago |
 | Recorded | day 186, today |
 | Tracking number | RR123456785HK, any registered-post number |
@@ -3101,19 +3185,19 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click Post the notice, enter the date 3 days ago as the posting date and the tracking number, and click Record.
-2. Click the Timeline tab and read the notice entry's 30 days.
+2. Click the Timeline tab and read the notice entry's period.
 
 **Expected Results:**
 
-* The 30 days are counted from day 183, the posting date, not from day 186, the day it was entered.
+* The 90 days are counted from day 183, the posting date, not from day 186, the day it was entered.
 
-### grade10-admin-grading-counter-US12-TC5-1: Nothing more is offered once the 30 days pass
+### grade10-admin-grading-counter-US12-TC5-2: Nothing more is offered once the notice period passes
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -3126,7 +3210,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission is seeded at `ready` with `readyAt` 211 days back, as *Seeding a submission* says, and its notice is recorded with a posting date 31 days ago and a tracking number, the cards still uncollected.
+* A submission is seeded at `ready` with `readyAt` 271 days back, as *Seeding a submission* says, its pinned notice period the seeded 90 days, and its notice is recorded with a posting date 91 days ago and a tracking number, the cards still uncollected.
 * admin(holds `grading:operate`) is signed in to the console.
 
 **Steps:**
@@ -4076,8 +4160,8 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US12-TC1-1` | Covered | `grade10-admin-grading-counter-SC-08`, `grade10-admin-grading-counter-SC-65` |
 | `grade10-admin-grading-counter-US12-TC2-1` | Covered | `grade10-admin-grading-counter-SC-66`, `grade10-admin-grading-counter-SC-67` |
 | `grade10-admin-grading-counter-US12-TC3-1` | Covered | `grade10-admin-grading-counter-SC-66` |
-| `grade10-admin-grading-counter-US12-TC4-1` | Covered | `grade10-admin-grading-counter-SC-67` |
-| `grade10-admin-grading-counter-US12-TC5-1` | Covered | `grade10-admin-grading-counter-SC-68` |
+| `grade10-admin-grading-counter-US12-TC4-2` | Covered | `grade10-admin-grading-counter-SC-67`; `<v>` 2: the period is the 90 pinned at signing |
+| `grade10-admin-grading-counter-US12-TC5-2` | Covered | `grade10-admin-grading-counter-SC-68`; `<v>` 2: the period is the 90 pinned at signing |
 | `grade10-admin-grading-counter-US13-TC1-1` | Covered | `grade10-admin-grading-counter-SC-56` |
 | `grade10-admin-grading-counter-US13-TC2-1` | Covered | `grade10-admin-grading-counter-SC-58` |
 | `grade10-admin-grading-counter-US13-TC3-1` | Covered, deferred at review | `grade10-admin-grading-counter-SC-57`; the letters step was added at review. Still `draft`: no act or surface marks a timeline entry staff-only, so no tester can reach the case's starting state; the spec's author owes it |
@@ -4111,6 +4195,8 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-SC-105` | Case added, added after the run | `grade10-admin-grading-counter-US12-TC6-1`: decided outside the blind pass; the address is personal data, so only a holder who may post the notice reads it, and only while the notice is due |
 | `grade10-admin-grading-counter-SC-106` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC8-1`: decided outside the blind pass; staff cancel on the collector's word inside the collector's own window, the drop-off going with it, filed on the audit chain and no message sent |
 | `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-1`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once the visit's start time comes or a card is checked or refused, a desk that started early included, and the desk refuses the cards instead |
+| `grade10-admin-grading-counter-SC-108` | Case added, added after the run | `grade10-admin-grading-counter-US2-TC15-1`: decided at landing; the desk reads the safe's cap before the first card is checked, and a list the safe cannot take is turned to the next drop-off before the till opens |
+| `grade10-admin-grading-counter-SC-109` | Case added, added after the run | `grade10-admin-grading-counter-US8-TC6-1`: decided at landing; a card's storage is waived by the same two people as an upcharge, and the waiver names its kind so each kind nets against its own |
 | `grade10-admin-grading-counter-SC-91` | Case added at review | `grade10-admin-grading-counter-US4-TC12-1` — three wrong codes, each refused on the field and on the timeline, nothing closing the field, and the ID glance as the fallback; `grade10-admin-grading-counter-US4-TC4-1` asserts one wrong code only |
 | `grade10-admin-grading-counter-SC-43` | Case added at review | `grade10-admin-grading-counter-US11-TC9-1` — the receipt refused by name before the iPad while storage is unpaid; `grade10-admin-grading-counter-US4-TC8-1`'s run has only an unticked item |
 | `grade10-admin-grading-counter-SC-07` | Case added at review | `grade10-admin-grading-counter-US12-TC7-1` — a submission read on its 29th and 30th day ready, badged uncollected on the second read with nothing written between; one condition, one case |

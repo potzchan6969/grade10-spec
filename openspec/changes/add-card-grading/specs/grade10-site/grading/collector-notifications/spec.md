@@ -191,7 +191,7 @@ and the release stops at the written notice.
 - **The days** — the reminder days, the storage day and the notice day SHALL be the settings the console holds, seeded at 30 and 60 days, day 90 and day 180 from the day the cards became ready, and counted on the shop's clock.
 - **A reminder costs nothing** — every reminder SHALL name the pickup code, what is due, the storage day and the notice day, and SHALL say that the reminder itself adds nothing.
 - **The storage message** — it SHALL name the fee for each card for each month, what is due now, and the notice day.
-- **The notice** — it SHALL name what is due that day, the pickup code, the 30 days it gives from the posting date, and the clause it acts under.
+- **The notice** — it SHALL name what is due that day, the pickup code, the days it gives from the posting date, the notice period pinned at signing, and the clause it acts under.
 - **Once per rung** — a rung already told SHALL never be told again, whatever the cadence of the passes.
 - **The ladder stops** — nothing stronger than the written notice SHALL be sent, and no message SHALL follow it.
 
@@ -213,7 +213,7 @@ and the release stops at the written notice.
 **Serves:** grade10-site/grading/submission-lifecycle#grade10-site-grading-submission-lifecycle-US-08 - the collector reading the notice as the record it is
 
 - **WHEN** staff record the written notice as posted
-- **THEN** the collector is sent it that day, naming what is due, the pickup code, the 30 days it gives from the posting date, and the clause it acts under
+- **THEN** the collector is sent it that day, naming what is due, the pickup code, the days it gives from the posting date as pinned at signing, and the clause it acts under
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-14 - A rung told twice is told once
 **Serves:** Reminders and the notice - the collector not told twice on a day the sweep ran twice
