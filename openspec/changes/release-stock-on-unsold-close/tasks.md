@@ -1,6 +1,6 @@
 # Tasks: Release stock on an Unsold close
 
-`grade10-admin-auction-listing-SC-131` is not planned: no listing carries a
+The reserve-miss scenario, SC-131, is retired: no listing carries a
 reserve price, so a top bid under one cannot arise. The Relist, remarks and
 history decisions in `tech-design.md` move scenarios the deltas still state
 otherwise; both wait on the PM under `awaiting: specs` in `.openspec.yaml`.

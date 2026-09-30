@@ -51,7 +51,7 @@ its listing closes with no winner. Named image sizes and optional alt live in
   - Watchers in Stats: opening Stats shows how many collectors watch the lot, so an operator judges interest beside the bidder count
   - No table column: the Listings table does not show the watch count
 - Unsold close
-  - Stock released: a listing that closes with no winner releases its inventory hold at the close, a reserve miss included, with no operator step
+  - Stock released: a listing that closes with no winner releases its inventory hold at the close, with no operator step
   - Released note: an Unsold listing says its stock was released, and when
   - Relist: an Unsold listing opens a new draft with the same product, quantity and catalogue copy
   - Earlier holds freed: holds left by earlier Unsold closes are released once
@@ -60,8 +60,7 @@ its listing closes with no winner. Named image sizes and optional alt live in
 
 ### Requirement: An Unsold close releases the listing's inventory hold
 
-When a listing closes with no winner - no bid was placed, or the top bid is
-under the reserve - Grade10 SHALL release the listing's whole remaining
+When a listing closes with no winner, Grade10 SHALL release the listing's whole remaining
 inventory hold at that close and SHALL NOT wait for an operator.
 
 - A failed release SHALL be retried until it succeeds and SHALL NOT delay or
@@ -78,20 +77,10 @@ inventory hold at that close and SHALL NOT wait for an operator.
 - **THEN** the listing is Unsold and its hold is released in full
 - **AND** the product's available rises by three
 
-#### Scenario: grade10-admin-auction-listing-SC-131 - A top bid under the reserve releases the hold
-**Serves:** grade10-admin-auction-listing-US-09 - the operator finds the stock back without a step
-
-- **GIVEN** a published listing with an active hold of two units and a top bid
-  under its reserve
-- **WHEN** the listing closes
-- **THEN** the listing is Unsold and its hold is released in full
-- **AND** the product's available rises by two
-
 #### Scenario: grade10-admin-auction-listing-SC-132 - A close with a winner keeps its hold for the sale
 **Serves:** Unsold close - a sold listing's hold is settled by the sale, not released
 
 - **GIVEN** a published listing with an active hold of one unit and a top bid
-  that clears the reserve
 - **WHEN** the listing closes
 - **THEN** no release is written for the hold
 - **AND** the hold stays active until the sale moves it to sold

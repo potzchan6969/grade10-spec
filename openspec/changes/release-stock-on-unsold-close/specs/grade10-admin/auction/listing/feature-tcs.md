@@ -42,10 +42,10 @@ Runs once per row of **Test data**.
 | `<available before>` | 2 units (any count) |
 | `<available after>` | 5 units: `<available before>` plus `<held quantity>` |
 
-| Row | Bids at close | Reserve | Outcome |
-| --- | --- | --- | --- |
-| No bids | None | None set | Closes Unsold, hold released |
-| Reserve miss | A top bid of HKD 800.00 | HKD 1,000.00 (any reserve above the top bid) | Closes Unsold, hold released |
+| Row | Bids at close | Outcome |
+| --- | --- | --- |
+| No bids | None | Closes Unsold, hold released |
+| Top bid demoted | Only `outbid` bids; the top bid's card hold failed before the close | Closes Unsold, hold released |
 
 **Steps:**
 
@@ -95,7 +95,7 @@ Runs once per row of **Test data**.
 
 | Row | `<listing_2>` | Stock outcome |
 | --- | --- | --- |
-| Sold | Closed with a winner, the top bid over any reserve | Hold moves to sold; available stays `<available before>` |
+| Sold | Closed with a winner | Hold moves to sold; available stays `<available before>` |
 | Live | Published, its close still ahead | Hold stays; available stays `<available before>` |
 
 **Steps:**
@@ -127,7 +127,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_3>` closed Unsold with bids under its reserve, and its hold is released.
+* `<listing_3>` closed Unsold with no bids, and its hold is released.
 * `<product_3>` shows `<available before>` units available.
 * admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
 
@@ -233,7 +233,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_5>` | Closed Unsold with no bids, holding 2 units of `<product_5>` |
-| `<listing_6>` | Closed Unsold on a reserve miss, holding 1 unit of `<product_5>` |
+| `<listing_6>` | Closed Unsold after its top bid was demoted, holding 1 unit of `<product_5>` |
 | `<listing_7>` | Closed Unsold, 4 units of `<product_5>` already released |
 | `<listing_8>` | Closed sold, 1 unit of `<product_5>` sold |
 | `<product_5>` | 6 units available before the clean-up (any count) |
@@ -268,5 +268,6 @@ None yet.
 - **Raised, escalated** - the fields Relist carries beyond the PRD's list, answered by the product manager: the Cert ID choice carries and the rest start as on any new draft, recorded in Q6
 - **Raised, rejected** - a Relist on a called-off listing, because a call-off is a choice nobody asked to undo (Q10 in `decisions.md`)
 - **Trimmed by the simpler reading** - the short-stock refusal on Relist Save (the durable draft-save rule proves it), the table sentence on the note, the closed-listing-unchanged clause, and catalog cases that repeat another case or a durable rule
+- **Retired** - SC-131, a top bid under the reserve: no listing carries a reserve price, so the case cannot arise; its id is not reused, and the reserve-miss rows here became a demoted top bid
 - **Contradicted** - none
 - **Uncovered anchors** - none: `grade10-admin-auction-listing-US-09` and `grade10-admin-inventory-catalog-US-09` each have cases; the group anchors `Unsold close` and `Unsold auction stock` are walked by the same cases

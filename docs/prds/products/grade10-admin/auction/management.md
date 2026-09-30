@@ -72,13 +72,10 @@ the card is in the winner's hands. The collector's half is
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
-- 🚧 **Unsold close** — a listing that closes with no winner, a top bid under
-  the reserve included, releases its stock hold at that moment, and the units
-  are available again. The listing's page says the stock was released, with
+- 🚧 **Unsold close** — a listing that closes with no winner releases its
+  stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
-  Stock · Intake](/p/grade10-admin/inventory/catalog#intake).
-  ❓ A top bid under the reserve — no listing carries a reserve today; the PM
-  confirms whether this case stays
+  Stock · Intake](/p/grade10-admin/inventory/catalog#intake)
 - 🚧 **Stock already held** — a listing that closed Unsold before this ships
   still holds its stock. One release frees every such hold, and each shows in
   the inventory history as released by that clean-up
