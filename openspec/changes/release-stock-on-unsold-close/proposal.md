@@ -13,9 +13,8 @@ because the stock is stuck.
 
 ## What Changes
 
-- **Stock returns at the Unsold close.** A listing that closes with no winner,
-  a top bid under the reserve included, releases its hold in that moment. The
-  units are available again and no operator step is needed.
+- **Stock returns at the Unsold close.** A listing that closes with no winner
+  releases its hold in that moment. The units are available again and no operator step is needed.
 - **The listing says so.** An Unsold listing shows that its stock was released,
   and when.
 - **The product page and the history show it.** Available rises by the released

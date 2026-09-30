@@ -8,8 +8,8 @@
   `listingOutcomeExpression` in `repositories/settlementOutcomes.ts` reads a
   `closed` listing with no settlement row as `unsold`.
 - **Reserve** - no listing carries a reserve price in grade10 or in the
-  durable specs; every top bid wins at the close. `grade10-admin-auction-listing-SC-131`
-  cannot arise, and waits on the PM in `.openspec.yaml`.
+  durable specs; every top bid wins at the close. The reserve-miss scenario,
+  SC-131, is retired.
 - **Hold** - Auction reaches Inventory through the `AUCTION_INVENTORY_SERVICE`
   binding. `releaseListingInventoryHold` in `services/inventory.ts` releases a
   listing's active hold for call-off and the order cancel paths.
