@@ -32,11 +32,9 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 | Surface | Consumer | Trust |
 | --- | --- | --- |
 | RPC `Grade10AuctionService` and `ZzzAuctionService` | that storefront's backend | service binding to a named entrypoint; storefront pinned server-side |
-| `GET /api/public/listings/:id` — listing state | storefront frontends | none; edge-cached, uncredentialed CORS |
-| `GET /api/public/listings` — the browse page, filtered and keyset-paged | storefront frontends | none; edge-cached |
-| `GET /api/public/auctions` and `/auctions/:id` — sales and one sale's listings | storefront frontends | none; edge-cached |
-| `GET /api/public/categories` — visible taxonomies and their categories | storefront frontends | none; edge-cached |
-| `GET /api/public/listing-media/:size/*` — named sizes `card`, `detail`, `thumb`, `zoom` (Images transform when the scan exceeds that size's ceiling) | browsers | none; immutable, outside every purge prefix |
+| tRPC `public.listing`, `public.listings`, `public.auctions`, `public.auction`, `public.categories` and `featured.publicList` - a lot by slug, the keyset-paged browse, sales and one sale's lots, visible taxonomies, Featured | storefront frontends | none; answered `private, no-store`, never edge-cached |
+| 🚧 WebSocket `/api/public/live/lot/:id` and `/api/public/live/catalogue` - the lot and catalogue rooms under [Live lots](#live-lots) | storefront frontends | none; `Origin` checked against the storefronts |
+| `GET /api/public/listing-media/:size/*` — named sizes `card`, `detail`, `thumb`, `zoom` (Images transform when the scan exceeds that size's ceiling) | browsers | none; immutable, never purged |
 | tRPC `/api/trpc` and the byte routes under `/api/admin/*` | the grade10 admin panel's auction section | own `AUTH_SERVICE` → grade10-auth |
 | `POST /webhooks/stripe/<storefront>` | Stripe, live and test | signature per storefront × mode |
 | cron, every five minutes | Cloudflare trigger | — |
@@ -59,7 +57,8 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 - Every money transition — bid insert, promote, re-auth swap, close, cancel — runs in one Postgres transaction holding `SELECT … FOR UPDATE` on the listing row
 - A hold row changes state only inside one of those transactions, never ahead of the lock
-- No Durable Objects: state that must be consistent lives in one store with one lock, not two
+- No Durable Object holds auction state: state that must be consistent lives in one store with one lock, not two
+- 🚧 The lot rooms under [Live lots](#live-lots) relay committed state and keep time; they never decide
 
 ### At most one live hold per listing — the current top bid's
 
@@ -86,21 +85,24 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ### Ends means ends
 
-- A bid wins only if its hold is confirmed before `ends_at`; `recordHoldCapturable` guards on the clock, not on sweep timing, so the outcome never depends on when the cron ran
-- The extension (applied at bid insert, under the lock) is what gives a last-minute hold time to confirm
-- `snipe_window_seconds` is the trigger and `extension_seconds` is the reach: a bid landing that close to the end moves `ends_at` to now plus the reach, so a short window can buy a long tail
-- Omitted at create, both default to 1800 seconds (30 minutes); both zero together means extension off
-- Every late bid extends again — the tail is continuous — until `scheduled_ends_at + extension_cap_seconds`, which truncates rather than rejects, so a cap below the reach is how you spell a hard final deadline
-- Listing state carries the extension policy (`snipe_window_seconds`, `extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
-- The window narrows and never widens; row checks keep it inside the reach and keep an armed listing from carrying a cap of zero — either shape would accept late bids and silently never extend
+- A bid is placed when its hold confirms: `placeBid` records it `pending`, and `recordHoldCapturable` accepts it under the lock, judged by the clock read after the lock, so the outcome never depends on when the cron ran
+- A confirm that lands after the effective close is too late and its hold is released; the close marks any bid still `pending` as `lost`, with no grace, because a pending bid was never placed
+- Until `scheduled_ends_at` no bid moves the close; at it, a listing with an accepted bid enters extended bidding, and every accepted bid from then on sets `ends_at` to its own confirm time plus `extension_seconds`
+- Omitted at create, `extension_seconds` defaults to 1800 seconds (30 minutes); zero turns extended bidding off
+- `scheduled_ends_at + extension_cap_seconds` truncates the tail rather than rejecting a bid, so a cap below the reach is how you spell a hard final deadline, and a cap of zero behaves as extension off
+- A bid that does not move the public price (a bidder raising their own maximum) never extends
+- A bid confirmed at exactly `scheduled_ends_at` is accepted when extension is on, so the lot's first deadline is one millisecond after it
+- Listing state carries the extension policy (`extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
+- 🚧 Today the late window has no upper bound and ignores a cap of zero, so while the sweep lags a confirm after the effective close is accepted; the fix bounds it at `scheduled_ends_at` plus the reach
 
 ## Public reads and cache
 
-### Public reads are anonymous, edge-cached, pseudonymous
+### Public reads are anonymous, uncached, pseudonymous
 
-- Every browse read is a plain GET published with `edgeCache()` — `max-age=5` plus 55 seconds of `stale-while-revalidate` — so a listing going viral costs one query per five seconds
-- One listing carries `listing:<id>`; the listing list carries `listings:index`; the sales list carries `auctions:index`; a sale's page carries its own `auction:<id>` as well as the listing list tag, because a listing writer cannot know which sale page embeds its summary
+- Every browse read is a `public.*` tRPC query behind the service's session tier, which answers `private, no-store`, so nothing on this surface is edge-cached and every read reaches Postgres
+- A page that polls pays one database read per viewer per poll
+- 🚧 [Live lots](#live-lots) replaces polling: a page reads once and the rooms carry each change
 - Listing state carries the extension policy and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - It publishes less than the rows hold: a `draft` or `canceled` listing reads as not found, `lost_hold` publishes as an ordinary `lost`, and `unsold` folds to `closed` unless the listing chose to expose its reserve state
 - A listing publishes on its own clock, so it can be live under a sale still in `draft`. It lists, and reads with no sale at all — naming the sale is what the draft status is keeping back. The taxonomy `public` flag reads the same way on every anonymous surface: an internal one is absent from the listing payload and is not a browse filter, not merely missing from the taxonomy list
@@ -111,22 +113,62 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - Displays show "Bidder N", never who — a zzz user's identity must not leak to grade10 viewers
 - A sandbox listing is refused outside development, by the same branch on every list as on the single-listing read, or it would be hidden on its own page and listed on the one in front of it
 
-### Purge handles are derived, never spelled twice
+### Only listing media is cached
 
-- Routes are declared relative to the API gateway prefix `createWorkerApp` mounts them under, so a browser and the cache see `/auction/api/public/…` while the route says `/api/public/…`
-- Every purge used to name the declared path, which matched nothing that was ever cached — no error, no metric, just a page stale until its TTL ran out. Both forms now derive from the one service id in `src/publicSurface.ts`, and a test pins the derived value
+- Listing media is the one cached response: its key is the hash of the bytes and it is served `immutable` for a year, so a cached copy can never be wrong and nothing purges it
+- The purge calls still in the code (admin mutations, a bid, the webhook, a sweep pass that moved rows) reach no cached read and change nothing a reader sees
+- 🚧 They go when the change signal under [Live lots](#live-lots) lands, which is what keeps an open page fresh
 
-### Tags first, prefixes only when rows cannot be named
+## Live lots
 
-- Every admin mutation purges tags: the listing's own and the lists it appears on, and both sales when a listing moves between them. A test drives every mutation the router exposes and pins what it drops, including the ones that owe nothing
-- `auctions.update` is the one catalogue writer that also purges the browse prefixes: every listing under the sale carries its title, and a sale of a thousand listings cannot be spelled out as tags
-- A bid purges too — the listing's tag, the listing list, and the sale's page — scheduled the moment the transaction commits and before the Stripe confirm, because an accepted bid has already moved the floor and any extension of `ends_at`
-- Stripe webhooks and any sweep pass that moved a row purge the prefixes alone: a work list reports how many rows it moved, not which
-- Listing media sit outside every prefix on purpose: the key is the hash of the bytes and the response is `immutable` for a year, so a cached one can never be wrong and a sweep that dropped them would re-fetch every asset on the site every five minutes
+🚧 A lot's clock, price and result reach every open page within a second of the commit that decides them. Postgres still decides everything; a Durable Object per lot only relays what was committed and wakes the worker at the next deadline. The engineering plan is `docs/temp/auction-realtime-plan.md` in the application repository.
 
-### A purge never fails the work that earned it
+::image{src="assets/diagrams/auction-live-lot.svg" alt="How a lot page stays live, in three parts. A page joins: the page sends 3 time probes to the auction worker at the nearest edge and the fastest sets its clock, opens a socket to the lot room, the room reads the lot through the worker once for every page joining at once, and answers hello with the lot. A bid lands: the bidder places a bid through the storefront, the auction worker commits it under the listing lock and the version rises, the storefront answers the bidder, the worker tells the room the listing changed, the room reads the committed lot, sends every page the whole lot at its new version and sets its alarm to the lot's next deadline. The deadline passes: the room's alarm asks the worker to settle the lot, the worker extends or closes it under the lock and returns the lot, and the room sends Ended or Extended bidding and re-arms"}
 
-- The row is committed first and the purge runs behind it on `waitUntil`, with the short TTL as the backstop
+### The room relays; it never decides
+
+- 🚧 One room per public lot and one for the catalogue: each holds WebSockets, one alarm, and in memory the last state it sent
+- The room writes nothing and keeps no storage beyond its alarm: every read and every settle it asks for runs in the auction worker against Postgres, so losing a room loses nothing
+- The worker signals the room after each commit that raised a lot's `version`; the signal is best effort, because the next change, a reconnect, a late touch and the cron all heal a lost one
+- The room reads the committed lot back rather than being handed it, so no writer can send a wrong or out-of-order state
+- Frames carry the whole lot and its `version`, never a diff; a page keeps the highest version it has seen, from a frame or from a read, so one lost frame is healed by the next
+- A room only sends: a page's one message is a keepalive the platform answers without waking it, so an open page that nothing happens on costs nothing, and the database sees one read per change whatever the audience
+- Connecting reads no database: the route checks the id's shape, the page's origin and a per-address rate limit, and the room's first read refuses a lot that is unknown, not public or sandbox
+- A lot that stops being public (canceled, unpublished) is sent as gone, and its sockets close
+- Rooms sit beside the database in Southeast Asia, and the catalogue room sends at most one frame a second
+
+### One rule places a lot on its clock
+
+- 🚧 The bid guards, the close, every read and the browser all work out the phase from one function in `@grade10/auction-contracts`, and the catalogue's ordering uses one SQL fragment built beside it
+
+| Lot | Phase | Countdown to | Takes a bid |
+| --- | --- | --- | --- |
+| before `starts_at` | upcoming | `starts_at` | no |
+| from `starts_at` to `scheduled_ends_at`, the last instant included when extension is on | open | `scheduled_ends_at` | yes |
+| past `scheduled_ends_at`, before the written `ends_at` | extended | `ends_at` | yes |
+| past its effective close, not yet closed | closing | none | no |
+| closed or settled, or canceled after it was listed | ended | none | no |
+
+- Readers use the stored row alone, so the catalogue's paging stays on its columns; only a writer holding the lock asks whether an accepted bid exists
+- The room's alarm writes the first extension one millisecond after `scheduled_ends_at`, so the stored `ends_at` is the truth within a second; frames carry whether an accepted bid exists as a hint, so a page shows Extended bidding at the scheduled close without a flash of Closing
+- A page never shows Ended from its own clock: at the effective close it shows Closing until the room says Ended or brings a later close
+- A new close resets the countdown at once, and at the cap the page says it is the final deadline
+
+### Whoever reaches a due lot first settles it
+
+- 🚧 Settling is one idempotent function in its own transaction under the lock: it publishes, writes the first extension, or closes, whichever is due, and settling twice is a no-op
+- The room's alarm calls it at the lot's next deadline; the alarm is a copy of that deadline, set again from every read the room makes, so a bid that extends the lot or an edit that moves it re-arms the room
+- A read that finds a lot still closing two seconds past its deadline settles it after answering, skipping a lot another transaction holds, so a crowd queues nothing
+- No bid or confirm settles inside its own transaction: it refuses a closing lot, because a close that fails must not fail the bid or the payment webhook that found it
+- The five-minute cron still settles what nobody reached, and counts it as a repair, so the metric shows each time the room was not first
+
+### The page clock follows the server
+
+- 🚧 Countdowns read the server's time, not the device's: 3 probes to a stateless time route at the nearest edge set an offset on the browser's monotonic clock, accurate to half the fastest round trip
+- The page probes again after sleep, a reconnect or a return to the tab, and a correction under a second never makes a countdown jump up
+- One animation-frame loop drives every countdown on the page while it is visible and redraws a countdown only when its displayed value changes; nothing counts timer ticks, so nothing drifts
+- A countdown rounds up, so it reads 0 only once the deadline has passed
+- ❓ Tenths of a second in a lot's last 10 seconds - whole seconds ship first, and the designer decides at review
 
 ## Data model
 
@@ -136,7 +178,7 @@ Own Postgres database (`grade10_auction` in the shared `stg-/prd-grade10` Neon p
 | --- | --- |
 | products | the unit itself: status only — title, copy, category and media belong to the listing, so relisting cannot rewrite a closed listing's record |
 | auctions | the sale event: identity and policy only — no clock, no pricing, and no money path reads it |
-| auction_listings | the listing: copy, pricing, clock, snipe policy, and the current top; its row lock is the money path's serializer |
+| auction_listings | the listing: copy, pricing, clock, extension policy, the current top, and a `version` every change a page shows raises; its row lock is the money path's serializer |
 | category_taxonomies | a way of classifying listings — data, not vocabulary, so a new one is an insert; `public` decides whether anonymous browsing sees it at all, internal by default |
 | categories | a taxonomy's labels |
 | auction_listing_categories | one category per taxonomy per listing; its composite key stops the denormalized taxonomy lying |
@@ -222,7 +264,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 - No `pending` bid by this bidder on this listing already (a partial unique index) — confirm or fail before bidding again
 - Currency matches
 - Amount at least the floor plus `min_increment`, where the floor is the highest of the recorded `top_amount` and every live `pending` bid (`starting_price` alone accepts the first)
-- Insert bid `pending`, a watch, and hold `creating`; inside the snipe window, extend `ends_at` to now plus `extension_seconds`, bounded by the listing's extension cap
+- Insert bid `pending`, a watch, and hold `creating`; the clock does not move here, because the bid is not placed until its hold confirms
 - Commit, then — never under the lock — create and confirm the manual-capture, off-session PaymentIntent in the bidder's storefront account
 - Validating against pending bids makes accepted amounts strictly increasing, so no two bids ever tie
 - The one-pending-bid guard bounds how much unconfirmed money one bidder can pin the floor with
@@ -238,7 +280,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 | Guard | On failure |
 | --- | --- |
 | bid still `pending` | hold → `release_due`; the bid keeps whatever state resolved it |
-| listing `published` and `now < ends_at` | bid → `lost_hold`, hold → `release_due` |
+| the lot takes a bid by [the clock rule](#one-rule-places-a-lot-on-its-clock) at the confirm | bid → `lost_hold`, hold → `release_due` |
 | amount above the recorded `top_amount` | bid → `lost`, hold → `release_due` |
 
 - On success: previous top bid → `outbid` with all its holds in `creating` or `held` → `release_due`; the bid → `top`; `current_top_bid_id` and `top_amount` updated
@@ -269,6 +311,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 - A top bid under the reserve: the listing closes `unsold`, the bid → `lost`, its holds are released, and nobody owes anything
 - No top bid at all: the listing closes as a no-sale
 - A captured settlement then moves the listing to `settled`
+- 🚧 The sweep becomes the net: the lot room's alarm and a late read settle a lot first, as [Live lots](#live-lots) describes
 
 ### Capture asks fresh every attempt
 
@@ -472,8 +515,12 @@ What is left is what a UI has to draw, plus the accounts nobody can provision fr
 
 ## Q & A
 
-- Why not an AuctionRoom DO with WebSocket fan-out?
-  - A second stateful part whose broadcast duplicates what an edge-cached poll gives at any watcher count for free; the public GET is shaped so a broadcast layer could be added later without moving any state.
+- Why a lot room when the service keeps no Durable Object state?
+  - The room holds no fact: it relays what Postgres committed and keeps the alarm. The public reads answer `private, no-store`, so polling costs a database read per viewer, and a Worker alone cannot hold a socket.
+- Why WebSockets and not server-sent events?
+  - A room holding hibernated WebSockets is billed only while it handles a change, an alarm or a connect. An open event stream is an unfinished request, so the room could never hibernate while anyone watched and would be billed for every second a lot is live, and a Worker cannot share one upstream connection between viewers, so moving the stream into a Worker saves nothing.
+- Why no grace for a card still confirming at the close?
+  - A bid is placed when its hold confirms, so a confirm after the close is a bid after the close.
 - Why not TaskScheduler for guaranteed side effects?
   - It gives up after six attempts (~3.5 h) and lives in a DO, which cannot reach Hyperdrive under the test harness; pairing it with the mandatory repair sweep means two delivery mechanisms for one job.
 - Why not a pending-ops outbox table?
