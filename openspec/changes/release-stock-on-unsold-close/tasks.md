@@ -9,7 +9,7 @@ reserve price, so a top bid under one cannot arise.
 - [ ] 1.2 Once the change is deployed, take 🚧 off the Unsold close, Stock already held and Relist lines on the Auction Management page, and the Unsold auction stock and History lines on the Products and Stock page.
 - [ ] 1.3 Verify: `pnpm check:manual`, `pnpm run validate:changes release-stock-on-unsold-close` and `pnpm run lint` in grade10-spec.
 
-## 2. Inventory remarks and holder label (grade10)
+## 2. Inventory remarks and holder label (grade10) (owner: @mason5991)
 
 - [ ] 2.1 Tests for the release remarks and the holder label, in their own commit before the code (`grade10-admin-inventory-catalog-SC-136`, `grade10-admin-inventory-catalog-SC-137`, `grade10-admin-inventory-catalog-SC-138`, `grade10-admin-inventory-catalog-SC-140`)
 - [ ] 2.2 Add `holder_label` to `inventory.reservations`; add optional `holderLabel` to the reserve, adjust, change-product and release inputs, and optional `remarks` to release, through the service and the Auction binding. The changelog records the remarks as its reason; a release with none records null; a write with no label keeps the stored one (`grade10-admin-inventory-catalog-SC-136`, `grade10-admin-inventory-catalog-SC-137`, `grade10-admin-inventory-catalog-SC-138`, `grade10-admin-inventory-catalog-SC-140`)
