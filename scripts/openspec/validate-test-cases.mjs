@@ -27,6 +27,7 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
+import { spawnSync } from "node:child_process";
 import {
   existsSync,
   readdirSync,
@@ -34,7 +35,16 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import {
+  basename,
+  dirname,
+  isAbsolute,
+  join,
+  normalize,
+  relative,
+  resolve,
+  sep,
+} from "node:path";
 import {
   everySection,
   outline,
@@ -101,6 +111,9 @@ Flags:
                     a reviewed case claims
   --root <dir>      Read a store other than this one, which is how the tests
                     read a fixture
+  --app-root <dir>  The application clone a grade10:<path> Decided by line is
+                    held to; without it, the clone this store is a submodule
+                    of, and with neither, the line is held to its form alone
   --help            Print this help and exit
 `;
 
@@ -515,8 +528,39 @@ function checkSuite(root, filePath, rulesRev) {
       }
       // Resolved against the store this run reads, so a fixture is checked
       // against itself. A path that climbs out of the store names a file no
-      // clone of it has, and a directory decides nothing.
+      // clone of it has, and a directory decides nothing. A `grade10:<path>`
+      // resolves in the application clone this run reaches, and is held to
+      // its form alone where it reaches none (Q111).
       for (const { path, line } of tc.decidedBy) {
+        const named = `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\``;
+        const tagged = /^([a-z][a-z0-9-]*):(.*)$/.exec(path);
+        if (tagged) {
+          const [, repo, within] = tagged;
+          if (!APPLICATION_TAGS.has(repo)) {
+            err(
+              line,
+              `${named}, whose tag \`${repo}\` is no application repository — name a store path, or \`grade10:<path>\``,
+            );
+          } else if (within === "") {
+            err(line, `${named}, which names no path after its tag`);
+          } else if (
+            isAbsolute(within) ||
+            normalize(within).split(sep)[0] === ".."
+          ) {
+            err(
+              line,
+              `${named}, which resolves outside the application repository — write it relative to that repository's root`,
+            );
+          } else if (APP_ROOT !== null) {
+            const full = join(APP_ROOT, within);
+            if (!existsSync(full) || !statSync(full).isFile())
+              err(
+                line,
+                `${named}, which the application clone at ${APP_ROOT} does not hold as a file`,
+              );
+          }
+          continue;
+        }
         const full = resolve(root, path);
         if (full !== root && !full.startsWith(root + sep)) {
           err(
@@ -625,10 +669,33 @@ function checkSuite(root, filePath, rulesRev) {
   return { rel, suite, counts, derived, cases: cases.length };
 }
 
+/** Repositories a `**Decided by:**` path may name by tag, `<tag>:<path>`. */
+const APPLICATION_TAGS = new Set(["grade10"]);
+
+/** `--app-root` when given, else the clone `root` is a submodule of, else
+ *  `null`. A given directory that is not there is a mistake, not an absence. */
+function applicationRoot(given, root) {
+  if (given !== undefined) {
+    const tree = resolve(given);
+    if (existsSync(tree) && statSync(tree).isDirectory()) return tree;
+    console.error(
+      `--app-root ${given} is not a directory — pass the directory that holds the application repository`,
+    );
+    process.exit(1);
+  }
+  const git = spawnSync(
+    "git",
+    ["-C", root, "rev-parse", "--show-superproject-working-tree"],
+    { encoding: "utf8" },
+  );
+  const tree = git.status === 0 ? git.stdout.trim() : "";
+  return tree === "" ? null : tree;
+}
+
 // ---------------------------------------------------------------------------
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
-  keys: ["capture-baseline", "root", "swept"],
+  keys: ["app-root", "capture-baseline", "root", "swept"],
   booleans: ["require-suites", "stale-report", "strict"],
   usage: USAGE,
 });
@@ -645,6 +712,10 @@ const args = {
 // it, so a suite's checks are proved by this script rather than by a copy of
 // it beside the test.
 const ROOT = flags.root ? resolve(flags.root) : STORE_ROOT;
+/** The application clone a `grade10:<path>` line resolves in (Q111), or
+ *  `null` where this run reaches none: the store's own CI holds only the
+ *  store, and the application repository's `check:decided-by` holds the file. */
+const APP_ROOT = applicationRoot(flags["app-root"], ROOT);
 const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;
