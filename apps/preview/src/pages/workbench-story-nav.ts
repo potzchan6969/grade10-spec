@@ -3,10 +3,10 @@ const AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID =
   "pages-auction-lot-details--closed-won-payment-due";
 
 /** Storybook story id for the filled Order History page assembly. */
-const ORDER_HISTORY_STORY_ID = "pages-order-history-page--filled";
+const ORDER_HISTORY_STORY_ID = "pages-store-order-history-page--filled";
 
 /** Storybook story id for the filled Order Details page assembly. */
-const ORDER_DETAILS_STORY_ID = "pages-order-details-page--filled";
+const ORDER_DETAILS_STORY_ID = "pages-store-order-details-page--filled";
 
 /** Storybook story id for the Store Locator page assembly. */
 const STORE_LOCATOR_STORY_ID = "pages-store-locator-page--default";
