@@ -25,6 +25,8 @@
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -54,6 +56,8 @@
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(does not hold `user:list`) is signed in.
@@ -81,6 +85,8 @@
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -119,6 +125,8 @@
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -154,6 +162,8 @@
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -200,6 +210,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
@@ -242,6 +254,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
@@ -278,6 +292,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(does not hold `user:ban`) is signed in.
@@ -313,6 +329,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
@@ -343,6 +361,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -449,6 +469,8 @@ peer lockout does not.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:set-role`) is signed in.
@@ -483,6 +505,8 @@ peer lockout does not.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:set-role`) is signed in.
@@ -516,6 +540,8 @@ peer lockout does not.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -552,6 +578,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -624,6 +652,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `admin` and `user:set-role`) is signed in.
@@ -657,9 +687,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -707,6 +739,8 @@ without reading every account.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -744,6 +778,8 @@ without reading every account.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -773,6 +809,8 @@ without reading every account.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -806,6 +844,8 @@ without reading every account.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 

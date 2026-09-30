@@ -247,9 +247,11 @@ Signed in as an operator who holds `session:revoke`.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/sessions.spec.ts`
 
 **Pre-conditions:**
 Signed in as an operator who holds `session:revoke`. <a subject user id> has two sessions, A and B; an ordinary browse read of A's signed-in state has already warmed its cache and is still within the cache window.
