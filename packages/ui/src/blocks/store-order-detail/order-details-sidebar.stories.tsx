@@ -57,8 +57,8 @@ export const WithPointsCredit: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
     expect(canvas.getByText("Points (100 pts)")).toBeVisible();
-    expect(canvas.getByText("−HK$100")).toBeVisible();
-    expect(canvas.getByText("HK$1,438")).toBeVisible();
+    expect(canvas.getByText("−$100.00")).toBeVisible();
+    expect(canvas.getByText("HK$1,438.00")).toBeVisible();
   },
 };
 
@@ -71,7 +71,7 @@ export const WithoutPointsCredit: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
     expect(canvas.queryByText(/Points \(\d+ pts\)/)).not.toBeInTheDocument();
-    expect(canvas.getByText("HK$1,538")).toBeVisible();
+    expect(canvas.getByText("HK$1,538.00")).toBeVisible();
   },
 };
 

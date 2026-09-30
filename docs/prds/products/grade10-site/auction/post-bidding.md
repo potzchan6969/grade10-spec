@@ -2,7 +2,7 @@
 title: Post-Bidding
 spec: grade10-site/auction/winner-order
 order: 4
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 ---
 
 What happens after a lot stops taking bids: the result, then the winner's
@@ -43,8 +43,10 @@ winner of three lots has three orders, each with its own deadlines.
 | Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
-- **Sections** — Order Information with Invoice Status and Collection Method,
-  Order Status with a time per step, and Lots
+- 🚧 **Layout** — the Winner Order design's page body, the one its stories
+  render: the lot once, in its card; alerts under it; a sidebar with the
+  summary, payment method, receipts and addresses. No Order Information,
+  Collection Method, Order Status list or Lots
 - **Progress** — five steps, Address → Invoice → Payment → Shipping →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
 - 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
@@ -62,7 +64,7 @@ winner of three lots has three orders, each with its own deadlines.
 
 ### My Auction Orders
 
-🚧 Every won lot on one list, opened from the account menu beside My
+Every won lot on one list, opened from the account menu beside My
 Auctions: the lot with View lot, the auction, the winning bid, the status and
 one next action — Complete Order Setup while Awaiting Setup, Pay Invoice
 while Pending Payment, an expired invoice included, and View detail
@@ -205,6 +207,9 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
+- **Amount marks** — Order Summary lines use `$` with two decimals
+  (`$12,800.00`), except bare `$0` when the amount is zero; Order Total keeps
+  `HK$` with two decimals (`HK$16,460.00`)
 - 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
   from the Stripe card rule; the operator's own on a bank transfer invoice,
   zero or more, empty read as Free
@@ -247,7 +252,7 @@ doing, under Edge Cases.
 - **Card** — a fresh charge for the order total while the invoice is pending,
   on a stored card or another; Grade10 confirms it on its own, and a declined
   attempt leaves the invoice payable until the deadline
-- 🚧 **Unfinished payment** — a payment that times out or is abandoned says
+- **Unfinished payment** — a payment that times out or is abandoned says
   so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
 - 🚧 **Started in time** — one tried at or after the deadline cannot start, so
@@ -430,7 +435,7 @@ other lots.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the order, invoice and fulfilment records, and the derived status
-- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderDetail` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
+- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, 🚧 `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
 - **Grant** — `auction:moderate`, the one grant that suspends and reinstates, in the auction service and on the admin Users panel
 - **Mail** — `apps/emails/emails/auction/`
 - **Identifiers** — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers)
@@ -438,6 +443,8 @@ other lots.
 
 :::detail{title="Test cases" for="qa"}
 ::cases{id="grade10-site/auction/winner-order"}
+
+::cases{id="grade10-site/auction/auction-orders"}
 
 ::cases{id="grade10-site/auction/order-status"}
 

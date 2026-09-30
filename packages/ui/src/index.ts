@@ -221,11 +221,6 @@ export {
   auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
 export {
-  AuctionOrderDetail,
-  type AuctionOrderDetailCopy,
-  type AuctionOrderDetailProps,
-} from "./blocks/auction-order/auction-order-detail";
-export {
   AuctionOrderEmpty,
   type AuctionOrderEmptyProps,
 } from "./blocks/auction-order/auction-order-empty";
@@ -242,6 +237,12 @@ export {
   AuctionPhoneField,
   type AuctionPhoneFieldProps,
 } from "./blocks/auction-order/auction-phone-field";
+export {
+  AuctionWinnerOrder,
+  type AuctionWinnerOrderCopy,
+  type AuctionWinnerOrderProps,
+  type AuctionWinnerOrderStep,
+} from "./blocks/auction-order/auction-winner-order";
 export type {
   AuctionAddressFormValues,
   AuctionAddressKind,

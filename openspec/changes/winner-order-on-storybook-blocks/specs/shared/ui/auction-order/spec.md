@@ -1,31 +1,24 @@
-## Purpose
-
-The shared blocks a store application composes for a winner's auction orders:
-the My Auction Orders list, its row and empty state, the order detail, and the
-delivery address form. They display what they are given and report what the
-winner did; every status, amount and string belongs to the application.
-
 ## Feature set
 
 - **Order list**
   - AuctionOrderList: the page body with rows or the empty state.
   - AuctionOrderRow: one order with View lot and one next action.
 - **Order detail**
-  - AuctionOrderDetail: the four sections and the status-dependent content.
+  - AuctionWinnerOrder: the Winner Order page body from resolved parts; reports, never acts.
   - AuctionAddressForm: the address fields, errors, Confirm and Cancel.
 
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: The auction-order surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the winner's auction orders — `AuctionOrderList`,
-`AuctionOrderRow`, `AuctionOrderEmpty`, `AuctionOrderDetail` and
+`AuctionOrderRow`, `AuctionOrderEmpty`, `AuctionWinnerOrder` and
 `AuctionAddressForm` — and exactly these types: `AuctionOrderListProps`,
 `AuctionOrderRowProps`, `AuctionOrderRowCopy`, `AuctionOrderEmptyProps`,
-`AuctionOrderDetailProps`, `AuctionOrderDetailCopy`,
-`AuctionAddressFormProps`, `AuctionAddressFormCopy` and
-`AuctionAddressFormValues`.
+`AuctionWinnerOrderProps`, `AuctionWinnerOrderCopy`,
+`AuctionWinnerOrderStep`, `AuctionAddressFormProps`, `AuctionAddressFormCopy`
+and `AuctionAddressFormValues`.
 
 `AuctionOrderRow` SHALL render the lot's key image and title, the auction,
 the winning bid and the order status as the application supplies them, a
@@ -33,17 +26,19 @@ the winning bid and the order status as the application supplies them, a
 supplies. It SHALL report which action was selected and SHALL NOT choose the
 action from the status itself.
 
-`AuctionOrderDetail` SHALL render the Order Information, Collection Method,
-Order Status and Lots sections in that order, and SHALL render in Collection
-Method whichever of an address form, a read-only address, or nothing the
-application supplies, and an invoice with Pay Now only when the application
-supplies one.
+`AuctionWinnerOrder` SHALL render the header, Order Progress, the lot card,
+the alerts and the sidebar that `grade10-site/auction/winner-order` names,
+from the parts the application supplies. It SHALL derive each progress
+step's state from the current step it is given and show no progress when
+given none. It SHALL take every string through its props, amounts and dates
+already formatted, and report each press through a callback; a PDF or
+tracking link SHALL open the URL the application supplies. It SHALL NOT fetch,
+write or read an order status.
 
 `AuctionAddressForm` SHALL render the fields named in
 `grade10-site/auction/winner-order`, mark the required ones, show an
 application-supplied error beside each field it names, and report Confirm with
-the entered values and Cancel. It SHALL NOT validate a phone number's format
-and SHALL NOT offer a billing address.
+the entered values and Cancel. It SHALL NOT validate a phone number's format.
 
 Each of `AuctionOrderRow` and `AuctionAddressForm` SHALL be renderable on its
 own.
@@ -75,7 +70,26 @@ own.
 #### Scenario: shared-ui-auction-order-SC-04 - The detail omits an invoice it was not given
 **Serves:** Order detail - the detail omits an invoice it was not given
 
-- **GIVEN** an `AuctionOrderDetail` supplied with no invoice
+- **GIVEN** an `AuctionWinnerOrder` supplied with no invoice PDF and no pay
+  control
 - **WHEN** it renders
-- **THEN** it shows the four sections
-- **AND** shows no invoice and no Pay Now
+- **THEN** it shows the order summary's lines
+- **AND** shows no Invoice PDF link and no pay control
+
+<!-- trace:scenario id=g10.shared-auction-order.SC-qy4 rev=1 -->
+#### Scenario: shared-ui-auction-order-SC-13 - The page body derives its steps
+**Serves:** Order detail - the block derives the progress from the current step
+
+- **GIVEN** an `AuctionWinnerOrder` supplied with Payment as the current step
+- **WHEN** it renders
+- **THEN** Address and Invoice read complete, Payment current, Shipping and
+  Completed upcoming
+
+<!-- trace:scenario id=g10.shared-auction-order.SC-ofq rev=1 -->
+#### Scenario: shared-ui-auction-order-SC-14 - The page body reports a press
+**Serves:** Order detail - the block reports, never acts
+
+- **GIVEN** an `AuctionWinnerOrder` supplied with a pay control
+- **WHEN** the winner selects it
+- **THEN** the block reports the press through the pay callback
+- **AND** makes no request of its own

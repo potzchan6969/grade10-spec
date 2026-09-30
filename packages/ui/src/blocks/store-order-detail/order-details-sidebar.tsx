@@ -101,9 +101,12 @@ function AddressSection({
  * rows are conditional: discount when present, points credit after discount
  * when applied (cart-drawer parity), refund when issued, shipping hidden for
  * pickup/in-store, tax optional, shipping address hidden offline, loyalty
- * points for logged-in users only. Amounts are consumer-formatted (up to two
- * decimal places, no trailing zeros). Payment row shows a brand logo at
- * `text-sm` line height beside an optional masked number.
+ * points for logged-in users only. Amounts are consumer-formatted: summary
+ * line rows use `$` with at least two decimal places (`$0` stays bare), while
+ * the total keeps the currency mark (`HK$`) and also shows at least two
+ * decimals. Line amounts use `tabular-nums`.
+ * Payment row shows a brand logo at `text-sm` line height beside an optional
+ * masked number.
  */
 function OrderDetailsSidebar({
   copy,
