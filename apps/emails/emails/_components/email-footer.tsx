@@ -5,7 +5,7 @@ export type EmailFooterProps = {
   whyYouGotThis: string;
   brandName?: string;
   canUnsubscribe?: boolean;
-  /** Signed-in mute surface for this lot's email alerts. */
+  /** Signed-in mute surface for this auction's email alerts. */
   muteUrl?: string;
   /** @deprecated Prefer `muteUrl`. */
   unwatchUrl?: string;

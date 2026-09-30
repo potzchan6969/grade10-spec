@@ -1,16 +1,16 @@
 ## User journeys
 
-### grade10-site-auction-listing-page-US-06: Watch a lot and open My Auctions from the toast
+### grade10-site-auction-listing-page-US-06: Watch an auction and open My Auctions from the toast
 
-**As a** collector on a lot I have not bid on,
+**As a** collector on an auction I have not bid on,
 **I want** Watching to tell me email alerts are on and offer My Auctions,
-**so that** I know how to manage that lot without hunting for the account page.
+**so that** I know how to manage that auction without hunting for the account page.
 
-### grade10-site-auction-listing-page-US-07: Unwatch from the lot and undo
+### grade10-site-auction-listing-page-US-07: Unwatch from the auction and undo
 
-**As a** collector who watched a lot without bidding,
+**As a** collector who watched an auction without bidding,
 **I want** Unwatch to confirm alerts are off and let me Undo,
-**so that** a mis-tap does not force me to find the lot again.
+**so that** a mis-tap does not force me to find the auction again.
 
 ### grade10-site-auction-listing-page-US-08: After bidding, Watching stays locked
 

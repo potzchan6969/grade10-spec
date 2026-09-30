@@ -67,14 +67,14 @@ SHALL offer Undo.
 
 <!-- trace:scenario id=g10.auction-account-record.SC-vwk rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-01 - A collector watches from a listing's page
-**Serves:** grade10-site-auction-account-record-US-05 - Watch from the lot with alerts toast
+**Serves:** grade10-site-auction-account-record-US-05 - Watch from the auction with alerts toast
 
 - **GIVEN** a signed-in collector reading a published listing's own page who
   has not bid on it
 - **WHEN** they watch it
 - **THEN** that listing is on My Auctions
 - **AND** the listing's page shows it as watched
-- **AND** a toast says email alerts are on for this lot with **View My
+- **AND** a toast says email alerts are on for this auction with **View My
   Auctions**, which opens My Auctions
 
 <!-- trace:scenario id=g10.auction-account-record.SC-e7i rev=1 -->
@@ -88,7 +88,7 @@ SHALL offer Undo.
 
 <!-- trace:scenario id=g10.auction-account-record.SC-ewb rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-03 - Unwatching can be undone
-**Serves:** grade10-site-auction-account-record-US-05 - Watch from the lot with alerts toast
+**Serves:** grade10-site-auction-account-record-US-05 - Watch from the auction with alerts toast
 
 - **GIVEN** a collector who has just unwatched a listing from its page and
   has not bid on it
@@ -638,7 +638,7 @@ My Auctions without a separate Watch.
 (same enrolment as watching).
 
 **Announced once** - When that bid first bookmarks the listing for the
-collector, Grade10 SHALL announce that email alerts are on for the lot **at
+collector, Grade10 SHALL announce that email alerts are on for the auction **at
 most once per listing per collector**. That fact SHALL be stored on the
 account. A later bid, page view, or device SHALL NOT show the same announcement
 again for that pair.
@@ -659,7 +659,7 @@ again for that pair.
 - **GIVEN** a signed-in collector who has never been shown the bid-alerts
   toast for listing L
 - **WHEN** their bid bookmarks L
-- **THEN** a toast says email alerts are on for this lot
+- **THEN** a toast says email alerts are on for this auction
 - **AND** a second successful bid on L does not show that toast again
 
 ### Requirement: A bid bookmarks the listing on My Auctions

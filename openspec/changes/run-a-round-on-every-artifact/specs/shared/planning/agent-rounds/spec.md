@@ -49,7 +49,7 @@ read again before anything lands after it, with one record row per round.
 - The walk
   - Test first: each task group lands the tests its scenario ids name in their own commit, then the code, then its readers, then the landing summary
   - Demonstrated: the last group walks the journeys end to end through the interface each actor uses and leaves the end-to-end suite, marking each covered case automated
-  - Decided by a test: a case a test in this store decides reads automated from the commit that lands that test, and the suite names the deciding test on the case
+  - Decided by a test: a case a test decides reads automated from the commit that lands that test, and the suite names the deciding test on the case, by the repository's tag when it lives in the application repository
   - Run sheet: the pass on staging leaves automated cases out and says how many
   - Suite on every push: the end-to-end suite runs on every push to `main`, its smoke cases on every staging deploy and cut
   - Tick refused: a task naming a scenario id no test in the tree cites is not ticked; a task naming none is
@@ -1157,6 +1157,9 @@ leave those walks as the change's end-to-end suite.
 - **Marked automated by a test** — a case a unit or script test in this store
   decides reads automated from the commit that lands that test, and the suite
   names the deciding test on the case
+- **Named where it lives** — a case a test or a walk in the application
+  repository decides names it by the repository's tag, `grade10:<path>`; the
+  store holds the form, and the application repository holds the file
 - **Marked by neither** — a case no test and no walk decides stays manual,
   with its reason in the suite
 - **One pass over the whole** — after the last group, one reader argues the
@@ -1204,6 +1207,15 @@ leave those walks as the change's end-to-end suite.
 - **THEN** that case reads automated from the same commit
 - **AND** the case names that test as what decides it
 - **AND** a case only the end-to-end walk drives is flipped by the walk's commit instead, and a case neither decides stays manual with its reason
+
+#### Scenario: shared-planning-agent-rounds-SC-107 - A case an application test decides names it by the repository's tag
+**Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases a test in the application repository already decides
+
+- **GIVEN** an in-flight change's automated case that a test or a walk in the application repository decides
+- **WHEN** the suite's cases are checked
+- **THEN** the case names that test as `grade10:<path>`, and the store's check accepts it without holding the file
+- **AND** the store's check refuses the file when it runs beside an application clone that holds no file there
+- **AND** the application repository's check refuses a `grade10:` path that names no file in it
 
 ### Requirement: The run sheet keeps what only staging proves
 

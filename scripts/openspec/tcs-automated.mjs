@@ -5,10 +5,6 @@
  *
  *   pnpm run tcs:automated <case-id…> --decided-by <path>[,<path>]
  *
- * A path is the store's own, or `<repository>:<path>` for a file in a
- * repository `lib/decided-by.mjs` declares - `grade10:apps/…/offer.spec.ts`
- * for the application repository's end-to-end walk.
- *
  * The walk's last group is what earns the flip: every journey it drove end
  * to end through the interface its actor uses is proved, so its cases stop
  * being a run sheet's to walk by hand (`docs/governance/specs-to-test-cases.md`,
@@ -41,16 +37,11 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
-import {
-  knownPrefixes,
-  knownRepository,
-  readDecidedPath,
-} from "./lib/decided-by.mjs";
 import { caseIndex, commaList, findSuites, PROPERTIES } from "./lib/suites.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
-  "usage: pnpm run tcs:automated <case-id…> [--decided-by [<repository>:]<path>[,…]] [--root <dir>]";
+  "usage: pnpm run tcs:automated <case-id…> [--decided-by <path>[,<path>]] [--root <dir>]";
 
 const AUTOMATION_LINE = /^([-*]\s+\*\*Automation status:\*\*\s*)(\S.*?)\s*$/;
 const HEADING = /^#{2,3}\s/;
@@ -74,16 +65,6 @@ const asked = flags["decided-by"] !== undefined;
 const { values: decidedBy, empty } = commaList(flags["decided-by"]);
 if (asked && (decidedBy.length === 0 || empty > 0))
   fail("--decided-by names an empty path — a doubled or trailing comma");
-// A path in another repository is written `<repository>:<path>`, with the
-// prefixes `lib/decided-by.mjs` declares; any other prefix is refused here,
-// before a suite carries a line `tcs:validate` would refuse.
-const unknown = decidedBy.filter(
-  (path) => !knownRepository(readDecidedPath(path).repo),
-);
-if (unknown.length > 0)
-  fail(
-    `--decided-by names ${unknown.map((one) => `\`${one}\``).join(", ")}, whose prefix names no repository this store knows — write ${knownPrefixes()}, or a bare path for the store's own`,
-  );
 
 // One reading of "which case is where", shared with the rest of the store
 // rather than a second scan over the same headings: `caseIndex` already

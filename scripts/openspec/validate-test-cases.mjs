@@ -27,6 +27,7 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
+import { spawnSync } from "node:child_process";
 import {
   existsSync,
   readdirSync,
@@ -34,7 +35,16 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import {
+  basename,
+  dirname,
+  isAbsolute,
+  join,
+  normalize,
+  relative,
+  resolve,
+  sep,
+} from "node:path";
 import {
   everySection,
   outline,
@@ -42,12 +52,6 @@ import {
 } from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
-import {
-  checkDecidedPath,
-  knownPrefixes,
-  REPOSITORIES,
-  repositoryRoots,
-} from "./lib/decided-by.mjs";
 import {
   activeChangeSpecRoots,
   CASE_STATUSES,
@@ -93,8 +97,6 @@ const USAGE = `Usage: node scripts/openspec/validate-test-cases.mjs [<scope>] [f
   <scope>   Only check suites whose repo-relative path contains this string.
 
 Flags:
-  --quiet           Print only what fails and the closing line (warnings too
-                    under --strict, since --strict fails on them)
   --strict          Treat warnings as errors (legacy-shape suites fail too)
   --stale-report    Skip validation; list suites whose drafts sit below the
                     current tcs-rules revision, each owed a regenerate
@@ -109,23 +111,13 @@ Flags:
                     a reviewed case claims
   --root <dir>      Read a store other than this one, which is how the tests
                     read a fixture
-  --app-root <repository>=<dir>[,…]
-                    The clone a \`<repository>:<path>\` Decided-by path is
-                    checked against, over its variable below. With neither,
-                    those paths are a warning
-  --app-paths-only  Report only what a clone's own repository can fix: the
-                    prefixed Decided-by paths it does not hold. An application
-                    repository's CI runs this, so the store's own findings
-                    stay the store's
+  --app-root <dir>  The application clone a grade10:<path> Decided by line is
+                    held to; without it, the clone this store is a submodule
+                    of, and with neither, the line is held to its form alone
+  --app-paths-only  Report only the grade10:<path> lines the application clone
+                    does not hold. The application repository's CI runs this,
+                    so the store's own findings stay the store's
   --help            Print this help and exit
-
-Environment:
-${Object.entries(REPOSITORIES)
-  .map(
-    ([name, { env }]) =>
-      `  ${env.padEnd(16)}  The ${name} clone, when \`--app-root\` names none`,
-  )
-  .join("\n")}
 `;
 
 const problems = [];
@@ -245,9 +237,6 @@ function checkSuite(root, filePath, rulesRev) {
   // those is a rules revision of its own (Q70) - and the archive is never
   // read here at all.
   const decidedByOwed = changeOf(root, filePath) !== null;
-  /** repo -> the prefixed paths this suite names in a clone nobody pointed
-   *  the run at, warned once per repository rather than once per case. */
-  const unchecked = {};
 
   if (!spec) {
     const missingScope = {
@@ -541,36 +530,60 @@ function checkSuite(root, filePath, rulesRev) {
             `case \`${tc.id}\` writes \`**Decided by:**\` as a classification bullet at line ${line} — the block is the ten properties, and the line is its own, directly after it`,
           );
       }
-      // A bare path resolves against the store this run reads, so a fixture
-      // is checked against itself; a prefixed one against the clone its
-      // repository's variable names. A path that climbs out of its tree names
-      // a file no clone holds, and a directory decides nothing.
+      // Resolved against the store this run reads, so a fixture is checked
+      // against itself. A path that climbs out of the store names a file no
+      // clone of it has, and a directory decides nothing. A `grade10:<path>`
+      // resolves in the application clone this run reaches, and is held to
+      // its form alone where it reaches none (Q111).
       for (const { path, line } of tc.decidedBy) {
-        const { verdict, repo } = checkDecidedPath(root, path, APP_ROOTS);
-        const tree = repo === null ? "the store" : `the ${repo} clone`;
-        const said = `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\``;
-        if (verdict === "unknown")
+        const named = `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\``;
+        const tagged = /^([a-z][a-z0-9-]*):(.*)$/.exec(path);
+        if (tagged) {
+          const [, repo, within] = tagged;
+          if (!APPLICATION_TAGS.has(repo)) {
+            err(
+              line,
+              `${named}, whose tag \`${repo}\` is no application repository — name a store path, or \`grade10:<path>\``,
+            );
+          } else if (within === "") {
+            err(line, `${named}, which names no path after its tag`);
+          } else if (
+            isAbsolute(within) ||
+            normalize(within).split(sep)[0] === ".."
+          ) {
+            err(
+              line,
+              `${named}, which resolves outside the application repository — write it relative to that repository's root`,
+            );
+          } else if (APP_ROOT !== null) {
+            const full = join(APP_ROOT, within);
+            if (!existsSync(full) || !statSync(full).isFile())
+              errApp(
+                line,
+                `${named}, which the application clone at ${APP_ROOT} does not hold as a file`,
+              );
+          }
+          continue;
+        }
+        const full = resolve(root, path);
+        if (full !== root && !full.startsWith(root + sep)) {
           err(
             line,
-            `${said}, whose prefix \`${repo}:\` names no repository this store knows — write ${knownPrefixes()}, or a bare path for the store's own`,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which resolves outside the store — write it relative to the repository root`,
           );
-        else if (verdict === "unchecked") {
-          unchecked[repo] ??= [];
-          unchecked[repo].push(path);
-        } else if (verdict === "outside")
-          (repo === null ? err : errApp)(
+          continue;
+        }
+        if (!existsSync(full)) {
+          err(
             line,
-            `${said}, which resolves outside ${tree} — write it relative to the repository root`,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which does not exist in this checkout`,
           );
-        else if (verdict === "missing")
-          (repo === null ? err : errApp)(
+          continue;
+        }
+        if (!statSync(full).isFile())
+          err(
             line,
-            `${said}, which does not exist in ${repo === null ? "this checkout" : `the ${repo} clone at ${APP_ROOTS[repo]}`}`,
-          );
-        else if (verdict === "directory")
-          (repo === null ? err : errApp)(
-            line,
-            `${said}, which is not a file — name the test, not the directory holding it`,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which is not a file — name the test, not the directory holding it`,
           );
       }
       if (tc.decidedBy.length > 0 && !automated)
@@ -655,30 +668,39 @@ function checkSuite(root, filePath, rulesRev) {
     }
   }
 
-  for (const [repo, paths] of Object.entries(unchecked)) {
-    const files = [...new Set(paths)];
-    warn(
-      1,
-      `${paths.length} \`**Decided by:**\` path${paths.length === 1 ? "" : "s"} name${paths.length === 1 ? "s" : ""} the ${repo} repository, unchecked because no ${repo} clone is named — \`--app-root ${repo}=<dir>\` or \`${REPOSITORIES[repo].env}\`: ${files.map((one) => `\`${one}\``).join(", ")}`,
-    );
-  }
-
   checkManualRows(root, text, cases, err);
 
   return { rel, suite, counts, derived, cases: cases.length };
+}
+
+/** Repositories a `**Decided by:**` path may name by tag, `<tag>:<path>`. */
+const APPLICATION_TAGS = new Set(["grade10"]);
+
+/** `--app-root` when given, else the clone `root` is a submodule of, else
+ *  `null`. A given directory that is not there is a mistake, not an absence. */
+function applicationRoot(given, root) {
+  if (given !== undefined) {
+    const tree = resolve(given);
+    if (existsSync(tree) && statSync(tree).isDirectory()) return tree;
+    console.error(
+      `--app-root ${given} is not a directory — pass the directory that holds the application repository`,
+    );
+    process.exit(1);
+  }
+  const git = spawnSync(
+    "git",
+    ["-C", root, "rev-parse", "--show-superproject-working-tree"],
+    { encoding: "utf8" },
+  );
+  const tree = git.status === 0 ? git.stdout.trim() : "";
+  return tree === "" ? null : tree;
 }
 
 // ---------------------------------------------------------------------------
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["app-root", "capture-baseline", "root", "swept"],
-  booleans: [
-    "app-paths-only",
-    "require-suites",
-    "stale-report",
-    "strict",
-    "quiet",
-  ],
+  booleans: ["app-paths-only", "require-suites", "stale-report", "strict"],
   usage: USAGE,
 });
 const args = {
@@ -688,24 +710,16 @@ const args = {
   requireSuites: Boolean(flags["require-suites"]),
   captureBaseline: flags["capture-baseline"] ?? null,
   swept: flags.swept ?? null,
-  quiet: Boolean(flags.quiet),
-  appPathsOnly: Boolean(flags["app-paths-only"]),
 };
 // The store this run reads. `--root <dir>` names another one - a fixture a
 // test writes - the way `archive-preflight.mjs` and `tcs-automated.mjs` take
 // it, so a suite's checks are proved by this script rather than by a copy of
 // it beside the test.
 const ROOT = flags.root ? resolve(flags.root) : STORE_ROOT;
-// The clones a prefixed `**Decided by:**` path is checked against, named by
-// `--app-root` or each repository's variable in `lib/decided-by.mjs`.
-const APP_ROOTS = (() => {
-  try {
-    return repositoryRoots(process.env, flags["app-root"] ?? null);
-  } catch (cause) {
-    console.error(red(cause.message));
-    process.exit(1);
-  }
-})();
+/** The application clone a `grade10:<path>` line resolves in (Q111), or
+ *  `null` where this run reaches none: the store's own CI holds only the
+ *  store, and the application repository's `check:decided-by` holds the file. */
+const APP_ROOT = applicationRoot(flags["app-root"], ROOT);
 const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;
@@ -974,7 +988,7 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
       m.set(v.level, (m.get(v.level) ?? 0) + 1);
     }
   const crossed = [...levelsByJourney].filter(([, m]) => m.size > 1);
-  if (crossed.length > 0 && !args.quiet) {
+  if (crossed.length > 0) {
     console.log(
       `${bold("Traced at more than one level")}  ${dim("— check the lower cases do not re-test the path the higher one owns")}\n`,
     );
@@ -1146,23 +1160,22 @@ if (args.requireSuites) {
   }
 }
 
-if (!args.quiet) {
+console.log(
+  `${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : revText(rulesRev)}`)}\n`,
+);
+const w = Math.max(...summaries.map((s) => s.rel.length));
+for (const s of summaries) {
+  const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
   console.log(
-    `${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : revText(rulesRev)}`)}\n`,
+    `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
   );
-  const w = Math.max(...summaries.map((s) => s.rel.length));
-  for (const s of summaries) {
-    const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
-    console.log(
-      `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
-    );
-  }
 }
 
-if (args.appPathsOnly) {
+if (flags["app-paths-only"]) {
   const kept = problems.filter((p) => p.app);
   problems.splice(0, problems.length, ...kept);
 }
+
 const errors = problems.filter((p) => p.severity === "error");
 const warnings = problems.filter((p) => p.severity === "warning");
 
@@ -1193,12 +1206,11 @@ const print = (list, label, paint) => {
 };
 
 print(errors, `${errors.length} error${errors.length === 1 ? "" : "s"}`, red);
-if (!args.quiet || args.strict)
-  print(
-    warnings,
-    `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`,
-    yellow,
-  );
+print(
+  warnings,
+  `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`,
+  yellow,
+);
 
 console.log("");
 if (errors.length > 0 || (args.strict && warnings.length > 0)) {

@@ -41,7 +41,7 @@ time from lot close to address confirmed.
   Contact Us instead of Pay Now. A timed-out or abandoned payment session says payment was not
   completed and keeps Pay Now available. A completed session reads Confirming
   payment until Grade10 records the invoice paid; then the order reads
-  Processing.
+  Preparing Shipment.
 
 ## Non-Goals
 

@@ -83,7 +83,7 @@ function useAuctionRows(initial: readonly AuctionRecordRowProps[]) {
         current.filter((row) => rowKey(row) !== rowKey(item)),
       );
       toast(`Unwatched ${item.title}`, {
-        description: "Email alerts for this lot are off too.",
+        description: "Email alerts for this auction are off.",
         action: {
           label: "Undo",
           onClick: () =>
@@ -191,7 +191,6 @@ async function auctionRecordSettled(canvasElement: HTMLElement) {
 /** Default composition: bid rows first, watch-only after, one table from md. */
 export const Filled: Story = {
   name: "Filled",
-  globals: { viewport: { value: "tablet" } },
   render: () => <MyAuctions />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -218,7 +217,7 @@ export const Filled: Story = {
     expect(within(rows[2] as HTMLElement).getByText("--")).toBeVisible();
     // Unwatch only on the two watch-only rows.
     expect(
-      canvas.getAllByRole("button", { name: "Unwatch this lot" }),
+      canvas.getAllByRole("button", { name: "Unwatch this auction" }),
     ).toHaveLength(2);
   },
 };
@@ -256,7 +255,7 @@ export const FilledSmallViewport: Story = {
     expect(canvas.getAllByText(/Current Bid/).length).toBeGreaterThan(0);
     expect(canvas.getAllByText("Leading").length).toBeGreaterThan(0);
     expect(
-      canvas.getAllByRole("button", { name: "Unwatch this lot" }),
+      canvas.getAllByRole("button", { name: "Unwatch this auction" }),
     ).toHaveLength(2);
   },
 };
@@ -270,7 +269,7 @@ export const BiddingOnly: Story = {
     await auctionRecordSettled(canvasElement);
     expect(canvas.getByText("2")).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: "Unwatch this lot" }),
+      canvas.queryByRole("button", { name: "Unwatch this auction" }),
     ).not.toBeInTheDocument();
     expect(canvas.getAllByRole("switch")).toHaveLength(2);
   },
@@ -285,9 +284,11 @@ export const Empty: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await auctionRecordSettled(canvasElement);
-    expect(canvas.getByText("No lots yet")).toBeVisible();
+    expect(canvas.getByText("No auctions yet")).toBeVisible();
     expect(canvas.queryByText("0")).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "Browse lots" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Browse auctions" }),
+    );
     expect(onBrowseCatalogue).toHaveBeenCalled();
   },
 };
@@ -318,7 +319,7 @@ export const Ended: Story = {
       }),
     ).toHaveAttribute("href", "#lot-wax-pack");
     expect(
-      bidRow.queryByRole("button", { name: "Unwatch this lot" }),
+      bidRow.queryByRole("button", { name: "Unwatch this auction" }),
     ).not.toBeInTheDocument();
 
     const watchRow = within(rows[1] as HTMLElement);
@@ -332,7 +333,7 @@ export const Ended: Story = {
       }),
     ).toHaveAttribute("href", "#lot-sticker-album");
     expect(
-      watchRow.getByRole("button", { name: "Unwatch this lot" }),
+      watchRow.getByRole("button", { name: "Unwatch this auction" }),
     ).toBeVisible();
   },
 };
@@ -377,7 +378,7 @@ export const PostAuctionStanding: Story = {
     expect(canvas.getByText("Payment Verifying")).toBeVisible();
     expect(canvas.getByText("Payment Overdue")).toBeVisible();
     expect(canvas.getByText("Partially Paid")).toBeVisible();
-    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Preparing Shipment")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Delivered")).toBeVisible();
     expect(canvas.getByText("Cancelled")).toBeVisible();
@@ -543,7 +544,7 @@ export const Unwatch: Story = {
     await auctionRecordSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Unwatch this lot" }),
+      canvas.getByRole("button", { name: "Unwatch this auction" }),
     );
     await waitFor(() =>
       expect(
@@ -551,7 +552,7 @@ export const Unwatch: Story = {
       ).toBeInTheDocument(),
     );
     expect(
-      body.getByText("Email alerts for this lot are off too."),
+      body.getByText("Email alerts for this auction are off."),
     ).toBeInTheDocument();
 
     await userEvent.click(body.getByRole("button", { name: "Undo" }));
@@ -581,7 +582,7 @@ export const EmailAlertsMuted: Story = {
 
     await waitFor(() =>
       expect(
-        body.getByText("Email alerts off for this lot"),
+        body.getByText("Email alerts off for this auction"),
       ).toBeInTheDocument(),
     );
     expect(body.getByText("Your bid stands.")).toBeInTheDocument();

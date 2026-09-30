@@ -189,6 +189,11 @@ authorization rather than adding a second.
 
 - 🚧 **Time left (extended)** — while the lot is in extended bidding the label
   says so, and its tooltip names the extension duration only
+- 🚧 **Recent bids Winner** — after the lot closes sold, the winning public
+  row shows a primary crown after the amount; a same-price non-leading row
+  carries an Info tip in the amount tone: when maximums match, the
+  earlier one leads — [Listing Page Blocks · Bid
+  History](/p/shared/ui/auction-listing#bid-history)
 - **Your bidding** — a signed-in bidder opens their own record for the lot
   beside the public recent bids — [Bidding
   History](/p/grade10-site/auction/bidding#auction-panel)
@@ -358,8 +363,8 @@ the account's registered address, and the letters about a won lot are
 - **No one-hour reminder** — Grade10 sends no one-hour closing reminder; the
   last warnings before a close are Bidding closes in 24 hours, then Extended
   bidding has started if the lot extends
-- **Footer** — every letter says email alerts are on for this lot, and
-  **Manage alerts** opens My Auctions to mute that lot; never an
+- **Footer** — every letter says email alerts are on for this auction, and
+  **Manage alerts** opens My Auctions to mute that auction; never an
   unauthenticated one-click stop, never unwatch
 - **Never a false statement** — a called-off lot sends nothing further, and a
   letter that would state something no longer true is not sent late
@@ -439,6 +444,7 @@ surface.
 | Absolute sale | Decided | No reserve and no buy-now price; the highest accepted bid at the close wins. | Product |
 | Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on every accepted bid, and ends at the listing's optional cap. A listing with no bid, or with the duration set to 0, closes on schedule. | Product |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
+| Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; equal-max non-leaders show an Info tip in the amount tone (when maximums match, the earlier one leads). Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
@@ -459,7 +465,7 @@ surface.
 | Card holds stated plainly | Decided | A losing bidder's row names being released or released, because a pending authorization on a bank statement reads as a charge. | Product and finance |
 | Letter audiences | Decided | Start letters reach watchers; close-in-24h and extended-bidding reach a bidder who unwatched while alerts stay on; new-bid letters coalesce to the current leading bid; bid beats watch and a win beats both, so nobody gets two letters for one event. | Product |
 | No-bids close copy | Decided | Watch-only get the watched-ended letter (Ended only — never unsold, no sale or Highest bid); sold closes use watched-sold with Sold for. No bidder letter when nobody bid. | Product |
-| Unsubscribe | Decided | Stop means mute for this lot: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
+| Unsubscribe | Decided | Stop means mute for this auction: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
 | Hold line on the non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |

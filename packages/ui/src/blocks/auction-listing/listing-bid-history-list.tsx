@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
-import { Info } from "@phosphor-icons/react";
+import { CrownSimple, Info } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   type ActivityTimeCopy,
@@ -28,6 +28,8 @@ import "./listing-bid-history-list.css";
 type ListingBidHistoryListCopy = {
   you?: string;
   empty?: string;
+  /** Accessible name for the closed sold winning-row crown. */
+  winner?: string;
   /** Explains why an equal-price bid is not the accepted (earlier) one. */
   samePricePriorityTip?: string;
 };
@@ -113,13 +115,22 @@ function BidHistoryRowContent({
             <Tooltip>
               <TooltipTrigger
                 aria-label={copy.samePricePriorityTip}
-                className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+                className="relative inline-flex shrink-0 cursor-pointer outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
                 closeOnClick={false}
               >
                 <Info aria-hidden size={12} />
               </TooltipTrigger>
               <TooltipContent>{copy.samePricePriorityTip}</TooltipContent>
             </Tooltip>
+          ) : null}
+          {row.isWinner ? (
+            <span
+              aria-label={copy.winner ?? "Winner"}
+              className="inline-flex shrink-0 text-primary"
+              role="img"
+            >
+              <CrownSimple aria-hidden size={12} weight="fill" />
+            </span>
           ) : null}
         </Text>
         {row.isViewer ? (

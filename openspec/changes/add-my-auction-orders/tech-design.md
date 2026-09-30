@@ -72,7 +72,7 @@ the correct side of the application/shared-component boundary.
   a parallel timeline table.
 - **Payment confirmation:** Starting a hosted card session returns a provider
   session reference and URL. The browser may render Confirming payment after a
-  successful provider return, but Processing is shown only after the
+  successful provider return, but Preparing Shipment is shown only after the
   authenticated order read model returns invoice status `paid` and
   fulfilment status `unfulfilled`. Timed-out, abandoned, cancelled and
   declined sessions do not mutate the invoice and can start a fresh session.
@@ -165,7 +165,7 @@ routes; they do not carry payment or address mutations in query parameters.
   tests use the same invoice/fulfilment fixtures.
 - **[Risk]** A successful provider return could be shown as paid before the
   webhook is durable. → **Mitigation:** keep a separate Confirming state and
-  gate Processing and receipt status on the authoritative invoice read.
+  gate Preparing Shipment and receipt status on the authoritative invoice read.
 - **[Risk]** Timeline timestamps could become synthetic UI metadata. →
   **Mitigation:** require `reachedAt` in the read model and map each item to
   an existing lifecycle event timestamp.

@@ -59,9 +59,9 @@ export type EmailAlertsCopy = {
   offAriaLabel: string;
   /** Shown when the account master has turned auction email alerts off. */
   disabledReason?: string;
-  /** Toast once the consumer confirms alerts went on for this lot. */
+  /** Toast once the consumer confirms alerts went on for this auction. */
   enabledToast?: EmailAlertsToastCopy;
-  /** Toast once the consumer confirms alerts went off for this lot. */
+  /** Toast once the consumer confirms alerts went off for this auction. */
   mutedToast?: EmailAlertsToastCopy;
 };
 

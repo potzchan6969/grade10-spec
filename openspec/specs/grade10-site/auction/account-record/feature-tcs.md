@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
-## grade10-site-auction-account-record-US5: Watch from the lot with alerts toast
+## grade10-site-auction-account-record-US5: Watch from the auction with alerts toast
 
 **As a** collector,
 **I want** watching a lot from its page to put it on My Auctions and tell me alerts are on,

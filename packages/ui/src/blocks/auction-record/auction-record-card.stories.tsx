@@ -86,7 +86,7 @@ export const Leading: Story = {
     expect(canvas.getByText("Leading")).toBeVisible();
     expect(canvas.getByRole("switch")).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: "Unwatch this lot" }),
+      canvas.queryByRole("button", { name: "Unwatch this auction" }),
     ).not.toBeInTheDocument();
     expect(
       canvas.getByRole("link", {
@@ -116,7 +116,7 @@ export const Watching: Story = {
     expect(canvas.getByText("1994 Vintage Rangefinder Camera")).toBeVisible();
     expect(canvas.getByRole("switch")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Unwatch this lot" }),
+      canvas.getByRole("button", { name: "Unwatch this auction" }),
     ).toBeVisible();
   },
 };
@@ -129,7 +129,7 @@ export const Ended: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Ended")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Unwatch this lot" }),
+      canvas.getByRole("button", { name: "Unwatch this auction" }),
     ).toBeVisible();
   },
 };
@@ -142,7 +142,7 @@ export const DidntWin: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Didn’t win")).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: "Unwatch this lot" }),
+      canvas.queryByRole("button", { name: "Unwatch this auction" }),
     ).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("link", { name: /View order/ }),

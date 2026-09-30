@@ -45,10 +45,14 @@ winner of three lots has three orders, each with its own deadlines.
 
 - **Sections** — Order Information with Invoice Status and Collection Method,
   Order Status with a time per step, and Lots
-- **Progress** — five steps, Address → Invoice → Payment → Shipped →
+- **Progress** — five steps, Address → Invoice → Payment → Shipping →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
 - 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
   against the Payment step
+- 🚧 **Under Shipping** — Preparing Shipment and Shipped both read against
+  the Shipping step as its current (progress) step; while Preparing Shipment,
+  Shipping subtext reads Preparing to ship; Shipped and Preparing Shipment
+  badges use the muted default Badge tone on Winner Order and My Auctions
 - **Contact Us** — `support@grade10.com`, subject the invoice or the lot;
   Copy Message first on Winner Order, Open Mail App second; overdue,
   cancelled, delivered and partial-payment letters use the same subject and
@@ -74,7 +78,7 @@ fulfilment and delivery facts, that the winner, the operator and My Auctions
 all read. It shares label names with the store's order status, and no
 meaning.
 
-::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Setup through Preparing Invoice, Pending Payment and Processing to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Processing, Partially Paid or Delivered"}
+::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Setup through Preparing Invoice, Pending Payment and Preparing Shipment to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Preparing Shipment, Partially Paid or Delivered"}
 
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
@@ -85,7 +89,7 @@ meaning.
 | 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
-| **Processing** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
+| 🚧 **Preparing Shipment** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
@@ -381,7 +385,7 @@ balance. The invoice above, settled in three payments:
 | --- | --- | --- | --- |
 | `-P1` | 50,000 | Invoice total 125,571.80 · previous payments 0 · this payment 50,000 · balance due 75,571.80 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
 | `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
-| `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Processing |
+| `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Preparing Shipment |
 
 - 🚧 **The close prompt** — from the payment that brings the total to 90% of
   the invoice, every payment asks the operator to close as Paid or keep it
@@ -483,7 +487,7 @@ a second payment provider, and changes to the bid-time rules.
 | A refunded order | Decided | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason, and Note when the operator recorded one. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
 | An overpaid difference | Decided | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
 | Refund transaction clues | Decided | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
-| Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
+| Progress stepper | 🚧 In flight | Five presentation steps, Address → Invoice → Payment → **Shipping** → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Preparing Shipment and Shipped under Shipping as the **current** (progress) step (Preparing Shipment subtext: Preparing to ship — not an incomplete Shipping step), Delivered as Completed. Shipped and Preparing Shipment badges use the muted `default` Badge tone on Winner Order and My Auctions. **BREAKING** vs past-tense Shipped as the phase label and badge Processing for a paid undispatched order — those read as already shipped when the Shipping step pings. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Proof submit feedback | 🚧 In flight | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |

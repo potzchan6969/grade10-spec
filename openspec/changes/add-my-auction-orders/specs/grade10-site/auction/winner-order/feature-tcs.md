@@ -7,7 +7,7 @@
 
 **As a** winner
 **I want** to see the full invoice and pay it by card, even if a first attempt does not finish
-**so that** the lot moves to Processing without contacting Grade10.
+**so that** the lot moves to Preparing Shipment without contacting Grade10.
 
 ### winner-order-US4-TC1-1: An unpaid order shows invoice, Pay Now, address and lot
 
@@ -130,7 +130,7 @@
 * A new payment session opens.
 * It charges the same invoice amount.
 
-### winner-order-US4-TC5-1: A completed payment shows Confirming payment before Processing
+### winner-order-US4-TC5-1: A completed payment shows Confirming payment before Preparing Shipment
 
 **Classification:**
 
@@ -157,9 +157,9 @@
 **Expected Results:**
 
 * The page shows Confirming payment.
-* The order does not read Processing.
+* The order does not read Preparing Shipment.
 
-### winner-order-US4-TC6-1: A recorded payment reads Processing
+### winner-order-US4-TC6-1: A recorded payment reads Preparing Shipment
 
 **Classification:**
 
@@ -185,7 +185,7 @@
 
 **Expected Results:**
 
-* The order status reads Processing.
+* The order status reads Preparing Shipment.
 
 ---
 
@@ -212,7 +212,7 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds an order that reached Awaiting Setup, Preparing Invoice, Pending Payment and Processing.
+* customer(winner) holds an order that reached Awaiting Setup, Preparing Invoice, Pending Payment and Preparing Shipment.
 
 **Steps:**
 

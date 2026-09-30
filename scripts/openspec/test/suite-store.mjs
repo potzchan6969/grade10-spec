@@ -7,7 +7,6 @@
  */
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { REPOSITORIES } from "../lib/decided-by.mjs";
 
 const SCRIPT = fileURLToPath(
   new URL("../validate-test-cases.mjs", import.meta.url),
@@ -51,17 +50,10 @@ export function specFiles(base) {
   };
 }
 
-/** The real validator over `root`, colour off, with `args` after `--root`.
- *  `appRoot`, when given, is the grade10 clone the run is pointed at; every
- *  clone variable is otherwise removed, so a developer's own shell never
- *  decides a verdict. */
-export function runValidator(root, { appRoot = null, args = [] } = {}) {
-  const env = { ...process.env, NO_COLOR: "1" };
-  for (const { env: variable } of Object.values(REPOSITORIES))
-    delete env[variable];
-  if (appRoot !== null) env[REPOSITORIES.grade10.env] = appRoot;
+/** The real validator over `root`, colour off. */
+export function runValidator(root, args = []) {
   return spawnSync(process.execPath, [SCRIPT, "--root", root, ...args], {
     encoding: "utf8",
-    env,
+    env: { ...process.env, NO_COLOR: "1" },
   });
 }

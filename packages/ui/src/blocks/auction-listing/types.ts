@@ -7,6 +7,11 @@ export type ListingBidHistoryRow = {
   timeOverride?: string;
   isViewer?: boolean;
   /**
+   * When true, the lot is closed sold and this row is the winning public
+   * bid — the list shows a Winner badge. Live lots omit this flag.
+   */
+  isWinner?: boolean;
+  /**
    * When true, the row matches the leading price but is not the accepted
    * (earlier) bid — the list shows a tip explaining time priority.
    */

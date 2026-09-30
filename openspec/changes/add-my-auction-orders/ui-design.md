@@ -94,7 +94,7 @@ scenario is added here.
 | Empty required fields show field errors; optional fields and any phone format are accepted as specified | `winner-order-SC-152`–`SC-154` |
 | Pending Payment shows the full invoice and confirmed address; an expired invoice offers Contact Us instead of Pay Now | `winner-order-SC-44`, `SC-49` |
 | Timed-out, abandoned or cancelled sessions say payment was not completed and keep Pay Now; the next attempt starts fresh | `winner-order-SC-49`, `SC-50` |
-| A completed hosted session reads Confirming payment until the authenticated read model returns invoice `paid`; then the order reads Processing | `winner-order-SC-51`, `SC-52` |
+| A completed hosted session reads Confirming payment until the authenticated read model returns invoice `paid`; then the order reads Preparing Shipment | `winner-order-SC-51`, `SC-52` |
 
 The route's loading treatment is unchanged and has no new scenario in this
 change.

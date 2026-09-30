@@ -19,10 +19,9 @@ const AUCTION_RECORD_COPY: AuctionRecordCopy = {
   noStanding: "--",
   watchingHeading: "Watching",
   biddingHeading: "Bidding",
-  emptyTitle: "No lots yet",
-  emptyDescription:
-    "Watch a lot to come back to it here, or place a bid. Email alerts are optional.",
-  browseCatalogue: "Browse lots",
+  emptyTitle: "No auctions yet",
+  emptyDescription: "Watch an auction to come back to it here, or place a bid.",
+  browseCatalogue: "Browse auctions",
   openListing: "Open listing",
   openBidding: "Bid",
 };
@@ -31,36 +30,36 @@ const WATCH_COPY: WatchButtonCopy = {
   watch: "Watch",
   watching: "Watching",
   unwatch: "Unwatch",
-  watchAriaLabel: "Watch this lot",
-  unwatchAriaLabel: "Unwatch this lot",
+  watchAriaLabel: "Watch this auction",
+  unwatchAriaLabel: "Unwatch this auction",
   watchedToast: {
-    title: "Email alerts on for this lot",
+    title: "Email alerts on for this auction",
     actionLabel: "View My Auctions",
   },
   unwatchedToast: {
-    title: "Unwatched this lot",
-    description: "Email alerts for this lot are off too.",
+    title: "Unwatched this auction",
+    description: "Email alerts for this auction are off.",
     actionLabel: "Undo",
   },
 };
 
 const EMAIL_ALERTS_COPY: EmailAlertsCopy = {
   label: "Email alerts",
-  onAriaLabel: "Turn off email alerts for this lot",
-  offAriaLabel: "Turn on email alerts for this lot",
+  onAriaLabel: "Turn off email alerts for this auction",
+  offAriaLabel: "Turn on email alerts for this auction",
   disabledReason: "Auction email alerts are off in account notifications.",
-  enabledToast: { title: "Email alerts on for this lot" },
+  enabledToast: { title: "Email alerts on for this auction" },
   mutedToast: {
-    title: "Email alerts off for this lot",
+    title: "Email alerts off for this auction",
     description: "It stays on My Auctions.",
   },
 };
 
-/** Same copy, worded for a lot the collector has bid on rather than watched. */
+/** Same copy, worded for an auction the collector has bid on rather than watched. */
 const BIDDING_EMAIL_ALERTS_COPY: EmailAlertsCopy = {
   ...EMAIL_ALERTS_COPY,
   mutedToast: {
-    title: "Email alerts off for this lot",
+    title: "Email alerts off for this auction",
     description: "Your bid stands.",
   },
 };
@@ -280,7 +279,7 @@ const BIDDING_WON_PROCESSING = biddingItem({
   id: "won-processing",
   title: "1999 Fossil Dragonite Holo PSA 9",
   state: "processing",
-  stateLabel: "Processing",
+  stateLabel: "Preparing Shipment",
   currentBid: "HK$4,200",
   closesAt: "Paid 18 Sep 2026",
   href: WINNER_ORDER_HREF.processing,

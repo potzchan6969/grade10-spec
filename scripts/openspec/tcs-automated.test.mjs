@@ -246,6 +246,27 @@ test("shared-planning-agent-rounds-SC-78 - writes the status and the `**Decided 
   assert.match(result.stdout, new RegExp(`decided by ${DECIDER}`));
 });
 
+test("shared-planning-agent-rounds-SC-107 - writes a grade10 path as given", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const decider = "grade10:apps/frontend/grade10/e2e/tests/demo.spec.ts";
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    decider,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(
+    readFileSync(join(root, CHANGE_PATH), "utf8").includes(
+      `**Decided by:** \`${decider}\``,
+    ),
+  );
+});
+
 test("shared-planning-agent-rounds-SC-78 - refuses a flip of an in-flight change's case that names no path", () => {
   const root = sandbox({
     [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
@@ -345,46 +366,5 @@ test("shared-planning-agent-rounds-SC-78 - refuses `--decided-by` with an empty 
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /--decided-by names an empty path/);
-  assert.equal(readFileSync(join(root, CHANGE_PATH), "utf8"), before);
-});
-
-test("shared-planning-agent-rounds-SC-78 - writes a path in the application repository with its prefix", () => {
-  const root = sandbox({
-    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
-  });
-  const walk = "grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts";
-
-  const result = run(
-    root,
-    ["demo-thing-widget-US1-TC1-1"],
-    "--decided-by",
-    `${walk},${DECIDER}`,
-  );
-
-  assert.equal(result.status, 0, result.stderr);
-  assert.match(
-    readFileSync(join(root, CHANGE_PATH), "utf8"),
-    new RegExp(`\\*\\*Decided by:\\*\\* \`${walk}\`, \`${DECIDER}\``),
-  );
-});
-
-test("shared-planning-agent-rounds-SC-78 - refuses `--decided-by` naming a repository the store does not know", () => {
-  const root = sandbox({
-    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
-  });
-  const before = readFileSync(join(root, CHANGE_PATH), "utf8");
-
-  const result = run(
-    root,
-    ["demo-thing-widget-US1-TC1-1"],
-    "--decided-by",
-    "grade11:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts",
-  );
-
-  assert.notEqual(result.status, 0);
-  assert.match(
-    result.stderr,
-    /--decided-by names `grade11:apps\/frontend\/grade10\/e2e\/tests\/vault\/offer\.spec\.ts`, whose prefix names no repository this store knows — write `grade10:`/,
-  );
   assert.equal(readFileSync(join(root, CHANGE_PATH), "utf8"), before);
 });

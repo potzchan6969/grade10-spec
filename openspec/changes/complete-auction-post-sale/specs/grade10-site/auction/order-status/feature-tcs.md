@@ -39,7 +39,7 @@
 
 * The invoice status is `paid`.
 * The payment is recorded and flagged Paid late.
-* The order derives as Processing.
+* The order derives as Preparing Shipment.
 
 ### auction-status-US1-TC17-1: A card payment landing on a checked invoice moves nothing
 
