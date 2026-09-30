@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-30, tcs-rules r4
 
 **Out of suite:** winner-order-SC-243 keeps its durable case, `winner-order-US19-TC2-1`, which the new page does not move.
