@@ -76,7 +76,9 @@ the card is in the winner's hands. The collector's half is
   the reserve included, releases its stock hold at that moment, and the units
   are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
-  Stock · Intake](/p/grade10-admin/inventory/catalog#intake)
+  Stock · Intake](/p/grade10-admin/inventory/catalog#intake).
+  ❓ A top bid under the reserve — no listing carries a reserve today; the PM
+  confirms whether this case stays
 - 🚧 **Stock already held** — a listing that closed Unsold before this ships
   still holds its stock. One release frees every such hold, and each shows in
   the inventory history as released by that clean-up
@@ -86,7 +88,9 @@ the card is in the winner's hands. The collector's half is
   and listing code, sets its own window, and carries no bids or history from
   the closed one. Campaign, reserve, extension, taxonomy and sandbox start as
   on any new draft. Relist shows on an Unsold listing only, to an operator who
-  can operate auctions; nothing is stored until Save
+  can operate auctions; nothing is stored until Save. It shows on the
+  listing's row in the Listings table, once its stock was released, and not
+  on a listing in a campaign or one already relisted
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
