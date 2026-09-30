@@ -1124,8 +1124,9 @@ Signed in as admin(holds `user:create`). No Auth account holds <empty-roles emai
 - Empty role selection at create leaves the account as `user` only (Q13).
 - Name and email are required on create (Q14).
 - Email-verification standing of a newly created account is open on the PRD.
-- Whether a read already in flight when a ban or role change commits counts as "the next read" — no; only a read that starts after it commits is guaranteed to see it (`close-revoked-session-cache-gap` Q4).
-- Which concrete endpoints are "cached browse reads" versus "elevated calls" is an implementation mapping for `tech-design.md`, not a suite-level question — rejected as a finding on `close-revoked-session-cache-gap`.
+- A read already in flight when a ban or role change commits needs no rule of its own - the requirement is a 70-second bound, and such a read falls inside it.
+- Which endpoints are cached browse reads and which are elevated calls is the implementation's mapping, not a suite question.
+- Per-session versus per-account cache-version keying changes no case's expected result here.
 
 ## Reconciliation
 
