@@ -178,7 +178,7 @@ request over, a cancel sent through the account holder's own request SHALL be
 refused, and the request SHALL stay open as the operator's. A taken-over request
 SHALL end only by running or by an operator's cancel.
 
-#### Scenario: shared-auth-users-SC-34 - An operator's filing shuts the account
+#### Scenario: shared-auth-users-SC-49 - An operator's filing shuts the account
 **Serves:** shared-auth-users-US-02 - an operator taking a person who must leave off the brand from the directory
 
 - **GIVEN** an operator who holds `user:delete`
@@ -186,7 +186,7 @@ SHALL end only by running or by an operator's cancel.
 - **THEN** one open request stands for that person
 - **AND** that person cannot sign in
 
-#### Scenario: shared-auth-users-SC-35 - Cancelling an operator's request lets the person back in
+#### Scenario: shared-auth-users-SC-50 - Cancelling an operator's request lets the person back in
 **Serves:** shared-auth-users-US-02 - an operator undoing a filing made in error before anything is erased
 
 - **GIVEN** a person whose account is banned by an operator's open erasure

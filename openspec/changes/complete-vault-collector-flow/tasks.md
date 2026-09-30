@@ -272,8 +272,8 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       case refuses the ask in words (`shared-auth-users-SC-43`,
       `shared-auth-users-SC-44`, `shared-auth-users-SC-45`,
       `shared-auth-users-SC-46`, `shared-auth-users-SC-47`,
-      `shared-auth-users-SC-48`, `shared-auth-users-SC-34`,
-      `shared-auth-users-SC-35`, `shared-auth-users-SC-36`,
+      `shared-auth-users-SC-48`, `shared-auth-users-SC-49`,
+      `shared-auth-users-SC-50`, `shared-auth-users-SC-36`,
       `shared-auth-users-SC-37`, `shared-auth-users-SC-38`,
       `shared-auth-users-SC-39`, `shared-auth-users-SC-40`,
       `shared-auth-users-SC-41`,
@@ -283,8 +283,8 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `open.requestedBy !== userId`, an operator filing over a self-filed row
       takes it over — and give `readSession.ts`'s `enforceOpenErasure` the
       same branch (`shared-auth-users-SC-45`, `shared-auth-users-SC-46`,
-      `shared-auth-users-SC-47`, `shared-auth-users-SC-34`,
-      `shared-auth-users-SC-35`, `shared-auth-users-SC-36`,
+      `shared-auth-users-SC-47`, `shared-auth-users-SC-49`,
+      `shared-auth-users-SC-50`, `shared-auth-users-SC-36`,
       `shared-auth-users-SC-40`, `shared-auth-users-SC-41`)
 - [x] 7.3 Make a second filing answer the open row's `executeAfter` and a
       cancel with no open row a no-op, in place of `ERASURE_ALREADY_REQUESTED`
