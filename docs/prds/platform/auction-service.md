@@ -59,7 +59,8 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 - Every money transition — bid insert, promote, re-auth swap, close, cancel — runs in one Postgres transaction holding `SELECT … FOR UPDATE` on the listing row
 - A hold row changes state only inside one of those transactions, never ahead of the lock
-- No Durable Objects: state that must be consistent lives in one store with one lock, not two
+- No Durable Object holds auction state: state that must be consistent lives in one store with one lock, not two
+- 🚧 The lot rooms under [Live lots](#live-lots) relay committed state and keep time; they never decide
 
 ### At most one live hold per listing — the current top bid's
 
@@ -127,6 +128,49 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 ### A purge never fails the work that earned it
 
 - The row is committed first and the purge runs behind it on `waitUntil`, with the short TTL as the backstop
+
+## Live lots
+
+🚧 A lot's clock, price and result reach every open page within a second of the commit that decides them. Postgres still decides everything; a Durable Object per lot only relays what was committed and wakes the worker at the deadline. The engineering plan is `docs/temp/auction-realtime-plan.md` in the application repository.
+
+::image{src="assets/diagrams/auction-live-lot.svg" alt="How a lot page stays live, in three parts. A page joins: viewers open a socket to the lot room, the room reads the lot through the auction worker only when it woke empty, answers hello with the server time and the lot, and the page sends 5 clock probes whose shortest round trip sets its clock. A bid lands: the bidder places a bid through the storefront, the auction worker commits it under the listing lock and the version rises, the storefront answers the bidder, the worker tells the room the listing changed, the room reads the committed lot and sends every page the whole lot at its new version. The deadline passes: the room's alarm asks the worker to settle the lot, the worker extends or closes it under the lock, returns the lot and its next deadline, and the room sends Ended or Extended bidding and re-arms"}
+
+### The room relays; it never decides
+
+- 🚧 One room per lot and one for the catalogue: each holds WebSockets, one alarm, and in memory the last state it sent
+- The room writes nothing and keeps no storage beyond its alarm: every read and every settle it asks for runs in the auction worker against Postgres, so losing a room loses nothing
+- The worker signals the room after each commit that moved a lot; the signal is best effort, because the next change, the cron and the page's own version check all heal a lost one
+- The room reads the committed lot back rather than being handed it, so no writer can send a wrong or out-of-order state
+- Frames carry the whole lot and its `version`, never a diff; a page keeps the highest version it has seen, from a frame or from a read, so one lost frame is healed by the next
+- The room hibernates between changes, so an open page that nothing happens on costs nothing, and the database sees one read per change whatever the audience
+
+### One rule places a lot on its clock
+
+- 🚧 The bid guards, the close, every read and the browser all work out the phase from one function in `@grade10/auction-contracts`
+
+| Lot | Phase | Countdown to | Takes a bid |
+| --- | --- | --- | --- |
+| before `starts_at` | upcoming | `starts_at` | no |
+| from `starts_at` to `scheduled_ends_at`, the last instant included when extension is on | open | `scheduled_ends_at` | yes |
+| past `scheduled_ends_at`, before the effective close | extended | the effective close | yes |
+| at or past the effective close, not yet closed | closing | none | no |
+| closed | ended | none | no |
+
+- The effective close is `ends_at` once an extension is written; until then it is `scheduled_ends_at` plus `extension_seconds`, capped, when an accepted bid exists, and `scheduled_ends_at` when none does
+- A page never shows Ended from its own clock: at the effective close it shows Closing until the room says Ended or brings a later close, because a bid holding the lock a millisecond earlier can still extend the lot
+
+### Whoever reaches a due lot first settles it
+
+- 🚧 The room's alarm fires at the lot's next deadline and asks the worker to settle it: publish, open extended bidding, or close
+- The first bid, hold confirm or signed-in read after the deadline settles it the same way, inside its own transaction; settling twice is a no-op
+- The five-minute cron still closes what nobody reached, and counts it as a repair, so the metric shows each time the room was not first
+
+### The page clock follows the server
+
+- 🚧 Countdowns read the server's time, not the device's: 5 probes at connect set an offset on the browser's monotonic clock, accurate to half the shortest round trip
+- One animation-frame loop drives every countdown on the page and redraws a countdown only when its displayed second changes; nothing counts timer ticks, so nothing drifts
+- A countdown rounds up, so it reads 0 only once the deadline has passed
+- ❓ Tenths of a second in a lot's last 10 seconds - the designer confirms with the countdown block
 
 ## Data model
 
@@ -269,6 +313,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 - A top bid under the reserve: the listing closes `unsold`, the bid → `lost`, its holds are released, and nobody owes anything
 - No top bid at all: the listing closes as a no-sale
 - A captured settlement then moves the listing to `settled`
+- 🚧 The sweep becomes the net: the lot room's alarm and the first request after the deadline settle a lot first, as [Live lots](#live-lots) describes
 
 ### Capture asks fresh every attempt
 
@@ -472,8 +517,10 @@ What is left is what a UI has to draw, plus the accounts nobody can provision fr
 
 ## Q & A
 
-- Why not an AuctionRoom DO with WebSocket fan-out?
-  - A second stateful part whose broadcast duplicates what an edge-cached poll gives at any watcher count for free; the public GET is shaped so a broadcast layer could be added later without moving any state.
+- Why a lot room when the service keeps no Durable Object state?
+  - The room holds no fact: it relays what Postgres committed and keeps the alarm. The public reads answer `private, no-store`, so polling costs a database read per viewer, and a Worker alone cannot hold a socket.
+- Why WebSockets and not server-sent events?
+  - A hibernated room keeps WebSockets open while it is evicted; a server-sent event stream keeps it awake and billed for every viewer.
 - Why not TaskScheduler for guaranteed side effects?
   - It gives up after six attempts (~3.5 h) and lives in a DO, which cannot reach Hyperdrive under the test harness; pairing it with the mandatory repair sweep means two delivery mechanisms for one job.
 - Why not a pending-ops outbox table?

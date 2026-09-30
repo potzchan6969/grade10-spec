@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "How a lot page stays live",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      960,
+      1000
+    ]
+  },
+  "participants": [
+    {
+      "id": "bidder",
+      "type": "external",
+      "label": "Bidder",
+      "sublabel": "browser"
+    },
+    {
+      "id": "storefront",
+      "type": "backend",
+      "label": "Storefront",
+      "sublabel": "session"
+    },
+    {
+      "id": "auction",
+      "type": "backend",
+      "label": "Auction worker",
+      "sublabel": "decides"
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "Postgres",
+      "sublabel": "the only truth"
+    },
+    {
+      "id": "room",
+      "type": "cloud",
+      "label": "Lot room",
+      "sublabel": "relay and alarm"
+    },
+    {
+      "id": "viewers",
+      "type": "external",
+      "label": "Viewers",
+      "sublabel": "open lot pages"
+    }
+  ],
+  "segments": [
+    {
+      "from": 166,
+      "to": 382,
+      "label": "A page joins"
+    },
+    {
+      "from": 382,
+      "to": 706,
+      "label": "A bid lands"
+    },
+    {
+      "from": 706,
+      "to": 900,
+      "label": "The deadline passes"
+    }
+  ],
+  "messages": [
+    {
+      "id": "joins",
+      "from": "viewers",
+      "to": "room",
+      "y": 196,
+      "label": "opens a socket",
+      "note": "anonymous; public data only"
+    },
+    {
+      "id": "reads-for-hello",
+      "from": "room",
+      "to": "auction",
+      "y": 240,
+      "label": "reads the lot",
+      "variant": "dashed",
+      "note": "only when the room woke empty"
+    },
+    {
+      "id": "hello",
+      "from": "room",
+      "to": "viewers",
+      "y": 284,
+      "label": "hello: server time and the lot",
+      "variant": "return"
+    },
+    {
+      "id": "probes",
+      "from": "viewers",
+      "to": "room",
+      "y": 328,
+      "label": "5 clock probes",
+      "note": "the shortest round trip sets the page clock"
+    },
+    {
+      "id": "bids",
+      "from": "bidder",
+      "to": "storefront",
+      "y": 412,
+      "label": "places a bid"
+    },
+    {
+      "id": "forwards",
+      "from": "storefront",
+      "to": "auction",
+      "y": 456,
+      "label": "placeBid for this user"
+    },
+    {
+      "id": "commits",
+      "from": "auction",
+      "to": "postgres",
+      "y": 500,
+      "label": "commits under the listing lock",
+      "variant": "emphasis",
+      "note": "the version rises"
+    },
+    {
+      "id": "answers",
+      "from": "storefront",
+      "to": "bidder",
+      "y": 544,
+      "label": "accepted, or why not",
+      "variant": "return"
+    },
+    {
+      "id": "signals",
+      "from": "auction",
+      "to": "room",
+      "y": 588,
+      "label": "listing changed",
+      "variant": "dashed",
+      "note": "after the commit; a lost one only costs time"
+    },
+    {
+      "id": "reads-back",
+      "from": "room",
+      "to": "auction",
+      "y": 632,
+      "label": "reads the committed lot"
+    },
+    {
+      "id": "state",
+      "from": "room",
+      "to": "viewers",
+      "y": 676,
+      "label": "state: whole lot, new version",
+      "variant": "emphasis",
+      "note": "every page, within about 100 ms"
+    },
+    {
+      "id": "alarm",
+      "from": "room",
+      "to": "auction",
+      "y": 736,
+      "label": "alarm: settle the lot",
+      "variant": "emphasis",
+      "note": "at the effective close; pages show Closing"
+    },
+    {
+      "id": "settles",
+      "from": "auction",
+      "to": "postgres",
+      "y": 780,
+      "label": "extends or closes under the lock",
+      "variant": "emphasis",
+      "note": "idempotent; a later touch or the cron does the same"
+    },
+    {
+      "id": "settled",
+      "from": "auction",
+      "to": "room",
+      "y": 824,
+      "label": "the lot and its next deadline",
+      "variant": "return"
+    },
+    {
+      "id": "ended",
+      "from": "room",
+      "to": "viewers",
+      "y": 868,
+      "label": "state: Ended, or Extended bidding",
+      "variant": "emphasis",
+      "note": "the room re-arms for the next deadline"
+    }
+  ]
+}
