@@ -32,10 +32,8 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 | Surface | Consumer | Trust |
 | --- | --- | --- |
 | RPC `Grade10AuctionService` and `ZzzAuctionService` | that storefront's backend | service binding to a named entrypoint; storefront pinned server-side |
-| `GET /api/public/listings/:id` — listing state | storefront frontends | none; edge-cached, uncredentialed CORS |
-| `GET /api/public/listings` — the browse page, filtered and keyset-paged | storefront frontends | none; edge-cached |
-| `GET /api/public/auctions` and `/auctions/:id` — sales and one sale's listings | storefront frontends | none; edge-cached |
-| `GET /api/public/categories` — visible taxonomies and their categories | storefront frontends | none; edge-cached |
+| tRPC `public.listing`, `public.listings`, `public.auctions`, `public.auction`, `public.categories` and `featured.publicList` - a lot by slug, the keyset-paged browse, sales and one sale's lots, visible taxonomies, Featured | storefront frontends | none; answered `private, no-store`, never edge-cached |
+| 🚧 WebSocket `/api/public/live/lot/:id` and `/api/public/live/catalogue` - the lot and catalogue rooms under [Live lots](#live-lots) | storefront frontends | none; `Origin` checked against the storefronts |
 | `GET /api/public/listing-media/:size/*` — named sizes `card`, `detail`, `thumb`, `zoom` (Images transform when the scan exceeds that size's ceiling) | browsers | none; immutable, outside every purge prefix |
 | tRPC `/api/trpc` and the byte routes under `/api/admin/*` | the grade10 admin panel's auction section | own `AUTH_SERVICE` → grade10-auth |
 | `POST /webhooks/stripe/<storefront>` | Stripe, live and test | signature per storefront × mode |
@@ -98,10 +96,12 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ## Public reads and cache
 
-### Public reads are anonymous, edge-cached, pseudonymous
+### Public reads are anonymous, uncached, pseudonymous
 
-- Every browse read is a plain GET published with `edgeCache()` — `max-age=5` plus 55 seconds of `stale-while-revalidate` — so a listing going viral costs one query per five seconds
-- One listing carries `listing:<id>`; the listing list carries `listings:index`; the sales list carries `auctions:index`; a sale's page carries its own `auction:<id>` as well as the listing list tag, because a listing writer cannot know which sale page embeds its summary
+- Every browse read is a `public.*` tRPC query behind the service's session tier, which answers `private, no-store`, so nothing on this surface is edge-cached and every read reaches Postgres
+- A page that polls pays one database read per viewer per poll
+- 🚧 [Live lots](#live-lots) replaces polling: a page reads once and the rooms carry each change
+- The cache tags that purges name (`listing:<id>`, `listings:index`, `auctions:index`, `auction:<id>`) reach no cached read, and the browse path prefixes a purge can name are empty
 - Listing state carries the extension policy and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - It publishes less than the rows hold: a `draft` or `canceled` listing reads as not found, `lost_hold` publishes as an ordinary `lost`, and `unsold` folds to `closed` unless the listing chose to expose its reserve state
 - A listing publishes on its own clock, so it can be live under a sale still in `draft`. It lists, and reads with no sale at all — naming the sale is what the draft status is keeping back. The taxonomy `public` flag reads the same way on every anonymous surface: an internal one is absent from the listing payload and is not a browse filter, not merely missing from the taxonomy list
