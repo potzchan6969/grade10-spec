@@ -29,12 +29,10 @@ hold, a wizard to open another, and each case's own page.
 
 ## Request wizard
 
-Three steps, one per thing the collector does.
-
-1. *Collector* — **Describe the item** — category (trading card, coin,
-   bullion, watch, jewellery, other), title (≤ **200** characters),
-   description (≤ **2,000**), WhatsApp number (optional, unverified, in
-   E.164, refused if not a number), and the lane question: a loan and how much
+1. *Collector* — **Describe the item** — category (one of the register's
+   ten, below), title (≤ **200** characters), description (≤ **2,000**),
+   WhatsApp number (optional, unverified, in E.164, refused if not a
+   number), and the lane question: a loan and how much
 2. *Collector* — **Photograph it** — **1 to 10** photos, JPEG, PNG or WebP,
    ≤ **20 MB** each; location metadata is stripped before and after upload
 3. *Collector* — **Send it in** — needs at least one photo; the case becomes
@@ -43,13 +41,13 @@ Three steps, one per thing the collector does.
 - 🚧 **Check it, then send** — the third step reads the request back, says
   what happens next, and takes the collector's tick that they have read the
   personal information collection statement before it sends
+- 🚧 **Ten categories** — the register's —
+  [Items](/p/grade10-admin/inventory/items#values)
 - **Currency** — the brand's (HKD for Grade10); another currency is refused
 - **One item per case** — a binder of twelve cards is twelve requests, in
   batches of three; book one visit on the first and bring them all together
 
 ## Case page
-
-What a collector reads on one case, top to bottom.
 
 - **Header** — item, status badge, lane badge, and staff's decline reason
   verbatim when declined
@@ -95,6 +93,9 @@ What a collector reads on one case, top to bottom.
   bring the item, sign at the counter
 - **Cancel this request** — ends the case at any status before the item is in
   the vault; any visit is cancelled with it and the item stays with the collector
+- 🚧 **A draft staff opened** — on the collector's list as a draft opened at
+  the counter; they check it and send it, and nothing is valued or emailed
+  before they send it
 - **History** — every event the collector may see, actor kind only, never a
   staff id; the counter's own records stay staff-only
 - **Clocks** — a day and a deadline, on this page and in every email, are

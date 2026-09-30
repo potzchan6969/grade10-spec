@@ -108,7 +108,7 @@ Escape or the overlay - as `onGoBack`, answering nothing.
 **Serves:** Accepting an offer - a collector changes their mind before answering
 
 - **WHEN** the dialog is open with nothing in flight
-- **AND** the collector clicks Go back or presses Escape
+- **AND** the collector clicks Go back, presses Escape or clicks the overlay
 - **THEN** `onGoBack` is reported once
 - **AND** `onConfirm` is not reported
 
@@ -116,7 +116,7 @@ Escape or the overlay - as `onGoBack`, answering nothing.
 **Serves:** Accepting an offer - an answer on its way is never abandoned
 
 - **WHEN** the dialog is open with an answer in flight
-- **AND** the collector presses Escape
+- **AND** the collector presses Escape or clicks the overlay
 - **THEN** Accept shows it is busy and Go back cannot be clicked
 - **AND** the dialog stays open and nothing is reported
 

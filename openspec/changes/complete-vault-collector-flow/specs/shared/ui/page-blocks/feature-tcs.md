@@ -556,17 +556,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Title And Description and With Action stories render `EmptyPanel` without and with a slot.
+* Each of the five page blocks has one story without a slot and one with a slot.
 
 **Steps:**
 
-1. Open Page Blocks / EmptyPanel / Title And Description at <grade10 ui workbench url> and inspect the panel's root.
-2. Open Page Blocks / EmptyPanel / With Action and inspect the panel's root.
+1. Open Page Blocks / FactCard / Every Part at <grade10 ui workbench url> and inspect the card's root; then open With Slot and inspect it again.
+2. Open Page Blocks / FactCardSkeleton / Two and inspect the status's root; then open With Slot and inspect it again.
+3. Open Page Blocks / NoteList / Before You Come Storage and inspect the list's root; then open With Slot and inspect it again.
+4. Open Page Blocks / StageRail / Financed Mid and inspect the rail's root and the stepper inside it; then open With Slot and inspect the rail's root again.
+5. Open Page Blocks / EmptyPanel / Title And Description and inspect the panel's root; then open With Action and inspect it again.
 
 **Expected Results:**
 
-* Step 1: the root carries `data-slot="empty-state"`.
-* Step 2: the root carries `data-slot="grading-home-submissions-empty"`.
+* Step 1: the root carries `data-slot="card"`, then `data-slot="vault-case-keeps"`.
+* Step 2: the root carries `data-slot="stack"`, then `data-slot="vault-cases-loading"`.
+* Step 3: the root carries `data-slot="list"`, then `data-slot="vault-case-before-you-come"`.
+* Step 4: the rail's root carries no `data-slot` and the stepper carries `data-slot="stepper"`; then the rail's root carries `data-slot="vault-case-stages"`.
+* Step 5: the root carries `data-slot="empty-state"`, then `data-slot="grading-home-submissions-empty"`.
 
 ## Reconciliation
 

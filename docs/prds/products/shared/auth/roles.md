@@ -27,6 +27,9 @@ can hold roles it should not, but it cannot invent a permission for one.
 - **Refund processing** — `auction:refund`, held by `staff` and `admin`;
   recording an auction refund, apart from `auction:payment`, which collects
   money — [Auction Management](/p/grade10-admin/auction/management#grants)
+- 🚧 **Moving items** — `inventory:transfer`, held by `staff` and `admin`;
+  moving an item to a new owner and opening its proof —
+  [Items](/p/grade10-admin/inventory/items#permissions)
 
 :::detail{title="Gate layers" for="operator"}
 Permissions are only the first of three layers, all fail-closed. An elevated

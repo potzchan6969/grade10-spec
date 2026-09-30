@@ -18,8 +18,14 @@ quantity change appends one changelog entry — who, what, and the counts
 before and after — so the arithmetic is never lost.
 
 This is an operator product: everything here happens in the admin console,
-and the number that matters is whether stock reconciles — available plus
-every hold, grouped by who holds it, equal to what the house actually has.
+and for stock, the number that matters is whether it reconciles — available
+plus every hold, grouped by who holds it, equal to what the house actually
+has.
+
+## Items
+
+- 🚧 **One object, one owner** — an item is one physical object and who owns
+  it, apart from stock — [Items](/p/grade10-admin/inventory/items)
 
 ## Product Assets
 

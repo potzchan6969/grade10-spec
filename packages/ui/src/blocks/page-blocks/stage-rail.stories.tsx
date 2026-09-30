@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 import {
   ENDED_WORD,
   FINANCED_STAGES,
@@ -33,7 +33,9 @@ function read(canvasElement: HTMLElement) {
 }
 
 /** The financed lane at Signed: four done, Signed the one current step,
- * three to come (shared-ui-page-blocks-SC-11). */
+ * three to come (shared-ui-page-blocks-SC-11). Given no slot, the rail's
+ * root carries none and its stepper keeps `stepper`
+ * (shared-ui-page-blocks-SC-18). */
 export const FinancedMid: Story = {
   play: async ({ canvasElement }) => {
     const { steps, labels, states, current } = read(canvasElement);
@@ -49,6 +51,19 @@ export const FinancedMid: Story = {
       "upcoming",
     ]);
     expect(current).toEqual([steps[4]]);
+    const rail = within(canvasElement).getByRole("list")
+      .parentElement as HTMLElement;
+    expect(rail).not.toHaveAttribute("data-slot");
+    expect(rail.querySelector('[data-slot="stepper"]')).not.toBeNull();
+  },
+};
+
+/** The rail carries the slot it is given (shared-ui-page-blocks-SC-18). */
+export const WithSlot: Story = {
+  args: { slot: "vault-case-stages" },
+  play: async ({ canvasElement }) => {
+    const rail = within(canvasElement).getByRole("list").parentElement;
+    expect(rail).toHaveAttribute("data-slot", "vault-case-stages");
   },
 };
 
@@ -105,7 +120,8 @@ export const Ended: Story = {
   },
 };
 
-/** Eight stages in 320 pixels: the rail scrolls sideways, the page does not
+/** Eight stages in 320 pixels: the rail scrolls sideways inside them, so the
+ * page does not, and takes focus so a keyboard can scroll it
  * (shared-ui-page-blocks-SC-16). */
 export const Narrow: Story = {
   decorators: [
@@ -126,8 +142,9 @@ export const Narrow: Story = {
     const home = within(canvasElement).getByText("Home");
     const { right } = home.getBoundingClientRect();
     expect(right).toBeLessThanOrEqual(rail.getBoundingClientRect().right + 1);
-    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
-      window.innerWidth,
-    );
+    const frame = rail.parentElement as HTMLElement;
+    expect(frame.scrollWidth).toBeLessThanOrEqual(320);
+    await userEvent.tab();
+    expect(rail).toHaveFocus();
   },
 };

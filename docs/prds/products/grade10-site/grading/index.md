@@ -120,8 +120,9 @@ The canvas is the source, and the defaults it runs on are in
 | The grader | A batch arrives | One order at one level, one invoice, one shipment back |
 
 **Not in scope.** Shipping slabs back; CGC and BGS fee figures until
-Commercial supplies their sheets; a vault case carrying the grade and cert as
-valuation fields; online payment; staff notifications; disposal of cards
+Commercial supplies their sheets; the grade and cert on a vault case, which
+the item register carries - [Items](/p/grade10-admin/inventory/items#facts);
+online payment; staff notifications; disposal of cards
 nobody collects, which the first release stops short of.
 
 **Measurement.** Submissions booked, cards graded, upcharges settled before

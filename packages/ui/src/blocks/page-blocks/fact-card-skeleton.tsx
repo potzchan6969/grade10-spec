@@ -14,6 +14,9 @@ type FactCardSkeletonProps = {
   copy: FactCardSkeletonCopy;
   /** The cards the read will fill; one at least. */
   count: number;
+  /** The `data-slot` the consumer finds the status by; the design system
+   * stack's own `stack` when omitted. */
+  slot?: string;
   className?: string;
 };
 
@@ -23,7 +26,12 @@ type FactCardSkeletonProps = {
  * than a status per placeholder. A count below one is the caller's mistake
  * and is refused by name, so a page never waits on an empty status.
  */
-function FactCardSkeleton({ copy, count, className }: FactCardSkeletonProps) {
+function FactCardSkeleton({
+  copy,
+  count,
+  slot,
+  className,
+}: FactCardSkeletonProps) {
   if (!Number.isInteger(count) || count < 1) {
     throw new Error(
       `FactCardSkeleton: a count of ${count} draws no card; give one at least`,
@@ -35,12 +43,13 @@ function FactCardSkeleton({ copy, count, className }: FactCardSkeletonProps) {
       aria-busy="true"
       aria-label={copy.label}
       className={className}
+      data-slot={slot ?? "stack"}
       gap="md"
       role="status"
     >
-      {Array.from({ length: count }, (_, slot) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: the key is the slot; placeholders are a fixed count, never reordered.
-        <Card key={slot}>
+      {Array.from({ length: count }, (_, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: placeholders are a fixed count, never reordered.
+        <Card key={index}>
           <CardContent>
             <VStack gap="sm">
               <Skeleton aria-hidden="true" className="w-1/3" shape="line" />

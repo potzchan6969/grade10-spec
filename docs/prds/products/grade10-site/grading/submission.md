@@ -136,7 +136,9 @@ it changes; the rest of the cards carry on:
   against a live cert — owner confirms or corrects PSA's, CGC's and BGS's
   own, in `@grade10/grading-contracts`
 - 🚧 **Never stock** — a collector's slab never enters the catalogue; a vault
-  valuation or an auction consignment reads the record from here
+  valuation reads its grader, grade and cert from the item register; an
+  auction consignment reads the record from here —
+  [Items](/p/grade10-admin/inventory/items#facts)
 - ❓ **Retention** — 2,555 days on the vault's table: the sealed documents and
   the photographs in the vault's classes, and the submission record as a class
   of its own; each window runs from the day the submission ends, collected,

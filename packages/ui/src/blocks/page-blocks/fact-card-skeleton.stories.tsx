@@ -14,8 +14,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Two placeholder cards inside one busy status a reader hears once
- * (shared-ui-page-blocks-SC-06). */
+/** Two placeholder cards inside one busy status a reader hears once, no
+ * placeholder announced on its own (shared-ui-page-blocks-SC-06). Given no
+ * slot, the status keeps the design system's `stack`
+ * (shared-ui-page-blocks-SC-18). */
 export const Two: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -24,5 +26,22 @@ export const Two: Story = {
     expect(statuses[0]).toHaveAccessibleName(LOADING_LABEL);
     expect(statuses[0]).toHaveAttribute("aria-busy", "true");
     expect(statuses[0].querySelectorAll('[data-slot="card"]')).toHaveLength(2);
+    const placeholders = statuses[0].querySelectorAll('[data-slot="skeleton"]');
+    expect(placeholders).toHaveLength(6);
+    for (const placeholder of placeholders) {
+      expect(placeholder).toHaveAttribute("aria-hidden", "true");
+    }
+    expect(statuses[0]).toHaveAttribute("data-slot", "stack");
+  },
+};
+
+/** The status carries the slot it is given (shared-ui-page-blocks-SC-18). */
+export const WithSlot: Story = {
+  args: { slot: "vault-cases-loading" },
+  play: async ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole("status")).toHaveAttribute(
+      "data-slot",
+      "vault-cases-loading",
+    );
   },
 };

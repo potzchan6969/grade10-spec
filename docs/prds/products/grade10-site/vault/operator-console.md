@@ -39,8 +39,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   the end of a day the operator names, and the ledger over payouts,
   repayments and corrections for a date range on the shop's calendar,
   filtered by method, paged, with totals per method and currency
-- **Held items tab** — everything in a locker, with the shop it is in, oldest
-  first, paged
+- **Held items tab** — everything in a locker, with its shop, oldest first, paged
 - 🚧 **Counts and today** — every view carries its count; the landing view
   opens on a Today block that is the Today cut itself, in slot order with its
   count; rows show the lane and read the collector's word for the status
@@ -58,12 +57,22 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **Held items, at a glance** — tiles: in the vault, per shop, with a loan
   running, waiting for a pickup; rows carry held since, days held, status,
   outstanding and whether a pickup is booked
-- ❓ Product — a stock-take sheet from the held-items list, and Send notice
-  from an arrears row; recommended: neither, the notice stays an act on the case
+- 🚧 **Collector by name** — rows name each case's collector for staff and
+  admins, never a treasurer
+- 🚧 **Narrow by collector** — a click on the name shows only that
+  collector's cases; a link beside it opens their
+  [Collector Page](/p/grade10-admin/console/collector-page)
+- 🚧 **Walk-ins** — staff open a draft for a customer at the counter under
+  the customer's own account; nothing about the case is emailed; the customer
+  asks for their own sign-in link on their phone at `grade10.com/vault`,
+  finds the draft on their list and sends it with the wizard's third step
+- 🚧 **An address signed in to before** — a walk-in is refused when the
+  address belongs to an account someone has signed in to
+- 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
+  cert and the case takes the item the register holds, its facts filled in -
+  [Items](/p/grade10-admin/inventory/items#facts)
 
 ## One case
-
-One line per tab, as `Surface: verb, verb, verb`.
 
 - **Header**: back, the customer's email and phone with the WhatsApp
   click-to-chat link and six templates, set or change the contact, book, move
@@ -85,6 +94,9 @@ One line per tab, as `Surface: verb, verb, verb`.
   only on a row this operator did not record
 - **Appointments section**: add or retire a shop, weekly rules, exceptions,
   the day's offered slots and bookings, each booking opening its case
+- 🚧 **The collector's cases** — a link in the header opens the case's
+  [Collector Page](/p/grade10-admin/console/collector-page), for any
+  `vault:read` holder
 - 🚧 **Today's visit, in order** — the Case tab opens on the counter's steps
   for this visit as an ordered checklist, each ticked as its act lands, and
   says why an act is not offered yet
@@ -97,6 +109,11 @@ One line per tab, as `Surface: verb, verb, verb`.
   beside what the collector was told
 - 🚧 **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
+- 🚧 **The item's facts** — the Case tab shows and edits the item's category,
+  grader, grade, cert and facts from the register once it has the item, which
+  it gets when the valuation starts, and says registration is pending until
+  then; editing needs `inventory:write` —
+  [Items](/p/grade10-admin/inventory/items#facts)
 
 ## Permissions
 
@@ -107,6 +124,10 @@ One line per tab, as `Surface: verb, verb, verb`.
 | `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit |
 | `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position |
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
+
+- 🚧 **Walk-ins and names** — `vault:operate` also opens a walk-in;
+  `kyc:read` also opens collector names on the queue, held items and
+  collector page; a treasurer sees none
 
 - **Two people move money** — staff and treasurer share no money grant, a
   correction takes a second `vault:payout` holder, and the payout is refused
@@ -129,13 +150,11 @@ One line per tab, as `Surface: verb, verb, verb`.
   free text; a move between lockers writes a movement
 - **Movements** — `in` at vaulting, `moved` on a move, `out` at release,
   unwind and forfeiture
-- **Valuation** — an amount and a note; no grading company, certificate
-  number, grade, condition, market reference or second valuer
+- 🚧 **Valuation** — an amount and a note, read beside the item's grader,
+  grade and cert; no condition, market reference or second valuer
 - **Not modelled** — a locker registry per shop, capacity, transfer between
   shops, a condition report, damage or loss, a stock-take against the shelf;
   a forfeited item is written `out` because it has become the shop's stock
-- **No intake** — every case is the collector's own, opened from their
-  account, in the shop on their phone if need be; staff open none
 
 ## Specs and journeys
 
@@ -184,10 +203,17 @@ One line per tab, as `Surface: verb, verb, verb`.
 | "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
 | The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
 | Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and never the legal name | Product |
+| Collector by name | Decided | Queue and held-item rows show the collector's account name to staff and admins under the identity grant; a treasurer and the arrears row keep what they read today | Owner |
+| No search by name | Decided | A collector is found by an exact contact, the case reference or a click on their name; a name search would let staff walk the customer list | Owner |
 | The identity panel reads the record's six states | Decided | Verified, Out, Stalled, Refused, Lapsed and None, as [Identity Check](/p/grade10-site/vault/identity-check#identity-states) defines them; the provider's finer states fold into them, because an operator arranging a visit needs the difference between out and none, not the provider's stage | Product |
-| Counter intake | Decided | Every case is the collector's own account, opened in the shop if need be; the console has no intake, and no identity is keyed to a case | Product |
+| Counter intake | Decided | Staff open a draft for a customer at the counter, under the customer's own account, with staff's photos, and no email is sent; the customer sends it from their own phone with the wizard's third step, ticking the collection statement, before it is valued or any email is sent. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
+| Signed-in customers at the counter | Decided | Refused: a typed address does not prove the account is theirs, so that customer sends the request from their own phone with staff beside them | Owner |
+| Walk-ins open under `vault:operate`, names read under `kyc:read` | Decided | Opening a case at the counter is an operate act; collector names sit behind the identity grant, and every read that names a person — the names on a page, one collector's cases, a collector's page — is on the audit chain | Product |
+| When a walk-in reads the collection statement | ❓ Open | Staff type the address before the customer ticks the statement on their phone. Recommended: the counter shows the statement first, and the tick on the phone is the record | Legal |
+| Stock-take sheet and Send notice from arrears | ❓ Open | A stock-take sheet from the held-items list, and Send notice from an arrears row. Recommended: neither, the notice stays an act on the case | Product |
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
-| Valuation record | Deferred | Grading company, certificate number and grade ride the note until the inventory catalogue links; a second valuer, a condition report and counter photographs with it | Product |
+| Grader, grade and cert on a valuation | Decided | Read from the item register beside the amount and the note — [Items](/p/grade10-admin/inventory/items#facts) | Owner |
+| Valuation record | Deferred | A second valuer, a condition report and counter photographs | Product |
 | Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
 | Forfeited stock | Decided | A forfeited item leaves custody and becomes the shop's stock; the chain keeps the figure it settled and the rest is inventory's | Owner |
 | Staff notifications | Decided | The queue is the inbox: badges, counts, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |

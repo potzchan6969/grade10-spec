@@ -127,6 +127,8 @@ released`, guarded on nothing outstanding and no packet open.
 | Signing link | **30 minutes**, one device | the link |
 | Sweeps | every **15 minutes** and hourly | liveness only; every deadline is also enforced where it is read |
 
+- 🚧 **A draft staff opened** — ends on the **7-day** draft clock and on a
+  cancel with no email
 - 🚧 **A lapsed offer reads as one** — the offer's own expiry is read at the
   read, and the case stays `offer_made`, open for another —
   [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
@@ -144,12 +146,25 @@ released`, guarded on nothing outstanding and no packet open.
   before the cure date of a written notice has passed; the item settles the
   debt, the figure reaches the audit chain, and the collector is told; a
   visit ahead is cancelled and one past is a no-show, never completed
+- 🚧 **An address typed wrong** — staff cancel the unsent draft and open
+  another under the right address; the account at the wrong address is not
+  emailed
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - 🚧 **Every ending reads on the case** — in the collector's words: the
   reason staff gave, that the request was called off and by whom, the clock
   that ended it, or the figure the item settled with the notice date and the
   date to pay by; nothing left to do but start again
+
+## Item Record
+
+- 🚧 **Registered at valuation** - starting the valuation gives the item its
+  record in the register, under the case's collector -
+  [Items](/p/grade10-admin/inventory/items#holds)
+- 🚧 **Held while vaulted** - from vaulting until release, unwind or
+  forfeit; a forfeit moves the item to the lender
+- 🚧 **Another owner** - preparing documents is refused while the register
+  names someone other than the case's collector
 
 ## Specs and journeys
 
@@ -195,5 +210,6 @@ released`, guarded on nothing outstanding and no packet open.
 | What waits on a person, and what waits on a clock | Decided | Before acceptance a case badges somebody — nobody started it, nobody valued it in a week, the offer lapsed; after acceptance it runs a clock | Product |
 | An ended case still names its visit | Decided | The cached booking is the record of where the item went; clearing it would erase that and write a cancellation nobody made | Engineering |
 | Notice before forfeiture | Decided | No grace on the interest, and a written notice naming a cure date at least **14 days** off before anything may be taken | Owner |
+| A draft staff opened that nobody sends | ❓ Open | Recommended: the existing **7-day** draft clock ends it as `expired`, with no email | Product |
 | A different item at the counter | Decided | The case is the item, so a different one is a new case; this one is declined or cancelled | Product |
 :::
