@@ -398,7 +398,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1114,5 +1114,5 @@ Signed in as admin(holds `user:create`). No Auth account holds <empty-roles emai
 
 **Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
 
-- `US2-TC7-1` — Approved (`actual`).
+- `US2-TC7-1` — Retired (`deprecated`), on writing its Playwright walk: `US2-TC1-1`'s own cached-read assertion (`store.page`'s pre-ban session, read with no `fresh` flag) already proves the same close once its `test.fail` placeholder for the then-unfixed cache is removed. A Case That Already Exists Is Not Written Twice.
 - `US3-TC7-1` — Approved (`actual`).
