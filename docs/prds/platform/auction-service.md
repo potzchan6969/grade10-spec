@@ -85,14 +85,16 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ### Ends means ends
 
-- A bid wins only if its hold is confirmed before `ends_at`; `recordHoldCapturable` guards on the clock, not on sweep timing, so the outcome never depends on when the cron ran
-- The extension (applied at bid insert, under the lock) is what gives a last-minute hold time to confirm
-- `snipe_window_seconds` is the trigger and `extension_seconds` is the reach: a bid landing that close to the end moves `ends_at` to now plus the reach, so a short window can buy a long tail
-- Omitted at create, both default to 1800 seconds (30 minutes); both zero together means extension off
-- Every late bid extends again — the tail is continuous — until `scheduled_ends_at + extension_cap_seconds`, which truncates rather than rejects, so a cap below the reach is how you spell a hard final deadline
-- Listing state carries the extension policy (`snipe_window_seconds`, `extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
-- The window narrows and never widens; row checks keep it inside the reach and keep an armed listing from carrying a cap of zero — either shape would accept late bids and silently never extend
+- A bid is placed when its hold confirms: `placeBid` records it `pending`, and `recordHoldCapturable` accepts it under the lock, judged by the clock read after the lock, so the outcome never depends on when the cron ran
+- A confirm that lands after the effective close is too late and its hold is released; the close marks any bid still `pending` as `lost`, with no grace, because a pending bid was never placed
+- Until `scheduled_ends_at` no bid moves the close; at it, a listing with an accepted bid enters extended bidding, and every accepted bid from then on sets `ends_at` to its own confirm time plus `extension_seconds`
+- Omitted at create, `extension_seconds` defaults to 1800 seconds (30 minutes); zero turns extended bidding off
+- `scheduled_ends_at + extension_cap_seconds` truncates the tail rather than rejecting a bid, so a cap below the reach is how you spell a hard final deadline, and a cap of zero behaves as extension off
+- A bid that does not move the public price (a bidder raising their own maximum) never extends
+- A bid confirmed at exactly `scheduled_ends_at` is accepted when extension is on, so the lot's first deadline is one millisecond after it
+- Listing state carries the extension policy (`extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
+- 🚧 Today the late window has no upper bound and ignores a cap of zero, so while the sweep lags a confirm after the effective close is accepted; the fix bounds it at `scheduled_ends_at` plus the reach
 
 ## Public reads and cache
 
@@ -119,46 +121,54 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ## Live lots
 
-🚧 A lot's clock, price and result reach every open page within a second of the commit that decides them. Postgres still decides everything; a Durable Object per lot only relays what was committed and wakes the worker at the deadline. The engineering plan is `docs/temp/auction-realtime-plan.md` in the application repository.
+🚧 A lot's clock, price and result reach every open page within a second of the commit that decides them. Postgres still decides everything; a Durable Object per lot only relays what was committed and wakes the worker at the next deadline. The engineering plan is `docs/temp/auction-realtime-plan.md` in the application repository.
 
-::image{src="assets/diagrams/auction-live-lot.svg" alt="How a lot page stays live, in three parts. A page joins: viewers open a socket to the lot room, the room reads the lot through the auction worker only when it woke empty, answers hello with the server time and the lot, and the page sends 5 clock probes whose shortest round trip sets its clock. A bid lands: the bidder places a bid through the storefront, the auction worker commits it under the listing lock and the version rises, the storefront answers the bidder, the worker tells the room the listing changed, the room reads the committed lot and sends every page the whole lot at its new version. The deadline passes: the room's alarm asks the worker to settle the lot, the worker extends or closes it under the lock, returns the lot and its next deadline, and the room sends Ended or Extended bidding and re-arms"}
+::image{src="assets/diagrams/auction-live-lot.svg" alt="How a lot page stays live, in three parts. A page joins: the page sends 3 time probes to the auction worker at the nearest edge and the fastest sets its clock, opens a socket to the lot room, the room reads the lot through the worker once for every page joining at once, and answers hello with the lot. A bid lands: the bidder places a bid through the storefront, the auction worker commits it under the listing lock and the version rises, the storefront answers the bidder, the worker tells the room the listing changed, the room reads the committed lot, sends every page the whole lot at its new version and sets its alarm to the lot's next deadline. The deadline passes: the room's alarm asks the worker to settle the lot, the worker extends or closes it under the lock and returns the lot, and the room sends Ended or Extended bidding and re-arms"}
 
 ### The room relays; it never decides
 
-- 🚧 One room per lot and one for the catalogue: each holds WebSockets, one alarm, and in memory the last state it sent
+- 🚧 One room per public lot and one for the catalogue: each holds WebSockets, one alarm, and in memory the last state it sent
 - The room writes nothing and keeps no storage beyond its alarm: every read and every settle it asks for runs in the auction worker against Postgres, so losing a room loses nothing
-- The worker signals the room after each commit that moved a lot; the signal is best effort, because the next change, the cron and the page's own version check all heal a lost one
+- The worker signals the room after each commit that raised a lot's `version`; the signal is best effort, because the next change, a reconnect, a late touch and the cron all heal a lost one
 - The room reads the committed lot back rather than being handed it, so no writer can send a wrong or out-of-order state
 - Frames carry the whole lot and its `version`, never a diff; a page keeps the highest version it has seen, from a frame or from a read, so one lost frame is healed by the next
-- The room hibernates between changes, so an open page that nothing happens on costs nothing, and the database sees one read per change whatever the audience
+- A room only sends: a page's one message is a keepalive the platform answers without waking it, so an open page that nothing happens on costs nothing, and the database sees one read per change whatever the audience
+- Connecting reads no database: the route checks the id's shape, the page's origin and a per-address rate limit, and the room's first read refuses a lot that is unknown, not public or sandbox
+- A lot that stops being public (canceled, unpublished) is sent as gone, and its sockets close
+- Rooms sit beside the database in Southeast Asia, and the catalogue room sends at most one frame a second
 
 ### One rule places a lot on its clock
 
-- 🚧 The bid guards, the close, every read and the browser all work out the phase from one function in `@grade10/auction-contracts`
+- 🚧 The bid guards, the close, every read and the browser all work out the phase from one function in `@grade10/auction-contracts`, and the catalogue's ordering uses one SQL fragment built beside it
 
 | Lot | Phase | Countdown to | Takes a bid |
 | --- | --- | --- | --- |
 | before `starts_at` | upcoming | `starts_at` | no |
 | from `starts_at` to `scheduled_ends_at`, the last instant included when extension is on | open | `scheduled_ends_at` | yes |
-| past `scheduled_ends_at`, before the effective close | extended | the effective close | yes |
-| at or past the effective close, not yet closed | closing | none | no |
-| closed | ended | none | no |
+| past `scheduled_ends_at`, before the written `ends_at` | extended | `ends_at` | yes |
+| past its effective close, not yet closed | closing | none | no |
+| closed or settled, or canceled after it was listed | ended | none | no |
 
-- The effective close is `ends_at` once an extension is written; until then it is `scheduled_ends_at` plus `extension_seconds`, capped, when an accepted bid exists, and `scheduled_ends_at` when none does
-- A page never shows Ended from its own clock: at the effective close it shows Closing until the room says Ended or brings a later close, because a bid holding the lock a millisecond earlier can still extend the lot
+- Readers use the stored row alone, so the catalogue's paging stays on its columns; only a writer holding the lock asks whether an accepted bid exists
+- The room's alarm writes the first extension one millisecond after `scheduled_ends_at`, so the stored `ends_at` is the truth within a second; frames carry whether an accepted bid exists as a hint, so a page shows Extended bidding at the scheduled close without a flash of Closing
+- A page never shows Ended from its own clock: at the effective close it shows Closing until the room says Ended or brings a later close
+- A new close resets the countdown at once, and at the cap the page says it is the final deadline
 
 ### Whoever reaches a due lot first settles it
 
-- 🚧 The room's alarm fires at the lot's next deadline and asks the worker to settle it: publish, open extended bidding, or close
-- The first bid, hold confirm or signed-in read after the deadline settles it the same way, inside its own transaction; settling twice is a no-op
-- The five-minute cron still closes what nobody reached, and counts it as a repair, so the metric shows each time the room was not first
+- 🚧 Settling is one idempotent function in its own transaction under the lock: it publishes, writes the first extension, or closes, whichever is due, and settling twice is a no-op
+- The room's alarm calls it at the lot's next deadline; the alarm is a copy of that deadline, set again from every read the room makes, so a bid that extends the lot or an edit that moves it re-arms the room
+- A read that finds a lot still closing two seconds past its deadline settles it after answering, skipping a lot another transaction holds, so a crowd queues nothing
+- No bid or confirm settles inside its own transaction: it refuses a closing lot, because a close that fails must not fail the bid or the payment webhook that found it
+- The five-minute cron still settles what nobody reached, and counts it as a repair, so the metric shows each time the room was not first
 
 ### The page clock follows the server
 
-- 🚧 Countdowns read the server's time, not the device's: 5 probes at connect set an offset on the browser's monotonic clock, accurate to half the shortest round trip
-- One animation-frame loop drives every countdown on the page and redraws a countdown only when its displayed second changes; nothing counts timer ticks, so nothing drifts
+- 🚧 Countdowns read the server's time, not the device's: 3 probes to a stateless time route at the nearest edge set an offset on the browser's monotonic clock, accurate to half the fastest round trip
+- The page probes again after sleep, a reconnect or a return to the tab, and a correction under a second never makes a countdown jump up
+- One animation-frame loop drives every countdown on the page while it is visible and redraws a countdown only when its displayed value changes; nothing counts timer ticks, so nothing drifts
 - A countdown rounds up, so it reads 0 only once the deadline has passed
-- ❓ Tenths of a second in a lot's last 10 seconds - the designer confirms with the countdown block
+- ❓ Tenths of a second in a lot's last 10 seconds - whole seconds ship first, and the designer decides at review
 
 ## Data model
 
@@ -168,7 +178,7 @@ Own Postgres database (`grade10_auction` in the shared `stg-/prd-grade10` Neon p
 | --- | --- |
 | products | the unit itself: status only — title, copy, category and media belong to the listing, so relisting cannot rewrite a closed listing's record |
 | auctions | the sale event: identity and policy only — no clock, no pricing, and no money path reads it |
-| auction_listings | the listing: copy, pricing, clock, snipe policy, and the current top; its row lock is the money path's serializer |
+| auction_listings | the listing: copy, pricing, clock, extension policy, the current top, and a `version` every change a page shows raises; its row lock is the money path's serializer |
 | category_taxonomies | a way of classifying listings — data, not vocabulary, so a new one is an insert; `public` decides whether anonymous browsing sees it at all, internal by default |
 | categories | a taxonomy's labels |
 | auction_listing_categories | one category per taxonomy per listing; its composite key stops the denormalized taxonomy lying |
@@ -254,7 +264,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 - No `pending` bid by this bidder on this listing already (a partial unique index) — confirm or fail before bidding again
 - Currency matches
 - Amount at least the floor plus `min_increment`, where the floor is the highest of the recorded `top_amount` and every live `pending` bid (`starting_price` alone accepts the first)
-- Insert bid `pending`, a watch, and hold `creating`; inside the snipe window, extend `ends_at` to now plus `extension_seconds`, bounded by the listing's extension cap
+- Insert bid `pending`, a watch, and hold `creating`; the clock does not move here, because the bid is not placed until its hold confirms
 - Commit, then — never under the lock — create and confirm the manual-capture, off-session PaymentIntent in the bidder's storefront account
 - Validating against pending bids makes accepted amounts strictly increasing, so no two bids ever tie
 - The one-pending-bid guard bounds how much unconfirmed money one bidder can pin the floor with
@@ -270,7 +280,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 | Guard | On failure |
 | --- | --- |
 | bid still `pending` | hold → `release_due`; the bid keeps whatever state resolved it |
-| listing `published` and `now < ends_at` | bid → `lost_hold`, hold → `release_due` |
+| the lot takes a bid by [the clock rule](#one-rule-places-a-lot-on-its-clock) at the confirm | bid → `lost_hold`, hold → `release_due` |
 | amount above the recorded `top_amount` | bid → `lost`, hold → `release_due` |
 
 - On success: previous top bid → `outbid` with all its holds in `creating` or `held` → `release_due`; the bid → `top`; `current_top_bid_id` and `top_amount` updated
@@ -301,7 +311,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 - A top bid under the reserve: the listing closes `unsold`, the bid → `lost`, its holds are released, and nobody owes anything
 - No top bid at all: the listing closes as a no-sale
 - A captured settlement then moves the listing to `settled`
-- 🚧 The sweep becomes the net: the lot room's alarm and the first request after the deadline settle a lot first, as [Live lots](#live-lots) describes
+- 🚧 The sweep becomes the net: the lot room's alarm and a late read settle a lot first, as [Live lots](#live-lots) describes
 
 ### Capture asks fresh every attempt
 
@@ -508,7 +518,9 @@ What is left is what a UI has to draw, plus the accounts nobody can provision fr
 - Why a lot room when the service keeps no Durable Object state?
   - The room holds no fact: it relays what Postgres committed and keeps the alarm. The public reads answer `private, no-store`, so polling costs a database read per viewer, and a Worker alone cannot hold a socket.
 - Why WebSockets and not server-sent events?
-  - A hibernated room keeps WebSockets open while it is evicted; a server-sent event stream keeps it awake and billed for every viewer.
+  - A room holding hibernated WebSockets is billed only while it handles a change, an alarm or a connect. An open event stream is an unfinished request, so the room could never hibernate while anyone watched and would be billed for every second a lot is live, and a Worker cannot share one upstream connection between viewers, so moving the stream into a Worker saves nothing.
+- Why no grace for a card still confirming at the close?
+  - A bid is placed when its hold confirms, so a confirm after the close is a bid after the close.
 - Why not TaskScheduler for guaranteed side effects?
   - It gives up after six attempts (~3.5 h) and lives in a DO, which cannot reach Hyperdrive under the test harness; pairing it with the mandatory repair sweep means two delivery mechanisms for one job.
 - Why not a pending-ops outbox table?

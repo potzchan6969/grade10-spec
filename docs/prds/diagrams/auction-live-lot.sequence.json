@@ -71,37 +71,37 @@
   ],
   "messages": [
     {
+      "id": "probes",
+      "from": "viewers",
+      "to": "auction",
+      "y": 196,
+      "label": "3 time probes",
+      "note": "nearest edge; the fastest sets the page clock"
+    },
+    {
       "id": "joins",
       "from": "viewers",
       "to": "room",
-      "y": 196,
+      "y": 240,
       "label": "opens a socket",
-      "note": "anonymous; public data only"
+      "note": "anonymous; it only sends a keepalive"
     },
     {
       "id": "reads-for-hello",
       "from": "room",
       "to": "auction",
-      "y": 240,
+      "y": 284,
       "label": "reads the lot",
       "variant": "dashed",
-      "note": "only when the room woke empty"
+      "note": "one read for every page joining at once"
     },
     {
       "id": "hello",
       "from": "room",
       "to": "viewers",
-      "y": 284,
-      "label": "hello: server time and the lot",
-      "variant": "return"
-    },
-    {
-      "id": "probes",
-      "from": "viewers",
-      "to": "room",
       "y": 328,
-      "label": "5 clock probes",
-      "note": "the shortest round trip sets the page clock"
+      "label": "hello: the lot at its version",
+      "variant": "return"
     },
     {
       "id": "bids",
@@ -157,7 +157,7 @@
       "y": 676,
       "label": "state: whole lot, new version",
       "variant": "emphasis",
-      "note": "every page, within about 100 ms"
+      "note": "every page within 100 ms; the alarm re-arms"
     },
     {
       "id": "alarm",
@@ -182,7 +182,7 @@
       "from": "auction",
       "to": "room",
       "y": 824,
-      "label": "the lot and its next deadline",
+      "label": "the settled lot",
       "variant": "return"
     },
     {
@@ -192,7 +192,7 @@
       "y": 868,
       "label": "state: Ended, or Extended bidding",
       "variant": "emphasis",
-      "note": "the room re-arms for the next deadline"
+      "note": "the room re-arms from the lot it read"
     }
   ]
 }
