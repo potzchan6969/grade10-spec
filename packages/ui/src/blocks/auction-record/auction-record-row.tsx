@@ -52,7 +52,7 @@ const STATE_VARIANT: Record<
   preparing_invoice: "default",
   payment_problem: "error",
   paid: "outline",
-  shipped: "outline",
+  shipped: "default",
   delivered: "outline",
   hold_releasing: "outline",
   hold_released: "outline",

@@ -23,7 +23,7 @@ const meta = {
         title: "1986 World Cup Panini Sticker Album",
         auction: "Summer Sports Auction",
         winningBid: "HK$320",
-        status: "Processing",
+        status: "Preparing Shipment",
         lotHref: "#lot-sticker-album",
         onAction: fn(),
       },
