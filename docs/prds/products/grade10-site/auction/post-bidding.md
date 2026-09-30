@@ -2,7 +2,7 @@
 title: Post-Bidding
 spec: grade10-site/auction/winner-order
 order: 4
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 ---
 
 What happens after a lot stops taking bids: the result, then the winner's
@@ -62,7 +62,7 @@ winner of three lots has three orders, each with its own deadlines.
 
 ### My Auction Orders
 
-🚧 Every won lot on one list, opened from the account menu beside My
+Every won lot on one list, opened from the account menu beside My
 Auctions: the lot with View lot, the auction, the winning bid, the status and
 one next action — Complete Order Setup while Awaiting Setup, Pay Invoice
 while Pending Payment, an expired invoice included, and View detail
@@ -247,7 +247,7 @@ doing, under Edge Cases.
 - **Card** — a fresh charge for the order total while the invoice is pending,
   on a stored card or another; Grade10 confirms it on its own, and a declined
   attempt leaves the invoice payable until the deadline
-- 🚧 **Unfinished payment** — a payment that times out or is abandoned says
+- **Unfinished payment** — a payment that times out or is abandoned says
   so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
 - 🚧 **Started in time** — one tried at or after the deadline cannot start, so
@@ -438,6 +438,8 @@ other lots.
 
 :::detail{title="Test cases" for="qa"}
 ::cases{id="grade10-site/auction/winner-order"}
+
+::cases{id="grade10-site/auction/auction-orders"}
 
 ::cases{id="grade10-site/auction/order-status"}
 
