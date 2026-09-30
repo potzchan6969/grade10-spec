@@ -204,7 +204,10 @@ function usId(heading) {
 function mergeJourneys(currentText, deltaText, changeId, capability) {
   if (/\*\*Walked by:\*\*/.test(deltaText)) return currentText ?? deltaText;
   const current = currentText ?? deltaText;
-  const currentDoc = rootSections(current);
+  const currentDoc = {
+    heading: rootSections(current).heading,
+    sections: documentSections(current),
+  };
   const deltaDoc = { heading: "", sections: documentSections(deltaText) };
   const currentJourneySection = sectionByName(
     currentDoc.sections,
@@ -249,7 +252,7 @@ function mergeJourneys(currentText, deltaText, changeId, capability) {
     retired.add(id);
   }
   const rendered = [];
-  rendered.push(`# ${currentDoc.heading || deltaDoc.heading || capability}`);
+  if (currentDoc.heading) rendered.push(`# ${currentDoc.heading}`);
   rendered.push("## User journeys");
   for (const journey of live.values()) rendered.push(renderSection(journey));
   if (retired.size > 0) {
@@ -327,9 +330,9 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   const body = [...baseGroups]
     .map(([group, children]) => [group, ...children].join("\n"))
     .join("\n");
-  const rendered = `## Feature set\n\n${body}`;
+  const rendered = `## Feature set\n\n${body}\n`;
   const span = sectionSpan(currentSpec, "Feature set");
-  if (!span) return `${currentSpec.replace(/\n*$/, "\n\n")}${rendered}\n`;
+  if (!span) return `${currentSpec.replace(/\n*$/, "\n\n")}${rendered}`;
   const lines = currentSpec.split("\n");
   lines.splice(
     span.from - 1,
@@ -358,7 +361,7 @@ function mergePurpose(currentSpec, deltaPurpose, capability, priorText) {
   }
   const rendered = `## Purpose${deltaPurpose.raw ? `\n\n${deltaPurpose.raw}` : ""}`;
   const span = sectionSpan(currentSpec, "Purpose");
-  if (!span) return `${currentSpec.replace(/\n*$/, "\n\n")}${rendered}\n`;
+  if (!span) return `${currentSpec.replace(/\n*$/, "\n\n")}${rendered}`;
   const lines = currentSpec.split("\n");
   lines.splice(
     span.from - 1,
@@ -418,7 +421,10 @@ function mergeSuite(currentText, deltaText, capability) {
   if (currentText === null || currentText === undefined) return deltaText;
   if (currentText === deltaText) return currentText;
   const current = currentText ?? deltaText;
-  const currentDoc = rootSections(current);
+  const currentDoc = {
+    heading: rootSections(current).heading,
+    sections: documentSections(current),
+  };
   const deltaDoc = { heading: "", sections: documentSections(deltaText) };
   const journeyHeading = /^.+-US-?\d+\b/i;
   const currentGroups = new Map(

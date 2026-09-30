@@ -904,6 +904,33 @@ describe("permanent ids across the whole store", () => {
     ]);
   });
 
+  it("lets an accepted change keep the requirements and ids it published", async () => {
+    const root = changing(
+      "published",
+      [
+        "## ADDED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/published/acceptance.json": `${JSON.stringify({
+          version: 2,
+          change: "published",
+          baseline: "b".repeat(64),
+          fingerprint: "a".repeat(64),
+          reviewedBy: "tester",
+          acceptedAt: "2026-09-30T00:00:00.000Z",
+          artifacts: [],
+          contractTargets: [],
+        })}\n`,
+      },
+    );
+    const result = await runChecks(root, NO_GIT);
+    expect(lines(result, "delta")).toEqual([]);
+    expect(lines(result, "issued")).toEqual([]);
+  });
+
   it("lets a MODIFIED block restate durable ids and a change repeat its own", async () => {
     const root = changing(
       "restating",

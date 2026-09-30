@@ -194,10 +194,47 @@ test("acceptance merges subset journeys and test cases without deleting the dura
   );
   assert.match(spec, /Legacy result: remains available/);
   assert.match(spec, /Query: The reader enters a query/);
+  assert.match(spec, /The reader enters a query\.\n\n## Requirements/);
   assert.match(journeys, /site-search-US-02/);
   assert.match(journeys, /site-search-US-03/);
   assert.match(suite, /site-search-TC02-01/);
   assert.match(suite, /site-search-TC03-01/);
+});
+
+test("acceptance keeps the durable journeys of a file with no title", () => {
+  const { root } = sandbox();
+  const delta = join(root, "openspec/changes/build-alpha/specs/site/search");
+  mkdirSync(join(root, "openspec/specs/site/search"), { recursive: true });
+  writeFileSync(
+    join(root, "openspec/specs/site/search/spec.md"),
+    "# Search\n\n## Purpose\n\nReaders search.\n\n## Feature set\n\n- Existing behaviour\n  - Legacy result: remains available.\n\n## Requirements\n\n### Requirement: Existing search\n\nThe system SHALL preserve existing search.\n",
+  );
+  writeFileSync(
+    join(root, "openspec/specs/site/search/user-journeys.md"),
+    "## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n\n### site-search-US-02: Reader uses existing search\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(delta, "spec.md"),
+    readFileSync(join(delta, "spec.md"), "utf8").replace(
+      "### Search\n\nThe reader enters a query.",
+      "- New behaviour\n  - Query: The reader enters a query.",
+    ),
+  );
+  writeFileSync(
+    join(delta, "user-journeys.md"),
+    "## Context user journeys\n\n### site-search-US-02: Reader uses existing search\n\nExisting journey.\n\n## ADDED User journeys\n\n### site-search-US-03: Reader sees a new result\n\nNew journey.\n\n## MODIFIED User journeys\n\n## REMOVED User journeys\n",
+  );
+  const journeys = prepareAcceptance(root, CHANGE).outputs.get(
+    "openspec/specs/site/search/user-journeys.md",
+  );
+  assert.match(journeys, /^## User journeys\n/);
+  assert.match(journeys, /site-search-US-01: Reader opens search/);
+  assert.match(journeys, /site-search-US-02/);
+  assert.match(journeys, /site-search-US-03/);
+  assert.ok(
+    journeys.indexOf("site-search-US-01") <
+      journeys.indexOf("site-search-US-03"),
+  );
 });
 
 test("acceptance records ui-design as a whole-file claim target", () => {

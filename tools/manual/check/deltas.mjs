@@ -651,6 +651,8 @@ function checkIssued(ctx, files) {
         `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed`,
       );
     }
+    // An accepted change's ADDED ids are the ones its acceptance published.
+    if (one.accepted) continue;
     for (const requirement of one.requirements) {
       if (requirement.kind !== "added") continue;
       for (const scenario of scenarios(requirement.block.children)) {

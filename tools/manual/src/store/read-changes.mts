@@ -79,7 +79,8 @@ function acceptedRecord(
   try {
     const value = JSON.parse(text) as Record<string, unknown>;
     if (
-      value.version !== 1 ||
+      (value.version !== 1 &&
+        !(value.version === 2 && Array.isArray(value.contractTargets))) ||
       value.change !== id ||
       typeof value.baseline !== "string" ||
       typeof value.fingerprint !== "string" ||
@@ -111,9 +112,14 @@ function implementationMatches(
   if (text === undefined) return false;
   try {
     const value = JSON.parse(text) as Record<string, unknown>;
+    const accepted =
+      value.version === 2
+        ? (value.acceptance as Record<string, unknown> | undefined)?.fingerprint
+        : value.version === 1
+          ? value.fingerprint
+          : undefined;
     return (
-      value.version === 1 &&
-      value.fingerprint === fingerprint &&
+      accepted === fingerprint &&
       Array.isArray(value.repositories) &&
       value.repositories.length > 0 &&
       value.repositories.every(

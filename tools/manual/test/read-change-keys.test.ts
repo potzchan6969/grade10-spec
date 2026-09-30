@@ -86,6 +86,32 @@ describe("the immutable acceptance and implementation records", () => {
     expect(entry.implementationComplete).toBeUndefined();
   });
 
+  it("reads a version 2 acceptance with its contract targets", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json({
+        ...acceptance,
+        version: 2,
+        contractTargets: [
+          {
+            path: "openspec/specs/demo/alpha/spec.md",
+            anchors: ["Feature set"],
+          },
+        ],
+      }),
+    });
+
+    expect(entry.accepted).toBe(true);
+    expect(entry.acceptanceFingerprint).toBe(acceptance.fingerprint);
+  });
+
+  it("refuses a version 2 acceptance with no contract targets", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json({ ...acceptance, version: 2 }),
+    });
+
+    expect(entry.accepted).toBeUndefined();
+  });
+
   it("does not treat an empty repository list as implementation-complete", () => {
     const { entry } = changeWith("", {
       [`${CHANGE}/acceptance.json`]: json(acceptance),
@@ -106,6 +132,25 @@ describe("the immutable acceptance and implementation records", () => {
       [`${CHANGE}/implementation.json`]: json({
         version: 1,
         fingerprint: acceptance.fingerprint,
+        repositories: [
+          {
+            repository: "grade10",
+            commit: "1".repeat(40),
+            components: ["demo-product/alpha"],
+          },
+        ],
+      }),
+    });
+
+    expect(entry.implementationComplete).toBe(true);
+  });
+
+  it("recognizes a version 2 implementation record by its accepted fingerprint", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json(acceptance),
+      [`${CHANGE}/implementation.json`]: json({
+        version: 2,
+        acceptance: { fingerprint: acceptance.fingerprint },
         repositories: [
           {
             repository: "grade10",
