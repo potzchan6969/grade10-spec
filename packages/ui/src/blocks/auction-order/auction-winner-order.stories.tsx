@@ -209,6 +209,25 @@ export const CardRedirecting: Story = {
   },
 };
 
+export const ProofReturned: Story = {
+  args: {
+    alerts: [
+      {
+        title: "Payment proof returned",
+        description:
+          "Reason: The transfer receipt is unreadable.\nPayment deadline restarted: Oct 9, 2026, 3:00 PM",
+        status: "warning",
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    await settled(canvasElement);
+    expect(within(canvasElement).getByRole("alert")).toHaveTextContent(
+      "Reason: The transfer receipt is unreadable.",
+    );
+  },
+};
+
 export const PartiallyPaid: Story = {
   args: {
     badge: { label: "Partially Paid", variant: "warning" },

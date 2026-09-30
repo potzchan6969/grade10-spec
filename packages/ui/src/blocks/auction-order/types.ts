@@ -54,7 +54,7 @@ type AuctionWinnerOrderCopy = {
 
 type AuctionWinnerOrderAction = { label: string; onPress: () => void };
 
-/** A description keeps its line breaks; `role` overrides the Alert's own. */
+/** A description keeps its line breaks and stacks under the title; `role` overrides the Alert's own. */
 type AuctionWinnerOrderAlert = {
   title: string;
   description?: string;

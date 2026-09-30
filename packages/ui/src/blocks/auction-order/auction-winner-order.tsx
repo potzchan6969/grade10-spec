@@ -206,7 +206,7 @@ function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
         ) : undefined
       }
       dismissible={false}
-      layout="inline"
+      layout={alert.description ? "block" : "inline"}
       role={alert.role ?? "alert"}
       status={alert.status}
       title={alert.title}
