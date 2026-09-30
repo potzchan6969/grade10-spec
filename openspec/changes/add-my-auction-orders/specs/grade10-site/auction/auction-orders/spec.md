@@ -63,7 +63,7 @@ The account menu SHALL link to My Auction Orders beside My Auctions.
 #### Scenario: grade10-site-auction-auction-orders-SC-04 - Newest close first within a band
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
-- **GIVEN** two Processing orders, one whose lot closed yesterday and one last week
+- **GIVEN** two Preparing Shipment orders, one whose lot closed yesterday and one last week
 - **WHEN** the collector opens My Auction Orders
 - **THEN** the order closed yesterday is listed first
 
@@ -78,7 +78,7 @@ order, per `grade10-site/auction/winner-order`.
 | Awaiting Setup | Complete Order Setup |
 | Pending Payment | Pay Invoice |
 | Preparing Invoice | View detail |
-| Processing | View detail |
+| Preparing Shipment | View detail |
 | Shipped | View detail |
 | Delivered | View detail |
 | Cancelled | View detail |
@@ -117,7 +117,7 @@ the list itself.
 #### Scenario: grade10-site-auction-auction-orders-SC-08 - Other statuses offer View detail
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
-- **GIVEN** orders whose statuses are Preparing Invoice, Processing, Shipped,
+- **GIVEN** orders whose statuses are Preparing Invoice, Preparing Shipment, Shipped,
   Delivered, Cancelled and Refunded
 - **WHEN** the winner reads their rows
 - **THEN** each row's action is View detail

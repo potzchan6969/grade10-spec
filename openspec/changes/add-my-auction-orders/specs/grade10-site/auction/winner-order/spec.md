@@ -41,7 +41,7 @@ What the page offers SHALL follow the order status.
 | Awaiting Setup | The address form in Collection Method, per "The address form refuses empty required fields" |
 | Preparing Invoice | The confirmed address, per "The delivery address is confirmed before payment"; no invoice and no way to pay |
 | Pending Payment | The full invoice with every line, per "Invoice fields", and **Pay Now**; the confirmed address |
-| Processing, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
+| Preparing Shipment, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
 
 An invoice whose status is `expired` SHALL still be presented under the
 derived Pending Payment order status, per `revise-auction-winner-invoicing`,
@@ -68,7 +68,7 @@ not derive a second Expired order status.
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
-  Pending Payment and Processing
+  Pending Payment and Preparing Shipment
 - **WHEN** the winner reads Order Status
 - **THEN** it lists those four statuses in the order reached
 - **AND** each carries the date and time it was reached
@@ -111,7 +111,7 @@ outcome SHALL read as follows.
 
 | Session outcome | The winner sees | Order |
 | --- | --- | --- |
-| Completed | **Confirming payment** until Grade10 records the invoice `paid` | Processing once paid |
+| Completed | **Confirming payment** until Grade10 records the invoice `paid` | Preparing Shipment once paid |
 | Timed out | Payment was not completed; Pay Now is available again | Stays Pending Payment |
 | Abandoned or cancelled by the winner | Payment was not completed; Pay Now is available again | Stays Pending Payment |
 | Declined | The refusal, per "The bid-time hold is released, never captured" | Stays Pending Payment |
@@ -135,7 +135,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **WHEN** the winner selects Pay Now
 - **THEN** a new payment session starts for the same invoice amount
 
-#### Scenario: winner-order-SC-51 - A completed session confirms before reading Processing
+#### Scenario: winner-order-SC-51 - A completed session confirms before reading Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** a winner whose hosted card session completed but whose
@@ -143,12 +143,12 @@ NOT show the order as paid before it records the invoice `paid`.
   `paid`
 - **WHEN** they return to the order
 - **THEN** the page shows Confirming payment
-- **AND** the order does not yet read Processing
+- **AND** the order does not yet read Preparing Shipment
 
-#### Scenario: winner-order-SC-52 - A recorded payment reads Processing
+#### Scenario: winner-order-SC-52 - A recorded payment reads Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** an order whose authenticated auction-order read model returns
   invoice status `paid` and fulfilment status `unfulfilled`
 - **WHEN** the winner opens it
-- **THEN** its status is Processing
+- **THEN** its status is Preparing Shipment

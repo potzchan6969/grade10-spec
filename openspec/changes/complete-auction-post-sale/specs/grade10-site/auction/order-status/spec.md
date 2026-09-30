@@ -182,7 +182,7 @@ anyway is recorded and moves nothing.
 - **GIVEN** an auction order whose invoice status is `payment_verifying` and whose fulfilment status is `unfulfilled`
 - **WHEN** an operator confirms the proof
 - **THEN** the invoice status is `paid`
-- **AND** the order derives as Processing
+- **AND** the order derives as Preparing Shipment
 
 #### Scenario: auction-status-SC-48 - Proof upload enters payment_verifying only from pending
 **Serves:** Writable primitives - `payment_verifying` is entered on upload
@@ -199,7 +199,7 @@ anyway is recorded and moves nothing.
   `expired`
 - **WHEN** a card payment of 323225 minor units in HKD for it completes
 - **THEN** the invoice status is `paid`, and the payment is flagged Paid late
-- **AND** the order derives as Processing
+- **AND** the order derives as Preparing Shipment
 
 #### Scenario: auction-status-SC-56 - A card payment landing on a checked invoice moves nothing
 **Serves:** Guards - money that lands while proof is checked moves no status
