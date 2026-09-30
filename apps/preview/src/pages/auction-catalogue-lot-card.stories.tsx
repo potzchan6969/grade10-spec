@@ -7,6 +7,7 @@ import {
   COLLECTION_LOTS,
   ENDED_ONLY_LOTS,
   FEW_FEATURED_LOTS,
+  pinCatalogueClock,
 } from "./auction-catalogue-content";
 
 /**
@@ -18,6 +19,7 @@ const meta = {
   title: "Auction List/All Auctions/Lot Card",
   component: AuctionLotCard,
   parameters: { layout: "padded" },
+  beforeEach: pinCatalogueClock,
   decorators: [
     (Story) => (
       <div className="w-72">

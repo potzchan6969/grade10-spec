@@ -32,9 +32,9 @@ export const STAGES: Stage[] = [
   "designed",
   "specified",
   "planned",
+  "accepted",
   "building",
-  "on-staging",
-  "released",
+  "implementation-complete",
   "archived",
 ];
 
@@ -52,9 +52,9 @@ export const STAGE_LABEL: Record<Stage, string> = {
   designed: "Designed",
   specified: "Specified",
   planned: "Planned",
+  accepted: "Accepted",
   building: "Building",
-  "on-staging": "On staging",
-  released: "Released",
+  "implementation-complete": "Implementation complete",
   archived: "Archived",
 };
 
@@ -88,8 +88,8 @@ export const ROLE_LABEL: Record<Role, string> = {
  * Two answers are read before the ladder. A record nothing could read is
  * Proposed — where every change starts — because the lanes are how somebody
  * finds it and leaving it out would hide the one change that needs a person.
- * An archived change is Archived: the fold is the last rung, `deploy_waived`
- * and `tasks_waived` are how the archive answers for a rung it skipped, and
+ * An archived change is Archived: the fold is the last rung, and
+ * `tasks_waived` is how the archive answers for a rung it skipped, and
  * reading it back down the ladder would file finished work as in progress.
  */
 export function stageOf(
@@ -123,10 +123,10 @@ export function ladderOf(
       PROOF_OF_STAGE.specified.every(settled) && (change.raisedOpen ?? 0) === 0,
     planned:
       PROOF_OF_STAGE.planned.every(settled) && change.promotedBy !== undefined,
+    accepted: change.accepted === true,
     building: done > 0,
-    "on-staging":
-      total > 0 && done === total && change.deployedEnv === "staging",
-    released: change.releasedIn !== undefined,
+    "implementation-complete":
+      total > 0 && done === total && change.implementationComplete === true,
   };
   // A rung is reached only when its own proof holds and every proof before it
   // does too: Designed's own row (a waiver stands for each design) says
@@ -189,8 +189,8 @@ export function taskTotals(change: ChangeEntry): {
 }
 
 /** The lane one stage projects to, so the four and the eight cannot disagree
- * about the same change. Designed is still what was proposed; Released and
- * Archived are both finished work awaiting or past the fold. */
+ * about the same change. Designed is still what was proposed; Accepted,
+ * Implementation complete and Archived are finished planning or delivery. */
 export function laneOfStage(stage: Stage): ChangeLane {
   return LANE_OF[stage];
 }
@@ -201,8 +201,8 @@ const LANE_OF: Record<Stage, ChangeLane> = {
   specified: "specified",
   planned: "in-progress",
   building: "in-progress",
-  "on-staging": "complete",
-  released: "complete",
+  accepted: "complete",
+  "implementation-complete": "complete",
   archived: "complete",
 };
 
@@ -215,8 +215,9 @@ const LANE_OF: Record<Stage, ChangeLane> = {
  * `(stage, hands)` changing and not the stage alone. A waived design needs no
  * hand: nobody draws it, so the turn passes to the hand of the design that is
  * still owed rather than waiting on a handle for a file nobody will write.
- * Designed, Released and Archived name nobody: the requirements are drafted
- * next and read at Specified, and whoever archives takes a released change.
+ * Designed and Archived name nobody: requirements are drafted next and read
+ * at Specified; acceptance goes to the implementation hand, then QA and
+ * release verify the implementation before the fold.
  *
  * Settled is read through the same predicate as the ladder, so the stage and
  * the turn cannot disagree about whether an artifact is in: `decisions` is
@@ -261,8 +262,8 @@ const HANDS_AT: Record<Stage, Role[]> = {
   specified: ["pm", "qa"],
   planned: ["dev"],
   building: ["dev"],
-  "on-staging": ["qa", "release"],
-  released: [],
+  accepted: ["dev"],
+  "implementation-complete": ["qa", "release"],
   archived: [],
 };
 
@@ -275,28 +276,27 @@ export function rolesAtStage(stage: Stage): Role[] {
 }
 
 /**
- * The changes a release has carried, and when: a change in flight whose
- * record carries `released_in:`, dated by the commit that wrote it —
- * `lastMoved`, as near as the store dates a cut — and every archived change,
- * dated by its directory's own prefix, which a rebase cannot move.
+ * The changes whose implementation is complete, and when: the implementation
+ * record dates an in-flight change by its last landing, and every archived
+ * change is dated by its directory's own prefix.
  *
  * One reading behind the board, the change page and the digest: `depends_on:`
  * naming one of these blocks nothing, which is what the Blocked overlay reads
  * and what makes a dependent freed.
  */
-export function releasedOf(
-  changes: Pick<ChangeEntry, "id" | "releasedIn" | "lastMoved">[],
+export function completedOf(
+  changes: Pick<ChangeEntry, "id" | "implementationComplete" | "lastMoved">[],
   archived: { id: string; shippedOn?: string }[],
 ): Map<string, { id: string; on?: string }> {
-  const released = new Map<string, { id: string; on?: string }>();
+  const completed = new Map<string, { id: string; on?: string }>();
   for (const change of changes) {
-    if (change.releasedIn === undefined) continue;
-    released.set(change.id, { id: change.id, on: change.lastMoved });
+    if (!change.implementationComplete) continue;
+    completed.set(change.id, { id: change.id, on: change.lastMoved });
   }
   for (const change of archived) {
-    released.set(change.id, { id: change.id, on: change.shippedOn });
+    completed.set(change.id, { id: change.id, on: change.shippedOn });
   }
-  return released;
+  return completed;
 }
 
 /** The roles of these the change names nobody for — the hands a card shows as
@@ -356,8 +356,8 @@ export type Drafted = {
 /**
  * The agent mark and the hands' moves, one entry per drafted stage.
  *
- * Partial, not total: On staging, Released and Archived are drafted by nobody
- * — the deploy, the cut and the fold — so a lookup that misses is the answer
+ * Partial, not total: Accepted, Implementation complete and Archived are
+ * drafted by nobody — evidence records and the fold — so a lookup that misses is the answer
  * for them rather than a hole. Nothing in a change's record says any of this,
  * because which stages an agent drafts is the schema's rule and not one
  * change's: two changes in one stage read the same pair. `draftedOf` in

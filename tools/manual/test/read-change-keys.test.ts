@@ -10,7 +10,7 @@ import { writeStore } from "./tmp-store";
 /**
  * The keys this change adds to a change's record: who takes it at each stage,
  * whose word landed each artifact, what was read again, where its thread is,
- * the UI design it does not owe, and the release it went out in.
+ * the UI design it does not owe.
  *
  * Every one is read the way the record's keys already are — absent waives
  * nothing, and anything that is not a line of text is a malformed manifest
@@ -39,11 +39,12 @@ const PROPOSAL = [
 ].join("\n");
 
 /** The change as the store reads it, with the record the case is about. */
-function changeWith(record: string) {
+function changeWith(record: string, extraFiles: Record<string, string> = {}) {
   const root = writeStore({
     "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
     [`${CHANGE}/.openspec.yaml`]: `schema: demo-planning\ncreated: 2026-09-18\n${record}`,
     [`${CHANGE}/proposal.md`]: PROPOSAL,
+    ...extraFiles,
   });
   const [entry] = readChanges(root, NO_GIT, null);
   return { entry, root };
@@ -51,6 +52,93 @@ function changeWith(record: string) {
 
 /** What the record refused, as the `store` rule would report it. */
 const refusalOf = (record: string) => changeWith(record).entry.error?.message;
+
+const acceptance = {
+  version: 1,
+  change: "key-probe",
+  baseline: "b".repeat(64),
+  fingerprint: "a".repeat(64),
+  reviewedBy: "tester",
+  acceptedAt: "2026-09-18T00:00:00.000Z",
+  artifacts: [
+    { path: "openspec/changes/key-probe/proposal.md", sha256: "c".repeat(64) },
+  ],
+};
+
+const json = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
+
+describe("the immutable acceptance and implementation records", () => {
+  it("does not infer acceptance from an existing planning draft", () => {
+    const { entry } = changeWith("");
+
+    expect(entry.accepted).toBeUndefined();
+    expect(entry.acceptanceFingerprint).toBeUndefined();
+    expect(entry.implementationComplete).toBeUndefined();
+  });
+
+  it("reads a valid acceptance fingerprint", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json(acceptance),
+    });
+
+    expect(entry.accepted).toBe(true);
+    expect(entry.acceptanceFingerprint).toBe(acceptance.fingerprint);
+    expect(entry.implementationComplete).toBeUndefined();
+  });
+
+  it("does not treat an empty repository list as implementation-complete", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json(acceptance),
+      [`${CHANGE}/implementation.json`]: json({
+        version: 1,
+        fingerprint: acceptance.fingerprint,
+        repositories: [],
+      }),
+    });
+
+    expect(entry.accepted).toBe(true);
+    expect(entry.implementationComplete).toBeUndefined();
+  });
+
+  it("recognizes implementation records only when they match acceptance", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json(acceptance),
+      [`${CHANGE}/implementation.json`]: json({
+        version: 1,
+        fingerprint: acceptance.fingerprint,
+        repositories: [
+          {
+            repository: "grade10",
+            commit: "1".repeat(40),
+            components: ["demo-product/alpha"],
+          },
+        ],
+      }),
+    });
+
+    expect(entry.implementationComplete).toBe(true);
+  });
+
+  it("ignores an implementation record tied to an older accepted fingerprint", () => {
+    const { entry } = changeWith("", {
+      [`${CHANGE}/acceptance.json`]: json(acceptance),
+      [`${CHANGE}/implementation.json`]: json({
+        version: 1,
+        fingerprint: "f".repeat(64),
+        repositories: [
+          {
+            repository: "grade10",
+            commit: "1".repeat(40),
+            components: ["demo-product/alpha"],
+          },
+        ],
+      }),
+    });
+
+    expect(entry.accepted).toBe(true);
+    expect(entry.implementationComplete).toBeUndefined();
+  });
+});
 
 describe("the hands a change names", () => {
   it("reads one handle per role", () => {
@@ -159,12 +247,11 @@ describe("what was read again", () => {
 });
 
 describe("the lines beside them", () => {
-  it("reads the thread, the waived UI design and the release", () => {
+  it("reads the thread and the waived UI design", () => {
     const { entry } = changeWith(
       [
         "thread: C0123ABCD/1758240000.123456",
         'ui_waived: "nothing a reader sees moves"',
-        "released_in: v4.19.0",
         "",
       ].join("\n"),
     );
@@ -172,7 +259,6 @@ describe("the lines beside them", () => {
     expect(entry.error).toBeUndefined();
     expect(entry.thread).toBe("C0123ABCD/1758240000.123456");
     expect(entry.uiWaived).toBe("nothing a reader sees moves");
-    expect(entry.releasedIn).toBe("v4.19.0");
   });
 
   it("says nothing where each key is absent", () => {
@@ -180,7 +266,6 @@ describe("the lines beside them", () => {
 
     expect(entry.thread).toBeUndefined();
     expect(entry.uiWaived).toBeUndefined();
-    expect(entry.releasedIn).toBeUndefined();
   });
 
   it("refuses a waiver written as a flag rather than a reason", () => {
@@ -192,12 +277,6 @@ describe("the lines beside them", () => {
   it("refuses a thread that is not a line of text", () => {
     expect(refusalOf("thread:\n  - C0123ABCD\n")).toMatch(
       /`thread` must be a line of text/,
-    );
-  });
-
-  it("refuses a release that is not a line of text", () => {
-    expect(refusalOf("released_in: 419\n")).toMatch(
-      /`released_in` must be a line of text/,
     );
   });
 });

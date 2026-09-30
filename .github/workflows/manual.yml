@@ -40,10 +40,13 @@ on:
   # cannot carry the nightly's verdict on its own — that is what left a
   # designer-side rename waiting for the next unrelated engineer push.
   workflow_dispatch:
+  repository_dispatch:
+    types: [deployment-evidence-updated]
 
 permissions:
   actions: read
   contents: read
+  deployments: read
 
 concurrency:
   group: manual-staging
@@ -89,6 +92,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Client payload fields only request a refresh. The manual reads the
+      # deployment back from the configured app repository's Deployments API.
+      - name: Fetch deployment receipts
+        env:
+          APP_DEPLOYMENTS_READ_TOKEN: ${{ secrets.APP_DEPLOYMENTS_READ_TOKEN }}
+          APP_DEPLOYMENTS_REPOSITORY: ${{ vars.APP_DEPLOYMENTS_REPOSITORY || '9gag/grade10' }}
+        run: node scripts/openspec/fetch-deployment-evidence.mjs
+
       # The viewer never resolves a store path of its own: it asks the openspec
       # CLI, and it runs `validate --strict` through it for every change in
       # development. Pinned to the version engineers run against this store.
@@ -130,28 +141,3 @@ jobs:
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
-
-  notify-deploy-failure:
-    name: Report failed manual deployment
-    needs: deploy
-    if: always() && needs.deploy.result == 'failure'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Slack about failed manual deployment
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
-          payload: |
-            {
-              "attachments": [
-                {
-                  "color": "#dc3545",
-                  "fallback": "Manual deployment failed.",
-                  "pretext": ":x: Manual deployment failed",
-                  "text": "Ref: *`${{ github.sha }}`*\\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>",
-                  "footer": "${{ github.repository }} | ${{ github.ref_name }}"
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

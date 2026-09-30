@@ -111,11 +111,15 @@ test("every group heading of the tasks template carries its repository tag", () 
 // every capability the change specifies, leaves the walks as its end-to-end
 // suite, and the same commit flips each case the walk decides.
 // Proves part of shared-planning-agent-rounds-US11-TC2-1.
-test("shared-planning-agent-rounds-SC-90 - the walk group names the suite's review as its input, in the template and the instruction", () => {
+test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases during planning and defers human QA until deployment", () => {
   const template = read(`${SCHEMA}/templates/${artifact.template}`);
   const walkText = template.slice(template.indexOf("## 3. The walk"));
-  assert.match(walkText, /\/tcs-review/);
-  assert.match(instruction, /names the suite's review .*as its input/i);
+  assert.match(walkText, /Uses draft `feature-tcs\.md` as its input/i);
+  assert.match(walkText, /human QA reviews cases after deployment/i);
+  assert.match(walkText, /`\/tcs-run-sheet` executes manual cases/i);
+  assert.match(instruction, /draft suite.*as its planning input/i);
+  assert.match(instruction, /human QA after deployment/i);
+  assert.doesNotMatch(walkText, /Needs `feature-tcs\.md` reviewed/);
 });
 
 test("shared-planning-agent-rounds-SC-59 - the tasks template's last group is the walk, and flips the cases it decides", () => {

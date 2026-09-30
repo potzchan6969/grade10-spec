@@ -9,7 +9,7 @@ import { openManual } from "./setup";
  * leaves behind.
  *
  * The clock is frozen at `FROZEN_NOW` before every open: `fixture-dates.json`
- * dates `demo-on-staging` at 2026-09-07 (12 days idle, the Idle chip) and
+ * dates `demo-implementation-complete` at 2026-09-07 (12 days idle, the Idle chip) and
  * `add-thing` at 2026-08-05 (45 days, the shelf) — the two bounds this store
  * can ever show against a frozen reading; the real clock would move both past
  * 30 days within the year.
@@ -45,9 +45,9 @@ test("the Board opens", async () => {
 /** The eight lanes an agent drafts from Proposed to Building, in stage order:
  * the lane heading names the stage, and the pair the reader meets there — the
  * agent's mark and the hand's move — is read from the stage alone, so every
- * change in that stage would carry the same words. On staging, Released and
- * Archived are a deploy, a cut and a fold: no agent drafts them, so their
- * headings carry neither. Scoped one lane at a time, because Specified and
+ * change in that stage would carry the same words. Implementation complete
+ * and Archived are an evidence record and the archive: no agent drafts them,
+ * so their headings carry neither. Scoped one lane at a time, because Specified and
  * Planned both name their hand's move "read" — the word the store reuses for
  * two different stages — and a page-wide search for it would not say which
  * lane it came from. */
@@ -104,7 +104,7 @@ test("shared-planning-change-stages-SC-10 - the mark and the move on a lane head
     }
   }
 
-  for (const stage of ["on-staging", "released", "archived"]) {
+  for (const stage of ["implementation-complete", "archived"]) {
     const lane = laneSection(stage);
     await expect
       .element(page.elementLocator(lane).getByText("agent drafts"))
@@ -140,9 +140,9 @@ test("shared-planning-change-stages-SC-51 - the lanes and a card", async () => {
     "Designed",
     "Specified",
     "Planned",
+    "Accepted",
     "Building",
-    "On staging",
-    "Released",
+    "Implementation complete",
     "Archived",
   ]) {
     await expect
@@ -237,7 +237,7 @@ test("shared-planning-change-stages-SC-54 - the filters narrow the board", async
 
   const titleOf = {
     waiting: "The Waiting overlay",
-    idle: "The On staging stage",
+    idle: "The Implementation complete stage",
     behind: "The Planned stage",
     blocked: "The Building stage",
   } as const;

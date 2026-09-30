@@ -1,123 +1,103 @@
 ---
 name: planning-dev
-description: Write the engineer's artifacts on an OpenSpec change - tech-design.md and tasks.md - on a change somebody else specified or one you author yourself. Use when planning delivery.
+description: Plan and accept one OpenSpec change in one invocation: QA1 writes blind cases, Dev writes design, scenarios and tasks, and QA2 reconciles them. Publish the accepted contract before implementation.
 ---
 
-# The engineer's artifacts
+# Plan and Accept a Change
 
-Two of the eight artifacts in `grade10-planning` are yours - `tech-design.md`
-is the fifth, `tasks.md` the eighth:
+`/planning-dev <change>` is the single planning entry point after the PM has
+settled the proposal, decisions and journeys, and the designer has added any
+needed UI design. It owns QA1, Dev, QA2, clarification, acceptance and
+publication. Durable specs hold the rolling latest accepted contract. The
+immutable acceptance snapshot and fingerprint preserve planning provenance;
+the first implementation claim records the durable contract baseline that
+archive will reconcile.
 
-| Artifact | What it holds |
-| --- | --- |
-| `tech-design.md` | How the requirements land — decisions, data model, contracts, risks |
-| `tasks.md` | The delivery plan, grouped by layer and claimed group by group |
+Planning creates draft cases only. Human QA reviews and classifies them with
+`/tcs-review` after deployment makes the implementation available; manual
+execution uses `/tcs-run-sheet`. Do not mark new cases approved or actual.
 
-`tasks.md` is the one that moves the change off the planning board: until it
-exists, both boards read the change as still being planned.
+## Prepare
 
-## Pick up the change in hand; never open a second one
+Read the capability PRD, durable spec, overlapping active changes, proposal,
+decisions, journeys, UI design where present, and the relevant
+`openspec instructions` output. Resolve product, scope and technical questions
+in their source artifacts before acceptance. Do not invent an answer.
 
-Most changes arrive already carrying a proposal, the decisions and the journeys
-somebody else wrote. **Add your artifacts to that change.** The implementing
-repository has no planning shape of its own — its `openspec/` is config-only
-and resolves to this store — so delivery is planned here, by you.
+Write the `spec.md` outline: `## Purpose` and `## Feature set`. Freeze the
+complete anchors: the journey set plus the feature-set root groups. If an
+anchor changes after a reading starts, invalidate QA1 and Dev and restart both
+in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
 
-1. Add `promoted_by: @your-handle` to the change's `.openspec.yaml` beside
-   `schema:`. The board names the promoter from that key — without it the card
-   still reads "proposed by" alone, and the author never learns their change
-   was picked up.
-2. **Read what the deltas carry, not whether the file is there.** Look for the
-   `## ADDED` and `## MODIFIED Requirements` headings before you plan.
+## One Planning Run
 
-   **No requirements means `tasks.md` is not yours to plan yet.** A task names
-   the scenarios it makes pass, and an outline issues none, so the plan waits
-   on the requirements; `tech-design.md` is drawn before them, from the page,
-   the decisions and the journeys. Where you own the change, take it through
-   `/workflow-specify` — the suite and the scenarios — and continue here. Where
-   somebody else authored it, say it needs QA's two readings and stop: that run
-   stops on *its* author for a case nobody ever decided, and answering one of
-   those yourself is the agent deciding the product.
+1. **QA1 - blind cases.** Levels first: the rulebook's **When a Change
+   Touches a Suite Above It** runs before the readings, and a domain or
+   product hit drafts that suite into the change. Then, in a fresh context,
+   QA1 runs `spec-to-tcs` against only frozen anchors and the domain suite
+   above, without requirements, scenarios, technical design, QA2 or archive
+   material. Keep `feature-tcs.md` draft.
+2. **Dev - delivery draft.** In another fresh context, Dev writes the
+   technical design in `tech-design.md`, requirement scenarios in `spec.md`,
+   then `tasks.md`. Dev does not read QA1 until this independent draft is
+   complete. Derive scenarios from the PRD, journeys, UI design and technical
+   design: the requirements pass reads `tech-design.md` beside
+   `ui-design.md`; a requirement contradicting either is not written. A
+   requirement that reaches a design another hand owns writes a dated wait on
+   them rather than writing over them:
+   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
+   cleared by their edit or by that artifact's `reviewed:` line, and it holds
+   no stage. Use `docs/governance/task-ownership.md` for groups and owners.
+3. **QA2 - reconciliation.** In a fresh context, reconcile each blind case
+   and scenario against the anchors in `feature-tcs.md`. Record whether a case
+   was folded, rejected with reason, raised for the human or remains uncovered.
+   Put unresolved product questions in `decisions.md`'s `## Raised` table.
+4. **Resolve and check.** A question the readings cannot settle goes to the
+   same human, as a numbered `Q<n>` row. The same human resolves questions that affect
+   behaviour, scope, design, architecture or tasks. Update the source first,
+   then dependent artifacts. A changed anchor restarts QA1 and Dev; another
+   edit reruns QA2. Confirm artifacts are complete and new cases remain draft.
+5. **Accept and publish.** Run `pnpm accept:preflight <change>`. With its
+   printed baseline, run `pnpm spec:accept <change> --baseline <digest>
+   --reviewed-by <human>`. An amendment names `--supersedes <fingerprint>`.
+   Acceptance publishes the durable contract and preserves prior snapshots.
 
-The proposal, the deltas and the journeys carry over untouched. **Do not send
-the proposal back to its author for a task list** — their part is finished. A
-change whose scenarios never landed is the exception above, and what goes back
-is the anchor set, not the proposal.
+`acceptance.json` version 2 records the change, baseline content fingerprint,
+reviewer, time, scoped artifact hashes and derived durable target paths and
+anchors. `implementation.json` version 2 records the accepted fingerprint, the
+first-claim durable commit and targets, repository commits and components. They
+are planning and engineering evidence, not QA execution evidence.
 
-Authoring a change from scratch is the same lane: take artifacts 1 to 3
-through `/workflow-plan` - the proposal, the decisions, the journeys - then the spec
-passes. **`spec.md` is yours on a change you authored**: its outline, the blind
-suite, then the requirements, exactly as `/workflow-specify` runs them. Read
-`planning-qa` and follow it rather than writing the file directly; the PM and
-the designer never open it, and neither do you on somebody else's change.
+## Artifacts
 
-## tech-design.md
+| Artifact | Owner | Contract |
+| --- | --- | --- |
+| `tech-design.md` | Dev | Implementation decisions, interfaces and risks |
+| `spec.md` | QA1 outline, Dev scenarios | Frozen anchors and accepted requirements |
+| `feature-tcs.md` | QA1, QA2 | Blind draft cases and reconciliation |
+| `tasks.md` | Dev | Scenario-linked groups and verification |
 
-Owed by every change carrying a task group outside this store — the
-instruction `/workflow-tech` renders holds the sections, what each carries, and the
-waiver that stands in for the file, and it carries this store's own rules, from
-`openspec/config.yaml`, on top of the schema's. Beyond them: under
-**Decisions**, keep the
-implementation alternative an engineer might still try even when the spec
-forbids the resulting behavior, so the next engineer finds it rejected rather
-than untried.
+Every external implementation change needs `tech-design.md`; use
+`design_waived: <why>` only for work wholly in this store. Each scenario has
+an anchor in `**Serves:**`; each case has one in `**Trace:**`. Reconciliation
+does not add scenario ids to blind cases. Task groups include tests before
+implementation, verification, and a final end-to-end walk.
 
-## tasks.md
+## After Implementation
 
-This is the artifact the implementing repository reads, checks off, and claims
-groups in. The instruction `/workflow-tasks` renders holds the shape — layers, clone
-names, parallel groups, tasks phrased as scenarios, a verification step per
-group, no owner tags — and `docs/governance/task-ownership.md` the format
-tooling on both sides parses. Beyond them:
-
-- **Leave the routine archive hand-copy out of the tasks.** The fold keeps
-  `## Requirements` and nothing else, so a delta's `## Feature set` and every
-  `-US-` id in a `user-journeys.md` need carrying across — but
-  `pnpm run archive:preflight` already refuses the archive while they are
-  uncarried, and a task for it cannot be ticked when the work is: it waits on a
-  deploy, so a delivered change reads as incomplete on the board. Name who
-  archives in the proposal instead. Carry a task only for what the preflight
-  cannot check — a hand-off sequenced behind another change archiving first, a
-  capability with no durable spec for the copy to land in, a README row or an
-  acceptance shelf — and write it inside the grade10-spec group that updates
-  the PRD, never as a group of its own with a verification step it
-  cannot pass.
-- **The PRD moves first.** A constraint you learn that changes an outcome goes
-  on the PRD, marked 🚧 or ❓, before the delta or the task that depends on
-  it. A constraint that changes no outcome — a mechanism, a key, a lock, a
-  metric, a sweep, what was tried and dropped — is `tech-design.md`'s and the
-  application repository's architecture doc's. Your depth on the page is one
-  `detail{for="engineer"}` block, and it is a code map: the module, the
-  config name, the architecture doc, as items of a name and a link. The
-  check warns (`dense`) on an engineer block holding a paragraph.
-- **Engineers claim groups at pickup** with `pnpm plan claim`, which is why
-  the groups are written without owner tags.
-- **Link selected app tests** - once a scenario and case have stable markers,
-  the test task adds its adjacent acceptance or support marker with the
-  [trace CLI](../../../docs/governance/test-traceability.md):
-  `acceptance=<app>.<product>-<capability>.TC-<sequence>@<revision>` or
-  `supports=<app>.<product>-<capability>.SC-<sequence>`. The CLI accepts
-  case-insensitive references and writes canonical casing. The app test
-  remains the evidence; the marker only identifies which record it decides.
-
-## Finish
-
-The round's conduct is [Round Summary and
-Landing](../../../docs/governance/round-summary.md)'s.
-
-A change that needs an artifact nobody has written yet says so: `awaiting:
-<artifact>: <what is missing>` in its `.openspec.yaml`, which puts it on
-[Pending](/pending) under the teammate who owes it.
-
-Then hand off: an engineer claims one group at a time from the application
-repository with `/workflow-build`. Archive belongs to whoever owns the change,
-**after it is deployed**.
+At the first task claim, `pnpm plan claim` records the published durable commit
+and derived targets. Implement against the rolling durable contract. After
+engineering verification, record repository commits and components with `pnpm
+plan implementation`. Archive compares the claim baseline with current targets:
+every difference needs a compatibility acknowledgement, and semantic changes
+name test or other evidence. Archive preserves history and does not fold again
+or wait for human QA. After deployment, QA reviews with `/tcs-review` and
+executes manual cases with `/tcs-run-sheet` where needed.
 
 ## Related
 
-- `planning-pm` — the requirements and journeys your tasks name.
-- `planning-design` — the screens and the component work your plan carries.
-- `planning-qa` — the scenarios your tasks name and the suites that land
-  beside them; where a change arrives without them, the run that fills them.
-- `openspec-apply-change`, `openspec-archive-change` — the far end of the
-  lifecycle.
+- `planning-pm` - proposal, decisions and journeys.
+- `planning-design` - optional UI design.
+- `spec-to-tcs` - internal QA1 generator.
+- `tcs-review` - human QA after implementation.
+- `openspec-apply-change`, `openspec-archive-change` - implementation and archive.

@@ -9,6 +9,5 @@ design_waived: "the Typekit link and the theme's canada-type-gibson mapping
 reviewed:
   user-journeys: 06c5afe3
   tasks: 19d3e923
-deploy_waived: "seankcw, staging deploy 35678969234 (2026-09-22) confirms the change; production Deploy runs since 2026-09-17 fail on an unrelated pending-migration gate"
 decisions_carried: "Q1 needs no carry - self-evident from the capability's grade10-site-scoped path; Q2 is already durable in spec.md Requirement 3 (SC-04); Q3 (crawler/scraper requesters are crawlable-pages' remit) has nowhere to land - no PRD page exists here (page_waived) and crawlable-pages isn't in this change's deltas"
 journeys_copied: "true"

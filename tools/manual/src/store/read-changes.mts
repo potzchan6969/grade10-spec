@@ -70,6 +70,69 @@ const AUTHOR =
   /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
+function acceptedRecord(
+  dir: string,
+  id: string,
+): { fingerprint: string } | undefined {
+  const text = readTextIfExists(join(dir, "acceptance.json"));
+  if (text === undefined) return undefined;
+  try {
+    const value = JSON.parse(text) as Record<string, unknown>;
+    if (
+      value.version !== 1 ||
+      value.change !== id ||
+      typeof value.baseline !== "string" ||
+      typeof value.fingerprint !== "string" ||
+      value.fingerprint.length === 0 ||
+      typeof value.reviewedBy !== "string" ||
+      typeof value.acceptedAt !== "string" ||
+      !Array.isArray(value.artifacts) ||
+      !value.artifacts.every(
+        (item) =>
+          item &&
+          typeof item === "object" &&
+          typeof item.path === "string" &&
+          typeof item.sha256 === "string",
+      )
+    )
+      return undefined;
+    return { fingerprint: value.fingerprint };
+  } catch {
+    return undefined;
+  }
+}
+
+function implementationMatches(
+  dir: string,
+  fingerprint: string | undefined,
+): boolean {
+  if (!fingerprint) return false;
+  const text = readTextIfExists(join(dir, "implementation.json"));
+  if (text === undefined) return false;
+  try {
+    const value = JSON.parse(text) as Record<string, unknown>;
+    return (
+      value.version === 1 &&
+      value.fingerprint === fingerprint &&
+      Array.isArray(value.repositories) &&
+      value.repositories.length > 0 &&
+      value.repositories.every(
+        (item) =>
+          item &&
+          typeof item === "object" &&
+          typeof item.repository === "string" &&
+          typeof item.commit === "string" &&
+          Array.isArray(item.components) &&
+          item.components.every(
+            (component: unknown) => typeof component === "string",
+          ),
+      )
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * The changes in flight in this checkout. A change on `main` has its task
  * list read there, where every claim and checkmark is recorded, and carries
@@ -146,6 +209,7 @@ function readChange(
   landed?: string,
 ): ChangeEntry {
   const rel = storePath(root, dir);
+  const acceptance = acceptedRecord(dir, id);
   const entry: ChangeEntry = {
     id,
     dir: rel,
@@ -162,6 +226,12 @@ function readChange(
     taskGroups: [],
     deltas: [],
     written: [],
+    ...(acceptance
+      ? { accepted: true, acceptanceFingerprint: acceptance.fingerprint }
+      : {}),
+    ...(implementationMatches(dir, acceptance?.fingerprint)
+      ? { implementationComplete: true }
+      : {}),
   };
 
   // Any file of the change, not only tasks.md — a plan that writes specs and
@@ -467,13 +537,8 @@ const RECORDED = [
   ["decisions_waived", "decisionsWaived"],
   ["design_waived", "designWaived"],
   ["ui_waived", "uiWaived"],
-  ["deployed_at", "deployedAt"],
-  ["deployed_env", "deployedEnv"],
-  ["deployed_build", "deployedBuild"],
-  ["deploy_waived", "deployWaived"],
   ["tasks_waived", "tasksWaived"],
   ["thread", "thread"],
-  ["released_in", "releasedIn"],
 ] as const;
 
 /** `skip_specs` turns the whole cross-check off, so it is read on its own. The

@@ -1,19 +1,42 @@
 ---
 name: openspec-archive-change
-description: Finalize a completed OpenSpec change and preserve its decision history.
+description: Archive an accepted OpenSpec change after implementation is verified and before deployment.
 ---
 
-# Archive an OpenSpec change
+# Archive a Verified Change
 
-1. Confirm every required task is checked off on this store's `main`, where `pnpm plan` records checkmarks; call out any intentional exception. `pnpm run archive:preflight <change>` reads them there and prints what still refuses the archive.
-2. Record the deploy: `pnpm plan shipped <change>` in the application repository. It finds the deploy run that contains every merge commit of the change, runs this store's preflight with that sha, and commits `deployed_at` and `deployed_env` into the change's `.openspec.yaml` — `pnpm plan shipped <change> --build <tag>` names the build QA walked, `deployed_build`, beside them, and `archive:preflight`'s own `--deployed-build <tag>` writes it by hand, refused without `--deployed-at` the way `--deployed-env` is. A change whose task groups are all tagged `(grade10-spec)` deploys nothing and needs no record. On an owner's explicit say-so the waiver is written here by hand instead — `pnpm run archive:preflight <change> --deploy-waived "<who, why>"`, with `--tasks-waived "<who, why>"` where tasks are still unchecked. The preflight refuses either way while the change's `## Feature set` and its `user-journeys.md` are not carried across to the durable capability — the fold keeps `## Requirements` only. Carry the change's `feature-tcs.md` across to the capability beside its spec, a `domain-tcs.md` into the domain directory and a `product-tcs.md` into the product's, by hand as well, every case whole, in whatever status the file holds. The preflight refuses a suite that leaves a case behind, or lands one under another `<v>` or status.
-3. Fold accepted delta requirements from `openspec/changes/<change>/specs/` into `openspec/specs/`, then re-read the capability spec and confirm it describes the shipped behavior. It is the only record consuming applications build from.
-4. Run `openspec validate --specs` and `pnpm run trace -- validate`. Before
-   archive, `archive:preflight` runs `pnpm run trace -- fold --change <id>`
-   where a carried feature suite has trace markers. It accepts the exact
-   active-to-durable case handover; after archive, normal validation is strict
-   against the durable graph.
-5. Move what outlives the change from `decisions.md` onto the capability's PRD, in its `Product decisions` block — the option each row dropped, where the reason still binds. That file is folded nowhere and archives with the change, and the blind suite pass may not read `openspec/changes/archive/`, so a rejection left there alone is invisible to the pass most likely to raise it again. `archive:preflight` asks for `--decisions-carried "<what went where>"`, or `none` where nothing outlived it.
-6. Take the 🚧 marks off every line on the capability's PRD in `docs/prds/` that this change delivered — the line stays, flat — in the same commit as the fold, and run `pnpm check:manual`: it fails a 🚧 line no in-flight change delivers, and warns on every page the fold left older than its spec — read each against what moved and clear it with the edit it needs, or with `reviewed: <date>` in its frontmatter when it already reads right. Leave requirements out of it.
-7. Move the change to `openspec/changes/archive/YYYY-MM-DD-<change-name>/` without dropping its proposal, design, task history or `rounds.md` — the rounds are folded into no capability and archive with the change, and `archive:preflight` refuses a copy that left the file behind.
-8. Summarize the archived path, the durable specs updated, the deploy evidence recorded, and any follow-up work.
+The accepted contract is published to `openspec/specs/` before implementation.
+Archiving preserves the change record after implementation; it does not fold
+requirements a second time and does not wait for deployment.
+
+1. **Check implementation evidence.** Confirm required task groups are complete
+   and verified. In the application repository, record the implemented
+   contract and source commits with
+   `pnpm plan implementation <change> [--commit <sha>] --component <deploy-component>...`.
+   The first claim records the durable contract baseline and target scope. The
+   generated `implementation.json` identifies the accepted fingerprint,
+   repository commits and concrete components. A change implemented wholly in
+   `grade10-spec` records its repository commit there.
+2. **Check acceptance and archive readiness.** Confirm `acceptance.json` names
+   the accepted content fingerprint. Run `pnpm run archive:preflight <change>`.
+   It compares the claim baseline with the current durable target scope. Record
+   every difference in `compatibilityAcknowledgement`; an editorial entry names
+   its reason, and a semantic entry also names its test or other evidence.
+3. **Keep QA downstream.** Archive does not wait for human QA review or test
+   execution. After deployment makes the implementation available, human QA
+   reviews and classifies suites through `/tcs-review`; `/tcs-run-sheet` handles
+   manual execution, and the review updates durable suites after archive.
+4. **Preserve product decisions.** Move any decision that outlives the change
+   into the capability PRD's `Product decisions` block. Record what moved, or
+   `none`, as required by the archive preflight.
+5. **Check the durable pages.** Remove the 🚧 marks for outcomes delivered by
+   this change. The durable requirements were already published before
+   implementation, so do not edit them as a second fold. Run `pnpm check:manual`
+   after page updates.
+6. **Archive.** Move the change to
+   `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the proposal,
+   decisions, design, tasks, acceptance record, implementation record and
+   `rounds.md`. Run the applicable archive and suite validation commands.
+
+Report the archived path, accepted fingerprint, implementation record, durable
+specs already published, and any remaining work.

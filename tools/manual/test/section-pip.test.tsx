@@ -110,8 +110,8 @@ describe("the pip a 🚧 line wears", () => {
 
     expect(html).toMatch(/title="The building one — Building[^"]*"/);
     expect(html).not.toMatch(/title="The designed one — Designed[^"]*"/);
-    // Building is the fifth stage.
-    expect(html).toContain(">5<");
+    // Building is the sixth stage: Accepted is explicit.
+    expect(html).toContain(">6<");
   });
 
   it("shared-planning-change-stages-SC-66 - wears no pip once every change delivering it has archived", () => {

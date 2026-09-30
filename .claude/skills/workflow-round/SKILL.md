@@ -6,12 +6,14 @@ allowed-tools: Read, Grep, Glob, Write, Edit, Bash, Task
 
 # One Round, One Artifact
 
-Every artifact of a change, from the proposal to a task group's code, is
-written by one round of six steps, and nothing reaches `main` by another
-route. The line commands - `/workflow-plan`, `/workflow-design`,
-`/workflow-tech`, `/workflow-specify`, `/workflow-tasks`, `/workflow-build`,
-`/workflow-land` - each name their artifact and follow this skill; the rules
-the artifact must meet are theirs, the procedure is here.
+Individual planning artifacts and implementation groups use rounds. Product
+planning after the journeys is one exception: `/planning-dev` runs the frozen
+anchor workflow from QA1 through Dev and QA2, accepts the complete result once,
+and publishes the accepted contract before implementation. The compatibility
+routes `/workflow-tech`, `/workflow-specify`, and `/workflow-tasks` dispatch
+that full invocation; they do not start separate planning rounds. Other line
+commands - `/workflow-plan`, `/workflow-design`, `/workflow-build`,
+`/workflow-land` - name the artifact or group they land and follow this skill.
 
 The product's own words for all of it:
 [Agent Rounds](../../../docs/prds/products/shared/planning/agent-rounds.md).
@@ -335,5 +337,6 @@ landing, which needs no word. Every other landing waits for a hand's word.
 - [`docs/governance/system-design.md`](../../../docs/governance/system-design.md) - the eight principles
 - [`.claude/agents/README.md`](../../agents/README.md) - the readers
 - [`docs/governance/writing.md`](../../../docs/governance/writing.md) - the house style
-- `planning-pm`, `planning-design`, `planning-qa`, `planning-dev` - the rules
-  each artifact must meet, which the line commands load
+- `planning-pm`, `planning-design`, `planning-dev` - the rules each artifact
+  must meet, which the line commands load; `planning-qa` is a redirect to
+  `planning-dev`

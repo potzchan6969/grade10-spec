@@ -1,50 +1,17 @@
 ---
 name: workflow-specify
-description: Run a round on a change's requirements and cases - spec.md's outline, the two blind readings, the reconciliation and the requirements - and land both files on the product manager's word. Use when a change's proposal, decisions and journeys are on main. Invoke as /workflow-specify <change>.
+description: Route a specification-planning request to the single planning-dev invocation, which writes QA1 cases, Dev scenarios, QA2 reconciliation, and acceptance. Invoke as /workflow-specify <change>.
 ---
 
-# The Requirements' Round
+# Specification Planning Route
 
-**The artifacts:** `specs/<capability>/spec.md` and
-`specs/<capability>/feature-tcs.md`, together. Neither names a teammate: the
-product manager is the hand, and reads them side by side.
+`/workflow-specify <change>` is a compatibility route to
+[`planning-dev`](../planning-dev/SKILL.md). Run that skill once to freeze the
+anchor set, generate QA1's blind draft cases, write the technical design and
+scenarios in an independent Dev context, reconcile in QA2, resolve questions
+with the same human, then accept and publish the contract.
 
-**The rules:** `planning-qa`, governed by
-[`docs/governance/specs-to-test-cases.md`](../../../docs/governance/specs-to-test-cases.md),
-plus:
-
-```bash
-openspec instructions specs --change <change>
-openspec instructions test-cases --change <change>
-```
-
-Then follow `workflow-round`. Its challenge and verify steps are different here, and
-nothing else is.
-
-## The Blind Readings Are the Challenge
-
-- **Levels first** — the rulebook's **When a Change Touches a Suite Above
-  It** runs before the readings; the blind suite reads its draft
-- **Challenge** — the two independent readings of the change's anchors: the
-  scenarios and the blind suite, neither reader seeing the other's output
-- **Verify** — their reconciliation, taken by the run that took both readings.
-  No verifier agent reads them, and no agent decides between them
-- **Then the simpler thing** — once reconciled, dispatch `simpler` over both
-  files, as on every round; the run applies what stands to both, and never
-  folds a case into a scenario
-- **Stops on the product manager** — a disagreement or a question neither
-  reading can settle is a numbered `Q<n>` row for them
-- **One word, both files** — the product manager's word at the reconciliation
-  lands `spec.md` and `feature-tcs.md` together
-
-## The Tech Design Is What Is Before Them
-
-- **Read it** — the requirements pass reads `tech-design.md` beside
-  `ui-design.md`; a requirement contradicting either is not written
-- **A requirement that reaches the design** — write a dated wait on the tech
-  PIC rather than writing over them:
-  `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
-  cleared by the tech PIC's edit or by that artifact's `reviewed:` line, and
-  it holds no stage
-- **Delete the wait you answered** — the change's `awaiting: specs:` line
-  named this pass; it goes as the requirements land
+Do not run a separate QA round or request initial human QA approval. Human QA
+reviews the draft suite through `tcs-review` after deployment, and `tcs-run-sheet`
+supports manual execution once the implementation is available.
+[`tcs-review`](../tcs-review/SKILL.md).

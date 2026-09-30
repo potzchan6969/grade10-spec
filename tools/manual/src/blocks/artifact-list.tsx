@@ -1,6 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
+import { visibleAvailabilityState } from "../api/availability";
 import { artifactLabel } from "../api/change-artifacts";
 import type { Handoff } from "../api/handoff";
 import { askedIdsOf, roundArtifactOf, roundlessGroupsOf } from "../api/rounds";
@@ -148,9 +149,9 @@ export function ArtifactList({
 }
 
 /**
- * Where the code is: `main`, staging, and the release that carried the
- * change. Each is said either way — "not deployed" is the fact a reader wants
- * from a change whose tasks are all ticked.
+ * Where the code is: `main` and the environments with deployment evidence.
+ * Environment availability comes from GitHub Deployments receipts, apart
+ * from the change's accepted plan and implementation record.
  *
  * The suite's own automated count rides here too, against its total: a run
  * sheet leaves those cases out, so this is where a reader sees how many the
@@ -179,32 +180,82 @@ export function DeliveryRow({ change }: { change: ChangeEntry }) {
       </li>
       <li className="flex items-center gap-1.5">
         <Text as="span" size="xs" tone="secondary">
-          staging
+          availability
         </Text>
-        {change.deployedEnv === undefined ? (
+        {change.availability === undefined ||
+        change.availability.length === 0 ? (
           <Badge size="sm" variant="outline">
-            not deployed
+            unknown
           </Badge>
         ) : (
-          <Badge size="sm" variant="success">
-            {[change.deployedEnv, change.deployedBuild]
-              .filter(Boolean)
-              .join(" · ")}
-          </Badge>
-        )}
-      </li>
-      <li className="flex items-center gap-1.5">
-        <Text as="span" size="xs" tone="secondary">
-          release
-        </Text>
-        {change.releasedIn === undefined ? (
-          <Badge size="sm" variant="outline">
-            unreleased
-          </Badge>
-        ) : (
-          <Badge size="sm" variant="success">
-            {change.releasedIn}
-          </Badge>
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {change.availability.map((environment) => (
+              <span
+                key={environment.environment}
+                className="inline-flex flex-wrap items-center gap-1.5"
+              >
+                {/** A reader's current view decides whether the receipt aged. */}
+                {(() => {
+                  const state = visibleAvailabilityState(environment);
+                  return (
+                    <Badge
+                      size="sm"
+                      variant={
+                        state === "newly" || state === "still"
+                          ? "success"
+                          : state === "partial" || state === "stale"
+                            ? "warning"
+                            : "outline"
+                      }
+                    >
+                      {`${environment.environment}: ${state}`}
+                    </Badge>
+                  );
+                })()}
+                {environment.observedAt ? (
+                  <time
+                    className="text-xs text-muted-foreground"
+                    dateTime={environment.observedAt}
+                  >
+                    {new Date(environment.observedAt).toLocaleString()}
+                  </time>
+                ) : null}
+                {environment.summary ? (
+                  <span className="text-xs text-muted-foreground">
+                    {environment.summary}
+                  </span>
+                ) : null}
+                {environment.manualUrl ? (
+                  <a className="text-xs underline" href={environment.manualUrl}>
+                    Manual
+                  </a>
+                ) : null}
+                {environment.qaUrl ? (
+                  <a className="text-xs underline" href={environment.qaUrl}>
+                    QA
+                  </a>
+                ) : null}
+                {environment.components.map((component) =>
+                  component.url ? (
+                    <a
+                      className="text-xs underline"
+                      href={component.url}
+                      key={component.name}
+                    >
+                      {component.name}
+                    </a>
+                  ) : (
+                    <span
+                      className="text-xs text-muted-foreground"
+                      key={component.name}
+                    >
+                      {`${component.name} ${component.status}`}
+                    </span>
+                  ),
+                )}
+              </span>
+            ))}
+          </span>
         )}
       </li>
       {totalCases > 0 ? (

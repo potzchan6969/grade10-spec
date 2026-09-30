@@ -271,6 +271,37 @@ export type MainState = {
   files?: number;
 };
 
+export type EnvironmentAvailability = {
+  environment: string;
+  state: "newly" | "still" | "no-longer" | "partial" | "unknown" | "stale";
+  observedAt?: string;
+  fetchedAt?: string;
+  resolvedRef?: string;
+  components: {
+    name: string;
+    status: string;
+    url?: string;
+    resolvedRef?: string;
+  }[];
+  summary?: string;
+  manualUrl?: string;
+  qaUrl?: string;
+};
+
+export type EnvironmentReceiptSummary = {
+  environment: string;
+  resolvedRef: string;
+  observedAt: string;
+  fetchedAt?: string;
+  deploymentUrl?: string;
+  components: {
+    name: string;
+    status: string;
+    url?: string;
+    resolvedRef?: string;
+  }[];
+};
+
 /** Where a change stands, derived and never stored: `proposed` has no
  * deltas yet, `specified` has deltas and no task list, `in-progress` has
  * open tasks, `complete` has finished them all and awaits the archive. */
@@ -301,9 +332,9 @@ export type Stage =
   | "designed"
   | "specified"
   | "planned"
+  | "accepted"
   | "building"
-  | "on-staging"
-  | "released"
+  | "implementation-complete"
   | "archived";
 
 /** One thing about a change nobody has settled, and the hand it is addressed
@@ -486,17 +517,13 @@ export type ChangeEntry = {
    * `ui_waived:` — the line that stands in for the UI design on a change
    * nothing a reader sees moves on. */
   uiWaived?: string;
-  /** The deploy that carried the change, from `.openspec.yaml` `deployed_at:`
-   * and `deployed_env:` — the sha the application repository verified, and the
-   * environment it ran in. */
-  deployedAt?: string;
-  deployedEnv?: string;
-  /** The tagged build that deploy carried, from `.openspec.yaml`
-   * `deployed_build:` — what QA walks, named beside the environment. */
-  deployedBuild?: string;
-  /** Who archived the change without deploy evidence, and why, from
-   * `.openspec.yaml` `deploy_waived:`. */
-  deployWaived?: string;
+  /** A structurally valid acceptance.json for this change's current plan. */
+  accepted?: boolean;
+  acceptanceFingerprint?: string;
+  /** An implementation.json whose fingerprint matches acceptance.json. */
+  implementationComplete?: boolean;
+  /** Deployment evidence projected from GitHub Deployments, never stored here. */
+  availability?: EnvironmentAvailability[];
   /** Who archived the change with tasks still unchecked, and why, from
    * `.openspec.yaml` `tasks_waived:`. */
   tasksWaived?: string;
@@ -546,9 +573,6 @@ export type ChangeEntry = {
   /** The change's Slack thread, from `.openspec.yaml` `thread:`, as
    * `<channel>/<ts>`. Written by the round; every message links it. */
   thread?: string;
-  /** The release this change went out in, from `.openspec.yaml`
-   * `released_in:`. */
-  releasedIn?: string;
   /** ISO timestamp of the last commit that ticked a task, claimed a group or
    * added an artifact of this change — what says it has stopped moving, which
    * `lastMoved` cannot: one repository-wide commit moves every change at
@@ -874,6 +898,10 @@ export type Snapshot = {
    * store with no file yet knows nobody rather than refusing to boot, which
    * is what an empty `handles` says. */
   team: SnapshotTeam;
+  /** Fresh canonical GitHub Deployment receipts available to the manual. */
+  availabilityEnvironments?: EnvironmentReceiptSummary[];
+  /** Why availability has no receipts yet. */
+  availabilityStatus?: "ready" | "unconfigured";
   /** The run sheet QA is sent to walk, from `TCS_SHEET_URL` at build and in
    * dev — the same variable the push workflow's notify step reads, so Told
    * now and the Slack message link one sheet. Absent where nobody has

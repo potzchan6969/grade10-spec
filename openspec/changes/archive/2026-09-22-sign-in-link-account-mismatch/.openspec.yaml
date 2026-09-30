@@ -6,6 +6,5 @@ reviewed:
   ui-design: 5862a1fa
   specs: cd620bc9
   test-cases: cd620bc9
-deploy_waived: "seankcw: PR #520 merged 2026-09-22T06:30:42Z; deploy scheduled separately, next deploy.yml run will include it"
 decisions_carried: "Q1-Q6 already reflected in the PRD's existing 'Link while signed in as someone else' row; Q7-Q9 (invalid-link precedence, token not consumed, second link replaces the toast) added as three new Product decisions rows on docs/prds/products/shared/auth/sign-in.md"
 journeys_copied: "true"

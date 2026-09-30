@@ -151,26 +151,23 @@ describe("the stages that say something else", () => {
     expect(html).toContain("3 cases; the walk needs it reviewed as its input");
   });
 
-  it("sends QA to walk the run sheet on staging", () => {
-    const html = render(gift(), "on-staging");
+  it("records implementation completion without scheduling the later QA walk", () => {
+    const html = render(gift(), "implementation-complete");
 
-    expect(html).toContain("<strong>On staging</strong>");
-    expect(html).toContain("Walk the run sheet");
+    expect(html).toContain("<strong>Implementation complete</strong>");
+    expect(html).not.toContain("Walk the run sheet");
     expect(html).toContain("@sam");
   });
 
-  it("names the build the deploy recorded", () => {
-    const html = render(gift({ deployedBuild: "1.4.0-rc2" }), "on-staging");
+  it("does not turn implementation completion into a run-sheet walk", () => {
+    const html = render(
+      gift(),
+      "implementation-complete",
+      "https://sheets.test/run",
+    );
 
-    expect(html).toContain("build");
-    expect(html).toContain("1.4.0-rc2");
-  });
-
-  it("links the run sheet the store was configured with", () => {
-    const html = render(gift(), "on-staging", "https://sheets.test/run");
-
-    expect(html).toContain('href="https://sheets.test/run"');
-    expect(html).toContain(">the run sheet<");
+    expect(html).not.toContain('href="https://sheets.test/run"');
+    expect(html).not.toContain(">the run sheet<");
   });
 
   it("tells the hand of a behind artifact what changed before it", () => {

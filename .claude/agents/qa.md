@@ -13,8 +13,10 @@ edit, no commit, no push, no reply in a thread.
 **Summoned by** — the artifacts the schema dispatches you on: `tasks.md` and a
 task group, always. You are not the blind reading: `spec.md` and
 `feature-tcs.md` carry no `perspectives:` entry for you, because the
-requirements and the cases are read by the two independent readings
-`planning-qa` runs instead, and you read neither of those.
+requirements and the cases are drafted independently inside `planning-dev`.
+Its QA2 reconciliation sees both outputs after the isolated readings finish.
+This round reader remains separate from those planning phases and from the
+human QA review after implementation.
 
 ## What You Are Given
 

@@ -1,127 +1,12 @@
 #!/usr/bin/env node
-/**
- * Run this before `openspec archive <change-id>`:
- *
- *   pnpm run archive:preflight <change-id> --deployed-at <sha> --deployed-env <env> [--deployed-build <tag>]
- *   pnpm run archive:preflight <change-id> --deploy-waived "<who waived it, why>"
- *
- * The application repository runs this through `pnpm plan shipped <change-id>`,
- * which finds the deployed sha and commits the record. Run it by hand only to
- * write a waiver.
- *
- * The archive has five gates, and they used to be prose in a skill file —
- * which made the honest path and the fast path differ by forty minutes with
- * only one leaving a record. This makes them mechanical:
- *
- * DEPLOY   A change merged is not a change shipped; merging deploys nothing.
- *          This store cannot see the application repo's deploy runs, so the
- *          gate demands the evidence instead of trusting silence: the deployed
- *          sha that contains the change's merge commit and the environment it
- *          ran in, or an explicit waiver naming who and why.
- *
- * TASKS    An open checkbox at archive is work nobody did or a checkmark
- *          nobody wrote. Either way the record says so: check them off, or
- *          name the decision with `--tasks-waived`.
- *
- * BEHIND   Nothing is built on an artifact that is behind what it was drawn
- *          from, and the fold is no exception: this reads the change through
- *          the store's own reader — pages included, so a `reviewed:` id
- *          hashes what it always hashes — and compares it with `behindOf`,
- *          the same way `check:manual` and the manual do, refusing while
- *          anything is and naming what changed before it. Not waivable — the
- *          round's re-read is what clears it, and it runs on every clone:
- *          a `reviewed:` id needs no history to compare.
- *
- * WALK     A change on the round — one with a row or a `landed_by:` line, or
- *          created from the day every change is — ends with its journeys
- *          walked and the whole read as one shape, and `rounds.md` is the
- *          record of both: its last task group's row names, in its Tests
- *          cell, the walks it left — a `*.walk.ts` the suite runs or a walk
- *          by hand with its cases manual — and a row after it reads `whole
- *          change`, which `plan:land --whole` writes for the one reader over
- *          the whole. The rows and the groups are read on the store's main,
- *          where a landing writes them, never in this checkout. The journeys
- *          are the capability's: the delta's file where it carries one, the
- *          durable one where it leans on it. A change whose journeys say
- *          nobody walks it owes no walk row, and a change on the old flow
- *          owes neither. Not waivable — the row is the record, and landing
- *          it is what clears this.
- *
- * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
- *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
- *          and its suites — and every `-US-` id in them — die with the change
- *          unless someone copies them into the durable capability. This checks
- *          whether they were carried, and refuses while they are not.
- *          `rounds.md` is carried too, but sideways: it is folded into no
- *          capability and archives with the change, so nothing here can check
- *          it before the archive exists — `pnpm check:manual`'s `round` rule
- *          reads the archived copy afterwards and refuses one that left it
- *          behind.
- *          `--journeys-copied` acknowledges a delta whose capability has no
- *          durable spec yet: the fold creates it, so the copy can only happen
- *          right after — the flag is a promise, and the sections stay on
- *          `pnpm check:manual`'s list.
- *
- * DECIDE   `decisions.md` is change-local: it archives with the change and is
- *          folded nowhere. So a rejected option recorded there is readable
- *          afterwards only under `openspec/changes/archive/`, which the blind
- *          suite pass is forbidden to read — the same shape as dropping a
- *          suite's `## Settled`, and the same cost: the question is asked
- *          again next quarter, answered the other way, and the record that
- *          would have caught it sits in the one tree nothing may open.
- *          Whatever still matters goes onto the capability's PRD, in its
- *          `Product decisions` block, which is durable and which the blind
- *          pass already reads. This gate asks the owner to say that happened:
- *          `--decisions-carried "<what went where>"`, or the same flag with
- *          `none` where nothing outlived the change.
- *
- *          A copy that did land is read for the five things only archive can
- *          get wrong: every case of the change's suites lands under its id,
- *          `<v>` and status, a written `## Purpose` replaces the durable one whole, a
- *          removed journey leaves a `## Retired` tombstone instead of vanishing
- *          (archived suites still trace its id), a carried `## Reconciliation`
- *          has its scenario ids stripped, and `## Settled` travels with the
- *          suite — drop it and every later blind pass raises the same refused
- *          reading again, with nobody left who remembers refusing it. None of
- *          those is a promise `--journeys-copied` can defer: the files are all
- *          here, so they are fixed now.
- *
- * A clear run writes what it was told into the change's `.openspec.yaml`, so
- * the record archives with the change and `pnpm check:manual` can read it back.
- *
- * No `openspec` call — every other gate reads the change's own files, and its
- * checkmarks on the store's main, where `plan-preflight.mjs` reads claims
- * too. BEHIND is the one gate that reads the store's own change reader,
- * because a second reading of what is behind would drift from the one
- * `check:manual` and the manual already carry.
- */
+/** Verify implementation evidence for the accepted fingerprint before the
+ * change directory is moved to history. This command never folds the delta. */
 
-import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { heldToRounds } from "../../tools/manual/check/rounds.mjs";
-import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
-import { behindOf } from "../../tools/manual/src/api/stages.ts";
-import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
-import {
-  SCENARIO_ID,
-  scenarioIdsIn,
-  sectionSpan,
-} from "../../tools/manual/src/store/markdown.mts";
-import {
-  DECISION_ROW,
-  decisionRows,
-} from "../../tools/manual/src/store/read-changes.mts";
-import {
-  readRounds,
-  roundArtifactOf,
-} from "../../tools/manual/src/store/read-rounds.mts";
-import { walkedByNobody } from "../../tools/manual/src/store/read-specs.mts";
-import { roundsPath } from "./lib/rounds.mjs";
-import { readChangeEntry } from "./lib/store-read.mjs";
-import { caseIndex, parseSuite } from "./lib/suites.mjs";
-import { storeMain, textAt } from "./store-main.mjs";
+import { contractTargetDiffs, verifyAcceptance } from "./lib/acceptance.mjs";
+import { git, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -145,39 +30,16 @@ const ROOT = rootIndex === -1 ? HERE : (argv[rootIndex + 1] ?? HERE);
 if (rootIndex !== -1) argv.splice(rootIndex, 2);
 const CHANGES = join(ROOT, "openspec", "changes");
 
-const DOOMED = ["Feature set"];
-const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
-// The anchor line as `read-specs.mts` reads it: anywhere in the scenario's
-// body, bulleted or not, so this gate and the checker agree on what counts.
-const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
-const SCENARIO_HEADING = new RegExp(
-  `^####\\s+Scenario:\\s+(${SCENARIO_ID.source})\\b`,
-);
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
-/** A task group heading, and the repository tag `task-ownership.md` puts at the
- * end of it: `## 3. Store prose (grade10-spec)`. An owner tag is `(owner: …)`
- * and is not a repository. */
-const GROUP_HEADING = /^##\s+\d+\.\s*(.+?)\s*$/;
-const REPO_TAG = /\(([^()@]+)\)\s*$/;
-const STORE_GROUP = "grade10-spec";
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
  * was told, so a waiver never outlives the record that replaces it. */
 const RECORD_KEYS = new Set([
-  "deployed_at",
-  "deployed_env",
-  "deployed_build",
-  "deploy_waived",
   "tasks_waived",
   "decisions_carried",
   "journeys_copied",
 ]);
 const SHOWN = 10;
-/** What the walk's row names in its Tests cell: the suite file it left, or
- * the walk by hand. */
-const WALK = /\.walk\.ts\b|\bby hand\b/i;
-/** A task group's number off its heading, as `tasks.md` writes it. */
-const GROUP_NUM = /^##\s+(\d+)\./;
 
 function changeIds() {
   if (!existsSync(CHANGES)) return [];
@@ -185,157 +47,6 @@ function changeIds() {
     .filter((entry) => entry.isDirectory() && entry.name !== "archive")
     .map((entry) => entry.name)
     .sort();
-}
-
-/** Every `specs/**\/spec.md` of the change, with its capability path. */
-function deltaFiles(changeId) {
-  const found = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const path = join(dir, entry.name);
-      if (entry.isDirectory()) walk(path);
-      else if (entry.name === "spec.md") found.push(path);
-    }
-  };
-  const specs = join(CHANGES, changeId, "specs");
-  if (existsSync(specs)) walk(specs);
-  return found.map((file) => ({
-    file,
-    capability: dirname(file)
-      .slice(specs.length + 1)
-      .replaceAll("\\", "/"),
-  }));
-}
-
-/** Runs the trace handover check from this checkout against the store the
- * preflight is inspecting. It is only needed when the change carries a trace
- * case marker: ordinary suites have no transitional graph to preserve. */
-function traceFoldFailure(changeId) {
-  const script = join(HERE, "scripts", "test-traceability", "trace.mjs");
-  const result = spawnSync(
-    process.execPath,
-    [script, "fold", "--change", changeId, "--store-root", ROOT],
-    { encoding: "utf8" },
-  );
-  if (result.status === 0) return null;
-  const output = [result.stdout, result.stderr]
-    .filter(Boolean)
-    .join("\n")
-    .trim();
-  return (
-    output || result.error?.message || `trace fold exited ${result.status}`
-  );
-}
-
-/** The `## <name>` sections of one delta the fold would discard, with the
- * `-US-` ids they issue. Sections end at the next `## ` heading. */
-function doomedSections(text) {
-  const lines = text.split("\n");
-  const found = [];
-  let current = null;
-  for (const line of lines) {
-    const heading = line.match(/^##\s+(.+?)\s*$/);
-    if (heading) {
-      current = DOOMED.includes(heading[1])
-        ? { name: heading[1], ids: new Set() }
-        : null;
-      if (current) found.push(current);
-      continue;
-    }
-    if (!current) continue;
-    for (const id of line.match(US_ID) ?? []) current.ids.add(id);
-  }
-  return found;
-}
-
-/** The scenarios one delta issues that name no anchor. `anchorless` is a
- * failure on the durable store and the fold is what moves a scenario there, so
- * a delta nothing refuses here breaks `pnpm check:manual` the moment it lands.
- * The anchor belongs in the delta, where the journeys that resolve it are
- * still sitting beside it. A scenario carrying no permanent id is not one the
- * rule counts, so it is not one this counts either. */
-function anchorlessScenarios(text) {
-  const lines = text.split("\n");
-  const found = [];
-  let current = null;
-  const close = () => {
-    if (current && !SERVES.test(current.body.join("\n")))
-      found.push(current.id);
-  };
-  for (const line of lines) {
-    const heading = line.match(SCENARIO_HEADING);
-    if (heading) {
-      close();
-      current = { id: heading[1], body: [] };
-      continue;
-    }
-    if (/^#{2,4}\s/.test(line)) {
-      close();
-      current = null;
-      continue;
-    }
-    if (current) current.body.push(line);
-  }
-  close();
-  return found;
-}
-
-/** The body of one `## <name>` section, trimmed, or null when the file has no
- * such heading. Sections end at the next `## ` heading, so an empty string
- * means the heading is there and says nothing — which is not the same answer. */
-function sectionBody(text, name) {
-  const span = sectionSpan(text, name);
-  if (!span) return null;
-  return text.split("\n").slice(span.from, span.until).join("\n").trim();
-}
-
-/** The bullet lines of a section body, continuations folded in and whitespace
- * collapsed, so a line that was rewrapped on the way across still counts as
- * the same line. */
-function bullets(body) {
-  const found = [];
-  for (const line of (body ?? "").split("\n")) {
-    if (/^\s*[-*]\s+/.test(line)) found.push(line.replace(/^\s*[-*]\s+/, ""));
-    else if (found.length > 0 && line.trim() !== "" && !line.startsWith("#")) {
-      found[found.length - 1] += ` ${line.trim()}`;
-    }
-  }
-  return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
-}
-
-/** Every case in a suite that names what decides it: id -> the paths as the
- *  line writes them. Read through the store's own suite parser, so the fold
- *  compares what `tcs:validate` reads rather than a second reading of the
- *  same line. */
-function decidedByOf(text) {
-  const named = new Map();
-  for (const journey of parseSuite(text).journeys) {
-    for (const tc of journey.cases) {
-      if (tc.decidedBy.length > 0)
-        named.set(tc.id, tc.decidedBy.map((one) => one.path).join(", "));
-    }
-  }
-  return named;
-}
-
-/** Whether every task group of a task list lands in this store. Such a change
- * deploys nothing, so there is no run to point at and no waiver owed — the same
- * exemption `check:manual`'s `archived` rule already grants, which this script
- * did not, so a store-only change could only be archived by waiving a deploy it
- * never had. A list with no tagged group is not store-only: an untagged group
- * is a group nobody said where it lands. */
-function storeOnly(text) {
-  const groups = text
-    .split("\n")
-    .map((line) => GROUP_HEADING.exec(line)?.[1])
-    .filter((title) => title !== undefined)
-    .map(
-      (title) =>
-        REPO_TAG.exec(
-          title.replace(/\s*\(owner:\s*[^)]*\)\s*$/i, ""),
-        )?.[1].trim() ?? "",
-    );
-  return groups.length > 0 && groups.every((repo) => repo === STORE_GROUP);
 }
 
 /** The unchecked tasks of a task list, in file order. */
@@ -370,38 +81,20 @@ function writeRecord(changeId, entries) {
 }
 
 function help() {
-  console.log(
-    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> --deployed-env <env> [--deployed-build <tag>] | --deploy-waived "<why>"`,
-  );
+  console.log(`${bold("pnpm run archive:preflight")} <change-id>`);
   console.log(
     dim(
-      '                             [--tasks-waived "<who, why>"] [--journeys-copied]',
-      '                             [--decisions-carried "<what went where, or none>"] [--root <dir>]',
+      '                             [--tasks-waived "<who, why>"] [--root <dir>]',
     ),
   );
   console.log(
-    dim("  The archive's five gates, mechanical: proof of deploy, every task"),
-  );
-  console.log(
-    dim("  checked off, nothing behind what it was drawn from, the decisions"),
-  );
-  console.log(
     dim(
-      "  that outlive the change put on the PRD, and the purpose / feature set /",
-    ),
-  );
-  console.log(dim("  journeys / suites copy"));
-  console.log(
-    dim(
-      "  the fold would discard, done and done right. A clear run writes the",
+      "  Verifies accepted contract implementation evidence and prints the archive move.",
     ),
   );
   console.log(
-    dim("  record into the change's .openspec.yaml and prints the commit."),
-  );
-  console.log(
     dim(
-      "  Checkmarks are read on the store's main, fetched first; PLAN_NO_FETCH=1 skips the fetch.",
+      "  It does not fold the delta. Checkmarks are read from main; PLAN_NO_FETCH=1 skips fetch.",
     ),
   );
   const ids = changeIds();
@@ -415,28 +108,170 @@ function fail(...lines) {
   process.exitCode = 1;
 }
 
+const targetKey = ({ path, anchors }) => `${path}\0${anchors.join("\0")}`;
+
+function acknowledgementErrors(acknowledgement, differences) {
+  if (
+    !acknowledgement ||
+    typeof acknowledgement !== "object" ||
+    Array.isArray(acknowledgement)
+  ) {
+    return [
+      "compatibilityAcknowledgement is required because the claimed contract changed",
+    ];
+  }
+  const errors = [];
+  if (
+    typeof acknowledgement.reviewedBy !== "string" ||
+    acknowledgement.reviewedBy.trim() === ""
+  )
+    errors.push("compatibilityAcknowledgement.reviewedBy is required");
+  if (
+    typeof acknowledgement.reviewedAt !== "string" ||
+    Number.isNaN(Date.parse(acknowledgement.reviewedAt))
+  )
+    errors.push(
+      "compatibilityAcknowledgement.reviewedAt must be an ISO timestamp",
+    );
+  if (!Array.isArray(acknowledgement.changes)) {
+    errors.push(
+      "compatibilityAcknowledgement.changes must list every scoped difference",
+    );
+    return errors;
+  }
+  const expected = new Set(differences.map(targetKey));
+  const seen = new Set();
+  for (const change of acknowledgement.changes) {
+    const valid =
+      change &&
+      typeof change.path === "string" &&
+      Array.isArray(change.anchors) &&
+      change.anchors.every(
+        (anchor) => typeof anchor === "string" && anchor.trim() !== "",
+      ) &&
+      ["editorial", "semantic"].includes(change.classification) &&
+      typeof change.reason === "string" &&
+      change.reason.trim() !== "";
+    if (!valid) {
+      errors.push(
+        "each compatibility acknowledgement needs path, anchors, classification and reason",
+      );
+      continue;
+    }
+    if (
+      change.classification === "semantic" &&
+      (!Array.isArray(change.evidence) ||
+        change.evidence.length === 0 ||
+        change.evidence.some(
+          (item) => typeof item !== "string" || item.trim() === "",
+        ))
+    ) {
+      errors.push(
+        `semantic acknowledgement for ${change.path} needs non-empty evidence`,
+      );
+    }
+    const entries =
+      change.anchors.length === 0
+        ? [{ path: change.path, anchors: [] }]
+        : change.anchors.map((anchor) => ({
+            path: change.path,
+            anchors: [anchor],
+          }));
+    for (const entry of entries) {
+      const key = targetKey(entry);
+      const label = `${entry.path}${entry.anchors.length ? ` (${entry.anchors.join(", ")})` : ""}`;
+      if (!expected.has(key))
+        errors.push(
+          `compatibility acknowledgement is outside the changed scope: ${label}`,
+        );
+      else if (seen.has(key))
+        errors.push(`compatibility acknowledgement repeats: ${label}`);
+      else seen.add(key);
+    }
+  }
+  for (const key of expected)
+    if (!seen.has(key)) {
+      const difference = differences.find((entry) => targetKey(entry) === key);
+      errors.push(
+        `compatibility acknowledgement is missing: ${difference.path}${difference.anchors.length ? ` (${difference.anchors.join(", ")})` : ""}`,
+      );
+    }
+  return errors;
+}
+
+function compatibilityGate({ changeId, acceptanceCheck, root, main }) {
+  const implementation = acceptanceCheck.implementation;
+  // Version 1 records are historical evidence from before a claim recorded a
+  // baseline. They remain archivable under their accepted snapshot; all new
+  // claims write version 2 and take this path instead.
+  if (implementation?.version === 1) {
+    console.log(
+      yellow(
+        `! ${changeId} uses a v1 implementation record; its first claim predates contract-baseline tracking.`,
+      ),
+    );
+    console.log(
+      dim(
+        "  Archive uses the accepted snapshot. New claims record contractBaseline and receive a scoped comparison.",
+      ),
+    );
+    return true;
+  }
+  const baseline = implementation?.contractBaseline;
+  if (!baseline) return false;
+  if (git(root, ["cat-file", "-e", `${baseline.commit}^{commit}`]) === null) {
+    fail(
+      yellow(
+        `The claimed contract baseline ${baseline.commit} is not available in this store clone.`,
+      ),
+    );
+    fail("Fetch that store commit, then re-run archive:preflight.");
+    return false;
+  }
+  const differences = contractTargetDiffs(
+    baseline.targets,
+    (path) => textAt(root, baseline.commit, path),
+    (path) => textAt(root, main.commit, path),
+  );
+  if (differences.length === 0) return true;
+  console.log(
+    yellow(
+      `${changeId} has ${differences.length} change(s) in its claimed contract scope since ${baseline.commit}:`,
+    ),
+  );
+  for (const difference of differences)
+    console.error(
+      `  - ${difference.path}${difference.anchors.length ? ` - ${difference.anchors.join(", ")}` : " - whole file"}`,
+    );
+  const acknowledgementErrorsForDiff = acknowledgementErrors(
+    implementation.compatibilityAcknowledgement,
+    differences,
+  );
+  if (acknowledgementErrorsForDiff.length > 0) {
+    for (const error of acknowledgementErrorsForDiff)
+      console.error(`  - ${error}`);
+    console.error("");
+    console.error(
+      "Record the scoped review in implementation.json. Editorial entries name the reason; semantic entries also name the test or other evidence that proves compatibility.",
+    );
+    process.exitCode = 1;
+    return false;
+  }
+  console.log(
+    `${yellow("!")} ${changeId} archives with ${differences.length} acknowledged contract change(s) since ${baseline.commit}.`,
+  );
+  return true;
+}
+
 const changeId = argv[0];
 if (!changeId || changeId === "--help" || changeId === "-h") {
   help();
   process.exit();
 }
 
-let deployedAt = null;
-let deployedEnv = null;
-let deployedBuild = null;
-let deployWaived = null;
 let tasksWaived = null;
-let journeysCopied = false;
-let decisionsCarried = null;
 for (let i = 1; i < argv.length; i += 1) {
-  if (argv[i] === "--deployed-at") deployedAt = argv[++i] ?? null;
-  else if (argv[i] === "--deployed-env") deployedEnv = argv[++i] ?? null;
-  else if (argv[i] === "--deployed-build") deployedBuild = argv[++i] ?? null;
-  else if (argv[i] === "--deploy-waived") deployWaived = argv[++i] ?? null;
-  else if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
-  else if (argv[i] === "--journeys-copied") journeysCopied = true;
-  else if (argv[i] === "--decisions-carried")
-    decisionsCarried = argv[++i] ?? null;
+  if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
   else {
     fail(`Unknown argument: ${argv[i]}`, `Run with ${cyan("--help")}.`);
     process.exit();
@@ -453,9 +288,7 @@ if (!changeIds().includes(changeId)) {
 
 // ── The plan, as main holds it ──────────────────────────────────────────────
 // `pnpm plan` records checkmarks and repository tags on the store's main, so
-// both are read there: this checkout can be behind main, or ticked by hand
-// where main is not. Read before the deploy gate, because the tags say whether
-// a deploy is owed at all.
+// both are read there: this checkout can be behind main, or ticked by hand.
 const main = storeMain(ROOT);
 if (!main) {
   fail(
@@ -464,6 +297,26 @@ if (!main) {
   );
   process.exit();
 }
+
+// Acceptance and implementation evidence are facts only after their commit is
+// published on main. Reading every accepted artifact at the same revision as
+// the task list prevents a local acceptance.json or implementation.json from
+// making a change archivable before the team can actually build from it.
+const acceptanceCheck = verifyAcceptance(ROOT, changeId, {
+  requireImplementation: true,
+  readFile: (path) => textAt(ROOT, main.commit, path),
+});
+if (!acceptanceCheck.ok) {
+  fail(
+    yellow(
+      `${changeId} cannot archive before implementation verification on ${main.ref}:`,
+    ),
+  );
+  for (const error of acceptanceCheck.errors) console.error(`  - ${error}`);
+  process.exit();
+}
+if (!compatibilityGate({ changeId, acceptanceCheck, root: ROOT, main }))
+  process.exit();
 const tasksFile = `openspec/changes/${changeId}/tasks.md`;
 const tasks = textAt(ROOT, main.commit, tasksFile);
 if (tasks === null && existsSync(join(ROOT, tasksFile))) {
@@ -474,75 +327,10 @@ if (tasks === null && existsSync(join(ROOT, tasksFile))) {
   process.exit();
 }
 
-// ── Deploy gate ─────────────────────────────────────────────────────────────
-// The application repo holds the answer (`gh run list --workflow=deploy.yml`
-// and `git merge-base --is-ancestor`, per its archive-change skill); this
-// store only refuses to fold without it being stated.
-if (deployedAt !== null && deployWaived !== null) {
-  fail(
-    yellow("Pass --deployed-at or --deploy-waived, not both."),
-    "One says the change shipped; the other says who decided to archive without proof.",
-  );
-  process.exit();
-}
-if (deployedAt === null && deployedBuild !== null) {
-  fail(yellow("--deployed-build names a build for no sha."));
-  process.exit();
-}
-if (deployedAt === null && deployWaived === null && !storeOnly(tasks ?? "")) {
-  fail(
-    yellow(`No deploy evidence for ${changeId}.`),
-    "A change merged is not a change shipped — merging deploys nothing. The",
-    "application repository finds the deploy that contains the merge commit and",
-    "runs this for you:",
-    "",
-    `  ${cyan(`pnpm plan shipped ${changeId}`)}`,
-    "",
-    "Archiving anyway is an owner's call, made out loud:",
-    "",
-    `  ${cyan(`pnpm run archive:preflight ${changeId} --deploy-waived "<who waived it, why>"`)}`,
-  );
-  process.exit();
-}
-if (deployedAt !== null && !/^[0-9a-f]{7,40}$/i.test(deployedAt)) {
-  fail(
-    yellow(`--deployed-at ${deployedAt} is not a commit sha.`),
-    "Name the deployed sha itself, so the archive commit records something checkable.",
-  );
-  process.exit();
-}
-if (deployWaived !== null && deployWaived.trim() === "") {
-  fail(yellow("--deploy-waived needs the who and the why, in quotes."));
-  process.exit();
-}
-if (
-  deployedAt !== null &&
-  (deployedEnv === null || deployedEnv.trim() === "")
-) {
-  fail(
-    yellow("--deployed-at needs --deployed-env."),
-    "A staging deploy and a production one are different archives, and the record",
-    "is read long after the run is gone:",
-    "",
-    `  ${cyan(`pnpm run archive:preflight ${changeId} --deployed-at ${deployedAt} --deployed-env production`)}`,
-  );
-  process.exit();
-}
-if (deployedAt === null && deployedEnv !== null) {
-  fail(yellow("--deployed-env names an environment for no sha."));
-  process.exit();
-}
 if (tasksWaived !== null && tasksWaived.trim() === "") {
   fail(yellow("--tasks-waived needs the who and the why, in quotes."));
   process.exit();
 }
-if (decisionsCarried !== null && decisionsCarried.trim() === "") {
-  fail(
-    yellow("--decisions-carried needs what went where, in quotes, or `none`."),
-  );
-  process.exit();
-}
-
 // ── Tasks gate ──────────────────────────────────────────────────────────────
 // An open checkbox at archive is work nobody did or a checkmark nobody wrote.
 const open = openTasks(tasks ?? "");
@@ -562,492 +350,15 @@ if (open.length > 0 && tasksWaived === null) {
   process.exit();
 }
 
-// ── Behind gate ─────────────────────────────────────────────────────────────
-// Nothing is built on a behind artifact, and the fold is no exception: an
-// artifact drawn from something that has since changed is read from a
-// requirement nobody has read again. `readChangeEntry` is the store's own
-// change reader — pages included, so a linked section's `reviewed:` id
-// hashes the same text it always hashes — and `behindOf` is the same pure
-// comparison over its reading that `check:manual`, the manual and the round
-// all read. It runs on every clone: a `reviewed:` id is a hash of the text
-// before the artifact, so the comparison that reads it needs no history at
-// all, and the dated fallback beside it marks only what a commit dates
-// strictly later — which a clone holding one commit never does. A shallow
-// clone therefore reads every stale id and invents no behind artifact of its
-// own.
-const { entry, artifacts } = await readChangeEntry(ROOT, changeId);
-const behind = behindOf(entry, artifacts);
-if (behind.length > 0) {
-  fail(
-    yellow(`${changeId} archives with ${behind.length} artifact(s) behind:`),
-  );
-  for (const one of behind) {
-    console.error(`  ${one.artifact} — ${behindLabelOf(one)}`);
-  }
-  fail(
-    "",
-    "Nothing is built on a behind artifact, and the fold is no exception.",
-    "Read it again — the round's re-read writes the record line that clears",
-    "this — then re-run this.",
-  );
-  process.exit();
-}
-
-// ── Walk gate ───────────────────────────────────────────────────────────────
-// The change's own record of its rounds says whether the journeys were walked
-// and the whole was read: the last group's row and the `whole change` row
-// after it, both read on `main`, where a landing writes them — a row the
-// checkout alone holds is nobody's landing. Held only where the change is on
-// the round, through the same reading the `round` rule uses, so a change
-// worked on the old flow is asked for neither.
-if (heldToRounds(entry)) {
-  const rows = readRounds(
-    textAt(ROOT, main.commit, roundsPath(changeId)) ?? "",
-  );
-  const last = (tasks ?? "")
-    .split("\n")
-    .map((line) => GROUP_NUM.exec(line)?.[1])
-    .filter((num) => num !== undefined)
-    .reduce(
-      (top, num) =>
-        top === undefined || Number(num) > Number(top) ? num : top,
-      undefined,
-    );
-  // The capability's journeys: the delta's file where it carries one, the
-  // durable one where it leans on it. A nobody line is what excuses the walk,
-  // whatever journeys it routes.
-  const journeysCarried = deltaFiles(changeId).some(({ file, capability }) => {
-    const own = file.replace(/spec\.md$/, "user-journeys.md");
-    const durable = join(
-      ROOT,
-      "openspec",
-      "specs",
-      capability,
-      "user-journeys.md",
-    );
-    const journeys = existsSync(own) ? own : durable;
-    if (!existsSync(journeys)) return false;
-    const text = readFileSync(journeys, "utf8");
-    return (text.match(US_ID) ?? []).length > 0 && !walkedByNobody(text);
-  });
-  const lastRows =
-    last === undefined
-      ? []
-      : rows.filter((one) => roundArtifactOf(one.artifact) === last);
-  if (journeysCarried && last !== undefined) {
-    if (!lastRows.some((one) => WALK.test(one.tests))) {
-      fail(
-        yellow(
-          `${changeId} archives with its journeys unwalked: group ${last}'s row names no walk.`,
-        ),
-        "The last group walks every journey the change specifies and leaves the",
-        "walks as its suite: its row's Tests cell names the `*.walk.ts` files it",
-        "left, or says the journeys were walked by hand with their cases manual.",
-        "Land that row, then re-run this.",
-      );
-      process.exit();
-    }
-  }
-  const wholes = rows.filter(
-    (one) => roundArtifactOf(one.artifact) === WHOLE_CHANGE,
-  );
-  const wholeLanding = `pnpm run plan:land ${changeId} --whole --perspectives simpler --stood "<what stood>"`;
-  if (wholes.length === 0) {
-    fail(
-      yellow(
-        `${changeId} archives with no reading of the whole: no row reads \`${WHOLE_CHANGE}\`.`,
-      ),
-      "After the last group, one reader argues the simpler shape for the whole",
-      "change before it goes to staging, and its landing writes the row:",
-      "",
-      `  ${cyan(wholeLanding)}`,
-    );
-    process.exit();
-  }
-  const lastRound = Math.max(0, ...lastRows.map((one) => one.round));
-  const whole = wholes.at(-1);
-  if (whole.round < lastRound) {
-    fail(
-      yellow(
-        `${changeId}'s reading of the whole is round ${whole.round}, before group ${last}'s row ${lastRound}.`,
-      ),
-      "The whole is read after the last group lands, so the shape it argues is",
-      "the one that ships. Read it again and land it:",
-      "",
-      `  ${cyan(wholeLanding)}`,
-    );
-    process.exit();
-  }
-}
-
-// ── Decide gate ─────────────────────────────────────────────────────────────
-// `decisions.md` is folded nowhere, so a rejected option recorded only there
-// survives archive in a tree the blind suite pass may not read. Whatever still
-// matters belongs on the capability's PRD, in `Product decisions`. The store
-// cannot judge which rows those are — the owner can, and this asks them to say
-// so rather than to remember.
-const decisionsFile = `openspec/changes/${changeId}/decisions.md`;
-const decisions = existsSync(join(ROOT, decisionsFile))
-  ? readFileSync(join(ROOT, decisionsFile), "utf8")
-  : null;
-const rows =
-  decisions === null
-    ? []
-    : decisionRows(decisions).filter(
-        (cells) => DECISION_ROW.test(cells[0]) && !cells[1]?.startsWith("<!--"),
-      );
-if (rows.length > 0 && decisionsCarried === null) {
-  fail(
-    yellow(
-      `${changeId} records ${rows.length} decision(s) that the fold carries nowhere:`,
-    ),
-  );
-  for (const cells of rows.slice(0, SHOWN)) {
-    console.error(`  | ${cells.join(" | ")} |`.slice(0, 102));
-  }
-  if (rows.length > SHOWN) {
-    console.error(dim(`  … and ${rows.length - SHOWN} more`));
-  }
-  fail(
-    "",
-    "A rejected option readable only under archive/ is one the blind pass may",
-    "not read, so the question comes back answered the other way. Put what",
-    "still matters in the capability's `Product decisions` block, then say so:",
-    "",
-    `  ${cyan('--decisions-carried "<what went where>"')}`,
-    `  ${cyan("--decisions-carried none")}   nothing outlived the change`,
-  );
-  process.exit();
-}
-
-// ── Carry gate ──────────────────────────────────────────────────────────────
-// Two lists, because they are two different failures. `uncarried` is a copy
-// that has not happened, and against a capability the fold has yet to create
-// it cannot happen until after — `--journeys-copied` defers those. `wrong` is
-// a copy that landed and landed wrong: every file involved is already here, so
-// no flag defers it.
-const uncarried = [];
-const wrong = [];
-const anchorless = [];
-const suitesSeen = new Set();
-let carriesTraceCase = false;
-
-for (const { file, capability } of deltaFiles(changeId)) {
-  const delta = readFileSync(file, "utf8");
-
-  const unanchored = anchorlessScenarios(delta);
-  if (unanchored.length > 0) anchorless.push({ capability, ids: unanchored });
-  const durableFile = join(ROOT, "openspec", "specs", capability, "spec.md");
-  const durable = existsSync(durableFile)
-    ? readFileSync(durableFile, "utf8")
-    : null;
-
-  for (const section of doomedSections(delta)) {
-    const carried =
-      durable !== null &&
-      durable.match(new RegExp(`^##\\s+${section.name}\\s*$`, "m")) !== null &&
-      [...section.ids].every((id) => durable.includes(id));
-    if (!carried) uncarried.push({ capability, section, durable });
-  }
-
-  // A written `## Purpose` replaces the durable one whole. The durable file
-  // still holding a different one means the fold took the requirements and
-  // left behind the sentence that says what the capability is for.
-  const purpose = sectionBody(delta, "Purpose");
-  if (
-    purpose !== null &&
-    purpose !== "" &&
-    durable !== null &&
-    sectionBody(durable, "Purpose") !== purpose
-  ) {
-    wrong.push({
-      capability,
-      what: "`## Purpose` — the change wrote one and the durable spec still holds a different one",
-    });
-  }
-
-  // The journeys are their own file on both sides, so the fold never touches
-  // them: the change's user-journeys.md has to be copied across whole.
-  const journeysFile = file.replace(/spec\.md$/, "user-journeys.md");
-  const durableJourneys = join(
-    ROOT,
-    "openspec",
-    "specs",
-    capability,
-    "user-journeys.md",
-  );
-  const landed = existsSync(durableJourneys)
-    ? readFileSync(durableJourneys, "utf8")
-    : null;
-
-  if (existsSync(journeysFile)) {
-    const journeys = readFileSync(journeysFile, "utf8");
-    const ids = new Set(journeys.match(US_ID) ?? []);
-    const carried =
-      landed !== null && [...ids].every((id) => landed.includes(id));
-    if (!carried) {
-      uncarried.push({
-        capability,
-        section: { name: "User journeys", ids },
-        durable: landed,
-      });
-    }
-
-    // A removed journey keeps its id forever — archived suites still carry
-    // `**Trace:** <id>`, and nothing recovers that join once the journey is
-    // gone. Archive leaves a one-line tombstone instead of deleting it.
-    const removed = new Set(
-      sectionBody(journeys, "REMOVED User journeys")?.match(US_ID) ?? [],
-    );
-    const retired = landed === null ? null : sectionBody(landed, "Retired");
-    for (const id of removed) {
-      if (landed === null) continue;
-      if (retired === null || !retired.includes(id)) {
-        wrong.push({
-          capability,
-          what: `\`${id}\` is removed and leaves no \`## Retired\` tombstone — archived suites still trace that id`,
-        });
-      } else if (new RegExp(`^###\\s+${id}\\b`, "m").test(landed)) {
-        wrong.push({
-          capability,
-          what: `\`${id}\` is tombstoned under \`## Retired\` and its journey is still written above it`,
-        });
-      }
-    }
-  }
-
-  // The suites travel beside the spec — `feature-tcs.md` into the capability,
-  // `domain-tcs.md` into the domain above it, `product-tcs.md` into the
-  // product above that. Every capability under a domain reaches the same
-  // domain suite, so it is read once.
-  for (const [name, dir] of [
-    ["feature-tcs.md", capability],
-    ["domain-tcs.md", dirname(capability)],
-    ["product-tcs.md", dirname(dirname(capability))],
-  ]) {
-    const source = join(CHANGES, changeId, "specs", dir, name);
-    if (!existsSync(source) || suitesSeen.has(source)) continue;
-    suitesSeen.add(source);
-
-    const target = join(ROOT, "openspec", "specs", dir, name);
-    if (!existsSync(target)) {
-      uncarried.push({
-        capability: dir,
-        section: { name, ids: new Set() },
-        durable: null,
-      });
-      continue;
-    }
-    const arrived = readFileSync(target, "utf8");
-
-    // Scenario ids belong to the change. A `## Reconciliation` that keeps
-    // them past the fold points at a change that is about to stop existing.
-    const ids = [
-      ...new Set(scenarioIdsIn(sectionBody(arrived, "Reconciliation") ?? "")),
-    ];
-    if (ids.length > 0) {
-      wrong.push({
-        capability: dir,
-        what: `${name} carries \`## Reconciliation\` with ${ids.length} scenario id(s) not stripped (${ids.slice(0, 3).join(", ")})`,
-      });
-    }
-
-    const delta = readFileSync(source, "utf8");
-    if (name === "feature-tcs.md" && delta.includes("<!-- trace:case"))
-      carriesTraceCase = true;
-
-    // `## Settled` is a legal part of the next blind pass's isolated input:
-    // what earlier readings asked and had answered. Left behind, the same
-    // refused reading is raised by every future run.
-    const kept = new Set(bullets(sectionBody(arrived, "Settled")));
-    const owed = bullets(sectionBody(delta, "Settled")).filter(
-      (line) => !kept.has(line),
-    );
-    if (owed.length > 0) {
-      wrong.push({
-        capability: dir,
-        what: `${name} drops ${owed.length} \`## Settled\` line(s) — the next blind pass raises them again: "${owed[0].slice(0, 60)}"`,
-      });
-    }
-
-    // The `**Decided by:**` line travels with the suite too (Q49). A case
-    // whose deciding test the change named, landing durable with no line or
-    // with another one, leaves the store keeping that case off every run
-    // sheet for a test nothing names any more - and the durable suites are
-    // not back-filled, so the fold is the only place this is caught.
-    const durable = decidedByOf(arrived);
-    for (const [id, paths] of decidedByOf(delta)) {
-      const landedPaths = durable.get(id);
-      if (landedPaths === undefined)
-        wrong.push({
-          capability: dir,
-          what: `${name} drops \`${id}\`'s \`**Decided by:** ${paths}\` — the run sheet leaves the case out for a test nothing names`,
-        });
-      else if (landedPaths !== paths)
-        wrong.push({
-          capability: dir,
-          what: `${name} lands \`${id}\`'s \`**Decided by:**\` as \`${landedPaths}\`, where the change names \`${paths}\``,
-        });
-    }
-
-    // Every case the change's suite holds lands under the same id - `<v>`
-    // included, since the id carries it - and the same status. Copying the
-    // file's header and its sections while leaving cases behind is how
-    // archived changes lost whole journeys of cases: the durable file existed,
-    // so nothing above noticed.
-    const landedCases = caseIndex(ROOT, [target]);
-    const missing = [];
-    for (const [id, one] of caseIndex(ROOT, [source])) {
-      const there = landedCases.get(id);
-      if (there === undefined) missing.push(id);
-      else if (there.status !== one.status)
-        wrong.push({
-          capability: dir,
-          what: `${name} lands \`${id}\` as \`${there.status}\`, where the change holds it \`${one.status}\``,
-        });
-    }
-    if (missing.length > 0) {
-      const shown = missing.slice(0, SHOWN).join(", ");
-      const more =
-        missing.length > SHOWN ? `, … and ${missing.length - SHOWN} more` : "";
-      wrong.push({
-        capability: dir,
-        what: `${name} leaves ${missing.length} case(s) behind — each lands under its id and \`<v>\`: ${shown}${more}`,
-      });
-    }
-  }
-}
-
-if (carriesTraceCase) {
-  const traceFailure = traceFoldFailure(changeId);
-  if (traceFailure !== null) {
-    wrong.push({
-      capability: "traceability",
-      what: `trace handover validation failed:\n${traceFailure}`,
-    });
-  }
-}
-
-if (wrong.length > 0) {
-  fail(
-    yellow(
-      `${changeId} carries ${wrong.length} section(s) across incorrectly:`,
-    ),
-  );
-  for (const { capability, what } of wrong) {
-    console.error(`  ${capability} — ${what}`);
-  }
-  fail(
-    "",
-    "The copy landed; what archive owes it did not. Every file involved is",
-    "still here, so none of this is waivable — the fold is what makes it",
-    "unrecoverable. Fix them, then re-run this.",
-  );
-  process.exit();
-}
-
-if (anchorless.length > 0) {
-  const total = anchorless.reduce((sum, one) => sum + one.ids.length, 0);
-  fail(
-    yellow(
-      `The fold would add ${total} scenario(s) carrying no \`**Serves:**\` line:`,
-    ),
-  );
-  for (const { capability, ids } of anchorless) {
-    const shown = ids.slice(0, SHOWN).join(", ");
-    const more = ids.length > SHOWN ? `, … and ${ids.length - SHOWN} more` : "";
-    console.error(`  ${capability} — ${shown}${more}`);
-  }
-  fail(
-    "",
-    "A scenario names the journey or feature set group it serves, and",
-    "`anchorless` fails on the durable store. Nothing refuses it inside a",
-    "change, so the break lands on whoever folds it. Anchor them here, where",
-    "the journeys that resolve them are still beside the delta, then re-run",
-    "this.",
-  );
-  process.exit();
-}
-
-if (uncarried.length > 0 && !journeysCopied) {
-  fail(
-    yellow(
-      `The fold would discard ${uncarried.length} section(s) of ${changeId}:`,
-    ),
-  );
-  for (const { capability, section, durable } of uncarried) {
-    const ids = [...section.ids];
-    console.error(
-      `  ${capability} — \`${section.name}\`${ids.length ? ` (${ids.join(", ")})` : ""}${durable === null ? dim("  · nothing durable yet") : ""}`,
-    );
-  }
-  fail(
-    "",
-    "`openspec archive` folds `## Requirements` and nothing else — the purpose,",
-    "the feature set, the journeys file, the suites, and every `-US-` id in them",
-    "die with the change unless they are copied across to the durable",
-    "capability. Copy them, then re-run this.",
-    "",
-    "A capability with no durable spec yet can only receive the copy after the",
-    `fold creates it. Acknowledge that with ${cyan("--journeys-copied")} — the sections`,
-    "stay on `pnpm check:manual`'s warning list until the copy actually lands.",
-  );
-  process.exit();
-}
-
-// ── Clear ───────────────────────────────────────────────────────────────────
+// ── Clear ─────────────────────────────────────────────────────────────────
 console.log(`${green("✓")} ${bold(changeId)} is clear to archive.`);
-if (uncarried.length > 0) {
-  console.log(
-    yellow(
-      `  ${uncarried.length} section(s) acknowledged as still to copy — do it right after the fold.`,
-    ),
-  );
-}
-
-// A store-only change records no deploy key at all: there is no run to name
-// and no waiver owed, and its `tasks.md` repository tags are the record of
-// where every group landed. Writing `deploy_waived` there would put a waiver
-// in the manifest for a rule the change never answered to, and a waiver
-// written where none is owed is how the waiver becomes the default.
-const record = {
-  ...(deployedAt !== null
-    ? {
-        deployed_at: deployedAt,
-        deployed_env: deployedEnv,
-        ...(deployedBuild !== null ? { deployed_build: deployedBuild } : {}),
-      }
-    : deployWaived !== null
-      ? { deploy_waived: deployWaived }
-      : {}),
-  ...(tasksWaived !== null ? { tasks_waived: tasksWaived } : {}),
-  // What the clear run was told about the fold's own two DECIDE gates,
-  // archived with the change so `pnpm check:manual` can read it back rather
-  // than being asked for again next run.
-  ...(decisionsCarried !== null ? { decisions_carried: decisionsCarried } : {}),
-  ...(journeysCopied ? { journeys_copied: "true" } : {}),
-};
-const subject =
-  deployedAt !== null
-    ? deployedBuild !== null
-      ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv}, build ${deployedBuild})`
-      : `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
-    : deployWaived !== null
-      ? `Record ${changeId} archived with the deploy waived`
-      : `Archive ${changeId}, which deploys nothing`;
-
-if (Object.keys(record).length === 0) {
-  console.log(
-    `\nNo deploy record is owed — every task group lands in ${bold(STORE_GROUP)}.`,
-  );
-  console.log(`\nArchive it:\n`);
-  console.log(
-    `  ${cyan(`git -C "${ROOT}" mv openspec/changes/${changeId} openspec/changes/archive/<YYYY-MM-DD>-${changeId}`)}`,
-  );
-  console.log(`  ${cyan(`git -C "${ROOT}" commit -m "${subject}"`)}`);
-} else {
-  const rel = writeRecord(changeId, record);
-  console.log(`\nThe record is written into ${bold(rel)}. Commit it:\n`);
-  console.log(`  ${cyan(`git -C "${ROOT}" commit ${rel} -m "${subject}"`)}`);
-}
-console.log(`\nThen:  ${cyan(`openspec archive ${changeId}`)}`);
+console.log(
+  `\nImplementation attests ${acceptanceCheck.implementation?.version === 2 ? acceptanceCheck.implementation.acceptance.fingerprint : acceptanceCheck.fingerprint}.`,
+);
+console.log(`\nArchive the change directory without folding it again:\n`);
+console.log(
+  `  ${cyan(`git -C "${ROOT}" mv openspec/changes/${changeId} openspec/changes/archive/<YYYY-MM-DD>-${changeId}`)}`,
+);
+console.log(
+  `  ${cyan(`git -C "${ROOT}" commit -m "Archive ${changeId} after implementation verification"`)}`,
+);

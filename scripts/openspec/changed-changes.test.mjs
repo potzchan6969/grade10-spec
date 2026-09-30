@@ -655,9 +655,9 @@ test("shared-planning-change-stages-SC-38 - --stages tells nobody when a push on
   const { read } = stages(root, ["--base", base, "--head", head]);
   const { messages, stages: reached, payload } = read();
 
-  assert.equal(reached[CHANGE], "building");
+  assert.equal(reached[CHANGE], "planned");
   assert.deepEqual(messages, []);
-  assert.match(payload.blocks[0].text.text, /probe.*Building/s);
+  assert.match(payload.blocks[0].text.text, /probe.*Planned/s);
 });
 
 test("shared-planning-change-stages-SC-70 - --stages names no change for a push that only writes the record's keys, and the thread still hears what landed", () => {
@@ -835,7 +835,7 @@ test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one
   );
 });
 
-test("shared-planning-change-stages-SC-18 - --stages says it told a handle with no Slack member nothing", () => {
+test("--stages keeps an unaccepted plan off implementation and QA notifications", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -844,7 +844,6 @@ test("shared-planning-change-stages-SC-18 - --stages says it told a handle with 
       "  qa: gina",
       "  release: fred",
       'promoted_by: "@dana"',
-      "deployed_env: staging",
     ),
     [`${DIR}/proposal.md`]: proposalOf(),
     [`${DIR}/tasks.md`]: tasksMd(0),
@@ -853,20 +852,12 @@ test("shared-planning-change-stages-SC-18 - --stages says it told a handle with 
   write({ [`${DIR}/tasks.md`]: tasksMd(2) });
   const head = commit("finish probe", 1);
 
-  const { read, stderr } = stages(root, ["--base", base, "--head", head]);
+  const { read } = stages(root, ["--base", base, "--head", head]);
   const { messages, skipped, stages: reached } = read();
 
-  assert.equal(reached[CHANGE], "on-staging");
-  assert.deepEqual(
-    messages.map((one) => [one.key, one.channel]),
-    [["probe:on-staging:release", "U-FRED"]],
-  );
-  assert.deepEqual(
-    skipped.map((one) => one.key),
-    ["probe:on-staging:qa"],
-  );
-  assert.match(skipped[0].why, /gina/);
-  assert.match(stderr, /gina/);
+  assert.equal(reached[CHANGE], "planned");
+  assert.deepEqual(messages, []);
+  assert.deepEqual(skipped, []);
 });
 
 test("shared-planning-change-stages-SC-41 - --stages posts to the role's channel when the hand is unnamed", () => {
@@ -942,7 +933,7 @@ test("--stages refuses a base the checkout cannot reach, naming the range", () =
   assert.match(done.stderr, new RegExp(`${missing}\\.\\.${head}`));
 });
 
-test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA and the release hand's own turn", () => {
+test("--stages leaves QA execution until a deployed build is available", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -950,8 +941,6 @@ test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA a
       ...HANDS,
       'promoted_by: "@dana"',
       "thread: C0AB/1700000000.000100",
-      "deployed_env: staging",
-      'deployed_build: "1.4.0-rc2"',
     ),
     [`${DIR}/proposal.md`]: proposalOf(),
     [`${DIR}/tasks.md`]: tasksMd(0),
@@ -960,49 +949,17 @@ test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA a
   write({ [`${DIR}/tasks.md`]: tasksMd(2) });
   const head = commit("finish probe", 1);
 
-  const { read } = stages(root, [
-    "--base",
-    base,
-    "--head",
-    head,
-    "--sheet-url",
-    "https://sheets.test/run",
-  ]);
+  const { read } = stages(root, ["--base", base, "--head", head]);
   const { messages } = read();
 
-  assert.deepEqual(
-    messages.map((one) => [one.key, one.kind, one.channel]),
-    [
-      ["probe:on-staging:qa", "staging", "U-HANA"],
-      ["probe:on-staging:release", "your-turn", "U-FRED"],
-    ],
-  );
-  assert.match(
-    textOf(messages, "probe:on-staging:qa"),
-    /https:\/\/sheets\.test\/run/,
-  );
-  assert.match(textOf(messages, "probe:on-staging:qa"), /1\.4\.0-rc2/);
-  assert.match(textOf(messages, "probe:on-staging:release"), /On staging/);
-  // The thread's permalink: the workspace host, the channel, and the
-  // timestamp with its dot taken out. A direct message is not a reply.
-  for (const message of messages) {
-    assert.match(
-      message.text,
-      /https:\/\/grade10\.slack\.com\/archives\/C0AB\/p1700000000000100/,
-    );
-    assert.equal(message.threadTs, undefined);
-  }
+  assert.deepEqual(messages, []);
 });
 
-test("--stages says the words when no run sheet is configured", () => {
+test("--stages does not treat a completed task list as a QA execution signal", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
-    [`${DIR}/.openspec.yaml`]: record(
-      ...HANDS,
-      'promoted_by: "@dana"',
-      "deployed_env: staging",
-    ),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
     [`${DIR}/proposal.md`]: proposalOf(),
     [`${DIR}/tasks.md`]: tasksMd(0),
   });
@@ -1012,7 +969,7 @@ test("--stages says the words when no run sheet is configured", () => {
 
   const { messages } = stages(root, ["--base", base, "--head", head]).read();
 
-  assert.match(textOf(messages, "probe:on-staging:qa"), /the run sheet/);
+  assert.deepEqual(messages, []);
 });
 
 /** A landing as `plan:land` writes it: the artifacts, and the record naming

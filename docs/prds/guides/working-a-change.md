@@ -23,17 +23,22 @@ artifact, and no second change is opened for the same work.
 | 2 | `decisions.md` | Product manager | `/workflow-plan` | Always — goals, non-goals, and what the interview settled |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `/workflow-plan` | Always — one nobody walks says so in it |
 | 4 | `ui-design.md` | Designer, or the PM who already has the design | `/workflow-design` | Optional — from the journeys |
-| 5 | `tech-design.md` | Tech PIC | `/workflow-tech` | When a task group lands outside this store — or `design_waived: <why>` |
-| 6 | `specs/<capability>/spec.md` | Product manager | `/workflow-specify` | Always — the outline, then the requirements, with 7 between them |
-| 7 | `specs/<capability>/feature-tcs.md` | Product manager | `/workflow-specify` | Always — blind, before the scenarios |
-| 8 | `tasks.md` | Engineer | `/workflow-tasks` | Before anyone can build it |
+| 5 | `tech-design.md` | Dev in the integrated planning run | `/planning-dev` | Every implementation change outside this store — or `design_waived: <why>` |
+| 6 | `specs/<capability>/spec.md` | QA1 outline, Dev scenarios | `/planning-dev` | Always — anchors first, scenarios after QA1 and technical design |
+| 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `/planning-dev` | Always — blind draft cases before scenarios |
+| 8 | `tasks.md` | Dev in the integrated planning run | `/planning-dev` | Before acceptance and implementation |
 
-The round drafts ahead: the first sentence puts every file above on the
-change's branch, each read by its own perspectives, and lands nothing. A hand
-lands only their own artifacts — one word lands every drafted artifact of that
-hand, in the order above, and tells the next hand. **Neither the PM nor the
-designer opens `spec.md`**: its two readings belong to the run that takes them
-from the journeys, and the PM is its reader of record.
+The PM writes 1 to 3; a designer adds 4 where the change affects a surface.
+Then `/planning-dev <id>` freezes the anchor set, gets QA1's blind draft cases,
+gets Dev's independent technical design, scenarios and tasks, then reconciles
+both in QA2. The same human answers questions and accepts the complete plan
+once. `pnpm accept:preflight <id>` checks readiness and prints the baseline
+fingerprint; `pnpm spec:accept <id> --baseline <digest> --reviewed-by <human>`
+records that decision and publishes the requirements to `openspec/specs/`
+before implementation. An amended acceptance names its prior fingerprint
+with `--supersedes <old-fingerprint>` and preserves that snapshot. The new
+cases remain drafts until human QA reviews them after deployment; manual
+execution uses `/tcs-run-sheet`.
 
 Two files every hand writes on. A product detail you learn goes on the PRD
 under `docs/prds/` first, marked 🚧 or ❓, and a scope fact on `decisions.md`,
@@ -62,11 +67,12 @@ Customers-also-bought from orders is phase two, once this ships.
   the row and the page's sentence quoted
 - **A line a build round puts on your page** — comes back to you as ❓, with
   the line before and after
-- **QA** — is told when the requirements land, with the suite to review
+- **Planning questions** — go to the same human who is accepting the complete plan
+- **Human QA** — reviews the suite after deployment; `/tcs-run-sheet` handles manual execution
 
 From a terminal it is your artifact's line command instead —
-`/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
-each with the change id, then `/workflow-build add-store-cross-sell <group>`,
+`/workflow-design`, then one `/planning-dev` run with the change id, then
+`/workflow-build add-store-cross-sell <group>`,
 once per group.
 
 Four things the round cannot know, so say them when they are true:
@@ -115,27 +121,29 @@ screen: the rail under the buy box on the card's page, from
 mixed, none at all and no rail, and a chosen pick nobody can buy. The frame
 arrives as a remark, and the designer's word lands `ui-design.md`.
 
-## *Tech PIC* — **The mirror and the rule**
+## *Dev* — **The technical design and rule**
 
 The catalogue mirror gains the card's complementary references and its tags,
 and the similar rule runs when the card's page is served, in the response
 before any script runs. Rejected: Storefront's `productRecommendations`,
 Shopify's own ranking rather than the store's facets and not deterministic, and
-a nightly precompute, stale inside the window the mirror already closes. What
-the tech PIC remarks is applied as written, and their word lands
-`tech-design.md`.
+a nightly precompute, stale inside the window the mirror already closes. The
+technical design lands with the delivery draft and explains how accepted
+behavior will be implemented.
 
-## *PM* — **The two readings**
+## *QA1 · Dev · QA2* — **Cases, scenarios and reconciliation**
 
-The cases are written blind of the scenarios, and the requirements are
-reconciled against them after. The ids start at
+QA1 writes draft cases from the frozen anchors without reading scenarios. Dev
+independently writes requirement scenarios and tasks. QA2 compares cases and
+scenarios against the anchors and records every disposition. The ids start at
 `grade10-site-store-cross-sell-SC-01` in `spec.md` and
 `grade10-site-store-cross-sell-US1-TC1-1` in `feature-tcs.md`, beside a delta
 on `grade10-site/store/product-page` for the rail's place on the page. The
-product manager reads the two side by side, and one word lands both. The
-landing tells QA by direct message. It carries the suite's path, its case
-count and `/tcs-review add-store-cross-sell`, which the walk group takes as its
-input.
+same human answers questions throughout and accepts the completed plan once,
+using the baseline fingerprint from `pnpm accept:preflight` with
+`pnpm spec:accept`. That acceptance publishes the requirements to durable
+specs. The draft cases remain unreviewed until human QA reviews them after
+deployment; `/tcs-run-sheet` handles manual execution.
 
 ## *Engineer* — **The plan, then the build**
 
@@ -151,11 +159,14 @@ model is named so. A reader the fallback could not run stops the round and
 tells the thread which one is missing. The last group walks US-01 to US-03
 end to end and leaves the end-to-end suite that runs on every push to `main`.
 
-## *QA · Release hand* — **Staging, the cut, the fold**
+## *Engineer* — **Implementation and archive**
 
-The deploy, the run sheet QA walks, then the release hand's cut. The fold
-rewrites `openspec/specs/grade10-site/store/cross-sell/spec.md` and takes the
-marks off the page's lines. Phase two is its own change,
+After engineering verification, record the accepted fingerprint, repository
+commits and deploy components with `pnpm plan implementation`. Archive the
+change before deployment; acceptance already published the durable spec, so
+archive makes no second fold. Deployment follows archive. Human QA reviews the
+suite once the application is available; `/tcs-run-sheet` handles manual
+execution. Phase two is its own change,
 `add-store-also-bought`, opened by the next sentence with `depends_on:
 add-store-cross-sell`; it decides first whether to compute the store's first
 behavioural signal from `Order Paid`, the only store event sent today.
@@ -163,22 +174,20 @@ behavioural signal from `Order Paid`, the only store event sent today.
 
 ## How You Know It Is Your Turn
 
-The change carries its own stage, one of eight, and the stage names the hand.
+The change carries its own stage, and the stage names the hand.
 Answer in the change's thread when it names you, or run the command below in a
 terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/agent-rounds).
 
 | # | Stage | Hand | Say |
 | --- | --- | --- | --- |
-| 1 | Proposed | Product manager, then Designer · Tech PIC | `/workflow-plan <id>`, then `/workflow-design <id>` · `/workflow-tech <id>` |
-| 2 | Designed | nobody — both designs land while Proposed is still the stage | — |
-| 3 | Specified | Product manager · QA | `/workflow-specify <id>` · `/tcs-review <id>` |
-| 4 | Planned | Engineer | `/workflow-tasks <id>` |
-| 5 | Building | Engineer | `/workflow-build <id> <group>` |
-| 6 | On staging | QA · Release hand | — |
-| 7 | Released | nobody — the cut happens outside the agent | — |
-| 8 | Archived | nobody | — |
+| 1 | Proposed | Product manager | `/workflow-plan <id>` |
+| 2 | Designed | Designer, when needed | `/workflow-design <id>` |
+| 3 | Accepted | Invoking human, after QA1 · Dev · QA2 | `/planning-dev <id>`, then accept with the preflight fingerprint |
+| 4 | Building | Engineer | `/workflow-build <id> <group>` |
+| 5 | Implementation-complete | Engineer, after verification | `pnpm plan implementation <id> --commit <sha> --component <id>` |
+| 6 | Archived | Nobody | `/openspec-archive-change` before deployment |
 
-- **What proves each stage** — [Change Stages](/p/shared/planning/change-stages)
+- **What proves each stage** — [Change Stages](/p/shared/planning/change-stages). Deployment availability follows archive and is tracked separately.
 
 [My turn](/my-turn) shows what is on you; [Board](/in-flight) shows every change; ask the agent where a change stands to read this for one.
 
@@ -193,7 +202,7 @@ say what you say, and what has to be running.
 | The thread | A sentence to the app in the planning channel, then your answers in the change's thread | The relay, on your word or the Confirm button | The Slack app, the relay and the Routine, which Operations sets up — [Agent Runner](/references/agent-runner) |
 | A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command from the table above | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
 | The locally run manual | Assign on a change page, Propose on a product page, Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
-| The application repository | `pnpm plan claim`, `done` and `released` today; `hand` and `shipped --build <tag>` once the stages change's group 7 lands there | A commit straight to the store's `main`, as today | `grade10`, with the store clone beside it |
+| The application repository | `pnpm plan claim`, `done`, `hand` and `implementation` | A commit straight to the store's `main` | `grade10`, with the store clone beside it |
 | A push of your own | A push to the change's branch, from a terminal or the code host | The round, which reads it as your word for the lines it touched | Nothing more |
 
 - **A terminal alone, end to end** — `/workflow-plan` opens the change and

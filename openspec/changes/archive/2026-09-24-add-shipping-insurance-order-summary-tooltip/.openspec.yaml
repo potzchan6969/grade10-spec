@@ -4,6 +4,4 @@ promoted_by: "@htonyl"
 reviewed:
   specs: ccffec27
   test-cases: ccffec27
-deployed_at: "4e0d347"
-deployed_env: "staging"
 decisions_carried: "post-bidding product record"

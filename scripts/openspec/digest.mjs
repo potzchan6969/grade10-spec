@@ -22,11 +22,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import {
-  handOf,
-  releasedOf,
-  STAGE_LABEL,
-} from "../../tools/manual/src/api/stages.ts";
+import { handOf, STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
@@ -239,7 +235,17 @@ async function main() {
   const now = values.now ? Date.parse(values.now) : Date.now();
   // The archive is walked only when a change in flight depends on something:
   // most digests read nobody's `depends_on:`, so the walk stays a call.
-  const releases = releasedOf(read.changes, read.archivedOf());
+  // Dependencies become available when their contract is accepted. Deployment
+  // availability is a separate receipt and never a planning prerequisite.
+  const releases = new Map(
+    [...read.changes, ...read.archivedOf()]
+      // Historical archives predate acceptance records. They are already
+      // immutable contracts, so they remain valid dependency evidence.
+      .filter(
+        (change) => change.accepted === true || change.status === "archived",
+      )
+      .map((change) => [change.id, { on: change.lastMoved ?? change.created }]),
+  );
   const told = digestOf(read, readTeamMap(root, values.team), {
     now,
     released: new Set(releases.keys()),

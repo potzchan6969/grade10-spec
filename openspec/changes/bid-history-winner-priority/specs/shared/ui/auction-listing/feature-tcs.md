@@ -20,12 +20,12 @@ contract states,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** component
+* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Public bid history outcome
 
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx` ClosedSoldEqualMax
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -51,12 +51,12 @@ contract states,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** component
+* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Public bid history outcome
 
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx` ClosedSoldEqualMax
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`
 
 **Pre-conditions:**
 

@@ -14,6 +14,12 @@ Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a suite
 The reviewer decides, never this skill: present the case beside the spec, answer
 what they ask, and record their words untidied — generation copies what they approve.
 
+For a suite belonging to an OpenSpec change, start human QA after implementation
+is deployed and available. Planning produces draft cases and QA2 reconciliation,
+not human review verdicts; do not move its new cases to `actual` before the
+implementation can be exercised. Use `/tcs-run-sheet` to record manual test
+execution; a review classification is not a pass or fail result.
+
 ## Steps
 
 0. **Read the rulebook and the conventions whole.**

@@ -5,5 +5,4 @@ depends_on:
   - add-winner-partial-payment
 hands:
   pm: "@jeffffej0909"
-deploy_waived: "Owner: deployed offline"
 decisions_carried: "post-bidding product record"

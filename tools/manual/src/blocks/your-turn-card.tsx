@@ -50,24 +50,26 @@ export function YourTurnCard({
   /** The change's schema artifacts, for whose turn it is in Proposed — a
    * waived design needs no hand. */
   artifacts: SchemaArtifact[];
-  /** The run sheet the store was configured with, for the message QA is sent
-   * on staging. */
+  /** The run sheet the store was configured with. */
   sheetUrl?: string;
 }) {
   const roles = handOf(change, stage, artifacts);
   // One command per hand whose turn it is, not per hand the stage table
   // names: Proposed's second half is the designer's and the tech PIC's.
   const moves = movesOfHands(stage, roles, change.id);
-  // The three stages DRAFTED carries no entry for — On staging, Released and
-  // Archived — are a deploy, a cut and a fold: nobody's agent drafts them, so
-  // no per-hand move exists to offer. The first two still have work to do,
-  // which is the archive command; the fold itself is done, so Archived offers
-  // nothing.
+  // Record-based milestones have no authored artifact. Accepted still has
+  // implementation work, and Implementation complete still needs archiving.
   const fallback =
     stage !== "archived" && DRAFTED[stage] === undefined
       ? {
-          command: `/archive-change ${change.id}`,
-          note: "confirm it deployed, then fold it into the durable specs",
+          command:
+            stage === "accepted"
+              ? `/workflow-build ${change.id} <group>`
+              : `/archive-change ${change.id}`,
+          note:
+            stage === "accepted"
+              ? "engineer: implement one task group, test first"
+              : "archive the verified implementation and fold its accepted delta",
         }
       : undefined;
 

@@ -85,7 +85,7 @@ test("shared-planning-change-stages-SC-67 - two changes deliver one line", async
   // Designed's.
   const pip = markedLine("Cap").getByTitle(/The Building stage — Building/);
   await expect.element(pip).toBeVisible();
-  await expect.element(pip).toHaveTextContent("5");
+  await expect.element(pip).toHaveTextContent("6");
   await expect
     .element(markedLine("Cap").getByTitle(/— Designed/))
     .not.toBeInTheDocument();

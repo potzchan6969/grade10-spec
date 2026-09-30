@@ -5,19 +5,19 @@
 Where a change stands, who is on it, and how they are told: eight stages read
 from the change's files on `main`, one hand per stage whose word moves it, a
 closed set of overlays beside the stage, and one message per move pointing at
-the change's thread, shown the same on the board, the change page, the page's
-ribbon, My turn and Slack.
+the change's thread. Deployment availability is an independent projection of
+GitHub Deployment receipts, shown for each application component.
 
 ## Feature set
 
 - Stages read from files
-  - One of eight: Proposed, Designed, Specified, Planned, Building, On staging, Released, Archived, each proven by what is on `main`, never set by a key
+  - One of eight: Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete, Archived, each proven by what is on `main`, never set by a key
   - One projection: the four lanes, the stepper, the pip and every message read the same derivation
   - Proposed whole: the proposal, the decisions and the journeys are one stage, with ❓ on what is still open
   - Waivers as written: `ui_waived` and `design_waived` stand for the artifact they name, so Designed needs both designs or their line
   - Tech design first: the tech design is drawn beside the UI design, before the requirements, on every change
 - Drafted, landed on a word
-  - Agent mark: the five stages from Proposed to Building are drafted by the change's agent and carry the hand's move beside the mark
+  - Agent mark: the six stages from Proposed to Building are drafted by the change's agent and carry the hand's move beside the mark
   - Landed by: `landed_by:` names the hand whose word landed each artifact, written by the landing itself
 - Hands and whose turn
   - Hands mapping: `hands:` names one handle per role, written by the product manager, the local manual or the application repository's command, refused when the team map does not know it
@@ -31,11 +31,11 @@ ribbon, My turn and Slack.
   - Open questions: a ❓ decisions row or a ❓ line under a linked section, counted per artifact and listed per hand
 - Messages, once per move
   - Your turn: one direct message to the hand a change reaches, keyed by change, stage and role, never sent twice for one move
-  - Behind and staging: one message to the hand of an artifact newly behind, and one to QA when a change reaches staging
+  - Behind and implementation complete: one message to the hand of an artifact newly behind, and one to QA when implementation is complete
   - Landed from a terminal: a landing pushed from a terminal posts one reply in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
   - Channel and digest: the post per push names each change's stage; a weekly digest per person lists open questions, idle, behind and waiting
 - Surfaces that show the stage
-  - Board: eight lanes with the agent mark and the hand's move on five, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
+  - Board: eight lanes with the agent mark and the hand's move on six, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
   - Change page: the stepper, the Your turn card with the thread and the command, the hands, each artifact fresh or behind with its questions and who landed it, on the pages every line the change marks, delivery and handoff
   - My turn: the reader's open questions, then the changes on them now, then the ones theirs later
   - Ribbon and pip: a section's in-flight row shows the stage and the hand, and each 🚧 line wears its change's stage
@@ -62,12 +62,131 @@ The stage says how far a change has got, and only what is on `main` proves it.
 | --- | --- | --- |
 | 1 | Proposed | `proposal.md` |
 | 2 | Designed | `ui-design.md` or `ui_waived:` · `tech-design.md` or `design_waived:` |
-| 3 | Specified | `spec.md` carrying requirements · `feature-tcs.md` · every Raised row landed |
-| 4 | Planned | `tasks.md` · `promoted_by:` |
-| 5 | Building | at least one task ticked |
-| 6 | On staging | every task ticked · `deployed_env: staging` |
-| 7 | Released | `released_in:` naming the tag that carried the change |
-| 8 | Archived | the change's directory under the archive |
+| 3 | Specified | QA1 cases · independent Dev requirements, scenarios and technical design · QA2 reconciliation · every Raised row resolved |
+| 4 | Planned | `tasks.md` |
+| 5 | Accepted | `acceptance.json` records the immutable planning fingerprint of the reconciled plan after one human resolves every raised question |
+| 6 | Building | `implementation.json` names that historical acceptance and the first-claim durable-spec baseline and target scope |
+| 7 | Implementation complete | every task is ticked · `implementation.json` records the repository commit and concrete application component ids |
+| 8 | Archived | the change's directory under the archive · archive preflight verifies historical acceptance, implementation ancestry and the claimed durable-spec scope, with acknowledgement for every difference, without folding |
+
+Deployment does not move a change between these stages. GitHub Deployment
+receipts are read separately for each environment and application component.
+
+#### Scenario: shared-planning-change-stages-SC-84 - A receipt does not advance a planning stage
+**Serves:** Stages read from files - deployment availability is independent of accepted-contract progress
+
+**GIVEN** a change at Accepted with no implementation record
+**WHEN** a deployment receipt is recorded for an application component
+**THEN** the change SHALL remain Accepted
+**AND** the component availability SHALL be visible independently
+
+### Requirement: Acceptance records the resolved plan before implementation
+
+The change SHALL reach Accepted only after QA2 has reconciled the independent
+QA1 and Dev readings and one human has resolved every raised question.
+
+- **Record** — `acceptance.json` SHALL name the change, canonical planning
+  fingerprint, review baseline, reviewer, acceptance time, scoped artifacts
+  whose hashes form that fingerprint, and the durable paths and anchors the
+  accepted delta touches
+- **Immutable history** — each acceptance SHALL preserve its fingerprint and
+  artifact snapshot; a later accepted revision SHALL name the fingerprint it
+  supersedes and SHALL NOT rewrite earlier acceptance evidence
+- **Fold** — `pnpm run spec:accept <change>` SHALL fold the accepted
+  requirements, journeys and PRD sources before implementation starts
+- **Held** — an unresolved Raised row or a changed review baseline SHALL
+  refuse acceptance until the human resolves it and the reconciled plan is
+  accepted again
+
+#### Scenario: shared-planning-change-stages-SC-79 - Acceptance waits for every raised question
+**Serves:** shared-planning-change-stages-US-02 - the product manager accepts only a reconciled plan whose questions are resolved
+
+**GIVEN** QA2 has reconciled QA1's cases and Dev's requirements, scenarios and tasks, with one Raised row still open
+**WHEN** `pnpm run accept:preflight` or `pnpm run spec:accept` runs
+**THEN** acceptance SHALL be refused and name the unresolved row
+**AND** the stage SHALL remain Planned
+
+#### Scenario: shared-planning-change-stages-SC-80 - Acceptance preserves a superseded fingerprint
+**Serves:** shared-planning-change-stages-US-02 - the product manager can review which resolved plan implementation follows
+
+**GIVEN** an accepted plan whose scoped artifacts later change and a second QA2 reconciliation that resolves the new Raised rows
+**WHEN** the plan is accepted again
+**THEN** the new immutable acceptance SHALL name the fingerprint it supersedes
+**AND** the earlier acceptance and its snapshot SHALL remain readable
+**AND** the new fingerprint SHALL be the current acceptance while both immutable snapshots remain readable
+
+### Requirement: A claim fixes archive scope while durable specs keep moving
+
+The implementation record SHALL preserve immutable planning provenance, record
+the first implementation claim's durable-spec comparison boundary, and prove
+which application commit and components complete the change.
+
+- **Start** — `pnpm plan claim <change> <group>` SHALL verify acceptance and,
+  on the first claim, create `implementation.json` with the historical accepted
+  fingerprint, the store repository and commit, capture time, and the durable
+  paths and anchors the accepted delta touches. A later claim SHALL preserve
+  that baseline and target scope.
+- **Complete** — `implementation.json` SHALL record each repository, a
+  reachable commit and the exact application component ids built for the
+  historical accepted plan.
+- **Archive** — preflight SHALL verify the named historical acceptance record
+  and application repository ancestry. It SHALL compare every claimed
+  durable-spec target with its current content. Every difference SHALL have a
+  compatibility acknowledgement that names the reviewer, time and reason and
+  lists every changed path and anchor once as editorial or semantic. A semantic
+  entry SHALL name test or other evidence. Preflight SHALL NOT infer that
+  distinction from Markdown and SHALL NOT fold the specification a second
+  time.
+- **Deployment order** — a GitHub Deployment receipt MAY arrive after archive
+  and SHALL NOT change the stage or rewrite either immutable record.
+
+#### Scenario: shared-planning-change-stages-SC-81 - An unacknowledged claimed contract change cannot be archived
+**Serves:** shared-planning-change-stages-US-02 - the engineer acknowledges a durable-spec change that affects the implementation scope
+
+**GIVEN** a change with checked tasks, a valid historical acceptance record, and a claimed durable requirement whose current content differs from its first-claim baseline
+**WHEN** archive preflight runs without a compatibility acknowledgement for that requirement
+**THEN** it SHALL refuse the archive and name the changed target and missing acknowledgement
+**AND** the change SHALL remain outside the archive
+
+#### Scenario: shared-planning-change-stages-SC-82 - The archive preserves accepted evidence without another fold
+**Serves:** shared-planning-change-stages-US-02 - the engineer archives verified implementation while durable specs remain rolling facts
+
+**GIVEN** a historical accepted plan, a matching implementation record with its first-claim baseline, reachable application commit, and no target difference or an acknowledgement for every difference
+**WHEN** archive preflight and archive run
+**THEN** the archive SHALL preserve the accepted snapshot and implementation record
+**AND** the historical fingerprint SHALL remain unchanged
+**AND** no second fold SHALL run
+
+### Requirement: Deployment receipts describe component availability independently
+
+The store SHALL show GitHub Deployment receipt evidence per application
+component and environment, whether the change is active or archived.
+
+| Status | Meaning |
+| --- | --- |
+| Newly | The component first appears in the environment |
+| Still | The deployed component has not changed |
+| No longer | A previously deployed component is absent |
+| Partial | Only some of the change's components are present |
+| Unknown | Available evidence cannot establish component state |
+| Stale | The receipt predates newer environment evidence |
+
+- **Receipt detail** — each component row SHALL link to its immutable GitHub
+  Deployment receipt, resolved deployed ref, component URL, manual URL, QA
+  URL and receipt freshness time
+- **Same projection** — `/availability` and the change detail SHALL use the
+  same receipt and status; each SHALL give QA a friendly testing
+  summary with the relevant links
+- **Separate status** — a receipt update SHALL NOT advance, reverse or reopen
+  the change's stage
+
+#### Scenario: shared-planning-change-stages-SC-83 - A receipt updates archived component availability
+**Serves:** shared-planning-change-stages-US-12 - the product manager sees which components remain available after the change is archived
+
+**GIVEN** an archived change with a prior deployment receipt for two application components
+**WHEN** a new receipt reports one component still deployed and the other no longer present
+**THEN** the environment page and the change detail SHALL show `Still` and `No longer` against the matching components
+**AND** the change SHALL remain Archived
 
 #### Scenario: shared-planning-change-stages-SC-01 - Each rung is proven by its row
 **Serves:** Stages read from files - every push to `main` is read here before any surface shows a change
@@ -178,7 +297,7 @@ and the journeys, before anybody writes a requirement.
 **THEN** the wait SHALL be shown against the change's tech PIC with the date it started
 **AND** the stage SHALL be unchanged
 
-### Requirement: The five drafted stages carry the agent mark and the hand's move
+### Requirement: The six drafted stages carry the agent mark and the hand's move
 
 Proposed to Building are drafted by the change's agent, and the hand of the
 stage answers.
@@ -186,8 +305,8 @@ stage answers.
 - **Where the pair is shown** — for Proposed to Building the board's lane
   heading SHALL carry the agent mark and the hand's move, and the change
   page's stepper step SHALL carry the move with the mark on the element for a
-  pointer and a screen reader; On staging, Released and Archived SHALL carry
-  neither
+  pointer and a screen reader; Implementation complete and Archived SHALL
+  carry neither
 - **Read from the stage** — the mark and the move SHALL come from the stage,
   so every change in one stage carries the same pair and no change's record
   SHALL change them
@@ -196,9 +315,10 @@ stage answers.
 | --- | --- | --- | --- |
 | 1 | Proposed | the marks and the three files, from what the hand asks | answer |
 | 2 | Designed | both designs, from the page and the journeys | tweak · challenge |
-| 3 | Specified | two blind readings, reconciled | read |
-| 4 | Planned | the plan | read |
-| 5 | Building | each group, test first | read each landing |
+| 3 | Specified | QA1's blind cases, Dev's independent design, requirements and scenarios, then QA2's reconciliation | read and resolve raised questions |
+| 4 | Planned | the tasks | read |
+| 5 | Accepted | the immutable accepted fingerprint | accept |
+| 6 | Building | each group, test first | read each landing |
 
 #### Scenario: shared-planning-change-stages-SC-10 - The mark and the move on a lane and a step
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a lane heading and opens the change beneath it
@@ -206,7 +326,7 @@ stage answers.
 **WHEN** the lane headings and the change page's stepper steps are read
 **THEN** each lane heading from Proposed to Building SHALL carry the agent mark and the hand's move for that stage
 **AND** each stepper step from Proposed to Building SHALL carry that stage's move, with the mark on the element for a pointer and a screen reader
-**AND** On staging, Released and Archived SHALL carry neither
+**AND** Implementation complete and Archived SHALL carry neither
 **AND** two changes in one stage SHALL carry the same pair
 
 ### Requirement: `landed_by:` names the hand whose word landed each artifact
@@ -260,12 +380,12 @@ Each change names who takes it at each stage.
 
 | Role | Key | Takes the change at |
 | --- | --- | --- |
-| Product manager | `pm` | Proposed, and Specified |
+| Product manager | `pm` | Proposed and Accepted; answers each raised question while the change is Specified |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
 | Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
-| Engineer | `dev` | Planned, and Building |
-| QA | `qa` | Specified, for the suite's review; On staging; the suite's verdict at any time, as an overlay |
-| Release hand | `release` | On staging |
+| Engineer | `dev` | Specified, Planned, Accepted and Building |
+| QA | `qa` | Implementation complete, for human verification; suite verdict as an overlay after implementation |
+| Release hand | `release` | Environment availability updates after archive |
 
 #### Scenario: shared-planning-change-stages-SC-13 - The hands are named at the interview's end
 **Serves:** shared-planning-change-stages-US-04 - the product manager closes the interview by naming who takes each role
@@ -290,12 +410,12 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 | # | Stage | Whose turn |
 | --- | --- | --- |
 | 1 | Proposed | `pm` until `decisions.md` and the journeys file are on `main` and `hands:` names every role the next stage needs - `design` unless `ui_waived`, `tech` unless `design_waived`; then those hands |
-| 2 | Designed | nobody: the requirements are drafted next and read at Specified |
-| 3 | Specified | `pm`; and `qa`, for the suite's review |
+| 2 | Designed | nobody: QA1 writes the blind suite next |
+| 3 | Specified | Dev drafts independently, then QA2 reconciles; `pm` answers every raised question |
 | 4 | Planned | `dev` |
-| 5 | Building | `dev` |
-| 6 | On staging | `qa` and `release` |
-| 7 | Released | nobody: whoever archives takes it |
+| 5 | Accepted | `pm` or the one named human who accepts the resolved plan |
+| 6 | Building | `dev` |
+| 7 | Implementation complete | `qa` verifies the implementation and records the suite verdict |
 | 8 | Archived | nobody |
 
 #### Scenario: shared-planning-change-stages-SC-15 - Proposed changes hands without changing stage
@@ -311,9 +431,9 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 #### Scenario: shared-planning-change-stages-SC-16 - Each later stage names its hands
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads across the lanes to see who each change waits on
 
-**WHEN** a change in Specified, Planned, Building and On staging is read in turn
-**THEN** the turns SHALL be the product manager's with the QA hand's, the engineer's, the engineer's, and the QA hand's with the release hand's
-**AND** a change in Designed, Released or Archived SHALL name nobody
+**WHEN** a change in Specified, Planned, Accepted, Building and Implementation complete is read in turn
+**THEN** the turns SHALL name Dev and QA2 while specified, Dev while planned, the accepting human while accepted, Dev while building, and QA for post-implementation verification
+**AND** a change in Designed or Archived SHALL name nobody
 
 #### Scenario: shared-planning-change-stages-SC-17 - A hand nobody has named
 **Serves:** shared-planning-change-stages-US-04 - the product manager sees which changes still need a hand named
@@ -572,7 +692,7 @@ Every message the push workflow and the digest send SHALL be one of the kinds
 below and SHALL be sent once for the key it carries, so a re-run of the same
 push sends nothing again.
 
-- **Six kinds** — nothing else SHALL be sent: a written wait and a change
+- **Seven kinds** — nothing else SHALL be sent: a written wait and a change
   freed by a dependency SHALL be lines of the digest, and the round's own
   replies are `shared/planning/agent-rounds` — ❓ the recommendation of `Q31`,
   open on the product manager; another answer adds a message for a written wait
@@ -587,7 +707,8 @@ push sends nothing again.
 | Kind | Sent when | Who is told | Key |
 | --- | --- | --- | --- |
 | Your turn | a push to `main` moves the change to a hand | that hand, by direct message; the role's channel when the hand is unnamed | the change, the stage and the role |
-| Staging | a change reaches On staging | its QA hand, with the run sheet | the change, the stage and QA |
+| Implementation complete | a change reaches Implementation complete | its QA hand, with the accepted implementation identity and run sheet | the change, the fingerprint and QA |
+| Deployment | a GitHub Deployment receipt changes component availability | the configured planning channel, with component and testing links | the deployment id, environment, change, fingerprint and status |
 | Behind | an artifact is newly behind | the hand of the earliest behind artifact | the change and the artifact |
 | Landed | a push lands an artifact of a change whose record names a thread | that thread | the change and the push's head |
 | Push post | every push to `main` | the planning channel | the push |
@@ -679,16 +800,19 @@ to that hand.
 **WHEN** a Your turn message is sent
 **THEN** it SHALL carry the change page's link in place of the thread's
 
-### Requirement: An artifact going behind and a change reaching staging are told
+### Requirement: An artifact behind, implementation completion and deployment evidence are told
 
 Two moves that are not a stage landing still reach a person.
 
 - **Behind** — an artifact newly behind SHALL send one message to its hand,
   naming the artifact and what changed before it
-- **Staging** — a change reaching On staging SHALL send one message to its QA
-  hand, naming the change, the run sheet to walk and the build the deploy
-  recorded where the record carries one, and one Your turn message to its
-  release hand
+- **Implementation complete** — reaching this stage SHALL send one message to
+  QA naming the historical accepted fingerprint, claimed durable-spec baseline,
+  completed application components and the run sheet to walk
+- **Deployment** — a receipt change SHALL post component availability to the
+  configured planning channel, naming newly, still, no longer, partial,
+  unknown or stale state with its receipt, resolved ref and testing links;
+  rerunning the same receipt SHALL send nothing again
 
 #### Scenario: shared-planning-change-stages-SC-44 - An artifact goes behind
 **Serves:** shared-planning-change-stages-US-09 - the hand is told before anything is built on the artifact
@@ -697,13 +821,22 @@ Two moves that are not a stage landing still reach a person.
 **THEN** one direct message SHALL be sent to that artifact's hand
 **AND** it SHALL name the artifact and what changed before it
 
-#### Scenario: shared-planning-change-stages-SC-45 - A change reaches staging
-**Serves:** shared-planning-change-stages-US-08 - QA starts the manual pass the day the change deploys
+#### Scenario: shared-planning-change-stages-SC-45 - A change reaches Implementation complete
+**Serves:** shared-planning-change-stages-US-08 - QA verifies the completed implementation against the run sheet
 
-**GIVEN** a change carrying a staging deploy recording build `1.4.0-rc2`
-**WHEN** a push moves the change to On staging
-**THEN** one direct message SHALL be sent to its QA hand, naming the change, the run sheet, and build `1.4.0-rc2`
-**AND** one Your turn message SHALL be sent to its release hand, naming the change and On staging
+**GIVEN** a change with every task ticked and an `implementation.json` entry for the historical accepted fingerprint, first-claim durable-spec baseline, repository commit and application components
+**WHEN** a push moves the change to Implementation complete
+**THEN** one direct message SHALL be sent to its QA hand with the implementation identity and run sheet
+**AND** it SHALL NOT wait for a deployment receipt
+
+#### Scenario: shared-planning-change-stages-SC-83 - Deployment status stays separate from the stage
+**Serves:** shared-planning-change-stages-US-12 - the product manager reads component availability for an archived change
+
+**GIVEN** a GitHub Deployment receipt for one of two archived application components
+**WHEN** availability is projected in `/availability` and the change detail
+**THEN** each surface SHALL show the same component status, receipt and QA links
+**AND** replaying the receipt SHALL create no second availability record
+**AND** the change SHALL remain Archived
 
 ### Requirement: A landing from a terminal is told in the thread
 
@@ -836,7 +969,7 @@ The board is where every change in flight is read at once.
 The change page SHALL show, in this order down the reading column:
 
 1. the stepper, one step per stage, the change's stage marked, the agent mark
-   and the hand's move under the first five
+   and the hand's move under the first six
 2. the Your turn card: the hand, the link to the change's thread and the
    command to paste
 3. the hands, one row per role with its handle or open
@@ -844,12 +977,15 @@ The change page SHALL show, in this order down the reading column:
    and the handle that landed it
 5. on the pages: every 🚧 and ❓ line of each page section the proposal
    links, under its page's title and section, a ❓ line with its hand
-6. delivery: where the code is — `main`, staging with the build the deploy
-   recorded where the record carries one, and the release that carried the
-   change
-7. the handoff: for each stage the change has left, the days from the stage
+6. implementation: the historical accepted fingerprint, first-claim
+   durable-spec baseline, each repository commit and the concrete application
+   component ids recorded for the change
+7. environment availability: each application's receipt-derived status,
+   resolved deployed ref, component URL, manual and QA links, and receipt age;
+   this row remains visible for archived changes
+8. the handoff: for each stage the change has left, the days from the stage
    landing to that hand's first word
-8. the thread as `main` records it, which `shared/planning/agent-rounds`
+9. the thread as `main` records it, which `shared/planning/agent-rounds`
    states beside the message the hands are being told
 
 #### Scenario: shared-planning-change-stages-SC-57 - The stepper marks the stage
@@ -866,12 +1002,12 @@ The change page SHALL show, in this order down the reading column:
 **THEN** the Your turn card SHALL name that hand
 **AND** SHALL carry the thread's link and the command as text
 
-#### Scenario: shared-planning-change-stages-SC-59 - Where the code is and where the days went
-**Serves:** shared-planning-change-stages-US-02 - the product manager reads whether a finished change shipped and where its days went
+#### Scenario: shared-planning-change-stages-SC-59 - Where the implementation is and where the days went
+**Serves:** shared-planning-change-stages-US-02 - the product manager reads the implementation identity and where its days went
 
-**GIVEN** a change carrying a staging deploy recording build `1.4.0-rc2`, a release tag, and a Proposed landing 3 days before its designer's first word
+**GIVEN** a change carrying a historical accepted fingerprint, an implementation record with a first-claim durable-spec baseline, one repository commit and two component ids, and a Proposed landing 3 days before its designer's first word
 **WHEN** the change page is read
-**THEN** delivery SHALL name `main`, staging with `1.4.0-rc2`, and that tag
+**THEN** implementation SHALL name the historical accepted fingerprint, claimed durable-spec baseline, repository commit and both component ids
 **AND** the handoff SHALL show 3 days against Proposed
 
 #### Scenario: shared-planning-change-stages-SC-71 - The change page lists the lines it marks
@@ -882,12 +1018,13 @@ The change page SHALL show, in this order down the reading column:
 **THEN** On the pages SHALL list each section under its page's title
 **AND** SHALL show every 🚧 and ❓ line of those sections as the page writes them, the ❓ line with its hand
 
-#### Scenario: shared-planning-change-stages-SC-76 - A staging deploy recording no build
-**Serves:** shared-planning-change-stages-US-02 - the product manager reads delivery for a change staged before a build was tagged
+#### Scenario: shared-planning-change-stages-SC-76 - A stale deployment receipt is labelled
+**Serves:** shared-planning-change-stages-US-12 - the product manager can tell when availability evidence predates the environment
 
-**GIVEN** a change carrying a staging deploy that records no build
-**WHEN** the change page renders
-**THEN** the delivery row SHALL read staging with no build beside it
+**GIVEN** a GitHub Deployment receipt older than the latest evidence for its environment
+**WHEN** the environment view and change detail render
+**THEN** the component SHALL be labelled `Stale`
+**AND** the row SHALL link to its receipt and the latest evidence time
 
 ### Requirement: My turn lists what is on the reader
 

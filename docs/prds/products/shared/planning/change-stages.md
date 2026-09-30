@@ -11,28 +11,39 @@ read from the change's files on `main`, never set by hand —
 
 ## Stages
 
-A change is in exactly one stage, proven by a file on `main`. From Proposed to
-Building the change's agent drafts, and a person's word lands.
+A change is in exactly one planning or delivery stage, proven by a file on
+`main`. Deployment availability is read separately from GitHub Deployments.
 
 | # | Stage | Proven by | The agent | You |
 | --- | --- | --- | --- | --- |
-| 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted, answer |
-| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Proposes each design from the page and the journeys, challenged and verified | Designer: tweak. Tech PIC: challenge |
-| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings of the journeys, reconciled | Product manager: read the requirements and the cases together. QA: `/tcs-review` |
-| 4 | Planned | `tasks.md`; `promoted_by` | Writes the plan, challenged for order, tests first and size | Engineer: read the summary |
-| 5 | Building | Boxes ticking | Builds each group test first, audited and verified | Engineer: read each landing |
-| 6 | On staging | Every box ticked; `deployed_env: staging` | The deploy; the run sheet | QA: walk it |
-| 7 | Released | `released_in: <tag>` | The cut | Release hand: cut |
-| 8 | Archived | The directory under `archive/`; the fold; the marks off | The fold | Whoever archives |
+| 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted and whether to do it now |
+| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Designer and tech PIC challenge the page and journeys from their own perspectives | Designer and tech PIC: read and land their designs |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
+| 4 | Planned | `tasks.md` | Dev writes the dependency-ordered plan after QA2 reconciliation | Engineer: read the plan |
+| 5 | Accepted | `acceptance.json`, with a content fingerprint of the resolved plan | Records the human's acceptance of the reconciled plan; no product question remains open | Product manager or named owner: accept the plan |
+| 6 | Building | Implementation has started from the accepted fingerprint | Builds each group test first, audited and verified | Engineer: read each landing |
+| 7 | Implementation complete | `implementation.json`, with the repository, commit and concrete application component ids | Records implementation and ancestry against the accepted contract | QA: run human review after implementation, on a deployed environment when required |
+| 8 | Archived | The directory under `archive/`; the accepted contract and implementation record verified | Folds the accepted specification and marks | Engineer: archive after implementation verification |
 
 - 🚧 **One stage per change** — the board, the change page, a page's in-flight
   ribbon and My turn all show the same one
 - 🚧 **One stage for what is wanted** — the product manager settles the proposal,
-  the decisions and the journeys in one sitting; an item still open holds nothing
-- 🚧 **Drafted, then landed on your word** — every stage from Proposed to
-  Building is written by the change's agent and reaches `main` only when the
-  hand of that stage says so; the landing records who said it, and every
-  surface marks the five with the hand's move beside the agent's
+  the decisions and the journeys in one sitting; a decision still open holds
+  acceptance
+- 🚧 **Independent planning readings** — QA1 writes the blind feature cases from
+  the frozen anchors, then Dev writes design, requirements, scenarios and tasks
+  without reading those cases; QA2 reconciles both before one human resolves
+  every raised question and accepts the plan
+- 🚧 **Implementation before human QA** — planning acceptance does not mark a
+  suite approved or actual; human QA starts after implementation is complete
+- 🚧 **Accepted and verified records** — the acceptance fingerprint stays
+  immutable, implementation records its repository, commit and application
+  component ids, and the archive verifies that record before deployment
+- 🚧 **Availability follows archive** — a GitHub Deployment receipt records
+  whether each application component is newly, still, no longer, partially,
+  unknown or stale in an environment
+- 🚧 **Drafted, then landed on your word** — each planning artifact reaches
+  `main` only when its hand lands it, and the landing records whose word it was
 - 🚧 **The tech design before the requirements** — `tech-design.md` is drawn
   from the page, the decisions and the journeys, beside `ui-design.md`; the
   requirements read both, and a requirement that reaches the design is a
@@ -67,18 +78,39 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 - 🚧 **Day bounds** — whole calendar days on the Hong Kong date, the chip from
   the seventh and the shelf from the thirtieth
 
+## Environment Availability
+
+Deployment availability is separate from a change's stage. Each application
+component has its own status in each environment, read from its GitHub
+Deployment receipt. A change remains Archived after deployment; the manual
+keeps its availability visible with both active and archived changes.
+
+| Status | Meaning |
+| --- | --- |
+| Newly | The component first appears in this environment |
+| Still | The deployed component has not changed |
+| No longer | A component previously present is absent from the environment |
+| Partial | Only some of the change's components are present |
+| Unknown | The available evidence cannot establish the component state |
+| Stale | The receipt is older than the environment's latest evidence |
+
+- 🚧 **Receipt detail** — each row links to the GitHub Deployment, the resolved
+  deployed ref, the component URL and the manual and QA testing links
+- 🚧 **Testing summary** — the change page and the environment view show a
+  friendly summary of the components QA should verify
+
 ## Hands
 
 One handle per role on each change.
 
 | Role | Key | Takes the change at |
 | --- | --- | --- |
-| Product manager | `pm` | Proposed, and Specified |
+| Product manager | `pm` | Proposed and Accepted |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
 | Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
-| QA | `qa` | Specified, for the suite's review; On staging; the suite's verdict, any time, as an overlay |
-| Engineer | `dev` | Planned and Building |
-| Release hand | `release` | On staging |
+| QA | `qa` | Implementation complete, for the suite's human verdict |
+| Engineer | `dev` | Planned, Accepted and Building |
+| Release hand | `release` | Availability review after archive |
 
 - 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
   by the product manager at the interview's end, by Assign on the locally run
@@ -102,7 +134,7 @@ Slack tells one person, once per move, in the change's thread.
 | When | Who is told | Carries |
 | --- | --- | --- |
 | A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the thread to answer in, the command to paste |
-| A change reaches staging | Its QA hand, by direct message; the release hand by the message above | The change, and the run sheet to walk |
+| A change reaches Implementation complete | Its QA hand, by direct message | The change, the accepted implementation identity and the run sheet to walk |
 | 🚧 What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
 | 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
@@ -116,8 +148,10 @@ Slack tells one person, once per move, in the change's thread.
 - **The channel post per push** — runs today, listing the changes a push touched
 - 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
   lines, not messages of their own
-- 🚧 **The build QA walks** — the staging message and the change page name
-  the tagged build the deploy recorded
+- 🚧 **QA follows implementation** — the QA hand is told when implementation
+  is complete and sees the run sheet and application components to verify
+- 🚧 **Availability is a receipt** — the environment view links each component
+  to its GitHub Deployment receipt and the actual deployed ref
 
 ## Surfaces
 
@@ -130,7 +164,7 @@ Slack tells one person, once per move, in the change's thread.
   move under each drafted step; a Your turn card with the thread and the
   command; the hands; each artifact with fresh or behind, its open questions
   and who landed it; the marked lines it delivers, by page and section; tasks
-  by group; where the code is: `main`, staging, a release
+  by group; the accepted fingerprint and archived implementation record
 - 🚧 **[My turn](/my-turn)** — the open questions addressed to the reader, then the
   changes whose current stage names them, then the ones that are theirs
   later, then what moved before their artifacts and is not read yet; the
@@ -151,25 +185,28 @@ Slack tells one person, once per move, in the change's thread.
   cannot make
 
 :::detail{title="Product decisions" for="pm"}
-A change passes through five hands and nobody is told when it reaches theirs;
-the board shows four lanes, so a change waiting on a designer sits in the same
-lane as one waiting on a deploy. The owner's brief is
+A change passes through planning and implementation, then reaches one or more
+deployment environments. A single stage cannot describe component-level
+availability, so deployment receipts are shown separately. The owner's brief is
 [the blueprint](/references/delivery-workflow-blueprint).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Stage | Decided | Derived from the files on `main`, one of eight; never a status key somebody sets. | Product |
-| Proposed and Decided | Decided | One stage: the product manager settles the proposal, the decisions and the journeys in one sitting, and an open item stays `❓` instead of holding a gate. | Product |
-| Who drafts | Decided | The change's agent drafts every stage from Proposed to Building; the hand of the stage answers, tweaks, challenges or reads, and their word lands it. Every surface marks the five. | Product, Engineering |
+| Stage | Decided | Eight stages are derived from files on `main`; deployment availability comes from GitHub Deployments and never changes the stage. | Product |
+| Planning readings | Decided | QA1 writes isolated cases from the frozen anchors; Dev writes the delivery design and artifacts independently; QA2 reconciles both. | Product, QA, Engineering |
+| Human questions | Decided | One human resolves every raised question before accepting the plan. An unanswered question prevents acceptance. | Product |
+| Human QA | Decided | QA does not review the planned suite as an execution verdict. Human QA happens after implementation, using a deployed environment when needed. | Product, QA |
+| Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
 | Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, the channel post per push kept, a weekly digest; never one per commit. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
-| Suite review | Decided | An overlay beside the stage, so planning never waits on QA's verdict. | Product, QA |
+| Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
 | Hosted actions | Decided | Assign stays on the locally run manual until the hosted site has a sign-in. | Operations |
 | Open pages | Decided | A page open while `main` moves is told and refreshes once the site has caught up; the locally run manual pulls. | Operations, Engineering |
-| Pre-release build | Decided | The deploy record names the tagged build, so the change page and QA's staging message say which build the change is on. | Product, Operations |
+| Implementation evidence | Decided | `implementation.json` records the repository, commit and concrete application component ids. Archive verifies it before deployment. | Engineering |
+| Availability | Decided | GitHub Deployment receipts report per-component environment status as newly, still, no longer, partial, unknown or stale; archived changes remain visible. | Product, Operations |
 :::

@@ -8,7 +8,7 @@ import { openManual, rowFor } from "./setup";
  * about it points at, read mostly on `demo-planned` — the Behind fixture,
  * held at Planned with nothing ticked yet and `decisions.md` moved after it
  * was reviewed — with `demo-designed` for the one behind reading a real
- * (unwaived) UI design needs, and `demo-released` for delivery.
+ * (unwaived) UI design needs, and `demo-accepted` for delivery.
  *
  * The clock is frozen at `FROZEN_NOW` before every open — the same instant
  * the other walks freeze it, for the same reason: nothing on this page
@@ -44,9 +44,9 @@ test("shared-planning-change-stages-SC-57 - the stepper marks the stage", async 
     "Designed",
     "Specified",
     "Planned",
+    "Accepted",
     "Building",
-    "On staging",
-    "Released",
+    "Implementation complete",
     "Archived",
   ]) {
     await expect

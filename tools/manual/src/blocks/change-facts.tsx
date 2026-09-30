@@ -90,9 +90,8 @@ export function ChangeFacts({
  * a skill name off a badge.
  *
  * Read from the stage and never from a lane: what a change is waiting on is
- * the command the hand of its stage pastes, and the five stages an agent
- * drafts each name their own. The three it drafts nothing for — the deploy,
- * the cut and the fold — leave the archive, which is the work still to do.
+ * the command the hand of its stage pastes. Accepted starts implementation;
+ * implementation-complete leaves the archive as the work still to do.
  */
 export function nextAction(
   change: ChangeEntry,
@@ -107,10 +106,18 @@ export function nextAction(
       note: `${roleTitle(one.role)}: ${one.move}`,
     }));
   if (stage === "archived") return [];
+  if (stage === "accepted") {
+    return [
+      {
+        command: `/workflow-build ${change.id} <group>`,
+        note: "engineer: implement one task group, test first",
+      },
+    ];
+  }
   return [
     {
       command: `/archive-change ${change.id}`,
-      note: "confirm it deployed, then fold it into the durable specs",
+      note: "archive the verified implementation and fold its accepted delta",
     },
   ];
 }
@@ -146,7 +153,7 @@ export function MainStateNote({ change }: { change: ChangeEntry }) {
   if (!state) return null;
   const stage = change.stage;
   const blocked =
-    stage === "on-staging" || stage === "released" || stage === "archived"
+    stage === "implementation-complete" || stage === "archived"
       ? "archived"
       : "claimed or implemented";
 

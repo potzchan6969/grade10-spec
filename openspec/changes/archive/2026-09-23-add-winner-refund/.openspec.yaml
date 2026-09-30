@@ -3,6 +3,4 @@ created: 2026-09-17
 promoted_by: "@htonyl"
 depends_on:
   - add-winner-partial-payment
-deployed_at: "61cc3196aaff6aba32cad64d3de4c5948c06035a"
-deployed_env: "staging"
 decisions_carried: "Q1–Q31 refund shape (one bounded refund, auction:refund, manual money path, stock choice, winner Refunded/overpayment/bank reference/Transfer to clues, no letter) and Raised closures → Post-Bidding Product decisions A refunded order / An overpaid difference / Refund transaction clues (Decided); Auction Management Who records a refund / Refund money path / One refund, any amount / Refund letter / Refund transaction clues (Decided); roles Refund processing unmarked"

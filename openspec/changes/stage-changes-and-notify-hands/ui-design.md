@@ -6,7 +6,7 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 [Blueprint · 4.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked down the reading column as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. Replaces the four lanes of `/in-flight`, titled Board at the same route.
 
-A lane opens when its stage names a hand - Proposed, Specified, Planned, Building and On staging - and starts collapsed when it names nobody: Designed, Released and Archived. A lane with nothing in it collapses whichever it is, and a reader may open or shut any lane.
+A lane opens when its stage names a hand - Proposed, Specified, Planned, Building and Implementation complete - and starts collapsed when it names nobody: Designed, Accepted and Archived. A lane with nothing in it collapses whichever it is, and a reader may open or shut any lane.
 
 ### Change page
 
@@ -22,7 +22,7 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### Slack messages
 
-[Blueprint · 4.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Behind, Landed on main, Staging deployed and the weekly digest; each carries the link to the change's thread and to the change page, and the command as text. No button on these five: the one button a round's summary carries is the round change's.
+[Blueprint · 4.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Behind, Landed on main, Implementation complete and the weekly digest; each carries the link to the change's thread and to the change page, and the command as text. No button on these five: the one button a round's summary carries is the round change's.
 
 ## Flows
 
@@ -86,5 +86,5 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - A 🚧 line delivered by two changes, wearing the further stage - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-67`
 - A Your turn message for a change reaching a stage twice, sent once - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-36`
 - A Behind message for an artifact behind twice before it is read, sent once - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-39`
-- A Staging deployed message naming the run sheet and the build - `shared-planning-change-stages-US-08` - `shared-planning-change-stages-SC-45`
+- An implementation-complete message naming the run sheet and accepted implementation identity - `shared-planning-change-stages-US-08` - `shared-planning-change-stages-SC-45`
 - A weekly digest with nothing to say, not sent - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-50`

@@ -16,15 +16,15 @@ describe("in-flight changes", () => {
   it("reads one entry per change directory, archive aside", () => {
     expect(changes.map((one) => one.id)).toEqual([
       "add-thing",
+      "demo-accepted",
       "demo-approved",
       "demo-building",
       "demo-designed",
       "demo-half-designed",
-      "demo-on-staging",
+      "demo-implementation-complete",
       "demo-overlays",
       "demo-planned",
       "demo-refund-window",
-      "demo-released",
       "demo-specified",
       "demo-unreadable",
       "demo-waiting",

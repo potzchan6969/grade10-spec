@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "change": "demo-building",
+  "baseline": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "reviewedBy": "tester",
+  "acceptedAt": "2026-09-05T00:00:00.000Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/demo-building/proposal.md",
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  ]
+}

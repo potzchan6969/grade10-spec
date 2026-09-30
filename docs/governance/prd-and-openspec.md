@@ -1,27 +1,27 @@
-# PRDs and OpenSpec: the PRD first, the spec as what runs
+# PRDs and OpenSpec: the PRD first, the accepted spec before implementation
 
-A capability's PRD under `docs/prds/` is written first, and it moves first: whoever learns a product detail — PM, designer, QA or engineer — writes it there, marked 🚧 or ❓, before the delta, the design, the suite or the code that depends on it. The product manager keeps the PRD whole. It holds everything the product should be — what runs, what is confirmed and being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` is the production shape: every checkable requirement of what runs today, rewritten only when a change archives. An engineer in a consuming application builds from the spec alone.
+A capability's PRD under `docs/prds/` is written first, and it moves first: whoever learns a product detail writes it there before the artifact that depends on it. The product manager keeps the PRD whole. It holds what the product should be — what is accepted for delivery, what is being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` holds the rolling latest accepted contract. Acceptance publishes it before implementation and preserves an immutable planning snapshot and fingerprint. The first implementation claim records the store commit and the affected contract paths and anchors. Archive compares that claimed surface with the current durable contract. Deployment availability is tracked separately.
 
 ## The rule
 
 A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter shows the capability's suite under it with `::cases`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
 
-- **Unmarked** — what runs. The spec holds the checkable form of the same fact.
-- **🚧** — confirmed and being built. An active change on the page's spec is delivering it, and the mark comes off when that change archives.
+- **Unmarked** — the product contract in the reader's words. The spec holds its checkable form.
+- **🚧** — confirmed and accepted for implementation. An accepted change delivers it; the mark comes off when implementation is verified. It does not say the outcome is available in a deployed application.
 - **❓**, or `TBC` — what nobody has confirmed. Nothing is built from it. A long draft behind it lives under `docs/references/`, and the line cites it.
 
 What a requirement cannot carry — who it is for, what was deliberately excluded, what will be measured, the decisions made and why, the risks — sits on the same page in a `:::detail{title="Product decisions" for="pm"}` block: collapsed under the prose, never hidden from search or a deep link. The page names its spec in its frontmatter, so the requirements sit beside the record rather than duplicated into it.
 
-Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<domain>/<capability>/spec.md`, and reaches it only through a change's delta folding at archive. If a statement is testable, it belongs there; the page states the outcome in its own words and links the capability. If removing every testable statement leaves nothing worth a product-decisions block, the page needs none — write the change and the spec instead.
+Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<domain>/<capability>/spec.md`. If a statement is testable, it belongs there; the page states the outcome in its own words and links the capability. `pnpm spec:accept` publishes accepted deltas there before implementation. If removing every testable statement leaves nothing worth a product-decisions block, the page needs none — write the change and the spec instead.
 
 ## Which artifact answers which question?
 
 | Dimension | PRD (`docs/prds/`) | `openspec/changes/` | `openspec/specs/` |
 | --- | --- | --- | --- |
-| Primary question | What is this, what should it be, why, for whom, and what did we rule out? | What is changing, and how will it be delivered? | What runs today, checkably? |
+| Primary question | What is this, what should it be, why, for whom, and what did we rule out? | What is changing, and how will it be delivered? | What is the latest accepted contract? |
 | Primary audience | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change | Engineers and implementation agents in consuming applications |
-| Authority | Canonical for what the product should be; its marks say which lines are not yet running. Never restates a requirement. | Canonical for the in-flight delta only, until archived | Canonical for what runs. Wins any conflict with an unmarked line. |
-| Lifespan | Durable; written first, edited as intent changes, marks taken off at archive | Archived after delivery | Durable; rewritten by the fold at archive |
+| Authority | Canonical for what the product should be; its marks show accepted work and open decisions. Never restates a requirement. | Canonical for one proposed or accepted change and its immutable acceptance snapshot | Canonical for the rolling latest accepted contract. A claim baseline isolates the paths and anchors one implementation must reconcile |
+| Lifespan | Durable; written first, edited as intent changes, marks taken off after implementation verification | Archived after implementation is verified and before deployment | Durable; updated at acceptance and by later accepted refinement |
 | Typical content | The shape in prose with its marks, its values, the sets the reader meets, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
 | Content to keep out | Anything testable; a case, a state or a mechanism that only expands a stated line; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
 
@@ -40,7 +40,7 @@ The PRD moves first, whoever learns the detail — and a detail is a line the re
 | QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page shows the suite with `::cases`, never as prose |
 | Engineer | A constraint that changes an outcome, as a 🚧 or ❓ line | A mechanism, a key, a lock, a metric, a sweep, what was tried and dropped — the application repository's architecture doc, which the page's engineer block links as a code map |
 
-A page over the budget is the expansion, not the essence: `pnpm check:manual` warns (`dense`) past 120 lines of prose outside its examples and details, on a section opening on more than six sentences, on an engineer block holding a paragraph, and on a 🚧 inside a flow step or mid-line. The warning asks for the cut and never blocks a fold.
+A page over the budget is the expansion, not the essence: `pnpm check:manual` warns (`dense`) past 120 lines of prose outside its examples and details, on a section opening on more than six sentences, on an engineer block holding a paragraph, and on a 🚧 inside a flow step or mid-line. The warning asks for the cut and never blocks acceptance.
 
 ## When to use each
 
@@ -48,12 +48,12 @@ A page over the budget is the expansion, not the essence: `pnpm check:manual` wa
 | --- | --- | --- |
 | A new problem, workflow, or idea is being explored | The page: ❓ lines and rows in its decisions block, a draft under `docs/references/` | Intent is on record before anything is confirmed |
 | A change is confirmed | The pages it touches first, each outcome a 🚧 line in the reader's words; then the change, whose deltas derive from those lines | The page is the roadmap the deltas are read against |
-| A requirement, state behavior, accessibility obligation, or export contract changes | The page's 🚧 line, then the delta in the change | The spec moves only at archive |
-| Another active change already folds the same requirement | That change is extended or superseded, never doubled | Whichever archives second reverts the first |
+| A requirement, state behavior, accessibility obligation, or export contract changes | The page's 🚧 line, then the delta in the change | The spec moves when the complete plan is accepted and published |
+| Another change has already accepted a requirement on the same capability | Accept an amendment against the recorded durable baseline, name its superseded fingerprint, and reconcile it with newer accepted content | The durable spec keeps the latest contract; a claimed implementation compares only its recorded paths and anchors |
 | A technical refactor changes no product-visible behavior | Change only, with no delta and no page edit | Nothing the product should be has changed |
 | The code does not do what is already settled | No change: a `fix` commit where the code is wrong, per [Bug Fixes](bug-fixes.md) | The fix restores what the product should be |
 | The rationale for a decision changes but the behavior does not | The page's product-decisions block | Nothing testable moved |
-| A change is complete | Fold the deltas into `openspec/specs/`, take the 🚧 marks off the page, then archive | The spec must describe what runs once delivery history moves to archive |
+| A change's implementation is verified | Complete the first-claim baseline with implementation commits and components, take the delivered 🚧 marks off the page, then archive before deployment | Acceptance already published the contract; archive compares the claimed scope without another fold |
 
 ## Maintenance workflow for future agents
 
@@ -80,7 +80,7 @@ A capability spec at `openspec/specs/<product>/<domain>/<capability>/spec.md` co
 - `### Requirement:` entries written so an engineer in another repository can implement them without a follow-up question; and
 - `#### Scenario:` entries beneath each, every one checkable by a test or a manual pass.
 
-The change's delta carries the same shape, and the fold at archive writes it into the spec. Do not name a class, hook, function, table, or library. Do name the public component exports a consuming application must provide, and keep them in one requirement so a contract change is easy to spot.
+The change's delta carries the same shape, and `pnpm spec:accept` publishes it to the durable spec after the complete plan is accepted. Do not name a class, hook, function, table, or library. Do name the public component exports a consuming application must provide, and keep them in one requirement so a contract change is easy to spot.
 
 ### 4. Record a product decision only when there is one to explain
 
@@ -97,17 +97,17 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 - `proposal.md` — scope, why now, consumer impact, and under `## References` a link to every page section the change marked;
 - `decisions.md` — the interview's record: the change's goals, its non-goals, and one row per question the rounds settled with the option it dropped. The proposal points here for the edges rather than restating them, and the journeys, the design and the requirements are all drawn from this scope;
 - `specs/<capability>/user-journeys.md` — who walks the capability, written before the requirements, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches it;
-- `specs/<capability>/spec.md` — the capability's `## Purpose` and `## Feature set`, then the requirement deltas against `openspec/specs/`; two passes over one file with the blind suite between them, both written by `/workflow-specify`, following `planning-qa`'s rules, or `planning-dev`'s on a change an engineer authored. Neither the product manager nor the designer opens this file; they hand over the journeys and the marks, and the PM reads the root groups at the reconciliation, beside the scenarios built on them;
-- `specs/<capability>/feature-tcs.md` — a blind reading of those journeys and the feature set, written without sight of the scenarios, beside every capability;
+- `specs/<capability>/spec.md` — QA1 writes the purpose and feature-set outline, then Dev writes requirement scenarios in the same `/planning-dev` invocation after QA1 and technical design; QA2 reconciles cases and scenarios against the frozen anchors;
+- `specs/<capability>/feature-tcs.md` — QA1's blind draft cases and QA2's reconciliation, beside every capability;
 - `ui-design.md` — screens, exports and states, when the change alters something a user sees; drawn from the journeys and the PRD, before the requirements exist;
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
 - `tasks.md` — small, checkable delivery steps.
 
-Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows.
+Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows. A small durable-spec or design refinement may land while implementation continues. It is reconciled at archive against the claim baseline; it does not rewrite the historical acceptance snapshot.
 
-Only the first three and the two generated ones are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; `ui-design.md` is the designer's, on that same change, unless the author already had the design; the engineer who picks it up adds `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
+The first three artifacts are written before planning-dev; `ui-design.md` is optional. `/planning-dev` writes `tech-design.md`, the spec outline and scenarios, `feature-tcs.md`, and `tasks.md` as one invocation. The same human clarifies open questions and accepts once after QA2. Run `pnpm accept:preflight <change>`; pass its `baselineFingerprint` to `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance records the accepted snapshots and publishes the requirements into `openspec/specs/` before implementation. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. A later accepted amendment names the prior fingerprint with `--supersedes <old-fingerprint>` and retains its snapshot.
 
-That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
+That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there. At the first task claim, `pnpm plan claim` records the published store commit and target paths and anchors in `implementation.json`. Implement against the rolling durable contract. After engineering verification, `pnpm plan implementation` records repository commits and concrete deploy components. Archive compares the claim baseline with current durable targets: each difference needs a compatibility acknowledgement, and a semantic difference names its test or other evidence. Archive before deployment; human QA review starts after deployment when the application is available.
 
 ### The change's record
 
@@ -128,12 +128,12 @@ That is how the work reaches an engineer. The application repository has no plan
 | `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | The change page, beside each artifact; `pnpm check:manual`, rule `landed_by` |
 | `reviewed:` with `<artifact>: <content id>` | The round's re-read | When an artifact is read again against what is before it | The freshness read, which shows an artifact behind until the id matches; `archive:preflight`'s behind gate, which refuses the fold while one still does not |
 | `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread rather than the change page |
-| `released_in: "<release>"` | The release hand | At the release | The stage ladder, which reads it as Released |
-| `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
-| `deployed_build: "<tag>"` | `pnpm plan shipped --build <tag>` in the application repository | With the deploy record, when the deploy carried a tagged build | The change page's delivery row and QA's staging message, which name the build |
-| `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
+
+`acceptance.json` is a separate version 2 record, written by `pnpm spec:accept`. It carries the change id, baseline content fingerprint, `reviewedBy`, `acceptedAt`, accepted artifact digests and the derived `contractTargets`: durable paths with their touched requirement headings, plus whole-file journey, suite and UI-design targets. Each accepted snapshot is immutable historical planning evidence; an amendment passes `--supersedes <old-fingerprint>` and keeps the prior snapshot.
+
+`implementation.json` version 2 is first created by `pnpm plan claim` and completed by `pnpm plan implementation <change> [--commit <sha>] --component <deploy-component>...`. It carries `acceptance.fingerprint`, `contractBaseline.repository`, `contractBaseline.commit`, `capturedAt`, the exact derived targets, and each repository, commit and concrete component. At archive, a difference in that scope needs `compatibilityAcknowledgement`: every changed path and anchor is classified `editorial` or `semantic`, with a reason; every semantic entry also names its test or other evidence. An unrelated durable change does not enter the comparison. Version 1 implementation records remain archivable under their accepted snapshot because their first claim predates baseline tracking. Neither record is a deployment or QA verdict.
 
 A question the record cannot answer belongs in `decisions.md`, whose `Decided` cell writes one open as `❓ <role> - recommended: <option>`: the ` - ` separator and the `recommended:` lead are the grammar the store reads, and a cell that opens ❓ without both is addressed to nobody and refuses the change's landings.
 
@@ -151,7 +151,7 @@ A question the record cannot answer belongs in `decisions.md`, whose `Decided` c
 
 `blind_pass_skipped` is granted by the checker, never declared, and granting it is `pnpm check:manual`'s `blind` rule staying quiet: the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the checker refuses and the author disagrees, that is a question for the interview, not a self-service waiver.
 
-The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/workflow-plan` and `/workflow-specify` — the line commands that answer with `planning-pm`'s and `planning-qa`'s rules — are two commands the cost of not skipping falls from writing four documents to waiting for two runs. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
+The strongest control is one clear route. `/workflow-plan` writes the PM's artifacts; `/planning-dev` runs QA1, Dev, QA2, human clarification, acceptance and publication together. A slower or noisy run increases `skip_specs` use, so the integrated route must remain usable.
 
 
 A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
@@ -189,16 +189,15 @@ Component source lives in the application. This repository carries the contract 
 
 ### 7. Finish a change without losing context
 
-Before archiving:
+After implementation is verified and before deployment:
 
-1. ensure required tasks are complete and validation is recorded — `pnpm run archive:preflight` refuses while a task is unchecked, unless `tasks_waived: <who, why>` names the decision;
-2. record the deploy: `pnpm plan shipped <change-id>` in the application repository writes `deployed_at` and `deployed_env` into the change's `.openspec.yaml`, and `pnpm plan shipped <change-id> --build <tag>` names the build QA walked, `deployed_build`, beside them. `pnpm check:manual` fails an archive dated 2026-09-12 or later that carries neither those nor `deploy_waived: <who, why>`; a change whose task groups are all tagged `(grade10-spec)` deploys nothing and owes no record;
-3. fold accepted requirement deltas into `openspec/specs/`;
-4. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up — by the edit it needs, or by `reviewed: <date>` in its frontmatter when it already reads right;
-5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, `rounds.md` with it - one row per round, written by the landing, whose rule is [Agent Rounds](../prds/products/shared/planning/agent-rounds.md); and
-6. leave links between the spec, the page, and the archive where they aid discovery.
-
-Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe what runs.
+1. complete the required task groups and validation; `pnpm run archive:preflight` refuses while a task is unchecked unless `tasks_waived: <who, why>` records the exception;
+2. confirm the first task claim recorded `contractBaseline` in `implementation.json`; record the verified repository commits and concrete deploy components;
+3. run `pnpm run archive:preflight <change>`. It compares the claimed paths and anchors with the current durable contract. Add a compatibility acknowledgement for each difference; semantic entries name their evidence;
+4. take the 🚧 marks off outcomes this implementation verified. Deployment availability is recorded separately. Run `pnpm check:manual` after page changes;
+5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the accepted snapshot, acceptance and implementation records, tasks and `rounds.md`. Archive preserves planning and implementation history and does not fold requirements again;
+6. deploy from the accepted contract. After deployment makes the implementation available, human QA reviews cases with `/tcs-review` and uses `/tcs-run-sheet` for any manual execution. QA does not gate archive; case classification is not a pass/fail result;
+7. leave links between the durable spec, the page and the archive where they aid discovery.
 
 ## Fast decision guide
 
@@ -206,8 +205,8 @@ Do not archive a change as a substitute for updating `openspec/specs/`. Archives
 Is it what the product should be, in the reader's words?
 ├─ Yes → the PRD — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
 └─ No  → Is the statement testable — could a test or a manual pass decide it?
-         ├─ Yes → the delta in openspec/changes/, folded into
-         │        openspec/specs/<product>/<domain>/<capability>/spec.md at archive.
+         ├─ Yes → the delta in openspec/changes/, published into
+         │        openspec/specs/<product>/<domain>/<capability>/spec.md at acceptance.
          └─ No  → Does it explain a product judgment that outlives this change?
                   ├─ Yes → the PRD's Product decisions block.
                   └─ No  → normal repository documentation or code comments.

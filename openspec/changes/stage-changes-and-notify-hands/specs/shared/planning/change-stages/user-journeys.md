@@ -42,17 +42,23 @@
 **I want** each 🚧 line to show the stage of the change delivering it,
 **so that** I know how far the promise has come without leaving the page.
 
-### shared-planning-change-stages-US-08: QA learns a change has reached staging
+### shared-planning-change-stages-US-08: QA verifies a completed implementation
 
 **As a** QA teammate,
-**I want** to be told when a change reaches staging, with the run sheet to walk,
-**so that** the manual pass starts the day it deploys.
+**I want** to receive the accepted implementation identity and run sheet after implementation is complete,
+**so that** I verify the built components and record the suite's verdict.
 
 ### shared-planning-change-stages-US-09: Hand learns an artifact of theirs is behind
 
 **As a** hand of an artifact,
 **I want** to be told once when something before it changed after it was written,
 **so that** I read it again before anything is built on it.
+
+### shared-planning-change-stages-US-12: Product manager reads component availability
+
+**As a** product manager,
+**I want** each application's status in each environment to link to its deployment receipt, component and testing page,
+**so that** I know what people can test or use after a change is archived.
 
 ## MODIFIED User journeys
 

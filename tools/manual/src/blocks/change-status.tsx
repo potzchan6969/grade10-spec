@@ -4,7 +4,7 @@ import { dependenciesOf, type ManualIndex } from "../api/derive";
 import { handoffsOf, landingDatesOf } from "../api/handoff";
 import { overlaysOf } from "../api/overlays";
 import { roundlessGroupsOf } from "../api/rounds";
-import { releasedOf, taskTotals } from "../api/stages";
+import { completedOf, taskTotals } from "../api/stages";
 import type { ChangeDocument, ChangeEntry } from "../api/types";
 import {
   ArtifactList,
@@ -61,7 +61,7 @@ export function ChangeStatus({
   const questions = change.questions ?? [];
   const overlays = overlaysOf(change, {
     now: Date.now(),
-    released: new Set(releasedOf(index.snapshot.changes, archived).keys()),
+    released: new Set(completedOf(index.snapshot.changes, archived).keys()),
     artifacts,
   });
   const handoffs = document
