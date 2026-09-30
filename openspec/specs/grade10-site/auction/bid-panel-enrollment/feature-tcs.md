@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-panel-enrollment Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-30, tcs-rules r4
 
 ## grade10-site-auction-bid-panel-enrollment-US1: Collector signs in to bid on a lot
@@ -16,7 +16,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
@@ -52,7 +52,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
