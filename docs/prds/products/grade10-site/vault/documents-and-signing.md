@@ -35,8 +35,9 @@ vendor is involved.
 | Loan agreement | case, customer, collateral, principal, interest as `X.XX% for a N-day term`, the same rate stated per annum, `Fees: None`, the term as `N days from the Advance Date`, repayable amount, dated, licence, complaints | the lender lends against collateral the custody agreement holds; the term runs from the day the principal is advanced and the date is confirmed in writing then; after it the same daily rate continues, uncompounded and with no further fee; early repayment any day with the term's interest payable in full; release on full repayment; a written notice naming a final date at least **14 days** off before ownership may be taken, and forfeiture is always a person's decision; Hong Kong SAR law; executed by the lender on the advance; the borrower's own line that the key terms were explained before signing |
 | Release of custody | case, customer, item, settled (an amount or "nothing was owed"), released, complaints | handed back in the condition inspected; nothing outstanding; the custody agreement ends |
 
-- 🚧 **Grader, grade and cert** — the custody agreement prints them beside
-  the item, as the register held them when the packet was prepared
+- 🚧 **The register's item** — the custody agreement names the item by the
+  register's category, title and description, with its grader, grade and
+  cert beside it, as the register held them when the packet was prepared
 - **Two counterparties** — the custodian signs the custody agreement and the
   release, the lender signs the loan agreement, and the licence prints on the
   lender's paper alone. One function answers what a document may print, so

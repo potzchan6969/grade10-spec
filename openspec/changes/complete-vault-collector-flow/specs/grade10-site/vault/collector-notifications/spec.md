@@ -55,8 +55,6 @@
 - FROM: `### Requirement: The vault sends twenty-three messages, each about the case it names`
 - TO: `### Requirement: The vault sends twenty-four messages, each about the case it names`
 
-## MODIFIED Requirements
-
 ### Requirement: The vault sends twenty-four messages, each about the case it names
 
 The messages SHALL be exactly these twenty-four, in English, addressed to the

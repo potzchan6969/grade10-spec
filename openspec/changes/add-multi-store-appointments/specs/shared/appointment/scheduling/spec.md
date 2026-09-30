@@ -57,7 +57,7 @@ leave every booking that names it readable.
 | Slug | Unique, lowercase letters, digits and hyphens, 1 to 64 characters; the segment a public address carries |
 | Name | Trimmed, 1 to 120 characters |
 | Description | Trimmed text, may be empty |
-| Product | `vault`, `finance`, or none; a service with a product is product-bound |
+| Product | `vault`, `grading`, or none; a service with a product is product-bound |
 | Customer bookable | `true` or `false`; a product-bound service is never customer bookable |
 | Duration | Minutes the visit takes, **5 to 1440**, a multiple of 5 |
 | Increment | Minutes between candidate starts, **5 to 1440**, a multiple of 5 |

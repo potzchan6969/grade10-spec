@@ -66,15 +66,16 @@ written here.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Closed | Open a walk-in in the queue's header, for `vault:operate` only | `grade10-admin-vault-operator-queue-US-10` |
-| Statement first | ❓ awaiting Legal (Q17): the collection statement shown before staff type | `grade10-admin-vault-operator-queue-US-10` |
-| Empty | email, name, category, title, description, lane and amount, photos; Open case disabled | `grade10-admin-vault-operator-queue-US-10` |
+| Statement first | the collection statement shown before staff type, its version kept by the open (Q17); in production the open refuses while the statement is unwritten (Q24) | `grade10-admin-vault-operator-queue-US-10` |
+| Empty | email, category, title, description, lane and amount, photos; no name; Open case disabled | `grade10-admin-vault-operator-queue-US-10` |
 | Photos added | the photos in a `MediaGallery`, n of 10, each removable | `grade10-admin-vault-operator-queue-US-10` |
 | Opening | Open case pending; the form held | `grade10-admin-vault-operator-queue-US-10` |
 | Opened | the new draft opens on its own page | `grade10-admin-vault-operator-queue-US-10` |
 | Signed-in address | a `Notice` naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-US-10` |
 | Refused otherwise | the worker's refusal in words beside the field it names | `grade10-admin-vault-operator-queue-US-10` |
 
-Grader and cert arrive with `add-item-registry`.
+Grader and cert arrive with `add-item-registry`. The form is built without
+waiting on counsel's statement text (Q24).
 
 ### Walk-in draft
 
@@ -82,13 +83,13 @@ Grader and cert arrive with `add-item-registry`.
 | --- | --- | --- |
 | Listed | the draft in the Drafts view, as any draft reads there; nothing to value or book; Cancel offered; **The collector's cases** in the header | `grade10-admin-vault-operator-queue-US-10` |
 | Sent | it leaves Drafts for Needs staff, as any submitted case | `grade10-site-vault-case-intake-US-06` |
-| Cancelled for a typo | the draft ends as cancelled, and nobody is emailed | `grade10-site-vault-case-lifecycle-US-06` |
+| Cancelled for a typo | the draft and staff's photos are removed from the account at the wrong address, never listed there as cancelled, and nobody is emailed | `grade10-site-vault-case-lifecycle-US-06` |
 
 ### Queue and held items, collector
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Named | each row's collector by account name, a click narrowing to that collector, and a link beside it to their collector page | `grade10-admin-vault-operator-queue-US-11` |
+| Named | each row's collector by account name, or by the email handle of an account the walk-in created until the customer names themselves; a click narrowing to that collector, and a link beside it to their collector page | `grade10-admin-vault-operator-queue-US-11` |
 | Name unavailable | the short id and "name unavailable"; the rest of the row and the list stand | `grade10-admin-vault-operator-queue-US-11` |
 | Treasurer | a treasurer reads the rows as today, with no collector column | `grade10-admin-console-collector-page-US-02` |
 | Narrowed to one collector | the collector's name above the rows, the count for that collector, and a control clearing it | `grade10-admin-vault-operator-queue-US-12` |
@@ -114,7 +115,7 @@ Grader and cert arrive with `add-item-registry`.
 | Signing in | the site's existing sign-in dialog | `grade10-site-vault-case-intake-US-06` |
 | Listed as a draft | the draft on the collector's list, reading that staff opened it at the counter; it reopens in the wizard | `grade10-site-vault-case-intake-US-06` |
 | The wizard's own | the third step's read-back, statement tick and send, with its own states | `grade10-site-vault-case-intake-US-06` |
-| Cancelled before sending | the ending as any cancelled draft reads it | `grade10-site-vault-case-lifecycle-US-06` |
+| Cancelled before sending | a draft the collector cancelled reads as any cancelled draft; one staff cancelled leaves the list | `grade10-site-vault-case-lifecycle-US-06` |
 
 ## Flags
 

@@ -82,27 +82,27 @@ it changes; the rest of the cards carry on:
 
 | Day after the ready email | What happens | Confirms |
 | --- | --- | --- |
-| 30 and 60 | ❓ a reminder each, costing nothing | Operations |
-| 90 | ❓ a storage fee of HKD 30 a card a month accrues, due before collection | Commercial the amount, Operations the day |
-| 180 | ❓ the written notice is due: staff post it by registered post to the address taken at signing and email it the same day, giving 30 days to collect from the posting date | Legal: the form, whether email alone serves, the 30 days |
-| after the 30 days | ❓ clause 6 lets the cards be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456), the proceeds less fees held for the collector; nothing is built for it yet | Legal |
+| 30 and 60 | a reminder each, costing nothing | Operations |
+| 90 | a storage fee of HKD 30 a card a month accrues, due before collection | Commercial the amount, Operations the day |
+| 180 | ❓ the written notice is due: staff post it by registered post to the address taken at signing and email it the same day, giving the notice period pinned at signing, **90** days until counsel confirms, from the posting date | Legal: the form, whether email alone serves, the period |
+| after the notice period | ❓ clause 6 lets the cards be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456) and its own power of sale, the proceeds less what is owed and the sale's costs held for the collector; nothing is built for it yet | Legal |
 
 - 🚧 **Storage per card still at the shop** — a month started since day 90
   counts; a card withdrawn, paid out or vaulted does not, and it is one line
   per card held at the till
 - 🚧 **The rungs never pause** — they count from the ready day; only collecting, vaulting or a payout leaves it
-- ❓ **A part month** — counts as a whole month — Commercial
+- 🚧 **A part month** — counts as a whole month
 - ❓ **Every card paid out** — whether that submission has ended, for erasure and retention — Product
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
-  for it; the posting date and tracking are recorded, and the 30 days run from it
+  for it; the posting date and tracking are recorded, and the days the notice gives run from it
 - 🚧 **After the notice** — the release stops here: the cards stay the
   collector's, storage accrues, and a slab kept on purpose moves into a vault
   case
 - 🚧 **The payout** — a card not returned, or returned damaged, is paid out at
   its declared value on a record of its own, approved by a second person, at
   the till or by bank transfer; a card that turns up reverses it on that record
-- ❓ **The payout window** — 14 days from the day the batch is received at
-  the shop — Operations
+- 🚧 **The payout window** — 14 days from the day the batch is received at
+  the shop
 
 ## Ready to Collect
 
@@ -112,13 +112,14 @@ it changes; the rest of the cards carry on:
   ones; a one-off closure still shows the shop open that day — Operations
 - 🚧 **The ID glance** — above the threshold an ID matching the name, nothing
   kept and no identity check; at or below it the code and the name release
-- ❓ **The threshold** — HKD 10,000 declared in total — Operations
+- 🚧 **The threshold** — HKD 10,000 declared in total
 - 🚧 **Name a collector** — one person at a time, by their full name as on
   their ID, named, changed or removed on the page before collection; no email
   goes, History logs it, and the receipt names who collected
 - 🚧 **Nobody else** — anybody but the collector and the named person is turned
   away, code or no code; the collector names them in the minute
-- ❓ **No counter override** — staff cannot release to anyone else — Operations
+- 🚧 **No counter override** — staff cannot release to anyone else; a release
+  to an executor or under a court order is a later change
 - 🚧 **Vault it** — a slab goes straight into a vault case at the counter: the
   identity check and the custody agreement happen there, storage is free, a
   loan is the vault's offer after valuing it, and the receipt says so —
@@ -139,10 +140,11 @@ it changes; the rest of the cards carry on:
   valuation reads its grader, grade and cert from the item register; an
   auction consignment reads the record from here —
   [Items](/p/grade10-admin/inventory/items#facts)
-- ❓ **Retention** — 2,555 days on the vault's table: the sealed documents and
+- 🚧 **Retention** — 2,555 days on the vault's table: the sealed documents and
   the photographs in the vault's classes, and the submission record as a class
-  of its own; each window runs from the day the submission ends, collected,
-  cancelled, expired or its last card paid out; no identity class — Legal —
+  of its own; each window runs from the later of the day the submission ends,
+  collected, cancelled, expired or its last card paid out, and the day nothing
+  is owed either way; no identity class —
   [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness)
 - 🚧 **Erasure waits** — the ask to be forgotten is refused while a submission
   is between booked and ready, an upcharge is unsettled or ready cards wait
@@ -178,7 +180,7 @@ it changes; the rest of the cards carry on:
 | 2027/03/24 | Storage, the second month | +120 | 840 |
 | 2027/04/24 | Storage, the third month | +120 | 960 |
 | 2027/05/24 | Storage, the fourth month | +120 | 1080 |
-| 2027/05/25 | Written notice posted: $600 upcharge and $480 storage to date, due before collection, 30 days from today to collect | | 1080 |
+| 2027/05/25 | Written notice posted: $600 upcharge and $480 storage to date, due before collection, the notice period from today to collect | | 1080 |
 
 The balance is what the collector owes on that day.
 :::
@@ -204,12 +206,12 @@ The balance is what the collector owes on that day.
 | Running late is not a status | Decided | It is the estimate against the clock, read on the page and by the queue the same way | Engineering |
 | Held by the grader keeps the submission ready | Decided | The rest are handed back against a receipt that names the card still out; a second hand-back closes it | Product |
 | The fee's fate is one table | Decided | Refused never charged, withdrawn refunded at the till, ungraded and minimum not met stand, held stands, not returned or damaged refunded with the payout; every refund goes back the way it was paid | Product |
-| Storage fee | ❓ Open | HKD 30 a card a month from day 90, per card still held and per month started, derived at the read, one line per card held at collection, a nudge rather than revenue; vault storage stays free, so a slab kept on purpose moves into a case | Commercial |
-| The notice | ❓ Open | Reminders at 30 and 60, the fee at 90, then from 180 a counter act: posted by registered post and emailed, the posting date and tracking recorded, 30 days from posting; the first release stops there and clause 6 keeps the disposal basis; the notice's form and wording | Legal |
-| Payout for a lost or damaged card | ❓ Open | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout; the window and where it goes | Operations |
-| ID at hand-back | ❓ Open | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |
+| Storage fee | Decided | HKD 30 a card a month from day 90, per card still held and per month started, derived at the read, one line per card held at collection, a nudge rather than revenue; waived only by two people, with a reason, as the upcharge is; vault storage stays free, so a slab kept on purpose moves into a case | Commercial |
+| The notice | Decided | Reminders at 30 and 60, the fee at 90, then from 180 a counter act: posted by registered post and emailed, the posting date and tracking recorded, the notice period pinned at signing from posting, seeded at 90 days; the first release stops there and clause 6 keeps the disposal basis; counsel words the notice and clause 6 together | Legal |
+| Payout for a lost or damaged card | Decided | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout | Operations |
+| ID at hand-back | Decided | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |
 | The threshold's own figure | Decided | Above the threshold is more than HKD 10,000 declared in total, so the figure itself is released on the code and the name | Operations |
 | Each card's grade before the cards are back | ❓ Open | The page shows a card's grade once the cards are checked back in at the shop; at Grades are in it shows the grader's stage alone. Showing grades when the grader posts them would mean entering the grader's list before the cards arrive | Product |
 | Grade and cert into a vault case | ❓ Open | A follow-on; the vault reads the record from the submission page meanwhile | Product |
-| Retention | ❓ Open | 2,555 days for the documents and the photographs in the vault's classes and for the submission record as its own class, each from the submission's end event; no identity class; a live submission blocks an erasure as a live case does | Legal |
+| Retention | Decided | 2,555 days for the documents and the photographs in the vault's classes and for the submission record as its own class, each from the later of the submission's end event and the day nothing is owed either way; no identity class; a live submission blocks an erasure as a live case does | Legal |
 :::

@@ -148,7 +148,8 @@ released`, guarded on nothing outstanding and no packet open.
   visit ahead is cancelled and one past is a no-show, never completed
 - 🚧 **An address typed wrong** — staff cancel the unsent draft and open
   another under the right address; the account at the wrong address is not
-  emailed
+  emailed and keeps nothing: the draft and staff's photos are removed from
+  it rather than listed as cancelled
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - 🚧 **Every ending reads on the case** — in the collector's words: the
@@ -160,9 +161,10 @@ released`, guarded on nothing outstanding and no packet open.
 
 - 🚧 **Registered at valuation** - starting the valuation gives the item its
   record in the register, under the case's collector -
-  [Items](/p/grade10-admin/inventory/items#holds)
-- 🚧 **Held while vaulted** - from vaulting until release, unwind or
-  forfeit; a forfeit moves the item to the lender
+  [Items](/p/grade10-admin/inventory/items#marks)
+- 🚧 **Marked while vaulted** - the vault's mark on the item runs from
+  vaulting until release, unwind or forfeit; a forfeit moves the item to the
+  lender
 - 🚧 **Another owner** - preparing documents is refused while the register
   names someone other than the case's collector
 
@@ -210,6 +212,6 @@ released`, guarded on nothing outstanding and no packet open.
 | What waits on a person, and what waits on a clock | Decided | Before acceptance a case badges somebody — nobody started it, nobody valued it in a week, the offer lapsed; after acceptance it runs a clock | Product |
 | An ended case still names its visit | Decided | The cached booking is the record of where the item went; clearing it would erase that and write a cancellation nobody made | Engineering |
 | Notice before forfeiture | Decided | No grace on the interest, and a written notice naming a cure date at least **14 days** off before anything may be taken | Owner |
-| A draft staff opened that nobody sends | ❓ Open | Recommended: the existing **7-day** draft clock ends it as `expired`, with no email | Product |
+| A draft staff opened that nobody sends | Decided | The existing **7-day** draft clock ends it as `expired`, with no email, rather than the **30-day** submitted clock with a guard of its own | Owner |
 | A different item at the counter | Decided | The case is the item, so a different one is a new case; this one is declined or cancelled | Product |
 :::

@@ -147,13 +147,14 @@ See [Non-Goals](decisions.md#non-goals).
 
 - **The author's handle** — `@brianchacha6969` has no row in `team.yaml`;
   the round that lands this adds one
-- **Legal** — the notice's operative wording, the licence line, the
-  complaints contact and the collection statement; each a `TBC Legal` row on
-  [Compliance and Readiness](../../../docs/prds/products/grade10-site/vault/compliance-and-readiness.md#outside-the-code)
-- **Finance** — the FPS id and the bank account, a ❓ on
-  [Loan and Money](../../../docs/prds/products/grade10-site/vault/loan-and-money.md#reading-the-book)
-- **Product** — a stock-take sheet and Send notice from an arrears row,
-  held as `decisions.md` Q12
+- **Legal** — the notice's operative wording, the licence line and the
+  collection statement's text, readiness items on
+  [Compliance and Readiness](../../../docs/prds/products/grade10-site/vault/compliance-and-readiness.md#before-the-first-production-case);
+  the complaints contact is the Owner's
+- **Finance** — the FPS id and the bank account, readiness item 11 on
+  [Compliance and Readiness](../../../docs/prds/products/grade10-site/vault/compliance-and-readiness.md#before-the-first-production-case)
+- **Product** — a stock-take sheet and Send notice from an arrears row:
+  neither, `decisions.md` Q12
 
 ## References
 

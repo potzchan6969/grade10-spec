@@ -40,9 +40,14 @@ hold, a wizard to open another, and each case's own page.
 
 - 🚧 **Check it, then send** — the third step reads the request back, says
   what happens next, and takes the collector's tick that they have read the
-  personal information collection statement before it sends
+  personal information collection statement before it sends; in production
+  the send is refused while the statement is unwritten
 - 🚧 **Ten categories** — the register's —
   [Items](/p/grade10-admin/inventory/items#values)
+- 🚧 **A slab staff found** — on a draft staff opened with a slab the register
+  knows, the collector changes only the photos and the description; the
+  category, grader, grade and cert are the register's —
+  [Items](/p/grade10-admin/inventory/items#facts)
 - **Currency** — the brand's (HKD for Grade10); another currency is refused
 - **One item per case** — a binder of twelve cards is twelve requests, in
   batches of three; book one visit on the first and bring them all together
@@ -204,7 +209,7 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | Total and lateness on the offer card | Decided | The card states the total to repay and what a late day costs, so a collector answers knowing both | Design |
 | SMS and WhatsApp automation | Deferred | Click-to-chat, staff-pressed, until the owner names a provider | Owner |
 | Phone number | Decided | Stored in E.164 against the brand's plan and unverified until a channel writes to it | Product |
-| Which typed numbers are one person | ❓ Open | Which forms the canonical rule reads as the same person: spacing and dashes, a leading +852, a bare eight-digit local number. One stored form however it was typed is settled; the variants it covers are not | Product |
+| Which typed numbers are one person | Decided | One stored number, never one person: spacing, dots, dashes and brackets, `+852` or `00852`, a bare eight-digit local number, full-width digits, and `852` before a local number all store as one; a number from elsewhere with no country code is asked for one | Product |
 | Two vocabularies for one list | Decided | What happens to a case and what the collector is told stay separate lists joined by a map, so no event can ship silent | Engineering |
 | Every copy rides one ladder | Decided | The signed set retries on the same rungs as every other message — **5 minutes** to **6 hours**, an attempt giving up after **10 seconds** — and parks with its reason, rather than being retried for ever by a sweep of its own | Engineering |
 | No extension to ask for | Decided | A borrower pays at their own bank and cannot pay from the page; a renewal is a new offer somebody writes down, and nobody has written one yet | Owner |
