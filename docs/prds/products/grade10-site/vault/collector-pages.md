@@ -29,8 +29,6 @@ hold, a wizard to open another, and each case's own page.
 
 ## Request wizard
 
-Three steps, one per thing the collector does.
-
 1. *Collector* — **Describe the item** — category (trading card, coin,
    bullion, watch, jewellery, other), title (≤ **200** characters),
    description (≤ **2,000**), WhatsApp number (optional, unverified, in
@@ -48,8 +46,6 @@ Three steps, one per thing the collector does.
   batches of three; book one visit on the first and bring them all together
 
 ## Case page
-
-What a collector reads on one case, top to bottom.
 
 - **Header** — item, status badge, lane badge, and staff's decline reason
   verbatim when declined
@@ -95,6 +91,8 @@ What a collector reads on one case, top to bottom.
   bring the item, sign at the counter
 - **Cancel this request** — ends the case at any status before the item is in
   the vault; any visit is cancelled with it and the item stays with the collector
+- 🚧 **A case staff opened** - waits for the collector to read it back, tick
+  the collection statement and confirm; nothing is valued or emailed before
 - **History** — every event the collector may see, actor kind only, never a
   staff id; the counter's own records stay staff-only
 - **Clocks** — a day and a deadline, on this page and in every email, are

@@ -144,6 +144,8 @@ released`, guarded on nothing outstanding and no packet open.
   before the cure date of a written notice has passed; the item settles the
   debt, the figure reaches the audit chain, and the collector is told; a
   visit ahead is cancelled and one past is a no-show, never completed
+- 🚧 **An address typed wrong** - staff cancel the unconfirmed walk-in and open
+  another under the right address; the account at the wrong one hears nothing
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - 🚧 **Every ending reads on the case** — in the collector's words: the
@@ -195,5 +197,6 @@ released`, guarded on nothing outstanding and no packet open.
 | What waits on a person, and what waits on a clock | Decided | Before acceptance a case badges somebody — nobody started it, nobody valued it in a week, the offer lapsed; after acceptance it runs a clock | Product |
 | An ended case still names its visit | Decided | The cached booking is the record of where the item went; clearing it would erase that and write a cancellation nobody made | Engineering |
 | Notice before forfeiture | Decided | No grace on the interest, and a written notice naming a cure date at least **14 days** off before anything may be taken | Owner |
+| A walk-in nobody confirms | ❓ Open | Recommended: the **30-day** submitted clock ends it as `expired`, and no email goes, since nothing is sent before the confirmation | Product |
 | A different item at the counter | Decided | The case is the item, so a different one is a new case; this one is declined or cancelled | Product |
 :::
