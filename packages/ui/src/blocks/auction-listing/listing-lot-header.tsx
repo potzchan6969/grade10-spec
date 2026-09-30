@@ -68,7 +68,7 @@ function ListingLotHeader({
         <BreadcrumbItem current>{copy.lotBreadcrumb}</BreadcrumbItem>
       </Breadcrumbs>
       <div className="flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <h1 className="min-w-0 text-3xl font-semibold leading-9 text-foreground">
+        <h1 className="min-w-0 text-xl font-semibold leading-7 text-foreground sm:text-3xl sm:leading-9">
           {title}
         </h1>
         {onWatchToggle ? (

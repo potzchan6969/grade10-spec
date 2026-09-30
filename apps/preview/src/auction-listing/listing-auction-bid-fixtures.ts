@@ -117,6 +117,8 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   bidHistory: {
     you: "You",
     empty: "No bids yet",
+    winner: "Winner",
+    samePricePriorityTip: "When maximums match, the earlier one leads.",
   },
   auctionWon: "Auction won",
   completePurchase: "Complete Order Setup",
@@ -162,7 +164,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
     "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
-  customAmountPlaceholder: "Custom amount (min. {amount})",
+  customAmountPlaceholder: "{amount} min.",
   stepperMessage: "Min.: {amount}",
   invalidAmount: "Enter a valid amount.",
   useMinimum: "Use minimum",
@@ -177,6 +179,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     "At least {amount} (your maximum + {increment})",
   maximumBelowMinimum: "Enter at least {amount}",
   buyerFeeHint: "20% buyer fee is added on top of the winning bid",
+  noBids: "No bids",
   noBidsYet: "No bids yet",
   endsLabel: "Ends",
   opensLabel: "Opens",
@@ -302,6 +305,7 @@ export function bidHistoryForState(
         amountMinor: CLOSED_SOLD_MINOR,
         acceptedAtMs: msAgo(60),
         isViewer: viewerWon,
+        isWinner: true,
       },
       {
         id: viewerWon ? "bid-mike-prior" : "bid-john-closed",

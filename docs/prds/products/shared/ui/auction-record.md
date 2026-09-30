@@ -13,10 +13,17 @@ capability is the component contract underneath it.
 
 - **Page frame** — the title with its badge, whose number is the count of
   rows the application supplies
-- **One table** — bid rows before watch-only, replacing the Bidding and
-  Watching sections; a row is Auction (image, title, close), Current Bid,
-  Status (a badge, or the application's no-standing placeholder),
+- **One list** — bid lots before watch-only, replacing the Bidding and
+  Watching sections; each lot shows Auction (image, title, close), Current
+  Bid, Status (a badge, or the application's no-standing placeholder),
   Email alerts, and Unwatch only when the application supplies a watch toggle
+- 🚧 **Small viewport** — below `md`, each lot is a stacked card with identity,
+  inline current bid, Status when labelled, and a footer for Email alerts and
+  Unwatch or View order; the whole card opens the lot or Winner Order; from
+  `md`, the five-column table
+
+::changes{spec="shared/ui/auction-record"}
+
 - **Status** — Leading, Outbid, Bid submitted or Bid not accepted while open;
   the order's status once won; Won, Didn't win or `--` for a watch-only row;
   close urgency stays with the listing identity

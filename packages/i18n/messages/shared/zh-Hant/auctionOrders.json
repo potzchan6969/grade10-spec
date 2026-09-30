@@ -14,13 +14,11 @@
   "viewDetail": "查看詳情",
   "contactUs": "聯絡我們",
   "insuranceTooltip": "運輸途中按訂單金額的 0.9% 計算。",
-  "taxTooltip": "由 Grade10 按訂單送貨地點設定。部分訂單不設稅項。",
   "taxLabel": "稅項",
-  "buyersPremiumTooltip": "得標價的 20%，或該貨幣的最低額（取較高者）。",
+  "buyersPremiumTooltip": "成交價的 20%，或該貨幣的最低額（取較高者）。",
   "shippingHandlingTooltip": "依你確認的送貨地址計算的包裝、運送與處理費用。",
   "processingFeeTooltip": "依此發票送出時的付款方式而定。",
   "contactDialog": {
-    "title": "寄信給 Grade10",
     "to": "收件人",
     "subject": "主旨",
     "message": "訊息",
@@ -42,13 +40,31 @@
   },
   "status": {
     "awaitingSetup": "等待設定",
+    "setupOverdue": "設定逾期",
     "preparingInvoice": "準備發票中",
     "pendingPayment": "待付款",
-    "processing": "處理中",
+    "paymentOverdue": "付款逾期",
+    "paymentVerifying": "付款核實中",
+    "partiallyPaid": "已部分付款",
+    "processing": "準備出貨",
     "shipped": "已發貨",
     "delivered": "已送達",
     "cancelled": "已取消",
     "refunded": "已退款"
+  },
+  "refusal": {
+    "NOT_FOUND": "找不到此訂單。",
+    "ADDRESS_LOCKED": "你的訂單設定已確認，無法再在此更改。",
+    "ADDRESS_UNCONFIRMED": "請先確認你的收貨地址。",
+    "ADDRESS_WINDOW_CLOSED": "設定期限已過，訂單設定已關閉。",
+    "METHOD_UNAVAILABLE": "此訂單不支援銀行轉帳，請選擇信用卡。",
+    "ORDER_NOT_PAYABLE": "此訂單目前無法付款。",
+    "DEADLINE_ELAPSED": "付款期限已過。",
+    "INVOICE_EXPIRED": "此發票已過期，無法再在此付款。",
+    "PROOF_INVALID": "這些檔案無法作為付款證明。請上載 1 至 3 個 PDF、PNG、JPG、HEIC 或 HEIF 檔案，每個不超過 5 MB，合共不超過 15 MB。",
+    "PROOF_UNDER_REVIEW": "你的付款證明正在審核中，請等候結果後再提交。",
+    "UNAVAILABLE": "暫時無法使用，請稍後再試。",
+    "generic": "無法完成此操作，請再試一次或聯絡我們。"
   },
   "addAddress": {
     "personal": "個人",
@@ -62,11 +78,24 @@
     "city": "城市/城鎮",
     "addressLine1": "地址行 1",
     "addressLine2": "地址行 2",
+    "apartment": "室/樓層/大廈",
     "state": "州/省/地區",
     "postalCode": "郵遞區號",
     "optional": "選填",
     "confirm": "確認",
     "cancel": "取消",
     "countrySearchPlaceholder": "例如 United States"
+  },
+  "detail": {
+    "orderInformation": "訂單資訊",
+    "collectionMethod": "收貨方式",
+    "orderStatus": "訂單狀態",
+    "lots": "拍品",
+    "orderNumber": "訂單編號",
+    "auction": "拍賣",
+    "currency": "貨幣",
+    "date": "日期",
+    "invoiceStatus": "發票狀態",
+    "payNow": "立即付款"
   }
 }

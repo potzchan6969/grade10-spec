@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
@@ -7,23 +8,9 @@ import {
   type FeaturedAuctionsBannerSlide,
 } from "./featured-auctions-banner";
 
-const COPY: FeaturedAuctionsBannerCopy = {
-  active: "LIVE BIDDING",
-  upcoming: "UPCOMING",
-  ended: "ENDED",
-  currentBid: "CURRENT BID",
-  startingBid: "STARTING BID",
-  finalBid: "FINAL BID",
-  bidNow: "Bid Now",
-  viewAuction: "View Auction",
-  endsIn: "Ends in",
-  opensIn: "Opens in",
-  endedAt: "Ended",
-  progress: "Featured lots",
-  slide: "Show featured lot {position}: {title}",
-  previous: "Previous featured lot",
-  next: "Next featured lot",
-};
+const { auction } = getMessages("grade10", "en");
+
+const COPY: FeaturedAuctionsBannerCopy = auction.featured;
 
 /**
  * Story fixture for the front page stage. Production uploads target

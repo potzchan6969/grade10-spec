@@ -1,9 +1,10 @@
 # shared/auth/users Specification
 
 ## Purpose
-How an operator on either brand lists people in the identity directory, bans
-and unbans them, and changes their roles. Listing and ending their sessions
-is `shared/auth/sessions`. Recording those actions is `shared/auth/audit`.
+How an operator on either brand lists people in the identity directory, creates
+a passwordless Auth account for someone who has never signed in, bans and
+unbans them, and changes their roles. Listing and ending their sessions is
+`shared/auth/sessions`. Recording those actions is `shared/auth/audit`.
 Auction bidder bans belong to auction, not here.
 
 ## Feature set
@@ -13,12 +14,18 @@ Auction bidder bans belong to auction, not here.
   - Narrowed list: elevated or user population, a named elevated role, status, and verification combine; caller chooses order (newest first when none)
   - Banned remain: a banned account stays in the directory
 - Ban and unban
-  - Stops money and sign-in: a ban ends sessions and refuses new ones; unban restores sign-in
+  - Stops money and sign-in: a ban ends sessions and refuses new sign-ins; unban restores sign-in
   - No ban of admin: no caller bans an account that holds `admin` (peers included); self-ban stays refused
+  - Closes within 70 seconds: even a cached browse read stops answering signed in, not only a mutation or an elevated call
 - Role changes
   - Set-role edits: clearing operator roles leaves a user; own account included
   - Peer strip refused: an operator cannot remove `admin` from another admin
   - Self-strip: an admin may remove their own `admin` when not last
+  - Reflects within 70 seconds: even a cached browse read reflects the new roles, not only an elevated call
+- Account create
+  - Grant-gated create: only `user:create` creates; a non-`user` role also needs `user:set-role`
+  - Passwordless Auth row: name, email, and roles from the closed set; no loyalty enroll, invite mail, or password
+  - Duplicate email refused: never a second Auth row for an email that already exists
 
 ## Requirements
 
@@ -146,13 +153,16 @@ system SHALL return the newest account first.
 The system SHALL let a caller ban or unban an account only when they hold
 `user:ban`. A ban SHALL last until an unban. After a ban, that person SHALL
 NOT sign in, SHALL NOT be treated as signed in, and SHALL NOT complete a
-money-moving action. A money-moving action SHALL re-check identity so a ban
-cannot be ignored. The operator SHALL be able to include a reason on a ban.
-A caller SHALL NOT ban their own account. A caller SHALL NOT ban an account
-that holds `admin`, including when the caller also holds `admin`. The last
-remaining `admin` SHALL NOT be banned. A caller without the grant SHALL be
-refused, and the account SHALL be unchanged. Banning an already-banned
-account SHALL leave it banned.
+money-moving action. That person SHALL NOT be treated as signed in on an
+ordinary cached read either, not only on a mutation or an elevated call; this
+SHALL hold for every read that starts 70 seconds or more after the ban. A
+money-moving
+action SHALL re-check identity so a ban cannot be ignored. The operator
+SHALL be able to include a reason on a ban. A caller SHALL NOT ban their own
+account. A caller SHALL NOT ban an account that holds `admin`, including
+when the caller also holds `admin`. The last remaining `admin` SHALL NOT be
+banned. A caller without the grant SHALL be refused, and the account SHALL
+be unchanged. Banning an already-banned account SHALL leave it banned.
 
 <!-- trace:scenario id=g10.shared-users.SC-bc9 rev=1 -->
 #### Scenario: shared-auth-users-SC-06 - A ban stops money-moving
@@ -232,6 +242,15 @@ account SHALL leave it banned.
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
+#### Scenario: shared-auth-users-SC-34 - A ban closes a cached read within 70 seconds
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a person who signed in and holds a signed cookie cache that has
+  not yet expired
+- **WHEN** an operator who can ban bans that account
+- **THEN** an ordinary browse read that starts 70 seconds or more after the
+  ban reports no person, even though the cookie cache would not have expired
+
 ### Requirement: An operator who can set roles can change them
 
 The system SHALL let a caller change an account's roles only when they hold
@@ -242,7 +261,9 @@ account's. A caller SHALL NOT remove `admin` from another account that holds
 `admin`. Removing their own `admin` SHALL succeed only when at least one other
 account still holds `admin`. The last remaining `admin` SHALL NOT have `admin`
 removed, by self or by another caller. A caller without the grant SHALL be
-refused, and the roles SHALL be unchanged.
+refused, and the roles SHALL be unchanged. A role change SHALL be reflected
+in an ordinary cached read as well as in a mutation or an elevated call, in
+every read that starts 70 seconds or more after the change.
 
 <!-- trace:scenario id=g10.shared-users.SC-cg2 rev=1 -->
 #### Scenario: shared-auth-users-SC-14 - Admin changes another person's roles
@@ -303,3 +324,87 @@ refused, and the roles SHALL be unchanged.
 - **AND** an operator who holds `admin` and `user:set-role`
 - **WHEN** they save their own account without `admin`
 - **THEN** their account no longer holds `admin`
+
+#### Scenario: shared-auth-users-SC-35 - A role change reaches a cached read within 70 seconds
+**Serves:** shared-auth-users-US-03 - Operator changes roles
+
+- **GIVEN** a signed-in account whose signed cookie cache has not yet
+  expired
+- **WHEN** an operator who can set roles changes that account's roles
+- **THEN** an ordinary browse read that starts 70 seconds or more after the
+  change reflects the new roles, even though the cookie cache would not have
+  expired
+
+### Requirement: An operator who can create may create a passwordless Auth account
+
+An operator holding the create grant stands up an Auth account before the
+person signs in.
+
+**Who** - The system SHALL let a caller create an Auth account only when they
+hold `user:create`. A caller without that grant SHALL be refused, and no
+account SHALL be created.
+
+**What** - Create SHALL accept a name, an email, and roles from the closed set
+in `shared/auth/roles`. Name and email SHALL be required. Create SHALL NOT
+accept a password. Create SHALL NOT enroll the account in loyalty, SHALL NOT
+set opening points, and SHALL NOT send an invite or magic-link email.
+
+**Roles** - Creating with only `user` SHALL require `user:create` alone.
+Creating with any non-`user` role SHALL also require `user:set-role`; without
+it the system SHALL refuse and create no account. An empty role selection
+SHALL leave the account as `user` only.
+
+**Duplicate email** - When an Auth account already holds that email, the
+system SHALL refuse create and SHALL NOT create a second Auth row.
+
+#### Scenario: shared-auth-users-SC-28 - An operator creates a passwordless Auth account
+**Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
+
+- **GIVEN** an operator who holds `user:create` and `user:set-role`
+- **AND** no Auth account holds the email
+- **WHEN** they create an account with a name, that email, and role `admin`
+- **THEN** one Auth account exists for that email with that name and `admin`
+- **AND** create collected no password
+- **AND** the account is not enrolled in loyalty from create
+- **AND** no invite or magic-link email is sent from create
+
+#### Scenario: shared-auth-users-SC-29 - Create as plain user needs only user:create
+**Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
+
+- **GIVEN** an operator who holds `user:create` but not `user:set-role`
+- **AND** no Auth account holds the email
+- **WHEN** they create an account with a name, that email, and role `user`
+- **THEN** one Auth account exists for that email with roles `user` only
+
+#### Scenario: shared-auth-users-SC-30 - Create without user:create is refused
+**Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
+
+- **GIVEN** an operator who holds `user:set-role` but not `user:create`
+- **WHEN** they try to create an account with a name, an unused email, and role `user`
+- **THEN** the system refuses the request
+- **AND** no Auth account holds that email
+
+#### Scenario: shared-auth-users-SC-31 - Elevated create without user:set-role is refused
+**Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
+
+- **GIVEN** an operator who holds `user:create` but not `user:set-role`
+- **WHEN** they try to create an account with a name, an unused email, and role `admin`
+- **THEN** the system refuses the request
+- **AND** no Auth account holds that email
+
+#### Scenario: shared-auth-users-SC-32 - Duplicate email is refused
+**Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
+
+- **GIVEN** an operator who holds `user:create`
+- **AND** an Auth account already holds the email
+- **WHEN** they try to create an account with a name, that email, and role `user`
+- **THEN** the system refuses the request
+- **AND** exactly one Auth account holds that email
+
+#### Scenario: shared-auth-users-SC-33 - Empty roles at create leave a user
+**Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
+
+- **GIVEN** an operator who holds `user:create`
+- **AND** no Auth account holds the email
+- **WHEN** they create an account with a name, that email, and no role selected
+- **THEN** one Auth account exists for that email with roles `user` only

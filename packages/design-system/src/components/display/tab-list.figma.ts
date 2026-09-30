@@ -14,10 +14,16 @@ const variant = instance.getEnum("variant", {
   list: "list",
 });
 
+// `md` is the cva default, so only `sm` emits a prop.
+const size = instance.getEnum("size", {
+  md: "md",
+  sm: "sm",
+});
+
 const tabs = instance.getSlot("Tab List");
 
 export default {
-  example: figma.code`<TabsList${variant === "pill" ? "" : figma.code` variant="${variant}"`}>${tabs}</TabsList>`,
+  example: figma.code`<TabsList${variant === "pill" ? "" : figma.code` variant="${variant}"`}${size === "md" ? "" : figma.code` size="${size}"`}>${tabs}</TabsList>`,
   imports: ['import { TabsList } from "@grade10/design-system"'],
   id: "tab-list",
   metadata: { nestable: true },

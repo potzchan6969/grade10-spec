@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-28
+depends_on:
+  - add-winner-order-tax-line
+  - define-public-auction-identifiers
+hands:
+  pm: "@ecchochan"

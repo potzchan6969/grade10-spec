@@ -1,7 +1,8 @@
 # shared/auth/users Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-29, tcs-rules r4
+**Status:** reopened
+**Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-09-29
+**Drafts styled:** 2026-09-29, tcs-rules r3.0
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 
@@ -20,9 +21,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -49,9 +52,11 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -77,9 +82,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -114,9 +121,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -150,9 +159,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -195,9 +206,11 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -237,9 +250,11 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -273,9 +288,11 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -308,9 +325,11 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -339,9 +358,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -391,6 +412,37 @@ Runs once per row of **Test data**.
 * The system refuses the request.
 * The account remains unbanned.
 
+### shared-auth-users-US2-TC7-1: A cached browse read of a banned account closes on the very next read
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is unbanned, signed in, and an ordinary browse read of the store has already warmed its session cache.
+
+**Steps:**
+
+1. Read <subject user id>'s signed-in state on <grade10 store url> (an ordinary browse read).
+2. On <grade10 admin users url>, ban <subject user id>.
+3. Immediately read <subject user id>'s signed-in state, the same way as step 1.
+
+**Expected Results:**
+
+* Step 3 shows nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
+* <subject user id> stays listed, marked banned.
+
 ---
 
 ## shared-auth-users-US3: Operator changes roles
@@ -413,9 +465,11 @@ peer lockout does not.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -447,9 +501,11 @@ peer lockout does not.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -481,9 +537,11 @@ peer lockout does not.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -517,9 +575,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -588,9 +648,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -611,6 +673,46 @@ Runs once per row of **Test data**.
 
 * The directory refuses the save.
 * <peer admin user id> still holds `admin`.
+
+### shared-auth-users-US3-TC7-1: An ordinary read of the caller's own permissions reflects a role change on the very next read
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
+**Pre-conditions:**
+
+* The row's target is signed in, and an ordinary (non-elevated) browse read of its own current permissions has already warmed its session cache.
+
+**Test data:**
+
+| Target | Role change |
+| --- | --- |
+| Another account | `staff` granted, previously held no operator role |
+| The signed-in admin's own account | Own `admin` stripped; another admin remains |
+
+**Steps:**
+
+1. Read the row's target's permissions on an ordinary, non-elevated browse surface.
+2. An admin holding `user:set-role` saves the row's target with the row's role change.
+3. Immediately read the row's target's permissions the same way as step 1.
+
+**Expected Results:**
+
+* Step 3 reflects the row's new roles, even though step 1's read would otherwise have kept the cache answering the old roles for up to five more minutes.
 
 ---
 
@@ -633,9 +735,11 @@ without reading every account.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -670,9 +774,11 @@ without reading every account.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -700,9 +806,11 @@ without reading every account.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -733,9 +841,11 @@ without reading every account.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -751,3 +861,300 @@ without reading every account.
 
 * Every listed account holds no elevated role.
 * An account that holds `admin` is not listed.
+
+## shared-auth-users-US5: Operator creates an Auth account
+
+**As an** operator holding `user:create`,
+**I want** to create a passwordless Auth account with name, email, and roles
+from the closed set for someone who has never signed in — and to be refused
+when the email already exists —
+**so that** access can be granted before first sign-in without loyalty enroll
+or an invite mail, and a duplicate never becomes a second account.
+
+### shared-auth-users-US5-TC1-1: Create passwordless Auth account with elevated role
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create` and `user:set-role`). No Auth account holds <new email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <new name> | Ada Operator |
+| <new email> | ada.operator@example.com |
+| <roles> | `admin` |
+
+**Steps:**
+
+1. Create an Auth account with <new name>, <new email>, and <roles>.
+2. Open the account named by <new email>.
+3. Check that account's roles and whether a password was required at create.
+
+**Expected Results:**
+
+* Step 1 succeeds and creates one Auth account for <new email>.
+* Step 2 opens that account with <new name> and roles including `admin`.
+* Create collected no password.
+
+### shared-auth-users-US5-TC2-1: Create plain user with only user:create
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account holds <plain email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <plain name> | Pat Collector |
+| <plain email> | pat.collector@example.com |
+| <roles> | `user` |
+
+**Steps:**
+
+1. Create an Auth account with <plain name>, <plain email>, and <roles>.
+2. Open the account named by <plain email>.
+
+**Expected Results:**
+
+* Step 1 succeeds.
+* Step 2 opens that account with roles `user` only.
+
+### shared-auth-users-US5-TC3-1: Create without user:create is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:list` and `user:set-role`, not `user:create`). No Auth account holds <attempted email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <attempted email> | no.create@example.com |
+
+**Steps:**
+
+1. Try to create an Auth account with name, <attempted email>, and role `user`.
+
+**Expected Results:**
+
+* The system refuses the create.
+* No Auth account holds <attempted email>.
+
+### shared-auth-users-US5-TC4-1: Elevated role without user:set-role is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account holds <elevated email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <elevated email> | almost.admin@example.com |
+| <roles> | `admin` |
+
+**Steps:**
+
+1. Try to create an Auth account with a name, <elevated email>, and <roles>.
+
+**Expected Results:**
+
+* The system refuses the create.
+* No Auth account holds <elevated email>.
+
+### shared-auth-users-US5-TC5-1: Duplicate email is refused
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create` and `user:set-role`). Auth already holds <existing email> on <existing account>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <existing email> | taken@example.com |
+
+**Steps:**
+
+1. Try to create an Auth account with a new name, <existing email>, and role `user`.
+2. Count Auth accounts whose email is <existing email>.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 still counts exactly one account for <existing email>.
+
+### shared-auth-users-US5-TC6-1: Create does not enroll loyalty or send invite mail
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create` and `user:set-role`). No Auth account holds <silent email>. No outbound mail is queued for <silent email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <silent name> | Silent Create |
+| <silent email> | silent.create@example.com |
+| <roles> | `staff` |
+
+**Steps:**
+
+1. Create an Auth account with <silent name>, <silent email>, and <roles>.
+2. Check loyalty enrollment for that account.
+3. Check outbound mail for <silent email>.
+
+**Expected Results:**
+
+* Step 1 succeeds.
+* Step 2 shows no loyalty enroll and no opening points from create.
+* Step 3 shows no invite or magic-link mail from create.
+
+### shared-auth-users-US5-TC7-1: Empty roles at create leave a user
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+Signed in as admin(holds `user:create`). No Auth account holds <empty-roles email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <empty-roles name> | No Role Pick |
+| <empty-roles email> | no.role@example.com |
+
+**Steps:**
+
+1. Create an Auth account with <empty-roles name>, <empty-roles email>, and no role selected.
+2. Open the account named by <empty-roles email>.
+
+**Expected Results:**
+
+* Step 1 succeeds.
+* Step 2 opens that account with roles `user` only.
+
+## Settled
+
+- Empty role selection at create leaves the account as `user` only (Q13).
+- Name and email are required on create (Q14).
+- Email-verification standing of a newly created account is open on the PRD.
+- A read already in flight when a ban or role change commits needs no rule of its own - the requirement is a 70-second bound, and such a read falls inside it.
+- Which endpoints are cached browse reads and which are elevated calls is the implementation's mapping, not a suite question.
+- Per-session versus per-account cache-version keying changes no case's expected result here.
+
+## Reconciliation
+
+**Run:** Blind pass read Purpose, Feature set, user-journeys.md, decisions.md (Raised included), the linked Users · Ban and Unban / Role Changes PRD sections, this suite for id continuity, and `shared/auth/domain-tcs.md` for id continuity, all with Reconciliation/Requirements stripped. Denied: every Requirements section, openspec/specs/ beyond Purpose, Feature set and the domain suite, openspec/changes/archive/. (Change: `close-revoked-session-cache-gap`.)
+
+**Raised, folded into spec**
+
+- The in-flight-read boundary - first folded into both requirements as "the next read that starts after", then replaced by the 70-second bound.
+
+**Raised, rejected**
+
+- Which endpoints count as cached versus elevated — tech-design's job, not a suite question.
+- Per-session versus per-user invalidation keying - does not change any case's observable expected result here.
+
+**Raised, landed as decisions**
+
+- Empty role selection — Q13.
+- Name and email required — Q14.
+- The in-flight-read boundary - `close-revoked-session-cache-gap` decisions.md Q4, superseded by Q5.
+
+**Uncovered anchors**
+
+- All scenarios under Account create / US-05 covered by US5-TC1 through TC7.
+- Cross-account isolation on ban and role change (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/permissions read. **Out of suite:** the per-user cache-version helper's own unit test in grade10.
+- The 70-second bound at a location other than the one the ban or role change was made at is not observable on a single-location stack, where the change reaches the next read at once. **Out of suite:** grade10's cache-version settling-window unit test and the auth worker's before/after-race regression test.
+- All other scenarios under Ban and unban / US-02 and Role changes / US-03, the 70-second closing and reflecting included, are covered by `US2-TC1-1` through `US2-TC7-1` and `US3-TC1-1` through `US3-TC7-1` above.
+
+**Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
+
+- `US2-TC7-1` — Retired (`deprecated`), on writing its Playwright walk: `US2-TC1-1`'s own cached-read assertion (`store.page`'s pre-ban session, read with no `fresh` flag) already proves the same close once its `test.fail` placeholder for the then-unfixed cache is removed. A Case That Already Exists Is Not Written Twice.
+- `US3-TC7-1` — Approved (`actual`).

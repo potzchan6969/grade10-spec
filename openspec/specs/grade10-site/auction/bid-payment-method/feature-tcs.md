@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-payment-method Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-16, tcs-rules r1
+**Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-bid-payment-method-US1: Collector authorizes a first bid on commit
 
@@ -10,7 +10,7 @@
 **so that** I am not asked to confirm a hold in a separate modal.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-x2e rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC1-1: Missing card blocks the first bid
+### grade10-site-auction-bid-payment-method-US1-TC1-1: No linked card means no bid and no authorization
 
 **Classification:**
 
@@ -27,24 +27,28 @@
 
 **Pre-conditions:**
 
-* A signed-in collector has no linked card.
-* The collector is viewing an open listing.
-* The submitted maximum is valid for the listing.
+* customer(signed in, no linked card) is on <listing_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | An open listing taking bids, with no bid from this collector |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Open the listing bid panel.
-2. Enter the submitted maximum.
-3. Select **Place Bid**.
+1. Enter <maximum> in the bid panel.
+2. Click the bid action.
 
 **Expected Results:**
 
-* The bid is not accepted.
-* No authorization is created.
-* Link-card setup remains available under bid-panel-enrollment.
+* No bid is accepted on <listing_1>.
+* No card authorization is created.
+* Card linking is offered from the bid panel.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-tm1 rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC2-1: Linked card authorizes the committed maximum
+### grade10-site-auction-bid-payment-method-US1-TC2-1: Committing a maximum authorizes it silently, then accepts the bid
 
 **Classification:**
 
@@ -61,24 +65,31 @@
 
 **Pre-conditions:**
 
-* A signed-in collector has a linked card.
-* The collector is viewing an open listing with no accepted bid.
-* The submitted maximum is valid for the listing.
+* customer(signed in, card linked, no bid on <listing_1>) is on <listing_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | An open listing taking bids, with no bid from this collector |
+| <maximum> | A maximum above the next valid bid, within the collector's bidding limits |
 
 **Steps:**
 
-1. Open the listing bid panel.
-2. Enter the submitted maximum.
-3. Select **Place Bid**.
+1. Enter <maximum> in the bid panel.
+2. Click the bid action.
+3. Read the linked card's authorizations at the card provider.
 
 **Expected Results:**
 
-* One authorization for the submitted maximum stands against the linked card.
-* The bid is accepted only after authorization is confirmed.
-* No payment-method or confirmation modal opens for authorization.
+* Step 2: no confirmation or payment-method modal opens.
+* Step 2: the bid shows as accepted only once authorization is confirmed.
+* Step 3: one authorization for <maximum> stands on the linked card.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-heq rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC3-1: Pending authentication stays on the bid surface
+### grade10-site-auction-bid-payment-method-US1-TC3-1: A pending or challenged authorization stays on the bid surface
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -93,25 +104,39 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
 
+
 **Pre-conditions:**
 
-* A signed-in collector has a linked card and is viewing an open listing.
-* The provider requires authentication or reports the authorization as pending.
+* customer(signed in, card linked, no bid on <listing_1>) is on <listing_1 url>.
+* The card provider is mocked to answer the authorization with <provider answer>.
+
+**Test data:**
+
+| Provider answer | Shown on the bid surface |
+| --- | --- |
+| Authentication challenge (SCA) | The provider's challenge |
+| Pending | A busy state on the bid action |
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | An open listing taking bids, with no bid from this collector |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Enter a valid maximum in the listing bid panel.
-2. Select **Place Bid**.
-3. Observe the bid action and the enrollment setup surface.
+1. Enter <maximum> in the bid panel.
+2. Click the bid action.
 
 **Expected Results:**
 
-* The provider challenge or pending state appears on or near the bid action.
-* The bid is not shown as accepted until authorization is confirmed.
-* The enrollment setup modal does not open for the pending state.
+* The row's state shows on the listing's bid surface.
+* The card-linking setup does not open.
+* The bid does not show as accepted.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-h30 rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC4-1: Declined authorization leaves no accepted bid
+### grade10-site-auction-bid-payment-method-US1-TC4-1: A declined or unusable card is refused near the bid action
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -126,25 +151,40 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
 
+
 **Pre-conditions:**
 
-* A signed-in collector has a linked card and is viewing an open listing.
-* The provider declines the authorization or reports the linked method as unusable.
+* customer(signed in, card linked, no bid on <listing_1>) is on <listing_1 url>.
+* The card provider is mocked to answer the authorization with <provider answer>.
+
+**Test data:**
+
+| Provider answer |
+| --- |
+| Declined |
+| Payment method unusable |
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | An open listing taking bids, with no bid from this collector |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Enter a valid maximum in the listing bid panel.
-2. Select **Place Bid**.
-3. Read the bid action and the listing's accepted bid state.
+1. Enter <maximum> in the bid panel.
+2. Click the bid action.
+3. Change the linked card from the bid panel.
 
 **Expected Results:**
 
-* The bid action shows: Your card could not be authorized. Try another card.
-* No accepted bid or active authorization exists for the attempt.
-* The collector may change the card before the first bid on the listing.
+* Step 2: refusal copy shows near the bid action.
+* Step 2: no bid is accepted and no authorization stands.
+* Step 3: the card can be changed, as no bid is on <listing_1> yet.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-b9p rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC5-1: Provider failure explains that no card was authorized
+### grade10-site-auction-bid-payment-method-US1-TC5-1: A provider failure has its own copy and leaves nothing held
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -156,27 +196,40 @@
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
+
 
 **Pre-conditions:**
 
-* A signed-in collector has a linked card and is viewing an open listing.
-* The authorize call times out, fails at the provider, or is cancelled.
+* customer(signed in, card linked, no bid on <listing_1>) is on <listing_1 url>.
+* The authorization call is mocked to <failure>.
+
+**Test data:**
+
+| Failure |
+| --- |
+| Time out |
+| Fail at the provider |
+| Drop the network connection |
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | An open listing taking bids, with no bid from this collector |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Enter a valid maximum in the listing bid panel.
-2. Select **Place Bid**.
-3. Read the bid action and the listing's accepted bid state.
+1. Enter <maximum> in the bid panel.
+2. Click the bid action.
 
 **Expected Results:**
 
-* The bid action shows: Your bid did not go through. The card was not authorized.
-* No accepted bid or active authorization exists for the attempt.
+* Provider-failure copy shows near the bid action, distinct from the decline copy.
+* No bid is accepted and no authorization stands.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-d2o rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC6-1: Linked card carries to a new listing
+### grade10-site-auction-bid-payment-method-US1-TC6-1: A linked card carries over to a new listing
 
 **Classification:**
 
@@ -193,19 +246,24 @@
 
 **Pre-conditions:**
 
-* A collector linked a card on a prior listing.
-* The collector has not bid on the new open listing.
-* The collector is viewing the new listing.
+* customer(signed in, card linked on an earlier listing, no bid on <listing_2>) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids, not bid on by this collector |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Enter a valid maximum on the new listing.
-2. Select **Place Bid**.
+1. Enter <maximum> in the bid panel.
+2. Click the bid action.
 
 **Expected Results:**
 
-* Authorization starts with the linked card.
-* A new method selection is not required solely because the listing is different.
+* No card choice is asked for.
+* The authorization is taken on the linked card.
 
 ---
 
@@ -216,7 +274,7 @@
 **so that** I can raise my maximum without selecting a card again.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-x5g rev=1 covers=g10.auction-bid-payment-method.SC-7z5,g10.auction-bid-payment-method.SC-khw,g10.auction-bid-payment-method.SC-oa0,g10.auction-bid-payment-method.SC-1ff -->
-### grade10-site-auction-bid-payment-method-US2-TC1-1: Higher maximum reuses the listing authorization
+### grade10-site-auction-bid-payment-method-US2-TC1-1: A higher maximum raises the same authorization on the same card
 
 **Classification:**
 
@@ -233,24 +291,30 @@
 
 **Pre-conditions:**
 
-* A collector is leading an open listing with an active authorization at the current maximum.
-* The collector is viewing that listing.
-* A higher maximum is valid for the listing.
+* customer(signed in, leads <listing_3> at <prior maximum>) is on <listing_3 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids, led by this collector with one active authorization |
+| <prior maximum> | The collector's current maximum on <listing_3> |
+| <higher maximum> | A maximum above <prior maximum> |
 
 **Steps:**
 
-1. Select **Raise** in the listing bid panel.
-2. Enter the higher maximum.
-3. Confirm the raise.
+1. Enter <higher maximum> in the bid panel.
+2. Click the bid action.
+3. Read the collector's authorizations for <listing_3> at the card provider.
 
 **Expected Results:**
 
-* The existing card is used without a payment-method step.
-* The existing authorization covers the higher maximum.
-* The raised bid is accepted only after the raised authorization is confirmed.
+* Step 2: no card choice is asked for.
+* Step 2: the raise shows as accepted only once the raised authorization is confirmed.
+* Step 3: one active authorization, now for <higher maximum>, on the same card.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-hk4 rev=1 covers=g10.auction-bid-payment-method.SC-7z5,g10.auction-bid-payment-method.SC-khw,g10.auction-bid-payment-method.SC-oa0,g10.auction-bid-payment-method.SC-1ff -->
-### grade10-site-auction-bid-payment-method-US2-TC2-1: Rejected raise resolves without a pending bid
+### grade10-site-auction-bid-payment-method-US2-TC2-1: A refused raise keeps the prior maximum and blocks nothing after
 
 **Classification:**
 
@@ -262,28 +326,34 @@
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-02
 
 **Pre-conditions:**
 
-* A collector has an active authorization for an open listing at the prior maximum.
-* The collector is viewing that listing.
-* The provider refuses the raise because the existing authorization cannot be incremented.
+* customer(signed in, leads <listing_3> at <prior maximum>) is on <listing_3 url>.
+* The card provider is mocked to refuse raising the existing authorization.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids, led by this collector with one active authorization |
+| <prior maximum> | The collector's current maximum on <listing_3> |
+| <higher maximum> | A maximum above <prior maximum> |
 
 **Steps:**
 
-1. Select **Raise** in the listing bid panel.
-2. Enter a higher valid maximum.
-3. Confirm the raise.
-4. Submit a later valid bid attempt on the listing.
+1. Enter <higher maximum> in the bid panel.
+2. Click the bid action.
+3. Remove the provider mock, then enter <higher maximum> again.
+4. Click the bid action.
 
 **Expected Results:**
 
-* The raised bid is refused with: Your card could not be authorized. Try another card.
-* The prior maximum and active authorization remain unchanged.
-* The attempted raise is recorded as failed rather than pending.
-* Step 4 is not blocked by a pending-confirmation message from the refused raise.
+* Step 2: the decline refusal copy shows near the bid action.
+* Step 2: the maximum stays <prior maximum>; its authorization is unchanged.
+* Step 4: the attempt is not blocked by a pending raise.
 
 ---
 
@@ -294,7 +364,7 @@
 **so that** money is not held for a listing I cannot win.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-qo3 rev=1 covers=g10.auction-bid-payment-method.SC-lao,g10.auction-bid-payment-method.SC-33r -->
-### grade10-site-auction-bid-payment-method-US3-TC1-1: Outbid authorization cancels once
+### grade10-site-auction-bid-payment-method-US3-TC1-1: Being outbid cancels the hold once, capturing nothing
 
 **Classification:**
 
@@ -304,27 +374,37 @@
 * **Behaviour:** destructive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-03
 
 **Pre-conditions:**
 
-* Collector A has an accepted bid and active authorization on an open listing.
-* Collector B is viewing the same listing and can submit a higher valid maximum.
+* customer A leads <listing_4> with an active authorization.
+* customer B(signed in, card linked) is on <listing_4 url> in a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_4> | An open listing taking bids, led by customer A |
+| <customer B maximum> | A maximum above customer A's maximum |
 
 **Steps:**
 
-1. As collector B, submit the higher maximum.
-2. As collector A, reload the listing and open the bidding record.
-3. Deliver the same authorization outcome again.
+1. As customer B, place <customer B maximum>.
+2. Read customer A's authorization for <listing_4> at the card provider.
+3. Deliver the same cancellation outcome from the provider again.
+4. Read customer A's authorizations, bids and orders for <listing_4>.
 
 **Expected Results:**
 
-* Collector A's authorization is cancelled without capturing money.
-* No payment, order, or fulfilment outcome is created for Collector A.
-* The repeated outcome does not create a second state transition, hold, or accepted bid.
+* Step 2: customer A's authorization is cancelled; nothing is captured.
+* Step 4: one cancellation only; no second hold or accepted bid.
+* Step 4: no payment or order exists for customer A.
+
+---
 
 ## grade10-site-auction-bid-payment-method-US4: Collector understands the buyer-premium rate before bidding
 
@@ -334,7 +414,7 @@
 does not exist yet.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-lbz rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
-### grade10-site-auction-bid-payment-method-US-04-TC1-1: Active listing shows the rate without a premium amount
+### grade10-site-auction-bid-payment-method-US4-TC1-1: The bid panel shows the 20% rate and no premium amount
 
 **Classification:**
 
@@ -351,20 +431,29 @@ does not exist yet.
 
 **Pre-conditions:**
 
-* A collector is viewing an active auction listing before submitting a bid.
+* customer(signed in, no bid on <listing_5>) is on <listing_5 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_5> | An open HKD listing taking bids |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Read the bid panel.
+1. Read the bid panel, under the bid action.
+2. Enter <maximum> in the bid panel without placing it.
 
 **Expected Results:**
 
-* The panel says the buyer's premium rate is 20%.
-* The panel shows no calculated premium amount.
-* The panel shows no invoice total.
+* Step 1: the buyer's premium reads 20% of the winning bid, not behind a tooltip.
+* Step 2: no premium amount and no invoice total show.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-nvs rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
-### grade10-site-auction-bid-payment-method-US-04-TC2-1: Supported currencies use the same disclosed rate
+### grade10-site-auction-bid-payment-method-US4-TC2-1: The rate reads 20% in every supported currency
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -376,27 +465,35 @@ does not exist yet.
 * **Suites:** regression
 * **Layer:** unit
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-04
 
 **Pre-conditions:**
 
-* Active auction listings exist in USD, HKD, and JPY.
+* The bid panel's premium disclosure is rendered for an open listing in <currency>.
+
+**Test data:**
+
+| Currency | Disclosure |
+| --- | --- |
+| HKD | 20% of the winning bid |
+| USD | 20% of the winning bid |
+| JPY | 20% of the winning bid |
 
 **Steps:**
 
-1. Read the bid panel for each listing.
+1. Render the premium disclosure for <currency>.
 
 **Expected Results:**
 
-* Each panel shows 20%.
-* None shows a currency-specific premium amount.
-
-## Raised
-
-- The latest product reading confirms that the bid panel shows the fixed 20% rate only; the calculated premium amount remains invoice-only.
+* It reads the row's disclosure.
+* No currency amount appears in it.
 
 ## Settled
+
+- The bid panel shows the fixed 20% rate only; the calculated premium amount is invoice-only.
+- `grade10-site-auction-bid-payment-method-US-04-TC1` is `grade10-site-auction-bid-payment-method-US4-TC1`: renamed to the compact id form while still draft.
+- `grade10-site-auction-bid-payment-method-US-04-TC2` is `grade10-site-auction-bid-payment-method-US4-TC2`: renamed to the compact id form while still draft.
 
 - Incremental and extended authorization are provider eligibility requests; the provider's returned capture deadline is authoritative for the authorization lifecycle.
 

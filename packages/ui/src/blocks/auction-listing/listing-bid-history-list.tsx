@@ -7,7 +7,14 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
+import { CrownSimple, Info } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   type ActivityTimeCopy,
@@ -21,6 +28,10 @@ import "./listing-bid-history-list.css";
 type ListingBidHistoryListCopy = {
   you?: string;
   empty?: string;
+  /** Accessible name for the closed sold winning-row crown. */
+  winner?: string;
+  /** Explains why an equal-price bid is not the accepted (earlier) one. */
+  samePricePriorityTip?: string;
 };
 
 type ListingBidHistoryListProps = {
@@ -100,6 +111,27 @@ function BidHistoryRowContent({
           weight={recessed ? "regular" : "medium"}
         >
           {formatMoney(row.amountMinor, currency, { locale })}
+          {row.samePricePriority && copy.samePricePriorityTip ? (
+            <Tooltip>
+              <TooltipTrigger
+                aria-label={copy.samePricePriorityTip}
+                className="relative inline-flex shrink-0 cursor-pointer outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+                closeOnClick={false}
+              >
+                <Info aria-hidden size={12} />
+              </TooltipTrigger>
+              <TooltipContent>{copy.samePricePriorityTip}</TooltipContent>
+            </Tooltip>
+          ) : null}
+          {row.isWinner ? (
+            <span
+              aria-label={copy.winner ?? "Winner"}
+              className="inline-flex shrink-0 text-primary"
+              role="img"
+            >
+              <CrownSimple aria-hidden size={12} weight="fill" />
+            </span>
+          ) : null}
         </Text>
         {row.isViewer ? (
           <Badge size="sm" variant="outline">
@@ -260,31 +292,33 @@ function BidHistoryEntrances({
   }
 
   return (
-    <VStack className="w-full" gap="sm">
-      {heading ? (
-        <Text className="uppercase tracking-wide" size="sm" tone="secondary">
-          {heading}
-        </Text>
-      ) : null}
-      <VStack className="w-full divide-y divide-border" gap="none">
-        {rows.map((row, index) => (
-          <BidHistoryRowItem
-            activityTimeCopy={activityTimeCopy}
-            animateEnter={row.id === enteringId}
-            copy={copy}
-            currency={currency}
-            entranceMode={entranceMode}
-            key={row.id}
-            locale={locale}
-            nowMs={nowMs}
-            recessed={index > 0}
-            row={row}
-            timeZone={timeZone}
-            useEnterWrapper={enteredIds.has(row.id)}
-          />
-        ))}
+    <TooltipProvider>
+      <VStack className="w-full" gap="sm">
+        {heading ? (
+          <Text className="uppercase tracking-wide" size="sm" tone="secondary">
+            {heading}
+          </Text>
+        ) : null}
+        <VStack className="w-full divide-y divide-border" gap="none">
+          {rows.map((row, index) => (
+            <BidHistoryRowItem
+              activityTimeCopy={activityTimeCopy}
+              animateEnter={row.id === enteringId}
+              copy={copy}
+              currency={currency}
+              entranceMode={entranceMode}
+              key={row.id}
+              locale={locale}
+              nowMs={nowMs}
+              recessed={index > 0}
+              row={row}
+              timeZone={timeZone}
+              useEnterWrapper={enteredIds.has(row.id)}
+            />
+          ))}
+        </VStack>
       </VStack>
-    </VStack>
+    </TooltipProvider>
   );
 }
 

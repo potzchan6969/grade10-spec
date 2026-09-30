@@ -38,6 +38,10 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Picker card title: company name for a company address; recipient first and last name for a personal address
   - Picker card body: street, city or region, and country only — no postal code and no phone
   - Order summary addresses: Delivery and Billing show company when company, recipient name, phone, and full address including postal
+- Country or region picker
+  - Complete A–Z catalogue: delivery Add Address lists every country and region, not a short designated set
+  - Searchable filter: typing in Country/Region narrows the list to matching names
+  - Field label Country/Region: the picker reads Country/Region
 - Address snapshots
   - The confirmed billing address is locked on the order
   - Later account-address changes do not rewrite the order
@@ -82,6 +86,14 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question; Copy Message stays footer-only
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
+- Order page
+  - Sections: Order Information, Collection Method, Order Status timeline, Lots.
+  - By status: address form, invoice with Pay Now, or read-only detail.
+- Delivery address form
+  - Address form: required and optional fields, errors on empty required fields.
+- Card payment
+  - Unfinished session: says so and leaves the invoice payable.
+  - Confirming: a completed session reads Confirming payment until paid.
 ## Requirements
 ### Requirement: Invoice fields
 
@@ -2166,6 +2178,63 @@ Confirming with them empty SHALL NOT be refused.
 - **WHEN** a winner is on Add Address on Winner Order setup
 - **THEN** Apt./Suite/Building is not shown
 
+### Requirement: Delivery Add Address Country/Region picker
+
+On Winner Order setup, delivery Add Address names the destination country or
+region through a Country/Region picker.
+
+**Label** — The field SHALL read Country/Region.
+
+**Catalogue** — The Country/Region popup SHALL list every country and
+region in A–Z order, not a short designated set.
+
+**Search** — While the Country/Region picker is open, typing SHALL filter the
+list to names that match the typed query.
+
+**No match** — A typed query that matches no catalogue name SHALL leave the
+list empty; confirming without a selected catalogue country or region SHALL
+be refused as an empty Country/Region.
+
+**Empty country or region** — Confirming with Country/Region empty SHALL be
+refused with a field refusal beside Country/Region, as for other empty
+required address fields.
+
+#### Scenario: winner-order-SC-174 - Delivery Add Address lists every country and region
+**Serves:** winner-order-US-01 - choosing where the lot ships on delivery Add Address
+
+- **GIVEN** a winner on Winner Order setup delivery Add Address
+- **WHEN** the winner opens the Country/Region picker
+- **THEN** the popup lists every country and region in A–Z order
+
+#### Scenario: winner-order-SC-175 - Typing filters the list to matching names
+**Serves:** winner-order-US-01 - finding a country or region by search on delivery Add Address
+
+- **GIVEN** a winner with the Country/Region picker open on delivery Add Address
+- **WHEN** the winner types a query that matches one or more catalogue names
+- **THEN** the list shows only names that match that query
+- **AND** names that do not match are not shown
+
+#### Scenario: winner-order-SC-178 - A query with no match leaves the list empty
+**Serves:** winner-order-US-01 - searching for a country or region that is not in the catalogue
+
+- **GIVEN** a winner with the Country/Region picker open on delivery Add Address
+- **WHEN** the winner types a query that matches no catalogue name
+- **THEN** the list shows no country or region options
+
+#### Scenario: winner-order-SC-176 - The field reads Country/Region
+**Serves:** winner-order-US-01 - naming the destination on delivery Add Address
+
+- **WHEN** a winner is on Winner Order setup delivery Add Address
+- **THEN** the picker field label reads Country/Region
+
+#### Scenario: winner-order-SC-177 - An empty Country/Region is refused
+**Serves:** winner-order-US-01 - confirming delivery Add Address without a country or region
+
+- **GIVEN** a winner on delivery Add Address with Country/Region empty
+- **WHEN** the winner confirms the address
+- **THEN** Grade10 refuses applying the address
+- **AND** a field refusal shows beside Country/Region
+
 ### Requirement: Winner Order renders a refunded order as a retained record
 
 When an order is Refunded, Winner Order SHALL show Refunded as the order and
@@ -2330,3 +2399,146 @@ its absence from the order page remain governed by
 - **AND** the third receipt still shows Previous Payments 50000,
   Current Payment Received 10000 and Remaining Balance Due 40000
 - **AND** no issued receipt is reissued
+
+### Requirement: The auction order page shows its sections by status
+
+The auction order page SHALL show these sections, in this order.
+
+| Section | Carries |
+| --- | --- |
+| Order Information | Order No., Auction, Currency, Date (the lot's close), Order Status, Invoice Status |
+| Collection Method | Delivery Method (always Delivery), Name, Contact Tel, Email (the account's), Address |
+| Order Status | Each order status the order has reached, in the order reached, each with the date and time it was reached |
+| Lots | Key image, title and winning bid of the order's lot |
+
+Invoice Status SHALL read one of these labels. The label **Paid Status** SHALL
+NOT appear.
+
+| Invoice status | Label |
+| --- | --- |
+| `not_issued` | Not issued |
+| `pending` | Pending |
+| `paid` | Paid |
+| `expired` | Expired |
+| `cancelled` | Cancelled |
+| `refunded` | Refunded |
+
+What the page offers SHALL follow the order status.
+
+| Order status | The page offers |
+| --- | --- |
+| Awaiting Setup | The address form in Collection Method, per "The address form refuses empty required fields" |
+| Preparing Invoice | The confirmed address, per "The delivery address is confirmed before payment"; no invoice and no way to pay |
+| Pending Payment | The full invoice with every line, per "Invoice fields", and **Pay Now**; the confirmed address |
+| Preparing Shipment, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
+
+An invoice whose status is `expired` SHALL still be presented under the
+derived Pending Payment order status, per `revise-auction-winner-invoicing`,
+with its full invoice and **Contact Us** instead of Pay Now. The page SHALL
+not derive a second Expired order status.
+
+#### Scenario: winner-order-SC-139 - The page shows its four sections
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
+
+- **GIVEN** an auction order in any status
+- **WHEN** the winner opens it
+- **THEN** the page shows Order Information, Collection Method, Order Status
+  and Lots, in that order
+
+#### Scenario: winner-order-SC-140 - Invoice Status replaces Paid Status
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** an auction order whose invoice status is `paid`
+- **WHEN** the winner reads Order Information
+- **THEN** it shows Invoice Status as Paid
+- **AND** no Paid Status label appears
+
+#### Scenario: winner-order-SC-141 - Each status step carries its time
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
+
+- **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
+  Pending Payment and Preparing Shipment
+- **WHEN** the winner reads Order Status
+- **THEN** it lists those four statuses in the order reached
+- **AND** each carries the date and time it was reached
+
+The Order Status timeline SHALL be supplied by the authenticated auction-order
+read model. Each item SHALL contain the derived order status and the
+authoritative time that status was reached; the page SHALL NOT reconstruct
+timestamps in the browser from the current invoice, fulfilment or payment
+session state.
+
+#### Scenario: winner-order-SC-53 - The timeline uses authoritative status times
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
+
+- **GIVEN** the auction-order read model returns the order statuses reached
+  and a recorded timestamp for each
+- **WHEN** the winner reads Order Status
+- **THEN** the page shows each returned timestamp for its matching status
+- **AND** it does not replace a returned timestamp with the page-load time
+
+#### Scenario: winner-order-SC-44 - An unpaid order shows the invoice and Pay Now
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** an auction order whose status is Pending Payment
+- **WHEN** the winner opens it
+- **THEN** the page shows every invoice line and Pay Now
+- **AND** the confirmed delivery address and the lot
+
+#### Scenario: winner-order-SC-45 - An order preparing its invoice offers no payment
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
+
+- **GIVEN** an auction order whose status is Preparing Invoice
+- **WHEN** the winner opens it
+- **THEN** the page shows the confirmed address
+- **AND** offers no invoice and no Pay Now
+
+### Requirement: An unfinished card payment leaves the invoice payable
+
+Pay Now SHALL start a hosted card payment session for the current invoice. Its
+outcome SHALL read as follows.
+
+| Session outcome | The winner sees | Order |
+| --- | --- | --- |
+| Completed | **Confirming payment** until Grade10 records the invoice `paid` | Preparing Shipment once paid |
+| Timed out | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Abandoned or cancelled by the winner | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Declined | The refusal, per "The bid-time hold is released, never captured" | Stays Pending Payment |
+
+Pay Now after an unfinished session SHALL start a fresh session. An unfinished
+session SHALL NOT change the invoice, its amount or its deadline. Grade10 SHALL
+NOT show the order as paid before it records the invoice `paid`.
+
+#### Scenario: winner-order-SC-49 - A timed-out payment session stays payable
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a winner whose payment session for a Pending Payment order timed out
+- **WHEN** they return to the order
+- **THEN** the page says payment was not completed
+- **AND** the order is still Pending Payment with Pay Now available
+
+#### Scenario: winner-order-SC-50 - Pay Now after an unfinished session starts fresh
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a Pending Payment order whose last payment session was abandoned
+- **WHEN** the winner selects Pay Now
+- **THEN** a new payment session starts for the same invoice amount
+
+#### Scenario: winner-order-SC-51 - A completed session confirms before reading Preparing Shipment
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a winner whose hosted card session completed but whose
+  authenticated auction-order read model has not yet recorded invoice status
+  `paid`
+- **WHEN** they return to the order
+- **THEN** the page shows Confirming payment
+- **AND** the order does not yet read Preparing Shipment
+
+#### Scenario: winner-order-SC-52 - A recorded payment reads Preparing Shipment
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** an order whose authenticated auction-order read model returns
+  invoice status `paid` and fulfilment status `unfulfilled`
+- **WHEN** the winner opens it
+- **THEN** its status is Preparing Shipment
+

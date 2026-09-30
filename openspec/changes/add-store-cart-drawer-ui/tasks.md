@@ -40,7 +40,7 @@ contract change rather than hiding it in the application adapter.
 - [x] 4.3 Reset disclosure state and suppress prior read results on close, scope changes, cart edits, review refetches, and optional-read failures; prove that only the latest successful reviewed basket supplies tender context for `grade10-site-store-cart-drawer-SC-18` and `grade10-site-store-cart-drawer-SC-19` in focused hook and shell tests.
 - [x] 4.4 Verify the affected Grade10 frontend with the focused Cart Drawer and checkout-hook tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`; do not run `pnpm run test:backend` because this group adds no backend files.
 
-## 5. Interactive Cart Drawer points (grade10)
+## 5. Interactive Cart Drawer points (grade10) (owner: @kinisworking)
 
 This user-approved increment supersedes Group 4's read-only points behavior.
 Group 5 depends on Group 7 landing and its shared package being available.
@@ -48,20 +48,68 @@ Preserve completed task ids and existing promo editing; this points increment
 neither adds nor removes promo callbacks. Existing Group 3.2
 waits for archive and is outside this implementation increment.
 
-- [ ] 5.1 Make `grade10-site-store-cart-drawer-SC-20`, `grade10-site-store-cart-drawer-SC-23`, and `grade10-site-store-cart-drawer-SC-24` pass by exposing accepted completion, pending and failure from `useCartTender`, preserving existing callers and coupon choice. Include focused hook tests.
-- [ ] 5.2 Make `grade10-site-store-cart-drawer-SC-17` and `grade10-site-store-cart-drawer-SC-20` through `grade10-site-store-cart-drawer-SC-26` pass in the host with Apply, Use max, Remove, current quotes, persisted choice, pending guards and stale-result rejection. Pass Group 7's `tenderPending` across quote and persistence for points and existing promo actions. Include focused integration tests and supported-locale copy checks.
-- [ ] 5.3 Make `grade10-site-store-cart-drawer-SC-27` pass through reload and checkout handoff; preserve the selected code, re-quote and submit accepted spendPoints. Include checkout integration tests.
-- [ ] 5.4 Verify focused affected tests, repository typecheck, lint, test and build; compare the integrated drawer against the Default story at narrow and desktop widths with keyboard and locale checks. Record unavailable browser verification separately from passing local checks.
+- [x] 5.1 Make `grade10-site-store-cart-drawer-SC-20`, `grade10-site-store-cart-drawer-SC-23`, and `grade10-site-store-cart-drawer-SC-24` pass by exposing accepted completion, pending and failure from `useCartTender`, preserving existing callers and coupon choice. Include focused hook tests.
+- [x] 5.2 Make `grade10-site-store-cart-drawer-SC-17` and `grade10-site-store-cart-drawer-SC-20` through `grade10-site-store-cart-drawer-SC-26` pass in the host with Apply, Use max, Remove, current quotes, persisted choice, pending guards and stale-result rejection. Pass Group 7's `tenderPending` across quote and persistence for points and existing promo actions. Include focused integration tests and supported-locale copy checks.
+- [x] 5.3 Make `grade10-site-store-cart-drawer-SC-27` pass through reload and checkout handoff; preserve the selected code, re-quote and submit accepted spendPoints. Include checkout integration tests.
+- [x] 5.4 Verify focused affected tests, repository typecheck, lint, test and build; compare the integrated drawer against the Default story at narrow and desktop widths with keyboard and locale checks. Record unavailable browser verification separately from passing local checks.
 
-## 6. Interactive points product record (grade10-spec)
+## 6. Interactive points product record (grade10-spec) (owner: @kinisworking)
 
 Follows Group 5 delivery; Group 7 is the shared prerequisite, not a later phase.
 
-- [ ] 6.1 Keep the Cart Points and Checkout product record aligned with Group 5 delivery; validate the change, feature suite and manual. Preserve construction marks until deployment acceptance; do not archive as part of this increment.
+- [x] 6.1 Keep the Cart Points and Checkout product record aligned with Group 5 delivery; validate the change, feature suite and manual. Preserve construction marks until deployment acceptance; do not archive as part of this increment.
 
-## 7. Shared pending tender contract (grade10-spec)
+## 7. Shared pending tender contract (grade10-spec) (owner: @kinisworking)
 
 Prerequisite for Group 5; appended to preserve existing task ids.
 
-- [ ] 7.1 Make `shared-ui-store-cart-SC-37` through `shared-ui-store-cart-SC-39` pass with optional `tenderPending` on `CartDrawerProps` and `CartDrawerFooterProps`, forwarding it through the compound and disabling existing tender inputs/actions and Checkout, including an open promo sheet. Preserve callback absence guards and existing appearance; add focused component tests and pending stories in `cart-drawer.stories.tsx` and `cart-drawer-footer.stories.tsx`.
-- [ ] 7.2 Verify the affected shared component tests, typecheck and UI Storybook build; keep the shared Tender Actions product record aligned and validate this change and its suites before Group 5 consumes the shared package.
+- [x] 7.1 Make `shared-ui-store-cart-SC-37` through `shared-ui-store-cart-SC-39` pass with optional `tenderPending` on `CartDrawerProps` and `CartDrawerFooterProps`, forwarding it through the compound and disabling existing tender inputs/actions and Checkout, including an open promo sheet. Preserve callback absence guards and existing appearance; add focused component tests and pending stories in `cart-drawer.stories.tsx` and `cart-drawer-footer.stories.tsx`.
+- [x] 7.2 Verify the affected shared component tests, typecheck and UI Storybook build; keep the shared Tender Actions product record aligned and validate this change and its suites before Group 5 consumes the shared package.
+
+## 8. Checkout creation in the drawer (grade10) (owner: @sean)
+
+Folded in from `move-checkout-into-cart-drawer` (2026-09-29): `grade10-site/
+store/cart-drawer` has no durable spec yet, so that change's requirements
+landed here rather than under a second owner. Supersedes Group 2's task 2.5
+routing of Checkout to `/checkout` — `2.5` is left as the historical record
+of what shipped then; this group replaces that wiring, not that task's text.
+Independent of Groups 5–7 (points/promo editing is unaffected by this scope).
+
+- [x] 8.1 In `CartDrawerHost`, replace `handleCheckout`'s navigation to
+  `ROUTES.checkout` with a call to `useCreateCheckout` carrying the drawer's
+  current reviewed `items`, accepted `quoted` tender (coupon, points) and
+  `deviceId`. On success, show the shared component's `checkoutRedirecting`
+  state and hand off to the returned hosted URL; the drawer performs no
+  second live re-read of its own. Make `grade10-site-store-cart-drawer-SC-15`
+  pass.
+- [x] 8.2 Handle a checkout-creation refusal: when a line is named, show it
+  in the drawer and offer retry with no order created; when no line is
+  named, restore Checkout and show `checkoutFailed`. Make
+  `grade10-site-store-cart-drawer-SC-28` and
+  `grade10-site-store-cart-drawer-SC-29` pass.
+- [x] 8.3 Add the verification-bar gate: when the reviewed basket's goods
+  value meets or exceeds the bar (12000000 HKD minor units) and the member's
+  standing is not verified, replace the Checkout action's area with the same
+  threshold-and-link presentation `CheckoutPage`'s `VerifyPanel` renders
+  today (linking to `addressOf("profile")` when `config.gates.profile` is
+  set); a verified member or a basket under the bar proceeds without the
+  gate. Start no identity check from the drawer itself. Make
+  `grade10-site-store-cart-drawer-SC-30` through
+  `grade10-site-store-cart-drawer-SC-33` pass.
+- [x] 8.4 Remove `src/routes/checkout.tsx`, `src/pages/checkout/
+  CheckoutPage.tsx`, the `/checkout` route and surface entry from
+  `src/surfaces.ts` and `src/routes.ts`, and `e2e/tests/store/
+  checkout.spec.ts`, folding its coverage into cart-drawer tests. Confirm no
+  remaining reference to `addressOf("checkout")` or the `checkout` surface.
+- [x] 8.5 Verify the affected Grade10 frontend with focused cart-drawer,
+  route and e2e tests, `pnpm run typecheck`, `pnpm run lint`, and
+  `pnpm run build`; do not run `pnpm run test:backend` because this group
+  adds no backend files.
+
+## 9. Checkout product record (grade10-spec)
+
+- [x] 9.1 Mark the Cart Drawer and Checkout PRDs for direct checkout
+  creation from the drawer — `docs/prds/products/grade10-site/store/cart.md`
+  (`Carried to checkout` rule, `Checkout` section, `Checkout creation`
+  decision row) and `docs/prds/products/grade10-site/store/checkout.md`
+  (`Integration readiness`) — and validate with `pnpm check:manual`.

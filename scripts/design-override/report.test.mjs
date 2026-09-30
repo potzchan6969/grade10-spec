@@ -42,7 +42,7 @@ function skipped(repo, message, options) {
   return repo.head();
 }
 
-function report(repo, before, after) {
+function report(repo, before, after, extraEnv = {}) {
   const done = spawnSync(
     "node",
     ["scripts/design-override/report.mjs", before, after],
@@ -54,6 +54,7 @@ function report(repo, before, after) {
         PATH: `${repo.dir}:${process.env.PATH}`,
         GH_DIR: repo.dir,
         GITHUB_REPOSITORY: "9gag/store",
+        ...extraEnv,
       },
     },
   );
@@ -92,6 +93,32 @@ test("shared-design-sync-design-override-SC-40 - an override reaching main is to
     posts[0],
     /- <div className="p-4" \/>\n\+ <div className="p-6" \/>/,
   );
+});
+
+test("a merge on main is read on a runner with no git identity", () => {
+  const repo = store();
+  const before = repo.head();
+  repo.must(["switch", "-q", "-c", "side"]);
+  repo.write("README.md", "side\n");
+  skipped(repo, "docs: side");
+  repo.must(["switch", "-q", "main"]);
+  repo.write("NOTES.md", "main\n");
+  skipped(repo, "docs: main");
+  repo.must([
+    "merge",
+    "-q",
+    "--no-ff",
+    "--no-verify",
+    "-m",
+    "Merge side",
+    "side",
+  ]);
+  const { status, err } = report(repo, before, repo.head(), {
+    GIT_CONFIG_GLOBAL: "/dev/null",
+    GIT_AUTHOR_NAME: "",
+    GIT_COMMITTER_NAME: "",
+  });
+  assert.equal(status, 0, err);
 });
 
 test("shared-design-sync-design-override-SC-41 - a commit that skipped the check is told and stays", () => {

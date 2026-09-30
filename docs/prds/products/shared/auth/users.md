@@ -3,6 +3,7 @@ title: Users
 spec: shared/auth/users
 audience: operator
 order: 5
+reviewed: 2026-09-29
 ---
 
 Only an operator holding the directory grant sees the account list. Search
@@ -13,10 +14,19 @@ caller chooses order (newest first when none is asked). A banned account stays
 in the directory, marked, rather than vanishing — a person nobody can find is a
 person nobody can unban.
 
+## Ban and Unban
+
 A ban is the blunt instrument, and it is meant to be: it ends every session that
 account holds, refuses new sign-ins, and stops money moving. An unban restores
 sign-in. Moves refused outright: banning yourself, and banning any account that
 holds `admin` — peers included, not only support or the last admin.
+
+- **Closes within 70 seconds** — a ban stops answering signed in on every
+  read within 70 seconds, not only on a mutation or an elevated call, rather
+  than after the five minutes a browse page's cached copy of the session
+  would otherwise last.
+
+## Role Changes
 
 Role changes are made by an operator holding the set-role grant, from the same
 directory — their own account included. Clearing every operator role leaves a
@@ -24,10 +34,39 @@ plain user. An operator cannot strip `admin` from another admin. An admin may
 remove their own `admin` when another admin remains; the last admin keeps
 `admin`.
 
+- **Reflects within 70 seconds** - an ordinary, non-elevated read of the
+  person's permissions answers the new roles within 70 seconds, not only an
+  elevated call, rather than after the five minutes a browse page's cached
+  copy of the session would otherwise last.
+
 Everything on this page is *what an operator may do*. What the directory
 components render is the console's own capability, and each of these moves lands
 on the identity trail. Grade10's page that uses this read is the
 [Users access desk](/p/grade10-admin/console/user-directory).
+
+## Create Account
+
+- **Create** — an operator holding `user:create` may create a passwordless
+  Auth account with name, email, and roles from the closed set; a duplicate
+  email is refused; creating with a non-`user` role also requires
+  `user:set-role`; no loyalty enroll or invite mail
+- ❓ **Email verification on create** — what verification standing a newly
+  created Auth account starts with (unverified until they prove the address,
+  or verified because an operator typed it) — @rita-liu
+
+:::detail{title="Product decisions" for="pm"}
+| Decision | Choice |
+| --- | --- |
+| What create buys | Auth + roles only — simulate ordinary account creation then an elevated grant; not Override's loyalty enroll or opening points |
+| Who may create | Offer Create only with `user:create`; a non-`user` role also needs `user:set-role` |
+| Password | Passwordless — no password field |
+| Tell the new person | Silent create — no invite or magic-link email |
+| Empty roles | Leave the account as `user` only |
+| Name and email | Required; Confirm stays disabled until both are present after trim |
+| Browse reads after a ban or role change | Closed within 70 seconds too, instead of the requirement naming a five-minute lag for browse pages |
+| Which admin moves close within 70 seconds | Ban, revoke and role change. Account deletion is not a capability here yet, so a deleted account's cached read keeps its five minutes until a change specifies deletion |
+| Closing bound | 70 seconds everywhere: the session store's one-minute spread plus a 10-second margin. Not "the next read", which only the location that made the change can keep; under a minute needs sessions off the edge session store |
+:::
 
 :::callout{kind="note"}
 Auction bidder bans are a separate thing with a separate switch. The auction

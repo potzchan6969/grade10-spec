@@ -1,8 +1,11 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import type { InvoicePdfData } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 import { PdfPreview } from "./pdf-preview";
+
+const { auctionInvoicePdf } = getMessages("grade10", "en");
 
 const SAMPLE_INVOICE = {
   listingTitle: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
@@ -45,29 +48,7 @@ const SAMPLE_INVOICE = {
   ],
   issuerName: "Grade10",
   issuerEmail: "support@grade10.com",
-  copy: {
-    documentTitle: "Invoice",
-    billToHeading: "Bill To",
-    shipToHeading: "Ship To",
-    descriptionLabel: "Description",
-    amountLabel: "Amount",
-    invoiceNumberLabel: "Invoice number",
-    sentAtLabel: "Date of issue",
-    paymentDeadlineLabel: "Date due",
-    paymentMethodLabel: "Payment method",
-    bankDetailsHeading: "Bank details",
-    swiftLabel: "SWIFT",
-    fpsLabel: "FPS",
-    hkLocalTransferLabel: "HK local transfer",
-    beneficiaryLabel: "Beneficiary",
-    swiftBicLabel: "SWIFT/BIC",
-    accountIbanLabel: "Account/IBAN",
-    fpsIdLabel: "FPS ID",
-    bankAndCodeLabel: "Bank & code",
-    accountNoLabel: "Account no.",
-    bankReferenceNoteLabel:
-      "Enter this reference in your bank app's Memo or Remarks field. Missing it delays verification. Quote this reference on your transfer:",
-  },
+  copy: { ...auctionInvoicePdf.document, ...auctionInvoicePdf.invoice },
 } as const;
 
 /** Same order, its Payment Processing Fee showing Free per `winner-order/spec.md`'s bank-transfer pricing, and the Bank details section a bank-transfer invoice carries. */

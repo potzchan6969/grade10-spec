@@ -3,7 +3,7 @@ title: Auction Service
 order: 1
 ---
 
-One auction backend (`apps/backend/grade10/auction`) runs every auction for all storefronts: a product unit is auctioned once, the grade10 site and the zzz storefront display the same live auction, and their users bid against each other. Admins manage the catalog and post-auction fulfillment. Payment is a Stripe authorization hold per bid, captured from the winner. Builds on [Account Data](/platform/account-data) (data ownership) and [Multi-Product Assembly](/platform/multi-product) (the isolation this service is the recorded exception to).
+One auction backend (`apps/backend/grade10/auction`) runs every auction for all storefronts: a product unit is auctioned once, the grade10 site and the zzz storefront display the same live auction, and their users bid against each other. Admins manage the catalog and post-auction fulfillment. Payment is a Stripe authorization hold per bid; 🚧 the winner pays an invoice by card checkout or bank transfer, and the hold is released. Builds on [Account Data](/platform/account-data) (data ownership) and [Multi-Product Assembly](/platform/multi-product) (the isolation this service is the recorded exception to).
 
 ## Sharing and trust
 
@@ -435,10 +435,11 @@ Two accounts — one per storefront: the receiver of the winner's payment is the
 
 ### Grants split by what an action can cost
 
-- `auction: ["read", "catalog", "operate", "reserve", "moderate", "settle"]` in `@grade10/auth-contracts`'s rbac vocabulary — split by cost, not by read/write
+- `auction: ["read", "catalog", "operate", "reserve", "moderate", "settle", "payment", "shipment", "refund"]` in `@grade10/auth-contracts`'s rbac vocabulary — split by cost, not by read/write
 - `reserve` is the only grant exposing a seller's secret floor, and it is checked in every procedure that could name one: setting it, creating a listing, and opening a sale whose policy every listing inherits
 - `settle` is the only one that moves money: capture retry, release retry, the hold listing they are called from, and cancelling a live listing or sale
 - `moderate` is neither catalogue nor money and holds `bidders.list`, `bidders.ban` and `bidders.unban` alone
+- 🚧 `payment`, `shipment` and `refund` split the won order's work: invoicing and recording money, dispatch and delivery, the one refund
 - `staff` holds `read`, `catalog` and `operate`; `admin` holds everything
 - A test reads the grants off the built router, so a procedure added without one, or with a permission the vocabulary never declared, fails rather than quietly locking an admin out
 

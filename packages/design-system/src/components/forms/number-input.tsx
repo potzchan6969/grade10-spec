@@ -80,7 +80,7 @@ function NumberInput({
         prefix ? (
           <span
             data-slot="input-prefix"
-            className="shrink-0 text-sm text-secondary-foreground"
+            className="shrink-0 text-base text-secondary-foreground md:text-sm"
           >
             {prefix}
           </span>
@@ -100,7 +100,7 @@ function NumberInput({
       {unit ? (
         <span
           data-slot="input-unit"
-          className="shrink-0 text-sm text-secondary-foreground"
+          className="shrink-0 text-base text-secondary-foreground md:text-sm"
         >
           {unit}
         </span>

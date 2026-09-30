@@ -11,9 +11,10 @@ const PINNED = [
   "core.quotePath=false",
 ];
 
-function run(args, input) {
+function run(args, input, env) {
   const done = spawnSync("git", [...PINNED, ...args], {
     encoding: "utf8",
+    env: env && { ...process.env, ...env },
     input,
     maxBuffer: 1 << 28,
   });
@@ -21,8 +22,8 @@ function run(args, input) {
   return done;
 }
 
-export function git(args, { input, ok = [0] } = {}) {
-  const done = run(args, input);
+export function git(args, { input, env, ok = [0] } = {}) {
+  const done = run(args, input, env);
   if (!ok.includes(done.status)) {
     throw new Error(
       `could not read git: git ${args.join(" ")}\n${done.stderr.trim()}`,

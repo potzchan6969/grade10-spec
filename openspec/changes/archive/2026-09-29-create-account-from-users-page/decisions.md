@@ -1,0 +1,54 @@
+## Goals
+
+- Production Users can create a passwordless Auth account with name, email, and
+  roles from the closed set — including elevated roles such as `admin` — for
+  someone who has never signed in
+- Create simulates ordinary account creation plus a role grant, not Override's
+  loyalty provision
+- Create is offered only when the operator holds `user:create`; choosing a
+  non-`user` role also requires `user:set-role`
+- A duplicate email is refused on the create form before review, with a way to open the existing account's panel to change roles
+- After a successful create, the new account's panel opens
+
+## Non-Goals
+
+- Loyalty enroll or opening points
+- Retiring Override's Create user and member
+- Sending an invite or magic-link email on create
+- A password field
+- Wiring ZZZ in this change
+- Impersonation (separate worktree)
+
+## Decisions
+
+| Q | Asked | Decided | Instead of |
+| --- | --- | --- | --- |
+| Q1 | What does create buy on Users — Auth + roles, or Override's full provision (Auth + Loyalty + points)? | Simulate ordinary account creation then an elevated grant. Verified: ordinary Auth create does not enroll Loyalty or set opening points, so Users create is Auth + roles only. | Override's Create user and member pipeline (enroll + opening points) on the access desk |
+| Q2 | Who may create, and when is Create shown? | Clarified by Q10. | Gating Create on `user:set-role` alone, or offering it without `user:create` |
+| Q3 | Roles at create time? | Pick roles in the create dialog from the closed set, including elevated roles such as `admin`, under the same refusals as set-role. | Create as plain `user` only, then set roles later in the panel |
+| Q4 | Email already taken? | Refuse with a clear message that steers the operator to change roles on the existing account's panel (open-existing closes create and opens that panel). Never a second Auth row. | Refuse and leave the operator to search alone; invent a roles-only dialog |
+| Q5 | After a successful create? | Open the new account's panel, same as picking a row. | Stay on the list with no panel open |
+| Q6 | Override after this ships? | Leave Override's create-and-member flow as the non-prod loyalty tool. | Strip create from Override in this change |
+| Q7 | Brand scope? | Grade10 Users page + shared Auth create rules; shared directory components grow if needed; ZZZ adopts when it chooses. | Wiring ZZZ in this change |
+| Q8 | Confirm create shape given the code? | Auth account with name, email, and roles only — no Loyalty enroll, no opening points. Matches "user creates an account, then is granted elevated." Site use after magic link or Google is confirmed OK without loyalty enroll. | Full Override provision for admin creates |
+| Q9 | Which dialog — Override's `CreateMemberDialog`, a mode flag on it, or a slim Auth-only dialog? | A separate slim create dialog: name, email, and role(s). Reuse field patterns and Auth `createUser`, not `ProvisionMember`. Do not add a mode flag to `CreateMemberDialog`. | A `mode` flag on Override's CreateMemberDialog that hides enroll and points |
+| Q10 | Show Create on `user:create` or on `user:set-role`? | Offer Create only when the session holds `user:create`. Choosing a non-`user` role also requires `user:set-role`. Do not gate the button on `user:set-role` alone. (`user:create` is already in the roles vocabulary via `fix-roles-spec-divergence`; this change does not restate the full roles table.) | Show Create whenever the operator can set roles |
+| Q11 | Tell the new person? | Silent create. No invite or magic-link email on create. They sign in later when they need to. | Send an invite or magic-link email when create succeeds |
+| Q12 | Password? | Passwordless. No password field on Users create. | A password field at create |
+| Q13 | Empty role selection at create? | Leave the account as `user` only — same as clearing roles on set-role. - decided by the round | Refuse create until a role is picked |
+| Q14 | Are name and email required on create? | Name and email are required. - decided by the round | Optional name, or accept any string including blank |
+| Q15 | Required name and email — Confirm disabled until both present, or refuse on submit with an inline message? | Confirm disabled until both name and email are present. - decided by the round | Refuse on submit with an inline required message |
+| Q16 | When the session lacks `user:set-role`, offer only `user` in the create dialog, or offer every role and refuse after submit? | Console offers only `user` in the role options when the session lacks `user:set-role`; server still refuses a non-`user` role (stale session). - decided by the round | Offer every closed-set role and refuse after submit |
+| Q17 | Off-list or malformed email on create — refuse, warn, or create silently? | Warning confirmation, not a refuse. Grade10 domains are `9gag.com` and `memestrategy.com` (exact host after the last `@`, without letter case). Confirming still creates. Server accepts any email. | Refusing off-list or malformed, or silently creating |
+| Q18 | Warn when creating admin? | Warn on admin create — that role cannot be demoted once created. The same confirmation holds the email check when both apply. The console supplies the locked role ids; the dialog does not hardcode `admin`. - decided by this request | Silent create of admin, or a second dialog after the email warning |
+| Q19 | Always confirm create, or only when email or a locked role looks wrong? | Always confirm against a preview when the email is free (or lookup is skipped / fails open), even when the draft looks fine. Email and locked-role notes sit on that same confirmation when they apply. Copy is a double-check, not an alarm. | Create immediately when the email and roles look fine |
+| Q20 | Taken email — refuse on the form, or open review then refuse after create? | Look up the trimmed email on Create. When an account holds it, stay on the form, show the duplicate refuse and open-existing, and create nothing. When free, open the review as today. Post-create duplicate refuse stays as a safety net. | Open review first, then refuse after Auth create |
+| Q21 | Review dismiss control — Cancel or Back? | Back on the review confirmation (returns to the create form). Cancel stays on the create form (closes the whole create). | Cancel on both dialogs |
+
+## Raised
+
+| Capability | Raised | Landed |
+| --- | --- | --- |
+| shared/auth/users | Empty role selection at create — leave as `user`, or refuse? | Q13 |
+| shared/auth/users | Are name and email required on create? | Q14 |
+| shared/auth/users | What email-verification standing does a newly created Auth account start with? | ❓ on [Users · Create Account](../../../docs/prds/products/shared/auth/users.md#create-account) |

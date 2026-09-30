@@ -1,8 +1,11 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import { PdfPreview } from "./pdf-preview";
 import type { ReceiptPdfData } from "./receipt-pdf";
 import { ReceiptPdf } from "./receipt-pdf";
+
+const { auctionInvoicePdf } = getMessages("grade10", "en");
 
 const SAMPLE_RECEIPT = {
   listingTitle: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
@@ -53,25 +56,7 @@ const SAMPLE_RECEIPT = {
   paymentReference: null,
   issuerName: "Grade10",
   issuerEmail: "support@grade10.com",
-  copy: {
-    documentTitle: "Receipt",
-    billToHeading: "Bill To",
-    shipToHeading: "Ship To",
-    descriptionLabel: "Description",
-    amountLabel: "Amount",
-    receiptNumberLabel: "Receipt number",
-    invoiceNumberLabel: "Invoice number",
-    datePaidLabel: "Date paid",
-    paymentMethodLabel: "Payment method",
-    paymentReferenceLabel: "Payment reference",
-    paymentSectionLabel: "Payment",
-    transferReferenceLabel: "Transfer reference",
-    paymentBreakdownLabel: "Payment breakdown",
-    originalInvoiceTotalLabel: "Original Invoice Total",
-    previousPaymentsLabel: "Previous Payments",
-    currentPaymentReceivedLabel: "Current Payment Received",
-    remainingBalanceDueLabel: "Remaining Balance Due",
-  },
+  copy: { ...auctionInvoicePdf.document, ...auctionInvoicePdf.receipt },
 } as const;
 
 /** Same payment, paid by bank transfer - no separate transfer reference, since `paymentReferenceCode` above already names it once. */

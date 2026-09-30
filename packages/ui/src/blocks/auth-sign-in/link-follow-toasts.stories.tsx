@@ -1,5 +1,6 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
@@ -12,9 +13,7 @@ import { expect, waitFor, within } from "storybook/test";
  * still waiting on Check Your Email whose address signs in on another
  * device — it ends the wait with this toast and gains no session of its own.
  *
- * Failure and settled-elsewhere copy match shared `signIn` catalog keys
- * (`linkExpired`, `linkInvalid`, `linkBanned`, `settledElsewhere`). Mismatch
- * copy is story-local until the catalog keys land with engineering.
+ * Every word here matches the shared `signIn` catalog.
  */
 const meta = {
   title: "Auth Sign In/Link Follow Toasts",
@@ -33,15 +32,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const { signIn } = getMessages("grade10", "en");
+
 const COPY = {
-  linkExpired: "This sign-in link has expired.",
-  linkInvalid: "This sign-in link no longer works.",
-  linkBanned: "You can’t sign in with this account.",
-  differentAccount: "You’re signed in with a different account.",
-  differentAccountDescription: "Switch to alex@example.com.",
-  switch: "Switch",
-  stay: "Stay",
-  settledElsewhere: "Signed in on another device.",
+  linkExpired: signIn.linkExpired,
+  linkInvalid: signIn.linkInvalid,
+  linkBanned: signIn.linkBanned,
+  differentAccount: signIn.differentAccount,
+  differentAccountDescription: signIn.differentAccountDescription.replace(
+    "{email}",
+    "alex@example.com",
+  ),
+  switch: signIn.switch,
+  stay: signIn.stay,
+  settledElsewhere: signIn.settledElsewhere,
 } as const;
 
 function FireErrorToast({ message }: { message: string }) {

@@ -9,8 +9,10 @@
 ### grade10-admin-auction-listing-US-02: Operator puts a gallery on a listing
 
 **As an** auction operator,
-**I want** to attach, order, and replace the photographs and video of a card,
-**so that** a collector judges the item from the images without asking me for more.
+**I want** to choose product media, add listing-only photographs and video,
+and order them together,
+**so that** a collector judges the item from the best complete gallery without
+asking me for more.
 
 ### grade10-admin-auction-listing-US-03: Operator creates a listing that is ready to sell
 

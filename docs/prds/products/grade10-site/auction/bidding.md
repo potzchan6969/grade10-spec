@@ -2,6 +2,7 @@
 title: Bidding
 spec: grade10-site/auction/auction
 order: 3
+reviewed: 2026-09-30
 ---
 
 How a lot is won: the rules every bid is held to, the panel a collector bids
@@ -110,7 +111,8 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 
 | Lot | Amount being beaten | Next minimum | Outcome |
 | --- | ---: | ---: | --- |
-| HKD lot opening at HK$200 | HK$200 | HK$210 | The first bid must reach HK$210 |
+| HKD lot opening at HK$200 | HK$200 | 🚧 HK$200 | 🚧 The first bid may stand on the starting price; HK$210 from the second |
+| 🚧 HKD lot opening at HK$0 | HK$0 | HK$10 | 🚧 The first bid must reach the lowest increment; a lone bidder stands at HK$10, never HK$0 |
 | USD lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
 | USD lot at the ceiling | $10,000,000 | — | Every further bid is refused |
@@ -119,6 +121,9 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
   schedule
 - **A first maximum** — must reach the starting price plus one increment; the
   public price it creates is the starting price itself
+- 🚧 **Opening price** — the first bid must reach the starting price, or the
+  lowest increment when the lot starts at 0, and a lone bidder stands there;
+  one increment above the current bid applies from the second bid
 
 ### Refusals
 
@@ -180,9 +185,16 @@ authorization rather than adding a second.
 | **Leading** | Their maximum, the current bid and Leading |
 | **Outbid** | Outbid, and the next valid bid |
 | **Lost** | Did not win, with no hold-release copy; that reads on My Auctions |
+| **Open, no bids** | **No bids yet** under the starting bid |
+| **Closed, no bids** | **Ended** as the result, and **No bids** under it — never **No bids yet** |
 
 - 🚧 **Time left (extended)** — while the lot is in extended bidding the label
   says so, and its tooltip names the extension duration only
+- 🚧 **Recent bids Winner** — after the lot closes sold, the winning public
+  row shows a primary crown after the amount; a same-price non-leading row
+  carries an Info tip in the amount tone: when maximums match, the
+  earlier one leads — [Listing Page Blocks · Bid
+  History](/p/shared/ui/auction-listing#bid-history)
 - **Your bidding** — a signed-in bidder opens their own record for the lot
   beside the public recent bids — [Bidding
   History](/p/grade10-site/auction/bidding#auction-panel)
@@ -258,9 +270,12 @@ the letters that follow those lots.
 
 ### My Auctions
 
-🚧 One table holds every bookmarked lot once — bid rows before watch-only,
+🚧 One list holds every bookmarked lot once — bid lots before watch-only,
 soonest close first in each band, closed lots after open ones — with the row
 count in the title. The former Bidding and Watching sections do not appear.
+On a small viewport each lot is a stacked card; the whole card opens the lot
+or Winner Order, and Unwatch and Email alerts stay on the card. From tablet
+the same facts sit in the five-column table.
 
 | Column | What it shows |
 | --- | --- |
@@ -270,6 +285,9 @@ count in the title. The former Bidding and Watching sections do not appear.
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
 
+- **Tabs** — Active, Upcoming and Ended by bidding window, opening on
+  Active; the title count stays the total, and an empty tab says it has no
+  lots
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
@@ -349,16 +367,17 @@ the account's registered address, and the letters about a won lot are
 - **No one-hour reminder** — Grade10 sends no one-hour closing reminder; the
   last warnings before a close are Bidding closes in 24 hours, then Extended
   bidding has started if the lot extends
-- **Footer** — every letter says email alerts are on for this lot, and
-  **Manage alerts** opens My Auctions to mute that lot; never an
+- **Footer** — every letter says email alerts are on for this auction, and
+  **Manage alerts** opens My Auctions to mute that auction; never an
   unauthenticated one-click stop, never unwatch
 - **Never a false statement** — a called-off lot sends nothing further, and a
   letter that would state something no longer true is not sent late
 - **Send log** — operators answer "I was never told" from message type,
   recipient, lot and when it was sent, never the body
+- **Log retention** — **90 days**; troubleshooting only. Resend keeps the
+  durable trail
 - ❓ **Hold line on the non-winner letter** — whether the body also says the
   card hold is being released; Product confirms
-- ❓ **Log retention** — how long send-log rows are kept; Engineering confirms
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the bid, maximum and close invariants, and the sweeps
@@ -429,6 +448,7 @@ surface.
 | Absolute sale | Decided | No reserve and no buy-now price; the highest accepted bid at the close wins. | Product |
 | Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on every accepted bid, and ends at the listing's optional cap. A listing with no bid, or with the duration set to 0, closes on schedule. | Product |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
+| Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; equal-max non-leaders show an Info tip in the amount tone (when maximums match, the earlier one leads). Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
@@ -449,9 +469,9 @@ surface.
 | Card holds stated plainly | Decided | A losing bidder's row names being released or released, because a pending authorization on a bank statement reads as a charge. | Product and finance |
 | Letter audiences | Decided | Start letters reach watchers; close-in-24h and extended-bidding reach a bidder who unwatched while alerts stay on; new-bid letters coalesce to the current leading bid; bid beats watch and a win beats both, so nobody gets two letters for one event. | Product |
 | No-bids close copy | Decided | Watch-only get the watched-ended letter (Ended only — never unsold, no sale or Highest bid); sold closes use watched-sold with Sold for. No bidder letter when nobody bid. | Product |
-| Unsubscribe | Decided | Stop means mute for this lot: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
+| Unsubscribe | Decided | Stop means mute for this auction: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
 | Hold line on the non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
-| Send-log retention | ❓ Open | How long rows are kept. | Engineering |
+| Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
 :::

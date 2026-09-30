@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
@@ -12,18 +13,19 @@ import type {
   ListingUserMaximumHistoryRow,
 } from "./types";
 
+const { auctionListing } = getMessages("grade10", "en");
+
 const COPY = {
-  link: "Your bidding",
-  title: "Your bidding",
-  description:
-    "We bid only as needed up to your maximum. If two people set the same maximum, the earlier one leads.",
-  maximumsTab: "Your maximums",
-  bidsTab: "Bid placed",
-  maximumAmount: "Maximum",
-  bidAmount: "Bid",
-  time: "Time",
-  emptyBidsTitle: "No bids placed yet",
-  emptyBidsDescription: "We only bid as needed up to your maximum.",
+  link: auctionListing.userBidHistoryLink,
+  title: auctionListing.userBidHistoryTitle,
+  description: auctionListing.userBidHistoryDescription,
+  maximumsTab: auctionListing.userBidHistoryMaximumsTab,
+  bidsTab: auctionListing.userBidHistoryBidsTab,
+  maximumAmount: auctionListing.userBidHistoryMaximumAmount,
+  bidAmount: auctionListing.userBidHistoryBidAmount,
+  time: auctionListing.userBidHistoryTime,
+  emptyBidsTitle: auctionListing.userBidHistoryEmptyBidsTitle,
+  emptyBidsDescription: auctionListing.userBidHistoryEmptyBidsDescription,
 } as const;
 
 const STORY_NOW_MS = Date.now();

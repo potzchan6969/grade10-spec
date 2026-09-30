@@ -1,0 +1,8 @@
+schema: grade10-planning
+created: 2026-09-21
+promoted_by: "@mason5991"
+reviewed:
+  user-journeys: 69cbd05c
+deployed_at: "c4729dac6e9212335d48378100b056b4ce74c666"
+deployed_env: "staging"
+decisions_carried: "Country or region on delivery setup on Post-Bidding Product decisions (Decided); billing catalogue, shippable-only, and catalogue display locale stay PRD open rows"

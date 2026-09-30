@@ -17,6 +17,8 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment |
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999** |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
+| Empty bid count | **No bids yet** while the lot is open; **No bids** when it is closed |
+| Lot title under the breadcrumb | Smaller title size on a small viewport; larger from tablet |
 
 ## Gallery
 
@@ -40,6 +42,11 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   in the stated local time zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
   own display text; collector deadline lines use the same locale and zone
+- 🚧 **Winner after close** — when the lot is closed and sold, the winning
+  public row shows a primary crown after the amount (`isWinner`; accessible
+  name from consumer copy)
+- 🚧 **Equal-max tip** — a same-price non-leading row shows an Info tip in
+  the amount tone: when maximums match, the earlier one leads
 
 ## Personal Bidding
 
@@ -123,9 +130,11 @@ cancelled; when holds are on it also says the hold matches the maximum.
 ::story{id="auction-listing-listingdetails--default" title="The details section"}
 
 :::detail{title="Code map" for="engineer"}
-- **Blocks** — `ListingGallery`, `ListingAuctionBidCard`, `ListingDetails`,
-  `ListingUserBidHistory`, `ListingBidHistoryList`, `EnrollmentSetupSheet`,
-  `PaymentMethodRow` and `PaymentMethodEmptyState`, in `packages/ui`
+- **Blocks** — `ListingLotHeader`, `ListingGallery`, `ListingAuctionBidCard`,
+  `ListingDetails`, `ListingUserBidHistory`, `ListingBidHistoryList`,
+  `EnrollmentSetupSheet`, `PaymentMethodRow` and `PaymentMethodEmptyState`, in
+  `packages/ui`
+- **Empty bid copy** — `copy.noBidsYet` while open; `copy.noBids` when closed
 - **Signal** — `bidEnrollment`: `signed-out`, `needs-card` or `ready`
 :::
 

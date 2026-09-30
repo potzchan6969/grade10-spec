@@ -143,5 +143,9 @@ export const ClosedUnsold: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.getAllByText("Ended").length).toBeGreaterThan(0);
     expect(canvas.queryByText("Unsold")).not.toBeInTheDocument();
+    expect(canvas.getByText("No bids")).toBeInTheDocument();
+    for (const empty of canvas.queryAllByText("No bids yet")) {
+      expect(empty).not.toBeVisible();
+    }
   },
 };

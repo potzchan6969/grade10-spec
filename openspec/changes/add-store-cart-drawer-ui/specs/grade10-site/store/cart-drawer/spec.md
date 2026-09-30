@@ -24,9 +24,13 @@ address.
 - Cart changes
   - Scoped edits: quantity and removal change the same cart the drawer opened
   - Delisted cleanup: lets the shared drawer remove unavailable lines once
-- Existing ways onward
+- Continuing onward
   - Product: uses the Store's product addresses
-  - Checkout handoff: opens the existing checkout surface for its own review
+- Checkout from the drawer
+  - Direct creation: Proceed to Checkout creates the checkout session from the reviewed basket and accepted tender
+  - Verification gate: blocks Proceed to Checkout for an unverified member whose basket meets the bar, linking to the account page
+  - Hosted handoff: redirects to Shopify's hosted invoice once the session is created
+  - Named refusal: a changed line or a provider refusal is named in the drawer, never on a separate page
 
 ## ADDED Requirements
 
@@ -164,12 +168,16 @@ the removal and single-notice behavior defined by `shared/ui/store-cart`.
 - **THEN** each unavailable line is removed once from the current member cart
 - **AND** one cleanup notice is shown for that open
 
-### Requirement: Drawer actions use existing site addresses
+### Requirement: Drawer actions continue to a product address or create checkout directly
 
-The drawer SHALL close before opening a product or checkout. A product line
-SHALL open that product's existing address. Checkout SHALL open the existing
-`/checkout` surface, which remains responsible for its own live read and
-checkout creation.
+The drawer SHALL close before opening a product. A product line SHALL open
+that product's existing address. Checkout SHALL NOT open a separate surface:
+activating Checkout SHALL create the checkout session directly from the
+reviewed basket and its accepted tender. The drawer SHALL remain open,
+showing the redirecting state, until it hands the collector to the resulting
+hosted invoice. `grade10-site/store/checkout`'s existing transactional
+recheck at order-write time remains the read that gates this creation; the
+drawer adds no second re-read of its own.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
 **Serves:** grade10-site-store-cart-drawer-US-03 - Signed-in collector continues from the cart drawer
@@ -179,14 +187,84 @@ checkout creation.
 - **THEN** the drawer closes
 - **AND** the line's existing Store product address opens
 
-#### Scenario: grade10-site-store-cart-drawer-SC-15 - Checkout uses the existing surface
-**Serves:** grade10-site-store-cart-drawer-US-03 - Signed-in collector continues from the cart drawer
+#### Scenario: grade10-site-store-cart-drawer-SC-15 - Checkout creates the session and hands off to the hosted invoice
+**Serves:** grade10-site-store-cart-drawer-US-06 - a collector who presses Proceed to Checkout and reaches the hosted invoice
 
-- **GIVEN** an open cart drawer whose status-and-price read is not pending or failed
-- **WHEN** the collector activates Checkout
-- **THEN** the drawer closes
-- **AND** the existing `/checkout` surface opens
-- **AND** no checkout is created by the drawer
+- **GIVEN** an open cart drawer whose status-and-price read is current and whose reviewed basket carries its accepted tender
+- **WHEN** the collector activates Checkout and the checkout session is created
+- **THEN** the drawer redirects to the resulting hosted invoice
+- **AND** the drawer remains open on its redirecting state until that redirect succeeds
+- **AND** no separate checkout surface opens
+
+#### Scenario: grade10-site-store-cart-drawer-SC-28 - A changed line is named and no order is created
+**Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt is refused because a line changed
+
+- **GIVEN** an open cart drawer whose reviewed basket contains a line the shop has since changed
+- **WHEN** the collector activates Checkout and the checkout session is refused for that line
+- **THEN** the drawer names the affected line
+- **AND** no order is created
+- **AND** the drawer offers to try Checkout again
+
+#### Scenario: grade10-site-store-cart-drawer-SC-29 - A provider refusal offers retry with no order created
+**Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt fails for a reason no line names
+
+- **GIVEN** an open cart drawer whose Checkout action is creating a session
+- **WHEN** the checkout provider refuses or fails to create the session for a reason no line names
+- **THEN** the drawer restores Checkout and shows a failed state naming that the attempt did not go through
+- **AND** no order is created
+- **AND** the collector may activate Checkout again
+
+### Requirement: The drawer gates Checkout at the verification bar
+
+The cart drawer gates Checkout at the bar `grade10-site/store/account-identity`
+defines, rather than repeating that check itself.
+
+**Gate** - When a signed-in collector's reviewed basket meets or exceeds the
+bar and their standing there is not verified, activating Checkout SHALL
+create no checkout session.
+
+**Message** - The drawer SHALL show the bar's threshold and the basket's
+goods value, in the basket's currency.
+
+**Link** - The drawer SHALL link to the collector's account page when the
+site's profile address is enabled.
+
+**No local check** - The identity check itself SHALL run only on the account
+page, per `grade10-site/store/account-identity`'s consent requirement; the
+drawer SHALL start no check of its own.
+
+#### Scenario: grade10-site-store-cart-drawer-SC-30 - An unverified member's basket at the bar blocks Checkout
+**Serves:** grade10-site-store-cart-drawer-US-06 - a collector who tries to check out a basket the bar asks a verified buyer for
+
+- **GIVEN** a signed-in collector whose standing is not verified and whose reviewed basket totals 12000000 HKD minor units or more
+- **WHEN** they activate Checkout
+- **THEN** no checkout session is created
+- **AND** the drawer shows the bar's threshold and the basket's goods value in HKD minor units
+
+#### Scenario: grade10-site-store-cart-drawer-SC-31 - The gate links to the account page to verify
+**Serves:** grade10-site/store/account-identity#grade10-site-store-account-identity-US-01 - a collector who follows the drawer's gate to verify from their account
+
+- **GIVEN** the site's profile address is enabled and the Checkout gate is shown for an unverified member's basket at the bar
+- **WHEN** the collector reads the gate
+- **THEN** it shows a link to their account page
+- **AND** activating it opens the account page, where they verify on their own consent
+- **AND** the drawer starts no identity check itself
+
+#### Scenario: grade10-site-store-cart-drawer-SC-32 - A verified member's basket at or above the bar proceeds without the gate
+**Serves:** grade10-site-store-cart-drawer-US-06 - a verified collector whose basket meets the bar checks out without an extra step
+
+- **GIVEN** a signed-in collector whose standing is verified and whose reviewed basket totals 12000000 HKD minor units or more
+- **WHEN** they activate Checkout
+- **THEN** no verification message or account-page link is shown
+- **AND** the checkout session is created
+
+#### Scenario: grade10-site-store-cart-drawer-SC-33 - A basket under the bar proceeds regardless of standing
+**Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose basket does not meet the bar checks out without regard to their standing
+
+- **GIVEN** a signed-in collector's reviewed basket totals less than 12000000 HKD minor units
+- **WHEN** they activate Checkout
+- **THEN** no verification message or account-page link is shown, whether or not the collector's standing is verified
+- **AND** the checkout session is created
 
 ### Requirement: A signed-in collector sees current tender facts and chooses points
 
@@ -246,7 +324,7 @@ persist with the member cart for reload and checkout. Selecting points SHALL
 NOT mutate the loyalty ledger.
 
 While a points quote or persistence operation is unresolved, the drawer SHALL
-prevent duplicate tender submissions and Checkout navigation. A quote,
+prevent duplicate tender submissions and activating Checkout. A quote,
 refusal or persistence failure SHALL show a localized error and keep the last
 accepted choice and total for the same reviewed basket. Once the failed
 operation resolves, Checkout MAY use that still-current accepted quote.
@@ -320,6 +398,6 @@ authoritative reread resolves the accepted choice.
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
 - **GIVEN** a successfully persisted points choice with its existing code
-- **WHEN** the collector reloads or continues to checkout
-- **THEN** the choice is read from the member cart and checkout re-quotes both points and code
-- **AND** only accepted spendPoints reach checkout creation and the drawer creates no checkout
+- **WHEN** the collector reloads or activates Checkout
+- **THEN** the choice is read from the member cart and the drawer's live quote re-quotes both points and code
+- **AND** only accepted spendPoints and the existing code reach the checkout session the drawer creates

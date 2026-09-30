@@ -3,7 +3,7 @@ title: User Directory
 spec: shared/console/user-directory
 audience: operator
 order: 2
-reviewed: 2026-09-15
+reviewed: 2026-09-29
 ---
 
 This is the operator's view of the identity directory: a table of accounts,
@@ -29,6 +29,16 @@ submits an empty list, leaving what an empty list means to the console.
   about what shows next
 - **Order** — sortable headings report the column and direction; the table
   does not reorder the rows it was given
+- **Create** — offered only when the console supplies a create handler; the
+  create dialog collects name, email, and roles from the console-supplied
+  vocabulary; Create stays disabled until a role is selected; a taken email
+  refuses on the create form before review with open-existing to change roles;
+  when the email is free, create is confirmed against a preview of the trimmed
+  name, email, and roles; a note sits on that confirmation only when the email
+  is malformed or off the console's list, or a chosen role is locked; Back
+  returns to the form; the typed email is in bold only for an email note, and
+  a locked role label is in bold only for a role note; confirming the preview
+  reports the created account
 
 ## Account Panel
 
@@ -76,4 +86,14 @@ governs only what the components render.
 This surface used to live in the shared-UI package as `auth-user-directory`. It
 carries those requirements forward; only its home moved, to where admin UI
 belongs.
+:::
+
+:::detail{title="Product decisions" for="pm"}
+| Decision | Choice |
+| --- | --- |
+| Which dialog | A separate slim `UserCreateDialog` — not a mode flag on Override's `CreateMemberDialog` |
+| Always confirm | Always confirm against a preview when the email is free (or lookup skipped / fails open) |
+| Taken email | Refuse on the create form before review; open-existing via `onOpenExisting` |
+| Review dismiss | Back returns to the form; Cancel closes create |
+| Without set-role | Console offers only `user` in role options |
 :::

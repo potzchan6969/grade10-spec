@@ -377,8 +377,8 @@ const STORE_CART_COPY = {
 };
 
 export {
-  appliedFiltersFromSelection,
   AUCTION_FOOTER,
+  appliedFiltersFromSelection,
   FILTER_GROUPS,
   FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,

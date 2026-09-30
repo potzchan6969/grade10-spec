@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { ListingLotGallery } from "./listing-lot-gallery";
@@ -7,10 +8,12 @@ const IMAGE = new URL(
   import.meta.url,
 ).href;
 
+const { auctionListing } = getMessages("grade10", "en");
+
 const COPY = {
-  previous: "Previous image",
-  next: "Next image",
-  images: "Lot images",
+  previous: auctionListing.previousImage,
+  next: auctionListing.nextImage,
+  images: auctionListing.auctionImages,
 };
 
 const THREE_IMAGES = [
@@ -52,10 +55,10 @@ export const SeveralImages: Story = {
       canvas.getByRole("button", { name: "Next image" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("navigation", { name: "Lot images" }),
+      canvas.getByRole("navigation", { name: "Auction images" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("region", { name: "Lot images" }),
+      canvas.getByRole("region", { name: "Auction images" }),
     ).toBeInTheDocument();
   },
 };
@@ -75,7 +78,7 @@ export const SingleImage: Story = {
       canvas.queryByRole("button", { name: "Previous image" }),
     ).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("navigation", { name: "Lot images" }),
+      canvas.queryByRole("navigation", { name: "Auction images" }),
     ).not.toBeInTheDocument();
   },
 };

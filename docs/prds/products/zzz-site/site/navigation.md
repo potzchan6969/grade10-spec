@@ -12,8 +12,8 @@ specific mistake this rules out.
 
 ## Not Found
 
-🚧 **Not-found words** — shared catalogs with grade10: a static title and
-description with Back to Home; the page does not name the failed path
+The not-found page shares catalogs with grade10: a static title and
+description with Back to Home; the page does not name the failed path.
 
 Home and sign-in are session-decided: a signed-in collector who opens either is
 sent on to the profile, replacing the history entry so going back never returns

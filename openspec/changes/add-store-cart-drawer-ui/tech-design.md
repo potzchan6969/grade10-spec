@@ -1,3 +1,37 @@
+## Current Checkout Delivery
+
+Folded in from `move-checkout-into-cart-drawer` (2026-09-29), because
+`grade10-site/store/cart-drawer` has no durable spec yet and this change is
+its one owner. Supersedes "Checkout — keep its route and creation owner"
+below in Current Points Delivery, and the checkout-creation non-goal and the
+"Navigate through existing application addresses" decision in Original
+Delivery Notes.
+
+- **Creation** — `CartDrawerHost.handleCheckout` calls `useCreateCheckout`
+  with the drawer's current `items`, `quoted` tender (coupon, points) and
+  `deviceId`, instead of navigating to `ROUTES.checkout`. On success it
+  shows the shared component's `checkoutRedirecting` state and hands off to
+  the returned hosted URL; on failure it restores Checkout and shows
+  `checkoutFailed`, naming the affected line where the failure names one.
+  No second live re-read is added: the drawer's existing `useBasketQuote`
+  (`staleTime: 0`) already gates `checkoutDisabled` on a current quote, and
+  `createCheckout`'s own transactional recheck at order-write time remains
+  the read that gates Pay.
+- **Verification gate** — render the same threshold-and-link presentation
+  `CheckoutPage`'s `VerifyPanel` renders today (goods value against the bar,
+  a link to `addressOf("profile")` when `config.gates.profile` is set) in
+  place of the Checkout action when the resolution's outcome is `verify`.
+  The identity check itself is untouched: it still runs only on the account
+  page.
+- **Removed** — `src/routes/checkout.tsx`, `src/pages/checkout/
+  CheckoutPage.tsx`, the `/checkout` route and surface entry, and `e2e/
+  tests/store/checkout.spec.ts`, once the drawer covers review, tender,
+  verification and handoff.
+- **Alternatives** — a second explicit re-read at the button press was
+  rejected: the drawer's continuous live quote already serves that purpose,
+  and adding one would duplicate an existing gate. Redirecting to the
+  account page instead of an inline gate was rejected as an extra screen.
+
 ## Current Points Delivery
 
 The user-approved points integration below supersedes the read-only points and

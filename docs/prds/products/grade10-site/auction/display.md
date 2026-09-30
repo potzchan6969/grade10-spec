@@ -75,7 +75,8 @@ the one a search engine keeps.
   in the same short form as All auctions cards, the current bid when Active
   (rolls when the amount increases after first paint; Upcoming shows no money
   until the lot opens), and Bid Now when Active or View Auction otherwise —
-  either opens that lot's details page.
+  either opens that lot's details page. A long lot title truncates to **four
+  lines** on a small viewport and **three** from tablet.
   Extended bidding keeps LIVE BIDDING and
   Ends in to the recorded close — no Extended label — and that close moves with
   the same freshness as the live current bid. Progress dots advance the slides
@@ -144,6 +145,8 @@ lot before any script runs.
   Auctions; unwatching says the lot left My Auctions, with Undo
 - **A first bid** — announces that email alerts are on, once per lot per
   collector
+- **Title on a small screen** — under the breadcrumb, the lot title uses the
+  smaller title size; from tablet it uses the larger title size
 
 ::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
 
@@ -194,7 +197,7 @@ never the collector's bid or order, and every page reads the same value.
 ## Admin Panel
 
 An operator drafts a lot, fills it, prices and schedules it, holds its stock
-and publishes it; from the close on, the sale is worked in the post-sale queue
+and publishes it; from the close on, the sale is worked in Orders
 — [Auction Management](/p/grade10-admin/auction/management).
 
 ::image{src="assets/diagrams/auction-listing-status.svg" alt="A listing from Draft to Created, Published, Closed and Settled, with Canceled beneath, reached by calling off a created or published listing"}

@@ -1,7 +1,8 @@
 ---
 title: Analytics
-spec: grade10-site/analytics
+spec: grade10-site/analytics/analytics
 icon: chart-bar
+reviewed: 2026-09-29
 ---
 
 What Grade10 measures, by domain, and where each number is read from.
@@ -35,10 +36,10 @@ different jobs — Order Paid describes a paid moment; Orders hold revenue.
 | Points outstanding                  | Unexpired points plus unused coupon money, as a liability                          | [Site Records](/p/grade10-site/analytics/site-records) · Points ledger and coupons               | Finance     |
 | Earning delivery                    | Money events awaiting delivery to the programme, and their age                     | [Datadog Counters](/p/grade10-site/analytics/datadog-counters) · Earning delivery                | Engineering |
 
-🚧 Order Paid carries member, the tier the spend was priced at, and the
+Order Paid carries member, the tier the spend was priced at, and the
 points that order earned and spent.
 
-🚧 Mixpanel records a reward bought with points, a member card saved to a
+Mixpanel records a reward bought with points, a member card saved to a
 wallet, and a successful till identification.
 
 At $1 a point the programme returns 10% / 12% / 17% of spend at Silver /
@@ -50,9 +51,9 @@ stay sustainable — [Membership](/p/grade10-site/loyalty).
 | Signal                    | Definition                                                                                 | Source                                                                                                      | Owner   |
 | ------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- | ------- |
 | Row-led product views     | Share of front-door sessions that open a product from the merchandised row                 | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Page Viewed then Product Viewed (Source Row) | Product |
-| 🚧 Identified paid orders | Share of Order Paid whose distinct_id is a user id, among orders that had a checkout email | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Order Paid                                   | Product |
+| Identified paid orders | Share of Order Paid whose distinct_id is a user id, among orders that had a checkout email | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Order Paid                                   | Product |
 
-🚧 The storefront records page view, product view and source, add to cart,
+The storefront records page view, product view and source, add to cart,
 cart open, and a checkout the worker started.
 
 ## Auction
@@ -62,9 +63,9 @@ cart open, and a checkout the worker started.
 | Completed-auction payment rate | Closed listings whose winner reaches paid, over closed listings with a winner | [Site Records](/p/grade10-site/analytics/site-records) · Auction listings                 | Product and finance        |
 | Time to ship                   | Elapsed time from paid to shipment started                                    | [Site Records](/p/grade10-site/analytics/site-records) · Auction listings                 | Operations                 |
 | Bid integrity incidents        | Accepted bids later found to conflict with the close                          | ❓ Nothing records an incident; Engineering confirms where one is filed                   | Engineering and operations |
-| 🚧 Bid conversion              | Share of Lot Viewed sessions that reach Bid Placed                            | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Lot Viewed then Bid Placed | Product                    |
+| Bid conversion              | Share of Lot Viewed sessions that reach Bid Placed                            | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Lot Viewed then Bid Placed | Product                    |
 
-🚧 Mixpanel holds the collector funnel: lot view, card linked, bid, watch,
+Mixpanel holds the collector funnel: lot view, card linked, bid, watch,
 outbid, win, and invoice paid. Payment rate and time to ship stay on
 [Site Records](/p/grade10-site/analytics/site-records).
 
@@ -78,15 +79,11 @@ outbid, win, and invoice paid. Payment rate and time to ship stay on
 | Recording lag     | Days from a money row's value date to its recording | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Finance    |
 | Loans outstanding | What is owed at a date                              | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Finance    |
 
-🚧 Mixpanel holds financed-case conversion: submitted, visit booked, offer
+Mixpanel holds financed-case conversion: submitted, visit booked, offer
 made or answered, payout recorded, and identity bound. Financed cases and
 loans outstanding stay on [Site Records](/p/grade10-site/analytics/site-records).
 
 :::detail{title="Product decisions" for="pm"}
-🚧 Until this change archives, Mixpanel still shows mainly Order Paid in
-production; the catalog, storefront funnel, auction, vault, and loyalty
-emits land with the change and stay marked 🚧 on the domain rows above.
-
 **Not in scope.** Mixpanel as the money or liability ledger. Operator
 consoles. ZZZ storefront emit. A consent gate. Bid ticks, KYC payloads,
 coupon codes, and pass serials.

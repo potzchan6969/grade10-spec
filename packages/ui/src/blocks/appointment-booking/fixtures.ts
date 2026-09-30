@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import type { BookingConfirmationCopy } from "./booking-confirmation";
 import type { BookingDetailsFormCopy } from "./booking-details-form";
@@ -17,6 +18,8 @@ import type {
   BookingService,
   BookingSlot,
 } from "./types";
+
+const { common } = getMessages("grade10", "en");
 
 /** Hong Kong, September 2026: the calendar every fixture is drawn on. */
 const FIXTURE_MONTH = "2026-09";
@@ -146,7 +149,7 @@ const STEPS_COPY: BookingStepsCopy = {
     time: "Time",
     details: "Details",
   },
-  back: "Back",
+  back: common.back,
 };
 
 const SERVICE_PICKER_COPY: BookingServicePickerCopy = {

@@ -23,7 +23,7 @@ export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
   pending_payment_expired: "Pending Payment (expired invoice)",
   payment_verifying: "Payment Verifying",
   partially_paid: "Partially Paid",
-  processing: "Processing",
+  processing: "Preparing Shipment",
   shipped: "Shipped",
   delivered: "Delivered",
   cancelled: "Cancelled",
@@ -75,6 +75,10 @@ export type WinnerOrderContent = {
   overdue?: boolean;
   primaryCta: string | null;
   secondaryNote?: string;
+  /** Carrier tracking id — linked in Order Progress when shipped. */
+  trackingCode?: string;
+  /** External carrier tracking URL for `trackingCode`. */
+  trackingHref?: string;
   progressDates?: WinnerOrderProgressDates;
   /**
    * Inline Alert under the lot for a cancelled order.
@@ -115,6 +119,13 @@ const LOT = {
   lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
   winningBid: "HK$12,800",
   endedAt: "Ended 17 Sep 2026, 21:30 HKT",
+} as const;
+
+/** Preview SF Express waybill — same id on Shipped and Delivered. */
+const TRACKING = {
+  trackingCode: "SF1234567890",
+  trackingHref:
+    "https://www.sf-express.com/us/en/dynamic_function/waybill/#search/bill-number/SF1234567890",
 } as const;
 
 /** Same collector-facing invoice ID as Email Grade10 / Contact Us. */
@@ -160,64 +171,64 @@ export const LINE_TOOLTIPS = {
 } as const;
 
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$12,800" },
+  { label: "Winning Bid", value: "$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560",
+    value: "$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180",
+    value: "$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$480",
+    value: "$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$320",
+    value: "$320.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
     label: "Payment Processing Fee",
-    value: "HK$120",
+    value: "$120.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,460" },
+  { label: "Order Total", value: "HK$16,460.00" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
 export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$12,800" },
+  { label: "Winning Bid", value: "$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560",
+    value: "$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180",
+    value: "$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$480",
+    value: "$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$320",
+    value: "$320.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
     label: "Payment Processing Fee",
-    value: "HK$120",
+    value: "$120.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,460" },
+  { label: "Order Total", value: "HK$16,460.00" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
@@ -247,25 +258,25 @@ export const WINNER_ORDER_REFUND_OVERPAID = {
  * (`winner-order-SC-111`). Order total is the card fixture less the card fee.
  */
 export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$12,800" },
+  { label: "Winning Bid", value: "$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560",
+    value: "$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180",
+    value: "$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$480",
+    value: "$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$320",
+    value: "$320.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
@@ -273,7 +284,7 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,340" },
+  { label: "Order Total", value: "HK$16,340.00" },
 ];
 
 /** Shared progress dates once each milestone has happened. */
@@ -480,11 +491,12 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
         invoiceId: INVOICE_ID,
-        primaryCta: "Track shipment",
+        primaryCta: null,
         progressDates: {
           ...PROGRESS_SHIPPED,
         },
-        secondaryNote: "SF Express · SF1234567890",
+        trackingCode: TRACKING.trackingCode,
+        trackingHref: TRACKING.trackingHref,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
         receipts: [{ label: "Receipt" }],
@@ -501,6 +513,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         progressDates: {
           ...PROGRESS_DELIVERED,
         },
+        trackingCode: TRACKING.trackingCode,
+        trackingHref: TRACKING.trackingHref,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
         receipts: [{ label: "Receipt" }],

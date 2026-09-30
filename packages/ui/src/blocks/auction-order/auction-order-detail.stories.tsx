@@ -4,23 +4,17 @@ import {
 } from "@grade10/design-system/components/display/card";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionOrderDetail } from "./auction-order-detail";
 
+const { auctionListing, auctionOrders } = getMessages("grade10", "en");
+
 const COPY = {
-  orderInformation: "Order Information",
-  collectionMethod: "Collection Method",
-  orderStatus: "Order Status",
-  lots: "Lots",
-  orderNumber: "Order No.",
-  auction: "Auction",
-  currency: "Currency",
-  date: "Date",
-  invoiceStatus: "Invoice Status",
-  winningBid: "Winning bid",
-  payNow: "Pay Now",
-  contactUs: "Contact Us",
+  ...auctionOrders.detail,
+  winningBid: auctionListing.winningBid,
+  contactUs: auctionOrders.contactUs,
 };
 
 const meta = {

@@ -38,10 +38,10 @@ Needs group 1.
 - [ ] 3.4 Add the Tax label and `Set by Grade10 for where your order ships. Some orders have none.` tooltip in every Grade10 site locale
 - [ ] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused Winner Order and PDF E2E journey
 
-## 4. End-to-end invoice walk (grade10)
+## 4. End-to-end invoice walk (grade10) (owner: @ecchochan)
 
 Needs groups 2 and 3.
 
-- [ ] 4.1 Walk `post-sale-US-05` and `winner-order-US-01`: send one taxed card invoice, confirm its summary, invoice and fee; reissue it with changed Tax and confirm the audit values; pay it and confirm the receipt repeats the reissued Tax (`post-sale-SC-155`, `post-sale-SC-158`, `winner-order-SC-216`, `winner-order-SC-217`, `winner-order-SC-214`)
-- [ ] 4.2 Walk an untaxed invoice from quote through payment and confirm the summary, invoice and receipt omit Tax while pre-send still showed TBD and its tip (`post-sale-SC-156`, `winner-order-SC-215`, `winner-order-SC-212`, `winner-order-SC-213`)
-- [ ] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and the focused admin and Winner Order E2E journeys
+- [x] 4.1 Walk `post-sale-US-05` and `winner-order-US-01`: send one taxed card invoice, confirm its summary, invoice and fee; reissue it with changed Tax and confirm the audit values; pay it and confirm the receipt repeats the reissued Tax (`post-sale-SC-155`, `post-sale-SC-158`, `winner-order-SC-216`, `winner-order-SC-217`, `winner-order-SC-214`)
+- [x] 4.2 Walk an untaxed invoice from quote through payment and confirm the summary, invoice and receipt omit Tax while pre-send still showed TBD and its tip (`post-sale-SC-156`, `winner-order-SC-215`, `winner-order-SC-212`, `winner-order-SC-213`)
+- [x] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and the focused admin and Winner Order E2E journeys

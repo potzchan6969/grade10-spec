@@ -1,7 +1,7 @@
 # grade10-site/store/cart-drawer Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Drafts styled:** 2026-09-29, tcs-rules r3.0
 
 ## grade10-site-store-cart-drawer-US01: Signed-in collector opens the current cart over the page
 
@@ -285,10 +285,10 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-store-cart-drawer-US03: Signed-in collector continues from the cart drawer
+## grade10-site-store-cart-drawer-US03: Signed-in collector continues to a product from the cart drawer
 
 **As a** signed-in collector,
-**I want** the cart to take me to a product or checkout,
+**I want** the cart to take me to a product I select from it,
 **so that** I can continue the shopping path I chose.
 
 ### grade10-site-store-cart-drawer-US03-TC01-1: Reviewed line opens its existing product address
@@ -320,37 +320,8 @@ Runs once per row of **Test data**.
 * The drawer closes.
 * <product>'s existing Store product address opens.
 
-### grade10-site-store-cart-drawer-US03-TC03-1: Checkout opens the existing checkout surface
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-03
-
-**Pre-conditions:**
-
-* The current cart holds an available line.
-* The cart drawer's status-and-price read has succeeded.
-
-**Steps:**
-
-1. Activate **Checkout** in the cart drawer.
-
-**Expected Results:**
-
-* The drawer closes.
-* The site's existing `/checkout` surface opens.
-* The drawer creates no checkout; the checkout surface performs its own read and handoff.
-
 ---
+
 
 ## grade10-site-store-cart-drawer-US04: Signed-in collector reads tender choices for the reviewed basket
 
@@ -977,7 +948,316 @@ Runs once per row of **Test data**.
 
 * The UI does not claim rollback of the successful write. Stale totals remain unavailable and Checkout waits for authoritative reread.
 
+---
+
+## grade10-site-store-cart-drawer-US06: Signed-in collector completes checkout without leaving the drawer
+
+**As a** signed-in collector,
+**I want** to pay for my reviewed cart from the drawer itself,
+**so that** I reach Shopify's hosted invoice without a second page.
+
+### grade10-site-store-cart-drawer-US06-TC01-1: Proceed to Checkout creates the session from the reviewed basket and reaches Shopify's hosted invoice
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector has a successfully reviewed drawer holding an available line, an accepted code and accepted points.
+* The collector's identity is verified, or the reviewed basket is under HKD 120,000.
+
+**Steps:**
+
+1. Press Proceed to Checkout.
+2. Wait for the redirect.
+
+**Expected Results:**
+
+* A checkout session is created carrying the reviewed lines and the accepted code and points; no separate checkout-open read happens first.
+* The drawer shows a redirecting state until the collector's browser reaches Shopify's hosted invoice for that session.
+
+### grade10-site-store-cart-drawer-US06-TC02-1: An unverified member's basket at the HKD 120,000 bar blocks Proceed to Checkout
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in member whose identity is not verified has a successfully reviewed drawer holding a basket read at or above HKD 120,000 (gross goods, before any code or points).
+
+**Steps:**
+
+1. Inspect the drawer's checkout area.
+2. Attempt to press Proceed to Checkout.
+
+**Expected Results:**
+
+* The drawer shows the same threshold message and account-page link that `CheckoutPage`'s verification panel shows today, in place of an available Proceed to Checkout.
+* No checkout session is created.
+* The link opens the member's account page; the drawer itself performs no verification.
+
+### grade10-site-store-cart-drawer-US06-TC03-1: A basket under the bar, or a verified member's basket at or above it, proceeds without the gate
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector is in `<state>` with a successfully reviewed drawer eligible to check out.
+
+**Test data:**
+
+| `<state>` |
+| --- |
+| Identity not verified, basket read (gross goods) under HKD 120,000 |
+| Identity verified, basket read (gross goods) at or above HKD 120,000 |
+
+**Steps:**
+
+1. Press Proceed to Checkout.
+
+**Expected Results:**
+
+* No verification message or account-page link is shown.
+* A checkout session is created and the collector reaches Shopify's hosted invoice.
+
+### grade10-site-store-cart-drawer-US06-TC04-1: The drawer holds a redirecting state until Shopify's hosted invoice is ready before leaving
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector has a successfully reviewed drawer eligible to check out.
+* The checkout-creation response can be held in flight.
+
+**Steps:**
+
+1. Press Proceed to Checkout and hold the response.
+2. Inspect the drawer while the response is pending.
+3. Deliver the response and wait for the redirect.
+
+**Expected Results:**
+
+* While the response is pending, the drawer shows a redirecting state rather than closing or leaving the page.
+* The collector's browser leaves for Shopify's hosted invoice only once the response arrives successfully.
+
+### grade10-site-store-cart-drawer-US06-TC05-1: A changed line found at creation is named in the drawer, not on a separate page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector has a successfully reviewed drawer holding `<line>`.
+* `<line>` changes price, stock or is delisted between the drawer's last read and the checkout-creation response.
+
+**Steps:**
+
+1. Press Proceed to Checkout.
+2. Wait for the response naming the changed line.
+
+**Expected Results:**
+
+* The drawer names `<line>` as the reason Proceed to Checkout did not complete, in the drawer itself.
+* No checkout session is created for the stale basket.
+* The collector can review the current basket and press Proceed to Checkout again without leaving the drawer.
+
+### grade10-site-store-cart-drawer-US06-TC06-1: A provider refusal is named in the drawer, not on a separate page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector has a successfully reviewed drawer eligible to check out.
+* Shopify refuses the checkout-creation request.
+
+**Steps:**
+
+1. Press Proceed to Checkout.
+2. Wait for the refusal.
+
+**Expected Results:**
+
+* The drawer shows the provider's refusal in place of redirecting, without navigating to a separate page.
+* No order or checkout session is left behind from the refused attempt.
+* The reviewed basket and accepted tender remain as they were before the press.
+
+### grade10-site-store-cart-drawer-US06-TC07-1: A second press before the first resolves returns the same checkout, not a second one
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector has a successfully reviewed drawer eligible to check out.
+* The first Proceed to Checkout request can be held in flight.
+
+**Steps:**
+
+1. Press Proceed to Checkout and hold the response.
+2. Press Proceed to Checkout again before the first response arrives.
+3. Let both responses resolve.
+
+**Expected Results:**
+
+* Exactly one checkout session is created for the reviewed basket.
+* The collector reaches the same hosted invoice regardless of which response the drawer acts on.
+
+**Note:** the idempotency guarantee this case exercises is `add-shopify-checkout-integration`'s (a server-side, cross-request fact), not this capability's own; **Covered at `grade10-site/store/checkout`** once that change's server-side requirement lands.
+
+### grade10-site-store-cart-drawer-US06-TC08-1: The removed /checkout address no longer opens a checkout page
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-cart-drawer-US-06
+
+**Pre-conditions:**
+
+* A signed-in collector has a browser session on the Store site.
+
+**Steps:**
+
+1. Navigate directly to the site's former `/checkout` address.
+
+**Expected Results:**
+
+* No checkout page opens at that address.
+* Checkout is reachable only from Proceed to Checkout in the cart drawer.
+
 ## Reconciliation
+
+**Run:** 2026-09-29. Independent scenario and blind test-design readings,
+carried over from `move-checkout-into-cart-drawer` (folded here because
+`grade10-site/store/cart-drawer` has no durable spec yet and this change is
+its one owner) and reconciled together with the readings below. The
+scenario reader saw the durable-equivalent baseline (this file's own prior
+`spec.md`), the journeys, `decisions.md`, and the linked PRDs; the blind
+suite reader saw only Purpose, Feature set, journeys, `decisions.md`, the
+PRDs, the prior suite (for id continuity) and the domain suite - never a
+`## Requirements` section or a scenario anywhere.
+
+- **Uncovered anchor, folded into spec** - `US06-TC03-1` tested a boundary
+  the scenario reading had not written: a verified member at or above the
+  bar, and any member under it, proceeding without the gate. Folded as
+  `grade10-site-store-cart-drawer-SC-32` and `grade10-site-store-cart-
+  drawer-SC-33`.
+- **Raised, escalated** - `US06-TC02-1`'s pre-condition assumption (the bar
+  read against gross goods, not the total after code and points) and
+  whether the gate replaces Checkout or sits disabled beside it were both
+  raised as open questions. Landed as `decisions.md` Q6 and Q7 in
+  `move-checkout-into-cart-drawer` (folded into this file per that
+  change's own decisions record).
+- **Joined** - `US03-TC01-1` ↔ `grade10-site-store-cart-drawer-SC-13`;
+  `US06-TC01-1` and `US06-TC04-1` ↔ `grade10-site-store-cart-drawer-SC-15`;
+  `US06-TC02-1` ↔ `grade10-site-store-cart-drawer-SC-30`; `US06-TC05-1` ↔
+  `grade10-site-store-cart-drawer-SC-28`; `US06-TC06-1` ↔ `grade10-site-
+  store-cart-drawer-SC-29`.
+- **Retired** - the former `US03-TC03-1` ("Checkout opens the existing
+  checkout surface") stated behaviour this change removes; replaced by the
+  `US06` section above. This capability has not archived, so nothing durable
+  names the retired case; no tombstone is owed.
+- **Out of this capability's remit** - `US06-TC07-1` tests checkout-intent
+  idempotency across a repeated press, which is `add-shopify-checkout-
+  integration`'s Q6/Q13 (a server-side, cross-request fact), not a
+  requirement this capability states on its own - left uncovered here,
+  verified once that change's server-side requirement lands. `US06-TC08-1`
+  tests that the removed `/checkout` address no longer serves a page, an
+  infrastructure fact this change's proposal states under Impact rather than
+  a capability behaviour a spec scenario names - verified by a routing-level
+  check, not a scenario here.
+- **Uncovered anchor, out of suite** - `grade10-site-store-cart-drawer-SC-31`
+  (verifying itself happens on the account page, on the collector's own
+  consent) is reached by no case in this suite, since the blind pass never
+  reads `grade10-site/store/account-identity`'s own journeys. Out of suite:
+  verified in that capability's own `feature-tcs.md`; the drawer-side half of
+  the same walk (the link appearing and opening the account page) is
+  exercised by `US06-TC02-1`.
+- **No contradictions** between the two readings.
+
+### Earlier Reconciliation (2026-09-22, points integration)
 
 **Run:** 2026-09-22. Independent scenario and test-design readings used the
 same points anchors. The blind reader received only `/tmp/cart-points-blind`:
@@ -996,7 +1276,7 @@ were excluded. The coordinator supplied dispositions after both readings.
 - **Out of suite:** `grade10-site-store-cart-drawer-SC-17` visual parity is
   verified by Group 5.4's Storybook comparison, keyboard and locale checks.
 
-### Earlier Reconciliation
+#### Earlier Reconciliation (2026-09-18, member cart)
 
 
 **Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the member-cart decision.

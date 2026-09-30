@@ -41,6 +41,12 @@ belong to.
 | --- | --- |
 | [`loyalty/programme`](loyalty/programme/spec.md) | The points-and-tiers membership programme: earning, expiry, tiers, the reward menu, and the operator actions that run it. |
 
+## `analytics`
+
+| Capability | What it governs |
+| --- | --- |
+| [`analytics/analytics`](analytics/analytics/spec.md) | What Grade10 records in Mixpanel: collector events, visitor identity, the user-profile snapshot, and what never leaves the site. |
+
 ## `vault`
 
 | Capability | What it governs |

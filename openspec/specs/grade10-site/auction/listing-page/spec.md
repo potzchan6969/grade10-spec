@@ -204,7 +204,7 @@ for them.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-z67 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-10 - A collector watches the lot they are reading
-**Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
+**Serves:** grade10-site-auction-listing-page-US-06 - Watch an auction and open My Auctions from the toast
 
 - **GIVEN** a signed-in collector on a published lot's own page who does not
   watch it and has not bid on it
@@ -252,33 +252,33 @@ Watching or unwatching from the lot page shows a toast with one action on it.
 
 **Watch** - When a signed-in collector with **no bid** on the lot successfully
 watches it from that lot's page, Grade10 SHALL announce that email alerts are
-on for the lot, in wording aligned with My Auctions email-alerts-on copy, and
+on for the auction, in wording aligned with My Auctions email-alerts-on copy, and
 SHALL offer a toast action labelled **View My Auctions** that opens My
 Auctions.
 
 **Unwatch** - When they successfully unwatch from that lot's page, Grade10
-SHALL announce that the lot left My Auctions / email alerts are off for it, in
+SHALL announce that the auction left My Auctions / email alerts are off for it, in
 wording aligned with My Auctions Unwatch, and SHALL offer **Undo** that
 restores the watch without finding the lot again.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-omp rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-14 - Watch announces alerts and My Auctions
-**Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
+**Serves:** grade10-site-auction-listing-page-US-06 - Watch an auction and open My Auctions from the toast
 
 - **GIVEN** a signed-in collector on a lot's page who does not watch it and
   has not bid on it
 - **WHEN** they watch it and Grade10 records the watch
-- **THEN** a toast says email alerts are on for this lot
+- **THEN** a toast says email alerts are on for this auction
 - **AND** the toast offers **View My Auctions**, which opens My Auctions
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-15a rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-15 - Unwatch announces and can be undone
-**Serves:** grade10-site-auction-listing-page-US-07 - Unwatch from the lot and undo
+**Serves:** grade10-site-auction-listing-page-US-07 - Unwatch from the auction and undo
 
 - **GIVEN** a signed-in collector on a lot's page who watches it and has not
   bid on it
 - **WHEN** they unwatch it and Grade10 records the removal
-- **THEN** a toast says the lot is unwatched and email alerts for it are off
+- **THEN** a toast says the auction is unwatched and email alerts for it are off
 - **AND** Undo puts the listing back on My Auctions without opening the lot
   again
 
@@ -303,7 +303,7 @@ for the same collector and listing.
 - **GIVEN** a signed-in collector who has never been shown the bid-alerts
   toast for listing L
 - **WHEN** their bid bookmarks L
-- **THEN** a toast says email alerts are on for this lot
+- **THEN** a toast says email alerts are on for this auction
 - **AND** Grade10 records that the toast was shown for that collector and L
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-bs7 rev=1 -->

@@ -1,3 +1,4 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
@@ -11,6 +12,8 @@ import {
   LIST_COPY,
   LIVE_RECORD,
 } from "./fixtures";
+
+const { common } = getMessages("grade10", "en");
 
 const meta = {
   title: "Appointment Booking/BookingList",
@@ -69,7 +72,7 @@ export const Failed: Story = {
     records: {
       status: "error",
       message: "Your visits could not be read.",
-      action: { label: "Try again", onAction: fn() },
+      action: { label: common.retry, onAction: fn() },
     },
   },
 };
