@@ -1,56 +1,18 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
-import { Card } from "@grade10/design-system/components/display/card";
-import { Step } from "@grade10/design-system/components/display/step";
-import { Stepper } from "@grade10/design-system/components/display/stepper";
-import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@grade10/design-system/components/overlays/tooltip";
-import { cn } from "@grade10/design-system/lib/utils";
-import {
+  AuctionWinnerOrder,
+  type AuctionWinnerOrderProps,
+  type AuctionWinnerOrderStep,
   type OrderDetailsPaymentBrand,
-  OrderDetailsPaymentLogo,
-  PaymentMethodCard,
   SiteHeader,
 } from "@grade10/ui";
-import {
-  ArrowCounterClockwise,
-  ArrowUpRight,
-  Bank,
-  FilePdf,
-  Hourglass,
-  Info,
-} from "@phosphor-icons/react";
-import {
-  type ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  REVEAL_HIDDEN_CLASS,
-  REVEAL_REDUCED_MOTION_CLASS,
-  REVEAL_TRANSITION_CLASS,
-  REVEAL_VISIBLE_CLASS,
-  revealStaggerDelayMs,
-  useFirstPaintReveal,
-} from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
+import { useEffect, useState } from "react";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { AUCTION_FOOTER } from "./store-content";
 import { WinnerOrderContactDialog } from "./winner-order-contact-dialog";
@@ -89,36 +51,6 @@ const SETUP_CONFIRMED_TOAST = {
   title: "Order setup complete",
   description: "Grade10 is preparing your invoice for this destination.",
 } as const;
-
-function RevealGroup({
-  children,
-  className,
-  revealed,
-  staggerIndex,
-}: {
-  children: ReactNode;
-  className?: string;
-  revealed: boolean;
-  staggerIndex: number;
-}) {
-  return (
-    <div
-      className={cn(
-        REVEAL_HIDDEN_CLASS,
-        REVEAL_TRANSITION_CLASS,
-        REVEAL_REDUCED_MOTION_CLASS,
-        revealed && REVEAL_VISIBLE_CLASS,
-        className,
-      )}
-      data-slot="winner-order-reveal"
-      style={{
-        transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
-      }}
-    >
-      {children}
-    </div>
-  );
-}
 
 /**
  * Minimal placeholder PDF for Storybook — not a real invoice / receipt pipeline.
@@ -195,6 +127,20 @@ function receiptLinksFor(content: WinnerOrderContent): WinnerOrderReceipt[] {
 
 const PRODUCT_IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
+const COPY: AuctionWinnerOrderProps["copy"] = {
+  orderProgress: "Order Progress",
+  orderSummary: "Order summary",
+  invoice: "Invoice",
+  pdf: "PDF",
+  paymentMethod: "Payment method",
+  view: "View",
+  contactUs: "Contact Us",
+  lot: "Lot",
+  openLot: "open lot details",
+  winningBid: "Winning bid",
+  bank: "Bank",
+};
+
 type WinnerOrderPageProps = {
   status?: WinnerOrderStatus;
   content?: WinnerOrderContent;
@@ -202,12 +148,6 @@ type WinnerOrderPageProps = {
   /** Opens lot details — preview defaults to the closed-won lot story. */
   lotHref?: string;
   onLotClick?: () => void;
-};
-
-type WinnerProgressStep = {
-  label: string;
-  description?: string;
-  state: "completed" | "current" | "upcoming";
 };
 
 /** Happy-path winner stages — not Cancelled / Refunded. */
@@ -229,7 +169,7 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
 /** Same `Badge` variants as My Auctions `AuctionRecordRow`, not the store order badge. */
 function winnerOrderBadgeVariant(
   status: WinnerOrderStatus,
-): "default" | "error" | "warning" | "outline" {
+): AuctionWinnerOrderProps["badge"]["variant"] {
   switch (status) {
     case "awaiting_address":
     case "pending_payment":
@@ -248,106 +188,23 @@ function winnerOrderBadgeVariant(
   }
 }
 
-/**
- * Post-auction winner progress — designer-required five steps.
- * Address → Invoice → Payment → Shipping → Completed.
- * Cancelled / Refunded omit the stepper.
- *
- * Subtext: Address / Invoice / Payment use absolute datetimes (Payment while
- * due reads “Pay by …”). Shipping while Preparing Shipment reads Preparing to
- * ship; Shipping while Shipped and Completed use day-only dates like store
- * Order Details.
- */
-function winnerProgressStepsFor(
+/** The designer's five steps; Cancelled and Refunded show none. */
+function currentStepFor(
   status: WinnerOrderStatus,
-  content: WinnerOrderContent,
-): WinnerProgressStep[] {
-  const dates = content.progressDates;
-  const address: WinnerProgressStep = {
-    label: "Address",
-    description: dates?.address,
-    state: "upcoming",
-  };
-  const invoice: WinnerProgressStep = {
-    label: "Invoice",
-    description: dates?.invoice,
-    state: "upcoming",
-  };
-  const payment: WinnerProgressStep = {
-    label: "Payment",
-    description: dates?.payment,
-    state: "upcoming",
-  };
-  const shipping: WinnerProgressStep = {
-    label: "Shipping",
-    description: dates?.shipped,
-    state: "upcoming",
-  };
-  const completed: WinnerProgressStep = {
-    label: "Completed",
-    description: dates?.completed,
-    state: "upcoming",
-  };
-
+): AuctionWinnerOrderStep | "done" {
   switch (status) {
     case "awaiting_address":
     case "awaiting_address_expired":
-      return [
-        { ...address, state: "current" },
-        invoice,
-        payment,
-        shipping,
-        completed,
-      ];
+      return "address";
     case "preparing_invoice":
-      return [
-        { ...address, state: "completed" },
-        { ...invoice, state: "current" },
-        payment,
-        shipping,
-        completed,
-      ];
-    case "pending_payment":
-    case "pending_payment_expired":
-    case "payment_verifying":
-    case "partially_paid":
-      return [
-        { ...address, state: "completed" },
-        { ...invoice, state: "completed" },
-        { ...payment, state: "current" },
-        shipping,
-        completed,
-      ];
+      return "invoice";
     case "processing":
-      return [
-        { ...address, state: "completed" },
-        { ...invoice, state: "completed" },
-        { ...payment, state: "completed" },
-        {
-          ...shipping,
-          state: "current",
-          description: "Preparing to ship",
-        },
-        completed,
-      ];
     case "shipped":
-      return [
-        { ...address, state: "completed" },
-        { ...invoice, state: "completed" },
-        { ...payment, state: "completed" },
-        { ...shipping, state: "current" },
-        completed,
-      ];
+      return "shipping";
     case "delivered":
-      return [
-        { ...address, state: "completed" },
-        { ...invoice, state: "completed" },
-        { ...payment, state: "completed" },
-        { ...shipping, state: "completed" },
-        { ...completed, state: "completed" },
-      ];
+      return "done";
     default:
-      return [address, invoice, payment, shipping, completed];
+      return "payment";
   }
 }
 
@@ -366,6 +223,82 @@ function summaryLineAmount(value: string): string {
       return `${sign}$${intPart}.${decimals}`;
     },
   );
+}
+
+/**
+ * Address, Invoice and Payment use absolute datetimes (Payment while due
+ * reads “Pay by …”); Shipping reads Preparing to ship while Preparing
+ * Shipment, and day-only dates once shipped.
+ */
+function progressFor(
+  content: WinnerOrderContent,
+): AuctionWinnerOrderProps["progress"] {
+  if (!showWinnerProgress(content.status)) return null;
+  const dates = content.progressDates;
+  return {
+    current: currentStepFor(content.status),
+    steps: {
+      address: { label: "Address", description: dates?.address },
+      invoice: { label: "Invoice", description: dates?.invoice },
+      payment: { label: "Payment", description: dates?.payment },
+      shipping: {
+        label: "Shipping",
+        description:
+          content.status === "processing"
+            ? "Preparing to ship"
+            : dates?.shipped,
+      },
+      completed: { label: "Completed", description: dates?.completed },
+    },
+    tracking:
+      content.trackingCode && content.trackingHref
+        ? { code: content.trackingCode, href: content.trackingHref }
+        : undefined,
+  };
+}
+
+function noteFor(content: WinnerOrderContent): AuctionWinnerOrderProps["note"] {
+  if (!content.secondaryNote) return undefined;
+  if (content.status === "preparing_invoice") {
+    return { title: content.secondaryNote };
+  }
+  if (content.status === "payment_verifying") {
+    return { title: content.secondaryNote, icon: "hourglass" };
+  }
+  return undefined;
+}
+
+const PAYMENT_BRAND_BY_LABEL: Record<string, OrderDetailsPaymentBrand> = {
+  Visa: "visa",
+  Mastercard: "mastercard",
+  "American Express": "amex",
+  "Apple Pay": "apple-pay",
+  "Google Pay": "google-pay",
+};
+
+function paymentMethodFor(
+  content: WinnerOrderContent,
+): AuctionWinnerOrderProps["paymentMethod"] {
+  const method = content.paymentMethod;
+  if (method) {
+    const brand = PAYMENT_BRAND_BY_LABEL[method];
+    if (brand) return { kind: "card", brand, masked: content.paymentMasked };
+    return {
+      kind: "bank",
+      label: content.paymentMasked ?? method,
+      bankName: method !== "Bank transfer" ? method : undefined,
+    };
+  }
+  const pendingPayment =
+    content.status === "pending_payment" ||
+    content.status === "pending_payment_expired";
+  return content.setupPaymentMethod && !pendingPayment
+    ? { kind: "text", label: content.setupPaymentMethod }
+    : undefined;
+}
+
+function isMuted(line: WinnerOrderInvoiceLine): boolean {
+  return Boolean(line.muted) || line.value === "TBD";
 }
 
 /** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
@@ -444,731 +377,10 @@ function resolveContent(
   return base;
 }
 
-function SummaryRow({
-  label,
-  value,
-  emphasize = false,
-  muted = false,
-  tooltip,
-  valueClassName,
-}: {
-  label: ReactNode;
-  value: ReactNode;
-  emphasize?: boolean;
-  muted?: boolean;
-  tooltip?: string;
-  valueClassName?: string;
-}) {
-  const labelNode = tooltip ? (
-    <HStack className="min-w-0" gap="xs" vAlign="center">
-      <span>{label}</span>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger
-            aria-label={tooltip}
-            className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            onPointerDown={(event) => event.preventDefault()}
-            render={<Info aria-hidden size={12} />}
-          />
-          <TooltipContent>{tooltip}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </HStack>
-  ) : (
-    label
-  );
-
-  return (
-    <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4">
-      <span
-        className={cn(
-          "min-w-0 text-sm leading-5 text-foreground",
-          emphasize && "text-base font-semibold",
-          muted && !emphasize && "text-secondary-foreground",
-        )}
-      >
-        {labelNode}
-      </span>
-      <span
-        className={cn(
-          "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
-          emphasize && "text-base font-semibold",
-          muted && "text-secondary-foreground",
-          valueClassName,
-        )}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
-
-const PAYMENT_BRAND_BY_LABEL: Record<string, OrderDetailsPaymentBrand> = {
-  Visa: "visa",
-  Mastercard: "mastercard",
-  "American Express": "amex",
-  "Apple Pay": "apple-pay",
-  "Google Pay": "google-pay",
-};
-
-function WinnerOrderPaymentMethod({
-  method,
-  masked,
-}: {
-  method: string;
-  masked?: string;
-}) {
-  const brand = PAYMENT_BRAND_BY_LABEL[method];
-  if (brand != null) {
-    return (
-      <PaymentMethodCard
-        label={masked}
-        leading={<OrderDetailsPaymentLogo brand={brand} />}
-      />
-    );
-  }
-
-  const bankName = method !== "Bank transfer" ? method : undefined;
-
-  return (
-    <PaymentMethodCard
-      description={bankName}
-      label={masked ?? method}
-      leading={<Bank aria-label="Bank" size={20} weight="regular" />}
-    />
-  );
-}
-
-function LotCard({
-  content,
-  href,
-  onClick,
-}: {
-  content: WinnerOrderContent;
-  href?: string;
-  onClick?: () => void;
-}) {
-  const className = cn(
-    "flex w-full flex-row items-center gap-3 rounded-xl border border-border bg-card p-3 sm:gap-4 sm:p-4",
-    "transition-[background-color,border-color] duration-200 ease-out",
-    "hover:bg-muted/25 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
-    "motion-reduce:transition-none",
-  );
-
-  const body = (
-    <>
-      <div
-        className="relative size-14 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted"
-        data-slot="winner-order-lot-image"
-      >
-        <img
-          alt=""
-          className="absolute inset-0 size-full object-contain p-0.5"
-          src={PRODUCT_IMAGE}
-        />
-      </div>
-      <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
-        <Text
-          className="line-clamp-2 text-pretty sm:truncate sm:line-clamp-none"
-          size="sm"
-          weight="medium"
-        >
-          {content.lotTitle}
-        </Text>
-        <Text className="tabular-nums" size="sm" weight="medium">
-          Winning bid: {content.winningBid}
-        </Text>
-      </VStack>
-    </>
-  );
-
-  if (href) {
-    return (
-      <a
-        aria-label={`${content.lotTitle} — open lot details`}
-        className={className}
-        data-slot="winner-order-lot"
-        href={href}
-        onClick={onClick}
-      >
-        {body}
-      </a>
-    );
-  }
-
-  return (
-    <section
-      aria-label="Lot"
-      className={className}
-      data-slot="winner-order-lot"
-    >
-      {body}
-    </section>
-  );
-}
-
-function AddressBlock({
-  content,
-  confirmCta,
-  onConfirmAddress,
-  onContact,
-}: {
-  content: WinnerOrderContent;
-  confirmCta?: string | null;
-  onConfirmAddress?: () => void;
-  onContact?: () => void;
-}) {
-  const addressOverdue =
-    content.overdue &&
-    (content.status === "awaiting_address" ||
-      content.status === "awaiting_address_expired");
-
-  return (
-    <VStack className="w-full" gap="sm" hAlign="start">
-      {content.addressValue ? (
-        <>
-          <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-            {content.addressLabel}
-          </h3>
-          <Text className="whitespace-pre-line text-foreground" size="sm">
-            {content.addressValue}
-          </Text>
-        </>
-      ) : null}
-      {addressOverdue ? (
-        <Alert
-          actions={
-            <Button onClick={onContact} size="sm" variant="outline">
-              Contact Us
-            </Button>
-          }
-          dismissible={false}
-          layout="inline"
-          status="warning"
-          title={content.deadline ?? "Missed setup deadline"}
-        />
-      ) : null}
-      {confirmCta && onConfirmAddress && !addressOverdue ? (
-        <VStack className="w-full" gap="sm" hAlign="stretch">
-          <Button className="w-full" onClick={onConfirmAddress} size="md">
-            {confirmCta}
-          </Button>
-          {content.deadline ? (
-            <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
-              {content.deadline}
-            </p>
-          ) : null}
-        </VStack>
-      ) : null}
-    </VStack>
-  );
-}
-
-function OrderSummary({
-  lines,
-  refund,
-  payCta,
-  howToPayCta,
-  deadline,
-  overdue = false,
-  settlementContact = null,
-  onPay,
-  onHowToPay,
-  onViewInvoicePdf,
-  onViewRefundDetails,
-  onContact,
-}: {
-  lines: WinnerOrderInvoiceLine[];
-  refund?: WinnerOrderContent["refund"];
-  payCta?: string | null;
-  howToPayCta?: string | null;
-  deadline?: string | null;
-  overdue?: boolean;
-  /** Partially Paid — Contact Us, no balance figure. */
-  settlementContact?: string | null;
-  onPay?: () => void;
-  onHowToPay?: () => void;
-  onViewInvoicePdf?: () => void;
-  onViewRefundDetails?: () => void;
-  onContact?: () => void;
-}) {
-  const total = lines.find((line) => line.label === "Order Total");
-  const rest = lines.filter((line) => line.label !== "Order Total");
-
-  return (
-    <VStack className="w-full" gap="md" hAlign="stretch">
-      <HStack
-        className="w-full justify-between gap-3"
-        gap="none"
-        vAlign="center"
-      >
-        <h3 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
-          Order summary
-        </h3>
-        {onViewInvoicePdf ? (
-          <Link
-            aria-label="Invoice PDF"
-            className="shrink-0"
-            href="#view-invoice-pdf"
-            onClick={(event) => {
-              event.preventDefault();
-              onViewInvoicePdf();
-            }}
-            size="sm"
-            variant="secondary"
-          >
-            <FilePdf aria-hidden size={14} weight="regular" />
-            Invoice
-          </Link>
-        ) : null}
-      </HStack>
-      <VStack className="w-full" gap="sm" hAlign="stretch">
-        {rest.map((line) => (
-          <SummaryRow
-            key={line.label}
-            label={line.label}
-            muted={line.muted || line.value === "TBD"}
-            tooltip={line.tooltip}
-            value={line.value}
-          />
-        ))}
-      </VStack>
-      {total ? (
-        <>
-          <hr className="w-full border-border" />
-          <SummaryRow
-            emphasize
-            label={total.label}
-            muted={total.muted || total.value === "TBD"}
-            value={total.value}
-          />
-        </>
-      ) : null}
-
-      {refund ? (
-        <Alert
-          actions={
-            <Button onClick={onViewRefundDetails} size="sm" variant="outline">
-              View
-            </Button>
-          }
-          dismissible={false}
-          icon={<ArrowCounterClockwise aria-hidden size={16} weight="bold" />}
-          layout="inline"
-          status="default"
-          title={`Refund ${refund.amount}`}
-        />
-      ) : null}
-
-      {overdue ? (
-        <Alert
-          actions={
-            <Button onClick={onContact} size="sm" variant="outline">
-              Contact Us
-            </Button>
-          }
-          dismissible={false}
-          layout="inline"
-          status="warning"
-          title={deadline ?? "Payment deadline passed"}
-        />
-      ) : null}
-
-      {settlementContact && !overdue ? (
-        <Alert
-          actions={
-            <Button onClick={onContact} size="sm" variant="outline">
-              Contact Us
-            </Button>
-          }
-          dismissible={false}
-          layout="inline"
-          status="warning"
-          title={settlementContact}
-        />
-      ) : null}
-
-      {payCta && onPay && !overdue && !settlementContact ? (
-        <VStack className="w-full" gap="sm" hAlign="stretch">
-          <Button className="w-full" onClick={onPay} size="md">
-            {payCta}
-          </Button>
-          {howToPayCta && onHowToPay ? (
-            <Button
-              className="w-full"
-              onClick={onHowToPay}
-              size="md"
-              variant="outline"
-            >
-              {howToPayCta}
-            </Button>
-          ) : null}
-          {deadline ? (
-            <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
-              {deadline}
-            </p>
-          ) : null}
-        </VStack>
-      ) : null}
-    </VStack>
-  );
-}
-
-function WinnerProgressCard({
-  steps,
-  trackingCode,
-  trackingHref,
-}: {
-  steps: WinnerProgressStep[];
-  /** Tracking id as an external link with arrow, when present. */
-  trackingCode?: string | null;
-  trackingHref?: string | null;
-}) {
-  const railRef = useRef<HTMLDivElement>(null);
-  // Prefer the in-progress step; when every step is done (Delivered), the last
-  // completed step is the latest status the winner should see on open.
-  const focusKey =
-    steps.find((step) => step.state === "current")?.label ??
-    [...steps].reverse().find((step) => step.state === "completed")?.label;
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-centre when the focus step moves
-  useLayoutEffect(() => {
-    const rail = railRef.current;
-    if (!rail) return;
-
-    let settled = false;
-    let raf = 0;
-    const mq = window.matchMedia("(min-width: 640px)");
-    const ro = new ResizeObserver(() => {
-      if (!settled) scrollFocusIntoView();
-    });
-
-    function scrollFocusIntoView() {
-      // Equal-flex layout at sm+ — no horizontal overflow to correct.
-      if (mq.matches) {
-        settled = true;
-        ro.disconnect();
-        return;
-      }
-      const current = rail.querySelector<HTMLElement>(
-        '[data-slot="step"][data-state="progress"]',
-      );
-      const completed = rail.querySelectorAll<HTMLElement>(
-        '[data-slot="step"][data-state="completed"]',
-      );
-      const target = current ?? completed[completed.length - 1];
-      if (!target || !rail) return;
-      // Absolute position inside the scroll content — stable if the rail is
-      // already scrolled, and after a late layout that opens overflow.
-      const left =
-        target.getBoundingClientRect().left -
-        rail.getBoundingClientRect().left +
-        rail.scrollLeft;
-      const next = left + target.offsetWidth / 2 - rail.clientWidth / 2;
-      const max = Math.max(0, rail.scrollWidth - rail.clientWidth);
-      // Overflow may open a frame later (fonts, reveal, Storybook viewport).
-      if (max === 0) return;
-      rail.scrollLeft = Math.min(max, Math.max(0, next));
-      settled = true;
-      ro.disconnect();
-    }
-
-    ro.observe(rail);
-
-    const arm = () => {
-      settled = false;
-      ro.observe(rail);
-      scrollFocusIntoView();
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(scrollFocusIntoView);
-    };
-
-    arm();
-    mq.addEventListener("change", arm);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      mq.removeEventListener("change", arm);
-    };
-  }, [focusKey]);
-
-  return (
-    <div className="w-full" data-slot="winner-order-progress">
-      <Card className="gap-0 overflow-hidden p-0" padding={false}>
-        <HStack
-          className="w-full justify-between gap-3 border-b border-border bg-muted px-4 py-3 sm:px-6 sm:py-4"
-          gap="none"
-          vAlign="center"
-        >
-          <h3 className="min-w-0 text-base leading-6 font-medium text-foreground">
-            Order Progress
-          </h3>
-          {trackingCode && trackingHref ? (
-            <Link
-              className="min-w-0 shrink tabular-nums"
-              href={trackingHref}
-              rel="noopener noreferrer"
-              size="sm"
-              target="_blank"
-              trailing={<ArrowUpRight aria-hidden size={14} weight="bold" />}
-              variant="secondary"
-            >
-              {trackingCode}
-            </Link>
-          ) : null}
-        </HStack>
-        {/*
-          Five nowrap labels cannot share 320px without colliding. Keep a
-          horizontal scroll rail on small viewports; restore equal flex at sm+.
-          Mobile column min-width fits “Completed” and date subtext without
-          clipping the label. Scroll the current (or last completed) step into
-          the rail on open.
-        */}
-        <div
-          className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          data-slot="winner-order-progress-rail"
-          ref={railRef}
-        >
-          <Stepper className="min-w-max sm:min-w-0 sm:w-full">
-            {steps.map((step, index) => (
-              <Step
-                className="w-[7.5rem] min-w-[7.5rem] flex-none basis-[7.5rem] sm:w-auto sm:min-w-0 sm:flex-1 sm:basis-0"
-                description={step.description}
-                key={step.label}
-                label={step.label}
-                showLeadingConnector={index > 0}
-                showTrailingConnector={index < steps.length - 1}
-                state={
-                  step.state === "current"
-                    ? "progress"
-                    : step.state === "completed"
-                      ? "completed"
-                      : "upcoming"
-                }
-              />
-            ))}
-          </Stepper>
-        </div>
-      </Card>
-    </div>
-  );
-}
-
 /**
- * Right sidebar — same shell as Order Details: summary, optional payment,
- * delivery address. Pre-invoice rows use TBD for unquoted fees.
- */
-function OrderSidebar({
-  content,
-  confirmAddressCta,
-  onConfirmAddress,
-  payCta,
-  howToPayCta,
-  onPay,
-  onHowToPay,
-  onViewInvoicePdf,
-  receipts,
-}: {
-  content: WinnerOrderContent;
-  confirmAddressCta?: string | null;
-  onConfirmAddress?: () => void;
-  payCta?: string | null;
-  howToPayCta?: string | null;
-  onPay?: () => void;
-  onHowToPay?: () => void;
-  onViewInvoicePdf?: () => void;
-  receipts?: WinnerOrderReceipt[];
-}) {
-  const lines = summaryLinesFor(content);
-  const showPayment = Boolean(content.paymentMethod);
-  const isPendingPayment =
-    content.status === "pending_payment" ||
-    content.status === "pending_payment_expired";
-  const showAddress = content.status !== "cancelled";
-  const paymentOverdue =
-    Boolean(content.overdue) && content.status === "pending_payment_expired";
-  const settlementContact =
-    content.status === "partially_paid"
-      ? (content.secondaryNote ??
-        "Only part of this invoice is settled. Contact Grade10 about what remains.")
-      : null;
-  const showSetupPaymentMethod =
-    !showPayment && !isPendingPayment && Boolean(content.setupPaymentMethod);
-  const showBilling = Boolean(content.billingValue);
-  const receiptList = receipts ?? [];
-  const hasLowerSection =
-    showPayment ||
-    showAddress ||
-    showSetupPaymentMethod ||
-    showBilling ||
-    receiptList.length > 0;
-  const [refundDialogOpen, setRefundDialogOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
-  const contactReason = contactReasonFor(content.status);
-  const contactMail = contactReason
-    ? winnerOrderContactMail({
-        reason: contactReason,
-        lotTitle: content.lotTitle,
-        invoiceId: content.invoiceId,
-        receiptIds: (content.receipts ?? [])
-          .map((receipt) => receipt.fileName?.replace(/\.pdf$/i, ""))
-          .filter((id): id is string => Boolean(id)),
-      })
-    : null;
-
-  return (
-    <aside
-      className="w-full bg-background lg:sticky lg:top-8"
-      data-slot="winner-order-sidebar"
-    >
-      <Card className="gap-0 overflow-hidden p-0" padding={false}>
-        <VStack
-          className={cn(
-            "w-full bg-background-subtle p-4 sm:p-6",
-            hasLowerSection && "border-b border-border",
-          )}
-          gap="md"
-          hAlign="stretch"
-        >
-          <OrderSummary
-            deadline={paymentOverdue || payCta ? content.deadline : null}
-            howToPayCta={howToPayCta}
-            lines={lines}
-            onHowToPay={onHowToPay}
-            onPay={onPay}
-            onViewInvoicePdf={onViewInvoicePdf}
-            onViewRefundDetails={
-              content.refund ? () => setRefundDialogOpen(true) : undefined
-            }
-            onContact={contactMail ? () => setContactOpen(true) : undefined}
-            overdue={paymentOverdue}
-            payCta={payCta}
-            refund={content.refund}
-            settlementContact={settlementContact}
-          />
-        </VStack>
-        {hasLowerSection ? (
-          <VStack className="w-full p-4 sm:p-6" gap="lg" hAlign="stretch">
-            {showPayment ? (
-              <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-                  Payment method
-                </h3>
-                <WinnerOrderPaymentMethod
-                  masked={content.paymentMasked}
-                  method={content.paymentMethod!}
-                />
-                {receiptList.length > 0 ? (
-                  <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
-                    {receiptList.map((receipt) => (
-                      <Link
-                        aria-label={
-                          receipt.label === "Receipt"
-                            ? "Receipt PDF"
-                            : `${receipt.label} PDF`
-                        }
-                        href="#view-receipt-pdf"
-                        key={receipt.label}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          openPlaceholderReceiptPdf(
-                            receipt.fileName ?? "grade10-winner-receipt.pdf",
-                          );
-                        }}
-                        size="sm"
-                        variant="secondary"
-                      >
-                        <FilePdf aria-hidden size={14} weight="regular" />
-                        {receipt.label}
-                      </Link>
-                    ))}
-                  </HStack>
-                ) : null}
-              </VStack>
-            ) : null}
-            {!showPayment && receiptList.length > 0 ? (
-              <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
-                {receiptList.map((receipt) => (
-                  <Link
-                    aria-label={
-                      receipt.label === "Receipt"
-                        ? "Receipt PDF"
-                        : `${receipt.label} PDF`
-                    }
-                    href="#view-receipt-pdf"
-                    key={receipt.label}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      openPlaceholderReceiptPdf(
-                        receipt.fileName ?? "grade10-winner-receipt.pdf",
-                      );
-                    }}
-                    size="sm"
-                    variant="secondary"
-                  >
-                    <FilePdf aria-hidden size={14} weight="regular" />
-                    {receipt.label}
-                  </Link>
-                ))}
-              </HStack>
-            ) : null}
-            {showSetupPaymentMethod ? (
-              <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-                  Payment method
-                </h3>
-                <Text className="text-foreground" size="sm">
-                  {content.setupPaymentMethod}
-                </Text>
-              </VStack>
-            ) : null}
-            {showAddress ? (
-              <AddressBlock
-                confirmCta={confirmAddressCta}
-                content={content}
-                onConfirmAddress={onConfirmAddress}
-                onContact={contactMail ? () => setContactOpen(true) : undefined}
-              />
-            ) : null}
-            {showBilling ? (
-              <VStack className="w-full" gap="sm" hAlign="start">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-                  {content.billingLabel ?? "Billing address"}
-                </h3>
-                <Text className="whitespace-pre-line text-foreground" size="sm">
-                  {content.billingValue}
-                </Text>
-              </VStack>
-            ) : null}
-          </VStack>
-        ) : null}
-      </Card>
-      {content.refund ? (
-        <WinnerOrderRefundDialog
-          onOpenChange={setRefundDialogOpen}
-          open={refundDialogOpen}
-          refund={content.refund}
-        />
-      ) : null}
-      {contactMail ? (
-        <WinnerOrderContactDialog
-          mail={contactMail}
-          onOpenChange={setContactOpen}
-          open={contactOpen}
-        />
-      ) : null}
-    </aside>
-  );
-}
-
-/**
- * Preview-only Winner Order page. Always uses the Order Details 2-column shell
- * (main + sticky summary sidebar). Storybook-first — not a published
- * `@grade10/ui` export and not the store Order Details contract.
- *
- * First paint: title, progress (when present), lot, and sidebar stagger in
- * (opacity + translateY, 280ms) via `useFirstPaintReveal` — same pattern as
- * Order Details. Settles immediately under reduced motion.
+ * Preview-only Winner Order page: the preview's chrome, status transitions,
+ * card checkout simulation and dialogs around the published
+ * `AuctionWinnerOrder` block.
  */
 function WinnerOrderPage({
   status: statusProp = "awaiting_address",
@@ -1184,8 +396,9 @@ function WinnerOrderPage({
   const [setupDialogOpen, setSetupDialogOpen] = useState(false);
   const [proofDialogOpen, setProofDialogOpen] = useState(false);
   const [howToPayDialogOpen, setHowToPayDialogOpen] = useState(false);
+  const [refundDialogOpen, setRefundDialogOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
   const [cardCheckoutPending, setCardCheckoutPending] = useState(false);
-  const revealed = useFirstPaintReveal();
 
   useEffect(() => {
     setStatus(statusProp);
@@ -1195,46 +408,40 @@ function WinnerOrderPage({
   }, [statusProp]);
 
   const content = resolveContent(status, setupResult, contentProp, statusProp);
-  const confirmAddressCta =
-    content.status === "awaiting_address" &&
-    content.primaryCta === "Complete Order Setup"
-      ? content.primaryCta
-      : null;
+  const contactReason = contactReasonFor(content.status);
+  const contactMail = contactReason
+    ? winnerOrderContactMail({
+        reason: contactReason,
+        lotTitle: content.lotTitle,
+        invoiceId: content.invoiceId,
+        receiptIds: (content.receipts ?? [])
+          .map((receipt) => receipt.fileName?.replace(/\.pdf$/i, ""))
+          .filter((id): id is string => Boolean(id)),
+      })
+    : null;
+  const onContact = () => {
+    if (contactMail) setContactOpen(true);
+  };
+
   const payCta =
     content.status === "pending_payment" && !content.overdue
       ? content.setupPaymentMethod === "Bank transfer"
         ? "Submit Payment Proof"
         : "Pay with Card"
       : null;
-  const howToPayCta =
-    payCta === "Submit Payment Proof" ? "View Bank Details" : null;
-  const progress = showWinnerProgress(content.status)
-    ? winnerProgressStepsFor(content.status, content)
-    : null;
-  const mainStaggerIndex = progress ? 1 : 0;
-  const lotStaggerIndex = progress ? 2 : 1;
-  const sidebarStaggerIndex = progress ? 3 : 2;
-  const statusInfoAlert =
-    content.status === "preparing_invoice" && content.secondaryNote ? (
-      <Alert
-        dismissible={false}
-        layout="inline"
-        status="default"
-        title={content.secondaryNote}
-      />
-    ) : content.status === "payment_verifying" && content.secondaryNote ? (
-      <Alert
-        dismissible={false}
-        icon={<Hourglass aria-hidden size={16} weight="bold" />}
-        layout="inline"
-        status="default"
-        title={content.secondaryNote}
-      />
-    ) : null;
-
-  function handleConfirmAddressClick() {
-    setSetupDialogOpen(true);
-  }
+  const paymentOverdue =
+    Boolean(content.overdue) && content.status === "pending_payment_expired";
+  const addressOverdue =
+    Boolean(content.overdue) &&
+    (content.status === "awaiting_address" ||
+      content.status === "awaiting_address_expired");
+  const settlementContact =
+    content.status === "partially_paid"
+      ? (content.secondaryNote ??
+        "Only part of this invoice is settled. Contact Grade10 about what remains.")
+      : null;
+  const lines = summaryLinesFor(content);
+  const total = lines.find((line) => line.label === "Order Total");
 
   function handleSetupConfirm(result: WinnerOrderSetupResult) {
     setSetupResult(result);
@@ -1271,7 +478,6 @@ function WinnerOrderPage({
   return (
     <div
       className="flex min-h-svh w-full flex-col bg-background"
-      data-revealed={revealed || undefined}
       data-slot="winner-order-page"
       data-status={content.status}
     >
@@ -1285,102 +491,115 @@ function WinnerOrderPage({
           <BreadcrumbItem current>Winner Order</BreadcrumbItem>
         </Breadcrumbs>
 
-        <RevealGroup revealed={revealed} staggerIndex={0}>
-          <HStack className="w-full" gap="sm" vAlign="center">
-            <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
-              {content.title}
-            </h1>
-            <Badge size="sm" variant={winnerOrderBadgeVariant(content.status)}>
-              {content.statusLabel}
-            </Badge>
-          </HStack>
-        </RevealGroup>
-
-        <div className="grid w-full items-start gap-6 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
-          {/*
-            On small viewports the status inline alert sits under Order progress
-            (before the lot). From lg up it stays under the lot card.
-          */}
-          <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
-            {progress ? (
-              <RevealGroup
-                className="order-1"
-                revealed={revealed}
-                staggerIndex={mainStaggerIndex}
-              >
-                <WinnerProgressCard
-                  steps={progress}
-                  trackingCode={content.trackingCode}
-                  trackingHref={content.trackingHref}
-                />
-              </RevealGroup>
-            ) : null}
-
-            {statusInfoAlert ? (
-              <RevealGroup
-                className="order-2 w-full lg:order-3"
-                revealed={revealed}
-                staggerIndex={progress ? mainStaggerIndex + 1 : lotStaggerIndex}
-              >
-                {statusInfoAlert}
-              </RevealGroup>
-            ) : null}
-
-            <RevealGroup
-              className={cn(
-                "w-full",
-                progress && statusInfoAlert ? "order-3 lg:order-2" : undefined,
-              )}
-              revealed={revealed}
-              staggerIndex={lotStaggerIndex}
-            >
-              <VStack className="w-full" gap="lg" hAlign="stretch">
-                <LotCard
-                  content={content}
-                  href={lotHref}
-                  onClick={onLotClick}
-                />
-
-                {content.outcomeAlert ? (
-                  <Alert
-                    dismissible={false}
-                    layout="inline"
-                    status={content.outcomeAlert.status}
-                    title={content.outcomeAlert.title}
-                  />
-                ) : null}
-              </VStack>
-            </RevealGroup>
-          </VStack>
-
-          <RevealGroup
-            className="min-w-0 w-full"
-            revealed={revealed}
-            staggerIndex={sidebarStaggerIndex}
-          >
-            <OrderSidebar
-              confirmAddressCta={confirmAddressCta}
-              content={content}
-              howToPayCta={howToPayCta}
-              onConfirmAddress={handleConfirmAddressClick}
-              onHowToPay={
-                howToPayCta ? () => setHowToPayDialogOpen(true) : undefined
-              }
-              onPay={payCta ? handlePayClick : undefined}
-              onViewInvoicePdf={
-                hasIssuedInvoice(content)
-                  ? openPlaceholderInvoicePdf
-                  : undefined
-              }
-              payCta={
-                cardCheckoutPending && payCta === "Pay with Card"
-                  ? "Redirecting…"
-                  : payCta
-              }
-              receipts={receiptLinksFor(content)}
-            />
-          </RevealGroup>
-        </div>
+        <AuctionWinnerOrder
+          alerts={
+            content.outcomeAlert
+              ? [
+                  {
+                    title: content.outcomeAlert.title,
+                    status: content.outcomeAlert.status,
+                  },
+                ]
+              : []
+          }
+          badge={{
+            label: content.statusLabel,
+            variant: winnerOrderBadgeVariant(content.status),
+          }}
+          billing={
+            content.billingValue
+              ? {
+                  label: content.billingLabel ?? "Billing address",
+                  value: content.billingValue,
+                }
+              : undefined
+          }
+          copy={COPY}
+          delivery={
+            content.status === "cancelled"
+              ? undefined
+              : {
+                  label: content.addressLabel,
+                  value: content.addressValue ?? undefined,
+                  alert: addressOverdue
+                    ? {
+                        title: content.deadline ?? "Missed setup deadline",
+                        onContact,
+                      }
+                    : undefined,
+                  confirm:
+                    content.status === "awaiting_address" &&
+                    content.primaryCta === "Complete Order Setup" &&
+                    !addressOverdue
+                      ? {
+                          label: content.primaryCta,
+                          onPress: () => setSetupDialogOpen(true),
+                          deadline: content.deadline,
+                        }
+                      : undefined,
+                }
+          }
+          lot={{
+            title: content.lotTitle,
+            winningBid: content.winningBid,
+            imageSrc: PRODUCT_IMAGE,
+            href: lotHref,
+            onOpen: onLotClick,
+          }}
+          note={noteFor(content)}
+          paymentMethod={paymentMethodFor(content)}
+          progress={progressFor(content)}
+          receipts={receiptLinksFor(content).map((receipt) => ({
+            label: receipt.label,
+            onOpen: () =>
+              openPlaceholderReceiptPdf(
+                receipt.fileName ?? "grade10-winner-receipt.pdf",
+              ),
+          }))}
+          summary={{
+            lines: lines
+              .filter((line) => line !== total)
+              .map((line) => ({ ...line, muted: isMuted(line) })),
+            total: total ? { ...total, muted: isMuted(total) } : null,
+            onInvoicePdf: hasIssuedInvoice(content)
+              ? openPlaceholderInvoicePdf
+              : undefined,
+            refund: content.refund
+              ? {
+                  title: `Refund ${content.refund.amount}`,
+                  onView: () => setRefundDialogOpen(true),
+                }
+              : undefined,
+            alert: paymentOverdue
+              ? {
+                  title: content.deadline ?? "Payment deadline passed",
+                  onContact,
+                }
+              : settlementContact
+                ? { title: settlementContact, onContact }
+                : undefined,
+            pay:
+              payCta && !paymentOverdue && !settlementContact
+                ? {
+                    label:
+                      cardCheckoutPending && payCta === "Pay with Card"
+                        ? "Redirecting…"
+                        : payCta,
+                    onPress: handlePayClick,
+                    pending: cardCheckoutPending,
+                    secondary:
+                      payCta === "Submit Payment Proof"
+                        ? {
+                            label: "View Bank Details",
+                            onPress: () => setHowToPayDialogOpen(true),
+                          }
+                        : undefined,
+                    deadline: content.deadline,
+                  }
+                : undefined,
+          }}
+          title={content.title}
+        />
       </main>
       <Footer {...AUCTION_FOOTER} />
       <Toast position="bottom-right" />
@@ -1400,6 +619,20 @@ function WinnerOrderPage({
         onSubmit={handleProofSubmit}
         open={proofDialogOpen}
       />
+      {content.refund ? (
+        <WinnerOrderRefundDialog
+          onOpenChange={setRefundDialogOpen}
+          open={refundDialogOpen}
+          refund={content.refund}
+        />
+      ) : null}
+      {contactMail ? (
+        <WinnerOrderContactDialog
+          mail={contactMail}
+          onOpenChange={setContactOpen}
+          open={contactOpen}
+        />
+      ) : null}
     </div>
   );
 }
