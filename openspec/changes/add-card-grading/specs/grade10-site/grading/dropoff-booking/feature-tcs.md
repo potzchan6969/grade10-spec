@@ -1,7 +1,8 @@
 # grade10-site/grading/dropoff-booking Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-29, tcs-rules r4
+**Status:** reopened
+**Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-09-30
+**Drafts styled:** 2026-09-30, tcs-rules r4
 
 ## Background
 
@@ -543,6 +544,35 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: neither Move nor Cancel visit is offered.
+
+### grade10-site-grading-dropoff-booking-US2-TC5-1: A cancelled visit restarts the plan's clock from the day of the cancel
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-dropoff-booking-US-02
+
+**Pre-conditions:**
+
+* A plan kept 25 days ago, `plan_expiry_days` set to 30, whose visit the collector cancelled today.
+
+**Steps:**
+
+1. Run the plan expiry sweep `plan_expiry_days` after the day the plan was first kept.
+2. Run the plan expiry sweep `plan_expiry_days` after today.
+
+**Expected Results:**
+
+* The plan has not expired after step 1.
+* The plan expires only once `plan_expiry_days` has run from the day of the cancel, not from the day it was first kept.
 
 ---
 
@@ -1136,6 +1166,7 @@ Runs once per row of **Test data**.
 | The walk-in's cards listed at the desk | Case added | `grade10-site-grading-dropoff-booking-US5-TC4-1` — the walk-in's cards listed at the desk, with grading silent about the visit |
 | The page reading booked until the diary answers | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as a scenario and walked by `grade10-site-grading-dropoff-booking-US3-TC3-1`; landed as `Q54` |
 | A move never offering its own slot back | Case added, added after the run | `grade10-site-grading-dropoff-booking-US2-TC4-1`: moving the drop-off never offers its own current slot back, since the diary already counts it taken |
+| A cancelled visit restarting the plan's clock | Case added, added after the run | `grade10-site-grading-dropoff-booking-US2-TC5-1`: decided at landing; a visit cancelled without a hand-in restarts the plan's clock from the day of the cancel, as a missed one does |
 
 ### Manual
 

@@ -1059,7 +1059,7 @@ Runs once per row of **Test data**.
 
 - The arrears sit behind the vault read grant, with the list the figures sum; the money grant guards the register and the position alone.
 - The position is untouched by this change: its journey and its scenarios are the durable ones, and this suite is the first to walk them.
-- What page the register and the arrears list page on is Product's to name; until it is named, no case fixes a number.
+- The register and the arrears list page 50 rows at a time, at most 200 a call, decided on the Operator Console page.
 - The arrears fold answers every loan the filter in force holds, as the register's totals answer the range; it is not bounded to a page and refuses nothing.
 
 ## Reconciliation
@@ -1096,7 +1096,7 @@ and `tech-design.md`. Nothing verifies that account; it is the run's word.
 | `US5-TC6-1` | Kept, routed | The reminder ladder's words are `grade10-site/vault/collector-notifications`', as the design's Ladder row anchors them |
 | Raised — which grant opens the arrears view | Raised, answered | The vault read grant, with the list the figures sum: the durable requirement "The book sits behind the money grant, and one case's balance does not" and the Permissions table of the [Operator Console](/p/grade10-site/vault/operator-console#permissions) page. Landed as `Q35`, and `grade10-admin-vault-money-book-SC-31` now states the refusal |
 | Raised — whether any journey reads the position | Raised, answered | No screen in this change reads it, and the blind pass wrote no case for it, rightly. Landed as `Q36`: the position is out of this change's scope, the durable journey US-02 keeps its durable scenarios, and this first suite owes them cases — `US2-TC1-1` to `US2-TC5-1` |
-| Raised — what page the register and the arrears list page on | Raised, escalated | Neither the console's blocks spec nor this capability states a number. ❓ Product on the [Operator Console](/p/grade10-site/vault/operator-console) page, recommended 50; the landing is in the change's `decisions.md` |
+| Raised — what page the register and the arrears list page on | Raised, answered | 50 rows a page, at most 200 a call, decided on the [Operator Console](/p/grade10-site/vault/operator-console) page |
 | `grade10-admin-vault-money-book-SC-08` | Case added | `US3-TC7-1` |
 | `grade10-admin-vault-money-book-SC-12` | Case added | `US3-TC6-1` |
 | `grade10-admin-vault-money-book-SC-24` | Case added | `US4-TC9-1` |

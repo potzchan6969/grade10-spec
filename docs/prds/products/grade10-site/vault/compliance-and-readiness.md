@@ -85,9 +85,9 @@ it; no statute here is asserted.
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
   still read “Being prepared” on the live site. An auction-launch draft for
   review lives in Storybook under Pages/Legal, not in the message catalogs
-- ❓ **Counsel's wording on those pages** — Legal confirms the Terms, Privacy
-  Policy, and personal information collection statement the wizard's tick
-  links, before live catalogs and the app’s legal pages carry them
+- **Counsel's wording on those pages** — the Terms, the Privacy Policy and
+  the collection statement are counsel's, readiness item 3; production refuses
+  the statement's send while it is unwritten
 - **Processors and residency** — Cloudflare, Neon in `ap-southeast-1`, Datadog
   in the US carrying no personal data, Resend; no processor register
 - **Disputes** — beyond the complaints contact the paper prints, no path to
@@ -98,21 +98,22 @@ it; no statute here is asserted.
 ## Before the first production case
 
 Every item is a value or an act outside the code, with who closes it;
-`check:libs` in the application repository prints items 1 and 11 until they are done.
+`check:libs` in the application repository prints items 1, 11 and 12 until they are done.
 
 1. *Legal* — **Name the two entities and their licence** — each refuses its
    own act while unset in production: the custodian's name a deploy, the
-   lender's an offer, the licence the loan agreement and every money email,
-   the complaints contact every email; the paper prints the contact where set
+   lender's an offer, the licence the loan agreement and every money email
 2. *Legal* — **Confirm the postures** — the regime and any particular it
    prescribes, the e-sign ceremony's adequacy, an upload as a verification
    method, whether an AML duty applies, the retention windows, and whether
    the hash chain with a witnessed head is evidence enough
 3. *Legal* — **Counsel's wording** — the e-sign disclosure, the per-document
    consent text, the collection statement, the forfeiture notice's operative
-   text, and the Chinese versions of each; production refuses the act that
-   would print an unset one — the notice's send, the collection-statement tick
-   — and brackets print outside production only
+   text, a notices clause making email to the case's address good service, any
+   summary or warning the regime prescribes beside the loan agreement, the
+   complaints escalation line, and the Chinese versions of each; production
+   refuses the act that would print an unset one — the notice's send, the
+   collection statement's send — and brackets print outside production only
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
    the chain verifying on the restored copy
@@ -134,6 +135,9 @@ Every item is a value or an act outside the code, with who closes it;
 11. *Finance* — **Where a borrower pays** — the lender's FPS id and bank account
     beside its legal identity; unset, they refuse every offer in production, so
     no loan goes live without them, and print a marked placeholder outside it
+12. *Owner* — **The complaints contact** — a monitored mailbox, a phone and the
+    shop's address; every vault email and paper refuses in production while
+    unset
 
 ## Specs and journeys
 
@@ -177,18 +181,18 @@ the code holds until they do.
 | --- | --- | --- | --- |
 | Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
 | The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer; `check:libs` lists them among its unset values, six of them Grade10's own | Legal |
-| The complaints contact | TBC Legal | Where a customer complains, in every email's footer and on the paper where set. Until it is given, production refuses every act that sends a vault email, and brackets print outside production only | Legal |
+| The complaints contact | TBC Owner | A monitored mailbox on the brand's domain, a phone and the shop's address, in every email's footer and on the paper; counsel adds the escalation line. Until it is given, production refuses every act that sends a vault email or mints a paper, and brackets print outside production only | Owner; the escalation line Legal |
 | The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built, production refuses the send while the wording is unset, and brackets print outside production only | Legal |
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
 | Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
-| The collection statement | TBC Legal | The personal information collection statement the wizard's tick links; live Terms and Privacy still read “Being prepared”, and the tick ships against the privacy page; auction-launch draft copy is in Storybook Pages/Legal until counsel confirms | Legal |
-| One rule for the complaints contact | ❓ Open | In production an email refuses to go without the complaints contact, while the paper prints it where set. Recommended: the paper refuses an unset contact in production too, so the field keeps one rule | Product |
+| The collection statement | TBC Legal | One personal information collection statement per brand, for every product, versioned; each send keeps the version it showed. In production the send is refused while it is unwritten; outside production it reads “Being prepared”. A draft for counsel is written; changed at landing, superseding the round's answer | Legal |
+| One rule for the complaints contact | Decided | The paper refuses an unset contact in production too, so the field keeps one rule | Product |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
 | Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |
-| Forfeiture | Decided | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item; the surplus and the accounting after it are the firm's books | Legal |
+| Forfeiture | TBC Legal | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item. What follows turns on the regime: under the pawnbroking reading the item is the lender's and nothing further is owed; under the money-lending reading, as recalled, the lender sells it and returns what is left after the debt and the sale's costs. Posture until Legal names it: the forfeit settles the debt with no shortfall claimed, and no forfeited item is sold before the regime is named; handing it back to the borrower stays open. Changed at landing, superseding the round's answer | Legal |
 | A document held under another account | Decided | Flag, never refuse: a refusal needs an override the vault has nowhere and would strand a customer with two accounts | Owner |
 | Residency | Decided | Every Neon project in `ap-southeast-1`, the nearest region to Hong Kong and one stated home; Datadog stays in the US on the standing rule that logs carry no personal data | Legal |
 | Dates | Decided | A calendar day — a contract's date, a due date, an age, an expiry — is judged on `Asia/Hong_Kong`; instants stay UTC on the wire and in the database | Legal |

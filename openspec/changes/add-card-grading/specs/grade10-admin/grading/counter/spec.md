@@ -436,7 +436,9 @@ safe past `grading.safe_declared_cap` SHALL be refused by name at the desk, and
 the counter SHALL offer the next drop-off instead. The value held counts the
 declared value of every card in a `checked_in`, `returned` or `ready`
 submission whose outcome has not taken it out of the safe, ready slabs
-included.
+included. The desk SHALL read the cap before the first card is checked, and
+SHALL book the next drop-off rather than open the till when the list would
+pass it.
 
 #### Scenario: grade10-admin-grading-counter-SC-22 - An unsealed agreement refuses the hand-in
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk

@@ -327,7 +327,7 @@
       "account": "银行账户，户名为 {lenderName}",
       "reference": "请以 {reference} 作为转账附言。",
       "counter": "或于门店以现金或信用卡付款。",
-      "counterOnly": "请于门店以现金或信用卡付款。银行转账资料稍后以邮件发送。",
+      "counterOnly": "请于门店以现金或信用卡付款。",
       "recordedAgainst": "以款项到达我们的日期入账。",
       "growsBy": "{when} 后，欠款每日增加 {amount}。",
       "receiptLine": "入账后我们会以邮件通知你。",

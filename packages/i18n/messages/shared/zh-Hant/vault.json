@@ -327,7 +327,7 @@
       "account": "銀行戶口，戶名為 {lenderName}",
       "reference": "請以 {reference} 作為轉帳附言。",
       "counter": "或於門市以現金或信用卡付款。",
-      "counterOnly": "請於門市以現金或信用卡付款。銀行轉帳資料稍後以電郵發送。",
+      "counterOnly": "請於門市以現金或信用卡付款。",
       "recordedAgainst": "以款項到達我們的日期入賬。",
       "growsBy": "{when} 後，欠款每日增加 {amount}。",
       "receiptLine": "入賬後我們會以電郵通知你。",

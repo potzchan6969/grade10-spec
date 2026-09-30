@@ -10,7 +10,8 @@ with 22 beside 18) are parallel, 13 following 12, the frontends working
 against the fixture transport rather than a running worker. Group 19 stands
 the Storybook every frontend group's stories are written for and lands beside
 group 3, before them; it depends on nothing else in this change. Group 20 is
-the manual, and group 21 is the walk.
+the manual, and group 21 is the walk. Group 26 is appended at landing and
+lands before the first production case.
 
 One migration, `0031_case_reference.sql`, lands in group 4, and the worker and
 both SPAs deploy from one commit in one window — Migration Plan, step 2.
@@ -1068,3 +1069,16 @@ their words, their tests and their story ids; only what draws them moves.
 - [x] 25.8 Verify: `node scripts/checks/check-store-blocks.mjs`,
       `node scripts/checks/check-dialogs.mjs`, the vault frontend's suites
       and stories unchanged, `pnpm run typecheck`, `pnpm run lint`
+
+## 26. The collection statement in production (grade10)
+
+Appended at landing, when the owner took the production refusal (`decisions.md`
+Q8). The intake test for a statement nobody has written splits in two.
+
+- [ ] 26.1 Refuse `cases.submit` by name in production while
+      `COLLECTION_STATEMENT` in `documents/plan.ts` is not written, before
+      anything is written, so the request stays a draft; outside production
+      the step reads "Being prepared" and the send goes through; the review
+      step shows the refusal by name
+      (`grade10-site-vault-case-intake-SC-18`,
+      `grade10-site-vault-case-intake-SC-31`)

@@ -28,7 +28,7 @@ new event cannot ship silent:
 | Ready to collect | Ready to collect: 3 slabs and 1 card | when receiving finishes | the pickup code, the shop's hours, what is due, the vault offer, the uncollected ladder, naming someone to collect and the ID line | Open your submission |
 | Still here | Your graded cards are still with us | 30 and 60 days after the ready email | the code, what is due, the storage day and the notice day | Open your submission |
 | Storage fee | Your graded cards: a storage fee from today | day 90 | the fee a card a month, what is due, the notice day, the vault offer | Open your submission |
-| Written notice | Written notice: collect your graded cards | the day staff post it, from day 180; by email and by registered post | what is due today, the code, the 30 days from the posting date, and clause 6 | Open your submission |
+| Written notice | Written notice: collect your graded cards | the day staff post it, from day 180; by email and by registered post | what is due today, the code, the days the notice gives from the posting date, and clause 6 | Open your submission |
 
 - 🚧 **Silence on purpose** — a card refused at the counter is told at the
   counter and shows on the receipt; naming a collector sends no email, History

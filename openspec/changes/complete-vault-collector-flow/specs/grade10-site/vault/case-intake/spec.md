@@ -230,8 +230,9 @@ answers for the personal information collection statement.
 - **The version** - a send SHALL keep the version of the collection statement
   the step showed.
 - **Wording nobody has written yet** - where no collection statement wording is
-  set, the step SHALL say it is being prepared, and the send SHALL NOT be
-  refused for it in any environment.
+  set, the step SHALL say it is being prepared; outside production the send
+  SHALL NOT be refused for it, and in production the send SHALL be refused by
+  name with the request left unsent.
 
 #### Scenario: grade10-site-vault-case-intake-SC-15 - The last step shows the request as it will be sent
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back what they are sending before it goes
@@ -256,13 +257,22 @@ answers for the personal information collection statement.
 - **WHEN** the collector ticks it and sends the request in
 - **THEN** the case keeps that version of the collection statement with the send
 
-#### Scenario: grade10-site-vault-case-intake-SC-18 - A statement nobody has written yet does not hold the request
+#### Scenario: grade10-site-vault-case-intake-SC-18 - Outside production, a statement nobody has written yet does not hold the request
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector sends the request while the wording is still being written
 
-- **GIVEN** a brand with no collection statement wording set
+- **GIVEN** an environment that is not production and a brand with no
+  collection statement wording set
 - **WHEN** the collector reaches the last step
 - **THEN** the statement reads as being prepared
-- **AND** ticking it sends the request in, in every environment
+- **AND** ticking it sends the request in
+
+#### Scenario: grade10-site-vault-case-intake-SC-31 - In production, a statement nobody has written yet refuses the send
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector is not asked to answer for a statement that does not exist
+
+- **GIVEN** production and a brand with no collection statement wording set
+- **WHEN** the collector ticks the statement and sends the request in
+- **THEN** the send is refused by name
+- **AND** the request stays a draft
 
 ### Requirement: A case carries a six-character reference
 

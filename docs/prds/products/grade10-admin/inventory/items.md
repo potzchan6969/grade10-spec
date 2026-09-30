@@ -19,7 +19,7 @@ company owns. Stock counts units of a product; an item is one object.
 | Cert | as printed on the slab, trimmed and in capitals; one item per grader and cert |
 | Title | at most **200** characters |
 | Description | at most **2,000** characters |
-| Proof of a move | optional; one PDF, PNG, JPG, HEIC or HEIF file, at most **5 MB** |
+| Proof of a move | optional; up to **5** PDF, PNG or JPG files, each at most **10 MB** |
 | Retired because | duplicate · lost · destroyed · left the platform |
 
 ## Owners
@@ -33,9 +33,8 @@ company owns. Stock counts units of a product; an item is one object.
   be read the page shows the short id and "name unavailable" and still opens
 - 🚧 **A collector's items** -
   [Collector Page](/p/grade10-admin/console/collector-page#sections)
-- ❓ **Owner of a bought or gifted item** - which entity owns what the
-  company buys or is given; recommended: the custodian, the lender only
-  through a forfeit - Legal
+- 🚧 **Owner of a bought or gifted item** - the custodian; the lender only
+  through a forfeit
 
 ## Facts
 
@@ -69,7 +68,8 @@ mark the vault no longer has.
   belongs to the lender, and staff retire a second record of one object when
   they find it
 - 🚧 **A mark left open** - staff close a mark the vault no longer has, with
-  a reason; a later word from the vault does not reopen it
+  a reason; a later word from the vault does not reopen it; offered only
+  while the vault reads the item as no longer held
 
 ## Moving an Item
 
@@ -90,16 +90,17 @@ mark the vault no longer has.
 
 - 🚧 **Retire** - staff retire an item as a duplicate, lost, destroyed or
   left the platform; refused while a place marks it
-- 🚧 **After retiring** - the retire is final and the item reads only: it
-  keeps its history and leaves the default list, and its grader and cert may
-  name a new item; an item retired by mistake is registered again
+- 🚧 **After retiring** - the item reads only, keeps its history and leaves
+  the default list, and its grader and cert may name a new item; staff
+  restore a retired item with a reason, refused while its cert names a live
+  item
 
 ## Finding an Item
 
 - 🚧 **Default list** - marked items; staff switch to every item or to
   retired ones
-- 🚧 **Search** - by title, by grader and cert, by item id, or by the owner's
-  exact email; never by an owner's name - a click on a name opens the
+- 🚧 **Search** - by title or description, by grader and cert, by item id,
+  or by the owner's exact email; never by an owner's name - a click on a name opens the
   collector page
 
 ## Erasure
@@ -109,12 +110,11 @@ mark the vault no longer has.
   [Account Data](/platform/account-data#erasure)
 - 🚧 **Items they own** - the owner is removed, the title reads as erased,
   and the description goes
-- ❓ **The object's facts** - whether category, grader, grade and cert stay
-  once the owner is erased; recommended: they stay, since they describe the
-  object - Legal
+- 🚧 **The object's facts** - category, grader, grade and cert stay once the
+  owner is erased; they describe the object
 - 🚧 **Moves they were part of** - their side and the reason go; a proof
   stays while the other party is the custodian, the lender or a live
-  account, then goes
+  account, for at most **2,555** days from the move
 
 ## Permissions
 
@@ -122,7 +122,7 @@ mark the vault no longer has.
 | --- | --- | --- |
 | `inventory:read` | staff, admin | Items, one item, a collector's items |
 | `kyc:read` | staff, admin | the owner's name on Items, one item and a collector's items |
-| `inventory:write` | staff, admin | add an item, edit its facts, retire it, close a mark left open |
+| `inventory:write` | staff, admin | add an item, edit its facts, retire or restore it, close a mark left open |
 | `inventory:transfer` | staff, admin | move an item, open a proof |
 
 - 🚧 **The new grant** - `inventory:transfer`, held by staff and admin
@@ -163,7 +163,7 @@ recorded with who and why; marks closed by hand, expected near zero.
 | A vaulted item changing owner | Decided | Refused in this release; the vault moves an owner when a vaulted item is sold, with that change | Product |
 | Transfer notice | Decided | No email to either owner; the item's moves and the audit log hold it | Product |
 | Proof after erasure | Decided | Kept while the other party is the custodian, the lender or a live account, so the remaining owner keeps the record of how it got the item | Product |
-| Search by name | Decided | None; exact email, cert, title, item id or a click on a name | Product |
+| Search by name | Decided | None; exact email, cert, title or description, item id or a click on a name | Product |
 | Grading's slab and the catalogue | Decided | A collector's slab never enters the catalogue; the vault values it from this register - [The Submission](/p/grade10-site/grading/submission#the-record-after-collection) | Product |
-| Owner of a bought or gifted item | ❓ Open | Recommended: the custodian; the lender only through a forfeit | Legal |
+| Owner of a bought or gifted item | Decided | The custodian; the lender only through a forfeit; Legal confirms | Legal |
 :::

@@ -907,7 +907,7 @@ have read the collection statement,
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1217,8 +1217,8 @@ reference at my bank.
 - The 20 MB cap bounds each photograph; nothing bounds the ten together but the count of ten.
 - The conflict on Send it in is the case-lifecycle guard — the draft moved between the session reading it and the send landing — so the send is refused by name and no second case opens.
 - Whether the Describe step's amount field names the brand's currency is the product manager's to confirm; the recommendation is that it does, and the refusal of any other currency stands either way.
-- Which typed forms of a number count as one person is ❓ Product on `docs/prds/products/grade10-site/vault/collector-pages.md`; until it is named no case fixes a variant.
-- Refused reading: that a send is refused in production while no collection statement wording is set. The tick is not one of the acts production refuses, and the send goes through in every environment.
+- Which typed forms of a number are one is decided on `docs/prds/products/grade10-site/vault/collector-pages.md`: spacing, `+852` or `00852`, the bare local number, full-width digits and `852` before a local number store as one.
+- Taken at landing: a send is refused in production while no collection statement wording is set; outside production it goes through.
 
 ## Reconciliation
 
@@ -1247,13 +1247,13 @@ requirements, and neither pass saw the other's file before this join.
 | `US1-TC14-1` | Covered | `grade10-site-vault-case-intake-SC-07` |
 | `US1-TC15-1` | Covered | `grade10-site-vault-case-intake-SC-01` |
 | `US1-TC16-1` | Covered by another capability | `grade10-site-vault-case-lifecycle-SC-04` — a case that moved under the caller is refused by name; the blind pass's question about what produces `request.caseConflict` landed as `Q58`, and the design's Moved on state closes on that same scenario |
-| `US1-TC17-1`, `US1-TC19-1` | Covered; question escalated | `grade10-site-vault-case-intake-SC-04` stores one canonical number however it was typed, and the number is optional by the requirement's table; which typed forms count as one person is the ❓ on `collector-pages.md` |
-| `US1-TC18-1` | Folded | `grade10-site-vault-case-intake-SC-26`. The requirement now says a number the brand's plan cannot read is refused by name, as the worker already refuses it; which typed forms count as one person stays the ❓ on `collector-pages.md` |
+| `US1-TC17-1`, `US1-TC19-1` | Covered; question escalated | `grade10-site-vault-case-intake-SC-04` stores one canonical number however it was typed, and the number is optional by the requirement's table; which typed forms count as one person is decided on `collector-pages.md` |
+| `US1-TC18-1` | Folded | `grade10-site-vault-case-intake-SC-26`. The requirement now says a number the brand's plan cannot read is refused by name, as the worker already refuses it; which typed forms count as one person is decided on `collector-pages.md` |
 | `US1-TC20-1` | Covered; question landed | `grade10-site-vault-case-intake-SC-03`; whether the amount field shows the brand's currency to the collector landed as `Q56` |
 | `US4-TC1-1`, `US4-TC2-1`, `US4-TC3-1` | Covered | `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` |
 | `US4-TC4-1` | Covered | `grade10-site-vault-case-intake-SC-16` |
-| `US4-TC5-1` | Covered | `grade10-site-vault-case-intake-SC-18` |
-| `US4-TC6-1` | Dropped as a misreading; `deprecated`, id kept | It refuses the send in production while the statement is unset. `decisions.md` Q8 and Q17 settle the opposite — the tick is not one of the acts production refuses — and `grade10-site-vault-case-intake-SC-18` states the send goes through in every environment |
+| `US4-TC5-1` | Covered | `grade10-site-vault-case-intake-SC-18`, now outside production alone |
+| `US4-TC6-1` | Covered; restored to `draft`, id kept | `grade10-site-vault-case-intake-SC-31`. Deprecated at the round as a misreading of Q8 and Q17; at landing the owner took the production refusal, so `decisions.md` Q8 now reads as this case does and the case comes back unchanged |
 | `US4-TC7-1` | Covered, trimmed | `grade10-site-vault-case-intake-SC-01` — a request left unsent is listed unsent on the collector's own list. The draft also claimed the tick survives the save, which nothing states; `grade10-site-vault-case-intake-SC-17` records the version at the send, so that result left the case |
 | `US5-TC1-1` | Covered | `grade10-site-vault-case-intake-SC-19`, `grade10-site-vault-case-intake-SC-23`; the reference is drawn when the request is opened, so what the case reads at the send is the reference the draft already carried. The letter that carries it is `grade10-site/vault/collector-notifications`', and its suite walks it |
 | `US5-TC2-1`, `US5-TC4-1`, `US5-TC5-1` | Covered, retraced | `grade10-site-vault-case-intake-SC-20`, `grade10-site-vault-case-intake-SC-21`, `grade10-site-vault-case-intake-SC-22`; each case now traces `The case reference`, the group those scenarios serve, in place of the journey — one anchor per case, and US-05 keeps its own cases |

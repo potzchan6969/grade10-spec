@@ -48,3 +48,8 @@ summary of `grade10-site/auction/winner-order` and
 [Post-Bidding](../prds/products/grade10-site/auction/post-bidding.md), carrying
 the receipt breakdown as `carry-receipt-payment-breakdown` writes it.
 
+[`vault-and-grading-counsel-drafts.md`](vault-and-grading-counsel-drafts.md)
+is the legal wording the vault and grading print, drafted for counsel: the
+forfeiture notice, the notices clause, the licence line, the complaints
+footer, the collection statement, grading's clause 6 and the uncollected-cards
+notice, with where each value lives while it is unset.

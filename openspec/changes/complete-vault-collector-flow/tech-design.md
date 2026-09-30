@@ -245,13 +245,14 @@ The spec governs the confirmations; this is what changes.
   `documents/plan.ts` holds `COLLECTION_STATEMENT_VERSION`, owned by Legal. The
   review step shows the statement, or "Being prepared" until Legal writes it,
   and records the version it showed
-- **The tick refuses nothing in production** — Q8 decided the step ships ahead
-  of the wording, and Q17's production refusal covers the letters and documents
-  that print Legal's own wording
+- **Production refuses the send while the statement is unwritten** — Q8 as
+  changed at landing: `submitIntake` refuses by name in production while
+  `COLLECTION_STATEMENT` in `documents/plan.ts` is not written, before it
+  writes, so the request stays a draft; outside production the step reads
+  "Being prepared" and the send goes through
 - Alternatives rejected: the version as an eighth `LEGAL_IDENTITY` field, which
-  is not an identity and whose production refusal would close intake until
-  Legal answers; `pics_acknowledged_at` on `vault_cases`, a second column for a
-  fact one event row already dates
+  is not an identity; `pics_acknowledged_at` on `vault_cases`, a second column
+  for a fact one event row already dates
 
 ### The calendar file is the booking's own, served and attached
 
@@ -560,7 +561,7 @@ counts, the sums, the net out.
 | `printedValue(ports, field)` | brand, deployEnv, field | the value, a placeholder, or `LEGAL_IDENTITY_UNSET` | pure over `legalIdentity(brand)`; `printedEntity` composes it |
 | `renderVaultLetter(kind, facts)` | a `LetterFacts` member | `{ subject, html, text, attachments? }` or `LEGAL_IDENTITY_UNSET` | pure; run at the head of the act, before its transaction |
 | `letterFacts(db, vaultCase, kind, extra)` | the case and the send's own figures | one `LetterFacts` member | one builder for the send and the retry |
-| `cases.submit` | `{ caseId, collectionStatement: { version } }` | the case, or `COLLECTION_STATEMENT_REQUIRED` for a version not in force | writes the version shown into the event details |
+| `cases.submit` | `{ caseId, collectionStatement: { version } }` | the case, `COLLECTION_STATEMENT_REQUIRED` for a version not in force, or a refusal by name in production while the statement is unwritten | writes the version shown into the event details |
 | `cases.yourData` | a cursor | classes, standing, documents, holds, the open request | one binding read; no write |
 | `cases.requestErasure` | none | `{ executeAfter }` or `ERASURE_HELD { holds }` | reads holds, then one binding call; no local write |
 | `cases.cancelErasure` | none | void | one binding call |
@@ -575,13 +576,20 @@ Example — a self-filed ask on a held case. `cases.requestErasure` reads
 `erasureStatus` → `holds: ["a case is in custody"]` → answers `ERASURE_HELD`
 with the words; no row on auth. The same call on a released account →
 `holds: []` → `requestOwnErasure(headers)` → auth inserts
-`deletion_requests { user_id: u1, requested_by: u1, execute_after: now + 7 d }`,
+`deletion_requests { user_id: u1, requested_by: u1, execute_after: the run day's first instant }`,
 `users.banned` untouched → `{ executeAfter }`. The next page load reads a
 session `enforceOpenErasure` leaves alone, because `requested_by = user_id`. A
 second ask inside the window answers the same `executeAfter`; a cancel closes
 the row `cancelled` and lifts nothing; a second cancel does nothing. An
 operator filing over that open row sets `requested_by` to the operator and
 applies the ban.
+
+**The run day** — `executeAfter` is the first instant, on the brand's zone, of
+the seventh day after the filing day. A cancel is refused from that instant
+(`ERASURE_WINDOW_PASSED`) and the run is refused before it
+(`ERASURE_NOT_MATURED`). **Closed once** — the cancel and the run each write
+`outcome` only `WHERE id = ? AND outcome IS NULL` and refuse unless one row
+changed.
 
 ## API Contracts
 
@@ -647,8 +655,10 @@ applies the ban.
    migration row leaves `pnpm db:status` diverged
 4. One pull request per Legal-owed value, each redeploying every `app-env`
    reader: Finance owns `fpsId` and `bankAccount` in `legalIdentity.ts`, Legal
-   owns `licenceWording`, `licenceNumber` and the complaints contact there and
-   `COLLECTION_STATEMENT_VERSION` in `documents/plan.ts`. Until they answer the
+   owns `licenceWording` and `licenceNumber` there and
+   `COLLECTION_STATEMENT_VERSION` in `documents/plan.ts`, and the Owner the
+   complaints contact. Until they answer the
    block prints its placeholders outside production and the money acts refuse
-   in it; intake is not held, because the review step shows "Being prepared"
+   in it; production intake is held until the collection statement is
+   written, and outside production the review step shows "Being prepared"
 5. Enable the three new services in `start-isolated.sh` with the same commit

@@ -187,9 +187,8 @@ Schema `appointment`. Ids are text ULIDs minted by the worker. Timestamps are
 | `sort_order` | integer | no | `0` |
 | `created_at`, `updated_at` | timestamptz | no | `now()` |
 
-Checks: `product IN ('vault','finance')` when set; `NOT (product IS NOT NULL
-AND customer_bookable)`; duration and increment `BETWEEN 5 AND 1440` and
-`% 5 = 0`; buffers `BETWEEN 0 AND 1440` and `% 5 = 0`; notice and reminder
+Checks: `NOT (product IS NOT NULL AND customer_bookable)`; duration and
+increment `BETWEEN 5 AND 1440` and `% 5 = 0`; buffers `BETWEEN 0 AND 1440` and `% 5 = 0`; notice and reminder
 lead `BETWEEN 0 AND 43200`; horizon `BETWEEN 1 AND 365`. Index
 `(active, sort_order)`.
 

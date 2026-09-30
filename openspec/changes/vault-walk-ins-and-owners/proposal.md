@@ -93,10 +93,8 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Open questions
 
-- **Legal** - when the walk-in customer reads the collection statement, a ❓
-  row in [Operator Console](../../../docs/prds/products/grade10-site/vault/operator-console.md)'s
-  decisions; the walk-in form's task group starts after Legal answers, and
-  the names and the collector page do not wait
+- **Legal** - the collection statement's text, which the walk-in open and
+  the send both wait on in production; the form is built without waiting
 - **Design** - the counter's form, the collector column and filter, and the
   collector page have no board yet; `ui-design.md` waits on them
 

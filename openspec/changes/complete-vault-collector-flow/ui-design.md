@@ -284,7 +284,8 @@ beside them.
 | Photo refused | the existing refusals under the dropzone: type, size, empty, limit | `grade10-site-vault-case-intake-SC-09` — type, size and the zero-byte empty; `grade10-site-vault-case-intake-SC-08` — the limit |
 | Review (`C04`) | step 3; the request read back with Edit per block, What happens next (three items), the statement tick linking the statement page, Send it in, Finish later | `grade10-site-vault-case-intake-SC-15` |
 | Tick missing | Send it in refused on the page with the line under the tick; nothing sent | `grade10-site-vault-case-intake-SC-16` |
-| Statement being prepared | the tick's link opens the privacy page reading Being prepared; the tick records the version shown and still sends, in every environment | `grade10-site-vault-case-intake-SC-18`, `grade10-site-vault-case-intake-SC-17` |
+| Statement being prepared | the tick's link opens the privacy page reading Being prepared; outside production the tick records the version shown and still sends | `grade10-site-vault-case-intake-SC-18`, `grade10-site-vault-case-intake-SC-17` |
+| Statement unwritten, in production | Send it in refused by name on the page; the request stays a draft | `grade10-site-vault-case-intake-SC-31` |
 | Sent (`C05`) | the reference in mono, Book a visit, Not now — open the case, the several-items block, Start another request, the 30-day line | `grade10-site-vault-case-intake-SC-23`, `grade10-site-vault-case-intake-SC-14` |
 | Draft limit | `request.draftLimitReached` on Start a request | `grade10-site-vault-case-intake-SC-07` |
 | Moved on | `request.caseConflict` on Send it in | `grade10-site-vault-case-lifecycle-SC-04` |
@@ -329,7 +330,7 @@ beside them.
 | In the vault, storage (`C14`) | hero the shop; Book a pickup visit, Ask for it back; the custody card with outstanding Nothing; documents with fingerprints | `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-lifecycle-SC-18` |
 | Loan running (`C15`) | hero total by the due date with the holds line; Book a visit to collect; What is owed as at: outstanding of total · repaid, the progress line, the breakdown | `grade10-site-vault-loan-and-settlement-SC-05` |
 | How to pay | the block: FPS id, account under the lender's name, reference = the case reference, the counter line; holds until, grows by after | `grade10-site-vault-loan-and-settlement-SC-35` |
-| How to pay, values unset | the bracketed placeholder outside production; in production the block is refused and the counter line stands alone, card or cash at the counter and the transfer details by email — ❓ Product confirms it, flagged below | `grade10-site-vault-loan-and-settlement-SC-38`, `grade10-site-vault-loan-and-settlement-SC-47` |
+| How to pay, values unset | the bracketed placeholder outside production; in production the block is refused and the counter line stands alone, card or cash at the counter | `grade10-site-vault-loan-and-settlement-SC-38`, `grade10-site-vault-loan-and-settlement-SC-47` |
 | Reminders | the two dates before the due date and the 7-day rung after; a reminder costs nothing | `grade10-site-vault-loan-and-settlement-SC-30` |
 | Repayments, none | the empty line: each appears here with its day and the balance after | `grade10-site-vault-loan-and-settlement-SC-28` |
 | Repayments, one (`C23`) | amount by method · reached us · recorded · balance after; the allocation sentence; the never-restarts line; the receipt line; the hero reads the remainder and the reduced daily figure | `grade10-site-vault-loan-and-settlement-SC-27` |
@@ -597,12 +598,11 @@ One row per kind, and the blocks each carries after the lead.
   facts between and not where a case stands; the PM may issue a journey
   for reading where the case stands, or the requirements pass states them
   out of suite
-- **❓ Product** — what a production borrower reads in place of the
-  how-to-pay block while Finance's values are unset; the spec and the PRD's
-  recommendation give the counter line alone, which Product has not
-  confirmed
-- **❓ Tech design** — how the withdrawal of a cancelled visit's calendar
-  file reaches the phone, and the address of Your data under `/profile`
+- **Decided** — a production borrower reads the counter line alone while
+  Finance's values are unset; no transfer details are promised
+- **Decided from the code** — a cancelled visit's message attaches the
+  calendar file as an RFC 5546 `CANCEL` on the same event with its sequence
+  raised, so the phone drops it; Your data is `/profile/data`
 - **Drawn, not carried** — `A06`'s quote widget and recorder's key,
   `A02`'s Send notice and `A08`'s stock-take sheet (Q12), `A09`'s
   signing-room lane (Q20), `C08` and `C09`'s verify copy

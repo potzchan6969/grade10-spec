@@ -11,11 +11,11 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 
 | Rule | Value | Confirms |
 | --- | --- | --- |
-| Visit | ❓ about 20 minutes, up to 20 cards | Product |
-| Bulk visit | ❓ about 45 minutes, 20 cards or more, or two lists on one visit passing 20 together | Product |
-| Batch cut-off | ❓ Thursday 19:00 on the shop's clock; the batch leaves the next day | Operations, against the courier's pickup schedule |
-| Estimate | ❓ counted from the day the batch leaves | Commercial |
-| Booking window | ❓ the service's own horizon in the diary, seeded at 30 days; never a grading setting | Product |
+| Visit | about 20 minutes, up to 20 cards | Product |
+| Bulk visit | about 45 minutes, 20 cards or more, or two lists on one visit passing 20 together | Product |
+| Batch cut-off | Thursday 19:00 on the shop's clock; the batch leaves the next day | Operations, against the courier's pickup schedule |
+| Estimate | counted from the day the batch leaves | Commercial |
+| Booking window | the service's own horizon in the diary, seeded at 30 days; never a grading setting | Product |
 | Fee | HKD, paid at the counter once every card is checked and the agreement signed; the cover line beside it at Express and Super Express | — |
 
 ## Booking
@@ -49,11 +49,11 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   within the hour the submission reads the outcome, sends the missed email
   and keeps the list and the estimate as they were, and another drop-off is
   booked from the submission page
-- 🚧 **A missed visit restarts the plan's clock** — from the day of the miss,
-  `plan_expiry_days` counted from there rather than from the day the plan
-  was first kept, for every submission on the visit, a joined one too, so a
-  collector who missed a visit weeks into their plan is not left with only
-  what was originally left to book again in
+- 🚧 **A visit ended without a hand-in restarts the plan's clock** — missed
+  or cancelled, from the day it ended, `plan_expiry_days` counted from there
+  rather than from the day the plan was first kept, for every submission on
+  the visit, a joined one too, so a collector whose visit ended weeks into
+  their plan is not left with only what was originally left to book again in
 - 🚧 **The booked page** — the day, the time and the shop, add to calendar,
   move, cancel, and the day the cards leave with the estimated day back
 
@@ -95,10 +95,10 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | The submission owns every email | Decided | The diary is given no address for a product booking, so booked, moved, cancelled, missed and the day before are grading's own messages | Product |
-| A missed visit closes a visit | Decided | After the grace period grading tells the diary the collector did not come, the same shape the vault takes; the submission reads the outcome within the hour. Only the plan's expiry clock ends a plan, restarted from the missed visit's own day, so a collector who missed a visit rebooks from the page with the list intact and the clock they actually have left | Product |
+| A missed visit closes a visit | Decided | After the grace period grading tells the diary the collector did not come, the same shape the vault takes; the submission reads the outcome within the hour. Only the plan's expiry clock ends a plan, restarted from the day a visit ended without a hand-in, missed or cancelled, so a collector who missed a visit rebooks from the page with the list intact and the clock they actually have left | Product |
 | One visit for two submissions | Decided | The first submission owns the visit and a second joins it, listed under the same day and time with the slot sized for both lists, so a collector with two levels still makes one trip and the diary holds one booking | Product |
 | The booking blocks are the diary's | Decided | The picker, the details, the confirmation and the manage card are `@grade10/ui`'s appointment-booking exports; grading adds the batch line and its own wizard rail | Design |
-| Diary services | ❓ Open | A product-bound drop-off service, a Bulk variant with the longer duration, and the customer-bookable Grading visit kept for the walk-in; the names, the durations and the horizon | Product, Engineering |
-| Batch cut-off | ❓ Open | Thursday 19:00 with the batch shipping the next day, checked against the courier's pickup schedule | Operations |
+| Diary services | Decided | A product-bound drop-off service, a Bulk variant with the longer duration, and the customer-bookable Grading visit kept for the walk-in, about 20 and 45 minutes; the horizon, the minimum notice and the buffers are each service's diary fields | Product, Engineering |
+| Batch cut-off | Decided | Thursday 19:00 with the batch shipping the next day, checked against the courier's pickup schedule | Operations |
 | One shop | Decided | More shops appear in the picker as they open; the first release has one | Owner |
 :::
