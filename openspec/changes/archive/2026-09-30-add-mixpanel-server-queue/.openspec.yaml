@@ -1,0 +1,23 @@
+schema: grade10-planning
+created: 2026-09-23
+hands:
+  pm: "@ecchochan"
+  tech: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: no collector or admin surface; backend Mixpanel delivery only
+landed_by:
+  proposal: ecchochan
+  decisions: ecchochan
+  user-journeys: ecchochan
+  tech-design: ecchochan
+  specs: ecchochan
+  test-cases: ecchochan
+  tasks: ecchochan
+reviewed:
+  user-journeys: 6600724a
+  tech-design: 633ae4ab
+  specs: b7b65bd1
+  test-cases: b7b65bd1
+  tasks: "0fbe0677"
+deploy_waived: "@ecchochan: durable specs now hold the accepted shape to be implemented and the code holds the production shape (accepted-contract model, grade10#624 / grade10-spec#661); code merged in grade10#660 (5f406e32), migrations and release scheduled separately"
+decisions_carried: "Q1, Q3, Q4, Q5b, Q7, Q10-Q20 onto Mixpanel Events · Product decisions (docs/prds/products/grade10-site/analytics/mixpanel-events.md): backend send path, recorded with the fact, send timing, failed and refused sends, /api/track stays awaited, held profile write, erasure and unsent records, no Mixpanel token, event with no user or device; Q2 already on it as Backend delivery; Q5 naming is change-local"
