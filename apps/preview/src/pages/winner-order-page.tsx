@@ -825,34 +825,72 @@ function WinnerProgressCard({
   trackingHref?: string | null;
 }) {
   const railRef = useRef<HTMLDivElement>(null);
-  const currentKey = steps.find((step) => step.state === "current")?.label;
+  // Prefer the in-progress step; when every step is done (Delivered), the last
+  // completed step is the latest status the winner should see on open.
+  const focusKey =
+    steps.find((step) => step.state === "current")?.label ??
+    [...steps].reverse().find((step) => step.state === "completed")?.label;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-centre when the current step moves
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-centre when the focus step moves
   useLayoutEffect(() => {
     const rail = railRef.current;
     if (!rail) return;
 
-    const scrollCurrentIntoView = () => {
+    let settled = false;
+    let raf = 0;
+    const mq = window.matchMedia("(min-width: 640px)");
+    const ro = new ResizeObserver(() => {
+      if (!settled) scrollFocusIntoView();
+    });
+
+    function scrollFocusIntoView() {
       // Equal-flex layout at sm+ — no horizontal overflow to correct.
-      if (window.matchMedia("(min-width: 640px)").matches) return;
+      if (mq.matches) {
+        settled = true;
+        ro.disconnect();
+        return;
+      }
       const current = rail.querySelector<HTMLElement>(
         '[data-slot="step"][data-state="progress"]',
       );
-      if (!current) return;
-      const railRect = rail.getBoundingClientRect();
-      const stepRect = current.getBoundingClientRect();
-      const delta =
-        stepRect.left +
-        stepRect.width / 2 -
-        (railRect.left + railRect.width / 2);
-      rail.scrollLeft += delta;
+      const completed = rail.querySelectorAll<HTMLElement>(
+        '[data-slot="step"][data-state="completed"]',
+      );
+      const target = current ?? completed[completed.length - 1];
+      if (!target || !rail) return;
+      // Absolute position inside the scroll content — stable if the rail is
+      // already scrolled, and after a late layout that opens overflow.
+      const left =
+        target.getBoundingClientRect().left -
+        rail.getBoundingClientRect().left +
+        rail.scrollLeft;
+      const next = left + target.offsetWidth / 2 - rail.clientWidth / 2;
+      const max = Math.max(0, rail.scrollWidth - rail.clientWidth);
+      // Overflow may open a frame later (fonts, reveal, Storybook viewport).
+      if (max === 0) return;
+      rail.scrollLeft = Math.min(max, Math.max(0, next));
+      settled = true;
+      ro.disconnect();
+    }
+
+    ro.observe(rail);
+
+    const arm = () => {
+      settled = false;
+      ro.observe(rail);
+      scrollFocusIntoView();
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(scrollFocusIntoView);
     };
 
-    scrollCurrentIntoView();
-    const mq = window.matchMedia("(min-width: 640px)");
-    mq.addEventListener("change", scrollCurrentIntoView);
-    return () => mq.removeEventListener("change", scrollCurrentIntoView);
-  }, [currentKey]);
+    arm();
+    mq.addEventListener("change", arm);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      mq.removeEventListener("change", arm);
+    };
+  }, [focusKey]);
 
   return (
     <div className="w-full" data-slot="winner-order-progress">
@@ -883,10 +921,12 @@ function WinnerProgressCard({
           Five nowrap labels cannot share 320px without colliding. Keep a
           horizontal scroll rail on small viewports; restore equal flex at sm+.
           Mobile column min-width fits “Completed” and date subtext without
-          clipping the label. Scroll the current step into the rail on open.
+          clipping the label. Scroll the current (or last completed) step into
+          the rail on open.
         */}
         <div
           className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          data-slot="winner-order-progress-rail"
           ref={railRef}
         >
           <Stepper className="min-w-max sm:min-w-0 sm:w-full">
