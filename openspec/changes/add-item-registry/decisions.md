@@ -69,6 +69,8 @@
 | Q38 | Does erasure keep an erased owner's item category, grader, grade and cert? The owner's and Legal's to settle; Q17 covers only the proof | ❓ legal - recommended: keep them, since they describe the object, not the person; the owner link, the title, the description and the person's side of each move go, and the kept cert is what lets "one slab, one item" refuse a second record when the slab comes back | Clearing the cert, which lets that slab be registered twice |
 | Q39 | Does the collector page list the collector's retired items? | ❓ owner - recommended: no, live items only; US-07's reason is everything they have with us, and a lost, destroyed or departed item is not with us, while the item's page keeps its history | Retired items shown in a group of their own |
 | Q40 | Is a retire final, and can a retired item's facts be edited? | ❓ owner - recommended: final and read-only; Q20 frees the grader and cert for a new item, so undoing a retire can collide with that item, and a mistaken retire is fixed by registering the item again | Reopening a retire while its cert is still free |
+| Q41 | Where does Items sit in the console's nav? | ❓ design - recommended: a detail page of Inventory, as every `/inventory/*` page is today, so no new nav entry is needed | A section of its own, which saves a click on the change's busiest page |
+| Q42 | Does the Items list show when an item was last edited? | ❓ design - recommended: no, only one item's page shows it; no journey reads it on the list, and the column narrows the table | Last edited on both the list and one item's page |
 
 ## Raised
 
