@@ -65,11 +65,13 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **Walk-ins** — staff open a draft for a customer at the counter under
   the customer's own account; nothing about the case is emailed; the customer
   asks for their own sign-in link on their phone at `grade10.com/vault`,
-  finds the draft on their list and sends it with the wizard's third step
+  finds the draft on their list and sends it with the wizard's third step;
+  staff type no name, and an account the walk-in creates reads by its email
+  handle until the customer names themselves
 - 🚧 **An address signed in to before** — a walk-in is refused when the
   address belongs to an account someone has signed in to
 - 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
-  cert and the case takes the item the register holds, its facts filled in -
+  cert and the case takes the item the register knows, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
 
 ## One case
@@ -109,10 +111,11 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   beside what the collector was told
 - 🚧 **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
-- 🚧 **The item's facts** — the Case tab shows and edits the item's category,
-  grader, grade, cert and facts from the register once it has the item, which
-  it gets when the valuation starts, and says registration is pending until
-  then; editing needs `inventory:write` —
+- 🚧 **The item's facts** — the Case tab shows and edits the register's
+  category, title, description, grader, grade and cert once it has the item,
+  which it gets when the valuation starts, and says registration is pending
+  until then; the collector's request stays as they sent it; editing needs
+  `inventory:write` —
   [Items](/p/grade10-admin/inventory/items#facts)
 
 ## Permissions

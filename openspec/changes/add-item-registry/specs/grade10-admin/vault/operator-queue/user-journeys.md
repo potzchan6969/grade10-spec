@@ -19,15 +19,16 @@ everything we hold,
 
 **As a** member of shop staff opening a case for a walk-in,
 **I want** to type the slab's grader and cert and have the case take the item
-the register already holds, its facts filled in,
+the register already knows, its facts filled in,
 **so that** one slab never has two records and nobody types its facts twice.
 
 ### grade10-admin-vault-operator-queue-US-21: Operator reads and corrects the item's facts on the case
 
 **As a** member of shop staff working a case,
-**I want** the Case tab to show the item's category, grader, grade, cert and
-other facts from the register, editable once the register has the item, and
-to show registration pending until it does,
+**I want** the Case tab to show the register's category, title, description,
+grader, grade and cert, editable once the register has the item, with the
+collector's request kept as they sent it, and to show registration pending
+until it does,
 **so that** the case and the register never tell two stories about one item.
 
 ## MODIFIED User journeys

@@ -20,32 +20,38 @@ zero after the backfill; ownership moves recorded with who, why and when
 - **An item register** - one record per physical thing, graded or not, owned
   by an account or by one of the company's two entities, the custodian or the
   lender, carrying its category from a closed list of ten, title,
-  description, grader, grade, cert and the catalogue's attributes
+  description, grader, grade and cert
 - **Staff find who has what** - Items and one item's page on the console,
   searched by title, by grader and cert, by item id or by the owner's exact
-  email, opening on the items a place holds, the owner shown by name
-- **Held or not is read from the places** - a place that holds an item says
-  so on it; in this release the vault is the only place. The register mirrors
-  what the vault has already done and never refuses it; a disagreement on
-  the owner is shown to staff, and staff close a hold the vault no longer has
+  email, opening on the items a place marks, the owner shown by name
+- **Marked or not is read from the places** - a place keeping an item puts
+  its mark on it; in this release the vault is the only place. The register
+  mirrors what the vault has already done and never refuses it; a
+  disagreement on the owner is shown to staff, and staff close a mark the
+  vault no longer has
 - **The vault registers what it takes in** - an item is registered when staff
-  start its valuation and is held from vaulting until release, unwind or
-  forfeit; every case that already reached custody is registered once
-- **Grader, grade and cert reach the vault** - on the case's valuation and
-  printed on the custody agreement; a walk-in bringing a slab the register
-  knows finds it by grader and cert rather than typing it again. This
-  delivers carry-grade-into-vault-case, the follow-on `add-card-grading` names
-- **Staff move an item to a new owner** - any account or the custodian, with
-  a reason and an optional proof document, traced on the item and the audit
-  log; an item whose owner was erased moves the same way; refused while a
-  place holds the item, naming the place
-- **Forfeit moves the item to the lender** - when the vault closes its hold,
+  start its valuation and is marked from vaulting until release, unwind or
+  forfeit; every case that already reached custody is registered once, and
+  staff retire a second record of one object when they find it
+- **Grader, grade and cert reach the vault** - on the case's valuation; the
+  Case tab and the custody agreement show the register's facts, and the
+  collector's request stays as they sent it; a walk-in bringing a slab the
+  register knows finds it by grader and cert rather than typing it again, and
+  the customer's edits to that draft touch only its photos and description.
+  This delivers carry-grade-into-vault-case, the follow-on `add-card-grading`
+  names
+- **Staff move an item to a new owner** - any account or the custodian,
+  never the lender, with a reason and an optional proof document, traced on
+  the item and the audit log; an item whose owner was erased moves the same
+  way; refused while a place marks the item, naming the place
+- **Forfeit moves the item to the lender** - when the vault closes its mark,
   never by a staff move
 - **Retire** - a duplicate, a lost or destroyed item, or one that left the
-  platform
-- **A collector's items** - their own section on the collector page
+  platform; final, and the item reads only after it
+- **A collector's items** - their own section on the collector page, every
+  item they own but a retired one
 - **Erasure reaches the register** - inventory answers the erasure checklist,
-  refusing while a place holds an item the person owns
+  refusing while a place marks an item the person owns
 - **A grant to move items** - `inventory:transfer`, held by staff and admin;
   the treasurer holds none of the register's grants
 - **Grading's Q82, changed** - a collector's slab still never enters the
@@ -62,27 +68,29 @@ See [Non-Goals](decisions.md#non-goals).
 
 - `grade10-admin/inventory/items`: the register on the console - what an item
   says, who owns it, finding it, registering and editing it, moving it,
-  retiring it, closing a hold left open, a collector's items, and erasure
-- `grade10-admin/inventory/item-marks`: how a place tells the register what
-  it holds - a hold opened and closed by the place, mirrored and never
-  refused, a disagreement recorded, the owner moved by a place's closing
-  word; walked by nobody on their own
+  retiring it, a collector's items, and erasure; and how a place tells the
+  register what it keeps - a mark opened and closed by the place, mirrored
+  and never refused, a disagreement recorded, the owner moved by a place's
+  closing word, and staff closing a mark left open
 
 ### Modified Capabilities
 
 - `grade10-admin/vault/operator-queue`: the Case tab reads and edits the
-  item's grader, grade, cert and facts once it is registered; a walk-in finds
-  a slab the register already knows by grader and cert
+  register's category, title, description, grader, grade and cert once the
+  item is registered; a walk-in finds a slab the register already knows by
+  grader and cert
 - `grade10-site/vault/valuation-and-offer`: a valuation is read beside the
   item's grader, grade and cert
 - `grade10-site/vault/documents-and-signing`: the custody agreement prints
-  the grader, grade and cert as they stood when the packet was prepared
+  the register's category, title and description, with the grader, grade and
+  cert, as they stood when the packet was prepared
 - `grade10-site/vault/case-lifecycle`: starting the valuation registers the
-  item; vaulting, release, unwind and forfeit open and close its hold;
+  item; vaulting, release, unwind and forfeit open and close its mark;
   preparing documents is refused while the register names another owner;
   a forfeit moves the item to the lender
 - `grade10-site/vault/case-intake`: the request wizard offers the register's
-  ten categories
+  ten categories; on a draft staff opened with a known slab, the collector
+  changes only the photos and the description
 - `shared/auth/roles`: the vocabulary gains `inventory:transfer`, and staff
   and admin hold it
 
@@ -94,7 +102,7 @@ See [Non-Goals](decisions.md#non-goals).
 - **Inventory console** - `packages/inventory/admin-frontend`: Items, one
   item, the move and retire dialogs
 - **Vault worker** - `packages/vault/backend`: registration at the start of
-  valuation, the hold at custody, the backfill, the facts on the custody
+  valuation, the mark at custody, the backfill, the facts on the custody
   agreement, the forfeit's owner move
 - **Vault console and collector SPA** - `packages/vault/admin-frontend`: the
   item's facts on the Case tab, the known-slab lookup at the walk-in, the
@@ -131,7 +139,7 @@ See [Non-Goals](decisions.md#non-goals).
 - [Inventory · Items](../../../docs/prds/products/grade10-admin/inventory/index.md#items)
 - [Items · Owners](../../../docs/prds/products/grade10-admin/inventory/items.md#owners)
 - [Items · Facts](../../../docs/prds/products/grade10-admin/inventory/items.md#facts)
-- [Items · Holds](../../../docs/prds/products/grade10-admin/inventory/items.md#holds)
+- [Items · Marks](../../../docs/prds/products/grade10-admin/inventory/items.md#marks)
 - [Items · Moving an Item](../../../docs/prds/products/grade10-admin/inventory/items.md#moving-an-item)
 - [Items · Retiring an Item](../../../docs/prds/products/grade10-admin/inventory/items.md#retiring-an-item)
 - [Items · Finding an Item](../../../docs/prds/products/grade10-admin/inventory/items.md#finding-an-item)

@@ -16,7 +16,7 @@ state neither of us meant.
 **I want** to cancel the unsent draft and open it again under the right
 address,
 **so that** the customer can send it, and the account at the wrong address
-is never emailed.
+is never emailed and keeps nothing of it.
 
 ## MODIFIED User journeys
 

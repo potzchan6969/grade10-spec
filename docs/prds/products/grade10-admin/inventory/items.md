@@ -39,10 +39,8 @@ company owns. Stock counts units of a product; an item is one object.
 
 ## Facts
 
-- 🚧 **What an item says** - category, title, description, grader, grade,
-  cert, and any of the catalogue's attributes -
-  [Products and Stock](/p/grade10-admin/inventory/catalog#product-schemas);
-  anything else goes in the description
+- 🚧 **What an item says** - category, title, description, grader, grade
+  and cert; any other fact goes in the description
 - 🚧 **Graded or not** - an item with no grader carries no grade and no
   cert; a slab from a grader not listed has no grader, and its grader, grade
   and cert go in the description
@@ -52,67 +50,71 @@ company owns. Stock counts units of a product; an item is one object.
 - 🚧 **Register and edit** - staff add an item and edit its facts on the
   console; the item shows who changed it last and when
 
-## Holds
+## Marks
 
-A place that holds an item says so on the item: in this release the vault is
-the only place. Held or not is read from the places; staff only close a hold
-the vault no longer has.
+A place keeping an item puts its mark on the item: in this release the vault
+is the only place. Marked or not is read from the places; staff only close a
+mark the vault no longer has.
 
 - 🚧 **The vault registers** - an item gets its record when staff start the
-  vault valuation, and reads as held from the day it is vaulted until it is
-  released, unwound or forfeited -
+  vault valuation, and carries the vault's mark from the day it is vaulted
+  until it is released, unwound or forfeited -
   [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#exits)
 - 🚧 **The place decides** - the register never refuses what the vault has
   already done; where the vault and the register disagree on the owner, the
   item's page shows staff both owners
 - 🚧 **Items already in the vault** - every case that reached custody
-  appears as an item under its collector, held while the item is in the
-  vault; an erased collector's case is left out, and a forfeited case's item
-  belongs to the lender
-- 🚧 **A hold left open** - staff close a hold the vault no longer has, with
+  appears as an item under its collector, marked while the item is in the
+  vault; an erased collector's case is left out, a forfeited case's item
+  belongs to the lender, and staff retire a second record of one object when
+  they find it
+- 🚧 **A mark left open** - staff close a mark the vault no longer has, with
   a reason; a later word from the vault does not reopen it
 
 ## Moving an Item
 
-- 🚧 **Transfer** - a staff member or an admin moves an item no place holds
+- 🚧 **Transfer** - a staff member or an admin moves an item no place marks
   to any account, named by its exact email, or to the custodian, with a
   reason and, where there is one, a proof document; an item whose owner was
   erased moves the same way; the item shows each move, who made it and when,
   and the audit log records it
-- 🚧 **Refused while held** - a transfer is refused while a place holds the
-  item, naming the place
+- 🚧 **Refused while marked** - a transfer is refused while a place marks
+  the item, naming the place
 - 🚧 **Forfeit** - a forfeited vault item belongs to the lender from the
-  moment the vault closes its hold; nobody transfers it by hand
+  moment the vault closes its mark; nobody transfers it by hand, and a
+  transfer never names the lender
 - 🚧 **Proof** - opened only by those who may transfer, and each opening is
   on the audit log
 
 ## Retiring an Item
 
 - 🚧 **Retire** - staff retire an item as a duplicate, lost, destroyed or
-  left the platform; refused while a place holds it
-- 🚧 **After retiring** - the item keeps its history and leaves the default
-  list, and its grader and cert may name a new item
+  left the platform; refused while a place marks it
+- 🚧 **After retiring** - the retire is final and the item reads only: it
+  keeps its history and leaves the default list, and its grader and cert may
+  name a new item; an item retired by mistake is registered again
 
 ## Finding an Item
 
-- 🚧 **Default list** - held items; staff switch to every item or to retired
-  ones
+- 🚧 **Default list** - marked items; staff switch to every item or to
+  retired ones
 - 🚧 **Search** - by title, by grader and cert, by item id, or by the owner's
   exact email; never by an owner's name - a click on a name opens the
   collector page
 
 ## Erasure
 
-- 🚧 **Refused while held** - the ask to be forgotten is refused while a
-  place holds an item the person owns -
+- 🚧 **Refused while marked** - the ask to be forgotten is refused while a
+  place marks an item the person owns -
   [Account Data](/platform/account-data#erasure)
 - 🚧 **Items they own** - the owner is removed, the title reads as erased,
-  and the description and attributes go
+  and the description goes
 - ❓ **The object's facts** - whether category, grader, grade and cert stay
   once the owner is erased; recommended: they stay, since they describe the
   object - Legal
 - 🚧 **Moves they were part of** - their side and the reason go; a proof
-  stays while the other party still has an account, then goes
+  stays while the other party is the custodian, the lender or a live
+  account, then goes
 
 ## Permissions
 
@@ -120,7 +122,7 @@ the vault no longer has.
 | --- | --- | --- |
 | `inventory:read` | staff, admin | Items, one item, a collector's items |
 | `kyc:read` | staff, admin | the owner's name on Items, one item and a collector's items |
-| `inventory:write` | staff, admin | add an item, edit its facts, retire it, close a hold left open |
+| `inventory:write` | staff, admin | add an item, edit its facts, retire it, close a mark left open |
 | `inventory:transfer` | staff, admin | move an item, open a proof |
 
 - 🚧 **The new grant** - `inventory:transfer`, held by staff and admin
@@ -144,23 +146,23 @@ move it to a new owner with a trace.
 **Users.** Staff and admins on the console. Collectors do not see the
 register; their vault case and their grading submission stay their pages.
 
-**Not in scope.** Values, photographs or locations on an item; an item held
-by the auction or by grading; moving a vaulted item to a new owner; telling
-either owner of a move; search by name; merging two items; linking an item
-to catalogue stock.
+**Not in scope.** Values, photographs or locations on an item; the
+catalogue's attributes on an item; an item the auction or grading marks;
+moving a vaulted item to a new owner; telling either owner of a move; search
+by name; merging two items; linking an item to catalogue stock.
 
 **Measurement.** Items in custody with no record, held at zero; moves
-recorded with who and why; holds closed by hand, expected near zero.
+recorded with who and why; marks closed by hand, expected near zero.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Where the record lives | Decided | The inventory service, in tables of its own; one object with one owner is not a stock count, so not the catalogue | Product |
-| Who owns what, outside the vault | Decided | The map of which account owns which item sits in the shared database, outside the vault's own. It holds no values, photographs, locations, loan terms or amounts, and a hold ends with a neutral reason; a forfeited item's move to the lender is the one signal that cannot be hidden. Revisit if the register ever stores a value, a photograph or a location, or Legal names a duty | Product |
+| Who owns what, outside the vault | Decided | The map of which account owns which item sits in the shared database, outside the vault's own. It holds no values, photographs, locations, loan terms or amounts, and a mark ends with a neutral reason; a forfeited item's move to the lender is the one signal that cannot be hidden. Revisit if the register ever stores a value, a photograph or a location, or Legal names a duty | Product |
 | The place decides | Decided | A place commits its own fact first and the register mirrors it, never refusing it; a disagreement is recorded, not refused | Product |
-| Two places at once | Decided | One item may be held by the vault and by the auction at the same time; the auction arrives with its own change | Product |
+| Two places at once | Decided | One item may carry the vault's mark and the auction's at the same time; the auction arrives with its own change | Product |
 | A vaulted item changing owner | Decided | Refused in this release; the vault moves an owner when a vaulted item is sold, with that change | Product |
 | Transfer notice | Decided | No email to either owner; the item's moves and the audit log hold it | Product |
-| Proof after erasure | Decided | Kept while the other party still has an account | Product |
+| Proof after erasure | Decided | Kept while the other party is the custodian, the lender or a live account, so the remaining owner keeps the record of how it got the item | Product |
 | Search by name | Decided | None; exact email, cert, title, item id or a click on a name | Product |
 | Grading's slab and the catalogue | Decided | A collector's slab never enters the catalogue; the vault values it from this register - [The Submission](/p/grade10-site/grading/submission#the-record-after-collection) | Product |
 | Owner of a bought or gifted item | ❓ Open | Recommended: the custodian; the lender only through a forfeit | Legal |

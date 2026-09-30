@@ -13,11 +13,12 @@ time to find one collector's cases, read by observing the counter.
 
 ## What Changes
 
-- **Staff open a draft for a walk-in** - the customer's email and name, the
-  item and staff's own photos; the case opens as a draft under the
+- **Staff open a draft for a walk-in** - the customer's email, the item and
+  staff's own photos, and no name; the case opens as a draft under the
   customer's own account, or an account nobody has signed in to yet where
-  there is none, and nothing is emailed. **BREAKING** for the rule that the
-  console opens no case
+  there is none, which reads by its email handle until the customer names
+  themselves; nothing is emailed. **BREAKING** for the rule that the console
+  opens no case
 - **An address signed in to before** - it is refused when the address
   belongs to an account someone has signed in to; that customer sends the
   request from their own phone, with staff beside them, because a typed
@@ -55,19 +56,21 @@ See [Non-Goals](decisions.md#non-goals).
   covers collector names and the operate grant opens a walk-in
 - `grade10-site/vault/case-intake`: a draft staff opened under the
   collector's account, sent by the collector with the wizard's third step
-- `grade10-site/vault/case-lifecycle`: a draft staff opened ends on the draft
-  clock or a cancel, silently; a mistyped walk-in is cancelled and opened
-  again
+- `grade10-site/vault/case-lifecycle`: a draft staff opened ends on the
+  **7-day** draft clock or a cancel, silently; a mistyped walk-in is cancelled
+  and opened again, and the account at the wrong address keeps nothing of
+  it
 - `grade10-site/vault/collector-notifications`: no email on a staff-opened
   draft's expiry or cancel
 
 ## Impact
 
-- **Auth workers** - `grade10-auth` and `zzz-auth`: `createUnverifiedAccount`
-  takes the name staff type and applies it only to an account it creates;
+- **Auth workers** - `grade10-auth` and `zzz-auth` do not change: the walk-in
+  creates an account with `createUnverifiedAccount` as it stands, and
   `accountsByUserIds` answers the collector names, at most 100 ids a call
 - **Vault worker** - `packages/vault/backend`: the walk-in act opening a
-  draft, the silent expiry and cancel of a draft staff opened, collector names
+  draft, the silent expiry of a draft staff opened, and its cancel, which
+  removes the draft and staff's photos from the account; collector names
   by case ids under the identity grant, the collector filter, and one
   collector's cases
 - **Console** - `packages/vault/admin-frontend`: the walk-in form, the
@@ -92,15 +95,10 @@ See [Non-Goals](decisions.md#non-goals).
 
 - **Legal** - when the walk-in customer reads the collection statement, a ❓
   row in [Operator Console](../../../docs/prds/products/grade10-site/vault/operator-console.md)'s
-  decisions
-- **Product** - what ends a draft staff opened that nobody sends, a ❓ row in
-  [Case Lifecycle](../../../docs/prds/products/grade10-site/vault/case-lifecycle.md)'s
-  decisions
+  decisions; the walk-in form's task group starts after Legal answers, and
+  the names and the collector page do not wait
 - **Design** - the counter's form, the collector column and filter, and the
   collector page have no board yet; `ui-design.md` waits on them
-- **Owner** - the collector filter, the typed name, the mistyped address's
-  account, the form's wait on Legal and a counter QR, held in
-  [decisions.md](decisions.md#decisions)
 
 ## References
 
