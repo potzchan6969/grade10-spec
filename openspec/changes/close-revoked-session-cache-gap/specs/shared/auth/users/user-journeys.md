@@ -1,5 +1,11 @@
 ## Context user journeys
 
+### shared-auth-users-US-01: Operator lists people in the identity directory
+
+**As an** operator who can list users,
+**I want** to search and open accounts by user id,
+**so that** I can find a person without seeing records I am not granted.
+
 ### shared-auth-users-US-02: Operator bans and unbans an account
 
 **As an** operator who can ban,
@@ -15,6 +21,23 @@ strip my own `admin` when another admin remains, without stripping `admin`
 from a peer,
 **so that** ordinary grants and cooperative offboarding stay in the console and
 peer lockout does not.
+
+### shared-auth-users-US-04: Operator finds the accounts they mean
+
+**As an** operator who can list users,
+**I want** to search by the name I was given and narrow the directory to the
+accounts I mean,
+**so that** I can reach one person from a ticket, and answer who holds a role,
+without reading every account.
+
+### shared-auth-users-US-05: Operator creates an Auth account
+
+**As an** operator holding `user:create`,
+**I want** to create a passwordless Auth account with name, email, and roles
+from the closed set for someone who has never signed in — and to be refused
+when the email already exists —
+**so that** access can be granted before first sign-in without loyalty enroll
+or an invite mail, and a duplicate never becomes a second account.
 
 ## ADDED User journeys
 

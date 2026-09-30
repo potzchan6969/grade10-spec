@@ -59,6 +59,14 @@ See [Non-Goals](decisions.md#non-goals).
 - `docs/architecture/edge-cache.md`, `docs/architecture/security.md`
   (grade10) — correct the accepted-lag framing for these four actions
 
+## Domain impact
+
+No domain impact: `shared/auth/domain-tcs.md`'s `shared-auth-e2e-US3-TC1-1`
+(ban) and `shared-auth-e2e-US4-TC1-1` (revoke) already walk the actions this
+change tightens end to end; the new feature-level cases pin the cache-closing
+timing precisely, and the domain smoke pass does not need its own edit for
+that precision.
+
 ## References
 
 - [Sessions · Revoke](../../../docs/prds/products/shared/auth/sessions.md#revoke)

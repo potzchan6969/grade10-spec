@@ -1,4 +1,2 @@
 schema: grade10-planning
 created: 2026-09-30
-awaiting:
-  specs: shared/auth/sessions and shared/auth/users deltas, from /workflow-specify
