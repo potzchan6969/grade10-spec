@@ -2,7 +2,7 @@
 title: Analytics
 spec: grade10-site/analytics/analytics
 icon: chart-bar
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 ---
 
 What Grade10 measures, by domain, and where each number is read from.

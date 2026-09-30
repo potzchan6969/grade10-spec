@@ -15,7 +15,8 @@ that use them sit on [Analytics](/p/grade10-site/analytics).
 | Wallet passes | Passes issued and ended | Wallet |
 | Tier reviews | Members who kept or lost a tier at review | Outcome |
 | Earning delivery | Money events that reached the programme, were refused, or could not | Outcome |
+| Mixpanel outbox | Backend records waiting to send, the oldest one's age, and how many Mixpanel refused and are held | Product · kind (event or profile) |
 
 :::detail{title="Code map" for="engineer"}
-- **Counters** — `ddCount` from `@grade10/utils/metrics`, read in Datadog
+- **Counters and gauges** — `ddCount` and `ddGauge` from `@grade10/utils/metrics`, read in Datadog; the outbox gauges are reported by `packages/mixpanel/src/outbox/send.ts`
 :::
