@@ -18,15 +18,23 @@ const expectedBaseline = value("--baseline");
 const supersedes = value("--supersedes");
 const changeId = args[0];
 if (!changeId || args.length !== 1 || !reviewedBy || !expectedBaseline) {
-  console.error("usage: pnpm run spec:accept <change-id> --reviewed-by <name> --baseline <preflight-baseline> [--supersedes <fingerprint>] [--root <store>]");
+  console.error(
+    "usage: pnpm run spec:accept <change-id> --reviewed-by <name> --baseline <preflight-baseline> [--supersedes <fingerprint>] [--root <store>]",
+  );
   process.exit(2);
 }
 try {
-  const acceptance = acceptChange(root, changeId, { reviewedBy, expectedBaseline, supersedes });
+  const acceptance = acceptChange(root, changeId, {
+    reviewedBy,
+    expectedBaseline,
+    supersedes,
+  });
   console.log(`Accepted ${changeId}.`);
   console.log(`Fingerprint: ${acceptance.fingerprint}`);
   console.log(`Review: ${acceptance.reviewedBy} at ${acceptance.acceptedAt}`);
-  console.log(`Immutable record: openspec/changes/${changeId}/acceptance/${acceptance.fingerprint}.json`);
+  console.log(
+    `Immutable record: openspec/changes/${changeId}/acceptance/${acceptance.fingerprint}.json`,
+  );
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;

@@ -34,8 +34,8 @@ import {
   readRounds,
   roundArtifactOf,
 } from "../../tools/manual/src/store/read-rounds.mts";
-import { fixPassFloor, planningSchema, SCHEMA } from "./lib/perspectives.mjs";
 import { verifyAcceptance } from "./lib/acceptance.mjs";
+import { fixPassFloor, planningSchema, SCHEMA } from "./lib/perspectives.mjs";
 import { readTextIfThere } from "./lib/read-text.mjs";
 import { perspectivesRefusals, roundsPath } from "./lib/rounds.mjs";
 import { storeMain, textAt } from "./store-main.mjs";

@@ -22,10 +22,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import {
-  handOf,
-  STAGE_LABEL,
-} from "../../tools/manual/src/api/stages.ts";
+import { handOf, STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
@@ -244,7 +241,9 @@ async function main() {
     [...read.changes, ...read.archivedOf()]
       // Historical archives predate acceptance records. They are already
       // immutable contracts, so they remain valid dependency evidence.
-      .filter((change) => change.accepted === true || change.status === "archived")
+      .filter(
+        (change) => change.accepted === true || change.status === "archived",
+      )
       .map((change) => [change.id, { on: change.lastMoved ?? change.created }]),
   );
   const told = digestOf(read, readTeamMap(root, values.team), {

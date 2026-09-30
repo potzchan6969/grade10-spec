@@ -14,6 +14,7 @@ import type {
   TeamMap,
 } from "../api/types.ts";
 import { ROLES } from "../api/types.ts";
+import { projectAvailability, receiptsFrom } from "./availability.mts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
 import {
@@ -44,7 +45,6 @@ import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
 import { markUpstream } from "./upstream.mts";
 import { checkWarnings } from "./warnings.mts";
-import { projectAvailability, receiptsFrom } from "./availability.mts";
 
 /** `docs/prds/team.yaml`, projected to what the browser needs: a handle
  * against the roles it may take, its e-mail, Slack member and channels left
@@ -177,10 +177,18 @@ export function composeStore(
       warnings,
       ...(designSync ? { designSync } : {}),
       team,
-      ...(["ready", "unconfigured"].includes(process.env.MANUAL_AVAILABILITY_STATUS ?? "")
-        ? { availabilityStatus: process.env.MANUAL_AVAILABILITY_STATUS as "ready" | "unconfigured" }
+      ...(["ready", "unconfigured"].includes(
+        process.env.MANUAL_AVAILABILITY_STATUS ?? "",
+      )
+        ? {
+            availabilityStatus: process.env.MANUAL_AVAILABILITY_STATUS as
+              | "ready"
+              | "unconfigured",
+          }
         : {}),
-      ...(availabilityEnvironments.length > 0 ? { availabilityEnvironments } : {}),
+      ...(availabilityEnvironments.length > 0
+        ? { availabilityEnvironments }
+        : {}),
       ...(sheetUrl ? { sheetUrl } : {}),
     },
     archive: {

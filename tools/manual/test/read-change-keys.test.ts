@@ -60,7 +60,9 @@ const acceptance = {
   fingerprint: "a".repeat(64),
   reviewedBy: "tester",
   acceptedAt: "2026-09-18T00:00:00.000Z",
-  artifacts: [{ path: "openspec/changes/key-probe/proposal.md", sha256: "c".repeat(64) }],
+  artifacts: [
+    { path: "openspec/changes/key-probe/proposal.md", sha256: "c".repeat(64) },
+  ],
 };
 
 const json = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
@@ -105,7 +107,11 @@ describe("the immutable acceptance and implementation records", () => {
         version: 1,
         fingerprint: acceptance.fingerprint,
         repositories: [
-          { repository: "grade10", commit: "1".repeat(40), components: ["demo-product/alpha"] },
+          {
+            repository: "grade10",
+            commit: "1".repeat(40),
+            components: ["demo-product/alpha"],
+          },
         ],
       }),
     });
@@ -120,7 +126,11 @@ describe("the immutable acceptance and implementation records", () => {
         version: 1,
         fingerprint: "f".repeat(64),
         repositories: [
-          { repository: "grade10", commit: "1".repeat(40), components: ["demo-product/alpha"] },
+          {
+            repository: "grade10",
+            commit: "1".repeat(40),
+            components: ["demo-product/alpha"],
+          },
         ],
       }),
     });
@@ -269,7 +279,6 @@ describe("the lines beside them", () => {
       /`thread` must be a line of text/,
     );
   });
-
 });
 
 describe("what a record waives", () => {

@@ -15,10 +15,9 @@ import type {
 /** The change as a message reads it: the id a command is written with, the
  * stage the sentence names and the suites QA's turn at Specified names by
  * path and case count. */
-export type WordedChange = Pick<
-  ChangeEntry,
-  "id" | "suites"
-> & { stage: Stage };
+export type WordedChange = Pick<ChangeEntry, "id" | "suites"> & {
+  stage: Stage;
+};
 
 /** The change as a landing reply reads it: the stage it is at now, the roles
  * of that stage and the hand each names, where one is named. */

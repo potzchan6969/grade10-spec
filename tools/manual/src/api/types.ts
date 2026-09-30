@@ -277,7 +277,12 @@ export type EnvironmentAvailability = {
   observedAt?: string;
   fetchedAt?: string;
   resolvedRef?: string;
-  components: { name: string; status: string; url?: string; resolvedRef?: string }[];
+  components: {
+    name: string;
+    status: string;
+    url?: string;
+    resolvedRef?: string;
+  }[];
   summary?: string;
   manualUrl?: string;
   qaUrl?: string;
@@ -289,7 +294,12 @@ export type EnvironmentReceiptSummary = {
   observedAt: string;
   fetchedAt?: string;
   deploymentUrl?: string;
-  components: { name: string; status: string; url?: string; resolvedRef?: string }[];
+  components: {
+    name: string;
+    status: string;
+    url?: string;
+    resolvedRef?: string;
+  }[];
 };
 
 /** Where a change stands, derived and never stored: `proposed` has no

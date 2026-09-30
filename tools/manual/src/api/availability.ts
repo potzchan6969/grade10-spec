@@ -1,4 +1,7 @@
-import type { EnvironmentAvailability, EnvironmentReceiptSummary } from "./types";
+import type {
+  EnvironmentAvailability,
+  EnvironmentReceiptSummary,
+} from "./types";
 
 const STALE_AFTER = 24 * 60 * 60 * 1000;
 
@@ -6,7 +9,9 @@ const STALE_AFTER = 24 * 60 * 60 * 1000;
  * when an application deployment happened. Evaluated when the reader opens
  * the page so a failed refresh makes the previously published receipt age. */
 export function availabilityIsStale(
-  evidence: Pick<EnvironmentAvailability, "fetchedAt"> | Pick<EnvironmentReceiptSummary, "fetchedAt">,
+  evidence:
+    | Pick<EnvironmentAvailability, "fetchedAt">
+    | Pick<EnvironmentReceiptSummary, "fetchedAt">,
   now = Date.now(),
 ): boolean {
   if (!evidence.fetchedAt) return true;

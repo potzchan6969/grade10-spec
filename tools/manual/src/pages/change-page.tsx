@@ -33,9 +33,10 @@ export function ChangePage() {
   const index = useManualIndex();
   const archive = useArchive();
   const change = index.changeById.get(id);
-  const archived = archive.status === "ready"
-    ? archive.archive.changes.find((one) => one.id === id)
-    : undefined;
+  const archived =
+    archive.status === "ready"
+      ? archive.archive.changes.find((one) => one.id === id)
+      : undefined;
   const entry = change ?? archived;
   useDocumentTitle(entry?.title ?? id);
 
@@ -44,9 +45,7 @@ export function ChangePage() {
       <>
         <PageHeading
           eyebrow="Board"
-          summary={
-            "No change in flight or archive answers to that id."
-          }
+          summary={"No change in flight or archive answers to that id."}
           title="No such change"
         />
         <Text as="p" className="mb-6 font-mono" size="sm" tone="secondary">
@@ -157,9 +156,16 @@ function ArchivedChangeBody({ change }: { change: ChangeEntry }) {
   return (
     <>
       <StageStepper heldBy={change.heldBy} stage={change.stage} />
-      <YourTurnCard artifacts={artifacts} change={change} sheetUrl={index.snapshot.sheetUrl} stage={change.stage} />
+      <YourTurnCard
+        artifacts={artifacts}
+        change={change}
+        sheetUrl={index.snapshot.sheetUrl}
+        stage={change.stage}
+      />
       <ChangeStatus
-        archived={archive.status === "ready" ? archive.archive.changes : undefined}
+        archived={
+          archive.status === "ready" ? archive.archive.changes : undefined
+        }
         change={change}
         index={index}
       />

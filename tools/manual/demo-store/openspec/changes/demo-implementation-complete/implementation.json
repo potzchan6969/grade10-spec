@@ -5,9 +5,7 @@
     {
       "repository": "grade10",
       "commit": "1111111111111111111111111111111111111111",
-      "components": [
-        "demo-product/alpha"
-      ]
+      "components": ["demo-product/alpha"]
     }
   ]
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { appendFileSync, readFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
+import { appendFileSync, readFileSync } from "node:fs";
 
 const api = process.env.GITHUB_API_URL ?? "https://api.github.com";
 const token = process.env.APP_DEPLOYMENTS_READ_TOKEN;
@@ -13,7 +13,9 @@ const now = new Date().toISOString();
 if (!token) {
   writeEnv("MANUAL_DEPLOYMENT_RECEIPTS", "[]");
   writeEnv("MANUAL_AVAILABILITY_STATUS", "unconfigured");
-  process.stderr.write("APP_DEPLOYMENTS_READ_TOKEN is not set; deployment availability will read as unknown.\n");
+  process.stderr.write(
+    "APP_DEPLOYMENTS_READ_TOKEN is not set; deployment availability will read as unknown.\n",
+  );
   process.exit(0);
 }
 if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository)) {
@@ -30,7 +32,9 @@ if (eventName === "repository_dispatch") {
     !Number.isInteger(Number(hint.deploymentId)) ||
     typeof hint.environment !== "string"
   ) {
-    throw new Error("Deployment refresh hint does not name the configured repository and a deployment id");
+    throw new Error(
+      "Deployment refresh hint does not name the configured repository and a deployment id",
+    );
   }
 }
 
@@ -45,27 +49,40 @@ async function get(path) {
   const response = await fetch(`${api}${path}`, { headers });
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(`GitHub API ${response.status} for ${path}: ${detail.slice(0, 500)}`);
+    throw new Error(
+      `GitHub API ${response.status} for ${path}: ${detail.slice(0, 500)}`,
+    );
   }
   return response.json();
 }
 
 const deployments = [];
 for (let page = 1; page <= 5; page++) {
-  const found = await get(`/repos/${owner}/${repo}/deployments?task=${encodeURIComponent(task)}&per_page=100&page=${page}`);
-  if (!Array.isArray(found)) throw new Error("GitHub deployments response is not an array");
+  const found = await get(
+    `/repos/${owner}/${repo}/deployments?task=${encodeURIComponent(task)}&per_page=100&page=${page}`,
+  );
+  if (!Array.isArray(found))
+    throw new Error("GitHub deployments response is not an array");
   deployments.push(...found);
   if (found.length < 100) break;
 }
 if (deployments.length === 500) {
-  throw new Error("Deployment history exceeds 500 records; refusing to silently truncate availability");
+  throw new Error(
+    "Deployment history exceeds 500 records; refusing to silently truncate availability",
+  );
 }
 
 if (eventName === "repository_dispatch") {
   const requested = Number(event.client_payload.deploymentId);
   const deployment = deployments.find((one) => one.id === requested);
-  if (!deployment || deployment.task !== task || deployment.environment !== event.client_payload.environment) {
-    throw new Error(`Deployment ${requested} is not a ${task} deployment in ${repository}`);
+  if (
+    !deployment ||
+    deployment.task !== task ||
+    deployment.environment !== event.client_payload.environment
+  ) {
+    throw new Error(
+      `Deployment ${requested} is not a ${task} deployment in ${repository}`,
+    );
   }
 }
 
@@ -82,10 +99,14 @@ for (const deployment of deployments) {
 
 const receipts = [];
 for (const [environment, rows] of byEnvironment) {
-  rows.sort((left, right) => Date.parse(right.created_at) - Date.parse(left.created_at));
+  rows.sort(
+    (left, right) => Date.parse(right.created_at) - Date.parse(left.created_at),
+  );
   let included = 0;
   for (const deployment of rows) {
-    const statuses = await get(`/repos/${owner}/${repo}/deployments/${deployment.id}/statuses?per_page=1`);
+    const statuses = await get(
+      `/repos/${owner}/${repo}/deployments/${deployment.id}/statuses?per_page=1`,
+    );
     const status = statuses[0];
     if (!status) continue;
     const payload = receiptPayload(deployment);
@@ -107,11 +128,15 @@ let eventReceipt;
 if (eventName === "repository_dispatch") {
   const id = Number(event.client_payload.deploymentId);
   const deployment = deployments.find((one) => one.id === id);
-  const statuses = await get(`/repos/${owner}/${repo}/deployments/${id}/statuses?per_page=1`);
+  const statuses = await get(
+    `/repos/${owner}/${repo}/deployments/${id}/statuses?per_page=1`,
+  );
   const status = statuses[0];
   const payload = receiptPayload(deployment);
   if (!status || !validReceipt(payload)) {
-    throw new Error(`Deployment ${id} has no valid availability receipt status`);
+    throw new Error(
+      `Deployment ${id} has no valid availability receipt status`,
+    );
   }
   eventReceipt = {
     ...payload,
@@ -131,16 +156,27 @@ function receiptPayload(deployment) {
   }
 }
 
-receipts.sort((left, right) => Date.parse(left.observedAt) - Date.parse(right.observedAt));
+receipts.sort(
+  (left, right) => Date.parse(left.observedAt) - Date.parse(right.observedAt),
+);
 const json = JSON.stringify(receipts);
 const envFile = process.env.GITHUB_ENV;
 if (envFile) {
   const delimiter = `RECEIPTS_${randomUUID().replaceAll("-", "")}`;
-  appendFileSync(envFile, `MANUAL_DEPLOYMENT_RECEIPTS<<${delimiter}\n${json}\n${delimiter}\n`);
+  appendFileSync(
+    envFile,
+    `MANUAL_DEPLOYMENT_RECEIPTS<<${delimiter}\n${json}\n${delimiter}\n`,
+  );
   appendFileSync(envFile, "MANUAL_AVAILABILITY_STATUS=ready\n");
   if (eventName === "repository_dispatch") {
-    appendFileSync(envFile, `MANUAL_DEPLOYMENT_ID=${Number(event.client_payload.deploymentId)}\n`);
-    appendFileSync(envFile, `MANUAL_DEPLOYMENT_EVENT_RECEIPT=${JSON.stringify(eventReceipt)}\n`);
+    appendFileSync(
+      envFile,
+      `MANUAL_DEPLOYMENT_ID=${Number(event.client_payload.deploymentId)}\n`,
+    );
+    appendFileSync(
+      envFile,
+      `MANUAL_DEPLOYMENT_EVENT_RECEIPT=${JSON.stringify(eventReceipt)}\n`,
+    );
   }
 } else {
   process.stdout.write(`${json}\n`);

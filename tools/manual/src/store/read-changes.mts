@@ -70,7 +70,10 @@ const AUTHOR =
   /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
-function acceptedRecord(dir: string, id: string): { fingerprint: string } | undefined {
+function acceptedRecord(
+  dir: string,
+  id: string,
+): { fingerprint: string } | undefined {
   const text = readTextIfExists(join(dir, "acceptance.json"));
   if (text === undefined) return undefined;
   try {
@@ -91,14 +94,18 @@ function acceptedRecord(dir: string, id: string): { fingerprint: string } | unde
           typeof item.path === "string" &&
           typeof item.sha256 === "string",
       )
-    ) return undefined;
+    )
+      return undefined;
     return { fingerprint: value.fingerprint };
   } catch {
     return undefined;
   }
 }
 
-function implementationMatches(dir: string, fingerprint: string | undefined): boolean {
+function implementationMatches(
+  dir: string,
+  fingerprint: string | undefined,
+): boolean {
   if (!fingerprint) return false;
   const text = readTextIfExists(join(dir, "implementation.json"));
   if (text === undefined) return false;
@@ -116,7 +123,9 @@ function implementationMatches(dir: string, fingerprint: string | undefined): bo
           typeof item.repository === "string" &&
           typeof item.commit === "string" &&
           Array.isArray(item.components) &&
-          item.components.every((component: unknown) => typeof component === "string"),
+          item.components.every(
+            (component: unknown) => typeof component === "string",
+          ),
       )
     );
   } catch {

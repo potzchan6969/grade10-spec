@@ -160,7 +160,11 @@ describe("the stages that say something else", () => {
   });
 
   it("does not turn implementation completion into a run-sheet walk", () => {
-    const html = render(gift(), "implementation-complete", "https://sheets.test/run");
+    const html = render(
+      gift(),
+      "implementation-complete",
+      "https://sheets.test/run",
+    );
 
     expect(html).not.toContain('href="https://sheets.test/run"');
     expect(html).not.toContain(">the run sheet<");

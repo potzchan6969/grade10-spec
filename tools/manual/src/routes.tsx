@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
-import { ChangePage } from "./pages/change-page";
 import { AvailabilityPage } from "./pages/availability-page";
+import { ChangePage } from "./pages/change-page";
 import { DesignPage } from "./pages/design-page";
 import { GuidePage } from "./pages/guide-page";
 import { HomePage } from "./pages/home-page";

@@ -32,7 +32,11 @@ const tracked = () =>
   // change. Read the files that exist now, including their replacement
   // fixtures, rather than trying to open deleted entries still in Git's
   // index while the suite is validating the migration.
-  execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: ROOT, encoding: "utf8" })
+  execFileSync(
+    "git",
+    ["ls-files", "--cached", "--others", "--exclude-standard"],
+    { cwd: ROOT, encoding: "utf8" },
+  )
     .split("\n")
     .filter((path) => path !== "" && path !== SELF && TEXT.test(path))
     .filter((path) => existsSync(join(ROOT, path)));

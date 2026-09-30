@@ -17,7 +17,12 @@ export type DeploymentReceipt = {
     still: { change: string; fingerprint: string }[];
     noLonger: { change: string; fingerprint: string }[];
   };
-  components: { name: string; status: string; url?: string; resolvedRef?: string }[];
+  components: {
+    name: string;
+    status: string;
+    url?: string;
+    resolvedRef?: string;
+  }[];
   changes: {
     change: string;
     title: string;
@@ -34,9 +39,7 @@ export type DeploymentReceipt = {
 
 /** Receipts arrive from the canonical GitHub Deployments payloads. Invalid
  * payloads are ignored: a malformed or absent observation says unknown. */
-export function receiptsFrom(
-  source: string | undefined,
-): DeploymentReceipt[] {
+export function receiptsFrom(source: string | undefined): DeploymentReceipt[] {
   if (!source) return [];
   try {
     const parsed: unknown = JSON.parse(source);
@@ -57,29 +60,30 @@ function validReceipt(value: unknown): value is DeploymentReceipt {
     typeof item.observedAt === "string" &&
     Number.isFinite(Date.parse(item.observedAt)) &&
     Array.isArray(item.components) &&
-    item.components.every(
-      (one: unknown) => {
-        if (!one || typeof one !== "object") return false;
-        const component = one as Record<string, unknown>;
-        return typeof component.name === "string" && typeof component.status === "string";
-      },
-    ) &&
+    item.components.every((one: unknown) => {
+      if (!one || typeof one !== "object") return false;
+      const component = one as Record<string, unknown>;
+      return (
+        typeof component.name === "string" &&
+        typeof component.status === "string"
+      );
+    }) &&
     Array.isArray(item.changes) &&
-    item.changes.every(
-      (one: unknown) => {
-        if (!one || typeof one !== "object") return false;
-        const change = one as Record<string, unknown>;
-        return (
-          typeof change.change === "string" &&
-          typeof change.title === "string" &&
-          typeof change.fingerprint === "string" &&
-          typeof change.archiveCommit === "string" &&
-          typeof change.summary === "string" &&
-          Array.isArray(change.components) &&
-          change.components.every((component: unknown) => typeof component === "string")
-        );
-      },
-    )
+    item.changes.every((one: unknown) => {
+      if (!one || typeof one !== "object") return false;
+      const change = one as Record<string, unknown>;
+      return (
+        typeof change.change === "string" &&
+        typeof change.title === "string" &&
+        typeof change.fingerprint === "string" &&
+        typeof change.archiveCommit === "string" &&
+        typeof change.summary === "string" &&
+        Array.isArray(change.components) &&
+        change.components.every(
+          (component: unknown) => typeof component === "string",
+        )
+      );
+    })
   );
 }
 
@@ -97,7 +101,10 @@ export function projectAvailability(
     history.set(receipt.environment, rows);
   }
   for (const rows of history.values()) {
-    rows.sort((left, right) => Date.parse(left.observedAt) - Date.parse(right.observedAt));
+    rows.sort(
+      (left, right) =>
+        Date.parse(left.observedAt) - Date.parse(right.observedAt),
+    );
   }
 
   for (const change of changes) {
@@ -106,18 +113,29 @@ export function projectAvailability(
       const latest = rows.at(-1)!;
       const previous = rows.at(-2);
       const listed = latest.changes.find((one) => one.change === change.id);
-      const wasListed = previous?.changes.some((one) => one.change === change.id) ?? false;
-      const newly = latest.servingSet?.newly.some(
-        (one) => one.change === change.id && one.fingerprint === change.acceptanceFingerprint,
-      ) ?? (!wasListed && Boolean(listed));
-      const still = latest.servingSet?.still.some(
-        (one) => one.change === change.id && one.fingerprint === change.acceptanceFingerprint,
-      ) ?? (wasListed && Boolean(listed));
-      const noLonger = latest.servingSet?.noLonger.some(
-        (one) => one.change === change.id,
-      ) ?? (wasListed && !listed);
+      const wasListed =
+        previous?.changes.some((one) => one.change === change.id) ?? false;
+      const newly =
+        latest.servingSet?.newly.some(
+          (one) =>
+            one.change === change.id &&
+            one.fingerprint === change.acceptanceFingerprint,
+        ) ??
+        (!wasListed && Boolean(listed));
+      const still =
+        latest.servingSet?.still.some(
+          (one) =>
+            one.change === change.id &&
+            one.fingerprint === change.acceptanceFingerprint,
+        ) ??
+        (wasListed && Boolean(listed));
+      const noLonger =
+        latest.servingSet?.noLonger.some((one) => one.change === change.id) ??
+        (wasListed && !listed);
       const components = listed
-        ? latest.components.filter((one) => listed.components.includes(one.name))
+        ? latest.components.filter((one) =>
+            listed.components.includes(one.name),
+          )
         : [];
       const validEvidence = Boolean(
         listed &&
@@ -127,7 +145,11 @@ export function projectAvailability(
           listed.archiveCommit &&
           (listed.status === undefined || listed.status === "available"),
       );
-      const state: EnvironmentAvailability["state"] = listed && (!validEvidence || listed.status === "partial" || listed.status === "unknown")
+      const state: EnvironmentAvailability["state"] =
+        listed &&
+        (!validEvidence ||
+          listed.status === "partial" ||
+          listed.status === "unknown")
           ? listed.status === "partial"
             ? "partial"
             : "unknown"

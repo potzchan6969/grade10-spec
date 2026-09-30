@@ -284,7 +284,9 @@ describe("the lanes", () => {
     expect(html).toContain(
       'title="agent drafts each group, test first · read each landing"',
     );
-    expect(lane(html, "implementation-complete", "archived")).not.toContain("agent drafts");
+    expect(lane(html, "implementation-complete", "archived")).not.toContain(
+      "agent drafts",
+    );
     expect(lane(html, "archived", "archived")).not.toContain("agent drafts");
   });
 

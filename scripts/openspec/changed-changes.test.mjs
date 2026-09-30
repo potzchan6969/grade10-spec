@@ -959,10 +959,7 @@ test("--stages does not treat a completed task list as a QA execution signal", (
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
-    [`${DIR}/.openspec.yaml`]: record(
-      ...HANDS,
-      'promoted_by: "@dana"',
-    ),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
     [`${DIR}/proposal.md`]: proposalOf(),
     [`${DIR}/tasks.md`]: tasksMd(0),
   });

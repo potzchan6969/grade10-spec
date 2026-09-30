@@ -6,13 +6,13 @@ import { landingDatesOf } from "../src/api/handoff.ts";
 import { OVERLAYS, type Overlay, overlaysOf } from "../src/api/overlays.ts";
 import { draftedOf, movedBy, moveShown } from "../src/api/stage-view.ts";
 import {
+  completedOf,
   handOf,
   handOfArtifact,
   ladderOf,
   laneOfStage,
   laterRolesOf,
   openHands,
-  completedOf,
   STAGES,
   stageOf,
 } from "../src/api/stages.ts";
@@ -420,7 +420,10 @@ describe("whose turn it is", () => {
       openHands(at("planned"), handOf(at("planned"), "planned", artifacts())),
     ).toEqual([]);
     expect(
-      openHands(at("implementation-complete", { hands: { qa: "ari" } }), ["qa", "release"]),
+      openHands(at("implementation-complete", { hands: { qa: "ari" } }), [
+        "qa",
+        "release",
+      ]),
     ).toEqual(["release"]);
   });
 });
@@ -822,7 +825,11 @@ describe("what a completed implementation has carried", () => {
     const completedIds = new Set(completedOf([complete], []).keys());
 
     expect(
-      overlaysOf(dependent, { now: NOW, released: completedIds, artifacts: artifacts() }),
+      overlaysOf(dependent, {
+        now: NOW,
+        released: completedIds,
+        artifacts: artifacts(),
+      }),
     ).toEqual([{ kind: "blocked", change: "elsewhere" }]);
   });
 });

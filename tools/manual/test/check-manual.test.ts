@@ -1201,7 +1201,7 @@ describe("the record a change leaves", () => {
       carrying({
         "docs/prds/products/demo-product/alpha.md": MARKED,
         "openspec/changes/build-alpha/.openspec.yaml":
-            "schema: grade10-planning\npage_waived: true\n",
+          "schema: grade10-planning\npage_waived: true\n",
       }),
     );
     expect(lines(await runChecks(root, NO_GIT), "store")).toEqual([
@@ -1261,8 +1261,6 @@ describe("the record a change leaves", () => {
     });
     expect(lines(await runChecks(waived, NO_GIT), "design")).toEqual([]);
   });
-
-
 });
 
 describe("a manifest naming its blockers", () => {

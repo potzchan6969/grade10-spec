@@ -62,12 +62,14 @@ export function YourTurnCard({
   const fallback =
     stage !== "archived" && DRAFTED[stage] === undefined
       ? {
-          command: stage === "accepted"
-            ? `/workflow-build ${change.id} <group>`
-            : `/archive-change ${change.id}`,
-          note: stage === "accepted"
-            ? "engineer: implement one task group, test first"
-            : "archive the verified implementation and fold its accepted delta",
+          command:
+            stage === "accepted"
+              ? `/workflow-build ${change.id} <group>`
+              : `/archive-change ${change.id}`,
+          note:
+            stage === "accepted"
+              ? "engineer: implement one task group, test first"
+              : "archive the verified implementation and fold its accepted delta",
         }
       : undefined;
 

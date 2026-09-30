@@ -182,53 +182,77 @@ export function DeliveryRow({ change }: { change: ChangeEntry }) {
         <Text as="span" size="xs" tone="secondary">
           availability
         </Text>
-        {change.availability === undefined || change.availability.length === 0 ? (
+        {change.availability === undefined ||
+        change.availability.length === 0 ? (
           <Badge size="sm" variant="outline">
             unknown
           </Badge>
         ) : (
           <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
             {change.availability.map((environment) => (
-              <span key={environment.environment} className="inline-flex flex-wrap items-center gap-1.5">
+              <span
+                key={environment.environment}
+                className="inline-flex flex-wrap items-center gap-1.5"
+              >
                 {/** A reader's current view decides whether the receipt aged. */}
                 {(() => {
                   const state = visibleAvailabilityState(environment);
                   return (
-                <Badge
-                  size="sm"
-                  variant={
-                    state === "newly" || state === "still"
-                      ? "success"
-                      : state === "partial" || state === "stale"
-                        ? "warning"
-                        : "outline"
-                  }
-                >
-                  {`${environment.environment}: ${state}`}
-                </Badge>
+                    <Badge
+                      size="sm"
+                      variant={
+                        state === "newly" || state === "still"
+                          ? "success"
+                          : state === "partial" || state === "stale"
+                            ? "warning"
+                            : "outline"
+                      }
+                    >
+                      {`${environment.environment}: ${state}`}
+                    </Badge>
                   );
                 })()}
                 {environment.observedAt ? (
-                  <time className="text-xs text-muted-foreground" dateTime={environment.observedAt}>
+                  <time
+                    className="text-xs text-muted-foreground"
+                    dateTime={environment.observedAt}
+                  >
                     {new Date(environment.observedAt).toLocaleString()}
                   </time>
                 ) : null}
                 {environment.summary ? (
-                  <span className="text-xs text-muted-foreground">{environment.summary}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {environment.summary}
+                  </span>
                 ) : null}
-                {environment.manualUrl ? <a className="text-xs underline" href={environment.manualUrl}>Manual</a> : null}
-                {environment.qaUrl ? <a className="text-xs underline" href={environment.qaUrl}>QA</a> : null}
-                {environment.components.map((component) => (
+                {environment.manualUrl ? (
+                  <a className="text-xs underline" href={environment.manualUrl}>
+                    Manual
+                  </a>
+                ) : null}
+                {environment.qaUrl ? (
+                  <a className="text-xs underline" href={environment.qaUrl}>
+                    QA
+                  </a>
+                ) : null}
+                {environment.components.map((component) =>
                   component.url ? (
-                    <a className="text-xs underline" href={component.url} key={component.name}>
+                    <a
+                      className="text-xs underline"
+                      href={component.url}
+                      key={component.name}
+                    >
                       {component.name}
                     </a>
                   ) : (
-                    <span className="text-xs text-muted-foreground" key={component.name}>
+                    <span
+                      className="text-xs text-muted-foreground"
+                      key={component.name}
+                    >
                       {`${component.name} ${component.status}`}
                     </span>
-                  )
-                ))}
+                  ),
+                )}
               </span>
             ))}
           </span>

@@ -107,10 +107,12 @@ export function nextAction(
     }));
   if (stage === "archived") return [];
   if (stage === "accepted") {
-    return [{
-      command: `/workflow-build ${change.id} <group>`,
-      note: "engineer: implement one task group, test first",
-    }];
+    return [
+      {
+        command: `/workflow-build ${change.id} <group>`,
+        note: "engineer: implement one task group, test first",
+      },
+    ];
   }
   return [
     {
