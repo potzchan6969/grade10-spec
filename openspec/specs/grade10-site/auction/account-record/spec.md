@@ -44,6 +44,12 @@ Owner-only — nobody but the collector sees their record.
   - Ownership: resolves the record from the session and nothing else.
   - Landing, empty, and failed reads: makes an unused record and a broken one
     tell the collector different things.
+- **Tabs by bidding window**
+  - Active, Upcoming, Ended: every row sits in the tab its bidding window names.
+  - Landing: My Auctions opens on Active; the title count stays the total.
+- **Row actions**
+  - Ended alerts: Email alerts show disabled on a closed lot.
+  - Won entry: a Won row opens its auction order.
 ## Requirements
 ### Requirement: A collector watches a listing from where it is shown
 

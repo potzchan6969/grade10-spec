@@ -49,7 +49,7 @@ with its full invoice and **Contact Us** instead of Pay Now. The page SHALL
 not derive a second Expired order status.
 
 #### Scenario: winner-order-SC-139 - The page shows its four sections
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order in any status
 - **WHEN** the winner opens it
@@ -65,7 +65,7 @@ not derive a second Expired order status.
 - **AND** no Paid Status label appears
 
 #### Scenario: winner-order-SC-141 - Each status step carries its time
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
   Pending Payment and Preparing Shipment
@@ -80,7 +80,7 @@ timestamps in the browser from the current invoice, fulfilment or payment
 session state.
 
 #### Scenario: winner-order-SC-53 - The timeline uses authoritative status times
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
 
 - **GIVEN** the auction-order read model returns the order statuses reached
   and a recorded timestamp for each
@@ -97,7 +97,7 @@ session state.
 - **AND** the confirmed delivery address and the lot
 
 #### Scenario: winner-order-SC-45 - An order preparing its invoice offers no payment
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order whose status is Preparing Invoice
 - **WHEN** the winner opens it

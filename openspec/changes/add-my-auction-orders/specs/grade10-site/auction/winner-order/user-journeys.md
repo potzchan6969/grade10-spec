@@ -6,7 +6,7 @@
 **I want** to see the full invoice and pay it by card, even if a first attempt does not finish
 **so that** the lot moves to Preparing Shipment without contacting Grade10.
 
-### winner-order-US-07: Winner confirms where a won lot ships
+### winner-order-US-19: Winner confirms where a won lot ships
 
 **As a** winner
 **I want** to fill in and confirm a delivery address on the order

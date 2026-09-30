@@ -189,13 +189,13 @@
 
 ---
 
-## winner-order-US7: Winner confirms where a won lot ships
+## winner-order-US19: Winner confirms where a won lot ships
 
 **As a** winner
 **I want** to fill in and confirm a delivery address on the order
 **so that** Grade10 can quote shipping to the right place.
 
-### winner-order-US7-TC1-1: Order page shows four sections and timed status steps
+### winner-order-US19-TC1-1: Order page shows four sections and timed status steps
 
 **Classification:**
 
@@ -208,7 +208,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-07
+* **Trace:** winner-order-US-19
 
 **Pre-conditions:**
 
@@ -225,7 +225,7 @@
 * Step 2 lists the four statuses in the order reached.
 * Each status shows the date and time reached.
 
-### winner-order-US7-TC5-1: Timeline uses the auction-order read model timestamps
+### winner-order-US19-TC5-1: Timeline uses the auction-order read model timestamps
 
 **Classification:**
 
@@ -238,7 +238,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-07
+* **Trace:** winner-order-US-19
 
 **Pre-conditions:**
 
@@ -255,7 +255,7 @@
 * Each status shows the timestamp returned for that status.
 * No timestamp is replaced with the page-load time.
 
-### winner-order-US7-TC2-1: Preparing Invoice shows the address and no payment
+### winner-order-US19-TC2-1: Preparing Invoice shows the address and no payment
 
 **Classification:**
 
@@ -268,7 +268,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-07
+* **Trace:** winner-order-US-19
 
 **Pre-conditions:**
 
@@ -283,7 +283,7 @@
 * The confirmed address is shown.
 * No invoice and no Pay Now are shown.
 
-### winner-order-US7-TC3-1: A complete address with optional fields empty is accepted
+### winner-order-US19-TC3-1: A complete address with optional fields empty is accepted
 
 **Classification:**
 
@@ -296,7 +296,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-07
+* **Trace:** winner-order-US-19
 
 **Pre-conditions:**
 
@@ -321,7 +321,7 @@
 * The address is accepted.
 * The order status reads Preparing Invoice.
 
-### winner-order-US7-TC4-1: Empty required fields are refused with field errors
+### winner-order-US19-TC4-1: Empty required fields are refused with field errors
 
 **Classification:**
 
@@ -334,7 +334,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-07
+* **Trace:** winner-order-US-19
 
 **Pre-conditions:**
 

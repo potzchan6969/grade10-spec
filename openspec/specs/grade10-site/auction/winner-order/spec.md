@@ -86,6 +86,14 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question; Copy Message stays footer-only
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
+- Order page
+  - Sections: Order Information, Collection Method, Order Status timeline, Lots.
+  - By status: address form, invoice with Pay Now, or read-only detail.
+- Delivery address form
+  - Address form: required and optional fields, errors on empty required fields.
+- Card payment
+  - Unfinished session: says so and leaves the invoice payable.
+  - Confirming: a completed session reads Confirming payment until paid.
 ## Requirements
 ### Requirement: Invoice fields
 

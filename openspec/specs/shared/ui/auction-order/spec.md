@@ -2,12 +2,19 @@
 
 ## Purpose
 
-The shared auction-order address form lets an application collect delivery and
-billing addresses — including personal or company kind and a country-aware
-phone — without owning the address-book or order rules.
+The shared blocks a store application composes for a winner's auction orders:
+the My Auction Orders list, its row and empty state, the order detail, and the
+delivery address form. They display what they are given and report what the
+winner did; every status, amount and string belongs to the application.
 
 ## Feature set
 
+- **Order list**
+  - AuctionOrderList: the page body with rows or the empty state.
+  - AuctionOrderRow: one order with View lot and one next action.
+- **Order detail**
+  - AuctionOrderDetail: the four sections and the status-dependent content.
+  - AuctionAddressForm: the address fields, errors, Confirm and Cancel.
 - Address form fields
   - Personal or Company: Company Name required only for company and hidden on personal
   - Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted; phone country starts empty

@@ -42,8 +42,7 @@ supplies one.
 `AuctionAddressForm` SHALL render the fields named in
 `grade10-site/auction/winner-order`, mark the required ones, show an
 application-supplied error beside each field it names, and report Confirm with
-the entered values and Cancel. It SHALL NOT validate a phone number's format
-and SHALL NOT offer a billing address.
+the entered values and Cancel. It SHALL NOT validate a phone number's format.
 
 Each of `AuctionOrderRow` and `AuctionAddressForm` SHALL be renderable on its
 own.
