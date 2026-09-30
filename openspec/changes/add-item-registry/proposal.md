@@ -118,7 +118,13 @@ See [Non-Goals](decisions.md#non-goals).
   custodian, and the lender only through a forfeit. A ❓ on
   [Items · Owners](../../../docs/prds/products/grade10-admin/inventory/items.md#owners)
   and `decisions.md` Q14
-- **The author's handle** - `@brianchacha6969` has no row in `team.yaml`
+- **Legal** - whether erasure keeps an erased owner's item category, grader,
+  grade and cert; recommended: keep them, since they describe the object.
+  A ❓ on [Items · Erasure](../../../docs/prds/products/grade10-admin/inventory/items.md#erasure)
+  and `decisions.md` Q38
+- **Design** - where Items sits in the console's nav, and whether the list
+  shows when an item was last edited; `decisions.md` Q41 and Q42 and
+  `ui-design.md`'s flags
 
 ## References
 

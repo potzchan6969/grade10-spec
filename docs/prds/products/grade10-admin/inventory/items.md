@@ -107,8 +107,10 @@ the vault no longer has.
   place holds an item the person owns -
   [Account Data](/platform/account-data#erasure)
 - 🚧 **Items they own** - the owner is removed, the title reads as erased,
-  the description and attributes go; category, grader, grade and cert
-  stay
+  and the description and attributes go
+- ❓ **The object's facts** - whether category, grader, grade and cert stay
+  once the owner is erased; recommended: they stay, since they describe the
+  object - Legal
 - 🚧 **Moves they were part of** - their side and the reason go; a proof
   stays while the other party still has an account, then goes
 

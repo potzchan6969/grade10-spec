@@ -54,4 +54,7 @@ handles:
   chloe9gag: # @chloe on Slack
     email: chloe@9gag.com
     roles: [qa]
+  brianchacha6969: # the owner
+    email: brianchacha6969@proton.me
+    roles: [pm]
 channels: {}
