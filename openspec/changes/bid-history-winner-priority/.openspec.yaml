@@ -1,0 +1,10 @@
+schema: grade10-planning
+promoted_by: "@tangconst"
+created: 2026-09-30
+hands:
+  pm: "@tangconst"
+  design: "@tangconst"
+  tech: "@tangconst"
+  qa: "@tangconst"
+  dev: "@tangconst"
+decisions_carried: "Q1–Q3 on docs/prds/products/grade10-site/auction/bidding.md Auction Panel Recent bids 🚧 and Public Recent bids Winner row"
