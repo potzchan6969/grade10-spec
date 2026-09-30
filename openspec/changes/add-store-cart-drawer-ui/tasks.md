@@ -53,11 +53,11 @@ waits for archive and is outside this implementation increment.
 - [x] 5.3 Make `grade10-site-store-cart-drawer-SC-27` pass through reload and checkout handoff; preserve the selected code, re-quote and submit accepted spendPoints. Include checkout integration tests.
 - [x] 5.4 Verify focused affected tests, repository typecheck, lint, test and build; compare the integrated drawer against the Default story at narrow and desktop widths with keyboard and locale checks. Record unavailable browser verification separately from passing local checks.
 
-## 6. Interactive points product record (grade10-spec)
+## 6. Interactive points product record (grade10-spec) (owner: @kinisworking)
 
 Follows Group 5 delivery; Group 7 is the shared prerequisite, not a later phase.
 
-- [ ] 6.1 Keep the Cart Points and Checkout product record aligned with Group 5 delivery; validate the change, feature suite and manual. Preserve construction marks until deployment acceptance; do not archive as part of this increment.
+- [x] 6.1 Keep the Cart Points and Checkout product record aligned with Group 5 delivery; validate the change, feature suite and manual. Preserve construction marks until deployment acceptance; do not archive as part of this increment.
 
 ## 7. Shared pending tender contract (grade10-spec) (owner: @kinisworking)
 
