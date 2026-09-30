@@ -44,6 +44,33 @@ const COMPANIONS = new Set([
   "platform-tcs.md",
 ]);
 
+/** The suites and journeys that publish with one capability's delta: the
+ * companions beside it, then the domain suite one level up and the product
+ * suite two levels up, where the change carries them beside its specs. Each
+ * names the directory under `specs/` its durable copy lands in. */
+function companionsOf(deltaDir, capability) {
+  const found = [...COMPANIONS].map((name) => ({
+    name,
+    source: join(deltaDir, name),
+    dir: capability,
+  }));
+  const domain = dirname(capability);
+  const product = dirname(domain);
+  if (domain !== ".")
+    found.push({
+      name: "domain-tcs.md",
+      source: join(dirname(deltaDir), "domain-tcs.md"),
+      dir: domain,
+    });
+  if (product !== ".")
+    found.push({
+      name: "product-tcs.md",
+      source: join(dirname(dirname(deltaDir)), "product-tcs.md"),
+      dir: product,
+    });
+  return found.filter((one) => existsSync(one.source));
+}
+
 function walkFiles(root, dir, found = []) {
   if (!existsSync(dir)) return found;
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -614,19 +641,22 @@ function contractOutputs(root, changeId) {
     );
     outputs.set(targetRel, folded);
     const sourceDir = dirname(join(root, path));
-    for (const companion of COMPANIONS) {
-      const source = join(sourceDir, companion);
-      if (!existsSync(source)) continue;
-      const targetPath = durableFor(root, relativeCapability, companion);
+    for (const { name, source, dir } of companionsOf(
+      sourceDir,
+      relativeCapability,
+    )) {
+      const targetPath = durableFor(root, dir, name);
+      const targetKey = relative(root, targetPath).replaceAll("\\", "/");
+      if (outputs.has(targetKey)) continue;
       const currentText = existsSync(targetPath)
         ? readFileSync(targetPath, "utf8")
         : null;
       const sourceText = readFileSync(source, "utf8");
       const merged =
-        companion === "user-journeys.md"
+        name === "user-journeys.md"
           ? mergeJourneys(currentText, sourceText, changeId, relativeCapability)
-          : mergeSuite(currentText, sourceText, relativeCapability);
-      outputs.set(relative(root, targetPath).replaceAll("\\", "/"), merged);
+          : mergeSuite(currentText, sourceText, dir);
+      outputs.set(targetKey, merged);
     }
   }
   return outputs;
@@ -677,13 +707,16 @@ export function contractTargets(root, changeId) {
       path: targetPathOf(changeId, deltaPath),
       anchors: [...anchors].sort(),
     });
-    for (const companion of COMPANIONS) {
-      if (existsSync(join(dirname(join(root, deltaPath)), companion))) {
-        targets.push({
-          path: targetPathOf(changeId, deltaPath, companion),
-          anchors: [],
-        });
-      }
+    const capability = deltaPath
+      .slice(`openspec/changes/${changeId}/specs/`.length)
+      .replace(/\/spec\.md$/, "");
+    for (const { name, dir } of companionsOf(
+      dirname(join(root, deltaPath)),
+      capability,
+    )) {
+      const path = `openspec/specs/${dir}/${name}`;
+      if (targets.some((one) => one.path === path)) continue;
+      targets.push({ path, anchors: [] });
     }
   }
   if (existsSync(join(changeDir, "ui-design.md"))) {

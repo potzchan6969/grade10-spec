@@ -91,6 +91,68 @@ test("acceptance fingerprint is deterministic and binds the folded durable scope
   ]);
 });
 
+// The suites above a capability travel with it: a domain suite one level up
+// and a product suite two levels up publish beside the durable specs, once
+// however many capabilities reach them, every case under its id and status.
+test("acceptance publishes the domain and product suites above a capability", () => {
+  const { root } = sandbox();
+  const change = join(root, "openspec/changes/build-alpha/specs");
+  const cart = join(change, "site/store/cart");
+  const list = join(change, "site/store/list");
+  const specOf = (name, sc) =>
+    `# ${name}\n\n## Purpose\n\nReaders ${name}.\n\n## Feature set\n\n### ${name}\n\nThe reader acts.\n\n## ADDED Requirements\n\n### Requirement: ${name} works\n\nThe system SHALL work.\n\n#### Scenario: ${sc} - It works\n\n- **WHEN** a reader acts\n- **THEN** it works\n`;
+  for (const [dir, name, sc] of [
+    [cart, "Cart", "site-store-cart-SC-01"],
+    [list, "List", "site-store-list-SC-01"],
+  ]) {
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "spec.md"), specOf(name, sc));
+    writeFileSync(
+      join(dir, "user-journeys.md"),
+      `# ${name} journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n`,
+    );
+    writeFileSync(
+      join(dir, "feature-tcs.md"),
+      `# ${name} test cases\n\n## Reconciliation\n\nThe blind reading agreed.\n`,
+    );
+  }
+  const suite = (prefix) =>
+    `# Cases\n\n## ${prefix}-US1: Reader walks\n\n### ${prefix}-US1-TC1-1: Walk ends\n\n* **Status:** actual\n\nCovered.\n\n### ${prefix}-US1-TC2-1: Walk refused\n\n* **Status:** draft\n\nCovered.\n`;
+  writeFileSync(
+    join(change, "site/store/domain-tcs.md"),
+    suite("site-store-e2e"),
+  );
+  writeFileSync(join(change, "site/product-tcs.md"), suite("site-e2e"));
+  mkdirSync(join(root, "openspec/specs/site/store"), { recursive: true });
+  writeFileSync(
+    join(root, "openspec/specs/site/store/domain-tcs.md"),
+    "# Cases\n\n## site-store-e2e-US0: Reader browses\n\n### site-store-e2e-US0-TC1-1: Browse ends\n\n* **Status:** actual\n\nCovered.\n",
+  );
+
+  const prepared = prepareAcceptance(root, CHANGE);
+  const domain = prepared.outputs.get(
+    "openspec/specs/site/store/domain-tcs.md",
+  );
+  const product = prepared.outputs.get("openspec/specs/site/product-tcs.md");
+  assert.match(domain, /site-store-e2e-US0-TC1-1/);
+  assert.match(
+    domain,
+    /site-store-e2e-US1-TC1-1: Walk ends\n\n\* \*\*Status:\*\* actual/,
+  );
+  assert.match(
+    domain,
+    /site-store-e2e-US1-TC2-1: Walk refused\n\n\* \*\*Status:\*\* draft/,
+  );
+  assert.match(product, /site-e2e-US1-TC1-1[\s\S]*site-e2e-US1-TC2-1/);
+  const paths = prepared.contractTargets.map((one) => one.path);
+  assert.equal(
+    paths.filter((path) => path === "openspec/specs/site/store/domain-tcs.md")
+      .length,
+    1,
+  );
+  assert.ok(paths.includes("openspec/specs/site/product-tcs.md"));
+});
+
 test("acceptance merges subset journeys and test cases without deleting the durable capability", () => {
   const { root } = sandbox();
   const delta = join(root, "openspec/changes/build-alpha/specs/site/search");
