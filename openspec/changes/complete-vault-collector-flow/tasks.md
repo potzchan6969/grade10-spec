@@ -10,8 +10,9 @@ with 22 beside 18) are parallel, 13 following 12, the frontends working
 against the fixture transport rather than a running worker. Group 19 stands
 the Storybook every frontend group's stories are written for and lands beside
 group 3, before them; it depends on nothing else in this change. Group 20 is
-the manual, and group 21 is the walk. Group 26 is appended at landing and
-lands before the first production case.
+the manual, and group 21 is the walk. Groups 26 and 27 are appended at
+landing: 26 lands before the first production case, and 27 is platform code
+any group may land beside.
 
 One migration, `0031_case_reference.sql`, lands in group 4, and the worker and
 both SPAs deploy from one commit in one window — Migration Plan, step 2.
@@ -1072,14 +1073,29 @@ their words, their tests and their story ids; only what draws them moves.
 
 ## 26. The collection statement in production (grade10)
 
-Appended at landing, when the owner took the production refusal (`decisions.md`
-Q8). The intake test for a statement nobody has written splits in two.
+The production refusal `decisions.md` Q8 records, and the statement's move
+onto the legal-copy table.
 
-- [ ] 26.1 Refuse `cases.submit` by name in production while
-      `COLLECTION_STATEMENT` in `documents/plan.ts` is not written, before
-      anything is written, so the request stays a draft; outside production
-      the step reads "Being prepared" and the send goes through; the review
-      step shows the refusal by name, `vault.request.statementUnwritten` in
-      the catalogs
-      (`grade10-site-vault-case-intake-SC-18`,
+- [ ] 26.1 Write `packages/app-env/src/legalCopy.ts` as the tech-design names
+      it, its tests red first; `cases.collectionStatement` answers
+      `{ version, text }` off it and `COLLECTION_STATEMENT_VERSION` is
+      deleted
+- [ ] 26.2 Refuse `cases.submit` `COLLECTION_STATEMENT_UNWRITTEN` in
+      production while the table holds no statement for the brand, before
+      anything is written, the review step showing
+      `vault.request.statementUnwritten`; outside production the step reads "Being prepared" and the send
+      records `UNWRITTEN_VERSION` (`grade10-site-vault-case-intake-SC-18`,
       `grade10-site-vault-case-intake-SC-31`)
+- [ ] 26.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
+      `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`
+
+## 27. One number for every way it is typed (grade10)
+
+- [ ] 27.1 Fold full-width digits and the full-width plus to ASCII in
+      `canonicalPhone`, and read a bare dial code before a valid national
+      number as that number with its `+`, the vectors red first in
+      `packages/utils` and in the store's `profilePhone` suite, with
+      `E164_PATTERN` and the generated `account_profile` CHECK untouched
+      (`grade10-admin-vault-operator-queue-SC-07a`)
+- [ ] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+      `pnpm run test:backend`
