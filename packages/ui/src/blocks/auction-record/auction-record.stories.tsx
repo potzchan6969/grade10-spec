@@ -191,7 +191,6 @@ async function auctionRecordSettled(canvasElement: HTMLElement) {
 /** Default composition: bid rows first, watch-only after, one table from md. */
 export const Filled: Story = {
   name: "Filled",
-  globals: { viewport: { value: "tablet" } },
   render: () => <MyAuctions />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
