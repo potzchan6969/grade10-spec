@@ -1,8 +1,8 @@
 ## Purpose
 
 Lets an operator with payment processing keep, from the Auction admin section,
-the minimum buyer premium per currency and the payment processing fee schedule
-each invoice's fee starts from.
+the minimum buyer premium per currency and the Stripe card fee rule that prices
+a card invoice's payment processing fee.
 
 ## Feature set
 
@@ -10,7 +10,7 @@ each invoice's fee starts from.
   - Auction tab: Payment settings lives under `/auction`
   - Premium minimums: USD, HKD and JPY each have one minimum, zero or more, typed in major units
   - Safe defaults: USD 0, HKD 0 and JPY 0 until a save
-  - Fee schedule: per currency, a card rule and a bank transfer rule, each a percentage and a fixed amount, or no rule
+  - Stripe card fee: one card rule per currency, a percentage and a fixed amount, or no rule
   - Live example: each rule shows the fee it suggests on a subtotal of 1,000 in its currency
   - Payment processing: `auction:payment` is required to read or change either
 
@@ -77,14 +77,14 @@ its id. The title is historical: the operator holds payment processing.
 
 ## ADDED Requirements
 
-### Requirement: Operators manage the payment processing fee schedule
+### Requirement: Operators manage the Stripe card fee rule
 
-The fee schedule holds the rule each invoice's payment processing fee starts
-from.
+The card rule is what prices a card invoice's payment processing fee. Bank
+transfer carries no rule; its fee is the operator's own, per
+`grade10-admin/auction/post-sale`.
 
-**Rules** - Payment settings SHALL hold, for each of USD, HKD and JPY, a card
-rule and a bank transfer rule. A rule is a percentage and a fixed amount
-together:
+**Rules** - Payment settings SHALL hold, for each of USD, HKD and JPY, one
+card rule: a percentage and a fixed amount together:
 
 | Part | Typed as | Range |
 | --- | --- | --- |
@@ -96,7 +96,7 @@ refuse a rule with only one part filled. Zero is a value: a rule of 0% and 0 is
 a rule, and suggests a fee of 0.
 
 **No seed** - Nothing SHALL be stored before the first save. Until then, every
-method in every currency has no rule.
+currency has no rule.
 
 **The suggestion** - For a subtotal, a rule SHALL suggest the fee that leaves
 the subtotal whole after the rule's percentage of the whole charge and its
@@ -108,65 +108,64 @@ unit, and the fee is that order total less the subtotal.
 suggests on a subtotal of 1,000 in the currency's major units, and follow the
 rule as the operator types it.
 
-**Saved whole** - A save SHALL replace the whole schedule at once and record
-the acting operator and the time. Grade10 SHALL refuse a save, changing
+**Saved whole** - A save SHALL replace all three currencies' rules at once and
+record the acting operator and the time. Grade10 SHALL refuse a save, changing
 nothing stored, when a rule breaks the ranges above or has only one part, or
-names a currency or method Grade10 does not support.
+names a currency Grade10 does not support.
 
-**Applies forward** - A saved schedule SHALL be where the fee on a quote or a
-reissue made after it starts, per `grade10-admin/auction/post-sale`. It SHALL
-NOT change a sent invoice or anything the winner reads.
+**Applies forward** - A saved rule SHALL be where a card invoice's fee on a
+quote or a reissue made after it starts, per `grade10-admin/auction/post-sale`.
+It SHALL NOT change a sent invoice or anything the winner reads.
 
 **Access** - Only an operator with payment processing, `auction:payment`,
 SHALL open or save Payment Settings.
 
-#### Scenario: grade10-admin-auction-payment-settings-SC-06 - A new schedule holds no rule
-**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the payment processing fee schedule
+#### Scenario: grade10-admin-auction-payment-settings-SC-06 - No rule saved yet
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
-- **GIVEN** no fee schedule has been saved
+- **GIVEN** no card rule has been saved
 - **WHEN** an operator with payment processing opens Payment settings
-- **THEN** card and bank transfer show no rule in USD, HKD and JPY
+- **THEN** USD, HKD and JPY each show no rule
 
-#### Scenario: grade10-admin-auction-payment-settings-SC-07 - A save replaces the schedule whole
-**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the payment processing fee schedule
+#### Scenario: grade10-admin-auction-payment-settings-SC-07 - A save replaces the rules whole
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
-- **GIVEN** no fee schedule has been saved
+- **GIVEN** no card rule has been saved
 - **AND** an operator whose roles are exactly `finance`
-- **WHEN** they save HKD card `3.4`% and `2.35`, and HKD bank transfer `0`%
-  and `0.00`, leaving USD and JPY empty
-- **THEN** Grade10 stores HKD card 3.4% and 235 minor units, HKD bank transfer
-  0% and 0 minor units, and no rule in USD or JPY
+- **WHEN** they save HKD `3.4`% and `2.35`, leaving USD and JPY empty
+- **THEN** Grade10 stores HKD 3.4% and 235 minor units, and no rule in USD or
+  JPY
 - **AND** records that operator and the time of the save
 
 #### Scenario: grade10-admin-auction-payment-settings-SC-08 - Half a rule or a percentage out of range is refused
-**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the payment processing fee schedule
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
-- **GIVEN** the HKD card rule is 3.4% and 235 minor units, and no other rule
-- **WHEN** an operator saves a USD card rule of `4.4`% with no fixed amount,
-  then an HKD card rule of `3.405`%, then one of `100`%
+- **GIVEN** the HKD rule is 3.4% and 235 minor units, and no other rule
+- **WHEN** an operator saves a USD rule of `4.4`% with no fixed amount, then an
+  HKD rule of `3.405`%, then one of `100`%
 - **THEN** Grade10 refuses each save
-- **AND** the stored schedule is unchanged
+- **AND** the stored rules are unchanged
 
 #### Scenario: grade10-admin-auction-payment-settings-SC-09 - A rule grosses the subtotal up
-**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the payment processing fee schedule
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
-- **GIVEN** the HKD card rule is 3.4% and 235 minor units
+- **GIVEN** the HKD rule is 3.4% and 235 minor units
 - **WHEN** Grade10 suggests the fee for a subtotal of 312000 minor units in HKD
 - **THEN** it suggests a fee of 11225 and an order total of 323225 minor units
   in HKD
 
-#### Scenario: grade10-admin-auction-payment-settings-SC-10 - Other operators cannot read or change the schedule
-**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the payment processing fee schedule
+#### Scenario: grade10-admin-auction-payment-settings-SC-10 - Other operators cannot read or change the rules
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
 - **GIVEN** an operator whose roles are exactly `staff`
-- **WHEN** they request or save the fee schedule
+- **WHEN** they request or save the card rules
 - **THEN** Grade10 refuses the operation
-- **AND** the stored schedule is unchanged
+- **AND** the stored rules are unchanged
 
 #### Scenario: grade10-admin-auction-payment-settings-SC-11 - Each rule shows its fee on an example subtotal
-**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the payment processing fee schedule
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
 - **GIVEN** an operator with payment processing on Payment settings
-- **WHEN** they type an HKD card rule of `3.4`% and `2.35`
+- **WHEN** they type an HKD rule of `3.4`% and `2.35`
 - **THEN** beside the rule the page shows a fee of 3763 on a subtotal of 100000
   minor units in HKD, read as HKD 37.63 on HKD 1,000.00

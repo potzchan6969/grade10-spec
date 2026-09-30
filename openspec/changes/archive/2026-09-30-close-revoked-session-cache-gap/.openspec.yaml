@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-30
+promoted_by: "@sean"
+reviewed:
+  user-journeys: 946f87dc
+deploy_waived: "@sean waived it on 2026-09-30, archiving before any deploy holds grade10 3a78f098e"
+decisions_carried: "Q2, Q3 (account deletion) and Q5 to the Product decisions blocks of docs/prds/products/shared/auth/sessions.md and users.md"

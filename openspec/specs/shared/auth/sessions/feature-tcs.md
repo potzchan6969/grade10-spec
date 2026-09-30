@@ -1,6 +1,6 @@
 # shared/auth/sessions Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
 ## shared-auth-sessions-US1: Operator lists a person's sessions
@@ -235,3 +235,94 @@ Signed in as an operator who holds `session:revoke`.
 **Expected Results:**
 
 * The operator is not signed in.
+
+### shared-auth-sessions-US2-TC6-1: A cached browse read closes on the very next read after a revoke
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sessions-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/sessions.spec.ts`
+
+**Pre-conditions:**
+Signed in as an operator who holds `session:revoke`. <a subject user id> has two sessions, A and B; an ordinary browse read of A's signed-in state has already warmed its cache and is still within the cache window.
+
+**Steps:**
+
+1. Read A's signed-in state (an ordinary browse read, not a mutation or an elevated call).
+2. Revoke session A only.
+3. Immediately read A's and B's signed-in state, the same way as step 1.
+
+**Expected Results:**
+
+* Step 3 shows A as nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
+* Step 3 still shows B signed in — revoking A does not touch a session it did not name.
+
+### shared-auth-sessions-US2-TC7-1: A caller without the revoke grant cannot force a stale read either
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sessions-US-02
+
+**Pre-conditions:**
+<a subject user id> has a live, cache-warmed session. No revoke has happened.
+
+**Steps:**
+
+1. Read the session's signed-in state.
+
+**Expected Results:**
+
+* The session still shows signed in — nothing about this change causes a session to close on its own, absent a revoke.
+
+## Settled
+
+- A read already in flight when a revoke commits needs no rule of its own - the requirement is a 70-second bound, and such a read falls inside it.
+- Which endpoints are cached browse reads and which are elevated calls is the implementation's mapping, not a suite question.
+- Per-session versus per-account cache-version keying changes no case's expected result - a sibling session is still valid either way.
+
+## Reconciliation
+
+**Run:** Blind pass read Purpose, Feature set, user-journeys.md, decisions.md (Raised included), the linked Sessions · Revoke PRD section, this suite for id continuity, and `shared/auth/domain-tcs.md` for id continuity, all with Reconciliation/Requirements stripped. Denied: every Requirements section, openspec/specs/ beyond Purpose, Feature set and the domain suite, openspec/changes/archive/.
+
+**Raised, folded into spec**
+
+- The in-flight-read boundary - first folded in as "the next read that starts after the revoke", then replaced by the 70-second bound.
+
+**Raised, rejected**
+
+- Which endpoints count as cached versus elevated — tech-design's job, not a suite question.
+- Per-session versus per-user invalidation keying — does not change any case's observable expected result.
+
+**Raised, landed as decisions**
+
+- The in-flight-read boundary - `close-revoked-session-cache-gap` decisions.md Q4, superseded by Q5.
+
+**Uncovered anchors**
+
+- Cross-account isolation (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/not-signed-in read. **Out of suite:** the per-user cache-version helper's own unit test in grade10.
+- The 70-second bound at a location other than the one the revoke was made at is not observable on a single-location stack, where the revoke reaches the next read at once. **Out of suite:** grade10's cache-version settling-window unit test and the auth worker's before/after-race regression test.
+- All other scenarios under Revoke / US-02, the 70-second closing included, are covered by `US2-TC1-1` through `US2-TC7-1` above.
+
+**Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
+
+- `US2-TC6-1` — Approved (`actual`).
+- `US2-TC7-1` — Retired (`deprecated`): its title claimed a caller without the revoke grant, but its steps never exercised that caller, and the refusal it gestured at is already covered by `US2-TC3-1`/`US2-TC4-1`.

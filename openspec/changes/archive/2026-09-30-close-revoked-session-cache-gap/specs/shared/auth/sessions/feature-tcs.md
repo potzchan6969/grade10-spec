@@ -247,9 +247,11 @@ Signed in as an operator who holds `session:revoke`.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/sessions.spec.ts`
 
 **Pre-conditions:**
 Signed in as an operator who holds `session:revoke`. <a subject user id> has two sessions, A and B; an ordinary browse read of A's signed-in state has already warmed its cache and is still within the cache window.
@@ -293,9 +295,9 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has two
 
 ## Settled
 
-- Whether a read already in flight when a revoke commits counts as "the next read" — no; only a read that starts after the revoke commits is guaranteed to see it (`shared/auth/sessions` decisions.md Q4).
-- Which concrete endpoints are "cached browse reads" versus "elevated calls" is an implementation mapping for `tech-design.md`, not a suite-level question — rejected as a finding here.
-- Whether a per-session or a per-user cache-version key could make TC6-1 flaky — checked: either keying satisfies TC6-1's expected results, since session B is genuinely still valid either way; rejected as a finding.
+- A read already in flight when a revoke commits needs no rule of its own - the requirement is a 70-second bound, and such a read falls inside it.
+- Which endpoints are cached browse reads and which are elevated calls is the implementation's mapping, not a suite question.
+- Per-session versus per-account cache-version keying changes no case's expected result - a sibling session is still valid either way.
 
 ## Reconciliation
 

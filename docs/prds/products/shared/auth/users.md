@@ -21,7 +21,7 @@ account holds, refuses new sign-ins, and stops money moving. An unban restores
 sign-in. Moves refused outright: banning yourself, and banning any account that
 holds `admin` — peers included, not only support or the last admin.
 
-- 🚧 **Closes within 70 seconds** — a ban stops answering signed in on every
+- **Closes within 70 seconds** — a ban stops answering signed in on every
   read within 70 seconds, not only on a mutation or an elevated call, rather
   than after the five minutes a browse page's cached copy of the session
   would otherwise last.
@@ -34,10 +34,10 @@ plain user. An operator cannot strip `admin` from another admin. An admin may
 remove their own `admin` when another admin remains; the last admin keeps
 `admin`.
 
-- 🚧 **Browse reads close too** — a role change used to leave an ordinary,
-  non-elevated read of the caller's permissions answering the old roles for
-  up to five minutes; an elevated call already read fresh. It now reaches
-  that read within 70 seconds as well.
+- **Reflects within 70 seconds** - an ordinary, non-elevated read of the
+  person's permissions answers the new roles within 70 seconds, not only an
+  elevated call, rather than after the five minutes a browse page's cached
+  copy of the session would otherwise last.
 
 Everything on this page is *what an operator may do*. What the directory
 components render is the console's own capability, and each of these moves lands
@@ -63,6 +63,9 @@ on the identity trail. Grade10's page that uses this read is the
 | Tell the new person | Silent create — no invite or magic-link email |
 | Empty roles | Leave the account as `user` only |
 | Name and email | Required; Confirm stays disabled until both are present after trim |
+| Browse reads after a ban or role change | Closed within 70 seconds too, instead of the requirement naming a five-minute lag for browse pages |
+| Which admin moves close within 70 seconds | Ban, revoke and role change. Account deletion is not a capability here yet, so a deleted account's cached read keeps its five minutes until a change specifies deletion |
+| Closing bound | 70 seconds everywhere: the session store's one-minute spread plus a 10-second margin. Not "the next read", which only the location that made the change can keep; under a minute needs sessions off the edge session store |
 :::
 
 :::callout{kind="note"}

@@ -25,6 +25,8 @@
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -54,6 +56,8 @@
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(does not hold `user:list`) is signed in.
@@ -81,6 +85,8 @@
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -119,6 +125,8 @@
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -154,6 +162,8 @@
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -200,6 +210,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
@@ -242,6 +254,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
@@ -278,6 +292,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(does not hold `user:ban`) is signed in.
@@ -313,6 +329,8 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
@@ -343,6 +361,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -392,6 +412,37 @@ Runs once per row of **Test data**.
 * The system refuses the request.
 * The account remains unbanned.
 
+### shared-auth-users-US2-TC7-1: A cached browse read of a banned account closes on the very next read
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is unbanned, signed in, and an ordinary browse read of the store has already warmed its session cache.
+
+**Steps:**
+
+1. Read <subject user id>'s signed-in state on <grade10 store url> (an ordinary browse read).
+2. On <grade10 admin users url>, ban <subject user id>.
+3. Immediately read <subject user id>'s signed-in state, the same way as step 1.
+
+**Expected Results:**
+
+* Step 3 shows nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
+* <subject user id> stays listed, marked banned.
+
 ---
 
 ## shared-auth-users-US3: Operator changes roles
@@ -417,6 +468,8 @@ peer lockout does not.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -452,6 +505,8 @@ peer lockout does not.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:set-role`) is signed in.
@@ -485,6 +540,8 @@ peer lockout does not.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -521,6 +578,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -593,6 +652,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `admin` and `user:set-role`) is signed in.
@@ -612,6 +673,46 @@ Runs once per row of **Test data**.
 
 * The directory refuses the save.
 * <peer admin user id> still holds `admin`.
+
+### shared-auth-users-US3-TC7-1: An ordinary read of the caller's own permissions reflects a role change on the very next read
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
+**Pre-conditions:**
+
+* The row's target is signed in, and an ordinary (non-elevated) browse read of its own current permissions has already warmed its session cache.
+
+**Test data:**
+
+| Target | Role change |
+| --- | --- |
+| Another account | `staff` granted, previously held no operator role |
+| The signed-in admin's own account | Own `admin` stripped; another admin remains |
+
+**Steps:**
+
+1. Read the row's target's permissions on an ordinary, non-elevated browse surface.
+2. An admin holding `user:set-role` saves the row's target with the row's role change.
+3. Immediately read the row's target's permissions the same way as step 1.
+
+**Expected Results:**
+
+* Step 3 reflects the row's new roles, even though step 1's read would otherwise have kept the cache answering the old roles for up to five more minutes.
 
 ---
 
@@ -637,6 +738,8 @@ without reading every account.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -675,6 +778,8 @@ without reading every account.
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
@@ -704,6 +809,8 @@ without reading every account.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -737,6 +844,8 @@ without reading every account.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
 
@@ -1015,25 +1124,37 @@ Signed in as admin(holds `user:create`). No Auth account holds <empty-roles emai
 - Empty role selection at create leaves the account as `user` only (Q13).
 - Name and email are required on create (Q14).
 - Email-verification standing of a newly created account is open on the PRD.
+- A read already in flight when a ban or role change commits needs no rule of its own - the requirement is a 70-second bound, and such a read falls inside it.
+- Which endpoints are cached browse reads and which are elevated calls is the implementation's mapping, not a suite question.
+- Per-session versus per-account cache-version keying changes no case's expected result here.
 
 ## Reconciliation
 
-**Run:** Blind pass read Purpose, Feature set, user-journeys.md, proposal.md, decisions.md (Raised included), linked Create Account PRD section, and this suite for id continuity with Reconciliation stripped. Denied: every Requirements section, openspec/specs/ beyond Purpose and Feature set, openspec/changes/archive/.
+**Run:** Blind pass read Purpose, Feature set, user-journeys.md, decisions.md (Raised included), the linked Users · Ban and Unban / Role Changes PRD sections, this suite for id continuity, and `shared/auth/domain-tcs.md` for id continuity, all with Reconciliation/Requirements stripped. Denied: every Requirements section, openspec/specs/ beyond Purpose, Feature set and the domain suite, openspec/changes/archive/. (Change: `close-revoked-session-cache-gap`.)
 
 **Raised, folded into spec**
 
-- Loyalty enroll and invite mail absent on create — folded as a scenario.
-- Empty roles at create — folded as a scenario; case `shared-auth-users-US5-TC7-1` added after Q13.
+- The in-flight-read boundary - first folded into both requirements as "the next read that starts after", then replaced by the 70-second bound.
 
-**Raised, escalated**
+**Raised, rejected**
 
-- Email-verification standing of a newly created Auth account — ❓ on Users · Create Account; no scenario written.
+- Which endpoints count as cached versus elevated — tech-design's job, not a suite question.
+- Per-session versus per-user invalidation keying - does not change any case's observable expected result here.
 
 **Raised, landed as decisions**
 
 - Empty role selection — Q13.
 - Name and email required — Q14.
+- The in-flight-read boundary - `close-revoked-session-cache-gap` decisions.md Q4, superseded by Q5.
 
 **Uncovered anchors**
 
 - All scenarios under Account create / US-05 covered by US5-TC1 through TC7.
+- Cross-account isolation on ban and role change (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/permissions read. **Out of suite:** the per-user cache-version helper's own unit test in grade10.
+- The 70-second bound at a location other than the one the ban or role change was made at is not observable on a single-location stack, where the change reaches the next read at once. **Out of suite:** grade10's cache-version settling-window unit test and the auth worker's before/after-race regression test.
+- All other scenarios under Ban and unban / US-02 and Role changes / US-03, the 70-second closing and reflecting included, are covered by `US2-TC1-1` through `US2-TC7-1` and `US3-TC1-1` through `US3-TC7-1` above.
+
+**Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
+
+- `US2-TC7-1` — Retired (`deprecated`), on writing its Playwright walk: `US2-TC1-1`'s own cached-read assertion (`store.page`'s pre-ban session, read with no `fresh` flag) already proves the same close once its `test.fail` placeholder for the then-unfixed cache is removed. A Case That Already Exists Is Not Written Twice.
+- `US3-TC7-1` — Approved (`actual`).
