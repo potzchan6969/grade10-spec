@@ -148,7 +148,8 @@ backend does not require.
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) has the setup modal open on <listing_2 url>.
+* customer(signed in, no linked card) is on <listing_2 url>.
+* The setup modal is open, from the bid action on this lot.
 
 **Test data:**
 
@@ -392,6 +393,7 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* The card on file was linked by completing setup.
 * Bid-time holds are off.
 
 **Test data:**
@@ -508,6 +510,7 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* The card on file was linked by completing setup.
 * Bid-time holds are off.
 
 **Test data:**
@@ -553,6 +556,7 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* The card on file was linked by completing setup.
 
 **Test data:**
 
@@ -589,6 +593,7 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* The card on file was linked by completing setup.
 
 **Test data:**
 
@@ -627,7 +632,8 @@ backend does not require.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, age already attested, no bid on <listing_4>) is on <listing_4 url>.
+* customer(signed in, card linked, no bid on <listing_4>) is on <listing_4 url>.
+* The card on file was linked by completing setup on an earlier lot, with age attestation checked.
 
 **Test data:**
 
@@ -673,7 +679,9 @@ backend does not require.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, has bid on <listing_5>) is on <listing_5 url>.
+* customer(signed in, card linked) is on <listing_5 url>.
+* The card on file was linked by completing setup.
+* This collector's bid was accepted from the bid panel on this lot.
 
 **Test data:**
 
@@ -709,6 +717,7 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* The card on file was linked by completing setup.
 
 **Test data:**
 
@@ -755,7 +764,8 @@ backend does not require.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked on an earlier lot, no bid on <listing_6>) is on <listing_6 url>.
+* customer(signed in, no bid on <listing_6>) is on <listing_6 url>.
+* The card on file was linked by completing setup on an earlier lot.
 
 **Test data:**
 
