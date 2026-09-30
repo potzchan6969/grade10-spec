@@ -232,24 +232,58 @@ function ProgressCard({
     const rail = railRef.current;
     if (!rail) return;
 
-    const scrollCurrentIntoView = () => {
-      if (window.matchMedia("(min-width: 640px)").matches) return;
-      const current = rail.querySelector<HTMLElement>(
-        '[data-slot="step"][data-state="progress"]',
+    let settled = false;
+    let raf = 0;
+    const mq = window.matchMedia("(min-width: 640px)");
+    const ro = new ResizeObserver(() => {
+      if (!settled) scrollFocusIntoView();
+    });
+
+    // The current step, or the last completed one once every step is done.
+    function scrollFocusIntoView() {
+      if (!rail) return;
+      if (mq.matches) {
+        settled = true;
+        ro.disconnect();
+        return;
+      }
+      const completed = rail.querySelectorAll<HTMLElement>(
+        '[data-slot="step"][data-state="completed"]',
       );
-      if (!current) return;
-      const railRect = rail.getBoundingClientRect();
-      const stepRect = current.getBoundingClientRect();
-      rail.scrollLeft +=
-        stepRect.left +
-        stepRect.width / 2 -
-        (railRect.left + railRect.width / 2);
+      const target =
+        rail.querySelector<HTMLElement>(
+          '[data-slot="step"][data-state="progress"]',
+        ) ?? completed[completed.length - 1];
+      const max = rail.scrollWidth - rail.clientWidth;
+      // Overflow can open a frame late (fonts, reveal, viewport).
+      if (!target || max <= 0) return;
+      const left =
+        target.getBoundingClientRect().left -
+        rail.getBoundingClientRect().left +
+        rail.scrollLeft;
+      rail.scrollLeft = Math.min(
+        max,
+        Math.max(0, left + target.offsetWidth / 2 - rail.clientWidth / 2),
+      );
+      settled = true;
+      ro.disconnect();
+    }
+
+    const arm = () => {
+      settled = false;
+      ro.observe(rail);
+      scrollFocusIntoView();
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(scrollFocusIntoView);
     };
 
-    scrollCurrentIntoView();
-    const mq = window.matchMedia("(min-width: 640px)");
-    mq.addEventListener("change", scrollCurrentIntoView);
-    return () => mq.removeEventListener("change", scrollCurrentIntoView);
+    arm();
+    mq.addEventListener("change", arm);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      mq.removeEventListener("change", arm);
+    };
   }, [progress.current]);
 
   return (
@@ -283,6 +317,7 @@ function ProgressCard({
         */}
         <div
           className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          data-slot="winner-order-progress-rail"
           ref={railRef}
         >
           <Stepper
