@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
 
 type AuctionOrderRowCopy = {
   viewLot: string;
@@ -33,50 +34,104 @@ type AuctionOrderListProps = {
   className?: string;
 };
 
-type AuctionOrderDetailCopy = {
-  orderInformation: string;
-  collectionMethod: string;
-  orderStatus: string;
-  lots: string;
-  orderNumber: string;
-  auction: string;
-  currency: string;
-  date: string;
-  invoiceStatus: string;
+type AuctionWinnerOrderStep =
+  | "address"
+  | "invoice"
+  | "payment"
+  | "shipping"
+  | "completed";
+
+type AuctionWinnerOrderCopy = {
+  orderProgress: string;
+  orderSummary: string;
+  invoice: string;
+  invoicePdf: string;
+  paymentMethod: string;
+  view: string;
   winningBid: string;
-  payNow: string;
-  contactUs: string;
+  bank: string;
 };
 
-type AuctionOrderDetailProps = {
-  copy: AuctionOrderDetailCopy;
-  orderNumber: ReactNode;
-  auction: ReactNode;
-  currency: ReactNode;
-  date: ReactNode;
-  orderStatus: ReactNode;
-  invoiceStatus: ReactNode;
-  collectionMethod?: ReactNode;
-  statusTimeline: readonly {
-    status: ReactNode;
-    reachedAt: ReactNode;
-  }[];
-  /** Optional consumer-owned status or guidance card shown beside the order. */
-  notice?: ReactNode;
+type AuctionWinnerOrderAction = { label: string; onPress: () => void };
+
+/** A description keeps its line breaks and stacks under the title; `role` overrides the Alert's own. */
+type AuctionWinnerOrderAlert = {
+  title: string;
+  description?: string;
+  status: "default" | "warning" | "success" | "error";
+  role?: "alert" | "status";
+  action?: AuctionWinnerOrderAction;
+};
+
+/** A PDF the winner opens: a URL to follow, or a press the consumer handles. */
+type AuctionWinnerOrderPdf = {
+  href?: string;
+  onOpen?: () => void;
+  ariaLabel?: string;
+};
+
+type AuctionWinnerOrderLine = {
+  label: string;
+  value: string;
+  muted?: boolean;
+  tooltip?: string;
+};
+
+type AuctionWinnerOrderProps = {
+  copy: AuctionWinnerOrderCopy;
+  title: string;
+  badge: {
+    label: string;
+    variant: "default" | "warning" | "error" | "outline";
+  };
+  /** Null for an order with no progress, such as Cancelled or Refunded. */
+  progress: {
+    current: AuctionWinnerOrderStep | "done";
+    steps: Record<
+      AuctionWinnerOrderStep,
+      { label: string; description?: string }
+    >;
+    tracking?: { code: string; href: string };
+  } | null;
+  /** The one alert under progress on a phone and under the lot from `lg`. */
+  note?: { title: string; icon?: "hourglass" };
   lot: {
-    title: ReactNode;
-    winningBid: ReactNode;
+    title: string;
+    winningBid: string;
     imageSrc?: string;
-    imageAlt?: string;
     href?: string;
-    onViewLot?: () => void;
+    onOpen?: () => void;
+    ariaLabel: string;
   };
-  invoice?: {
-    lines: readonly { label: ReactNode; value: ReactNode }[];
-    onPayNow?: () => void;
-    onContact?: () => void;
+  /** Under the lot, in order. */
+  alerts?: readonly AuctionWinnerOrderAlert[];
+  summary: {
+    lines: readonly AuctionWinnerOrderLine[];
+    total: Omit<AuctionWinnerOrderLine, "tooltip"> | null;
+    invoicePdf?: AuctionWinnerOrderPdf;
+    refund?: { title: string; onView?: () => void };
+    alert?: AuctionWinnerOrderAlert;
+    /** `loading` spins the primary and disables both; `disabled` only disables. */
+    pay?: AuctionWinnerOrderAction & {
+      loading?: boolean;
+      disabled?: boolean;
+      secondary?: AuctionWinnerOrderAction;
+      deadline?: string;
+    };
   };
-  className?: string;
+  paymentMethod?:
+    | { kind: "card"; brand: OrderDetailsPaymentBrand; masked?: string }
+    | { kind: "bank"; label: string; bankName?: string }
+    | { kind: "text"; label: string };
+  receipts?: readonly (AuctionWinnerOrderPdf & { label: string })[];
+  /** Omitted where the order shows no address, such as Cancelled. */
+  delivery?: {
+    label: string;
+    value?: string;
+    alert?: AuctionWinnerOrderAlert;
+    confirm?: AuctionWinnerOrderAction & { deadline?: string };
+  };
+  billing?: { label: string; value: string };
 };
 
 type AuctionAddressKind = "personal" | "company";
@@ -146,10 +201,15 @@ export type {
   AuctionAddressFormProps,
   AuctionAddressFormValues,
   AuctionAddressKind,
-  AuctionOrderDetailCopy,
-  AuctionOrderDetailProps,
   AuctionOrderEmptyProps,
   AuctionOrderListProps,
   AuctionOrderRowCopy,
   AuctionOrderRowProps,
+  AuctionWinnerOrderAction,
+  AuctionWinnerOrderAlert,
+  AuctionWinnerOrderCopy,
+  AuctionWinnerOrderLine,
+  AuctionWinnerOrderPdf,
+  AuctionWinnerOrderProps,
+  AuctionWinnerOrderStep,
 };

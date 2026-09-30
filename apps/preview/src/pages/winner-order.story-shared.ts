@@ -20,7 +20,7 @@ function winnerOrderMeta(): Omit<Meta<typeof WinnerOrderPage>, "title"> {
       docs: {
         description: {
           component:
-            "Address-first auction Winner Order preview (Storybook only). Every status uses the Order Details 2-column shell. Not a published `@grade10/ui` export and not the store Order Details contract.",
+            "Address-first auction Winner Order: the preview's chrome, transitions and dialogs around the published `AuctionWinnerOrder` block from `@grade10/ui`.",
         },
       },
     },
@@ -39,7 +39,7 @@ function winnerOrderMeta(): Omit<Meta<typeof WinnerOrderPage>, "title"> {
 
 /** Same settle gate as Order Details — wait for first-paint reveal + opacity. */
 function winnerOrderRevealed(canvasElement: HTMLElement): boolean {
-  const root = canvasElement.querySelector('[data-slot="winner-order-page"]');
+  const root = canvasElement.querySelector('[data-slot="winner-order"]');
   if (root?.getAttribute("data-revealed") !== "true") return false;
 
   const groups = canvasElement.querySelectorAll(
