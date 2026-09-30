@@ -75,7 +75,7 @@ export const Refunded: Story = {
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460")).toBeVisible();
+    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
     expect(canvas.getByText("Refund HK$16,460")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "View" }));
     const page = within(canvasElement.ownerDocument.body);

@@ -79,7 +79,7 @@ export const ProcessingOverpaid: Story = {
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460")).toBeVisible();
+    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
@@ -134,9 +134,9 @@ export const ProcessingBankTransfer: Story = {
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("HK$320")).toBeVisible();
-    expect(sidebar.getByText("HK$16,340")).toBeVisible();
-    expect(sidebar.queryByText("HK$120")).not.toBeInTheDocument();
+    expect(sidebar.getByText("$320.00")).toBeVisible();
+    expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
+    expect(sidebar.queryByText("$120.00")).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },

@@ -58,11 +58,11 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460")).toBeVisible();
+    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
     expect(canvas.getByText("Tax")).toBeVisible();
-    expect(canvas.getByText("HK$320")).toBeVisible();
+    expect(canvas.getByText("$320.00")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -117,8 +117,8 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("HK$320")).toBeVisible();
-    expect(sidebar.getByText("HK$16,340")).toBeVisible();
+    expect(sidebar.getByText("$320.00")).toBeVisible();
+    expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
   },
 };
 
