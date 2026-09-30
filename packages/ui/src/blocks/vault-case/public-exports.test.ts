@@ -10,6 +10,7 @@ import {
   VaultCasesEmpty,
   type VaultCasesEmptyCopy,
   type VaultCasesEmptyProps,
+  type VaultCasesEmptyStep,
 } from "../../index";
 
 // Each block carries a `<Name>Props` and a `<Name>Copy` beside it; a type the
@@ -19,6 +20,7 @@ type PublicVaultTypes = [
   VaultAcceptOfferDialogProps,
   VaultCasesEmptyCopy,
   VaultCasesEmptyProps,
+  VaultCasesEmptyStep,
 ];
 
 const publicVaultTypes: PublicVaultTypes | undefined = undefined;

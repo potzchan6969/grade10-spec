@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, screen, userEvent, within } from "storybook/test";
+import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 import { ACCEPT_COPY, REFUSAL } from "./fixtures";
 import { VaultAcceptOfferDialog } from "./vault-accept-offer-dialog";
 
@@ -24,29 +24,39 @@ type Story = StoryObj<typeof meta>;
 const dialog = () => screen.findByRole("dialog", { name: ACCEPT_COPY.title });
 const button = (scope: HTMLElement, name: string) =>
   within(scope).getByRole("button", { name });
+const overlay = () =>
+  document.body.querySelector('[data-slot="dialog-overlay"]') as Element;
 
-/** The terms read before the answer, and Accept is reported once
- * (shared-ui-vault-case-SC-18). */
+/** Whether `a` comes before `b` in the document. */
+const before = (a: Node, b: Node) =>
+  Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+
+/** The terms read in order before Go back and Accept, and Accept is reported
+ * once (shared-ui-vault-case-SC-18). */
 export const Open: Story = {
   play: async ({ args }) => {
     const shown = await dialog();
-    for (const line of [
-      ACCEPT_COPY.lead,
-      ACCEPT_COPY.total,
-      ACCEPT_COPY.lateDay,
-      ACCEPT_COPY.signs,
-    ]) {
-      expect(within(shown).getByText(line)).toBeInTheDocument();
+    const order = [
+      ...[
+        ACCEPT_COPY.lead,
+        ACCEPT_COPY.total,
+        ACCEPT_COPY.lateDay,
+        ACCEPT_COPY.signs,
+      ].map((line) => within(shown).getByText(line)),
+      button(shown, ACCEPT_COPY.goBack),
+      button(shown, ACCEPT_COPY.accept),
+    ];
+    for (let at = 1; at < order.length; at++) {
+      expect(before(order[at - 1], order[at])).toBe(true);
     }
-    button(shown, ACCEPT_COPY.goBack);
     await userEvent.click(button(shown, ACCEPT_COPY.accept));
     expect(args.onConfirm).toHaveBeenCalledTimes(1);
     expect(args.onGoBack).not.toHaveBeenCalled();
   },
 };
 
-/** Go back and Escape each report going back, and nothing is answered
- * (shared-ui-vault-case-SC-19). */
+/** Go back, Escape and the overlay each report going back, and nothing is
+ * answered (shared-ui-vault-case-SC-19). */
 export const GoingBack: Story = {
   play: async ({ args }) => {
     const shown = await dialog();
@@ -54,12 +64,14 @@ export const GoingBack: Story = {
     expect(args.onGoBack).toHaveBeenCalledTimes(1);
     await userEvent.keyboard("{Escape}");
     expect(args.onGoBack).toHaveBeenCalledTimes(2);
+    await userEvent.click(overlay());
+    await waitFor(() => expect(args.onGoBack).toHaveBeenCalledTimes(3));
     expect(args.onConfirm).not.toHaveBeenCalled();
   },
 };
 
 /** An answer in flight holds the dialog: Accept busy, Go back unavailable,
- * Escape ignored (shared-ui-vault-case-SC-20). */
+ * Escape and the overlay ignored (shared-ui-vault-case-SC-20). */
 export const Pending: Story = {
   args: { pending: true },
   play: async ({ args }) => {
@@ -70,6 +82,7 @@ export const Pending: Story = {
     );
     expect(button(shown, ACCEPT_COPY.goBack)).toBeDisabled();
     await userEvent.keyboard("{Escape}");
+    await userEvent.click(overlay());
     expect(await dialog()).toBeInTheDocument();
     expect(args.onGoBack).not.toHaveBeenCalled();
     expect(args.onConfirm).not.toHaveBeenCalled();

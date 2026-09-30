@@ -29,7 +29,8 @@ function dividers(canvasElement: HTMLElement): boolean[] {
 }
 
 /** Before you come on the storage lane: its last line carries no divider
- * (shared-ui-page-blocks-SC-08). */
+ * (shared-ui-page-blocks-SC-08). Given no slot, the list keeps `list`
+ * (shared-ui-page-blocks-SC-18). */
 export const BeforeYouComeStorage: Story = {
   play: async ({ canvasElement }) => {
     const items = within(canvasElement).getAllByRole("listitem");
@@ -37,6 +38,10 @@ export const BeforeYouComeStorage: Story = {
       BEFORE_STORAGE.map((note) => note.content),
     );
     expect(dividers(canvasElement)).toEqual([true, true, false]);
+    expect(within(canvasElement).getByRole("list")).toHaveAttribute(
+      "data-slot",
+      "list",
+    );
   },
 };
 
@@ -91,5 +96,16 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("list")).toBeNull();
     expect(canvas.queryByRole("listitem")).toBeNull();
+  },
+};
+
+/** The list carries the slot it is given (shared-ui-page-blocks-SC-18). */
+export const WithSlot: Story = {
+  args: { slot: "vault-case-before-you-come" },
+  play: async ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole("list")).toHaveAttribute(
+      "data-slot",
+      "vault-case-before-you-come",
+    );
   },
 };

@@ -33,7 +33,8 @@ const before = (a: Node, b: Node) =>
   Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
 
 /** Every part, drawn in one order; the card a region named by its title,
- * the rows a table named by their own label (shared-ui-page-blocks-SC-03). */
+ * the rows a table named by their own label (shared-ui-page-blocks-SC-03).
+ * Given no slot, the card keeps `card` (shared-ui-page-blocks-SC-18). */
 export const EveryPart: Story = {
   args: {
     copy: {
@@ -49,6 +50,7 @@ export const EveryPart: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const region = canvas.getByRole("region", { name: OFFER_TITLE });
+    expect(region).toHaveAttribute("data-slot", "card");
     const table = within(region).getByRole("table", {
       name: OFFER_ROWS_LABEL,
     });
@@ -112,5 +114,16 @@ export const EmptyRows: Story = {
     });
     expect(within(region).getByText(REMINDERS_FREE)).toBeInTheDocument();
     expect(within(region).queryByRole("table")).toBeNull();
+  },
+};
+
+/** The card carries the slot it is given (shared-ui-page-blocks-SC-18). */
+export const WithSlot: Story = {
+  args: { ...RowsOnly.args, slot: "vault-case-keeps" },
+  play: async ({ canvasElement }) => {
+    const region = within(canvasElement).getByRole("region", {
+      name: KEEPS_TITLE,
+    });
+    expect(region).toHaveAttribute("data-slot", "vault-case-keeps");
   },
 };
