@@ -1,6 +1,6 @@
 # grade10-admin/inventory/catalog Test Cases
 
-**Status:** in-review
+**Status:** pending-review
 **Drafts styled:** 2026-09-24, tcs-rules r3.0
 
 ## grade10-admin-inventory-catalog-US12: Operator classifies source media for one copy
