@@ -38,5 +38,5 @@
 
 ## 7. Walk the suite (grade10-spec)
 
-- [ ] 7.1 Review `feature-tcs.md` with `/tcs-review add-mixpanel-server-queue`, flip the cases the tests decide with `pnpm run tcs:automated`, and name in `rounds.md` the cases that stay walked by hand: arrival within the sweep bound, an outage of hours, and the held alarm firing
-- [ ] 7.2 Verify: `pnpm run tcs:validate`
+- [x] 7.1 Review `feature-tcs.md` with `/tcs-review add-mixpanel-server-queue`, flip the cases the tests decide with `pnpm run tcs:automated`, and name in `rounds.md` the cases that stay walked by hand: arrival within the sweep bound, an outage of hours, and the held alarm firing
+- [x] 7.2 Verify: `pnpm run tcs:validate`
