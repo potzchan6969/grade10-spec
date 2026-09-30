@@ -43,8 +43,10 @@ winner of three lots has three orders, each with its own deadlines.
 | Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
-- **Sections** — Order Information with Invoice Status and Collection Method,
-  Order Status with a time per step, and Lots
+- 🚧 **Layout** — the Winner Order design's page body, the one its stories
+  render: the lot once, in its card; alerts under it; a sidebar with the
+  summary, payment method, receipts and addresses. No Order Information,
+  Collection Method, Order Status list or Lots
 - **Progress** — five steps, Address → Invoice → Payment → Shipping →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
 - 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
@@ -433,7 +435,7 @@ other lots.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the order, invoice and fulfilment records, and the derived status
-- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderDetail` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
+- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, 🚧 `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
 - **Grant** — `auction:moderate`, the one grant that suspends and reinstates, in the auction service and on the admin Users panel
 - **Mail** — `apps/emails/emails/auction/`
 - **Identifiers** — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers)

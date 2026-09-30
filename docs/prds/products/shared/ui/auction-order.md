@@ -5,9 +5,9 @@ order: 10
 reviewed: 2026-09-30
 ---
 
-Blocks make a winner's auction orders, composed by every application that
-shows them: the My Auction Orders list, its row and empty state, the order
-detail, and the delivery address form. What an order means is [My Auction
+🚧 Blocks make a winner's auction orders, composed by every application that
+shows them: the My Auction Orders list, its row and empty state, the Winner
+Order page body, and the delivery address form. What an order means is [My Auction
 Orders](/p/grade10-site/auction/post-bidding#winner-order) and [Winner
 Order](/p/grade10-site/auction/post-bidding#winner-order); this capability is the
 component contract underneath them.
@@ -19,10 +19,9 @@ component contract underneath them.
   status as supplied, a **View lot** action, and exactly one next action
   whose label the application supplies; the row reports which action was
   chosen and never picks it from the status itself
-- **Order detail** — Order Information, Collection Method, Order Status
-  and Lots, in that order; Collection Method shows whichever of an address
-  form, a read-only address, or nothing the application supplies, and an
-  invoice with Pay with Card only when one is supplied
+- 🚧 **Winner order** — the Winner Order page body from parts the
+  application resolves: it derives the progress from the current step and
+  knows no order status; Storybook and the site render it
 - **Address form** — the fields [Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, Personal or
   Company, a country-aware phone (country and digits required; E.164 when
@@ -45,7 +44,7 @@ component contract underneath them.
 
 :::detail{title="Code map" for="engineer"}
 - **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderEmpty`,
-  `AuctionOrderDetail` and `AuctionAddressForm`, in `packages/ui`
+  🚧 `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui`
 :::
 
 :::detail{title="Test cases" for="qa"}
