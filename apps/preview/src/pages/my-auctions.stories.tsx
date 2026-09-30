@@ -149,7 +149,7 @@ export const PostAuction: Story = {
     expect(canvas.getByText("Payment Verifying")).toBeVisible();
     expect(canvas.getByText("Payment Overdue")).toBeVisible();
     expect(canvas.getByText("Partially Paid")).toBeVisible();
-    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Preparing Shipment")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Delivered")).toBeVisible();
     expect(canvas.getByText("Cancelled")).toBeVisible();
