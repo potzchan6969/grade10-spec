@@ -17,6 +17,8 @@ handles for them, one section per product.
   no name
 - 🚧 **Vault cases** - every case the collector holds, with its reference,
   item, status and lane, newest-touched first, each opening its case
+- 🚧 **Items** - every item the collector owns, held or not, under
+  `inventory:read` - [Items](/p/grade10-admin/inventory/items#owners)
 - 🚧 **One section at a time** - a section the operator may not read, or one
   that fails to load, says so on its own and leaves the rest of the page
 - 🚧 **On the audit chain** - each opening records who read which collector,

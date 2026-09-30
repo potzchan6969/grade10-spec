@@ -63,6 +63,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **Walk-ins** - staff open a case for a customer at the counter, refused
   by name for an address someone has signed into; it emails nothing until the
   customer confirms it on their own phone
+- 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
+  cert and the case takes the item the register holds, its facts filled in -
+  [Items](/p/grade10-admin/inventory/items#facts)
 
 ## One case
 
@@ -98,6 +101,10 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   beside what the collector was told
 - 🚧 **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
+- 🚧 **The item's facts** - the Case tab shows and edits the item's category,
+  grader, grade, cert and facts from the register once the valuation starts,
+  and says registration is pending before that -
+  [Items](/p/grade10-admin/inventory/items#facts)
 
 ## Permissions
 
@@ -130,8 +137,11 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   free text; a move between lockers writes a movement
 - **Movements** — `in` at vaulting, `moved` on a move, `out` at release,
   unwind and forfeiture
-- **Valuation** — an amount and a note; no grading company, certificate
-  number, grade, condition, market reference or second valuer
+- 🚧 **Valuation** - an amount and a note, read beside the item's grader,
+  grade and cert; no condition, market reference or second valuer
+- 🚧 **Forfeited items** - belong to the lender in the register from the
+  moment the vault closes its hold -
+  [Items](/p/grade10-admin/inventory/items#moving-an-item)
 - **Not modelled** — a locker registry per shop, capacity, transfer between
   shops, a condition report, damage or loss, a stock-take against the shelf;
   a forfeited item is written `out` because it has become the shop's stock
