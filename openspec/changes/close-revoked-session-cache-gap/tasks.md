@@ -22,12 +22,12 @@
 - [x] 1.3 Verify: `pnpm --filter @grade10/auth-backend exec vitest run`,
   `pnpm run typecheck --all`, `pnpm run lint`
 
-## 2. The walk (grade10-spec)
+## 2. The walk (grade10-spec) (owner: @sean)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review close-revoked-session-cache-gap`)
 as its input, and group 1 landed.
 
-- [ ] 2.1 Walk `shared-auth-sessions-US-02` (revoke) and `shared-auth-users-US-02`
+- [x] 2.1 Walk `shared-auth-sessions-US-02` (revoke) and `shared-auth-users-US-02`
   (ban) and `shared-auth-users-US-03` (role changes) end to end through the
   admin console, each with a browse read on the collector site warmed
   beforehand, confirming the next read closes without waiting on the
