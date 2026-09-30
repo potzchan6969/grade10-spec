@@ -88,7 +88,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: subject, heading, lot block and footer name <lot_1>.
-* Step 1: the footer says email alerts are on for this lot.
+* Step 1: the footer says email alerts are on for this auction.
 * Step 2: <lot_1 url> opens; the link carries `utm_source=email` and `utm_medium=auction_notification`.
 * Step 3: sign-in is offered first; no alert is changed.
 * Step 4: My Auctions opens; <lot_1> is still watched, alerts on.

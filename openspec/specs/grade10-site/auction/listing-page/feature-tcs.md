@@ -351,7 +351,7 @@ None.
 
 ---
 
-## grade10-site-auction-listing-page-US6: Watch a lot and open My Auctions from the toast
+## grade10-site-auction-listing-page-US6: Watch an auction and open My Auctions from the toast
 
 **As a** collector on a lot I have not bid on,
 **I want** Watching to tell me email alerts are on and offer My Auctions,
@@ -434,7 +434,7 @@ None.
 
 ---
 
-## grade10-site-auction-listing-page-US7: Unwatch from the lot and undo
+## grade10-site-auction-listing-page-US7: Unwatch from the auction and undo
 
 **As a** collector who watched a lot without bidding,
 **I want** Unwatch to confirm alerts are off and let me Undo,

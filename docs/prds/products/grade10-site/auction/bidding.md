@@ -363,8 +363,8 @@ the account's registered address, and the letters about a won lot are
 - **No one-hour reminder** — Grade10 sends no one-hour closing reminder; the
   last warnings before a close are Bidding closes in 24 hours, then Extended
   bidding has started if the lot extends
-- **Footer** — every letter says email alerts are on for this lot, and
-  **Manage alerts** opens My Auctions to mute that lot; never an
+- **Footer** — every letter says email alerts are on for this auction, and
+  **Manage alerts** opens My Auctions to mute that auction; never an
   unauthenticated one-click stop, never unwatch
 - **Never a false statement** — a called-off lot sends nothing further, and a
   letter that would state something no longer true is not sent late
@@ -465,7 +465,7 @@ surface.
 | Card holds stated plainly | Decided | A losing bidder's row names being released or released, because a pending authorization on a bank statement reads as a charge. | Product and finance |
 | Letter audiences | Decided | Start letters reach watchers; close-in-24h and extended-bidding reach a bidder who unwatched while alerts stay on; new-bid letters coalesce to the current leading bid; bid beats watch and a win beats both, so nobody gets two letters for one event. | Product |
 | No-bids close copy | Decided | Watch-only get the watched-ended letter (Ended only — never unsold, no sale or Highest bid); sold closes use watched-sold with Sold for. No bidder letter when nobody bid. | Product |
-| Unsubscribe | Decided | Stop means mute for this lot: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
+| Unsubscribe | Decided | Stop means mute for this auction: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
 | Hold line on the non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
