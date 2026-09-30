@@ -719,12 +719,6 @@ export {
   type VaultCasesEmptyStep,
 } from "./blocks/vault-case/vault-cases-empty";
 export {
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_NOW_MS,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
-} from "./lib/datetime-fixtures";
-export {
   ACTIVITY_RELATIVE_MAX_MS,
   type ActivityTimeCopy,
   formatActivityAt,
