@@ -90,7 +90,10 @@ The conventions, each visible in the existing directories:
   `ListingAuctionBidCard`, `SignInCard`, `TwoFactorVerifyForm`. The test: the name
   reads unambiguously in a consumer's import statement with the path out of
   sight. Never a generic name (`Card`, `Panel`, `Header`) — it collides
-  across capabilities and shadows the primitive it composes.
+  across capabilities and shadows the primitive it composes. The one
+  exception is `page-blocks`: `FactCard`, `FactCardSkeleton`, `NoteList`,
+  `StageRail` and `EmptyPanel` take no prefix, because every site page
+  composes them, as Q115 in `complete-vault-collector-flow` decided.
 - **One component per file, satellites share the basename.** `<name>.tsx`,
   `<name>.stories.tsx`, `<name>.figma.ts`, `<name>.css` plus `.css.d.ts`, and
   one per-directory `types.ts` and `fixtures.ts`. The basename match is

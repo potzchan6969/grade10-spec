@@ -61,7 +61,9 @@ route or subscribe to data.
 
 **Found by slot** - each block SHALL take an optional slot and draw it as its
 `data-slot`; given none, it SHALL keep the slot the design system's part
-carries (`card`, `list`, `empty-state`).
+carries: `card` on `FactCard`, `stack` on `FactCardSkeleton`, `list` on
+`NoteList` and `empty-state` on `EmptyPanel`. `StageRail`'s root SHALL carry
+none, and the design system's stepper inside it keeps `stepper`.
 
 #### Scenario: shared-ui-page-blocks-SC-01 - An application imports the page blocks
 **Serves:** The export contract - site pages build from one set rather than drawing their own
@@ -93,7 +95,9 @@ slot when none is given, and SHALL draw its parts in this order, each only when 
 | Body | a body is given | the consumer's content |
 | Actions | actions are given | the consumer's controls, after everything else |
 
-An empty list of rows SHALL draw no table, the same as no rows.
+An empty list of rows SHALL draw no table, the same as no rows. The space
+between the lead, the rows and the body SHALL be the consumer's `gap`: `sm`,
+the default, or `md`.
 
 #### Scenario: shared-ui-page-blocks-SC-03 - A card with every part reads them in order
 **Serves:** Reading facts - a vault page lays out a fact the case meets
@@ -255,7 +259,10 @@ given, the line under it when given, and the consumer's actions when given.
 #### Scenario: shared-ui-page-blocks-SC-18 - A consumer finds a block by its slot
 **Serves:** The export contract - a page's tests and walks find its parts by name
 
-- **WHEN** `FactCard`, `NoteList`, `StageRail` or `EmptyPanel` is given a slot
+- **WHEN** `FactCard`, `FactCardSkeleton`, `NoteList`, `StageRail` or
+  `EmptyPanel` is given a slot
 - **THEN** the block carries it as its `data-slot`
-- **AND** given none, `FactCard` carries `card`, `NoteList` `list` and
-  `EmptyPanel` `empty-state`
+- **AND** given none, `FactCard` carries `card`, `FactCardSkeleton` `stack`,
+  `NoteList` `list` and `EmptyPanel` `empty-state`
+- **AND** given none, `StageRail`'s root carries no slot and its stepper
+  carries `stepper`

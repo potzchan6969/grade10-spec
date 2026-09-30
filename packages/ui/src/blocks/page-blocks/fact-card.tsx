@@ -50,8 +50,8 @@ type FactCardProps = {
  * title, so a screen reader lands on it by what it is about, and the rows
  * are a table named by what they are the figures of.
  *
- * The card keeps the design system's own `card` slot, which the vault's
- * pages find a case card by.
+ * The card carries the slot the consumer finds it by, or the design system
+ * card's own `card` when given none.
  */
 function FactCard({
   copy,
