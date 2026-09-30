@@ -1,6 +1,6 @@
 ## 1. Close the session-cache gap on revoke, ban, and set-role (grade10) (owner: @sean)
 
-- [ ] 1.1 Write the regression tests: a revoked session's next ordinary read
+- [x] 1.1 Write the regression tests: a revoked session's next ordinary read
   reports no person even with a warmed cookie cache, and a sibling session
   it did not name stays signed in (`shared-auth-sessions-SC-09`); a banned
   account's next read closes the same way (`shared-auth-users-SC-34`); a
@@ -9,7 +9,7 @@
   never changes another user's current version (the cross-account isolation
   case named `**Out of suite:**` in `specs/shared/auth/sessions/feature-tcs.md`
   and `specs/shared/auth/users/feature-tcs.md`)
-- [ ] 1.2 Add `bumpSessionVersion` and `currentSessionVersion` to
+- [x] 1.2 Add `bumpSessionVersion` and `currentSessionVersion` to
   `packages/grade10-auth/backend/src/secondaryStorage.ts` (an opaque
   per-user token, not a counter — `tech-design.md`); wire
   `session.cookieCache.version` to `currentSessionVersion` in
@@ -19,7 +19,7 @@
   `/admin/revoke-user-sessions`, and `/admin/set-role` — making
   `shared-auth-sessions-SC-09`, `shared-auth-users-SC-34`, and
   `shared-auth-users-SC-35` pass
-- [ ] 1.3 Verify: `pnpm --filter @grade10/auth-backend exec vitest run`,
+- [x] 1.3 Verify: `pnpm --filter @grade10/auth-backend exec vitest run`,
   `pnpm run typecheck --all`, `pnpm run lint`
 
 ## 2. The walk (grade10-spec)
