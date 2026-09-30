@@ -29,12 +29,25 @@ every hold, grouped by who holds it, equal to what the house actually has.
 | File size | At most **100 MiB** each |
 | Gallery | **0 to 8** images or videos, in the inventory admin's order |
 
-- 🚧 **Reusable product media** — an inventory admin keeps photographs and
+- **Reusable product media** — an inventory admin keeps photographs and
   video on the catalogue product, not on an individual Cert ID. The gallery
   can be added to, replaced, reordered, or cleared while the product record
   remains editable. It prepares material for Auction; it does not appear on a
   storefront product page.
-- 🚧 **Stable auction selection** — when an auction operator selects a product
+- **Stable auction selection** — when an auction operator selects a product
   asset for a listing and saves, that listing keeps its own copy of the
   selected media. Changing, reordering, or removing the product gallery later
   does not change the listing.
+
+:::detail{title="Product decisions" for="pm"}
+Reusable media belongs on the catalogue product so Auction listings of that
+product can start from material already checked once. Listing galleries keep
+their own copy at Save; later product-gallery edits do not rewrite a lot.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Media owner | Decided | Catalogue product, not a Cert ID or physical unit. Cert-tagged source media is a later change. | Product |
+| Media policy | Decided | Same accepted types, 100 MiB maximum, and gallery bounds as Auction listing media. | Product |
+| Storefront product media | Decided | Out of scope; product assets prepare Auction material only. | Product |
+| Backfill | Decided | Existing products and listings stay unchanged until an operator adds assets. | Product |
+:::

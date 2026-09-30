@@ -5,7 +5,7 @@
 - [x] 1.3 Make `grade10-admin-auction-featured-SC-09` and `SC-10` pass with `auction:write` gating on Featured admin procedures.
 - [x] 1.4 Verify: focused auction backend repository/router tests for Featured, `pnpm run typecheck`, and `pnpm run lint` in grade10. Record scenario evidence.
 
-## 2. Manage Featured Sub-Page (grade10)
+## 2. Manage Featured Sub-Page (grade10) (owner: @mason5991)
 
 Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 
@@ -13,7 +13,7 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 - [x] 2.2 Make `grade10-admin-auction-featured-SC-01`, `SC-04`, `SC-05`, `SC-07`, `SC-08`, and `SC-12` pass on that sub-page: empty slots, listing pick, front page image upload with no gallery picker, reorder, clear, and cap of three.
 - [x] 2.3 Make `grade10-admin-auction-featured-SC-03` and `SC-10` pass on the sub-page: Ended listings refused; callers without `auction:write` cannot curate.
 - [x] 2.4 Verify: admin-frontend feature tests, `pnpm run typecheck`, `pnpm run lint`. Record UI evidence for Manage Featured entry, fill/reorder/clear, and upload-only front page image.
-- [ ] 2.5 Make `grade10-admin-auction-featured-SC-12` carry the front page image brief on each slot's upload: **2400 × 1500** (8:5), subject centred, JPEG or WebP at most 400 KB, with the preview framed at 8:5.
+- [x] 2.5 Make `grade10-admin-auction-featured-SC-12` carry the front page image brief on each slot's upload: **2400 × 1500** (8:5), subject centred, JPEG or WebP at most 400 KB, with the preview framed at 8:5.
 
 ## 3. Featured Banner Block (grade10-spec)
 
@@ -22,13 +22,13 @@ Depends on Group 1. Entry is on the Listings tab toolbar beside Create listing.
 - [x] 3.3 Verify: `pnpm --filter @grade10/ui` storybook vitest for the banner stories, `pnpm run typecheck`, `pnpm run lint`, `pnpm check:manual`. Record story evidence.
 - [x] 3.4 Make `grade10-site-auction-auction-SC-35` and `SC-36` pass in Storybook on a small viewport: below `md`, stage previous/next and horizontal swipe page the stage among two or three slides and are absent for one; countdown beside the CTA; progress under the copy stack; band height holds the tallest slide; lot title clamps to four lines below `md` and three from `md`. Answer `auction.featured.previous` and `next` in `en`, `ko`, `zh-Hans`, and `zh-Hant`.
 
-## 4. Quiet Catalogue on `/auction` (grade10)
+## 4. Quiet Catalogue on `/auction` (grade10) (owner: @mason5991)
 
 Depends on Groups 1 and 3 (public Featured read + banner export).
 
 - [x] 4.1 Make `grade10-site-auction-auction-SC-43`, `SC-57`, `SC-30`, `SC-37`, `SC-40`, `SC-41`, and `SC-42` pass on `/auction`: Featured from `featured.publicList` when complete slides exist, absent otherwise, quiet layout (no category chrome), Featured lots still in All auctions below Featured, empty All auctions with Featured present, address `/auction` with no category query.
-- [ ] 4.2 Make `grade10-site-auction-auction-SC-31` through `SC-36`, `SC-58` through `SC-61`, and `SC-38` / `SC-39` pass in the live catalogue: slide facts, Bid Now / View Auction by status, progress and small-viewport stage previous/next and swipe, Upcoming money withheld on Featured and All auctions, All auctions infinite scroll with Boneyard load-more skeletons, shared watch on open cards and none on closed.
-- [ ] 4.3 Verify: auction-frontend and grade10 frontend tests, focused Playwright catalogue flows, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`. Record browser evidence.
+- [x] 4.2 Make `grade10-site-auction-auction-SC-31` through `SC-36`, `SC-58` through `SC-61`, and `SC-38` / `SC-39` pass in the live catalogue: slide facts, Bid Now / View Auction by status, progress and small-viewport stage previous/next and swipe, Upcoming money withheld on Featured and All auctions, All auctions infinite scroll with Boneyard load-more skeletons, shared watch on open cards and none on closed.
+- [x] 4.3 Verify: auction-frontend and grade10 frontend tests, focused Playwright catalogue flows, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`. Record browser evidence.
 
 ## 5. Product Record Close-Out (grade10-spec)
 

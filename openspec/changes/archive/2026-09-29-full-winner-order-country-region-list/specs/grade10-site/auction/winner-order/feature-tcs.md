@@ -9,7 +9,7 @@
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
 **so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
 
-### winner-order-US1-TC12-1: Delivery Add Address offers a complete A–Z country catalogue
+### winner-order-US1-TC36-1: Delivery Add Address offers a complete A–Z country catalogue
 
 **Classification:**
 
@@ -39,7 +39,7 @@
 * Step 1 opens a popup listing every country and region A–Z, not a short designated set.
 * Step 2 keeps the full catalogue available inside the capped-height popup.
 
-### winner-order-US1-TC13-1: Country/Region field label matches the manual wording
+### winner-order-US1-TC37-1: Country/Region field label matches the manual wording
 
 **Classification:**
 
@@ -66,7 +66,7 @@
 
 * The label reads Country/Region.
 
-### winner-order-US1-TC14-1: Closed field shows the selected or default country
+### winner-order-US1-TC38-1: Closed field shows the selected or default country
 
 **Classification:**
 
@@ -95,7 +95,7 @@
 * The field shows Hong Kong.
 * Country/Region options are not in the tree.
 
-### winner-order-US1-TC15-1: Open catalogue lists every country inside a scrollable popup
+### winner-order-US1-TC39-1: Open catalogue lists every country inside a scrollable popup
 
 **Classification:**
 
@@ -124,7 +124,7 @@
 * Step 1 shows every country and region A–Z in the popup.
 * Step 2 scrolls the long list inside a capped height without truncating the catalogue to a short set.
 
-### winner-order-US1-TC16-1: Typing filters the list to matching country names
+### winner-order-US1-TC40-1: Typing filters the list to matching country names
 
 **Classification:**
 
@@ -160,7 +160,7 @@
 * Step 2 shows only country or region names that match the query.
 * Names that do not match (for example Australia) are not shown.
 
-### winner-order-US1-TC17-1: Autocomplete filter works in isolation on a long list
+### winner-order-US1-TC41-1: Autocomplete filter works in isolation on a long list
 
 **Classification:**
 
@@ -195,7 +195,7 @@
 * The list shows only options whose labels match the query.
 * Non-matching options are not shown.
 
-### winner-order-US1-TC18-1: A query with no match leaves the list empty
+### winner-order-US1-TC42-1: A query with no match leaves the list empty
 
 **Classification:**
 
@@ -229,7 +229,7 @@
 
 * The list shows no country or region options.
 
-### winner-order-US1-TC19-1: Filter matches an early-alphabet name
+### winner-order-US1-TC43-1: Filter matches an early-alphabet name
 
 **Classification:**
 
@@ -264,7 +264,7 @@
 * Afghanistan (or the catalogue name that matches) appears in the filtered list.
 * Unrelated late-alphabet names are not shown.
 
-### winner-order-US1-TC20-1: Filter matches a late-alphabet name
+### winner-order-US1-TC44-1: Filter matches a late-alphabet name
 
 **Classification:**
 
@@ -299,7 +299,7 @@
 * Zimbabwe (or the catalogue name that matches) appears in the filtered list.
 * Unrelated early-alphabet names are not shown.
 
-### winner-order-US1-TC21-1: Choosing a filtered country closes the picker on that selection
+### winner-order-US1-TC45-1: Choosing a filtered country closes the picker on that selection
 
 **Classification:**
 
@@ -338,7 +338,7 @@
 * The field shows United Kingdom.
 * Options are no longer in the tree.
 
-### winner-order-US1-TC22-1: Empty Country/Region is refused beside the field
+### winner-order-US1-TC46-1: Empty Country/Region is refused beside the field
 
 **Classification:**
 
@@ -368,7 +368,7 @@
 * A field refusal appears beside Country/Region.
 * The address is not applied with an empty country or region.
 
-### winner-order-US1-TC23-1: Catalogue includes both early and late alphabet partitions
+### winner-order-US1-TC47-1: Catalogue includes both early and late alphabet partitions
 
 **Classification:**
 
