@@ -45,20 +45,30 @@ type AuctionWinnerOrderCopy = {
   orderProgress: string;
   orderSummary: string;
   invoice: string;
-  pdf: string;
+  invoicePdf: string;
   paymentMethod: string;
   view: string;
-  contactUs: string;
-  lot: string;
-  openLot: string;
   winningBid: string;
   bank: string;
 };
 
 type AuctionWinnerOrderAction = { label: string; onPress: () => void };
 
-/** An alert whose one action opens Contact Us. */
-type AuctionWinnerOrderContactAlert = { title: string; onContact: () => void };
+/** A description keeps its line breaks; `role` overrides the Alert's own. */
+type AuctionWinnerOrderAlert = {
+  title: string;
+  description?: string;
+  status: "default" | "warning" | "success" | "error";
+  role?: "alert" | "status";
+  action?: AuctionWinnerOrderAction;
+};
+
+/** A PDF the winner opens: a URL to follow, or a press the consumer handles. */
+type AuctionWinnerOrderPdf = {
+  href?: string;
+  onOpen?: () => void;
+  ariaLabel?: string;
+};
 
 type AuctionWinnerOrderLine = {
   label: string;
@@ -91,23 +101,20 @@ type AuctionWinnerOrderProps = {
     imageSrc?: string;
     href?: string;
     onOpen?: () => void;
+    ariaLabel: string;
   };
-  /** Under the lot, in order; a description keeps its line breaks. */
-  alerts?: readonly {
-    title: string;
-    description?: string;
-    status: "default" | "warning" | "success" | "error";
-    action?: AuctionWinnerOrderAction;
-  }[];
+  /** Under the lot, in order. */
+  alerts?: readonly AuctionWinnerOrderAlert[];
   summary: {
     lines: readonly AuctionWinnerOrderLine[];
     total: Omit<AuctionWinnerOrderLine, "tooltip"> | null;
-    onInvoicePdf?: () => void;
-    refund?: { title: string; onView: () => void };
-    alert?: AuctionWinnerOrderContactAlert;
-    /** `pending` disables the controls; the label stays the consumer's. */
+    invoicePdf?: AuctionWinnerOrderPdf;
+    refund?: { title: string; onView?: () => void };
+    alert?: AuctionWinnerOrderAlert;
+    /** `loading` spins the primary and disables both; `disabled` only disables. */
     pay?: AuctionWinnerOrderAction & {
-      pending?: boolean;
+      loading?: boolean;
+      disabled?: boolean;
       secondary?: AuctionWinnerOrderAction;
       deadline?: string;
     };
@@ -116,12 +123,12 @@ type AuctionWinnerOrderProps = {
     | { kind: "card"; brand: OrderDetailsPaymentBrand; masked?: string }
     | { kind: "bank"; label: string; bankName?: string }
     | { kind: "text"; label: string };
-  receipts?: readonly { label: string; onOpen: () => void }[];
+  receipts?: readonly (AuctionWinnerOrderPdf & { label: string })[];
   /** Omitted where the order shows no address, such as Cancelled. */
   delivery?: {
     label: string;
     value?: string;
-    alert?: AuctionWinnerOrderContactAlert;
+    alert?: AuctionWinnerOrderAlert;
     confirm?: AuctionWinnerOrderAction & { deadline?: string };
   };
   billing?: { label: string; value: string };
@@ -199,9 +206,10 @@ export type {
   AuctionOrderRowCopy,
   AuctionOrderRowProps,
   AuctionWinnerOrderAction,
-  AuctionWinnerOrderContactAlert,
+  AuctionWinnerOrderAlert,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderLine,
+  AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,
 };

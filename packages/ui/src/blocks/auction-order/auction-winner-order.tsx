@@ -35,8 +35,9 @@ import {
 } from "../shared/use-first-paint-reveal";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type {
-  AuctionWinnerOrderContactAlert,
+  AuctionWinnerOrderAlert,
   AuctionWinnerOrderCopy,
+  AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,
 } from "./types";
@@ -93,9 +94,9 @@ function RevealGroup({
 
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
-    <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+    <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
       {children}
-    </h3>
+    </h2>
   );
 }
 
@@ -158,23 +159,28 @@ function SummaryRow({
 function PdfLink({
   label,
   ariaLabel,
-  onOpen,
+  pdf,
   className,
 }: {
   label: string;
   ariaLabel: string;
-  onOpen: () => void;
+  pdf: AuctionWinnerOrderPdf;
   className?: string;
 }) {
+  const { href, onOpen } = pdf;
   return (
     <Link
       aria-label={ariaLabel}
       className={className}
-      href="#view-pdf"
-      onClick={(event) => {
-        event.preventDefault();
-        onOpen();
-      }}
+      href={href ?? "#view-pdf"}
+      onClick={
+        onOpen
+          ? (event) => {
+              event.preventDefault();
+              onOpen();
+            }
+          : undefined
+      }
       size="sm"
       variant="secondary"
     >
@@ -184,23 +190,25 @@ function PdfLink({
   );
 }
 
-function ContactAlert({
-  alert,
-  copy,
-}: {
-  alert: AuctionWinnerOrderContactAlert;
-  copy: AuctionWinnerOrderCopy;
-}) {
+function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
   return (
     <Alert
       actions={
-        <Button onClick={alert.onContact} size="sm" variant="outline">
-          {copy.contactUs}
-        </Button>
+        alert.action ? (
+          <Button onClick={alert.action.onPress} size="sm" variant="outline">
+            {alert.action.label}
+          </Button>
+        ) : undefined
+      }
+      description={
+        alert.description ? (
+          <span className="whitespace-pre-line">{alert.description}</span>
+        ) : undefined
       }
       dismissible={false}
       layout="inline"
-      status="warning"
+      role={alert.role ?? "alert"}
+      status={alert.status}
       title={alert.title}
     />
   );
@@ -249,9 +257,9 @@ function ProgressCard({
           gap="none"
           vAlign="center"
         >
-          <h3 className="min-w-0 text-base leading-6 font-medium text-foreground">
+          <h2 className="min-w-0 text-base leading-6 font-medium text-foreground">
             {copy.orderProgress}
-          </h3>
+          </h2>
           {progress.tracking ? (
             <Link
               className="min-w-0 shrink tabular-nums"
@@ -274,7 +282,10 @@ function ProgressCard({
           className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           ref={railRef}
         >
-          <Stepper className="min-w-max sm:min-w-0 sm:w-full">
+          <Stepper
+            aria-label={copy.orderProgress}
+            className="min-w-max sm:min-w-0 sm:w-full"
+          >
             {STEPS.map((step, index) => (
               <Step
                 className="w-[7.5rem] min-w-[7.5rem] flex-none basis-[7.5rem] sm:w-auto sm:min-w-0 sm:flex-1 sm:basis-0"
@@ -339,7 +350,7 @@ function LotCard({
   if (lot.href) {
     return (
       <a
-        aria-label={`${lot.title} — ${copy.openLot}`}
+        aria-label={lot.ariaLabel}
         className={className}
         data-slot="winner-order-lot"
         href={lot.href}
@@ -352,7 +363,7 @@ function LotCard({
 
   return (
     <section
-      aria-label={copy.lot}
+      aria-label={lot.ariaLabel}
       className={className}
       data-slot="winner-order-lot"
     >
@@ -376,15 +387,15 @@ function OrderSummary({
         gap="none"
         vAlign="center"
       >
-        <h3 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+        <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
           {copy.orderSummary}
-        </h3>
-        {summary.onInvoicePdf ? (
+        </h2>
+        {summary.invoicePdf ? (
           <PdfLink
-            ariaLabel={`${copy.invoice} ${copy.pdf}`}
+            ariaLabel={summary.invoicePdf.ariaLabel ?? copy.invoicePdf}
             className="shrink-0"
             label={copy.invoice}
-            onOpen={summary.onInvoicePdf}
+            pdf={summary.invoicePdf}
           />
         ) : null}
       </HStack>
@@ -414,9 +425,15 @@ function OrderSummary({
       {summary.refund ? (
         <Alert
           actions={
-            <Button onClick={summary.refund.onView} size="sm" variant="outline">
-              {copy.view}
-            </Button>
+            summary.refund.onView ? (
+              <Button
+                onClick={summary.refund.onView}
+                size="sm"
+                variant="outline"
+              >
+                {copy.view}
+              </Button>
+            ) : undefined
           }
           dismissible={false}
           icon={<ArrowCounterClockwise aria-hidden size={16} weight="bold" />}
@@ -426,15 +443,14 @@ function OrderSummary({
         />
       ) : null}
 
-      {summary.alert ? (
-        <ContactAlert alert={summary.alert} copy={copy} />
-      ) : null}
+      {summary.alert ? <OrderAlert alert={summary.alert} /> : null}
 
       {pay ? (
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button
             className="w-full"
-            disabled={pay.pending}
+            disabled={pay.disabled}
+            loading={pay.loading}
             onClick={pay.onPress}
             size="md"
           >
@@ -443,7 +459,7 @@ function OrderSummary({
           {pay.secondary ? (
             <Button
               className="w-full"
-              disabled={pay.pending}
+              disabled={pay.disabled || pay.loading}
               onClick={pay.secondary.onPress}
               size="md"
               variant="outline"
@@ -490,20 +506,18 @@ function PaymentMethod({
 }
 
 function Receipts({
-  copy,
   receipts,
 }: {
-  copy: AuctionWinnerOrderCopy;
   receipts: NonNullable<AuctionWinnerOrderProps["receipts"]>;
 }) {
   return (
     <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
       {receipts.map((receipt) => (
         <PdfLink
-          ariaLabel={`${receipt.label} ${copy.pdf}`}
+          ariaLabel={receipt.ariaLabel ?? receipt.label}
           key={receipt.label}
           label={receipt.label}
-          onOpen={receipt.onOpen}
+          pdf={receipt}
         />
       ))}
     </HStack>
@@ -511,10 +525,8 @@ function Receipts({
 }
 
 function AddressBlock({
-  copy,
   delivery,
 }: {
-  copy: AuctionWinnerOrderCopy;
   delivery: NonNullable<AuctionWinnerOrderProps["delivery"]>;
 }) {
   return (
@@ -527,9 +539,7 @@ function AddressBlock({
           </Text>
         </>
       ) : null}
-      {delivery.alert ? (
-        <ContactAlert alert={delivery.alert} copy={copy} />
-      ) : null}
+      {delivery.alert ? <OrderAlert alert={delivery.alert} /> : null}
       {delivery.confirm ? (
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button
@@ -591,12 +601,10 @@ function OrderSidebar({
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 <SectionHeading>{copy.paymentMethod}</SectionHeading>
                 <PaymentMethod copy={copy} method={methodCard} />
-                {receipts.length > 0 ? (
-                  <Receipts copy={copy} receipts={receipts} />
-                ) : null}
+                {receipts.length > 0 ? <Receipts receipts={receipts} /> : null}
               </VStack>
             ) : receipts.length > 0 ? (
-              <Receipts copy={copy} receipts={receipts} />
+              <Receipts receipts={receipts} />
             ) : null}
             {methodText ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
@@ -606,7 +614,7 @@ function OrderSidebar({
                 </Text>
               </VStack>
             ) : null}
-            {delivery ? <AddressBlock copy={copy} delivery={delivery} /> : null}
+            {delivery ? <AddressBlock delivery={delivery} /> : null}
             {billing ? (
               <VStack className="w-full" gap="sm" hAlign="start">
                 <SectionHeading>{billing.label}</SectionHeading>
@@ -712,31 +720,7 @@ function AuctionWinnerOrder({
             <VStack className="w-full" gap="lg" hAlign="stretch">
               <LotCard copy={copy} lot={lot} />
               {alerts.map((alert) => (
-                <Alert
-                  actions={
-                    alert.action ? (
-                      <Button
-                        onClick={alert.action.onPress}
-                        size="sm"
-                        variant="outline"
-                      >
-                        {alert.action.label}
-                      </Button>
-                    ) : undefined
-                  }
-                  description={
-                    alert.description ? (
-                      <span className="whitespace-pre-line">
-                        {alert.description}
-                      </span>
-                    ) : undefined
-                  }
-                  dismissible={false}
-                  key={alert.title}
-                  layout="inline"
-                  status={alert.status}
-                  title={alert.title}
-                />
+                <OrderAlert alert={alert} key={alert.title} />
               ))}
             </VStack>
           </RevealGroup>

@@ -131,12 +131,9 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   orderProgress: "Order Progress",
   orderSummary: "Order summary",
   invoice: "Invoice",
-  pdf: "PDF",
+  invoicePdf: "Invoice PDF",
   paymentMethod: "Payment method",
   view: "View",
-  contactUs: "Contact Us",
-  lot: "Lot",
-  openLot: "open lot details",
   winningBid: "Winning bid",
   bank: "Bank",
 };
@@ -297,10 +294,6 @@ function paymentMethodFor(
     : undefined;
 }
 
-function isMuted(line: WinnerOrderInvoiceLine): boolean {
-  return Boolean(line.muted) || line.value === "TBD";
-}
-
 /** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
 function summaryLinesFor(
   content: WinnerOrderContent,
@@ -419,8 +412,11 @@ function WinnerOrderPage({
           .filter((id): id is string => Boolean(id)),
       })
     : null;
-  const onContact = () => {
-    if (contactMail) setContactOpen(true);
+  const contactAction = {
+    label: "Contact Us",
+    onPress: () => {
+      if (contactMail) setContactOpen(true);
+    },
   };
 
   const payCta =
@@ -524,7 +520,8 @@ function WinnerOrderPage({
                   alert: addressOverdue
                     ? {
                         title: content.deadline ?? "Missed setup deadline",
-                        onContact,
+                        status: "warning",
+                        action: contactAction,
                       }
                     : undefined,
                   confirm:
@@ -545,24 +542,26 @@ function WinnerOrderPage({
             imageSrc: PRODUCT_IMAGE,
             href: lotHref,
             onOpen: onLotClick,
+            ariaLabel: lotHref
+              ? `${content.lotTitle} — open lot details`
+              : "Winning lot",
           }}
           note={noteFor(content)}
           paymentMethod={paymentMethodFor(content)}
           progress={progressFor(content)}
           receipts={receiptLinksFor(content).map((receipt) => ({
             label: receipt.label,
+            ariaLabel: `${receipt.label} PDF`,
             onOpen: () =>
               openPlaceholderReceiptPdf(
                 receipt.fileName ?? "grade10-winner-receipt.pdf",
               ),
           }))}
           summary={{
-            lines: lines
-              .filter((line) => line !== total)
-              .map((line) => ({ ...line, muted: isMuted(line) })),
-            total: total ? { ...total, muted: isMuted(total) } : null,
-            onInvoicePdf: hasIssuedInvoice(content)
-              ? openPlaceholderInvoicePdf
+            lines: lines.filter((line) => line !== total),
+            total: total ?? null,
+            invoicePdf: hasIssuedInvoice(content)
+              ? { onOpen: openPlaceholderInvoicePdf }
               : undefined,
             refund: content.refund
               ? {
@@ -573,10 +572,15 @@ function WinnerOrderPage({
             alert: paymentOverdue
               ? {
                   title: content.deadline ?? "Payment deadline passed",
-                  onContact,
+                  status: "warning",
+                  action: contactAction,
                 }
               : settlementContact
-                ? { title: settlementContact, onContact }
+                ? {
+                    title: settlementContact,
+                    status: "warning",
+                    action: contactAction,
+                  }
                 : undefined,
             pay:
               payCta && !paymentOverdue && !settlementContact
@@ -586,7 +590,7 @@ function WinnerOrderPage({
                         ? "Redirecting…"
                         : payCta,
                     onPress: handlePayClick,
-                    pending: cardCheckoutPending,
+                    loading: cardCheckoutPending,
                     secondary:
                       payCta === "Submit Payment Proof"
                         ? {

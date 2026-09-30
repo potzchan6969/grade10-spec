@@ -12,12 +12,9 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   orderProgress: "Order Progress",
   orderSummary: "Order summary",
   invoice: "Invoice",
-  pdf: "PDF",
+  invoicePdf: "Invoice PDF",
   paymentMethod: "Payment method",
   view: "View",
-  contactUs: "Contact Us",
-  lot: "Lot",
-  openLot: "open lot details",
   winningBid: "Winning bid",
   bank: "Bank",
 };
@@ -57,11 +54,12 @@ const meta = {
       winningBid: "HK$12,800",
       imageSrc: IMAGE,
       href: "#lot",
+      ariaLabel: "1999 Pokémon Base Set Charizard PSA 9 — open lot details",
     },
     summary: {
       lines: INVOICE_LINES,
       total: { label: "Order Total", value: "HK$16,085" },
-      onInvoicePdf: fn(),
+      invoicePdf: { onOpen: fn() },
       pay: {
         label: "Pay with Card",
         onPress: fn(),
@@ -105,7 +103,7 @@ export const PendingPayment: Story = {
     );
     expect(args.summary.pay?.onPress).toHaveBeenCalledTimes(1);
     await userEvent.click(canvas.getByRole("link", { name: "Invoice PDF" }));
-    expect(args.summary.onInvoicePdf).toHaveBeenCalledTimes(1);
+    expect(args.summary.invoicePdf?.onOpen).toHaveBeenCalledTimes(1);
   },
 };
 
@@ -162,6 +160,131 @@ export const PaymentVerifying: Story = {
     },
     paymentMethod: { kind: "text", label: "Bank transfer" },
   },
+  play: async ({ canvasElement }) => {
+    await settled(canvasElement);
+    expect(within(canvasElement).getByRole("alert")).toHaveTextContent(
+      "We’re verifying your transfer",
+    );
+  },
+};
+
+export const BankTransferDue: Story = {
+  args: {
+    summary: {
+      lines: INVOICE_LINES,
+      total: { label: "Order Total", value: "HK$16,085" },
+      pay: {
+        label: "Submit Payment Proof",
+        onPress: fn(),
+        secondary: { label: "View Bank Details", onPress: fn() },
+        deadline: "Pay by Oct 2, 2026, 3:00 PM",
+      },
+    },
+    paymentMethod: { kind: "bank", label: "Bank transfer", bankName: "HSBC" },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "View Bank Details" }),
+    );
+    expect(args.summary.pay?.secondary?.onPress).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const CardRedirecting: Story = {
+  args: {
+    summary: {
+      lines: INVOICE_LINES,
+      total: { label: "Order Total", value: "HK$16,085" },
+      pay: { label: "Redirecting…", onPress: fn(), loading: true },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    await settled(canvasElement);
+    const pay = within(canvasElement).getByRole("button", {
+      name: "Redirecting…",
+    });
+    expect(pay).toBeDisabled();
+    expect(pay).toHaveAttribute("aria-busy", "true");
+  },
+};
+
+export const PartiallyPaid: Story = {
+  args: {
+    badge: { label: "Partially Paid", variant: "warning" },
+    summary: {
+      lines: INVOICE_LINES,
+      total: { label: "Order Total", value: "HK$16,085" },
+      alert: {
+        title: "Payment received in part",
+        status: "warning",
+        action: { label: "Contact Us", onPress: fn() },
+      },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "Contact Us" }),
+    );
+    expect(args.summary.alert?.action?.onPress).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const SetupOverdue: Story = {
+  args: {
+    badge: { label: "Setup Overdue", variant: "error" },
+    progress: {
+      current: "address",
+      steps: {
+        ...STEPS,
+        address: { label: "Address", description: "Sep 26, 2026" },
+        invoice: { label: "Invoice" },
+        payment: { label: "Payment" },
+      },
+    },
+    summary: {
+      lines: [{ label: "Winning Bid", value: "HK$12,800" }],
+      total: { label: "Order Total", value: "TBD", muted: true },
+    },
+    paymentMethod: undefined,
+    delivery: {
+      label: "Delivery address",
+      alert: {
+        title: "Missed setup deadline: Sep 26, 2026",
+        status: "warning",
+        action: { label: "Contact Us", onPress: fn() },
+      },
+    },
+  },
+};
+
+export const Delivered: Story = {
+  args: {
+    badge: { label: "Delivered", variant: "outline" },
+    progress: {
+      current: "done",
+      steps: {
+        ...STEPS,
+        payment: { label: "Payment", description: "Sep 27, 2026" },
+        shipping: { label: "Shipping", description: "Sep 29, 2026" },
+        completed: { label: "Completed", description: "Oct 1, 2026" },
+      },
+    },
+    summary: {
+      lines: INVOICE_LINES,
+      total: { label: "Order Total", value: "HK$16,085" },
+    },
+    paymentMethod: { kind: "card", brand: "visa", masked: "•••• 4242" },
+    receipts: [{ label: "Receipt", href: "#receipt.pdf" }],
+  },
+  play: async ({ canvasElement }) => {
+    await settled(canvasElement);
+    const states = [
+      ...canvasElement.querySelectorAll('[data-slot="step"]'),
+    ].map((step) => step.getAttribute("data-state"));
+    expect(new Set(states)).toEqual(new Set(["completed"]));
+  },
 };
 
 export const Shipped: Story = {
@@ -179,10 +302,10 @@ export const Shipped: Story = {
     summary: {
       lines: INVOICE_LINES,
       total: { label: "Order Total", value: "HK$16,085" },
-      onInvoicePdf: fn(),
+      invoicePdf: { onOpen: fn() },
     },
     paymentMethod: { kind: "card", brand: "visa", masked: "•••• 4242" },
-    receipts: [{ label: "Receipt", onOpen: fn() }],
+    receipts: [{ label: "Receipt", href: "#receipt.pdf" }],
   },
   play: async ({ canvasElement }) => {
     await settled(canvasElement);
@@ -227,10 +350,17 @@ export const Refunded: Story = {
     summary: {
       lines: INVOICE_LINES,
       total: { label: "Order Total", value: "HK$16,085" },
-      onInvoicePdf: fn(),
+      invoicePdf: { onOpen: fn() },
       refund: { title: "Refund HK$16,085", onView: fn() },
     },
     paymentMethod: { kind: "card", brand: "mastercard", masked: "•••• 5454" },
-    receipts: [{ label: "Receipt", onOpen: fn() }],
+    receipts: [{ label: "Receipt", href: "#receipt.pdf" }],
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "View" }),
+    );
+    expect(args.summary.refund?.onView).toHaveBeenCalledTimes(1);
   },
 };
