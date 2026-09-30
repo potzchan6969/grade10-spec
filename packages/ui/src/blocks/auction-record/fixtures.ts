@@ -279,7 +279,7 @@ const BIDDING_WON_PROCESSING = biddingItem({
   id: "won-processing",
   title: "1999 Fossil Dragonite Holo PSA 9",
   state: "processing",
-  stateLabel: "Processing",
+  stateLabel: "Preparing Shipment",
   currentBid: "HK$4,200",
   closesAt: "Paid 18 Sep 2026",
   href: WINNER_ORDER_HREF.processing,

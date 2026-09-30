@@ -241,6 +241,7 @@ function winnerOrderBadgeVariant(
     case "preparing_invoice":
     case "payment_verifying":
     case "processing":
+    case "shipped":
       return "default";
     default:
       return "outline";
@@ -249,11 +250,12 @@ function winnerOrderBadgeVariant(
 
 /**
  * Post-auction winner progress — designer-required five steps.
- * Address → Invoice → Payment → Shipped → Completed.
+ * Address → Invoice → Payment → Shipping → Completed.
  * Cancelled / Refunded omit the stepper.
  *
  * Subtext: Address / Invoice / Payment use absolute datetimes (Payment while
- * due reads “Pay by …”). Shipped and Completed use day-only dates like store
+ * due reads “Pay by …”). Shipping while Preparing Shipment reads Preparing to
+ * ship; Shipping while Shipped and Completed use day-only dates like store
  * Order Details.
  */
 function winnerProgressStepsFor(
@@ -276,8 +278,8 @@ function winnerProgressStepsFor(
     description: dates?.payment,
     state: "upcoming",
   };
-  const shipped: WinnerProgressStep = {
-    label: "Shipped",
+  const shipping: WinnerProgressStep = {
+    label: "Shipping",
     description: dates?.shipped,
     state: "upcoming",
   };
@@ -294,7 +296,7 @@ function winnerProgressStepsFor(
         { ...address, state: "current" },
         invoice,
         payment,
-        shipped,
+        shipping,
         completed,
       ];
     case "preparing_invoice":
@@ -302,7 +304,7 @@ function winnerProgressStepsFor(
         { ...address, state: "completed" },
         { ...invoice, state: "current" },
         payment,
-        shipped,
+        shipping,
         completed,
       ];
     case "pending_payment":
@@ -313,7 +315,7 @@ function winnerProgressStepsFor(
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "current" },
-        shipped,
+        shipping,
         completed,
       ];
     case "processing":
@@ -321,7 +323,11 @@ function winnerProgressStepsFor(
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
-        { ...shipped, state: "current" },
+        {
+          ...shipping,
+          state: "current",
+          description: "Preparing to ship",
+        },
         completed,
       ];
     case "shipped":
@@ -329,7 +335,7 @@ function winnerProgressStepsFor(
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
-        { ...shipped, state: "current" },
+        { ...shipping, state: "current" },
         completed,
       ];
     case "delivered":
@@ -337,11 +343,11 @@ function winnerProgressStepsFor(
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
-        { ...shipped, state: "completed" },
+        { ...shipping, state: "completed" },
         { ...completed, state: "completed" },
       ];
     default:
-      return [address, invoice, payment, shipped, completed];
+      return [address, invoice, payment, shipping, completed];
   }
 }
 

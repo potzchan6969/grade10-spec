@@ -23,7 +23,7 @@ export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
   pending_payment_expired: "Pending Payment (expired invoice)",
   payment_verifying: "Payment Verifying",
   partially_paid: "Partially Paid",
-  processing: "Processing",
+  processing: "Preparing Shipment",
   shipped: "Shipped",
   delivered: "Delivered",
   cancelled: "Cancelled",

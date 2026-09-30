@@ -60,7 +60,7 @@ export const AwaitingSetup: Story = {
     expect(canvas.getByText("Address")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
-    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Shipping")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Complete Order Setup" }),

@@ -31,7 +31,7 @@ delivery recorded, with every change on one timeline.
   - Counts toward nothing: money on a replaced invoice, a cancelled order, at another amount or on an invoice in any other state pays nothing and blocks nothing, and finance returns it outside Grade10
   - Flags per payment: each flag is cleared on its own, with a reason
 - Fulfilment on the order
-  - Dispatch: the carrier and the tracking number, on a Processing order
+  - Dispatch: the carrier and the tracking number, on a Preparing Shipment order
   - Delivery: the date and the carrier's proof, on a Shipped order
 - Audit trail
   - Signed-in operator: every operator entry names the operator signed in and the time on Grade10's clock
@@ -61,7 +61,7 @@ a second status for the operator.
 
 | Segment | Orders |
 | --- | --- |
-| Needs action | Setup Overdue, Preparing Invoice, Payment Overdue, Payment Verifying and Processing, and every flagged order whatever its status |
+| Needs action | Setup Overdue, Preparing Invoice, Payment Overdue, Payment Verifying and Preparing Shipment, and every flagged order whatever its status |
 | Waiting on winner | Awaiting Setup, Pending Payment and Partially Paid, when not flagged |
 | In transit | Shipped, when not flagged |
 | Closed | Delivered, Cancelled and Refunded, when not flagged |
@@ -112,9 +112,9 @@ The title is historical: a lot still taking bids is not in the worklist.
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** a closed lot whose auction order derives as Processing
+- **GIVEN** a closed lot whose auction order derives as Preparing Shipment
 - **WHEN** an operator reads the worklist
-- **THEN** that order's row reads Processing
+- **THEN** that order's row reads Preparing Shipment
 - **AND** it is the same value the winner reads on their own order
 
 Scenario `grade10-admin-auction-post-sale-SC-21` keeps its title with its id.
@@ -125,9 +125,9 @@ sits under Needs action.
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
 - **GIVEN** a worklist holding a Payment Overdue order, a Pending Payment order,
-  a Processing order and a Delivered order, none flagged
+  a Preparing Shipment order and a Delivered order, none flagged
 - **WHEN** an operator opens Needs action
-- **THEN** it lists the Payment Overdue order and the Processing order
+- **THEN** it lists the Payment Overdue order and the Preparing Shipment order
 - **AND** it lists neither of the other two
 
 #### Scenario: grade10-admin-auction-post-sale-SC-44 - An order ready for a quote needs action
@@ -161,17 +161,17 @@ sits under Needs action.
 #### Scenario: grade10-admin-auction-post-sale-SC-159 - Each segment shows its count
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** a worklist holding two Processing orders, one Pending Payment order
+- **GIVEN** a worklist holding two Preparing Shipment orders, one Pending Payment order
   and one Delivered order, none flagged
 - **WHEN** an operator opens Orders
-- **THEN** Needs action is open, listing the two Processing orders
+- **THEN** Needs action is open, listing the two Preparing Shipment orders
 - **AND** Needs action reads 2, Waiting on winner 1, In transit 0, Closed 1 and
   All 4
 
 #### Scenario: grade10-admin-auction-post-sale-SC-160 - A search finds the order by the winner's email
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** a Processing order whose winner's account email is
+- **GIVEN** a Preparing Shipment order whose winner's account email is
   `collector@example.com`, among other orders
 - **WHEN** an operator searches the worklist for `Collector@Ex`
 - **THEN** the search finds that order
@@ -200,12 +200,12 @@ sits under Needs action.
 #### Scenario: grade10-admin-auction-post-sale-SC-181 - A row offers its status's primary action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** an order in Preparing Invoice, an order in Processing, and a
-  flagged order in Processing
+- **GIVEN** an order in Preparing Invoice, an order in Preparing Shipment, and a
+  flagged order in Preparing Shipment
 - **AND** an operator whose roles are exactly `finance`
 - **WHEN** they read Needs action and choose Send invoice on the first row
 - **THEN** the send dialog of that order opens
-- **AND** neither Processing row offers an action
+- **AND** neither Preparing Shipment row offers an action
 
 #### Scenario: grade10-admin-auction-post-sale-SC-182 - Filters follow the open segment
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
@@ -441,7 +441,7 @@ that status.
 | Payment Overdue | Reissue |
 | Payment Verifying | Check proof |
 | Partially Paid | Record payment |
-| Processing | Dispatch |
+| Preparing Shipment | Dispatch |
 | Shipped | Confirm delivery |
 | Delivered, Cancelled, Refunded | None |
 
@@ -534,10 +534,10 @@ minor units.
 #### Scenario: grade10-admin-auction-post-sale-SC-184 - More holds only what applies now
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
-- **GIVEN** a Processing order and a Cancelled order, neither flagged
+- **GIVEN** a Preparing Shipment order and a Cancelled order, neither flagged
 - **AND** an operator holding payment, shipment and refund processing
 - **WHEN** they open each
-- **THEN** the Processing order offers Dispatch as its primary action and
+- **THEN** the Preparing Shipment order offers Dispatch as its primary action and
   Refund alone under More
 - **AND** the Cancelled order offers no primary action and no More
 
@@ -600,7 +600,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 **Serves:** Grants - finance cannot record dispatch
 
 - **GIVEN** an operator holding the finance role
-- **WHEN** they open a Processing order
+- **WHEN** they open a Preparing Shipment order
 - **THEN** Dispatch stays in the header, disabled
 - **AND** the text beneath it names shipment processing as the access it needs
 - **AND** Grade10 refuses a dispatch from them on the server
@@ -692,7 +692,7 @@ began:
 | Payment Overdue | The payment deadline |
 | Payment Verifying | The winner's latest proof |
 | Partially Paid | The latest payment |
-| Processing | The payment that paid the invoice |
+| Preparing Shipment | The payment that paid the invoice |
 | Shipped | The dispatch |
 | Delivered | The delivery |
 | Cancelled | The cancellation |
@@ -809,7 +809,7 @@ the reason.
 - **THEN** the invoice is `paid` at 312000 minor units in HKD
 - **AND** the payment record carries bank transfer, the reference, 2026-09-25
   and the slip
-- **AND** the order derives as Processing
+- **AND** the order derives as Preparing Shipment
 
 Scenario `grade10-admin-auction-post-sale-SC-67` keeps its title with its id.
 The title is historical: manual settlement keeps the payment processing fee.
@@ -865,7 +865,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **AND** an operator holding payment processing
 - **WHEN** they record the payment with its reference, proof and a reason
 - **THEN** Grade10 accepts it
-- **AND** the order derives as Processing without having expired first
+- **AND** the order derives as Preparing Shipment without having expired first
 - **AND** the order never read Payment Verifying
 
 #### Scenario: grade10-admin-auction-post-sale-SC-62 - A proof file of the wrong kind is refused
@@ -1010,7 +1010,7 @@ action on the server.
 ### Requirement: Operators can record one bounded refund and its stock outcome
 
 An operator with refund processing, `auction:refund`, SHALL be able to record
-exactly one refund on an auction order in Processing, Shipped, Delivered or
+exactly one refund on an auction order in Preparing Shipment, Shipped, Delivered or
 Partially Paid:
 
 1. Enter the amount: greater than zero and no greater than what is paid on the
@@ -1059,11 +1059,11 @@ fix the stock choice, and refuse a second refund.
 #### Scenario: grade10-admin-auction-post-sale-SC-191 - A refund of the overpaid difference keeps the status
 **Serves:** post-sale-US-16 - returning only what was paid above the order total
 
-- **GIVEN** a Processing order whose invoice of 312000 minor units in HKD was
+- **GIVEN** a Preparing Shipment order whose invoice of 312000 minor units in HKD was
   paid 320000
 - **WHEN** an operator with refund processing records a refund of 8000 minor
   units in HKD with its reason, reference and proof
-- **THEN** the order still reads Processing
+- **THEN** the order still reads Preparing Shipment
 - **AND** a second refund on it is refused
 
 #### Scenario: grade10-admin-auction-post-sale-SC-192 - A bank refund names where it went and is restated first
@@ -1244,7 +1244,7 @@ moment of send, or the current deadline on a reissue that keeps it.
 An operator holding shipment processing records the goods leaving and arriving
 from the order's page.
 
-**Dispatch** - On a Processing order, the operator SHALL record dispatch with
+**Dispatch** - On a Preparing Shipment order, the operator SHALL record dispatch with
 the carrier, the tracking number and, when there is one, a link to the
 carrier's tracker, reading the delivery address the lot goes to. The order
 SHALL then derive as Shipped.
@@ -1255,7 +1255,7 @@ one PDF, JPEG or PNG of at most 10 MB, which the winner keeps too. The order
 SHALL then derive as Delivered.
 
 **In order only** - Grade10 SHALL refuse dispatch on an order that is not
-Processing, delivery on one that is not Shipped, and a dispatch without a
+Preparing Shipment, delivery on one that is not Shipped, and a dispatch without a
 carrier or a tracking number.
 
 **On the record** - Each SHALL write a fulfilment log entry, per "Fulfilment
@@ -1265,7 +1265,7 @@ log history", and send the winner the shipped or delivered letter, per
 #### Scenario: grade10-admin-auction-post-sale-SC-173 - Dispatch with a carrier and tracking number ships the order
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
-- **GIVEN** a Processing order
+- **GIVEN** a Preparing Shipment order
 - **AND** an operator holding shipment processing
 - **WHEN** they record dispatch with carrier `SF Express` and tracking number
   `SF1234567890`
@@ -1287,7 +1287,7 @@ log history", and send the winner the shipped or delivered letter, per
 #### Scenario: grade10-admin-auction-post-sale-SC-175 - Dispatch and delivery cannot skip ahead
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
-- **GIVEN** an order in Pending Payment and an order in Processing
+- **GIVEN** an order in Pending Payment and an order in Preparing Shipment
 - **WHEN** an operator holding shipment processing records dispatch on the
   first and delivery on the second
 - **THEN** Grade10 refuses both
@@ -1296,11 +1296,11 @@ log history", and send the winner the shipped or delivered letter, per
 #### Scenario: grade10-admin-auction-post-sale-SC-176 - A dispatch without a tracking number is refused
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
-- **GIVEN** a Processing order
+- **GIVEN** a Preparing Shipment order
 - **WHEN** an operator holding shipment processing records dispatch with a
   carrier and no tracking number
 - **THEN** Grade10 refuses it
-- **AND** the order still derives as Processing
+- **AND** the order still derives as Preparing Shipment
 
 ### Requirement: Money that lands is always recorded
 
@@ -1347,7 +1347,7 @@ entry. Clearing SHALL change no status.
 - **WHEN** a card payment of 323225 minor units in HKD completes against that
   invoice
 - **THEN** Grade10 records it and flags it Paid late
-- **AND** the invoice is `paid`, so the order derives as Processing
+- **AND** the invoice is `paid`, so the order derives as Preparing Shipment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-202 - A card payment on an invoice in any other state counts toward nothing
 **Serves:** post-sale-US-03 - Operator collects payment
@@ -1373,10 +1373,10 @@ entry. Clearing SHALL change no status.
 #### Scenario: grade10-admin-auction-post-sale-SC-179 - Clearing a flag changes no status
 **Serves:** post-sale-US-03 - Operator collects payment
 
-- **GIVEN** an order in Processing, flagged Paid late for a card payment that
+- **GIVEN** an order in Preparing Shipment, flagged Paid late for a card payment that
   paid its expired invoice
 - **WHEN** an operator holding payment processing clears the flag with a reason
-- **THEN** the order is no longer flagged and still derives as Processing
+- **THEN** the order is no longer flagged and still derives as Preparing Shipment
 - **AND** the invoice log shows a flag cleared entry with that operator and
   that reason
 

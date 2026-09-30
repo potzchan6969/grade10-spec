@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* The store holds one order, none flagged, in each of Awaiting Setup, Preparing Invoice, Pending Payment, Payment Verifying, Payment Overdue, Processing, Shipped, Delivered and Refunded.
+* The store holds one order, none flagged, in each of Awaiting Setup, Preparing Invoice, Pending Payment, Payment Verifying, Payment Overdue, Preparing Shipment, Shipped, Delivered and Refunded.
 * The store holds a published lot 30 minutes from its close.
 * admin(operator) can open Orders under `/auction`.
 
@@ -38,7 +38,7 @@
 
 **Expected Results:**
 
-* Orders opens on Needs action, which reads 4 and lists the Preparing Invoice, Payment Verifying, Payment Overdue and Processing orders.
+* Orders opens on Needs action, which reads 4 and lists the Preparing Invoice, Payment Verifying, Payment Overdue and Preparing Shipment orders.
 * Waiting on winner reads 2 and lists the Awaiting Setup and Pending Payment orders.
 * In transit reads 1 and lists the Shipped order; Closed reads 2 and lists the Delivered and Refunded orders.
 * All reads 9, and the lot 30 minutes from its close is on no segment.
@@ -61,7 +61,7 @@
 
 **Pre-conditions:**
 
-* A Processing order on listing `LK423`, whose first invoice `IN-LK42301` was replaced by `IN-LK42302`, and whose winner's account email is `collector@example.com`.
+* A Preparing Shipment order on listing `LK423`, whose first invoice `IN-LK42301` was replaced by `IN-LK42302`, and whose winner's account email is `collector@example.com`.
 * Other orders in every segment, on listings whose codes do not start with `LK423`.
 * admin(operator) is on Orders.
 
@@ -95,7 +95,7 @@
 **Pre-conditions:**
 
 * Two orders in Preparing Invoice whose winners confirmed setup 10 and 30 hours ago.
-* A Processing order paid 2 hours ago, and a Processing order flagged 1 hour ago for a card payment that landed while proof was checked.
+* A Preparing Shipment order paid 2 hours ago, and a Preparing Shipment order flagged 1 hour ago for a card payment that landed while proof was checked.
 * Two Delivered orders, delivered 1 and 3 days ago, and Cancelled orders of two cancellation categories.
 * admin(operator whose roles are exactly `finance`) is on Orders.
 
@@ -109,7 +109,7 @@
 
 **Expected Results:**
 
-* Needs action lists the order confirmed 30 hours ago first, and neither Processing row offers an action.
+* Needs action lists the order confirmed 30 hours ago first, and neither Preparing Shipment row offers an action.
 * Send invoice opens that order's send dialog.
 * Closed lists the order delivered 1 day ago above the one delivered 3 days ago.
 * The status filter offers Delivered, Cancelled and Refunded only; the category filter appears once Cancelled is chosen, and the list then holds only that category's orders.
@@ -140,19 +140,19 @@
 
 **Pre-conditions:**
 
-* A Processing order on an ordinary lot, and a Cancelled order on a sandbox lot, neither flagged.
+* A Preparing Shipment order on an ordinary lot, and a Cancelled order on a sandbox lot, neither flagged.
 * admin(operator holding payment, shipment and refund processing) is on the Listings table.
 
 **Steps:**
 
-1. Choose Open order on the Processing order's lot.
+1. Choose Open order on the Preparing Shipment order's lot.
 2. Read the header and More.
 3. Reload the page, then open its address in a new window.
 4. Open the Cancelled order from Orders and read its header.
 
 **Expected Results:**
 
-* The order page opens, reading Processing with one sentence naming the rule behind it and how long it has waited, and no Test badge.
+* The order page opens, reading Preparing Shipment with one sentence naming the rule behind it and how long it has waited, and no Test badge.
 * Dispatch is the primary action, and More holds Refund alone.
 * The reload and the new window open the same order.
 * The Cancelled order reads Cancelled with a Test badge, and offers no primary action and no More.
@@ -324,7 +324,7 @@
 
 **Expected Results:**
 
-* The first payment is flagged Paid late; the invoice is `paid` and the order reads Processing.
+* The first payment is flagged Paid late; the invoice is `paid` and the order reads Preparing Shipment.
 * The second is flagged Unexpected status; the invoice is still `payment_verifying`, with nothing counted as paid.
 * Each timeline shows a flagged payment entry naming the card.
 
@@ -353,7 +353,7 @@
 
 **Pre-conditions:**
 
-* A Processing order.
+* A Preparing Shipment order.
 * admin(operator with shipment processing) opens it.
 
 **Steps:**
@@ -384,14 +384,14 @@
 
 **Pre-conditions:**
 
-* An order in Pending Payment and an order in Processing.
+* An order in Pending Payment and an order in Preparing Shipment.
 * admin(operator with shipment processing).
 
 **Steps:**
 
 1. Record dispatch on the Pending Payment order.
-2. Record delivery on the Processing order.
-3. Record dispatch on the Processing order with a carrier and no tracking number.
+2. Record delivery on the Preparing Shipment order.
+3. Record dispatch on the Preparing Shipment order with a carrier and no tracking number.
 
 **Expected Results:**
 
@@ -723,7 +723,7 @@
 
 * The amount first reads `3120.00`, with a balance of 312000 before and 0 after, and the dialog says the invoice will be paid.
 * At `2000.00` the balance after reads 112000 minor units in HKD, and the dialog says the order will read Partially Paid.
-* After the commit the invoice is `paid`, the order reads Processing, and the payment carries bank transfer, `HSBC-778812`, 2026-09-25 and the slip.
+* After the commit the invoice is `paid`, the order reads Preparing Shipment, and the payment carries bank transfer, `HSBC-778812`, 2026-09-25 and the slip.
 
 ### post-sale-US7-TC34-1: Record payment refuses what it cannot record
 
@@ -965,7 +965,7 @@ payments that failed,
 
 **Pre-conditions:**
 
-* A Processing order whose invoice of 312000 minor units in HKD was paid 320000, the overpayment confirmed when it was recorded.
+* A Preparing Shipment order whose invoice of 312000 minor units in HKD was paid 320000, the overpayment confirmed when it was recorded.
 * admin(operator with refund processing) opens Refund.
 
 **Steps:**
@@ -975,7 +975,7 @@ payments that failed,
 
 **Expected Results:**
 
-* The order still reads Processing.
+* The order still reads Preparing Shipment.
 * The second refund is refused.
 
 ### post-sale-US16-TC4-1: An FPS email is kept to its first letter and domain

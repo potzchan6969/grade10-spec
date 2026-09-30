@@ -21,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under View Bank Details, Submit Payment Proof and Email Grade10; these stories cover the page shell and CTA outcomes.",
+          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Preparing Shipment). Dialog form coverage lives under View Bank Details, Submit Payment Proof and Email Grade10; these stories cover the page shell and CTA outcomes.",
       },
     },
   },
@@ -52,7 +52,7 @@ export const PendingPayment: Story = {
     ).not.toBeNull();
     expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
-    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Shipping")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("18 Sep 2026")).toBeVisible();
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
@@ -205,7 +205,7 @@ export const SubmitBankPaymentProof: Story = {
   },
 };
 
-/** Simulated card host return → Processing + Payment received toast. */
+/** Simulated card host return → Preparing Shipment + Payment received toast. */
 export const PayWithCardCheckout: Story = {
   name: "Pay with Card",
   args: { status: "pending_payment" },
