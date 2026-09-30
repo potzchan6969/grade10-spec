@@ -1,4 +1,4 @@
-**Author:** @mason - 2026-09-30
+**Author:** @mason5991 - 2026-09-30
 
 Product context: [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic),
 [Auction Display · Auction Listing](../../../docs/prds/products/grade10-site/auction/display.md#auction-listing),
