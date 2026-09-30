@@ -635,6 +635,65 @@ Runs once per row of **Test data**.
 
 * Each supplied error appears beside its named field.
 
+<!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=1 covers=g10.shared-auction-order.SC-qy4 -->
+### shared-ui-auction-order-US1-TC21-1: The current step decides every step's state
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Order detail
+
+**Pre-conditions:**
+
+* `AuctionWinnerOrder` is rendered with Payment as the current step.
+
+**Steps:**
+
+1. Read the five steps.
+
+**Expected Results:**
+
+* Address and Invoice read complete.
+* Payment reads current.
+* Shipping and Completed read upcoming.
+
+<!-- trace:case id=g10.shared-auction-order.TC-fjf rev=1 covers=g10.shared-auction-order.SC-ofq -->
+### shared-ui-auction-order-US1-TC22-1: A press is reported, never acted on
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Order detail
+
+**Pre-conditions:**
+
+* `AuctionWinnerOrder` is rendered with a pay control and a spy on its callback.
+
+**Steps:**
+
+1. Choose the pay control.
+
+**Expected Results:**
+
+* The pay callback is called once.
+* No network request is made.
+
 ## Settled
 
 - Non-parseable phone still exports the entered value; E.164 only when parseable

@@ -14,7 +14,7 @@
 **so that** Winner Order setup can confirm delivery and billing through one contract.
 
 <!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=1 covers=g10.shared-auction-order.SC-qy4 -->
-### shared-ui-auction-order-US1-TC10-1: The current step decides every step's state
+### shared-ui-auction-order-US1-TC21-1: The current step decides every step's state
 
 **Classification:**
 
@@ -44,7 +44,7 @@
 * Shipping and Completed read upcoming.
 
 <!-- trace:case id=g10.shared-auction-order.TC-fjf rev=1 covers=g10.shared-auction-order.SC-ofq -->
-### shared-ui-auction-order-US1-TC11-1: A press is reported, never acted on
+### shared-ui-auction-order-US1-TC22-1: A press is reported, never acted on
 
 **Classification:**
 
@@ -76,5 +76,5 @@
 
 | Scenario | Case | Finding |
 | --- | --- | --- |
-| shared-ui-auction-order-SC-13 | shared-ui-auction-order-US1-TC10-1 | Agree |
-| shared-ui-auction-order-SC-14 | shared-ui-auction-order-US1-TC11-1 | Agree |
+| shared-ui-auction-order-SC-13 | shared-ui-auction-order-US1-TC21-1 | Agree |
+| shared-ui-auction-order-SC-14 | shared-ui-auction-order-US1-TC22-1 | Agree |
