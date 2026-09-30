@@ -171,64 +171,64 @@ export const LINE_TOOLTIPS = {
 } as const;
 
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$12,800" },
+  { label: "Winning Bid", value: "$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560",
+    value: "$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180",
+    value: "$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$480",
+    value: "$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$320",
+    value: "$320.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
     label: "Payment Processing Fee",
-    value: "HK$120",
+    value: "$120.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,460" },
+  { label: "Order Total", value: "HK$16,460.00" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
 export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$12,800" },
+  { label: "Winning Bid", value: "$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560",
+    value: "$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180",
+    value: "$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$480",
+    value: "$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$320",
+    value: "$320.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
     label: "Payment Processing Fee",
-    value: "HK$120",
+    value: "$120.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,460" },
+  { label: "Order Total", value: "HK$16,460.00" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
@@ -258,25 +258,25 @@ export const WINNER_ORDER_REFUND_OVERPAID = {
  * (`winner-order-SC-111`). Order total is the card fixture less the card fee.
  */
 export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$12,800" },
+  { label: "Winning Bid", value: "$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560",
+    value: "$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180",
+    value: "$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$480",
+    value: "$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$320",
+    value: "$320.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
@@ -284,7 +284,7 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,340" },
+  { label: "Order Total", value: "HK$16,340.00" },
 ];
 
 /** Shared progress dates once each milestone has happened. */

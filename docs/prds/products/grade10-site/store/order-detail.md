@@ -36,6 +36,10 @@ credit after Discount — label names how many were deducted (for example
 `Points (100 pts)`), value is the money credit in the same success style as the
 cart drawer — and omits that row when no points were applied.
 
+**Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
+except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
+(`HK$1,704.50`)
+
 ## Designs
 
 ::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}

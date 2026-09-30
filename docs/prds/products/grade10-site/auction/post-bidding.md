@@ -205,6 +205,9 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
+- **Amount marks** — Order Summary lines use `$` with two decimals
+  (`$12,800.00`), except bare `$0` when the amount is zero; Order Total keeps
+  `HK$` with two decimals (`HK$16,460.00`)
 - 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
   from the Stripe card rule; the operator's own on a bank transfer invoice,
   zero or more, empty read as Free

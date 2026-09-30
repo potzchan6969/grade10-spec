@@ -351,21 +351,40 @@ function winnerProgressStepsFor(
   }
 }
 
+/** Order Summary line money: `$` prefix, at least two decimals; `$0` stays bare. */
+function summaryLineAmount(value: string): string {
+  const withDollar = value.replaceAll("HK$", "$");
+  return withDollar.replace(
+    /^(−?)\$([\d,]+)(?:\.(\d+))?$/,
+    (_match, sign: string, intPart: string, frac: string | undefined) => {
+      const digits = intPart.replaceAll(",", "");
+      const fracDigits = frac ?? "";
+      if (Number(digits) === 0 && Number(fracDigits || "0") === 0) {
+        return `${sign}$0`;
+      }
+      const decimals = fracDigits.padEnd(2, "0");
+      return `${sign}$${intPart}.${decimals}`;
+    },
+  );
+}
+
 /** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
 function summaryLinesFor(
   content: WinnerOrderContent,
 ): WinnerOrderInvoiceLine[] {
+  // Lot card keeps HK$; Order Summary line amounts use `$` with two decimals.
+  const winningBidLine = summaryLineAmount(content.winningBid);
   if (content.invoiceLines?.length) {
     return [...content.invoiceLines];
   }
   if (content.status === "cancelled") {
     return [
-      { label: "Winning Bid", value: content.winningBid },
+      { label: "Winning Bid", value: winningBidLine },
       { label: "Order Total", value: "—" },
     ];
   }
   return [
-    { label: "Winning Bid", value: content.winningBid },
+    { label: "Winning Bid", value: winningBidLine },
     {
       label: "Buyer’s Premium",
       value: "TBD",
