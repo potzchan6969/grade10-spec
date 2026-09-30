@@ -118,8 +118,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     you: "You",
     empty: "No bids yet",
     winner: "Winner",
-    samePricePriorityTip:
-      "When maximums match, the earlier one leads.",
+    samePricePriorityTip: "When maximums match, the earlier one leads.",
   },
   auctionWon: "Auction won",
   completePurchase: "Complete Order Setup",

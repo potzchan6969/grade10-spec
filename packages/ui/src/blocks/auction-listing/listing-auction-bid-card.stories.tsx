@@ -226,9 +226,7 @@ export const Default: Story = {
     expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
     expect(canvas.queryByLabelText("Winner")).not.toBeInTheDocument();
     expect(
-      canvas.getByLabelText(
-        "When maximums match, the earlier one leads.",
-      ),
+      canvas.getByLabelText("When maximums match, the earlier one leads."),
     ).toBeInTheDocument();
   },
 };
@@ -504,9 +502,7 @@ export const ClosedSoldEqualMax: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByLabelText("Winner")).toBeInTheDocument();
     expect(
-      canvas.getByLabelText(
-        "When maximums match, the earlier one leads.",
-      ),
+      canvas.getByLabelText("When maximums match, the earlier one leads."),
     ).toBeInTheDocument();
   },
 };
