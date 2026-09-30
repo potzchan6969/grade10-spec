@@ -7,3 +7,4 @@ Written by the landing, in the landing's own commit.
 | --- | --- | --- | --- | --- | --- |
 | 1 | proposal | product, reader, design, operations, simpler, verifier | a walk-in opens as a draft the customer sends with the wizard's third step; collector, not owner; the collector page reached from a case; the metric read by observation | - | - |
 | 2 | decisions | product, reader, design, operations, simpler, verifier | Q12 and Q15 rewritten for the draft the customer sends; Q18-Q20 decided for the draft's costs; Q16 and Q21-Q25 held for the owner; Q17 deferred to Legal | - | - |
+| 3 | user-journeys | product, reader, design, operations, simpler, verifier | case-intake US-06 and case-lifecycle US-06 rewritten for a draft staff open; the vault-case capability dropped; the treasurer's journey reads the short id | - | - |
