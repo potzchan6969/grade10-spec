@@ -212,8 +212,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Counter intake | Decided | Staff open a draft for a customer at the counter, under the customer's own account, with staff's photos, and no email is sent; the customer sends it from their own phone with the wizard's third step, ticking the collection statement, before it is valued or any email is sent. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
 | Signed-in customers at the counter | Decided | Refused: a typed address does not prove the account is theirs, so that customer sends the request from their own phone with staff beside them | Owner |
 | Walk-ins open under `vault:operate`, names read under `kyc:read` | Decided | Opening a case at the counter is an operate act; collector names sit behind the identity grant, and every read that names a person — the names on a page, one collector's cases, a collector's page — is on the audit chain | Product |
-| When a walk-in reads the collection statement | ❓ Open | Staff type the address before the customer ticks the statement on their phone. Recommended: the counter shows the statement first, and the tick on the phone is the record | Legal |
-| Stock-take sheet and Send notice from arrears | ❓ Open | A stock-take sheet from the held-items list, and Send notice from an arrears row. Recommended: neither, the notice stays an act on the case | Product |
+| When a walk-in reads the collection statement | Decided | The counter shows the collection statement before staff type the address, and the open keeps the version shown; the tick on the customer's phone is their record. In production the open refuses while the statement is unwritten | Legal |
+| Stock-take sheet and Send notice from arrears | Decided | Neither; the notice stays an act on the case, and a shelf count reads the held-items list until the stock-take | Product |
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
 | Grader, grade and cert on a valuation | Decided | Read from the item register beside the amount and the note — [Items](/p/grade10-admin/inventory/items#facts) | Owner |
 | Valuation record | Deferred | A second valuer, a condition report and counter photographs | Product |
@@ -224,7 +224,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Valuer versus approver | Decided | One grant prices, offers and forfeits; the split that matters is per case — the payout's recorder is not the offer's maker — and a separate valuing grant would over-split a shop of three | Owner |
 | Paging the arrears | Decided | A keyset cursor over the payout's due date and the case id, the same idiom the ledger pages on; the ledger's own pager stays as it is | Engineering |
 | Who recorded a ledger row | ❓ Open | Naming the operator reads the auth directory, which asks for `user:list` and a live second factor a treasurer does not hold, so until this is decided the ledger prints the recorder as the worker sends it: a staff handle, the first eight characters of the account id. Recommended: the recorder's name through a narrow read the ledger's own grant allows. | Product, Finance |
-| The page a list pages on | ❓ Open | No number is fixed for the ledger or the arrears list; each pages on its own cursor and nothing states how many rows it takes. Recommended: 50. | Product |
+| The page a list pages on | Decided | **50** rows a page, at most **200** a call | Product |
 | Second factor | Decided | Required in production only, for every brand — a platform-wide rule, not a per-brand one; staging and development stay optional so a rehearsal or a local stack never locks an operator out | Owner |
 | No-show and late | Decided | The case is the item, so a different item is a new case and this one is declined or cancelled | Product |
 :::

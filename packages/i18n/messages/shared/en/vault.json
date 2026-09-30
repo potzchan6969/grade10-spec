@@ -327,7 +327,7 @@
       "account": "Bank account, under {lenderName}",
       "reference": "Use {reference} as the transfer reference.",
       "counter": "Or pay by card or cash at the counter.",
-      "counterOnly": "Pay by card or cash at the counter. The bank transfer details follow by email.",
+      "counterOnly": "Pay by card or cash at the counter.",
       "recordedAgainst": "Recorded against the day it reaches us.",
       "growsBy": "Grows by {amount} a day after {when}.",
       "receiptLine": "You will get an email once we have recorded it.",

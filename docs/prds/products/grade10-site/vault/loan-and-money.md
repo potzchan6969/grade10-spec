@@ -29,6 +29,8 @@ amount on it is whole cents written down by a person after the bank moved it.
 - **Forfeiture** — a person's decision, past the due date and never before
   the cure date of a written notice has passed; the item settles the debt,
   and the figure it settled is on the audit chain
+- ❓ Legal — whether a surplus over the debt is returned; the regime decides —
+  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#outside-the-code)
 - **Release** — refused while anything is outstanding; a storage case owes nothing
 
 ## Arithmetic
@@ -130,12 +132,13 @@ every bound unset and writes no offer in production.
 - 🚧 **Past due** — the reminders sent with their days; before a notice, the next weekly
   one by its date and that a written notice naming a date to pay by may follow, on no
   day set; once one is sent, its date to pay by, before which nothing can be taken
-- ❓ Finance — the FPS id and the bank account; recommended: the lender's own,
-  one set per brand beside its legal identity, refused in production while
-  unset — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
+- **Where a borrower pays** — the lender's own FPS id and bank account, one
+  set per brand beside its legal identity; Finance supplies both, readiness
+  item 11 on [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case),
+  and every production offer refuses while unset
 - 🚧 **Unset, outside production** — the block prints `[fpsId]` and `[bankAccount]`
-- ❓ Product — what a borrower reads in production while those two are unset;
-  recommended: the counter line alone, transfer details by email, no money message
+- 🚧 **Unset, in production** — the counter line alone: pay by card or cash at
+  the counter; no money message goes until both are set again
 - **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
 
 ## Specs and journeys

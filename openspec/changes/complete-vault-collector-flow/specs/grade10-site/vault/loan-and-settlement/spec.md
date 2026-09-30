@@ -228,8 +228,8 @@ in every message about money.
 - **A value nobody has set** — outside production the block SHALL print a
   marked placeholder in place of the unset value. In production an unset FPS
   id or bank account SHALL NOT be printed: the block SHALL NOT be shown, and
-  in its place the live loan SHALL show the counter line alone — pay at the
-  counter, transfer details to follow by email. The act that would send a
+  in its place the live loan SHALL show the counter line alone — pay by card
+  or cash at the counter. The act that would send a
   message carrying an unset value is refused by
   `grade10-site/vault/collector-notifications`, which states that rule.
 
@@ -272,8 +272,8 @@ in every message about money.
   and bank account were set, both since cleared
 - **WHEN** the borrower reads that live loan
 - **THEN** no payee, no FPS id, no bank account and no transfer reference is
-  shown, and the case shows the counter line alone — pay at the counter,
-  transfer details to follow by email
+  shown, and the case shows the counter line alone — pay by card or cash at
+  the counter
 
 ### Requirement: The console states the rule before the operator acts
 
