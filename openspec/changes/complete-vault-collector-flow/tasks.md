@@ -1079,6 +1079,7 @@ Q8). The intake test for a statement nobody has written splits in two.
       `COLLECTION_STATEMENT` in `documents/plan.ts` is not written, before
       anything is written, so the request stays a draft; outside production
       the step reads "Being prepared" and the send goes through; the review
-      step shows the refusal by name
+      step shows the refusal by name, `vault.request.statementUnwritten` in
+      the catalogs
       (`grade10-site-vault-case-intake-SC-18`,
       `grade10-site-vault-case-intake-SC-31`)

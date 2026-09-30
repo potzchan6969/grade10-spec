@@ -227,52 +227,44 @@ first submission owns (`decisions.md` Q18, Q19).
 
 ## Open questions
 
-Every default below is adopted from the canvas until its owner confirms or
-changes it, and is a `❓` row in `decisions.md` with the value recommended.
+Every clock, figure and wording the canvas adopted is a decided row in
+`decisions.md`, taken as recommended at landing; the owner named confirms the
+value on the page its ❓ sits on, and the decided row holds until then.
 
-- **Operations** — the clocks: the plan's nudge at 21 days and expiry at 30,
-  reminders at 30 and 60 days, storage from day 90, the notice at 180, and the
-  batch cut-off Thursday 19:00 with the batch shipping the next day, checked
-  against the courier's pickup schedule; the payout window of 14 days from
-  the day the batch is received and where it goes; the ID glance threshold of
-  HKD 10,000 and that staff have no override; cards a submission, 100 at Bulk
-  and 20 elsewhere, as a fee-sheet column; how the manifest and the invoice
-  enter; a batch above the courier's written cover, split or held. ❓ on
-  [The Submission · Not Collected](../../../docs/prds/products/grade10-site/grading/submission.md#not-collected),
-  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving)
-  and [Grading Console · Settings](../../../docs/prds/products/grade10-admin/grading/console.md#settings).
-- **Commercial** — the fee sheet, one per grader and level with its ceiling,
-  fee, cover rate, estimate and cards a submission, every figure on the canvas
-  being an example modelled on PSA's; cover as its own line at 1.5% of the
-  declared value per card at Express and Super Express; the fee's fate per
-  outcome; fronting the upcharge with no cap and no pre-authorisation; the
-  storage fee of HKD 30 a card a month as a nudge, a part month counting
-  whole; the cap of HKD 300,000 on declared value in the safe until cover is
-  bought; whether grading's lines earn loyalty points. ❓ on
-  [Planning a Submission · Fee Sheet](../../../docs/prds/products/grade10-site/grading/planning.md#fee-sheet),
-  [Planning a Submission · Caps and Clocks](../../../docs/prds/products/grade10-site/grading/planning.md#caps-and-clocks)
-  and [Grading Console · Hand-in](../../../docs/prds/products/grade10-admin/grading/console.md#hand-in).
-- **Legal** — the custodian's registered name and the complaints contact
-  printed on both documents and every email; clause 5, which changes the day a
-  policy is bought; clause 6's wording and the notice's form, whether email
-  alone serves and the 30 days it gives from posting; the hand-back receipt's
-  first clause when a named person collects; the grading classes, the
-  submission record among them, at the vault's retention windows. ❓ on
-  [Documents and Signing · The Submission Agreement](../../../docs/prds/products/grade10-site/grading/documents.md#the-submission-agreement),
-  [Documents and Signing · The Hand-back Receipt](../../../docs/prds/products/grade10-site/grading/documents.md#the-hand-back-receipt)
-  and [The Submission · The Record After Collection](../../../docs/prds/products/grade10-site/grading/submission.md#the-record-after-collection).
-- **Product** — the three diary services' names, durations and horizon;
-  whether a `planned` submission has a queue view of its own; what an outage
-  of the card price reference does to the paste; shipping slabs back in a
-  second release. ❓ on
-  [The Drop-off · Rules](../../../docs/prds/products/grade10-site/grading/drop-off.md#rules),
-  [Planning a Submission · The Wizard](../../../docs/prds/products/grade10-site/grading/planning.md#the-wizard)
-  and [Grading Console · Queue](../../../docs/prds/products/grade10-admin/grading/console.md#queue).
-- **Engineering** — whether `grading` joins the scheduling vocabulary's
-  product set in `add-multi-store-appointments`'s own delta (`Q19`).
-- **The author's handle** — `@brianchacha6969` has no row in
-  `docs/prds/team.yaml` yet, so the record can name the hand and address
-  nothing to it until Operations adds the line.
+- **Operations** — the clocks (`Q23`, `Q33`); the payout window of 14 days from
+  the day the batch is received, at the till or by bank transfer (`Q24`); the
+  ID glance threshold of HKD 10,000 with no staff override (`Q12`, `Q11`);
+  cards a submission as the fee sheet's fewest and most columns (`Q28`); the
+  manifest and the invoice entered before the first scan, an unmatched line
+  holding finishing (`Q50`); the batch closed Thursday 19:00 and shipped the
+  next day (`Q17`). Still Operations' on
+  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving):
+  whether the manifest enters as a file or typed (`Q50`), and whether a batch
+  above the courier's written cover is split or held (`Q29`).
+- **Commercial** — the fee sheet, one setting per grader and level to the
+  grader's top tier, with cover as its own line at 1.5% of the declared value
+  per card at Express and Super Express (`Q27`); the fee's fate per outcome
+  (`Q5`); the upcharge fronted with no cap and no pre-authorisation (`Q6`);
+  the storage fee of HKD 30 a card a month from day 90, a part month counting
+  whole (`Q25`); the safe's cap of HKD 300,000 declared until cover is bought
+  (`Q29`); no loyalty points on any grading line (`Q47`). The sheet's real
+  figures replace the examples on
+  [Planning a Submission · Fee Sheet](../../../docs/prds/products/grade10-site/grading/planning.md#fee-sheet).
+- **Legal** — the custodian is the brand's one registered legal name, the
+  vault's (`Q52`); the complaints contact, clause 4, clause 5, clause 6 and
+  the hand-back receipt's first clause for a named person print as drafted
+  until Legal confirms them, and in production the seal refuses while a fact
+  it prints is unset (`Q48`); the notice by registered post and email, its
+  period a setting pinned at signing and seeded at 90 days (`Q26`); the
+  grading classes at the vault's retention windows (`Q20`, `Q68`). Legal's
+  confirmations are ❓ on
+  [Documents and Signing](../../../docs/prds/products/grade10-site/grading/documents.md).
+- **Product** — the three diary services, their durations and the diary's
+  own horizon (`Q30`); a `planned` submission off the queue (`Q36`); a
+  reference outage keeping every line as typed (`Q46`); slabs shipped back
+  as a second release (`Q7`).
+- **Engineering** — `grading` joins the scheduling vocabulary in
+  `add-multi-store-appointments`' own delta (`Q19`).
 
 ## References
 

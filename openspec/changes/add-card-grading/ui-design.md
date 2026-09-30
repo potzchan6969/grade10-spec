@@ -631,7 +631,7 @@ Stories `grading-documents-sign-page--`.
 | Link expired | the refusal by name: ask staff for a new link | `grade10-site-grading-counter-documents-SC-08` |
 | Already signed | the refusal by name; the sealed copy on the page | `grade10-site-grading-counter-documents-SC-11` |
 | Receipt, signable (`G15`) | handed back, settled, collected by, where and when; three clauses; the same signing block; the slabs-are-yours footer | `grade10-site-grading-counter-documents-SC-16`, `grade10-site-grading-counter-documents-SC-21` |
-| Receipt, named person (`G18`) | Your name prefilled as named; the hint; the first clause names them — ❓ Legal words it | `grade10-site-grading-counter-documents-SC-17`, `grade10-site-grading-counter-documents-SC-29` |
+| Receipt, named person (`G18`) | Your name prefilled as named; the hint; the first clause names them, printed as drawn until Legal confirms it (`decisions.md` Q48) | `grade10-site-grading-counter-documents-SC-17`, `grade10-site-grading-counter-documents-SC-29` |
 | Receipt, ID matched | Collected by names the glance and that nothing was kept | `grade10-site-grading-counter-documents-SC-16` |
 | Receipt, card held | Handed back names the card still out | `grade10-site-grading-counter-documents-SC-18`, `grade10-site-grading-counter-documents-SC-30` |
 | Receipt, vaulted slab | Handed back says the card went to the vault | `grade10-site-grading-counter-documents-SC-19`, `grade10-site-grading-counter-documents-SC-30` |
@@ -701,7 +701,7 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 | Badge: Uncollected 30 d | ready 30 days and not collected | `grade10-admin-grading-counter-SC-07` |
 | Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-SC-10` |
 | Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-SC-08` |
-| Badge: Payout past its window | a payout owed and unmade past the settlement window from the day the batch was received — ❓ Operations the window | `grade10-admin-grading-counter-SC-09` |
+| Badge: Payout past its window | a payout owed and unmade past the settlement window, 14 days from the day the batch was received (`decisions.md` Q24) | `grade10-admin-grading-counter-SC-09` |
 | Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-admin-grading-counter-SC-11` |
 | Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-counter-SC-87` |
 | Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-counter-SC-87` |
@@ -791,7 +791,7 @@ Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-adm
 | Empty | no batch; New batch | `grade10-admin-grading-batches-SC-44` |
 | New batch | grader, and only the levels the grader's active sheet carries; a card that fits neither waits | `grade10-admin-grading-batches-SC-44` |
 | Ship form (`GA4`) | the checklist: packing list printed, the grader's form filled, insured to the declared total against the courier's cover; courier and tracking, order number, shipped on, estimated back; Mark as shipped · email n collectors | `grade10-admin-grading-batches-SC-43` |
-| Above the courier's cover | the insured line in the warning tone; split or hold — ❓ Operations | `grade10-admin-grading-batches-SC-15` |
+| Above the courier's cover | the insured line in the warning tone; split or hold, ❓ Operations' on the console page (`decisions.md` Q29) | `grade10-admin-grading-batches-SC-15` |
 | Shipped on in the future | refused on the field | `grade10-admin-grading-batches-SC-12` |
 | Incomplete | Mark as shipped disabled naming the field | `grade10-admin-grading-batches-SC-13` |
 | Shipping | pending | **Out of suite:** the panel's colocated test |
@@ -808,7 +808,7 @@ Stories `grading-admin-receiving-receive-panel--`.
 | --- | --- | --- |
 | Header (`GA5`) | the batch, grader · level, cards from submissions, the grader's last stage with the day it was recorded, arrived; the progress | `grade10-admin-grading-batches-SC-29` |
 | Before the manifest | Scan disabled; Enter the manifest and the invoice first | `grade10-admin-grading-batches-SC-23` |
-| Manifest entry | `FilePicker` or typed lines — ❓ Operations | `grade10-admin-grading-batches-SC-23` |
+| Manifest entry | `FilePicker` or typed lines, ❓ Operations' on the console page (`decisions.md` Q50) | `grade10-admin-grading-batches-SC-23` |
 | Invoice entry | the invoice's lines and total | `grade10-admin-grading-batches-SC-23` |
 | Unmatched manifest line | a line naming no intake id in the batch listed unmatched; Finish held | `grade10-admin-grading-batches-SC-24` |
 | Line resolved | on an unmatched line, the batch's card it meant named, or the line closed as the grader's error with the reason; the line reads its card, unscanned, until the cert scans, or reads closed with its reason | `grade10-admin-grading-batches-SC-51` |
@@ -971,13 +971,17 @@ Stories `grading-admin-settings-settings-panel--`.
   owed (`decisions.md` Q75;
   `grade10-site-grading-submission-lifecycle-SC-58` and
   `grade10-admin-grading-counter-SC-89`)
-- **❓ Tech design** — the grading `RefusalWords` for the doc-sign codes grading
-  can meet
-- **❓ Operations** — the manifest and the invoice's entry (`GA5` draws
-  Import and the read types the rest), and a batch above the courier's
-  cover; the rows above draw both forms
-- **❓ Legal** — the receipt's first clause when a named person collects;
-  the row prefills the name and prints the clause as drawn
+- **Refusal words** — the grading `RefusalWords` for the doc-sign codes
+  grading can meet are `tech-design.md`'s, over `grading.ceremony`
+- **❓ Operations** — whether the manifest and the invoice enter as a file or
+  typed (`GA5` draws Import and the read types the rest), and whether a batch
+  above the courier's cover is split or held; the rows above draw both forms,
+  and the ❓ sits on
+  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving)
+  (`decisions.md` Q29, Q50)
+- **Legal words** — the receipt's first clause when a named person collects
+  prints as drawn until Legal confirms it (`decisions.md` Q48); the row
+  prefills the name
 - **Drawn, not carried** — `G00-Main`'s disposal step and `G13`'s exception
   lines, the twelfth's disposal line among them (`decisions.md` Q44), `GA3`'s WhatsApp
   templates' words, `G06`'s vault cross-sell copy beyond one line, `GA6`'s
