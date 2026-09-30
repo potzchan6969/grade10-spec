@@ -229,7 +229,7 @@ Used by Register and Transfer, never by Edit.
 | Slab fields | grader and cert, added to the walk-in form by this change | `grade10-admin-vault-operator-queue-US-20` |
 | Looking up | pending | `grade10-admin-vault-operator-queue-US-20` |
 | Register unreachable | an error with retry; the form keeps what was typed | `grade10-admin-vault-operator-queue-US-20` |
-| Found | ❓ Q35: the register's facts, read-only, corrected on the Case tab; the case takes that item | `grade10-admin-vault-operator-queue-US-20` |
+| Found | ❓ Q35, ❓ Q43: the register's facts, read-only, corrected on the Case tab; the case takes that item | `grade10-admin-vault-operator-queue-US-20` |
 | Not found | nothing filled; the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-US-20` |
 | Retired cert | reads as not found | `grade10-admin-vault-operator-queue-US-20` |
 | Another owner | found, naming its owner; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-US-20` |

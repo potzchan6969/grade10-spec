@@ -71,6 +71,7 @@
 | Q40 | Is a retire final, and can a retired item's facts be edited? | ❓ owner - recommended: final and read-only; Q20 frees the grader and cert for a new item, so undoing a retire can collide with that item, and a mistaken retire is fixed by registering the item again | Reopening a retire while its cert is still free |
 | Q41 | Where does Items sit in the console's nav? | ❓ design - recommended: a detail page of Inventory, as every `/inventory/*` page is today, so no new nav entry is needed | A section of its own, which saves a click on the change's busiest page |
 | Q42 | Does the Items list show when an item was last edited? | ❓ design - recommended: no, only one item's page shows it; no journey reads it on the list, and the column narrows the table | Last edited on both the list and one item's page |
+| Q43 | A walk-in is now a draft the customer may edit before sending (`vault-walk-ins-and-owners` Q19). When staff link a slab the register knows, may the customer's edits change its grader, grade, cert or category? | ❓ pm - recommended: no; a linked slab's grader, grade, cert and category read from the register, and the customer's edits touch only the photos and the description | The customer's draft edits overwrite the case's copy, leaving the case and the register with two stories of one slab |
 
 ## Raised
 
