@@ -305,16 +305,16 @@ test("shared-planning-agent-rounds-SC-06 - the requirements' round takes two rea
 
 test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settle", () => {
   const skill = claims(".claude/skills/planning-dev/SKILL.md");
-  assert.match(
-    skill,
-    /question.*cannot settle.*same human/i,
-  );
+  assert.match(skill, /question.*cannot settle.*same human/i);
 });
 
 test("the retired planning routes all dispatch the integrated planning-dev invocation", () => {
   for (const name of ["workflow-specify", "workflow-tech", "workflow-tasks"]) {
     const text = claims(`.claude/skills/${name}/SKILL.md`);
-    assert.match(text, /compatibility route.*planning-dev|routes to.*planning-dev/i);
+    assert.match(
+      text,
+      /compatibility route.*planning-dev|routes to.*planning-dev/i,
+    );
     assert.doesNotMatch(text, /follow `workflow-round`/i);
   }
 });
@@ -751,7 +751,7 @@ test("shared-planning-agent-rounds-SC-48 - a late answer reaches the requirement
 });
 
 test("shared-planning-agent-rounds-SC-49 - the requirements pass reads the design", () => {
-  const skill = claims(SPECIFY);
+  const skill = claims(".claude/skills/planning-dev/SKILL.md");
   assert.match(
     skill,
     /the requirements pass reads `tech-design\.md` beside\s+`ui-design\.md`; a requirement contradicting either is not written/i,
@@ -759,7 +759,7 @@ test("shared-planning-agent-rounds-SC-49 - the requirements pass reads the desig
 });
 
 test("shared-planning-agent-rounds-SC-50 - a requirement reaching the design writes the wait", () => {
-  const skill = claims(SPECIFY);
+  const skill = claims(".claude/skills/planning-dev/SKILL.md");
   assert.match(skill, /awaiting: tech-design:/);
   assert.match(skill, /it holds no stage/i);
 });
@@ -810,7 +810,8 @@ test("the round skill's own frontmatter name is workflow-round", () => {
 
 test("each standalone line skill names its artifact and follows the round", () => {
   for (const [name, artifact] of Object.entries(LINES)) {
-    if (["workflow-tech", "workflow-specify", "workflow-tasks"].includes(name)) continue;
+    if (["workflow-tech", "workflow-specify", "workflow-tasks"].includes(name))
+      continue;
     const path = `.claude/skills/${name}/SKILL.md`;
     const skill = claims(path);
     assert.equal(frontMatter(read(path)).name, name);

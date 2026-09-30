@@ -44,9 +44,9 @@ change**, and nothing beyond them is restated here:
 | --- | --- |
 | Proposed or Designed, and the sentence is its product manager's | Extends it: the sentence is a remark on its proposal, the chain is redrawn, and the reply names the change - decided by the round |
 | Proposed or Designed, and the sentence is another hand's | Writes a held row on its product manager: extend, recommended |
-| Specified or Planned | Writes a held row on its product manager: extend where the moved part is smaller than a task group of work, split otherwise |
+| Specified, Planned or Accepted | Writes a held row on its product manager: extend where the moved part is smaller than a task group of work, split otherwise |
 | Building | Writes a held row on its product manager: split, recommended; supersede where the sentence contradicts what is built |
-| Implementation complete or Archived | Opens a change with `depends_on:` |
+| Implementation complete or Archived | Opens a change, `depends_on:` naming it |
 
 Where no change overlaps, or where the row above opens a new change, what the
 sentence opens:

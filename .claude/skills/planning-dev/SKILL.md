@@ -31,19 +31,29 @@ in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
 
 ## One Planning Run
 
-1. **QA1 - blind cases.** In a fresh context, run `spec-to-tcs` against only
-   frozen anchors. Exclude requirements, scenarios, technical design, QA2 and
-   archive material. Keep `feature-tcs.md` draft.
-2. **Dev - delivery draft.** In another fresh context, write `tech-design.md`,
-   requirement scenarios in `spec.md`, then `tasks.md`. Dev does not read QA1
-   until this independent draft is complete. Derive scenarios from the PRD,
-   journeys, UI design and technical design. Use
-   `docs/governance/task-ownership.md` for groups and owners.
+1. **QA1 - blind cases.** Levels first: the rulebook's **When a Change
+   Touches a Suite Above It** runs before the readings, and a domain or
+   product hit drafts that suite into the change. Then, in a fresh context,
+   QA1 runs `spec-to-tcs` against only frozen anchors and the domain suite
+   above, without requirements, scenarios, technical design, QA2 or archive
+   material. Keep `feature-tcs.md` draft.
+2. **Dev - delivery draft.** In another fresh context, Dev writes the
+   technical design in `tech-design.md`, requirement scenarios in `spec.md`,
+   then `tasks.md`. Dev does not read QA1 until this independent draft is
+   complete. Derive scenarios from the PRD, journeys, UI design and technical
+   design: the requirements pass reads `tech-design.md` beside
+   `ui-design.md`; a requirement contradicting either is not written. A
+   requirement that reaches a design another hand owns writes a dated wait on
+   them rather than writing over them:
+   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
+   cleared by their edit or by that artifact's `reviewed:` line, and it holds
+   no stage. Use `docs/governance/task-ownership.md` for groups and owners.
 3. **QA2 - reconciliation.** In a fresh context, reconcile each blind case
    and scenario against the anchors in `feature-tcs.md`. Record whether a case
    was folded, rejected with reason, raised for the human or remains uncovered.
    Put unresolved product questions in `decisions.md`'s `## Raised` table.
-4. **Resolve and check.** The same human resolves questions that affect
+4. **Resolve and check.** A question the readings cannot settle goes to the
+   same human, as a numbered `Q<n>` row. The same human resolves questions that affect
    behaviour, scope, design, architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another
    edit reruns QA2. Confirm artifacts are complete and new cases remain draft.

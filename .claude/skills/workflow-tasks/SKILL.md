@@ -12,3 +12,7 @@ coverage before the human accepts the complete plan.
 
 Do not start a separate task-planning round. Human QA review and execution
 follow implementation through [`tcs-review`](../tcs-review/SKILL.md).
+
+The plan's rules are the instruction's, printed by
+`openspec instructions tasks --change <change>` and held by
+`scripts/openspec/tasks-template.test.mjs`; the template is the example.

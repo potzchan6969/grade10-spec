@@ -5,7 +5,6 @@ import {
   behindText,
   escapeSlackText,
   linkedOf,
-  stagingText,
   threadPathOf,
   toldBodyOf,
   yourTurnText,
@@ -44,73 +43,24 @@ test("yourTurnText writes the change's own id into the command", () => {
 
 test("yourTurnText says the stage alone where the hand has no move at it", () => {
   assert.equal(
-    yourTurnText({ id: "probe", stage: "released" }, "release", LINKED),
-    `*Your turn* — ${LINKED} is at *Released*.`,
+    yourTurnText({ id: "probe", stage: "archived" }, "qa", LINKED),
+    `*Your turn* — ${LINKED} is at *Archived*.`,
   );
 });
 
-test("stagingText names the run sheet it was given", () => {
-  assert.equal(
-    stagingText(LINKED, { sheetUrl: "https://sheets.test/run" }),
-    `*On staging* — ${LINKED} is on staging. Walk <https://sheets.test/run|the run sheet>.`,
-  );
-});
-
-test("stagingText names the run sheet in words where none is configured", () => {
-  assert.equal(
-    stagingText(LINKED),
-    `*On staging* — ${LINKED} is on staging. Walk the run sheet.`,
-  );
-});
-
-test("shared-planning-change-stages-SC-45 - stagingText names the build the deploy recorded", () => {
-  assert.equal(
-    stagingText(LINKED, {
-      sheetUrl: "https://sheets.test/run",
-      build: "1.4.0-rc2",
-    }),
-    `*On staging* — ${LINKED} is on staging, build \`1.4.0-rc2\`. Walk <https://sheets.test/run|the run sheet>.`,
-  );
-});
-
-test("shared-planning-change-stages-SC-45 - toldBodyOf carries the record's build into QA's message", () => {
+// Deployment availability has its own evidence path, so no stage sends QA a
+// staging walk: implementation complete is the ordinary Your turn.
+test("toldBodyOf gives QA at Implementation complete the ordinary Your turn", () => {
   assert.deepEqual(
-    toldBodyOf(
-      { id: "probe", stage: "on-staging", deployedBuild: "1.4.0-rc2" },
-      "qa",
-      {
-        linked: LINKED,
-        sheetUrl: undefined,
-      },
-    ),
-    { kind: "staging", text: stagingText(LINKED, { build: "1.4.0-rc2" }) },
-  );
-});
-
-test("toldBodyOf sends QA to the run sheet on staging, with the sheet linked", () => {
-  assert.deepEqual(
-    toldBodyOf({ id: "probe", stage: "on-staging" }, "qa", {
-      linked: LINKED,
-      sheetUrl: "https://sheets.test/run",
-    }),
-    {
-      kind: "staging",
-      text: stagingText(LINKED, { sheetUrl: "https://sheets.test/run" }),
-    },
-  );
-});
-
-test("toldBodyOf gives every other hand of staging the ordinary Your turn", () => {
-  assert.deepEqual(
-    toldBodyOf({ id: "probe", stage: "on-staging" }, "release", {
+    toldBodyOf({ id: "probe", stage: "implementation-complete" }, "qa", {
       linked: LINKED,
       sheetUrl: "https://sheets.test/run",
     }),
     {
       kind: "your-turn",
       text: yourTurnText(
-        { id: "probe", stage: "on-staging" },
-        "release",
+        { id: "probe", stage: "implementation-complete" },
+        "qa",
         LINKED,
       ),
     },
