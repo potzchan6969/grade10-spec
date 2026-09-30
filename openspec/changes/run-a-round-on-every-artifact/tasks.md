@@ -103,5 +103,5 @@ Raised by `close-revoked-session-cache-gap`, whose suite copies carry cases a gr
 Needs group 9 on this store's `main` and pinned, so the pinned suites can carry the tagged form.
 
 - [ ] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-107`
-- [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and CI's plan job runs it - `shared-planning-agent-rounds-SC-107`
+- [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and `check:libs` runs it on every CI pass - `shared-planning-agent-rounds-SC-107`
 - [ ] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`
