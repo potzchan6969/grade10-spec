@@ -29,10 +29,10 @@ hold, a wizard to open another, and each case's own page.
 
 ## Request wizard
 
-1. *Collector* — **Describe the item** — category (trading card, coin,
-   bullion, watch, jewellery, other), title (≤ **200** characters),
-   description (≤ **2,000**), WhatsApp number (optional, unverified, in
-   E.164, refused if not a number), and the lane question: a loan and how much
+1. *Collector* — **Describe the item** — category (one of the register's
+   ten, below), title (≤ **200** characters), description (≤ **2,000**),
+   WhatsApp number (optional, unverified, in E.164, refused if not a
+   number), and the lane question: a loan and how much
 2. *Collector* — **Photograph it** — **1 to 10** photos, JPEG, PNG or WebP,
    ≤ **20 MB** each; location metadata is stripped before and after upload
 3. *Collector* — **Send it in** — needs at least one photo; the case becomes

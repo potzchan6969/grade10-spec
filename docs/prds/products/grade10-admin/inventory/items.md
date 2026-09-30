@@ -15,6 +15,7 @@ company owns. Stock counts units of a product; an item is one object.
 | Owner | one account, or one of the company's two entities: the custodian or the lender, or no one once the owner is erased |
 | Category | trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia, other |
 | Grader | PSA, BGS, CGC, SGC, TAG, PCGS, NGC, PMG, or none |
+| Grade | as printed on the slab; only with a grader |
 | Cert | as printed on the slab, trimmed and in capitals; one item per grader and cert |
 | Title | at most **200** characters |
 | Description | at most **2,000** characters |
@@ -74,9 +75,10 @@ the vault no longer has.
 ## Moving an Item
 
 - 🚧 **Transfer** - a staff member or an admin moves an item no place holds
-  to any account or to the custodian, with a reason and, where there is one,
-  a proof document; an item whose owner was erased moves the same way; the
-  item shows each move, who made it and when, and the audit log records it
+  to any account, named by its exact email, or to the custodian, with a
+  reason and, where there is one, a proof document; an item whose owner was
+  erased moves the same way; the item shows each move, who made it and when,
+  and the audit log records it
 - 🚧 **Refused while held** - a transfer is refused while a place holds the
   item, naming the place
 - 🚧 **Forfeit** - a forfeited vault item belongs to the lender from the
@@ -120,7 +122,7 @@ the vault no longer has.
 | `inventory:transfer` | staff, admin | move an item, open a proof |
 
 - 🚧 **The new grant** - `inventory:transfer`, held by staff and admin
-- **The treasurer** - holds none of the three
+- **The treasurer** - holds none of the four above
 
 :::detail{title="Code map" for="engineer"}
 - **Worker** - `packages/inventory/backend`

@@ -4,22 +4,23 @@
 
 **As a** member of shop staff asked about one object,
 **I want** to find it by its title, by its grader and cert, by its item id or
-by its owner, and read its owner by name, its facts and whether a place holds
-it,
+by its owner's exact email, and read its owner by name, its facts and whether
+a place holds it,
 **so that** I can answer who has what without opening every case.
 
 ### grade10-admin-inventory-items-US-02: Operator registers an item and corrects its facts
 
 **As a** member of shop staff with an item no place has registered,
-**I want** to add it under its owner with its category, title, description,
-grader, grade, cert and attributes, and to correct a fact later,
+**I want** to add it under its owner, an account named by its exact email or
+one of the company's entities, with its category, title, description, grader,
+grade, cert and attributes, and to correct a fact later,
 **so that** the register says what the item is, whoever brought it in.
 
 ### grade10-admin-inventory-items-US-03: Operator moves an item to its new owner
 
 **As a** member of shop staff when an item no place holds changes hands,
-**I want** to move it to any account or to the custodian, with a reason and a
-proof document where I have one,
+**I want** to move it to an account named by its exact email or to the
+custodian, with a reason and a proof document where I have one,
 **so that** anyone can later read who moved it, when, why and on what proof.
 
 ### grade10-admin-inventory-items-US-04: Operator learns which place holds an item before moving it

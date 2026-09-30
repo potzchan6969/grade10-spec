@@ -22,8 +22,8 @@ zero after the backfill; ownership moves recorded with who, why and when
   lender, carrying its category from a closed list of ten, title,
   description, grader, grade, cert and the catalogue's attributes
 - **Staff find who has what** - Items and one item's page on the console,
-  searched by title, by grader and cert, by item id or by owner, opening on
-  the items a place holds, the owner shown by name
+  searched by title, by grader and cert, by item id or by the owner's exact
+  email, opening on the items a place holds, the owner shown by name
 - **Held or not is read from the places** - a place that holds an item says
   so on it; in this release the vault is the only place. The register mirrors
   what the vault has already done and never refuses it; a disagreement on
@@ -102,8 +102,9 @@ See [Non-Goals](decisions.md#non-goals).
   categories in the wizard
 - **Auth** - `packages/grade10-auth/contracts`: the new grant, the role table
   and the generated roles
-- **This store** - `packages/i18n` gains the four new category words and the
-  register's console words; no `@grade10/ui` export changes, since the
+- **This store** - `packages/i18n` gains the four new category words
+  (comic, banknote, stamp, memorabilia); the register's console words are the
+  console's own English; no `@grade10/ui` export changes, since the
   register's pages compose the console blocks
 - **Beside this change** - `vault-walk-ins-and-owners` opens the walk-in, the
   owner names and the collector page this change adds to, so the vault deltas
@@ -121,6 +122,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## References
 
+- [Inventory · Items](../../../docs/prds/products/grade10-admin/inventory/index.md#items)
 - [Items · Owners](../../../docs/prds/products/grade10-admin/inventory/items.md#owners)
 - [Items · Facts](../../../docs/prds/products/grade10-admin/inventory/items.md#facts)
 - [Items · Holds](../../../docs/prds/products/grade10-admin/inventory/items.md#holds)

@@ -1,14 +1,14 @@
 ## Goals
 
-- Staff find any item the house knows, graded or not, by title, by grader and cert, by item id or by owner, and read who owns it by name
-- Staff register an item and edit its facts, and every item the vault has taken into custody is already there
+- Staff find any item the house knows, graded or not, by title, by grader and cert, by item id or by the owner's exact email, and read who owns it by name
+- Staff register an item and edit its facts, and every item the vault has taken into custody, but an erased collector's, is already there
 - Staff read whether a place holds an item, and close a hold the place no longer has
 - The vault's valuation and the custody agreement name a slab by its grader, grade and cert, and a walk-in with a slab the register knows finds it rather than typing it again
 - Staff move an item no place holds to any owner, with a reason and a proof where there is one, and anyone can later read who moved it, when and why
 - A forfeited vault item belongs to the lender without anybody moving it by hand
 - Staff retire a duplicate, a lost or destroyed item, or one that left the platform
 - Staff read a collector's items on the collector page
-- The ask to be forgotten reaches the register and waits while a place holds an item the person owns
+- The ask to be forgotten reaches the register and is refused while a place holds an item the person owns
 
 ## Non-Goals
 
@@ -66,6 +66,9 @@
 | Q35 | Once the item is registered, whose category, title and description do the Case tab and the custody agreement show? | ❓ pm - recommended: the register's facts on the Case tab and the paper, with the collector's request kept as they sent it; extends Q22 | The case's own category, title and description beside the register's grader, grade and cert |
 | Q36 | Which word names a place keeping an item, now that "hold" already means a stock reservation in inventory? | ❓ pm - recommended: "mark", the capability's name and unused elsewhere in inventory, across the page, the decisions and the journeys; rewords Q6, Q12 and Q19 | "Hold", which reads as a stock reservation |
 | Q37 | Is `item-marks` its own capability, or part of `items`? | ❓ pm - recommended: part of `items`, since no page names it, and its journeys file deleted; the auction's change then modifies `items` | `item-marks` as a second capability that no page names |
+| Q38 | Does erasure keep an erased owner's item category, grader, grade and cert? The owner's and Legal's to settle; Q17 covers only the proof | ❓ legal - recommended: keep them, since they describe the object, not the person; the owner link, the title, the description and the person's side of each move go, and the kept cert is what lets "one slab, one item" refuse a second record when the slab comes back | Clearing the cert, which lets that slab be registered twice |
+| Q39 | Does the collector page list the collector's retired items? | ❓ owner - recommended: no, live items only; US-07's reason is everything they have with us, and a lost, destroyed or departed item is not with us, while the item's page keeps its history | Retired items shown in a group of their own |
+| Q40 | Is a retire final, and can a retired item's facts be edited? | ❓ owner - recommended: final and read-only; Q20 frees the grader and cert for a new item, so undoing a retire can collide with that item, and a mistaken retire is fixed by registering the item again | Reopening a retire while its cert is still free |
 
 ## Raised
 

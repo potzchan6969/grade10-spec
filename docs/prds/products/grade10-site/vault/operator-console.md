@@ -112,7 +112,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **The item's facts** — the Case tab shows and edits the item's category,
   grader, grade, cert and facts from the register once it has the item, which
   it gets when the valuation starts, and says registration is pending until
-  then — [Items](/p/grade10-admin/inventory/items#facts)
+  then; editing needs `inventory:write` —
+  [Items](/p/grade10-admin/inventory/items#facts)
 
 ## Permissions
 
