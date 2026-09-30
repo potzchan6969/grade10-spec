@@ -153,6 +153,7 @@
     "titleRequired": "Tell us what the item is first.",
     "financingNotPositive": "A loan of nothing is not a loan — tell us how much, or ask for storage only.",
     "photoRequired": "Add a photograph before sending this in.",
+    "statementUnwritten": "We cannot take your request yet: the personal information collection statement is still being written. Your request is kept as a draft — come back once it is ready.",
     "step": {
       "describe": "Describe",
       "photograph": "Photograph",

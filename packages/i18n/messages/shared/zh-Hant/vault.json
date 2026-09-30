@@ -153,6 +153,7 @@
     "titleRequired": "請先告訴我們這是甚麼物品。",
     "financingNotPositive": "借零元不算借貸 — 請填寫金額，或選擇只作保管。",
     "photoRequired": "送出前請先加入一張相片。",
+    "statementUnwritten": "我們暫時未能接收你的申請：個人資料收集聲明仍在撰寫中。你的申請會保留為草稿，待聲明備妥後再回來送出。",
     "step": {
       "describe": "描述",
       "photograph": "拍照",
