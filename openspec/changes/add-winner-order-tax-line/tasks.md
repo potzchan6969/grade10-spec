@@ -38,7 +38,7 @@ Needs group 1.
 - [ ] 3.4 Add the Tax label and `Set by Grade10 for where your order ships. Some orders have none.` tooltip in every Grade10 site locale
 - [ ] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused Winner Order and PDF E2E journey
 
-## 4. End-to-end invoice walk (grade10)
+## 4. End-to-end invoice walk (grade10) (owner: @ecchochan)
 
 Needs groups 2 and 3.
 
