@@ -38,13 +38,13 @@ as its input, and group 1 landed.
   walk's `rounds.md` row
 - [ ] 2.3 Verify: `pnpm run tcs:validate`, `pnpm run validate:changes close-revoked-session-cache-gap`
 
-## 3. Bound the close to 70 seconds everywhere (grade10)
+## 3. Bound the close to 70 seconds everywhere (grade10) (owner: @sean)
 
 Code review on grade10#705 found group 1's `before`-hook bump racy and its
 "next read" unreachable beyond the location that made the change;
 `decisions.md` Q5 and `tech-design.md` hold the revised design.
 
-- [ ] 3.1 Write the regression tests: a read landing between the admin
+- [x] 3.1 Write the regression tests: a read landing between the admin
   call's authorization and its mutation must not leave a cookie that is
   still trusted after the mutation, for `revoke-user-session`, `ban-user`
   and `set-role` (`shared-auth-sessions-SC-09`, `shared-auth-users-SC-34`,
@@ -52,15 +52,15 @@ Code review on grade10#705 found group 1's `before`-hook bump racy and its
   for 70 seconds after a bump, the version changes every 10 seconds, and
   after that it holds still (the 70-second bound named `**Out of suite:**`
   in both feature suites)
-- [ ] 3.2 Move the bump into `securityHooks.ts`'s `after` hook, only when
+- [x] 3.2 Move the bump into `securityHooks.ts`'s `after` hook, only when
   the call succeeded, carrying the target resolved in `before` through a
   per-request slot; store `{ token, bumpedAt }` and rotate the version per
   10-second bucket for 70 seconds after a bump — making the 3.1 tests pass
-- [ ] 3.3 Correct `docs/architecture/edge-cache.md` and
+- [x] 3.3 Correct `docs/architecture/edge-cache.md` and
   `docs/architecture/security.md`: an admin ban, revoke or role change now
   reaches a cached read within 70 seconds, not after the cookie cache's five
   minutes
-- [ ] 3.4 Verify: `pnpm --filter @grade10/auth-backend exec vitest run`,
+- [x] 3.4 Verify: `pnpm --filter @grade10/auth-backend exec vitest run`,
   `pnpm --filter @grade10/auth-worker exec vitest run`,
   `pnpm run typecheck --all`, `pnpm run lint`, and the affected isolated
   E2E files (`e2e/tests/auth/sessions.spec.ts`, `e2e/tests/auth/users.spec.ts`)
