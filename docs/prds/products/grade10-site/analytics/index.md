@@ -100,3 +100,7 @@ coupon codes, and pass serials.
 | Consent             | ❓ Open | Whether a gate sits in front of the browser client. The library can already drop.                                                   | Legal   |
 | Mixpanel erasure    | ❓ Open | Whether a deleted account must be deleted in Mixpanel. First-party data is the console checklist; Mixpanel is not on it.            | Legal   |
 :::
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/analytics/analytics"}
+:::
