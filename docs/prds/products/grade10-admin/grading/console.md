@@ -25,7 +25,7 @@ one submission in tabs whose buttons follow its status; cards are counted here, 
 | Closed | `collected`, `cancelled`, `expired` |
 | Today | every open submission whose drop-off falls on the shop's own day; pickups walk in |
 
-- ❓ **Drafts** — whether a `planned` submission has a view of its own or stays off the queue until booked — Product
+- 🚧 **Drafts** — a `planned` submission stays off the queue until booked; the collector's own list holds it
 - 🚧 **Rows** — submission id, collector, cards, grader and level, status, visit, last touched, and a badge naming why
   it waits: Visit today · Batch closes today · Due back · Running late · Upcharge to settle · Ungraded card ·
   Unchecked return · Uncollected 30 d · Storage fee from day 90 · Notice due; derived at the read, never stored
@@ -57,10 +57,12 @@ One intake label per card, the cards sealed into the intake bag with the printed
   standing and the cards with the collector; the till is run again or another drop-off is booked
 - 🚧 **Refusing a card** — the grader will not take it, it is above the level, or the collector withdrew it, with a
   line in their words on the page and the receipt; the card stays with them and a paid line is refunded at the till
-- 🚧 **The safe is full** — a hand-in that would carry the declared value in the safe past its cap is refused: the
-  counter tells the collector and books the next drop-off; ready slabs count toward the safe
-- ❓ **Grading lines earn no points** — the fee, an upcharge, a storage fee and a refund ride the loyalty programme's
-  non-earning list, as the Grading Service line does — Commercial — [Points](/p/grade10-site/loyalty/points)
+- 🚧 **The safe is full** — the desk reads the cap before the first card is checked; a hand-in that would carry the
+  declared value in the safe past its cap is refused: the counter tells the collector and books the next drop-off
+  rather than open the till; ready slabs count toward the safe
+- 🚧 **Grading lines earn no points** — the fee, an upcharge, a storage fee and a refund ride the loyalty programme's
+  non-earning list, as the Grading Service line does; before launch every till product behind a grading variant
+  carries type `Grading Service` or tag `no-earn` — [Points](/p/grade10-site/loyalty/points)
 
 ## Batches
 
@@ -78,7 +80,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **Mark as shipped** — `checked_in → sent` for every submission in the batch, each collector emailed the tracking
   and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
 - 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's value against its cap
-- ❓ **The safe's cap** — HKD 300,000 of declared value in the safe until cover is bought — Commercial, Legal
+- 🚧 **The safe's cap** — HKD 300,000 of declared value in the safe until cover is bought
 
 ## Receiving
 
@@ -142,7 +144,7 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 ## Written Notice
 
 - 🚧 **Notice due** — from day 180, posted registered to the agreement's address with its date and tracking; the email
-  goes the same day, the 30 days run from the posting, and after them the cards stay ready as storage accrues; the
+  goes the same day, the days the notice gives run from the posting, and after them the cards stay ready as storage accrues; the
   address shows only in the notice's dialog, to staff who may post the notice, while the notice is due. Whether the
   agreement also prints the address is Legal's open question on
   [Documents and Signing](/p/grade10-site/grading/documents#the-submission-agreement)
@@ -155,21 +157,22 @@ reaches only submissions not yet booked:
 
 | Setting | Default | Confirms |
 | --- | --- | --- |
-| `grading.plan_nudge_days` | ❓ 21 | Operations |
-| `grading.plan_expiry_days` | ❓ 30 | Operations |
-| `grading.booked_expiry_days` | ❓ 14, past the visit nobody arrived for | Operations |
-| `grading.batch_cutoff` | ❓ Thursday 19:00; the batch ships the next day | Operations, against the courier's pickup schedule |
-| `grading.reminder_days` | ❓ 30 and 60 | Operations |
-| `grading.storage_from_day` | ❓ 90 | Operations |
-| `grading.storage_fee_per_card_month` | ❓ HKD 30 | Commercial |
-| `grading.notice_day` | ❓ 180 | Operations; the notice's form is Legal's |
-| `grading.settlement_days` | ❓ 14, from the day the batch is received at the shop | Operations |
-| `grading.id_glance_threshold` | ❓ HKD 10,000 | Operations |
-| `grading.safe_declared_cap` | ❓ HKD 300,000 | Commercial, Legal |
+| `grading.plan_nudge_days` | 21 | Operations |
+| `grading.plan_expiry_days` | 30 | Operations |
+| `grading.booked_expiry_days` | 14, past the visit nobody arrived for | Operations |
+| `grading.batch_cutoff` | Thursday 19:00; the batch ships the next day | Operations, against the courier's pickup schedule |
+| `grading.reminder_days` | 30 and 60 | Operations |
+| `grading.storage_from_day` | 90 | Operations |
+| `grading.storage_fee_per_card_month` | HKD 30 | Commercial |
+| `grading.notice_day` | 180 | Operations; the notice's form is Legal's |
+| `grading.notice_period_days` | ❓ 90, from the posting date; pinned at signing | Legal |
+| `grading.settlement_days` | 14, from the day the batch is received at the shop | Operations |
+| `grading.id_glance_threshold` | HKD 10,000 | Operations |
+| `grading.safe_declared_cap` | HKD 300,000 | Commercial, Legal |
 | `grading.reference_usd_rate` | 7.84 HKD to 1 USD, decided by the user; the rate the review's upcharge warning reads a USD reference sale at, written by one approve holder as it is not charged | Operations |
-| the fee sheet | ❓ one setting per grader and level: ceiling, fee, cover rate, estimate, cards a submission | Commercial |
+| the fee sheet | ❓ one setting per grader and level, to the grader's top tier: ceiling, fee, cover rate, estimate, cards a submission | Commercial |
 | the grader's stages | ❓ each grader's own; PSA's published order stages — Arrived, Order Prep, Research & ID, Grading, Assembly, QA Checks, Completed, Shipped — Completed moving the grades in; CGC's and BGS's open until their levels open | Operations |
-| the diary services | ❓ the Grading drop-off at about 20 minutes, its Bulk variant at about 45, the customer-bookable Grading visit; names, durations and horizon | Product, Engineering |
+| the diary services | the Grading drop-off at about 20 minutes, its Bulk variant at about 45, the customer-bookable Grading visit; names, durations and horizon | Product, Engineering |
 
 ## Grants
 
@@ -214,18 +217,18 @@ reaches only submissions not yet booked:
 | A cert is held by one submission | Decided | A scan matching a cert already held elsewhere is refused by name, so a slab can never be handed to the wrong collector | Engineering |
 | The upcharge is the sheet's | Decided | Receiving records the fee sheet's difference and reconciles the invoice against it; a gap between them is Commercial's | Product |
 | Two people for money | Decided | A waiver, a payout and a money setting take a reason and a second `grading:approve` holder, never the recorder | Product |
-| The notice is a counter act | Decided | A queue rung from day 180, a posting record with the date and tracking, the email the same day; the 30 days run from the posting; nothing after it in the first release | Product |
+| The notice is a counter act | Decided | A queue rung from day 180, a posting record with the date and tracking, the email the same day; the days the notice gives run from the posting; nothing after it in the first release | Product |
 | One submission is one capability | Decided | The runbooks and the tabs are one screen at one address, so they are one spec, as the vault keeps one case inside its queue | Product |
 | Send again is a letter's copy | Decided | Only a sealed document a letter has already carried is sent again; before the hand-in the agreement is downloaded on the iPad, and a send is refused by name | Product |
 | Staff notifications | Decided | The queue is the inbox; nothing is emailed to staff | Product |
-| Drafts on the queue | ❓ Open | Whether a `planned` submission has a view of its own | Product |
+| Drafts on the queue | Decided | A `planned` submission stays off the queue until booked; the collector's own list holds it | Product |
 | The link to a vault case | ❓ Open | Grading records the case's six-character reference as typed, and nothing checks that the case exists; how the submission's page links the case from its reference | Product |
-| The safe's cap | ❓ Open | HKD 300,000 of declared value in the safe, ready slabs counted, refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |
+| The safe's cap | Decided | HKD 300,000 of declared value in the safe, ready slabs counted, read before the first card is checked and refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |
 | Every default a setting | ❓ Open | Each row of the settings table, adopted from the canvas until its owner confirms or changes it; pinned to a submission at booking and at signing | Operations, Commercial, Legal, Product |
 | Staff-only history entries | ❓ Open | Only a price reference that would not answer, a repair on our copy of the diary's booking and a card checked at the desk stay off the collector's history; a payout taken back and an upcharge written off show there, so the history never claims money the collector no longer has | Operations |
 | Buttons follow the machine | Decided | Each act shows only at the statuses the contract publishes, cancel never once the visit starts or a card is checked or refused, and the worker refuses independently | Engineering |
 | Counter intake | Decided | A walk-in books the customer-bookable visit and the cards are listed at the counter; the runbook is the same | Product |
-| When the section opens to the shop | ❓ Open | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
+| When the section opens to the shop | Decided | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
 | How many may still join today | ❓ Open | The batch closing tile counts the drop-offs booked today at its grader and level and not yet handed in, and only on the day the batch closes; on any other day it shows none | Product |
 | A diary outage during hand-in | ❓ Open | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again. Whether a letter may print from a kept copy of the shop, so the act stands | Operations |
 | An ungraded line with no code | ❓ Open | A manifest line with no grade records the card ungraded, and the code and the note are each taken where the grader gave one; whether a line with neither is refused at entry | Operations |

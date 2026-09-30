@@ -57,30 +57,35 @@ withdrawn early.
      refused at hand-in, or withdrawn before its batch closes, is not charged
   4. Where the grader moves a card to a higher level the difference between
      the two levels on the fee sheet is payable at the counter before
-     collection; the grade is the grader's decision
+     collection; the grade is the grader's decision; Grade10 may keep the
+     cards until it is paid
   5. In transit the cards are covered to their declared value under the
      courier's declared-value cover and the grader's terms; at the shop they
      are kept in the safe and Grade10 holds no separate policy; a card not
      returned, or returned damaged, is paid out at its declared value with its
      fee refunded, within 14 days of the day the batch is received at the shop
   6. Cards not collected incur a storage fee of HKD 30 a card a month from
-     day 90 after the ready email, payable before collection; after written
-     notice at 180 days, and 30 days from its posting, Grade10 may dispose of
-     them under the Disposal of Uncollected Goods Ordinance (Cap. 456) and
-     holds the proceeds less its fees for the customer
+     day 90 after the ready email, payable before collection; Grade10 may
+     keep the cards until the upcharge and the storage fee are paid; after
+     written notice at 180 days, and the notice period from its posting,
+     Grade10 may sell them under the Disposal of Uncollected Goods Ordinance
+     (Cap. 456) and under this clause, and holds the proceeds, less what is
+     owed and the sale's costs, for the customer
   7. Governing law Hong Kong SAR; the complaints contact
 - ❓ **Custodian registered name** — printed as the party trading as Grade10
   on both documents and every email — Legal
 - ❓ **Complaints contact** — printed on both documents and every email —
-  Legal
+  Owner; the escalation line Legal
 - ❓ **The postal address on the paper** — kept with the signature, and
   printed on no page; stamped beside the signature at the seal if Legal
   wants it on the agreement — Legal
 - ❓ **Clause 5** — changes the day a policy is bought; until then the
   courier's cover and the safe's cap stand — Commercial, Legal
-- ❓ **Clause 6's wording** — the draft reads "within 90 days of notice"
-  where the pages count 90 days from the ready email and 30 from the
-  posting; the clause and the notice are worded together — Legal
+- ❓ **Clause 4's wording** — keeping the cards until the upcharge is paid is
+  a draft for counsel — Legal
+- ❓ **Clause 6's wording** — the notice period is a setting pinned at
+  signing, seeded at 90 days; counsel words the clause and the notice
+  together — Legal
 
 ## The Intake Receipt
 
@@ -140,7 +145,7 @@ withdrawn early.
 | The postal address is one line | Decided | Taken at signing, prefilled, kept only for the clause 6 notice; no other use | Legal |
 | English governs | Decided | The documents and every email are English; the screen's chrome speaks the collector's language, as the vault's does | Legal |
 | Clause 6 keeps the disposal basis | Decided | The clause names the Ordinance although the first release stops at the notice, so the paper a collector signs already carries the ground a later change acts on | Legal |
-| The bracketed facts | ❓ Open | The custodian's registered name and the complaints contact print on both documents and every email; the receipt's first clause for a named person; clause 6's windows; the withdrawal receipt's clauses and the second receipt's line naming the first | Legal |
+| The bracketed facts | ❓ Open | The custodian's registered name and the complaints contact print on both documents and every email; the receipt's first clause for a named person; clause 6's windows; the withdrawal receipt's clauses and the second receipt's line naming the first | Legal; the complaints contact Owner |
 | The withdrawal receipt is issued | Decided | The till has already refunded the fee, so a receipt for money already moved needs no signature, as the intake receipt needs none | Product |
 | Which entity is the custodian | ❓ Open | The agreement names the brand's one registered legal name, the same custodian the vault's papers print, unless a second company is registered for grading | Legal |
 | Clause 5 | ❓ Open | Stands as drawn until a policy is bought; the day it is, the clause changes | Commercial, Legal |

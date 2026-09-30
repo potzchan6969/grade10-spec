@@ -259,10 +259,13 @@ appear on neither the schedule nor the fee.
 | 1 | Grade10 submits the cards to the grader on the customer's behalf under the grader's own terms, and hands them back in person to the customer or a person they name on the submission page, against the pickup code; slabs are not shipped |
 | 2 | The declared value sets the level and the insured cover; it does not affect the grade |
 | 3 | The fee is charged whether or not the grader encapsulates a card; a card refused at hand-in, or withdrawn before its batch closes, is not charged |
-| 4 | Where the grader moves a card to a higher level, the difference between the two levels on the pinned fee sheet is payable at the counter before collection; the grade is the grader's decision |
+| 4 | Where the grader moves a card to a higher level, the difference between the two levels on the pinned fee sheet is payable at the counter before collection; the grade is the grader's decision; Grade10 may keep the cards until it is paid |
 | 5 | In transit the cards are covered to their declared value under the courier's declared-value cover and the grader's terms; at the shop they are kept in the safe and Grade10 holds no separate policy; a card not returned, or returned damaged, is paid out at its declared value with its fee refunded, inside the payout window pinned at signing |
-| 6 | Cards not collected incur the storage fee pinned at signing, per card and per month, from the day pinned at signing after the ready email, payable before collection; after written notice on the notice day pinned at signing, and the days that notice gives from its posting, Grade10 may dispose of them under the Disposal of Uncollected Goods Ordinance (Cap. 456) and holds the proceeds less its fees for the customer |
+| 6 | Cards not collected incur the storage fee pinned at signing, per card and per month, from the day pinned at signing after the ready email, payable before collection; Grade10 may keep the cards until the upcharge and the storage fee are paid; after written notice on the notice day pinned at signing, and the days that notice gives from its posting, Grade10 may sell them under the Disposal of Uncollected Goods Ordinance (Cap. 456) and under this clause, and holds the proceeds, less what is owed and the sale's costs, for the customer |
 | 7 | Governing law Hong Kong SAR, and the complaints contact |
+
+**Drafts for counsel** - clauses 4 and 6 SHALL print as drafted above until
+counsel words them; counsel words clause 6 and the written notice together.
 
 #### Scenario: grade10-site-grading-counter-documents-SC-12 - A level that carries cover prints a cover line per card and the cover in total
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector reading what each card is covered for before signing

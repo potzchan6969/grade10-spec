@@ -66,23 +66,28 @@ vault's pages are, and on no lane the public reaches —
 
 Every item is a value or an act outside the code, with who closes it.
 
-1. *Legal* — **The custodian's registered name and the complaints contact**
-   — printed on both documents and every email
-2. *Legal* — **The notice's form** — its wording, whether email alone serves,
-   and the 30 days it gives from posting
-3. *Legal* — **The retention classes** — grading's rows on the vault's table
+1. *Legal* — **The custodian's registered name** — printed on both documents
+   and every email
+2. *Owner* — **The complaints contact** — a monitored mailbox, a phone and the
+   shop's address, on both documents and every email
+3. *Legal* — **The notice's form** — its wording, whether email alone serves,
+   and the period it gives from posting, seeded at **90** days
+4. *Legal* — **The retention classes** — grading's rows on the vault's table
    — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#retention-and-erasure)
-4. *Commercial, Legal* — **Cover** — a goods-in-trust quote spanning grading
+5. *Commercial, Legal* — **Cover** — a goods-in-trust quote spanning grading
    and the vault, transit insurance for outbound batches and the courier's
    collectibles terms in writing; clause 5 changes the day a policy is bought
    and the safe's cap stands until then
-5. *Commercial* — **The fee sheet** — one per grader and level, replacing the
-   example figures the pages carry
-6. *Operations, Commercial* — **The settings** — every row of the console's
+6. *Commercial* — **The fee sheet** — one per grader and level, replacing the
+   example figures the pages carry, to the grader's top tier, written before
+   the first production booking
+7. *Operations, Commercial* — **The settings** — every row of the console's
    table confirmed or changed —
    [Grading Console](/p/grade10-admin/grading/console#settings)
-7. *Product, Engineering* — **The diary services** — the drop-off, its Bulk
+8. *Product, Engineering* — **The diary services** — the drop-off, its Bulk
    variant and the walk-in's visit, named and sized in the diary
+9. *Operations* — **Till products** — every product behind a grading variant
+   carries type `Grading Service` or tag `no-earn`
 
 - 🚧 **The seal refuses a placeholder** — in production an agreement or a
   receipt cannot be sealed while a fact it prints is unset; outside
@@ -133,13 +138,13 @@ collection, submissions uncollected past 30 days.
 | One submission, one grader, one level | Decided | A card that needs another level goes in a second submission on the same drop-off; a batch is one grader and one level, so a submission is what the grader invoices | Product |
 | A card's outcome is a fact on the card | Decided | A grade, an upcharge, an ungraded return, a card held or lost are recorded on the card and never as a status of the submission; the rest of the cards carry on | Product |
 | Nothing paid before every card is checked and the agreement sealed | Decided | The till opens on the sealed agreement, one POS line per card at the level's fee; the collector keeps the cards until then, and a sealed agreement with no paid line hands nothing in | Product |
-| The fee stands on an ungraded card | ❓ Open | The grader charges it either way and the collector is warned twice, on the review step and in clause 3; goodwill on it is Commercial's call, and the design advises against | Commercial |
+| The fee stands on an ungraded card | Decided | The grader charges it either way and the collector is warned twice, on the review step and in clause 3; goodwill on it is Commercial's call, and the design advises against | Commercial |
 | Refused at the counter, never charged | Decided | A card the grader would not take is refused with a reason in the collector's words; a line already paid is refunded at the till | Product |
-| The upcharge is fronted and carried until collection | ❓ Open | Grade10 pays the difference on the grader's invoice and collects it at the counter; the exposure is carried from receiving to collection, or to disposal once a later change builds it, and nothing recovers it before; a collector who never collects leaves Grade10 holding it, secured on the card; no cap and no pre-authorisation | Commercial |
-| No slabs shipped | ❓ Open | The collector or a person they name collects in person; a second release could ship inside Hong Kong to the address on the agreement, at cost, once transit cover exists | Product |
+| The upcharge is fronted and carried until collection | Decided | Grade10 pays the difference on the grader's invoice and collects it at the counter; the exposure is carried from receiving to collection, or to disposal once a later change builds it, and nothing recovers it before; a collector who never collects leaves Grade10 holding it, secured on the card; no cap and no pre-authorisation; the sheet prices every level the grader can move a card to | Commercial |
+| No slabs shipped | Decided | The collector or a person they name collects in person; a second release could ship inside Hong Kong to the address on the agreement, at cost, once transit cover exists | Product |
 | Every default is a setting the console reads | Decided | Each value on the console's settings table is configuration, never a constant; a submission carries the values it was booked and signed on | Engineering |
 | A day is the brand's, an instant is UTC | Decided | `Asia/Hong_Kong` decides the cut-off, a due date, a reminder day and the queue's day; the wire and the database stay UTC ([[shared/dates-and-times]]) | Product |
 | Grading needs no identity record | Decided | The ID glance above the threshold is a counter fact, matched to the name and keeping nothing, and not a KYC check; the vault's identity duties do not apply | Product |
-| Cover for the cards | ❓ Open | Clause 5 promises a payout at declared value while Grade10 holds no policy and couriers cap collectibles cover near USD 1,000 a parcel; a goods-in-trust quote spanning grading and the vault, transit insurance for outbound batches and the courier's terms in writing before launch, and the safe's cap meanwhile | Commercial, Legal |
+| Cover for the cards | Decided | Clause 5 promises a payout at declared value while Grade10 holds no policy and couriers cap collectibles cover near USD 1,000 a parcel; a goods-in-trust quote spanning grading and the vault, transit insurance for outbound batches and the courier's terms in writing before launch, and the safe's cap meanwhile | Commercial, Legal |
 | The first release stops at the notice | Decided | Reminders, the storage fee and the written notice are built; disposal under clause 6, its status, act, grant and held-proceeds record, is a later change, and the cards stay the collector's at the shop meanwhile | Product |
 :::

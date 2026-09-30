@@ -30,15 +30,15 @@ Both are paid at the counter once the cards are checked.
 
 | Rule | Value | Confirms |
 | --- | --- | --- |
-| Cards a submission | ❓ 20 from Value to Super Express, 20 to 100 at Bulk; a column of the fee sheet | Operations |
+| Cards a submission | ❓ 1 to 20 from Value to Super Express, 20 to 100 at Bulk; the fee sheet's fewest and most columns | Operations |
 | Bulk | ❓ from 20 cards, and the longer drop-off | Operations |
-| Above the top ceiling | ❓ a card worth more than $39,000: ask at the counter or WhatsApp the shop first | Commercial |
-| Cover | ❓ 1.5% of the declared value a card at Express and Super Express, its own line on the estimate, the review, the till and the agreement's schedule | Commercial |
-| Turnaround | ❓ the grader's published time plus two weeks, counted from the day the batch leaves | Commercial |
+| Above the top ceiling | ❓ the grader's top tier is on the sheet; above its ceiling, ask at the counter | Commercial |
+| Cover | 1.5% of the declared value a card at Express and Super Express, its own line on the estimate, the review, the till and the agreement's schedule | Commercial |
+| Turnaround | the grader's published time plus two weeks, counted from the day the batch leaves | Commercial |
 | Reference rate | 7.84 HKD to 1 USD at the start; staff move it on the console — [Settings](/p/grade10-admin/grading/console#settings) | Operations |
-| Nudge | ❓ 21 days, a plan with no drop-off booked | Operations |
-| Expiry | ❓ 30 days, a plan with no drop-off booked | Operations |
-| Fee policy | ❓ the fee's fate per outcome — [The Submission](/p/grade10-site/grading/submission#the-fee-by-outcome) | Commercial |
+| Nudge | 21 days, a plan with no drop-off booked | Operations |
+| Expiry | 30 days, a plan with no drop-off booked, from the later of the day it was kept and the day its last visit ended without a hand-in | Operations |
+| Fee policy | the fee's fate per outcome — [The Submission](/p/grade10-site/grading/submission#the-fee-by-outcome) | Commercial |
 
 ## The Wizard
 
@@ -72,8 +72,9 @@ to book later.
 - 🚧 **The card price reference** — the catalogue a card is matched in and
   its reference sales are read from is the one the shop's own stock uses —
   [Products and Stock](/p/grade10-admin/inventory/catalog#current-reference)
-- ❓ **The reference out of reach** — a line is kept as typed with no
-  reference, and the level is still chosen on the declared value — Product
+- 🚧 **The reference out of reach** — each line is kept as typed and marked
+  not checked, never no match, and the level is still chosen on the declared
+  value
 - 🚧 **Paste a list** — one card a line, name, set and number, then the
   value; each line reports as matched in the reference, kept as typed with no
   reference, without a value and asked for before continuing, or above the
@@ -162,12 +163,12 @@ Express for the card now would be $1,200; Regular is $600, plus $600 only on a
 | Cover is its own line | Decided | 1.5% of the declared value per card at Express and Super Express, rounded to the cent when read, on the estimate, the review, the till and the agreement's schedule; the fee a card never hides it | Product |
 | Priced at booking | Decided | The fee sheet is pinned to a plan at booking, so a change reaches only plans not yet booked; the figures the agreement prints are pinned at signing | Product |
 | The catalogue is the card price reference | Decided | The paste match and the reference sales ride the inventory's card price reference rather than a second provider; one credential, held there | Product |
-| The reference out of reach | ❓ Open | A line is kept as typed with no reference and the level is chosen on the declared value, so an outage delays nothing | Product |
+| The reference out of reach | Decided | Each line is kept as typed and marked not checked, never no match, and the level is chosen on the declared value, so an outage delays nothing | Product |
 | No account needed | Decided | The plan lives under the email given and the emailed link opens it; signing in with the same email lists every submission, with no password | Product |
-| A plan lapses | ❓ Open | Nudged at 21 days and expired at 30 with no drop-off booked, told by a short email; prices and references move, so an old list is not kept | Operations |
-| Cards a submission | ❓ Open | 100 at Bulk from a pasted list, 20 at every other level, a column of the fee sheet; above it a second submission on another day. Revisited once dealer volume is known | Operations |
+| A plan lapses | Decided | Nudged at 21 days and expired at 30 with no drop-off booked, told by a short email; the clock runs from the later of the day the plan was kept and the day its last visit ended without a hand-in, cancelled or missed; prices and references move, so an old list is not kept | Operations |
+| Cards a submission | Decided | Bulk 20 to 100 from a pasted list, every other level 1 to 20, the fee sheet's fewest and most columns; above it a second submission on another day. Revisited once dealer volume is known | Operations |
 | Fee sheet | ❓ Open | Example figures modelled on PSA's; Commercial supplies one sheet per grader and level, ceiling, fee, cover rate, estimate and cards a submission | Commercial |
-| Fee policies | ❓ Open | The fee stands on an ungraded card, a refused card is never charged, a withdrawn card is refunded at the till; told on the review step and in clause 3 | Commercial |
+| Fee policies | Decided | The fee stands on an ungraded card, a refused card is never charged, a withdrawn card is refunded at the till; told on the review step and in clause 3 | Commercial |
 | The reference's currency | Decided | The warning turns a USD sale into HKD at a rate staff set on the console, 7.84 HKD to 1 USD at the start, rounded to the cent; a rate that moves daily is not fetched, because the warning is a caution and the fee sheet, not the sale, is what is charged. Decided by the user | Operations |
 | A grader with only example figures | Decided | Example figures are not figures supplied: CGC's and BGS's levels are listed and marked as carrying no figures, and none of them can be picked until Commercial supplies their sheets | Product |
 :::
