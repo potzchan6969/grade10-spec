@@ -4,7 +4,7 @@
 
 The shared blocks a store application composes for a winner's auction orders:
 the My Auction Orders list, its row and empty state, the order detail, and the
-delivery address form. They display what they are given and report what the
+address form for delivery and billing. They display what they are given and report what the
 winner did; every status, amount and string belongs to the application.
 
 ## Feature set
