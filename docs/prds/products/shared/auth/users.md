@@ -14,16 +14,30 @@ caller chooses order (newest first when none is asked). A banned account stays
 in the directory, marked, rather than vanishing — a person nobody can find is a
 person nobody can unban.
 
+## Ban and Unban
+
 A ban is the blunt instrument, and it is meant to be: it ends every session that
 account holds, refuses new sign-ins, and stops money moving. An unban restores
 sign-in. Moves refused outright: banning yourself, and banning any account that
 holds `admin` — peers included, not only support or the last admin.
+
+- 🚧 **Closes on the next read** — a ban stops answering signed in on the very
+  next read of any kind, not only a mutation or an elevated call. A browse
+  page already open when the ban happens does not keep working until its
+  cached copy of the session would otherwise have expired.
+
+## Role Changes
 
 Role changes are made by an operator holding the set-role grant, from the same
 directory — their own account included. Clearing every operator role leaves a
 plain user. An operator cannot strip `admin` from another admin. An admin may
 remove their own `admin` when another admin remains; the last admin keeps
 `admin`.
+
+- 🚧 **Browse reads close too** — a role change used to leave an ordinary,
+  non-elevated read of the caller's permissions answering the old roles for
+  up to five minutes; an elevated call already read fresh. It now acts on
+  the very next read there as well.
 
 Everything on this page is *what an operator may do*. What the directory
 components render is the console's own capability, and each of these moves lands
