@@ -43,6 +43,10 @@ hold, a wizard to open another, and each case's own page.
   personal information collection statement before it sends
 - 🚧 **Ten categories** — the register's —
   [Items](/p/grade10-admin/inventory/items#values)
+- 🚧 **A slab staff found** — on a draft staff opened with a slab the register
+  knows, the collector changes only the photos and the description; the
+  category, grader, grade and cert are the register's —
+  [Items](/p/grade10-admin/inventory/items#facts)
 - **Currency** — the brand's (HKD for Grade10); another currency is refused
 - **One item per case** — a binder of twelve cards is twelve requests, in
   batches of three; book one visit on the first and bring them all together
