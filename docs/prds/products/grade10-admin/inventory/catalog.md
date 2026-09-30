@@ -99,6 +99,10 @@ product history.
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
+- 🚧 **Unsold auction stock** — when an Auction listing closes Unsold, its hold
+  closes as released, available rises by the held units, and the product
+  page and the history both name the listing. A hold left over from a listing
+  that closed Unsold earlier is released once and reads the same
 - 🚧 **Cert-scoped media** - an Inventory image or video stays product-level
   when untagged, or is tagged to one same-product Cert record. Every Cert
   record has a Cert ID; regular stock without a Cert ID has no Cert record or
