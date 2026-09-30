@@ -159,8 +159,8 @@ required on every block that prints one and never defaulted.
   save where it only saves
 - **`GradingStatusRail`** — `stage` (one of Planned, Booked, Handed in,
   Sent, Graded, Back, Home), `ended` — the word that says the ending — or
-  none; a `Stepper` of seven `Step`s, the stage `progress`, earlier
-  `completed`, later `upcoming`
+  none; the store's `StageRail` with the seven stages, the stage reached,
+  earlier ones done, later ones to come
 - **`GradingOwnershipChip`** — `status` (the word and its tone) and `chip`
   (the word and its tone, or none on a closed submission); the two `Badge`s
   the status table pairs, drawn as one pair on every board
@@ -904,8 +904,8 @@ Stories `grading-admin-notice-post-notice-dialog--`.
 | Notice due | the badge on the Ready view and the submission; Post the notice | `grade10-admin-grading-counter-SC-65` |
 | Post the notice | `PostNoticeDialog`: the address from the agreement, posting date, tracking; the email goes the same day | `grade10-admin-grading-counter-SC-66`, `grade10-admin-grading-counter-SC-105` |
 | Incomplete | Record disabled naming the field | `grade10-admin-grading-counter-SC-66` |
-| Posted | the posting date and tracking on the timeline; the 30 days counted from it | `grade10-admin-grading-counter-SC-67` |
-| After the 30 days | nothing more offered; storage accrues | `grade10-admin-grading-counter-SC-68` |
+| Posted | the posting date and tracking on the timeline; the notice period pinned at signing counted from it | `grade10-admin-grading-counter-SC-67` |
+| After the notice period | nothing more offered; storage accrues | `grade10-admin-grading-counter-SC-68` |
 
 ### Settings
 

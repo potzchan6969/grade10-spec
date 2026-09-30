@@ -236,6 +236,14 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
 - **The owner's cancel or missed visit detaches every joiner** in the same
   commit, each with its own `dropoff_detached` event and letter, the joiner
   back to `booked` with no visit, which the page reads as book again
+- **A visit that ends without a hand-in restarts the plan's clock**, missed
+  or cancelled, for the owner and each joiner. `planClockAt` takes
+  `visitEndedAt`, the instant of the newest `dropoff_missed`,
+  `dropoff_cancelled` or `dropoff_detached` event, read by one
+  `lastVisitEndedAt` in `repositories/submissionEvents.ts` that replaces
+  `lastMissedVisitAt` at every call site
+  (`grade10-site-grading-dropoff-booking-SC-28`,
+  `grade10-site-grading-dropoff-booking-SC-31`)
 - **The missed visit is told, not read** — `BOOKING_STATUSES` holds no
   `absent` and an operator close of a product booking is refused
   `PRODUCT_BOOKING`, so `missedVisits` calls
@@ -370,6 +378,12 @@ this is how the paid order reaches the submission.
   flag cannot express a no-identity packet beside identity-bearing ones; a
   client whose base URL is read off `window.location` — not deterministic
 
+- Alternative rejected: the agreement's clauses on the per-brand legal-copy
+  table `complete-vault-collector-flow` builds beside `consentCopy.ts` — the
+  clauses interpolate the pinned figures, so they stay template text printed
+  as drafted until counsel words them (Q48), and doc-sign's hash of the
+  sealed paper is their version
+
 ### The card price reference is a read over the inventory binding
 
 - `GradingInventoryService` on the inventory worker, `GradingInventoryServiceApi`
@@ -400,17 +414,17 @@ this is how the paid order reaches the submission.
 
 - `pinned_fee_sheet jsonb` is the grader's active `fee_sheet` rows, keyed by
   level, copied at `book` in one read; `pinned_terms jsonb` copies `storage_fee_per_card_month`, `storage_from_day`,
-  `settlement_days`, `notice_day`, `reminder_days` and `id_glance_threshold`
-  at the agreement's mint. A later change reaches only rows not yet booked,
+  `settlement_days`, `notice_day`, `notice_period_days`, `reminder_days` and
+  `id_glance_threshold` at the agreement's mint. A later change reaches only rows not yet booked,
   by construction
 - `packages/grading/contracts/src/money.ts`: `coverLine(declaredMinor, coverBps)`
   half-up to the cent, `upchargeOf(sheet, from, to)`,
   `storageDue(readyAt, cardsHeld, asOf, terms)` counting months started since
   `storage_from_day` on `Asia/Hong_Kong` days, and `dueNow(input, asOf)` over
   a declared `DueNowInput`. **One settlement rule for every kind**: accrued
-  less the settled `money_lines` rows of that kind less the waivers, upcharge
-  and storage alike, so a storage fee rung at the till clears and `collect`
-  can pass. The expected upcharge is `upchargeOf(pinned_fee_sheet, level,
+  less the settled `money_lines` rows of that kind less the waivers of that
+  kind, upcharge and storage alike, so a storage fee rung at the till clears
+  and `collect` can pass. The expected upcharge is `upchargeOf(pinned_fee_sheet, level,
   submission_cards.moved_to_level)` per card, stored nowhere
 - **Currency is named beside every amount that is not HKD.**
   `invoice_total_minor` carries `invoice_currency` and `cover_figure_minor`
@@ -421,14 +435,22 @@ this is how the paid order reaches the submission.
 - **A payout** is `payouts` — declared value, the fee refund line beside it,
   `route` till or transfer, `recorded_by`, `approved_by`; a reversal is one
   `payout_reversals` row keyed `payout_id PK`, the vault's `money_adjustments`
-  guard with one fewer nullable column; **a waiver** is `upcharge_waivers`
-  with the same two approver columns. Both carry a plain index on `card_id`
+  guard with one fewer nullable column; **a waiver** is `waivers`, with the
+  same two approver columns and a `kind`, `upcharge` or `storage`, so a
+  card's due nets each kind against its own waivers and a storage waiver can
+  never clear an upcharge. The ask carries no amount: `AskedWaiver` gains
+  `kind`, and `checkWaiver` computes that kind's due on the card at the ask
+  and again under the lock at the approval, storage as the card's accrued
+  storage less its settled storage lines and its storage waivers, refusing
+  `conflict` when nothing of that kind is due; `writeWaiver` writes what the
+  approval computed, so storage accruing after it stays due. Both carry a
+  plain index on `card_id`
   and never a unique, because whether a row is live is decided by another
   table no constraint here can see, so `PAYOUT_EXISTS` guards on the netted
   read under the submission lock. All append-only
 - **The four-eyes rule is rendered once** — an inline drizzle helper in
   grading's schema module, naming each table's recorder column, armed on
-  `payouts`, `payout_reversals`, `upcharge_waivers`, `settings` and
+  `payouts`, `payout_reversals`, `waivers`, `settings` and
   `fee_sheet`, so no table carrying the two columns is left unguarded
 - **The safe's total** is one query at the read: declared values of cards in
   `checked_in`, `returned` and `ready` submissions whose outcome is not an
@@ -436,6 +458,16 @@ this is how the paid order reaches the submission.
   `handIn` takes `safe_declared_cap` `FOR UPDATE` before it counts: the batch
   lock is not the cap's scope, advisory locks are out over Hyperdrive, so the
   row is the serializer
+- **The desk reads the safe first.** One backend `safeStanding(tx)` answers
+  `{ declaredMinor, capMinor, atCap }`, the shape `batchTiles.safe` already
+  builds off `safeTotal` and `readSetting("safe_declared_cap")`;
+  `batchTiles` composes it and `admin.safeStanding` exposes it alone under
+  `grading:read`, with no lock. The intake runbook reads it before the first
+  card is checked: where `declaredMinor` plus the list's declared total
+  passes `capMinor`, the runbook says so by name in place of the check step
+  and offers the next drop-off, so no card is checked and the till never
+  opens for a list the safe cannot take. The locked read at `handIn` stays
+  the guard, because a second desk can fill the safe between the two reads
 - **Storage and the upcharge are per card.** Each card accrues storage from
   the storage day until its hand-back's figure was fixed, while the shop
   holds it or it waits to go into a vault case. Each card's line is settled
@@ -463,6 +495,19 @@ this is how the paid order reaches the submission.
   writes it through `updateSetting` with a second approver, which is the
   record of who confirmed it (Q48). The isolated stack's example figures are
   seeded once at start by `POST /dev/settings`
+- **The notice period is a setting, pinned at signing.**
+  `notice_period_days` joins `GRADING_SEEDED_SETTINGS`, seeded at 90 by
+  `0005_notice_period.sql` until counsel confirms it (Q26), and is copied
+  into `pinned_terms` at the mint as the seventh term, so a submission
+  sealed under 90 days keeps them if the setting later moves (Q43). The
+  constant `NOTICE_PERIOD_DAYS` is deleted: `noticeEnds` takes the pinned
+  term, and clause 6, the notice letter, the collector's ladder and the
+  console's notice dialog and timeline entry all print it, the console's
+  detail carrying `noticePeriodDays` beside its dates. `pinnedTermsOf`
+  throws by name on any of the seven terms missing. The same migration
+  backfills `noticePeriodDays: 30`, the figure clause 6 printed, into every
+  `pinned_terms` row that lacks it, and is rerun by hand for a row minted
+  between the migration and the deploy; only staging holds such rows
 - `admin.updateSetting` under `grading:approve`; a money key takes
   `approvedBy` who is not the caller; the audit subject is `settings`
 - Alternative rejected: a `decisionTable` in `packages/app-env` — a deploy
@@ -482,7 +527,7 @@ order pinned by a test. Every row carries its own `kind` and an explicit
 | `visitReminders` | `booked`, the visit resolved through `visit_owner_id` starting within two days — every submission it carries, the owner and each joiner, ordered by the visit's own `appointment_at` | the event and the letter | routine · fast |
 | `uncollectedReminders` | `ready`, no notice posted, more pinned reminder days come (a day wide) than told | the event and the letter | routine · fast |
 | `storageStarted` | `ready`, no notice posted, the pinned storage day come (a day wide), `NOT EXISTS storage_started` | the event and the letter | routine · fast |
-| `planExpiry` | `planned` or `booked` holding no visit, older than `plan_expiry_days` off the plan's own clock — which restarts from a missed visit's own day, never the day the plan was first kept | `expire` / `expireBooked` | routine · fast |
+| `planExpiry` | `planned` or `booked` holding no visit, older than `plan_expiry_days` off the plan's own clock — which restarts from the day its last visit ended without a hand-in, missed or cancelled, never the day the plan was first kept | `expire` / `expireBooked` | routine · fast |
 | `expiredBooked` | `booked`, `booked_expiry_days` past the visit's own slot (`bookedExpiresAt`) | `expireBooked`, cache cleared | routine · fast |
 | `missedVisits` | `booked` on a visit resolved through `visit_owner_id`, grace passed, re-read from the diary before it is told — a cached slot is a candidate, never a fact | `markOutcome(…, "no_show", …)`, then the cache cleared and `dropoff_missed` | routine · fast |
 | `repairedBookings`, `recoveredBookings` | the vault's two, over `visit_owner_id`; the cache compared on booking, service, shop and slot, since the diary keeps a booking's id across a move | the cache repaired | repair · fast |
@@ -534,9 +579,9 @@ answering the question it was for.
   while a joiner still waits on it. A diary that cannot be told is counted
   (`grading.booking.outcome_failed`) and leaves the cache for
   `terminalBookingsClosed`
-- **A missed visit restarts every clock on it**: each joiner's
-  `dropoff_detached` off a miss carries `missed`, and `lastMissedVisitAt`
-  reads it beside the owner's `dropoff_missed`
+- **A missed or cancelled visit restarts every clock on it**: each joiner's
+  `dropoff_detached` counts as its visit ending, and `lastVisitEndedAt`
+  reads it beside the owner's `dropoff_missed` or `dropoff_cancelled`
 - **A retry is delivered at least once, never exactly once**: the lease is
   claimed only while the row stands as its page read it (the same
   `attempts`, the same parked state, still due), and the row is deleted
@@ -704,8 +749,15 @@ answering the question it was for.
   maps every admin procedure to its grant, pinned both ways by a test
 - i18n: `messages/shared/{en,zh-Hant,zh-Hans,ko}/grading.json` in the store
   and the nav key in `chrome`; letters are English in the worker
-- Alternative rejected: console blocks in the store's `packages/ui` — it
-  carries none, and the seams place them in `packages/frontend-console`
+- **`GradingStatusRail` draws on `StageRail`** — the block keeps its export,
+  its `copy`, `stage` and `ended` props and its stories, and composes the
+  store's `StageRail` with the seven stages in order, `current` the stage
+  and `slot: "grading-status-rail"`; the rail's scroll wrapper carries the
+  slot, which is why it lands as its own group
+  (`complete-vault-collector-flow` Q117)
+- Alternatives rejected: console blocks in the store's `packages/ui` — it
+  carries none, and the seams place them in `packages/frontend-console`; a
+  second stepper kept in `grading-submission`, two blocks for one shape
 
 ### Letters are one exhaustive catalogue on the shared shell
 
@@ -800,7 +852,7 @@ CGC or BGS batch.
 | `access_hash` | `text NOT NULL` | sha256 of the link's token; re-minted on revocation |
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
 | `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
-| `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
+| `pinned_terms` | `jsonb` | the seven terms at the agreement's mint, `notice_period_days` among them |
 | `consented_at` | `timestamptz(3)` | the collection statement ticked, written by `plan` or `update` (the keep), `book` or `join` given `consented: true`, each in its own commit, through `tickOf`, its one writer; the review's Book sends it on either keep; they refuse `CONSENT_REQUIRED` only when neither it nor the input carries the tick |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
@@ -900,7 +952,7 @@ event names its reading.
 | `approval_requests` | `id`, `act CHECK (payout, reversal, waiver, setting, fee_sheet)`, `submission_id`, `card_id`, `params jsonb NOT NULL` (a payout's route, a reversal's found card), `bank_ref`, `reason`, `expected_updated_at`, `expected_version`, `setting_key`, `setting_value`, `fee_sheet_grader`, `fee_sheet_level`, `fee_sheet_row`, `requested_by`, `requested_at` | append-only, `bank_ref` and `reason` the only columns erasure may clear; the shape CHECK gives each act its own columns |
 | `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `recorded_at` | append-only; the four-eyes CHECK; plain index on `card_id` |
 | `payout_reversals` | `payout_id PK FK`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK |
-| `upcharge_waivers` | `id`, `submission_id`, `card_id`, `amount_minor`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK; plain index on `card_id` |
+| `waivers` | `id`, `submission_id`, `card_id`, `kind CHECK (upcharge, storage)`, `amount_minor`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK; plain index on `card_id`; `0005_waivers_kind.sql` renames `upcharge_waivers` and adds `kind` |
 | `notices` | `submission_id PK FK`, `posted_on date`, `tracking NOT NULL`, `recorded_by`, `at` | one per submission, which is the replay guard a double-click needs |
 
 - **A record reads its request** - a payout's route and transfer reference,
@@ -941,7 +993,7 @@ erDiagram
   submissions }o--o| submissions : "visit_owner_id"
   submission_cards ||--o{ card_photos : ""
   submission_cards ||--o{ payouts : "declared value"
-  submission_cards ||--o{ upcharge_waivers : ""
+  submission_cards ||--o{ waivers : ""
   payouts ||--o| payout_reversals : ""
   batches ||--o{ batch_manifest_lines : "matched to a card"
   fee_sheet ||..o{ submissions : "pinned at book"
@@ -1000,6 +1052,8 @@ events, distinct by kind and instant).
 | `scanCard(tx, args)` | batch, cert, intake id | the card | `CERT_HELD_ELSEWHERE` read under the lock before the insert; sets the exception, grade, cert and `moved_to_level` |
 | `finishReceiving(db, mail, args)` | batch | `ready` for every submission | refuses `MANIFEST_UNRESOLVED`; each code drawn in its own savepoint; one transaction; letters after |
 | `recordPayout(db, args)` | card, route, reference, approver | the record | refuses `SAME_APPROVER`, `PAYOUT_EXISTS` on the netted read under the lock; the refund line beside it |
+| `waive(db, args)` | card, kind, reason, approver | the record | refuses `SAME_APPROVER`, and `conflict` when nothing of that kind is due on the netted read under the lock; offered once the cards are back |
+| `safeStanding(tx)` | none | `{ declaredMinor, capMinor, atCap }` | `safeTotal` and the cap row, no lock; `batchTiles.safe` is this read |
 | `recordSettlement(db, store, args)` | submission, order name | the lines | at `ready`; the order read outside; one transaction, the order claimed first, a line above a card's due refused `LINE_ABOVE_DUE` |
 | `tickItem(db, args)` | card, a photograph on a slab | the tick | under the lock; one photograph for a slab and none for a raw card; refuses `BALANCE_DUE`, `CARD_HELD`, `ITEM_NOT_TICKABLE`; writes the photograph, `item_ticked` and the audit row |
 | `mintHandBack(db, deps, args)` | submission, the pickup code or the glance, the ID glance above the threshold | the packet | the code checked under the lock, a wrong one recorded in its own transaction; writes `hand_back_prepared`; refuses `WRONG_PICKUP_CODE`, `ID_GLANCE_REQUIRED`, `BALANCE_DUE` with the unticked positions, `ITEM_UNTICKED`, `PAYOUT_OWED` |
@@ -1045,7 +1099,7 @@ receipt, the sealed agreement and the re-minted access link.
 | Surface | Change |
 | --- | --- |
 | grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed); `plan`, `update`, `book` and `join` take an optional `consented: true`, written on the plan by one writer in their own commit |
-| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
+| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,safeStanding,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waive,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
 | `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.matchCards`; `GradingInventoryService` |
@@ -1159,6 +1213,8 @@ and the worker's router is annotated with it.
 | `createDocSignCoreModule`'s argument | `apps/frontend/grade10/src/di/container.ts`; `pages/vault/SignPage.tsx` passes `host: "vault"` |
 | `APPOINTMENT_PRODUCTS` | `ERASURE_LANES` widens with it, so `appointment:grading` joins `check-erasure-consumers.mjs`'s row and the console's checklist in the same step; the appointment console's product filter reads the list; the contracts pin moves |
 | `RETENTION_CLASSES` renamed to `case_records` | the vault's `sweeps/retention.ts` and `cases.yourData` iterate it, and the vault's own case rows answer under it |
+| `upcharge_waivers` renamed `waivers` with `kind`; `waiveUpcharge` becomes `waive` | the drizzle export `upchargeWaivers`, `UpchargeWaiverRow` and `insertUpchargeWaiver` and every file importing them, `counter/settlement.ts`, `dueNow`, `MoneyTab`, `withheldActs`, the recordings, the schema and guard tests naming the table; the `uw_` id prefix stays, ids being opaque |
+| `NOTICE_PERIOD_DAYS` deleted from `@grade10/grading-contracts` | `noticeEnds`, `email/facts.ts`, `submissionAgreement.ts`, `PostNoticeDialog`, each reading `pinnedTerms.noticePeriodDays` |
 
 Nothing is aliased and nothing is re-exported: no consumer is live, every
 worker and SPA deploys from one commit, and the shared modules the sibling
@@ -1171,7 +1227,14 @@ change creates are imported from their shared home by both products.
   `BATCH_CONFLICT`
 - **[Two hand-ins break the safe cap together]** → the `safe_declared_cap`
   row is taken `FOR UPDATE` before either counts, so the second reads the
-  first's total
+  first's total; the desk's earlier `safeStanding` read is a courtesy, never
+  the guard
+- **[A submission sealed under six terms reads a seventh]** →
+  `0005_notice_period.sql` backfills `noticePeriodDays: 30`, the figure its
+  clause 6 printed, into every `pinned_terms` row that lacks it, and
+  `pinnedTermsOf` throws by name on a term missing rather than print nothing,
+  so a row minted between the migration and the deploy fails loudly until
+  the backfill is rerun
 - **[The second shop opens]** → `location_id` is already in the batch key, so
   no live key migrates; a per-shop `safe_counters` row replacing the one cap
   row is the next change's seam
@@ -1242,7 +1305,25 @@ change creates are imported from their shared home by both products.
    always), `0002_sign_lifecycle_guards.sql`
    (`docSignProtectionSql`), `0003_seed_settings.sql`. They create tables in
    their own file and touch no `DESTRUCTIVE` or `LOCKING` pattern, so none
-   owes an annotation. The registries: `packages/app-env/src/services.ts`;
+   owes an annotation. Two land after them, one concern each, applied
+   staging then production before the pull request that reads them deploys,
+   step 7's way. `0004_waivers_kind.sql` adds `kind text NOT NULL DEFAULT
+   'upcharge' CHECK (kind IN ('upcharge', 'storage'))`, drops the default,
+   and renames `upcharge_waivers` to `waivers` with what `0000` and `0001`
+   named after the table: the function `upcharge_waivers_block_mutation`,
+   the triggers `upcharge_waivers_append_only` and
+   `upcharge_waivers_no_truncate`, the constraints
+   `uq_grading_upcharge_waivers_approval_request_id`, the four-eyes and
+   amount CHECKs and the three foreign keys, and the indexes
+   `idx_grading_upcharge_waivers_card_id` and
+   `idx_grading_upcharge_waivers_submission_id`; the rename is
+   `check:migrations`'s destructive pattern, so the file carries a
+   `-- contract:` line saying nothing deployed writes the old name once the
+   pull request deploys. `0005_notice_period.sql` inserts the seed
+   `ON CONFLICT ("key") DO NOTHING` and backfills `pinned_terms` with
+   `WHERE pinned_terms IS NOT NULL AND NOT (pinned_terms ? 'noticePeriodDays')`,
+   an `UPDATE` on a table it did not create, so it carries the `-- lock:`
+   line. The registries: `packages/app-env/src/services.ts`;
    the gateway's `wrangler.jsonc` and `routing.spec.ts`;
    `scripts/dev/services.mjs`; `scripts/deploy/components.mjs` (`grading`
    after `store`, before the gateway); `neondb/registry.sh`; the appointment,

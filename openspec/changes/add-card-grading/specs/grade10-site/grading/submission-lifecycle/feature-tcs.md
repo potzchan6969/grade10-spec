@@ -1381,13 +1381,13 @@ Runs once per row of **Test data**.
 * The uncollected ladder shows the storage rung passed, at 4 cards times 3000 (HKD, minor units).
 * The money block shows the same storage figure due before collection.
 
-### grade10-site-grading-submission-lifecycle-US8-TC3-1: The written notice counts its 30 days from its posting date, not from day 180
+### grade10-site-grading-submission-lifecycle-US8-TC3-2: The written notice counts its period from its posting date, not from day 180
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1411,15 +1411,15 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The uncollected ladder shows the notice rung with its posting date, and 27 days left of the 30 counted from that posting date.
+* The uncollected ladder shows the notice rung with its posting date, and 87 days left of the 90 seeded as the notice period, counted from that posting date.
 
-### grade10-site-grading-submission-lifecycle-US8-TC4-1: The cards stay the collector's and nothing further shows past the notice
+### grade10-site-grading-submission-lifecycle-US8-TC4-2: The cards stay the collector's and nothing further shows past the notice
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1432,7 +1432,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is at Ready, 40 days past the notice's posting date: on the local stack, seeded at Ready to collect with its ready day 230 days back, the notice recorded with Post the notice with a posting date 40 days back.
+* customer(collector)'s submission is at Ready, 100 days past the notice's posting date and so past the 90 seeded as the notice period: on the local stack, seeded at Ready to collect with its ready day 290 days back, the notice recorded with Post the notice with a posting date 100 days back.
 * The collector is on <grade10 grading submission page url> for the submission.
 
 **Steps:**
@@ -1647,7 +1647,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3: the collector is sent the notice that day, naming what is due, the pickup code, the 30 days it gives from the posting date, and the clause it acts under.
+* Step 3: the collector is sent the notice that day, naming what is due, the pickup code, the 90 days it gives from the posting date as the period pinned at signing, and the clause it acts under.
 
 ### grade10-site-grading-submission-lifecycle-US8-TC11-1: Nothing is sent about the uncollected cards after the notice
 
@@ -2208,7 +2208,7 @@ Runs once per row of **Test data**.
 | `US2-TC1-1`, `US2-TC4-1` | The card is pulled from the intake bag and its fee comes back at the till; a person runs the counter and the POS, and only the page's lines are scriptable |
 | `US5-TC1-1`, `US5-TC2-1` | The payout is made at the till or by bank transfer by a person; the case walks the money as well as the lines the page draws |
 | `US6-TC2-1` | The ID glance happens at the counter and keeps nothing, so nothing but the page's Bring line is scriptable |
-| `US8-TC3-1` | The written notice is posted by registered post, and its posting date and tracking are typed in from the receipt |
+| `US8-TC3-2` | The written notice is posted by registered post, and its posting date and tracking are typed in from the receipt |
 | `US10-TC4-1` | The refusal and the telling both happen at the counter, and the case asserts no message was sent for them |
 | `US1-TC10-1` | A person refuses the card at the counter after payment and reads the fee and cover lines come back at the till; only the page's refund line is scriptable |
 | `US6-TC6-1` | A person opens the vault case with the collector at the counter and has the receipt signed on the iPad; the page's Vaulted line and the storage count are scriptable |

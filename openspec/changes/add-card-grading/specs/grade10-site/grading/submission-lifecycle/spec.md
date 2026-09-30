@@ -667,16 +667,16 @@ became ready to collect.
 | 60 | a second reminder, costing nothing |
 | 90 | the storage fee begins to accrue |
 | 180 | the written notice is due |
-| 30 days after the notice is posted | the first release stops here |
+| the notice period after the notice is posted | the first release stops here; the period is `grading.notice_period_days`, pinned at signing |
 
 - **The notice** - from day 180 staff SHALL post the written notice by
   registered post to the address taken at signing and SHALL email it the same
   day, and its posting date and tracking SHALL be recorded on the submission.
-- **The days it gives** - the 30 days SHALL run from the posting date, and the
-  page SHALL show that date and the day it ends.
+- **The days it gives** - the notice period pinned at signing SHALL run from
+  the posting date, and the page SHALL show that date and the day it ends.
 - **The cards stay the collector's** - throughout the ladder the cards SHALL
   remain the collector's, and no rung SHALL take them.
-- **The ladder stops** - nothing SHALL follow the notice's 30 days in this
+- **The ladder stops** - nothing SHALL follow the notice's period in this
   release, and the page SHALL say that a slab kept on purpose goes into a vault
   case instead.
 - **Nothing pauses it** - the rungs SHALL be counted from the ready day
@@ -691,18 +691,18 @@ became ready to collect.
 - **THEN** a reminder has gone at each rung and nothing has been charged
 - **AND** the page shows each rung with the day it falls
 
-#### Scenario: grade10-site-grading-submission-lifecycle-SC-36 - The notice gives 30 days from its posting date
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-36 - The notice gives its pinned period from its posting date
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector is given written warning before anything else
 
-- **GIVEN** a ready submission 180 days uncollected
+- **GIVEN** a ready submission 180 days uncollected, its notice period pinned at 90 days
 - **WHEN** staff post the written notice and record its posting date and tracking
-- **THEN** the page shows the posting date and gives 30 days from it
+- **THEN** the page shows the posting date and gives 90 days from it
 - **AND** the collector is emailed the same day
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-37 - After the notice's days the cards are still the collector's
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector can still come in, or vault the slabs, after the notice
 
-- **GIVEN** a submission whose notice was posted more than 30 days ago
+- **GIVEN** a submission whose notice was posted longer ago than its pinned notice period
 - **WHEN** the collector opens the submission page
 - **THEN** the cards are still theirs to collect, storage is still accruing, and the page offers the vault instead
 

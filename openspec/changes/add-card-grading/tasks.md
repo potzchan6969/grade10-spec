@@ -7,7 +7,10 @@ other order a group depends on is a prose line under that group's heading.
 
 The four migrations `0000_grading_schema.sql` to `0003_seed_settings.sql` land
 whole in group 9: nothing is live and the `grading` gate hides the site's pages
-on uat and production. Three stages deploy, and each grade10 group's prose line names
+on uat and production. `0004_waivers_kind.sql` and `0005_notice_period.sql`
+land in groups 19 and 20, each applied before the pull request that reads it
+deploys. A task appended after a group's verify step runs that group's checks
+again. Three stages deploy, and each grade10 group's prose line names
 the one it lands in — (a) the shared modules, the three providers and the
 registered worker answering its health probe; (b) plan through ship, the money
 and the safe, with walk 33; (c) receiving through hand-back, the ladder, the
@@ -44,6 +47,9 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 - [x] 1.8 Name `grading.plan.review.saveChanges`, the editor's save, in the
       vocabulary type first, then answer it in every language 1.2 answers;
       then run 1.7's checks
+- [ ] 1.9 Give `grading.submission.ladder.noticeLine` a `{period}` argument in
+      place of its written 30, in the vocabulary type first, then in every
+      language 1.2 answers; then run 1.7's checks
 
 ## 2. The three rungs on `Text` (grade10-spec)
 
@@ -814,6 +820,9 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       (`grade10-admin-grading-counter-SC-106`,
       `grade10-admin-grading-counter-SC-107`,
       `grade10-admin-grading-counter-SC-84`)
+- [ ] 13.10 Lift `batchTiles.safe` into one `safeStanding(tx)` and expose it
+      as `admin.safeStanding` under `grading:read`, its test red first; then
+      run 13.8's checks (`grade10-admin-grading-counter-SC-108`)
 
 ## 14. The two templates and the intake receipt (grade10)
 
@@ -1286,6 +1295,13 @@ Stage (c).
       per request (`grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-103`)
+- [ ] 19.9 Write `0004_waivers_kind.sql` as the Migration Plan names it; then
+      `waive` in place of `waiveUpcharge`, the ask and the record carrying
+      `kind` and `dueNow` netting each kind against its own waivers, its
+      tests red first; then run 19.7's checks
+      (`grade10-admin-grading-counter-SC-109`,
+      `grade10-admin-grading-counter-SC-59`,
+      `grade10-site-grading-submission-lifecycle-SC-40`)
 
 ## 20. The uncollected ladder and the written notice (grade10)
 
@@ -1322,6 +1338,26 @@ Stage (c).
       `grade10-site-grading-collector-notifications-SC-15`)
 - [x] 20.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 20.6 Write `0005_notice_period.sql` as the Migration Plan names it; then
+      `notice_period_days` in `GRADING_SEEDED_SETTINGS`, pinned as the
+      seventh term and read by `noticeEnds`, clause 6 and the notice letter,
+      `pinnedTermsOf` throwing on a term missing and `NOTICE_PERIOD_DAYS`
+      deleted, their tests red first; then run 20.5's checks
+      (`grade10-admin-grading-counter-SC-67`,
+      `grade10-admin-grading-counter-SC-68`,
+      `grade10-site-grading-submission-lifecycle-SC-36`,
+      `grade10-site-grading-submission-lifecycle-SC-37`,
+      `grade10-site-grading-collector-notifications-SC-13`)
+- [ ] 20.7 Rewrite the four notice walks of `uncollected.spec.ts` to the 90
+      days pinned and move their acceptance links to
+      `grade10-site-grading-submission-lifecycle-US8-TC3-2`,
+      `grade10-site-grading-submission-lifecycle-US8-TC4-2`,
+      `grade10-admin-grading-counter-US12-TC4-2` and
+      `grade10-admin-grading-counter-US12-TC5-2`; then run 20.5's checks
+      (`grade10-admin-grading-counter-SC-67`,
+      `grade10-admin-grading-counter-SC-68`,
+      `grade10-site-grading-submission-lifecycle-SC-36`,
+      `grade10-site-grading-submission-lifecycle-SC-37`)
 
 ## 21. The sweeps (grade10)
 
@@ -1419,6 +1455,12 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-vault-retention-and-erasure-SC-30`)
 - [x] 21.10 Verify: `node scripts/checks/check-crons.mjs`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 21.11 Restart the plan's clock from a cancelled visit as from a missed
+      one, its test red first: `lastVisitEndedAt` over `dropoff_missed`,
+      `dropoff_cancelled` and `dropoff_detached` replaces `lastMissedVisitAt`
+      at every call site, and `planClockAt` takes `visitEndedAt`; then run
+      21.10's checks (`grade10-site-grading-dropoff-booking-SC-31`,
+      `grade10-site-grading-dropoff-booking-SC-28`)
 
 ## 22. The letters (grade10)
 
@@ -1971,6 +2013,11 @@ Stage (b).
       every read and act the page makes — the token group 25.2 lifts out is
       wired in here, at the one page that reads it
 
+- [ ] 27.13 Pass the pinned notice period into `ladder.noticeLine`'s
+      `{period}` from the detail's terms, its test red first; needs 1.9,
+      and lands with stage (c) after 20.6; then run 27.9's checks
+      (`grade10-site-grading-submission-lifecycle-SC-36`)
+
 ## 28. The console's queue, tiles and one submission (grade10)
 
 Needs group 10's exports and group 25's recorded worker. Stage (b).
@@ -2048,6 +2095,11 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       (`grade10-admin-grading-counter-SC-106`,
       `grade10-admin-grading-counter-SC-107`,
       `grade10-admin-grading-counter-SC-84`)
+- [ ] 28.11 Offer Waive the storage on `MoneyTab` beside Waive the upcharge,
+      per card and while that card's storage is unsettled, the request
+      naming its kind and the record read back under the card, its tests
+      red first; needs 19.9; then run 28.6's checks
+      (`grade10-admin-grading-counter-SC-109`)
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
@@ -2103,6 +2155,10 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       `onStarted(id)`, and `IntakeRunbook` always takes a `submissionId`
 - [x] 29.9 Give `IntakeRunbook` and `HandbackRunbook` a `recordHref`, the one
       press to the record, its test red first; 31.5 routes it
+- [ ] 29.10 Open `IntakeRunbook` on `admin.safeStanding` and turn a list the
+      safe cannot take to Book the next drop-off before the first check, its
+      tests red first; needs 13.10; then run 29.7's checks
+      (`grade10-admin-grading-counter-SC-108`)
 
 ## 30. The console's batches, receiving, the notice and the settings (grade10)
 
@@ -2201,6 +2257,10 @@ lands. Stage (c).
 - [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
+- [ ] 30.9 Read the notice period off the detail's pinned terms in
+      `PostNoticeDialog` and the timeline's notice entry, the detail carrying
+      `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
+      checks (`grade10-admin-grading-counter-SC-67`)
 
 ## 31. The application wiring (grade10)
 
@@ -2534,3 +2594,17 @@ rest lands. Stage (c).
       `grade10-admin-grading-counter-SC-105`)
 - [ ] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+
+## 37. The status rail on the store's stage rail (grade10-spec)
+
+Appended at landing, as `complete-vault-collector-flow` Q117 decided. Its own
+group because the rail's scroll wrapper changes the DOM the slot sits on.
+
+- [ ] 37.1 Compose `StageRail` inside `GradingStatusRail`, the block's export,
+      its `copy`, `stage` and `ended` props and its stories kept: the seven
+      stages in order from its copy, `current` the stage, `ended` under it,
+      `slot: "grading-status-rail"` on the rail
+      (`shared-ui-grading-submission-SC-32`,
+      `shared-ui-grading-submission-SC-33`)
+- [ ] 37.2 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
+      `pnpm run typecheck`, `pnpm run lint`

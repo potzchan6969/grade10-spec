@@ -212,7 +212,7 @@ first submission owns (`decisions.md` Q18, Q19).
 
 ## Follow-on changes
 
-- Disposal of cards nobody collects after the notice's 30 days, under clause
+- Disposal of cards nobody collects after the notice's period, under clause
   6: its terminal status, the act, the grant and the held-proceeds record, as
   `dispose-uncollected-cards`.
 - A vault case opened for a slab carries the grade and the cert as valuation
