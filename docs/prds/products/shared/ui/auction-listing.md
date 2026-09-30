@@ -42,6 +42,11 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   in the stated local time zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
   own display text; collector deadline lines use the same locale and zone
+- 🚧 **Winner after close** — when the lot is closed and sold, the winning
+  public row shows a primary crown after the amount (`isWinner`; accessible
+  name from consumer copy)
+- 🚧 **Equal-max tip** — a same-price non-leading row shows an Info tip in
+  the amount tone: when maximums match, the earlier one leads
 
 ## Personal Bidding
 
