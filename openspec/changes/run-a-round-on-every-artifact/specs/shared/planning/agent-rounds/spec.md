@@ -1208,7 +1208,7 @@ leave those walks as the change's end-to-end suite.
 - **AND** the case names that test as what decides it
 - **AND** a case only the end-to-end walk drives is flipped by the walk's commit instead, and a case neither decides stays manual with its reason
 
-#### Scenario: shared-planning-agent-rounds-SC-86 - A case an application test decides names it by the repository's tag
+#### Scenario: shared-planning-agent-rounds-SC-107 - A case an application test decides names it by the repository's tag
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases a test in the application repository already decides
 
 - **GIVEN** an in-flight change's automated case that a test or a walk in the application repository decides

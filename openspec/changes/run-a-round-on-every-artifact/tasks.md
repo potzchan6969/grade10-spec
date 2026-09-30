@@ -94,14 +94,14 @@ Operations' group, with a dated wait: nothing here is an agent's to tick, and th
 
 Raised by `close-revoked-session-cache-gap`, whose suite copies carry cases a grade10 walk decides; Q111 holds the form.
 
-- [ ] 9.1 Tests: `tcs:validate` accepts a `grade10:<path>` Decided by line with no application clone beside it, refuses an unknown tag and a path that climbs out, and refuses a file the application clone does not hold when `--app-root` names one; `tcs:automated` writes the tagged form as given - `shared-planning-agent-rounds-SC-86`
-- [ ] 9.2 `validate-test-cases.mjs` reads a `<tag>:<path>` entry: a store path as before, and a `grade10:` path held to its form, and to the file in the clone `--app-root` or the superproject names when one is there - `shared-planning-agent-rounds-SC-86`
+- [ ] 9.1 Tests: `tcs:validate` accepts a `grade10:<path>` Decided by line with no application clone beside it, refuses an unknown tag and a path that climbs out, and refuses a file the application clone does not hold when `--app-root` names one; `tcs:automated` writes the tagged form as given - `shared-planning-agent-rounds-SC-107`
+- [ ] 9.2 `validate-test-cases.mjs` reads a `<tag>:<path>` entry: a store path as before, and a `grade10:` path held to its form, and to the file in the clone `--app-root` or the superproject names when one is there - `shared-planning-agent-rounds-SC-107`
 - [ ] 9.3 Verify: `pnpm run test:openspec`, `pnpm run tcs:validate`, `pnpm check:manual`
 
 ## 10. Hold the tagged file in the application repository (grade10)
 
 Needs group 9 on this store's `main` and pinned, so the pinned suites can carry the tagged form.
 
-- [ ] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-86`
-- [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and CI's plan job runs it - `shared-planning-agent-rounds-SC-86`
+- [ ] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-107`
+- [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and CI's plan job runs it - `shared-planning-agent-rounds-SC-107`
 - [ ] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`

@@ -269,12 +269,12 @@ function applicationClone(path) {
   return root;
 }
 
-test("shared-planning-agent-rounds-SC-86 - a grade10 path is accepted with no application clone beside the store", () => {
+test("shared-planning-agent-rounds-SC-107 - a grade10 path is accepted with no application clone beside the store", () => {
   const result = inChange({ decidedBy: APP_DECIDER });
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
-test("shared-planning-agent-rounds-SC-86 - a tag no application repository answers to is refused", () => {
+test("shared-planning-agent-rounds-SC-107 - a tag no application repository answers to is refused", () => {
   const result = inChange({ decidedBy: "acme:apps/demo.spec.ts" });
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(
@@ -283,13 +283,16 @@ test("shared-planning-agent-rounds-SC-86 - a tag no application repository answe
   );
 });
 
-test("shared-planning-agent-rounds-SC-86 - a grade10 path that climbs out is refused", () => {
+test("shared-planning-agent-rounds-SC-107 - a grade10 path that climbs out is refused", () => {
   const result = inChange({ decidedBy: "grade10:../elsewhere/demo.spec.ts" });
   assert.equal(result.status, 1, result.stdout + result.stderr);
-  assert.match(result.stdout, /which resolves outside the application repository/);
+  assert.match(
+    result.stdout,
+    /which resolves outside the application repository/,
+  );
 });
 
-test("shared-planning-agent-rounds-SC-86 - beside an application clone that holds it, a grade10 path is accepted", () => {
+test("shared-planning-agent-rounds-SC-107 - beside an application clone that holds it, a grade10 path is accepted", () => {
   const app = applicationClone(APP_TEST);
   const result = run(store(CHANGE, { decidedBy: APP_DECIDER }), [
     "--app-root",
@@ -298,7 +301,7 @@ test("shared-planning-agent-rounds-SC-86 - beside an application clone that hold
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
-test("shared-planning-agent-rounds-SC-86 - beside an application clone that does not hold it, a grade10 path is refused", () => {
+test("shared-planning-agent-rounds-SC-107 - beside an application clone that does not hold it, a grade10 path is refused", () => {
   const app = applicationClone(null);
   const result = run(store(CHANGE, { decidedBy: APP_DECIDER }), [
     "--app-root",

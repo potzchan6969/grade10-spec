@@ -246,7 +246,7 @@ test("shared-planning-agent-rounds-SC-78 - writes the status and the `**Decided 
   assert.match(result.stdout, new RegExp(`decided by ${DECIDER}`));
 });
 
-test("shared-planning-agent-rounds-SC-86 - writes a grade10 path as given", () => {
+test("shared-planning-agent-rounds-SC-107 - writes a grade10 path as given", () => {
   const root = sandbox({
     [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
   });
