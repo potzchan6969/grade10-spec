@@ -286,7 +286,9 @@ export const Empty: Story = {
     await auctionRecordSettled(canvasElement);
     expect(canvas.getByText("No auctions yet")).toBeVisible();
     expect(canvas.queryByText("0")).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "Browse auctions" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Browse auctions" }),
+    );
     expect(onBrowseCatalogue).toHaveBeenCalled();
   },
 };

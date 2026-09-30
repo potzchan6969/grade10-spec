@@ -25,8 +25,7 @@ const AUCTION_RECORD_COPY = {
   emailAlertsColumn: "Email Alerts",
   noStanding: "--",
   emptyTitle: "No auctions yet",
-  emptyDescription:
-    "Watch an auction to come back to it here, or place a bid.",
+  emptyDescription: "Watch an auction to come back to it here, or place a bid.",
   browseCatalogue: "Browse auctions",
   openListing: "Open listing",
   openBidding: "Bid",
