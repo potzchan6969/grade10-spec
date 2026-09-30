@@ -20,11 +20,13 @@ winner confirming setup, in production. It is 0 today, since no send succeeds.
 
 ## What Changes
 
-- **The fee comes from a schedule Finance keeps.** Payment Settings holds, per
-  currency, a card rule and a bank transfer rule: a percentage and a fixed
-  amount, or no rule. The quote pre-fills the fee from it and the operator sets
-  the final amount, zero or more. The sent invoice never re-prices, and no send
-  needs the payment provider
+- **The invoice's payment method decides where its fee comes from.** A card
+  invoice's fee is Grade10's own: the card rule Finance keeps in Payment
+  Settings, per currency - a percentage and a fixed amount - grossed up so
+  Grade10 keeps the Subtotal whole. With no card rule for the currency, the
+  invoice cannot be sent or reissued. A bank transfer invoice's fee is the
+  operator's own, typed as an integer of zero or more; empty means zero. The
+  sent invoice never re-prices, and no send needs the payment provider
 - **Tax on the quote**, as `add-winner-order-tax-line` writes it
 - **The winner's page keeps its design.** Only the admin console is
   redesigned. Behind the page, bank transfer is offered only where Grade10
@@ -68,10 +70,10 @@ See [Non-Goals](decisions.md#non-goals).
   bank details, a proof file judged by its content, and no card payment
   started on an expired or checked invoice.
 - `grade10-admin/auction/post-sale`: the Orders worklist and order page, the
-  fee from the schedule, what was seen is sent, proofs, dispatch and delivery
+  fee by payment method, what was seen is sent, proofs, dispatch and delivery
   on the order, money that lands, the grant table, how long an order waited in
   place of the 72-hour mark, and the listing queue's requirements removed.
-- `grade10-admin/auction/payment-settings`: the fee schedule, and payment
+- `grade10-admin/auction/payment-settings`: the card fee rule, and payment
   processing in place of settlement as the grant.
 - `grade10-site/auction/order-status`: an expired or verifying invoice never
   starts a card payment, and one that completes anyway is recorded.
@@ -81,8 +83,8 @@ See [Non-Goals](decisions.md#non-goals).
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10` | Reads `Awaiting Setup`; My auction orders names all twelve statuses from the catalog; the winner's page keeps its design and procedures |
-| `apps/admin/grade10` | Orders replaces the Queue and Winner orders tabs, with a page per order at its own address and a dialog per action; Payment Settings gains the fee schedule; the Test tab gains test winners |
-| Auction service | Fee schedule; the fee stored as the operator set it; send and reissue priced again against the total read; order status read from the order's facts; money that lands recorded and flagged; proof files served to operators; order-level dispatch and delivery; the worklist query; the listing-level post-sale actions removed; test winners |
+| `apps/admin/grade10` | Orders replaces the Queue and Winner orders tabs, with a page per order at its own address and a dialog per action; Payment Settings gains the card fee rule; the Test tab gains test winners |
+| Auction service | The card fee rule; a card fee Grade10 computes and a bank transfer fee the operator sets; send and reissue priced again against the total read; order status read from the order's facts; money that lands recorded and flagged; proof files served to operators; order-level dispatch and delivery; the worklist query; the listing-level post-sale actions removed; test winners |
 | Store service | Passes the winner procedures through unchanged, with the session's user |
 | `apps/emails` | The Proof not accepted letter's template |
 | `@grade10/ui`, `@grade10/design-system` | No export or token change |
@@ -109,7 +111,7 @@ See [Non-Goals](decisions.md#non-goals).
   Partially Paid
 - **Feature sets are hand-merged at archive.** In post-sale, the Queue group's
   extended-bidding leaf goes, and the Quote and send group's bank transfer fee
-  leaf gives way to the fee from the schedule
+  leaf gives way to the fee by payment method
 
 ## References
 

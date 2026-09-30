@@ -71,13 +71,13 @@ premium for each auction currency,
 
 ---
 
-## grade10-admin-auction-payment-settings-US2: Finance keeps the payment processing fee schedule
+## grade10-admin-auction-payment-settings-US2: Finance keeps the Stripe card fee rule
 
 **As a** finance operator,
-**I want** to set, per currency, the card and the bank transfer rule each invoice's processing fee starts from,
-**so that** the fee an operator quotes covers what the payment costs Grade10 without anyone working it out by hand.
+**I want** to set, per currency, the card rule that prices a card invoice's processing fee,
+**so that** a card invoice's fee always covers what Stripe takes, without an operator working it out by hand.
 
-### grade10-admin-auction-payment-settings-US2-TC1-1: A new schedule holds no rule until Finance sets one
+### grade10-admin-auction-payment-settings-US2-TC1-1: No rule until Finance sets one
 
 **Classification:**
 
@@ -94,22 +94,22 @@ premium for each auction currency,
 
 **Pre-conditions:**
 
-* No fee schedule has been saved.
+* No card rule has been saved.
 * admin(operator whose roles are exactly `finance`) opens Payment settings.
 
 **Steps:**
 
-1. Read the fee schedule.
-2. Set HKD card to `3.4`% and `2.35`, and HKD bank transfer to `0`% and `0.00`, leave USD and JPY empty, and save.
+1. Read the card rule.
+2. Set HKD to `3.4`% and `2.35`, leave USD and JPY empty, and save.
 3. Reload the tab.
 
 **Expected Results:**
 
-* Before the save, card and bank transfer show no rule in every currency.
-* After the reload, HKD card reads 3.4% and HKD 2.35 and HKD bank transfer 0% and HKD 0.00, with no rule in USD or JPY.
-* The schedule records the finance operator and the time of the save.
+* Before the save, every currency shows no rule.
+* After the reload, HKD reads 3.4% and HKD 2.35, with no rule in USD or JPY.
+* The save records the finance operator and the time.
 
-### grade10-admin-auction-payment-settings-US2-TC2-1: Each rule shows its fee on an example subtotal, and quotes start from it
+### grade10-admin-auction-payment-settings-US2-TC2-1: The rule shows its fee on an example subtotal, and prices a card invoice
 
 **Classification:**
 
@@ -126,20 +126,20 @@ premium for each auction currency,
 
 **Pre-conditions:**
 
-* No fee schedule has been saved.
+* No card rule has been saved.
 * An order in HKD in Preparing Invoice for card, with a subtotal of 312000 minor units once Shipping & Handling and Insurance are entered.
 * admin(operator with payment processing) opens Payment settings.
 
 **Steps:**
 
-1. Type an HKD card rule of `3.4`% and `2.35`, and read the example beside it.
+1. Type an HKD rule of `3.4`% and `2.35`, and read the example beside it.
 2. Save.
 3. Open Send invoice on the order, enter the amounts, and read the fee.
 
 **Expected Results:**
 
 * The example reads a fee of HKD 37.63 on a subtotal of HKD 1,000.00, in the console's money format.
-* The quote's fee starts at 11225 and the total at 323225 minor units in HKD.
+* The quote's computed fee reads 11225 and the total 323225 minor units in HKD, read-only with the HKD rule it came from.
 
 ### grade10-admin-auction-payment-settings-US2-TC3-1: Half a rule or a percentage out of range is refused
 
@@ -163,17 +163,17 @@ premium for each auction currency,
 
 **Steps:**
 
-1. Save a USD card rule of `4.4`% with no fixed amount.
-2. Save an HKD card rule of `3.405`% and `2.35`.
-3. Save an HKD card rule of `100`% and `0.00`.
-4. Read the schedule.
+1. Save a USD rule of `4.4`% with no fixed amount.
+2. Save an HKD rule of `3.405`% and `2.35`.
+3. Save an HKD rule of `100`% and `0.00`.
+4. Read the rules.
 
 **Expected Results:**
 
 * Each save is refused.
-* The schedule still holds only the HKD card rule of 3.4% and 235 minor units.
+* The stored rules still hold only HKD 3.4% and 235 minor units.
 
-### grade10-admin-auction-payment-settings-US2-TC4-1: Staff can neither read nor change the schedule
+### grade10-admin-auction-payment-settings-US2-TC4-1: Staff can neither read nor change the card rules
 
 **Classification:**
 
@@ -194,13 +194,13 @@ premium for each auction currency,
 
 **Steps:**
 
-1. Request the fee schedule.
-2. Save a fee schedule.
+1. Request the card rules.
+2. Save a card rule.
 
 **Expected Results:**
 
 * Both are refused.
-* The stored schedule is unchanged.
+* The stored rules are unchanged.
 
 ## Reconciliation
 

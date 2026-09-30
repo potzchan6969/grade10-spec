@@ -2,12 +2,12 @@
 
 **Winner** - wins, opens the order from the `auction_won` letter, completes setup once (delivery address, payment method, billing address) on the site as it stands, waits for the invoice, pays by card through Stripe Checkout or transfers and submits the proof, gets a receipt, then sees the lot shipped and delivered.
 
-**Operator** - opens the Orders worklist, sends the invoice (shipping, insurance, tax, processing fee pre-filled from the fee schedule), reissues it when something changes, records bank money or checks the winner's proof, dispatches, confirms delivery, and cancels, refunds or comments when needed.
+**Operator** - opens the Orders worklist, sends the invoice (shipping, insurance, tax, and a card fee Grade10 computes or a bank transfer fee typed by the operator), reissues it when something changes, records bank money or checks the winner's proof, dispatches, confirms delivery, and cancels, refunds or comments when needed.
 
 **Architecture** - `@grade10/auction-contracts` holds the pure rules (pricing, status, actions, segments, payment outcome) that the backend enforces and both clients render; the auction worker's `services/orders/*` own every transition under the order row lock; the order's status is never stored - one SQL `CASE` in the worklist repository mirrors the contracts rule over fact columns; the storefront reaches the auction through a winner-only RPC entrypoint; the admin console is a thin client of one read model, `OperatorOrderView`; the winner's site keeps its design and its procedures, and this change's rules hold behind them.
 
 ```
-Payment Settings (minimum premium, card rule, bank rule)    Send / Reissue dialog (shipping, insurance, tax, fee)
+Payment Settings (minimum premium, card rule)               Send / Reissue dialog (shipping, insurance, tax, fee)
                                   \                        /
                  contracts/invoicePricing.priceInvoice(lines)
                    subtotal = hammer + premium + shipping + insurance + tax;  total = subtotal + processingFee
@@ -427,7 +427,7 @@ packages/grade10-auction/admin-frontend/src/features/operations/orders/
   presentation/dialogs/InvoiceQuoteFields.tsx SetupFields.tsx ProofFilesField.tsx
   presentation/dialogs/SendInvoiceDialog ReissueInvoiceDialog RecordOrChangeSetupDialog CheckProofDialog RecordPaymentDialog
                        CancelOrderDialog RefundDialog DispatchDialog ConfirmDeliveryDialog
-features/operations/payment-settings/                           the fee schedule per currency and method
+features/operations/payment-settings/                           the card fee rule per currency
 features/test/winners/                                          export "./test-winners": create, list, Email sign-in link, Open order
 ```
 
@@ -455,7 +455,7 @@ Every dialog is a `FormDialog` held open by `useDialogSubject`; a refusal shows 
 
 | Dialog | Fields | Restates |
 | --- | --- | --- |
-| Send invoice | `InvoiceQuoteFields`: Shipping & Handling, Insurance (optional), Tax (optional, tooltip), Payment processing fee pre-filled from the method's rule, following the subtotal until typed, "Use suggested" when it differs; live `priceInvoice` preview | Ship to, Bill to, Method with "Wrong? Change setup"; the priced lines; the exact deadline; "the winner gets the letter now" |
+| Send invoice | `InvoiceQuoteFields`: Shipping & Handling, Insurance (optional), Tax (optional, tooltip); Payment processing fee read-only, computed from the card rule, for card, or a `MoneyField` of the operator's own for bank transfer; live `priceInvoice` preview | Ship to, Bill to, Method with "Wrong? Change setup"; the priced lines; the exact deadline; "the winner gets the letter now" |
 | Reissue | `InvoiceQuoteFields`, deadline kept or restarted, reason; `SetupFields` behind a Switch "Change address or payment method" | what changes, old number -> Replaced, new total |
 | Record or Change setup | `SetupFields`: addresses, method, reason | what the winner sees |
 | Check proof | the files inline with Open, the invoice ID and bank reference beside the payment method and the order total; Confirm, or Return with the winner's reason and an internal note | "the winner sees this reason" |
@@ -472,7 +472,7 @@ Every dialog is a `FormDialog` held open by `useDialogSubject`; a refusal shows 
 
 ### Payment Settings
 
-Per currency: minimum premium through `MoneyField`, then a card rule and a bank transfer rule, each a `PercentField` (`max={9999}`, two decimals) and a `MoneyField`; 0 allowed everywhere; an empty pair is no rule, half a pair is refused at the field and by the server; a live example line per rule. The tab is gated on `auction:payment`.
+Per currency: minimum premium through `MoneyField`, then one card rule, a `PercentField` (`max={9999}`, two decimals) and a `MoneyField`; 0 allowed everywhere; an empty pair is no rule, half a pair is refused at the field and by the server; a live example line per rule. The tab is gated on `auction:payment`.
 
 ### Listings
 

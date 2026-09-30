@@ -190,7 +190,7 @@ by card, reads:
 | Insurance | 500 | Optional and above zero; absent when none |
 | 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
 | Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
-| 🚧 Payment Processing Fee | 4,271.80 | Set by the operator, pre-filled from the fee schedule in Payment Settings — here card at 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
+| 🚧 Payment Processing Fee | 4,271.80 | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings — here 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
 | Order Total | 125,571.80 | Subtotal plus the fee — what the winner pays |
 
 - 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
@@ -201,8 +201,9 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
-- 🚧 **Payment Processing Fee** — set by the operator on every invoice, card
-  or bank transfer, from the schedule's suggestion; zero reads Free
+- 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
+  from the Stripe card rule; the operator's own on a bank transfer invoice,
+  zero or more, empty read as Free
 - 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
   the document names it rather than leaving it to the fee amount alone
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
@@ -470,7 +471,7 @@ a second payment provider, and changes to the bid-time rules.
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
-| Payment processing fee | 🚧 In flight | On every invoice, card or bank transfer, the operator sets the fee, pre-filled from a fee schedule in Payment Settings: a percentage and a fixed amount per currency and method, the card rule grossed up from the Subtotal. No cap; a fee that costs more than quoted is absorbed; the sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
+| Payment processing fee | 🚧 In flight | A card invoice's fee is Grade10's own: the Stripe card rule per currency in Payment Settings, a percentage and a fixed amount grossed up from the Subtotal; with no rule for the currency, the invoice cannot be sent. A bank transfer invoice's fee is the operator's own, no cap, empty read as Free. The sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
 | Bank details | 🚧 In flight | Grade10 holds bank details per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account, so production offers card only until then. Chosen over a sample account in the site's code, which showed on every lane and on every invoice PDF, production included. | Product and Finance |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |

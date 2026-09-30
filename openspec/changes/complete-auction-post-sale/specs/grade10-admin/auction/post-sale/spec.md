@@ -2,8 +2,8 @@
 
 Operators work every won lot's auction order in one Orders workspace: a
 worklist by segment, a page per order that says what to do next, the invoice
-quoted with a fee from the schedule, payment collected, and dispatch and
-delivery recorded, with every change on one timeline.
+quoted with the fee its payment method decides, payment collected, and
+dispatch and delivery recorded, with every change on one timeline.
 
 ## Feature set
 
@@ -21,7 +21,7 @@ delivery recorded, with every change on one timeline.
   - Dialogs: each action restates what will happen, and a refusal reads as a sentence
   - Money in major units: an operator types `50.00` for HK$50
 - Quote and send
-  - Fee from the schedule: the payment processing fee starts from Payment Settings, and the operator sets it, zero or more
+  - Fee by payment method: a card invoice's fee is computed from the Stripe card rule in Payment Settings; a bank transfer invoice's fee is typed by the operator, zero or more
   - What was seen is sent: a send or reissue carries the total the operator read
 - Resolving an unpaid order
   - Record payment: one dialog for money received outside the card checkout, starting at the balance, always with a reason
@@ -1095,104 +1095,101 @@ fix the stock choice, and refuse a second refund.
 
 ## ADDED Requirements
 
-### Requirement: The payment processing fee starts from the fee schedule
+### Requirement: The payment processing fee follows the invoice's payment method
 
-The operator sets each invoice's payment processing fee, starting from what
-the fee schedule suggests. This requirement governs the fee on the quote and
-on a reissue, for card and bank transfer alike, in place of the fee steps of
-"An operator quotes and sends the invoice" and "An operator reissues a sent
-invoice", and of the fee's pricing in "Invoice fields" in
-`grade10-site/auction/winner-order`.
+The invoice's payment method decides where its payment processing fee comes
+from. This requirement governs the fee on the quote and on a reissue, in place
+of the fee steps of "An operator quotes and sends the invoice" and "An
+operator reissues a sent invoice", and of the fee's pricing in "Invoice
+fields" in `grade10-site/auction/winner-order`.
 
-**Starts from the schedule** - When an operator opens the quote, the payment
-processing fee SHALL read what the fee schedule's rule for the order's
-currency and the invoice's payment method suggests for the subtotal, per
-`grade10-admin/auction/payment-settings`. Where the schedule holds no such
-rule, the fee SHALL start empty, and Grade10 SHALL refuse the send until the
-operator enters one.
+**Card is computed** - A card invoice's fee SHALL be Grade10's own: the card
+rule for the order's currency, per `grade10-admin/auction/payment-settings`,
+grossed up so Grade10 keeps the subtotal whole. The operator SHALL NOT enter
+or edit it. Grade10 SHALL compute it from the current subtotal each time the
+quote or a reissue is opened, and fix it at send or reissue. The quote SHALL
+show it read-only, with the rule it came from.
 
-**Follows the subtotal** - Until the operator types a fee, the fee SHALL
-follow the subtotal as the quoted amounts change. Once typed, it SHALL stay as
-typed, and whenever it differs from the suggestion, Grade10 SHALL show the
-suggestion beside it with a way to use it.
+**No card rule refuses** - Where Payment Settings holds no card rule for the
+order's currency, Grade10 SHALL refuse to send or reissue a card invoice,
+`CARD_FEE_UNSET`. The refusal SHALL say the card fee for that currency is not
+set and point to Payment Settings. Grade10 SHALL NOT guess a fee.
 
-**The operator's to set** - The fee SHALL be an integer count of minor units of
-zero or more in the lot's currency, with no upper limit. A fee of zero reads
-Free to the winner.
+**Bank transfer is typed** - A bank transfer invoice's fee SHALL be the
+operator's own: an integer count of minor units of zero or more in the lot's
+currency, with no upper limit. An empty field SHALL be zero, and a fee of zero
+reads Free to the winner.
 
-**On a reissue** - The fee SHALL start from the current invoice while the
-payment method stays. After a switch of method, it SHALL start from what the
-new method's rule suggests, or empty where there is no rule. Beside it,
-Grade10 SHALL show what the schedule suggests for the new subtotal.
+**On a reissue** - The fee SHALL be editable only where the reissued invoice
+is bank transfer, starting from the current invoice while the method stays
+bank transfer. A switch to card SHALL price the fee from the card rule; a
+switch to bank transfer SHALL start it empty, which reads zero.
 
-**Never priced again** - A sent invoice SHALL keep its fee as the operator set
-it. A later change to the fee schedule or to the premium minimum SHALL change
-no sent invoice; only a reissue changes the fee.
+**Never priced again** - A sent invoice SHALL keep its fee. A later change to
+the card rule or to the premium minimum SHALL change no sent invoice; only a
+reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 
 **No provider** - No send or reissue SHALL need the payment provider.
 
-#### Scenario: grade10-admin-auction-post-sale-SC-167 - No rule leaves the fee to the operator
+#### Scenario: grade10-admin-auction-post-sale-SC-167 - No card rule refuses the send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in USD in Preparing Invoice for card
-- **AND** the fee schedule holds no USD card rule
-- **WHEN** an operator holding payment processing opens the quote
-- **THEN** the payment processing fee is empty
-- **AND** Grade10 refuses to send until the operator enters one
+- **AND** Payment Settings holds no USD card rule
+- **WHEN** an operator holding payment processing opens the quote and attempts
+  to send
+- **THEN** Grade10 refuses with `CARD_FEE_UNSET`
+- **AND** the dialog says the USD card fee is not set and points to Payment
+  Settings
 
-#### Scenario: grade10-admin-auction-post-sale-SC-168 - The operator changes the suggested fee
+#### Scenario: grade10-admin-auction-post-sale-SC-168 - Grade10 computes the card fee
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in HKD in Preparing Invoice for card with a
-  subtotal of 312000 minor units and the fee the schedule suggested, 11225
-- **AND** the payment provider cannot be reached
-- **WHEN** an operator changes the payment processing fee to `100.00` and sends
-- **THEN** the invoice is `pending` with a payment processing fee of 10000 and
-  an order total of 322000 minor units in HKD
+  subtotal of 312000 minor units
+- **AND** the HKD card rule is 3.4 per cent and 235 minor units
+- **WHEN** an operator holding payment processing opens the quote and sends
+- **THEN** the invoice is `pending` with a payment processing fee of 11225 and
+  an order total of 323225 minor units in HKD
+- **AND** the quote showed the fee read-only with the HKD card rule it came
+  from
 
-#### Scenario: grade10-admin-auction-post-sale-SC-169 - The fee follows the subtotal until the operator changes it
+#### Scenario: grade10-admin-auction-post-sale-SC-169 - The card fee tracks the subtotal until send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in HKD in Preparing Invoice for card with a
-  subtotal of 312000 minor units, whose fee reads the suggested 11225
-- **AND** the fee schedule's HKD card rule is 3.4 per cent and 235 minor units
+  subtotal of 312000 minor units, whose fee reads the computed 11225
+- **AND** the HKD card rule is 3.4 per cent and 235 minor units
 - **WHEN** an operator raises Shipping & Handling so the subtotal is 316000
   minor units
 - **THEN** the fee reads 11366 and the order total 327366 minor units in HKD
-- **AND** once the operator has typed a fee of 10000, a further change to the
-  subtotal leaves the fee at 10000, with the suggestion shown beside it
 
-#### Scenario: grade10-admin-auction-post-sale-SC-171 - A switch to bank transfer starts from its rule
+#### Scenario: grade10-admin-auction-post-sale-SC-171 - A switch to bank transfer starts the fee empty
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment whose card invoice has a subtotal of
   312000 and a fee of 11225 minor units in HKD
-- **AND** the fee schedule's HKD bank transfer rule is 0 per cent and 0 minor
-  units
 - **WHEN** an operator reissues it and switches the method to bank transfer
-- **THEN** the payment processing fee reads 0
+- **THEN** the payment processing fee reads empty, which is zero
 - **AND** the operator reads 323225 as the previous and 312000 minor units in
   HKD as the new order total
 
-#### Scenario: grade10-admin-auction-post-sale-SC-172 - A kept fee shows the schedule's suggestion beside it
+#### Scenario: grade10-admin-auction-post-sale-SC-172 - A reissue that keeps bank transfer keeps its typed fee
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an order in Pending Payment whose card invoice has a subtotal of
-  312000 and a fee of 11225 minor units in HKD
-- **AND** the fee schedule's HKD card rule is 3.4 per cent and 235 minor units
+- **GIVEN** an order in Pending Payment whose bank transfer invoice has a
+  subtotal of 312000 and a fee of 5000 minor units in HKD
 - **WHEN** an operator reissues it, raising Shipping & Handling so the subtotal
-  is 316000 minor units
-- **THEN** the payment processing fee still reads 11225, from the current
-  invoice
-- **AND** the schedule's suggestion of 11366 minor units in HKD is shown beside
-  it
+  is 316000 minor units, and keeps bank transfer
+- **THEN** the payment processing fee still reads 5000, editable by the
+  operator
 
-#### Scenario: grade10-admin-auction-post-sale-SC-193 - A sent invoice keeps its fee when the schedule changes
+#### Scenario: grade10-admin-auction-post-sale-SC-193 - A sent invoice keeps its fee when the card rule changes
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an order in Pending Payment whose card invoice carries a payment
-  processing fee of 11225 minor units in HKD, suggested by the HKD card rule of
-  3.4 per cent and 235 minor units
+  processing fee of 11225 minor units in HKD, computed from the HKD card rule
+  of 3.4 per cent and 235 minor units
 - **WHEN** an operator changes the HKD card rule to 3.9 per cent and 235 minor
   units
 - **THEN** the invoice still carries the fee of 11225 minor units in HKD
