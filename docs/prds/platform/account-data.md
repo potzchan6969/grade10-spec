@@ -123,7 +123,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 | Appointment | never | Nulls `bookings.user_id` in the named lane; the seat stays as the shop's record of its own day |
 | Auction | uncaptured settlement, unit in transit, or a live payment hold | Bidder name and email, watches, fulfillment address and proof documents, and the Stripe customer. `user_id` stays as an opaque key on bids and settlements |
 | Store | never | Profile and push subscriptions deleted; checkout address, vendor customer ref and an operator's claim notes cleared off the person's own rows; pairing marked deleted, which drops the phone it last pushed. Order, event, claim, code and handle ids stay |
-| Inventory | 🚧 a place holds an item the person owns | Owner removed, title marked erased, description and free attributes cleared, their side and reason on each move; a proof kept while the other party is a customer |
+| Inventory | 🚧 a place holds an item the person owns | Owner removed, title marked erased, description and attributes cleared, the person's side of each move and its reason cleared; a proof kept while the other party still has an account, then deleted |
 | Vault | a case still in custody or otherwise unerasable | Every case that named the person — phone, email, decline reason, item titles, photos, notes, signer details — and the identity binding released over the kyc port |
 
 - Loyalty is a named exemption with its column inventory pinned: every id there is an opaque FK that still balances once the auth user is gone

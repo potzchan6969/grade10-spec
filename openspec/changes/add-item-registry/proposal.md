@@ -12,15 +12,15 @@ valuation holds "an amount and a note; no grading company, certificate
 number, grade".
 
 **Metric** - items in the vault with no record in the register, held at
-zero after the backfill; ownership moves recorded with who, why and when,
-none today because none are recorded.
+zero after the backfill; ownership moves recorded with who, why and when
+(none are recorded today).
 
 ## What Changes
 
 - **An item register** - one record per physical thing, graded or not, owned
   by an account or by one of the company's two entities, the custodian or the
   lender, carrying its category from a closed list of ten, title,
-  description, grader, grade, cert and the catalogue's reusable attributes
+  description, grader, grade, cert and the catalogue's attributes
 - **Staff find who has what** - Items and one item's page on the console,
   searched by title, by grader and cert, by item id or by owner, opening on
   the items a place holds, the owner shown by name
@@ -34,11 +34,11 @@ none today because none are recorded.
 - **Grader, grade and cert reach the vault** - on the case's valuation and
   printed on the custody agreement; a walk-in bringing a slab the register
   knows finds it by grader and cert rather than typing it again. This
-  delivers the follow-on `add-card-grading` names carry-grade-into-vault-case
-- **Staff move an item to a new owner** - any account, the custodian, or away
-  from an erased owner, with a reason and an optional proof document, traced
-  on the item and the audit log; refused while a place holds the item, naming
-  the place
+  delivers carry-grade-into-vault-case, the follow-on `add-card-grading` names
+- **Staff move an item to a new owner** - any account or the custodian, with
+  a reason and an optional proof document, traced on the item and the audit
+  log; an item whose owner was erased moves the same way; refused while a
+  place holds the item, naming the place
 - **Forfeit moves the item to the lender** - when the vault closes its hold,
   never by a staff move
 - **Retire** - a duplicate, a lost or destroyed item, or one that left the
@@ -48,9 +48,9 @@ none today because none are recorded.
   refusing while a place holds an item the person owns
 - **A grant to move items** - `inventory:transfer`, held by staff and admin;
   the treasurer holds none of the register's grants
-- **Grading's catalogue rule, restated** - a collector's slab still never
-  enters the catalogue; the vault values it from the register, superseding
-  `add-card-grading`'s Q82 by name
+- **Grading's Q82, changed** - a collector's slab still never enters the
+  catalogue; a vault valuation reads grader, grade and cert from the register,
+  superseding the second half of `add-card-grading`'s Q82
 
 ## Non-Goals
 
@@ -110,14 +110,6 @@ See [Non-Goals](decisions.md#non-goals).
   wait for it; `fix-roles-spec-divergence` writes the vocabulary table the
   new grant joins; `add-card-grading`'s own spec line on where a valuation
   reads the grade is corrected by the change that next moves grading
-
-## Follow-on changes
-
-- Selling a vaulted item at auction, the item held by the vault and the
-  auction at once, and the vault moving an owner under its hold
-- Items of any category through grading
-- A notice to both owners when an item moves
-- Merging two records of one item
 
 ## Open questions
 

@@ -101,10 +101,10 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   beside what the collector was told
 - 🚧 **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
-- 🚧 **The item's facts** - the Case tab shows and edits the item's category,
-  grader, grade, cert and facts from the register once the valuation starts,
-  and says registration is pending before that -
-  [Items](/p/grade10-admin/inventory/items#facts)
+- 🚧 **The item's facts** — the Case tab shows and edits the item's category,
+  grader, grade, cert and facts from the register once it has the item, which
+  it gets when the valuation starts, and says registration is pending until
+  then — [Items](/p/grade10-admin/inventory/items#facts)
 
 ## Permissions
 
@@ -137,11 +137,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   free text; a move between lockers writes a movement
 - **Movements** — `in` at vaulting, `moved` on a move, `out` at release,
   unwind and forfeiture
-- 🚧 **Valuation** - an amount and a note, read beside the item's grader,
+- 🚧 **Valuation** — an amount and a note, read beside the item's grader,
   grade and cert; no condition, market reference or second valuer
-- 🚧 **Forfeited items** - belong to the lender in the register from the
-  moment the vault closes its hold -
-  [Items](/p/grade10-admin/inventory/items#moving-an-item)
 - **Not modelled** — a locker registry per shop, capacity, transfer between
   shops, a condition report, damage or loss, a stock-take against the shelf;
   a forfeited item is written `out` because it has become the shop's stock
@@ -202,7 +199,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | When a walk-in reads the collection statement | ❓ Open | Staff type the address before the customer ticks the statement on their phone. Recommended: the counter shows the statement first, and the tick on the phone is the record | Legal |
 | Stock-take sheet and Send notice from arrears | ❓ Open | A stock-take sheet from the held-items list, and Send notice from an arrears row. Recommended: neither, the notice stays an act on the case | Product |
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
-| Valuation record | Deferred | Grading company, certificate number and grade ride the note until the inventory catalogue links; a second valuer, a condition report and counter photographs with it | Product |
+| Grader, grade and cert on a valuation | Decided | Read from the item register beside the amount and the note — [Items](/p/grade10-admin/inventory/items#facts) | Owner |
+| Valuation record | Deferred | A second valuer, a condition report and counter photographs | Product |
 | Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
 | Forfeited stock | Decided | A forfeited item leaves custody and becomes the shop's stock; the chain keeps the figure it settled and the rest is inventory's | Owner |
 | Staff notifications | Decided | The queue is the inbox: badges, counts, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |

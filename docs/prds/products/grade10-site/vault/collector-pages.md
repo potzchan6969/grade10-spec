@@ -41,8 +41,7 @@ hold, a wizard to open another, and each case's own page.
 - 🚧 **Check it, then send** — the third step reads the request back, says
   what happens next, and takes the collector's tick that they have read the
   personal information collection statement before it sends
-- 🚧 **Ten categories** - trading card, comic, coin, banknote, stamp,
-  bullion, watch, jewellery, memorabilia, other -
+- 🚧 **Ten categories** — the register's —
   [Items](/p/grade10-admin/inventory/items#values)
 - **Currency** — the brand's (HKD for Grade10); another currency is refused
 - **One item per case** — a binder of twelve cards is twelve requests, in

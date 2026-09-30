@@ -20,7 +20,8 @@
 - Search by name
 - A value, a photograph or a location on an item
 - Merging two records of one item
-- Linking an item to catalogue stock, or retiring "vault from a reservation"
+- Linking an item to catalogue stock
+- Retiring the stock console's act that vaults a reserved unit
 - A locker registry or a house location
 - Any brand but Grade10
 
@@ -55,6 +56,16 @@
 | Q25 | Who holds which grant? | `inventory:read` and `inventory:write` as today, and a new `inventory:transfer`, all held by staff and admin; the treasurer holds none | Three new `items:*` grants beside `inventory:*`, which splits one resource |
 | Q26 | Does grading's Q82 still hold - that a collector's slab never enters the catalogue and a vault valuation reads the grade from the submission? | "Do what makes sense": the slab still never enters the catalogue; a vault valuation reads grader, grade and cert from the register, which supersedes `add-card-grading` Q82's second half and delivers the follow-on its Q22 left, carry-grade-into-vault-case | The submission as the one place a valuation reads, which ties the vault to grading and leaves a slab graded elsewhere with nothing to read |
 | Q27 | Which brands? | Grade10 only; revisited when the auction, which serves both brands, becomes a place | A brand on every item before any second brand has a vault |
+| Q28 | May a staff move name the lender, or only an account or the custodian? | ❓ owner - recommended: no, only a forfeit moves an item to the lender, keeping stock apart from collateral; Q11 and goal 7 then read "to any account or the custodian, never the lender - only a forfeit" | Any owner, the lender included, as Q11 reads now |
+| Q29 | Do staff close a hold the vault no longer has? | ❓ owner - recommended: yes, as Q19 reads; a stuck hold blocks the owner's erasure, and an erasure cannot wait on a deploy | No hand close, which changes Q19 and leaves a stuck hold to a fix in code |
+| Q30 | Does the vault hold the item from registration, rather than from vaulting? | ❓ owner - recommended: no, as Q9 reads; a hold from registration needs a close on decline, cancel, expiry and no-show, each another hold that can get stuck, to save one cheap guard on preparing documents | A hold opened at registration, which changes Q9 and drops the guard on preparing documents |
+| Q31 | Does an item carry the catalogue's attributes in this release? | ❓ owner - recommended: no; a catalogue schema is chosen by its IP, item and category, which the ten categories are not, so "where one fits" has no rule and the facts go in the description; changes Q3 | The catalogue's attributes where one fits, as Q3 reads now |
+| Q32 | How is one object on two old cases found, when old valuations carry no cert? | ❓ owner - recommended: keep Q10's scope and replace its duplicate clause with "a second record of one object is retired by staff when found"; changes Q10 | A backfill of only the items in custody today |
+| Q33 | Does moving an item need its own grant, or does it ride `inventory:write`? | ❓ owner - recommended: its own, as Q25 reads; the proof is a personal document, and splitting one grant later costs a grant change | Folding `inventory:transfer` into `inventory:write`, which changes Q25 |
+| Q34 | When one party to a move is erased and the other is the custodian or the lender, is the proof kept? | ❓ owner - recommended: kept while the other party is the custodian, the lender or a live account, for Q17's own reason: the remaining owner keeps its record; extends Q17 | Q17 as it reads, kept only while the other party is a customer, which the custodian and the lender never are |
+| Q35 | Once the item is registered, whose category, title and description do the Case tab and the custody agreement show? | ❓ pm - recommended: the register's facts on the Case tab and the paper, with the collector's request kept as they sent it; extends Q22 | The case's own category, title and description beside the register's grader, grade and cert |
+| Q36 | Which word names a place keeping an item, now that "hold" already means a stock reservation in inventory? | ❓ pm - recommended: "mark", the capability's name and unused elsewhere in inventory, across the page, the decisions and the journeys; rewords Q6, Q12 and Q19 | "Hold", which reads as a stock reservation |
+| Q37 | Is `item-marks` its own capability, or part of `items`? | ❓ pm - recommended: part of `items`, since no page names it, and its journeys file deleted; the auction's change then modifies `items` | `item-marks` as a second capability that no page names |
 
 ## Raised
 

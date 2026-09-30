@@ -18,7 +18,7 @@ grader, grade, cert and attributes, and to correct a fact later,
 ### grade10-admin-inventory-items-US-03: Operator moves an item to its new owner
 
 **As a** member of shop staff when an item no place holds changes hands,
-**I want** to move it to any account or to the company, with a reason and a
+**I want** to move it to any account or to the custodian, with a reason and a
 proof document where I have one,
 **so that** anyone can later read who moved it, when, why and on what proof.
 
@@ -32,7 +32,7 @@ proof document where I have one,
 
 **As a** member of shop staff who finds one object registered twice,
 **I want** to retire the extra record as a duplicate, and to retire an item
-lost, destroyed or gone from the platform the same way,
+lost, destroyed or left the platform the same way,
 **so that** each object has one live record and the history of the others
 stays readable.
 

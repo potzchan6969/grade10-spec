@@ -26,8 +26,8 @@ the register already holds, its facts filled in,
 
 **As a** member of shop staff working a case,
 **I want** the Case tab to show the item's category, grader, grade, cert and
-other facts from the register, editable once the valuation has started and
-marked as waiting until the register has the item,
+other facts from the register, editable once the register has the item, and
+to show registration pending until it does,
 **so that** the case and the register never tell two stories about one item.
 
 ## MODIFIED User journeys

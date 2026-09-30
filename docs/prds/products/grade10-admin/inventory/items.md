@@ -12,7 +12,7 @@ company owns. Stock counts units of a product; an item is one object.
 
 | Rule | Value |
 | --- | --- |
-| Owner | one account, or one of the company's two entities: the custodian or the lender |
+| Owner | one account, or one of the company's two entities: the custodian or the lender, or no one once the owner is erased |
 | Category | trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia, other |
 | Grader | PSA, BGS, CGC, SGC, TAG, PCGS, NGC, PMG, or none |
 | Cert | as printed on the slab, trimmed and in capitals; one item per grader and cert |
@@ -24,24 +24,27 @@ company owns. Stock counts units of a product; an item is one object.
 ## Owners
 
 - 🚧 **One owner** - an item belongs to one account, or to the custodian or
-  the lender under their registered names -
+  the lender under their registered names, or to no one once the owner is
+  erased -
   [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
-- 🚧 **Owner by name** - staff read the owner's name on every list and page
-  here; where the name cannot be read the page shows the short id and "name
-  unavailable" and still opens
-- 🚧 **A collector's items** - the collector page lists every item the
-  collector owns, held or not -
+- 🚧 **Owner by name** - staff and admins, behind `kyc:read`, read the
+  owner's name here; each read is on the audit chain; where the name cannot
+  be read the page shows the short id and "name unavailable" and still opens
+- 🚧 **A collector's items** -
   [Collector Page](/p/grade10-admin/console/collector-page#the-page)
-- ❓ **A shop purchase or a gift** - which entity it names; recommended: the
-  custodian, and the lender only through a forfeit - Legal
+- ❓ **Owner of a bought or gifted item** - which entity owns what the
+  company buys or is given; recommended: the custodian, the lender only
+  through a forfeit - Legal
 
 ## Facts
 
 - 🚧 **What an item says** - category, title, description, grader, grade,
-  cert, and any of the catalogue's reusable attributes -
+  cert, and any of the catalogue's attributes -
   [Products and Stock](/p/grade10-admin/inventory/catalog#product-schemas);
   anything else goes in the description
-- 🚧 **Graded or not** - an item with no grader carries no grade and no cert
+- 🚧 **Graded or not** - an item with no grader carries no grade and no
+  cert; a slab from a grader not listed has no grader, and its grader, grade
+  and cert go in the description
 - 🚧 **One slab, one item** - a grader and cert name one item until it is
   retired; typing a known grader and cert finds that item rather than adding
   a second
@@ -51,7 +54,8 @@ company owns. Stock counts units of a product; an item is one object.
 ## Holds
 
 A place that holds an item says so on the item: in this release the vault is
-the only place. Held or not is read from the places, never set by hand.
+the only place. Held or not is read from the places; staff only close a hold
+the vault no longer has.
 
 - 🚧 **The vault registers** - an item gets its record when staff start the
   vault valuation, and reads as held from the day it is vaulted until it is
@@ -59,20 +63,20 @@ the only place. Held or not is read from the places, never set by hand.
   [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#exits)
 - 🚧 **The place decides** - the register never refuses what the vault has
   already done; where the vault and the register disagree on the owner, the
-  item says so to staff
+  item's page shows staff both owners
 - 🚧 **Items already in the vault** - every case that reached custody
-  appears as an item under its collector, held while the item is in the vault
-- 🚧 **The list opens on held items** - staff switch to every item, or to
-  retired ones
+  appears as an item under its collector, held while the item is in the
+  vault; an erased collector's case is left out, and a forfeited case's item
+  belongs to the lender
 - 🚧 **A hold left open** - staff close a hold the vault no longer has, with
   a reason; a later word from the vault does not reopen it
 
 ## Moving an Item
 
 - 🚧 **Transfer** - a staff member or an admin moves an item no place holds
-  to any account, to the custodian, or away from an erased owner, with a
-  reason and, where there is one, a proof document; the item shows each move,
-  who made it and when, and the audit log records it
+  to any account or to the custodian, with a reason and, where there is one,
+  a proof document; an item whose owner was erased moves the same way; the
+  item shows each move, who made it and when, and the audit log records it
 - 🚧 **Refused while held** - a transfer is refused while a place holds the
   item, naming the place
 - 🚧 **Forfeit** - a forfeited vault item belongs to the lender from the
@@ -89,26 +93,29 @@ the only place. Held or not is read from the places, never set by hand.
 
 ## Finding an Item
 
-- 🚧 **Search** - by title, by grader and cert, by item id, or by owner; an
-  owner is reached by their exact email or by clicking their name; there is
-  no search by name
+- 🚧 **Default list** - held items; staff switch to every item or to retired
+  ones
+- 🚧 **Search** - by title, by grader and cert, by item id, or by the owner's
+  exact email; never by an owner's name - a click on a name opens the
+  collector page
 
 ## Erasure
 
-- 🚧 **Refused while held** - the ask to be forgotten waits while a place
-  holds an item the person owns -
+- 🚧 **Refused while held** - the ask to be forgotten is refused while a
+  place holds an item the person owns -
   [Account Data](/platform/account-data#erasure)
 - 🚧 **Items they own** - the owner is removed, the title reads as erased,
-  the description and free attributes go; category, grader, grade and cert
+  the description and attributes go; category, grader, grade and cert
   stay
 - 🚧 **Moves they were part of** - their side and the reason go; a proof
-  stays while the other party is still a customer, then goes
+  stays while the other party still has an account, then goes
 
 ## Permissions
 
 | Grant | Roles | Opens |
 | --- | --- | --- |
 | `inventory:read` | staff, admin | Items, one item, a collector's items |
+| `kyc:read` | staff, admin | the owner's name on Items, one item and a collector's items |
 | `inventory:write` | staff, admin | add an item, edit its facts, retire it, close a hold left open |
 | `inventory:transfer` | staff, admin | move an item, open a proof |
 
@@ -149,8 +156,8 @@ recorded with who and why; holds closed by hand, expected near zero.
 | Two places at once | Decided | One item may be held by the vault and by the auction at the same time; the auction arrives with its own change | Product |
 | A vaulted item changing owner | Decided | Refused in this release; the vault moves an owner when a vaulted item is sold, with that change | Product |
 | Transfer notice | Decided | No email to either owner; the item's moves and the audit log hold it | Product |
-| Proof after erasure | Decided | Kept while the other party is still a customer | Product |
+| Proof after erasure | Decided | Kept while the other party still has an account | Product |
 | Search by name | Decided | None; exact email, cert, title, item id or a click on a name | Product |
 | Grading's slab and the catalogue | Decided | A collector's slab never enters the catalogue; the vault values it from this register - [The Submission](/p/grade10-site/grading/submission#the-record-after-collection) | Product |
-| A shop purchase or a gift | ❓ Open | Recommended: the custodian; the lender only through a forfeit | Legal |
+| Owner of a bought or gifted item | ❓ Open | Recommended: the custodian; the lender only through a forfeit | Legal |
 :::
