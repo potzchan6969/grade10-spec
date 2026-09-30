@@ -206,7 +206,6 @@
 
 **Pre-conditions:**
 
-* The fee schedule's HKD bank transfer rule is 0% and HK$0.00.
 * An order in HKD in Preparing Invoice for bank transfer.
 * admin(operator with payment processing) opens Send invoice.
 
@@ -406,7 +405,7 @@
 **I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
-### post-sale-US5-TC13-1: The card fee starts from the schedule, follows the subtotal and is sent as typed
+### post-sale-US5-TC13-1: Grade10 computes the card fee, tracking the subtotal until send
 
 **Classification:**
 
@@ -423,26 +422,23 @@
 
 **Pre-conditions:**
 
-* The fee schedule's HKD card rule is 3.4% and HK$2.35.
+* The HKD card rule is 3.4% and HK$2.35.
 * An order in HKD in Preparing Invoice for card, with a winning bid of 250000 and a buyer's premium of 50000 minor units.
-* The payment provider cannot be reached.
 * admin(operator with payment processing) opens Send invoice.
 
 **Steps:**
 
 1. Type Shipping & Handling `80.00` and Insurance `40.00`, and read the fee and the total.
 2. Change Shipping & Handling to `120.00` and read them again.
-3. Type the fee `100.00`, then change Shipping & Handling back to `80.00`.
-4. Send the invoice.
+3. Send the invoice.
 
 **Expected Results:**
 
-* At a subtotal of 312000 the fee reads 11225 and the total 323225 minor units in HKD.
+* At a subtotal of 312000 the fee reads 11225, read-only, and the total 323225 minor units in HKD.
 * At 316000 the fee reads 11366 and the total 327366.
-* Once typed, the fee stays at 10000 as the subtotal moves, with the schedule's 11225 and a way to use it shown beside it.
-* The send succeeds, and the invoice is `pending` with a fee of 10000 and a total of 322000 minor units in HKD.
+* The send succeeds, and the invoice is `pending` with a fee of 11366 and a total of 327366 minor units in HKD.
 
-### post-sale-US5-TC14-1: No rule leaves the fee empty and required
+### post-sale-US5-TC14-1: No card rule refuses the send
 
 **Classification:**
 
@@ -459,21 +455,19 @@
 
 **Pre-conditions:**
 
-* The fee schedule holds no USD card rule.
+* Payment Settings holds no USD card rule.
 * An order in USD in Preparing Invoice for card.
 * admin(operator with payment processing) opens Send invoice.
 
 **Steps:**
 
-1. Enter Shipping & Handling and read the fee.
-2. Send with the fee empty.
-3. Enter the fee `0.00` and send.
+1. Read the fee.
+2. Send.
 
 **Expected Results:**
 
-* The fee starts empty.
-* The empty send is refused with a sentence saying the fee is needed, and the dialog stays open.
-* The send with a fee of `0.00` is accepted, and the invoice carries a fee of 0.
+* No fee shows; the field offers nothing to type.
+* The send is refused with `CARD_FEE_UNSET`, a sentence saying the USD card fee is not set, and a link to Payment Settings.
 
 ### post-sale-US5-TC15-1: A total that moved since it was read is refused
 
@@ -523,7 +517,7 @@
 
 **Pre-conditions:**
 
-* The fee schedule's HKD card rule is 3.4% and HK$2.35.
+* The HKD card rule is 3.4% and HK$2.35.
 * An order in HKD in Preparing Invoice for card, with a subtotal of 312000 minor units once Shipping & Handling and Insurance are entered.
 * admin(operator with payment processing) works in Hong Kong time, and the clock reads 2026-09-12T09:00:00Z.
 
@@ -661,7 +655,7 @@
 **I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
 **so that** a lot whose winner has not paid stops being an open-ended obligation.
 
-### post-sale-US7-TC32-1: A switch of method starts the fee from the new rule
+### post-sale-US7-TC32-1: A method switch on reissue prices the fee by the new method
 
 **Classification:**
 
@@ -678,19 +672,21 @@
 
 **Pre-conditions:**
 
-* The fee schedule holds HKD card 3.4% and HK$2.35, and HKD bank transfer 0% and HK$0.00.
+* The HKD card rule is 3.4% and HK$2.35.
 * An order in Pending Payment whose card invoice has a subtotal of 312000 and a fee of 11225 minor units in HKD.
 * admin(operator with payment processing) opens Reissue.
 
 **Steps:**
 
 1. Switch the method to bank transfer, and read the fee and the two totals.
-2. Switch back to card, raise Shipping & Handling so the subtotal is 316000, and read the fee and what is shown beside it.
+2. Type a bank transfer fee of `50.00`.
+3. Switch back to card, raise Shipping & Handling so the subtotal is 316000, and read the fee.
 
 **Expected Results:**
 
-* On bank transfer the fee reads 0, the previous total 323225 and the new total 312000.
-* Back on card the fee reads 11225, from the current invoice, with the schedule's 11366 shown beside it.
+* On bank transfer the fee reads empty, which is zero, the previous total 323225 and the new total 312000.
+* Once typed, the bank transfer fee reads 5000.
+* Back on card the fee reads 11366, computed from the HKD card rule, read-only.
 
 ### post-sale-US7-TC33-1: Record payment starts at the balance and says what the payment does
 

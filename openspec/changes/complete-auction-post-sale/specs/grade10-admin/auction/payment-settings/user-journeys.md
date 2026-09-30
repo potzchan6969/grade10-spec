@@ -1,10 +1,10 @@
 ## ADDED User journeys
 
-### grade10-admin-auction-payment-settings-US-02: Finance keeps the payment processing fee schedule
+### grade10-admin-auction-payment-settings-US-02: Finance keeps the Stripe card fee rule
 
 **As a** finance operator,
-**I want** to set, per currency, the card and the bank transfer rule each invoice's processing fee starts from,
-**so that** the fee an operator quotes covers what the payment costs Grade10 without anyone working it out by hand.
+**I want** to set, per currency, the card rule that prices a card invoice's processing fee,
+**so that** a card invoice's fee always covers what Stripe takes, without an operator working it out by hand.
 
 ## MODIFIED User journeys
 
