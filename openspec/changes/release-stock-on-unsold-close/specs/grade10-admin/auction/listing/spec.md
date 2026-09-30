@@ -4,10 +4,10 @@
 Lets an authorized Grade10 operator draft, create, and publish an Auction
 listing — incomplete saves first, required fields enforced at create, publish
 now or at a future scheduled time — with an ordered gallery of one to eight
-images or videos (originals stored and served as uploaded), call one off
-while it has not closed, and get a lot's stock back, with a one-step Relist, when
-its listing closes with no winner. Named image sizes and optional alt live in
-`grade10-site/auction/listing-media`.
+images or videos from product assets or direct uploads, frozen when saved,
+call one off while it has not closed, and get a lot's stock back, with a
+one-step Relist, when its listing closes with no winner. Named image sizes and
+optional alt live in `grade10-site/auction/listing-media`.
 
 ## Feature set
 
@@ -53,7 +53,7 @@ its listing closes with no winner. Named image sizes and optional alt live in
 - Unsold close
   - Stock released: a listing that closes with no winner releases its inventory hold at the close, with no operator step
   - Released note: an Unsold listing says its stock was released, and when
-  - Relist: an Unsold listing opens a new draft with the same product, quantity and catalogue copy
+  - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Earlier holds freed: holds left by earlier Unsold closes are released once
 
 ## ADDED Requirements
@@ -95,6 +95,15 @@ inventory hold at that close and SHALL NOT wait for an operator.
 - **AND** the release is retried until it succeeds, and then the reservation is
   closed once
 
+#### Scenario: grade10-admin-auction-listing-SC-146 - A close with only outbid bids releases the hold
+**Serves:** grade10-admin-auction-listing-US-09 - the operator finds the stock back without a step
+
+- **GIVEN** a published listing with an active hold of two units whose bids
+  are all `outbid`, its top bid demoted before the close
+- **WHEN** the listing closes
+- **THEN** the listing is Unsold and its hold is released in full
+- **AND** the product's available rises by two
+
 ### Requirement: An Unsold listing says its stock was released
 
 The admin page of a listing that closed with no winner SHALL show that its stock
@@ -110,26 +119,55 @@ completed.
 
 ### Requirement: Relist opens a new draft from an Unsold listing
 
-An Unsold listing SHALL offer **Relist** to an operator who holds the
-`auction:operate` grant, and to nobody else. No other listing SHALL offer it.
+The Listings table row of an Unsold listing SHALL offer **Relist** when every
+condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
+
+| Condition | Rule |
+| --- | --- |
+| Stock | The listing's stock release has completed |
+| Campaign | The listing sits in no campaign |
+| Relisted | No listing has yet been saved from this listing's Relist |
+| Operator | Holds the `auction:operate` grant |
 
 1. Relist SHALL open the listing editor filled in with the Unsold listing's
-   product, quantity, Cert ID choice, title, copy, price, currency and gallery.
-2. The editor SHALL start with no slug, listing code or window.
-3. Nothing SHALL be stored until the operator saves.
-4. Saving is an ordinary draft save.
+   product, quantity, Cert ID choice, title, copy, starting price, currency and
+   gallery.
+2. The editor SHALL start with no slug, listing code or window; every other
+   field SHALL start as on any new draft.
+3. Nothing SHALL be stored and no stock SHALL be held until the operator saves.
+   Relist activated again SHALL open another unsaved editor.
+4. Save SHALL be an ordinary draft save that records which listing it was
+   relisted from, and the Unsold listing SHALL NOT change.
 
 The gallery SHALL be copied into the new listing, so later edits to either
 gallery do not change the other.
 
+Save SHALL be refused, storing nothing and holding no stock, when the source
+listing:
+
+| Refused when the source | Refusal |
+| --- | --- |
+| Does not exist | Listing not found |
+| Did not close with no winner | Not Unsold |
+| Sits in a campaign | In a campaign |
+| Has no completed stock release | Stock not released |
+| Already has a listing saved from its Relist | Already relisted |
+
+The editor SHALL show the refusal's name inline.
+
+Every refusal of an ordinary draft save, such as available stock below the
+quantity, SHALL apply as well.
+
 #### Scenario: grade10-admin-auction-listing-SC-135 - Relist opens the editor with the lot filled in
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
-- **GIVEN** an Unsold listing with a product, a Cert ID choice, quantity three,
-  a title, copy, a price, a currency and a two-item gallery
-- **WHEN** an operator holding `auction:operate` activates Relist
+- **GIVEN** an Unsold listing in no campaign whose stock was released, with a
+  product, a Cert ID choice, quantity three, a title, copy, a starting price, a
+  currency and a two-item gallery
+- **WHEN** an operator holding `auction:operate` activates Relist on its row in
+  the Listings table
 - **THEN** the editor shows the same product, Cert ID choice, quantity, title,
-  copy, price, currency and both gallery items
+  copy, starting price, currency and both gallery items
 - **AND** it has no window, slug or listing code yet
 
 #### Scenario: grade10-admin-auction-listing-SC-136 - Relist stores nothing until Save
@@ -139,23 +177,67 @@ gallery do not change the other.
   available five and quantity three
 - **WHEN** the operator leaves without saving
 - **THEN** no listing is stored and available is unchanged
-- **AND** when the operator instead saves, a new draft holds three units and
-  available falls by three
+- **AND** when the operator instead saves, a new draft holds three units,
+  available falls by three and the Unsold listing is unchanged
 
-#### Scenario: grade10-admin-auction-listing-SC-137 - Relist is offered on an Unsold listing only
+#### Scenario: grade10-admin-auction-listing-SC-137 - Relist shows on the row of a released Unsold listing only
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
-- **GIVEN** an Unsold listing whose hold was released, a listing with a winner,
-  a live listing and a called-off listing
-- **WHEN** an operator holding `auction:operate` opens each
-- **THEN** only the Unsold listing offers Relist and says its stock was released
+- **GIVEN** listings in no campaign: an Unsold listing whose stock was
+  released, a listing with a winner, a live listing and a called-off listing
+- **WHEN** an operator holding `auction:operate` opens the Listings table
+- **THEN** only the Unsold listing's row offers Relist
 
 #### Scenario: grade10-admin-auction-listing-SC-138 - An operator without the grant is not offered Relist
 **Serves:** grade10-admin-auction-listing-US-09 - only an operator who can operate auctions relists
 
-- **GIVEN** an Unsold listing and an operator without `auction:operate`
-- **WHEN** they open the listing
-- **THEN** Relist is not shown
+- **GIVEN** an Unsold listing in no campaign whose stock was released, and an
+  operator without `auction:operate`
+- **WHEN** they open the Listings table
+- **THEN** the listing's row shows no Relist
+
+#### Scenario: grade10-admin-auction-listing-SC-141 - Relist waits for the stock release
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing in no campaign whose stock release has not yet
+  completed
+- **WHEN** an operator holding `auction:operate` opens the Listings table
+- **THEN** the listing's row shows no Relist
+- **AND** once the release completes, the row offers Relist
+
+#### Scenario: grade10-admin-auction-listing-SC-142 - A listing in a campaign offers no Relist
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing in a campaign whose stock was released
+- **WHEN** an operator holding `auction:operate` opens the Listings table
+- **THEN** the listing's row shows no Relist
+
+#### Scenario: grade10-admin-auction-listing-SC-143 - Relist is hidden once the listing is relisted
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing whose Relist editor was saved as a new draft
+- **WHEN** an operator holding `auction:operate` opens the Listings table
+- **THEN** the Unsold listing's row shows no Relist
+
+#### Scenario: grade10-admin-auction-listing-SC-144 - Only the first of two Relist editors saves
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** two editors opened by Relist on the same Unsold listing, of a
+  product with available five and quantity three
+- **WHEN** the operator saves the first and then the second
+- **THEN** the first stores a draft holding three units
+- **AND** the second is refused as already relisted, stores nothing and
+  available stays two
+
+#### Scenario: grade10-admin-auction-listing-SC-145 - Save refuses a source that cannot be relisted
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** a listing with a winner, an Unsold listing in a campaign, and an
+  Unsold listing whose stock release has not completed
+- **WHEN** a relist save names each as its source
+- **THEN** each is refused, as not Unsold, in a campaign and stock not released
+  in turn
+- **AND** no listing is stored and available is unchanged
 
 ### Requirement: Holds left by earlier Unsold closes are released once
 

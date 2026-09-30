@@ -91,3 +91,9 @@ product rows separately from stock, then mark valid products created,
 catalogue product,
 **so that** Auction operators can begin a listing with material already
 prepared for that product.
+
+### grade10-admin-inventory-catalog-US-09: Inventory admin sees unsold auction stock come back
+
+**As an** inventory admin,
+**I want** the stock of an auction that closed with no winner to show as available, with the hold closed and the listing named on the product page and in the history,
+**so that** I can trust the count and see why it moved.

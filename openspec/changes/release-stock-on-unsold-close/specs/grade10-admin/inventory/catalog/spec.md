@@ -50,9 +50,88 @@
   - Live values: Auction reads the selected unit through Inventory
 - Unsold auction stock
   - Released hold: the hold of a listing that closed with no winner reads closed and released on the product page, and available rises by its units
-  - Named in history: the history entry says the Unsold close, or the clean-up of an earlier one, released it
+  - Named in history: the release's remarks say an Unsold listing released it, at the close or in the clean-up of an earlier one
+  - Holder and remarks: every history entry shows when, with date and time, its holder by listing code and title, and its remarks
 
 ## MODIFIED Requirements
+
+### Requirement: Reservation record fields
+
+A reservation SHALL be a **product-level** hold for one consumer classified by
+**`holder_kind`**. `holder_kind` SHALL be `grade10-auction`, `grade10-vault`,
+or `admin` and SHALL be an explicit stored field — Grade10 SHALL NOT infer kind
+from `holder_reference`. Each reservation belongs to the product's single
+inventory row.
+
+| Field | Rules |
+| --- | --- |
+| Id | Unique, system-minted, immutable |
+| Product id | Required and immutable |
+| Inventory id | Required; FK to the product's one inventory |
+| Holder kind | `grade10-auction`, `grade10-vault`, or `admin`, immutable |
+| Holder reference | Non-empty business reference, immutable; holder apps supply their own; admin reserves mint `admin-<uuid>` server-side |
+| Remarks | Trimmed text, may be empty |
+| Holder label | Optional text naming the hold to a reader; the holder app may send one with any reserve, adjust, change-product or release, which replaces the stored label; a write that sends none leaves it. Auction sends `<listing code> · <title>`, leaving out a part the listing lacks. Null for `admin` holds |
+| Quantity | Current hold size; 1–500; changed only by adjust and set on reserve |
+| Remaining | Still reserved; active when > 0 |
+| Sold | Sold from this hold (Auction) |
+| Vaulted | Vaulted from this hold (Vault) |
+| Released | Released back to available |
+| Status | `active` or `closed` |
+| Created at | Set on reserve, immutable |
+| Updated at | Set on every successful reservation mutation |
+
+`quantity = remaining + sold + vaulted + released` at all times. Header
+remaining and inventory `reserved` SHALL stay equal under lock.
+
+When reserving, Grade10 SHALL refuse if the product's status is not `created`.
+While any reservation is `active` under the same `(holder_kind,
+holder_reference)`, that pair SHALL be unique. For `grade10-auction` and
+`grade10-vault`, retrying the same product and quantity under that active pair
+SHALL return the existing active reservation; a retry with a differing payload
+SHALL be refused. For `admin`, each reserve SHALL mint a new unique
+`holder_reference` and SHALL create a new active reservation. After the
+reservation is `closed`, the same kind and reference MAY create a new
+reservation (holder apps only; admin references are not reused).
+
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-pax rev=1 -->
+#### Scenario: grade10-admin-inventory-catalog-SC-14 - Auction reserves a quantity
+**Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
+
+- **GIVEN** a **created** product with available three
+- **WHEN** Auction reserves quantity two with holder reference `listing-42`
+- **THEN** one active reservation records `holder_kind` `grade10-auction`, quantity two,
+  and remaining two
+- **AND** reserved increases by two while stock and derived ledger remain
+  unchanged
+
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-w3w rev=1 -->
+#### Scenario: grade10-admin-inventory-catalog-SC-15 - Same active reference retries idempotently
+**Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
+
+- **GIVEN** Auction already has an active reservation of quantity two under
+  holder reference `listing-42`
+- **WHEN** Auction repeats the same reservation request
+- **THEN** Grade10 returns the existing reservation
+- **AND** reserved count and history do not change
+
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hef rev=1 -->
+#### Scenario: grade10-admin-inventory-catalog-SC-16 - Closed reference may reserve again
+**Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
+
+- **GIVEN** an Auction reservation under holder reference `listing-42` is closed
+- **WHEN** Auction reserves again with the same reference, product, and quantity
+- **THEN** a new active reservation is created
+- **AND** reserved increases by the new quantity
+
+#### Scenario: grade10-admin-inventory-catalog-SC-140 - A holder label follows the holder's latest write
+**Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees which listing held the stock
+
+- **GIVEN** Auction reserves quantity two with holder label `7KQ2P · Charizard`
+- **WHEN** Auction adjusts it to quantity three with holder label
+  `7KQ2P · Charizard PSA 10`, and later releases one with no label
+- **THEN** the reservation's holder label reads `7KQ2P · Charizard PSA 10`
+- **AND** its holder reference is unchanged
 
 ### Requirement: Change history fields identify every transition
 
@@ -72,7 +151,7 @@ entry in the same transaction. Each entry SHALL carry:
 | Reservation id | Required for reserve, adjust, change-product, release, sell-from-reservation, vault-from-reservation; null otherwise |
 | Sold total price | Positive integer minor units for sell / sell-from-reservation; null otherwise |
 | Sold currency | ISO 4217 code for sell / sell-from-reservation; null otherwise |
-| Reason | Required for withdraw; optional remarks for intake; `unsold close` or `unsold clean-up` on a release Auction makes for a listing that closed with no winner; null otherwise |
+| Reason | The entry's remarks. Required for withdraw; optional for intake; on a release Auction makes for a listing that closed with no winner, `Released by unsold listing` at its close and `Released by unsold listing (clean-up)` from the one-off release of an earlier close; null otherwise |
 | Before | Canonical snapshot immediately before; null for product-create |
 | After | Canonical snapshot immediately after |
 
@@ -197,15 +276,16 @@ audit.
 - **AND** before and after show product A reserved decreasing by three and
   product B reserved increasing by three
 
-#### Scenario: grade10-admin-inventory-catalog-SC-136 - An Unsold release names its reason and listing
+#### Scenario: grade10-admin-inventory-catalog-SC-136 - An Unsold release carries its remarks and the listing's label
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees why the stock came back
 
-- **GIVEN** Auction holds an active reservation of two for a listing that
-  closes with no winner
+- **GIVEN** Auction holds an active reservation of two for listing `7KQ2P`,
+  titled `Charizard PSA 10`, which closes with no winner
 - **WHEN** Auction releases it at the close
 - **THEN** one `release` change records quantity two, the reservation id and
-  the reason `unsold close`
-- **AND** its reservation snapshot names the listing
+  the reason `Released by unsold listing`
+- **AND** its reservation snapshot carries the holder label
+  `7KQ2P · Charizard PSA 10`
 
 #### Scenario: grade10-admin-inventory-catalog-SC-137 - The clean-up release reads differently from the close
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees why the stock came back
@@ -214,7 +294,7 @@ audit.
   closed with no winner before the release shipped
 - **WHEN** the one-off release frees it
 - **THEN** one `release` change records quantity five and the reason
-  `unsold clean-up`
+  `Released by unsold listing (clean-up)`
 
 #### Scenario: grade10-admin-inventory-catalog-SC-138 - A call-off release keeps no reason
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -230,16 +310,64 @@ audit.
 
 The product page's reservations table SHALL keep an Auction hold released for a
 listing that closed with no winner, showing it as closed with its released
-quantity and naming the listing by title and listing code. Available SHALL
-include its units. Other holds SHALL be unchanged.
+quantity and naming the listing by its holder label. Available SHALL include
+its units. Other holds SHALL be unchanged.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-139 - The product page shows the hold released
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees unsold stock come back
 
-- **GIVEN** a created product with stock ten, an Auction hold of four for a
-  listing that has just closed with no winner, and an active Vault hold of one
+- **GIVEN** a created product with stock ten, an Auction hold of four for
+  listing `7KQ2P`, titled `Charizard PSA 10`, that has just closed with no
+  winner, and an active Vault hold of one
 - **WHEN** an authorized inventory admin opens the product page
 - **THEN** available reads nine and reserved reads one
-- **AND** the Auction hold reads closed with released four and names the
-  listing by title and listing code
+- **AND** the Auction hold reads closed with released four, and its Reference
+  reads `7KQ2P · Charizard PSA 10`
 - **AND** the Vault hold is still active
+
+### Requirement: The product page and history name each hold's holder
+
+The reservations table's **Reference** SHALL show a reservation's holder label
+when it has one, else its holder reference.
+
+Every change history entry on the product page SHALL show:
+
+| Column | Shows |
+| --- | --- |
+| When | The date and time the entry occurred |
+| Action | The entry's action |
+| Quantity | The entry's quantity |
+| Actor | The entry's actor |
+| Holder | The holder kind, read as Auction, Vault or Admin, of the reservation the entry moved, followed by its holder label, else its holder reference, as its after snapshot holds them, else its before snapshot; `—` for an entry with no reservation |
+| Remarks | The entry's reason; `—` when it has none |
+
+The words Auction, Vault and Admin SHALL be the page's; the stored holder kind
+and holder reference SHALL be unchanged.
+
+#### Scenario: grade10-admin-inventory-catalog-SC-141 - An Unsold release names its holder and remarks in the history
+**Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees why the stock came back
+
+- **GIVEN** a product whose Auction hold of two for listing `7KQ2P`, titled
+  `Charizard PSA 10`, was released at an Unsold close
+- **WHEN** an authorized inventory admin opens the product's change history
+- **THEN** the release entry shows its date and time, `release`, quantity two
+  and the Auction actor
+- **AND** its Holder shows `Auction` and
+  `7KQ2P · Charizard PSA 10`, and its Remarks read `Released by unsold listing`
+
+#### Scenario: grade10-admin-inventory-catalog-SC-142 - An entry with no hold and no remarks shows dashes
+**Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
+
+- **GIVEN** a product with one `product-update` entry
+- **WHEN** an authorized inventory admin opens the product's change history
+- **THEN** that entry's Holder and Remarks each read `—`
+
+#### Scenario: grade10-admin-inventory-catalog-SC-143 - A hold with no label is named by its reference
+**Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
+
+- **GIVEN** a product with an active Vault hold under holder reference
+  `vault-7` and no holder label
+- **WHEN** an authorized inventory admin opens the product page
+- **THEN** the hold's Reference reads `vault-7`
+- **AND** its `reserve` entry's Holder shows `Vault` and
+  `vault-7`

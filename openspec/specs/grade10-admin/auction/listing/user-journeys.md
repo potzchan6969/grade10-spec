@@ -60,3 +60,9 @@ its configured identity,
 **I want** to see how many collectors watch a listing from its Stats dialog,
 **so that** I can judge interest beside the bidder count without a second
 surface for the same figure.
+
+### grade10-admin-auction-listing-US-09: Operator lists an unsold lot again
+
+**As an** auction operator,
+**I want** the stock of a listing that closed with no winner to come back on its own, and a Relist on that listing,
+**so that** a card nobody bought goes back on sale without me hunting for its stock.

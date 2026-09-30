@@ -1,0 +1,134 @@
+{
+  "version": 2,
+  "change": "release-stock-on-unsold-close",
+  "baseline": "de7e281449ca75911d5f4040f7eb1f41cb5f20f3d787459a42719b4053028729",
+  "fingerprint": "5c2eb910157dcaf1e3220a7ef2b87b20658339b8c555f504ac8b2bf7dfdf2f4d",
+  "reviewedBy": "@mason5991",
+  "acceptedAt": "2026-09-30T16:44:48.071Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "224807b43d8108e94cbb405272d84bde8b54a871e7058bc6f107f7f8c4af625a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/catalog.md#intake",
+      "sha256": "6d97276b25e7141da5794d0ccf34dcf029e893f3802d8c713fe1d67f28f78c68",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/decisions.md",
+      "sha256": "3e6d9c9ad82e0fca4d6340f5db1190fc6361acc5183d0268e300d8a2b54c3458",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/proposal.md",
+      "sha256": "11c6c69f4996605b627a6c53b9c12c41f6987f84ff75ef3b8d8ffc12c1e60180",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "306000374410fdfdb8ba3aa80bce84a0a358e71a07a71f22d2a83a3d306e12dc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "1f0f0f123eac60e138c9776f575c3a6562afef68b892a0c7f07a009e646e07ca",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "77221d492767e90f4173c80fff440454a794df72811b120cf8744c3402819120",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "a5df3ec7e61e2895beb784ac18169c13c87f97bbf4a6a7618b090ca64a1335a0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "ff2aba842477d99201ab107b9b339bae3997d3c1906ee3cf3a11ef2aa3d8aa31",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "02f60bbe71c30aa60db463fe7c99780f3d5394fb9c27d3f5a79c13cdd01e296e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-stock-on-unsold-close/tech-design.md",
+      "sha256": "4ce7654dd21ba96166d02a6a4995afe3337e87a86106c4ffda5f0e01d98dd8fd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "4eeaa9db543e963d17eb8cc05cc237b0e2cfbebb1a1f54ca121aa83e758a178f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "74466ef95828a2c08d425b816d3aeb8ba5d5ebb091cdc94ad107f8a0eee58e0e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "d869fa570846f57734a3a64b1dc1eb39f02becd953424a16e70254e58030bea8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "0986e654d948350b0a2dcd9a0edbdb2a265ca0d41c98074451b56635ba69aefe",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "59eee5657cf35fc75574c3a9f12283fc997262046de8bc4bc94480fc8025d986",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "e295801050844d9010a6c516683ceca6ac3f89ecd3beb28ce7ad488c722c1b4e",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An Unsold close releases the listing's inventory hold",
+        "Requirement: An Unsold listing says its stock was released",
+        "Requirement: Holds left by earlier Unsold closes are released once",
+        "Requirement: Relist opens a new draft from an Unsold listing"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Change history fields identify every transition",
+        "Requirement: Reservation record fields",
+        "Requirement: The product page and history name each hold's holder",
+        "Requirement: The product page shows an Unsold hold as released"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

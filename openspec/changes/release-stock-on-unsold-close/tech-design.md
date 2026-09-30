@@ -48,9 +48,8 @@
 
 The [listing delta](specs/grade10-admin/auction/listing/spec.md) and the
 [catalog delta](specs/grade10-admin/inventory/catalog/spec.md) govern this
-change. The decisions below that move Relist, the release remarks and the
-history columns are on both manual pages as 🚧 lines. Their deltas wait on
-the PM (`awaiting: specs`).
+change. Relist, the release remarks and the history columns follow Q10, Q13
+and Q14.
 
 ### Release
 
@@ -115,7 +114,7 @@ the PM (`awaiting: specs`).
 - **History columns** - `ChangeHistoryDialog.tsx` shows When (date and time),
   Action, Quantity, Actor, Holder and Remarks. Holder reads the entry's
   `after.reservation`, else `before.reservation`: its `holderLabel`, else its
-  `holderReference`, prefixed by the holder kind; `—` for an entry with no
+  `holderReference`, prefixed by the holder kind as Auction, Vault or Admin (Q16); `—` for an entry with no
   reservation. Remarks reads `reason`, else `—`. Both are read from the
   snapshot already stored, so no changelog column is added.
 - **Product page** - the reservations table's Reference cell shows
@@ -145,10 +144,10 @@ the PM (`awaiting: specs`).
   - Rejected: a `relist` mutation that stores the draft on the press. It
     leaves half-made drafts and a hold nobody asked for.
 - **What the editor fills** - it reads `listings.get(relistOf)` and fills the
-  product, Cert ID choice, quantity, title, copy, starting price, currency,
-  listing attributes, categories and gallery. Start, close, publish, slug and
-  listing code start empty, as on any new draft; campaign, listing label,
-  sort index, extension and sandbox start at a new draft's defaults. The
+  product, Cert ID choice, quantity, title, copy, starting price, currency and
+  gallery - Q6. Start, close, publish, slug and listing code start empty, as on
+  any new draft; campaign, categories, listing attributes, listing label, sort
+  index, extension and sandbox start at a new draft's defaults. The
   gallery shows the source's items by reference until Save.
 - **Save** - `listings.save` gains optional `relistOf`, accepted only when no
   `listingId` is given. The service loads the source and refuses in this
