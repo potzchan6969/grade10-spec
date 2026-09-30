@@ -166,6 +166,9 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **The record takes the application repository** — a group's repository
   tag says where its test paths live, and the landing resolves them in the
   application clone it runs beside
+- 🚧 **A case names a grade10 test by its tag** — a case a test or a walk in the
+  application repository decides names it `grade10:<path>`; the store checks
+  the form, and the application repository checks the file on every push
 - 🚧 **The cited test carries the id** — a row, or a suite's Manual row, that
   credits a test the file does not cite is refused
 - 🚧 **A walk's ids are signed** — in the application repository, a walk that

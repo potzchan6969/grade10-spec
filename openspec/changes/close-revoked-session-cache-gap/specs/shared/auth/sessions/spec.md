@@ -4,7 +4,7 @@
   - One account: an operator with `session:list` lists sessions by user id, never the secret
 - Revoke
   - One or all: a revoke ends that session; revoking every session is allowed; revoking the current one signs the operator out
-  - Closes on the next read: even a cached browse read stops answering signed in, not only a mutation or an elevated call
+  - Closes within 70 seconds: even a cached browse read stops answering signed in, not only a mutation or an elevated call
 
 ## MODIFIED Requirements
 
@@ -14,7 +14,8 @@ The system SHALL let a caller revoke a session, or every session of an
 account, only when they hold `session:revoke`. A revoked session SHALL NOT
 be treated as signed in. A revoked session SHALL NOT be treated as signed
 in on an ordinary cached read either, not only on a mutation or an elevated
-call; this SHALL hold from the next read that starts after the revoke. A
+call; this SHALL hold for every read that starts 70 seconds or more after
+the revoke. A
 money-moving action on a revoked session SHALL re-check identity and SHALL
 NOT complete. A caller SHALL NOT revoke a session of an account that holds
 `admin` unless the caller holds `admin`. A caller without the grant SHALL be
@@ -59,13 +60,14 @@ they are using, they are signed out.
 - **WHEN** they revoke the session they are using
 - **THEN** they are not signed in
 
-#### Scenario: shared-auth-sessions-SC-09 - A cached read closes on the next read after a revoke
+#### Scenario: shared-auth-sessions-SC-09 - A cached read closes within 70 seconds of a revoke
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
 - **GIVEN** an operator who holds `session:revoke`
 - **AND** a signed-in session whose signed cookie cache has not yet expired
 - **WHEN** they revoke that session
-- **THEN** the next ordinary browse read that starts after the revoke
-  reports no person, even though the cookie cache has not expired
+- **THEN** an ordinary browse read that starts 70 seconds or more after the
+  revoke reports no person, even though the cookie cache would not have
+  expired
 - **AND** a session of that account they did not revoke keeps answering
   signed in

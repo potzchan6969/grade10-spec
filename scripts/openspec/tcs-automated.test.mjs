@@ -246,6 +246,27 @@ test("shared-planning-agent-rounds-SC-78 - writes the status and the `**Decided 
   assert.match(result.stdout, new RegExp(`decided by ${DECIDER}`));
 });
 
+test("shared-planning-agent-rounds-SC-107 - writes a grade10 path as given", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const decider = "grade10:apps/frontend/grade10/e2e/tests/demo.spec.ts";
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    decider,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(
+    readFileSync(join(root, CHANGE_PATH), "utf8").includes(
+      `**Decided by:** \`${decider}\``,
+    ),
+  );
+});
+
 test("shared-planning-agent-rounds-SC-78 - refuses a flip of an in-flight change's case that names no path", () => {
   const root = sandbox({
     [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),

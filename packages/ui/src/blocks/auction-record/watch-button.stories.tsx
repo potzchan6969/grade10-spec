@@ -42,7 +42,7 @@ export const Watch: Story = {
   play: async ({ canvasElement }) => {
     watchPressed.mockClear();
     await userEvent.click(
-      within(canvasElement).getByRole("button", { name: "Watch this lot" }),
+      within(canvasElement).getByRole("button", { name: "Watch this auction" }),
     );
     expect(watchPressed).toHaveBeenCalled();
   },
@@ -117,11 +117,11 @@ export const WatchAnnounces: Story = {
     const body = within(document.body);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Watch this lot" }),
+      canvas.getByRole("button", { name: "Watch this auction" }),
     );
     await waitFor(() =>
       expect(
-        body.getByText("Email alerts on for this lot"),
+        body.getByText("Email alerts on for this auction"),
       ).toBeInTheDocument(),
     );
     await userEvent.click(
@@ -145,19 +145,19 @@ export const UnwatchAnnounces: Story = {
     const body = within(document.body);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Unwatch this lot" }),
+      canvas.getByRole("button", { name: "Unwatch this auction" }),
     );
     await waitFor(() =>
-      expect(body.getByText("Unwatched this lot")).toBeInTheDocument(),
+      expect(body.getByText("Unwatched this auction")).toBeInTheDocument(),
     );
     expect(
-      body.getByText("Email alerts for this lot are off too."),
+      body.getByText("Email alerts for this auction are off."),
     ).toBeInTheDocument();
     await userEvent.click(body.getByRole("button", { name: "Undo" }));
     expect(undoUnwatch).toHaveBeenCalled();
     await waitFor(() =>
       expect(
-        canvas.getByRole("button", { name: "Unwatch this lot" }),
+        canvas.getByRole("button", { name: "Unwatch this auction" }),
       ).toBeVisible(),
     );
   },

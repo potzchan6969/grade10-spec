@@ -62,8 +62,8 @@
 | --- | --- |
 | <order_1> | A Delivered order whose lot closed yesterday |
 | <order_2> | A Pending Payment order whose lot closed last week |
-| <order_3> | A Processing order whose lot closed yesterday |
-| <order_4> | A Processing order whose lot closed last week |
+| <order_3> | A Preparing Shipment order whose lot closed yesterday |
+| <order_4> | A Preparing Shipment order whose lot closed last week |
 
 **Steps:**
 
@@ -103,7 +103,7 @@ Runs once per row of **Test data**.
 | Pending Payment | pending | Pay Invoice |
 | Pending Payment | expired | View detail; Contact Us in detail |
 | Preparing Invoice | not_issued | View detail |
-| Processing | paid | View detail |
+| Preparing Shipment | paid | View detail |
 | Shipped | paid | View detail |
 | Delivered | paid | View detail |
 | Cancelled | cancelled | View detail |

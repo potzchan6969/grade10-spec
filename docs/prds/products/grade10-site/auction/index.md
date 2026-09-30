@@ -81,7 +81,7 @@ lot is its own capability.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Auction unit | Decided | A **listing** is one lot and the sole term in every spec and the operator queue; collectors read **lot**. | Product |
+| Auction unit | Decided | A **listing** is one auction item and the sole term in every spec and the operator queue; collectors read **auction**. | Product |
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
 | One auction, two brands | Decided | A card is auctioned once, and Grade10 and ZZZ collectors bid on the same lot. Identities, sessions and money never cross; a display says Bidder 4, never a name. | Product |
 | Currencies | Decided | USD, HKD and JPY, one per lot, each with a Grade10-owned increment schedule. | Product |

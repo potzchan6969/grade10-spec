@@ -35,7 +35,7 @@ separate preference — see `grade10-site/auction/watchlist`.
 - Delivery
   - Registered email: every message goes to the account email
   - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer; brand mark opens the storefront home; outbound links carry campaign tags
-  - Stop email alerts: letters say alerts are on for the lot, then **Manage alerts** → My Auctions (sign-in first when signed out)
+  - Stop email alerts: letters say alerts are on for the auction, then **Manage alerts** → My Auctions (sign-in first when signed out)
   - Failed send: a temporary failure is retried; a permanent one stops; a false statement is not sent
   - Call-off suppresses: a called-off listing sends nothing further
   - Send log: type, recipient email, listing, and Sent At — no body — filterable by email
@@ -72,7 +72,7 @@ still receive it when alerts are on.
 **Serves:** grade10-site-auction-notifications-US-04 - Collector hears a new bid on a lot they bid on
 
 - **GIVEN** a collector who has bid on a lot and does not watch it
-- **AND** email alerts are on for that lot
+- **AND** email alerts are on for that auction
 - **WHEN** another collector bids on that lot
 - **THEN** Grade10 sends them the new-bid message
 
@@ -81,7 +81,7 @@ still receive it when alerts are on.
 **Serves:** `grade10-site-auction-notifications-US-01`, `grade10-site-auction-notifications-US-02` - a watcher who also bids receives one copy
 
 - **GIVEN** a collector who both watches a lot and has bid on it
-- **AND** email alerts are on for that lot
+- **AND** email alerts are on for that auction
 - **WHEN** a message about that lot is sent
 - **THEN** they receive exactly one copy of it
 
@@ -90,7 +90,7 @@ still receive it when alerts are on.
 **Serves:** `grade10-site-auction-notifications-US-02`, `grade10-site-auction-notifications-US-04` - unwatching does not end bidder enrolment
 
 - **GIVEN** a collector who watched a lot and has bid on it
-- **AND** email alerts remain on for that lot after they unwatch
+- **AND** email alerts remain on for that auction after they unwatch
 - **WHEN** they unwatch it
 - **AND** another collector bids on that lot
 - **THEN** Grade10 still sends them the new-bid message
@@ -440,7 +440,7 @@ same; only these query parameters are added.
 
 A letter Grade10 sends about a listing SHALL include a way to stop further
 letters about that listing by turning email alerts off for it. The footer
-SHALL state that email alerts are on for that lot and SHALL offer a link
+SHALL state that email alerts are on for that auction and SHALL offer a link
 **Manage alerts** to the **My Auctions** page, where the collector mutes that
 listing's Email alerts control. A signed-out collector who activates
 **Manage alerts** SHALL be sent through the existing Grade10 sign-in flow

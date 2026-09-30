@@ -61,7 +61,7 @@ SELECT o.id,
     WHEN o.cancelled_at IS NOT NULL OR i.status = 'cancelled' THEN 'Cancelled'
     WHEN i.status = 'paid' AND o.delivered_at IS NOT NULL THEN 'Delivered'
     WHEN i.status = 'paid' AND o.dispatched_at IS NOT NULL THEN 'Shipped'
-    WHEN i.status = 'paid' THEN 'Processing'
+    WHEN i.status = 'paid' THEN 'Preparing Shipment'
     WHEN i.status = 'partially_paid' THEN 'Partially Paid'
     WHEN i.status = 'payment_verifying' THEN 'Payment Verifying'
     WHEN i.status = 'expired' THEN 'Payment Overdue'
@@ -92,7 +92,7 @@ Files under `packages/grade10-auction/contracts/src/`. `winnerOrder.ts` keeps th
 
 One list, used by the backend, the admin, the site and E2E:
 
-`Awaiting Setup`, `Setup Overdue`, `Preparing Invoice`, `Pending Payment`, `Payment Overdue`, `Partially Paid`, `Payment Verifying`, `Processing`, `Shipped`, `Delivered`, `Cancelled`, `Refunded`
+`Awaiting Setup`, `Setup Overdue`, `Preparing Invoice`, `Pending Payment`, `Payment Overdue`, `Partially Paid`, `Payment Verifying`, `Preparing Shipment`, `Shipped`, `Delivered`, `Cancelled`, `Refunded`
 
 Invoice statuses stay `pending`, `expired`, `partially_paid`, `payment_verifying`, `paid`, `cancelled`, `refunded`. "Awaiting Address" is renamed everywhere.
 
@@ -150,7 +150,7 @@ export const PROOF_LIMITS = {
 
 | Segment | Statuses |
 | --- | --- |
-| `needsAction` | Preparing Invoice, Payment Verifying, Processing, Setup Overdue, Payment Overdue, and any order with an open flag |
+| `needsAction` | Preparing Invoice, Payment Verifying, Preparing Shipment, Setup Overdue, Payment Overdue, and any order with an open flag |
 | `waitingOnWinner` | Awaiting Setup, Pending Payment, Partially Paid |
 | `inTransit` | Shipped |
 | `closed` | Delivered, Cancelled, Refunded |
@@ -502,8 +502,8 @@ Won rows offer Open order; lots still taking bids read Extended.
 
 `apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts`, seeded only through the admin `testWinners.create` procedure and signed in through the magic link read from `AuthDoor.readOutbox` in a fresh context:
 
-1. **Card** - create -> follow the link -> setup (card) -> admin sends the invoice with tax and fee (the totals match on both sides) -> Pay with Card -> the test posts a signed `checkout.session.completed` to `/webhooks/stripe/grade10` for the fake port's session -> the order reads Processing with the receipt -> Dispatch -> Shipped -> Confirm delivery -> Delivered with the proof
-2. **Bank** - create -> setup (bank transfer) -> invoice -> submit the proof -> admin Return with reasons -> the winner reads the reason and submits again -> admin Confirm -> Processing
+1. **Card** - create -> follow the link -> setup (card) -> admin sends the invoice with tax and fee (the totals match on both sides) -> Pay with Card -> the test posts a signed `checkout.session.completed` to `/webhooks/stripe/grade10` for the fake port's session -> the order reads Preparing Shipment with the receipt -> Dispatch -> Shipped -> Confirm delivery -> Delivered with the proof
+2. **Bank** - create -> setup (bank transfer) -> invoice -> submit the proof -> admin Return with reasons -> the winner reads the reason and submits again -> admin Confirm -> Preparing Shipment
 3. **Operator paths** - reissue with the deadline restarted (the old number searches, reads Replaced) -> record a partial payment -> cancel refused -> record the balance -> refund with destination and date -> Refunded
 
 With `STRIPE_SECRET_KEY_GRADE10_E2E` set the first journey drives real Checkout and the stripe-cli listener as today.

@@ -25,8 +25,7 @@ const AUCTION_RECORD_COPY = {
   emailAlertsColumn: "Email Alerts",
   noStanding: "--",
   emptyTitle: "No auctions yet",
-  emptyDescription:
-    "Watch an auction to come back to it here, or place a bid.",
+  emptyDescription: "Watch an auction to come back to it here, or place a bid.",
   browseCatalogue: "Browse auctions",
   openListing: "Open listing",
   openBidding: "Bid",
@@ -47,13 +46,13 @@ const LISTING_ROW_COPY = {
 
 const BIDDING_EMAIL_ALERTS_COPY = {
   label: "Email alerts",
-  onAriaLabel: "Turn off email alerts for this lot",
-  offAriaLabel: "Turn on email alerts for this lot",
+  onAriaLabel: "Turn off email alerts for this auction",
+  offAriaLabel: "Turn on email alerts for this auction",
   mutedToast: {
-    title: "Email alerts off for this lot",
+    title: "Email alerts off for this auction",
     description: "Your bid stands.",
   },
-  enabledToast: { title: "Email alerts on for this lot" },
+  enabledToast: { title: "Email alerts on for this auction" },
 };
 
 function biddingItem(
@@ -82,7 +81,7 @@ function watchingItem(
     emailAlertsCopy: {
       ...BIDDING_EMAIL_ALERTS_COPY,
       mutedToast: {
-        title: "Email alerts off for this lot",
+        title: "Email alerts off for this auction",
         description: "It stays on My Auctions.",
       },
     },
@@ -90,8 +89,8 @@ function watchingItem(
       watch: "Watch",
       watching: "Watching",
       unwatch: "Unwatch",
-      watchAriaLabel: "Watch this lot",
-      unwatchAriaLabel: "Unwatch this lot",
+      watchAriaLabel: "Watch this auction",
+      unwatchAriaLabel: "Unwatch this auction",
     },
     imageSrc: IMAGE,
     imageAlt: partial.title,
@@ -187,7 +186,7 @@ const WON_PROCESSING = biddingItem({
   id: "won-processing",
   title: "1999 Fossil Dragonite Holo PSA 9",
   state: "processing",
-  stateLabel: "Processing",
+  stateLabel: "Preparing Shipment",
   currentBid: "HK$4,200",
   closesAt: "Paid 18 Sep 2026",
   href: storyHref(WINNER_ORDER_PROCESSING_STORY_ID),

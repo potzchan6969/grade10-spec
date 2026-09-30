@@ -1,112 +1,122 @@
 ## Context
 
 `packages/grade10-auth/backend/src/createAuth.ts` (grade10) enables
-better-auth's `session.cookieCache` (`maxAge: 5 * 60`) with no `version`
-configured. While a request's signed `session_data` cookie is within that
-window, better-auth answers straight from the cookie payload — no KV or
-Postgres read at all (`better-auth/dist/api/routes/session.mjs`,
-`cookies/index.mjs`). The admin mutations that should end that answer —
-`/admin/ban-user`, `/admin/revoke-user-session(s)`, `/admin/set-role` — go
-through `securityHooks.ts`'s `before`/`after` hooks and better-auth's own
-admin plugin, which deletes the session's KV row (`internalAdapter.deleteSession`)
-or updates the user row, but never touches the cookie cache. The two settled
-requirements this closes: `shared/auth/sessions`, revoke; `shared/auth/users`,
-ban and set-role — all in the spec's `## MODIFIED Requirements`.
+better-auth's `session.cookieCache` (`maxAge: 5 * 60`). While a request's
+signed `session_data` cookie is within that window, better-auth answers
+straight from the cookie payload — no KV or Postgres read at all
+(`better-auth/dist/api/routes/session.mjs`). The admin mutations that should
+end that answer — `/admin/ban-user`, `/admin/revoke-user-session(s)`,
+`/admin/set-role` — go through `securityHooks.ts`'s `before`/`after` hooks
+and better-auth's admin plugin, which deletes the session's KV entry or
+rewrites every session entry of the account (`refreshUserSessions`), but
+never touches the cookie cache.
 
-better-auth's `cookieCache.version` option is unused today. It runs on every
-cached read (`cookies/index.mjs`) and at cache-mint time
-(`api/routes/session.mjs`), taking the cached `(session, user)` and returning
-a string; a mismatch against what is baked into the cookie forces a real
-`getSession` — KV, then Postgres if needed — instead of answering from the
-cookie.
+better-auth's `cookieCache.version` option runs on every cached read and at
+cache-mint time, taking the cached `(session, user)` and returning a string.
+A mismatch against the version baked into the cookie falls through to
+`findSession` — a KV read — and, when the session is still there, re-mints
+the cookie with the version current at that moment.
+
+Sessions live in edge KV (`secondaryStorage.ts`). A write is visible at once
+where it was made and within 60 seconds elsewhere
+(`docs/architecture/edge-cache.md`). The admin who acts and the person whose
+session it is are usually at different locations.
 
 ## Goals / Non-Goals
 
 **Goals:**
-- A cached read answers the cookie's baked-in version against a fresh,
-  cheap lookup, so a version bumped after the cookie was minted is caught on
-  the very next request.
+- A cached read compares the cookie's baked-in version with a cheap lookup,
+  so a version bumped after the cookie was minted is caught on that
+  location's next request.
+- Every location converges within 70 seconds (`decisions.md` Q5), including
+  one that sees the new version before it sees the change itself.
 - One mechanism covers ban, revoke (single or every session), and set-role.
 
 **Non-Goals:** as `decisions.md` already states — no change to `maxAge`, no
-per-session invalidation granularity, no account-deletion wiring in this
-change.
+per-session invalidation, no account-deletion wiring, no sessions off KV.
 
 ## Decisions
 
-**A per-user, opaque version token in KV — not a numeric counter, not a
-per-session key.**
+**A per-user, opaque version token in KV, stamped with when it was bumped.**
 
-- `packages/grade10-auth/backend/src/secondaryStorage.ts` gains two
-  functions: `bumpSessionVersion(storage, userId)` writes
-  `session-version:<userId>` to a fresh `crypto.randomUUID()`; **rejected:
-  a numeric counter** — Cloudflare KV has no atomic increment, and an opaque
-  token needs none: the check is equality, not ordering.
-- `currentSessionVersion(storage, userId)` reads that key, defaulting to a
-  constant (`"0"`) when unset, so an account nobody has ever banned/revoked/
-  set-role'd mints its first cookie against the same default every time.
-- **Keyed by user, not by session.** Revoking one session of an account
-  bumps every session's cache for that account. **Rejected: a per-session
-  version** — it would need its own key per session, doubling the surface
-  for one mechanism, for a cost that is already harmless: a sibling session
-  forced to revalidate is still genuinely valid, so it still answers signed
-  in — just via a fresh check instead of the cookie, once
+- `secondaryStorage.ts` gains `bumpSessionVersion(storage, userId)`, which
+  writes `session-version:<userId>` as `{ token: crypto.randomUUID(),
+  bumpedAt }`, and `currentSessionVersion(storage, userId)`, which reads it,
+  defaulting to `"0"` when unset. **Rejected: a numeric counter** — KV has no
+  atomic increment, and the check is equality, never ordering.
+- **Keyed by user, not by session.** Revoking one session revalidates every
+  session of that account. **Rejected: a per-session version** — a key per
+  session for a cost that is already harmless: a sibling session is still
+  valid, so it still answers signed in, through one fresh check
   (`shared-auth-sessions-SC-09`).
-- `createAuth.ts` wires
-  `session.cookieCache.version: (session, user) => currentSessionVersion(secondaryStorage, user.id)`.
+- `createAuth.ts` wires `session.cookieCache.version` to
+  `currentSessionVersion`.
 
-**Bump in the `before` hook, right after the permission check passes — not
-in `after`, and not by threading a value between them.**
+**Bump in the `after` hook, once the mutation succeeded, with the target
+resolved in `before`.**
 
-`securityHooks.ts`'s `before` hook already resolves the target `userId` for
-all four paths before it authorizes the call: `body.userId` directly for
-`/admin/ban-user`, `/admin/revoke-user-sessions`, `/admin/set-role`; via
-`userIdForSessionToken` for `/admin/revoke-user-session` (the single-session
-path, resolving the list's id to the real token). Bump there, once the
-`FAIL_CLOSED_PERMISSION` grant check passes.
+`before` already resolves the target `userId` for all four paths:
+`body.userId` for `ban-user`, `revoke-user-sessions` and `set-role`;
+`userIdForSessionToken` for `revoke-user-session`. It holds that id in a
+per-request slot inside `createSecurityHooks`, and `after` bumps it when
+the call did not fail. `createAuth()` runs once per request, so the slot is
+this request's alone — the same invariant `sentWatchId` already relies on
+between `sendMagicLink` and `after`.
 
-**Rejected: bump in the `after` hook**, gated on `!failed`, closer to how
-audit logging already works there. Two reasons it does not survive:
-- `/admin/revoke-user-session` deletes the session's KV row — and, in
-  `secondaryStorage.ts`'s wrapped `delete()`, the `id:<sessionId>` pointer
-  alongside it — inside the endpoint call itself. By the time `after` runs,
-  `userIdForSessionToken` can no longer resolve anything: the very data
-  needed to know who to bump is already gone.
-- Passing the resolved `userId` forward by stashing an extra field on the
-  rewritten body does not survive better-auth's own zod parsing of that
-  body inside the endpoint, which strips unknown keys by default.
+**Rejected: bump in `before`.** It opens a race: a read landing between the
+bump and the mutation falls through on the new version, finds the session
+still as it was, and re-mints the cookie with the new version and the old
+data. Once the mutation completes, that cookie matches and is trusted for
+the rest of the five minutes (code review on grade10#705). Bumping only
+after a successful mutation also means a request better-auth refuses —
+last admin, peer admin, self-ban — bumps nothing.
 
-Bumping in `before`, before better-auth's own business-rule refusals run
-(last admin, peer admin, self-ban), means a request refused for one of
-those reasons still bumps its target's version. Accepted: a spurious bump
-costs one harmless extra fresh check on that account's next request: no
-data exposure, no incorrect access, and no decided requirement promises an
-untouched account's cache stays untouched by an *attempted* action.
+**Rejected: resolving the target in `after`.** `revoke-user-session`
+deletes the session's KV entry and its `id:<sessionId>` pointer inside the
+endpoint, so there is nothing left to resolve by then. **Rejected: carrying
+it on the rewritten body** — better-auth's zod parse strips unknown keys.
+
+**For 70 seconds after a bump, the version rotates every 10 seconds.**
+
+`currentSessionVersion` returns `<token>.<floor(now / 10s)>` while
+`now - bumpedAt < 70s`, and `<token>` after. A location that sees the new
+version before the change itself has reached its copy of the session
+re-mints stale data — but under a version that expires with its 10-second
+bucket. The session store settles within 60 seconds, so any mint after that
+reads the change, and at 70 seconds the version drops its bucket and every
+cookie minted in between revalidates once more.
+
+**Rejected: the invalidation signal in Postgres.** It puts identity
+Postgres back on every cached read, which `edge-cache.md` keeps off the
+per-request path, and does not close the window: revalidation still reads
+the session from KV, so a location with the new signal and an old session
+entry re-caches stale data under the new version. **Rejected: re-bumping
+once KV has settled** — it needs a scheduler (an alarm, a delayed queue
+message) for what a time bucket in the version gives statelessly.
 
 ## Risks / Trade-offs
 
-- **Every cached read now costs one extra KV get** (the version check),
-  even for an account nobody has touched → a single small keyed lookup, not
-  a session refetch; this is the "existing cost" `decisions.md`'s goals
-  refer to, not the fresh-read cost this change deliberately keeps off
-  every other account.
-- **KV's own propagation window** (`docs/architecture/edge-cache.md`: ≤60s
-  across colos) still applies to the version key itself → accepted; this
-  change closes the cookie-cache gap specifically, not KV's general
-  eventual consistency, which the store has already priced elsewhere.
-- **A spurious bump on a refused admin action** (see Decisions) → accepted
-  as harmless; not mitigated further.
+- **Every cached read now costs one extra KV get** (the version check), for
+  every account → a single keyed lookup, not a session refetch; the fresh
+  read stays off every account an admin did not touch.
+- **An account an admin just acted on revalidates up to every 10 seconds
+  for 70 seconds** → bounded to that one account, once per action.
+- **The 70-second bound rests on KV's documented 60-second propagation** →
+  it is the same bound every KV-backed session read already carries,
+  money-moving fresh reads included. A slower propagation stretches it the
+  same way it stretches theirs.
+- **Clock skew between locations moves a bucket boundary** → a mismatch
+  only ever forces a revalidation, never trusts a stale cookie.
+- **A failed bump after a committed mutation** throws from `after`, so the
+  admin sees an error for an action that took effect → every one of the
+  four actions is idempotent, so the retry bumps; the failure is loud rather
+  than a silently reopened five-minute window.
 
 ## Migration Plan
 
 No schema or data migration. The version key is created lazily on first
-bump; an account with no key reads the shared default. Ship the
-`cookieCache.version` wiring and the four bump call sites in the same
-deploy — either alone is a no-op, and there is no meaningful intermediate
-state to stage.
-
-## Open Questions
-
-- Exact TTL on the `session-version:<userId>` KV key (a working default:
-  30 days, comfortably past the 7-day session lifetime) — does not change
-  the approach or the tasks below.
+bump, with a 30-day TTL — past the 7-day session lifetime. Ship the
+`cookieCache.version` wiring and the four bump call sites in one deploy.
+Correct `docs/architecture/edge-cache.md` and `docs/architecture/security.md`
+(grade10) in the same pull request: both describe the five-minute browse
+window as what a ban leaves open.
