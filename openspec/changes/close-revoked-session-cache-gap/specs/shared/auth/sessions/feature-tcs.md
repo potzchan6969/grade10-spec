@@ -1,6 +1,6 @@
 # shared/auth/sessions Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
 ## shared-auth-sessions-US1: Operator lists a person's sessions
@@ -242,7 +242,7 @@ Signed in as an operator who holds `session:revoke`.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -271,7 +271,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has two
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
@@ -318,3 +318,8 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has two
 
 - Cross-account isolation (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/not-signed-in read. **Out of suite:** the per-user cache-version helper's own unit test, added under this change's `tasks.md`.
 - All other scenarios under Revoke / US-02, including the new `SC-09`, are covered by `US2-TC1-1` through `US2-TC7-1` above.
+
+**Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
+
+- `US2-TC6-1` — Approved (`actual`).
+- `US2-TC7-1` — Retired (`deprecated`): its title claimed a caller without the revoke grant, but its steps never exercised that caller, and the refusal it gestured at is already covered by `US2-TC3-1`/`US2-TC4-1`.

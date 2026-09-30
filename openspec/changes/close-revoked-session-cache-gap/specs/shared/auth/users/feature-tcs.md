@@ -398,7 +398,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -652,7 +652,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -1111,3 +1111,8 @@ Signed in as admin(holds `user:create`). No Auth account holds <empty-roles emai
 - All scenarios under Account create / US-05 covered by US5-TC1 through TC7.
 - Cross-account isolation on ban and role change (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/permissions read. **Out of suite:** the per-user cache-version helper's own unit test, added under `close-revoked-session-cache-gap`'s `tasks.md`.
 - All other scenarios under Ban and unban / US-02 and Role changes / US-03, including the new `SC-34` and `SC-35`, are covered by `US2-TC1-1` through `US2-TC7-1` and `US3-TC1-1` through `US3-TC7-1` above.
+
+**Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
+
+- `US2-TC7-1` — Approved (`actual`).
+- `US3-TC7-1` — Approved (`actual`).
