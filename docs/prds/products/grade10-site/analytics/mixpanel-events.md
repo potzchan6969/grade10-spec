@@ -29,7 +29,7 @@ The storefront posts these through first-party `/api/track`.
 
 ### Server events
 
-Workers send these when the domain fact lands. The browser cannot.
+Workers record these with the domain fact and send them on their next sweep. The browser cannot.
 
 | Event                 | Fires when                                     | Domain             |
 | --------------------- | ---------------------------------------------- | ------------------ |
@@ -135,7 +135,7 @@ snapshot used to filter events and build cohorts.
 | Server keeps `$device_id`    | Decided | Checkout Started, web Order Paid, and other server emits that continue a browser or till visit name that device when known, so pre-login browse joins after pay or sign-in.                                                                                                                                 | Product               |
 | First-touch campaign         | Decided | Page Viewed and Lot Viewed carry UTM from the landing address; first Page Viewed on a device may carry Initial Referrer.                                                                                                                                                                                    | Product               |
 | First-party ingest           | Decided | No Mixpanel browser SDK, Autocapture, or Session Replay. Title Case names stay.                                                                                                                                                                                                                             | Product               |
-| Checkout Started             | Decided | The worker sends it when checkout is accepted. The browser has already left for Shopify.                                                                                                                                                                                                                    | Product               |
+| Checkout Started             | Decided | The worker records it when checkout is accepted and sends it on its next sweep. The browser has already left for Shopify.                                                                                                                                                                                                                    | Product               |
 | Ownerless then claimed       | Decided | Order Paid is sent once, on the order. A later claim does not send it again and does not merge the order device onto the member.                                                                                                                                                                            | Product               |
 | Collector IP for geo         | Decided | Client and server Mixpanel sends carry the collector IP when known so Mixpanel geolocates the person, not the worker. IP is never stored as a property.                                                                                                                                                     | Product               |
 | Backend delivery             | Decided | Every backend send reaches Mixpanel and counts once, whatever the outage. Browser events and Datadog counters are best effort.                                                                                                                                                                              | Product               |

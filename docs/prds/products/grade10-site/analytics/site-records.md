@@ -2,6 +2,7 @@
 title: Site Records
 spec: grade10-site/analytics/analytics
 order: 3
+reviewed: 2026-09-30
 ---
 
 The site's own tables for money, liability, and outcomes. Domain signals

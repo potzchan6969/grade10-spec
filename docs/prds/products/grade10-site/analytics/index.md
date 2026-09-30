@@ -2,7 +2,7 @@
 title: Analytics
 spec: grade10-site/analytics/analytics
 icon: chart-bar
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 ---
 
 What Grade10 measures, by domain, and where each number is read from.
@@ -99,4 +99,8 @@ coupon codes, and pass serials.
 | One Grade10 project | Decided | Store, auction, loyalty, and vault events share it so a lot view can join a bid. ZZZ gets its own project when it has a storefront. | Product |
 | Consent             | ❓ Open | Whether a gate sits in front of the browser client. The library can already drop.                                                   | Legal   |
 | Mixpanel erasure    | ❓ Open | Whether a deleted account must be deleted in Mixpanel. First-party data is the console checklist; Mixpanel is not on it.            | Legal   |
+:::
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/analytics/analytics"}
 :::
