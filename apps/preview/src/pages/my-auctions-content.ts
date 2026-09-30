@@ -24,10 +24,10 @@ const AUCTION_RECORD_COPY = {
   standingColumn: "Status",
   emailAlertsColumn: "Email Alerts",
   noStanding: "--",
-  emptyTitle: "No lots yet",
+  emptyTitle: "No auctions yet",
   emptyDescription:
-    "Watch a lot to come back to it here, or place a bid. Email alerts are optional.",
-  browseCatalogue: "Browse lots",
+    "Watch an auction to come back to it here, or place a bid.",
+  browseCatalogue: "Browse auctions",
   openListing: "Open listing",
   openBidding: "Bid",
 };

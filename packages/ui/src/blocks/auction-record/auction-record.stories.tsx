@@ -284,9 +284,9 @@ export const Empty: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await auctionRecordSettled(canvasElement);
-    expect(canvas.getByText("No lots yet")).toBeVisible();
+    expect(canvas.getByText("No auctions yet")).toBeVisible();
     expect(canvas.queryByText("0")).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "Browse lots" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Browse auctions" }));
     expect(onBrowseCatalogue).toHaveBeenCalled();
   },
 };
