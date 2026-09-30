@@ -5,7 +5,7 @@ import { vi } from "vitest";
  * time - and the same instant `fixture-snapshot.test.ts`'s coverage test
  * reads the fixture's idle and shelf bounds against. One constant rather
  * than each file's own literal, or a bare `Date.now()` a machine's real
- * clock would move: `demo-on-staging` is dated 2026-09-07 in
+ * clock would move: `demo-implementation-complete` is dated 2026-09-07 in
  * `fixture-dates.json`, which only ever reads as 12 days idle against this
  * one frozen reading.
  */

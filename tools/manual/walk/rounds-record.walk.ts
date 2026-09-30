@@ -13,7 +13,7 @@ import { openManual, rowFor } from "./setup";
  * "a second address is a second walk" is why the two live in separate files
  * rather than a second `openManual` call here.
  *
- * `demo-on-staging` is given a `rounds.md` of its own for this walk (the
+ * `demo-implementation-complete` is given a `rounds.md` of its own for this walk (the
  * demo store carries none yet): three rows, the GIVEN's own count — one on
  * an artifact whose round found nothing, one on the fixture's own
  * fully-ticked task group, and a third on a second artifact, so the row
@@ -29,10 +29,13 @@ beforeEach(freezeClock);
 afterEach(unfreezeClock);
 
 test("shared-planning-agent-rounds-SC-51 - one line per round, one of them finding nothing", async () => {
-  await openManual("/in-flight/demo-on-staging");
+  await openManual("/in-flight/demo-implementation-complete");
   await expect
     .element(
-      page.getByRole("heading", { level: 1, name: "The On staging stage" }),
+      page.getByRole("heading", {
+        level: 1,
+        name: "The Implementation complete stage",
+      }),
     )
     .toBeVisible();
 
