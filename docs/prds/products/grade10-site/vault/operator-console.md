@@ -57,12 +57,17 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **Held items, at a glance** — tiles: in the vault, per shop, with a loan
   running, waiting for a pickup; rows carry held since, days held, status,
   outstanding and whether a pickup is booked
-- 🚧 **Owner by name** - rows name each case's owner for staff and admins,
-  never a treasurer; the name narrows the queue and held items to that owner
-  or opens their [Collector Page](/p/grade10-admin/console/collector-page)
-- 🚧 **Walk-ins** - staff open a case for a customer at the counter, refused
-  by name for an address someone has signed into; it emails nothing until the
-  customer confirms it on their own phone
+- 🚧 **Collector by name** — rows name each case's collector for staff and
+  admins, never a treasurer
+- 🚧 **Narrow by collector** — a click on the name shows only that
+  collector's cases; a link beside it opens their
+  [Collector Page](/p/grade10-admin/console/collector-page)
+- 🚧 **Walk-ins** — staff open a draft for a customer at the counter under
+  the customer's own account; nothing about the case is emailed; the customer
+  asks for their own sign-in link on their phone at `grade10.com/vault`,
+  finds the draft on their list and sends it with the wizard's third step
+- 🚧 **An address signed in to before** — a walk-in is refused when the
+  address belongs to an account someone has signed in to
 - 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register holds, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
@@ -89,6 +94,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   only on a row this operator did not record
 - **Appointments section**: add or retire a shop, weekly rules, exceptions,
   the day's offered slots and bookings, each booking opening its case
+- 🚧 **The collector's cases** — a link in the header opens the case's
+  [Collector Page](/p/grade10-admin/console/collector-page), for any
+  `vault:read` holder
 - 🚧 **Today's visit, in order** — the Case tab opens on the counter's steps
   for this visit as an ordered checklist, each ticked as its act lands, and
   says why an act is not offered yet
@@ -115,6 +123,10 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit |
 | `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position |
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
+
+- 🚧 **Walk-ins and names** — `vault:operate` also opens a walk-in;
+  `kyc:read` also opens collector names on the queue, held items and
+  collector page; a treasurer sees none
 
 - **Two people move money** — staff and treasurer share no money grant, a
   correction takes a second `vault:payout` holder, and the payout is refused
@@ -189,13 +201,13 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | The book exports | Decided | A CSV of the ledger as filtered, bounded to what the ledger pages and on the audit chain like a search, with a net-out figure and a takes-back column, so the controller ties the range to the statement in a spreadsheet; double entry stays the firm's accounting system's | Finance |
 | "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
 | The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
-| Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and, behind the identity grant, the account's name; never the legal name | Product |
-| Owner by name | Decided | Queue and held-item rows name the owner by the account's name, read from the account service at each read and copied nowhere, behind the identity grant, so staff and admins read it and a treasurer does not. Supersedes `complete-vault-collector-flow` Q111 for these two lists; the arrears row keeps the reference and the contact | Owner |
-| No search by name | Decided | An owner is found by an exact contact, the case reference or a click on their name; a name search would let staff walk the customer list | Owner |
+| Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and never the legal name | Product |
+| Collector by name | Decided | Queue and held-item rows show the collector's account name to staff and admins under the identity grant; a treasurer and the arrears row keep what they read today | Owner |
+| No search by name | Decided | A collector is found by an exact contact, the case reference or a click on their name; a name search would let staff walk the customer list | Owner |
 | The identity panel reads the record's six states | Decided | Verified, Out, Stalled, Refused, Lapsed and None, as [Identity Check](/p/grade10-site/vault/identity-check#identity-states) defines them; the provider's finer states fold into them, because an operator arranging a visit needs the difference between out and none, not the provider's stage | Product |
-| Counter intake | Decided | Staff open a case for a customer at the counter, under the customer's own account, with staff's photos and nothing emailed; the customer signs in on their own phone and confirms it with the collection-statement tick before it is valued or anyone is written to. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
-| Signed-in customers at the counter | Decided | Refused in the first version: a typed address proves nothing about an account someone has signed into, so that customer sends the request from their own phone with staff beside them | Owner |
-| Walk-ins open under `vault:operate`, names read under `kyc:read` | Decided | Opening a case at the counter is an operate act; owner names sit behind the identity grant, and every read that names a person - the names on a page, one owner's cases, a collector's page - is on the audit chain | Product |
+| Counter intake | Decided | Staff open a draft for a customer at the counter, under the customer's own account, with staff's photos, and no email is sent; the customer sends it from their own phone with the wizard's third step, ticking the collection statement, before it is valued or any email is sent. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
+| Signed-in customers at the counter | Decided | Refused: a typed address does not prove the account is theirs, so that customer sends the request from their own phone with staff beside them | Owner |
+| Walk-ins open under `vault:operate`, names read under `kyc:read` | Decided | Opening a case at the counter is an operate act; collector names sit behind the identity grant, and every read that names a person — the names on a page, one collector's cases, a collector's page — is on the audit chain | Product |
 | When a walk-in reads the collection statement | ❓ Open | Staff type the address before the customer ticks the statement on their phone. Recommended: the counter shows the statement first, and the tick on the phone is the record | Legal |
 | Stock-take sheet and Send notice from arrears | ❓ Open | A stock-take sheet from the held-items list, and Send notice from an arrears row. Recommended: neither, the notice stays an act on the case | Product |
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |

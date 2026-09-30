@@ -22,20 +22,20 @@ everything we hold,
 **I want** to open the case myself from their email, their name, the item and
 my own photos,
 **so that** a customer with no request on their phone is served on the spot,
-and the case waits for them to confirm it.
+and the draft waits for them to send it.
 
 ### grade10-admin-vault-operator-queue-US-11: Operator reads whose case it is by name
 
 **As a** member of shop staff,
-**I want** the queue and the held items to name each case's owner,
+**I want** the queue and the held items to name each case's collector,
 **so that** I can greet the customer and tell two customers' cases apart
 without opening each one.
 
-### grade10-admin-vault-operator-queue-US-12: Operator narrows the queue to one owner's cases
+### grade10-admin-vault-operator-queue-US-12: Operator narrows the queue to one collector's cases
 
 **As a** member of shop staff,
-**I want** an owner's name to narrow the queue and the held items to that
-owner,
+**I want** a collector's name to narrow the queue and the held items to that
+collector,
 **so that** I can see everything one customer has with us without being able
 to search the customer list by name.
 

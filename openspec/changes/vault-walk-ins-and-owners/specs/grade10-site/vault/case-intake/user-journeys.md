@@ -9,13 +9,13 @@ borrow against it,
 
 ## ADDED User journeys
 
-### grade10-site-vault-case-intake-US-06: Collector confirms a case staff opened for them at the counter
+### grade10-site-vault-case-intake-US-06: Collector sends a request staff opened for them at the counter
 
 **As a** collector whose request staff opened at the counter,
 **I want** to sign in on my own phone, read the request and the photos back,
-and tick that I have read the collection statement before I confirm it,
+and tick that I have read the collection statement before I send it,
 **so that** nothing happens to my item on a request I have not seen, and a
-case typed under the wrong address never reaches anyone.
+request typed under the wrong address is never emailed.
 
 ## MODIFIED User journeys
 

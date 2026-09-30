@@ -13,10 +13,10 @@ state neither of us meant.
 ### grade10-site-vault-case-lifecycle-US-06: Operator opens a walk-in again under the right address
 
 **As a** member of shop staff who typed a customer's address wrong,
-**I want** to cancel the unconfirmed case and open it again under the right
+**I want** to cancel the unsent draft and open it again under the right
 address,
-**so that** the customer can confirm it, and the owner of the wrong address
-is never written to.
+**so that** the customer can send it, and the account at the wrong address
+is never emailed.
 
 ## MODIFIED User journeys
 

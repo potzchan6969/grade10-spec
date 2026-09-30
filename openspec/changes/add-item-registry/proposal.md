@@ -136,6 +136,6 @@ See [Non-Goals](decisions.md#non-goals).
 - [Documents and Signing · Document terms](../../../docs/prds/products/grade10-site/vault/documents-and-signing.md#document-terms)
 - [Collector Pages · Request wizard](../../../docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard)
 - [Case Lifecycle · Item Record](../../../docs/prds/products/grade10-site/vault/case-lifecycle.md#item-record)
-- [Collector Page · The Page](../../../docs/prds/products/grade10-admin/console/collector-page.md#the-page)
+- [Collector Page · Sections](../../../docs/prds/products/grade10-admin/console/collector-page.md#sections)
 - [Roles and Permissions](../../../docs/prds/products/shared/auth/roles.md)
 - [Account Data · Erasure](../../../docs/prds/platform/account-data.md#erasure)

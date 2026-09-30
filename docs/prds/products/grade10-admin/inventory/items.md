@@ -31,7 +31,7 @@ company owns. Stock counts units of a product; an item is one object.
   owner's name here; each read is on the audit chain; where the name cannot
   be read the page shows the short id and "name unavailable" and still opens
 - 🚧 **A collector's items** -
-  [Collector Page](/p/grade10-admin/console/collector-page#the-page)
+  [Collector Page](/p/grade10-admin/console/collector-page#sections)
 - ❓ **Owner of a bought or gifted item** - which entity owns what the
   company buys or is given; recommended: the custodian, the lender only
   through a forfeit - Legal

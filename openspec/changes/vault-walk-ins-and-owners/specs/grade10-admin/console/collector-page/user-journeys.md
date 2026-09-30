@@ -10,7 +10,7 @@ every vault case they hold,
 ### grade10-admin-console-collector-page-US-02: Treasurer reads a collector's cases without their name
 
 **As a** treasurer,
-**I want** the collector page to show the cases and the contact they hold,
+**I want** the collector page to show the cases they hold,
 **so that** I can follow a borrower's money across their cases without being
 shown a name my role does not hold.
 

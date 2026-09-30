@@ -93,8 +93,9 @@ hold, a wizard to open another, and each case's own page.
   bring the item, sign at the counter
 - **Cancel this request** — ends the case at any status before the item is in
   the vault; any visit is cancelled with it and the item stays with the collector
-- 🚧 **A case staff opened** - waits for the collector to read it back, tick
-  the collection statement and confirm; nothing is valued or emailed before
+- 🚧 **A draft staff opened** — on the collector's list as a draft opened at
+  the counter; they check it and send it, and nothing is valued or emailed
+  before they send it
 - **History** — every event the collector may see, actor kind only, never a
   staff id; the counter's own records stay staff-only
 - **Clocks** — a day and a deadline, on this page and in every email, are
