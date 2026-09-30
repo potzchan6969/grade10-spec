@@ -21,6 +21,7 @@ const COPY = {
   bidHistory: {
     you: auctionListing.bidHistoryYou,
     empty: auctionListing.noBidsYet,
+    winner: auctionListing.bidHistoryWinner,
     samePricePriorityTip: auctionListing.samePricePriorityTip,
   },
   auctionWon: auctionListing.auctionWon,
@@ -223,6 +224,12 @@ export const Default: Story = {
       canvas.getByRole("button", { name: /^Maximum /, pressed: true }),
     ).toBeInTheDocument();
     expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
+    expect(canvas.queryByLabelText("Winner")).not.toBeInTheDocument();
+    expect(
+      canvas.getByLabelText(
+        "When maximums match, the earlier one leads.",
+      ),
+    ).toBeInTheDocument();
   },
 };
 
@@ -438,6 +445,69 @@ export const CustomMaximumCeiling: Story = {
     await userEvent.clear(field);
     await userEvent.type(field, "500");
     expect(field).toHaveValue(500);
+  },
+};
+
+const CLOSED_EQUAL_MAX_HISTORY: ListingBidHistoryRow[] = [
+  {
+    id: "bid-john-won-5800",
+    initials: "john@example.com",
+    amountMinor: 5_800_000,
+    acceptedAtMs: NOW_MS - 60 * 60_000,
+    isViewer: true,
+    isWinner: true,
+  },
+  {
+    id: "bid-mike-tie-5800",
+    initials: "mike@example.com",
+    amountMinor: 5_800_000,
+    acceptedAtMs: NOW_MS - 61 * 60_000,
+    samePricePriority: true,
+  },
+  {
+    id: "bid-mike-5550",
+    initials: "mike@example.com",
+    amountMinor: 5_550_000,
+    acceptedAtMs: NOW_MS - 90 * 60_000,
+  },
+];
+
+/**
+ * Closed sold with equal maxima: winning row shows a crown; the same-price
+ * non-leader carries the equal-max Info tip.
+ */
+export const ClosedSoldEqualMax: Story = {
+  args: {
+    history: CLOSED_EQUAL_MAX_HISTORY,
+    view: liveView({
+      live: false,
+      closed: true,
+      showBidActions: false,
+      priceLabel: "Winning bid",
+      standing: "won-payment-due",
+      countdown: "",
+      countdownSeconds: null,
+      closesAtMs: null,
+      deadlineAtMs: NOW_MS - 60 * 60_000,
+      opensAtMs: NOW_MS - 3 * 24 * 60 * 60 * 1000,
+    }),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "After close, the winning public row shows a primary crown after the amount. The equal-max challenger shows an Info tip in the amount tone.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByLabelText("Winner")).toBeInTheDocument();
+    expect(
+      canvas.getByLabelText(
+        "When maximums match, the earlier one leads.",
+      ),
+    ).toBeInTheDocument();
   },
 };
 

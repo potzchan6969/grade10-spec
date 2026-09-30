@@ -117,6 +117,9 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   bidHistory: {
     you: "You",
     empty: "No bids yet",
+    winner: "Winner",
+    samePricePriorityTip:
+      "When maximums match, the earlier one leads.",
   },
   auctionWon: "Auction won",
   completePurchase: "Complete Order Setup",
@@ -303,6 +306,7 @@ export function bidHistoryForState(
         amountMinor: CLOSED_SOLD_MINOR,
         acceptedAtMs: msAgo(60),
         isViewer: viewerWon,
+        isWinner: true,
       },
       {
         id: viewerWon ? "bid-mike-prior" : "bid-john-closed",
