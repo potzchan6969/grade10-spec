@@ -323,3 +323,14 @@ export const ENDED_ONLY_LOTS: CatalogueLot[] = [
   withStatus(COLLECTION_LOTS[1], "Ended"),
   withStatus(COLLECTION_LOTS[2], "Ended"),
 ];
+
+/** Reads the catalogue fixtures at one fixed instant, before every lot opens or
+ * closes, so a story that checks a countdown does not age with the calendar. */
+export function pinCatalogueClock() {
+  const realNow = Date.now;
+  const pinned = Date.parse("2026-09-20T12:00:00+08:00");
+  Date.now = () => pinned;
+  return () => {
+    Date.now = realNow;
+  };
+}

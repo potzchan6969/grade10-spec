@@ -6,7 +6,10 @@ import {
   FeaturedAuctions,
   FeaturedAuctionsPair,
 } from "./auction-catalogue-card";
-import { FEW_FEATURED_LOTS } from "./auction-catalogue-content";
+import {
+  FEW_FEATURED_LOTS,
+  pinCatalogueClock,
+} from "./auction-catalogue-content";
 
 /**
  * Earlier Featured band explorations kept for reference — scrolling row,
@@ -15,6 +18,7 @@ import { FEW_FEATURED_LOTS } from "./auction-catalogue-content";
  */
 const meta = {
   title: "Auction List/Featured Auctions/Archived",
+  beforeEach: pinCatalogueClock,
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 
