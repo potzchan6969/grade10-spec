@@ -2400,99 +2400,6 @@ its absence from the order page remain governed by
   Current Payment Received 10000 and Remaining Balance Due 40000
 - **AND** no issued receipt is reissued
 
-### Requirement: The auction order page shows its sections by status
-
-The auction order page SHALL show these sections, in this order.
-
-| Section | Carries |
-| --- | --- |
-| Order Information | Order No., Auction, Currency, Date (the lot's close), Order Status, Invoice Status |
-| Collection Method | Delivery Method (always Delivery), Name, Contact Tel, Email (the account's), Address |
-| Order Status | Each order status the order has reached, in the order reached, each with the date and time it was reached |
-| Lots | Key image, title and winning bid of the order's lot |
-
-Invoice Status SHALL read one of these labels. The label **Paid Status** SHALL
-NOT appear.
-
-| Invoice status | Label |
-| --- | --- |
-| `not_issued` | Not issued |
-| `pending` | Pending |
-| `paid` | Paid |
-| `expired` | Expired |
-| `cancelled` | Cancelled |
-| `refunded` | Refunded |
-
-What the page offers SHALL follow the order status.
-
-| Order status | The page offers |
-| --- | --- |
-| Awaiting Setup | The address form in Collection Method, per "The address form refuses empty required fields" |
-| Preparing Invoice | The confirmed address, per "The delivery address is confirmed before payment"; no invoice and no way to pay |
-| Pending Payment | The full invoice with every line, per "Invoice fields", and **Pay Now**; the confirmed address |
-| Preparing Shipment, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
-
-An invoice whose status is `expired` SHALL still be presented under the
-derived Pending Payment order status, per `revise-auction-winner-invoicing`,
-with its full invoice and **Contact Us** instead of Pay Now. The page SHALL
-not derive a second Expired order status.
-
-#### Scenario: winner-order-SC-139 - The page shows its four sections
-**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
-
-- **GIVEN** an auction order in any status
-- **WHEN** the winner opens it
-- **THEN** the page shows Order Information, Collection Method, Order Status
-  and Lots, in that order
-
-#### Scenario: winner-order-SC-140 - Invoice Status replaces Paid Status
-**Serves:** winner-order-US-04 - Winner pays an invoice by card
-
-- **GIVEN** an auction order whose invoice status is `paid`
-- **WHEN** the winner reads Order Information
-- **THEN** it shows Invoice Status as Paid
-- **AND** no Paid Status label appears
-
-#### Scenario: winner-order-SC-141 - Each status step carries its time
-**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
-
-- **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
-  Pending Payment and Preparing Shipment
-- **WHEN** the winner reads Order Status
-- **THEN** it lists those four statuses in the order reached
-- **AND** each carries the date and time it was reached
-
-The Order Status timeline SHALL be supplied by the authenticated auction-order
-read model. Each item SHALL contain the derived order status and the
-authoritative time that status was reached; the page SHALL NOT reconstruct
-timestamps in the browser from the current invoice, fulfilment or payment
-session state.
-
-#### Scenario: winner-order-SC-53 - The timeline uses authoritative status times
-**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
-
-- **GIVEN** the auction-order read model returns the order statuses reached
-  and a recorded timestamp for each
-- **WHEN** the winner reads Order Status
-- **THEN** the page shows each returned timestamp for its matching status
-- **AND** it does not replace a returned timestamp with the page-load time
-
-#### Scenario: winner-order-SC-44 - An unpaid order shows the invoice and Pay Now
-**Serves:** winner-order-US-04 - Winner pays an invoice by card
-
-- **GIVEN** an auction order whose status is Pending Payment
-- **WHEN** the winner opens it
-- **THEN** the page shows every invoice line and Pay Now
-- **AND** the confirmed delivery address and the lot
-
-#### Scenario: winner-order-SC-45 - An order preparing its invoice offers no payment
-**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
-
-- **GIVEN** an auction order whose status is Preparing Invoice
-- **WHEN** the winner opens it
-- **THEN** the page shows the confirmed address
-- **AND** offers no invoice and no Pay Now
-
 ### Requirement: An unfinished card payment leaves the invoice payable
 
 Pay Now SHALL start a hosted card payment session for the current invoice. Its
@@ -2541,4 +2448,72 @@ NOT show the order as paid before it records the invoice `paid`.
   invoice status `paid` and fulfilment status `unfulfilled`
 - **WHEN** the winner opens it
 - **THEN** its status is Preparing Shipment
+
+### Requirement: The auction order page is the Winner Order design
+
+The auction order page SHALL render `AuctionWinnerOrder` from
+`shared/ui/auction-order`, the block the Winner Order stories render, and no
+rebuild of it.
+
+| Part | Carries |
+| --- | --- |
+| Header | The page title and the order status badge |
+| Order Progress | The five steps, per "Winner Order shows five progress steps" |
+| Lot | The lot's key image, title and winning bid, opening the lot |
+| Alerts | Under the lot: the status's outcome, suspension, a returned proof, a card checkout's return |
+| Sidebar | The order summary with its lines and Invoice PDF, the pay controls and deadline, the payment method with its receipts, the delivery and billing addresses, and Complete Order Setup while setup is open |
+
+The page SHALL NOT show Order Information, Collection Method, an Order Status
+list or a Lots section.
+
+What the page offers SHALL follow the order status.
+
+| Order status | The page offers |
+| --- | --- |
+| Awaiting Setup | Complete Order Setup, which opens setup, per "The address form refuses empty required fields" |
+| Preparing Invoice | The confirmed address, per "The delivery address is confirmed before payment"; no invoice and no way to pay |
+| Pending Payment | The full invoice with every line, per "Invoice fields", and the pay control for the chosen method; the confirmed address |
+| Preparing Shipment, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
+
+An invoice whose status is `expired` SHALL still be presented under the
+derived Pending Payment order status, per `revise-auction-winner-invoicing`,
+with its full invoice and **Contact Us** instead of the pay control. The page
+SHALL not derive a second Expired order status.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-cu4 rev=1 -->
+#### Scenario: winner-order-SC-241 - The page shows the lot once
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
+
+- **GIVEN** an auction order in any status
+- **WHEN** the winner opens it
+- **THEN** the page shows the header, the lot card and the sidebar
+- **AND** the lot's title shows in the lot card only
+- **AND** no Order Information, Collection Method, Order Status list or Lots
+  section shows
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1yn rev=1 -->
+#### Scenario: winner-order-SC-240 - A suspended winner reads it under the lot
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a suspended winner's auction order whose invoice is `pending`
+- **WHEN** the winner opens it
+- **THEN** an alert under the lot says bidding is suspended and payment does
+  not lift it
+- **AND** offers Pay what is owed
+
+#### Scenario: winner-order-SC-242 - An unpaid order shows the invoice and the pay control
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** an auction order whose status is Pending Payment
+- **WHEN** the winner opens it
+- **THEN** the sidebar shows every invoice line and the pay control
+- **AND** the confirmed delivery address and the lot
+
+#### Scenario: winner-order-SC-243 - An order preparing its invoice offers no payment
+**Serves:** winner-order-US-19 - Winner confirms where a won lot ships
+
+- **GIVEN** an auction order whose status is Preparing Invoice
+- **WHEN** the winner opens it
+- **THEN** the page shows the confirmed address
+- **AND** offers no invoice and no pay control
 

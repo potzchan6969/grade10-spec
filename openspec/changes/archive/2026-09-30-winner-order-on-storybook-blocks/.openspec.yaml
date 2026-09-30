@@ -1,0 +1,14 @@
+schema: grade10-planning
+created: 2026-09-30
+depends_on:
+  - add-my-auction-orders
+  - winner-order-tracking-link
+hands:
+  pm: "@ecchochan"
+  design: "@ecchochan"
+  tech: "@ecchochan"
+  qa: "@ecchochan"
+  dev: "@ecchochan"
+deployed_at: "a471fa82d6421d58afebcdbcc6fe84e8142597f3"
+deployed_env: "staging"
+decisions_carried: "Q1, Q3 and Q4 to the post-bidding page's Winner Order layout and dialogs rows; Q2 to the auction-order page's Product decisions"

@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## winner-order-US1: Winner settles a won lot
@@ -4812,7 +4812,7 @@ Runs once per row of **Test data**.
 **I want** to see the full invoice and pay it by card, even if a first attempt does not finish
 **so that** the lot moves to Preparing Shipment without contacting Grade10.
 
-### winner-order-US4-TC1-1: An unpaid order shows invoice, Pay Now, address and lot
+### winner-order-US4-TC1-2: An unpaid order shows invoice, Pay with Card, address and lot
 
 **Classification:**
 
@@ -4838,10 +4838,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Every invoice line and Pay Now are shown.
+* Every invoice line and Pay with Card are shown in the order summary.
 * The confirmed delivery address and the lot are shown.
 * An expired invoice still reads Pending Payment and offers Contact Us instead
-  of Pay Now.
+  of Pay with Card.
 
 ### winner-order-US4-TC2-1: Order Information reads Invoice Status, not Paid Status
 
@@ -4849,7 +4849,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -4992,13 +4992,46 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.auction-winner-order.TC-td7 rev=1 covers=g10.auction-winner-order.SC-1yn -->
+### winner-order-US4-TC7-1: A suspended winner reads the suspension under the lot
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) is suspended from bidding and holds an order whose invoice
+  is `pending`.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Read the alerts under the lot.
+3. Choose Pay what is owed.
+
+**Expected Results:**
+
+* An alert under the lot says bidding is suspended and payment does not lift it.
+* Choosing Pay what is owed brings the order summary's pay control into view.
+
 ## winner-order-US19: Winner confirms where a won lot ships
 
 **As a** winner
 **I want** to fill in and confirm a delivery address on the order
 **so that** Grade10 can quote shipping to the right place.
 
-### winner-order-US19-TC1-1: Order page shows four sections and timed status steps
+<!-- trace:case id=g10.auction-winner-order.TC-clp rev=2 covers=g10.auction-winner-order.SC-cu4 -->
+### winner-order-US19-TC1-2: The page shows the lot once and none of the old sections
 
 **Classification:**
 
@@ -5015,18 +5048,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) holds an order that reached Awaiting Setup, Preparing Invoice, Pending Payment and Preparing Shipment.
+* customer(winner) holds an order in Awaiting Setup.
 
 **Steps:**
 
 1. Navigate to <grade10 auction order url>.
-2. Scroll to the Order Status section.
+2. Read the page from the header to the sidebar.
 
 **Expected Results:**
 
-* Order Information, Collection Method, Order Status, Lots appear in order.
-* Step 2 lists the four statuses in the order reached.
-* Each status shows the date and time reached.
+* The header shows Winner Order and the status badge.
+* Order Progress shows Address current, then Invoice, Payment, Shipping and
+  Completed.
+* The lot's title shows in the lot card only.
+* No Order Information, Collection Method, Order Status list or Lots section
+  shows.
 
 ### winner-order-US19-TC5-1: Timeline uses the auction-order read model timestamps
 
@@ -5034,7 +5070,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
