@@ -722,10 +722,12 @@ backend does not require.
 1. Enter <maximum> in the custom maximum.
 2. Click the bid action.
 3. Check whether the setup modal is open.
+4. Read the bid panel.
 
 **Expected Results:**
 
 * The setup modal does not open.
+* The bid continues under auto-bidding and payment authorization.
 
 ---
 
