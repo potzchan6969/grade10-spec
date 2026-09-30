@@ -21,7 +21,7 @@ const HEADER_COPY = {
   },
   unwatchedToast: {
     title: "Unwatched this auction",
-    description: "Email alerts for this auction are off too.",
+    description: "Email alerts for this auction are off.",
     actionLabel: "Undo",
   },
 };
@@ -160,7 +160,7 @@ export const UnwatchAnnounces: Story = {
       expect(body.getByText("Unwatched this auction")).toBeInTheDocument(),
     );
     expect(
-      body.getByText("Email alerts for this auction are off too."),
+      body.getByText("Email alerts for this auction are off."),
     ).toBeInTheDocument();
     await userEvent.click(body.getByRole("button", { name: "Undo" }));
     expect(undoUnwatch).toHaveBeenCalled();

@@ -67,6 +67,6 @@
   "emailAlertsMutedWatching": "It stays on Watching.",
   "emailAlertsMutedBidding": "Your bid stands.",
   "unwatchedTitle": "Unwatched {title}",
-  "unwatchToastDescription": "Email alerts for this auction are off too.",
+  "unwatchToastDescription": "Email alerts for this auction are off.",
   "undo": "Undo"
 }

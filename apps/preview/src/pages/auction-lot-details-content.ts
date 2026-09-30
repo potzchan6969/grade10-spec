@@ -211,7 +211,7 @@ export const AUCTION_LOT_DETAILS_COPY = {
     },
     unwatchedToast: {
       title: "Unwatched this auction",
-      description: "Email alerts for this auction are off too.",
+      description: "Email alerts for this auction are off.",
       actionLabel: "Undo",
     },
   },
