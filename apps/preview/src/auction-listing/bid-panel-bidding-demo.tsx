@@ -1,12 +1,14 @@
 import {
-  FIXTURE_SHIPPED_LOCALE,
   formatMoney,
   type ListingAuctionBidView,
   type ListingAuctionStanding,
   type ListingBidHistoryRow,
   minNextBidMinor,
 } from "@grade10/ui";
-import { FIXTURE_LIVE_BID_AT_MS } from "@grade10/ui/lib/datetime-fixtures";
+import {
+  FIXTURE_LIVE_BID_AT_MS,
+  FIXTURE_SHIPPED_LOCALE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import { FlowContainer } from "../../../../packages/ui/src/blocks/shared/flow-container";
 import { BID_FIXTURE_LOT } from "./listing-auction-bid-fixtures";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";

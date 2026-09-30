@@ -1,15 +1,17 @@
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
   LISTING_LOT_GRID_CLASS,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
 } from "@grade10/ui";
+import {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { expect, within } from "storybook/test";

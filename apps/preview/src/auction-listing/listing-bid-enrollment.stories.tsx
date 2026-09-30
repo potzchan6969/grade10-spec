@@ -1,8 +1,8 @@
+import { ListingAuctionBidCard } from "@grade10/ui";
 import {
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
-  ListingAuctionBidCard,
-} from "@grade10/ui";
+} from "@grade10/ui/lib/datetime-fixtures";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
