@@ -11,9 +11,8 @@ import type { ComponentProps, ReactNode } from "react";
 // Dot is `Size/size-2` (8). Count is `Size/size-4` (16) min — `h-4 min-w-4` —
 // with `Gap/gap-1` horizontal padding inside the box and `text-xs/medium`.
 // Fills: default `Base/muted` + `Base/foreground` label; error
-// `Status/destructive` + `Status/destructive-on`; brand
-// `Base/accent-foreground` + `Base/primary-on` — the on-fill tones, which
-// Figma still draws under the `-foreground` names.
+// `Status/destructive` + `Status/destructive-foreground`; brand
+// `Base/accent-foreground` + `Base/primary-foreground`.
 const statusIndicatorVariants = cva(
   "relative inline-flex shrink-0 items-center justify-center rounded-(--radius-full) border-background ring-2 ring-background",
   {
@@ -25,8 +24,8 @@ const statusIndicatorVariants = cva(
       },
       variant: {
         default: "bg-muted text-foreground",
-        error: "bg-destructive text-destructive-on",
-        brand: "bg-accent-foreground text-primary-on",
+        error: "bg-destructive text-destructive-foreground",
+        brand: "bg-accent-foreground text-primary-foreground",
       },
     },
     defaultVariants: {

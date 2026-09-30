@@ -13,15 +13,13 @@
   --popover: var(--background); /* Background for dropdown menus and popovers */
   --popover-foreground: var(--foreground); /* Text and icons within popovers */
   --primary: var(--orange-400); /* Brand color for primary actions (buttons, highlights) */
-  --primary-foreground: #FFFFFF; /* Text and icons on a dark brand surface */
-  --primary-on: var(--gray-950); /* Text and icons on the primary fill */
+  --primary-foreground: #FFFFFF; /* Text and icons on primary-colored elements */
   --secondary: var(--gray-200); /* Less prominent action color */
-  --secondary-foreground: var(--gray-600); /* Secondary text, descriptions */
+  --secondary-foreground: var(--gray-500); /* Secondary text, descriptions */
   --muted: var(--gray-100); /* Subdued background for less important elements */
-  --muted-foreground: var(--gray-500); /* Placeholders, disabled labels, markers */
+  --muted-foreground: var(--gray-400); /* Placeholders, disabled labels, markers */
   --accent: color-mix(in oklab, var(--gray-950) 4%, transparent); /* Highlight color for active or focused elements */
   --accent-foreground: var(--orange-400); /* Text and icons on accent-colored elements */
-  --link-foreground: var(--orange-600); /* Link text on a page surface */
   --border: var(--gray-200); /* Default border color */
   --border-subtle: var(--gray-100); /* Subtle border color */
   --border-strong: var(--gray-300); /* Border color for hovering cards */
@@ -29,17 +27,13 @@
   --ring: var(--gray-300); /* Focus indicator color */
   --overlay: color-mix(in oklab, var(--gray-950) 30%, transparent);
   --success: var(--green-500);
-  --success-foreground: var(--green-600); /* Success text on a page surface */
-  --success-on: var(--gray-950); /* Text and icons on the success fill */
+  --success-foreground: #FFFFFF;
   --info: var(--blue-500);
-  --info-foreground: var(--blue-600); /* Info text on a page surface */
-  --info-on: var(--gray-950); /* Text and icons on the info fill */
+  --info-foreground: #FFFFFF;
   --warning: var(--yellow-400);
-  --warning-foreground: var(--yellow-600); /* Warning text on a page surface */
-  --warning-on: var(--gray-950); /* Text and icons on the warning fill */
+  --warning-foreground: #FFFFFF;
   --destructive: var(--red-500);
-  --destructive-foreground: var(--red-600); /* Destructive text on a page surface */
-  --destructive-on: var(--gray-950); /* Text and icons on the destructive fill */
+  --destructive-foreground: #FFFFFF;
   --chart-1: var(--green-400);
   --chart-2: var(--blue-400);
   --chart-3: var(--purple-500);
@@ -71,7 +65,7 @@
   --warning-border: color-mix(in oklab, var(--warning) 20%, transparent); /* warning field border */
   --sidebar-foreground: var(--foreground); /* Text and icons within the sidebar */
   --sidebar-primary: var(--primary); /* Primary actions within the sidebar */
-  --sidebar-primary-foreground: var(--primary-on); /* Text on sidebar primary elements */
+  --sidebar-primary-foreground: var(--primary-foreground); /* Text on sidebar primary elements */
   --sidebar-accent: var(--accent); /* Highlighted elements within the sidebar */
   --sidebar-accent-foreground: var(--accent-foreground); /* Text on sidebar accent elements */
   --sidebar-border: var(--border); /* Sidebar divider lines or borders */

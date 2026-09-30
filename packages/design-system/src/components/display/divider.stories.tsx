@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Divider } from "./divider";
 
 const Box = ({ children }: { children: ReactNode }) => (
-  <div className="rounded-md bg-muted px-3 py-2 text-sm text-secondary-foreground">
+  <div className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
     {children}
   </div>
 );

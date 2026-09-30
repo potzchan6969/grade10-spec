@@ -245,7 +245,7 @@ function SetupSheetBody({
       )}
       {errorMessage && !linking ? (
         <p
-          className="text-left text-xs text-destructive-foreground"
+          className="text-left text-xs text-destructive"
           data-slot="input-message"
           role="alert"
         >

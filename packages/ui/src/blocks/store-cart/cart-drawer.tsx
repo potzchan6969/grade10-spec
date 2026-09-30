@@ -208,12 +208,19 @@ function CartItemContent({
         <button
           type="button"
           onClick={onClickProduct}
-          className="w-full cursor-pointer text-left text-sm font-medium leading-5 text-foreground hover:underline focus-visible:outline-none"
+          className={cn(
+            "w-full cursor-pointer text-left text-sm font-medium leading-5 text-foreground hover:underline focus-visible:outline-none",
+            isSoldOut && "opacity-50",
+          )}
         >
           {item.name}
         </button>
 
-        <HStack gap="sm" vAlign="center" className="w-full whitespace-nowrap">
+        <HStack
+          gap="sm"
+          vAlign="center"
+          className={cn("w-full whitespace-nowrap", isSoldOut && "opacity-50")}
+        >
           <span className="text-sm font-normal leading-5 text-foreground">
             {item.price}
           </span>
@@ -225,7 +232,11 @@ function CartItemContent({
         </HStack>
 
         {item.couponCode != null ? (
-          <HStack gap="xs" vAlign="center" className="w-full">
+          <HStack
+            gap="xs"
+            vAlign="center"
+            className={cn("w-full", isSoldOut && "opacity-50")}
+          >
             <span aria-hidden className="shrink-0 text-secondary-foreground">
               <Tag size={14} weight="bold" />
             </span>
@@ -236,7 +247,7 @@ function CartItemContent({
         ) : null}
 
         {isSoldOut ? (
-          <span className="w-full text-xs font-semibold leading-4 text-destructive-foreground">
+          <span className="w-full text-xs font-semibold leading-4 text-destructive">
             {copy.soldOutLabel}
           </span>
         ) : null}
@@ -250,7 +261,7 @@ function CartItemContent({
         {item.remainingLabel != null ? (
           <span
             data-slot="cart-item-remaining"
-            className="w-full text-xs font-semibold leading-4 text-destructive-foreground"
+            className="w-full text-xs font-semibold leading-4 text-destructive"
           >
             {item.remainingLabel}
           </span>
@@ -857,7 +868,7 @@ function CartDrawerFooter({
                     ) : null}
                   </HStack>
                   <CartAmountSkeleton loading={loading}>
-                    <span className="text-sm font-medium leading-5 text-success-foreground">
+                    <span className="text-sm font-medium leading-5 text-success">
                       {appliedView.discountAmount}
                     </span>
                   </CartAmountSkeleton>
@@ -919,7 +930,7 @@ function CartDrawerFooter({
                     ) : null}
                   </HStack>
                   <CartAmountSkeleton loading={loading}>
-                    <span className="text-sm font-medium leading-5 text-success-foreground">
+                    <span className="text-sm font-medium leading-5 text-success">
                       {appliedPointsView.amountLabel}
                     </span>
                   </CartAmountSkeleton>

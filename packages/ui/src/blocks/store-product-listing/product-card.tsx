@@ -170,7 +170,7 @@ function ProductCardContent({
             className={cn(
               "text-base",
               onSale
-                ? "font-medium text-success-foreground"
+                ? "font-medium text-success"
                 : "font-normal text-card-foreground",
             )}
           >

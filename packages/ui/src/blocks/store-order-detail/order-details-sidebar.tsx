@@ -180,14 +180,14 @@ function OrderDetailsSidebar({
                   <SummaryRow
                     label={summary.discount.label}
                     value={summary.discount.value}
-                    valueClassName="text-success-foreground"
+                    valueClassName="text-success"
                   />
                 ) : null}
                 {summary?.points ? (
                   <SummaryRow
                     label={summary.points.label}
                     value={summary.points.value}
-                    valueClassName="text-success-foreground"
+                    valueClassName="text-success"
                   />
                 ) : null}
                 {summary?.refund ? (

@@ -436,14 +436,12 @@ function ListingQuickMaximumBidActions({
                 aria-disabled={amountEntryLocked || undefined}
                 aria-label={accessibleName}
                 aria-pressed={selected}
-                // No dim while the custom field leads: a preset stays a live
-                // control and keeps its text at AA. Locked, the Button's own
-                // disabled style dims it once.
                 className={cn(
                   // Below `sm`: grow with the amount (min width), scroll the row.
                   // From `sm`: equal columns again.
                   "h-auto shrink-0 flex-col items-center gap-0.5 rounded-(--radius-xl) px-2.5 py-3 text-center whitespace-nowrap min-w-20",
                   "sm:min-w-0 sm:flex-1 sm:px-1.5 sm:whitespace-normal",
+                  (customActive || amountEntryLocked) && "opacity-50",
                   selected &&
                     "border-success-ring hover:border-success-ring focus-visible:border-success-ring focus-visible:ring-success-ring/50",
                 )}
@@ -466,7 +464,10 @@ function ListingQuickMaximumBidActions({
 
         <NumberInput
           aria-label={customPlaceholder}
-          className="w-full"
+          className={cn(
+            "w-full",
+            (!customActive || amountEntryLocked) && "opacity-50",
+          )}
           disabled={amountEntryLocked}
           inputMode="numeric"
           message={amountEntryLocked ? undefined : helperMessage}
@@ -495,7 +496,7 @@ function ListingQuickMaximumBidActions({
         </Button>
         {authorizationStatus === "error" && authorizationMessage ? (
           <p
-            className="text-left text-xs text-destructive-foreground"
+            className="text-left text-xs text-destructive"
             data-slot="input-message"
             role="alert"
           >

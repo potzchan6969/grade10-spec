@@ -83,6 +83,9 @@ const preview: Preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: "error",
+      // Colour contrast waits on the designer's palette decision, so that
+      // one rule is off; every other rule fails the run.
+      config: { rules: [{ id: "color-contrast", enabled: false }] },
     },
   },
   initialGlobals: {

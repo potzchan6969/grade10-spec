@@ -49,10 +49,8 @@ function AvatarFallback({
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
-      // Text on `--muted` takes the secondary tone: `--muted-foreground`
-      // reads 4.4 there, under AA. The group count below does the same.
       className={cn(
-        "flex size-full items-center justify-center rounded-full bg-muted text-sm font-medium text-secondary-foreground [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] group-data-[size=xs]/avatar:text-[10px] group-data-[size=sm]/avatar:text-xs",
+        "flex size-full items-center justify-center rounded-full bg-muted text-sm font-medium text-muted-foreground [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] group-data-[size=xs]/avatar:text-[10px] group-data-[size=sm]/avatar:text-xs",
         className,
       )}
       {...props}
@@ -79,7 +77,7 @@ function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
     <span
       data-slot="avatar-badge"
       className={cn(
-        "absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-on bg-blend-color ring-2 ring-background select-none",
+        "absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background select-none",
         // Figma draws no badge on Avatar, so these stay derived: roughly a
         // quarter of each rung, tracking the rungs above.
         "group-data-[size=xs]/avatar:size-2 group-data-[size=xs]/avatar:[&>svg]:hidden",
@@ -115,7 +113,7 @@ function AvatarGroupCount({
     <div
       data-slot="avatar-group-count"
       className={cn(
-        "relative flex size-12 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-secondary-foreground ring-2 ring-background group-has-data-[size=xs]/avatar-group:size-6 group-has-data-[size=md]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-8 group-has-data-[size=xl]/avatar-group:size-16 [&>svg]:size-5 group-has-data-[size=md]/avatar-group:[&>svg]:size-4 group-has-data-[size=sm]/avatar-group:[&>svg]:size-4 group-has-data-[size=xl]/avatar-group:[&>svg]:size-6",
+        "relative flex size-12 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=xs]/avatar-group:size-6 group-has-data-[size=md]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-8 group-has-data-[size=xl]/avatar-group:size-16 [&>svg]:size-5 group-has-data-[size=md]/avatar-group:[&>svg]:size-4 group-has-data-[size=sm]/avatar-group:[&>svg]:size-4 group-has-data-[size=xl]/avatar-group:[&>svg]:size-6",
         className,
       )}
       {...props}

@@ -59,7 +59,9 @@ function FilterChip({
     <ButtonPrimitive
       className={cn(
         filterChipVariants({ size }),
-        selected ? undefined : "border-border text-foreground hover:bg-accent",
+        selected
+          ? undefined
+          : "border-border text-accent-foreground hover:bg-accent",
         className,
       )}
       data-selected={selected || undefined}

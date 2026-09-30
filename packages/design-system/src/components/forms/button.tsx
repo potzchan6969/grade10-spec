@@ -28,14 +28,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-on hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
+          "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
         outline:
           "border-border bg-control text-foreground hover:border-border-strong hover:bg-background-subtle aria-expanded:border-border-strong aria-expanded:bg-background-subtle",
         secondary:
           "bg-muted text-foreground hover:bg-background-subtle aria-expanded:bg-background-subtle",
         ghost: "text-foreground hover:bg-muted aria-expanded:bg-muted",
         destructive:
-          "bg-destructive text-destructive-on hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
+          "bg-destructive text-destructive-foreground hover:shadow-[inset_0_0_0_100vmax_var(--muted-hover)]",
       },
       size: {
         sm: "h-8 gap-1 px-3 text-xs [&_svg:not([class*='size-'])]:size-3",

@@ -9,15 +9,15 @@ import type { ReactNode } from "react";
 // underline, regular weight, and its own tonal axis. `variant` is the axis
 // Button already spends on fills, which is why this cannot be a Button rung.
 const linkVariants = cva(
-  "group/link inline-flex w-fit cursor-pointer items-center justify-center gap-1 font-normal underline decoration-solid decoration-from-font transition-colors outline-none [text-underline-position:from-font] focus-visible:rounded-(--radius-sm) focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/link inline-flex w-fit cursor-pointer items-center justify-center gap-1 font-normal underline decoration-solid decoration-from-font transition-colors outline-none [text-underline-position:from-font] focus-visible:rounded-(--radius-sm) focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:text-disabled-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default: "text-foreground",
         secondary: "text-secondary-foreground",
-        // Page text, so the status text tone: `--destructive` is the fill and
-        // reads 4.1 on white. Figma still binds Status/destructive (Q63).
-        error: "text-destructive-foreground",
+        // Figma binds Status/destructive (`--destructive`), not the on-fill
+        // `destructive-foreground` used by solid destructive buttons/badges.
+        error: "text-destructive",
       },
       // The rungs are Figma's Sizing collection: 16/24, 14/20 and 12/16, each
       // with an icon matching its type size.

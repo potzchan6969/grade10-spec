@@ -21,9 +21,9 @@ const textVariants = cva("leading-snug", {
       primary: "text-foreground",
       secondary: "text-muted-foreground",
       muted: "text-muted-foreground",
-      success: "text-success-foreground",
-      warning: "text-warning-foreground",
-      error: "text-destructive-foreground",
+      success: "text-success",
+      warning: "text-warning",
+      error: "text-destructive",
     },
     face: {
       sans: "font-sans",
@@ -58,13 +58,12 @@ type TextProps = React.HTMLAttributes<HTMLElement> &
  * `size="display"` is the rung above `xl`, for one figure a surface leads
  * with — a pickup code, a grade. `face="mono"` binds `--font-mono`, so digits
  * a collector reads back to a counter line up. The status tones bind the
- * `--<tone>-foreground` text contract, never the `--<tone>-on` a fill carries:
- * `warning` for a line that is due rather than failed, `error` for a refusal.
- * `error` binds `--destructive-foreground`, the token every theme defines;
- * `--error-foreground` is stock shadcn's and `.theme-grade10` sets no such
- * slot. `muted` is page text too, so it binds `--muted-foreground`, never
- * `--disabled-foreground`: that is the text on the dark disabled fill and
- * reads 1.0 on the page in `.theme-grade10`. No Figma set defines this
+ * status fill as text, as the store's blocks do for page text: `warning` for a
+ * line that is due rather than failed, `error` for a refusal. The
+ * `--<tone>-foreground` tokens are the text on a fill, white on the page, and
+ * `--error-foreground` is stock shadcn's, set by no theme. `muted` binds
+ * `--muted-foreground`, never `--disabled-foreground`: that is the text on the
+ * dark disabled fill and reads 1.0 on the page. No Figma set defines this
  * component, so the three axes are code ahead
  * of design, recorded in the `add-card-grading` change.
  */

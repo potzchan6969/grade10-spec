@@ -131,7 +131,7 @@ function ProductCardCartControl({
         >
           <button
             aria-label={copy.cart}
-            className="flex size-10 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-primary-on transition-[box-shadow] duration-150 ease-out hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)] motion-reduce:transition-none"
+            className="flex size-10 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-primary-foreground transition-[box-shadow] duration-150 ease-out hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)] motion-reduce:transition-none"
             onClick={(event) => {
               event.stopPropagation();
               report(1);
@@ -154,7 +154,7 @@ function ProductCardCartControl({
         >
           <button
             aria-label={collapsedLabel(copy, cartCount, quantity)}
-            className="flex h-10 w-full cursor-pointer items-center justify-center border-0 bg-transparent px-1 text-sm font-semibold text-primary-on"
+            className="flex h-10 w-full cursor-pointer items-center justify-center border-0 bg-transparent px-1 text-sm font-semibold text-primary-foreground"
             onClick={(event) => {
               event.stopPropagation();
               setMode("expanded");
