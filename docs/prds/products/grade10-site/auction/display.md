@@ -183,6 +183,7 @@ never the collector's bid or order, and every page reads the same value.
 | --- | --- | --- |
 | **Upcoming** | Published; bidding has not started | Scheduled |
 | **Active** | Bidding is open, extended bidding included | Live |
+| 🚧 **Closing** | Past the recorded close while settle has not finished; pages do not show Ended from their own clock alone — `relay-auction-live-state` | Published, past recorded close |
 | **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Setup to Refunded |
 | Hidden | Never published | Draft |
 | Removed from browse/search | Called off before close; canonical address remains direct | Called off |
@@ -191,6 +192,10 @@ never the collector's bid or order, and every page reads the same value.
   the catalogue, search or filters but remain directly accessible at their
   canonical address; My Auctions shows a called-off lot to a collector who bid
   on it, saying the card hold was released when there was one
+- 🚧 **Service clock and live refresh** — every open auction page and catalogue
+  card counts down from the auction service clock and refreshes standing when
+  the auction's live room pushes; My Auctions bidding rows show the auction
+  top — `relay-auction-live-state`
 
 ::changes{spec="grade10-site/auction/lot-status"}
 
@@ -242,6 +247,7 @@ Active and Completed filters in bidding history.
 | --- | --- | --- | --- |
 | The catalogue page | 🚧 In flight | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
+| Closing between close and settle | 🚧 In flight | Past the recorded close while still published, collectors see Closing until settle extends or ends the auction; pages do not show Ended from the browser clock alone. Live rooms re-read Postgres before they broadcast; countdowns follow the service clock. | Product (`relay-auction-live-state`) |
 | Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |

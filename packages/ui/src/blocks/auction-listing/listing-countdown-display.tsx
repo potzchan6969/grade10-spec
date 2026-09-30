@@ -32,14 +32,22 @@ function ListingCountdownDisplay({
   }, [closesAtMs, initialSeconds]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setSeconds((value) =>
-        closesAtMs != null
-          ? remainingSecondsUntil(closesAtMs)
-          : Math.max(0, value - 1),
-      );
-    }, 1000);
-    return () => window.clearInterval(timer);
+    if (closesAtMs == null) {
+      const timer = window.setInterval(() => {
+        setSeconds((value) => Math.max(0, value - 1));
+      }, 1000);
+      return () => window.clearInterval(timer);
+    }
+    // Ticks as the whole seconds left turn, so every screen counting down
+    // to the same instant changes its digit together.
+    let timer: number | undefined;
+    const tick = () => {
+      setSeconds(remainingSecondsUntil(closesAtMs));
+      const rest = (((closesAtMs - Date.now()) % 1000) + 1000) % 1000;
+      timer = window.setTimeout(tick, rest === 0 ? 1000 : rest);
+    };
+    tick();
+    return () => window.clearTimeout(timer);
   }, [closesAtMs]);
 
   const parts = useMemo(
