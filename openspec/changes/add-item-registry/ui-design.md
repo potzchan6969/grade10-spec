@@ -120,10 +120,10 @@ One cell, used by Items, one item and each move's from and to.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Marked | the default tab: marked items, with title, category, grader and cert, the owner cell and the place marking it, each row opening its item | `grade10-admin-inventory-items-US-01` |
-| Last edited | ❓ Q42: a column on the list as well as on one item | `grade10-admin-inventory-items-US-01` |
+| Last edited | no column on the list; one item's page shows who edited it last and when, as Q42 reads | `grade10-admin-inventory-items-US-01` |
 | All | every item, marked or not | `grade10-admin-inventory-items-US-01` |
 | Retired | retired items and why each was retired | `grade10-admin-inventory-items-US-05` |
-| Search | one `Search` field reading the owner's exact email, an item id, a grader and cert, else a title | `grade10-admin-inventory-items-US-01` |
+| Search | one `Search` field reading the owner's exact email, an item id, a grader and cert, else a title or description | `grade10-admin-inventory-items-US-01` |
 | Paged | `CursorPager` under the rows | `grade10-admin-inventory-items-US-01` |
 | None in a tab | `Status` empty, naming the tab | `grade10-admin-inventory-items-US-01` |
 | No match | `Status` empty, naming the search and a way to clear it | `grade10-admin-inventory-items-US-01` |
@@ -148,7 +148,7 @@ One cell, used by Items, one item and each move's from and to.
 | Read-only | without `inventory:write`, no Register, Edit, Retire or Close mark | `grade10-admin-inventory-items-US-02` |
 | Mark left open | Close mark on the place row, for `inventory:write` only | `grade10-admin-inventory-items-US-06` |
 | Closed by hand | the place row names who closed it, when and why | `grade10-admin-inventory-items-US-06` |
-| Retired | final and read-only, with the reason and when; no Edit, Transfer or Retire | `grade10-admin-inventory-items-US-05` |
+| Retired | reads only, with the reason and when; no Edit, Transfer or Retire | `grade10-admin-inventory-items-US-05` |
 | Erased owner | the owner cell reads as erased and the title reads as erased; Transfer still offered | `grade10-admin-inventory-items-US-08` |
 | Not found | no item has that id | `grade10-admin-inventory-items-US-01` |
 | Forbidden | names `inventory:read` | `grade10-admin-inventory-items-US-01` |
@@ -186,7 +186,7 @@ Used by Register and Transfer, never by Edit.
 | --- | --- | --- |
 | Empty | the new owner, a reason and an optional proof; Transfer disabled until the owner and a reason are given | `grade10-admin-inventory-items-US-03` |
 | Proof picked | the file's name in a `Text` line with a Remove `Button`, under the picker | `grade10-admin-inventory-items-US-03` |
-| Proof refused | the refusal under the picker: one PDF, PNG, JPG, HEIC or HEIF file, at most 5 MB | `grade10-admin-inventory-items-US-03` |
+| Proof refused | the refusal under the picker: up to 5 PDF, PNG or JPG files, each at most 10 MB | `grade10-admin-inventory-items-US-03` |
 | Refused while marked | an error `Notice` naming the place, when a mark landed after the page opened | `grade10-admin-inventory-items-US-04` |
 | Moved | the item's page shows the new owner and the move at the top of its moves | `grade10-admin-inventory-items-US-03` |
 
@@ -231,7 +231,7 @@ Used by Register and Transfer, never by Edit.
 | Register unreachable | an error with retry; the form keeps what was typed | `grade10-admin-vault-operator-queue-US-20` |
 | Found | the register's facts, read-only, corrected on the Case tab; the case takes that item, and the customer's edits to the draft touch only its photos and description | `grade10-admin-vault-operator-queue-US-20` |
 | Not found | nothing filled; the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-US-20` |
-| Retired cert | reads as not found | `grade10-admin-vault-operator-queue-US-20` |
+| Retired cert | reads as retired | `grade10-admin-vault-operator-queue-US-20` |
 | Another owner | found, naming its owner; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-US-20` |
 | Marked by another case | a `Notice` in the dialog's body, `Link` in its `actions`: refused, naming and linking the case; that mark is closed first | `grade10-admin-vault-operator-queue-US-20` |
 
@@ -279,8 +279,8 @@ Used by Register and Transfer, never by Edit.
   valuation's slab line, the walk-in's slab fields, Prepare documents
   blocked, the collector page's Items section and the erasure checklist's
   lines; the change waits on them in its record
-- ❓ Q41 **Where Items sits in the nav** - the designer's: recommended a
-  detail page of Inventory, as every `/inventory/*` page is today
+- Q41 **Where Items sits in the nav** - a detail page of Inventory, reached
+  from its header; the designer may still draw a nav entry of its own
 - ❓ **The search hint** - the designer's: `Search` has no description
   slot, so the hint can only be the placeholder, which goes once staff type
 - ❓ **When the walk-in lookup runs** - the designer's
