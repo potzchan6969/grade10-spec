@@ -133,7 +133,10 @@ function SummaryRow({
   );
 
   return (
-    <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4">
+    <div
+      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4"
+      data-slot="winner-order-summary-line"
+    >
       <span
         className={cn(
           "min-w-0 text-sm leading-5 text-foreground",

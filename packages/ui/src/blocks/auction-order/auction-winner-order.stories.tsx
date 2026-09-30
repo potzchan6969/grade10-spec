@@ -28,10 +28,10 @@ const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] = {
 };
 
 const INVOICE_LINES = [
-  { label: "Winning Bid", value: "HK$12,800" },
-  { label: "Buyer’s Premium", value: "HK$2,560" },
-  { label: "Shipping & Handling", value: "HK$180" },
-  { label: "Payment Processing Fee", value: "HK$545" },
+  { label: "Winning Bid", value: "$12,800.00" },
+  { label: "Buyer’s Premium", value: "$2,560.00" },
+  { label: "Shipping & Handling", value: "$180.00" },
+  { label: "Payment Processing Fee", value: "$545.00" },
 ];
 
 const DELIVERY = {
@@ -58,7 +58,7 @@ const meta = {
     },
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Pay with Card",
@@ -121,7 +121,7 @@ export const AwaitingSetup: Story = {
     },
     summary: {
       lines: [
-        { label: "Winning Bid", value: "HK$12,800" },
+        { label: "Winning Bid", value: "$12,800.00" },
         { label: "Shipping & Handling", value: "TBD", muted: true },
       ],
       total: { label: "Order Total", value: "TBD", muted: true },
@@ -156,7 +156,7 @@ export const PaymentVerifying: Story = {
     },
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
     },
     paymentMethod: { kind: "text", label: "Bank transfer" },
   },
@@ -172,7 +172,7 @@ export const BankTransferDue: Story = {
   args: {
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
       pay: {
         label: "Submit Payment Proof",
         onPress: fn(),
@@ -195,7 +195,7 @@ export const CardRedirecting: Story = {
   args: {
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
       pay: { label: "Redirecting…", onPress: fn(), loading: true },
     },
   },
@@ -233,7 +233,7 @@ export const PartiallyPaid: Story = {
     badge: { label: "Partially Paid", variant: "warning" },
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
       alert: {
         title: "Payment received in part",
         status: "warning",
@@ -263,7 +263,7 @@ export const SetupOverdue: Story = {
       },
     },
     summary: {
-      lines: [{ label: "Winning Bid", value: "HK$12,800" }],
+      lines: [{ label: "Winning Bid", value: "$12,800.00" }],
       total: { label: "Order Total", value: "TBD", muted: true },
     },
     paymentMethod: undefined,
@@ -292,7 +292,7 @@ export const Delivered: Story = {
     },
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
     },
     paymentMethod: { kind: "card", brand: "visa", masked: "•••• 4242" },
     receipts: [{ label: "Receipt", href: "#receipt.pdf" }],
@@ -320,7 +320,7 @@ export const Shipped: Story = {
     },
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
       invoicePdf: { onOpen: fn() },
     },
     paymentMethod: { kind: "card", brand: "visa", masked: "•••• 4242" },
@@ -348,7 +348,7 @@ export const Cancelled: Story = {
       },
     ],
     summary: {
-      lines: [{ label: "Winning Bid", value: "HK$12,800" }],
+      lines: [{ label: "Winning Bid", value: "$12,800.00" }],
       total: { label: "Order Total", value: "—" },
     },
     paymentMethod: undefined,
@@ -368,7 +368,7 @@ export const Refunded: Story = {
     progress: null,
     summary: {
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085" },
+      total: { label: "Order Total", value: "HK$16,085.00" },
       invoicePdf: { onOpen: fn() },
       refund: { title: "Refund HK$16,085", onView: fn() },
     },
