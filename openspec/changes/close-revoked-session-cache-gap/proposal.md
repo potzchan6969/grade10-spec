@@ -11,20 +11,22 @@ be treated as signed in — but an ordinary browse read still answers from a
 five-minute signed cookie cache that no admin action invalidates. Only a
 mutation or an elevated call re-reads fresh today.
 
-**Metric:** time between an admin's revoke, ban, or role change and the next
-read (of any kind) no longer reflecting the old state — from up to ~5 minutes
-today to no more than the next request.
+**Metric:** time between an admin's revoke, ban, or role change and every
+read (of any kind) no longer reflecting the old state — from up to ~6 minutes
+today (five of cookie cache, one of session-store propagation) to no more than
+70 seconds.
 
 ## What Changes
 
-- A revoked session's next read, browse or otherwise, no longer answers
-  signed in. **BREAKING** — `docs/architecture/edge-cache.md` and
-  `security.md` (grade10) currently document this five-minute browse-read
-  window for sessions as accepted; this change closes it instead of keeping
-  it.
-- A banned account's next read, browse or otherwise, no longer answers
-  signed in — the same closing, for the same reason.
-- A role change's next ordinary (non-elevated) read reflects the new roles,
+- A revoked session stops answering signed in on every read within 70
+  seconds, browse or otherwise. **BREAKING** —
+  `docs/architecture/edge-cache.md` and `security.md` (grade10) currently
+  document the five-minute browse-read window for sessions as accepted; this
+  change closes it instead of keeping it. The session store's own one-minute
+  propagation stays (`decisions.md` Q5).
+- A banned account stops answering signed in on every read within 70
+  seconds — the same closing, for the same reason.
+- A role change reaches an ordinary (non-elevated) read within 70 seconds,
   matching what an elevated call already does.
 - Every other caller's browse reads keep riding the fast cached path
   untouched — the closing is scoped to the account an admin action just

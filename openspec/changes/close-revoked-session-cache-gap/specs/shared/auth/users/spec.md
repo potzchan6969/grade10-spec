@@ -7,12 +7,12 @@
 - Ban and unban
   - Stops money and sign-in: a ban ends sessions and refuses new sign-ins; unban restores sign-in
   - No ban of admin: no caller bans an account that holds `admin` (peers included); self-ban stays refused
-  - Closes on the next read: even a cached browse read stops answering signed in, not only a mutation or an elevated call
+  - Closes within 70 seconds: even a cached browse read stops answering signed in, not only a mutation or an elevated call
 - Role changes
   - Set-role edits: clearing operator roles leaves a user; own account included
   - Peer strip refused: an operator cannot remove `admin` from another admin
   - Self-strip: an admin may remove their own `admin` when not last
-  - Closes on the next read: even a cached browse read reflects the new roles, not only an elevated call
+  - Reflects within 70 seconds: even a cached browse read reflects the new roles, not only an elevated call
 - Account create
   - Grant-gated create: only `user:create` creates; a non-`user` role also needs `user:set-role`
   - Passwordless Auth row: name, email, and roles from the closed set; no loyalty enroll, invite mail, or password
@@ -27,7 +27,8 @@ The system SHALL let a caller ban or unban an account only when they hold
 NOT sign in, SHALL NOT be treated as signed in, and SHALL NOT complete a
 money-moving action. That person SHALL NOT be treated as signed in on an
 ordinary cached read either, not only on a mutation or an elevated call; this
-SHALL hold from the next read that starts after the ban. A money-moving
+SHALL hold for every read that starts 70 seconds or more after the ban. A
+money-moving
 action SHALL re-check identity so a ban cannot be ignored. The operator
 SHALL be able to include a reason on a ban. A caller SHALL NOT ban their own
 account. A caller SHALL NOT ban an account that holds `admin`, including
@@ -104,14 +105,14 @@ be unchanged. Banning an already-banned account SHALL leave it banned.
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
-#### Scenario: shared-auth-users-SC-34 - A ban closes a cached read on the very next read
+#### Scenario: shared-auth-users-SC-34 - A ban closes a cached read within 70 seconds
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** a person who signed in and holds a signed cookie cache that has
   not yet expired
 - **WHEN** an operator who can ban bans that account
-- **THEN** the next ordinary browse read that starts after the ban reports
-  no person, even though the cookie cache has not expired
+- **THEN** an ordinary browse read that starts 70 seconds or more after the
+  ban reports no person, even though the cookie cache would not have expired
 
 ### Requirement: An operator who can set roles can change them
 
@@ -124,8 +125,8 @@ account's. A caller SHALL NOT remove `admin` from another account that holds
 account still holds `admin`. The last remaining `admin` SHALL NOT have `admin`
 removed, by self or by another caller. A caller without the grant SHALL be
 refused, and the roles SHALL be unchanged. A role change SHALL be reflected
-in an ordinary cached read as well as in a mutation or an elevated call,
-from the next read that starts after the change.
+in an ordinary cached read as well as in a mutation or an elevated call, in
+every read that starts 70 seconds or more after the change.
 
 #### Scenario: shared-auth-users-SC-14 - Admin changes another person's roles
 **Serves:** shared-auth-users-US-03 - Operator changes roles
@@ -180,11 +181,12 @@ from the next read that starts after the change.
 - **WHEN** they save their own account without `admin`
 - **THEN** their account no longer holds `admin`
 
-#### Scenario: shared-auth-users-SC-35 - A role change reflects on the next cached read
+#### Scenario: shared-auth-users-SC-35 - A role change reaches a cached read within 70 seconds
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** a signed-in account whose signed cookie cache has not yet
   expired
 - **WHEN** an operator who can set roles changes that account's roles
-- **THEN** the next ordinary browse read that starts after the change
-  reflects the new roles, even though the cookie cache has not expired
+- **THEN** an ordinary browse read that starts 70 seconds or more after the
+  change reflects the new roles, even though the cookie cache would not have
+  expired
