@@ -66,7 +66,7 @@ written here.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Closed | Open a walk-in in the queue's header, for `vault:operate` only | `grade10-admin-vault-operator-queue-US-10` |
-| Statement first | ❓ awaiting Legal (Q17): the collection statement shown before staff type | `grade10-admin-vault-operator-queue-US-10` |
+| Statement first | the collection statement shown before staff type, its version kept by the open (Q17); in production the open refuses while the statement is unwritten (Q24) | `grade10-admin-vault-operator-queue-US-10` |
 | Empty | email, category, title, description, lane and amount, photos; no name; Open case disabled | `grade10-admin-vault-operator-queue-US-10` |
 | Photos added | the photos in a `MediaGallery`, n of 10, each removable | `grade10-admin-vault-operator-queue-US-10` |
 | Opening | Open case pending; the form held | `grade10-admin-vault-operator-queue-US-10` |
@@ -74,8 +74,8 @@ written here.
 | Signed-in address | a `Notice` naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-US-10` |
 | Refused otherwise | the worker's refusal in words beside the field it names | `grade10-admin-vault-operator-queue-US-10` |
 
-Grader and cert arrive with `add-item-registry`. The form's task group
-starts once Legal answers Q17; the names and the collector page do not wait.
+Grader and cert arrive with `add-item-registry`. The form is built without
+waiting on counsel's statement text (Q24).
 
 ### Walk-in draft
 
