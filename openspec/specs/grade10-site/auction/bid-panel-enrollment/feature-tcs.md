@@ -98,7 +98,7 @@ backend does not require.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
@@ -137,7 +137,7 @@ backend does not require.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
@@ -156,13 +156,14 @@ backend does not require.
 | Field | Value |
 | --- | --- |
 | <listing_2> | An open listing taking bids; this collector has no linked card |
+| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 
 **Steps:**
 
 1. Leave the provider card field empty.
 2. Leave age attestation unchecked.
 3. Read the continue control.
-4. Enter a card in the provider-hosted field.
+4. Enter <the successful Visa> in the provider-hosted field.
 5. Check age attestation.
 6. Read the continue control.
 
@@ -179,13 +180,13 @@ backend does not require.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
@@ -218,7 +219,7 @@ backend does not require.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -250,14 +251,14 @@ backend does not require.
 * The empty link prompt is shown.
 * Amount controls stay visible and disabled.
 
-<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-e02 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
-### grade10-site-auction-bid-panel-enrollment-US2-TC5-1: Completing setup unlocks amount controls
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-e02 rev=2 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
+### grade10-site-auction-bid-panel-enrollment-US2-TC5-2: Completing setup unlocks amount controls
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -275,16 +276,18 @@ backend does not require.
 | Field | Value |
 | --- | --- |
 | <listing_2> | An open listing taking bids; this collector has no linked card |
+| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 
 **Steps:**
 
 1. Click the primary bid action.
-2. Enter a card in the provider-hosted field.
+2. Enter <the successful Visa> in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
 5. Read the linked-card slot.
 6. Read the quick-bid presets and the custom maximum.
 7. Read the primary bid action.
+8. Read the linked card's authorizations.
 
 **Expected Results:**
 
@@ -292,6 +295,8 @@ backend does not require.
 * The linked card is shown, with Change available.
 * Quick-bid presets and the custom maximum are enabled.
 * The primary bid action offers set or raise maximum.
+* The panel does not wait for a bid-time hold.
+* No card authorization is created.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-3e2 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC6-1: Empty linked-card slot opens setup
@@ -300,7 +305,7 @@ backend does not require.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -339,7 +344,7 @@ backend does not require.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -381,7 +386,7 @@ backend does not require.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -423,7 +428,7 @@ backend does not require.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -460,7 +465,7 @@ backend does not require.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
@@ -498,7 +503,7 @@ backend does not require.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
