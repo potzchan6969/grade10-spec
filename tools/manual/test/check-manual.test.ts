@@ -34,6 +34,15 @@ describe("a store that tells the truth", () => {
     ]);
   });
 
+  it("--quiet drops the note the default report keeps", async () => {
+    const root = fixture("clean");
+    const outcome = await runChecks(root, NO_GIT);
+    const loud = formatReport(root, outcome).text;
+    const quiet = formatReport(root, outcome, { quiet: true }).text;
+    expect(loud).toContain("note:");
+    expect(quiet).not.toContain("note:");
+  });
+
   it("exits 0 and counts nothing", async () => {
     const root = fixture("clean");
     const report = formatReport(root, await runChecks(root, NO_GIT));
@@ -130,6 +139,24 @@ describe("a store that has drifted", () => {
     expect(report.failures).toBe(12);
     expect(report.warnings).toBe(3);
     expect(report.text).toContain("12 failures, 3 warnings");
+  });
+
+  it("--quiet keeps only lines the default report already prints, and drops WARN", async () => {
+    const root = fixture("broken");
+    const outcome = await result;
+    const loudReport = formatReport(root, outcome);
+    const quietReport = formatReport(root, outcome, { quiet: true });
+    expect(quietReport.failures).toBe(12);
+    expect(quietReport.warnings).toBe(3);
+    expect(loudReport.text).toContain("WARN");
+    expect(quietReport.text).not.toContain("WARN");
+    expect(quietReport.text).toContain("FAIL");
+    expect(quietReport.text).toContain("12 failures, 3 warnings");
+    for (const line of quietReport.text
+      .split("\n")
+      .filter((one) => one.length > 0)) {
+      expect(loudReport.text).toContain(line);
+    }
   });
 });
 
@@ -597,6 +624,44 @@ describe("the rest of what the fold refuses", () => {
     );
     expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([
       "openspec/changes/adding/specs/demo-product/alpha/spec.md — ADDED `Alpha does things` is already a requirement of `demo-product/alpha`, and the fold refuses to add a name that exists",
+    ]);
+  });
+
+  it("takes a MODIFIED naming a same-file RENAMED's new header", async () => {
+    const root = changing(
+      "renaming-modified",
+      [
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha does things`",
+        "- TO: `### Requirement: Alpha does the thing`",
+        "",
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does the thing", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([]);
+  });
+
+  it("fails a MODIFIED naming the OLD header of a same-file RENAMED", async () => {
+    const root = changing(
+      "renaming-old",
+      [
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha does things`",
+        "- TO: `### Requirement: Alpha does the thing`",
+        "",
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([
+      "openspec/changes/renaming-old/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things`, but this change also renames it to `Alpha does the thing` — the fold requires MODIFIED to name the new header",
     ]);
   });
 

@@ -114,12 +114,15 @@ Flags:
   --app-root <dir>  The application clone a grade10:<path> Decided by line is
                     held to; without it, the clone this store is a submodule
                     of, and with neither, the line is held to its form alone
+  --app-paths-only  Report only the grade10:<path> lines the application clone
+                    does not hold. The application repository's CI runs this,
+                    so the store's own findings stay the store's
   --help            Print this help and exit
 `;
 
 const problems = [];
-const record = (severity, file, line, message) =>
-  problems.push({ severity, file, line, message });
+const record = (severity, file, line, message, app = false) =>
+  problems.push({ severity, file, line, message, app });
 
 /**
  * Where the Manual table sits. It belongs under `## Reconciliation`, where the
@@ -225,6 +228,7 @@ function checkSuite(root, filePath, rulesRev) {
           ? domainPrefix(root, dir)
           : (issuedPrefix(spec) ?? basename(dir));
   const err = (line, msg) => record("error", rel, line, msg);
+  const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
   // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
@@ -554,7 +558,7 @@ function checkSuite(root, filePath, rulesRev) {
           } else if (APP_ROOT !== null) {
             const full = join(APP_ROOT, within);
             if (!existsSync(full) || !statSync(full).isFile())
-              err(
+              errApp(
                 line,
                 `${named}, which the application clone at ${APP_ROOT} does not hold as a file`,
               );
@@ -696,7 +700,7 @@ function applicationRoot(given, root) {
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["app-root", "capture-baseline", "root", "swept"],
-  booleans: ["require-suites", "stale-report", "strict"],
+  booleans: ["app-paths-only", "require-suites", "stale-report", "strict"],
   usage: USAGE,
 });
 const args = {
@@ -1165,6 +1169,11 @@ for (const s of summaries) {
   console.log(
     `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
   );
+}
+
+if (flags["app-paths-only"]) {
+  const kept = problems.filter((p) => p.app);
+  problems.splice(0, problems.length, ...kept);
 }
 
 const errors = problems.filter((p) => p.severity === "error");

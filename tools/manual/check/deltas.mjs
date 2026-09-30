@@ -490,6 +490,15 @@ function checkFolded(ctx, files, shape) {
     // the store rule already names it.
     if (spec?.error) continue;
     const durable = new Set((spec?.requirements ?? []).map((it) => it.name));
+    // openspec's own fold: once a RENAMED pair exists, MODIFIED must name its
+    // TO header, and the FROM header is refused under it — so both sides are
+    // read from this delta's own RENAMED blocks, not the durable set alone.
+    const renamedFrom = new Map(
+      one.requirements
+        .filter((it) => it.kind === "renamed")
+        .map((it) => [it.name, it.to]),
+    );
+    const renamedTo = new Map([...renamedFrom].map(([from, to]) => [to, from]));
 
     for (const requirement of one.requirements) {
       const what = label(requirement);
@@ -502,7 +511,19 @@ function checkFolded(ctx, files, shape) {
         );
         continue;
       }
-      if (!durable.has(requirement.name)) {
+      if (
+        requirement.kind === "modified" &&
+        renamedFrom.has(requirement.name)
+      ) {
+        ctx.add(
+          "delta",
+          one.file,
+          `${what}, but this change also renames it to \`${renamedFrom.get(requirement.name)}\` — the fold requires MODIFIED to name the new header`,
+        );
+        continue;
+      }
+      const durableName = renamedTo.get(requirement.name) ?? requirement.name;
+      if (!durable.has(durableName)) {
         if (!spec) {
           ctx.add(
             "delta",
@@ -523,7 +544,7 @@ function checkFolded(ctx, files, shape) {
       }
       if (requirement.kind !== "modified") continue;
       const dropped = droppedScenarios(
-        scenarios(outline(blocks(one.spec).get(requirement.name) ?? "")),
+        scenarios(outline(blocks(one.spec).get(durableName) ?? "")),
         scenarios(requirement.block.children),
       );
       if (dropped.length === 0) continue;

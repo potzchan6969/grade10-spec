@@ -64,6 +64,9 @@ withdrawn.
 A case with a check still out is not a case with no identity, and the screen
 says which — an operator arranging a visit needs to know the difference.
 
+🚧 The console's identity panel shows only these six states, never the
+provider's finer ones.
+
 ## Verdict
 
 The identity binds under the case's own guard, and any signing packet still out

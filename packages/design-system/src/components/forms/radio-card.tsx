@@ -3,7 +3,9 @@ import { RadioButton } from "@grade10/design-system/components/forms/radio-butto
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
-type RadioCardProps = RadioPrimitive.Root.Props & {
+// `title` is taken over from the DOM attribute of that name: the card's
+// primary line is a node, not a tooltip string.
+type RadioCardProps = Omit<RadioPrimitive.Root.Props, "title"> & {
   /** Primary line — address nickname, plan name, etc. */
   title?: ReactNode;
   /** Secondary lines under the title. */

@@ -18,6 +18,10 @@
  *
  * A namespace is added under `shared` for every language, and under a brand
  * only where that brand has to say it itself.
+ *
+ * Each layer in one language is its own export, and the two tables are built
+ * from them, so an entry that serves one brand in one language imports only
+ * the layers it reads and a bundler leaves every other language out.
  */
 
 import grade10EnAuctionListing from "../messages/grade10/en/auctionListing.json";
@@ -75,6 +79,7 @@ import sharedEnChrome from "../messages/shared/en/chrome.json";
 import sharedEnCommon from "../messages/shared/en/common.json";
 import sharedEnDates from "../messages/shared/en/dates.json";
 import sharedEnEmail from "../messages/shared/en/email.json";
+import sharedEnGrading from "../messages/shared/en/grading.json";
 import sharedEnIdentity from "../messages/shared/en/identity.json";
 import sharedEnLegal from "../messages/shared/en/legal.json";
 import sharedEnLocale from "../messages/shared/en/locale.json";
@@ -101,6 +106,7 @@ import sharedKoChrome from "../messages/shared/ko/chrome.json";
 import sharedKoCommon from "../messages/shared/ko/common.json";
 import sharedKoDates from "../messages/shared/ko/dates.json";
 import sharedKoEmail from "../messages/shared/ko/email.json";
+import sharedKoGrading from "../messages/shared/ko/grading.json";
 import sharedKoIdentity from "../messages/shared/ko/identity.json";
 import sharedKoLegal from "../messages/shared/ko/legal.json";
 import sharedKoLocale from "../messages/shared/ko/locale.json";
@@ -127,6 +133,7 @@ import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
 import sharedZhHansCommon from "../messages/shared/zh-Hans/common.json";
 import sharedZhHansDates from "../messages/shared/zh-Hans/dates.json";
 import sharedZhHansEmail from "../messages/shared/zh-Hans/email.json";
+import sharedZhHansGrading from "../messages/shared/zh-Hans/grading.json";
 import sharedZhHansIdentity from "../messages/shared/zh-Hans/identity.json";
 import sharedZhHansLegal from "../messages/shared/zh-Hans/legal.json";
 import sharedZhHansLocale from "../messages/shared/zh-Hans/locale.json";
@@ -153,6 +160,7 @@ import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
 import sharedZhHantCommon from "../messages/shared/zh-Hant/common.json";
 import sharedZhHantDates from "../messages/shared/zh-Hant/dates.json";
 import sharedZhHantEmail from "../messages/shared/zh-Hant/email.json";
+import sharedZhHantGrading from "../messages/shared/zh-Hant/grading.json";
 import sharedZhHantIdentity from "../messages/shared/zh-Hant/identity.json";
 import sharedZhHantLegal from "../messages/shared/zh-Hant/legal.json";
 import sharedZhHantLocale from "../messages/shared/zh-Hant/locale.json";
@@ -178,186 +186,208 @@ import zzzKoSignIn from "../messages/zzz/ko/signIn.json";
 import zzzKoStoreHome from "../messages/zzz/ko/storeHome.json";
 import zzzKoVault from "../messages/zzz/ko/vault.json";
 
+/** The words no brand claims, one language at a time. */
+export const sharedEn = {
+  appointment: sharedEnAppointment,
+  auction: sharedEnAuction,
+  auctionBiddingHistory: sharedEnAuctionBiddingHistory,
+  auctionInvoicePdf: sharedEnAuctionInvoicePdf,
+  auctionRecord: sharedEnAuctionRecord,
+  auctionListing: sharedEnAuctionListing,
+  auctionOrders: sharedEnAuctionOrders,
+  auctionWatchlist: sharedEnAuctionWatchlist,
+  checkout: sharedEnCheckout,
+  chrome: sharedEnChrome,
+  common: sharedEnCommon,
+  dates: sharedEnDates,
+  email: sharedEnEmail,
+  grading: sharedEnGrading,
+  identity: sharedEnIdentity,
+  legal: sharedEnLegal,
+  locale: sharedEnLocale,
+  marketing: sharedEnMarketing,
+  membership: sharedEnMembership,
+  notFound: sharedEnNotFound,
+  notifications: sharedEnNotifications,
+  product: sharedEnProduct,
+  profile: sharedEnProfile,
+  signIn: sharedEnSignIn,
+  store: sharedEnStore,
+  storeHome: sharedEnStoreHome,
+  vault: sharedEnVault,
+};
+
+export const sharedZhHant = {
+  appointment: sharedZhHantAppointment,
+  auction: sharedZhHantAuction,
+  auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
+  auctionInvoicePdf: sharedZhHantAuctionInvoicePdf,
+  auctionRecord: sharedZhHantAuctionRecord,
+  auctionListing: sharedZhHantAuctionListing,
+  auctionOrders: sharedZhHantAuctionOrders,
+  auctionWatchlist: sharedZhHantAuctionWatchlist,
+  checkout: sharedZhHantCheckout,
+  chrome: sharedZhHantChrome,
+  common: sharedZhHantCommon,
+  dates: sharedZhHantDates,
+  email: sharedZhHantEmail,
+  grading: sharedZhHantGrading,
+  identity: sharedZhHantIdentity,
+  legal: sharedZhHantLegal,
+  locale: sharedZhHantLocale,
+  marketing: sharedZhHantMarketing,
+  membership: sharedZhHantMembership,
+  notFound: sharedZhHantNotFound,
+  notifications: sharedZhHantNotifications,
+  product: sharedZhHantProduct,
+  profile: sharedZhHantProfile,
+  signIn: sharedZhHantSignIn,
+  store: sharedZhHantStore,
+  storeHome: sharedZhHantStoreHome,
+  vault: sharedZhHantVault,
+};
+
+export const sharedZhHans = {
+  appointment: sharedZhHansAppointment,
+  auction: sharedZhHansAuction,
+  auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
+  auctionInvoicePdf: sharedZhHansAuctionInvoicePdf,
+  auctionRecord: sharedZhHansAuctionRecord,
+  auctionListing: sharedZhHansAuctionListing,
+  auctionOrders: sharedZhHansAuctionOrders,
+  auctionWatchlist: sharedZhHansAuctionWatchlist,
+  checkout: sharedZhHansCheckout,
+  chrome: sharedZhHansChrome,
+  common: sharedZhHansCommon,
+  dates: sharedZhHansDates,
+  email: sharedZhHansEmail,
+  grading: sharedZhHansGrading,
+  identity: sharedZhHansIdentity,
+  legal: sharedZhHansLegal,
+  locale: sharedZhHansLocale,
+  marketing: sharedZhHansMarketing,
+  membership: sharedZhHansMembership,
+  notFound: sharedZhHansNotFound,
+  notifications: sharedZhHansNotifications,
+  product: sharedZhHansProduct,
+  profile: sharedZhHansProfile,
+  signIn: sharedZhHansSignIn,
+  store: sharedZhHansStore,
+  storeHome: sharedZhHansStoreHome,
+  vault: sharedZhHansVault,
+};
+
+export const sharedKo = {
+  appointment: sharedKoAppointment,
+  auction: sharedKoAuction,
+  auctionBiddingHistory: sharedKoAuctionBiddingHistory,
+  auctionInvoicePdf: sharedKoAuctionInvoicePdf,
+  auctionRecord: sharedKoAuctionRecord,
+  auctionListing: sharedKoAuctionListing,
+  auctionOrders: sharedKoAuctionOrders,
+  auctionWatchlist: sharedKoAuctionWatchlist,
+  checkout: sharedKoCheckout,
+  chrome: sharedKoChrome,
+  common: sharedKoCommon,
+  dates: sharedKoDates,
+  email: sharedKoEmail,
+  grading: sharedKoGrading,
+  identity: sharedKoIdentity,
+  legal: sharedKoLegal,
+  locale: sharedKoLocale,
+  marketing: sharedKoMarketing,
+  membership: sharedKoMembership,
+  notFound: sharedKoNotFound,
+  notifications: sharedKoNotifications,
+  product: sharedKoProduct,
+  profile: sharedKoProfile,
+  signIn: sharedKoSignIn,
+  store: sharedKoStore,
+  storeHome: sharedKoStoreHome,
+  vault: sharedKoVault,
+};
+
+/** What each brand says for itself, one language at a time. */
+export const grade10En = {
+  auctionListing: grade10EnAuctionListing,
+  auctionOrders: grade10EnAuctionOrders,
+  chrome: grade10EnChrome,
+  email: grade10EnEmail,
+  head: grade10EnHead,
+  identity: grade10EnIdentity,
+  marketing: grade10EnMarketing,
+  orderDetail: grade10EnOrderDetail,
+  orderHistory: grade10EnOrderHistory,
+  profile: grade10EnProfile,
+  signIn: grade10EnSignIn,
+  store: grade10EnStore,
+  storeHome: grade10EnStoreHome,
+  vault: grade10EnVault,
+};
+
+export const grade10ZhHant = {
+  auctionListing: grade10ZhHantAuctionListing,
+  auctionOrders: grade10ZhHantAuctionOrders,
+  chrome: grade10ZhHantChrome,
+  email: grade10ZhHantEmail,
+  head: grade10ZhHantHead,
+  identity: grade10ZhHantIdentity,
+  marketing: grade10ZhHantMarketing,
+  orderDetail: grade10ZhHantOrderDetail,
+  orderHistory: grade10ZhHantOrderHistory,
+  profile: grade10ZhHantProfile,
+  signIn: grade10ZhHantSignIn,
+  store: grade10ZhHantStore,
+  storeHome: grade10ZhHantStoreHome,
+  vault: grade10ZhHantVault,
+};
+
+export const grade10ZhHans = {
+  auctionListing: grade10ZhHansAuctionListing,
+  auctionOrders: grade10ZhHansAuctionOrders,
+  chrome: grade10ZhHansChrome,
+  email: grade10ZhHansEmail,
+  head: grade10ZhHansHead,
+  identity: grade10ZhHansIdentity,
+  marketing: grade10ZhHansMarketing,
+  orderDetail: grade10ZhHansOrderDetail,
+  orderHistory: grade10ZhHansOrderHistory,
+  profile: grade10ZhHansProfile,
+  signIn: grade10ZhHansSignIn,
+  store: grade10ZhHansStore,
+  storeHome: grade10ZhHansStoreHome,
+  vault: grade10ZhHansVault,
+};
+
+export const zzzKo = {
+  auctionListing: zzzKoAuctionListing,
+  chrome: zzzKoChrome,
+  email: zzzKoEmail,
+  head: zzzKoHead,
+  identity: zzzKoIdentity,
+  marketing: zzzKoMarketing,
+  profile: zzzKoProfile,
+  signIn: zzzKoSignIn,
+  storeHome: zzzKoStoreHome,
+  vault: zzzKoVault,
+};
+
 /** The words no brand claims, in every language any brand speaks. */
 export const sharedCatalogs = {
-  en: {
-    appointment: sharedEnAppointment,
-    auction: sharedEnAuction,
-    auctionBiddingHistory: sharedEnAuctionBiddingHistory,
-    auctionInvoicePdf: sharedEnAuctionInvoicePdf,
-    auctionRecord: sharedEnAuctionRecord,
-    auctionListing: sharedEnAuctionListing,
-    auctionOrders: sharedEnAuctionOrders,
-    auctionWatchlist: sharedEnAuctionWatchlist,
-    checkout: sharedEnCheckout,
-    chrome: sharedEnChrome,
-    common: sharedEnCommon,
-    dates: sharedEnDates,
-    email: sharedEnEmail,
-    identity: sharedEnIdentity,
-    legal: sharedEnLegal,
-    locale: sharedEnLocale,
-    marketing: sharedEnMarketing,
-    membership: sharedEnMembership,
-    notFound: sharedEnNotFound,
-    notifications: sharedEnNotifications,
-    product: sharedEnProduct,
-    profile: sharedEnProfile,
-    signIn: sharedEnSignIn,
-    store: sharedEnStore,
-    storeHome: sharedEnStoreHome,
-    vault: sharedEnVault,
-  },
-  "zh-Hant": {
-    appointment: sharedZhHantAppointment,
-    auction: sharedZhHantAuction,
-    auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
-    auctionInvoicePdf: sharedZhHantAuctionInvoicePdf,
-    auctionRecord: sharedZhHantAuctionRecord,
-    auctionListing: sharedZhHantAuctionListing,
-    auctionOrders: sharedZhHantAuctionOrders,
-    auctionWatchlist: sharedZhHantAuctionWatchlist,
-    checkout: sharedZhHantCheckout,
-    chrome: sharedZhHantChrome,
-    common: sharedZhHantCommon,
-    dates: sharedZhHantDates,
-    email: sharedZhHantEmail,
-    identity: sharedZhHantIdentity,
-    legal: sharedZhHantLegal,
-    locale: sharedZhHantLocale,
-    marketing: sharedZhHantMarketing,
-    membership: sharedZhHantMembership,
-    notFound: sharedZhHantNotFound,
-    notifications: sharedZhHantNotifications,
-    product: sharedZhHantProduct,
-    profile: sharedZhHantProfile,
-    signIn: sharedZhHantSignIn,
-    store: sharedZhHantStore,
-    storeHome: sharedZhHantStoreHome,
-    vault: sharedZhHantVault,
-  },
-  "zh-Hans": {
-    appointment: sharedZhHansAppointment,
-    auction: sharedZhHansAuction,
-    auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
-    auctionInvoicePdf: sharedZhHansAuctionInvoicePdf,
-    auctionRecord: sharedZhHansAuctionRecord,
-    auctionListing: sharedZhHansAuctionListing,
-    auctionOrders: sharedZhHansAuctionOrders,
-    auctionWatchlist: sharedZhHansAuctionWatchlist,
-    checkout: sharedZhHansCheckout,
-    chrome: sharedZhHansChrome,
-    common: sharedZhHansCommon,
-    dates: sharedZhHansDates,
-    email: sharedZhHansEmail,
-    identity: sharedZhHansIdentity,
-    legal: sharedZhHansLegal,
-    locale: sharedZhHansLocale,
-    marketing: sharedZhHansMarketing,
-    membership: sharedZhHansMembership,
-    notFound: sharedZhHansNotFound,
-    notifications: sharedZhHansNotifications,
-    product: sharedZhHansProduct,
-    profile: sharedZhHansProfile,
-    signIn: sharedZhHansSignIn,
-    store: sharedZhHansStore,
-    storeHome: sharedZhHansStoreHome,
-    vault: sharedZhHansVault,
-  },
-  ko: {
-    appointment: sharedKoAppointment,
-    auction: sharedKoAuction,
-    auctionBiddingHistory: sharedKoAuctionBiddingHistory,
-    auctionInvoicePdf: sharedKoAuctionInvoicePdf,
-    auctionRecord: sharedKoAuctionRecord,
-    auctionListing: sharedKoAuctionListing,
-    auctionOrders: sharedKoAuctionOrders,
-    auctionWatchlist: sharedKoAuctionWatchlist,
-    checkout: sharedKoCheckout,
-    chrome: sharedKoChrome,
-    common: sharedKoCommon,
-    dates: sharedKoDates,
-    email: sharedKoEmail,
-    identity: sharedKoIdentity,
-    legal: sharedKoLegal,
-    locale: sharedKoLocale,
-    marketing: sharedKoMarketing,
-    membership: sharedKoMembership,
-    notFound: sharedKoNotFound,
-    notifications: sharedKoNotifications,
-    product: sharedKoProduct,
-    profile: sharedKoProfile,
-    signIn: sharedKoSignIn,
-    store: sharedKoStore,
-    storeHome: sharedKoStoreHome,
-    vault: sharedKoVault,
-  },
+  en: sharedEn,
+  "zh-Hant": sharedZhHant,
+  "zh-Hans": sharedZhHans,
+  ko: sharedKo,
 };
 
 /** What each brand says for itself, in every language it speaks. */
 export const brandCatalogs = {
   grade10: {
-    en: {
-      auctionListing: grade10EnAuctionListing,
-      auctionOrders: grade10EnAuctionOrders,
-      chrome: grade10EnChrome,
-      email: grade10EnEmail,
-      head: grade10EnHead,
-      identity: grade10EnIdentity,
-      marketing: grade10EnMarketing,
-      orderDetail: grade10EnOrderDetail,
-      orderHistory: grade10EnOrderHistory,
-      profile: grade10EnProfile,
-      signIn: grade10EnSignIn,
-      store: grade10EnStore,
-      storeHome: grade10EnStoreHome,
-      vault: grade10EnVault,
-    },
-    "zh-Hant": {
-      auctionListing: grade10ZhHantAuctionListing,
-      auctionOrders: grade10ZhHantAuctionOrders,
-      chrome: grade10ZhHantChrome,
-      email: grade10ZhHantEmail,
-      head: grade10ZhHantHead,
-      identity: grade10ZhHantIdentity,
-      marketing: grade10ZhHantMarketing,
-      orderDetail: grade10ZhHantOrderDetail,
-      orderHistory: grade10ZhHantOrderHistory,
-      profile: grade10ZhHantProfile,
-      signIn: grade10ZhHantSignIn,
-      store: grade10ZhHantStore,
-      storeHome: grade10ZhHantStoreHome,
-      vault: grade10ZhHantVault,
-    },
-    "zh-Hans": {
-      auctionListing: grade10ZhHansAuctionListing,
-      auctionOrders: grade10ZhHansAuctionOrders,
-      chrome: grade10ZhHansChrome,
-      email: grade10ZhHansEmail,
-      head: grade10ZhHansHead,
-      identity: grade10ZhHansIdentity,
-      marketing: grade10ZhHansMarketing,
-      orderDetail: grade10ZhHansOrderDetail,
-      orderHistory: grade10ZhHansOrderHistory,
-      profile: grade10ZhHansProfile,
-      signIn: grade10ZhHansSignIn,
-      store: grade10ZhHansStore,
-      storeHome: grade10ZhHansStoreHome,
-      vault: grade10ZhHansVault,
-    },
+    en: grade10En,
+    "zh-Hant": grade10ZhHant,
+    "zh-Hans": grade10ZhHans,
   },
   zzz: {
-    ko: {
-      auctionListing: zzzKoAuctionListing,
-      chrome: zzzKoChrome,
-      email: zzzKoEmail,
-      head: zzzKoHead,
-      identity: zzzKoIdentity,
-      marketing: zzzKoMarketing,
-      profile: zzzKoProfile,
-      signIn: zzzKoSignIn,
-      storeHome: zzzKoStoreHome,
-      vault: zzzKoVault,
-    },
+    ko: zzzKo,
   },
 };

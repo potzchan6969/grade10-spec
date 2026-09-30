@@ -22,7 +22,7 @@ Every public callback, keyboard-operable native control, disabled/loading guard,
 
 Query through accessible role and name wherever possible. Native controls must be verified as keyboard operable. Do not add application integration tests here: API calls, stores, routing, analytics, persistence, wallets, hosted checkout, and notifications belong to consuming applications.
 
-In this repository the required browser gate is `pnpm run test:stories`. A consuming application must provide an equivalent gate over its own component stories or tests. Storybook accessibility remains report-only while `a11y.test` is `"todo"`; promote it only in a separate clean-baseline change.
+In this repository the required browser gate is `pnpm run test:stories`. A consuming application must provide an equivalent gate over its own component stories or tests. An axe violation fails that gate in all three Storybooks, where `a11y.test` is `"error"`. One rule is off on one story: `product-filter.search`'s `Suggestions` turns off `aria-hidden-focus`, because an open Base UI autocomplete sets `aria-hidden` on the rest of the page and leaves it tabbable, and no component here can change that. Every other rule still runs on that story.
 
 ## Motion policy
 

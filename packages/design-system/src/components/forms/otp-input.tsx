@@ -195,6 +195,7 @@ function OtpInput({
     <div
       data-slot="otp-input"
       data-status={status}
+      aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn("flex w-full flex-col gap-2", className)}
     >

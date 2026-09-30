@@ -68,6 +68,7 @@ function PromoTicket({
     <div
       data-slot="promo-ticket"
       role="group"
+      aria-disabled={muted || undefined}
       aria-label={code.label}
       className={cn("w-full", muted && "opacity-70", TICKET_SHADOW, className)}
     >

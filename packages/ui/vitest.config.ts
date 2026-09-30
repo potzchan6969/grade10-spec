@@ -43,6 +43,9 @@ export default defineConfig({
           // Storybook's generated project-annotations module is shared by all
           // browser files and is not safe to transform concurrently.
           fileParallelism: false,
+          // One frame for every file: a frame per file raced its own swap, cutting
+          // off the next file's import so its iframe could not connect.
+          isolate: false,
           // The package scaffolding lands before its first component, so an
           // empty story set must not fail the run.
           passWithNoTests: true,

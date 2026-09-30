@@ -196,7 +196,9 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
             <DialogHeader>
               <DialogTitle>{copy.zoom}</DialogTitle>
             </DialogHeader>
-            <DialogBody>
+            {/* Only an image scrolls here, so the body takes focus itself for a
+                keyboard to scroll it. */}
+            <DialogBody tabIndex={0}>
               <img
                 alt={item.alt}
                 className="w-full"

@@ -1,10 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BreadcrumbItem } from "./breadcrumb-item";
+import { Breadcrumbs } from "./breadcrumbs";
 
 const meta = {
   title: "Components/BreadcrumbItem",
   component: BreadcrumbItem,
   tags: ["autodocs"],
+  // A crumb is a list item: it renders inside the trail's list.
+  decorators: [
+    (Story) => (
+      <Breadcrumbs>
+        <Story />
+      </Breadcrumbs>
+    ),
+  ],
   args: { children: "Link", href: "#link" },
 } satisfies Meta<typeof BreadcrumbItem>;
 

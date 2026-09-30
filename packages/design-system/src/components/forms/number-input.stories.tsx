@@ -47,7 +47,10 @@ export const Disabled: Story = { args: { disabled: true, onClear: () => {} } };
 export const Loading: Story = { args: { loading: true } };
 
 export const WithoutUnit: Story = { args: { unit: undefined } };
-export const WithoutLabel: Story = { args: { label: undefined } };
+/** No visible label, so the field takes its name from `aria-label`. */
+export const WithoutLabel: Story = {
+  args: { label: undefined, "aria-label": "Amount" },
+};
 export const WithoutMessage: Story = { args: { message: undefined } };
 
 /** The trailing slot holds one thing at a time: spinner, then status icon,

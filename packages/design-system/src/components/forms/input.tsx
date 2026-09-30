@@ -135,6 +135,7 @@ function InputShell({
     <div
       data-slot="input-shell"
       data-status={status}
+      aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       className={cn(
         "group/input-shell flex w-full flex-col gap-2",

@@ -56,8 +56,9 @@ export const Large: Story = { args: { size: "lg", defaultValue: 10 } };
 
 export const Disabled: Story = { args: { disabled: true, defaultValue: 10 } };
 
+/** No visible label, so the field takes its name from `aria-label`. */
 export const WithoutLabel: Story = {
-  args: { label: undefined, defaultValue: 10 },
+  args: { label: undefined, "aria-label": "Quantity", defaultValue: 10 },
 };
 export const WithoutMessage: Story = {
   args: { message: undefined, defaultValue: 10 },

@@ -1,12 +1,22 @@
+import { assemble } from "./assemble.ts";
+import {
+  type Brand,
+  defaultLocaleOf,
+  isLocale,
+  type Locale,
+  type LocaleOf,
+} from "./brands.ts";
 import { brandCatalogs, sharedCatalogs } from "./catalogs.ts";
 
-/** Which languages a brand speaks, and which it falls back to. */
-export const brands = {
-  grade10: { locales: ["en", "zh-Hant", "zh-Hans"], defaultLocale: "en" },
-  zzz: { locales: ["ko"], defaultLocale: "ko" },
-} as const;
-
-export type Brand = keyof typeof brands;
+export {
+  type Brand,
+  brands,
+  defaultLocaleOf,
+  isLocale,
+  type Locale,
+  type LocaleOf,
+  localesOf,
+} from "./brands.ts";
 
 /**
  * The vocabulary: every user-facing string either site renders, named once.
@@ -28,12 +38,6 @@ export type Messages<B extends Brand = "grade10"> = typeof sharedCatalogs.en &
   (B extends "grade10"
     ? typeof brandCatalogs.grade10.en
     : typeof brandCatalogs.zzz.ko);
-
-/** The locales one brand speaks. */
-export type LocaleOf<B extends Brand> = (typeof brands)[B]["locales"][number];
-
-/** Every locale this package ships, across every brand. */
-export type Locale = LocaleOf<Brand>;
 
 export type ShippedLocale = Locale;
 
@@ -98,59 +102,6 @@ const owned = {
   zzz: { ko: overlay(brandCatalogs.zzz.ko) },
 } satisfies { [B in Brand]: Record<LocaleOf<B>, unknown> };
 
-type MessageTree = { [key: string]: string | MessageTree };
-
-/** The language every layer is measured against, and the one a partial
- * translation falls back to. */
-const VOCABULARY_LOCALE = "en";
-
-const layer = (
-  catalogs: Record<string, unknown>,
-  locale: string,
-): MessageTree => (catalogs[locale] as MessageTree | undefined) ?? {};
-
-export function localesOf<B extends Brand>(brand: B): readonly LocaleOf<B>[] {
-  return brands[brand].locales;
-}
-
-export function defaultLocaleOf<B extends Brand>(brand: B): LocaleOf<B> {
-  return brands[brand].defaultLocale;
-}
-
-export function isLocale<B extends Brand>(
-  brand: B,
-  value: string,
-): value is LocaleOf<B> {
-  return (brands[brand].locales as readonly string[]).includes(value);
-}
-
-function merge(base: MessageTree, overlaid: MessageTree): MessageTree {
-  const result: MessageTree = { ...base };
-  for (const [key, value] of Object.entries(overlaid)) {
-    const current = result[key];
-    result[key] =
-      typeof value === "object" && typeof current === "object"
-        ? merge(current, value)
-        : value;
-  }
-  return result;
-}
-
-/**
- * One brand's copy in one language, from the two layers that answer it.
- *
- * Four merges, each overriding the one before: the vocabulary's own language,
- * the vocabulary in the language asked for, what the brand says for itself,
- * and what the brand says for itself in that language. Language before brand,
- * because a brand states its own words in every language it speaks — so the
- * only thing the brand layer can override is a sentence written in the same
- * language, and the only thing that ever falls back across languages is a
- * translation a brand chose to leave partial.
- *
- * A locale the brand does not speak reads as its default. A raw key is not
- * among the outcomes: whatever no layer answered is what the coverage test
- * refuses to let ship.
- */
 export function resolveShippedLocale<B extends Brand>(
   brand: B,
   input: string,
@@ -158,19 +109,15 @@ export function resolveShippedLocale<B extends Brand>(
   return isLocale(brand, input) ? input : defaultLocaleOf(brand);
 }
 
+/** One brand's copy in one language; a locale the brand does not speak
+ * reads as its default. A raw key is not among the outcomes: whatever no
+ * layer answered is what the coverage test refuses to let ship. */
 export function getMessages<B extends Brand>(
   brand: B,
   locale: string,
 ): Messages<B> {
-  const fallback = brands[brand].defaultLocale;
-  const active = isLocale(brand, locale) ? locale : fallback;
-  const brandLayer = owned[brand] as Record<string, unknown>;
-
-  return merge(
-    merge(
-      merge(layer(shared, VOCABULARY_LOCALE), layer(shared, active)),
-      layer(brandLayer, fallback),
-    ),
-    layer(brandLayer, active),
-  ) as Messages<B>;
+  return assemble(brand, resolveShippedLocale(brand, locale), {
+    shared,
+    brand: owned[brand],
+  });
 }

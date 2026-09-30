@@ -110,6 +110,7 @@
     "retry": "再试一次",
     "slotTaken": "这个时间刚被预约了，请另选一个。",
     "slotNotOffered": "这个时间已不再提供，请另选一个。",
+    "resourceNotAvailable": "这个时间没有空位，请另选一个。",
     "alreadyBooked": "你在 {when} 已有此服务的预约。",
     "bookingFailed": "无法完成预约，请再试一次。",
     "moveFailed": "无法更改预约，请再试一次。",

@@ -32,6 +32,10 @@ function StepConnector({ hidden }: { hidden?: boolean }) {
  * Figma set `Step` (`5010:5711`). Display-only — steps are not interactive.
  * Hide the leading connector on the first step and the trailing connector on
  * the last.
+ *
+ * Each step is an item of `Stepper`'s ordered list, and the one in progress
+ * carries `aria-current="step"`. The indicator is decorative, so without those
+ * two a reader reaches the labels with nothing saying which one is current.
  */
 function Step({
   label,
@@ -44,13 +48,14 @@ function Step({
   const isUpcoming = state === "upcoming";
 
   return (
-    <VStack
-      className={cn("min-w-0 flex-1 py-2", className)}
+    <li
+      aria-current={state === "progress" ? "step" : undefined}
+      className={cn(
+        "flex min-w-0 flex-1 flex-col items-center justify-start gap-2 py-2",
+        className,
+      )}
       data-slot="step"
       data-state={state}
-      gap="sm"
-      hAlign="center"
-      vAlign="start"
     >
       <HStack className="w-full" gap="none" vAlign="center">
         <StepConnector hidden={!showLeadingConnector} />
@@ -73,7 +78,7 @@ function Step({
           </p>
         ) : null}
       </VStack>
-    </VStack>
+    </li>
   );
 }
 

@@ -39,6 +39,25 @@ Language before brand, because a brand answers its own keys in every language
 it speaks — so the only thing that ever falls back across languages is a
 translation a brand chose to leave partial.
 
+`getMessages` imports every brand in every language. A surface that renders
+one brand in one language takes that pair's subpath instead, and its bundle
+carries only the layers that pair reads:
+
+| Subpath | Layers it imports |
+| --- | --- |
+| `@grade10/i18n/grade10/en` | shared `en` · grade10 `en` |
+| `@grade10/i18n/grade10/zh-Hant` | shared `en`, `zh-Hant` · grade10 `en`, `zh-Hant` |
+| `@grade10/i18n/grade10/zh-Hans` | shared `en`, `zh-Hans` · grade10 `en`, `zh-Hans` |
+| `@grade10/i18n/zzz/ko` | shared `en`, `ko` · zzz `ko` |
+
+```ts
+import { messages } from "@grade10/i18n/grade10/en"; // equals getMessages("grade10", "en")
+```
+
+Both paths go through `src/assemble.ts`, so the order the layers merge in is
+written once. `src/locales.test.ts` holds each subpath equal to `getMessages`
+and refuses a subpath for a language its brand does not speak.
+
 A key no catalog names, or one a catalog misspells, is a compile error rather
 than a value nothing ever reads: `pnpm run typecheck` measures every layer
 against the vocabulary. That the layers *together* answer everything is
@@ -47,12 +66,13 @@ and the language when they do not, and refuses a key answered twice.
 
 Adding a locale: `messages/shared/<locale>/` with a file per namespace, the
 brand's own words in `messages/<brand>/<locale>/`, both wired into
-`src/catalogs.ts`, and the tag added to that brand's `locales` in
-`src/index.ts`. Adding a namespace: a file under `shared` for every language,
-one under a brand only where a brand has to say it itself, and a line per
-file in `src/catalogs.ts`. Adding a brand: a directory per locale holding
-the keys every other brand states — the test names them — plus a registry
-entry.
+`src/catalogs.ts`, the tag added to that brand's `locales` in
+`src/brands.ts`, and a subpath under `src/locales/<brand>/` with its line in
+`package.json`'s `exports`. Adding a namespace: a file under `shared` for
+every language, one under a brand only where a brand has to say it itself,
+and a line per file in `src/catalogs.ts`. Adding a brand: a directory per
+locale holding the keys every other brand states — the test names them —
+plus a registry entry and a subpath per locale.
 
 ZZZ's own words live here as an interim. They move to `external/zzz-spec`
 when that submodule lands (`docs/architecture/multi-product.md` in the

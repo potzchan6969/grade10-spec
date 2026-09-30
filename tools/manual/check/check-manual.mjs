@@ -2,7 +2,7 @@
 /*
  * CHECK: the manual against the store it describes.
  *
- *   pnpm check:manual [store-root] [--pages]
+ *   pnpm check:manual [store-root] [--pages] [--quiet]
  *
  * The manual restates nothing — it points at specs, changes, images and
  * stories. Every one of those pointers can rot without anyone noticing, so
@@ -223,9 +223,10 @@ export async function runChecks(
   return { findings, notes };
 }
 
-export function formatReport(target, result) {
+export function formatReport(target, result, { quiet = false } = {}) {
   const lines = [`manual check — ${label(target)}`];
   for (const rule of RULES) {
+    if (quiet && rule.level !== "fail") continue;
     const found = result.findings
       .filter((one) => one.rule === rule.key)
       .sort(byPathThenReason);
@@ -233,7 +234,7 @@ export function formatReport(target, result) {
     lines.push("", `${rule.level.toUpperCase()}  ${rule.title}`);
     for (const one of found) lines.push(`      ${one.path} — ${one.reason}`);
   }
-  for (const note of result.notes) lines.push("", `note: ${note}`);
+  if (!quiet) for (const note of result.notes) lines.push("", `note: ${note}`);
 
   const failures = result.findings.filter((one) => one.level === "fail").length;
   const warnings = result.findings.length - failures;
@@ -275,11 +276,13 @@ async function gitIndex(roots) {
 if (import.meta.main) {
   const args = process.argv.slice(2);
   const pages = args.includes("--pages");
+  const quiet = args.includes("--quiet");
   const where = args.find((one) => !one.startsWith("--"));
   const roots = where ? rootsOf(resolve(where)) : resolveRoots();
   const { text, failures } = formatReport(
     roots,
     await runChecks(roots, undefined, { pages }),
+    { quiet },
   );
   console.log(text);
   process.exitCode = failures > 0 ? 1 : 0;

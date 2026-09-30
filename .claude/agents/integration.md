@@ -48,14 +48,14 @@ before you write.
 
 ## What You Return
 
-One table, and nothing else.
+One table, rows ordered `blocks`, `fix`, `note`, each Finding cell at most two
+sentences. Nothing else.
 
 | # | Where | Finding | Severity |
 | --- | --- | --- | --- |
 
 - **Where** — the file and the heading or the line
-- **Finding** — what is wrong or missing, then the fix, in one or two
-  sentences
+- **Finding** — what is wrong or missing, then the fix
 - **Severity** — `blocks` where a boundary or a failure has no answer, `fix`
   where the reach is right and weaker than it should be, `note` where a reader
   would want to know and nothing waits on it

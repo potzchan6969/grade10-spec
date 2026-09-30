@@ -361,12 +361,14 @@ function FileDropzoneTarget({
       </VStack>
       <input
         accept={accept}
+        aria-hidden
         className="sr-only"
         disabled={inactive}
         id={inputId}
         multiple={limits.maxFiles > 1}
         onChange={handleInputChange}
         ref={inputRef}
+        tabIndex={-1}
         type="file"
       />
       <Button

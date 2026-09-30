@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { Step } from "./step";
 
 const meta = {
@@ -20,10 +20,11 @@ const meta = {
     showTrailingConnector: true,
   },
   decorators: [
+    // A step is a list item; `Stepper` is that list everywhere but here.
     (Story) => (
-      <div className="w-64">
+      <ol className="m-0 w-64 list-none p-0">
         <Story />
-      </div>
+      </ol>
     ),
   ],
 } satisfies Meta<typeof Step>;
@@ -31,10 +32,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Progress: Story = {};
+/** The step in progress is the current one, and says so. */
+export const Progress: Story = {
+  play: async ({ canvasElement }) => {
+    const step = within(canvasElement).getByRole("listitem");
+    await expect(step).toHaveAttribute("aria-current", "step");
+  },
+};
 
 export const Completed: Story = {
   args: { state: "completed" },
+  play: async ({ canvasElement }) => {
+    const step = within(canvasElement).getByRole("listitem");
+    await expect(step).not.toHaveAttribute("aria-current");
+  },
 };
 
 /**
@@ -53,6 +64,9 @@ export const Upcoming: Story = {
     await expect(ring).toBeInstanceOf(HTMLElement);
     await expect(ring).not.toBeDisabled();
     await expect(ring).not.toHaveAttribute("data-checked");
+    await expect(
+      within(canvasElement).getByRole("listitem"),
+    ).not.toHaveAttribute("aria-current");
   },
 };
 

@@ -35,6 +35,11 @@ type Story = StoryObj<typeof meta>;
 
 /** Typing opens product and filter suggestion groups under the field. */
 export const Suggestions: Story = {
+  // Base UI's open autocomplete hides the page from assistive tech but leaves
+  // it tabbable; see docs/governance/ui-component-testing.md.
+  parameters: {
+    a11y: { config: { rules: [{ id: "aria-hidden-focus", enabled: false }] } },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });

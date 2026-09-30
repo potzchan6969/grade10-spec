@@ -3,12 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "vitest run"
   },
   "exports": {
     ".": "./src/index.ts",
+    "./grade10/en": "./src/locales/grade10/en.ts",
+    "./grade10/zh-Hant": "./src/locales/grade10/zh-Hant.ts",
+    "./grade10/zh-Hans": "./src/locales/grade10/zh-Hans.ts",
+    "./zzz/ko": "./src/locales/zzz/ko.ts",
     "./messages/*": "./messages/*"
   },
   "devDependencies": {

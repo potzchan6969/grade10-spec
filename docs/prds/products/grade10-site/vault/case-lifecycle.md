@@ -16,14 +16,12 @@ decided at intake by one question: does the collector want a loan against it.
 - **Exits that are not a release** — `declined`, `cancelled`, `expired`,
   `forfeited`
 - **Two moves back** — a reversed payout returns `active → vaulted` while no
-  repayment is live, and the item may be paid out again from there; a
-  reversed repayment reopens `repaid → active`. The machine holds no other
-  move back, so a correction anywhere else has nowhere to land
+  repayment is live, and the item may be paid out again; a reversed
+  repayment reopens `repaid → active`; the machine holds no other move back
 - **What is not a status** — a booking (a relationship the diary holds) and
   overdue (a computation against the clock)
 - **One case, one item** — a unique index; a collector with three items
-  sends three requests and books one visit on the first, because a case has
-  never needed a booking of its own to be vaulted
+  sends three requests and books one visit on the first
 
 :::flow{title="Intake to release"}
 # Intake
@@ -36,18 +34,15 @@ Details, then photos, then send; the loan amount is the lane.
 `draft → submitted`, guarded on at least one photo.
 
 ## Collector — Book a visit
-On the case, at any live status but a draft, so the visit can be booked
-before the valuation or after the offer. The diary holds the seat and the
-case caches it.
+At any live status but a draft, so before the valuation or after the offer.
+The diary holds the seat and the case caches it.
 
 # Valuation and offer
-What the item is worth and, on the financed lane, what the shop lends against
-it.
+What the item is worth and, on the financed lane, what the shop lends.
 
 ## Staff — Start the valuation
-`submitted → under_valuation`. A booking is marked completed only once its
-slot has started, so a valuation from photographs leaves a future visit
-open.
+`submitted → under_valuation`. A booking is completed only once its slot has
+started, so a valuation from photographs leaves a future visit open.
 
 ## Staff — Record a value
 Every case, both lanes; appended, never edited; a figure below a standing
@@ -55,30 +50,23 @@ offer is refused.
 
 ## Staff — Make an offer
 Financed lane: `under_valuation → offer_made`. Principal at most the
-valuation and inside every bound the brand lends under — loan to value, the
-rate band, the term presets, the accrual ceiling and how long an offer may
-stay open. One gate applies all of them, and in production the offer is
-refused outright while a bound or the lender's name is unset. A counter-offer
-supersedes and inserts in one transaction; staff can also withdraw it back to
-`under_valuation`.
+valuation and inside every bound the brand lends under, applied by one gate;
+in production the offer is refused while a bound or the lender's name is
+unset. A counter-offer supersedes; staff can withdraw back to `under_valuation`.
 
 ## Collector or staff — Accept the offer
-`offer_made → accepted`, from the collector's own case page or from the
-counter, guarded on the offer not having expired. Declining the offer returns
-the case to `under_valuation` with the offer closed, and the request stays
-open for another. Custody terms agreed at the counter take either lane
-`under_valuation → accepted` with no offer — a storage case always, and a loan
-request the shop is not yet lending against — and either lane may end at
-`declined` by staff here.
+`offer_made → accepted`, from the collector's own case page or the counter,
+guarded on the offer not having expired. Declining returns the case to
+`under_valuation` with the offer closed and the request open. Custody terms
+agreed at the counter take either lane `under_valuation → accepted` with no
+offer; either lane may end at `declined` by staff here.
 
 # Signing and custody
 Who the collector is, what they sign, where the item goes.
 
 ## Bind the identity check
-A verification id is bound to the case. No name, birth date or document number is
-stored on the case, only the reference. The check behind it may have been walked
-by the collector days earlier, reused from one they already passed, or recorded
-by staff at the counter — the case holds the same reference either way.
+A verification id is bound to the case and nothing else is stored on it,
+whether the check was walked days earlier, reused, or recorded at the counter.
 
 ## Staff — Explain the key terms
 Financed lane: staff record that the terms were explained, with a recording
@@ -87,25 +75,23 @@ reference where there is one. Nothing else opens the loan packet.
 ## Staff — Prepare documents
 `accepted → signing`; one packet, the custody agreement always and the loan
 agreement when financed. The packet lives **24 hours**, or until a day after
-the booked visit when there is one.
+the booked visit.
 
 ## Collector — Sign on the shop iPad
 A single-use link or QR code, **30 minutes**, one device.
 
 ## Staff — Confirm vaulted
-`signing → vaulted`, guarded on an executed packet. The shop the item is kept
-at is required and the locker id is optional; a visit whose slot has started
-is marked completed.
+`signing → vaulted`, guarded on an executed packet. The shop is required and
+the locker optional; a visit whose slot has started is marked completed.
 
 # The loan
 Financed lane only.
 
 ## Treasurer — Record the payout
-`vaulted → active`. The transfer already happened; the amount must equal the
-principal, the bank reference is required, and the value date may be no
-earlier than the day the paper was sealed. The term starts here: the due date
-is computed from that value date and written on the payout row. The person
-who made the offer may not be the person who pays it out.
+`vaulted → active`. The transfer already happened; the amount equals the
+principal, the bank reference is required, and the value date is no earlier
+than the day the paper was sealed. The term starts here: the due date is
+computed from that value date. The person who made the offer may not pay it out.
 
 ## Treasurer — Record repayments
 Each carries the date the money reached the bank, the recorder's key and the
@@ -141,29 +127,31 @@ released`, guarded on nothing outstanding and no packet open.
 | Signing link | **30 minutes**, one device | the link |
 | Sweeps | every **15 minutes** and hourly | liveness only; every deadline is also enforced where it is read |
 
+- 🚧 **A lapsed offer reads as one** — the offer's own expiry is read at the
+  read, and the case stays `offer_made`, open for another —
+  [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
+
 ## Exits
 
 - **Declined** — from `under_valuation`, by staff, with a reason the
   collector reads verbatim
 - **Cancelled before custody** — from any status before the item is in the
-  vault, by the collector on their own case, by staff, or by the abandonment
-  sweep; whatever offer is live closes in the same transaction, the visit is
-  cancelled with it, and the collector is told
+  vault, by the collector, by staff, or by the abandonment sweep; the live
+  offer closes and the visit is cancelled with it, and the collector is told
 - **The unwind** — `vaulted → cancelled`, only while no payout is live; it
   runs the release machinery but signs no release document
-- **Forfeited** — `active → forfeited`, by staff, past the due date and
-  never before the cure date of a written notice has passed; the item settles
-  the debt, the figure it settled reaches the audit chain, and the collector
-  is told. A visit still ahead is cancelled in the diary and one already past is
-  marked a no-show, because calling it completed would say the borrower came
-  in, which is the one thing a forfeiture establishes did not happen
+- **Forfeited** — `active → forfeited`, by staff, past the due date and never
+  before the cure date of a written notice has passed; the item settles the
+  debt, the figure reaches the audit chain, and the collector is told; a
+  visit ahead is cancelled and one past is a no-show, never completed
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
+- 🚧 **Every ending reads on the case** — in the collector's words: the
+  reason staff gave, that the request was called off and by whom, the clock
+  that ended it, or the figure the item settled with the notice date and the
+  date to pay by; nothing left to do but start again
 
 ## Specs and journeys
-
-**Specs** — this page documents `grade10-site/vault/case-lifecycle`. The
-requirements are its; this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/case-lifecycle"}
 
@@ -195,6 +183,7 @@ requirements are its; this page holds the decision behind them.
 | Lane at intake | Decided | The financing amount's presence is the lane; nothing later asks which kind of case this is | Product |
 | No `overdue` status | Decided | Overdue is the due calculation against a clock; a status would be a cached answer that can be wrong | Engineering |
 | No booking status | Decided | A booking is the diary's row; the case caches it for display and a sweep repairs drift | Engineering |
+| No status for what the collector reads | Decided | A lapsed, declined or superseded offer, a missed visit and an ask for the item back are facts the page derives from the case, its offer and its visit at every read; a fifteenth status would be a cached answer that can be wrong, the same reason `overdue` is none | Product |
 | A packet expiring ends nothing | Decided | The ceremony's window and the case's abandonment are two clocks; only the second is terminal | Engineering |
 | A live loan books its visit | Decided | `active` is bookable; a missed pickup closes the visit, never the case | Product |
 | A reversal moves the case back | Decided | A reversed payout returns the case to `vaulted`; a reversed repayment reopens the loan | Product |

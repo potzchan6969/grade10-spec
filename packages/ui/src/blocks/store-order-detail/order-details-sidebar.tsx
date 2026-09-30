@@ -61,9 +61,9 @@ function AddressSection({
 }) {
   return (
     <VStack className="w-full" gap="sm" hAlign="stretch">
-      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+      <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
         {heading}
-      </h3>
+      </h2>
       <VStack className="w-full text-sm leading-5" gap="xs">
         {hasValue(address.name) ? (
           <p className="font-medium text-foreground">{address.name}</p>
@@ -168,9 +168,9 @@ function OrderDetailsSidebar({
             gap="md"
             hAlign="stretch"
           >
-            <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+            <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
               {copy.orderSummary}
-            </h3>
+            </h2>
             {hasLineMoneyRows ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 {summary?.subtotal ? (
@@ -235,9 +235,9 @@ function OrderDetailsSidebar({
           <VStack className="w-full p-6" gap="lg" hAlign="stretch">
             {hasPayment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   {copy.paymentMethod}
-                </h3>
+                </h2>
                 <PaymentMethodCard
                   description={
                     payment.maskedNumber != null ? payment.label : undefined

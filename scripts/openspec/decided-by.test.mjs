@@ -314,6 +314,31 @@ test("shared-planning-agent-rounds-SC-107 - beside an application clone that doe
   );
 });
 
+test("shared-planning-agent-rounds-SC-107 - --app-paths-only reports a grade10 path the application clone does not hold", () => {
+  const app = applicationClone(null);
+  const result = run(store(CHANGE, { decidedBy: APP_DECIDER }), [
+    "--app-root",
+    app,
+    "--app-paths-only",
+  ]);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /which the application clone at .+ does not hold/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-107 - --app-paths-only leaves the store's own findings to the store", () => {
+  const app = applicationClone(null);
+  const result = run(store(CHANGE, { decidedBy: "acme:apps/demo.spec.ts" }), [
+    "--app-root",
+    app,
+    "--app-paths-only",
+  ]);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.doesNotMatch(result.stdout, /no application repository/);
+});
+
 // --- the two suites this store back-filled ---------------------------------
 
 test("shared-planning-agent-rounds-SC-78 - every automated case of the two back-filled suites names a file that exists", () => {

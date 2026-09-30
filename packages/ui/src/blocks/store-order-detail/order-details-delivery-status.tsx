@@ -57,9 +57,9 @@ function OrderDetailsDeliveryStatus({
           gap="none"
           vAlign="center"
         >
-          <h3 className="text-base leading-6 font-medium text-foreground">
+          <h2 className="text-base leading-6 font-medium text-foreground">
             {copy.title}
-          </h3>
+          </h2>
           {showTrack ? (
             <Button
               size="md"

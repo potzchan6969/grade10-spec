@@ -110,6 +110,7 @@
     "retry": "Try again",
     "slotTaken": "That time was just taken. Pick another.",
     "slotNotOffered": "That time isn’t offered any more. Pick another.",
+    "resourceNotAvailable": "Nobody’s free at that time. Pick another.",
     "alreadyBooked": "You already have a visit for this service on {when}.",
     "bookingFailed": "The visit could not be booked. Try again.",
     "moveFailed": "The visit could not be moved. Try again.",
