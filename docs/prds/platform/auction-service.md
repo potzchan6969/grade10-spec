@@ -34,7 +34,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 | RPC `Grade10AuctionService` and `ZzzAuctionService` | that storefront's backend | service binding to a named entrypoint; storefront pinned server-side |
 | tRPC `public.listing`, `public.listings`, `public.auctions`, `public.auction`, `public.categories` and `featured.publicList` - a lot by slug, the keyset-paged browse, sales and one sale's lots, visible taxonomies, Featured | storefront frontends | none; answered `private, no-store`, never edge-cached |
 | 🚧 WebSocket `/api/public/live/lot/:id` and `/api/public/live/catalogue` - the lot and catalogue rooms under [Live lots](#live-lots) | storefront frontends | none; `Origin` checked against the storefronts |
-| `GET /api/public/listing-media/:size/*` — named sizes `card`, `detail`, `thumb`, `zoom` (Images transform when the scan exceeds that size's ceiling) | browsers | none; immutable, outside every purge prefix |
+| `GET /api/public/listing-media/:size/*` — named sizes `card`, `detail`, `thumb`, `zoom` (Images transform when the scan exceeds that size's ceiling) | browsers | none; immutable, never purged |
 | tRPC `/api/trpc` and the byte routes under `/api/admin/*` | the grade10 admin panel's auction section | own `AUTH_SERVICE` → grade10-auth |
 | `POST /webhooks/stripe/<storefront>` | Stripe, live and test | signature per storefront × mode |
 | cron, every five minutes | Cloudflare trigger | — |
@@ -101,7 +101,6 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - Every browse read is a `public.*` tRPC query behind the service's session tier, which answers `private, no-store`, so nothing on this surface is edge-cached and every read reaches Postgres
 - A page that polls pays one database read per viewer per poll
 - 🚧 [Live lots](#live-lots) replaces polling: a page reads once and the rooms carry each change
-- The cache tags that purges name (`listing:<id>`, `listings:index`, `auctions:index`, `auction:<id>`) reach no cached read, and the browse path prefixes a purge can name are empty
 - Listing state carries the extension policy and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - It publishes less than the rows hold: a `draft` or `canceled` listing reads as not found, `lost_hold` publishes as an ordinary `lost`, and `unsold` folds to `closed` unless the listing chose to expose its reserve state
 - A listing publishes on its own clock, so it can be live under a sale still in `draft`. It lists, and reads with no sale at all — naming the sale is what the draft status is keeping back. The taxonomy `public` flag reads the same way on every anonymous surface: an internal one is absent from the listing payload and is not a browse filter, not merely missing from the taxonomy list
@@ -112,22 +111,11 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - Displays show "Bidder N", never who — a zzz user's identity must not leak to grade10 viewers
 - A sandbox listing is refused outside development, by the same branch on every list as on the single-listing read, or it would be hidden on its own page and listed on the one in front of it
 
-### Purge handles are derived, never spelled twice
+### Only listing media is cached
 
-- Routes are declared relative to the API gateway prefix `createWorkerApp` mounts them under, so a browser and the cache see `/auction/api/public/…` while the route says `/api/public/…`
-- Every purge used to name the declared path, which matched nothing that was ever cached — no error, no metric, just a page stale until its TTL ran out. Both forms now derive from the one service id in `src/publicSurface.ts`, and a test pins the derived value
-
-### Tags first, prefixes only when rows cannot be named
-
-- Every admin mutation purges tags: the listing's own and the lists it appears on, and both sales when a listing moves between them. A test drives every mutation the router exposes and pins what it drops, including the ones that owe nothing
-- `auctions.update` is the one catalogue writer that also purges the browse prefixes: every listing under the sale carries its title, and a sale of a thousand listings cannot be spelled out as tags
-- A bid purges too — the listing's tag, the listing list, and the sale's page — scheduled the moment the transaction commits and before the Stripe confirm, because an accepted bid has already moved the floor and any extension of `ends_at`
-- Stripe webhooks and any sweep pass that moved a row purge the prefixes alone: a work list reports how many rows it moved, not which
-- Listing media sit outside every prefix on purpose: the key is the hash of the bytes and the response is `immutable` for a year, so a cached one can never be wrong and a sweep that dropped them would re-fetch every asset on the site every five minutes
-
-### A purge never fails the work that earned it
-
-- The row is committed first and the purge runs behind it on `waitUntil`, with the short TTL as the backstop
+- Listing media is the one cached response: its key is the hash of the bytes and it is served `immutable` for a year, so a cached copy can never be wrong and nothing purges it
+- The purge calls still in the code (admin mutations, a bid, the webhook, a sweep pass that moved rows) reach no cached read and change nothing a reader sees
+- 🚧 They go when the change signal under [Live lots](#live-lots) lands, which is what keeps an open page fresh
 
 ## Live lots
 
