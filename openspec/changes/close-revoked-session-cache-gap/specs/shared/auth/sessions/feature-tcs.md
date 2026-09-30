@@ -317,6 +317,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has two
 **Uncovered anchors**
 
 - Cross-account isolation (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/not-signed-in read. **Out of suite:** the per-user cache-version helper's own unit test, added under this change's `tasks.md`.
+- The 70-second bound at a location other than the one the revoke was made at (`decisions.md` Q5) is not observable on a single-location stack, where the revoke reaches the next read at once. **Out of suite:** the cache-version helper's settling-window unit test and the auth worker's before/after-race regression test, both under `tasks.md` group 3.
 - All other scenarios under Revoke / US-02, including the new `SC-09`, are covered by `US2-TC1-1` through `US2-TC7-1` above.
 
 **Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**

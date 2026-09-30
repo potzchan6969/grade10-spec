@@ -20,7 +20,8 @@ refuses new sign-ins; a revoke ends a session and leaves the person able to sign
 in again, which is what a lost laptop needs. Signing out of the surface you are
 on is a different capability again.
 
-- 🚧 **Closes on the next read** — a revoked session stops answering signed in
-  on the very next read of any kind, not only a mutation or an elevated call.
-  A browse page already open when the revoke happens does not keep working
-  until its cached copy of the session would otherwise have expired.
+- 🚧 **Closes within 70 seconds** — a revoked session stops answering signed
+  in on every read within 70 seconds, not only on a mutation or an elevated
+  call, rather than after the five minutes a browse page's cached copy of the
+  session would otherwise last. Seventy, not zero: the session store takes up
+  to a minute to reach every location.

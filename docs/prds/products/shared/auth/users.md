@@ -21,10 +21,10 @@ account holds, refuses new sign-ins, and stops money moving. An unban restores
 sign-in. Moves refused outright: banning yourself, and banning any account that
 holds `admin` — peers included, not only support or the last admin.
 
-- 🚧 **Closes on the next read** — a ban stops answering signed in on the very
-  next read of any kind, not only a mutation or an elevated call. A browse
-  page already open when the ban happens does not keep working until its
-  cached copy of the session would otherwise have expired.
+- 🚧 **Closes within 70 seconds** — a ban stops answering signed in on every
+  read within 70 seconds, not only on a mutation or an elevated call, rather
+  than after the five minutes a browse page's cached copy of the session
+  would otherwise last.
 
 ## Role Changes
 
@@ -36,8 +36,8 @@ remove their own `admin` when another admin remains; the last admin keeps
 
 - 🚧 **Browse reads close too** — a role change used to leave an ordinary,
   non-elevated read of the caller's permissions answering the old roles for
-  up to five minutes; an elevated call already read fresh. It now acts on
-  the very next read there as well.
+  up to five minutes; an elevated call already read fresh. It now reaches
+  that read within 70 seconds as well.
 
 Everything on this page is *what an operator may do*. What the directory
 components render is the console's own capability, and each of these moves lands
