@@ -23,7 +23,8 @@ zero after the backfill; ownership moves recorded with who, why and when
   description, grader, grade and cert
 - **Staff find who has what** - Items and one item's page on the console,
   searched by title or description, by grader and cert, by item id or by
-  the owner's exact email, opening on the items a place marks, the owner shown by name
+  the owner's exact email, opening on the items a place marks, the owner
+  shown by name
 - **Marked or not is read from the places** - a place keeping an item puts
   its mark on it; in this release the vault is the only place. The register
   mirrors what the vault has already done and never refuses it; a
@@ -124,9 +125,8 @@ See [Non-Goals](decisions.md#non-goals).
 
 - **Legal** - a shop purchase or a gift names the custodian, and the lender
   only through a forfeit (`decisions.md` Q14); erasure keeps an erased
-  owner's item category, grader, grade and cert (`decisions.md` Q38). Both
-  taken as recommended at landing; Legal confirms them on
-  [Items](../../../docs/prds/products/grade10-admin/inventory/items.md)
+  owner's item category, grader, grade and cert (`decisions.md` Q38); both
+  taken as recommended at landing, and Legal confirms the rows
 - **Design** - Items is a detail page of Inventory, reached from its header,
   and only one item's page shows when it was last edited (`decisions.md` Q41
   and Q42); the boards, the search hint and when the walk-in lookup runs are
