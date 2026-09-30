@@ -5,5 +5,9 @@ hands:
 depends_on:
   - complete-vault-collector-flow
 awaiting:
-  specs: "2026-09-30, the vault deltas wait for complete-vault-collector-flow to be accepted and published - @brianchacha6969"
-  ui-design: "2026-09-30, no board draws the counter's walk-in form, the collector column and filter, or the collector page - design"
+  specs: "2026-09-30, the vault deltas wait for complete-vault-collector-flow to
+    be accepted and published - @brianchacha6969"
+  ui-design: "2026-09-30, no board draws the counter's walk-in form, the collector
+    column and filter, or the collector page - design"
+landed_by:
+  proposal: brianchacha6969
