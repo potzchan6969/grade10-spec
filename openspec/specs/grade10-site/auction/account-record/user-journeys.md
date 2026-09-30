@@ -47,3 +47,9 @@ have to ask Grade10 what happens next.
 As a losing bidder, I want to see that my card hold is released, so that a
 pending authorization on my statement does not read as a charge for a listing I
 did not win.
+
+### grade10-site-auction-account-record-US-07: Collector reads My Auctions by bidding window
+
+**As a** collector
+**I want** my lots split into Active, Upcoming and Ended tabs
+**so that** I see what needs me now without scrolling past closed and unopened lots.

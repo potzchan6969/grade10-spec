@@ -1,0 +1,874 @@
+# grade10-site/vault/documents-and-signing Test Cases
+
+**Status:** pending-review
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
+
+## grade10-site-vault-documents-and-signing-US1: Collector signs their case's papers at the counter
+
+**As a** collector standing at the shop counter,
+**I want** to read every page on the iPad, agree to sign electronically and
+sign each document once,
+**so that** I know exactly what I signed and leave with a copy of it.
+
+### grade10-site-vault-documents-and-signing-US1-TC1-1: Storage-lane packet is read and signed in one ceremony
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector is on <the vault signing link> for <a case with a storage-lane packet ready to sign>, holding only the custody agreement.
+
+**Steps:**
+
+1. Turn every page of the custody agreement.
+2. Tick the e-sign disclosure and the document's own consent.
+3. Type <the case's verified legal name> and sign.
+
+**Expected Results:**
+
+* The packet seals in one transaction; a certificate page is appended to the custody agreement.
+* The custody agreement prints the case, the verified legal name, the item, the valuation, the named shop and the date, with no other document attached.
+* <the vault case page> shows the sealed document with its fingerprint.
+
+### grade10-site-vault-documents-and-signing-US1-TC2-1: Financed packet seals two documents in one ceremony
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector is on <the vault signing link> for <a financed case, principal 500000 (HKD)>, whose packet carries the custody agreement and the loan agreement.
+
+**Steps:**
+
+1. Turn every page of both documents.
+2. Tick the e-sign disclosure once and each document's own consent.
+3. Type <the case's verified legal name> and sign both documents.
+
+**Expected Results:**
+
+* Both documents seal in the same transaction, each carrying its own certificate.
+* The loan agreement prints the principal, the interest as a percentage for the term in days, the same rate per annum, `Fees: None`, the repayable amount and the borrower's own line that the key terms were explained.
+* <the vault case page> shows both sealed documents, each with its own fingerprint.
+
+### grade10-site-vault-documents-and-signing-US1-TC3-1: Signature is refused until every page has been turned
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector is on <the vault signing link> for <a case with a storage-lane packet ready to sign>.
+
+**Steps:**
+
+1. Turn every page but the last.
+2. Try to tick the document's own consent with the last page unturned.
+3. Turn the last page and tick the document's own consent.
+
+**Expected Results:**
+
+* Step 2 refuses the tick; nothing is signed.
+* Step 3 accepts the tick once every page has been turned.
+
+### grade10-site-vault-documents-and-signing-US1-TC4-1: A typed name that does not match the verified legal name is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector has turned every page and ticked the consents on <the vault signing link> for <a case with a storage-lane packet ready to sign>.
+
+**Steps:**
+
+1. Type <a typed name that does not match the verified legal name>.
+2. Try to sign.
+
+**Expected Results:**
+
+* Signing is refused; nothing seals.
+* The packet stays ready for the verified legal name to sign.
+
+### grade10-site-vault-documents-and-signing-US1-TC5-1: A signing link already used is refused on a second open
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Pre-conditions:**
+
+* <the vault signing link> for <a case with a storage-lane packet ready to sign> has already sealed the packet.
+
+**Steps:**
+
+1. Open the same signing link again, on the device that signed.
+
+**Expected Results:**
+
+* The link is refused by name, and no document is shown.
+* No further signature or seal is taken.
+
+### grade10-site-vault-documents-and-signing-US1-TC6-1: A signing link opened after its 30-minute life is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Pre-conditions:**
+
+* <the vault signing link> for <a case with a storage-lane packet ready to sign> was issued more than 30 minutes ago and never opened.
+
+**Steps:**
+
+1. Open the signing link.
+
+**Expected Results:**
+
+* The link is refused as expired.
+* Nothing seals; the packet is unchanged.
+
+### grade10-site-vault-documents-and-signing-US1-TC7-1: A signing link opened on a second device is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* <the vault signing link> for <a case with a storage-lane packet ready to sign> was opened once already on the counter iPad.
+
+**Steps:**
+
+1. Open the same signing link on a second device.
+
+**Expected Results:**
+
+* The second device is refused; the link stays bound to the first.
+* Nothing seals from the second device.
+
+### grade10-site-vault-documents-and-signing-US1-TC8-1: Declining withdraws the whole packet and is itself recorded
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector is on <the vault signing link> for <a financed case, principal 500000 (HKD)>, whose packet carries the custody agreement and the loan agreement, with every page turned.
+
+**Steps:**
+
+1. Choose to decline instead of signing.
+
+**Expected Results:**
+
+* Neither document seals; the whole packet withdraws together.
+* The decline is itself written on the record, on the case's history.
+
+### grade10-site-vault-documents-and-signing-US1-TC9-1: The sealed set reaches the collector by email
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector has just sealed <a case with a storage-lane packet ready to sign>.
+
+**Steps:**
+
+1. Open <the collector's registered email>.
+
+**Expected Results:**
+
+* An email has arrived with the sealed PDF attached.
+
+### grade10-site-vault-documents-and-signing-US1-TC10-1: Every sealed document appears on the case page with its fingerprint
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* A collector has just sealed <a financed case, principal 500000 (HKD)>, whose packet carries the custody agreement and the loan agreement.
+
+**Steps:**
+
+1. Navigate to <the vault case page>.
+
+**Expected Results:**
+
+* Both sealed documents are listed, each with its own fingerprint.
+* The public verification address is shown beside them.
+
+### grade10-site-vault-documents-and-signing-US1-TC11-1: Anyone holding a document's digest can verify it belongs to the vault
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Pre-conditions:**
+
+* <a sealed document's SHA-256 digest> is known from a sealed case.
+* The asker is not signed in.
+
+**Steps:**
+
+1. Ask <the public document verification page> whether the digest is one of ours.
+
+**Expected Results:**
+
+* The answer says the digest is a document the vault sealed.
+* It names the template and when the document was completed.
+* It names nobody.
+
+### grade10-site-vault-documents-and-signing-US1-TC12-1: A digest nobody issued fails verification
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* <a digest no sealed document carries> is at hand.
+
+**Steps:**
+
+1. Ask <the public document verification page> whether the digest is one of ours.
+
+**Expected Results:**
+
+* The answer says the digest is not one of ours.
+
+---
+
+## grade10-site-vault-documents-and-signing-US3: Operator prepares the papers for the visit in front of them
+
+**As a** member of shop staff,
+**I want** the packet to carry exactly the documents this case's lane needs,
+naming the shop and the person we checked,
+**so that** nothing is handed over to sign that we could not be held to.
+
+### grade10-site-vault-documents-and-signing-US3-TC1-1: A storage-lane packet is prepared naming the shop, custody agreement only
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case ready for its visit, naming a shop>, on the storage lane.
+
+**Steps:**
+
+1. Prepare the packet.
+
+**Expected Results:**
+
+* No key-terms dialog opens for the storage lane.
+* The packet carries the custody agreement only, naming the shop.
+
+### grade10-site-vault-documents-and-signing-US3-TC2-1: A financed packet is prepared after the key terms are ticked and recorded
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case ready for its visit, naming a shop>, on the financed lane.
+
+**Steps:**
+
+1. Open <the key-terms dialog> and tick every term the loan agreement states.
+2. Record the key terms as explained.
+3. Prepare the packet.
+
+**Expected Results:**
+
+* The key terms recorded are the loan agreement's own list, unchanged from the agreement.
+* Prepare documents is offered once the key terms are recorded.
+* The packet carries the custody agreement and the loan agreement, naming the shop.
+
+### grade10-site-vault-documents-and-signing-US3-TC3-1: Recording the key terms is refused until every term is ticked
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case ready for its visit, naming a shop>, on the financed lane, with <the key-terms dialog> open.
+
+**Steps:**
+
+1. Tick every term but one.
+2. Try to record.
+3. Tick the remaining term and record.
+
+**Expected Results:**
+
+* Step 2 refuses to record; nothing is stored as explained.
+* Step 3 records the key terms once every term is ticked.
+
+### grade10-site-vault-documents-and-signing-US3-TC4-1: A loan packet cannot open before the key terms are recorded
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case ready for its visit, naming a shop>, on the financed lane, with the key terms not yet recorded.
+
+**Steps:**
+
+1. Try to prepare the packet.
+
+**Expected Results:**
+
+* Preparing the packet is refused; the loan agreement is not included.
+* The key-terms dialog is offered instead.
+
+### grade10-site-vault-documents-and-signing-US3-TC5-1: A packet that can name no shop is refused at the counter
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case with no shop the packet can name>.
+
+**Steps:**
+
+1. Try to prepare the packet.
+
+**Expected Results:**
+
+* Preparing the packet is refused, naming that no shop can be held to it.
+* No document is produced.
+
+### grade10-site-vault-documents-and-signing-US3-TC6-1: The key terms are recorded with or without a recording reference
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case ready for its visit, naming a shop>, on the financed lane, with every key term ticked in <the key-terms dialog>.
+
+**Test data:**
+
+| Recording reference | Outcome |
+| --- | --- |
+| <a recording reference> | Recorded, with the reference stored beside it |
+| None | Recorded, with no reference stored |
+
+**Steps:**
+
+1. Enter the row's recording reference, or leave it blank.
+2. Record the key terms as explained.
+
+**Expected Results:**
+
+* The key terms are recorded as explained, when · by, matching the row's outcome.
+
+### grade10-site-vault-documents-and-signing-US3-TC7-1: A packet outside its preparation window is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-03
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on <a case ready for its visit, naming a shop>, whose packet's preparation window has closed.
+
+**Steps:**
+
+1. Try to open the prepared packet for signing.
+
+**Expected Results:**
+
+* The packet is refused as outside its window.
+* The packet must be prepared again before it can be signed.
+
+---
+
+## grade10-site-vault-documents-and-signing-US5: Collector downloads every document they ever signed
+
+**As a** collector,
+**I want** every sealed document from every case in one download, each with
+its fingerprint,
+**so that** I hold my own record without opening each case in turn.
+
+### grade10-site-vault-documents-and-signing-US5-TC1-1: Every sealed document across every case downloads in one file
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector holding <every case whose documents are sealed> is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* One file downloads, carrying every sealed document the collector holds, each with its own fingerprint.
+
+### grade10-site-vault-documents-and-signing-US5-TC2-1: Download all is absent when nothing has been signed yet
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
+
+**Pre-conditions:**
+
+* A collector on <a collector account with no signed documents> is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Look for Download all.
+
+**Expected Results:**
+
+* Download all is absent; nothing has been signed yet.
+
+### grade10-site-vault-documents-and-signing-US5-TC3-1: The download shows a pending state while in flight
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector holding <every case whose documents are sealed> is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* Download all shows pending while the file is being built.
+
+### grade10-site-vault-documents-and-signing-US5-TC4-1: A failed download surfaces its error and can be retried
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector holding <every case whose documents are sealed> is on <the collector's Your data page>, with the download stubbed to fail.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* An error line appears under the button; no file downloads.
+* Download all is available again to retry.
+
+### grade10-site-vault-documents-and-signing-US5-TC5-1: The bundle is bounded to only the cases the page lists
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector holding <every case whose documents are sealed> is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* The file carries only documents from cases the page lists; no other collector's case is included.
+
+### grade10-site-vault-documents-and-signing-US5-TC6-1: The bulk download is recorded on the audit chain like a search
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector holding <every case whose documents are sealed> is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* The audit chain gains an entry naming who downloaded, when, and how many documents.
+
+### grade10-site-vault-documents-and-signing-US5-TC7-1: A download past 52,428,800 bytes is refused before anything is read
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector whose sealed documents come to more than 52,428,800 bytes together is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* The download is refused by name, before any document is read.
+* No file is sent, and no document is recorded as read.
+
+---
+
+## Settled
+
+- The seal's short download grant is the durable *Every signer keeps a copy, three ways* requirement's; the blind pass was denied it, and nothing here re-decides it.
+- Which bound of the packet's preparation window applies when is the durable *A packet is prepared as one set* requirement's — a day, or a day past the visit the packet belongs to.
+- Verifying a digest asks for no sign-in: anyone holding a document's digest may ask whether it is one of ours.
+- The download refuses past 52,428,800 bytes, and the refusal comes before any document is read.
+- A pending or failed download is the view's own status rather than a rule, so no scenario is owed for it.
+
+## Reconciliation
+
+**Run:** the blind pass read the bundle — `spec.md`'s `## Purpose` and
+`## Feature set`, this capability's `user-journeys.md`, the change's
+`proposal.md` and `decisions.md` (`## Raised` included), `ui-design.md` with its
+state dispositions stripped, and the linked sections of
+`docs/prds/products/grade10-site/vault/documents-and-signing.md`. It was denied
+every `## Requirements` section, `openspec/specs/` beyond the two included
+sections, `openspec/changes/archive/` and `tech-design.md`. It wrote 25 cases
+over US1, US3 and US5 and raised three questions. The scenario pass issued
+`grade10-site-vault-documents-and-signing-SC-22` to `grade10-site-vault-documents-and-signing-SC-29`.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-02`, `grade10-site-vault-documents-and-signing-SC-12`, `grade10-site-vault-documents-and-signing-SC-17` — the storage packet, the pages turned, the copies |
+| `US1-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-01`, `grade10-site-vault-documents-and-signing-SC-04` — both agreements, the term printed as a term |
+| `US1-TC3-1` | Covered | `grade10-site-vault-documents-and-signing-SC-12` |
+| `US1-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-13` |
+| `US1-TC5-1` | Folded | `grade10-site-vault-documents-and-signing-SC-30`. The durable requirement *The signing link is single-use, short-lived and bound to one device* says the link "SHALL be usable once", and no scenario reached it; the change now opens that requirement in a MODIFIED block and the scenario lands there |
+| `US1-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-11` |
+| `US1-TC7-1` | Covered | `grade10-site-vault-documents-and-signing-SC-10` |
+| `US1-TC8-1` | Covered | `grade10-site-vault-documents-and-signing-SC-14` |
+| `US1-TC9-1` | Covered | `grade10-site-vault-documents-and-signing-SC-17` |
+| `US1-TC10-1` | Covered | `grade10-site-vault-documents-and-signing-SC-17`; the public verify address beside the documents is the design's Case page row, not a requirement |
+| `US1-TC11-1` | Folded | `grade10-site-vault-documents-and-signing-SC-31`. The durable requirement *A document can be verified by anyone holding its digest* states the positive answer, and `grade10-site-vault-documents-and-signing-SC-18` and `grade10-site-vault-documents-and-signing-SC-19` state only the unknown digest and the operator's re-check; the change opens that requirement in a MODIFIED block and the scenario lands there. The draft's "computed fresh at the ask" is the re-check's rule, not the public answer's, and left the case |
+| `US1-TC12-1` | Covered | `grade10-site-vault-documents-and-signing-SC-18` |
+| `US3-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-25`, `grade10-site-vault-documents-and-signing-SC-02` |
+| `US3-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-22`, `grade10-site-vault-documents-and-signing-SC-24`, `grade10-site-vault-documents-and-signing-SC-01` |
+| `US3-TC3-1` | Covered | `grade10-site-vault-documents-and-signing-SC-23` |
+| `US3-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-06` |
+| `US3-TC5-1` | Covered | `grade10-site-vault-documents-and-signing-SC-05` |
+| `US3-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-24` for when and by whom; the optional recording reference is the durable *A packet is prepared as one set* requirement's, which this change does not open |
+| `US3-TC7-1` | Covered | `grade10-site-vault-documents-and-signing-SC-08`, `grade10-site-vault-documents-and-signing-SC-09`; which bound applies was raised and is landed in `decisions.md` |
+| `US5-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-26` |
+| `US5-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-27` |
+| `US5-TC3-1` | Kept, no scenario | Presentation only: the pending button is the design's `Your data` · Download in flight row, closed there as `**Out of suite:**` the view's colocated test. No requirement states a pending state and none was invented |
+| `US5-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-28` for the refusal; the error line and the retry affordance are the design's `Your data` · Download failed row |
+| `US5-TC5-1` | Covered | `grade10-site-vault-documents-and-signing-SC-26` |
+| `US5-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-29` |
+| `grade10-site-vault-documents-and-signing-SC-28` | Case added | `US5-TC7-1` — no blind case drove the size ceiling; `US5-TC4-1` stubs a generic failure and never reaches the bound |
+| Raised — the seal's short download grant has no stated duration or surface | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *Every signer keeps a copy, three ways* requirement, which the blind pass was denied |
+| Raised — which bound of the packet's preparation window applies when | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *A packet is prepared as one set* requirement, which the blind pass was denied |
+| Raised — must the asker be signed in to verify a digest | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *A document can be verified by anyone holding its digest* requirement, which the blind pass was denied |
+| Raised — what byte ceiling the download refuses past | Raised, answered | The tech design names none, so the requirement states 52,428,800 bytes and `grade10-site-vault-documents-and-signing-SC-28`'s GIVEN reads it; landed as a Decisions row in the change's `decisions.md` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US1-TC1-1` | The end-to-end walk drives the ceremony, but a person turns the pages on the counter iPad and reads the printed custody agreement's facts off the sealed PDF |
+| `US1-TC2-1` | As above, and the loan agreement's printed figures — interest for the term, the same rate per annum, `Fees: None`, the repayable amount — are read off the PDF a person opens |
+| `US1-TC6-1` | Needs a signing link past its own 30-minute life; the stack has no clock to move it there |
+| `US3-TC1-1` | A person confirms no key-terms dialog opens on the storage lane; the automated walk proves the packet's contents, not what the console withheld |
+| `US3-TC2-1` | A person reads the dialog's terms against the loan agreement itself, which is the one thing no assertion can restate without keeping a second list |
+| `US5-TC1-1` | The automated walk proves the response; a person opens the downloaded file and checks every document and its fingerprint are in it |
+| `US5-TC3-1` | The pending state is a frame between the press and the file; no automated test decides it, and the view's colocated test is what holds the button's states |

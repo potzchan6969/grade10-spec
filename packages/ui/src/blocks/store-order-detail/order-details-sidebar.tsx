@@ -61,9 +61,9 @@ function AddressSection({
 }) {
   return (
     <VStack className="w-full" gap="sm" hAlign="stretch">
-      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+      <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
         {heading}
-      </h3>
+      </h2>
       <VStack className="w-full text-sm leading-5" gap="xs">
         {hasValue(address.name) ? (
           <p className="font-medium text-foreground">{address.name}</p>
@@ -101,9 +101,12 @@ function AddressSection({
  * rows are conditional: discount when present, points credit after discount
  * when applied (cart-drawer parity), refund when issued, shipping hidden for
  * pickup/in-store, tax optional, shipping address hidden offline, loyalty
- * points for logged-in users only. Amounts are consumer-formatted (up to two
- * decimal places, no trailing zeros). Payment row shows a brand logo at
- * `text-sm` line height beside an optional masked number.
+ * points for logged-in users only. Amounts are consumer-formatted: summary
+ * line rows use `$` with at least two decimal places (`$0` stays bare), while
+ * the total keeps the currency mark (`HK$`) and also shows at least two
+ * decimals. Line amounts use `tabular-nums`.
+ * Payment row shows a brand logo at `text-sm` line height beside an optional
+ * masked number.
  */
 function OrderDetailsSidebar({
   copy,
@@ -165,9 +168,9 @@ function OrderDetailsSidebar({
             gap="md"
             hAlign="stretch"
           >
-            <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+            <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
               {copy.orderSummary}
-            </h3>
+            </h2>
             {hasLineMoneyRows ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 {summary?.subtotal ? (
@@ -232,9 +235,9 @@ function OrderDetailsSidebar({
           <VStack className="w-full p-6" gap="lg" hAlign="stretch">
             {hasPayment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   {copy.paymentMethod}
-                </h3>
+                </h2>
                 <PaymentMethodCard
                   description={
                     payment.maskedNumber != null ? payment.label : undefined

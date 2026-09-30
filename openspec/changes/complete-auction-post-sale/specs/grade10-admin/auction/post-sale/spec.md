@@ -2,8 +2,8 @@
 
 Operators work every won lot's auction order in one Orders workspace: a
 worklist by segment, a page per order that says what to do next, the invoice
-quoted with a fee from the schedule, payment collected, and dispatch and
-delivery recorded, with every change on one timeline.
+quoted with the fee its payment method decides, payment collected, and
+dispatch and delivery recorded, with every change on one timeline.
 
 ## Feature set
 
@@ -21,7 +21,7 @@ delivery recorded, with every change on one timeline.
   - Dialogs: each action restates what will happen, and a refusal reads as a sentence
   - Money in major units: an operator types `50.00` for HK$50
 - Quote and send
-  - Fee from the schedule: the payment processing fee starts from Payment Settings, and the operator sets it, zero or more
+  - Fee by payment method: a card invoice's fee is computed from the Stripe card rule in Payment Settings; a bank transfer invoice's fee is typed by the operator, zero or more
   - What was seen is sent: a send or reissue carries the total the operator read
 - Resolving an unpaid order
   - Record payment: one dialog for money received outside the card checkout, starting at the balance, always with a reason
@@ -31,7 +31,7 @@ delivery recorded, with every change on one timeline.
   - Counts toward nothing: money on a replaced invoice, a cancelled order, at another amount or on an invoice in any other state pays nothing and blocks nothing, and finance returns it outside Grade10
   - Flags per payment: each flag is cleared on its own, with a reason
 - Fulfilment on the order
-  - Dispatch: the carrier and the tracking number, on a Processing order
+  - Dispatch: the carrier and the tracking number, on a Preparing Shipment order
   - Delivery: the date and the carrier's proof, on a Shipped order
 - Audit trail
   - Signed-in operator: every operator entry names the operator signed in and the time on Grade10's clock
@@ -61,7 +61,7 @@ a second status for the operator.
 
 | Segment | Orders |
 | --- | --- |
-| Needs action | Setup Overdue, Preparing Invoice, Payment Overdue, Payment Verifying and Processing, and every flagged order whatever its status |
+| Needs action | Setup Overdue, Preparing Invoice, Payment Overdue, Payment Verifying and Preparing Shipment, and every flagged order whatever its status |
 | Waiting on winner | Awaiting Setup, Pending Payment and Partially Paid, when not flagged |
 | In transit | Shipped, when not flagged |
 | Closed | Delivered, Cancelled and Refunded, when not flagged |
@@ -112,9 +112,9 @@ The title is historical: a lot still taking bids is not in the worklist.
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** a closed lot whose auction order derives as Processing
+- **GIVEN** a closed lot whose auction order derives as Preparing Shipment
 - **WHEN** an operator reads the worklist
-- **THEN** that order's row reads Processing
+- **THEN** that order's row reads Preparing Shipment
 - **AND** it is the same value the winner reads on their own order
 
 Scenario `grade10-admin-auction-post-sale-SC-21` keeps its title with its id.
@@ -125,9 +125,9 @@ sits under Needs action.
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
 - **GIVEN** a worklist holding a Payment Overdue order, a Pending Payment order,
-  a Processing order and a Delivered order, none flagged
+  a Preparing Shipment order and a Delivered order, none flagged
 - **WHEN** an operator opens Needs action
-- **THEN** it lists the Payment Overdue order and the Processing order
+- **THEN** it lists the Payment Overdue order and the Preparing Shipment order
 - **AND** it lists neither of the other two
 
 #### Scenario: grade10-admin-auction-post-sale-SC-44 - An order ready for a quote needs action
@@ -161,17 +161,17 @@ sits under Needs action.
 #### Scenario: grade10-admin-auction-post-sale-SC-159 - Each segment shows its count
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** a worklist holding two Processing orders, one Pending Payment order
+- **GIVEN** a worklist holding two Preparing Shipment orders, one Pending Payment order
   and one Delivered order, none flagged
 - **WHEN** an operator opens Orders
-- **THEN** Needs action is open, listing the two Processing orders
+- **THEN** Needs action is open, listing the two Preparing Shipment orders
 - **AND** Needs action reads 2, Waiting on winner 1, In transit 0, Closed 1 and
   All 4
 
 #### Scenario: grade10-admin-auction-post-sale-SC-160 - A search finds the order by the winner's email
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** a Processing order whose winner's account email is
+- **GIVEN** a Preparing Shipment order whose winner's account email is
   `collector@example.com`, among other orders
 - **WHEN** an operator searches the worklist for `Collector@Ex`
 - **THEN** the search finds that order
@@ -200,12 +200,12 @@ sits under Needs action.
 #### Scenario: grade10-admin-auction-post-sale-SC-181 - A row offers its status's primary action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
-- **GIVEN** an order in Preparing Invoice, an order in Processing, and a
-  flagged order in Processing
+- **GIVEN** an order in Preparing Invoice, an order in Preparing Shipment, and a
+  flagged order in Preparing Shipment
 - **AND** an operator whose roles are exactly `finance`
 - **WHEN** they read Needs action and choose Send invoice on the first row
 - **THEN** the send dialog of that order opens
-- **AND** neither Processing row offers an action
+- **AND** neither Preparing Shipment row offers an action
 
 #### Scenario: grade10-admin-auction-post-sale-SC-182 - Filters follow the open segment
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
@@ -441,7 +441,7 @@ that status.
 | Payment Overdue | Reissue |
 | Payment Verifying | Check proof |
 | Partially Paid | Record payment |
-| Processing | Dispatch |
+| Preparing Shipment | Dispatch |
 | Shipped | Confirm delivery |
 | Delivered, Cancelled, Refunded | None |
 
@@ -534,10 +534,10 @@ minor units.
 #### Scenario: grade10-admin-auction-post-sale-SC-184 - More holds only what applies now
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
-- **GIVEN** a Processing order and a Cancelled order, neither flagged
+- **GIVEN** a Preparing Shipment order and a Cancelled order, neither flagged
 - **AND** an operator holding payment, shipment and refund processing
 - **WHEN** they open each
-- **THEN** the Processing order offers Dispatch as its primary action and
+- **THEN** the Preparing Shipment order offers Dispatch as its primary action and
   Refund alone under More
 - **AND** the Cancelled order offers no primary action and no More
 
@@ -600,7 +600,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 **Serves:** Grants - finance cannot record dispatch
 
 - **GIVEN** an operator holding the finance role
-- **WHEN** they open a Processing order
+- **WHEN** they open a Preparing Shipment order
 - **THEN** Dispatch stays in the header, disabled
 - **AND** the text beneath it names shipment processing as the access it needs
 - **AND** Grade10 refuses a dispatch from them on the server
@@ -692,7 +692,7 @@ began:
 | Payment Overdue | The payment deadline |
 | Payment Verifying | The winner's latest proof |
 | Partially Paid | The latest payment |
-| Processing | The payment that paid the invoice |
+| Preparing Shipment | The payment that paid the invoice |
 | Shipped | The dispatch |
 | Delivered | The delivery |
 | Cancelled | The cancellation |
@@ -809,7 +809,7 @@ the reason.
 - **THEN** the invoice is `paid` at 312000 minor units in HKD
 - **AND** the payment record carries bank transfer, the reference, 2026-09-25
   and the slip
-- **AND** the order derives as Processing
+- **AND** the order derives as Preparing Shipment
 
 Scenario `grade10-admin-auction-post-sale-SC-67` keeps its title with its id.
 The title is historical: manual settlement keeps the payment processing fee.
@@ -865,7 +865,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **AND** an operator holding payment processing
 - **WHEN** they record the payment with its reference, proof and a reason
 - **THEN** Grade10 accepts it
-- **AND** the order derives as Processing without having expired first
+- **AND** the order derives as Preparing Shipment without having expired first
 - **AND** the order never read Payment Verifying
 
 #### Scenario: grade10-admin-auction-post-sale-SC-62 - A proof file of the wrong kind is refused
@@ -1010,7 +1010,7 @@ action on the server.
 ### Requirement: Operators can record one bounded refund and its stock outcome
 
 An operator with refund processing, `auction:refund`, SHALL be able to record
-exactly one refund on an auction order in Processing, Shipped, Delivered or
+exactly one refund on an auction order in Preparing Shipment, Shipped, Delivered or
 Partially Paid:
 
 1. Enter the amount: greater than zero and no greater than what is paid on the
@@ -1059,11 +1059,11 @@ fix the stock choice, and refuse a second refund.
 #### Scenario: grade10-admin-auction-post-sale-SC-191 - A refund of the overpaid difference keeps the status
 **Serves:** post-sale-US-16 - returning only what was paid above the order total
 
-- **GIVEN** a Processing order whose invoice of 312000 minor units in HKD was
+- **GIVEN** a Preparing Shipment order whose invoice of 312000 minor units in HKD was
   paid 320000
 - **WHEN** an operator with refund processing records a refund of 8000 minor
   units in HKD with its reason, reference and proof
-- **THEN** the order still reads Processing
+- **THEN** the order still reads Preparing Shipment
 - **AND** a second refund on it is refused
 
 #### Scenario: grade10-admin-auction-post-sale-SC-192 - A bank refund names where it went and is restated first
@@ -1095,104 +1095,101 @@ fix the stock choice, and refuse a second refund.
 
 ## ADDED Requirements
 
-### Requirement: The payment processing fee starts from the fee schedule
+### Requirement: The payment processing fee follows the invoice's payment method
 
-The operator sets each invoice's payment processing fee, starting from what
-the fee schedule suggests. This requirement governs the fee on the quote and
-on a reissue, for card and bank transfer alike, in place of the fee steps of
-"An operator quotes and sends the invoice" and "An operator reissues a sent
-invoice", and of the fee's pricing in "Invoice fields" in
-`grade10-site/auction/winner-order`.
+The invoice's payment method decides where its payment processing fee comes
+from. This requirement governs the fee on the quote and on a reissue, in place
+of the fee steps of "An operator quotes and sends the invoice" and "An
+operator reissues a sent invoice", and of the fee's pricing in "Invoice
+fields" in `grade10-site/auction/winner-order`.
 
-**Starts from the schedule** - When an operator opens the quote, the payment
-processing fee SHALL read what the fee schedule's rule for the order's
-currency and the invoice's payment method suggests for the subtotal, per
-`grade10-admin/auction/payment-settings`. Where the schedule holds no such
-rule, the fee SHALL start empty, and Grade10 SHALL refuse the send until the
-operator enters one.
+**Card is computed** - A card invoice's fee SHALL be Grade10's own: the card
+rule for the order's currency, per `grade10-admin/auction/payment-settings`,
+grossed up so Grade10 keeps the subtotal whole. The operator SHALL NOT enter
+or edit it. Grade10 SHALL compute it from the current subtotal each time the
+quote or a reissue is opened, and fix it at send or reissue. The quote SHALL
+show it read-only, with the rule it came from.
 
-**Follows the subtotal** - Until the operator types a fee, the fee SHALL
-follow the subtotal as the quoted amounts change. Once typed, it SHALL stay as
-typed, and whenever it differs from the suggestion, Grade10 SHALL show the
-suggestion beside it with a way to use it.
+**No card rule refuses** - Where Payment Settings holds no card rule for the
+order's currency, Grade10 SHALL refuse to send or reissue a card invoice,
+`CARD_FEE_UNSET`. The refusal SHALL say the card fee for that currency is not
+set and point to Payment Settings. Grade10 SHALL NOT guess a fee.
 
-**The operator's to set** - The fee SHALL be an integer count of minor units of
-zero or more in the lot's currency, with no upper limit. A fee of zero reads
-Free to the winner.
+**Bank transfer is typed** - A bank transfer invoice's fee SHALL be the
+operator's own: an integer count of minor units of zero or more in the lot's
+currency, with no upper limit. An empty field SHALL be zero, and a fee of zero
+reads Free to the winner.
 
-**On a reissue** - The fee SHALL start from the current invoice while the
-payment method stays. After a switch of method, it SHALL start from what the
-new method's rule suggests, or empty where there is no rule. Beside it,
-Grade10 SHALL show what the schedule suggests for the new subtotal.
+**On a reissue** - The fee SHALL be editable only where the reissued invoice
+is bank transfer, starting from the current invoice while the method stays
+bank transfer. A switch to card SHALL price the fee from the card rule; a
+switch to bank transfer SHALL start it empty, which reads zero.
 
-**Never priced again** - A sent invoice SHALL keep its fee as the operator set
-it. A later change to the fee schedule or to the premium minimum SHALL change
-no sent invoice; only a reissue changes the fee.
+**Never priced again** - A sent invoice SHALL keep its fee. A later change to
+the card rule or to the premium minimum SHALL change no sent invoice; only a
+reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 
 **No provider** - No send or reissue SHALL need the payment provider.
 
-#### Scenario: grade10-admin-auction-post-sale-SC-167 - No rule leaves the fee to the operator
+#### Scenario: grade10-admin-auction-post-sale-SC-167 - No card rule refuses the send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in USD in Preparing Invoice for card
-- **AND** the fee schedule holds no USD card rule
-- **WHEN** an operator holding payment processing opens the quote
-- **THEN** the payment processing fee is empty
-- **AND** Grade10 refuses to send until the operator enters one
+- **AND** Payment Settings holds no USD card rule
+- **WHEN** an operator holding payment processing opens the quote and attempts
+  to send
+- **THEN** Grade10 refuses with `CARD_FEE_UNSET`
+- **AND** the dialog says the USD card fee is not set and points to Payment
+  Settings
 
-#### Scenario: grade10-admin-auction-post-sale-SC-168 - The operator changes the suggested fee
+#### Scenario: grade10-admin-auction-post-sale-SC-168 - Grade10 computes the card fee
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in HKD in Preparing Invoice for card with a
-  subtotal of 312000 minor units and the fee the schedule suggested, 11225
-- **AND** the payment provider cannot be reached
-- **WHEN** an operator changes the payment processing fee to `100.00` and sends
-- **THEN** the invoice is `pending` with a payment processing fee of 10000 and
-  an order total of 322000 minor units in HKD
+  subtotal of 312000 minor units
+- **AND** the HKD card rule is 3.4 per cent and 235 minor units
+- **WHEN** an operator holding payment processing opens the quote and sends
+- **THEN** the invoice is `pending` with a payment processing fee of 11225 and
+  an order total of 323225 minor units in HKD
+- **AND** the quote showed the fee read-only with the HKD card rule it came
+  from
 
-#### Scenario: grade10-admin-auction-post-sale-SC-169 - The fee follows the subtotal until the operator changes it
+#### Scenario: grade10-admin-auction-post-sale-SC-169 - The card fee tracks the subtotal until send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in HKD in Preparing Invoice for card with a
-  subtotal of 312000 minor units, whose fee reads the suggested 11225
-- **AND** the fee schedule's HKD card rule is 3.4 per cent and 235 minor units
+  subtotal of 312000 minor units, whose fee reads the computed 11225
+- **AND** the HKD card rule is 3.4 per cent and 235 minor units
 - **WHEN** an operator raises Shipping & Handling so the subtotal is 316000
   minor units
 - **THEN** the fee reads 11366 and the order total 327366 minor units in HKD
-- **AND** once the operator has typed a fee of 10000, a further change to the
-  subtotal leaves the fee at 10000, with the suggestion shown beside it
 
-#### Scenario: grade10-admin-auction-post-sale-SC-171 - A switch to bank transfer starts from its rule
+#### Scenario: grade10-admin-auction-post-sale-SC-171 - A switch to bank transfer starts the fee empty
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment whose card invoice has a subtotal of
   312000 and a fee of 11225 minor units in HKD
-- **AND** the fee schedule's HKD bank transfer rule is 0 per cent and 0 minor
-  units
 - **WHEN** an operator reissues it and switches the method to bank transfer
-- **THEN** the payment processing fee reads 0
+- **THEN** the payment processing fee reads empty, which is zero
 - **AND** the operator reads 323225 as the previous and 312000 minor units in
   HKD as the new order total
 
-#### Scenario: grade10-admin-auction-post-sale-SC-172 - A kept fee shows the schedule's suggestion beside it
+#### Scenario: grade10-admin-auction-post-sale-SC-172 - A reissue that keeps bank transfer keeps its typed fee
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an order in Pending Payment whose card invoice has a subtotal of
-  312000 and a fee of 11225 minor units in HKD
-- **AND** the fee schedule's HKD card rule is 3.4 per cent and 235 minor units
+- **GIVEN** an order in Pending Payment whose bank transfer invoice has a
+  subtotal of 312000 and a fee of 5000 minor units in HKD
 - **WHEN** an operator reissues it, raising Shipping & Handling so the subtotal
-  is 316000 minor units
-- **THEN** the payment processing fee still reads 11225, from the current
-  invoice
-- **AND** the schedule's suggestion of 11366 minor units in HKD is shown beside
-  it
+  is 316000 minor units, and keeps bank transfer
+- **THEN** the payment processing fee still reads 5000, editable by the
+  operator
 
-#### Scenario: grade10-admin-auction-post-sale-SC-193 - A sent invoice keeps its fee when the schedule changes
+#### Scenario: grade10-admin-auction-post-sale-SC-193 - A sent invoice keeps its fee when the card rule changes
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an order in Pending Payment whose card invoice carries a payment
-  processing fee of 11225 minor units in HKD, suggested by the HKD card rule of
-  3.4 per cent and 235 minor units
+  processing fee of 11225 minor units in HKD, computed from the HKD card rule
+  of 3.4 per cent and 235 minor units
 - **WHEN** an operator changes the HKD card rule to 3.9 per cent and 235 minor
   units
 - **THEN** the invoice still carries the fee of 11225 minor units in HKD
@@ -1244,7 +1241,7 @@ moment of send, or the current deadline on a reissue that keeps it.
 An operator holding shipment processing records the goods leaving and arriving
 from the order's page.
 
-**Dispatch** - On a Processing order, the operator SHALL record dispatch with
+**Dispatch** - On a Preparing Shipment order, the operator SHALL record dispatch with
 the carrier, the tracking number and, when there is one, a link to the
 carrier's tracker, reading the delivery address the lot goes to. The order
 SHALL then derive as Shipped.
@@ -1255,7 +1252,7 @@ one PDF, JPEG or PNG of at most 10 MB, which the winner keeps too. The order
 SHALL then derive as Delivered.
 
 **In order only** - Grade10 SHALL refuse dispatch on an order that is not
-Processing, delivery on one that is not Shipped, and a dispatch without a
+Preparing Shipment, delivery on one that is not Shipped, and a dispatch without a
 carrier or a tracking number.
 
 **On the record** - Each SHALL write a fulfilment log entry, per "Fulfilment
@@ -1265,7 +1262,7 @@ log history", and send the winner the shipped or delivered letter, per
 #### Scenario: grade10-admin-auction-post-sale-SC-173 - Dispatch with a carrier and tracking number ships the order
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
-- **GIVEN** a Processing order
+- **GIVEN** a Preparing Shipment order
 - **AND** an operator holding shipment processing
 - **WHEN** they record dispatch with carrier `SF Express` and tracking number
   `SF1234567890`
@@ -1287,7 +1284,7 @@ log history", and send the winner the shipped or delivered letter, per
 #### Scenario: grade10-admin-auction-post-sale-SC-175 - Dispatch and delivery cannot skip ahead
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
-- **GIVEN** an order in Pending Payment and an order in Processing
+- **GIVEN** an order in Pending Payment and an order in Preparing Shipment
 - **WHEN** an operator holding shipment processing records dispatch on the
   first and delivery on the second
 - **THEN** Grade10 refuses both
@@ -1296,11 +1293,11 @@ log history", and send the winner the shipped or delivered letter, per
 #### Scenario: grade10-admin-auction-post-sale-SC-176 - A dispatch without a tracking number is refused
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
-- **GIVEN** a Processing order
+- **GIVEN** a Preparing Shipment order
 - **WHEN** an operator holding shipment processing records dispatch with a
   carrier and no tracking number
 - **THEN** Grade10 refuses it
-- **AND** the order still derives as Processing
+- **AND** the order still derives as Preparing Shipment
 
 ### Requirement: Money that lands is always recorded
 
@@ -1347,7 +1344,7 @@ entry. Clearing SHALL change no status.
 - **WHEN** a card payment of 323225 minor units in HKD completes against that
   invoice
 - **THEN** Grade10 records it and flags it Paid late
-- **AND** the invoice is `paid`, so the order derives as Processing
+- **AND** the invoice is `paid`, so the order derives as Preparing Shipment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-202 - A card payment on an invoice in any other state counts toward nothing
 **Serves:** post-sale-US-03 - Operator collects payment
@@ -1373,10 +1370,10 @@ entry. Clearing SHALL change no status.
 #### Scenario: grade10-admin-auction-post-sale-SC-179 - Clearing a flag changes no status
 **Serves:** post-sale-US-03 - Operator collects payment
 
-- **GIVEN** an order in Processing, flagged Paid late for a card payment that
+- **GIVEN** an order in Preparing Shipment, flagged Paid late for a card payment that
   paid its expired invoice
 - **WHEN** an operator holding payment processing clears the flag with a reason
-- **THEN** the order is no longer flagged and still derives as Processing
+- **THEN** the order is no longer flagged and still derives as Preparing Shipment
 - **AND** the invoice log shows a flag cleared entry with that operator and
   that reason
 

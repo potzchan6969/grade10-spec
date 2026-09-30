@@ -1,0 +1,795 @@
+{
+  "home": {
+    "title": "Grading",
+    "lead": "Get your cards graded by PSA, CGC or BGS. Hand them in at the shop; we ship them insured, follow them through the grader, and hand them back to you in their slabs.",
+    "start": "Start a submission",
+    "bookWithoutList": "Book a drop-off without a list",
+    "bookWithoutListNote": "Listing the cards first makes the counter quicker; without a list we write them down with you.",
+    "signIn": "Sign in",
+    "linkSent": "Check your inbox: we sent a link to {email}. Same email, no password.",
+    "loading": "Loading your submissions…",
+    "error": "We could not load your submissions. Try again in a moment.",
+    "howItWorks": {
+      "title": "How it works",
+      "list": {
+        "title": "List the cards and what you would insure each for",
+        "body": "A few minutes on this phone, no account needed. The declared value picks the level and the cover; it never sways the grade."
+      },
+      "handIn": {
+        "title": "Book a drop-off and hand them in",
+        "body": "About {minutes, plural, one {# minute} other {# minutes}} at the counter: we check each card against your list, you sign on our iPad, and you pay the fee at the till."
+      },
+      "leave": {
+        "title": "They leave with the week’s batch",
+        "body": "Insured both ways. We read the grader’s stages most days and email you the moment the grades post."
+      },
+      "collect": {
+        "title": "Collect in person with the pickup code",
+        "body": "Any opening hour, no booking. Someone you name can collect for you. Slabs are never shipped."
+      }
+    },
+    "priceSheet": {
+      "title": "What it costs",
+      "lead": "Example fees, a card, including the grader’s fee and insured shipping both ways. Express and Super Express add cover at {rate} of the declared value. Paid when you hand the cards in.",
+      "table": {
+        "level": "Level",
+        "ceiling": "Value up to",
+        "cardsPerSubmission": "Cards per submission",
+        "feePerCard": "Fee per card",
+        "cover": "Cover",
+        "weeks": "Back in about",
+        "noCover": "—",
+        "noFigure": "—"
+      },
+      "aboveTop": "A card worth more than {ceiling}? Ask at the counter or WhatsApp us first, so the right level is ready.",
+      "bulkLine": "Twenty cards or more take the Bulk level and a longer drop-off, booked the same way.",
+      "error": "We could not load the prices. Try again in a moment."
+    },
+    "submissions": {
+      "title": "Your submissions",
+      "signedInAs": "Signed in · {email}",
+      "empty": "Nothing here yet. Start a submission and it shows up here.",
+      "cards": "{count, plural, one {# card} other {# cards}}",
+      "service": "{grader} · {level}"
+    },
+    "lostLink": "Every submission is also reachable from its emailed link, with no account. Lost the link? Sign in with the same email; there is no password."
+  },
+  "plan": {
+    "title": "List the cards you are bringing",
+    "step": {
+      "cards": "The cards",
+      "service": "The service",
+      "book": "Book",
+      "review": "Review"
+    },
+    "aboutYou": {
+      "title": "About you",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "signedInLine": "Filled from your account when you are signed in; change them for this submission here.",
+      "emailLine": "The moment you leave, we email the link to this submission to this address, so you can finish on any device — no account needed."
+    },
+    "card": {
+      "matched": "{set} · {number} · matched in the catalogue",
+      "matchedNoDetail": "Matched in the catalogue",
+      "keptAsTyped": "Kept as you typed it · no reference",
+      "edit": "Edit",
+      "remove": "Remove",
+      "declaredValue": "Declared value",
+      "referenceSales": "Recent sales:",
+      "referenceNote": "{grader} asks for the value at the grade you expect. A reference, not a valuation.",
+      "minimumGrade": "Only encapsulate at {grade} or above · the fee applies either way",
+      "noValue": "Tell us the declared value before you continue.",
+      "aboveCeiling": "{name} is worth more than this level takes. It goes in a second submission at a higher level, on the same drop-off.",
+      "referenceUnavailable": "We could not reach the catalogue, so this card keeps the name you typed. The value is still needed.",
+      "ungraded": "Ungraded"
+    },
+    "paste": "Paste a list",
+    "capNotice": "All the cards go to one grader at one level. Up to {standard, plural, one {# card} other {# cards}} from Value to Super Express; up to {bulk} at Bulk. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
+    "capNoticeUncapped": "All the cards go to one grader at one level. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
+    "overTwenty": "More than {standard, plural, one {# card} other {# cards}}, so Bulk is the only level open at the next step.",
+    "overCap": "{bulk, plural, one {# card} other {# cards}} is the most one submission takes. The rest go in a second submission, another day.",
+    "continueWithCount": "Continue · {count, plural, one {# card} other {# cards}}",
+    "finishLater": "Finish later",
+    "finishLaterEmail": "Tell us where to email the link, and we keep the list.",
+    "pasteSheet": {
+      "title": "Paste a list",
+      "labels": {
+        "matched": "Matched",
+        "keptAsTyped": "Kept as typed",
+        "withoutValue": "Without a value",
+        "aboveCeiling": "Above the ceiling",
+        "skipped": "Skipped",
+        "linesRead": "Lines read"
+      },
+      "lead": "One card a line: name, set and number, then the value you would insure it for. We match each line against the catalogue; a line we cannot match keeps the name you typed and shows no reference. A line naming a card already on your list is skipped.",
+      "yourList": "Your list",
+      "matching": "Matching…",
+      "matched": "{count} matched in the catalogue — the ungraded, {lower} and {upper} references show beside each on the list.",
+      "keptAsTyped": "{count} kept as typed — {names}: no reference beside them; the name you typed stands.",
+      "withoutValue": "{count} without a value — {names}: the list asks for it before you continue.",
+      "aboveCeiling": "{count} above the {level} ceiling — {names} goes in a second submission at a higher level, on the same drop-off; the next step names it while it stays on this list.",
+      "skipped": "{count} skipped — already on your list.",
+      "bulkNotice": "{count, plural, one {# card} other {# cards}}: more than {standard}, so Bulk is the only level open at the next step. At {grader} that is {fee} a card, cards up to {ceiling}, about {weeks, plural, one {# week} other {# weeks}} and the longer drop-off; up to {bulk, plural, one {# card} other {# cards}} a submission.",
+      "add": "Add {count, plural, one {# card} other {# cards}} to the list",
+      "goBack": "Go back",
+      "toCounter": "{count} worth more than any level takes — {names}: ask at the counter or WhatsApp us first.",
+      "failed": "We could not read the list just now. Try again in a moment."
+    },
+    "service": {
+      "title": "Pick the grader and the level",
+      "highestDeclaredLabel": "Your highest declared value",
+      "grader": "Grader",
+      "level": {
+        "open": "Value up to {ceiling} a card · {fee} a card",
+        "unavailable": "Not available",
+        "closedByValue": "Not available: {card} is declared above {ceiling}",
+        "closedByCount": "Not available: Bulk starts at {minimum, plural, one {# card} other {# cards}} and you have {count}.",
+        "bulkOnly": "More than {standard, plural, one {# card} other {# cards}}, so Bulk is the only level open.",
+        "allClosed": "One card is worth more than the top level takes. Ask at the counter or WhatsApp us first, so the right level is ready.",
+        "coverLine": "+ {rate} cover",
+        "backIn": "back in about {weeks, plural, one {# week} other {# weeks}}"
+      },
+      "estimate": {
+        "title": "Your estimate",
+        "perCard": "{count, plural, one {# card} other {# cards}} × {fee} · {grader} {level}",
+        "coverPerCard": "Cover {rate} of the declared value · {amount} a card",
+        "paidAtCounter": "Paid at the counter once the cards are checked.",
+        "includes": "Includes the grader’s fee and insured shipping both ways.",
+        "total": "Total"
+      },
+      "upchargeNotice": "If a card comes back worth more than the level allows, the grader moves it up a level and we pass on the difference. You are told the amount before you collect, never at the counter."
+    },
+    "review": {
+      "title": "Check it, then book the drop-off",
+      "header": "{count, plural, one {# card} other {# cards}} to {grader} · {level}",
+      "backIn": "Back in about {weeks, plural, one {# week} other {# weeks}} from the day your cards leave",
+      "summary": "{header} · {backIn}",
+      "edit": "Edit",
+      "schedule": "The cards, as you listed them",
+      "totals": {
+        "declared": "Declared value in total",
+        "fee": "Fee, at the counter",
+        "cover": "Cover, included in the fee"
+      },
+      "warning": {
+        "title": "A card can move up a level",
+        "line": "{card}: if it grades {grade} it is worth about {value}, above {level}’s {ceiling}.",
+        "levelLabel": "Moves to",
+        "differenceLabel": "Due at the counter before you collect",
+        "higherFeeLabel": "costs now"
+      },
+      "goodToKnow": {
+        "title": "Good to know before you book",
+        "fee": {
+          "title": "A fee is charged even when a card comes back ungraded",
+          "body": "The grader does the work either way. A card it will not take is refused at our counter instead, and never charged."
+        },
+        "upcharge": {
+          "title": "A card can move up a level",
+          "body": "If it comes back worth more than the level allows. We tell you the difference before you collect."
+        },
+        "estimate": {
+          "title": "The return date is an estimate",
+          "body": "The grader grades on its own clock. We show its stages as they happen and email you the moment the grades are in."
+        },
+        "keep": {
+          "title": "You keep the cards until you hand them in",
+          "body": "Nothing is paid or signed before our staff have checked each card with you."
+        },
+        "collect": {
+          "title": "We do not ship slabs back",
+          "body": "You collect in person, or someone you name on the submission page collects for you."
+        },
+        "line": "{title} — {body}"
+      },
+      "consent": "I have read the personal information collection statement.",
+      "book": "Book the drop-off",
+      "saveForLater": "Save and book later",
+      "saveChanges": "Save changes",
+      "expired": "This list has expired. Prices and references move, so start again from the price sheet.",
+      "noEmail": "We need an email to keep the list. Add yours under About you, and we send the list’s link there.",
+      "noCards": "There are no cards on the list yet. Add a card, then book or save.",
+      "withoutValue": "Every card needs a declared value before the list is kept. Edit the list to add the missing ones.",
+      "failed": "We could not save this just now. Try again in a moment.",
+      "minimumGrade": "Minimum grade"
+    },
+    "search": {
+      "label": "Card name",
+      "placeholder": "Start typing the card's name",
+      "addTyped": "Add this card"
+    },
+    "empty": {
+      "title": "No cards yet",
+      "body": "Add a card by its name, or paste a list of them."
+    },
+    "withoutValue": "{count, plural, one {One card is} other {# cards are}} still without a declared value.",
+    "kept": "Your list is kept. We emailed its link to {email}, so you can finish on any device.",
+    "keepFailed": "We could not keep your list just now. Try again in a moment.",
+    "backToSubmission": "Back to the submission"
+  },
+  "dropoff": {
+    "title": "Book the drop-off",
+    "lead": "{count, plural, one {Bring the # card.} other {Bring the # cards.}} The visit takes about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
+    "bulkLead": "{count, plural, one {Bring the # card.} other {Bring the # cards.}} Twenty or more books the longer Bulk drop-off, about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
+    "where": "Where",
+    "nothingFree": "Nothing is free on this day any more.",
+    "error": "We could not read the diary. Try again in a moment.",
+    "shop": {
+      "durations": "about {minutes} minutes for up to {standard, plural, one {# card} other {# cards}}; {standard, plural, one {# card} other {# cards}} or more books the longer Bulk drop-off, about {bulkMinutes} minutes",
+      "moreShops": "More shops appear here as they open.",
+      "joinsExisting": "Already have a drop-off booked? A second submission joins it: one visit, both lists."
+    },
+    "batchLine": {
+      "before": "Hand in by {cutOff} and your cards leave with the batch on {shipDay}.",
+      "after": "After that, the next batch closes {cutOff} and leaves {shipDay}.",
+      "estimateFrom": "The estimate runs from the day the batch leaves.",
+      "backBy": "Estimated back by {estimate}."
+    },
+    "moveOrCancel": "Move or cancel the visit any time before it starts. Miss it and we close the visit, not your list: book another drop-off from the submission page.",
+    "book": "Book {day}, {time}",
+    "joined": "This submission joins the drop-off you already have on {day}, {time}. One visit, both lists.",
+    "resized": "Both lists together pass {standard, plural, one {# card} other {# cards}}, so the visit takes the longer Bulk drop-off. We moved it once in the diary; the day and time stand.",
+    "alreadyBooked": "You already have a visit booked for this day. Pick another.",
+    "levelRequired": "This list has no level, so nothing was booked. Edit the list to pick one, then try again.",
+    "conflict": "This booking has moved on since you read it. We’re reading the latest — pick a time again.",
+    "booked": {
+      "title": "Your drop-off is booked",
+      "emailLine": "A confirmation is on its way by email, with a calendar file and this submission’s link. We remind you the day before.",
+      "calendar": "Add to calendar",
+      "move": "Move",
+      "cancel": "Cancel",
+      "beforeYouCome": {
+        "title": "Before you come",
+        "cards": {
+          "title": "{count, plural, one {Bring the # card, each in a sleeve} other {Bring the # cards, each in a sleeve}}",
+          "body": "Penny sleeves are fine. No toploaders taped shut, and nothing you want back: the grader keeps the sleeve."
+        },
+        "list": {
+          "title": "Have this list handy",
+          "body": "Staff check each card against it. You can change the list until the cards are checked in."
+        },
+        "pay": {
+          "title": "Sign on our iPad, then pay {amount} at the counter",
+          "body": "Once every card is checked with you and photographed. By card, cash or FPS at the till.",
+          "cover": "Cover"
+        },
+        "leave": {
+          "title": "Your cards leave on {shipDay}",
+          "body": "Handed in by {cutOff}, they go with that week’s batch. Estimated back at the shop by {estimate}."
+        }
+      },
+      "openTheList": "Open the list",
+      "vaultLine": "Want to open a vault case on the same visit — for a card you are not grading, or one coming back? Verify your identity on your phone first; grading itself needs no ID.",
+      "bulkDuration": "The visit takes about {minutes} minutes.",
+      "service": {
+        "standard": "Card drop-off",
+        "bulk": "Bulk card drop-off"
+      }
+    }
+  },
+  "submission": {
+    "header": "{count, plural, one {# card} other {# cards}} to {grader} · {level}",
+    "idLine": "Submission {reference}",
+    "plannedOn": "Planned {day}",
+    "loading": "Loading this submission…",
+    "error": "We could not load this submission. Try again in a moment.",
+    "notFound": "We could not find that submission. Check the link we emailed you.",
+    "notFoundLink": "Start a submission",
+    "edit": "Edit the list",
+    "levelNeeded": "This list has no level yet. Edit the list to pick one, then book the drop-off.",
+    "retry": "Try again",
+    "status": {
+      "planned": "Not handed in yet",
+      "booked": "Drop-off booked",
+      "checked_in": "Handed in",
+      "sent": "With the grader",
+      "graded": "Grades are in",
+      "returned": "Back at the shop, being checked",
+      "ready": "Ready to collect",
+      "collected": "Back with you",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "chip": {
+      "waitingOnYou": "Waiting on you",
+      "withUs": "With us",
+      "withGrader": "With {grader}",
+      "runningLate": "Running late · with {grader}",
+      "dropoff": "Drop-off {day}",
+      "collected": "Collected {day}",
+      "onTheirWayBack": "On their way back"
+    },
+    "stage": {
+      "planned": "Planned",
+      "booked": "Booked",
+      "handedIn": "Handed in",
+      "sent": "Sent",
+      "graded": "Graded",
+      "back": "Back",
+      "home": "Home"
+    },
+    "lead": {
+      "planned": "Not handed in yet. Book the drop-off and bring the cards; nothing is paid until they are checked in.",
+      "plannedKeptUntil": "Kept until {day}. Book a drop-off before then, or the list expires and nothing is owed.",
+      "booked": "Bring the {count, plural, one {# card} other {# cards}} on {when}. Staff check each card against your list with you, you sign the submission agreement, and you pay {amount} at the counter. Change the list any time until then.",
+      "checked_in": "Your cards are sealed in our intake bag and leave for {grader} with the batch that closes {cutOff} and ships {shipDay}. We email you when they are on their way, and the moment the grades are in.",
+      "sent": "With {grader} since {when} — being graded. Nothing to do: we read the grader’s status most days and email you the moment the grades are in.",
+      "graded": "{grader} posted the grades on {when} and shipped the cards back on {shippedOn}. We email you again once they are checked in at the shop, by about {estimate}.",
+      "returned": "The cards are back at the shop and we are checking them against {grader}’s manifest. Nothing to do; we email you the moment they are ready.",
+      "ready": "{items}, checked against {grader}’s manifest on {when}. Come any time we are open and show the code below.",
+      "collected": "You collected {items} on {when} and settled {amount}. This page keeps the record: grades, certs, slab photographs and every receipt.",
+      "cancelled": "This submission was cancelled. The cards never left you, and nothing was paid.",
+      "expired": "This list expired unbooked. Nothing was paid and nothing is owed."
+    },
+    "outcome": {
+      "listed": "Listed",
+      "checked_in": "Handed in",
+      "refused": "Refused at the counter",
+      "graded": "Graded",
+      "ungraded": "Returned ungraded",
+      "minimum_not_met": "Minimum grade not met",
+      "moved_up": "Moved up a level",
+      "withdrawn": "Withdrawn",
+      "held": "Held by the grader",
+      "not_returned": "Not returned",
+      "damaged": "Damaged",
+      "collected": "Collected",
+      "vaulted": "Vaulted"
+    },
+    "visit": {
+      "missed": "The visit closed. Your list and estimate stay exactly as they were.",
+      "bookAgain": "Book another drop-off"
+    },
+    "cancel": {
+      "title": "Cancel this submission",
+      "line": "Cancels the drop-off with it. The cards never left you, and nothing was paid.",
+      "dialogTitle": "Cancel this submission?",
+      "dialogBody": "The drop-off on {when} is cancelled with it. The cards never left you, and nothing was paid.",
+      "dialogBodyNoVisit": "The cards never left you, and nothing was paid.",
+      "confirm": "Yes, cancel",
+      "back": "Go back"
+    },
+    "actRefused": {
+      "conflict": "This page was reading an older version. We're reading it again — try that once more.",
+      "visitStarted": "The drop-off has already started, so this can no longer be changed here.",
+      "listAtCounter": "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter.",
+      "notOwner": "This submission is kept under another email, so it cannot be changed from here. Open it from the link we emailed to that address.",
+      "alreadyCollected": "The cards have already been collected, so this can no longer be changed.",
+      "cardCap": "The list has more cards than one submission takes, so nothing was saved. Take the rest off and bring them in a second submission.",
+      "graderPinned": "The drop-off is booked for this grader, so the grader stays. A card for another grader goes in a second submission.",
+      "levelNotOffered": "The grader does not offer this level at the moment, so nothing was saved. Edit the list to pick another level.",
+      "consentRequired": "Nothing was booked. Tick that you have read the personal information collection statement, then book the drop-off.",
+      "referenceUnavailable": "We could not open a submission for this list, so nothing was kept. The list stays on this page; WhatsApp us and we look into it.",
+      "pricesUnconfirmed": "The shop has not confirmed its prices yet, so nothing was saved. Ask at the counter or WhatsApp us.",
+      "diaryUnavailable": "We could not reach the shop’s diary, so nothing was changed. The drop-off and the list stand as they were; ask at the counter or WhatsApp us.",
+      "dropped": "We did not hear back in time, so this may not have gone through. We're reading the page again; check it, then try once more."
+    },
+    "withdraw": {
+      "title": "Changed your mind?",
+      "body": "Until the batch closes on {cutOff} we can pull a card. Message us, then collect it at the counter: its fee comes back at the till, and the estimate drops to the cards that go on.",
+      "whatsapp": "WhatsApp the shop"
+    },
+    "grader": {
+      "order": "At {grader} · order {order}",
+      "readMostDays": "Read most days · {when}",
+      "stages": "{grader}’s stages, in its words. A stage can take days; the estimate is what we promise, the stages are what the grader reports.",
+      "estimate": "Back by about {when}",
+      "nextStage": "We email you the moment the grades post.",
+      "runningLate": "Past {estimate} this reads Running late, the new date shows here with the grader’s stage, and we email it the day we set it. Nothing changes at the counter.",
+      "nothingToDo": "Nothing to do while the cards are with the grader."
+    },
+    "grades": {
+      "headline": "Grades are in: {summary}",
+      "settle": {
+        "title": "One thing to settle before you collect"
+      },
+      "ungraded": {
+        "body": "{card} comes back raw, in a sleeve with the grader’s note: {code}, {note}. The grader charges its fee whether or not it encapsulates, so nothing is refunded for it."
+      },
+      "aboutGrades": "A grade is the grader’s decision, not ours. If you want a second look, a review is a new submission at the grader’s review fee; ask at the counter when you collect.",
+      "cards": {
+        "graderLabel": "Grader",
+        "codeLabel": "Grader's code",
+        "noReason": "The grader gave no reason.",
+        "photoAlt": "{card}, photographed at hand-back"
+      }
+    },
+    "cards": {
+      "title": "The cards · {count}",
+      "intakeIdLabel": "Intake id",
+      "declaredValueLabel": "Declared value",
+      "minimumGradeLabel": "Minimum grade",
+      "grades": "Grades in the grader’s words",
+      "cert": "Cert",
+      "refusedReason": "Refused at the counter · {reason}",
+      "withdrawnRefund": "Withdrawn · {amount} refunded",
+      "movedUpLine": "{amount} due for {level}",
+      "heldUntil": "Held by the grader · expected {day}",
+      "payoutLine": "Settled at {amount} on {day}, {route}, its fee refunded",
+      "reversalLine": "The card turned up, so the settlement was reversed and the card is back on this submission."
+    },
+    "pickup": {
+      "title": "Pickup code · show it at the counter",
+      "codeLabel": "Code",
+      "itemsLabel": "Items",
+      "items": "{count, plural, one {# item} other {# items}} · {slabs, plural, one {# slab} other {# slabs}}, {raw, plural, one {# raw card} other {# raw cards}}",
+      "where": "Where",
+      "open": "Open",
+      "noBooking": "No booking needed. Come in any time we are open.",
+      "toSettle": "To settle",
+      "nothingDue": "nothing",
+      "bring": {
+        "label": "Bring",
+        "aboveThreshold": "an ID matching the name: your declared total is above {threshold}. Nothing is kept",
+        "named": "an ID matching the name, yours or {name}’s: your declared total is above {threshold}. Nothing is kept",
+        "none": "nothing — the code and your name release the cards"
+      }
+    },
+    "named": {
+      "title": "Someone else collecting?",
+      "lead": "Name them here and they collect with the code; the pickup card above says whether to bring an ID. With nobody named, only you can.",
+      "field": "Their name",
+      "placeholder": "Full name, as on their ID",
+      "save": "Save",
+      "badge": "Named",
+      "line": "They collect with the pickup code, and the ID the pickup card asks for; the hand-back receipt names them. One person at a time.",
+      "change": "Change",
+      "remove": "Remove"
+    },
+    "vaultIt": {
+      "title": "Keep it with us instead?",
+      "body": "Any slab from this submission can go straight into the vault from the counter: no second visit, and storage is free. A loan against it is an offer the vault makes after valuing it. The other cards come home with you. Say so at the counter: the identity check and the custody agreement happen there, before you leave.",
+      "howItWorks": "How the vault works"
+    },
+    "money": {
+      "title": "Money",
+      "fee": "Fee",
+      "feeLine": "{count} × {fee} = {total}",
+      "cover": "Cover",
+      "coverLine": "{rate} of the declared value · {total}",
+      "paid": "Paid",
+      "paidWith": "{method} · {when} · POS {reference}",
+      "method": {
+        "card": "Card",
+        "cash": "Cash",
+        "fps": "FPS",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "shop_pay": "Shop Pay"
+      },
+      "movedUp": "Moved up a level",
+      "movedUpLine": "{amount} · {card} → {level}",
+      "due": "Due at the counter before collection",
+      "waived": "The upcharge was waived. Nothing is due.",
+      "storage": "Storage fee",
+      "storageLine": "{rate} a card a month since {day} · accruing",
+      "refunded": "Refunded",
+      "refundedLine": "{amount} · {method}",
+      "paidOut": "Paid out",
+      "route": {
+        "till": "Till",
+        "transfer": "Bank transfer"
+      },
+      "paidOutNote": "at declared value · {route}",
+      "settled": "Settled at collection · POS {reference}",
+      "nothingDue": "Nothing due",
+      "footnote": "A fee is charged even when a card comes back ungraded. A card refused at our counter is never charged."
+    },
+    "ladder": {
+      "title": "If you do not collect",
+      "readyLabel": "Ready to collect since",
+      "cardsHeldLabel": "Cards held",
+      "passedLabel": "Passed",
+      "postedLabel": "Notice posted",
+      "reminders": "We remind you on {days}. {count, plural, one {The reminder never costs anything.} other {Reminders never cost anything.}}",
+      "storage": "From {day}, a storage fee of {rate} a card a month. It accrues here and is due before collection.",
+      "notice": "Written notice on {day}.",
+      "noticeLine": "{daysLeft, plural, one {# day} other {# days}} left of the 30 from the posting date, until {day}.",
+      "afterNotice": "After it, nothing further follows: the cards stay yours, and a slab can go into a vault case.",
+      "closing": "We do not ship slabs back. Rather keep them here on purpose? Vault it, above."
+    },
+    "collected": {
+      "lead": "This page keeps the record: grades, certs, slab photographs and every receipt.",
+      "record": "The graded record",
+      "lookUp": "Look up",
+      "whatNext": {
+        "title": "What next",
+        "vault": "Vault it — free storage in the shop, or a loan against it after a valuation.",
+        "auction": "Sell it at auction — the grade and the cert carry straight into the listing.",
+        "yourData": "Your data — this record and the photographs are kept for seven years, as our retention table says. Ask for erasure by signing in with this email."
+      }
+    },
+    "documents": {
+      "title": "Documents",
+      "agreement": "Submission agreement",
+      "intakeReceipt": "Intake receipt",
+      "withdrawalReceipt": "Withdrawal receipt",
+      "handbackReceipt": "Hand-back receipt",
+      "signedAt": "Signed {when}",
+      "issuedAt": "Issued {when}"
+    },
+    "history": {
+      "title": "History",
+      "batch": "{grader} · ships {shipDay}",
+      "events": {
+        "plan_saved": "Submission planned: {count, plural, one {# card} other {# cards}}{grader, select, none {} other {, {grader}{level, select, none {} other { {level}}}}}",
+        "plan_updated": "List changed",
+        "plan_nudged": "Reminded to book the drop-off",
+        "plan_expired": "List expired unbooked",
+        "dropoff_booked": "Drop-off booked",
+        "dropoff_moved": "Drop-off moved",
+        "dropoff_cancelled": "Drop-off cancelled",
+        "dropoff_reminder": "Reminded of the drop-off",
+        "dropoff_started": "Drop-off started",
+        "dropoff_missed": "Drop-off missed",
+        "dropoff_detached": "Drop-off closed by the submission that owned it",
+        "dropoff_joined": "Joined the drop-off another submission booked",
+        "agreement_signed": "Submission agreement signed",
+        "paid": "Paid {amount}{method, select, card { by card} cash { in cash} fps { by FPS} apple_pay { with Apple Pay} google_pay { with Google Pay} shop_pay { with Shop Pay} other {}}",
+        "checked_in": "Handed in: {count, plural, one {# card} other {# cards}}",
+        "card_refused": "Card refused at the counter",
+        "card_withdrawn": "Card withdrawn before the batch closed",
+        "batch_shipped": "Left with batch {batch}",
+        "batch_arrived": "Arrived at {grader}",
+        "grader_stage": "{grader} stage: {stage}",
+        "batch_reestimated": "Re-estimated: back by {estimate}",
+        "grades_posted": "Grades posted",
+        "moved_up": "Moved up a level: {movedToLevel}",
+        "card_ungraded": "Card returned ungraded",
+        "card_minimum_not_met": "Card below its minimum grade, returned raw",
+        "card_held": "Card held by the grader",
+        "card_not_returned": "Card not returned",
+        "card_damaged": "Card damaged",
+        "card_vaulted": "Card moved into the vault",
+        "shipped_back": "Shipped back to us",
+        "back_at_shop": "Back at the shop",
+        "ready": "Ready to collect",
+        "collector_named": "{who, select, current {Named {name} to collect} other {Named someone to collect}}",
+        "collector_removed": "Removed the named collector",
+        "uncollected_reminder": "Reminded to collect",
+        "storage_started": "Storage fee started",
+        "notice_posted": "Written notice posted",
+        "payout_recorded": "Paid out {amount} at declared value",
+        "payout_reversed": "Payout reversed: the card turned up",
+        "upcharge_waived": "Upcharge waived",
+        "handed_back": "Handed back {count, plural, one {# card} other {# cards}}",
+        "collected": "Collected",
+        "cancelled": "Submission cancelled",
+        "expired": "Submission expired"
+      }
+    },
+    "badge": {
+      "visitToday": "Visit today",
+      "batchClosesToday": "Batch closes today",
+      "dueBack": "Due back",
+      "runningLate": "Running late",
+      "upchargeToSettle": "Upcharge to settle",
+      "ungradedCard": "Ungraded card",
+      "uncheckedReturn": "Unchecked return",
+      "uncollected": "Uncollected {day} days",
+      "storageAccruing": "Storage fee from day {day}",
+      "noticeDue": "Notice due",
+      "payoutPastWindow": "Payout past its window",
+      "messageNotSent": "Message not sent"
+    }
+  },
+  "ceremony": {
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "This signing link does not open anything",
+        "message": "Ask staff to prepare it again."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "This signing link has expired",
+        "message": "Signing links last a short while for your safety; ask staff for a new one."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "This signing link has already been used",
+        "message": "If you signed with it, your copy is at the counter and on your submission page; if not, ask staff for a new link."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "This link was opened on another device",
+        "message": "A signing link stays on the device it was first opened on; ask staff for a new link for this device."
+      },
+      "PACKET_VOIDED": {
+        "title": "These documents were withdrawn",
+        "message": "A newer set replaced them; ask staff for the link to the current documents."
+      },
+      "PACKET_EXPIRED": {
+        "title": "These documents have expired",
+        "message": "They were prepared too long ago to sign now. Ask for them to be prepared again."
+      },
+      "PACKET_COMPLETED": {
+        "title": "These documents are already signed",
+        "message": "You can close this page."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "That document is not part of this signing",
+        "message": "Reload the page to see the documents you were asked to sign."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "You have already signed that one",
+        "message": "Reload the page to carry on with whatever is still left to sign."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "Read the whole document before signing",
+        "message": "Scroll to the end of every page."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "That page is not in this document",
+        "message": "Reload the page and read the document through again."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "Please confirm you agree first",
+        "message": "Tick the box confirming you have read the document and agree to sign it."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "Please agree to sign electronically first",
+        "message": "Read the notice about signing electronically and agree to it before signing anything."
+      },
+      "KYC_REQUIRED": {
+        "title": "Your identity check is not recorded yet",
+        "message": "The member of staff with you needs to record your ID check before you sign."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "That is not the name on your ID",
+        "message": "Type your name exactly as it appears on the ID the member of staff with you checked. If the ID is in another name, they need to record the check again."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "The counter is not ready for this document yet",
+        "message": "The member of staff with you can say what is outstanding."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "You have already signed everything",
+        "message": "Nothing further is needed from you. You can close this page."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "That is not the name this submission was booked under",
+        "message": "Type it as it was given at booking."
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "Your postal address is needed before you sign",
+        "message": "It is used only for the written notice."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "That signature could not be read",
+        "message": "Clear the signature box and sign again."
+      },
+      "SOURCE_MISSING": {
+        "title": "The document could not be loaded",
+        "message": "Ask the member of staff with you to prepare it again."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "The document does not match what was prepared",
+        "message": "Do not sign. Ask the member of staff with you to prepare it again."
+      },
+      "FONT_MISSING": {
+        "title": "The document cannot be drawn right now",
+        "message": "Nothing has been signed. Ask the member of staff with you; the shop has to restore its document font first."
+      },
+      "CONFLICT": {
+        "title": "This signing was finished elsewhere",
+        "message": "Another device completed or withdrew it while this page was open."
+      }
+    },
+    "yourName": {
+      "label": "Your name",
+      "hint": "As on the booking",
+      "hintNamed": "As named on the submission page"
+    },
+    "postalAddress": {
+      "label": "Postal address",
+      "hint": "Used only for the written notice, if the cards are left uncollected."
+    },
+    "decline": "Decline",
+    "declined": "Nothing was signed and nothing was paid. The member of staff with you can help with what happens next.",
+    "loading": "Opening your documents…",
+    "noTokenTitle": "This link is incomplete",
+    "noTokenMessage": "Open the link our staff sent you, exactly as it was given to you.",
+    "loadFailedTitle": "We could not open your documents",
+    "documentFailed": "This document could not be displayed. Please ask our staff.",
+    "emptyPacketTitle": "There is nothing here to sign",
+    "emptyPacketMessage": "Please tell the member of staff with you — these documents were not prepared properly.",
+    "disclosureTitle": "Before you sign electronically",
+    "disclosureFallback": "You are about to review and sign documents electronically. Ask the member of staff with you if you would rather not.",
+    "agreeLabel": "Agree and continue",
+    "agreeingLabel": "Recording your agreement…",
+    "packetExpiry": "These documents can be signed until {when}.",
+    "declineConfirmTitle": "Decline to sign?",
+    "declineConfirmMessage": "This withdraws every document prepared for today — the whole set, not one of them. Nothing will be signed, and the member of staff with you can take it from there.",
+    "declineReasonLabel": "Tell us why, if you like (optional — this stays on this screen and is not stored)",
+    "declineConfirmLabel": "Yes, decline everything",
+    "declineCancelLabel": "Go back",
+    "decliningLabel": "Declining…",
+    "declinedTitle": "Nothing was signed",
+    "rosterLabel": "What you are signing today: {total} documents",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "signed",
+    "rosterStateCurrent": "you are here",
+    "rosterStatePending": "still to sign",
+    "documentStep": "{title} — document {position} of {total}",
+    "movedOn": "You have signed the {signed}. Next is the {next}.",
+    "pageLabel": "Document page {page} of {pageCount}",
+    "pageStatus": "Page {page} of {pageCount}",
+    "pageNoText": "This page is a scan, so there is no text on it to read out. Ask the member of staff with you to read it to you before you sign.",
+    "pageFailed": "This page could not be shown. Do not sign until it has — ask the member of staff with you.",
+    "previousLabel": "Previous page",
+    "nextLabel": "Next page",
+    "readStatus": "{viewed} of {pageCount} pages read",
+    "integrityWarning": "This document does not match what we prepared. Stop and tell our staff before signing.",
+    "consentLabel": "I have read the {title} and agree to sign it",
+    "signatureLabel": "Sign the {title} here",
+    "clearSignatureLabel": "Clear signature",
+    "signatureDrawOption": "Draw my signature",
+    "signatureTypeOption": "Type my signature",
+    "signatureTypedNameLabel": "Type your name here to sign",
+    "signatureCaptured": "Your signature has been captured.",
+    "signatureEmpty": "No signature yet.",
+    "signatureTypedFailed": "This device could not turn what you typed into a signature. Ask the member of staff with you.",
+    "signatureTypedCaption": "Typed signature",
+    "submitLabel": "Sign the {title}",
+    "submittingLabel": "Signing…",
+    "retryLabel": "Try again",
+    "missingPages": "Please read every page before signing.",
+    "missingConsent": "Please tick the box to confirm you have read it.",
+    "missingSignature": "Please sign in the box above.",
+    "missingName": "Please type your name as it appears on your ID.",
+    "missingPostalAddress": "Please type your postal address.",
+    "signUnconfirmed": "We did not hear back after your signature was sent, so we cannot yet say whether it was recorded. Do not sign again — check what happened instead.",
+    "signRecheckLabel": "Check what happened",
+    "sealedTitle": "Signed and sealed",
+    "sealedMessage": "Your signed copies are on your submission page. Keep the fingerprint below — it identifies this exact set of documents.",
+    "sealedManifestLabel": "Fingerprint of everything you signed",
+    "sealedDocumentsLabel": "What you signed",
+    "downloadLabel": "Download the {title}",
+    "downloadingLabel": "Downloading…",
+    "downloadFailed": "The download could not be completed. Your signed copies are on your submission page, and the member of staff with you can print them at the counter.",
+    "downloadExpiry": "You can download from this screen until {when}. After that, the member of staff with you can print your copies at the counter.",
+    "sealedIntegrityWarning": "The copy that downloaded does not match the fingerprint of what you signed, so it has not been saved. Your signature is recorded — ask the member of staff with you for a printed copy.",
+    "signedTitle": "Your signatures are recorded",
+    "signedMessage": "Others still have to sign before these documents are sealed."
+  },
+  "console": {
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "submissions": "{count, plural, one {# submission} other {# submissions}}",
+    "labels": "{count, plural, one {# label} other {# labels}}",
+    "ungradedCards": "{count, plural, one {# card} other {# cards}} back ungraded",
+    "whatsapp": {
+      "confirmDropoff": "Hi {name}, confirming your grading drop-off on {when} at {shop}. Bring the {count}, each in a sleeve. Your submission: {link}",
+      "onTheirWay": "Hi {name}, your {count} left us today for {grader}, insured. Estimated back at the shop by {estimate}. Your submission: {link}",
+      "runningLate": "Hi {name}, {grader} is past the estimate we gave you on submission {id}. The new date is {estimate}; nothing changes at the counter. Your submission: {link}",
+      "gradesIn": "Hi {name}, the grades are in for submission {id}. {summary}. We will message you again when the cards are ready to collect: {link}",
+      "readyToCollect": "Hi {name}, your cards are ready to collect at {shop}. Pickup code {code}, {toSettle} to settle at the counter. Open {hours}. Your submission: {link}",
+      "notReturned": "Hi {name}, one card from submission {id} did not come back from {grader}. We settle it at its declared value and refund its fee. Your submission: {link}",
+      "stillHere": "Hi {name}, your graded cards have been ready at {shop} since {since}. Pickup code {code}. Nothing extra is due for the reminder. Your submission: {link}",
+      "labels": {
+        "confirmDropoff": "Confirm drop-off",
+        "onTheirWay": "On their way",
+        "runningLate": "Running late",
+        "gradesIn": "Grades are in",
+        "readyToCollect": "Ready to collect",
+        "notReturned": "Not returned",
+        "stillHere": "Still here"
+      }
+    },
+    "error": {
+      "diaryUnavailable": "We could not read the diary, so the letter has nothing to print. Try again in a moment."
+    }
+  },
+  "graders": {
+    "psa": "PSA",
+    "cgc": "CGC",
+    "bgs": "BGS",
+    "grade": "{grader} {grade}",
+    "noFigures": "{grader} has not confirmed its fees yet, so its levels cannot be picked."
+  },
+  "levels": {
+    "value": "Value",
+    "regular": "Regular",
+    "express": "Express",
+    "super_express": "Super Express",
+    "bulk": "Bulk"
+  }
+}

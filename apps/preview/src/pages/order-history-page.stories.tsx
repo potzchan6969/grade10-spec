@@ -49,7 +49,7 @@ function OrderHistoryPage({ empty = false }: { empty?: boolean }) {
 }
 
 const meta = {
-  title: "Pages/Order History Page",
+  title: "Pages/Store Order History Page",
   component: OrderHistoryPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

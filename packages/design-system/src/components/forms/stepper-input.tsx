@@ -274,6 +274,7 @@ function StepperInput({
     <VStack
       gap="sm"
       data-slot="stepper"
+      aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       data-status={status}
       className={cn("w-full", disabled && "opacity-50", className)}

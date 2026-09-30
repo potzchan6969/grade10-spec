@@ -62,14 +62,14 @@ task group, name the principle each finding rests on; on the page's marks or
 
 ## What You Return
 
-One table, and nothing else.
+One table, rows ordered `blocks`, `fix`, `note`, each Finding cell at most two
+sentences. Nothing else.
 
 | # | Where | Finding | Principle | Severity |
 | --- | --- | --- | --- | --- |
 
 - **Where** — the file and the heading, the group number or the line
-- **Finding** — what is wrong or missing, then the fix, in one or two
-  sentences
+- **Finding** — what is wrong or missing, then the fix
 - **Principle** — owed only reading a task group, where a finding naming none
   is not carried; blank on the page's marks or `tasks.md`
 - **Severity** — `blocks` where the plan cannot land or the run cannot be

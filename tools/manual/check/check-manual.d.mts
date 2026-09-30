@@ -25,4 +25,5 @@ export function runChecks(
 export function formatReport(
   target: string | Roots,
   result: CheckResult,
+  options?: { quiet?: boolean },
 ): { text: string; failures: number; warnings: number };

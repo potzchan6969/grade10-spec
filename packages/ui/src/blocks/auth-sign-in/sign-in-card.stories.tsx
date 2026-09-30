@@ -290,7 +290,9 @@ export const ProviderThatHasNotDrawnYet: Story = {
 
     expect(getComputedStyle(group).display).toBe("none");
 
-    container.appendChild(document.createElement("button"));
+    const provider = document.createElement("button");
+    provider.textContent = "Continue with Google";
+    container.appendChild(provider);
 
     await waitFor(() =>
       expect(getComputedStyle(group).display).not.toBe("none"),

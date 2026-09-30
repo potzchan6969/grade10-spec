@@ -60,7 +60,11 @@ function BreadcrumbItem({
   if (current) {
     return (
       <li data-slot="breadcrumb-item" className="inline-flex">
-        <span aria-current="page" className={classes}>
+        <span
+          aria-current="page"
+          aria-disabled={disabled || undefined}
+          className={classes}
+        >
           {children}
         </span>
       </li>

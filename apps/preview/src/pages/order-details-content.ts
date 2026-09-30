@@ -106,10 +106,10 @@ const ORDER_DETAILS_LINES: readonly OrderDetailsLineItem[] = [
 ];
 
 const ORDER_DETAILS_SUMMARY: OrderDetailsSummary = {
-  subtotal: { label: "Subtotal", value: "HK$1,759.50" },
-  refund: { label: "Refund", value: "−HK$105" },
-  shipping: { label: "Shipping", value: "HK$50" },
-  tax: { label: "Tax", value: "HK$0" },
+  subtotal: { label: "Subtotal", value: "$1,759.50" },
+  refund: { label: "Refund", value: "−$105.00" },
+  shipping: { label: "Shipping", value: "$50.00" },
+  tax: { label: "Tax", value: "$0" },
   total: { label: "Total", value: "HK$1,704.50" },
 };
 

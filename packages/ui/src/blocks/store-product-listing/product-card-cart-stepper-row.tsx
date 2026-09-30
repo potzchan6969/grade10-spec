@@ -74,9 +74,10 @@ function ProductCardCartStepperRow({
           <Minus aria-hidden size={12} weight="bold" />
         )}
       </IconButton>
+      {/* A readout the two buttons step, not a field: it takes no focus and
+          no keys, so it announces the count rather than claiming an input. */}
       <span
         aria-live="polite"
-        aria-valuenow={qty}
         className={cn(
           "min-w-[1.25rem] flex-1 text-center text-sm font-normal tabular-nums text-primary-foreground",
           roll === "up" &&
@@ -85,7 +86,6 @@ function ProductCardCartStepperRow({
             "animate-in fade-in slide-in-from-top-2 duration-150 motion-reduce:animate-none",
         )}
         onAnimationEnd={() => setRoll(null)}
-        role="spinbutton"
       >
         {qty}
       </span>

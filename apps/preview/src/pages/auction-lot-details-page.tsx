@@ -1,9 +1,6 @@
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import {
   EnrollmentSetupSheet,
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
   ListingAuctionCardSidebar,
   ListingLotGallery,
   ListingLotHeader,
@@ -11,6 +8,11 @@ import {
   PaymentMethodEmptyState,
   PaymentMethodRow,
 } from "@grade10/ui";
+import {
+  FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import { useEffect, useState } from "react";
 import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "../auction-listing/listing-bid-enrollment-copy";
 import {

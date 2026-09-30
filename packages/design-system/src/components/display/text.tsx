@@ -10,6 +10,7 @@ const textVariants = cva("leading-snug", {
       base: "text-base",
       lg: "text-lg",
       xl: "text-xl",
+      display: "text-3xl",
     },
     weight: {
       regular: "font-normal",
@@ -19,15 +20,21 @@ const textVariants = cva("leading-snug", {
     tone: {
       primary: "text-foreground",
       secondary: "text-muted-foreground",
-      muted: "text-disabled-foreground",
-      success: "text-success-foreground",
-      error: "text-error-foreground",
+      muted: "text-muted-foreground",
+      success: "text-success",
+      warning: "text-warning",
+      error: "text-destructive",
+    },
+    face: {
+      sans: "font-sans",
+      mono: "font-mono",
     },
   },
   defaultVariants: {
     size: "base",
     weight: "regular",
     tone: "primary",
+    face: "sans",
   },
 });
 
@@ -44,8 +51,21 @@ type TextProps = React.HTMLAttributes<HTMLElement> &
   };
 
 /**
- * The typographic primitive the product components read from. Size, weight, and
- * tone are independent axes so a heading tag never implies a type scale.
+ * The typographic primitive the product components read from. Size, weight,
+ * tone, and face are independent axes so a heading tag never implies a type
+ * scale and a figure never implies a font.
+ *
+ * `size="display"` is the rung above `xl`, for one figure a surface leads
+ * with — a pickup code, a grade. `face="mono"` binds `--font-mono`, so digits
+ * a collector reads back to a counter line up. The status tones bind the
+ * status fill as text, as the store's blocks do for page text: `warning` for a
+ * line that is due rather than failed, `error` for a refusal. The
+ * `--<tone>-foreground` tokens are the text on a fill, white on the page, and
+ * `--error-foreground` is stock shadcn's, set by no theme. `muted` binds
+ * `--muted-foreground`, never `--disabled-foreground`: that is the text on the
+ * dark disabled fill and reads 1.0 on the page. No Figma set defines this
+ * component, so the three axes are code ahead
+ * of design, recorded in the `add-card-grading` change.
  */
 function Text({
   as: Tag = "span",
@@ -53,6 +73,7 @@ function Text({
   size = "base",
   weight = "regular",
   tone = "primary",
+  face = "sans",
   truncate = false,
   ...props
 }: TextProps) {
@@ -61,7 +82,7 @@ function Text({
       data-slot="text"
       data-truncate={truncate || undefined}
       className={cn(
-        textVariants({ size, weight, tone }),
+        textVariants({ size, weight, tone, face }),
         truncate && "block truncate",
         className,
       )}

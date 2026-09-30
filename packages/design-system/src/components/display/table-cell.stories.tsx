@@ -1,10 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Table, TableBody } from "./table";
 import { TableCell } from "./table-cell";
+import { TableRow } from "./table-row";
 
 const meta = {
   title: "Components/TableCell",
   component: TableCell,
   tags: ["autodocs"],
+  // A part only has its table semantics inside the parts that own it.
+  decorators: [
+    (Story) => (
+      <Table className="w-fit">
+        <TableBody>
+          <TableRow>
+            <Story />
+          </TableRow>
+        </TableBody>
+      </Table>
+    ),
+  ],
 } satisfies Meta<typeof TableCell>;
 
 export default meta;

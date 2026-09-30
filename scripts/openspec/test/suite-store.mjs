@@ -51,8 +51,8 @@ export function specFiles(base) {
 }
 
 /** The real validator over `root`, colour off. */
-export function runValidator(root) {
-  return spawnSync(process.execPath, [SCRIPT, "--root", root], {
+export function runValidator(root, args = []) {
+  return spawnSync(process.execPath, [SCRIPT, "--root", root, ...args], {
     encoding: "utf8",
     env: { ...process.env, NO_COLOR: "1" },
   });

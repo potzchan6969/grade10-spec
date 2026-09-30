@@ -14,23 +14,19 @@ it; no statute here is asserted.
 - **Checked at the counter** — a staff member with the document: legal name
   typed character for character, date of birth, document type (passport,
   national ID, driving licence, residence permit), number, expiry, one
-  photograph; the method is in person or from an upload
-- **Refused** — under **18**, or a document expired on the day of the check,
-  each judged on the shop's own day; both judged again when the paper is
-  prepared and when a check is reused, and never at release
+  photograph; in person or from an upload
+- **Refused** — under **18** or an expired document, judged on the shop's own
+  day at the check, when the paper is prepared and on reuse, never at release
 - **Stored** — the name, birth date, expiry, type, a masked number and a keyed
   digest of it, the photograph, who verified by id and name, and when; the
   raw number never lands
 - **Reused** — a returning customer's latest check binds to a new case
   without a new photograph
-- **The same document elsewhere** — every binding is answered with how many
-  other accounts hold the same document. A hit writes a staff-only event
-  carrying the count, badges the case in the queue as **Document seen
-  before**, and refuses nothing; which accounts they are never leaves the
-  KYC service
-- **Not checked** — liveness, face match, address, nationality, sanctions or
-  politically exposed persons, source of funds, occupation, purpose, ongoing
-  monitoring, thresholds, suspicious-activity reporting
+- **The same document elsewhere** — every binding answers with how many other
+  accounts hold the same document; a hit writes a staff-only event, badges
+  the case **Document seen before**, and refuses nothing
+- **Not checked** — liveness, face match, address, nationality, sanctions,
+  politically exposed persons, source of funds, purpose, ongoing monitoring
 - **Whose it is** — every case belongs to an account, so every identity is
   keyed to a person and every erasure request reaches it
 - **Who sees the photograph** — every `staff` and `admin`, each download on
@@ -40,28 +36,32 @@ it; no statute here is asserted.
 ## Retention and erasure
 
 - **Retention windows** — days after a case ends, per class: agreements
-  **2,555**, photos **2,555**, identity **1,825**. Seven years is the
-  business-record window recalled for Hong Kong, and the photograph is the
-  collateral the agreement describes; five years is the AML window recalled.
-  Legal confirms them
-- **The review is a review** — the sweep flags a case past its window,
-  gauges each class, writes nothing and deletes nothing; deletion on expiry
-  is a second decision, and a class nobody has set a window for is flagged as
-  unset rather than treated as zero
+  **2,555**, photos **2,555**, identity **1,825**; seven years is the
+  business-record window recalled for Hong Kong, five the AML window
+- 🚧 **The submission record** — its own class, case records, **2,555** days
+  from the day it ended — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
+- **The review is a review** — the sweep flags a case past its window and
+  deletes nothing; deletion on expiry is a second decision, and a class with
+  no window is flagged as unset rather than treated as zero
 - **Legal hold** — the reason written on a case, not the guard; the guard is
   whether sealed evidence exists, read under the row lock
 - **Erasure, in flight** — a signed case that is not yet `released` or
   `forfeited` refuses; nothing is erased until the loan settles
+- 🚧 **Erasure, a live submission** — refused by name while a grading
+  submission is between booked and ready, an upcharge is unsettled or ready
+  cards are uncollected — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **Erasure, closed and signed** — contact, decline reason, staff notes and
-  the customer's actor ids go; the sealed PDFs, the identity record and
-  photograph, the item photos and the item text stay under the hold, with no
-  clock
+  actor ids go; the sealed PDFs, the identity record and photograph, the item
+  photos and text stay under the hold, no clock
 - **Erasure, never signed** — everything is purged and the identity released
-- **Messages never sent** — a case's queued and parked mail is deleted
-  whichever class the case falls in; a held case keeps the agreement, not the
-  outbox
-- **Process** — the account holder asks on the auth side, a **7-day** window
-  runs, then an admin runs each product from the console
+- **Messages never sent** — queued and parked mail goes whichever class the case falls in
+- 🚧 **Process** — the collector files the ask from Your data and can cancel
+  it inside the **7-day** window; then an admin runs each product from the
+  console — [Account Data](/platform/account-data#erasure)
+- 🚧 **Your data** — a page under the collector's account: what the vault keeps
+  and for how long, per class; the identity standing — verified until when,
+  checked how, never the name or document; every signed document in one download;
+  and the ask to be forgotten, refused in words while a case is in flight
 
 ## Evidence
 
@@ -73,94 +73,69 @@ it; no statute here is asserted.
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
 | Database backups | one check grades the gaps file against the registry, run by the build and by the nightly alike, across every environment | two age recipients, one green nightly, a restore drill |
-| Second factor | required in production and staging, optional in development | — |
+| 🚧 Second factor | required in production only, for every brand; optional in staging and development | — |
 | A read that names a person | yes — a search records who searched, when, the kind of term and how many cases matched, never the term | — |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 
 ## Outside the code
 
-- **The regime** — the loan agreement states Hong Kong SAR governing law, the
-  annualised rate, `Fees: None` and the complaints contact; which regime
-  governs the loan, and any particular it prescribes, is Legal's to name, and
-  no licence line prints until Legal writes one
+- **The regime** — Legal's to name; the loan agreement states Hong Kong SAR
+  governing law, the annualised rate, `Fees: None` and the complaints
+  contact; no licence line prints until Legal writes one
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
   still read “Being prepared” on the live site. An auction-launch draft for
   review lives in Storybook under Pages/Legal, not in the message catalogs
 - ❓ **Counsel's wording on those pages** — Legal confirms the Terms, Privacy
-  Policy, and personal information collection statement before live catalogs
-  and the app’s legal pages carry them
+  Policy, and personal information collection statement the wizard's tick
+  links, before live catalogs and the app’s legal pages carry them
 - **Processors and residency** — Cloudflare, Neon in `ap-southeast-1`, Datadog
   in the US carrying no personal data, Resend; no processor register
-- **Disputes** — beyond the complaints contact the paper prints, no path for a
-  collector to dispute a valuation, an interest figure or a forfeiture; the
-  only refusal in the flow is declining the packet before the seal
+- **Disputes** — beyond the complaints contact the paper prints, no path to
+  dispute a valuation, an interest figure or a forfeiture
 - **Insurance** — no policy, no insurer and no cover limit; the paper claims
   none and states the custodian's duty of reasonable care instead
 
 ## Before the first production case
 
-Every item here is a value or an act outside the code, with who closes it and
-how the closure is seen. `pnpm run check:libs` in the application repository
-prints the first until it is done; the rest live outside any check.
+Every item is a value or an act outside the code, with who closes it;
+`check:libs` in the application repository prints items 1 and 11 until they are done.
 
-1. *Legal* — **Name the two entities and their licence** — the custodian's
-   registered name, the lender's, the lender's licence number and the exact
-   wording beside it, the complaints contact and the repayment instructions,
-   in `packages/app-env/src/legalIdentity.ts`. Until then a production deploy
-   of the brand is refused before the first worker uploads, no offer may be
-   written in production, and a live loan's balance prints nowhere to pay
+1. *Legal* — **Name the two entities and their licence** — each refuses its
+   own act while unset in production: the custodian's name a deploy, the
+   lender's an offer, the licence the loan agreement and every money email,
+   the complaints contact every email; the paper prints the contact where set
 2. *Legal* — **Confirm the postures** — the regime and any particular it
-   prescribes, the e-sign ceremony's adequacy, a document upload as a
-   verification method, whether an AML duty applies, the retention windows,
-   and whether the hash chain with a witnessed head is evidence enough. Each
-   has a posture the code holds meanwhile, stated in the decisions below
+   prescribes, the e-sign ceremony's adequacy, an upload as a verification
+   method, whether an AML duty applies, the retention windows, and whether
+   the hash chain with a witnessed head is evidence enough
 3. *Legal* — **Counsel's wording** — the e-sign disclosure, the per-document
-   consent text, the personal information collection statement, and the
-   Chinese versions of each; the ceremony records whatever is served, so the
-   change is evidenced
+   consent text, the collection statement, the forfeiture notice's operative
+   text, and the Chinese versions of each; production refuses the act that
+   would print an unset one — the notice's send, the collection-statement tick
+   — and brackets print outside production only
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
    the chain verifying on the restored copy
 5. *Operations* — **The archive bucket lock** — the R2 lock rule on the
-   documents archive per environment; nothing in the repository can assert
-   it
+   documents archive per environment; nothing in the repository can assert it
 6. *Operations* — **Keys and assets** — the Datadog key with monitors and
    named recipients, the mail key, the CJK font asset per environment (a
    missing font fails the seal for any Chinese name)
-7. *Operations* — **The region** — every Neon project in `ap-southeast-1`,
-   the one home residency answers with; a project created elsewhere is
-   replaced, never moved
+7. *Operations* — **The region** — every Neon project in `ap-southeast-1`; a
+   project created elsewhere is replaced, never moved
 8. *Owner* — **Two people who can move money** — a reversal refuses the row's
    own recorder and a payout refuses the offer's own maker, so with a single
-   money holder a bounced transfer strands the case in `active` and
-   forfeiture is its only exit
-9. *Engineering* — **Bump the catalogue** — the collector's own words live in
-   this store and not in the submodule the application pins: the offer's
-   total and what a late day costs, accepting, declining and cancelling,
-   where to pay, the ceremony's chrome in Chinese, and the timeline entries
-   for a reminder, a forfeiture notice, a missed visit and the two money
-   corrections. Until the pointer moves after the upstream merge, the worker
-   answers all of it and the collector's page does not show it: the acts are
-   not on the page, the signing screen serves English to a Chinese reader,
-   and those entries stay off the timeline — the email tells them either way
+   money holder a bounced transfer strands the case in `active`
+9. *Engineering* — **Bump the catalogue** — the collector's words live in this
+   store and reach the application only when the submodule pointer moves
 10. *Engineering* — **Write the vault's specs** — the capabilities behind
-    these pages, so the timers, the arithmetic, the grants and the
-    twenty-three mail kinds are validated rather than described
-
-:::callout{kind="warning"}
-`check:libs` lists **43** unset values. Six are Grade10's own and every one is
-item 1's: the two registered names, the licence number and its wording, the
-complaints contact and the repayment instructions. One of the six blocks a
-deploy — without the custodian's registered name a production run is refused
-before it uploads anything — and a second stops the lane, because no offer is
-written without the lender's. The rest belong to zzz, which lends nothing.
-:::
+    these pages, so the timers, the arithmetic, the grants and the mail kinds
+    are validated rather than described
+11. *Finance* — **Where a borrower pays** — the lender's FPS id and bank account
+    beside its legal identity; unset, they refuse every offer in production, so
+    no loan goes live without them, and print a marked placeholder outside it
 
 ## Specs and journeys
-
-**Specs** — this page documents `grade10-site/vault/identity-verification`
-and `grade10-site/vault/retention-and-erasure`. The requirements are theirs;
-this page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/identity-verification"}
 
@@ -195,20 +170,24 @@ this page holds the decision behind them.
 :::detail{title="Product decisions" for="pm"}
 Where the law might bind, the borrower-favourable rule is the one taken — and
 "more" never means a charge. Every statute below is as engineering recalls it,
-never asserted; a TBC row names who supplies the fact and the posture the code
-holds until they do.
+never asserted; a row marked `TBC` names who supplies the fact and the posture
+the code holds until they do.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
-| The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer | Legal |
+| The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer; `check:libs` lists them among its unset values, six of them Grade10's own | Legal |
+| The complaints contact | TBC Legal | Where a customer complains, in every email's footer and on the paper where set. Until it is given, production refuses every act that sends a vault email, and brackets print outside production only | Legal |
+| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built, production refuses the send while the wording is unset, and brackets print outside production only | Legal |
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
-| Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed | Legal |
+| Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
-| The collection statement | TBC Legal | The personal information collection statement the wizard links; live Terms and Privacy still read “Being prepared”; auction-launch draft copy is in Storybook Pages/Legal until counsel confirms | Legal |
+| The collection statement | TBC Legal | The personal information collection statement the wizard's tick links; live Terms and Privacy still read “Being prepared”, and the tick ships against the privacy page; auction-launch draft copy is in Storybook Pages/Legal until counsel confirms | Legal |
+| One rule for the complaints contact | ❓ Open | In production an email refuses to go without the complaints contact, while the paper prints it where set. Recommended: the paper refuses an unset contact in production too, so the field keeps one rule | Product |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
+| Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |
 | Forfeiture | Decided | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item; the surplus and the accounting after it are the firm's books | Legal |
 | A document held under another account | Decided | Flag, never refuse: a refusal needs an override the vault has nowhere and would strand a customer with two accounts | Owner |
 | Residency | Decided | Every Neon project in `ap-southeast-1`, the nearest region to Hong Kong and one stated home; Datadog stays in the US on the standing rule that logs carry no personal data | Legal |

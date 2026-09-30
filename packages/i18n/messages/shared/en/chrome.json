@@ -13,6 +13,7 @@
     "store": "Store",
     "auction": "Auction",
     "vault": "Vault",
+    "grading": "Grading",
     "book": "Book a Visit",
     "help": "Help"
   },

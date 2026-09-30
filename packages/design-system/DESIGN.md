@@ -45,9 +45,10 @@ pnpm run test:stories:design-system       # this package only
 pnpm run test:stories                     # both Storybooks, as CI runs them
 ```
 
-`a11y.test` is set to `"todo"` in `.storybook/preview.tsx`, so violations are
-reported but do not fail the run. Set it to `"error"` to gate CI once the
-outstanding violations are cleared.
+`a11y.test` is `"error"` in `.storybook/preview.tsx`, so an axe violation
+fails the run, with one rule off: `color-contrast`. Several of the theme's
+pairs read under AA, and which way the palette passes is the designer's
+decision, open as Q63 in the `complete-vault-collector-flow` change.
 
 Design source of truth: the Figma file, via the token pipeline below. (A
 diverged Pencil `.pen` library under a root `designs/` directory was the

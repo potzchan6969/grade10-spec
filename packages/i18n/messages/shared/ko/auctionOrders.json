@@ -46,7 +46,7 @@
     "paymentOverdue": "결제 기한 초과",
     "paymentVerifying": "결제 확인 중",
     "partiallyPaid": "부분 결제됨",
-    "processing": "처리 중",
+    "processing": "배송 준비 중",
     "shipped": "배송 중",
     "delivered": "배송 완료",
     "cancelled": "취소됨",

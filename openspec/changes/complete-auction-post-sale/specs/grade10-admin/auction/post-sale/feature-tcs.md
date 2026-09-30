@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* The store holds one order, none flagged, in each of Awaiting Setup, Preparing Invoice, Pending Payment, Payment Verifying, Payment Overdue, Processing, Shipped, Delivered and Refunded.
+* The store holds one order, none flagged, in each of Awaiting Setup, Preparing Invoice, Pending Payment, Payment Verifying, Payment Overdue, Preparing Shipment, Shipped, Delivered and Refunded.
 * The store holds a published lot 30 minutes from its close.
 * admin(operator) can open Orders under `/auction`.
 
@@ -38,7 +38,7 @@
 
 **Expected Results:**
 
-* Orders opens on Needs action, which reads 4 and lists the Preparing Invoice, Payment Verifying, Payment Overdue and Processing orders.
+* Orders opens on Needs action, which reads 4 and lists the Preparing Invoice, Payment Verifying, Payment Overdue and Preparing Shipment orders.
 * Waiting on winner reads 2 and lists the Awaiting Setup and Pending Payment orders.
 * In transit reads 1 and lists the Shipped order; Closed reads 2 and lists the Delivered and Refunded orders.
 * All reads 9, and the lot 30 minutes from its close is on no segment.
@@ -61,7 +61,7 @@
 
 **Pre-conditions:**
 
-* A Processing order on listing `LK423`, whose first invoice `IN-LK42301` was replaced by `IN-LK42302`, and whose winner's account email is `collector@example.com`.
+* A Preparing Shipment order on listing `LK423`, whose first invoice `IN-LK42301` was replaced by `IN-LK42302`, and whose winner's account email is `collector@example.com`.
 * Other orders in every segment, on listings whose codes do not start with `LK423`.
 * admin(operator) is on Orders.
 
@@ -95,7 +95,7 @@
 **Pre-conditions:**
 
 * Two orders in Preparing Invoice whose winners confirmed setup 10 and 30 hours ago.
-* A Processing order paid 2 hours ago, and a Processing order flagged 1 hour ago for a card payment that landed while proof was checked.
+* A Preparing Shipment order paid 2 hours ago, and a Preparing Shipment order flagged 1 hour ago for a card payment that landed while proof was checked.
 * Two Delivered orders, delivered 1 and 3 days ago, and Cancelled orders of two cancellation categories.
 * admin(operator whose roles are exactly `finance`) is on Orders.
 
@@ -109,7 +109,7 @@
 
 **Expected Results:**
 
-* Needs action lists the order confirmed 30 hours ago first, and neither Processing row offers an action.
+* Needs action lists the order confirmed 30 hours ago first, and neither Preparing Shipment row offers an action.
 * Send invoice opens that order's send dialog.
 * Closed lists the order delivered 1 day ago above the one delivered 3 days ago.
 * The status filter offers Delivered, Cancelled and Refunded only; the category filter appears once Cancelled is chosen, and the list then holds only that category's orders.
@@ -140,19 +140,19 @@
 
 **Pre-conditions:**
 
-* A Processing order on an ordinary lot, and a Cancelled order on a sandbox lot, neither flagged.
+* A Preparing Shipment order on an ordinary lot, and a Cancelled order on a sandbox lot, neither flagged.
 * admin(operator holding payment, shipment and refund processing) is on the Listings table.
 
 **Steps:**
 
-1. Choose Open order on the Processing order's lot.
+1. Choose Open order on the Preparing Shipment order's lot.
 2. Read the header and More.
 3. Reload the page, then open its address in a new window.
 4. Open the Cancelled order from Orders and read its header.
 
 **Expected Results:**
 
-* The order page opens, reading Processing with one sentence naming the rule behind it and how long it has waited, and no Test badge.
+* The order page opens, reading Preparing Shipment with one sentence naming the rule behind it and how long it has waited, and no Test badge.
 * Dispatch is the primary action, and More holds Refund alone.
 * The reload and the new window open the same order.
 * The Cancelled order reads Cancelled with a Test badge, and offers no primary action and no More.
@@ -206,7 +206,6 @@
 
 **Pre-conditions:**
 
-* The fee schedule's HKD bank transfer rule is 0% and HK$0.00.
 * An order in HKD in Preparing Invoice for bank transfer.
 * admin(operator with payment processing) opens Send invoice.
 
@@ -324,7 +323,7 @@
 
 **Expected Results:**
 
-* The first payment is flagged Paid late; the invoice is `paid` and the order reads Processing.
+* The first payment is flagged Paid late; the invoice is `paid` and the order reads Preparing Shipment.
 * The second is flagged Unexpected status; the invoice is still `payment_verifying`, with nothing counted as paid.
 * Each timeline shows a flagged payment entry naming the card.
 
@@ -353,7 +352,7 @@
 
 **Pre-conditions:**
 
-* A Processing order.
+* A Preparing Shipment order.
 * admin(operator with shipment processing) opens it.
 
 **Steps:**
@@ -384,14 +383,14 @@
 
 **Pre-conditions:**
 
-* An order in Pending Payment and an order in Processing.
+* An order in Pending Payment and an order in Preparing Shipment.
 * admin(operator with shipment processing).
 
 **Steps:**
 
 1. Record dispatch on the Pending Payment order.
-2. Record delivery on the Processing order.
-3. Record dispatch on the Processing order with a carrier and no tracking number.
+2. Record delivery on the Preparing Shipment order.
+3. Record dispatch on the Preparing Shipment order with a carrier and no tracking number.
 
 **Expected Results:**
 
@@ -406,7 +405,7 @@
 **I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
-### post-sale-US5-TC13-1: The card fee starts from the schedule, follows the subtotal and is sent as typed
+### post-sale-US5-TC13-1: Grade10 computes the card fee, tracking the subtotal until send
 
 **Classification:**
 
@@ -423,26 +422,23 @@
 
 **Pre-conditions:**
 
-* The fee schedule's HKD card rule is 3.4% and HK$2.35.
+* The HKD card rule is 3.4% and HK$2.35.
 * An order in HKD in Preparing Invoice for card, with a winning bid of 250000 and a buyer's premium of 50000 minor units.
-* The payment provider cannot be reached.
 * admin(operator with payment processing) opens Send invoice.
 
 **Steps:**
 
 1. Type Shipping & Handling `80.00` and Insurance `40.00`, and read the fee and the total.
 2. Change Shipping & Handling to `120.00` and read them again.
-3. Type the fee `100.00`, then change Shipping & Handling back to `80.00`.
-4. Send the invoice.
+3. Send the invoice.
 
 **Expected Results:**
 
-* At a subtotal of 312000 the fee reads 11225 and the total 323225 minor units in HKD.
+* At a subtotal of 312000 the fee reads 11225, read-only, and the total 323225 minor units in HKD.
 * At 316000 the fee reads 11366 and the total 327366.
-* Once typed, the fee stays at 10000 as the subtotal moves, with the schedule's 11225 and a way to use it shown beside it.
-* The send succeeds, and the invoice is `pending` with a fee of 10000 and a total of 322000 minor units in HKD.
+* The send succeeds, and the invoice is `pending` with a fee of 11366 and a total of 327366 minor units in HKD.
 
-### post-sale-US5-TC14-1: No rule leaves the fee empty and required
+### post-sale-US5-TC14-1: No card rule refuses the send
 
 **Classification:**
 
@@ -459,21 +455,19 @@
 
 **Pre-conditions:**
 
-* The fee schedule holds no USD card rule.
+* Payment Settings holds no USD card rule.
 * An order in USD in Preparing Invoice for card.
 * admin(operator with payment processing) opens Send invoice.
 
 **Steps:**
 
-1. Enter Shipping & Handling and read the fee.
-2. Send with the fee empty.
-3. Enter the fee `0.00` and send.
+1. Read the fee.
+2. Send.
 
 **Expected Results:**
 
-* The fee starts empty.
-* The empty send is refused with a sentence saying the fee is needed, and the dialog stays open.
-* The send with a fee of `0.00` is accepted, and the invoice carries a fee of 0.
+* No fee shows; the field offers nothing to type.
+* The send is refused with `CARD_FEE_UNSET`, a sentence saying the USD card fee is not set, and a link to Payment Settings.
 
 ### post-sale-US5-TC15-1: A total that moved since it was read is refused
 
@@ -523,7 +517,7 @@
 
 **Pre-conditions:**
 
-* The fee schedule's HKD card rule is 3.4% and HK$2.35.
+* The HKD card rule is 3.4% and HK$2.35.
 * An order in HKD in Preparing Invoice for card, with a subtotal of 312000 minor units once Shipping & Handling and Insurance are entered.
 * admin(operator with payment processing) works in Hong Kong time, and the clock reads 2026-09-12T09:00:00Z.
 
@@ -661,7 +655,7 @@
 **I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
 **so that** a lot whose winner has not paid stops being an open-ended obligation.
 
-### post-sale-US7-TC32-1: A switch of method starts the fee from the new rule
+### post-sale-US7-TC32-1: A method switch on reissue prices the fee by the new method
 
 **Classification:**
 
@@ -678,19 +672,21 @@
 
 **Pre-conditions:**
 
-* The fee schedule holds HKD card 3.4% and HK$2.35, and HKD bank transfer 0% and HK$0.00.
+* The HKD card rule is 3.4% and HK$2.35.
 * An order in Pending Payment whose card invoice has a subtotal of 312000 and a fee of 11225 minor units in HKD.
 * admin(operator with payment processing) opens Reissue.
 
 **Steps:**
 
 1. Switch the method to bank transfer, and read the fee and the two totals.
-2. Switch back to card, raise Shipping & Handling so the subtotal is 316000, and read the fee and what is shown beside it.
+2. Type a bank transfer fee of `50.00`.
+3. Switch back to card, raise Shipping & Handling so the subtotal is 316000, and read the fee.
 
 **Expected Results:**
 
-* On bank transfer the fee reads 0, the previous total 323225 and the new total 312000.
-* Back on card the fee reads 11225, from the current invoice, with the schedule's 11366 shown beside it.
+* On bank transfer the fee reads empty, which is zero, the previous total 323225 and the new total 312000.
+* Once typed, the bank transfer fee reads 5000.
+* Back on card the fee reads 11366, computed from the HKD card rule, read-only.
 
 ### post-sale-US7-TC33-1: Record payment starts at the balance and says what the payment does
 
@@ -723,7 +719,7 @@
 
 * The amount first reads `3120.00`, with a balance of 312000 before and 0 after, and the dialog says the invoice will be paid.
 * At `2000.00` the balance after reads 112000 minor units in HKD, and the dialog says the order will read Partially Paid.
-* After the commit the invoice is `paid`, the order reads Processing, and the payment carries bank transfer, `HSBC-778812`, 2026-09-25 and the slip.
+* After the commit the invoice is `paid`, the order reads Preparing Shipment, and the payment carries bank transfer, `HSBC-778812`, 2026-09-25 and the slip.
 
 ### post-sale-US7-TC34-1: Record payment refuses what it cannot record
 
@@ -965,7 +961,7 @@ payments that failed,
 
 **Pre-conditions:**
 
-* A Processing order whose invoice of 312000 minor units in HKD was paid 320000, the overpayment confirmed when it was recorded.
+* A Preparing Shipment order whose invoice of 312000 minor units in HKD was paid 320000, the overpayment confirmed when it was recorded.
 * admin(operator with refund processing) opens Refund.
 
 **Steps:**
@@ -975,7 +971,7 @@ payments that failed,
 
 **Expected Results:**
 
-* The order still reads Processing.
+* The order still reads Preparing Shipment.
 * The second refund is refused.
 
 ### post-sale-US16-TC4-1: An FPS email is kept to its first letter and domain

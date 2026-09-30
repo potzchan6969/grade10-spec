@@ -89,3 +89,19 @@ Operations' group, with a dated wait: nothing here is an agent's to tick, and th
 
 - [ ] 8.1 The deploy, Operations' with a dated wait: the real `REPO` and channel in `wrangler.jsonc`, the secrets set, `wrangler deploy`, the Routine created with its API trigger and the prompt from `routine-prompt.md`, the Slack app's event subscription pointed at `<origin>/slack/events` and Interactivity turned on with `<origin>/slack/actions` as its request URL - the 200 Slack's save-time `ssl_check` is answered with is that leg's proof, as the webhook's `pong` is the code host's - `AGENT_WAKE_URL` and `AGENT_WAKE_TOKEN` on the repository, then `AGENT_REREAD` on
 - [ ] 8.2 The first walk by hand, once 8.1 has deployed: a sentence addressed to the app opens a change and the reply names the id; an asker the map does not know is answered and asked for a handle; the chain is drafted and nothing lands; one word lands the hand's artifacts and a held row stops it until answered or waved through; the summary waiting on that word carries its button, a press lands what the typed word lands, the thread reads who pressed, the button is replaced by who confirmed it, and a press by a member the map does not name lands nothing; a landing moves `main` through the relay, and a `main` that moved is retried once; a read that changed nothing lands with no word; a wake left to time out is said so in the thread; the same round from a terminal lands the same artifact. The walk's row in `rounds.md` names the cases of `feature-tcs.md` it walked, and flips none
+
+## 9. Name an application test by its tag (grade10-spec) (owner: @sean)
+
+Raised by `close-revoked-session-cache-gap`, whose suite copies carry cases a grade10 walk decides; Q111 holds the form.
+
+- [ ] 9.1 Tests: `tcs:validate` accepts a `grade10:<path>` Decided by line with no application clone beside it, refuses an unknown tag and a path that climbs out, and refuses a file the application clone does not hold when `--app-root` names one; `tcs:automated` writes the tagged form as given - `shared-planning-agent-rounds-SC-107`
+- [ ] 9.2 `validate-test-cases.mjs` reads a `<tag>:<path>` entry: a store path as before, and a `grade10:` path held to its form, and to the file in the clone `--app-root` or the superproject names when one is there - `shared-planning-agent-rounds-SC-107`
+- [ ] 9.3 Verify: `pnpm run test:openspec`, `pnpm run tcs:validate`, `pnpm check:manual`
+
+## 10. Hold the tagged file in the application repository (grade10) (owner: @sean)
+
+Needs group 9 on this store's `main` and pinned, so the pinned suites can carry the tagged form.
+
+- [ ] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-107`
+- [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and `check:libs` runs it on every CI pass - `shared-planning-agent-rounds-SC-107`
+- [ ] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`

@@ -1,0 +1,795 @@
+{
+  "home": {
+    "title": "카드 등급 감정",
+    "lead": "PSA, CGC, BGS 등급 감정을 대신 맡아 드립니다. 매장에 카드를 맡기시면 보험을 들어 발송하고, 감정 진행 상황을 따라가며, 슬랩에 담긴 카드를 직접 돌려드립니다.",
+    "start": "감정 신청 시작하기",
+    "bookWithoutList": "목록 없이 방문 예약하기",
+    "bookWithoutListNote": "카드를 미리 적어 두면 창구가 훨씬 빨라집니다. 목록이 없으면 현장에서 함께 적어 드립니다.",
+    "signIn": "로그인",
+    "linkSent": "메일함을 확인해 주세요. {email}(으)로 링크를 보냈습니다. 같은 메일 주소면 되고 비밀번호는 없습니다.",
+    "loading": "감정 신청을 불러오는 중…",
+    "error": "감정 신청을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "howItWorks": {
+      "title": "진행 방법",
+      "list": {
+        "title": "카드와 각 카드의 보험 가액을 적습니다",
+        "body": "휴대폰으로 몇 분이면 되고 계정도 필요 없습니다. 신고 가액이 등급 감정 레벨과 보상 한도를 정하며, 감정 결과에는 영향을 주지 않습니다."
+      },
+      "handIn": {
+        "title": "방문을 예약하고 카드를 맡깁니다",
+        "body": "창구에서 약 {minutes, plural, other {#분}}: 목록과 카드를 한 장씩 대조하고, 매장 iPad에 서명하신 뒤 계산대에서 결제합니다."
+      },
+      "leave": {
+        "title": "그 주 배치와 함께 발송됩니다",
+        "body": "왕복 모두 보험이 적용됩니다. 감정사의 단계를 거의 매일 확인하고, 결과가 나오는 즉시 메일로 알려드립니다."
+      },
+      "collect": {
+        "title": "픽업 코드로 직접 찾아가십니다",
+        "body": "영업시간 중 언제든 예약 없이 가능합니다. 대신 찾아갈 사람을 지정하실 수도 있습니다. 슬랩은 발송하지 않습니다."
+      }
+    },
+    "priceSheet": {
+      "title": "비용",
+      "lead": "카드 한 장 기준 예시 요금이며, 감정사 수수료와 왕복 보험 배송비가 포함되어 있습니다. Express와 Super Express는 신고 가액의 {rate}에 해당하는 보상이 추가됩니다. 카드를 맡기실 때 결제합니다.",
+      "table": {
+        "level": "레벨",
+        "ceiling": "신고 가액 상한",
+        "cardsPerSubmission": "1건당 카드 수",
+        "feePerCard": "카드당 요금",
+        "cover": "보상",
+        "weeks": "소요 기간",
+        "noCover": "—",
+        "noFigure": "—"
+      },
+      "aboveTop": "{ceiling}이 넘는 카드가 있으신가요? 알맞은 레벨을 준비할 수 있도록 창구나 WhatsApp으로 먼저 문의해 주세요.",
+      "bulkLine": "20장 이상은 Bulk 레벨로, 방문 시간이 더 긴 예약으로 진행됩니다. 예약 방법은 같습니다.",
+      "error": "요금표를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+    },
+    "submissions": {
+      "title": "내 감정 신청",
+      "signedInAs": "로그인함 · {email}",
+      "empty": "아직 아무것도 없습니다. 감정 신청을 시작하시면 여기에 표시됩니다.",
+      "cards": "{count}장",
+      "service": "{grader} · {level}"
+    },
+    "lostLink": "모든 감정 신청은 메일로 보낸 링크로도 계정 없이 열 수 있습니다. 링크를 잃어버리셨나요? 같은 메일 주소로 로그인하시면 됩니다. 비밀번호는 없습니다."
+  },
+  "plan": {
+    "title": "맡기실 카드를 적어 주세요",
+    "step": {
+      "cards": "카드",
+      "service": "서비스",
+      "book": "예약",
+      "review": "확인"
+    },
+    "aboutYou": {
+      "title": "신청자 정보",
+      "name": "이름",
+      "email": "이메일",
+      "phone": "전화번호",
+      "signedInLine": "로그인하시면 계정 정보가 채워집니다. 이번 신청에만 다르게 쓰시려면 여기에서 바꾸세요.",
+      "emailLine": "페이지를 벗어나는 즉시 이 주소로 신청 링크를 보내 드립니다. 계정 없이 어느 기기에서나 이어서 작성하실 수 있습니다."
+    },
+    "card": {
+      "matched": "{set} · {number} · 카탈로그에서 확인됨",
+      "matchedNoDetail": "카탈로그에서 확인됨",
+      "keptAsTyped": "입력하신 이름 그대로 · 참고 시세 없음",
+      "edit": "수정",
+      "remove": "삭제",
+      "declaredValue": "신고 가액",
+      "referenceSales": "최근 거래가:",
+      "referenceNote": "{grader}은(는) 예상하시는 등급 기준의 가액을 요구합니다. 감정가가 아니라 참고 자료입니다.",
+      "minimumGrade": "{grade} 이상일 때만 슬랩에 넣음 · 요금은 어느 쪽이든 부과됩니다",
+      "noValue": "계속하시기 전에 신고 가액을 적어 주세요.",
+      "aboveCeiling": "{name}은(는) 이 레벨의 상한을 넘습니다. 상위 레벨의 두 번째 신청으로 나뉘며, 같은 방문에 함께 맡기시면 됩니다.",
+      "referenceUnavailable": "카탈로그에 연결하지 못해 이 카드는 입력하신 이름 그대로 둡니다. 가액은 그래도 적어 주세요.",
+      "ungraded": "미감정"
+    },
+    "paste": "목록 붙여넣기",
+    "capNotice": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. Value부터 Super Express까지는 최대 {standard, plural, other {#장}}, Bulk는 최대 {bulk}장입니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
+    "capNoticeUncapped": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
+    "overTwenty": "{standard, plural, other {#장}}을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다.",
+    "overCap": "한 신청에는 최대 {bulk, plural, other {#장}}까지 담을 수 있습니다. 나머지는 다른 날 두 번째 신청으로 맡겨 주세요.",
+    "continueWithCount": "계속 · {count, plural, other {#장}}",
+    "finishLater": "나중에 이어서",
+    "finishLaterEmail": "링크를 보낼 메일 주소를 알려주시면 목록을 보관해 둡니다.",
+    "pasteSheet": {
+      "title": "목록 붙여넣기",
+      "labels": {
+        "matched": "일치됨",
+        "keptAsTyped": "입력한 대로 유지",
+        "withoutValue": "가액 없음",
+        "aboveCeiling": "상한 초과",
+        "skipped": "건너뜀",
+        "linesRead": "읽은 줄 수"
+      },
+      "lead": "한 줄에 한 장씩, 이름과 세트와 번호, 그다음에 보험 가액을 적어 주세요. 각 줄을 카탈로그와 대조하며, 찾지 못한 줄은 입력하신 이름 그대로 두고 참고 시세를 보여주지 않습니다. 이미 목록에 있는 카드는 건너뜁니다.",
+      "yourList": "목록",
+      "matching": "대조하는 중…",
+      "matched": "{count}장 카탈로그에서 확인됨 — 목록에 미감정, {lower}, {upper} 참고 시세가 함께 표시됩니다.",
+      "keptAsTyped": "{count}장 입력하신 이름 그대로 — {names}: 참고 시세가 없고 입력하신 이름을 그대로 씁니다.",
+      "withoutValue": "{count}장 가액 없음 — {names}: 계속하시기 전에 목록에서 가액을 입력받습니다.",
+      "aboveCeiling": "{count}장 {level} 상한 초과 — {names}은(는) 상위 레벨의 두 번째 신청으로 나뉘며 같은 방문에 함께 맡기시면 됩니다. 다음 단계에서 다시 안내하며, 그동안 이 목록에 그대로 남습니다.",
+      "skipped": "{count}장 건너뜀 — 이미 목록에 있습니다.",
+      "bulkNotice": "{count, plural, other {#장}}: {standard}장을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다. {grader} 기준으로 카드당 {fee}, 카드당 {ceiling}까지, 약 {weeks, plural, other {#주}}가 걸리며 방문 시간이 더 깁니다. 한 신청에 최대 {bulk, plural, other {#장}}입니다.",
+      "add": "{count, plural, other {#장}}을 목록에 추가",
+      "goBack": "돌아가기",
+      "toCounter": "어느 레벨의 상한보다도 비싼 카드 {count}장 — {names}: 창구나 WhatsApp으로 먼저 문의해 주세요.",
+      "failed": "지금은 목록을 읽지 못했습니다. 잠시 후 다시 시도해 주세요."
+    },
+    "service": {
+      "title": "감정사와 레벨을 고르세요",
+      "highestDeclaredLabel": "신고하신 최고 가액",
+      "grader": "감정사",
+      "level": {
+        "open": "카드당 {ceiling}까지 · 카드당 {fee}",
+        "unavailable": "이용 불가",
+        "closedByValue": "선택 불가: {card}의 신고 가액이 {ceiling}을 넘습니다",
+        "closedByCount": "선택 불가: Bulk는 {minimum, plural, other {#장}}부터이며 지금은 {count}장입니다.",
+        "bulkOnly": "{standard, plural, other {#장}}을 넘어 Bulk 레벨만 선택할 수 있습니다.",
+        "allClosed": "가장 높은 레벨의 상한을 넘는 카드가 있습니다. 알맞은 레벨을 준비할 수 있도록 창구나 WhatsApp으로 먼저 문의해 주세요.",
+        "coverLine": "+ 보상 {rate}",
+        "backIn": "약 {weeks, plural, other {#주}} 뒤 도착"
+      },
+      "estimate": {
+        "title": "예상 금액",
+        "perCard": "{count, plural, other {#장}} × {fee} · {grader} {level}",
+        "coverPerCard": "보상은 신고 가액의 {rate} · 카드당 {amount}",
+        "paidAtCounter": "카드를 모두 확인한 뒤 창구에서 결제합니다.",
+        "includes": "감정사 수수료와 왕복 보험 배송비가 포함되어 있습니다.",
+        "total": "합계"
+      },
+      "upchargeNotice": "카드가 레벨 상한보다 높은 가액으로 돌아오면 감정사가 한 단계 위로 올리고 그 차액을 청구합니다. 금액은 찾아가시기 전에 알려드리며, 창구에서 처음 듣는 일은 없습니다."
+    },
+    "review": {
+      "title": "확인하고 방문을 예약하세요",
+      "header": "{count, plural, other {#장}} · {grader} {level}",
+      "backIn": "카드가 발송되는 날부터 약 {weeks, plural, other {#주}}",
+      "summary": "{header} · {backIn}",
+      "edit": "수정",
+      "schedule": "적어 주신 카드",
+      "totals": {
+        "declared": "신고 가액 합계",
+        "fee": "창구 결제 금액",
+        "cover": "보상, 요금에 포함"
+      },
+      "warning": {
+        "title": "카드가 상위 레벨로 이동할 수 있습니다",
+        "line": "{card}: {grade} 등급을 받으면 약 {value}의 가치가 있어 {level}의 상한 {ceiling}을 초과합니다.",
+        "levelLabel": "이동할 레벨",
+        "differenceLabel": "수령 전 창구에서 추가 결제",
+        "higherFeeLabel": "현재 요금"
+      },
+      "goodToKnow": {
+        "title": "예약 전에 알아두실 것",
+        "fee": {
+          "title": "카드가 미감정으로 돌아와도 요금은 부과됩니다",
+          "body": "감정사는 어느 쪽이든 작업을 합니다. 감정사가 받지 않을 카드는 저희 창구에서 먼저 반려하며, 그 카드에는 요금이 붙지 않습니다."
+        },
+        "upcharge": {
+          "title": "카드가 한 레벨 올라갈 수 있습니다",
+          "body": "레벨 상한보다 높은 가액으로 돌아온 경우입니다. 차액은 찾아가시기 전에 알려드립니다."
+        },
+        "estimate": {
+          "title": "도착 예정일은 예상입니다",
+          "body": "감정사는 자체 일정으로 작업합니다. 단계는 나오는 대로 보여드리고, 결과가 나오면 즉시 메일로 알려드립니다."
+        },
+        "keep": {
+          "title": "맡기시기 전까지 카드는 계속 고객님 손에 있습니다",
+          "body": "직원이 카드를 한 장씩 함께 확인하기 전에는 결제도 서명도 하지 않습니다."
+        },
+        "collect": {
+          "title": "슬랩은 발송하지 않습니다",
+          "body": "직접 찾아가시거나, 신청 페이지에서 지정하신 분이 대신 찾아가십니다."
+        },
+        "line": "{title} — {body}"
+      },
+      "consent": "개인정보 수집 안내를 읽었습니다.",
+      "book": "방문 예약하기",
+      "saveForLater": "저장하고 나중에 예약",
+      "saveChanges": "변경 사항 저장",
+      "expired": "이 목록은 만료되었습니다. 가격과 참고 시세는 바뀌므로 요금표에서 다시 시작해 주세요.",
+      "noEmail": "목록을 보관하려면 메일 주소가 필요합니다. 신청자 정보에 메일 주소를 적어 주시면 목록 링크를 그곳으로 보내드립니다.",
+      "noCards": "목록에 아직 카드가 없습니다. 카드를 추가한 뒤 예약하거나 저장하세요.",
+      "withoutValue": "목록을 보관하려면 모든 카드에 신고 가액이 있어야 합니다. 목록을 수정해 빠진 가액을 적어 주세요.",
+      "failed": "지금은 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+      "minimumGrade": "최소 등급"
+    },
+    "search": {
+      "label": "카드 이름",
+      "placeholder": "카드 이름을 입력해 주세요",
+      "addTyped": "이 카드 추가"
+    },
+    "empty": {
+      "title": "아직 카드가 없습니다",
+      "body": "카드 이름으로 추가하거나 목록을 붙여 넣으세요."
+    },
+    "withoutValue": "신고 가액이 없는 카드가 {count}장 있습니다.",
+    "kept": "목록을 저장했습니다. {email}(으)로 링크를 보냈으니 어느 기기에서든 마저 작성하실 수 있습니다.",
+    "keepFailed": "지금은 목록을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "backToSubmission": "신청으로 돌아가기"
+  },
+  "dropoff": {
+    "title": "방문 예약하기",
+    "lead": "{count, plural, other {카드 #장을 가져와 주세요.}} 약 {minutes}분 걸리며, 카드를 모두 확인하고 서명하시기 전에는 결제하지 않습니다.",
+    "bulkLead": "{count, plural, other {카드 #장을 가져와 주세요.}} 20장 이상은 시간이 더 긴 Bulk 방문으로 약 {minutes}분 걸리며, 카드를 모두 확인하고 서명하시기 전에는 결제하지 않습니다.",
+    "where": "장소",
+    "nothingFree": "이 날짜에는 남은 시간이 없습니다.",
+    "error": "예약 정보를 읽지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "shop": {
+      "durations": "{standard, plural, other {#장까지}}는 약 {minutes}분, {standard, plural, other {#장}} 이상은 시간이 더 긴 Bulk 방문으로 약 {bulkMinutes}분",
+      "moreShops": "매장이 늘어나면 여기에 표시됩니다.",
+      "joinsExisting": "이미 예약된 방문이 있으신가요? 두 번째 신청은 그 방문에 합쳐집니다. 한 번 방문, 두 목록."
+    },
+    "batchLine": {
+      "before": "{cutOff}까지 맡기시면 카드는 {shipDay} 배치와 함께 발송됩니다.",
+      "after": "그 이후의 배치는 {cutOff}에 마감되어 {shipDay}에 발송됩니다.",
+      "estimateFrom": "예상 일정은 배치가 떠나는 날부터 계산됩니다.",
+      "backBy": "매장 도착 예정일은 {estimate}입니다."
+    },
+    "moveOrCancel": "방문 시작 전에는 언제든 변경하거나 취소하실 수 있습니다. 오지 못하셔도 방문만 종료되고 목록은 그대로 남으니, 신청 페이지에서 다시 예약해 주세요.",
+    "book": "{day} {time} 예약",
+    "joined": "이 신청은 이미 예약하신 {day} {time} 방문에 합쳐집니다. 한 번 방문, 두 목록.",
+    "resized": "두 목록을 합하면 {standard, plural, other {#장}}을 넘어 시간이 더 긴 Bulk 방문으로 바뀌니다. 예약을 한 번 조정했으며 날짜와 시간은 그대로입니다.",
+    "alreadyBooked": "이미 이 날짜에 예약된 방문이 있습니다. 다른 날을 골라 주세요.",
+    "levelRequired": "이 목록에 레벨이 없어 예약하지 못했습니다. 목록을 수정해 레벨을 고른 뒤 다시 시도해 주세요.",
+    "conflict": "이 예약은 다시 읽힌 후로 바뀌었습니다. 최신 정보를 다시 읽고 있습니다 — 시간을 다시 골라 주세요.",
+    "booked": {
+      "title": "방문이 예약되었습니다",
+      "emailLine": "확인 메일을 보내드리고 있습니다. 캘린더 파일과 이 신청의 링크가 함께 들어 있습니다. 하루 전에 다시 알려드립니다.",
+      "calendar": "캘린더에 추가",
+      "move": "변경",
+      "cancel": "취소",
+      "beforeYouCome": {
+        "title": "오시기 전에",
+        "cards": {
+          "title": "{count, plural, other {카드 #장을 각각 슬리브에 넣어 가져와 주세요}}",
+          "body": "일반 슬리브면 충분합니다. 테이프로 붙인 탑로더는 피해 주시고, 돌려받고 싶은 물건은 넣지 말아 주세요. 슬리브는 감정사가 보관합니다."
+        },
+        "list": {
+          "title": "이 목록을 준비해 주세요",
+          "body": "직원이 목록과 카드를 한 장씩 대조합니다. 카드를 접수하기 전까지는 목록을 바꾸실 수 있습니다."
+        },
+        "pay": {
+          "title": "매장 iPad에 서명하신 뒤 창구에서 {amount} 결제",
+          "body": "카드를 모두 함께 확인하고 촬영한 뒤에 결제합니다. 계산대에서 카드, 현금, FPS로 결제하실 수 있습니다.",
+          "cover": "보험"
+        },
+        "leave": {
+          "title": "카드는 {shipDay}에 발송됩니다",
+          "body": "{cutOff}까지 맡기시면 그 주 배치와 함께 나갑니다. 매장 도착 예정일은 {estimate}입니다."
+        }
+      },
+      "openTheList": "목록 열기",
+      "vaultLine": "같은 방문에 금고 보관도 함께 신청하고 싶으신가요? 감정을 맡기지 않는 카드든, 돌아온 카드든 가능합니다. 휴대폰으로 신분 확인을 먼저 해 주세요. 등급 감정 자체에는 신분증이 필요 없습니다.",
+      "bulkDuration": "약 {minutes}분 걸립니다.",
+      "service": {
+        "standard": "카드 접수",
+        "bulk": "Bulk 카드 접수"
+      }
+    }
+  },
+  "submission": {
+    "header": "{count, plural, other {#장}} · {grader} {level}",
+    "idLine": "신청 {reference}",
+    "plannedOn": "{day} 작성",
+    "loading": "이 신청을 불러오는 중…",
+    "error": "이 신청을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "notFound": "해당 신청을 찾지 못했습니다. 메일로 보내드린 링크를 확인해 주세요.",
+    "notFoundLink": "신청 시작하기",
+    "edit": "목록 수정",
+    "levelNeeded": "이 목록에는 아직 레벨이 없습니다. 목록을 수정해 레벨을 고른 뒤 방문을 예약하세요.",
+    "retry": "다시 시도",
+    "status": {
+      "planned": "아직 맡기지 않음",
+      "booked": "방문 예약됨",
+      "checked_in": "접수",
+      "sent": "감정사 보관 중",
+      "graded": "감정 결과 나옴",
+      "returned": "매장 도착, 확인 중",
+      "ready": "찾아가실 수 있음",
+      "collected": "고객님께 전달됨",
+      "cancelled": "취소됨",
+      "expired": "만료됨"
+    },
+    "chip": {
+      "waitingOnYou": "고객님 차례",
+      "withUs": "저희가 보관 중",
+      "withGrader": "{grader} 보관 중",
+      "runningLate": "예상보다 지연 · {grader}",
+      "dropoff": "{day} 방문",
+      "collected": "{day} 수령",
+      "onTheirWayBack": "돌아오는 중"
+    },
+    "stage": {
+      "planned": "작성",
+      "booked": "예약",
+      "handedIn": "접수",
+      "sent": "발송",
+      "graded": "감정",
+      "back": "도착",
+      "home": "전달"
+    },
+    "lead": {
+      "planned": "아직 맡기지 않으셨습니다. 방문을 예약하시고 카드를 가져와 주세요. 접수 전에는 결제하지 않습니다.",
+      "plannedKeptUntil": "{day}까지 보관됩니다. 그 전에 방문을 예약하지 않으면 목록이 만료되며, 청구되는 금액은 없습니다.",
+      "booked": "{when}에 카드 {count, plural, other {#장}}을(를) 가져와 주세요. 직원이 목록과 카드를 한 장씩 함께 대조하고, 감정 위탁 계약서에 서명하신 뒤 창구에서 {amount}을(를) 결제합니다. 그때까지는 목록을 언제든 바꾸실 수 있습니다.",
+      "checked_in": "카드는 접수 봉투에 밀봉되어 {cutOff}에 마감되고 {shipDay}에 발송되는 배치로 {grader}에 보내집니다. 카드가 출발할 때와 결과가 나오는 즉시 메일로 알려드립니다.",
+      "sent": "{when}부터 {grader}에서 감정 중입니다. 하실 일은 없습니다. 진행 상황을 거의 매일 확인하고 결과가 나오면 즉시 메일로 알려드립니다.",
+      "graded": "{grader}이(가) {when}에 결과를 공개하고 {shippedOn}에 카드를 돌려보냈습니다. 매장에서 확인이 끝나면 다시 메일로 알려드립니다. {estimate}쯤 예상됩니다.",
+      "returned": "카드가 매장에 도착해 {grader}의 명세와 대조하고 있습니다. 하실 일은 없으며, 준비되는 즉시 메일로 알려드립니다.",
+      "ready": "{items}, {when}에 {grader}의 명세와 대조를 마쳤습니다. 영업시간 중 언제든 오셔서 아래 코드를 보여주세요.",
+      "collected": "{when}에 {items}을(를) 찾아가시고 {amount}을(를) 정산하셨습니다. 이 페이지에 결과, 인증 번호, 슬랩 사진, 모든 영수증이 남아 있습니다.",
+      "cancelled": "이 신청은 취소되었습니다. 카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
+      "expired": "이 목록은 방문 예약 없이 만료되었습니다. 결제된 금액도, 남은 금액도 없습니다."
+    },
+    "outcome": {
+      "listed": "목록에 있음",
+      "checked_in": "접수됨",
+      "refused": "창구에서 반려",
+      "graded": "감정 완료",
+      "ungraded": "미감정 반환",
+      "minimum_not_met": "지정한 최저 등급 미달",
+      "moved_up": "한 레벨 상향",
+      "withdrawn": "회수함",
+      "held": "감정사 보류",
+      "not_returned": "반환되지 않음",
+      "damaged": "손상됨",
+      "collected": "수령함",
+      "vaulted": "금고 보관"
+    },
+    "visit": {
+      "missed": "방문이 종료되었습니다. 목록과 예상 금액은 그대로입니다.",
+      "bookAgain": "다시 방문 예약하기"
+    },
+    "cancel": {
+      "title": "이 신청 취소하기",
+      "line": "방문 예약도 함께 취소됩니다. 카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
+      "dialogTitle": "이 신청을 취소할까요?",
+      "dialogBody": "{when} 방문 예약도 함께 취소됩니다. 카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
+      "dialogBodyNoVisit": "카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
+      "confirm": "네, 취소합니다",
+      "back": "돌아가기"
+    },
+    "actRefused": {
+      "conflict": "이 페이지는 이전 버전을 보고 있었습니다. 다시 읽어오는 중이니, 잠시 후 다시 시도해 주세요.",
+      "visitStarted": "방문이 이미 시작되어 여기서는 더 이상 변경할 수 없습니다.",
+      "listAtCounter": "창구에서 이미 카드 확인을 시작해 여기서는 더 이상 변경할 수 없습니다. 창구에 문의해 주세요.",
+      "notOwner": "이 신청은 다른 메일 주소로 보관되어 있어 여기서는 변경할 수 없습니다. 그 주소로 보내드린 링크에서 열어 주세요.",
+      "alreadyCollected": "카드 수령이 이미 끝나 더 이상 변경할 수 없습니다.",
+      "cardCap": "목록의 카드가 한 신청에 담을 수 있는 수보다 많아 저장되지 않았습니다. 나머지는 빼고 두 번째 신청으로 맡겨 주세요.",
+      "graderPinned": "방문이 이 감정사로 예약되어 있어 감정사는 바꿀 수 없습니다. 다른 감정사에 맡길 카드는 두 번째 신청으로 나눠 주세요.",
+      "levelNotOffered": "감정사가 지금은 이 레벨을 제공하지 않아 저장되지 않았습니다. 목록을 수정해 다른 레벨을 골라 주세요.",
+      "consentRequired": "예약되지 않았습니다. 개인정보 수집 안내를 읽었다고 체크한 뒤 방문을 예약하세요.",
+      "referenceUnavailable": "이 목록으로 신청을 열지 못해 저장되지 않았습니다. 목록은 이 페이지에 그대로 있으니 WhatsApp으로 알려 주시면 확인하겠습니다.",
+      "pricesUnconfirmed": "매장에서 아직 가격을 확정하지 않아 저장되지 않았습니다. 창구나 WhatsApp으로 문의해 주세요.",
+      "diaryUnavailable": "매장 예약 일정에 연결하지 못해 아무것도 변경되지 않았습니다. 방문과 목록은 그대로입니다. 창구나 WhatsApp으로 문의해 주세요.",
+      "dropped": "제때 응답을 받지 못해 처리되지 않았을 수 있습니다. 페이지를 다시 읽어오는 중이니, 확인한 뒤 한 번 더 시도해 주세요."
+    },
+    "withdraw": {
+      "title": "마음이 바뀌셨나요?",
+      "body": "배치가 {cutOff}에 마감되기 전까지는 카드를 빼드릴 수 있습니다. 먼저 연락 주신 뒤 창구에서 찾아가시면, 그 카드의 요금은 계산대에서 환불되고 예상 금액도 남은 카드 기준으로 줄어듭니다.",
+      "whatsapp": "매장에 WhatsApp 보내기"
+    },
+    "grader": {
+      "order": "{grader} · 주문 번호 {order}",
+      "readMostDays": "거의 매일 확인 · {when}",
+      "stages": "{grader}이(가) 쓰는 표현 그대로의 단계입니다. 한 단계가 며칠 걸리기도 합니다. 예상 일정은 저희의 약속이고, 단계는 감정사가 알려오는 내용입니다.",
+      "estimate": "약 {when}까지 돌아옵니다",
+      "nextStage": "결과가 나오는 즉시 메일로 알려드립니다.",
+      "runningLate": "{estimate}을(를) 넘기면 여기에 ‘예상보다 지연’으로 표시되고, 감정사의 단계와 함께 새 날짜가 나타나며, 날짜를 정한 날 메일로 알려드립니다. 창구 절차는 달라지지 않습니다.",
+      "nothingToDo": "카드가 감정사에게 있는 동안 할 일이 없습니다."
+    },
+    "grades": {
+      "headline": "감정 결과: {summary}",
+      "settle": {
+        "title": "찾아가시기 전에 정산할 항목이 하나 있습니다"
+      },
+      "ungraded": {
+        "body": "{card}은(는) 슬랩에 들어가지 않고 감정사의 설명과 함께 슬리브에 담겨 돌아옵니다: {code}, {note}. 슬랩 여부와 관계없이 감정사는 요금을 받으므로 이 카드는 환불되지 않습니다."
+      },
+      "aboutGrades": "등급은 저희가 아니라 감정사의 판단입니다. 다시 보시려면 감정사의 재심 요금으로 새 신청을 하셔야 합니다. 찾아가실 때 창구에 문의해 주세요.",
+      "cards": {
+        "graderLabel": "감정사",
+        "codeLabel": "감정사 코드",
+        "noReason": "감정사가 사유를 밝히지 않았습니다.",
+        "photoAlt": "{card}, 반환 시 촬영"
+      }
+    },
+    "cards": {
+      "title": "카드 · {count}장",
+      "intakeIdLabel": "접수 번호",
+      "declaredValueLabel": "신고 가액",
+      "minimumGradeLabel": "최저 등급",
+      "grades": "감정사의 표현 그대로의 결과",
+      "cert": "인증 번호",
+      "refusedReason": "창구에서 반려 · {reason}",
+      "withdrawnRefund": "회수함 · {amount} 환불됨",
+      "movedUpLine": "{level} 상향으로 {amount} 추가",
+      "heldUntil": "감정사 보류 · {day} 예상",
+      "payoutLine": "{day}에 {amount}으로 보상 ({route}), 그 카드의 요금도 환불했습니다",
+      "reversalLine": "카드를 다시 찾아 보상이 취소되었고, 이 카드는 신청으로 돌아왔습니다."
+    },
+    "pickup": {
+      "title": "픽업 코드 · 창구에서 보여주세요",
+      "codeLabel": "코드",
+      "itemsLabel": "물품",
+      "items": "{count, plural, other {#점}} · 슬랩 {slabs, plural, other {#개}}, 생카드 {raw, plural, other {#장}}",
+      "where": "장소",
+      "open": "영업시간",
+      "noBooking": "예약은 필요 없습니다. 영업시간 중 언제든 오세요.",
+      "toSettle": "정산할 금액",
+      "nothingDue": "없음",
+      "bring": {
+        "label": "지참",
+        "aboveThreshold": "이름이 일치하는 신분증: 신고 가액 합계가 {threshold}을(를) 넘습니다. 사본은 보관하지 않습니다",
+        "named": "이름이 일치하는 신분증, 고객님 또는 {name}의 것: 신고 가액 합계가 {threshold}을(를) 넘습니다. 사본은 보관하지 않습니다",
+        "none": "필요 없음 — 코드와 성함만으로 카드를 내드립니다"
+      }
+    },
+    "named": {
+      "title": "다른 분이 찾아가시나요?",
+      "lead": "여기에 이름을 적어 두시면 그분이 코드로 찾아가십니다. 신분증이 필요한지는 위의 픽업 카드에 나옵니다. 아무도 지정하지 않으시면 고객님만 찾아가실 수 있습니다.",
+      "field": "대리인 성함",
+      "placeholder": "신분증에 적힌 그대로의 성명",
+      "save": "저장",
+      "badge": "지정됨",
+      "line": "그분은 픽업 코드와 픽업 카드가 요구하는 신분증으로 찾아가시고, 전달 영수증에 성함이 적힙니다. 한 번에 한 분만 지정하실 수 있습니다.",
+      "change": "변경",
+      "remove": "삭제"
+    },
+    "vaultIt": {
+      "title": "저희가 계속 보관해 드릴까요?",
+      "body": "이번 제출의 슬랩은 어느 것이든 창구에서 곧바로 금고에 보관하실 수 있습니다. 다시 오실 필요도 없고 보관료도 없습니다. 감정 후 금고가 대출을 제안드릴 수도 있습니다. 다른 카드는 그대로 가져가시면 됩니다. 창구에서 말씀만 해 주세요. 신분 확인과 보관 계약은 매장을 나서기 전에 창구에서 진행됩니다.",
+      "howItWorks": "금고 이용 방법"
+    },
+    "money": {
+      "title": "금액",
+      "fee": "요금",
+      "feeLine": "{count} × {fee} = {total}",
+      "cover": "보상",
+      "coverLine": "신고 가액의 {rate} · {total}",
+      "paid": "결제함",
+      "paidWith": "{method} · {when} · POS {reference}",
+      "method": {
+        "card": "카드",
+        "cash": "현금",
+        "fps": "FPS",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "shop_pay": "Shop Pay"
+      },
+      "movedUp": "한 레벨 상향",
+      "movedUpLine": "{amount} · {card} → {level}",
+      "due": "찾아가시기 전 창구에서 정산",
+      "waived": "상향 차액이 면제되었습니다. 내실 금액은 없습니다.",
+      "storage": "보관료",
+      "storageLine": "{day}부터 카드당 월 {rate} · 계속 쌓임",
+      "refunded": "환불함",
+      "refundedLine": "{amount} · {method}",
+      "paidOut": "보상함",
+      "route": {
+        "till": "카운터 결제",
+        "transfer": "계좌 이체"
+      },
+      "paidOutNote": "신고가 기준 · {route}",
+      "settled": "수령 시 정산 완료 · POS {reference}",
+      "nothingDue": "내실 금액 없음",
+      "footnote": "카드가 미감정으로 돌아와도 요금은 부과됩니다. 저희 창구에서 반려된 카드에는 요금이 붙지 않습니다."
+    },
+    "ladder": {
+      "title": "찾아가지 않으시면",
+      "readyLabel": "수령 가능일",
+      "cardsHeldLabel": "보관 중인 카드",
+      "passedLabel": "지남",
+      "postedLabel": "통지 발송일",
+      "reminders": "{days}에 알려드립니다. 안내 자체에는 비용이 붙지 않습니다.",
+      "storage": "{day}부터 카드당 월 {rate}의 보관료가 붙습니다. 여기에 쌓이며 찾아가시기 전에 정산하셔야 합니다.",
+      "notice": "{day}에 서면 통지를 보냅니다.",
+      "noticeLine": "발송일부터 센 30일 중 {daysLeft, plural, other {#일}}이 남았습니다. {day}에 끝납니다.",
+      "afterNotice": "그 이후에는 더 이상 진행되지 않습니다. 카드는 계속 고객님의 것이며, 슬랩은 금고 보관으로 옮길 수 있습니다.",
+      "closing": "슬랩은 발송하지 않습니다. 아예 여기에 보관하고 싶으시면 위의 금고 보관을 이용해 주세요."
+    },
+    "collected": {
+      "lead": "이 페이지에 결과, 인증 번호, 슬랩 사진, 모든 영수증이 남아 있습니다.",
+      "record": "감정 기록",
+      "lookUp": "조회",
+      "whatNext": {
+        "title": "다음 단계",
+        "vault": "금고 보관 — 매장에서 무료로 보관하고, 감정 후 대출도 가능합니다.",
+        "auction": "경매 출품 — 등급과 인증 번호가 그대로 출품 정보로 넘어갑니다.",
+        "yourData": "내 데이터 — 이 기록과 사진은 보존 기준에 따라 7년간 보관됩니다. 삭제를 원하시면 이 메일 주소로 로그인해 요청해 주세요."
+      }
+    },
+    "documents": {
+      "title": "문서",
+      "agreement": "감정 위탁 계약서",
+      "intakeReceipt": "접수 영수증",
+      "withdrawalReceipt": "철회 영수증",
+      "handbackReceipt": "전달 영수증",
+      "signedAt": "{when} 서명",
+      "issuedAt": "{when} 발행"
+    },
+    "history": {
+      "title": "기록",
+      "batch": "{grader} · {shipDay} 발송",
+      "events": {
+        "plan_saved": "신청 작성: 카드 {count, plural, other {#장}}{grader, select, none {} other {, {grader}{level, select, none {} other { {level}}}}}",
+        "plan_updated": "목록 변경됨",
+        "plan_nudged": "방문 예약 안내 발송",
+        "plan_expired": "방문 예약 없이 목록 만료됨",
+        "dropoff_booked": "방문 예약됨",
+        "dropoff_moved": "방문 변경됨",
+        "dropoff_cancelled": "방문 취소됨",
+        "dropoff_reminder": "방문 안내 발송",
+        "dropoff_started": "방문 시작",
+        "dropoff_missed": "방문하지 않음",
+        "dropoff_detached": "방문을 소유한 신청이 예약을 종료함",
+        "dropoff_joined": "다른 신청이 예약한 방문에 합류함",
+        "agreement_signed": "감정 위탁 계약서 서명",
+        "paid": "{method, select, card {카드로 } cash {현금으로 } fps {FPS로 } apple_pay {Apple Pay로 } google_pay {Google Pay로 } shop_pay {Shop Pay로 } other {}}{amount} 결제",
+        "checked_in": "접수 완료: 카드 {count, plural, other {#장}}",
+        "card_refused": "창구에서 카드 반려",
+        "card_withdrawn": "배치 마감 전 카드 회수",
+        "batch_shipped": "배치 {batch}와 함께 발송",
+        "batch_arrived": "{grader} 도착",
+        "grader_stage": "{grader} 단계: {stage}",
+        "batch_reestimated": "일정 재산정: {estimate} 도착 예정",
+        "grades_posted": "감정 결과 공개",
+        "moved_up": "한 레벨 상향: {movedToLevel}",
+        "card_ungraded": "카드 미감정 반환",
+        "card_minimum_not_met": "지정한 최저 등급 미달로 카드 그대로 반환",
+        "card_held": "감정사가 카드 보류",
+        "card_not_returned": "카드 반환되지 않음",
+        "card_damaged": "카드 손상됨",
+        "card_vaulted": "카드 금고 보관",
+        "shipped_back": "저희에게 반송됨",
+        "back_at_shop": "매장 도착",
+        "ready": "찾아가실 수 있음",
+        "collector_named": "{who, select, current {{name}을(를) 대리인으로 지정} other {대리인 지정}}",
+        "collector_removed": "대리인 지정 해제",
+        "uncollected_reminder": "수령 안내 발송",
+        "storage_started": "보관료 시작",
+        "notice_posted": "서면 통지 발송",
+        "payout_recorded": "신고 가액 {amount} 보상",
+        "payout_reversed": "카드를 다시 찾아 보상 취소",
+        "upcharge_waived": "상향 차액 면제",
+        "handed_back": "{count, plural, one {카드 #장} other {카드 #장}} 전달",
+        "collected": "수령 완료",
+        "cancelled": "신청 취소됨",
+        "expired": "신청 만료됨"
+      }
+    },
+    "badge": {
+      "visitToday": "오늘 방문",
+      "batchClosesToday": "배치 오늘 마감",
+      "dueBack": "회수 예정일 도래",
+      "runningLate": "지연됨",
+      "upchargeToSettle": "추가 요금 미정산",
+      "ungradedCard": "등급 미부여 카드",
+      "uncheckedReturn": "미확인 반입",
+      "uncollected": "{day}일째 미수령",
+      "storageAccruing": "{day}일째부터 보관료 발생",
+      "noticeDue": "서면 통지 필요",
+      "payoutPastWindow": "환급 기한 초과",
+      "messageNotSent": "메시지 미발송"
+    }
+  },
+  "ceremony": {
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "이 서명 링크로는 아무 문서도 열리지 않습니다",
+        "message": "직원에게 다시 준비해 달라고 요청해 주세요."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "이 서명 링크는 만료되었습니다",
+        "message": "안전을 위해 서명 링크는 짧은 시간만 유효합니다. 직원에게 새 링크를 요청해 주세요."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "이 서명 링크는 이미 사용되었습니다",
+        "message": "이 링크로 서명하셨다면 사본은 창구와 신청 페이지에 있습니다. 그렇지 않다면 직원에게 새 링크를 요청해 주세요."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "이 링크는 다른 기기에서 열렸습니다",
+        "message": "서명 링크는 처음 연 기기에서만 사용할 수 있습니다. 이 기기용 새 링크를 직원에게 요청해 주세요."
+      },
+      "PACKET_VOIDED": {
+        "title": "이 문서는 철회되었고 새 문서로 대체되었습니다",
+        "message": "현재 문서의 링크를 직원에게 요청해 주세요."
+      },
+      "PACKET_EXPIRED": {
+        "title": "이 서류는 기한이 지났습니다",
+        "message": "준비한 지 오래되어 지금은 서명할 수 없습니다. 다시 준비해 달라고 요청해 주세요."
+      },
+      "PACKET_COMPLETED": {
+        "title": "이 문서는 이미 서명이 끝났습니다",
+        "message": "이 페이지를 닫으셔도 됩니다."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "그 서류는 이번 서명에 포함되어 있지 않습니다",
+        "message": "페이지를 새로 고쳐 서명하셔야 할 서류를 확인해 주세요."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "그 서류에는 이미 서명하셨습니다",
+        "message": "페이지를 새로 고쳐 남은 서류를 이어서 서명해 주세요."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "서명 전에 문서를 끝까지 읽어 주세요",
+        "message": "모든 쪽을 마지막까지 내려야 합니다."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "그 쪽은 이 서류에 없습니다",
+        "message": "페이지를 새로 고친 뒤 서류를 처음부터 다시 읽어 주세요."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "먼저 동의를 확인해 주세요",
+        "message": "서류를 읽었고 서명에 동의한다는 상자에 표시해 주세요."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "먼저 전자 서명에 동의해 주세요",
+        "message": "어떤 서류든 서명하시기 전에 전자 서명 안내를 읽고 동의해 주세요."
+      },
+      "KYC_REQUIRED": {
+        "title": "신원 확인이 아직 기록되지 않았습니다",
+        "message": "서명하시기 전에 옆에 있는 직원이 신분증 확인을 기록해야 합니다."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "신분증에 적힌 성명과 다릅니다",
+        "message": "옆에 있는 직원이 확인한 신분증에 적힌 그대로 성명을 입력해 주세요. 신분증의 성명이 다르다면 직원이 확인을 다시 기록해야 합니다."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "창구에서 이 문서를 준비 중입니다",
+        "message": "함께 계신 직원이 남은 절차를 안내해 드립니다."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "모든 서류에 서명하셨습니다",
+        "message": "더 하실 일은 없습니다. 이 페이지를 닫으셔도 됩니다."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "이 신청을 예약할 때 쓰신 이름이 아닙니다",
+        "message": "예약 시 적으신 이름 그대로 입력해 주세요."
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "서명 전에 우편 주소를 적어 주세요",
+        "message": "주소는 서면 통지를 보낼 때만 사용됩니다."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "서명을 읽지 못했습니다",
+        "message": "서명 상자를 지우고 다시 서명해 주세요."
+      },
+      "SOURCE_MISSING": {
+        "title": "서류를 불러오지 못했습니다",
+        "message": "옆에 있는 직원에게 서류를 다시 준비해 달라고 요청해 주세요."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "서류가 준비된 내용과 일치하지 않습니다",
+        "message": "서명하지 마세요. 옆에 있는 직원에게 서류를 다시 준비해 달라고 요청해 주세요."
+      },
+      "FONT_MISSING": {
+        "title": "지금은 서류를 표시할 수 없습니다",
+        "message": "아직 아무것도 서명되지 않았습니다. 옆에 있는 직원에게 알려 주세요. 매장에서 서류 글꼴을 먼저 복구해야 합니다."
+      },
+      "CONFLICT": {
+        "title": "이 서명은 다른 곳에서 마무리되었습니다",
+        "message": "이 페이지가 열려 있는 동안 다른 기기에서 완료하거나 철회했습니다."
+      }
+    },
+    "yourName": {
+      "label": "성함",
+      "hint": "예약하실 때와 동일하게",
+      "hintNamed": "신청 페이지에 지정된 대리인과 동일하게"
+    },
+    "postalAddress": {
+      "label": "우편 주소",
+      "hint": "카드를 오래 찾아가지 않으실 때 서면 통지를 보내는 용도로만 사용됩니다."
+    },
+    "decline": "서명 거부",
+    "declined": "서명한 문서도, 결제된 금액도 없습니다. 함께 계신 직원이 다음 절차를 도와드립니다.",
+    "loading": "서류를 여는 중…",
+    "noTokenTitle": "링크가 완전하지 않습니다",
+    "noTokenMessage": "직원이 보내드린 링크를 받으신 그대로 열어 주세요.",
+    "loadFailedTitle": "서류를 열지 못했습니다",
+    "documentFailed": "이 서류를 표시할 수 없습니다. 직원에게 알려 주세요.",
+    "emptyPacketTitle": "서명할 서류가 없습니다",
+    "emptyPacketMessage": "옆에 있는 직원에게 알려 주세요 — 서류가 제대로 준비되지 않았습니다.",
+    "disclosureTitle": "전자 서명을 하시기 전에",
+    "disclosureFallback": "지금부터 서류를 전자적으로 검토하고 서명하게 됩니다. 원하지 않으시면 옆에 있는 직원에게 말씀해 주세요.",
+    "agreeLabel": "동의하고 계속",
+    "agreeingLabel": "동의를 기록하는 중…",
+    "packetExpiry": "이 서류는 {when}까지 서명하실 수 있습니다.",
+    "declineConfirmTitle": "서명을 거부하시겠습니까?",
+    "declineConfirmMessage": "오늘 준비된 서류가 모두 철회됩니다 — 한 건이 아니라 전체입니다. 아무것도 서명되지 않으며, 이후는 옆에 있는 직원이 도와드립니다.",
+    "declineReasonLabel": "원하시면 이유를 알려 주세요(선택 사항 — 이 화면에만 남고 저장되지 않습니다)",
+    "declineConfirmLabel": "네, 모두 거부합니다",
+    "declineCancelLabel": "돌아가기",
+    "decliningLabel": "거부하는 중…",
+    "declinedTitle": "서명된 서류가 없습니다",
+    "rosterLabel": "오늘 서명할 서류: 총 {total}건",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "서명 완료",
+    "rosterStateCurrent": "현재 서류",
+    "rosterStatePending": "서명 예정",
+    "documentStep": "{title} — {total}건 중 {position}번째",
+    "movedOn": "{signed} 서명이 끝났습니다. 다음은 {next}입니다.",
+    "pageLabel": "서류 {pageCount}쪽 중 {page}쪽",
+    "pageStatus": "{pageCount}쪽 중 {page}쪽",
+    "pageNoText": "이 쪽은 스캔본이라 읽어 드릴 수 있는 글자가 없습니다. 서명하기 전에 옆에 있는 직원에게 읽어 달라고 요청해 주세요.",
+    "pageFailed": "이 쪽을 표시할 수 없습니다. 표시되기 전까지는 서명하지 마세요 — 옆에 있는 직원에게 알려 주세요.",
+    "previousLabel": "이전 쪽",
+    "nextLabel": "다음 쪽",
+    "readStatus": "{pageCount}쪽 중 {viewed}쪽 읽음",
+    "integrityWarning": "이 서류는 저희가 준비한 것과 일치하지 않습니다. 서명을 멈추고 직원에게 알려 주세요.",
+    "consentLabel": "{title}을(를) 읽었으며 서명에 동의합니다",
+    "signatureLabel": "여기에 {title} 서명",
+    "clearSignatureLabel": "서명 지우기",
+    "signatureDrawOption": "서명 그리기",
+    "signatureTypeOption": "서명 입력하기",
+    "signatureTypedNameLabel": "서명하시려면 여기에 성명을 입력해 주세요",
+    "signatureCaptured": "서명이 입력되었습니다.",
+    "signatureEmpty": "아직 서명이 없습니다.",
+    "signatureTypedFailed": "이 기기에서 입력하신 내용을 서명으로 만들지 못했습니다. 옆에 있는 직원에게 알려 주세요.",
+    "signatureTypedCaption": "입력한 서명",
+    "submitLabel": "{title} 서명하기",
+    "submittingLabel": "서명 중…",
+    "retryLabel": "다시 시도",
+    "missingPages": "서명하기 전에 모든 쪽을 읽어 주세요.",
+    "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
+    "missingSignature": "위 상자에 서명해 주세요.",
+    "missingName": "신분증에 적힌 대로 성명을 입력해 주세요.",
+    "missingPostalAddress": "우편 주소를 입력해 주세요.",
+    "signUnconfirmed": "서명을 보낸 뒤 응답을 받지 못해 아직 기록 여부를 확인할 수 없습니다. 다시 서명하지 마세요 — 대신 결과를 확인해 주세요.",
+    "signRecheckLabel": "결과 확인",
+    "sealedTitle": "서명 및 봉인 완료",
+    "sealedMessage": "서명된 사본은 신청 페이지에 있습니다. 아래 지문을 보관해 주세요 — 바로 이 서류 묶음을 식별하는 값입니다.",
+    "sealedManifestLabel": "서명하신 전체 서류의 지문",
+    "sealedDocumentsLabel": "서명하신 서류",
+    "downloadLabel": "{title} 내려받기",
+    "downloadingLabel": "내려받는 중…",
+    "downloadFailed": "내려받기를 완료하지 못했습니다. 서명된 사본은 신청 페이지에 있으며, 옆에 있는 직원이 카운터에서 인쇄해 드릴 수 있습니다.",
+    "downloadExpiry": "{when}까지 이 화면에서 내려받으실 수 있습니다. 그 이후에는 옆에 있는 직원이 카운터에서 사본을 인쇄해 드립니다.",
+    "sealedIntegrityWarning": "내려받은 사본이 서명하신 서류의 지문과 일치하지 않아 저장되지 않았습니다. 서명은 기록되어 있습니다 — 옆에 있는 직원에게 인쇄본을 요청해 주세요.",
+    "signedTitle": "서명이 기록되었습니다",
+    "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다."
+  },
+  "console": {
+    "cards": "{count, plural, other {카드 #장}}",
+    "submissions": "{count, plural, other {제출 #건}}",
+    "labels": "{count, plural, other {라벨 #장}}",
+    "ungradedCards": "{count, plural, other {등급 미판정 카드 #장}}",
+    "whatsapp": {
+      "confirmDropoff": "{name}님, {when} {shop} 등급 감정 방문 예약을 확인해 드립니다. 카드 {count}장을 각각 슬리브에 넣어 가져와 주세요. 신청: {link}",
+      "onTheirWay": "{name}님, 카드 {count}장이 오늘 보험을 들어 {grader}(으)로 발송되었습니다. 매장 도착 예정일은 {estimate}입니다. 신청: {link}",
+      "runningLate": "{name}님, 신청 {id}의 카드가 {grader}에서 예상 일정을 넘겼습니다. 새 예정일은 {estimate}이며 창구 절차는 달라지지 않습니다. 신청: {link}",
+      "gradesIn": "{name}님, 신청 {id}의 감정 결과가 나왔습니다: {summary}. 찾아가실 수 있게 되면 다시 알려드리겠습니다: {link}",
+      "readyToCollect": "{name}님, 카드를 {shop}에서 찾아가실 수 있습니다. 픽업 코드 {code}, 창구에서 정산할 금액 {toSettle}. 영업시간 {hours}. 신청: {link}",
+      "notReturned": "{name}님, 신청 {id}의 카드 한 장이 {grader}에서 반환되지 않았습니다. 신고 가액으로 보상하고 그 카드의 요금을 환불해 드립니다. 신청: {link}",
+      "stillHere": "{name}님, 감정이 끝난 카드가 {since}부터 {shop}에서 기다리고 있습니다. 픽업 코드 {code}. 이 안내 자체에는 비용이 붙지 않습니다. 신청: {link}",
+      "labels": {
+        "confirmDropoff": "접수 확인",
+        "onTheirWay": "발송 완료",
+        "runningLate": "지연 안내",
+        "gradesIn": "감정 완료",
+        "readyToCollect": "수령 가능",
+        "notReturned": "미반환",
+        "stillHere": "보관 중"
+      }
+    },
+    "error": {
+      "diaryUnavailable": "예약 시스템을 읽지 못해 편지에 인쇄할 내용이 없습니다. 잠시 후 다시 시도해 주세요."
+    }
+  },
+  "graders": {
+    "psa": "PSA",
+    "cgc": "CGC",
+    "bgs": "BGS",
+    "grade": "{grader} {grade}",
+    "noFigures": "{grader}은(는) 아직 요금을 확정하지 않아 레벨을 고를 수 없습니다."
+  },
+  "levels": {
+    "value": "밸류",
+    "regular": "레귤러",
+    "express": "익스프레스",
+    "super_express": "슈퍼 익스프레스",
+    "bulk": "벌크"
+  }
+}

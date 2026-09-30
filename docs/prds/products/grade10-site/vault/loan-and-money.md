@@ -4,39 +4,32 @@ spec: grade10-site/vault/loan-and-settlement
 order: 3
 ---
 
-A loan is an accepted offer paid out against an item in the locker, and every
-amount on it is a whole number of cents recorded by a person after the bank
-moved the money. Nothing here moves money; it writes down that money moved,
-and when.
+A loan is an accepted offer paid out against an item in the locker; every
+amount on it is whole cents written down by a person after the bank moved it.
 
-- **Currency** — the brand's (HKD for Grade10), checked at intake, one per
-  case, never changed
+- **Currency** — the brand's (HKD for Grade10), checked at intake, one per case
 - **An offer** — principal, interest for the whole term in basis points, a
   term in days, an expiry; no due date, because nothing has been lent yet.
   Principal at most the latest valuation and inside the brand's lending
-  policy, and in production an offer is refused outright while a bound of
-  that policy or the lender's own name is unset
+  policy
 - **A payout** — one live payout per case, equal to the principal, recorded
   by a treasurer with the bank reference and the date the money left; the
-  case is `active` from that instant, the term starts running from that date,
-  and the borrower is told the due date in writing
+  case is `active` from that instant, the term runs from that date, and the
+  borrower is told the due date in writing
 - **A repayment** — any number, by bank transfer (reference required), cash
   or card, each carrying the date the money reached the bank, the recorder's
   key and the balance quoted at that date; partial allowed, and refused when
-  the money in value-date order would put the loan over what it owed on any
-  of those days
+  it would put the loan over what it owed on any day in value-date order
 - **A correction** — an append-only row that takes one payout or repayment
-  back in full, with a reason, recorded by a second `vault:payout` holder who
-  is not the row's own recorder, only while the case is `active` or `repaid`;
-  the borrower is emailed
+  back in full, with a reason, by a second `vault:payout` holder, never the
+  row's recorder, while the case is `active` or `repaid`; the borrower is emailed
 - **What is owed** — computed at every read by one function from the offer,
   the money valued by the instant asked about, and the brand's accrual; never
-  stored, never a status, never below zero; a quote at any instant is a query
+  stored, never a status, never below zero
 - **Forfeiture** — a person's decision, past the due date and never before
   the cure date of a written notice has passed; the item settles the debt,
   and the figure it settled is on the audit chain
-- **Release** — refused while anything is outstanding; storage is free, so a
-  storage case owes nothing
+- **Release** — refused while anything is outstanding; a storage case owes nothing
 
 ## Arithmetic
 
@@ -52,9 +45,8 @@ and when.
 | Settlement | the recording that leaves nothing owed at its own value date; interest stops there and never restarts |
 | Bounds | principal ≤ the valuation and ≤ the brand's loan-to-value cap; the rate inside the brand's band; the term one of the brand's presets; the expiry after now and no further off than the brand's offer-validity window. The outer limits the wire itself takes are rate **0% to 100%** per term and term **1 to 3,650 days** |
 
-Worked at **HKD 100,000**, **3%** for **30 days** — round numbers rather
-than Grade10's own band — advanced 1 September and so due 1 October, no
-grace.
+Worked at **HKD 100,000**, **3%** for **30 days** — round numbers, not
+Grade10's band — advanced 1 September and so due 1 October, no grace.
 
 - **Repay on day 10** — HKD 103,000; the whole term's interest is owed
 - **Repay 10 days late** — HKD 104,000; HKD 100 per started day
@@ -67,9 +59,8 @@ grace.
 
 ## Lending policy
 
-One per-brand table, read at the offer. Grade10's numbers are the owner's
-own; a brand that lends nothing leaves every one of them unset and writes no
-offer in production.
+One per-brand table, read at the offer; a brand that lends nothing leaves
+every bound unset and writes no offer in production.
 
 | Bound | Grade10 |
 | --- | --- |
@@ -81,15 +72,12 @@ offer in production.
 | Accrual ceiling | **100%** of the principal, for interest of every kind together |
 | Forfeiture notice | **14 days** of cure before the item may be taken |
 
-- **A null bound refuses the offer, never the deploy** — in production
-  `makeOffer` refuses while the loan-to-value cap, the rate ceiling, the
-  offer validity or the notice period is unset, so a shop opens on custody
-  alone; outside production a null bound allows everything, which is how a
-  brand rehearses
+- **A null bound refuses the offer, never the deploy** — in production an
+  offer is refused while the cap, the rate ceiling, the offer validity or the
+  notice period is unset, so a shop opens on custody alone; outside
+  production a null bound allows everything
 - **The lender is named or there is no offer** — the same refusal, at the
   same moment, for the lender's registered name
-- **The period is the one inference** — the owner's notes name a rate and no
-  period, and a month is how Hong Kong lending is quoted
 
 ## Records
 
@@ -102,58 +90,55 @@ offer in production.
 | Forfeiture | staff or admin | reason (optional) | past the due date; a disbursed loan exists; a written notice stands and the cure date it named has passed |
 
 - **Provenance and value** — every money row keeps who recorded it and when
-  beside when the money moved; the balance follows the second, the ledger
-  shows both
+  beside when the money moved; the balance follows the second
 - **Immutability** — payouts, repayments, corrections, valuations, movements
-  and history cannot be updated or deleted by any database session; the one
-  exception is the actor column on the history, which erasure rewrites
-- **The chain** — every recording lands on the audit chain filed under its
-  case, with case id, amount and method, and forfeiture with the figure it
-  settled; the bank reference and staff notes stay out of it, and the
-  reference is shown to staff only
-- **The key** — the recorder's key is derived from the day, method, amount,
-  quoted balance and the case's newest event, so reopening the dialog
-  reproduces it and the same transfer cannot land twice, while a recording
-  made after a correction is a new one rather than the old one arriving
-  again
+  and history cannot be updated or deleted; the one exception is the actor
+  column on the history, which erasure rewrites
+- **The chain** — every recording lands on the audit chain under its case,
+  with case id, amount and method, and forfeiture with the figure it settled;
+  the bank reference and staff notes stay out of it and are shown to staff only
+- **The key** — the recorder's key is derived from the recording, so reopening
+  the dialog reproduces it and the same transfer cannot land twice
 - **The split** — staff set terms and forfeit; treasurers record money,
-  correct it and read the book; the two roles share no grant, and `admin`
-  holds both. Per case the split holds whoever the operator is: the person
-  who priced the loan may not be the person who pays it out
+  correct it and read the book; the two roles share no grant, `admin` holds
+  both, and per case the person who priced the loan may not pay it out
+- 🚧 **Said before the act** — the offer dialog shows the cap, the presets, the
+  interest, total, late-day figure and annualised rate it derives, and the six
+  gates; the vault dialog its two preconditions; the payout dialog the two
+  people, the due date and the reminder days the recording fixes
 
 ## Reading the book
 
 - **Per case** — the payout, every repayment and every correction, the due
-  breakdown at the read instant, and each repayment's own breakdown in the
-  history
+  breakdown at the read instant, and each repayment's own in the history
 - **The book** — every payout, repayment and correction in a period,
   narrowable to one case, paged on a keyset cursor with totals per method and
-  currency, each printed in its own unit; a correction names the row it took
-  back; the page and its totals read as one answer; `vault:payout`, because a
-  ledger across every case is the firm's rather than the case in front of the
-  operator
+  currency; a correction names its row; `vault:payout`, because it is the firm's
 - **The position** — at any instant, principal, interest owed and repaid
   across active and repaid loans, in the brand's own currency; a book holding
   a second currency is refused by name rather than summed
-- **The arrears** — every live loan past its due date, longest overdue
-  first, judged on the payout's own due date and paged on a keyset cursor
-  over it
-- **What the collector sees** — the offer's amount, term, rate, total to
-  repay and what a late day costs; on a live loan the outstanding of the
-  total, repaid, due date, days overdue, the instant computed, and how to pay
-  under a balance that holds until the deadline beside it. No annualised rate
-  on screen and no payoff quote with a validity: the balance at a date is the
-  quote
-- **What the collector is mailed** — the payout with its due date, each
-  repayment, a correction of either, settlement, a reminder a week and a day
-  before the due date and every seventh day it stays overdue, the forfeiture
-  notice with its cure date, and the forfeiture itself
+- **The arrears** — every live loan past its due date, longest overdue first,
+  judged on the payout's own due date and paged on a keyset cursor over it
+- **What the collector sees** — the offer and what is owed, as the
+  [Case page](/p/grade10-site/vault/collector-pages#case-page) lists them; no
+  annualised rate and no payoff quote with a validity: the balance is the quote
+- 🚧 **How to pay** — one block: the lender's FPS id, its bank account under the
+  lender's registered name, the case reference as the transfer reference, or
+  card or cash at the counter; under the balance with the daily figure after
+  the deadline and the reminder dates, and in every money message
+- 🚧 **Each repayment, to the borrower** — its value date, method and the balance after it
+- 🚧 **Past due** — the reminders sent with their days; before a notice, the next weekly
+  one by its date and that a written notice naming a date to pay by may follow, on no
+  day set; once one is sent, its date to pay by, before which nothing can be taken
+- ❓ Finance — the FPS id and the bank account; recommended: the lender's own,
+  one set per brand beside its legal identity, refused in production while
+  unset — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
+- 🚧 **Unset, outside production** — the block prints `[fpsId]` and `[bankAccount]`
+- ❓ Product — what a borrower reads in production while those two are unset;
+  recommended: the counter line alone, transfer details by email, no money message
+- **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
 
 ## Specs and journeys
-
-**Specs** — this page documents `grade10-site/vault/valuation-and-offer` and
-`grade10-site/vault/loan-and-settlement`. The requirements are theirs; this
-page holds the decision behind them.
 
 ::spec{id="grade10-site/vault/valuation-and-offer"}
 
@@ -214,10 +199,12 @@ The owner's numbers are [Grade10 Finance](/references/grade10-finance):
 | Corrections | Decided | An append-only reversal of a whole row by a second `vault:payout` holder, never its own recorder; the borrower is told | Finance |
 | The book is the treasurer's | Decided | The ledger and the position are the firm's accounts, so `vault:payout`; what one case owes stays on `vault:read` | Product |
 | Bank reference | Decided | Required on every payout and every transfer, shown to staff only | Finance |
+| The transfer reference is the case reference | Decided | A borrower types the six-character case reference at their bank, so a treasurer matches an incoming transfer to its case by eye; the vault's id is never typed anywhere. Matching stays a person's act — no bank feed, no automatic allocation | Finance |
 | Lending policy lives in one table | Decided | Loan to value, rate band, term presets, offer validity, grace, an accrual ceiling and the forfeiture notice period per brand; every one of them enforced where it is read, and in production an unset bound refuses the offer | Engineering |
 | The brand's numbers are the owner's | Decided | **40%** loan to value and **1.5% to 2.5%** interest come from the notes; the period is read as per 30 days, which is how Hong Kong lending is quoted, and 2.5% over 30 days is 30% a year — under the thresholds recalled for an illegal or presumed-extortionate rate | Owner |
 | Grace is none, the ceiling is the principal | Decided | The paper accrues daily from the due date, so grace would contradict it; interest of every kind stops at **100%** of the principal, which never binds at the seeded band before a forfeiture notice | Product |
 | Interest first, on the principal left | Decided | One walk in value-date order; charging a late day on money already returned is indefensible, and a borrower who pays most of it back owes arrears on the rest | Product |
+| The rule is shown before the refusal | Decided | The console states the bound, the precondition and what a recording fixes before the operator sends, and the worker still refuses on its own; a refusal is never the first time an operator learns the rule | Product |
 | Renewal | Deferred | A new offer on the outstanding principal, a new agreement, the prior loan settled by rollover with no money moving. Reopens the day a borrower asks to extend | Owner |
 | Accrual after a correction | Decided | A reversal restores the arithmetic to what it would have been had the row never been written; nothing re-dates | Finance |
 | A correction names its row in the book | Decided | The movement carries the kind and id it takes back, and the totals split by kind, so a reader nets without a second query | Finance |

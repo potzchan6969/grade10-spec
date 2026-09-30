@@ -254,6 +254,91 @@ test("shared-planning-agent-rounds-SC-78 - a line on a case that is not automate
   );
 });
 
+// --- a test in the application repository, named by its tag (Q111) --------
+
+const APP_TEST = "apps/frontend/grade10/e2e/tests/demo.spec.ts";
+const APP_DECIDER = `grade10:${APP_TEST}`;
+
+/** A throwaway application clone for `--app-root`, holding `path` or nothing. */
+function applicationClone(path) {
+  const root = mkdtempSync(join(tmpdir(), "decided-by-app-"));
+  if (path !== null) {
+    mkdirSync(dirname(join(root, path)), { recursive: true });
+    writeFileSync(join(root, path), "// the walk that decides the case\n");
+  }
+  return root;
+}
+
+test("shared-planning-agent-rounds-SC-107 - a grade10 path is accepted with no application clone beside the store", () => {
+  const result = inChange({ decidedBy: APP_DECIDER });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test("shared-planning-agent-rounds-SC-107 - a tag no application repository answers to is refused", () => {
+  const result = inChange({ decidedBy: "acme:apps/demo.spec.ts" });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /names `acme:apps\/demo\.spec\.ts`, whose tag `acme` is no application repository/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-107 - a grade10 path that climbs out is refused", () => {
+  const result = inChange({ decidedBy: "grade10:../elsewhere/demo.spec.ts" });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /which resolves outside the application repository/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-107 - beside an application clone that holds it, a grade10 path is accepted", () => {
+  const app = applicationClone(APP_TEST);
+  const result = run(store(CHANGE, { decidedBy: APP_DECIDER }), [
+    "--app-root",
+    app,
+  ]);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test("shared-planning-agent-rounds-SC-107 - beside an application clone that does not hold it, a grade10 path is refused", () => {
+  const app = applicationClone(null);
+  const result = run(store(CHANGE, { decidedBy: APP_DECIDER }), [
+    "--app-root",
+    app,
+  ]);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /names `grade10:apps\/frontend\/grade10\/e2e\/tests\/demo\.spec\.ts`, which the application clone at .+ does not hold/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-107 - --app-paths-only reports a grade10 path the application clone does not hold", () => {
+  const app = applicationClone(null);
+  const result = run(store(CHANGE, { decidedBy: APP_DECIDER }), [
+    "--app-root",
+    app,
+    "--app-paths-only",
+  ]);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /which the application clone at .+ does not hold/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-107 - --app-paths-only leaves the store's own findings to the store", () => {
+  const app = applicationClone(null);
+  const result = run(store(CHANGE, { decidedBy: "acme:apps/demo.spec.ts" }), [
+    "--app-root",
+    app,
+    "--app-paths-only",
+  ]);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.doesNotMatch(result.stdout, /no application repository/);
+});
+
 // --- the two suites this store back-filled ---------------------------------
 
 test("shared-planning-agent-rounds-SC-78 - every automated case of the two back-filled suites names a file that exists", () => {

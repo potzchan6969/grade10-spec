@@ -36,6 +36,10 @@
     "title": "Book a visit — Grade10",
     "description": "Pick a service, a shop and a time to bring a card in. No account needed."
   },
+  "grading": {
+    "title": "Card grading — Grade10",
+    "description": "Get your cards graded by PSA, CGC or BGS. Plan your list and see the fees, hand it in at the shop, and collect your slabs there."
+  },
   "bookManage": {
     "title": "Your visit — Grade10",
     "description": "See, move or cancel a visit you booked with Grade10."

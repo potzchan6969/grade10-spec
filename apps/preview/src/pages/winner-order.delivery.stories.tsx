@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order after payment (Processing → Shipped → Delivered). Default Processing uses a card mark and masked last four; Processing Bank Transfer shows the bank icon with the bank name and masked last four.",
+          "Winner Order after payment (Preparing Shipment → Shipped → Delivered). Default Preparing Shipment uses a card mark and masked last four; Preparing Shipment Bank Transfer shows the bank icon with the bank name and masked last four.",
       },
     },
   },
@@ -29,9 +29,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Paid by card — preparing to ship (Shipped step current); receipt PDF available. */
+/** Paid by card — preparing to ship (Shipping step current); receipt PDF available. */
 export const Processing: Story = {
-  name: "Processing",
+  name: "Preparing Shipment",
   args: { status: "processing" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -43,7 +43,9 @@ export const Processing: Story = {
     ).not.toBeNull();
     expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
-    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Preparing Shipment")).toBeVisible();
+    expect(canvas.getByText("Shipping")).toBeVisible();
+    expect(canvas.getByText("Preparing to ship")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("20 Sep 2026")).toBeVisible();
     expect(canvas.getByLabelText("Visa")).toBeVisible();
@@ -56,11 +58,12 @@ export const Processing: Story = {
 };
 
 /**
- * Overpayment on a paid order. Status stays Processing. Order Summary stays
- * the invoice. An inline alert below Order Total shows only the difference.
+ * Overpayment on a paid order. Status stays Preparing Shipment. Order Summary
+ * stays the invoice. An inline alert below Order Total shows only the
+ * difference.
  */
 export const ProcessingOverpaid: Story = {
-  name: "Processing — Overpaid",
+  name: "Preparing Shipment — Overpaid",
   args: {
     status: "processing",
     content: {
@@ -71,12 +74,12 @@ export const ProcessingOverpaid: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await winnerOrderSettled(canvasElement);
-    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Preparing Shipment")).toBeVisible();
     expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460")).toBeVisible();
+    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
@@ -98,12 +101,12 @@ export const ProcessingOverpaid: Story = {
 };
 
 /**
- * Paid by bank transfer after operator confirmation — same Processing shell,
- * payment method shows the bank and a masked last-four account.
+ * Paid by bank transfer after operator confirmation — same Preparing Shipment
+ * shell, payment method shows the bank and a masked last-four account.
  * Processing fee may be Free when the operator set none.
  */
 export const ProcessingBankTransfer: Story = {
-  name: "Processing Bank Transfer",
+  name: "Preparing Shipment Bank Transfer",
   args: {
     status: "processing",
     content: {
@@ -131,15 +134,15 @@ export const ProcessingBankTransfer: Story = {
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("HK$320")).toBeVisible();
-    expect(sidebar.getByText("HK$16,340")).toBeVisible();
-    expect(sidebar.queryByText("HK$120")).not.toBeInTheDocument();
+    expect(sidebar.getByText("$320.00")).toBeVisible();
+    expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
+    expect(sidebar.queryByText("$120.00")).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
 };
 
-/** Dispatched — track shipment; Shipped step shows day-only date. */
+/** Dispatched — track shipment; Shipping step shows day-only date. */
 export const Shipped: Story = {
   name: "Shipped",
   args: { status: "shipped" },
@@ -150,7 +153,8 @@ export const Shipped: Story = {
     const trackingLink = canvas.getByRole("link", { name: /SF1234567890/ });
     expect(trackingLink.getAttribute("href")).toContain("SF1234567890");
     expect(trackingLink).toHaveAttribute("target", "_blank");
-    expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
+    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Shipping")).toBeVisible();
     expect(canvas.getByText("26 Sep 2026")).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();

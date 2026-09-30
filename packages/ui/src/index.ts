@@ -221,11 +221,6 @@ export {
   auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
 export {
-  AuctionOrderDetail,
-  type AuctionOrderDetailCopy,
-  type AuctionOrderDetailProps,
-} from "./blocks/auction-order/auction-order-detail";
-export {
   AuctionOrderEmpty,
   type AuctionOrderEmptyProps,
 } from "./blocks/auction-order/auction-order-empty";
@@ -242,6 +237,12 @@ export {
   AuctionPhoneField,
   type AuctionPhoneFieldProps,
 } from "./blocks/auction-order/auction-phone-field";
+export {
+  AuctionWinnerOrder,
+  type AuctionWinnerOrderCopy,
+  type AuctionWinnerOrderProps,
+  type AuctionWinnerOrderStep,
+} from "./blocks/auction-order/auction-winner-order";
 export type {
   AuctionAddressFormValues,
   AuctionAddressKind,
@@ -297,6 +298,110 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared/ui/grading-submission
+export type {
+  GradingCardAddition,
+  GradingCardListCap,
+} from "./blocks/grading-submission/grading-card-list";
+export {
+  GradingCardList,
+  type GradingCardListCopy,
+  type GradingCardListProps,
+} from "./blocks/grading-submission/grading-card-list";
+export type { GradingRecordCard } from "./blocks/grading-submission/grading-card-record";
+export {
+  GradingCardRecord,
+  type GradingCardRecordCopy,
+  type GradingCardRecordProps,
+} from "./blocks/grading-submission/grading-card-record";
+export type { GradingLocaleProps } from "./blocks/grading-submission/grading-copy";
+export {
+  GradingFeeSheet,
+  type GradingFeeSheetCopy,
+  type GradingFeeSheetProps,
+} from "./blocks/grading-submission/grading-fee-sheet";
+export type { GradingGradeCard } from "./blocks/grading-submission/grading-grade-cards";
+export {
+  GradingGradeCards,
+  type GradingGradeCardsCopy,
+  type GradingGradeCardsProps,
+} from "./blocks/grading-submission/grading-grade-cards";
+export type {
+  GradingEstimate,
+  GradingPickerLevel,
+} from "./blocks/grading-submission/grading-level-picker";
+export {
+  GradingLevelPicker,
+  type GradingLevelPickerCopy,
+  type GradingLevelPickerProps,
+} from "./blocks/grading-submission/grading-level-picker";
+export type {
+  GradingMoneyLine,
+  GradingMoneyLines,
+} from "./blocks/grading-submission/grading-money-block";
+export {
+  GradingMoneyBlock,
+  type GradingMoneyBlockCopy,
+  type GradingMoneyBlockProps,
+} from "./blocks/grading-submission/grading-money-block";
+export {
+  GradingNamedCollector,
+  type GradingNamedCollectorCopy,
+  type GradingNamedCollectorProps,
+} from "./blocks/grading-submission/grading-named-collector";
+export {
+  GradingOwnershipChip,
+  type GradingOwnershipChipCopy,
+  type GradingOwnershipChipProps,
+} from "./blocks/grading-submission/grading-ownership-chip";
+export type {
+  GradingPasteOutcome,
+  GradingPasteResult,
+  GradingPasteState,
+} from "./blocks/grading-submission/grading-paste-sheet";
+export {
+  GradingPasteSheet,
+  type GradingPasteSheetCopy,
+  type GradingPasteSheetProps,
+} from "./blocks/grading-submission/grading-paste-sheet";
+export {
+  GradingPickupCard,
+  type GradingPickupCardCopy,
+  type GradingPickupCardProps,
+} from "./blocks/grading-submission/grading-pickup-card";
+export type {
+  GradingReviewCard,
+  GradingUpchargeWarning,
+} from "./blocks/grading-submission/grading-review";
+export {
+  GradingReview,
+  type GradingReviewCopy,
+  type GradingReviewProps,
+} from "./blocks/grading-submission/grading-review";
+export type { GradingStage } from "./blocks/grading-submission/grading-status-rail";
+export {
+  GradingStatusRail,
+  type GradingStatusRailCopy,
+  type GradingStatusRailProps,
+} from "./blocks/grading-submission/grading-status-rail";
+export type { GradingLadderRung } from "./blocks/grading-submission/grading-uncollected-ladder";
+export {
+  GradingUncollectedLadder,
+  type GradingUncollectedLadderCopy,
+  type GradingUncollectedLadderProps,
+} from "./blocks/grading-submission/grading-uncollected-ladder";
+export type {
+  GradingCardMatch,
+  GradingCardOutcome,
+  GradingFeeLevel,
+  GradingFeeSheetRecord,
+  GradingGrader,
+  GradingListedCard,
+  GradingMoney,
+  GradingPhoto,
+  GradingReferenceSale,
+  GradingTone,
+} from "./blocks/grading-submission/types";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
@@ -343,6 +448,35 @@ export {
   type WalletPassState,
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
+// shared/ui/page-blocks
+export {
+  EmptyPanel,
+  type EmptyPanelCopy,
+  type EmptyPanelProps,
+} from "./blocks/page-blocks/empty-panel";
+export {
+  FactCard,
+  type FactCardCopy,
+  type FactCardProps,
+  type FactRow,
+} from "./blocks/page-blocks/fact-card";
+export {
+  FactCardSkeleton,
+  type FactCardSkeletonCopy,
+  type FactCardSkeletonProps,
+} from "./blocks/page-blocks/fact-card-skeleton";
+export {
+  NoteList,
+  type NoteListCopy,
+  type NoteListItem,
+  type NoteListProps,
+} from "./blocks/page-blocks/note-list";
+export {
+  StageRail,
+  type StageRailCopy,
+  type StageRailProps,
+  type StageRailStage,
+} from "./blocks/page-blocks/stage-rail";
 export {
   PaymentMethodCard,
   type PaymentMethodCardProps,
@@ -572,12 +706,18 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
+// shared/ui/vault-case
 export {
-  FIXTURE_ACTIVITY_TIME_COPY,
-  FIXTURE_NOW_MS,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
-} from "./lib/datetime-fixtures";
+  VaultAcceptOfferDialog,
+  type VaultAcceptOfferDialogCopy,
+  type VaultAcceptOfferDialogProps,
+} from "./blocks/vault-case/vault-accept-offer-dialog";
+export {
+  VaultCasesEmpty,
+  type VaultCasesEmptyCopy,
+  type VaultCasesEmptyProps,
+  type VaultCasesEmptyStep,
+} from "./blocks/vault-case/vault-cases-empty";
 export {
   ACTIVITY_RELATIVE_MAX_MS,
   type ActivityTimeCopy,

@@ -2,12 +2,12 @@
 
 **Winner** - wins, opens the order from the `auction_won` letter, completes setup once (delivery address, payment method, billing address) on the site as it stands, waits for the invoice, pays by card through Stripe Checkout or transfers and submits the proof, gets a receipt, then sees the lot shipped and delivered.
 
-**Operator** - opens the Orders worklist, sends the invoice (shipping, insurance, tax, processing fee pre-filled from the fee schedule), reissues it when something changes, records bank money or checks the winner's proof, dispatches, confirms delivery, and cancels, refunds or comments when needed.
+**Operator** - opens the Orders worklist, sends the invoice (shipping, insurance, tax, and a card fee Grade10 computes or a bank transfer fee typed by the operator), reissues it when something changes, records bank money or checks the winner's proof, dispatches, confirms delivery, and cancels, refunds or comments when needed.
 
 **Architecture** - `@grade10/auction-contracts` holds the pure rules (pricing, status, actions, segments, payment outcome) that the backend enforces and both clients render; the auction worker's `services/orders/*` own every transition under the order row lock; the order's status is never stored - one SQL `CASE` in the worklist repository mirrors the contracts rule over fact columns; the storefront reaches the auction through a winner-only RPC entrypoint; the admin console is a thin client of one read model, `OperatorOrderView`; the winner's site keeps its design and its procedures, and this change's rules hold behind them.
 
 ```
-Payment Settings (minimum premium, card rule, bank rule)    Send / Reissue dialog (shipping, insurance, tax, fee)
+Payment Settings (minimum premium, card rule)               Send / Reissue dialog (shipping, insurance, tax, fee)
                                   \                        /
                  contracts/invoicePricing.priceInvoice(lines)
                    subtotal = hammer + premium + shipping + insurance + tax;  total = subtotal + processingFee
@@ -61,7 +61,7 @@ SELECT o.id,
     WHEN o.cancelled_at IS NOT NULL OR i.status = 'cancelled' THEN 'Cancelled'
     WHEN i.status = 'paid' AND o.delivered_at IS NOT NULL THEN 'Delivered'
     WHEN i.status = 'paid' AND o.dispatched_at IS NOT NULL THEN 'Shipped'
-    WHEN i.status = 'paid' THEN 'Processing'
+    WHEN i.status = 'paid' THEN 'Preparing Shipment'
     WHEN i.status = 'partially_paid' THEN 'Partially Paid'
     WHEN i.status = 'payment_verifying' THEN 'Payment Verifying'
     WHEN i.status = 'expired' THEN 'Payment Overdue'
@@ -92,7 +92,7 @@ Files under `packages/grade10-auction/contracts/src/`. `winnerOrder.ts` keeps th
 
 One list, used by the backend, the admin, the site and E2E:
 
-`Awaiting Setup`, `Setup Overdue`, `Preparing Invoice`, `Pending Payment`, `Payment Overdue`, `Partially Paid`, `Payment Verifying`, `Processing`, `Shipped`, `Delivered`, `Cancelled`, `Refunded`
+`Awaiting Setup`, `Setup Overdue`, `Preparing Invoice`, `Pending Payment`, `Payment Overdue`, `Partially Paid`, `Payment Verifying`, `Preparing Shipment`, `Shipped`, `Delivered`, `Cancelled`, `Refunded`
 
 Invoice statuses stay `pending`, `expired`, `partially_paid`, `payment_verifying`, `paid`, `cancelled`, `refunded`. "Awaiting Address" is renamed everywhere.
 
@@ -150,7 +150,7 @@ export const PROOF_LIMITS = {
 
 | Segment | Statuses |
 | --- | --- |
-| `needsAction` | Preparing Invoice, Payment Verifying, Processing, Setup Overdue, Payment Overdue, and any order with an open flag |
+| `needsAction` | Preparing Invoice, Payment Verifying, Preparing Shipment, Setup Overdue, Payment Overdue, and any order with an open flag |
 | `waitingOnWinner` | Awaiting Setup, Pending Payment, Partially Paid |
 | `inTransit` | Shipped |
 | `closed` | Delivered, Cancelled, Refunded |
@@ -270,7 +270,7 @@ Codes travel as values (`{ success: false, errorCode }`) through every layer; a 
 | `repositories/orderQueue.ts` | `orderStatusSql`, `orderSinceSql`, `flagOpenSql`, the worklist query and its cursor | new |
 | `repositories/orderProofs.ts` | `orderProofReferences` - one union over every table holding a key: winner proofs, payments' and refunds' `proof_files`, `fulfilment_log.delivery_proof`, `fulfillments.proof_documents`, `auction_manual_settlement_proofs` | new; `storage/areas.ts` reads it |
 | `repositories/orderComments.ts` | rows | new |
-| `services/admin/paymentSettings.ts` | minimum and both fee rules, zero allowed, half a pair refused | extended |
+| `services/admin/paymentSettings.ts` | minimum and the card fee, zero allowed, half a pair refused | extended |
 | `trpc/routers/orders.ts` | every operator procedure, each with `auditDetails` | replaces `postSale.ts` |
 | `trpc/routers/testWinners.ts` | `create`, `list` on the `testBids` middleware (grant, then `NOT_FOUND` outside sandbox lanes) | new |
 | `routes/uploads.ts` | `PUT /api/admin/orders/:orderId/proofs?kind=` (one file, grant by kind), `GET /api/admin/orders/:orderId/proofs/:key` | replaces the settlement-proof pair; the listing-level proof routes go |
@@ -427,7 +427,7 @@ packages/grade10-auction/admin-frontend/src/features/operations/orders/
   presentation/dialogs/InvoiceQuoteFields.tsx SetupFields.tsx ProofFilesField.tsx
   presentation/dialogs/SendInvoiceDialog ReissueInvoiceDialog RecordOrChangeSetupDialog CheckProofDialog RecordPaymentDialog
                        CancelOrderDialog RefundDialog DispatchDialog ConfirmDeliveryDialog
-features/operations/payment-settings/                           the fee schedule per currency and method
+features/operations/payment-settings/                           the card fee rule per currency
 features/test/winners/                                          export "./test-winners": create, list, Email sign-in link, Open order
 ```
 
@@ -455,7 +455,7 @@ Every dialog is a `FormDialog` held open by `useDialogSubject`; a refusal shows 
 
 | Dialog | Fields | Restates |
 | --- | --- | --- |
-| Send invoice | `InvoiceQuoteFields`: Shipping & Handling, Insurance (optional), Tax (optional, tooltip), Payment processing fee pre-filled from the method's rule, following the subtotal until typed, "Use suggested" when it differs; live `priceInvoice` preview | Ship to, Bill to, Method with "Wrong? Change setup"; the priced lines; the exact deadline; "the winner gets the letter now" |
+| Send invoice | `InvoiceQuoteFields`: Shipping & Handling, Insurance (optional), Tax (optional, tooltip); Payment processing fee read-only, computed from the card rule, for card, or a `MoneyField` of the operator's own for bank transfer; live `priceInvoice` preview | Ship to, Bill to, Method with "Wrong? Change setup"; the priced lines; the exact deadline; "the winner gets the letter now" |
 | Reissue | `InvoiceQuoteFields`, deadline kept or restarted, reason; `SetupFields` behind a Switch "Change address or payment method" | what changes, old number -> Replaced, new total |
 | Record or Change setup | `SetupFields`: addresses, method, reason | what the winner sees |
 | Check proof | the files inline with Open, the invoice ID and bank reference beside the payment method and the order total; Confirm, or Return with the winner's reason and an internal note | "the winner sees this reason" |
@@ -472,7 +472,7 @@ Every dialog is a `FormDialog` held open by `useDialogSubject`; a refusal shows 
 
 ### Payment Settings
 
-Per currency: minimum premium through `MoneyField`, then a card rule and a bank transfer rule, each a `PercentField` (`max={9999}`, two decimals) and a `MoneyField`; 0 allowed everywhere; an empty pair is no rule, half a pair is refused at the field and by the server; a live example line per rule. The tab is gated on `auction:payment`.
+Per currency: minimum premium through `MoneyField`, then one card rule, a `PercentField` (`max={9999}`, two decimals) and a `MoneyField`; 0 allowed everywhere; an empty pair is no rule, half a pair is refused at the field and by the server; a live example line per rule. The tab is gated on `auction:payment`.
 
 ### Listings
 
@@ -495,15 +495,15 @@ Won rows offer Open order; lots still taking bids read Extended.
 | Schema | `*.drizzle.test.ts` via `emittedSql()` | columns, checks, the preflight block, backfills |
 | Workers pool | `node scripts/test.mjs apps/backend/grade10/auction` | send and reissue pricing and `QUOTE_CHANGED`; the pointer moves and the old revision is untouched; checkout attempts, CAS and the fresh session; money on every invoice state and its flag; a signed test-mode event on the real route; proofs by bytes and keys; `recordPayment` outcomes; cancel and refund release the hold and keep the listing closed; dispatch and delivery; expiry suspends in one transaction; the entrypoint prototype equals the allowlist; every winner method answers NOT_FOUND to a non-owner; test-winner create, replay, refusals and the real close; router grant map equals `OPERATOR_ACTION_PERMISSIONS`; audit row size |
 | Store worker | `node scripts/test.mjs apps/backend/grade10/store` | a client-sent `userId` or `storefront` is ignored |
-| Admin unit | `node scripts/test.mjs packages/grade10-auction/admin-frontend` | quote preview equals `priceInvoice`; `refusalCopy` covers every operator code; More and the primary follow the map and the grants; fee schedule form allows 0 and refuses half a pair |
+| Admin unit | `node scripts/test.mjs packages/grade10-auction/admin-frontend` | quote preview equals `priceInvoice`; `refusalCopy` covers every operator code; More and the primary follow the map and the grants; card fee form allows 0 and refuses half a pair |
 | E2E | `pnpm run test:e2e` | the journeys below |
 
 ### E2E Journeys
 
 `apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts`, seeded only through the admin `testWinners.create` procedure and signed in through the magic link read from `AuthDoor.readOutbox` in a fresh context:
 
-1. **Card** - create -> follow the link -> setup (card) -> admin sends the invoice with tax and fee (the totals match on both sides) -> Pay with Card -> the test posts a signed `checkout.session.completed` to `/webhooks/stripe/grade10` for the fake port's session -> the order reads Processing with the receipt -> Dispatch -> Shipped -> Confirm delivery -> Delivered with the proof
-2. **Bank** - create -> setup (bank transfer) -> invoice -> submit the proof -> admin Return with reasons -> the winner reads the reason and submits again -> admin Confirm -> Processing
+1. **Card** - create -> follow the link -> setup (card) -> admin sends the invoice with tax and fee (the totals match on both sides) -> Pay with Card -> the test posts a signed `checkout.session.completed` to `/webhooks/stripe/grade10` for the fake port's session -> the order reads Preparing Shipment with the receipt -> Dispatch -> Shipped -> Confirm delivery -> Delivered with the proof
+2. **Bank** - create -> setup (bank transfer) -> invoice -> submit the proof -> admin Return with reasons -> the winner reads the reason and submits again -> admin Confirm -> Preparing Shipment
 3. **Operator paths** - reissue with the deadline restarted (the old number searches, reads Replaced) -> record a partial payment -> cancel refused -> record the balance -> refund with destination and date -> Refunded
 
 With `STRIPE_SECRET_KEY_GRADE10_E2E` set the first journey drives real Checkout and the stripe-cli listener as today.

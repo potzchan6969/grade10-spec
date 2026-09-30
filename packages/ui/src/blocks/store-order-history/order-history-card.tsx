@@ -66,6 +66,8 @@ function OrderHistoryCard({
       <div
         className="scroll-fade-x w-full overflow-x-auto px-6 py-5"
         data-slot="order-history-card-body"
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: the strip scrolls sideways past its items, so a keyboard has to reach it to scroll.
+        tabIndex={0}
       >
         <div
           className="flex w-max min-w-full items-center gap-4"

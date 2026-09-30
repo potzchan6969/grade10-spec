@@ -30,6 +30,6 @@ to the Store
 
 ## Designs
 
-::story{id="pages-order-history-page--filled" title="Your Orders, filled"}
+::story{id="pages-store-order-history-page--filled" title="Your Orders, filled"}
 
 ::story{id="store-order-history-orderhistory--empty" title="An account with no orders"}

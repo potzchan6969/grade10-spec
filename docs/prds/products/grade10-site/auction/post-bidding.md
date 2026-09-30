@@ -2,7 +2,7 @@
 title: Post-Bidding
 spec: grade10-site/auction/winner-order
 order: 4
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 ---
 
 What happens after a lot stops taking bids: the result, then the winner's
@@ -43,12 +43,18 @@ winner of three lots has three orders, each with its own deadlines.
 | Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
-- **Sections** — Order Information with Invoice Status and Collection Method,
-  Order Status with a time per step, and Lots
-- **Progress** — five steps, Address → Invoice → Payment → Shipped →
+- **Layout** — the Winner Order design's page body, the one its stories
+  render: the lot once, in its card; alerts under it; a sidebar with the
+  summary, payment method, receipts and addresses. No Order Information,
+  Collection Method, Order Status list or Lots
+- **Progress** — five steps, Address → Invoice → Payment → Shipping →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
 - 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
   against the Payment step
+- 🚧 **Under Shipping** — Preparing Shipment and Shipped both read against
+  the Shipping step as its current (progress) step; while Preparing Shipment,
+  Shipping subtext reads Preparing to ship; Shipped and Preparing Shipment
+  badges use the muted default Badge tone on Winner Order and My Auctions
 - **Contact Us** — `support@grade10.com`, subject the invoice or the lot;
   Copy Message first on Winner Order, Open Mail App second; overdue,
   cancelled, delivered and partial-payment letters use the same subject and
@@ -58,7 +64,7 @@ winner of three lots has three orders, each with its own deadlines.
 
 ### My Auction Orders
 
-🚧 Every won lot on one list, opened from the account menu beside My
+Every won lot on one list, opened from the account menu beside My
 Auctions: the lot with View lot, the auction, the winning bid, the status and
 one next action — Complete Order Setup while Awaiting Setup, Pay Invoice
 while Pending Payment, an expired invoice included, and View detail
@@ -74,7 +80,7 @@ fulfilment and delivery facts, that the winner, the operator and My Auctions
 all read. It shares label names with the store's order status, and no
 meaning.
 
-::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Setup through Preparing Invoice, Pending Payment and Processing to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Processing, Partially Paid or Delivered"}
+::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Setup through Preparing Invoice, Pending Payment and Preparing Shipment to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Preparing Shipment, Partially Paid or Delivered"}
 
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
@@ -85,7 +91,7 @@ meaning.
 | 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
-| **Processing** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
+| 🚧 **Preparing Shipment** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
@@ -190,7 +196,7 @@ by card, reads:
 | Insurance | 500 | Optional and above zero; absent when none |
 | 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
 | Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
-| 🚧 Payment Processing Fee | 4,271.80 | Set by the operator, pre-filled from the fee schedule in Payment Settings — here card at 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
+| 🚧 Payment Processing Fee | 4,271.80 | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings — here 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
 | Order Total | 125,571.80 | Subtotal plus the fee — what the winner pays |
 
 - 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
@@ -201,8 +207,12 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
-- 🚧 **Payment Processing Fee** — set by the operator on every invoice, card
-  or bank transfer, from the schedule's suggestion; zero reads Free
+- **Amount marks** — Order Summary lines use `$` with two decimals
+  (`$12,800.00`), except bare `$0` when the amount is zero; Order Total keeps
+  `HK$` with two decimals (`HK$16,460.00`)
+- 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
+  from the Stripe card rule; the operator's own on a bank transfer invoice,
+  zero or more, empty read as Free
 - 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
   the document names it rather than leaving it to the fee amount alone
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
@@ -242,7 +252,7 @@ doing, under Edge Cases.
 - **Card** — a fresh charge for the order total while the invoice is pending,
   on a stored card or another; Grade10 confirms it on its own, and a declined
   attempt leaves the invoice payable until the deadline
-- 🚧 **Unfinished payment** — a payment that times out or is abandoned says
+- **Unfinished payment** — a payment that times out or is abandoned says
   so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
 - 🚧 **Started in time** — one tried at or after the deadline cannot start, so
@@ -381,7 +391,7 @@ balance. The invoice above, settled in three payments:
 | --- | --- | --- | --- |
 | `-P1` | 50,000 | Invoice total 125,571.80 · previous payments 0 · this payment 50,000 · balance due 75,571.80 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
 | `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
-| `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Processing |
+| `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Preparing Shipment |
 
 - 🚧 **The close prompt** — from the payment that brings the total to 90% of
   the invoice, every payment asks the operator to close as Paid or keep it
@@ -425,7 +435,7 @@ other lots.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the order, invoice and fulfilment records, and the derived status
-- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderDetail` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
+- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, 🚧 `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
 - **Grant** — `auction:moderate`, the one grant that suspends and reinstates, in the auction service and on the admin Users panel
 - **Mail** — `apps/emails/emails/auction/`
 - **Identifiers** — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers)
@@ -433,6 +443,8 @@ other lots.
 
 :::detail{title="Test cases" for="qa"}
 ::cases{id="grade10-site/auction/winner-order"}
+
+::cases{id="grade10-site/auction/auction-orders"}
 
 ::cases{id="grade10-site/auction/order-status"}
 
@@ -470,7 +482,7 @@ a second payment provider, and changes to the bid-time rules.
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
-| Payment processing fee | 🚧 In flight | On every invoice, card or bank transfer, the operator sets the fee, pre-filled from a fee schedule in Payment Settings: a percentage and a fixed amount per currency and method, the card rule grossed up from the Subtotal. No cap; a fee that costs more than quoted is absorbed; the sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
+| Payment processing fee | 🚧 In flight | A card invoice's fee is Grade10's own: the Stripe card rule per currency in Payment Settings, a percentage and a fixed amount grossed up from the Subtotal; with no rule for the currency, the invoice cannot be sent. A bank transfer invoice's fee is the operator's own, no cap, empty read as Free. The sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
 | Bank details | 🚧 In flight | Grade10 holds bank details per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account, so production offers card only until then. Chosen over a sample account in the site's code, which showed on every lane and on every invoice PDF, production included. | Product and Finance |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
@@ -483,7 +495,9 @@ a second payment provider, and changes to the bid-time rules.
 | A refunded order | Decided | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason, and Note when the operator recorded one. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
 | An overpaid difference | Decided | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
 | Refund transaction clues | Decided | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
-| Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
+| Winner Order layout | Decided | The site renders the Winner Order design's page body from `@grade10/ui`, so a design change reaches the site on the next submodule bump. States the design never drew sit as alerts under the lot, in the order the site supplies. Chosen over fixing the site's own copy of the page, which drifts again on the next design change, and over an open content slot, which lets the page rebuild the design beside it. | Product and design |
+| Winner Order dialogs | Decided | Setup, how to pay, payment proof, contact and refund stay the site's, each moving into the design in a change of its own. Chosen over moving all five at once, when three hold their own address book, bank details or files. | Product and design |
+| Progress stepper | 🚧 In flight | Five presentation steps, Address → Invoice → Payment → **Shipping** → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Preparing Shipment and Shipped under Shipping as the **current** (progress) step (Preparing Shipment subtext: Preparing to ship — not an incomplete Shipping step), Delivered as Completed. Shipped and Preparing Shipment badges use the muted `default` Badge tone on Winner Order and My Auctions. **BREAKING** vs past-tense Shipped as the phase label and badge Processing for a paid undispatched order — those read as already shipped when the Shipping step pings. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Proof submit feedback | 🚧 In flight | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |

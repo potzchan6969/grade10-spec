@@ -7,6 +7,7 @@ groups:
     - grade10-site/loyalty
     - grade10-site/auction
     - grade10-site/vault
+    - grade10-site/grading
     - grade10-site/appointment
     - grade10-site/doc-sign
     - grade10-site/finance
@@ -22,6 +23,7 @@ groups:
     - grade10-admin/inventory
     - grade10-admin/auction
     - grade10-admin/vault
+    - grade10-admin/grading
     - grade10-admin/appointment
     - grade10-admin/console
   Platform:

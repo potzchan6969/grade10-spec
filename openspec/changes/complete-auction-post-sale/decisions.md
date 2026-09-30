@@ -1,13 +1,13 @@
 ## Goals
 
 - A winner's invoice can be sent in production, with a payment processing fee
-  the operator sets from a schedule
+  Grade10 computes for card and the operator types for bank transfer
 - The rules behind the winner's page hold on the server: bank transfer only
   where Grade10 holds bank details, the setup lock, and card money that lands
 - An operator works every won lot from one Orders workspace: a worklist by
   segment, a page per order, and each action in its own dialog
 - Money a winner sends is never dropped
-- Finance keeps Payment Settings, the fee schedule included
+- Finance keeps Payment Settings, the card fee rule included
 - QA makes a test winner in one step outside production and signs in with the
   ordinary link
 
@@ -35,10 +35,10 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | Where does the payment processing fee come from? | A fee schedule in Payment Settings - per currency and method, a percentage and a fixed amount, or no rule - pre-fills the fee the operator sets on each invoice. The card rule is grossed up so Grade10 keeps the Subtotal whole. The sent invoice never re-prices. Finance enters the rules at rollout: HKD card 3.4% + HK$2.35 and HKD bank transfer free, with no rule in USD or JPY until Finance sets one | Reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card and is known only after the charge, so every send was refused |
+| Q1 | Where does the payment processing fee come from? | The invoice's payment method decides. A card invoice's fee is Grade10's own: the card rule for the order's currency in Payment Settings - a percentage and a fixed amount - grossed up so Grade10 keeps the Subtotal whole; the operator does not enter or edit it. With no card rule for the currency, the invoice cannot be sent or reissued, refused `CARD_FEE_UNSET`. A bank transfer invoice's fee is the operator's own, typed as an integer of zero or more; empty means zero. Finance enters HKD card 3.4% + HK$2.35 at rollout, with no rule in USD or JPY until Finance sets one | Reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card and is known only after the charge, so every send was refused |
 | Q2 | What does the winner read at the method choice? | Dropped: the winner's page keeps its design. Bank transfer is offered only where Grade10 holds bank details for the currency, per Q25 | - |
-| Q3 | Which amounts does the operator enter? | Shipping & Handling, Insurance, Tax and the payment processing fee. Tax follows `add-winner-order-tax-line` | A fee Grade10 fixes without the operator, which cannot carry a fee the operator agreed or waived |
-| Q4 | How is a sent invoice changed? | One Reissue, on a pending or expired invoice before any money is recorded: any of address, method, fee, Shipping & Handling, Insurance, Tax and the deadline kept or restarted, with a reason and at least one change. The replaced invoice reads Replaced, never Cancelled, and its ID still finds the order | Separate requote and reissue actions, which split one job and wrote the replaced invoice as cancelled |
+| Q3 | Which amounts does the operator enter? | Shipping & Handling, Insurance and Tax always; the payment processing fee only on a bank transfer invoice, since a card invoice's fee is Grade10's own. Tax follows `add-winner-order-tax-line` | An operator-set card fee, which can undercharge what Stripe takes |
+| Q4 | How is a sent invoice changed? | One Reissue, on a pending or expired invoice before any money is recorded: any of address, method, Shipping & Handling, Insurance, Tax and the deadline kept or restarted, with a reason and at least one change; the fee changes only where the reissued invoice is bank transfer, since a card invoice's fee is Grade10's own. The replaced invoice reads Replaced, never Cancelled, and its ID still finds the order | Separate requote and reissue actions, which split one job and wrote the replaced invoice as cancelled |
 | Q5 | What if the price moved while the operator read it? | The send and the reissue carry the total the operator read. Grade10 refuses when its own price differs, for example after the premium minimum changed, and the dialog shows the new total with the fields kept | Sending whatever Grade10 prices at that moment, which can bill a winner an amount nobody saw |
 | Q6 | Who decides which actions an order offers? | Grade10 decides, and every action is refused on the server when it does not apply. A control the operator lacks stays visible, disabled, and names the access it needs | Each screen working the rules out for itself, which drifted from the server and hid controls without saying why |
 | Q7 | Where do the operator and the time on a log entry come from? | The session of the operator signed in, and Grade10's clock | What the action itself says, which let any name and any time be written into the history |
@@ -48,7 +48,7 @@
 | Q11 | How does QA reach a winner's order by hand? | Outside production only, one action makes a test account that won a closed sandbox lot through the real close, so its letters go out. The address is the operator's own with a `+qa-<code>` tag, which Grade10 checks. The same address makes one test winner. The Test tab lists test winners; Cancel is the order's own | Seeding an order around the real close, which skipped its letters and failed on a deployed stack; and signing in as another account, which admin can do in production too |
 | Q12 | Are the order link in letters and the old order address requirements? | No. They restore settled behaviour, so they ship as fixes | A requirement for a link that should already work |
 | Q13 | What does the winner's page lead with? | Dropped: the winner's page keeps its design | - |
-| Q14 | Where does a reissue's fee start? | From the current invoice while the method stays; from the new method's rule after a switch, or empty with no rule; the schedule's suggestion for the new subtotal shows beside it - decided by the round | Always starting from the schedule, which undoes a fee the operator agreed with the winner |
+| Q14 | Where does a reissue's fee start? | The fee is editable only where the reissued invoice is bank transfer, starting from the current invoice while the method stays bank transfer. A switch to card prices it from the card rule; a switch to bank transfer starts it empty, which reads zero - decided by the round | Always starting from the schedule, which undoes a fee the operator agreed with the winner |
 | Q15 | Does money that lands move a status? | A card payment on an expired invoice settles it, since it paid the whole order total, and its flag asks the operator to check. On a replaced or cancelled invoice, at an amount that differs, or on an invoice in any status that cannot take a card payment, it counts toward nothing, and finance returns it outside Grade10. Clearing a flag moves nothing - decided by the round | Never moving a status, which leaves an expired invoice the winner paid in full with nothing an operator can do but settle it a second time |
 | Q16 | Where does a flagged order sit in the worklist? | Under Needs action only, whatever its status, until an operator clears every flag on it; then back in its status's segment. The segment counts add up to All - decided by the round | Finding it only by opening the order, when a flag is money waiting on someone |
 | Q17 | Where does a lot still taking bids read as extended? | The Listings table reads Extended; the worklist lists won lots only - decided by the round | A label on a worklist that no longer lists lots still taking bids |

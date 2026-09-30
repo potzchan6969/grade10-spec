@@ -42,6 +42,10 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          fileParallelism: false,
+          // One frame for every file: a frame per file raced its own swap, cutting
+          // off the next file's import so its iframe could not connect.
+          isolate: false,
           browser: {
             enabled: true,
             headless: true,

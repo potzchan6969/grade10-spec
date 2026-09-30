@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-09-30
+promoted_by: "@tangconst"
+hands:
+  pm: "@tangconst"
+  design: "@tangconst"
+  tech: "@tangconst"
+  qa: "@tangconst"
+  dev: "@tangconst"
+decisions_carried: "Q1–Q5 on Post-Bidding Progress stepper, Preparing Shipment naming, current Shipping, and Shipped badge tone"

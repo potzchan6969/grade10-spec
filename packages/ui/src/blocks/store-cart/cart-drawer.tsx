@@ -77,6 +77,7 @@ function PromoSectionReveal({
   return (
     <div
       aria-hidden={!open}
+      inert={!open}
       className={cn(
         "grid transition-[grid-template-rows] duration-200 motion-reduce:transition-none",
         open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
@@ -179,8 +180,11 @@ function CartItemContent({
       data-slot="cart-item"
       data-status={item.status || "default"}
     >
-      {/* Product Image Thumbnail */}
+      {/* The name button beside it is the control; the thumbnail repeats it
+          for a pointer only. */}
       <button
+        aria-hidden
+        tabIndex={-1}
         type="button"
         onClick={onClickProduct}
         className={cn(
@@ -534,6 +538,7 @@ function CartDrawerBody({
             <div
               key={item.id}
               aria-hidden={exiting}
+              inert={exiting}
               className={cn(
                 "grid transition-[grid-template-rows] duration-[220ms] motion-reduce:transition-none",
                 exiting ? "grid-rows-[0fr]" : "grid-rows-[1fr]",
@@ -968,6 +973,7 @@ function CartDrawerFooter({
                       <HStack gap="sm" vAlign="start" className="w-full pt-2">
                         <div className="flex-1">
                           <NumberInput
+                            aria-label={copy.usePoints}
                             id={pointsInputId}
                             placeholder={copy.pointsPlaceholder}
                             unit={copy.pointsUnit}
@@ -1146,6 +1152,7 @@ function CartPromoSheet({
       aria-modal="true"
       aria-label={copy.promoSheetTitle}
       aria-hidden={!open}
+      inert={!open}
       gap="none"
       data-slot="cart-promo-sheet"
       className={cn(
@@ -1174,6 +1181,7 @@ function CartPromoSheet({
           <HStack gap="sm" vAlign="start" className="w-full">
             <div className="flex-1">
               <TextInput
+                aria-label={copy.promoSheetTitle}
                 id={inputId}
                 placeholder={copy.promoPlaceholder}
                 value={promoInput}

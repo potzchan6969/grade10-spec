@@ -1,3 +1,7 @@
+import {
+  Table,
+  TableBody,
+} from "@grade10/design-system/components/display/table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   FIXTURE_CANCELED_MESSAGE,
@@ -10,6 +14,16 @@ const meta = {
   title: "Store Order Detail/OrderDetailsOrderItem",
   component: OrderDetailsOrderItem,
   tags: ["autodocs"],
+  // A row only has its table semantics inside the table that owns it.
+  decorators: [
+    (Story) => (
+      <Table className="w-fit">
+        <TableBody>
+          <Story />
+        </TableBody>
+      </Table>
+    ),
+  ],
   args: {
     product: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
     subtotal: "HK$105",

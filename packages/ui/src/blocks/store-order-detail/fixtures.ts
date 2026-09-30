@@ -145,21 +145,21 @@ const FILLED_LINES_ORDER_DISCOUNT: readonly OrderDetailsLineItem[] = [
 
 /** Subtotal matches the sum of line totals; item promo is not repeated in discount. */
 const FILLED_SUMMARY: OrderDetailsSummary = {
-  subtotal: { label: "Subtotal", value: "HK$1,759.50" },
-  refund: { label: "Refund", value: "−HK$105" },
-  shipping: { label: "Shipping", value: "HK$50" },
-  tax: { label: "Tax", value: "HK$0" },
+  subtotal: { label: "Subtotal", value: "$1,759.50" },
+  refund: { label: "Refund", value: "−$105.00" },
+  shipping: { label: "Shipping", value: "$50.00" },
+  tax: { label: "Tax", value: "$0" },
   total: { label: "Total", value: "HK$1,704.50" },
 };
 
 /** List-price lines; order promo appears once in the summary with its code. */
 const FILLED_SUMMARY_ORDER_DISCOUNT: OrderDetailsSummary = {
-  subtotal: { label: "Subtotal", value: "HK$1,770" },
-  discount: { label: "Discount (WELCOME10)", value: "−HK$177" },
-  refund: { label: "Refund", value: "−HK$105" },
-  shipping: { label: "Shipping", value: "HK$50" },
-  tax: { label: "Tax", value: "HK$0" },
-  total: { label: "Total", value: "HK$1,538" },
+  subtotal: { label: "Subtotal", value: "$1,770.00" },
+  discount: { label: "Discount (WELCOME10)", value: "−$177.00" },
+  refund: { label: "Refund", value: "−$105.00" },
+  shipping: { label: "Shipping", value: "$50.00" },
+  tax: { label: "Tax", value: "$0" },
+  total: { label: "Total", value: "HK$1,538.00" },
 };
 
 /**
@@ -167,13 +167,13 @@ const FILLED_SUMMARY_ORDER_DISCOUNT: OrderDetailsSummary = {
  * the cart drawer. Label carries the points deducted; value is the money credit.
  */
 const FILLED_SUMMARY_WITH_POINTS: OrderDetailsSummary = {
-  subtotal: { label: "Subtotal", value: "HK$1,770" },
-  discount: { label: "Discount (WELCOME10)", value: "−HK$177" },
-  points: { label: "Points (100 pts)", value: "−HK$100" },
-  refund: { label: "Refund", value: "−HK$105" },
-  shipping: { label: "Shipping", value: "HK$50" },
-  tax: { label: "Tax", value: "HK$0" },
-  total: { label: "Total", value: "HK$1,438" },
+  subtotal: { label: "Subtotal", value: "$1,770.00" },
+  discount: { label: "Discount (WELCOME10)", value: "−$177.00" },
+  points: { label: "Points (100 pts)", value: "−$100.00" },
+  refund: { label: "Refund", value: "−$105.00" },
+  shipping: { label: "Shipping", value: "$50.00" },
+  tax: { label: "Tax", value: "$0" },
+  total: { label: "Total", value: "HK$1,438.00" },
 };
 
 const FILLED_PAYMENT = {

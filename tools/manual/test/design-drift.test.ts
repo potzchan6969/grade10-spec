@@ -63,7 +63,7 @@ describe("the set a story card belongs to", () => {
 
     for (const id of [
       "pages-store-home-page--default",
-      "pages-order-history-page--filled",
+      "pages-store-order-history-page--filled",
       "pages-product-list-page--default",
     ]) {
       expect(classOf(generic, id)).toBeUndefined();

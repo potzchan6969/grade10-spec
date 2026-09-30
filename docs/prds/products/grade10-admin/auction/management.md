@@ -72,6 +72,21 @@ the card is in the winner's hands. The collector's half is
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
+- 🚧 **Unsold close** — a listing that closes with no winner, a top bid under
+  the reserve included, releases its stock hold at that moment, and the units
+  are available again. The listing's page says the stock was released, with
+  the date. An operator does nothing to get the stock back — [Products and
+  Stock · Intake](/p/grade10-admin/inventory/catalog#intake)
+- 🚧 **Stock already held** — a listing that closed Unsold before this ships
+  still holds its stock. One release frees every such hold, and each shows in
+  the inventory history as released by that clean-up
+- 🚧 **Relist** — an Unsold listing offers Relist, which opens a new draft
+  with the same product, quantity, Cert ID choice, title, copy, price, currency
+  and gallery. The draft takes its own stock hold on Save, gets its own slug
+  and listing code, sets its own window, and carries no bids or history from
+  the closed one. Campaign, reserve, extension, taxonomy and sandbox start as
+  on any new draft. Relist shows on an Unsold listing only, to an operator who
+  can operate auctions; nothing is stored until Save
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
@@ -214,8 +229,8 @@ on winner, In transit, Closed and All, opening on Needs action.
 ## Payment
 
 - 🚧 **The quote** - the operator reads the confirmed address, the method, the
-  winning bid and the premium, enters Shipping & Handling (zero allowed),
-  optional Insurance (above zero) and the Payment Processing Fee, reads the
+  winning bid and the premium, enters Shipping & Handling (zero allowed) and
+  optional Insurance (above zero), reads the Payment Processing Fee, the
   total and the deadline to the minute, and sends, which starts the 7 days
 - 🚧 **Tax** — a third quoted amount beside Shipping & Handling and
   Insurance, optional and above zero. Grade10 computes no rate: the operator
@@ -224,12 +239,15 @@ on winner, In transit, Closed and All, opening on Needs action.
   send is refused while the order has none, and the edit before send adds
   it; an address recorded by phone asks for billing too, same as delivery by
   default
-- 🚧 **Payment Processing Fee** - starts from the fee schedule's rule for the
-  order's currency and method, and follows the subtotal until the operator
-  types one; zero or more, with no cap. With no rule it starts empty and must
-  be filled. On a reissue it starts from the current invoice while the method
-  stays, or from the new method's rule after a switch, with the schedule's
-  suggestion beside it. A sent invoice never re-prices
+- 🚧 **Payment Processing Fee** - a card invoice's fee is Grade10's own: the
+  Stripe card rule for the order's currency, grossed up so Grade10 keeps the
+  Subtotal whole, read-only with the rule it came from. With no card rule for
+  the currency, the invoice cannot be sent or reissued, and the dialog says so
+  and points to Payment Settings. A bank transfer invoice's fee is the
+  operator's own, zero or more with no cap; empty reads Free. On a reissue,
+  the fee is editable only when the reissued invoice is bank transfer; a
+  switch to card prices it from the card rule, and a switch to bank transfer
+  starts it empty. A sent invoice never re-prices
 - 🚧 **What was seen is sent** - the send and the reissue carry the total the
   operator read; when Grade10 now prices the order differently, for example
   because the premium minimum changed, the send is refused and the dialog
@@ -351,30 +369,33 @@ money is not necessarily the person who dispatches cards.
 
 ## Payment Settings
 
-The buyer-premium minimums and the payment processing fee schedule, as the
-Payment settings tab under `/auction`.
+The buyer-premium minimums and the Stripe card fee rule that prices a card
+invoice's payment processing fee, as the Payment settings tab under
+`/auction`. A bank transfer invoice's fee is the operator's own, per
+[Auction Management · Payment](#payment); Payment Settings holds no rule for
+it.
 
 | Rule | Value |
 | --- | --- |
 | Minimum charge | One amount per currency, zero or more; **0** in USD, HKD and JPY at first |
-| 🚧 Fee schedule | Per currency, a card rule and a bank transfer rule: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
-| 🚧 At rollout | Nothing is stored until the first save; Finance sets HKD card **3.4% + HK$2.35** and HKD bank transfer **0% + HK$0.00** |
+| 🚧 Card fee rule | One per currency: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
+| 🚧 At rollout | Nothing is stored until the first save; Finance sets HKD **3.4% + HK$2.35** |
 | 🚧 Typed as | The currency's major units, `2.35` for HK$2.35, stored as minor units |
 | Who | 🚧 Operators with payment processing, `auction:payment`; others neither read nor change it |
-| Saved | Whole, replacing the settings at once and recording the operator and the time; a new value applies to invoices sent or reissued after it, and never re-prices a sent one |
+| Saved | Whole, replacing all three currencies' rules at once and recording the operator and the time; a new value applies to card invoices sent or reissued after it, and never re-prices a sent one |
 | Refused | A missing or unsupported currency, a negative amount or one finer than the currency's smallest unit, or a read or save without that access — nothing stored changes |
 
-- 🚧 **Live example** - each rule shows, as it is typed, the fee it suggests
-  on a subtotal of 1,000 in its currency, grossed up so Grade10 keeps the
-  whole subtotal once the rule is taken from the whole charge
-- ❓ **USD and JPY** - no rule until Finance sets one; Finance confirms the
-  rates
+- 🚧 **Live example** - each card fee shows, as it is typed, the fee a card
+  invoice charges on a subtotal of 1,000 in its currency, grossed up so
+  Grade10 keeps the whole subtotal once Stripe takes its fee from the whole
+  charge
+- ❓ **USD and JPY** - no card fee until Finance sets one, so a card invoice
+  in them cannot be sent; Finance confirms the rates
 
-| Subtotal | Rule | Suggested fee | Order total |
+| Subtotal | Stripe card fee | Card fee charged | Order total |
 | --- | --- | --- | --- |
-| HK$1,000.00 | Card, 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
-| HK$3,120.00 | Card, 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |
-| HK$3,120.00 | Bank transfer, 0% + HK$0.00 | HK$0.00, read as Free | HK$3,120.00 |
+| HK$1,000.00 | 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
+| HK$3,120.00 | 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |
 
 ::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 
@@ -385,7 +406,7 @@ Payment settings tab under `/auction`.
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
 | 🚧 Opening Orders, an order and its proof files, and commenting; attaching a proof file takes the grant of its action | `auction:read` - reading | `staff`, `finance`, `treasurer` and `admin` |
 | Sending and reissuing an invoice, recording a payment, checking proof, cancelling, reopening, recording or changing setup | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
-| 🚧 Clearing a flag, and Payment Settings: the premium minimums and the fee schedule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
+| 🚧 Clearing a flag, and Payment Settings: the premium minimums and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
 | Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
 | 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
@@ -452,7 +473,7 @@ and timeline together, with payment and shipment as separate jobs.
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Auction operator | Creating a listing | Chooses a supported currency without predicting its closing price. |
-| Finance operator | Reviews or updates the premium minimums and the fee schedule | Sees one minimum and a card and a bank transfer rule per currency, and saves them whole. |
+| Finance operator | Reviews or updates the premium minimums and the card fee rule | Sees one minimum and one card rule per currency, and saves them whole. |
 | Other operator | Opens Auction without payment processing | Cannot read or change the payment settings. |
 | QA | Needs to walk a winner's order | Makes a test winner in one step outside production and signs in with the ordinary link. |
 
@@ -467,6 +488,7 @@ settings.
 | Catalogue Featured | 🚧 In flight | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
+| Unsold stock | 🚧 In flight | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
 | Payment source | Decided | The order tells a card payment through Stripe from money an operator records, and neither captures the bid-time hold, which is released at the close. | Product and Finance |
@@ -475,8 +497,8 @@ settings.
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | 🚧 In flight | Under Auction because auction invoices use it; behind payment processing, `auction:payment`, because changing it changes the amount collected. Chosen over the settlement grant, which only `admin` holds, so finance could not keep the settings it owns. | Product and finance |
-| Fee schedule | 🚧 In flight | Payment Settings holds a card rule and a bank transfer rule per currency - a percentage and a fixed amount, or no rule - that pre-fill each invoice's fee, which the operator sets. The card rule is grossed up so Grade10 keeps the subtotal whole, a sent invoice never re-prices, and Finance enters the rules at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |
-| A reissue's fee | 🚧 In flight | Starts from the current invoice while the method stays, and from the new method's rule after a switch, with the schedule's suggestion beside it. Chosen over always starting from the schedule, which undoes a fee the operator agreed with the winner. | Product and finance |
+| Payment processing fee | 🚧 In flight | The invoice's payment method decides. A card invoice's fee is Grade10's own: the Stripe card rule per currency, grossed up so Grade10 keeps the subtotal whole; with no rule for the currency, the invoice cannot be sent or reissued. A bank transfer invoice's fee is the operator's own; a sent invoice never re-prices, and Finance enters the card rule at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |
+| A reissue's fee | 🚧 In flight | Editable only where the reissued invoice is bank transfer, starting from the current invoice while the method stays. A switch to card prices it from the card rule; a switch to bank transfer starts it empty. Chosen over always pricing it from the schedule, which undoes a fee the operator agreed with the winner. | Product and finance |
 | Orders workspace | 🚧 In flight | One worklist in segments with counts - Needs action, Waiting on winner, In transit, Closed, All - and one page per order with one primary action and each action in its own dialog. Chosen over a listing-level queue beside a separate winner orders tab, which split one order across two surfaces. | Product and Operations |
 | What was seen is sent | 🚧 In flight | The send and the reissue carry the total the operator read and are refused when Grade10 now prices the order differently. Chosen over sending whatever the server computes, which can bill a total nobody saw. | Product and finance |
 | Money that lands | 🚧 In flight | A card payment is always recorded, and one the invoice did not expect carries a flag until an operator clears it with a reason. On an expired invoice it pays the invoice, since it paid the whole total; on a replaced or cancelled invoice, at an amount that differs, or on an invoice in any state that cannot take a card payment, it counts toward nothing and blocks nothing, and finance returns it outside Grade10. Chosen over refusing or dropping it, which loses track of money Grade10 holds, and over never moving a status, which leaves an expired invoice the winner paid in full to be settled a second time. | Product and finance |

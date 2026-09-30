@@ -82,8 +82,13 @@ export const Disabled: Story = {
   args: { defaultValue: "128450", disabled: true },
 };
 
+/** No visible label, so the field takes its name from `aria-label`. */
 export const WithoutLabel: Story = {
-  args: { defaultValue: "", label: undefined },
+  args: {
+    defaultValue: "",
+    label: undefined,
+    "aria-label": "Verification code",
+  },
 };
 export const WithoutMessage: Story = {
   args: { defaultValue: "", message: undefined },
