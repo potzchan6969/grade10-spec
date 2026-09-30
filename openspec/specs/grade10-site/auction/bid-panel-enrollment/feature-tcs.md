@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-panel-enrollment Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-08, tcs-rules r2
+**Drafts styled:** 2026-09-30, tcs-rules r4
 
 ## grade10-site-auction-bid-panel-enrollment-US1: Collector signs in to bid on a lot
 
@@ -26,12 +26,19 @@
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-01
 
 **Pre-conditions:**
-The collector is signed out on <a live lot page>.
+
+* customer(signed out) is on <listing_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | A live lot taking bids, with recent public bids shown |
 
 **Steps:**
 
-1. Open <a live lot page> bid panel.
-2. Inspect the primary bid action label.
+1. Read the bid panel on <listing_1 url>.
+2. Read the primary bid action.
 
 **Expected Results:**
 
@@ -55,25 +62,34 @@ The collector is signed out on <a live lot page>.
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-01
 
 **Pre-conditions:**
-The collector is signed out on <a live lot page> where recent bids are shown.
+
+* customer(signed out) is on <listing_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | A live lot taking bids, with recent public bids shown |
 
 **Steps:**
 
-1. Open <a live lot page> bid panel.
-2. Inspect standing badges and the recent-bids section.
+1. Read standing badges on the bid panel.
+2. Read the recent-bids section.
 
 **Expected Results:**
 
-* Highest-bid and outbid standing badges are not shown.
-* Recent bids remain visible.
+* Highest-bid and outbid badges are not shown.
+* Recent bids stay visible.
 
 ---
 
 ## grade10-site-auction-bid-panel-enrollment-US2: Collector links a card when none is on file
 
 **As a** signed-in collector with no linked card,
-**I want** amount entry disabled until I link a card and attest my age,
-**so that** I only choose a maximum after setup is done.
+**I want** setup to leave me ready to bid immediately and to move me to
+enrolled after my first accepted bid,
+**so that** the panel does not wait for a bid-time authorization that the
+backend does not require.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-lqi rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC1-1: Link CTA opens setup when no card is linked
@@ -92,18 +108,25 @@ The collector is signed out on <a live lot page> where recent bids are shown.
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
-The collector is signed in with no linked card on <an open listing>.
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Open <the lot page> bid panel.
-2. Inspect amount controls and the primary bid action.
-3. Activate the primary bid action.
+1. Read the quick-bid presets and the custom maximum.
+2. Read the primary bid action.
+3. Click the primary bid action.
 
 **Expected Results:**
 
-* Quick-bid presets and the custom maximum field are visible and disabled.
-* The primary bid action is labeled Link a card to bid.
+* Quick-bid presets and the custom maximum are visible and disabled.
+* The primary bid action reads "Link a card to bid".
 * The setup modal opens.
 * No bid is placed.
 
@@ -120,24 +143,33 @@ The collector is signed in with no linked card on <an open listing>.
 * **Suites:** smoke, release
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
-The collector is signed in and the first-link setup modal is open on <an open listing>.
+
+* customer(signed in, no linked card) has the setup modal open on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Leave provider card entry incomplete and age attestation unchecked.
-2. Inspect continue.
-3. Complete provider card entry and check age attestation.
-4. Inspect continue again.
+1. Leave the provider card field empty.
+2. Leave age attestation unchecked.
+3. Read the continue control.
+4. Enter a card in the provider-hosted field.
+5. Check age attestation.
+6. Read the continue control.
 
 **Expected Results:**
 
-* Link Card is disabled while card entry or attestation is incomplete.
-* Link Card is enabled when both are complete.
-* Continue is labeled Link Card, not Authorize.
+* Continue stays disabled while the card or attestation is missing.
+* Continue reads "Link Card", not "Authorize".
+* Continue enables once the card and attestation are both set.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-12t rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC3-1: Setup linking locks dismiss and controls
@@ -152,21 +184,31 @@ The collector is signed in and the first-link setup modal is open on <an open li
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
-The collector submitted Link Card on <an open listing> and the provider link is in flight.
+
+* customer(signed in, no linked card) has submitted Link Card on <listing_2 url>.
+* The card provider is mocked to leave linking in progress.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Inspect continue, the provider field, age attestation, and dismiss.
+1. Read the continue control.
+2. Read the provider field and age attestation.
+3. Try to close the setup modal.
 
 **Expected Results:**
 
-* Continue is labeled Linking and busy.
+* Continue reads "Linking" and is busy.
 * The provider field and age attestation are not interactive.
-* The collector cannot dismiss the modal.
+* The setup modal cannot be dismissed.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-b5y rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC4-1: Dismissing setup leaves no linked card
@@ -185,19 +227,27 @@ The collector submitted Link Card on <an open listing> and the provider link is 
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
-The collector is signed in with no linked card on <an open listing>.
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Open setup from the bid panel.
-2. Close the modal without continuing.
-3. Inspect the linked-card slot and amount controls.
+1. Click the primary bid action.
+2. Close the setup modal without continuing.
+3. Read the linked-card slot.
+4. Read the quick-bid presets and the custom maximum.
 
 **Expected Results:**
 
 * No linked card is on file for bidding.
 * The empty link prompt is shown.
-* Amount controls remain visible and disabled.
+* Amount controls stay visible and disabled.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-e02 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC5-1: Completing setup unlocks amount controls
@@ -216,19 +266,30 @@ The collector is signed in with no linked card on <an open listing>.
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
-The collector is signed in with no linked card on <an open listing>.
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Complete setup with provider card entry and age attestation.
-2. Activate Link Card.
-3. Inspect the linked-card slot, amount controls, and primary bid action.
+1. Click the primary bid action.
+2. Enter a card in the provider-hosted field.
+3. Check age attestation.
+4. Click Link Card.
+5. Read the linked-card slot.
+6. Read the quick-bid presets and the custom maximum.
+7. Read the primary bid action.
 
 **Expected Results:**
 
 * The setup modal closes.
-* The linked card is shown with change available.
-* Quick-bid presets and the custom maximum field are enabled.
+* The linked card is shown, with Change available.
+* Quick-bid presets and the custom maximum are enabled.
 * The primary bid action offers set or raise maximum.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-3e2 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
@@ -248,18 +309,27 @@ The collector is signed in with no linked card on <an open listing>.
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**
-The collector is signed in with no linked card and the empty linked-card slot is visible on <an open listing>.
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+* The empty linked-card slot is visible.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Attempt to activate a disabled quick-bid preset.
-2. Attempt to focus or type in the custom maximum field.
-3. Activate the empty-slot link control.
+1. Click a disabled quick-bid preset.
+2. Try to type in the custom maximum.
+3. Click the empty card slot.
 
 **Expected Results:**
 
-* Disabled presets and the custom maximum field do not open setup.
-* The empty-slot link control opens the setup modal.
+* The disabled preset does not open setup.
+* The custom maximum does not open setup.
+* The empty card slot opens the setup modal.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-y2d rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC7-1: Card linking leaves the collector ready to bid
@@ -279,19 +349,29 @@ The collector is signed in with no linked card and the empty linked-card slot is
 
 **Pre-conditions:**
 
-* A signed-in collector has no linked card on an open listing.
-* Bid-time authorization holds are disabled.
+* customer(signed in, no linked card) is on <listing_2 url>.
+* Bid-time holds are off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Complete card-link setup with age attestation.
-2. Inspect the linked-card slot and amount controls when setup closes.
+1. Click the primary bid action.
+2. Enter a card in the provider-hosted field.
+3. Check age attestation.
+4. Click Link Card.
+5. Read the linked-card slot.
+6. Read the quick-bid presets and the custom maximum.
 
 **Expected Results:**
 
-* The existing pre-bid linked-card state shows the card with Change available.
-* Quick-bid presets and the custom maximum field are enabled immediately.
-* The panel does not wait for a bid-time authorization.
+* The linked card is shown, with Change available.
+* Quick-bid presets and the custom maximum are enabled at once.
+* The panel does not wait for a bid-time hold.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-av0 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC8-1: An accepted bid moves directly to enrolled
@@ -311,20 +391,28 @@ The collector is signed in with no linked card and the empty linked-card slot is
 
 **Pre-conditions:**
 
-* A collector has linked a card and has not bid on the open listing.
-* Bid-time authorization holds are disabled.
+* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* Bid-time holds are off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Submit a valid first bid.
-2. Inspect the panel state and linked-card actions after the backend accepts it.
+1. Enter <maximum> in the custom maximum.
+2. Click the bid action.
+3. Read the bid panel after the bid is accepted.
 
 **Expected Results:**
 
-* The panel moves directly to the existing `enrolled` state.
-* Change is no longer offered for that listing.
-* The panel does not add or display a client-side hold state.
-* The commitment proceeds under auto-bidding and payment authorization.
+* The panel moves straight to enrolled.
+* Change is not offered for this listing.
+* No hold state is shown.
+* The bid continues under auto-bidding and payment authorization.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-0h4 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC9-1: Default setup copy does not promise a bid-time hold
@@ -344,17 +432,23 @@ The collector is signed in with no linked card and the empty linked-card slot is
 
 **Pre-conditions:**
 
-* A signed-in collector has no linked card on an open listing.
-* Bid-time authorization holds are disabled.
+* customer(signed in, no linked card) is on <listing_2 url>.
+* Bid-time holds are off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Open the setup modal.
-2. Read the modal description.
+1. Click the primary bid action.
+2. Read the setup description.
 
 **Expected Results:**
 
-* The description is "Link a card for bidding. You're only charged if you win."
+* The description reads "Link a card for bidding. You're only charged if you win."
 * The description does not promise a bid-time hold.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-yrg rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
@@ -375,18 +469,25 @@ The collector is signed in with no linked card and the empty linked-card slot is
 
 **Pre-conditions:**
 
-* A signed-in collector has no linked card on an open listing.
-* Bid-time authorization holds are enabled.
+* customer(signed in, no linked card) is on <listing_2 url>.
+* Bid-time holds are on.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 
 **Steps:**
 
-1. Open the setup modal.
-2. Read the modal description and primary action.
+1. Click the primary bid action.
+2. Read the setup description.
+3. Read the continue control.
 
 **Expected Results:**
 
-* The description discloses that setting a maximum authorizes a hold.
-* Continue remains labeled Link Card.
+* The description says setting a maximum authorizes a hold.
+* Continue reads "Link Card".
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-rik rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC11-1: Default payment-method tooltip does not promise a hold
@@ -406,17 +507,24 @@ The collector is signed in with no linked card and the empty linked-card slot is
 
 **Pre-conditions:**
 
-* A signed-in collector has a linked card on an open listing.
-* Bid-time authorization holds are disabled.
+* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* Bid-time holds are off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
 
 **Steps:**
 
-1. Open the linked-card payment-method tooltip.
+1. Open the payment-method tooltip on the linked card.
+2. Read the tooltip.
 
 **Expected Results:**
 
-* The copy authorizes the card for bidding.
-* The copy does not promise a bid-time hold.
+* The tooltip authorizes the card for bidding.
+* The tooltip does not promise a bid-time hold.
 
 ---
 
@@ -443,17 +551,24 @@ The collector is signed in with no linked card and the empty linked-card slot is
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
 
 **Pre-conditions:**
-The collector has a linked card on <an open listing> and has not bid on it.
+
+* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
 
 **Steps:**
 
-1. Open <the lot page> bid panel.
-2. Activate change on the linked card.
+1. Read the linked-card row.
+2. Click Change on the linked card.
 
 **Expected Results:**
 
 * The setup modal opens.
-* The linked-card row remains visible behind the modal.
+* The linked-card row stays visible behind the modal.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-iih rev=1 covers=g10.auction-bid-panel-enrollment.SC-beq,g10.auction-bid-panel-enrollment.SC-ofn,g10.auction-bid-panel-enrollment.SC-1sa -->
 ### grade10-site-auction-bid-panel-enrollment-US3-TC2-1: Change reuses setup copy with prior card shown
@@ -468,22 +583,31 @@ The collector has a linked card on <an open listing> and has not bid on it.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
 
 **Pre-conditions:**
-The collector is changing the linked card before their first bid on <an open listing>.
+
+* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
 
 **Steps:**
 
-1. Open setup through change.
-2. Compare the modal title, description, and provider field area to first-link setup.
+1. Click Change on the linked card.
+2. Read the modal title.
+3. Read the modal description.
+4. Read the provider field.
 
 **Expected Results:**
 
-* Title is Link a card to bid.
-* Description discloses that setting a maximum authorizes a hold and that the collector is charged only if they win.
-* The provider field area indicates the previously linked card on file.
+* The title reads "Link a card to bid".
+* The description says a maximum authorizes a hold, and a charge happens only on a win.
+* The provider field shows the card already on file.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-shl rev=1 covers=g10.auction-bid-panel-enrollment.SC-beq,g10.auction-bid-panel-enrollment.SC-ofn,g10.auction-bid-panel-enrollment.SC-1sa -->
 ### grade10-site-auction-bid-panel-enrollment-US3-TC3-1: Attestation is pre-checked when already given
@@ -498,21 +622,30 @@ The collector is changing the linked card before their first bid on <an open lis
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
 
 **Pre-conditions:**
-The collector already attested on a prior lot and is changing card on <a new open listing> before their first bid on it.
+
+* customer(signed in, card linked, age already attested, no bid on <listing_4>) is on <listing_4 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_4> | A new open listing this collector has not bid on; the card was linked on an earlier lot, and age was already attested |
 
 **Steps:**
 
-1. Open setup through change.
-2. Inspect age attestation and continue.
+1. Click Change on the linked card.
+2. Read age attestation.
+3. Enter a card in the provider-hosted field.
+4. Read the continue control.
 
 **Expected Results:**
 
-* Age attestation is pre-checked.
-* Link Card is enabled once provider card entry is satisfied.
+* Age attestation is already checked.
+* Continue reads "Link Card" and enables once the card is entered.
 
 ---
 
@@ -539,12 +672,18 @@ The collector already attested on a prior lot and is changing card on <a new ope
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04
 
 **Pre-conditions:**
-The collector has a linked card on <an open listing> and has placed at least one bid on it.
+
+* customer(signed in, card linked, has bid on <listing_5>) is on <listing_5 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_5> | An open listing taking bids; this collector has a linked card and has placed a bid on it |
 
 **Steps:**
 
-1. Open <the lot page> bid panel.
-2. Inspect the linked-card slot.
+1. Read the linked-card slot on the bid panel.
 
 **Expected Results:**
 
@@ -564,16 +703,25 @@ The collector has a linked card on <an open listing> and has placed at least one
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04
 
 **Pre-conditions:**
-The collector has a linked card on <an open listing> and has not placed a bid on it.
+
+* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
+| <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
 
-1. Enter a valid maximum on the bid panel.
-2. Activate the primary bid action.
+1. Enter <maximum> in the custom maximum.
+2. Click the bid action.
+3. Check whether the setup modal is open.
 
 **Expected Results:**
 
@@ -604,15 +752,23 @@ The collector has a linked card on <an open listing> and has not placed a bid on
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-05
 
 **Pre-conditions:**
-The collector linked a card on a prior lot and has not bid on <a new open listing>.
+
+* customer(signed in, card linked on an earlier lot, no bid on <listing_6>) is on <listing_6 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_6> | A new open listing this collector has not bid on; the card was linked on an earlier lot |
 
 **Steps:**
 
-1. Open <the new lot page> bid panel.
-2. Inspect the linked-card slot, amount controls, and whether setup is open.
+1. Read the linked-card slot.
+2. Read the quick-bid presets and the custom maximum.
+3. Check whether the setup modal is open.
 
 **Expected Results:**
 
-* The linked-card slot shows the card on file with change available.
-* Quick-bid presets and the custom maximum field are enabled.
+* The linked-card slot shows the card on file, with Change available.
+* Quick-bid presets and the custom maximum are enabled.
 * The setup modal does not open.
