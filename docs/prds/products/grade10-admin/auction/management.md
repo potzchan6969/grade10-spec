@@ -370,13 +370,14 @@ it.
 | Saved | Whole, replacing all three currencies' rules at once and recording the operator and the time; a new value applies to card invoices sent or reissued after it, and never re-prices a sent one |
 | Refused | A missing or unsupported currency, a negative amount or one finer than the currency's smallest unit, or a read or save without that access — nothing stored changes |
 
-- 🚧 **Live example** - each rule shows, as it is typed, the fee it suggests
-  on a subtotal of 1,000 in its currency, grossed up so Grade10 keeps the
-  whole subtotal once the rule is taken from the whole charge
-- ❓ **USD and JPY** - no rule until Finance sets one; Finance confirms the
-  rates
+- 🚧 **Live example** - each card fee shows, as it is typed, the fee a card
+  invoice charges on a subtotal of 1,000 in its currency, grossed up so
+  Grade10 keeps the whole subtotal once Stripe takes its fee from the whole
+  charge
+- ❓ **USD and JPY** - no card fee until Finance sets one, so a card invoice
+  in them cannot be sent; Finance confirms the rates
 
-| Subtotal | Rule | Suggested fee | Order total |
+| Subtotal | Stripe card fee | Card fee charged | Order total |
 | --- | --- | --- | --- |
 | HK$1,000.00 | 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
 | HK$3,120.00 | 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |

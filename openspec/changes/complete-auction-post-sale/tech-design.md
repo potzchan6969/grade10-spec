@@ -270,7 +270,7 @@ Codes travel as values (`{ success: false, errorCode }`) through every layer; a 
 | `repositories/orderQueue.ts` | `orderStatusSql`, `orderSinceSql`, `flagOpenSql`, the worklist query and its cursor | new |
 | `repositories/orderProofs.ts` | `orderProofReferences` - one union over every table holding a key: winner proofs, payments' and refunds' `proof_files`, `fulfilment_log.delivery_proof`, `fulfillments.proof_documents`, `auction_manual_settlement_proofs` | new; `storage/areas.ts` reads it |
 | `repositories/orderComments.ts` | rows | new |
-| `services/admin/paymentSettings.ts` | minimum and both fee rules, zero allowed, half a pair refused | extended |
+| `services/admin/paymentSettings.ts` | minimum and the card fee, zero allowed, half a pair refused | extended |
 | `trpc/routers/orders.ts` | every operator procedure, each with `auditDetails` | replaces `postSale.ts` |
 | `trpc/routers/testWinners.ts` | `create`, `list` on the `testBids` middleware (grant, then `NOT_FOUND` outside sandbox lanes) | new |
 | `routes/uploads.ts` | `PUT /api/admin/orders/:orderId/proofs?kind=` (one file, grant by kind), `GET /api/admin/orders/:orderId/proofs/:key` | replaces the settlement-proof pair; the listing-level proof routes go |
@@ -495,7 +495,7 @@ Won rows offer Open order; lots still taking bids read Extended.
 | Schema | `*.drizzle.test.ts` via `emittedSql()` | columns, checks, the preflight block, backfills |
 | Workers pool | `node scripts/test.mjs apps/backend/grade10/auction` | send and reissue pricing and `QUOTE_CHANGED`; the pointer moves and the old revision is untouched; checkout attempts, CAS and the fresh session; money on every invoice state and its flag; a signed test-mode event on the real route; proofs by bytes and keys; `recordPayment` outcomes; cancel and refund release the hold and keep the listing closed; dispatch and delivery; expiry suspends in one transaction; the entrypoint prototype equals the allowlist; every winner method answers NOT_FOUND to a non-owner; test-winner create, replay, refusals and the real close; router grant map equals `OPERATOR_ACTION_PERMISSIONS`; audit row size |
 | Store worker | `node scripts/test.mjs apps/backend/grade10/store` | a client-sent `userId` or `storefront` is ignored |
-| Admin unit | `node scripts/test.mjs packages/grade10-auction/admin-frontend` | quote preview equals `priceInvoice`; `refusalCopy` covers every operator code; More and the primary follow the map and the grants; fee schedule form allows 0 and refuses half a pair |
+| Admin unit | `node scripts/test.mjs packages/grade10-auction/admin-frontend` | quote preview equals `priceInvoice`; `refusalCopy` covers every operator code; More and the primary follow the map and the grants; card fee form allows 0 and refuses half a pair |
 | E2E | `pnpm run test:e2e` | the journeys below |
 
 ### E2E Journeys
