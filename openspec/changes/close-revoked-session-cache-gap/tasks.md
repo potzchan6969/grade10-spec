@@ -1,4 +1,4 @@
-## 1. Close the session-cache gap on revoke, ban, and set-role (grade10)
+## 1. Close the session-cache gap on revoke, ban, and set-role (grade10) (owner: @sean)
 
 - [ ] 1.1 Write the regression tests: a revoked session's next ordinary read
   reports no person even with a warmed cookie cache, and a sibling session
