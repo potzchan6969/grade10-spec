@@ -1067,29 +1067,29 @@ Runs once per row of **Test data**.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `US1-TC1-1` row 1 — a request with no offer and no visit | Folded | The confirmation names only what stands open; `grade10-site-vault-case-lifecycle-SC-37`, and the move table's cell. Raised row 1, landed as `Q38` |
+| `US1-TC1-1` row 1 — a request with no offer and no visit | Folded | The confirmation names only what stands open; `grade10-site-vault-case-lifecycle-SC-37`, and the move table's cell. Raised row 1, landed as Q38 |
 | `US1-TC2-1` — Cancel withheld once the item is in the vault | Covered | Durable `grade10-site-vault-case-lifecycle-SC-10`, and the move table's Offered while |
-| `US1-TC3-1` — Cancel refused once the case moved | Covered | `grade10-site-vault-case-lifecycle-SC-19`, guarded by durable `grade10-site-vault-case-lifecycle-SC-04`, which refuses any status change under the caller. Raised row 3, landed as `Q40` |
-| `US2-TC1-1` — the deadline while a visit is unbooked | Covered | `grade10-site-vault-case-lifecycle-SC-28`; the rule reads from terms agreed onward, never before. Raised row 6, landed as `Q43` |
+| `US1-TC3-1` — Cancel refused once the case moved | Covered | `grade10-site-vault-case-lifecycle-SC-19`, guarded by durable `grade10-site-vault-case-lifecycle-SC-04`, which refuses any status change under the caller. Raised row 3, landed as Q40 |
+| `US2-TC1-1` — the deadline while a visit is unbooked | Covered | `grade10-site-vault-case-lifecycle-SC-28`; the rule reads from terms agreed onward, never before. Raised row 6, landed as Q43 |
 | `US2-TC2-1`, `US2-TC3-1`, `US2-TC4-1` — the clock boundaries | Covered | The durable clock table and durable `grade10-site-vault-case-lifecycle-SC-06`; this change adds no clock |
 | `US2-TC5-1` — a missed visit on a vaulted case | Covered | The durable clock table and `grade10-site-vault-case-lifecycle-SC-26` |
 | `US4-TC1-1` | Covered | `grade10-site-vault-case-lifecycle-SC-20`, `grade10-site-vault-case-lifecycle-SC-32`, `grade10-site-vault-case-lifecycle-SC-36` |
 | `US4-TC2-1` | Covered | `grade10-site-vault-case-lifecycle-SC-21`, `grade10-site-vault-case-lifecycle-SC-17` for the collector's own row |
-| `US4-TC3-1` — a wording per clock | Amended | One wording whichever clock ran out, the clock named on the timeline: `grade10-site-vault-case-lifecycle-SC-22` and the case's expected results. Raised row 4, landed as `Q41` |
+| `US4-TC3-1` — a wording per clock | Amended | One wording whichever clock ran out, the clock named on the timeline: `grade10-site-vault-case-lifecycle-SC-22` and the case's expected results. Raised row 4, landed as Q41 |
 | `US4-TC4-1` | Covered | `grade10-site-vault-case-lifecycle-SC-23`; the money's rendering is `grade10-site/vault/loan-and-settlement`'s |
 | `US4-TC5-1` | Covered | `grade10-site-vault-case-lifecycle-SC-35` |
 | `US5-TC1-1` | Covered | `grade10-site-vault-case-lifecycle-SC-30`, `grade10-site-vault-case-lifecycle-SC-31` |
 | `US5-TC2-1` | Covered | `grade10-site-vault-case-lifecycle-SC-33` |
-| `US5-TC3-1` — the With us rows | Amended | A fourth row for a vaulted financed case; `grade10-site-vault-case-lifecycle-SC-38` and the chip table now read either lane. Landed as `Q45` |
+| `US5-TC3-1` — the With us rows | Amended | A fourth row for a vaulted financed case; `grade10-site-vault-case-lifecycle-SC-38` and the chip table now read either lane. Landed as Q45 |
 | `US5-TC4-1`, `US5-TC5-1`, `US5-TC6-1`, `US5-TC7-1` | Covered | `grade10-site-vault-case-lifecycle-SC-24`, `grade10-site-vault-case-lifecycle-SC-25`, `grade10-site-vault-case-lifecycle-SC-26`, `grade10-site-vault-case-lifecycle-SC-27` and `grade10-site-vault-case-lifecycle-SC-18` |
 | `US5-TC8-1` — the vaulted storage page | Covered | The move table's Offered while and `grade10-site-vault-case-lifecycle-SC-18`; the documents and their fingerprints are `grade10-site/vault/documents-and-signing`'s |
 | `US5-TC9-1` | Covered | `grade10-site-vault-case-lifecycle-SC-19` |
-| `US5-TC10-1` — one not-found page | Amended | Two not-found rows, an unissued id and another collector's case, reading one page: `grade10-site-vault-case-lifecycle-SC-39`. Raised row 5, landed as `Q42` |
+| `US5-TC10-1` — one not-found page | Amended | Two not-found rows, an unissued id and another collector's case, reading one page: `grade10-site-vault-case-lifecycle-SC-39`. Raised row 5, landed as Q42 |
 | `grade10-site-vault-case-lifecycle-SC-18` — the act of asking | Case added | `US5-TC11-1`: no case confirmed the ask; the suite only read the state after it |
 | `grade10-site-vault-case-lifecycle-SC-34` — the list and the case | Case added | `US5-TC12-1`: the suite read the chip on the case and never against the list |
 | `grade10-site-vault-case-lifecycle-SC-29` — nothing derived is written | Case added | `US5-TC13-1`: two reads, the same fact, no history entry. It traces `Derived at the read`, the group the scenario serves, so the group anchor is walked |
-| `grade10-site-vault-case-lifecycle-SC-40` — two facts at once | Case added | `US5-TC14-1`, from the ruling that the later event's fact is the one read, landed as `Q44` |
-| `grade10-site-vault-case-lifecycle-SC-19` — Release refused | Covered | The design's Release refused state is the ask's own refusal. Raised row 2, landed as `Q39` |
+| `grade10-site-vault-case-lifecycle-SC-40` — two facts at once | Case added | `US5-TC14-1`, from the ruling that the later event's fact is the one read, landed as Q44 |
+| `grade10-site-vault-case-lifecycle-SC-19` — Release refused | Covered | The design's Release refused state is the ask's own refusal. Raised row 2, landed as Q39 |
 
 ### Manual
 

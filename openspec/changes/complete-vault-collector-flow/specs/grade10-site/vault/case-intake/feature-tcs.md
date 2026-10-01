@@ -1237,20 +1237,20 @@ requirements, and neither pass saw the other's file before this join.
 | --- | --- | --- |
 | `US1-TC1-1`, `US1-TC2-1` | Covered | `grade10-site-vault-case-intake-SC-05`, `grade10-site-vault-case-intake-SC-06`, `grade10-site-vault-case-intake-SC-13`, `grade10-site-vault-case-intake-SC-14`, `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` — the two lanes walked end to end |
 | `US1-TC3-1`, `US1-TC4-1` | Folded | `grade10-site-vault-case-intake-SC-24` and `grade10-site-vault-case-intake-SC-25`. The durable requirement `A request states one item, in the brand's own currency` tables the 200 and 2,000 character caps and no scenario stated them; the change now opens that requirement in a MODIFIED block and the two scenarios land there |
-| `US1-TC5-1`, `US1-TC7-1` | Folded; question landed | `grade10-site-vault-case-intake-SC-28` and `grade10-site-vault-case-intake-SC-29`, in a MODIFIED block on the photograph requirement, which now names the cap in bytes, 20,971,520, so the bound cannot move with a rounded megabyte. Whether the cap also bounds the ten together landed as `Q57` — it does not |
+| `US1-TC5-1`, `US1-TC7-1` | Folded; question landed | `grade10-site-vault-case-intake-SC-28` and `grade10-site-vault-case-intake-SC-29`, in a MODIFIED block on the photograph requirement, which now names the cap in bytes, 20,971,520, so the bound cannot move with a rounded megabyte. Whether the cap also bounds the ten together landed as Q57 — it does not |
 | `US1-TC6-1` | Covered | `grade10-site-vault-case-intake-SC-08` |
 | `US1-TC8-1` | Covered | `grade10-site-vault-case-intake-SC-09` |
-| `US1-TC9-1` | Covered; question landed | A zero-byte JPEG is not one of the three image types, so `grade10-site-vault-case-intake-SC-09` refuses it by name; the blind pass's question about what the empty refusal catches landed as `Q57` |
+| `US1-TC9-1` | Covered; question landed | A zero-byte JPEG is not one of the three image types, so `grade10-site-vault-case-intake-SC-09` refuses it by name; the blind pass's question about what the empty refusal catches landed as Q57 |
 | `US1-TC10-1` | Covered | `grade10-site-vault-case-intake-SC-13` |
 | `US1-TC11-1` | Covered | `grade10-site-vault-case-intake-SC-11` |
 | `US1-TC12-1` | Covered | `grade10-site-vault-case-intake-SC-12` |
 | `US1-TC13-1` | Folded | `grade10-site-vault-case-intake-SC-30`, in a MODIFIED block on `A photograph is stored without its location and read under a trail`, which states the ledger and had no scenario for a recorded read |
 | `US1-TC14-1` | Covered | `grade10-site-vault-case-intake-SC-07` |
 | `US1-TC15-1` | Covered | `grade10-site-vault-case-intake-SC-01` |
-| `US1-TC16-1` | Covered by another capability | `grade10-site-vault-case-lifecycle-SC-04` — a case that moved under the caller is refused by name; the blind pass's question about what produces `request.caseConflict` landed as `Q58`, and the design's Moved on state closes on that same scenario |
+| `US1-TC16-1` | Covered by another capability | `grade10-site-vault-case-lifecycle-SC-04` — a case that moved under the caller is refused by name; the blind pass's question about what produces `request.caseConflict` landed as Q58, and the design's Moved on state closes on that same scenario |
 | `US1-TC17-1`, `US1-TC19-1` | Covered; question escalated | `grade10-site-vault-case-intake-SC-04` stores one canonical number however it was typed, and the number is optional by the requirement's table; which typed forms count as one person is decided on `collector-pages.md` |
 | `US1-TC18-1` | Folded | `grade10-site-vault-case-intake-SC-26`. The requirement now says a number the brand's plan cannot read is refused by name, as the worker already refuses it; which typed forms count as one person is decided on `collector-pages.md` |
-| `US1-TC20-1` | Covered; question landed | `grade10-site-vault-case-intake-SC-03`; whether the amount field shows the brand's currency to the collector landed as `Q56` |
+| `US1-TC20-1` | Covered; question landed | `grade10-site-vault-case-intake-SC-03`; whether the amount field shows the brand's currency to the collector landed as Q56 |
 | `US4-TC1-1`, `US4-TC2-1`, `US4-TC3-1` | Covered | `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` |
 | `US4-TC4-1` | Covered | `grade10-site-vault-case-intake-SC-16` |
 | `US4-TC5-1` | Covered | `grade10-site-vault-case-intake-SC-18`, now outside production alone |

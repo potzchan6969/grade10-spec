@@ -807,8 +807,8 @@ question the rulings left open.
 | `grade10-site-vault-visit-booking-US4-TC11-1` | Case added | walks `grade10-site-vault-visit-booking-SC-20`, the standing visit read on the case, which no case reached |
 | `grade10-site-vault-visit-booking-US4-TC12-1` | Case added | walks `grade10-site-vault-visit-booking-SC-26`; `grade10-site/vault/collector-notifications`' suite carries no case for the file the visit's messages attach |
 | `grade10-site-vault-visit-booking-SC-23` | Out of suite | the `caseOwner` guard on `GET /api/cases/:caseId/visit.ics`, in the vault backend's route test; a case here traces a journey, and nobody walks a stranger's fetch |
-| Raised: does a sibling case offer a picker of its own? | Folded | `grade10-site-vault-visit-booking-SC-30`, landed as `Q32` in `decisions.md` |
-| Raised: may a move pick a different shop? | Folded | `grade10-site-vault-visit-booking-SC-27`, landed as `Q33` in `decisions.md` |
+| Raised: does a sibling case offer a picker of its own? | Folded | `grade10-site-vault-visit-booking-SC-30`, landed as Q32 in `decisions.md` |
+| Raised: may a move pick a different shop? | Folded | `grade10-site-vault-visit-booking-SC-27`, landed as Q33 in `decisions.md` |
 | `grade10-site-vault-visit-booking-SC-31` | Case added, added after the run | `grade10-site-vault-visit-booking-US4-TC13-1`: a move never offers the visit's own current slot back, since the diary already counts it taken |
 
 ### Manual

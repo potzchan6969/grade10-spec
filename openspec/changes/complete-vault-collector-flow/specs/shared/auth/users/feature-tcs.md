@@ -7,7 +7,8 @@
 
 **As an** operator who can ban,
 **I want** a ban to stop money-moving and sign-in, and an unban to restore them,
-**so that** a person who must leave cannot keep acting, and a mistaken ban is reversible.
+**so that** a person who must leave cannot keep acting, a mistaken ban is
+reversible, and a compromised admin cannot lock peer admins out by ban.
 
 ### shared-auth-users-US2-TC1-1: Ban stops money-moving and sign-in
 
@@ -15,8 +16,8 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
+* **Status:** actual
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
@@ -24,23 +25,34 @@
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned and signed in.
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is unbanned and signed in on <grade10 store url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An unbanned account |
+| <subject email> | That account's email |
+| <ban reason> | Account closed after a ticket |
 
 **Steps:**
 
-1. Ban <a subject user id>.
-2. Try a money-moving action as that person.
-3. Complete a sign-in method as that person.
-4. Ask a product who is calling on that person's existing session.
+1. On <grade10 admin users url>, ban <subject user id> with <ban reason> and confirm.
+2. In the pre-ban store session, start a payment.
+3. Sign in as <subject email> on <grade10 sign-in url>.
+4. Reopen <grade10 store url> in the pre-ban session.
 
 **Expected Results:**
 
-* That person cannot complete a money-moving action.
-* Completing a sign-in method does not sign them in.
-* A product reading who is calling reports no person.
+* The payment does not complete.
+* Sign-in does not start a session.
+* The store shows nobody signed in.
+* <subject user id> stays listed, marked banned.
 
 ### shared-auth-users-US2-TC2-1: Unban lets the person sign in again
 
@@ -48,28 +60,37 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** none
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
-<a subject user id> is banned. Signed in as an operator who can ban.
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is banned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | A banned account |
+| <subject email> | That account's email |
 
 **Steps:**
 
-1. Unban <a subject user id>.
-2. Complete a sign-in method as that person.
+1. On <grade10 admin users url>, unban <subject user id>.
+2. Complete sign-in as <subject email> on <grade10 sign-in url>.
 
 **Expected Results:**
 
-* That person can sign in again.
+* <subject email> is signed in.
 
 ### shared-auth-users-US2-TC3-1: Caller without the ban grant is refused
 
@@ -77,28 +98,36 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** none
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
 
 **Pre-conditions:**
-Signed in as an operator who does not hold `user:ban`. <a subject user id> is unbanned.
+
+* admin(does not hold `user:ban`) is signed in.
+* <subject user id> is unbanned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An unbanned account |
 
 **Steps:**
 
-1. Try to ban <a subject user id>.
+1. On <grade10 admin users url>, try to ban <subject user id>.
 
 **Expected Results:**
 
-* The system refuses the request.
-* The account remains unbanned.
+* The directory refuses the ban.
+* <subject user id> stays unbanned.
 
 ### shared-auth-users-US2-TC4-1: Operator cannot ban themselves
 
@@ -106,53 +135,69 @@ Signed in as an operator who does not hold `user:ban`. <a subject user id> is un
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** none
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
-Signed in as an operator who holds `user:ban`.
+
+* admin(holds `user:ban`) is signed in.
+* The signed-in account is unbanned.
 
 **Steps:**
 
-1. Try to ban the operator's own account.
+1. On <grade10 admin users url>, try to ban the signed-in account.
 
 **Expected Results:**
 
-* The system refuses the request.
-* Their account remains unbanned.
+* The directory refuses the ban.
+* The signed-in account stays unbanned.
 
-### shared-auth-users-US2-TC5-1: Support cannot ban an admin
+### shared-auth-users-US2-TC5-1: No caller bans an account that holds admin
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** none
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
+
 **Pre-conditions:**
-Signed in as an operator whose role is `support`. <an admin user id> holds `admin`.
+
+* The row's caller is signed in and holds `user:ban`.
+* The row's subject holds `admin` and is unbanned.
+
+**Test data:**
+
+| Caller | Subject | Outcome |
+| --- | --- | --- |
+| admin(role `support`, holds `user:ban`) | <admin user id> | Ban is refused. The account stays unbanned. |
+| admin(holds `admin` and `user:ban`) | <peer admin user id>, a different account | Ban is refused. The account stays unbanned. |
 
 **Steps:**
 
-1. Try to ban <an admin user id>.
+1. On <grade10 admin users url>, try to ban the row's subject.
 
 **Expected Results:**
 
-* The system refuses the request.
-* The account remains unbanned.
+* The directory answers as the row's outcome states.
 
 ### shared-auth-users-US2-TC6-1: Last admin cannot be banned
 
@@ -160,7 +205,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
@@ -170,7 +215,8 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who can ban. <an admin user id> is the only account that holds `admin`.
+
+* Signed in as an operator who can ban. <an admin user id> is the only account that holds `admin`.
 
 **Steps:**
 
@@ -181,7 +227,37 @@ Signed in as an operator who can ban. <an admin user id> is the only account tha
 * The system refuses the request.
 * The account remains unbanned.
 
-### shared-auth-users-US2-TC7-1: An operator's erasure filing bans the account
+### shared-auth-users-US2-TC7-1: A cached browse read of a banned account closes on the very next read
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:ban`) is signed in.
+* <subject user id> is unbanned, signed in, and an ordinary browse read of the store has already warmed its session cache.
+
+**Steps:**
+
+1. Read <subject user id>'s signed-in state on <grade10 store url> (an ordinary browse read).
+2. On <grade10 admin users url>, ban <subject user id>.
+3. Immediately read <subject user id>'s signed-in state, the same way as step 1.
+
+**Expected Results:**
+
+* Step 3 shows nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
+* <subject user id> stays listed, marked banned.
+### shared-auth-users-US2-TC8-1: An operator's erasure filing bans the account
 
 **Classification:**
 
@@ -211,7 +287,7 @@ Signed in as an operator who holds `user:delete`. <a subject user id> holds no o
 * One open erasure request stands for that person.
 * Completing a sign-in method does not sign them in.
 
-### shared-auth-users-US2-TC8-1: Cancelling an operator's request lets the person back in
+### shared-auth-users-US2-TC9-1: Cancelling an operator's request lets the person back in
 
 **Classification:**
 
@@ -239,7 +315,7 @@ Signed in as an operator who holds `user:delete`. <a subject user id> is banned 
 * The request closes as cancelled.
 * That person can sign in again.
 
-### shared-auth-users-US2-TC9-1: A cancel leaves a ban the filing did not apply
+### shared-auth-users-US2-TC10-1: A cancel leaves a ban the filing did not apply
 
 **Classification:**
 
@@ -267,7 +343,7 @@ Signed in as an operator who holds `user:delete`. <a subject user id> was banned
 * The account is still banned.
 * Completing a sign-in method does not sign them in.
 
-### shared-auth-users-US2-TC10-1: An erasure request over an admin is refused
+### shared-auth-users-US2-TC11-1: An erasure request over an admin is refused
 
 **Classification:**
 
@@ -298,7 +374,7 @@ Signed in as an operator who holds `user:delete`. <an admin user id> holds `admi
 * That person can still sign in.
 
 
-### shared-auth-users-US2-TC11-1: Ban and unban are refused while an erasure request is open
+### shared-auth-users-US2-TC12-1: Ban and unban are refused while an erasure request is open
 
 Runs once per row of **Test data**.
 
@@ -645,7 +721,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `shared-auth-users-US2-TC1-1` to `shared-auth-users-US2-TC6-1` | Carried | ban and unban behaviour the durable spec already states and this delta does not touch; the cases came across with the journey |
+| `shared-auth-users-US2-TC1-1` to `shared-auth-users-US2-TC7-1` | Carried | ban and unban behaviour the durable spec already states and this delta does not touch; the cases came across with the journey as the durable suite words them, and the erasure cases take the ids after them |
 | `shared-auth-users-US6-TC1-1` | Joined | `shared-auth-users-SC-45` |
 | `shared-auth-users-US6-TC2-1` | Joined | `shared-auth-users-SC-46` |
 | `shared-auth-users-US6-TC3-1` | Joined | `shared-auth-users-SC-47` |
@@ -658,19 +734,17 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond `shared-auth-users-SC-44`, which already lets a new request be filed once none is open |
 | Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-48`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
 | `shared-auth-users-SC-43` | Case added | `shared-auth-users-US6-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
-| `shared-auth-users-SC-49` | Case added | `shared-auth-users-US2-TC7-1` |
-| `shared-auth-users-SC-50` | Case added | `shared-auth-users-US2-TC8-1` |
-| `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC9-1` |
-| `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC10-1` |
-| `shared-auth-users-SC-42` | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC11-1` walks it, a row per filer |
+| `shared-auth-users-SC-49` | Case added | `shared-auth-users-US2-TC8-1` |
+| `shared-auth-users-SC-50` | Case added | `shared-auth-users-US2-TC9-1` |
+| `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC10-1` |
+| `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC11-1` |
+| `shared-auth-users-SC-42` | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC12-1` walks it, a row per filer |
 | Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-45`, `shared-auth-users-SC-46`, `shared-auth-users-SC-47`, `shared-auth-users-SC-44` and `shared-auth-users-SC-48`, beside the vault scenarios that state what the same rows render |
 
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `shared-auth-users-US2-TC1-1` | a person drives a money-moving action at the counter and reads the refusal; the sign-in and the who-is-calling read are scriptable |
-| `shared-auth-users-US2-TC2-1` | a person completes a real sign-in method after the unban |
 | `shared-auth-users-US6-TC1-1` | a person reads the confirmation: that it names the seven days and says the ask can be cancelled inside them |
 | `shared-auth-users-US6-TC2-1` | a person signs in while their own request is open, through the method they would really use |
 | `shared-auth-users-US6-TC3-1` | a person reads the page back to Ask available after the cancel |
