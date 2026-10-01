@@ -708,7 +708,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 16.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 17. The console's queue, case tabs and identity panel (grade10)
+## 17. The console's queue, case tabs and identity panel (grade10) (owner: @ecchochan)
 
 - [x] 17.1 Cover the console's reads and tabs: a count on every cut, the Today
       block in slot order and a day with none, the collector's word on a row,
