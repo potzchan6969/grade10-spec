@@ -4,3 +4,5 @@ page_waived: "predates the page rule"
 hands:
   pm: "@ecchochan"
   dev: "@ecchochan"
+reviewed:
+  user-journeys: 896ea23d
