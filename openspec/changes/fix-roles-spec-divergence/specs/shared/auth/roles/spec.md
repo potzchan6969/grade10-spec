@@ -13,6 +13,7 @@
 - What a role holds
   - Split by cost: in the vault, running a case, setting what it costs and moving its money are separate actions; staff and treasurer share no vault money grant
   - Identity documents: reached by a grant of their own, never by running a flow
+  - Two people on an approval: one person may hold staff and treasurer, and nobody approves an act they recorded
 
 ## MODIFIED Requirements
 
@@ -67,8 +68,7 @@ identity document.
 
 A person who holds several operator roles SHALL receive the union of those
 roles' grants. A person holding `staff` and `treasurer` therefore holds both
-sides of the vault split: the vocabulary does not refuse the pair, and giving
-the two roles to different people is a provisioning choice. Operators SHALL
+sides of the vault split, and the pair SHALL NOT be refused. Operators SHALL
 change who holds a role, and SHALL NOT change what a role grants.
 
 <!-- trace:scenario id=g10.shared-roles.SC-xb7 rev=1 -->
@@ -217,3 +217,23 @@ stays with the flow that needs it.
 - **THEN** it holds exactly the eleven resources and their actions in the
   table, in that order
 - **AND** it holds no `finance` resource and no `kyc:write`
+
+### Requirement: Nobody approves an act they recorded
+
+One person MAY hold both `staff` and `treasurer`. An act that approves
+another act SHALL NOT be taken by the person who recorded that act, whatever
+roles they hold, so a step that needs two people still needs two:
+
+| Act | Refused to |
+| --- | --- |
+| Recording a vault payout | the person who made the offer it pays out |
+| Reversing a vault money row | the person who recorded that row |
+| Approving a grading waiver, payout, payout reversal, setting or fee-sheet row | the person who asked for it |
+
+#### Scenario: shared-auth-roles-SC-22 - One person holding staff and treasurer cannot approve their own act
+**Serves:** shared-auth-roles-US-03 - Case work and money are separate grants
+
+- **GIVEN** a person holding `staff` and `treasurer`
+- **WHEN** they make an offer on a vault case and then try to record its payout
+- **THEN** the offer is made and the payout is refused
+- **AND** a second person holding `vault:payout` may record that payout

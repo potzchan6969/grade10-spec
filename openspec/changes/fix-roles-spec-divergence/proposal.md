@@ -39,9 +39,10 @@ An engineer building from this spec alone — which is what a durable spec is fo
   it outlive the case, and reading a case is not reading the person.
 - **Replace the role table with the shipped one**, every grant, in order.
 - **Say what the split between `staff` and `treasurer` does and does not
-  buy.** They are disjoint on every action that moves money. They are not
-  mutually exclusive, and grants stack, so the separation is a provisioning
-  practice rather than something the vocabulary enforces.
+  buy.** They are disjoint on every action that moves money. One person may
+  hold both and the grants stack, so two people on money comes from the rule
+  that nobody approves an act they recorded (Q9), which vault and grading
+  already enforce.
 
 Goals and non-goals are in [`decisions.md`](decisions.md).
 
@@ -70,7 +71,4 @@ Goals and non-goals are in [`decisions.md`](decisions.md).
 
 ## Open questions
 
-- ❓ **Whether one person may hold both `staff` and `treasurer`.** The grants
-  are disjoint; the roles are not exclusive, and a person holding both gets the
-  union. Whether provisioning should refuse the pair is unowned. *Owner:
-  whoever owns operator provisioning.*
+None; whether one person may hold both `staff` and `treasurer` is Q9.

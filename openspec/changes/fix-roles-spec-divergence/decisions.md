@@ -24,6 +24,7 @@
 | Q6 | Is the signed document printed from an identity capture behind `kyc:read` too? | Yes: both documents sit behind `kyc:read`, and `vault:read` reaches neither - settled by the identity documents requirement (Q2) | The signed document behind `vault:read`, which lets reading a case read the person's printed identity |
 | Q7 | Does `staff` hold `vault:approve` beside `vault:operate`? | Yes: staff run a vault case and set its cost, and only `treasurer` moves its money - settled by the role table (Q1) | A third role setting the vault cost, which no code ships; splitting `operate` from `approve` is a non-goal |
 | Q8 | Is a refused read of an identity document recorded on an audit trail? | No trail is owed: `shared/auth/audit` records refusals of ban, unban, set-role and revoke only, and `grade10-admin/vault/operator-queue` files acts that change a case and reads that declare an entry - settled by those specs | A roles rule trailing every refused grant, which belongs to a trail's own capability rather than to the vocabulary |
+| Q9 | May one person hold both `staff` and `treasurer`? | Yes; the grants stack, and no act that approves another is taken by the person who recorded it, so a step that needs two people still needs two - decided by the product owner, 2026-10-01 | Refusing the pair at provisioning, which a small shop cannot staff; allowing it with no further rule, which lets one person record and approve the same money |
 
 ## Raised
 

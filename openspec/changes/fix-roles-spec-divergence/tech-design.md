@@ -26,6 +26,18 @@ Tests today:
   treasurer refused the identity capture and the signed document, staff
   served them.
 
+Approvals already refuse their own recorder (Q9, `shared-auth-roles-SC-22`):
+
+| Act | Where |
+| --- | --- |
+| Vault payout refused to the offer's maker | `packages/vault/backend/src/money/payout.ts` `recordPayout`, `offer.madeBy === args.staffId` |
+| Vault money reversal refused to its recorder | `packages/vault/backend/src/money/reverse.ts`, `reversed.recordedBy === args.staffId` |
+| Grading waiver, payout and reversal approvals; setting and fee-sheet approvals | `packages/grading/backend/src/counter/approvers.ts` `requireSecondApprover` (`SAME_APPROVER`), called from `counter/approvals.ts` and `settings/approvals.ts`; the `fourEyes` check constraint in `db/schema/fourEyes.ts` on every table with a recorder and an approver |
+
+Tests that exercise them: `apps/backend/grade10/vault/test/db/money.spec.ts`,
+`packages/grading/backend/test/counter/approvals.repo.test.ts` and
+`packages/grading/backend/test/settings/approvals.repo.test.ts`.
+
 ## Goals / Non-Goals
 
 **Goals:**
@@ -92,6 +104,5 @@ lands as tests only.
 - [A grant changes in code between claim and archive] → archive preflight
   compares the claimed baseline with the durable contract and asks for an
   acknowledgement.
-- [A person is provisioned with `staff` and `treasurer`] → nothing in code
-  refuses it, and the open question in the proposal owns any refusal; no
-  scenario fixes the pair's stacking, so an answer either way retires none.
+- [A person is provisioned with `staff` and `treasurer`] → allowed (Q9); the
+  approval checks below keep each two-person step at two people.

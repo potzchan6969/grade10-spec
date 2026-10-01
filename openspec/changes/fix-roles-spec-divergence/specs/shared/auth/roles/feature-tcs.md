@@ -268,12 +268,53 @@
 * Step 1 shows the case.
 * Steps 2 and 3 are refused; neither document shows.
 
+### shared-auth-roles-US3-TC5-1: One person holding staff and treasurer cannot pay out their own offer
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-03
+
+**Pre-conditions:**
+
+* admin(holds `staff` and `treasurer`) is on <grade10 admin vault url>.
+* <second operator> holds `treasurer` only.
+* <vault case> is awaiting an agreed cost.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <vault case> | A vault case in progress with no cost agreed |
+| <second operator> | Another operator, holding `treasurer` only |
+
+**Steps:**
+
+1. Make an offer on <vault case> and have the customer accept it.
+2. Try to pay out <vault case>.
+3. As <second operator>, pay out <vault case>.
+
+**Expected Results:**
+
+* The offer is made.
+* Step 2 is refused and <vault case> shows no payout.
+* Step 3 is allowed and <vault case> shows the payout.
+
 ## Settled
 
 - **Treasurer and the case** - a treasurer reads the vault case it pays against, and is refused its identity document, starting a valuation on it and making it an offer (Q4)
 - **Admin and the whole vocabulary** - `admin` holds every declared permission, the vault payout and the identity read included, so one admin can do both (Q5)
 - **The signed document** - the signed document printed from an identity capture sits behind `kyc:read` as the capture does, and reading the case reaches neither (Q6)
 - **Staff and the vault cost** - `staff` hold `vault:approve` beside `vault:operate`, so staff set a case's cost and `treasurer` alone moves its money (Q7)
+- **Staff and treasurer together** - one person may hold both; nobody approves an act they recorded, so the offer's maker is refused its payout (Q9)
 - **A refused document read** - no trail is owed for it: the identity trail records refusals of ban, unban, set-role and revoke, and the vault trail files acts that change a case and reads that declare an entry (Q8)
 
 ## Reconciliation
@@ -281,12 +322,12 @@
 **Run:** QA2, 2026-10-01. QA1's blind pass read the Feature set, the journeys, the proposal, `decisions.md`, the roles PRD page, the durable roles suite and `shared/auth/domain-tcs.md` with their Reconciliation stripped, and the two rulebooks; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. After it ran, the non-anchor leaf "Split by cost" was clarified to name running a flow, setting its cost and moving money as separate actions, with no vault money grant shared by staff and treasurer, and acceptance review later narrowed it to the vault; no QA1 case read the leaf otherwise. QA2 read QA1's suite and raised list, the delta spec, `tech-design.md`, `tasks.md`, the durable spec and suite, and `ROLE_PERMISSIONS` in grade10's `packages/grade10-auth/contracts/src/schemas.ts`. It is a statement, not proof.
 
 - **Raised, answered by the scenario pass** - all five rows, landed as Q4 to Q8: the treasurer reads the case it pays against (`shared-auth-roles-SC-13`; `shared-auth-roles-US3-TC3-1` gains the read); admin holds the payout and the identity read (`shared-auth-roles-SC-18`, out of suite); the signed document sits behind `kyc:read` (`shared-auth-roles-SC-11`; `shared-auth-roles-US3-TC1-1` and `shared-auth-roles-US3-TC4-1` open both documents); staff hold `vault:approve` (`shared-auth-roles-SC-12`; `shared-auth-roles-US3-TC2-1`); a refused document read owes no trail, by `shared/auth/audit` and `grade10-admin/vault/operator-queue`, so no case here asserts one
-- **Raised, escalated** - none; the staff-and-treasurer pair is the proposal's open question and open on the PRD, raised by no reader, and no case fixes it either way
+- **Raised, escalated** - none; the staff-and-treasurer pair, the proposal's open question and raised by no reader, was answered by the product owner as Q9 after this run
 - **Raised, rejected** - none
 - **Joined** - `shared-auth-roles-SC-16` into `shared-auth-roles-US2-TC11-1`, which gains the order read, the shipment, the operate action, the catalogue write and the vault case, and whose refund refusal also reaches the durable `shared-auth-roles-SC-15`; `shared-auth-roles-SC-12` into `shared-auth-roles-US3-TC2-1`, which gains the repayment, the money book and the auction payment; `shared-auth-roles-SC-13` into `shared-auth-roles-US3-TC3-1`; `shared-auth-roles-SC-11` into `shared-auth-roles-US3-TC4-1`, which gains the signed document; the durable `shared-auth-roles-SC-07a`, which no durable case reaches, into `shared-auth-roles-US2-TC14-1`'s catalogue write
-- **Added by QA2** - `shared-auth-roles-US2-TC14-1` for `shared-auth-roles-SC-19`, staff at the grading counter, bookings and stock, which no blind case reached
+- **Added by QA2** - `shared-auth-roles-US2-TC14-1` for `shared-auth-roles-SC-19`, staff at the grading counter, bookings and stock, which no blind case reached; `shared-auth-roles-US3-TC5-1` for `shared-auth-roles-SC-22`, added with Q9: one person holding both roles is refused the payout of their own offer, and a second person records it
 - **Dropped as unobservable** - acceptance review dropped `shared-auth-roles-US2-TC10-1`, `shared-auth-roles-US2-TC12-1` and `shared-auth-roles-US2-TC13-1`: none is runnable or observable at api or e2e as written. Their scenarios `shared-auth-roles-SC-20`, `shared-auth-roles-SC-18` and `shared-auth-roles-SC-21` are out of suite, each with its verifier in grade10's `packages/grade10-auth/contracts/test/roles.test.ts` named on the suite's `**Out of suite:**` line. The unknown-name and undeclared-permission refusals stay with the durable `shared-auth-roles-US1-TC2-1` and `shared-auth-roles-US2-TC3-1` and the units. The operator-visible permission list is the Permissions tab, which `grade10-admin/console/roles-and-permissions` owns and walks
 - **Patched, not re-run** - `shared-auth-roles-US3-TC2-1` and `shared-auth-roles-US3-TC3-1` name the vault acts by the spec's words, starting a valuation for the operate action and an offer for the cost. Both keep `<v>`
 - **Kept beside a near neighbour** - `shared-auth-roles-US3-TC4-1` beside `shared-auth-roles-US3-TC3-1`: the first holds the grant rule for both documents, whoever holds `vault:read`; the second the treasurer's whole split
 - **Contradicted** - none: every QA1 outcome agrees with the delta's role table and `ROLE_PERMISSIONS`
-- **Uncovered anchors** - none: `shared-auth-roles-US-02` has two new cases beside the durable nine, `shared-auth-roles-US-03` has four; the Feature set's "Split by cost" and "Identity documents" leaves are walked by `shared-auth-roles-US3-TC2-1`, `shared-auth-roles-US3-TC3-1` and `shared-auth-roles-US3-TC4-1`, and "Resources and actions" by the durable `shared-auth-roles-US2-TC3-1`
+- **Uncovered anchors** - none: `shared-auth-roles-US-02` has two new cases beside the durable nine, `shared-auth-roles-US-03` has five; the Feature set's "Two people on an approval" leaf is walked by `shared-auth-roles-US3-TC5-1`, and its "Split by cost" and "Identity documents" leaves by `shared-auth-roles-US3-TC2-1`, `shared-auth-roles-US3-TC3-1` and `shared-auth-roles-US3-TC4-1`, and "Resources and actions" by the durable `shared-auth-roles-US2-TC3-1`
