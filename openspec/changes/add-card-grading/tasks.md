@@ -2587,7 +2587,7 @@ Lands once groups 1 to 34 and 36 are green and the change is deployed.
       `pnpm run validate:changes add-card-grading`,
       `pnpm run archive:preflight add-card-grading`
 
-## 36. The batch list, a new batch, the receiving lines and the notice's address (grade10)
+## 36. The batch list, a new batch, the receiving lines and the notice's address (grade10) (owner: @ecchochan)
 
 The worker's side of group 30, after groups 17 and 24. Its first task lands
 the types group 30 builds against; group 30's reads and acts answer once the
