@@ -483,7 +483,7 @@ Every other application group reads this one's exports. Stage (b).
 - [x] 10.7 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
-## 11. The plan, the paste and the collector's own acts (grade10)
+## 11. The plan, the paste and the collector's own acts (grade10) (owner: @ecchochan)
 
 Stage (b).
 
