@@ -137,7 +137,7 @@ Lands once every grade10 group is green and its implementation verified.
 - [ ] 5.7 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
-## 6. The silent endings and the removal (grade10)
+## 6. The silent endings and the removal (grade10) (owner: @ecchochan)
 
 - [ ] 6.1 Cover the endings of a draft staff opened: the staff cancel and the
       clock each moving and purging in one transaction with no letter drafted
