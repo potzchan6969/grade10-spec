@@ -30,6 +30,10 @@ can hold roles it should not, but it cannot invent a permission for one.
 - 🚧 **Moving items** — `inventory:transfer`, held by `staff` and `admin`;
   moving an item to a new owner and opening its proof —
   [Items](/p/grade10-admin/inventory/items#permissions)
+- ❓ **Staff and treasurer together** — `staff` and `treasurer` share no money
+  grant, but nothing stops one person holding both, and grants stack, so that
+  person holds both sides of the split. Whoever owns operator provisioning decides
+  whether the pair is refused
 
 :::detail{title="Gate layers" for="operator"}
 Permissions are only the first of three layers, all fail-closed. An elevated
