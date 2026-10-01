@@ -324,7 +324,7 @@ Q27 stands open on the designer's boards.
 - [ ] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build`
 
-## 10. The collector page (grade10)
+## 10. The collector page (grade10) (owner: @ecchochan)
 
 - [ ] 10.1 Cover the page against the fixture transport: the address under
       the Vault entry, the refusal without `vault:read`, the header for staff,
