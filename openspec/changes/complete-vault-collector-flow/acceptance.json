@@ -1,0 +1,771 @@
+{
+  "version": 2,
+  "change": "complete-vault-collector-flow",
+  "baseline": "6624af78aba6b68efb050bfd01a567198bf1b4b4480840d9f556671d33022775",
+  "fingerprint": "1da1f8c02bfcced603e674c6276126d17e8ce56ee7dad59c0641edad96b1ea03",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-01T06:50:08.860Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/platform/account-data.md#erasure",
+      "sha256": "4a173ff8cafc93acbf6e66e3ca72b515b313b4c4477d4799777aee1b698a4c8b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/case-lifecycle.md#exits",
+      "sha256": "2ca9ca9f3f64b8759e7d9f532cc3cd3423c2aca6d498f1e8d4da10888eccb1d9",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/case-lifecycle.md#timers",
+      "sha256": "2eaf1d53fd2aeffcec9977f5b3db8022e4976a9966ef1c5a3cc92e0c16503e07",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#booking-a-visit",
+      "sha256": "2aff2822e80d65e6e2f561d1a9d094249d0ef95e798032930e939da5cca05b24",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#case-page",
+      "sha256": "21c8208a90c6b033150d76688c25986e79a23661b72c942f4b9defd1a976692e",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#messages",
+      "sha256": "1d20a185feb78312dac11ce4753e893953c10e114a5981cf58969ad226c02519",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard",
+      "sha256": "f32ce8557f9e685ca4225d2159713a9035cd934b9f7a4f7ddc98784061dc3ec7",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/compliance-and-readiness.md#before-the-first-production-case",
+      "sha256": "989b213a87fc14230cec17a82f839552febc3c39cfd8c2fd96153e9a3e6c3a81",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/compliance-and-readiness.md#retention-and-erasure",
+      "sha256": "1c0ada223e6f140d214a16c8ed16327b714ff9765ba3530111b16749a8fe26d6",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/documents-and-signing.md#document-terms",
+      "sha256": "2c76b4813d2052828b6077b3b9959fce3067f0d62b8d91e7bfcca5715869ed3b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/identity-check.md#identity-states",
+      "sha256": "b7c62b957f0661c07168003851e9b7765aaa37db98c27678984c0b7bfb2881e8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/loan-and-money.md#reading-the-book",
+      "sha256": "ce8a124d24745ba9e481a0b65dad5bbde9cc7fa6afb58d6254085f7fe699d457",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/loan-and-money.md#records",
+      "sha256": "461a81a9e7b75b612318ec6ed3cee2b3c56cd16bb25b047d93b6e666c45d1155",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#one-case",
+      "sha256": "fac9944fbe2599a98fac0c46799850e51191bdea97236c39e38fe7fea3a58f34",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#queue",
+      "sha256": "e2e271d6f4e7a1ada1faa005392cc79e4e1b7a3aee12c437d5e60331688504f8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/auth/users.md#erasure",
+      "sha256": "e8ca3aa55793d5885f97a0866b8cff9cdad34687cf10a1506a04564c16c200e8",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/decisions.md",
+      "sha256": "10a864ffae9c85c1ca4aecfa20d01b89791b1078fc4c496e1562f26f42ecad22",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/proposal.md",
+      "sha256": "a980710baee2d167d2873b197c97a575e70608eee31ad1fd28d7846f69385de1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-admin/vault/money-book/feature-tcs.md",
+      "sha256": "37ec06474714a7d0d499eefdc2dc4129ec7c5a79a2a4180fbe18e074eb175284",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-admin/vault/money-book/spec.md",
+      "sha256": "043cb900646cf35a7439de1eca769da38ac57d31a11ce08720d53850f79b32aa",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-admin/vault/money-book/user-journeys.md",
+      "sha256": "92011e3e4489187630c2e17f071a10f8bb51d3fca66313174588db0281ab9c3d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "b122820c5d7898c8b18f5ea0bd6b491cf8a46b3fe6896e8dded880cbd95492c2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "36e346b5311c2bec90faeeb359ee559fe2b08e1c7673f5ece3666612733aa248",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "93e2a1ff685efe9fb02e1149a51ac81940fe8ba99fc602310668e7e94d3ad72c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "09c1af228b92606aa9bdc3b63e8daea642127cb7b9a9d4261c9b0e8330b05eca",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "8d6883959c1feaff2f6b5c8c5f19d9911e00f905c00a409a23881a33d5501629",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "ff29ab2ce7c1e09dfe3636952608ec81a9faa806913aaab9c529033eb75a5ee0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+      "sha256": "df37dd2337e55bb5f6256e34d130ef68aabfa7ab9888d2f6f788aa3e2aa63dd9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/case-lifecycle/spec.md",
+      "sha256": "e853d439941ceb97452caf4c847a9b29838c625374e0d2f0065aa54245d1e899",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+      "sha256": "5a37dc56901387f694527ba0721be15e96887aad79d914565747bc870162d294",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/collector-notifications/feature-tcs.md",
+      "sha256": "fce50c6b3bc104befd86198238a931b575b6e431494585377677bb07a35136be",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/collector-notifications/spec.md",
+      "sha256": "9c4d9f9ab75d1eadbdc59ea53a38346ae38288f12dd10a65015b68f128057cc7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/collector-notifications/user-journeys.md",
+      "sha256": "65a0f857d7b1a3bfc58f64ac03d6e089a52992fb820b7c7025bb78fa7faa3d1c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "sha256": "d21cb9afee9b1cff75aaf9abbb9c66a9c2bbbdb4f070fa97a27c2c710220be6d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "sha256": "41f1e4866e07dbaa735cb087de727e072b1aadd67d8619d47a9d9cd94a5dbb14",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "sha256": "394ba14fcc8e7c8db9506b0f98eac6c784dccf91c973c1aad64e854cfdd725ec",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/loan-and-settlement/feature-tcs.md",
+      "sha256": "89d7538ef11c3b17c284b71613dd66a4baf433693c3fd8fcee9a52686e0d1481",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/loan-and-settlement/spec.md",
+      "sha256": "831794d12c60ddaa3119699291a0d0a3a20bbb1e688e976ff273fe8304eaf5e0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/loan-and-settlement/user-journeys.md",
+      "sha256": "dc6883de1734e40ea4ed61a22c93a3e1f6dd6d8deabd60c47dc7db2688bb20a8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+      "sha256": "bb768c677364223ee90bd2d5391af17db52cafcc98e96a9fa1880fc74f49000d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/retention-and-erasure/spec.md",
+      "sha256": "ec9475eeaad11f417c1597072f15da33d1dcb6dd0cb60a6b01c151aca57f66e2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+      "sha256": "3876618032f409cab30f41414cf0bd0648f7f4b31ccfbcf8d0e69e446d573c2c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+      "sha256": "9ae25326b00f4ac7f2096a9aae4a0f5d4b3197d98ee6e79e9c15f1d3397e837b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/valuation-and-offer/spec.md",
+      "sha256": "4cd9a67ead51c65dfcf66ee78f2b75f41bd95a4a9a6c2eb4f974bc45e2d4a122",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+      "sha256": "b7bb5660ebbd75358bacc2154fe8cf5427ec9eac895a1b337247b2083eb00f25",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/visit-booking/feature-tcs.md",
+      "sha256": "8857aa7da5b93979fec76ea1804debe07c8af69be51bc3fb3493b12632e6580b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/visit-booking/spec.md",
+      "sha256": "7ccc24da41b3b581a2bde604f630f0eb0c61d86828d334e79dc051b0091ebf91",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/grade10-site/vault/visit-booking/user-journeys.md",
+      "sha256": "4fc851a824123682e583016e185106dce730e4fe29cf988c6a5345ee401cc2d5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/auth/users/feature-tcs.md",
+      "sha256": "d1edc14b47f64d4dfe4e612e91809b5290b802a9e6ebcbd5b20a132a0b3454d6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/auth/users/spec.md",
+      "sha256": "d60408eb722e7535695d04b7a79814a2879e0607ba3fbd34b25d26cbbcfdadc3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/auth/users/user-journeys.md",
+      "sha256": "4bb972a0cbdb01bcb5b2236e81c8c0871fcb0a2f7a95faa8dd54e9c09719d72f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/ui/page-blocks/feature-tcs.md",
+      "sha256": "1a987c3ec0dcf2741ddd6525e019edb43cc3526fb99b0f8ce842f7992d6538d0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/ui/page-blocks/spec.md",
+      "sha256": "a18388d9d860a11ffe44d4ffacd8dd6b9d9fcabda479a1981bfda196b60199e8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/ui/page-blocks/user-journeys.md",
+      "sha256": "c65ed413d4c2a3cb0637207b468a66ca061caa89aa619e546e05510b200c068e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/ui/vault-case/feature-tcs.md",
+      "sha256": "ae8b35a41f5a6029b73051127685972d1d36303d74dd9f8f46b02931ccbab91c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/ui/vault-case/spec.md",
+      "sha256": "b94131abbdd7c96454d68c880a3d3cce99f970d717cb7cd9444ad655232173c5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/specs/shared/ui/vault-case/user-journeys.md",
+      "sha256": "cacfacb6643083dbca370d3586ccb3787eec3f28d001e7c9365899203c1b0259",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/tech-design.md",
+      "sha256": "77f3e91b1c73a68f6cac953cfa08fe27a67b7bbcf5c5e36e88022705e2b528de",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/ui-design.md",
+      "sha256": "3a6762ba99f99ef29a387f1008cc6a2e59de5893b0bb10552de5363b5235c3a2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/money-book/feature-tcs.md",
+      "sha256": "37ec06474714a7d0d499eefdc2dc4129ec7c5a79a2a4180fbe18e074eb175284",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/money-book/spec.md",
+      "sha256": "11e5f310b04deff197b290bbc19508896e08d60fc8c15e6dd3e4ab65a1f8a2fc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/money-book/user-journeys.md",
+      "sha256": "5fd4c7c1f0d57fbe054597225209b281e27db9eff2c9077fdb277cd424a5b7bf",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "b122820c5d7898c8b18f5ea0bd6b491cf8a46b3fe6896e8dded880cbd95492c2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "8c904d65a3f14bc23b00f63b4e0ae1c9341db10d9c910672a124c833e3ac5a0c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "0166683e6b67fe3b0cd1d5a2217f1c13dd1de22330d1b79ae8f1c561a3cb0598",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "09c1af228b92606aa9bdc3b63e8daea642127cb7b9a9d4261c9b0e8330b05eca",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "71683ab687de8cb95c782ef11356fc46e13f87a419e662280df8fcd083ec7e94",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "4c534c76e68f454d7ce4390b5ed28662b18f75155eee40f6d09a301f8493016b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+      "sha256": "df37dd2337e55bb5f6256e34d130ef68aabfa7ab9888d2f6f788aa3e2aa63dd9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+      "sha256": "ccfe28100f1ddc715b47cd1a63b61e5856d7562fa91fcb65f8c71957f952101f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+      "sha256": "8996c03780d0e001e91623c1a07633396f869ccf68f0771ff7c0ea313cc7de1c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/collector-notifications/feature-tcs.md",
+      "sha256": "fce50c6b3bc104befd86198238a931b575b6e431494585377677bb07a35136be",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/collector-notifications/spec.md",
+      "sha256": "5239a07d4908a8633f091f062050c2b3702ea38be42794ca3e825fd7f5eac662",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/collector-notifications/user-journeys.md",
+      "sha256": "764c6ad3c7b7413792c04e8e1b2622e237b5cb812af2b41841cf357ccc7fdcd4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "sha256": "d21cb9afee9b1cff75aaf9abbb9c66a9c2bbbdb4f070fa97a27c2c710220be6d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "sha256": "df45538966e64c6524f370d9ee8cab76ac1c976ef7ee03d60b42103ccc26f797",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "sha256": "dbb64d79b8fd0328a776bf7f343a7c6d708b00d4a0029a9ae45f5e51870c6b24",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/loan-and-settlement/feature-tcs.md",
+      "sha256": "89d7538ef11c3b17c284b71613dd66a4baf433693c3fd8fcee9a52686e0d1481",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/loan-and-settlement/spec.md",
+      "sha256": "1e54b055054a8eafe498bb53af12d022139fc54ff7c74480897fc02c23f9d216",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/loan-and-settlement/user-journeys.md",
+      "sha256": "50fb36176391057e427d0f27a5e7b725c25f74055a0c26dcaf8f674a3b2b831b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+      "sha256": "bb768c677364223ee90bd2d5391af17db52cafcc98e96a9fa1880fc74f49000d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+      "sha256": "9442ce9686a89e925adf9c478b6da41bb1e20ed8a58695a530384ffd15f0d131",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+      "sha256": "e2e0d89ffc1bacd56ace202c8b43411e0d7af5d21636b54884dd4a8c09a98282",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+      "sha256": "9ae25326b00f4ac7f2096a9aae4a0f5d4b3197d98ee6e79e9c15f1d3397e837b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+      "sha256": "89fa248ae75ce440393842ddcfe109e3e5aef2cd1fb6ce8144a3b8af1175d672",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+      "sha256": "d7cc8e29c671af6fa98fc8c8e96c1b991a092dd862ab5f99b4ffe9f24648f999",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/visit-booking/feature-tcs.md",
+      "sha256": "8857aa7da5b93979fec76ea1804debe07c8af69be51bc3fb3493b12632e6580b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/visit-booking/spec.md",
+      "sha256": "d7a8d562c521a9b43f32409a94f509f1dc0e17e24b4134be92950e0c0c37a049",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/visit-booking/user-journeys.md",
+      "sha256": "ca166396a304cbaf88ad1b93ee756753f6b924ee830adbb6d9565022b1a5f659",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/users/feature-tcs.md",
+      "sha256": "d7ad2c7999a9ad785995a4192e63f59e3d35762bbfb99212d8d9866becd03392",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/users/spec.md",
+      "sha256": "9e4360204bbf698272039f2cd893ca5b2122d6e296a2b5cc9805f78b3b54f269",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/users/user-journeys.md",
+      "sha256": "ccf5e5ce6aabf969d997ea98ab27b46ad7dc58aa89d7d00e2dbbd1227ae048f6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/page-blocks/feature-tcs.md",
+      "sha256": "1a987c3ec0dcf2741ddd6525e019edb43cc3526fb99b0f8ce842f7992d6538d0",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/page-blocks/spec.md",
+      "sha256": "c945f92ae0a48245f04d92995fe3c03dbbad20cc55ee91f17614403eead4fbf2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/page-blocks/user-journeys.md",
+      "sha256": "c65ed413d4c2a3cb0637207b468a66ca061caa89aa619e546e05510b200c068e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/feature-tcs.md",
+      "sha256": "ae8b35a41f5a6029b73051127685972d1d36303d74dd9f8f46b02931ccbab91c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/spec.md",
+      "sha256": "6a2cf18dc8241fc745989dbe08b983f3053d770ff531db9558bd891858a420eb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/user-journeys.md",
+      "sha256": "cacfacb6643083dbca370d3586ccb3787eec3f28d001e7c9365899203c1b0259",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/complete-vault-collector-flow/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/money-book/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/money-book/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: The arrears are summed above the list",
+        "Requirement: The arrears list every live loan past its due date",
+        "Requirement: The register answers what the range took out of the business",
+        "Requirement: The register is taken out of the console as a file",
+        "Requirement: The register lists every money record in a period"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/money-book/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A case reads on the console in the words the collector reads",
+        "Requirement: An act the case withholds says what it is waiting for",
+        "Requirement: An operator's session is verified with a second factor, and stays verified for twelve hours",
+        "Requirement: An operator's session is verified, and stays verified for twelve hours",
+        "Requirement: Search is exact on a contact, prefix on a case id, and leaves a trail",
+        "Requirement: The case opens on today's visit, step by step",
+        "Requirement: The custody tab reads back where the item has been",
+        "Requirement: The held list counts what is held and says what each item carries",
+        "Requirement: The identity panel reads the six states the record holds",
+        "Requirement: The queue cuts cases by what they are waiting for"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A case carries a six-character reference",
+        "Requirement: A case carries between one and ten photographs",
+        "Requirement: A collector opens a request for one item",
+        "Requirement: A photograph is stored without its location and read under a trail",
+        "Requirement: A request states one item, in the brand's own currency",
+        "Requirement: The last step reads the request back before it sends"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A case is read as meeting one fact",
+        "Requirement: A case page answers only to the collector whose case it is",
+        "Requirement: A case reads the stage it has reached and whose the item is",
+        "Requirement: An ended case reads in the collector's words",
+        "Requirement: The collector's own moves run from their case page"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/collector-notifications/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/collector-notifications/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A message naming a due date says when the borrower will hear next",
+        "Requirement: A money message tables its figures and carries how to pay",
+        "Requirement: A value nobody has set is bracketed outside production and refuses the act in production",
+        "Requirement: Every message carries the case line and the sender's footer",
+        "Requirement: The forfeiture notice states what it acts under and what follows it",
+        "Requirement: The invitation to verify names the visit it prepares for",
+        "Requirement: The vault sends twenty-four messages, each about the case it names",
+        "Requirement: The vault sends twenty-three messages, each about the case it names"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/collector-notifications/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A document can be verified by anyone holding its digest",
+        "Requirement: Every sealed document a collector holds is taken in one download",
+        "Requirement: The key terms ticked at the counter are the loan agreement's own",
+        "Requirement: The signing link is single-use, short-lived and bound to one device"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/loan-and-settlement/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/loan-and-settlement/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A live loan lists each repayment and what it left owing",
+        "Requirement: A live loan names the reminders still to come",
+        "Requirement: How to pay is one block wherever an amount owed is named",
+        "Requirement: The advance is recorded by a second person and starts the term",
+        "Requirement: The console states the rule before the operator acts",
+        "Requirement: The forfeiture notice reads on the borrower's case",
+        "Requirement: What a loan owes is computed at every read"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/loan-and-settlement/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An erasure is refused while any of the person's cases is in flight",
+        "Requirement: Each class of kept data has a review window per brand",
+        "Requirement: The collector files the ask to be forgotten from Your data and cancels it inside the window",
+        "Requirement: The collector reads what the vault holds about them on one page",
+        "Requirement: Your data names each class the vault keeps and the window it is kept for",
+        "Requirement: Your data shows where the identity stands and never the identity itself"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A collector answers the live offer from the case page",
+        "Requirement: A refused answer is named where the answer was given",
+        "Requirement: Every offer is judged against the brand's lending policy",
+        "Requirement: In production an unset bound or an unnamed lender refuses the offer",
+        "Requirement: Only the offer that stands takes an answer"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/visit-booking/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/visit-booking/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A booked visit is confirmed with the shop, the slot and what to do before the day",
+        "Requirement: A sibling case reads the visit its lead holds and offers no picker of its own",
+        "Requirement: The picker offers the same shops and slots to a first booking and to a move",
+        "Requirement: The visit is one calendar entry the collector's own calendar opens"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/visit-booking/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/users/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/users/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A filing or a cancel sent again answers the request already there",
+        "Requirement: A person holds one open erasure request at a time",
+        "Requirement: An operator who can ban can ban and unban",
+        "Requirement: An operator's erasure request bans the account",
+        "Requirement: The account holder files their own erasure request and cancels it inside the window"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/users/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/page-blocks/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/page-blocks/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: The empty panel says nothing is here yet",
+        "Requirement: The fact card draws its parts in one order",
+        "Requirement: The loading cards are one busy status",
+        "Requirement: The note list draws a divider between two lines",
+        "Requirement: The page blocks export",
+        "Requirement: The stage rail marks the stage reached"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/page-blocks/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: The accept confirmation reads the terms before the answer",
+        "Requirement: The empty vault home reads the way in",
+        "Requirement: The vault case exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

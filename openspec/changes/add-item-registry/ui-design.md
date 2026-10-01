@@ -41,7 +41,7 @@ beside each delta own who walks it.
 | Walk-in known slab | none yet | the walk-in dialog from the queue's header | `WalkInDialog` from `vault-walk-ins-and-owners`, gaining `Select`, `TextField`, `Text`, `Status`, `Notice`, `Button`, `Link` |
 | Documents tab | none yet | `admin.grade10.com/vault/cases/:caseId`, the Documents tab | `DocumentsPanel`, `WithheldActs` → `Text`, `Link` |
 | Custody agreement | none yet | the paper, not a screen | `packages/vault/backend/src/documents/templates/custodyAgreement.ts`; no block |
-| Collector page Items | none yet | `admin.grade10.com/collectors/:userId` | `CollectorPage` from `vault-walk-ins-and-owners`, new `CollectorItemsSection` → `SectionHeader`, `Panel`, Items' table, `CursorPager`, `Status`, `Notice` |
+| Collector page Items | none yet | `admin.grade10.com/vault/collectors/:userId` | `CollectorPage` from `vault-walk-ins-and-owners`, new `CollectorItemsSection` → `SectionHeader`, `Panel`, Items' table, `CursorPager`, `Status`, `Notice` |
 | Erasure checklist | none yet | `admin.grade10.com/erasure` | `AccountErasureSection` → `Text` |
 | Request wizard | the collector flow's wizard | `grade10.com/vault`, the wizard's first step | `RequestWizard` → `RadioList`, `RadioListItem`, unchanged |
 

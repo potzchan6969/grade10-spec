@@ -223,13 +223,19 @@ in every message about money.
   live loan SHALL show no such block.
 - **One set** — the page and every message SHALL name the same values, so no
   two can disagree.
-- **The figure holds** — the block SHALL say the amount owed holds until the
-  due instant, and what each further started day after it adds.
+- **The figure holds** — the block SHALL say until when the amount owed holds
+  — the due instant before it, the end of the day started after it — and what
+  each further started day adds. The late-day figure SHALL be the rounded
+  total a day past the reading less the rounded total at it, so it never
+  disagrees with what the page will owe.
 - **A value nobody has set** — outside production the block SHALL print a
-  marked placeholder in place of the unset value. In production an unset FPS
-  id or bank account SHALL NOT be printed: the block SHALL NOT be shown, and
-  in its place the live loan SHALL show the counter line alone — pay by card
-  or cash at the counter. The act that would send a
+  marked placeholder in place of the unset value. In production an unset
+  payee name, FPS id or bank account SHALL NOT be printed: the block SHALL NOT
+  be shown, and in its place the live loan SHALL show the counter line alone —
+  pay by card or cash at the counter. Until the value is set again, the
+  counter SHALL record only a repayment that settles the loan; one leaving
+  anything owed SHALL be refused by name, since its message would carry how
+  to pay. The act that would send a
   message carrying an unset value is refused by
   `grade10-site/vault/collector-notifications`, which states that rule.
 
@@ -241,8 +247,8 @@ in every message about money.
 - **THEN** the block names the lender's registered name as payee, its FPS id,
   its bank account, the case reference as the transfer reference, and card or
   cash at the counter
-- **AND** it says the amount owed holds until the due instant and what each
-  further started day after it adds
+- **AND** it says until when the amount owed holds and what each further
+  started day adds
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-36 - A money message carries the same block
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower pays from the message without opening the site
@@ -269,11 +275,20 @@ in every message about money.
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower on a brand whose account is not set yet is still told where to pay
 
 - **GIVEN** a production brand whose live loan was advanced while its FPS id
-  and bank account were set, both since cleared
+  and bank account were set, its FPS id since cleared
 - **WHEN** the borrower reads that live loan
 - **THEN** no payee, no FPS id, no bank account and no transfer reference is
   shown, and the case shows the counter line alone — pay by card or cash at
   the counter
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-52 - A part payment at the counter is refused while nowhere to pay is set
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - the borrower is never sent a balance with no way to pay it
+
+- **GIVEN** that loan, its FPS id still cleared
+- **WHEN** a repayment leaving anything owed is recorded at the counter
+- **THEN** it is refused by name, naming the unset value
+- **AND** nothing is written, and a repayment that settles the loan is still
+  recorded
 
 ### Requirement: The console states the rule before the operator acts
 
@@ -290,7 +305,8 @@ the dialog, before they send it.
   what it depends on.
 - **Unmet** — the dialog SHALL name which bound or precondition is unmet and
   what it requires, and SHALL leave the act's own control in place.
-- **A bound nobody has set** — outside production the dialog SHALL say the
+- **A bound the offer is refused without** (every one but grace, which unset
+  reads as none) — outside production the dialog SHALL say the
   bound is not set and the act SHALL go through; in production the dialog
   SHALL name the refusal before the operator sends.
 - **The worker still refuses** — what a dialog states SHALL stand in for no
@@ -301,10 +317,10 @@ the dialog, before they send it.
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator prices a loan knowing what it will cost the borrower
 
 - **WHEN** an operator enters a principal of 10,000,000 HKD minor units at
-  300 basis points for a 30-day term
-- **THEN** the dialog states 300,000 HKD minor units of interest, 10,300,000
-  HKD minor units to repay, 10,000 HKD minor units for a late day, and an
-  annualised rate of 36.5%, alongside the valuation, the cap and the presets
+  250 basis points for a 30-day term
+- **THEN** the dialog states 250,000 HKD minor units of interest, 10,250,000
+  HKD minor units to repay, 8,333 HKD minor units for a late day, and an
+  annualised rate of 30.4%, alongside the valuation, the cap and the presets
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-41 - A bound the offer fails is named before the send
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator sees the cap before the worker teaches it
@@ -384,6 +400,7 @@ later correction of another record.
 The case SHALL become `active` in the same act, and the borrower SHALL be told
 the calendar date in writing.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-3g8 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-01 - The offer's maker may not pay it out
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -391,6 +408,7 @@ the calendar date in writing.
 - **WHEN** that same operator records the advance
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-72r rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-02 - A value date before the signature is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -398,6 +416,7 @@ the calendar date in writing.
 - **WHEN** an advance is recorded with a value date of the 9th
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-6zm rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-03 - The term runs from the advance
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -405,6 +424,7 @@ the calendar date in writing.
 - **WHEN** the advance is recorded with a value date of 15 September
 - **THEN** the loan falls due at the end of 15 October on the brand's own calendar
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-0as rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-04 - An amount that is not the principal is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -453,7 +473,7 @@ answer from the same derivation, so no two can disagree.
 | No other charge | no late fee, no stepped rate and no compounding is ever added |
 | Ceiling | term and overdue interest together never pass the brand's accrual ceiling |
 | Rounding | one half-up rounding of the exact figure; the total is principal plus interest exactly |
-| Annualised rate | the term's interest ÷ the principal × 365 ÷ the term's days, as a percentage rounded to one decimal place; the rate the loan agreement prints simple per annum, and the one figure every surface naming an annualised rate answers from |
+| Annualised rate | the term's interest ÷ the principal × 365 ÷ the term's days, as a percentage rounded half-up to one decimal place; the rate the loan agreement prints simple per annum, and the one figure every surface naming an annualised rate answers from |
 | Settlement | the recording that leaves nothing owed at its own value date; interest stops there and never restarts |
 
 Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
@@ -464,6 +484,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - 9,000,000 repaid on day 10 and the rest 10 days late — 1,313,000 still owed
 - annualised — 36.5%
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-t4w rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-05 - Early repayment owes the whole term's interest
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -471,6 +492,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **WHEN** it is quoted for day 10
 - **THEN** it owes 10,300,000 HKD minor units
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-3d7 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-06 - Overdue days charge the term's own daily rate
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -478,6 +500,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **WHEN** it is quoted for 10 days past the due date
 - **THEN** it owes 10,400,000 HKD minor units, and no fee has been added
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-xhh rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-07 - Interest stops at settlement
 **Serves:** What is owed - interest stops at settlement
 
@@ -485,6 +508,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **WHEN** it is quoted a month later
 - **THEN** it owes nothing, and nothing accrued after the settlement
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-pdz rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-08 - Interest never passes the ceiling
 **Serves:** What is owed - interest never passes the ceiling
 

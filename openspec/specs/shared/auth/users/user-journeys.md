@@ -38,3 +38,11 @@ from the closed set for someone who has never signed in — and to be refused
 when the email already exists —
 **so that** access can be granted before first sign-in without loyalty enroll
 or an invite mail, and a duplicate never becomes a second account.
+
+### shared-auth-users-US-06: Account holder files their own request to be forgotten
+
+**As a** person with an account,
+**I want** to file the request to be forgotten from my own account's Your data
+page, and to cancel it there inside the seven days,
+**so that** I need not ask an operator to file it, and can change my mind
+before anything is erased.

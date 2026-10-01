@@ -182,7 +182,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-loan-and-settlement-SC-36`,
       `grade10-site-vault-loan-and-settlement-SC-38`)
 - [x] 5.2 Add `printedValue(ports, field)` in
-      `packages/vault/backend/src/legal/printed.ts` — production and null
+      `packages/app-env/src/printed.ts` — production and null
       throws `LEGAL_IDENTITY_UNSET` by field, any other environment answers
       the marked placeholder — and compose `printedEntity` over it with every
       fallback it has today
@@ -309,6 +309,19 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       filing over a self-filed row now does
 - [x] 7.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 7.9 Store `executeAfter` as the first instant, on the brand's zone, of
+      the seventh day after the filing day (`startOfDayAfter`), with the
+      `deletion_requests` check loosened to `> requested_at + 143 hours`; close
+      a request only `WHERE outcome IS NULL`, the run refusing and a cancel
+      changing nothing when no row changed; drop `cancelUntil` from the wire
+      for `executeAfter`; rows filed before stay as filed and clear within one
+      window (`shared-auth-users-SC-43`, `shared-auth-users-SC-38`,
+      `shared-auth-users-SC-48`)
+- [ ] 7.10 Take a self-filed request over only `WHERE outcome IS NULL`,
+      refusing by name when no row changed so the ban and its audit roll back;
+      replace the `0014` guard in a new migration so it forgives the author
+      change only while `OLD.outcome IS NULL`; cover a take-over racing a
+      self-cancel (`shared-auth-users-SC-43`, `shared-auth-users-SC-36`)
 
 ## 8. The one download of every signed document (grade10)
 
@@ -572,8 +585,9 @@ append to `CaseDetailView.stories.tsx`.
       with Edit per block, what happens next, and the collection statement's
       tick (`grade10-site-vault-case-intake-SC-15`,
       `grade10-site-vault-case-intake-SC-16`)
-- [x] 14.3 Show "Being prepared" in place of a statement no brand has set, and
-      leave the request sendable (`grade10-site-vault-case-intake-SC-18`)
+- [x] 14.3 Show "Being prepared" in place of a statement no brand has set, and,
+      outside production, leave the request sendable (production's refusal
+      is 26.2) (`grade10-site-vault-case-intake-SC-18`)
 - [x] 14.4 Send `collectionStatement` with the submit, keep a draft listed as
       unsent, and refuse a photograph once the request has gone
       (`grade10-site-vault-case-intake-SC-01`,
@@ -829,15 +843,16 @@ append to `CaseDetailView.stories.tsx`.
 
 ## 20. The manual (grade10-spec)
 
-Lands once every other group is green and the change is deployed.
+Lands once every other group is green and its implementation verified.
 
 - [ ] 20.1 Take the 🚧 marks off the lines this change delivered on
       `docs/prds/products/grade10-site/vault/collector-pages.md`,
       `case-lifecycle.md`, `loan-and-money.md`, `documents-and-signing.md`,
-      `compliance-and-readiness.md` and `operator-console.md`, and on
-      `docs/prds/products/shared/auth/users.md` and
-      `docs/prds/platform/account-data.md`, leaving the marks the
-      `add-hosted-identity-verification` change still owes
+      `compliance-and-readiness.md`, `operator-console.md` and
+      `identity-check.md`, and on `docs/prds/products/shared/auth/users.md`
+      and `docs/prds/platform/account-data.md`, leaving the marks
+      `add-hosted-identity-verification`, `vault-walk-ins-and-owners`,
+      `add-item-registry` and `add-card-grading` still owe
 - [x] 20.2 Leave `TBC Legal` and ❓ Finance on what nobody has answered — the
       notice's wording, the licence line, the complaints contact, the
       collection statement, the FPS id and the bank account — and say on
@@ -846,9 +861,8 @@ Lands once every other group is green and the change is deployed.
 - [x] 20.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes complete-vault-collector-flow`
 - [ ] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/page-blocks.md`,
-      `docs/prds/products/shared/ui/vault-case.md`
-      and the Blocks line of `collector-pages.md`'s code map once group 25
-      is deployed
+      `docs/prds/products/shared/ui/vault-case.md` once group 25 is
+      verified
 
 ## 21. The walk (grade10)
 
@@ -911,7 +925,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as
       `grade10-site-vault-retention-and-erasure-US-03`,
       `grade10-site-vault-retention-and-erasure-US-05`,
       `grade10-site-vault-documents-and-signing-US-05`,
-      `shared-auth-users-US-02` and `shared-auth-users-US-05`, proving the
+      `shared-auth-users-US-02` and `shared-auth-users-US-06`, proving the
       erasure no case holds back, the own cancel refused on a request the
       shop took over, and standing held while a request is open
       (`grade10-site-vault-retention-and-erasure-SC-41`,
@@ -1091,11 +1105,16 @@ onto the legal-copy table.
 
 ## 27. One number for every way it is typed (grade10)
 
-- [ ] 27.1 Fold full-width digits and the full-width plus to ASCII in
-      `canonicalPhone`, and read a bare dial code before a valid national
-      number as that number with its `+`, the vectors red first in
-      `packages/utils` and in the store's `profilePhone` suite, with
-      `E164_PATTERN` and the generated `account_profile` CHECK untouched
-      (`grade10-admin-vault-operator-queue-SC-07a`)
+- [ ] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
+      only when the bare digits are not themselves a valid local number, read
+      a bare dial code before a valid national number as that number with its
+      `+`, the vectors red first in `packages/utils` and in the store's
+      `profilePhone` suite: `85291234567` moves from `needsCountryCode` to
+      accepted as `+85291234567`; `852 9123 4567` and `９１２３４５６７`
+      accept as `+85291234567`; `85212345` accepts as `+85285212345`;
+      `85212345678` answers `needsCountryCode`. `E164_PATTERN` and the
+      generated `account_profile` CHECK stay untouched
+      (`grade10-site-vault-case-intake-SC-04`,
+      `grade10-admin-vault-operator-queue-SC-07a`)
 - [ ] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run test:backend`

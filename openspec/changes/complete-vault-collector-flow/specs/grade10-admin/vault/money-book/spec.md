@@ -233,6 +233,7 @@ and a correction have no method to be one of.
 A range as narrowed in which nothing was recorded SHALL answer no rows and SHALL
 say that nothing remains behind them.
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-wbb rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-01 - The register is ordered by when it was written
 **Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
@@ -240,6 +241,7 @@ say that nothing remains behind them.
 - **WHEN** the register for today is read
 - **THEN** the row is in it, at today's position
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-n97 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-02 - A correction names the record it takes back
 **Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
@@ -295,6 +297,7 @@ page being full.
 The arrears SHALL be their own read: a page limit shared with any other
 worklist SHALL never let one hide the other.
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-2p3 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-07 - The arrears resume after the row the last page stopped at
 **Serves:** grade10-admin-vault-money-book-US-03 - Operator works the loans that are running late
 
@@ -302,6 +305,7 @@ worklist SHALL never let one hide the other.
 - **WHEN** the second page is read
 - **THEN** it begins after the row the first stopped at, and says there is nothing behind it
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-shu rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-08 - A corrected advance leaves the arrears
 **Serves:** grade10-admin-vault-money-book-US-03 - Operator works the loans that are running late
 
@@ -309,6 +313,7 @@ worklist SHALL never let one hide the other.
 - **WHEN** the arrears are read
 - **THEN** the case is not in them
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-k1b rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-12 - A two-currency book prints each row in its own currency
 **Serves:** The arrears - a two-currency book prints each row in its own currency
 

@@ -72,12 +72,14 @@ invitation to verify, whose link opens the identity check:
 | The paper | the signed documents, attached |
 | The identity check | the invitation to verify before the visit |
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-nte rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-03 - The advance names the due date
 **Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
 
 - **WHEN** an advance is recorded
 - **THEN** the collector is sent a message naming the amount and the calendar date the loan is repayable by
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-2ff rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-04 - A correction reaches the borrower
 **Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
 

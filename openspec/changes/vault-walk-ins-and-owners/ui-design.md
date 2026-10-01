@@ -27,7 +27,7 @@ and the journeys beside each delta own who walks it.
 | Walk-in form | none yet - the designer's | dialog from the queue's header, `admin.grade10.com/vault` | new `WalkInDialog` → `FormDialog`, `TextField`, `NotesField`, `ChoiceList`, `Choice`, `MoneyField`, `FileButton`, `MediaGallery`, `Notice` |
 | Walk-in draft | the Drafts view as it stands | `admin.grade10.com/vault/cases/:caseId` | `CaseDetailPanel`, `WithheldActs` → `Badge`, `Notice`, `Button`, `Link` |
 | Queue and held items, collector | none yet | `admin.grade10.com/vault`, the queue and the Held items tab; the collector in the URL | `CaseQueuePanel`, `CaseQueueTable`, `CustodyHoldingsPanel` → `Table`, `Row`, `Cell`, `Link`, `Status`, `Button` |
-| Collector page v1 | none yet - the designer draws the page | `admin.grade10.com/collectors/:userId` | new `CollectorPage` → `SectionHeader`, `Panel`, `Table`, `Row`, `Cell`, `At`, `StatusBadge`, `CursorPager`, `Status`, `Link` |
+| Collector page v1 | none yet - the designer draws the page | `admin.grade10.com/vault/collectors/:userId` | new `CollectorPage` → `SectionHeader`, `Panel`, `Table`, `Row`, `Cell`, `At`, `StatusBadge`, `CursorPager`, `Status`, `Link` |
 | Send a draft staff opened | the collector flow's list and wizard | `grade10.com/vault`, then the wizard on the draft | `CaseList`, the wizard's third step `RequestReview`, unchanged |
 
 ## Components

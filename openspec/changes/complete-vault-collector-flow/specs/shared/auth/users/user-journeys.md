@@ -9,7 +9,7 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 
 ## ADDED User journeys
 
-### shared-auth-users-US-05: Account holder files their own request to be forgotten
+### shared-auth-users-US-06: Account holder files their own request to be forgotten
 
 **As a** person with an account,
 **I want** to file the request to be forgotten from my own account's Your data

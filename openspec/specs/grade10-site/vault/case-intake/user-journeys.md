@@ -20,3 +20,17 @@ borrow against it,
 vault will not take refused before I spend the upload,
 **so that** the shop can prepare around what it can see and my photographs
 carry nothing about where I live.
+
+### grade10-site-vault-case-intake-US-04: Collector checks the request before sending it
+
+**As a** collector on the last step of the wizard,
+**I want** to read my request back, see what happens next, and tick that I
+have read the collection statement,
+**so that** I send what I meant and know what I agreed to.
+
+### grade10-site-vault-case-intake-US-05: Collector gets a reference they can say and type
+
+**As a** collector,
+**I want** a short reference for my case,
+**so that** I can read it out at the counter and type it as the transfer
+reference at my bank.

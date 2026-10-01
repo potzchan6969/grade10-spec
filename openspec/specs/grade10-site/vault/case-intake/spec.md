@@ -3,13 +3,13 @@
 ## Purpose
 
 How a collector opens a vault request for one item: what they say about it,
-what they photograph, and the one question that decides whether the case
-carries a loan.
+what they photograph, the one question that decides whether the case carries a
+loan, and the reference the case is known by afterwards.
 
 Intake is where the case is born, so it is where the facts nothing later can
-change are fixed — the item, the currency, and the lane. What happens to the
-case afterwards is `grade10-site/vault/case-lifecycle`; the visit it offers on
-submission is `grade10-site/vault/visit-booking`.
+change are fixed — the item, the currency, the lane and the reference. What
+happens to the case afterwards is `grade10-site/vault/case-lifecycle`; the
+visit it offers on submission is `grade10-site/vault/visit-booking`.
 
 ## Feature set
 
@@ -34,6 +34,23 @@ submission is `grade10-site/vault/visit-booking`.
 - Sending it in
   - A photograph required: staff prepare around what they can see
   - What follows: the case is submitted and the visit can be booked
+  - Read back before it goes: the last step shows the request as it will be
+    sent, each block editable where it was written
+  - What happens next: the step says what the shop does with the request, so
+    nobody waits on an answer nobody promised
+  - The collection statement: the collector ticks that they have read it
+    before the request sends, and the version they were shown is kept with
+    the send
+- The case reference
+  - Six characters a person can read out: an alphabet without the characters
+    that are read for one another at a counter
+  - Issued with the case: drawn beside the id, so no case is ever without one
+  - Unique per brand and never reused: unique across every case the brand has
+    opened, and a clash is redrawn rather than shared
+  - The id stays the key: the address, every link and every lookup keep the id,
+    and the reference is what is spoken and typed
+  - Where it is read: the case's own header, its card on the list, the step
+    that sent it, every letter, and the counter's search
 
 ## Requirements
 
@@ -45,7 +62,7 @@ A collector SHALL open a vault request from their own account, in three steps:
    optional contact number, and whether they want a loan against it and for
    how much.
 2. Photograph it: at least one and at most ten photographs.
-3. Send it in.
+3. Read the request back and send it in.
 
 An unsent request SHALL be reopenable at the step it was left on, and SHALL
 carry photographs only while it is unsent.
@@ -80,6 +97,9 @@ one item only:
 | Currency | the brand's own; a request naming another SHALL be refused by name |
 | Financing amount | optional, an integer count of minor units in that currency |
 
+A contact number the brand's numbering plan cannot read SHALL be refused by
+name, and no case SHALL be opened with it.
+
 A collector with several items SHALL open one request for each.
 
 <!-- trace:scenario id=g10.vault-case-intake.SC-yru rev=1 -->
@@ -95,6 +115,35 @@ A collector with several items SHALL open one request for each.
 
 - **WHEN** two collectors give the same number typed differently
 - **THEN** both cases store it in the same canonical form
+
+#### Scenario: grade10-site-vault-case-intake-SC-24 - A title and a description at their caps are taken
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request with a title of exactly 200 characters
+  and a description of exactly 2,000
+- **THEN** the request is opened carrying both as written
+
+#### Scenario: grade10-site-vault-case-intake-SC-25 - A title or a description past its cap is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request with a title of 201 characters
+- **THEN** it is refused by name and no case is opened
+- **WHEN** a collector opens a request with a description of 2,001 characters
+- **THEN** it is refused by name and no case is opened
+
+#### Scenario: grade10-site-vault-case-intake-SC-26 - A number the brand's plan cannot read is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request whose contact number is `123-abc`
+- **THEN** it is refused by name and no case is opened
+
+#### Scenario: grade10-site-vault-case-intake-SC-27 - A second item is a second request
+**Serves:** grade10-site-vault-case-intake-US-05 - Collector gets a reference they can say and type
+
+- **GIVEN** a collector who has just sent in a request for one item
+- **WHEN** they open a request for another item
+- **THEN** a new request is opened with a reference of its own
+- **AND** the request already sent keeps its reference and its status
 
 ### Requirement: The financing amount decides the lane
 
@@ -134,7 +183,7 @@ place.
 ### Requirement: A case carries between one and ten photographs
 
 A case SHALL carry at most ten photographs. Each SHALL be a JPEG, PNG or WebP
-of at most 20 MB, and anything else SHALL be refused by name before it is
+of at most 20 MB - 20,971,520 bytes - and anything else SHALL be refused by name before it is
 stored. The same bytes offered twice SHALL attach one photograph.
 
 <!-- trace:scenario id=g10.vault-case-intake.SC-e09 rev=1 -->
@@ -158,6 +207,21 @@ stored. The same bytes offered twice SHALL attach one photograph.
 
 - **WHEN** the same bytes are offered twice for one case
 - **THEN** the case carries one photograph, not two
+
+#### Scenario: grade10-site-vault-case-intake-SC-28 - Ten photographs at the size cap are all taken
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **GIVEN** a request carrying no photograph
+- **WHEN** ten different JPEGs of exactly 20,971,520 bytes each are offered for
+  it
+- **THEN** all ten are stored on the request
+
+#### Scenario: grade10-site-vault-case-intake-SC-29 - A photograph past the size cap is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **GIVEN** a request carrying fewer than ten photographs
+- **WHEN** a JPEG of 20,971,521 bytes is offered for it
+- **THEN** it is refused by name and nothing is stored
 
 ### Requirement: A photograph is stored without its location and read under a trail
 
@@ -184,6 +248,14 @@ that is never rewritten.
 - **WHEN** a signed-in collector asks for a photograph on a case that is not theirs
 - **THEN** it is refused by name
 
+#### Scenario: grade10-site-vault-case-intake-SC-30 - Every read of a photograph is recorded
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **GIVEN** a collector's case carrying a photograph
+- **WHEN** the collector opens that photograph
+- **THEN** the read is recorded, naming who read it and when
+- **AND** the photograph is served only once the read is recorded
+
 ### Requirement: A request is sent in only with a photograph on it
 
 A request SHALL be sent in only when it carries at least one photograph, and a
@@ -206,3 +278,117 @@ against.
 - **GIVEN** a request carrying one photograph
 - **WHEN** the collector sends it in
 - **THEN** the case is submitted and a visit may be booked against it
+
+### Requirement: The last step reads the request back before it sends
+
+The last step is where the collector checks what they are about to send and
+answers for the personal information collection statement.
+
+- **Read back** - the step SHALL show the item facts, the amount asked for and
+  the photographs as they will be sent, each block offering a way back to the
+  step it was written on.
+- **What happens next** - the step SHALL say what the shop does with the
+  request once it arrives.
+- **The tick** - the collector SHALL tick that they have read the collection
+  statement, and a send without the tick SHALL be refused by name with the
+  request left unsent.
+- **The version** - a send SHALL keep the version of the collection statement
+  the step showed.
+- **Wording nobody has written yet** - where no collection statement wording is
+  set, the step SHALL say it is being prepared; outside production the send
+  SHALL NOT be refused for it, and in production the send SHALL be refused by
+  name with the request left unsent.
+
+#### Scenario: grade10-site-vault-case-intake-SC-15 - The last step shows the request as it will be sent
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back what they are sending before it goes
+
+- **GIVEN** a request carrying its item facts and one photograph
+- **WHEN** the collector reaches the last step
+- **THEN** it shows the item facts, the amount asked for and the photographs as they will be sent
+- **AND** each block offers a way back to the step it was written on
+- **AND** the step says what the shop does with the request once it arrives
+
+#### Scenario: grade10-site-vault-case-intake-SC-16 - A send without the tick is refused
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector answers for the statement before the request goes
+
+- **GIVEN** a request whose last step has not been ticked
+- **WHEN** the collector sends it in
+- **THEN** it is refused by name and the request stays unsent
+
+#### Scenario: grade10-site-vault-case-intake-SC-17 - The send keeps the version that was shown
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector ticks the statement they were shown
+
+- **GIVEN** a request whose last step showed a collection statement
+- **WHEN** the collector ticks it and sends the request in
+- **THEN** the case keeps that version of the collection statement with the send
+
+#### Scenario: grade10-site-vault-case-intake-SC-18 - Outside production, a statement nobody has written yet does not hold the request
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector sends the request while the wording is still being written
+
+- **GIVEN** an environment that is not production and a brand with no
+  collection statement wording set
+- **WHEN** the collector reaches the last step
+- **THEN** the statement reads as being prepared
+- **AND** ticking it sends the request in
+
+#### Scenario: grade10-site-vault-case-intake-SC-31 - In production, a statement nobody has written yet refuses the send
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector is not asked to answer for a statement that does not exist
+
+- **GIVEN** production and a brand with no collection statement wording set
+- **WHEN** the collector ticks the statement and sends the request in
+- **THEN** the send is refused by name
+- **AND** the request stays a draft
+
+### Requirement: A case carries a six-character reference
+
+Every case has a short reference beside its id, for a person to read out at a
+counter and type into a bank form.
+
+- **Shape** - a reference SHALL be six characters drawn from the digits 2 to 9
+  and the capital letters A to Z without I, L and O.
+- **Issued with the case** - a reference SHALL be drawn when the case is
+  opened, beside its id, so an unsent request carries one as much as a sent
+  case does.
+- **Unique and never reused** - a reference SHALL be unique across every case
+  the brand has ever opened, ended and abandoned cases included, and a draw
+  that clashes SHALL be redrawn rather than shared.
+- **Fixed** - a case's reference SHALL never change after it is issued.
+- **The id stays the key** - the case's address, every link to it and every
+  lookup SHALL keep the id, and a reference SHALL NOT stand in an address.
+- **Where it is read** - a reference SHALL be shown on the case's own header,
+  on its card in the collector's list, and on the step that sent the request.
+  The letter that carries it is `grade10-site/vault/collector-notifications`'s,
+  and the counter's search over it is `grade10-admin/vault/operator-queue`'s.
+
+#### Scenario: grade10-site-vault-case-intake-SC-19 - A case is opened with its reference
+**Serves:** grade10-site-vault-case-intake-US-05 - the collector has something to say at the counter from the day they ask
+
+- **WHEN** a collector opens a request
+- **THEN** the case carries a six-character reference of that alphabet, before the request is sent
+
+#### Scenario: grade10-site-vault-case-intake-SC-20 - Two cases never share a reference
+**Serves:** The case reference - a draw that clashes is redrawn rather than shared
+
+- **GIVEN** a case carrying a reference
+- **WHEN** another case is opened and the reference drawn for it is that one
+- **THEN** another is drawn and the two cases carry different references
+
+#### Scenario: grade10-site-vault-case-intake-SC-21 - A reference is never issued twice
+**Serves:** The case reference - what was drawn once stays with the case that took it
+
+- **GIVEN** a case that has ended
+- **WHEN** a new case is opened
+- **THEN** it is not issued the ended case's reference
+
+#### Scenario: grade10-site-vault-case-intake-SC-22 - The address keeps the id
+**Serves:** The case reference - a link followed from a letter or the list opens the case by its id
+
+- **WHEN** a collector opens their case from the list or from a letter
+- **THEN** the address names the case's id and never its reference
+
+#### Scenario: grade10-site-vault-case-intake-SC-23 - The reference is read where a person needs it
+**Serves:** grade10-site-vault-case-intake-US-05 - the collector reads it out at the counter and types it at the bank
+
+- **GIVEN** a case carrying a reference
+- **WHEN** the collector opens their case list, the case itself, or the step that sent the request
+- **THEN** each names that same reference

@@ -111,9 +111,10 @@ Every item is a value or an act outside the code, with who closes it;
    consent text, the collection statement, the forfeiture notice's operative
    text, a notices clause making email to the case's address good service, any
    summary or warning the regime prescribes beside the loan agreement, the
-   complaints escalation line, and the Chinese versions of each; production
-   refuses the act that would print an unset one — the notice's send, the
-   collection statement's send — and brackets print outside production only
+   complaints escalation line, and the Chinese versions of each; a drafted
+   wording prints until counsel replaces it; only a text with no draft refuses
+   its act in production — today the collection statement's send alone — and
+   brackets print outside production only
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
    the chain verifying on the restored copy
@@ -182,7 +183,7 @@ the code holds until they do.
 | Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
 | The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer; `check:libs` lists them among its unset values, six of them Grade10's own | Legal |
 | The complaints contact | TBC Owner | A monitored mailbox on the brand's domain, a phone and the shop's address, in every email's footer and on the paper; counsel adds the escalation line. Until it is given, production refuses every act that sends a vault email or mints a paper, and brackets print outside production only | Owner; the escalation line Legal |
-| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built, production refuses the send while the wording is unset, and brackets print outside production only | Legal |
+| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure and drafted sentences are built and print until counsel replaces them; in production the send refuses while the licence line or where to pay is unset | Legal |
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |

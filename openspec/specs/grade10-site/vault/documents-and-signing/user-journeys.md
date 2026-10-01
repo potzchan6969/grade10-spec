@@ -27,3 +27,10 @@ naming the shop and the person we checked,
 **I want** to check its fingerprint against the vault and see the packet
 re-derived from what is stored,
 **so that** the record can be tested rather than believed.
+
+### grade10-site-vault-documents-and-signing-US-05: Collector downloads every document they ever signed
+
+**As a** collector,
+**I want** every sealed document from every case in one download, each with
+its fingerprint,
+**so that** I hold my own record without opening each case in turn.

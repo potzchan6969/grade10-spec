@@ -35,6 +35,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **Search** — exact on phone or email, prefix on case id; a number is
   matched in E.164 however typed; each search writes who, when, what kind of
   term and how many matched on the audit chain, never the term itself
+- 🚧 **Full-width or a bare 852** — a number typed either way is found as the
+  one stored
 - **Money tab** (`vault:payout` only) — the position at an instant, now or
   the end of a day the operator names, and the ledger over payouts,
   repayments and corrections for a date range on the shop's calendar,
