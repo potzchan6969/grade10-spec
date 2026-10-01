@@ -43,9 +43,9 @@ export function requireGit() {
     .match(/(\d+)\.(\d+)/)
     .slice(1)
     .map(Number);
-  if (major < 2 || (major === 2 && minor < 38)) {
+  if (major < 2 || (major === 2 && minor < 40)) {
     throw new Error(
-      `git ${major}.${minor} lacks merge-tree --write-tree: install git 2.38 or later`,
+      `git ${major}.${minor} lacks merge-tree --merge-base: install git 2.40 or later`,
     );
   }
 }

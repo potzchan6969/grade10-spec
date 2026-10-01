@@ -63,7 +63,8 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
   const env = {
     ...Object.fromEntries(
       Object.entries(process.env).filter(
-        ([key]) => key !== "CI" && !key.startsWith("GIT_"),
+        ([key]) =>
+          key !== "CI" && key !== "GITHUB_ACTIONS" && !key.startsWith("GIT_"),
       ),
     ),
     GIT_CONFIG_GLOBAL:

@@ -9,6 +9,7 @@ export const TRAILER = "Design-Override: <what changes and why>";
 const WHY = {
   look: "changes the agreed UI design",
   merge: "drops lines one side of the merge holds",
+  replay: "drops lines its new base holds, in a rebase or cherry-pick",
 };
 
 const setBy = ({ setBy: who }) =>

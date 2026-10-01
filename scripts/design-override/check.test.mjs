@@ -541,14 +541,144 @@ test("shared-design-sync-design-override-SC-36 - deleting a branch checks nothin
   passed(repo.git(["push", "-q", "origin", "--delete", "old"]));
 });
 
-test("shared-design-sync-design-override-SC-37 - install sets the hooks in a person's clone and not in CI", () => {
+test("shared-design-sync-design-override-SC-37 - install sets the hooks in a person's clone, with CI=true too, not on a GitHub runner", () => {
   const repo = store();
   const hooksPath = () =>
     repo.git(["config", "--get", "core.hooksPath"]).out.trim();
   assert.equal(hooksPath(), ".githooks");
   repo.must(["config", "--unset", "core.hooksPath"]);
   assert.equal(repo.install({ CI: "true" }).status, 0);
+  assert.equal(hooksPath(), ".githooks");
+  repo.must(["config", "--unset", "core.hooksPath"]);
+  assert.equal(repo.install({ CI: "true", GITHUB_ACTIONS: "true" }).status, 0);
   assert.equal(hooksPath(), "");
+});
+
+const DATA = "packages/ui/src/blocks/card/data.ts";
+const data = (...lines) => ["export const a = 1;", ...lines, ""].join("\n");
+
+/** `feature` adds `mine` where `main` added `theirs`, so a rebase conflicts. */
+function crossed(repo) {
+  repo.write(DATA, data());
+  repo.commit("feat: data", { as: DESIGNER });
+  repo.must(["push", "-q", "--no-verify", "origin", "main"]);
+  branchPair(
+    repo,
+    () => {
+      repo.write(DATA, data("export const mine = 2;"));
+      repo.commit("feat: mine");
+    },
+    () => {
+      repo.write(DATA, data("export const theirs = 3;"));
+      repo.commit("feat: theirs", { as: DESIGNER });
+      repo.must(["push", "-q", "--no-verify", "origin", "main"]);
+    },
+  );
+}
+
+/** Rebases `feature` onto `main`, settling the conflict as `resolved`; no commit hook runs. */
+function rebaseResolving(repo, resolved) {
+  assert.notEqual(repo.git(["rebase", "-q", "main"]).status, 0);
+  repo.write(DATA, resolved);
+  repo.must(["add", "-A"]);
+  repo.must(["-c", "core.editor=true", "rebase", "--continue"]);
+}
+
+test("a published branch rebased dropping a line its new base holds is refused at push", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  repo.must(["push", "-q", "origin", "feature"]);
+  rebaseResolving(repo, data("export const mine = 2;"));
+  repo.must(["reflog", "expire", "--expire=now", "--all"]);
+  const err = stopped(repo.git(["push", "-q", "-f", "origin", "feature"]));
+  assert.match(
+    err,
+    /drops lines its new base holds, in a rebase or cherry-pick/,
+  );
+  assert.match(err, /commit \w{8} feat: mine/);
+  assert.match(err, /before {2}export const theirs = 3;/);
+});
+
+test("a branch rebased before its first push is read from its reflog", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  rebaseResolving(repo, data("export const mine = 2;"));
+  assert.match(
+    stopped(repo.git(["push", "-q", "origin", "feature"])),
+    /export const theirs = 3;/,
+  );
+});
+
+test("a rebase that keeps both sides passes, and a later commit is read as its own", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  repo.must(["push", "-q", "origin", "feature"]);
+  rebaseResolving(
+    repo,
+    data("export const theirs = 3;", "export const mine = 2;"),
+  );
+  repo.write(DATA, data("export const mine = 2;"));
+  passed(repo.commit("refactor: drop theirs"));
+  passed(repo.git(["push", "-q", "-f", "origin", "feature"]));
+});
+
+test("a fixup squashed in on a rebase onto a moved main passes", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  const mine = "export const mine = 2;";
+  const more = "export const more = 4;";
+  repo.write(DATA, data(mine, more, "export const extra = 5;"));
+  repo.commit("feat: more");
+  repo.must(["push", "-q", "origin", "feature"]);
+  repo.must(["reset", "-q", "--soft", "HEAD~1"]);
+  repo.write(DATA, data(mine, more));
+  repo.commit("feat: more");
+  rebaseResolving(repo, data("export const theirs = 3;", mine));
+  assert.match(repo.must(["show", `HEAD:${DATA}`]), /more = 4/);
+  passed(repo.git(["push", "-q", "-f", "origin", "feature"]));
+});
+
+test("a push from HEAD reads the remote, not every branch HEAD visited", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  repo.must(["push", "-q", "origin", "feature"]);
+  rebaseResolving(repo, data("export const mine = 2;"));
+  repo.must(["reflog", "expire", "--expire=now", "refs/heads/feature"]);
+  assert.match(
+    stopped(
+      repo.git(["push", "-q", "-f", "origin", "HEAD:refs/heads/feature"]),
+    ),
+    /export const theirs = 3;/,
+  );
+});
+
+test("an amended commit is not a replay", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  repo.must(["push", "-q", "origin", "feature"]);
+  repo.write(DATA, "export const mine = 2;\n");
+  passed(repo.git(["commit", "-q", "-a", "--amend", "--no-edit"]));
+  passed(repo.git(["push", "-q", "-f", "origin", "feature"]));
+});
+
+test("a cherry-pick dropping a line its new base holds stops at commit", () => {
+  const repo = store();
+  withRemote(repo);
+  crossed(repo);
+  repo.must(["checkout", "-q", "main"]);
+  assert.notEqual(repo.git(["cherry-pick", "feature"]).status, 0);
+  repo.write(DATA, data("export const mine = 2;"));
+  repo.must(["add", "-A"]);
+  const err = stopped(
+    repo.git(["-c", "core.editor=true", "cherry-pick", "--continue"]),
+  );
+  assert.match(err, /before {2}export const theirs = 3;/);
 });
 
 test("a person's own git config changes no answer", () => {
