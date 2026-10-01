@@ -397,3 +397,22 @@ Runs once per row of **Test data**.
 ## Settled
 
 None.
+
+## Reconciliation
+
+**Run:** QA2 reconciliation 2026-10-01 for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-admin-auction-listing-US-01`, `-US-03` and `-US-04`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30 from `allow-zero-starting-price`), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
+
+| Finding | Disposition |
+| --- | --- |
+| Draft refuses a negative or non-whole starting price, in each currency | **Folded in:** `grade10-admin-auction-listing-SC-03` |
+| Draft keeps 0 apart from an empty price, both ways | **Folded in:** `grade10-admin-auction-listing-SC-124`; clearing back to empty is the requirement's "empty is allowed only while draft" |
+| Create takes 0 in `USD`, `HKD` and `JPY`, with a formatted zero read-back on the form | **Folded in:** `grade10-admin-auction-listing-SC-125`; the read-back is the requirement's formatted-amount line (Q21) |
+| API create refuses -1 and 0.5 | **Folded in:** `grade10-admin-auction-listing-SC-126`; 0.5 is the requirement's integer minor units |
+| API create with the price absent, null or empty is refused and stores no 0 | **Folded in:** `grade10-admin-auction-listing-SC-127` (Q23) |
+| A created listing lowers to 0 and stays created | **Folded in:** `grade10-admin-auction-listing-SC-128` |
+| API create with 0 and no currency creates as `HKD` 0 | **Folded in:** `grade10-admin-auction-listing-SC-125a`, added by this run (Q22) |
+| A created listing at 0 publishes and its slug opens it | **Folded in:** `grade10-admin-auction-listing-SC-129`; publish does not check the price again (Q24) |
+| A published listing refuses a change to 0 | **Folded in:** `grade10-admin-auction-listing-SC-25`; the requirement refuses any price write once published |
+| Unchanged scenarios restated by the modified blocks - `SC-01`, `SC-02`, `SC-04`, `SC-05`, `SC-56`, `SC-24`, `SC-26`, `SC-27`, `SC-27a`, `SC-28`, `SC-70` | **Out of suite:** the durable suite's existing cases; this change does not alter what they verify |
+
+**Uncovered anchors:** none. Every scenario serving `-US-01`, `-US-03` and `-US-04` that this change writes has a case.

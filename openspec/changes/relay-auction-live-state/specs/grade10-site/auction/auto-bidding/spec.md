@@ -159,6 +159,16 @@ intermediate increments.
 - **WHEN** a collector commits a maximum of 50000 minor units
 - **THEN** Grade10 accepts the commitment and that collector leads
 - **AND** the current bid is 1000 minor units, not 0
+- **AND** the public history records one bid, that collector's, at 1000 minor units
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-30a - A second maximum on a 0 start clears one increment above the opening price
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
+
+- **GIVEN** an open `HKD` listing with a starting price of 0, where A's
+  maximum of 50000 minor units stands alone at 1000 minor units
+- **WHEN** B commits a maximum of 1000 minor units
+- **THEN** Grade10 refuses it and names 2000 minor units as the minimum
+- **AND** A still leads at 1000 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-31 - A lone bidder on a 0 start never wins at 0
 **Serves:** grade10-site-auction-auto-bidding-US-01 - Collector opens bidding on a lot that starts at nothing

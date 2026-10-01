@@ -609,3 +609,115 @@ Runs once per row of **Test data**.
 * The bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
 * No new label or wording appears for the late bid.
 * Highest bid reads `<leader price>`, and the lot reads Did not win for customer A.
+
+### grade10-site-auction-listing-page-US14-TC5-1: A lone first bid still confirming at the close leaves the lot Ended with No bids
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* Bid-time holds are on.
+* `<listing_10>` is open with no accepted bid, its scheduled close under a minute away.
+* customer A(card linked) is signed in and on the lot page for `<listing_10>`.
+* customer A's card authorization is held until after the scheduled close.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_10>` | An open HKD listing with no bids, starting price 20000 minor units, extension duration 1800s (30mins), no cap |
+| `<bid amount>` | 20000 minor units, the opening price |
+
+**Steps:**
+
+1. Place `<bid amount>` 5 seconds before the scheduled close.
+2. Read the bid panel.
+3. Wait until the close is recorded, without reloading.
+4. Read the bid panel and the lot's state.
+
+**Expected Results:**
+
+* At step 2 the bid panel reads Authorizing….
+* Time left never reads Extended bidding at the scheduled close.
+* At step 4 the lot reads Ended, with No bids under it, and neither Won nor Did not win.
+* At step 4 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
+
+### grade10-site-auction-listing-page-US14-TC6-1: A later close turns a Closed page back to Extended bidding
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* Bid-time holds are off.
+* `<listing_11>` is in extended bidding, led by customer B, its recorded close under a minute away.
+* customer A is on the lot page for `<listing_11>`, with its live updates delayed by 5 seconds.
+* customer C(card linked) is signed in on a separate session, on the same lot page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_11>` | An HKD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
+| `<bid amount>` | At or above the minimum next bid |
+
+**Steps:**
+
+1. As customer C, place `<bid amount>` 1 second before the recorded close.
+2. As customer A, watch Time left through the recorded close, without reloading.
+3. As customer A, read the lot's state and the bid panel once the update arrives.
+
+**Expected Results:**
+
+* Once the close it counted to passes, customer A's page reads Closed with no result and its bid controls disabled.
+* At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus 1800s.
+* At step 3 the bid controls are enabled.
+* No step shows Won, Did not win or Ended, and the page did not reload.
+
+## Reconciliation
+
+**Run:** QA2 rerun, 2026-10-01, for change `relay-auction-live-state`. Joined QA1's blind cases, written from the re-frozen anchors (Purpose, Feature set, `user-journeys.md`, `proposal.md`, `decisions.md` with `## Raised`, and the change's `domain-tcs.md`), with the delta scenarios SC-29 to SC-46, `tech-design.md` and `tasks.md`. QA1 was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive. QA2 added US14-TC5 and US14-TC6 for scenarios no blind case reached.
+
+| Finding | Disposition |
+| --- | --- |
+| US12-TC1: another session's bid shows price and bid count without a reload | **Folded in:** `grade10-site-auction-listing-page-SC-29` |
+| US12-TC2: the scheduled close with a bid turns to Extended bidding | **Folded in:** `grade10-site-auction-listing-page-SC-31` |
+| US12-TC3: a page with the live line blocked, or `auction.realtime` off, catches up by polling | **Folded in:** `grade10-site-auction-listing-page-SC-32`; the flag-off row also walks `grade10-site-auction-auction-SC-77` |
+| US12-TC4: a page that lost its line catches up when it returns | **Folded in:** `grade10-site-auction-listing-page-SC-41` |
+| US12-TC5: the leader's standing turns to Outbid with the next valid bid, without a reload | **Folded in:** `grade10-site-auction-listing-page-SC-43` (Q12) |
+| US12-TC6: live updates carry no maximum, account, email or card | **Folded in:** `grade10-site-auction-listing-page-SC-43` (AND clause); the frame contract is `grade10-site-auction-auction-SC-76` |
+| US13-TC1: countdowns agree across devices whose clocks disagree | **Folded in:** `grade10-site-auction-listing-page-SC-33` |
+| US13-TC2: the last second reads 1, whole seconds only | **Folded in:** `grade10-site-auction-listing-page-SC-34`, `grade10-site-auction-listing-page-SC-44` (Q31) |
+| US13-TC3: sleep, reconnect and a tab return re-read the clock | **Folded in:** `grade10-site-auction-listing-page-SC-35` |
+| US13-TC4: a sub-second correction never raises the countdown | **Folded in:** `grade10-site-auction-listing-page-SC-36` |
+| US14-TC1: Closed with no result until recorded, then Won, Did not win, or Ended with No bids | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-38`, `grade10-site-auction-listing-page-SC-40`; the no-bid row is the requirement's No winner row |
+| US14-TC2: a close held to the sweep keeps Closed through a reload and never guesses | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-40` |
+| US14-TC3: a hold confirming after the close reads "Your bid did not go through." alone, then Did not win | **Folded in:** `grade10-site-auction-listing-page-SC-39` (Q13) |
+| US14-TC4: a bid reaching the auction after the close reads the same words alone | **Folded in:** `grade10-site-auction-listing-page-SC-45` (Q13) |
+| `grade10-site-auction-listing-page-SC-46`: a lone first bid confirming at the scheduled close; no blind case walked the pending bid | **Added:** `grade10-site-auction-listing-page-US14-TC5-1`. It also answers QA1's third raised question on the lot page: Ended with No bids, neither Won nor Did not win (Q1) |
+| `grade10-site-auction-listing-page-SC-42`: a later recorded close returns a Closed page to Extended bidding; no blind case reached it | **Added:** `grade10-site-auction-listing-page-US14-TC6-1` |
+
+- **Covered at domain** — `grade10-site-auction-e2e-US07-TC03-2` walks `grade10-site-auction-listing-page-SC-30`: a price-moving bid in extended bidding restarts the open page's countdown, labelled Extended bidding, without a reload
+
+**Uncovered anchors:** none. `grade10-site-auction-listing-page-US-04` is a context journey; this change adds no scenario serving it, and its durable cases stand.

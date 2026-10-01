@@ -161,6 +161,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - A read that finds a lot still closing two seconds past its deadline settles it after answering, skipping a lot another transaction holds, so a crowd queues nothing
 - No bid or confirm settles inside its own transaction: it refuses a closing lot, because a close that fails must not fail the bid or the payment webhook that found it
 - The five-minute cron still settles what nobody reached, and counts it as a repair, so the metric shows each time the room was not first
+- ❓ **With `auction.realtime` off** — the flag turns the rooms off and their alarms with them, so a read or the cron records a due close; Product confirms that the lot's own timer is part of the relay rather than of the close rules (Q33)
 
 ### The page clock follows the server
 

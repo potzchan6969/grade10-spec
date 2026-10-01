@@ -194,6 +194,21 @@
 **Expected Results:**
 
 * Once the close passes, customer A's page reads Closed with no result until the close is recorded.
+* Until then, customer C's card shows its existing closed state with <final price> and no result.
 * Step 2 reads Won, with Highest bid <final price>.
 * Step 3's card reads Ended and names when it ended, with no watch control.
 * Neither page reloaded.
+
+## Reconciliation
+
+**Run:** QA2 rerun, 2026-10-01, for change `relay-auction-live-state`. Joined the domain cases, composed from the journeys of auction, listing-page, account-record and auto-bidding, with the delta scenarios of those capabilities. QA2 added one expected result to US12-TC02: the card's closed state with no result before the close is recorded.
+
+| Finding | Disposition |
+| --- | --- |
+| US07-TC03: a price-moving auto-bid in extended bidding restarts the open page's countdown | **Folded in:** `grade10-site-auction-auction-SC-06`, `grade10-site-auction-listing-page-SC-30`; the feature suites leave both to this case |
+| US07-TC04: the card, the Featured slide and the lot page agree after an extension, on the service clock | **Folded in:** `grade10-site-auction-auction-SC-65`, `grade10-site-auction-auction-SC-66`, `grade10-site-auction-listing-page-SC-33`; the auction suite leaves the first two to this case |
+| US12-TC01: winner and losing bidder read one result and one final price on the lot and on My Auctions | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-38`, `grade10-site-auction-account-record-SC-66`; account-record leaves `grade10-site-auction-account-record-SC-18` and `grade10-site-auction-account-record-SC-19` to this case |
+| US12-TC02: the card and the lot page turn at the close without a reload | **Folded in:** `grade10-site-auction-auction-SC-88`, `grade10-site-auction-listing-page-SC-37` |
+
+**Uncovered anchors:** none. Every case traces two or more capabilities' journeys.
+

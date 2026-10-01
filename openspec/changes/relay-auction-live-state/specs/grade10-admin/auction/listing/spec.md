@@ -224,6 +224,13 @@ be refused.
 - **THEN** the form and the API accept each create
 - **AND** each listing is created with a starting price of 0 minor units in its currency
 
+#### Scenario: grade10-admin-auction-listing-SC-125a - Create with 0 and no currency stores HKD 0
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a draft complete except for price, with no currency chosen
+- **WHEN** a create is sent to the API with a starting price of 0 minor units
+- **THEN** the listing is created with a starting price of 0 minor units `HKD`
+
 #### Scenario: grade10-admin-auction-listing-SC-126 - Create refuses a negative starting price on the API
 **Serves:** grade10-admin-auction-listing-US-03 - A script cannot create what the form refuses
 

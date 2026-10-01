@@ -114,9 +114,15 @@ None.
 
 ## Open Questions
 
-None. The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31, and
+The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31, and
 `allow-zero-starting-price`'s interview settled Q16 to Q30 -
-[Decisions](decisions.md#decisions).
+[Decisions](decisions.md#decisions). QA2 raised four more, each with a
+recommended answer in [Raised](decisions.md#raised):
+
+- **Q32** - Current bid on a bidder's row for a lot that closed unsold
+- **Q33** - whether the lot's own timer settles a due lot with `auction.realtime` off
+- **Q34** - whether a bid at exactly the scheduled close counts with extension off
+- **Q35** - where Q28's quick-bid chip rule is written
 
 ## References
 

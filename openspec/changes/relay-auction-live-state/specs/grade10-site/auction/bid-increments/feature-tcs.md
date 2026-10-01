@@ -195,3 +195,18 @@ Runs once per row of **Test data**.
 - Before any accepted bid the minimum is the opening price: the starting price, or the currency's lowest increment on a 0 start. From the first accepted bid, the current bid plus its tier increment applies.
 - A first bid of 0, or of one minor unit, is a non-goal; no case asserts either.
 - Where a lone maximum above the opening price stands is the auto-bidding suite's; this suite asserts only the minimum.
+
+## Reconciliation
+
+**Run:** QA2 reconciliation 2026-10-01 for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
+
+| Finding | Disposition |
+| --- | --- |
+| Before any bid the minimum is the opening price: the starting price on a positive start, below the lowest increment included, and the lowest increment on a 0 start | **Folded in:** `grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-12` (Q19, Q27) |
+| Chip 1x before any bid reads the opening price plus one increment | **Escalated:** Q35 - Q28 settles the amount, but no scenario in this change states it: the chip rule lives in `shared/ui/auction-listing` · Quick-bid chips, which this change does not modify. Recorded in `grade10-site/auction/auction`'s reconciliation, the capability that raised Q28 |
+| A first bid at the opening price is accepted, then the opening price plus its tier increment is the minimum | **Folded in:** `grade10-site-auction-auction-SC-62`, `grade10-site-auction-bid-increments-SC-02` and the requirement's after-an-accepted-bid rule |
+| A first bid below the opening price is refused, naming it | **Folded in:** `grade10-site-auction-auction-SC-63`, `grade10-site-auction-auction-SC-64`, `grade10-site-auction-bid-increments-SC-04` |
+| A lot starting at the ceiling takes one first bid there and refuses the next | **Folded in:** durable `grade10-site-auction-bid-increments-SC-08` and `grade10-site-auction-bid-increments-SC-11`, unchanged by this change (Q30) |
+| Unchanged scenarios restated by the modified blocks - `SC-03`, `SC-05`, `SC-07` | **Out of suite:** the durable suite's existing cases; this change does not alter what they verify |
+
+**Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01`.

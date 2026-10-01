@@ -41,6 +41,10 @@ when the timer runs out with no new bid.
 - **A bid at the scheduled close** — counts as accepted by it, so the listing
   extends; a bid that would move the close past the cap is accepted without
   moving it
+- ❓ **A bid at the scheduled close with extension off** — the requirements
+  count it on every listing, while "no bid counts at or after the effective
+  close" refuses it when the duration or the cap is 0; Product confirms
+  (Q34)
 - **Each listing on its own** — every listing runs its own timer, whatever
   campaign it belongs to
 - **Accepted once** — a bid advances the highest bid atomically, so a delayed
@@ -162,6 +166,11 @@ Blocks](/p/shared/ui/auction-listing).
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999**; a typed decimal mark is refused |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Hold window | The provider's returned capture deadline, where it offers extended authorization |
+
+- ❓ **Quick bids before any bid** — Q28 has them step from the opening
+  price, so chip 1× reads the opening price plus one increment, but no
+  requirement says so; Product confirms whether this change carries it on
+  Listing Page Blocks (Q35)
 
 :::flow{title="From sign-in to a standing bid"}
 ## *Collector* — **Opens a live lot**
@@ -304,6 +313,9 @@ the same facts sit in the five-column table.
   lots
 - 🚧 **After the close** — Your Standing reads Won or Didn't win once the
   result is recorded, never from the page's own clock
+- ❓ **An unsold lot's row** — a bidder whose lone first bid did not confirm
+  before the close reads Didn't win; Product confirms what Current bid reads
+  on a lot that closed with no bid (Q32)
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
