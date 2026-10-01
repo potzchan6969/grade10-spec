@@ -2265,7 +2265,7 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       tests red first; needs 13.10; then run 29.7's checks
       (`grade10-admin-grading-counter-SC-108`)
 
-## 30. The console's batches, receiving, the notice and the settings (grade10)
+## 30. The console's batches, receiving, the notice and the settings (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's recorded worker; types against
 36.1 from the start, and its reads and acts answer once the rest of group 36
