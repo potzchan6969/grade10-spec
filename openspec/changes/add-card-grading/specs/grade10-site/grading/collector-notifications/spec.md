@@ -88,7 +88,7 @@ submission was planned under, each carrying an action link to the submission:
 | --- | --- |
 | The plan | the list saved with its link, the nudge on the nudge day, the plan expired |
 | The drop-off | booked, moved, cancelled, missed, the visit closed by the submission that owned it, the day before |
-| The counter | handed in, the hand-back receipt for a card withdrawn and for the cards collected |
+| The counter | handed in, the hand-back receipt (a card withdrawn or the cards collected) |
 | The batch | on its way to the grader, re-estimated |
 | The grades | the grades posted, a card not back with the box |
 | Waiting to be collected | ready to collect, still here, the storage fee started, the written notice |
@@ -96,9 +96,11 @@ submission was planned under, each carrying an action link to the submission:
 - **One channel, one language** — every message SHALL be sent by email, in English, whatever language the collector reads the pages in, and grading SHALL send nothing on any other channel.
 - **The link** — every message's action link SHALL open the submission at its own address, which SHALL need no account.
 - **What it names** — every message SHALL state the facts it is about rather than only linking to them, and SHALL leave out a paragraph whose fact does not stand for this submission.
+- **On its way** — the message that the cards are on their way SHALL name each shipment carrying the collector's cards, with its tracking and the cards in it.
+- **A held card back** — a card the grader held that comes back in a later box SHALL be told in the grades posted message for that card the day it is scanned, then in ready to collect; no message of its own is added.
 - **Not back with the box** — a card recorded held by the grader, not returned or damaged SHALL be told in the message for a card not back with the box, sent the day it is recorded; a held card SHALL be named with the day the grader holds it until.
 - **What it attaches** — the handed-in message SHALL carry the intake receipt and the signed agreement, the hand-back receipt SHALL carry the signed receipt, and the drop-off booked message SHALL carry a calendar file.
-- **The plan's link** — the list-saved message SHALL be sent once, by the daily sweep, for a plan kept with no drop-off booked; a plan booked before the sweep reaches it SHALL be sent none, and nothing SHALL wait on the collector closing the page.
+- **The plan's link** — the list-saved message SHALL be sent once, by the daily sweep, for a plan kept with no drop-off booked, read as the plan stands when the sweep runs: a plan with a visit then is sent none, and a plan whose visit was cancelled or missed before the sweep is sent it; nothing SHALL wait on the collector closing the page, and a plan already sent its link is never sent it again.
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-26 - The daily sweep sends a plan left unbooked its link once
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector who left the wizard without booking finds the plan again from their inbox
@@ -106,6 +108,20 @@ submission was planned under, each carrying an action link to the submission:
 - **GIVEN** one plan kept yesterday with no drop-off booked, and a second kept yesterday and booked since
 - **WHEN** the daily sweep runs, and runs again the next day
 - **THEN** the first plan's collector is sent the list-saved message with its link once, and the second is sent none
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-28 - A plan whose visit was cancelled before the sweep is sent its link
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector who booked, then cancelled, can still find the plan from their inbox
+
+- **GIVEN** a plan kept yesterday, booked and then cancelled before the daily sweep runs
+- **WHEN** the sweep runs
+- **THEN** the collector is sent the list-saved message with its link once
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-29 - A collector whose cards travel in two shipments is told both
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector following each parcel their cards are in
+
+- **GIVEN** a submission of two cards shipped in two shipments
+- **WHEN** the on-its-way message is sent
+- **THEN** it names both shipments, each with its tracking and its card
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-03 - The link opens the submission with no account
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector going straight from the message to the page rather than signing in
@@ -284,7 +300,7 @@ Every message closes the same way, whatever it is about.
 
 - **The submission's line** — every message SHALL carry the submission's id and what it holds — the cards, the grader and the level — directly above the footer.
 - **Who is writing** — the footer SHALL name the custodian under its registered name trading as Grade10, the shop and its address, the shop's opening hours from the diary's weekly rules, the shop phone, and the complaints contact.
-- **Which shop** — the shop SHALL be the one the submission's visit is at; a submission with no visit SHALL name the brand's main shop.
+- **Which shop** — the shop SHALL be the one the submission's visit is at; a submission with no visit SHALL name the brand's main shop, the diary shop the setting `grading.main_shop_id` names.
 - **The clock** — every date and time in a message SHALL be stated on the shop's clock, `Asia/Hong_Kong`, and the footer SHALL say so.
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-19 - The footer names the submission and who is writing
@@ -313,6 +329,7 @@ message goes out with a blank where one of them belongs.
 
 - **Outside production** — a message SHALL print a marked placeholder naming the unset value in its place, and SHALL still be sent.
 - **In production** — an act that would print an unset value SHALL be refused by name, and SHALL commit nothing.
+- **A letter the sweep sends** — a sweep row whose letter would print an unset value SHALL stay due and unclaimed in production, and SHALL raise `grading.sweep.repair` naming the value, until it is set.
 - **Rendered before it commits** — an act that sends a message SHALL render that message before its own record is written, so no record stands describing a message that cannot be sent.
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-21 - A value Legal has not set prints in brackets outside production
@@ -328,3 +345,11 @@ message goes out with a blank where one of them belongs.
 - **GIVEN** production and no custodian registered name set
 - **WHEN** the cards are handed in
 - **THEN** the act is refused by name, nothing is written, and no message is owed
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-30 - A sweep letter waits for an unset value in production
+**Serves:** The footer - the shop never sends a reminder with a blank where the complaints contact belongs
+
+- **GIVEN** production, no complaints contact set, and a ready submission at its 30-day reminder
+- **WHEN** the daily sweep runs
+- **THEN** no reminder is sent, the row stays due, and `grading.sweep.repair` names the complaints contact
+- **AND** once the contact is set, the next sweep sends the reminder

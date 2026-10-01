@@ -1107,6 +1107,44 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-admin-grading-counter-US3-TC6-1: A card declared above the courier's cover is refused at the check
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-03
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is at the card check of <booked submission>'s hand-in runbook.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <booked submission> | one submission booked at PSA · Super Express |
+| Courier's cover | `grading.courier_cover_minor` at 30000000 (HKD, minor units) |
+| <card above the cover> | a card on the list declared 35000000 (HKD, minor units) |
+
+**Steps:**
+
+1. Check <card above the cover>.
+2. Read the card and the offers beside it.
+
+**Expected Results:**
+
+* Step 2: the card is refused by name, naming the courier's cover, and no higher level is offered.
+
+---
+
 ## grade10-admin-grading-counter-US4: Operator hands the cards back against the code and the receipt
 
 **As a** member of shop staff with a collector at the desk,
@@ -2616,6 +2654,84 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-admin-grading-counter-US9-TC11-1: A transfer not yet received badges its row and counts in To settle
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+
+* admin(holds grading:read) is on <grade10 admin grading url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <unconfirmed transfer> | a payout recorded by bank transfer, not marked received |
+| <received transfer> | a payout recorded by bank transfer and marked received |
+
+**Steps:**
+
+1. Read the rows of the two submissions carrying them.
+2. Read the To settle tile.
+
+**Expected Results:**
+
+* Step 1: the row carrying <unconfirmed transfer> badges Transfer unconfirmed; the other does not.
+* Step 2: the tile counts one transfer unconfirmed.
+
+---
+
+### grade10-admin-grading-counter-US9-TC12-1: A card found after collection is handed back on its own
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) and a second approve holder are at the counter with <collected submission>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collected submission> | a `collected` submission whose one card was paid out at 400000 (HKD, minor units) with its fee of 15000 refunded, since found and the payout reversed |
+
+**Steps:**
+
+1. Open the hand-back for the found card.
+2. Settle at the till.
+3. Hand the card over and seal its receipt.
+4. Read the submission's status.
+
+**Expected Results:**
+
+* Step 2: 415000 (HKD, minor units) are due as one repayment and taken at the till.
+* Step 3: a hand-back receipt is minted for that card alone.
+* Step 4: the submission still reads `collected`.
+
+---
+
 ## grade10-admin-grading-counter-US10: Operator answers a collector from one submission's tabs
 
 **As a** member of shop staff opening a submission,
@@ -3810,6 +3926,44 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-admin-grading-counter-US14-TC10-1: A read holder is offered no act on a batch
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-14
+
+**Pre-conditions:**
+
+* An operator holding `grading:read` alone, the grants mocked as the Background says, is on <grade10 admin grading batches url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch> | a closed batch not yet shipped |
+| <batch back> | a batch back, unchecked |
+
+**Steps:**
+
+1. Open <closed batch> and <batch back>'s receive page.
+2. Send a ship act for <closed batch> to the worker directly.
+
+**Expected Results:**
+
+* Step 1: no ship, stage, re-estimate, arrive, manifest, scan, exception or finish act is offered.
+* Step 2: refused by name.
+
+---
+
 ## grade10-admin-grading-counter-US15: Operations changes a default without a deploy
 
 **As an** admin answerable for how the counter runs,
@@ -4160,6 +4314,44 @@ Runs once per row of **Test data**.
 * Step 2's till prices each card at the fee before, 60000 minor units: the booked submission is untouched.
 * Step 3's till prices each card at the fee after, 70000 minor units: the planned submission is priced on the new row when it books.
 
+### grade10-admin-grading-counter-US15-TC11-1: A seeded figure no owner approved holds the seal in production
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-15
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is at the agreement step of <booked submission>'s hand-in, on a stack read as production.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <booked submission> | one submission booked at PSA · Regular |
+| Notice period | `grading.notice_period_days` at its seeded 90, no approver recorded |
+
+**Steps:**
+
+1. Seal the agreement.
+2. Have an approve holder approve the 90 days, then seal again.
+
+**Expected Results:**
+
+* Step 1: the seal is refused by name, naming the notice period, and nothing is sealed.
+* Step 2: the agreement seals.
+
+---
+
 ## Reconciliation
 
 **Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and four cases against a hundred and two scenarios.
@@ -4199,7 +4391,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US4-TC8-1` | Covered | `grade10-admin-grading-counter-SC-44`; its run has only an unticked item, so `grade10-admin-grading-counter-SC-43` went to a case of its own at review |
 | `grade10-admin-grading-counter-US4-TC9-1` | Covered | `grade10-admin-grading-counter-SC-35` |
 | `grade10-admin-grading-counter-US4-TC4-1` | Raised, answered, folded | The blind pass could not tell whether repeated wrong codes do anything beyond the field's own refusal. Answered: a wrong code is refused as often as it is typed, nothing closes the field, each refusal is on the timeline, and the ID glance against the collector's own name is the fallback. Folded as `grade10-admin-grading-counter-SC-91` and landed as Q76 |
-| `grade10-admin-grading-counter-US4-TC10-1` | Raised, answered, folded | The blind pass could not tell whether a second hand-back re-runs who is collecting. Answered: it does, as every hand-back does. Folded as `grade10-admin-grading-counter-SC-90`, added to the case, and landed as Q78. The case's own close is `grade10-admin-grading-counter-SC-36`. Deferred at review, still `draft`: no spec names the receive that records the held card back at the shop, so a tester cannot reach the case's starting state; the spec's author owes it |
+| `grade10-admin-grading-counter-US4-TC10-1` | Raised, answered, folded | The blind pass could not tell whether a second hand-back re-runs who is collecting. Answered: it does, as every hand-back does. Folded as `grade10-admin-grading-counter-SC-90`, added to the case, and landed as Q78. The case's own close is `grade10-admin-grading-counter-SC-36`. Deferred at review, still `draft`, until the acceptance review: `grade10-admin-grading-batches-SC-58` now names the receive that brings the held card back in a later box, so its starting state is reachable |
 | `grade10-admin-grading-counter-US5-TC1-1` | Covered | `grade10-admin-grading-counter-SC-38` |
 | `grade10-admin-grading-counter-US5-TC2-1` | Covered | `grade10-admin-grading-counter-SC-39` |
 | `grade10-admin-grading-counter-US5-TC3-1` | Retired at review, `deprecated` | Every holder of `grading:operate` also holds `grading:approve`, so the case ran the same operator on the same route as `grade10-admin-grading-counter-US5-TC2-1`, which walks it: no override is offered to anyone turned away |
@@ -4288,6 +4480,11 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-SC-11` | Out of suite | **Out of suite:** `grade10-site/grading/submission-lifecycle`'s feature suite, where `grade10-site/grading/collector-notifications` routes its uncollected ladder; no counter case reads the queue row's badge |
 | A reversed payout repaid at the till | Case added, added after the run | `grade10-admin-grading-counter-US9-TC9-1`: decided by the product owner after the run (Q131), stated by `grade10-admin-grading-counter-SC-110` |
 | A transfer payout marked received | Case added, added after the run | `grade10-admin-grading-counter-US9-TC10-1`: decided by the product owner after the run (Q132), stated by `grade10-admin-grading-counter-SC-111` |
+| The courier's cover refusing a card at the check | Case added at the acceptance review | `grade10-admin-grading-counter-US3-TC6-1`: decided by the product owner, 2026-10-01, stated by `grade10-admin-grading-counter-SC-113` |
+| A transfer unconfirmed on the queue | Case added at the acceptance review | `grade10-admin-grading-counter-US9-TC11-1`: decided by the product owner, 2026-10-01, stated by `grade10-admin-grading-counter-SC-112` |
+| A card found after collection | Case added at the acceptance review | `grade10-admin-grading-counter-US9-TC12-1`: decided by the product owner, 2026-10-01, stated by `grade10-admin-grading-counter-SC-114` |
+| The batch acts behind the operate grant | Case added at the acceptance review | `grade10-admin-grading-counter-US14-TC10-1`: the grant table named no batch act though the worker gates them on `grading:operate`; stated by `grade10-admin-grading-counter-SC-116` |
+| A seeded figure with no approver at the seal | Case added at the acceptance review | `grade10-admin-grading-counter-US15-TC11-1`: decided by the product owner, 2026-10-01, stated by `grade10-admin-grading-counter-SC-115` |
 
 ### Manual
 

@@ -759,7 +759,7 @@ Runs once per row of **Test data**.
 
 * The submission reads Ready to collect, and the other three cards are collectable.
 * The card shows the Not returned badge with the payout line.
-* The money block shows 500000 (HKD, minor units) paid out, with the card's fee and cover refunded beside it, its route and its reference.
+* The money block shows 500000 (HKD, minor units) paid out, with the card's fee refunded beside it and the cover kept, its route and its reference.
 
 ### grade10-site-grading-submission-lifecycle-US5-TC2-1: A payout reaches the collector by either route
 
@@ -861,6 +861,41 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: the collector is told that day that the card came back damaged, with the payout it owes.
+
+---
+
+### grade10-site-grading-submission-lifecycle-US5-TC5-1: A card that turns up is repaid before it goes home
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-05
+
+**Pre-conditions:**
+
+* <collector> opens <their submission>'s page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a ready submission whose card was paid out at 800000 (HKD, minor units) with its fee of 60000 refunded, since found and its payout reversed |
+
+**Steps:**
+
+1. Read the money block and the pickup card.
+
+**Expected Results:**
+
+* Step 1: 860000 (HKD, minor units) read due to repay at the counter, and the card is collectable only once they are paid.
 
 ---
 
@@ -1341,7 +1376,7 @@ Runs once per row of **Test data**.
 ## grade10-site-grading-submission-lifecycle-US8: Collector who leaves the cards is reminded, charged and then given notice
 
 **As a** collector who has not collected,
-**I want** a reminder at 30 and 60 days costing nothing, the storage fee accruing per card and per month from day 90 and due before collection, and the written notice posted from day 180 giving me 30 days from its posting, with the cards mine throughout,
+**I want** a reminder at 30 and 60 days costing nothing, the storage fee accruing per card and per month from day 90 and due before collection, and the written notice posted from day 180 giving me the notice period pinned at signing (90 days) from its posting, with the cards mine throughout,
 **so that** I am nudged, never surprised, and can still vault them instead.
 
 ### grade10-site-grading-submission-lifecycle-US8-TC1-1: The reminders at day 30 and day 60 cost nothing
@@ -1714,6 +1749,148 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: no further message is sent about the cards being uncollected.
+
+---
+
+### grade10-site-grading-submission-lifecycle-US8-TC12-1: A rung falls on the shop's day
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* <collector> opens <their submission>'s page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a submission that became ready at 23:30 on 1 January on the shop's clock |
+
+**Steps:**
+
+1. Read the ladder.
+
+**Expected Results:**
+
+* Step 1: the first reminder falls on 31 January.
+
+---
+
+### grade10-site-grading-submission-lifecycle-US8-TC13-1: A submission whose every card is paid out climbs no rung
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* <collector> opens <their submission>'s page, its ready day 181 days past.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a ready submission of two cards, both recorded not returned and paid out |
+
+**Steps:**
+
+1. Read the page.
+2. Read the letters sent to <collector>.
+
+**Expected Results:**
+
+* Step 1: the submission reads as ended; no storage reads due and no notice is owed.
+* Step 2: no reminder, storage or notice letter was sent.
+
+---
+
+### grade10-site-grading-submission-lifecycle-US8-TC14-1: Storage months come round on the day storage began
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* <collector> opens <their submission>'s page on 1 May.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a ready submission of one card that became ready on 1 January |
+
+**Steps:**
+
+1. Read what is due.
+
+**Expected Results:**
+
+* Step 1: storage reads 6000 (HKD, minor units), two months started from 1 April.
+
+---
+
+### grade10-site-grading-submission-lifecycle-US8-TC15-1: A card the grader held starts its storage from the day it came back
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* <collector> opens <their submission>'s page on 15 April.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a submission ready on 1 January, one card held by the grader and back at the shop on 1 March, one card at the shop since 1 January |
+
+**Steps:**
+
+1. Read what is due.
+
+**Expected Results:**
+
+* Step 1: storage reads 3000 (HKD, minor units), one month for the card at the shop since 1 January, and none for the card back on 1 March.
 
 ---
 
@@ -2238,6 +2415,12 @@ Runs once per row of **Test data**.
 | A vault reference matching no case | Case added, added after the run | `grade10-site-grading-submission-lifecycle-US6-TC7-1`: decided by the product owner after the run (Q133), stated by `grade10-site-grading-submission-lifecycle-SC-63` |
 
 **Uncovered anchors:** none. Every journey US-01 to US-11 carries cases, and the one feature-set anchor, The statuses, is listed out of suite above.
+| The collector's notice period in the journey | Case amended at the acceptance review | `US8` statement: 30 days became the notice period pinned at signing, 90, as `grade10-site-grading-submission-lifecycle-SC-36` reads |
+| What a payout refunds | Case amended at the acceptance review | `US5-TC1-1`: the cover is kept, decided by the product owner, 2026-10-01, as the counter's payout requirement reads |
+| A card repaid before it goes home | Case added at the acceptance review | `US5-TC5-1`, stated by `grade10-site-grading-submission-lifecycle-SC-68` |
+| The ladder on the shop's day | Case added at the acceptance review | `US8-TC12-1`, stated by `grade10-site-grading-submission-lifecycle-SC-64` |
+| Nothing left to hand back | Case added at the acceptance review | `US8-TC13-1`: decided by the product owner, 2026-10-01, stated by `grade10-site-grading-submission-lifecycle-SC-65` |
+| Storage months and a held card's storage | Case added at the acceptance review | `US8-TC14-1` and `US8-TC15-1`: the held card's start decided by the product owner, 2026-10-01, stated by `grade10-site-grading-submission-lifecycle-SC-66` and `SC-67` |
 
 ### Manual
 

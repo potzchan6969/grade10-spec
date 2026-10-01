@@ -45,7 +45,7 @@
 ### grade10-site-grading-submission-lifecycle-US-08: Collector who leaves the cards is reminded, charged and then given notice
 
 **As a** collector who has not collected,
-**I want** a reminder at 30 and 60 days costing nothing, the storage fee accruing per card and per month from day 90 and due before collection, and the written notice posted from day 180 giving me 30 days from its posting, with the cards mine throughout,
+**I want** a reminder at 30 and 60 days costing nothing, the storage fee accruing per card and per month from day 90 and due before collection, and the written notice posted from day 180 giving me the notice period pinned at signing (90 days) from its posting, with the cards mine throughout,
 **so that** I am nudged, never surprised, and can still vault them instead.
 
 ### grade10-site-grading-submission-lifecycle-US-09: Collector keeps the graded record after collection

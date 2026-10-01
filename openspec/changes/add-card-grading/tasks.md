@@ -7,9 +7,10 @@ other order a group depends on is a prose line under that group's heading.
 
 The four migrations `0000_grading_schema.sql` to `0003_seed_settings.sql` land
 whole in group 9: nothing is live and the `grading` gate hides the site's pages
-on uat and production. `0004_waivers_kind.sql` and `0005_notice_period.sql`
-land in groups 19 and 20, each applied before the pull request that reads it
-deploys. A task appended after a group's verify step runs that group's checks
+on uat and production. `0004_batch_shipments.sql`, `0005_waivers_kind.sql`,
+`0006_payout_received.sql` and `0007_notice_period.sql` land in groups 16, 19,
+19 and 20, numbered in that deploy order, each applied before the pull request
+that reads it deploys. A task appended after a group's verify step runs that group's checks
 again. Three stages deploy, and each grade10 group's prose line names
 the one it lands in — (a) the shared modules, the three providers and the
 registered worker answering its health probe; (b) plan through ship, the money
@@ -823,6 +824,11 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
 - [ ] 13.10 Lift `batchTiles.safe` into one `safeStanding(tx)` and expose it
       as `admin.safeStanding` under `grading:read`, its test red first; then
       run 13.8's checks (`grade10-admin-grading-counter-SC-108`)
+- [ ] 13.11 Refuse a card declared above `courier_cover_minor` at `checkCard`
+      with `ABOVE_COVER`, naming the cover and offering no higher level, the
+      setting unset refusing the check in production, its test red first;
+      needs 16.8's migration; then run 13.8's checks (Q143,
+      `grade10-admin-grading-counter-SC-113`)
 
 ## 14. The two templates and the intake receipt (grade10)
 
@@ -977,6 +983,10 @@ Stage (b).
       `admin.signingLink` (`grade10-admin-grading-counter-SC-45`)
 - [x] 15.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 15.10 Refuse a production seal with `SETTING_UNAPPROVED` while any
+      setting the document prints has no `approved_by`, naming it, its test
+      red first; then run 15.9's checks (Q139,
+      `grade10-admin-grading-counter-SC-115`)
 
 ## 16. The batch, the ship and the grader's stages (grade10)
 
@@ -1037,13 +1047,19 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-10`)
 - [x] 16.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 16.8 Ship a batch above the courier's cover split into shipments, its test
-      red first: `shipBatch` takes one or more shipments, each with its cards,
-      courier, tracking and insured total read against the cover in one
-      currency, refusing a shipment past the cover, a card in no shipment or in
-      two, and moving every submission in one act once every shipment is
-      recorded; each collector is told their shipment's tracking (Q128,
-      `grade10-admin-grading-batches-SC-15`, `grade10-admin-grading-batches-SC-57`)
+- [ ] 16.8 Write `0004_batch_shipments.sql` as the Migration Plan names it; then
+      ship every batch as one or more shipments, its tests red first:
+      `shipBatch` takes the shipments, each with its cards, courier, tracking
+      and insured total read against the HKD setting `courier_cover_minor`,
+      refusing a shipment past the cover, a card in no shipment or in two, and
+      an unset cover in production, and moving every submission in one act
+      once every shipment is recorded; the batch keeps only its order number
+      and ship date, `BatchRow` reading courier and tracking from its
+      shipments; each collector is told the tracking of each shipment carrying
+      their cards (Q128, Q143, `grade10-admin-grading-batches-SC-13`,
+      `grade10-admin-grading-batches-SC-15`, `grade10-admin-grading-batches-SC-16`,
+      `grade10-admin-grading-batches-SC-57`,
+      `grade10-site-grading-collector-notifications-SC-29`)
 - [ ] 16.9 Refuse a ship date earlier than the day of the batch's cut-off on the
       shop's clock, its test red first (Q129,
       `grade10-admin-grading-batches-SC-56`)
@@ -1135,6 +1151,13 @@ Stage (c).
       a line settled neither way
       (`grade10-admin-grading-batches-SC-24`,
       `grade10-admin-grading-batches-SC-51`)
+- [ ] 17.11 Match a manifest line in a later batch at the same grader to a
+      card recorded held in an earlier received batch by its intake id, let
+      `resolveManifestLine` name such a card, and have its scan record cert,
+      grade and the grader's words and clear `held`, its collector sent the
+      grades for that card the day it is scanned, its tests red first; then
+      run 17.9's checks (Q142, `grade10-admin-grading-batches-SC-58`,
+      `grade10-admin-grading-counter-SC-36`)
 
 ## 18. Hand-back, collection and the vault case (grade10)
 
@@ -1305,22 +1328,42 @@ Stage (c).
       per request (`grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-103`)
-- [ ] 19.9 Write `0004_waivers_kind.sql` as the Migration Plan names it; then
+- [ ] 19.9 Write `0005_waivers_kind.sql` as the Migration Plan names it; then
       `waive` in place of `waiveUpcharge`, the ask and the record carrying
       `kind` and `dueNow` netting each kind against its own waivers, its
       tests red first; then run 19.7's checks
       (`grade10-admin-grading-counter-SC-109`,
       `grade10-admin-grading-counter-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
-- [ ] 19.10 Put a reversed payout and its refunded fee back on the submission as due,
-      settled at the till by `recordSettlement` as any due line, so the hand-back
-      is refused while either is unpaid, its test red first (Q131,
-      `grade10-admin-grading-counter-SC-110`)
-- [ ] 19.11 Add `markPayoutReceived` under `grading:approve`: a till payout stamped
+- [ ] 19.10 Put a reversed payout and its refunded fee back on the submission as
+      one `repayment` due — `money_lines.kind` and `DUE_KINDS` taking it in
+      19.9's migration, `pos_repayment_variant` ringing it, Q47's no-earn rule
+      covering it and no waiver reaching it — settled at the till by
+      `recordSettlement` as any due line, so the hand-back is refused while it
+      is unpaid, its test red first (Q131, Q138,
+      `grade10-admin-grading-counter-SC-110`,
+      `grade10-site-grading-submission-lifecycle-SC-68`)
+- [ ] 19.11 Write `0006_payout_received.sql` as the Migration Plan names it; then
+      add `markPayoutReceived` under `grading:approve`: a till payout stamped
       received at recording, a transfer only by this act, moving no money and
       refusing a payout already received by name; the console's Money tab
       offers Mark received on a transfer not yet received (Q132,
       `grade10-admin-grading-counter-SC-111`)
+- [ ] 19.12 Hand back a card whose payout was reversed on a `collected`
+      submission: settle its repayment, mint a receipt for that card alone and
+      hand it over or vault it, the submission staying `collected`, its tests
+      red first; then run 19.7's checks (Q137,
+      `grade10-admin-grading-counter-SC-114`)
+- [ ] 19.13 Start a card's storage at day 90 after the later of the ready day
+      and the day it came back to the shop in `dueByCard`, months counted on the
+      shop's days, its tests red first; then run 19.7's checks (Q141,
+      `grade10-site-grading-submission-lifecycle-SC-66`,
+      `grade10-site-grading-submission-lifecycle-SC-67`)
+- [ ] 19.14 Refund only the fee line on the payout path, the cover kept, and
+      cover a storage waiver in `settlement.ts`'s netting with a test, its
+      tests red first; then run 19.7's checks (Q138,
+      `grade10-admin-grading-counter-SC-62`,
+      `grade10-site-grading-submission-lifecycle-SC-41`)
 
 ## 20. The uncollected ladder and the written notice (grade10)
 
@@ -1348,7 +1391,7 @@ Stage (c).
       tracking together, and writing one `notices` row per submission so a
       double-click is a no-op (`grade10-admin-grading-counter-SC-65`,
       `grade10-admin-grading-counter-SC-66`)
-- [x] 20.4 Run the thirty days from the posting date, offer nothing further
+- [ ] 20.4 Run the pinned `notice_period_days` from the posting date (see 20.6), offer nothing further
       once they have passed, and leave the cards the collector's
       (`grade10-admin-grading-counter-SC-67`,
       `grade10-admin-grading-counter-SC-68`,
@@ -1357,7 +1400,7 @@ Stage (c).
       `grade10-site-grading-collector-notifications-SC-15`)
 - [x] 20.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 20.6 Write `0005_notice_period.sql` as the Migration Plan names it; then
+- [ ] 20.6 Write `0007_notice_period.sql` as the Migration Plan names it; then
       `notice_period_days` in `GRADING_SEEDED_SETTINGS`, pinned as the
       seventh term and read by `noticeEnds`, clause 6 and the notice letter,
       `pinnedTermsOf` throwing on a term missing and `NOTICE_PERIOD_DAYS`
@@ -1377,6 +1420,11 @@ Stage (c).
       `grade10-admin-grading-counter-SC-68`,
       `grade10-site-grading-submission-lifecycle-SC-36`,
       `grade10-site-grading-submission-lifecycle-SC-37`)
+- [ ] 20.8 Skip every rung, the storage letter, the notice and the ready letter
+      for a submission with no card left on the ladder, and count every rung
+      on the `Asia/Hong_Kong` day, its tests red first; then run 20.5's checks
+      (Q146, `grade10-site-grading-submission-lifecycle-SC-64`,
+      `grade10-site-grading-submission-lifecycle-SC-65`)
 
 ## 21. The sweeps (grade10)
 
@@ -1477,16 +1525,22 @@ the slow lane of 21.8; walk 34 decides them.
 - [ ] 21.11 Restart the plan's clock from a cancelled visit as from a missed
       one, its test red first: `lastVisitEndedAt` over `dropoff_missed`,
       `dropoff_cancelled` and `dropoff_detached` replaces `lastMissedVisitAt`
-      at every call site, and `planClockAt` takes `visitEndedAt`; then run
+      at every call site, and `planClockAt` takes `visitEndedAt`; `planNudges`
+      reads the same clock and nudges once per clock start (Q144); then run
       21.10's checks (`grade10-site-grading-dropoff-booking-SC-31`,
-      `grade10-site-grading-dropoff-booking-SC-28`)
+      `grade10-site-grading-dropoff-booking-SC-28`,
+      `grade10-site-grading-submission-plan-SC-64`)
 - [ ] 21.12 Send the list-saved message once from the daily sweep for a plan kept
-      with no drop-off booked, never on the collector leaving the page, a
-      plan booked before the sweep sent none; move Finish later and Save for
+      with no drop-off booked as the `planLinks` list, `plan_saved` joining
+      `ONCE_PER_SUBMISSION_KINDS`, never on the collector leaving the page, the
+      plan read as it stands when the sweep runs (Q145); a plan already mailed
+      under the old immediate send is not mailed again, its existing
+      `plan_saved` row holding the once-only index; move Finish later and Save for
       later off their immediate send, and update `plan.spec.ts`'s
       `US6-TC1-1` walk to read the letter after the sweep (Q134,
       `grade10-site-grading-submission-plan-SC-38`,
-      `grade10-site-grading-collector-notifications-SC-26`)
+      `grade10-site-grading-collector-notifications-SC-26`,
+      `grade10-site-grading-collector-notifications-SC-28`)
 
 ## 22. The letters (grade10)
 
@@ -1557,8 +1611,12 @@ fixtures through `external/grade10-spec`. Stage (c).
 - [x] 22.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 - [ ] 22.10 Print the shop's weekly hours from the diary and the shop phone in every
-      letter's footer, and name the brand's main shop on a submission with no
-      visit (Q135, Q136, `grade10-site-grading-collector-notifications-SC-27`)
+      letter's footer, and name the brand's main shop, the setting
+      `main_shop_id`, on a submission with no visit (Q135, Q136,
+      `grade10-site-grading-collector-notifications-SC-27`)
+- [ ] 22.11 Hold a sweep letter that would print an unset value in production:
+      the row stays due and unclaimed and `grading.sweep.repair` names the
+      value, its test red first (`grade10-site-grading-collector-notifications-SC-30`)
 
 ## 23. Retention and erasure (grade10)
 
@@ -1616,6 +1674,12 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       site's own grading client, each block failing on its own, the ask
       withheld while any hold of either product stands and each named in the
       collector's words (`grade10-site-vault-retention-and-erasure-SC-33`)
+- [ ] 23.9 Date `retentionReviews` from the later of a submission's terminal event
+      and the day nothing is owed either way, and refuse an erasure while money
+      is due on a submission at any status, a repayment included, its tests
+      red first; then run 23.7's checks (Q20,
+      `grade10-site-vault-retention-and-erasure-SC-42`,
+      `grade10-site-vault-retention-and-erasure-SC-43`)
 
 ## 24. The console's reads, the settings and the grants (grade10)
 
@@ -1750,6 +1814,11 @@ Stage (b).
       (`grade10-site-grading-submission-plan-SC-60`,
       `grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-71`)
+- [ ] 24.15 Add `courier_cover_minor` (money), `main_shop_id` and
+      `pos_repayment_variant` to the settings, each unset until its owner
+      writes it, the grant table naming every batch act under
+      `grading:operate`, its tests red first (Q143, Q136,
+      `grade10-admin-grading-counter-SC-116`)
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10)
 
@@ -2132,6 +2201,10 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       naming its kind and the record read back under the card, its tests
       red first; needs 19.9; then run 28.6's checks
       (`grade10-admin-grading-counter-SC-109`)
+- [ ] 28.12 Badge Transfer unconfirmed on a row whose transfer payout has no
+      `received_at`, and count those on the To settle tile beside every kind
+      due, its tests red first; then run 28.6's checks (Q140,
+      `grade10-admin-grading-counter-SC-112`)
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
@@ -2456,7 +2529,9 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-admin-grading-counter-US-05`,
       `grade10-admin-grading-counter-US-06`,
       `grade10-admin-grading-counter-US-09`,
-      `grade10-admin-grading-counter-US-10`,
+      `grade10-admin-grading-counter-US-10`, the held card back in a later
+      batch then the second hand-back (`grade10-admin-grading-counter-US4-TC10-1`,
+      `grade10-admin-grading-batches-US2-TC19-1`),
       `grade10-admin-grading-counter-US-11`,
       `grade10-admin-grading-counter-US-13`,
       `grade10-site-grading-counter-documents-US-03`,
@@ -2476,7 +2551,10 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-site-vault-retention-and-erasure-US-03`,
       `grade10-site-vault-retention-and-erasure-US-04`)
 - [ ] 34.4 Flip the cases these walks decide with
-      `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
+      `pnpm run tcs:automated <case…> --decided-by <walk path>` — among them
+      `grade10-admin-grading-batches-US1-TC18-1` and
+      `grade10-admin-grading-batches-US1-TC19-1`, and the reworded shipment
+      cases `batch.spec.ts` already decides — in the walks'
       own commit, and name in the counter suite and in this change's
       `rounds.md` row the three that stay walked by hand — the till at
       hand-back (`grade10-admin-grading-counter-US4-TC5-1`), the identity

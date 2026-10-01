@@ -473,6 +473,116 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-grading-collector-notifications-US1-TC14-1: A plan whose visit was cancelled before the sweep is sent its link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* A plan kept yesterday by <collector>, booked and then cancelled before the sweep.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector> | an email only this run uses |
+
+**Steps:**
+
+1. Run the daily sweep.
+2. Read the letter to <collector>.
+3. Run the sweep again the next day.
+
+**Expected Results:**
+
+* Step 2: the list-saved message with its link.
+* Step 3: nothing further is sent.
+
+---
+
+### grade10-site-grading-collector-notifications-US1-TC15-1: A collector whose cards travel in two shipments is told both
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* <their submission> shipped in two shipments.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a submission of two cards, each in its own shipment with its own tracking |
+
+**Steps:**
+
+1. Read the on-its-way letter to its collector.
+
+**Expected Results:**
+
+* Step 1: it names both shipments, each with its tracking and its card.
+
+---
+
+### grade10-site-grading-collector-notifications-US1-TC16-1: A sweep letter waits for an unset value in production
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* A stack read as production with no complaints contact set, and <their submission> at its 30-day reminder.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <their submission> | a ready submission uncollected 30 days |
+
+**Steps:**
+
+1. Run the daily sweep.
+2. Set the complaints contact, then run the sweep again.
+
+**Expected Results:**
+
+* Step 1: no reminder is sent, and `grading.sweep.repair` names the complaints contact.
+* Step 2: the reminder is sent.
+
+---
+
 ## grade10-site-grading-collector-notifications-US2: Collector is not emailed about what the counter already told them
 
 **As a** collector who was refused a card at the counter or who named someone to collect on the page,
@@ -801,6 +911,9 @@ Runs once per row of **Test data**.
 | The footer's shop, hours and phone | Case added, added after the run | `grade10-site-grading-collector-notifications-US1-TC13-1`: decided by the product owner after the run (Q135, Q136), stated by `grade10-site-grading-collector-notifications-SC-27` |
 
 **Uncovered anchors:** none. Every journey of this capability — `grade10-site-grading-collector-notifications-US-01`, `grade10-site-grading-collector-notifications-US-02`, `grade10-site-grading-collector-notifications-US-03` — and every feature set group a scenario serves is walked by a living case.
+| `grade10-site-grading-collector-notifications-SC-28` | Case added at the acceptance review | `grade10-site-grading-collector-notifications-US1-TC14-1`: the sweep reads the plan as it stands, decided by the product owner, 2026-10-01 |
+| `grade10-site-grading-collector-notifications-SC-29` | Case added at the acceptance review | `grade10-site-grading-collector-notifications-US1-TC15-1`: one submission's cards may travel in two shipments (Q128) |
+| `grade10-site-grading-collector-notifications-SC-30` | Case added at the acceptance review | `grade10-site-grading-collector-notifications-US1-TC16-1`: a sweep letter has no act to refuse, so it waits and raises the repair alert |
 
 ### Manual
 

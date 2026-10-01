@@ -929,13 +929,17 @@ every submission under that email, open and closed.
 An old list is priced on a stale sheet and referenced against stale sales, so a
 plan nobody books is let go rather than kept.
 
-**The nudge** - a plan with no drop-off booked SHALL be nudged once, 21 days
-after it was kept, with the link to it.
+**The clock's start** - the plan's clock SHALL start on the later of the day it
+was kept and the day its last visit ended without a hand-in, cancelled or
+missed; both days below SHALL be counted from that start, on the
+Asia/Hong_Kong day.
 
-**The expiry** - a plan with no drop-off booked SHALL expire 30 days after it
-was kept, and the collector SHALL be told.
+**The nudge** - a plan with no drop-off booked SHALL be nudged once per clock
+start, 21 days after it, with the link to it, so a plan whose clock restarts
+never expires unwarned.
 
-**The clock** - both days SHALL be counted on the Asia/Hong_Kong day.
+**The expiry** - a plan with no drop-off booked SHALL expire 30 days after its
+clock's start, and the collector SHALL be told.
 
 **Nothing owed** - an expired plan SHALL leave nothing paid and nothing owed,
 and SHALL offer starting a submission again.
@@ -975,3 +979,10 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **WHEN** the day turns
 - **THEN** the plan does not expire
 - **AND** no nudge and no expiry message is sent
+
+#### Scenario: grade10-site-grading-submission-plan-SC-64 - A cancelled visit restarts the plan's clock and its nudge
+**Serves:** grade10-site-grading-submission-plan-US-08 - a collector who booked, then cancelled, is warned again before the plan lets go
+
+- **GIVEN** a plan kept on 1 March, nudged on 22 March, then booked and its visit cancelled on 25 March
+- **WHEN** the days turn
+- **THEN** the plan is nudged again on 15 April and expires on 24 April, not on 31 March

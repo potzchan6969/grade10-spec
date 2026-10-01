@@ -15,13 +15,13 @@ new event cannot ship silent:
 
 | Event | Subject | When | Carries | Link |
 | --- | --- | --- | --- | --- |
-| The plan is saved and the collector leaves without booking | Your submission: 4 cards for PSA Regular | at once, and again as the nudge at day 21; not sent when booked in one sitting | the cards and the declared total, the estimate, the day the plan is kept until and the nudge day | Book the drop-off |
+| The plan is saved and the collector leaves without booking | Your submission: 4 cards for PSA Regular | once, by the daily sweep, while the plan has no visit; the nudge at day 21 is its own row | the cards and the declared total, the estimate, the day the plan is kept until and the nudge day | Book the drop-off |
 | The plan expires | Your submission list has expired | day 30 with no drop-off booked | nothing paid, nothing owed; start again from the price sheet | Start a submission |
 | Drop-off booked | Drop-off booked: Tue 27 Oct 2026, 15:00 | on booking | where, what to bring, the visit's length, the fee, the day the cards leave and the estimate, a calendar file | Open your submission |
 | Drop-off moved, cancelled, missed, or the day before | one each, sent by grading | on each event; the reminder the day before | the visit, and on a missed one the line to book again from the page | Open your submission |
 | Handed in | Handed in: 4 cards for PSA Regular | at hand-in | the intake receipt: what was paid and the POS reference, the intake ids, the batch's cut-off and ship day, the estimate; the receipt and the signed agreement attached | Open your submission |
 | A card withdrawn, or the cards collected | the hand-back receipt | at the counter | the signed receipt attached | Open your submission |
-| Batch shipped | Your cards are on their way to PSA | the ship day | the courier and tracking, the grader's order number, the estimate | Open your submission |
+| Batch shipped | Your cards are on their way to PSA | the ship day | each shipment carrying the collector's cards with its courier and tracking, the grader's order number, the estimate | Open your submission |
 | Running late | PSA is running late with your cards | the day the batch is re-estimated, to every collector in it | the grader's stage, the old and the new estimate | Open your submission |
 | Grades posted | Grades are in: a PSA 10, two 9s, and one returned ungraded | the morning the grades are read | each card's grade and cert, any upcharge and that it is settled at the counter, any ungraded card with the grader's note, the review line | See the grades |
 | A card not back with the box: held by the grader, not returned, or damaged | One card did not come back: Lugia V (Alternate Art) | the day it is recorded at receiving | a held card, the day the grader holds it until; a card not returned or damaged, the payout at declared value and the fee refunded, inside the payout window | Open your submission |

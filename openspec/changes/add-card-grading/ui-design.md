@@ -701,12 +701,13 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 | Badge: Uncollected 30 d | ready 30 days and not collected | `grade10-admin-grading-counter-SC-07` |
 | Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-SC-10` |
 | Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-SC-08` |
-| Badge: Payout past its window | a payout owed and unmade past the settlement window, 14 days from the day the batch was received (`decisions.md` Q24) | `grade10-admin-grading-counter-SC-09` |
+| Badge: Payout past its window | a payout owed and not yet recorded past the settlement window, 14 days from the day the batch was received (`decisions.md` Q24); an unreceived transfer does not count | `grade10-admin-grading-counter-SC-09` |
+| Badge: Transfer unconfirmed | a transfer payout recorded and not yet marked received, counted on To settle (`decisions.md` Q140) | `grade10-admin-grading-counter-SC-112` |
 | Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-admin-grading-counter-SC-11` |
 | Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-counter-SC-87` |
 | Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-counter-SC-87` |
 | Tile: Ready, uncollected | the count and how many past 30 days | `grade10-admin-grading-counter-SC-12` |
-| Tile: To settle | the sum and the count of upcharges | `grade10-admin-grading-counter-SC-13` |
+| Tile: To settle | the sum of what is due (upcharges, storage, repayments) and the submissions owing it; the transfers unconfirmed | `grade10-admin-grading-counter-SC-13`, `grade10-admin-grading-counter-SC-112` |
 | Empty view | `EmptyState` in the view | `grade10-admin-grading-counter-SC-05` |
 | Loading | the console's async status line | **Out of suite:** the panel's colocated test |
 | Error | the console's async status line, retry | **Out of suite:** the panel's colocated test |
@@ -790,7 +791,8 @@ Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-adm
 | Order and older batches | every batch not yet received on each page, what waits on the shop first: back unchecked, closed with cards to ship, past the estimate, then the rest with the grader soonest due, then open; the received ones newest first behind the pager | `grade10-admin-grading-batches-SC-55` |
 | Empty | no batch; New batch | `grade10-admin-grading-batches-SC-44` |
 | New batch | grader, and only the levels the grader's active sheet carries; a card that fits neither waits | `grade10-admin-grading-batches-SC-44` |
-| Ship form (`GA4`) | the checklist: packing list printed, the grader's form filled, insured to the declared total against the courier's cover; courier and tracking, order number, shipped on, estimated back; Mark as shipped · email n collectors | `grade10-admin-grading-batches-SC-43` |
+| Ship form (`GA4`) | the checklist: packing list printed, the grader's form filled; order number, shipped on, estimated back; one shipment block with its courier and tracking, insured to its cards' declared total against the courier's cover setting, read-only; Mark as shipped · email n collectors | `grade10-admin-grading-batches-SC-43` |
+| Cover unset | Mark as shipped refused naming the courier's cover, in production (`decisions.md` Q143) | `grade10-admin-grading-batches-SC-16` |
 | Above the courier's cover | the insured line in the warning tone; Mark as shipped refused as one shipment, and Split into shipments offered (`decisions.md` Q128) | `grade10-admin-grading-batches-SC-15` |
 | Split into shipments | one block per shipment: its cards picked from the packing list, courier and tracking, its insured total against the cover; a card in no shipment or a shipment past the cover named; Mark as shipped once every card is in one | `grade10-admin-grading-batches-SC-57` |
 | Shipped on in the future | refused on the field | `grade10-admin-grading-batches-SC-12` |

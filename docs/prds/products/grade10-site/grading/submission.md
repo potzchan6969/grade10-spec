@@ -90,10 +90,15 @@ it changes; the rest of the cards carry on:
 - 🚧 **Storage per card still at the shop** — a month started since day 90
   counts; a card withdrawn, paid out or vaulted does not, and it is one line
   per card held at the till
+- 🚧 **A card the grader held** — its day 90 counts from the later of the ready
+  day and the day it came back to the shop
+- 🚧 **The months** — counted on the shop's days from the midnight that begins
+  day 90, each next on that day of the month
 - 🚧 **The rungs never pause** — they count from the ready day; only collecting, vaulting or a payout leaves it
 - 🚧 **A part month** — counts as a whole month
 - 🚧 **Every card paid out** — the submission has ended, for erasure and
-  retention, on the day its last card is paid out
+  retention, on the day its last card is paid out; it climbs no rung and is
+  sent no reminder, notice or ready message, with no status of its own
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
   for it; the posting date and tracking are recorded, and the days the notice gives run from it
 - 🚧 **After the notice** — the release stops here: the cards stay the
@@ -101,7 +106,9 @@ it changes; the rest of the cards carry on:
   case
 - 🚧 **The payout** — a card not returned, or returned damaged, is paid out at
   its declared value on a record of its own, approved by a second person, at
-  the till or by bank transfer; a card that turns up reverses it on that record
+  the till or by bank transfer, its fee refunded and its cover kept; a card
+  that turns up reverses it on that record, and the payout and fee are repaid
+  at the till before it goes home
 - 🚧 **The payout window** — 14 days from the day the batch is received at
   the shop
 

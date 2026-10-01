@@ -219,6 +219,7 @@ somebody.
 | Storage fee from day 90 | the cards have been ready for 90 days, so the storage fee accrues |
 | Notice due | the cards have been ready for 180 days, so the written notice is owed |
 | Payout past its window | a payout is owed and unmade 14 days after the day its batch was received at the shop |
+| Transfer unconfirmed | a payout by transfer is recorded and not yet marked received |
 | Message not sent | a letter to the collector ran out of attempts |
 
 **Derivation** - the badges SHALL be derived at the read from the submission's
@@ -285,7 +286,7 @@ The queue SHALL carry these four:
 | Batch closing | the grader and level closing next, its cards, its submissions, how many more may still join today, and the day it ships |
 | With graders | the submissions with a grader, and how many are past their estimate |
 | Ready, uncollected | the submissions ready and uncollected, and how many have been ready more than 30 days |
-| To settle | the sum of the unpaid upcharges in HKD minor units, and how many submissions owe one |
+| To settle | the sum of what is due in HKD minor units - unpaid upcharges, storage and repayments of a reversed payout - how many submissions owe it, and how many transfer payouts are unconfirmed |
 
 #### Scenario: grade10-admin-grading-counter-SC-12 - The ready tile counts what is still in the safe
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
@@ -300,6 +301,13 @@ The queue SHALL carry these four:
 - **GIVEN** two submissions with unpaid upcharges of 20000 and 35000 HKD minor units
 - **WHEN** the queue is read
 - **THEN** the settle tile reads 55000 HKD minor units over two submissions
+
+#### Scenario: grade10-admin-grading-counter-SC-112 - A transfer not yet received badges its row and counts in To settle
+**Serves:** grade10-admin-grading-counter-US-09 - the approver sees a transfer payout the bank has not yet shown
+
+- **GIVEN** one payout by transfer recorded and not marked received, and one marked received
+- **WHEN** the queue is read
+- **THEN** the first payout's row badges Transfer unconfirmed, the second's does not, and the settle tile counts one transfer unconfirmed
 
 #### Scenario: grade10-admin-grading-counter-SC-87 - The closing and with-graders tiles read the batches
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
@@ -322,7 +330,9 @@ offered before the one above it is done:
    declared value against the card's reference, and two photographs, front and
    back, that reach the collector's submission page. A card not on the list is
    added with the collector.
-3. **Check the level fits** — a card whose declared value is above the pinned
+3. **Check the level fits** — a card declared above `grading.courier_cover_minor`
+   SHALL NOT be checked in at all, since no shipment could carry it; it is
+   refused, naming the courier's cover. A card whose declared value is above the pinned
    level's ceiling SHALL NOT be checked in at that level; it moves to a second
    submission at a higher level, or it is refused.
 4. **Sign the agreement** — the submission agreement is shown on the iPad, and
@@ -372,6 +382,13 @@ lines.
 - **GIVEN** a submission at a level whose pinned ceiling is 5000000 HKD minor units
 - **WHEN** the operator checks a card declared at 8000000 HKD minor units
 - **THEN** the card is refused at that level by name, and is offered a second submission at a higher level or a refusal
+
+#### Scenario: grade10-admin-grading-counter-SC-113 - A card declared above the courier's cover is refused at the check
+**Serves:** grade10-admin-grading-counter-US-03 - the operator finds one card no parcel could carry
+
+- **GIVEN** a courier's cover of 30000000 HKD minor units and a submission at Super Express
+- **WHEN** the operator checks a card declared at 35000000 HKD minor units
+- **THEN** the card is refused by name, naming the courier's cover, and is not offered a higher level
 
 #### Scenario: grade10-admin-grading-counter-SC-18 - The till opens only on the sealed agreement
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
@@ -538,9 +555,9 @@ close only on the sealed receipt:
    `grading.id_glance_threshold`, an identity document SHALL be matched to that
    name and nothing about it SHALL be kept; the receipt records only that an ID
    was matched. At or below the threshold no document SHALL be asked for.
-3. **Settle** — the upcharge and the storage accrued SHALL be taken at the till
-   before anything is handed over; where nothing is due, the step ticks with
-   nothing taken.
+3. **Settle** — the upcharge, the storage accrued and any repayment of a
+   reversed payout SHALL be taken at the till before anything is handed over;
+   where nothing is due, the step ticks with nothing taken.
 4. **Hand over and inspect** — each item is ticked as it is handed over and
    inspected with the collector, and each slab is photographed for the
    collector's page. A card the grader is still holding SHALL NOT be tickable.
@@ -1000,7 +1017,8 @@ shop's claim.
 
 **What is paid** - a payout SHALL be recorded at the card's declared value,
 with the card's fee refunded beside it, on a record naming the card, the
-person who recorded it and the second approve holder.
+person who recorded it and the second approve holder. The cover line SHALL NOT
+be refunded: it paid for the protection the payout drew on.
 
 **The route** - a payout SHALL name one of two routes, the till or a bank
 transfer, and a transfer SHALL carry its reference.
@@ -1017,8 +1035,14 @@ same record, with its own reason and second approve holder, and the card SHALL
 go back on the submission; nothing already recorded SHALL be edited.
 
 **Repaid at the till** - a reversal SHALL put the payout and the refunded fee
-on the submission as due, settled at the till as any due line, and the card
-SHALL NOT be handed back while either is unpaid.
+on the submission as one repayment due, a kind of its own that no waiver
+reaches and that earns no points, settled at the till as any due line; the
+card SHALL NOT be handed back while it is unpaid.
+
+**After collection** - a card whose payout is reversed on a `collected`
+submission SHALL be handed back on its own while the submission stays
+`collected`: its repayment is settled, a hand-back receipt is minted for that
+card alone, and it is handed over or vaulted.
 
 **Received** - a payout at the till SHALL be stamped received when it is
 recorded; a payout by transfer SHALL be stamped received only by a later Mark
@@ -1052,6 +1076,14 @@ SHALL be refused by name on a payout already received.
 - **GIVEN** a card paid out at 400000 HKD minor units with its fee of 15000 HKD minor units refunded, since found and the payout reversed
 - **WHEN** the hand-back is prepared
 - **THEN** 415000 HKD minor units are due on the submission, settled at the till, and the card is not handed back until they are paid
+
+#### Scenario: grade10-admin-grading-counter-SC-114 - A card found after collection is handed back on its own
+**Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
+
+- **GIVEN** a `collected` submission whose card was paid out at 400000 HKD minor units with its fee of 15000 refunded, since found and the payout reversed
+- **WHEN** the hand-back is prepared for that card
+- **THEN** 415000 HKD minor units are settled at the till, a hand-back receipt is minted for that card alone, and it is handed over or vaulted
+- **AND** the submission still reads `collected`
 
 #### Scenario: grade10-admin-grading-counter-SC-96 - A payout by transfer carries its reference
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
@@ -1153,7 +1185,7 @@ waits for.
 service the counter runs on SHALL be a setting the console reads: the plan's
 nudge and expiry days, the reminder days, the day the storage fee starts and
 its amount per card per month, the notice day, the notice period the notice
-gives, the settlement days, the ID glance threshold, the safe's declared cap, the batch cut-off, the reference
+gives, the settlement days, the ID glance threshold, the safe's declared cap, the courier's cover, the brand's main shop, the batch cut-off, the reference
 rate that reads a USD reference sale in HKD, and the fee sheet one row per
 grader and level with its ceiling, fee, cover rate, estimate and cards a
 submission.
@@ -1167,6 +1199,10 @@ money setting SHALL take a second approve holder who is not the writer. The
 reference rate prices nothing a collector pays, so it is not money: one
 approve holder SHALL write it, and a rate of nought or less SHALL be refused.
 
+**Approved before it prints** - in production, sealing a document SHALL be
+refused by name while a setting it prints carries no recorded approver; a
+value seeded with no approver is a draft until its owner approves it.
+
 **Its own subject** - a settings write SHALL be filed on the audit chain under
 its own subject, `settings`, rather than under a submission.
 
@@ -1179,6 +1215,14 @@ written, naming the owner who owes it.
 - **GIVEN** the storage fee per card per month never written by its owner
 - **WHEN** a surface that needs it is read
 - **THEN** the read is refused by name, naming that setting, and no other value is used in its place
+
+#### Scenario: grade10-admin-grading-counter-SC-115 - A seeded figure no owner approved holds the seal in production
+**Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
+
+- **GIVEN** a production brand whose notice period stands at its seeded 90 days with no approver recorded
+- **WHEN** a submission agreement is sealed
+- **THEN** the seal is refused by name, naming the notice period, and nothing is sealed
+- **AND** once an approve holder approves the 90 days, the next seal goes through
 
 #### Scenario: grade10-admin-grading-counter-SC-70 - A money setting takes a second approve holder
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
@@ -1217,8 +1261,8 @@ the desk.
 
 **At signing** - every figure the submission agreement prints SHALL be pinned
 when that agreement is minted: the storage fee per card per month, the day it
-starts, the settlement days, the notice day, the reminder days and the ID
-glance threshold.
+starts, the settlement days, the notice day, the notice period, the reminder
+days and the ID glance threshold.
 
 **Reach** - a settings write SHALL reach only submissions not yet booked, and
 SHALL change no figure already pinned.
@@ -1236,6 +1280,7 @@ SHALL change no figure already pinned.
 - **GIVEN** a submission whose agreement was sealed with a storage fee of 3000 HKD minor units per card per month
 - **WHEN** an approve holder later writes that fee as 5000 HKD minor units
 - **THEN** the storage accrued on that submission is still worked out at 3000 HKD minor units per card per month
+- **AND** a notice period written later leaves that submission on the period it was sealed with
 
 #### Scenario: grade10-admin-grading-counter-SC-74 - A change reaches only what is not yet booked
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
@@ -1252,8 +1297,8 @@ so a section an operator cannot use is not offered.
 | Grant | Held by | What it opens |
 | --- | --- | --- |
 | `grading:read` | staff, admin | the queue with its badges, tiles and day strip; one submission with its cards, money, documents and timeline; the settings, read-only |
-| `grading:operate` | staff, admin | starting the visit, checking, adding and refusing a card, minting a document, recording the fee paid, handing in, withdrawing a card, handing back, opening a vault case for a slab, posting the written notice, sending a document or the grades message again |
-| `grading:approve` | staff, admin | waiving an upcharge, recording and reversing a payout, marking a transfer payout received, and writing a setting or a fee-sheet row |
+| `grading:operate` | staff, admin | starting the visit, checking, adding and refusing a card, minting a document, recording the fee paid, handing in, withdrawing a card, handing back, opening a vault case for a slab, posting the written notice, sending a document or the grades message again; opening, closing and shipping a batch, recording its stage and its estimate, recording it arrived, entering the manifest and the invoice, resolving or adding a line, scanning, recording an exception, and finishing receiving |
+| `grading:approve` | staff, admin | waiving an upcharge or a card's storage, recording and reversing a payout, marking a transfer payout received, and writing a setting or a fee-sheet row |
 
 **The settings** - `grading:read` SHALL open the settings read-only, and only
 `grading:approve` SHALL edit them.
@@ -1270,6 +1315,13 @@ badges, its tiles and the day's strip are the whole signal.
 - **GIVEN** an operator holding `grading:read` alone
 - **WHEN** they open a submission
 - **THEN** no act requiring another grant is offered, and sending one is refused by name
+
+#### Scenario: grade10-admin-grading-counter-SC-116 - A read holder is offered no act on a batch
+**Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
+
+- **GIVEN** an operator holding `grading:read` alone
+- **WHEN** they open the batches and a batch's receive page
+- **THEN** no ship, stage, re-estimate, arrive, manifest, scan, exception or finish act is offered, and sending one is refused by name
 
 #### Scenario: grade10-admin-grading-counter-SC-76 - Only an approve holder edits the settings
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
@@ -1356,6 +1408,10 @@ An act absent is better than an act refused, and the console is never the guard.
 | Cancel the submission | operate | `planned`, `booked`, before the visit starts and before a card is checked or refused |
 | Withdraw a card | operate | `checked_in`, until its batch closes |
 | Mint the hand-back receipt, hand over, open a vault case for a slab | operate | `ready` |
+| Hand back a card whose payout was reversed | operate | `collected` |
+| Ship a batch | operate | a closed batch |
+| Record a batch's stage, re-estimate it, record it arrived | operate | a shipped batch |
+| Enter the manifest and the invoice, resolve or add a line, scan, record an exception, finish receiving | operate | a batch back, unchecked |
 | Post the written notice | operate | `ready`, from the notice day |
 | Show, copy or send a sealed document or the grades message again | operate | once the document is sealed |
 | Waive an upcharge or a card's storage | approve | `returned`, `ready` |

@@ -2322,6 +2322,42 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 ---
 
+### grade10-site-grading-submission-plan-US8-TC5-1: A cancelled visit restarts the plan's clock and its nudge
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-plan-US-08
+
+**Pre-conditions:**
+
+* A plan kept on 1 March by <collector> with no drop-off, nudged on 22 March.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector> | an email only this run uses |
+
+**Steps:**
+
+1. Book a drop-off for the plan on 25 March, then cancel it.
+2. Read the letters to <collector> through 24 April, and the plan's page.
+
+**Expected Results:**
+
+* Step 2: a second nudge on 15 April, and the plan expires on 24 April, not on 31 March.
+
+---
+
 ## Reconciliation
 
 **Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 44 cases over US1 to US8 and four raised questions; the scenario pass wrote `grade10-site-grading-submission-plan-SC-01` to `SC-45` over fourteen ADDED requirements. Nothing verifies the bundle; this line is the run's own word for it.
@@ -2360,6 +2396,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 | `grade10-site-grading-submission-plan-SC-62` a plan kept from a ticked review | **Case added:** `US7-TC9-1` | written after the blind pass: the keep carries the review's tick, so a plan booked from the review is never asked for it again |
 | `grade10-site-grading-submission-plan-SC-61` a plan kept unticked asks for the statement | **Case added:** `US6-TC9-1` | written after the blind pass: a plan saved unticked and booked from its page was asked for nothing, so the plan now holds its tick and a booking or a join for it unticked is refused |
 | `grade10-site-grading-submission-plan-SC-63` a plan kept with no level asks for one | **Case added:** `US6-TC10-1` | written after the blind pass: a plan kept before a level was picked was offered a drop-off its booking could only refuse, so its page now asks for the level through the list's edit, and a booking or a join sent for it is refused before the diary is asked |
+| `grade10-site-grading-submission-plan-SC-64` | Case added at the acceptance review | `grade10-site-grading-submission-plan-US8-TC5-1`: the clock restarts on a cancelled or missed visit and nudges again, decided by the product owner, 2026-10-01 |
 
 ### Manual
 

@@ -11,7 +11,7 @@
 
 ## Background
 
-* The stack is a Grade10 dev or isolated end-to-end stack, started so its grading dev settings stand: PSA's levels as seeded (Regular: ceiling 1170000 minor units a card, fee 60000, back in 5 weeks; Express: ceiling 1950000, fee 120000, back in 3 weeks; Super Express: ceiling 3900000, fee 240000, back in 2 weeks), the batch cut-off Thursday 19:00 `Asia/Hong_Kong`, and the safe's declared cap as seeded, 999999999. A case that needs the cap at 30000000 writes it first, as *Writing a money setting* says.
+* The stack is a Grade10 dev or isolated end-to-end stack, started so its grading dev settings stand: PSA's levels as seeded (Regular: ceiling 1170000 minor units a card, fee 60000, back in 5 weeks; Express: ceiling 1950000, fee 120000, back in 3 weeks; Super Express: ceiling 3900000, fee 240000, back in 2 weeks), the batch cut-off Thursday 19:00 `Asia/Hong_Kong`, the courier's cover `grading.courier_cover_minor` as seeded, 30000000 HKD minor units, and the safe's declared cap as seeded, 999999999. A case that needs the cap at 30000000 writes it first, as *Writing a money setting* says.
 * admin A and admin B each hold the `staff` role, which carries `grading:read`, `grading:operate` and `grading:approve`, and each is signed in to the console in a browser of their own. A case naming one admin means admin A. No shipped role holds `grading:read` alone, so a case naming that grant mocks the operator's grants.
 * PSA's stages read, in order: Arrived, Order prep, Research and ID, Grading, Assembly, QA checks, Completed, Shipped. Completed is the stage that is the move to the grades being in.
 * *Seeding a submission* - `POST <grade10 api origin>/grading/dev/submissions/seed` with a fresh `seed`, the `status` the case names, `level`, `cards` (one declared value per card, in minor units), an `email` only this run uses, and, where the case gives them, `appointmentAt` (the hand-in) and `readyAt`, all in the past. It walks the submission to that status through the desk's own acts; its hand-in joins a batch of its own, closed at the hand-in's instant, and the batch ships a quarter of the way from the hand-in to `readyAt`. `checked_in` leaves the batch closed and not shipped; `sent` shipped; `graded` shipped with the grades in; `returned` back, unchecked, with the grader's manifest entered whole, a line per card, and no invoice; `ready` received.
@@ -26,7 +26,7 @@
 ## grade10-admin-grading-batches-US1: Operator ships the batch that closed
 
 **As a** member of shop staff on the day after the cut-off,
-**I want** the batch closed at Thursday 19:00 with its packing list, the grader's order number, the courier and tracking, the insured total against the courier's written cover figure and the estimate from the ship day, and one act that marks every submission in it as sent and emails every collector,
+**I want** the batch closed at Thursday 19:00 with its packing list, the grader's order number, one or more shipments each with its courier, tracking and insured total at or under the courier's cover, and the estimate from the ship day, and one act that marks every submission in it as sent and emails every collector,
 **so that** one parcel to one grader at one level leaves with one record.
 
 ### grade10-admin-grading-batches-US1-TC1-1: Operator ships a closed batch with a complete ship form
@@ -59,7 +59,7 @@
 | Grader's order number | PSA-ORDER-0001 |
 | Courier | SF Express |
 | Tracking number | SF1000000001 |
-| Courier's written cover | 30000000, HKD, above the insured total |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded, above the insured total |
 | Shipped on | today |
 | Estimated back | <ship day> plus Regular's 5 weeks |
 
@@ -67,7 +67,7 @@
 
 1. Click Ship on <closed batch of one card>'s row.
 2. Tick each check under Before it leaves, the packing list printed among them.
-3. Enter the order number, courier, tracking number, courier's written cover with its currency, and Shipped on.
+3. Enter the order number, the one shipment's courier and tracking number, and Shipped on.
 4. Click Mark as shipped.
 5. Read the batch's row, and read the letter to the submission's collector.
 
@@ -144,13 +144,13 @@
 | Grader's order number | PSA-ORDER-0003 |
 | Courier | SF Express |
 | Tracking number | SF1000000003 |
-| Courier's written cover | 30000000, HKD |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded |
 | Shipped on | tomorrow on the shop's clock, a day after today |
 
 **Steps:**
 
 1. Click Ship on <closed batch of one card>'s row.
-2. Tick each check under Before it leaves, and enter the order number, courier, tracking number and courier's written cover with its currency.
+2. Tick each check under Before it leaves, and enter the order number and the one shipment's courier and tracking number.
 3. Set Shipped on to tomorrow.
 4. Click Mark as shipped, where it is offered.
 5. Read the batch's row.
@@ -191,7 +191,7 @@
 | Grader's order number | PSA-ORDER-0004 |
 | Courier | SF Express |
 | Tracking number | left blank |
-| Courier's written cover | 30000000, HKD |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded |
 | Shipped on | today |
 
 **Steps:**
@@ -207,7 +207,7 @@
 
 ---
 
-### grade10-admin-grading-batches-US1-TC5-1: The insured total past the courier's written cover figure is flagged before shipping
+### grade10-admin-grading-batches-US1-TC5-1: A shipment insured past the courier's cover is flagged before shipping
 
 **Classification:**
 
@@ -227,19 +227,19 @@
 **Pre-conditions:**
 
 * admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of three cards> closed and not shipped.
-* The batch's declared total exceeds <the courier's written cover figure>.
+* The batch's declared total exceeds <the courier's cover>, written and approved first as *Writing a money setting* says.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | <closed batch of three cards> | one submission seeded at `checked_in` at Regular, its three cards declared 500000, 300000 and 200000 (HKD, minor units): an insured total of 1000000 |
-| <the courier's written cover figure> | 800000, HKD, below the insured total |
+| <the courier's cover> | `grading.courier_cover_minor` at 800000 (HKD, minor units), below the insured total |
 
 **Steps:**
 
 1. Click Ship on <closed batch of three cards>'s row.
-2. Enter <the courier's written cover figure> and its currency.
+2. Record the batch as one shipment with its courier and tracking.
 3. Read the insured line.
 4. Click Mark as shipped, where it is offered.
 5. Read the form and the batch's row.
@@ -279,7 +279,7 @@
 | Grader's order number | PSA-ORDER-0006 |
 | Courier | SF Express |
 | Tracking number | SF1000000006 |
-| Courier's written cover | 30000000, HKD |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded |
 | Shipped on | today |
 
 **Steps:**
@@ -404,7 +404,7 @@
 | Grader's order number | PSA-ORDER-0009 |
 | Courier | SF Express |
 | Tracking number | SF1000000009 |
-| Courier's written cover | 30000000, HKD |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded |
 | Shipped on | today |
 
 **Steps:**
@@ -574,7 +574,7 @@
 
 ---
 
-### grade10-admin-grading-batches-US1-TC14-1: A cover figure in another currency is refused, never converted
+### grade10-admin-grading-batches-US1-TC14-1: An unset courier cover holds the ship
 
 **Classification:**
 
@@ -594,14 +594,13 @@
 **Pre-conditions:**
 
 * admin(holds grading:operate) is on <grade10 admin grading batches url>, with <closed batch of three cards> closed and not shipped.
+* The stack stands as production would read it: `grading.courier_cover_minor` cleared.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <closed batch of three cards> | one submission seeded at `checked_in` at Regular, its three cards declared 500000, 300000 and 200000 (HKD, minor units): an insured total of 1000000 |
-| Insured total | 1000000 (HKD, minor units), read off the cards |
-| Cover figure | 500000 (USD, minor units), as the courier wrote it; converted at any rate it would cover the total, so a refusal can only be the currency's |
+| <closed batch of three cards> | one submission seeded at `checked_in` at Regular, its three cards declared 500000, 300000 and 200000 (HKD, minor units) |
 | Grader's order number | PSA-ORDER-0014 |
 | Courier | SF Express |
 | Tracking number | SF1000000014 |
@@ -610,15 +609,13 @@
 **Steps:**
 
 1. Click Ship on <closed batch of three cards>'s row.
-2. Tick each check under Before it leaves, and enter the order number, courier, tracking number and Shipped on.
-3. Record the cover figure with USD as its currency.
-4. Click Mark as shipped, where it is offered.
-5. Read the form and the batch's row.
+2. Tick each check under Before it leaves, and enter the order number, the one shipment's courier and tracking number, and Shipped on.
+3. Click Mark as shipped, where it is offered.
+4. Read the form and the batch's row.
 
 **Expected Results:**
 
-* Step 5: the batch is refused because the two figures carry different currencies.
-* Step 5: no rate is applied to either figure, and no submission moves.
+* Step 4: the act is refused naming the courier's cover, and no submission moves.
 
 ---
 
@@ -649,7 +646,7 @@
 | Grader's order number | PSA-ORDER-0015 |
 | Courier | SF Express |
 | Tracking number | SF1000000015 |
-| Courier's written cover | 30000000, HKD |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded |
 | Shipped on | today |
 
 **Steps:**
@@ -778,12 +775,12 @@
 
 | Field | Value |
 | --- | --- |
-| <closed batch> | a closed PSA · Regular batch of three cards declared 20000000, 15000000 and 10000000 (HKD, minor units) |
-| Courier's written cover | 30000000, HKD |
+| <closed batch> | a closed PSA · Regular batch of three cards declared 20000000, 15000000 and 10000000 (HKD, minor units), the first two in one submission |
+| Courier's cover | 30000000 (HKD, minor units), the setting as seeded |
 
 **Steps:**
 
-1. Enter the courier's written cover and try Mark as shipped as one shipment.
+1. Try Mark as shipped as one shipment.
 2. Split into two shipments: the first card alone, then the other two, each with its courier and tracking.
 3. Mark as shipped.
 
@@ -791,7 +788,7 @@
 
 * Step 1: refused, naming 45000000 against 30000000 HKD minor units; nothing moves.
 * Step 2: the shipments read 20000000 and 25000000 HKD minor units insured, each under the cover.
-* Step 3: every submission in the batch reads With the grader, and each collector is told the tracking of the shipment carrying their cards.
+* Step 3: every submission in the batch reads With the grader, and each collector is told the tracking of each shipment carrying their cards; the collector whose two cards travel apart is told both, each with its card.
 
 ---
 
@@ -1590,6 +1587,48 @@ Runs once per row of **Test data**.
 * Step 1: the new line stands as the grader's omission.
 * Step 2: the cert and the grade stand on <a card>, and its line reads scanned.
 * <a card> no longer holds Finish receiving.
+
+---
+
+### grade10-admin-grading-batches-US2-TC19-1: A card the grader held comes home in a later box
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-02
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on <grade10 admin grading batches url>.
+* <held card> stands recorded held in a received PSA batch, its submission ready for its other card.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <held card> | one of a submission's two cards at PSA · Regular, recorded held by the grader with a date it is expected when its batch was received |
+| <later batch> | a second PSA · Regular batch, Arrived, its manifest typed with a line naming <held card>'s intake id and cert 90000001 |
+| <card held at CGC> | a card recorded held in a received CGC batch |
+
+**Steps:**
+
+1. Type <later batch>'s manifest, one more line naming <card held at CGC>'s intake id.
+2. Scan cert 90000001.
+3. Read <held card> on its submission's console page, and read the letter to its collector.
+
+**Expected Results:**
+
+* Step 1: the line naming <held card> matches it; the line naming <card held at CGC> is listed unmatched.
+* Step 2: <held card> carries cert 90000001 and its grade, and no longer reads held.
+* Step 3: its collector is told the grades that day, and the submission offers the second hand-back.
 
 ---
 
@@ -2495,7 +2534,7 @@ Runs once per row of **Test data**.
 | The cut-off passing, and the next day's ship | Case added | `grade10-admin-grading-batches-US1-TC12-1` - the cut-off passes, the row reads Closed with nothing written, and it ships the next day |
 | The box arriving, back and unchecked | Case added | `grade10-admin-grading-batches-US2-TC14-1` - the box arrives, the row reads back unchecked, and the badge turns after a day |
 | A card handed in after the cut-off | Case added | `grade10-admin-grading-batches-US1-TC13-1` - a hand-in after the cut-off joins the next batch |
-| A cover figure in another currency | Case added | `grade10-admin-grading-batches-US1-TC14-1` - a cover figure in another currency, refused and never converted |
+| A cover figure in another currency | Case added, then rewritten | `grade10-admin-grading-batches-US1-TC14-1` - the courier's cover became the HKD setting `grading.courier_cover_minor` at the acceptance review (decided by the product owner, 2026-10-01), so no second currency reaches the ship form; the case now walks an unset cover holding the ship, stated by `grade10-admin-grading-batches-SC-16` |
 | The stage that is the move | Case added | `grade10-admin-grading-batches-US4-TC6-1` - the stage that is the move carries the whole batch |
 | The same stage recorded twice | Case added | `grade10-admin-grading-batches-US4-TC7-1` - the same stage on a second morning tells nobody again |
 | A re-estimate to the date already set | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
@@ -2509,6 +2548,8 @@ Runs once per row of **Test data**.
 | Two operators shipping one parcel, a box finished twice, two desks against one shelf | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
 | A batch above the cover split into shipments | Case added, added after the run | `grade10-admin-grading-batches-US1-TC18-1`: decided by the product owner after the run (Q128), stated by `grade10-admin-grading-batches-SC-57` |
 | A ship date before the cut-off | Case added, added after the run | `grade10-admin-grading-batches-US1-TC19-1`: decided by the product owner after the run (Q129), stated by `grade10-admin-grading-batches-SC-56` |
+| A held card coming home in a later box | Case added at the acceptance review | `grade10-admin-grading-batches-US2-TC19-1`: the console page decided the card returns in a later box, and no requirement let a later manifest line match it; stated by `grade10-admin-grading-batches-SC-58`, its collector's letters decided by the product owner, 2026-10-01 |
+| Shipments carrying the courier and tracking | Cases amended at the acceptance review | `grade10-admin-grading-batches-US1-TC1-1`, `US1-TC3-1`, `US1-TC4-1`, `US1-TC5-1`, `US1-TC6-1`, `US1-TC9-1`, `US1-TC15-1` and `US1-TC18-1`: every batch ships as one or more shipments and the cover is a setting, so no case types a cover figure any more |
 
 ### Manual
 
