@@ -1103,7 +1103,7 @@ onto the legal-copy table.
 - [ ] 26.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`
 
-## 27. One number for every way it is typed (grade10)
+## 27. One number for every way it is typed (grade10) (owner: @ecchochan)
 
 - [ ] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
       only when the bare digits are not themselves a valid local number, read
