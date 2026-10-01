@@ -17,6 +17,7 @@ import {
   acceptanceReadiness,
   acceptChange,
   contractTargetDiffs,
+  mergeSuite,
   prepareAcceptance,
   verifyAcceptance,
   writeAcceptance,
@@ -912,4 +913,307 @@ test("spec:accept rolls back every durable and acceptance file when validation r
   }
   assert.equal(verifyAcceptance(root, CHANGE).ok, false);
   assert.deepEqual(calls, 2);
+});
+
+const caseBlock = (id, status = "draft") =>
+  `### ${id}: A case\n\n**Classification:**\n\n* **Status:** ${status}\n\nBody of ${id}.`;
+const suiteOf = (...parts) =>
+  `# site/search Test Cases\n\n**Status:** pending-review\n\n${parts.join("\n\n")}\n`;
+const group = (n, ...cases) =>
+  [`## site-search-US${n}: Journey ${n}`, ...cases].join("\n\n");
+const merge = (current, delta) => mergeSuite(current, delta, "site/search");
+
+test("suite fold renders the delta's Background before the first journey", () => {
+  const merged = merge(
+    suiteOf(group(1, caseBlock("site-search-US1-TC1-1"))),
+    suiteOf(
+      "## Background\n\nEvery case signs in.",
+      group(2, caseBlock("site-search-US2-TC1-1")),
+    ),
+  );
+  assert.match(
+    merged,
+    /\*\*Status:\*\* pending-review\n\n## Background\n\nEvery case signs in\.\n\n## site-search-US1/,
+  );
+});
+
+test("suite fold appends Background paragraphs the durable lacks, once", () => {
+  const merged = merge(
+    suiteOf(
+      "## Background\n\nShared seed.",
+      group(1, caseBlock("site-search-US1-TC1-1")),
+    ),
+    suiteOf(
+      "## Background\n\nShared seed.\n\nGrading seed.",
+      group(2, caseBlock("site-search-US2-TC1-1")),
+    ),
+  );
+  assert.match(
+    merged,
+    /## Background\n\nShared seed\.\n\nGrading seed\.\n\n## site-search-US1/,
+  );
+  assert.equal(merged.match(/Shared seed/g).length, 1);
+});
+
+test("suite fold drops the Settled placeholder once a real item exists", () => {
+  const placeholder = "## Settled\n\n*None yet — suite pending review.*";
+  const real = "## Settled\n\n- An unset window reads undecided.";
+  const durable = (settled) =>
+    suiteOf(group(1, caseBlock("site-search-US1-TC1-1")), settled);
+  const delta = (settled) =>
+    suiteOf(group(2, caseBlock("site-search-US2-TC1-1")), settled);
+  for (const [current, next] of [
+    [real, placeholder],
+    [placeholder, real],
+  ]) {
+    const merged = merge(durable(current), delta(next));
+    assert.match(
+      merged,
+      /## Settled\n\n- An unset window reads undecided\.\n$/,
+    );
+    assert.doesNotMatch(merged, /None yet/);
+  }
+  assert.equal(
+    merge(durable(placeholder), delta(placeholder)).match(/None yet/g).length,
+    1,
+  );
+});
+
+test("suite fold keeps each reconciliation run whole under one Manual table", () => {
+  const recon = (run, row) =>
+    `## Reconciliation\n\n${run}\n\n| Case | Disposition |\n| --- | --- |\n| ${row} | Covered |\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| ${row} | A person reads it |`;
+  const merged = merge(
+    suiteOf(
+      group(1, caseBlock("site-search-US1-TC1-1")),
+      recon("**Run:** first.", "`site-search-US1-TC1-1`"),
+    ),
+    suiteOf(
+      group(2, caseBlock("site-search-US2-TC1-1")),
+      recon("Run: second.", "`site-search-US2-TC1-1`"),
+    ),
+  );
+  const reconciliation = merged.slice(merged.indexOf("## Reconciliation"));
+  assert.equal(
+    reconciliation,
+    "## Reconciliation\n\n**Run:** first.\n\n| Case | Disposition |\n| --- | --- |\n| `site-search-US1-TC1-1` | Covered |\n\nRun: second.\n\n| Case | Disposition |\n| --- | --- |\n| `site-search-US2-TC1-1` | Covered |\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `site-search-US1-TC1-1` | A person reads it |\n| `site-search-US2-TC1-1` | A person reads it |\n",
+  );
+});
+
+test("suite fold is idempotent over its own output", () => {
+  const delta = readFileSync(
+    new URL("./fixtures/fold-suite/delta.md", import.meta.url),
+    "utf8",
+  );
+  const durable = readFileSync(
+    new URL("./fixtures/fold-suite/durable.md", import.meta.url),
+    "utf8",
+  );
+  const merged = merge(durable, delta);
+  assert.equal(merge(merged, delta), merged);
+});
+
+test("suite fold refuses a level-2 section it does not know", () => {
+  assert.throws(
+    () =>
+      merge(
+        suiteOf(group(1, caseBlock("site-search-US1-TC1-1"))),
+        suiteOf(
+          group(2, caseBlock("site-search-US2-TC1-1")),
+          "## Notes\n\nStray.",
+        ),
+      ),
+    /site\/search: test-case suite section `## Notes` has no fold rule/,
+  );
+});
+
+test("suite fold orders journey groups by US number", () => {
+  const merged = merge(
+    suiteOf(
+      group(1, caseBlock("site-search-US1-TC1-1")),
+      group(3, caseBlock("site-search-US3-TC1-1")),
+      group(5, caseBlock("site-search-US5-TC1-1")),
+    ),
+    suiteOf(group(4, caseBlock("site-search-US4-TC1-1"))),
+  );
+  const order = [...merged.matchAll(/^## site-search-US(\d+)/gm)].map(
+    (one) => one[1],
+  );
+  assert.deepEqual(order, ["1", "3", "4", "5"]);
+});
+
+test("suite fold derives the file Status from the merged cases", () => {
+  const merged = merge(
+    suiteOf(group(1, caseBlock("site-search-US1-TC1-1"))),
+    suiteOf(group(2, caseBlock("site-search-US2-TC1-1", "actual"))).replace(
+      "pending-review",
+      "approved",
+    ),
+  );
+  assert.match(merged, /^\*\*Status:\*\* in-review$/m);
+});
+
+test("suite fold keeps the later dated header line and the rule closing the journeys", () => {
+  const styled = (date) =>
+    `**Status:** pending-review\n**Drafts styled:** ${date}, tcs-rules r3`;
+  const current = suiteOf(
+    group(1, caseBlock("site-search-US1-TC1-1"), "---"),
+    "## Settled\n\n- Kept.",
+  ).replace("**Status:** pending-review", styled("2026-09-29"));
+  const delta = suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))).replace(
+    "**Status:** pending-review",
+    styled("2026-09-22"),
+  );
+  const merged = merge(current, delta);
+  assert.match(merged, /^\*\*Drafts styled:\*\* 2026-09-29/m);
+  assert.match(
+    merged,
+    /Body of site-search-US1-TC1-1\.\n\n---\n\n## site-search-US2[\s\S]*Body of site-search-US2-TC1-1\.\n\n---\n\n## Settled/,
+  );
+});
+
+test("suite fold takes the delta's header line unless it is dated earlier", () => {
+  const withLine = (text, line) =>
+    text.replace(
+      "**Status:** pending-review",
+      `**Status:** pending-review\n${line}`,
+    );
+  const durable = suiteOf(group(1, caseBlock("site-search-US1-TC1-1")));
+  const delta = suiteOf(group(2, caseBlock("site-search-US2-TC1-1")));
+  for (const [current, next, kept] of [
+    [
+      "**Drafts styled:** 2026-09-29, tcs-rules r3",
+      "**Drafts styled:** 2026-09-29, tcs-rules r4",
+      "r4",
+    ],
+    [
+      "**Drafts styled:** 2026-09-29, tcs-rules r3",
+      "**Drafts styled:** 2026-09-22, tcs-rules r4",
+      "r3",
+    ],
+    ["**Note:** durable", "**Note:** delta", "delta"],
+  ]) {
+    const merged = merge(withLine(durable, current), withLine(delta, next));
+    assert.ok(merged.includes(kept), `${next} over ${current} keeps ${kept}`);
+  }
+});
+
+test("suite fold replaces a Manual row by its case id, backticks or not", () => {
+  const recon = (cell, why) =>
+    `## Reconciliation\n\nRun: one.\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| ${cell} | ${why} |\n| \`site-search-US9-TC1-1\` | Untouched |`;
+  for (const cell of ["`site-search-US1-TC1-1`", "site-search-US1-TC1-1"]) {
+    const merged = merge(
+      suiteOf(
+        group(1, caseBlock("site-search-US1-TC1-1")),
+        recon("`site-search-US1-TC1-1`", "Old reason"),
+      ),
+      suiteOf(
+        group(2, caseBlock("site-search-US2-TC1-1")),
+        recon(cell, "New reason"),
+      ),
+    );
+    assert.match(
+      merged,
+      /\| Manual \| Why \|\n\| --- \| --- \|\n\| \S+ \| New reason \|\n\| `site-search-US9-TC1-1` \| Untouched \|\n$/,
+    );
+    assert.doesNotMatch(merged, /Old reason/);
+  }
+});
+
+test("suite fold reads CRLF input as LF", () => {
+  const durable = suiteOf(
+    group(1, caseBlock("site-search-US1-TC1-1")),
+    "## Settled\n\n- Kept.",
+  );
+  const delta = suiteOf(
+    group(2, caseBlock("site-search-US2-TC1-1")),
+    "## Settled\n\n- Added.",
+  );
+  const crlf = (text) => text.replace(/\n/g, "\r\n");
+  assert.equal(merge(crlf(durable), crlf(delta)), merge(durable, delta));
+  assert.doesNotMatch(merge(crlf(durable), crlf(delta)), /\r/);
+});
+
+test("suite fold keeps the durable reconciliation when the delta has none, and adds Manual to one without", () => {
+  const durable = suiteOf(
+    group(1, caseBlock("site-search-US1-TC1-1")),
+    "## Reconciliation\n\nRun: one.",
+  );
+  assert.match(
+    merge(durable, suiteOf(group(2, caseBlock("site-search-US2-TC1-1")))),
+    /## Reconciliation\n\nRun: one\.\n$/,
+  );
+  assert.match(
+    merge(
+      durable,
+      suiteOf(
+        group(2, caseBlock("site-search-US2-TC1-1")),
+        "## Reconciliation\n\nRun: two.\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `site-search-US2-TC1-1` | Read |",
+      ),
+    ),
+    /## Reconciliation\n\nRun: one\.\n\nRun: two\.\n\n### Manual\n\n\| Manual \| Why \|\n\| --- \| --- \|\n\| `site-search-US2-TC1-1` \| Read \|\n$/,
+  );
+});
+
+test("suite fold drops the Raised placeholder and keeps reworded text beside the old", () => {
+  const merged = merge(
+    suiteOf(
+      "## Background\n\nSeed one.",
+      group(1, caseBlock("site-search-US1-TC1-1")),
+      "## Raised\n\n*None yet — suite pending review.*\n\n## Settled\n\n- Old wording.",
+    ),
+    suiteOf(
+      "## Background\n\nSeed one, reworded.",
+      group(2, caseBlock("site-search-US2-TC1-1")),
+      "## Raised\n\n- A question.\n\n## Settled\n\n- New wording.",
+    ),
+  );
+  assert.match(merged, /## Background\n\nSeed one\.\n\nSeed one, reworded\.\n/);
+  assert.match(
+    merged,
+    /## Raised\n\n- A question\.\n\n## Settled\n\n- Old wording\.\n- New wording\.\n$/,
+  );
+});
+
+test("suite fold of the vault erasure suite with grading's delta keeps every section whole", () => {
+  const read = (name) =>
+    readFileSync(
+      new URL(`./fixtures/fold-suite/${name}`, import.meta.url),
+      "utf8",
+    );
+  const merged = merge(read("durable.md"), read("delta.md"));
+  const headings = [...merged.matchAll(/^##? (\S+?)(?::|$)/gm)].map((one) =>
+    one[1].replace(/^grade10-site-vault-retention-and-erasure-/, ""),
+  );
+  assert.ok(
+    merged.startsWith(
+      "# grade10-site/vault/retention-and-erasure Test Cases\n\n**Status:** in-review\n**Drafts styled:** 2026-09-29, tcs-rules r4\n\n## Background",
+    ),
+  );
+  assert.deepEqual(headings, [
+    "Background",
+    "US1",
+    "US2",
+    "US3",
+    "US4",
+    "US5",
+    "Settled",
+    "Reconciliation",
+  ]);
+  assert.match(merged, /^\*\*Status:\*\* in-review$/m);
+  assert.doesNotMatch(merged, /None yet/);
+  assert.equal(merged.match(/^Run: 2026-09-22/gm).length, 2);
+  assert.match(merged, /walked here and given cases\.\n\n\| Case or scenario/);
+  assert.match(
+    merged,
+    /reads the history keeping its entries and losing the person \|\n\nRun: 2026-09-22/,
+  );
+  assert.equal(merged.match(/^### Manual$/gm).length, 1);
+  assert.equal(merged.match(/^\| Manual \| Why \|$/gm).length, 1);
+  const manual = merged.slice(merged.indexOf("### Manual"));
+  assert.doesNotMatch(manual, /\| Covered/);
+  assert.equal(manual.match(/^\| `/gm).length, 12);
+  assert.match(
+    merged,
+    /\n\n---\n\n## grade10-site-vault-retention-and-erasure-US5/,
+  );
 });

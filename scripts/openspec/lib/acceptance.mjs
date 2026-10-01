@@ -13,6 +13,7 @@ import YAML from "yaml";
 import {
   outline,
   sectionSpan,
+  trimBlank,
 } from "../../../tools/manual/src/store/markdown.mts";
 import {
   deltaKindOf,
@@ -20,6 +21,7 @@ import {
   deltaSections,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
 const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
 const MARKED_SCENARIO =
@@ -459,31 +461,160 @@ function validatedRenamedPairs(section, capability) {
   return pairs;
 }
 
+const SUITE_LISTS = ["Raised", "Settled", "Out of suite"];
+const SUITE_SECTIONS = new Set([
+  "Background",
+  "Reconciliation",
+  ...SUITE_LISTS,
+]);
+const JOURNEY_GROUP = /^(.+?-US-?(\d+)([a-z]?))\b/i;
+
+function paragraphs(text) {
+  return (text ?? "")
+    .split(/\n[ \t]*\n/)
+    .map((one) => one.trim())
+    .filter(Boolean);
+}
+
+function appendMissing(currentText, deltaText) {
+  const kept = paragraphs(currentText);
+  for (const one of paragraphs(deltaText))
+    if (!kept.includes(one)) kept.push(one);
+  return kept.join("\n\n");
+}
+
+function listItems(text) {
+  const items = [];
+  let fresh = true;
+  for (const line of (text ?? "").split("\n")) {
+    if (line.trim() === "") fresh = true;
+    else if (fresh || /^([-*] |\*None yet\b)/.test(line)) {
+      items.push(line);
+      fresh = false;
+    } else items[items.length - 1] += `\n${line}`;
+  }
+  return items;
+}
+
+function mergeList(currentText, deltaText) {
+  const items = [
+    ...new Set([...listItems(currentText), ...listItems(deltaText)]),
+  ];
+  const real = items.filter((item) => !/^\*None yet\b/.test(item));
+  const kept = real.length ? real : items.slice(0, 1);
+  const isItem = (item) => /^[-*] /.test(item);
+  if (kept.length === 0) return "";
+  return kept.reduce(
+    (text, item, i) =>
+      `${text}${isItem(item) && isItem(kept[i - 1]) ? "\n" : "\n\n"}${item}`,
+  );
+}
+
+function splitManual(raw) {
+  const lines = (raw ?? "").split("\n");
+  const start = lines.findIndex((line) => line.trim() === "### Manual");
+  if (start < 0) return { runs: trimBlank(lines), manual: [] };
+  const after = lines.findIndex(
+    (line, i) => i > start && /^#{1,3} /.test(line),
+  );
+  const end = after < 0 ? lines.length : after;
+  return {
+    runs: trimBlank([...lines.slice(0, start), ...lines.slice(end)]),
+    manual: lines.slice(start + 1, end),
+  };
+}
+
+function mergeReconciliation(currentRaw, deltaRaw) {
+  const current = splitManual(currentRaw);
+  const delta = splitManual(deltaRaw);
+  const runs =
+    delta.runs && !current.runs.includes(delta.runs)
+      ? [current.runs, delta.runs].filter(Boolean).join("\n\n")
+      : current.runs;
+  const tables = [current.manual, delta.manual].map((lines) =>
+    lines.filter((line) => line.startsWith("|")),
+  );
+  const header = (tables[0].length ? tables[0] : tables[1]).slice(0, 2);
+  const rows = new Map();
+  for (const row of [...tables[0].slice(2), ...tables[1].slice(2)]) {
+    rows.set(/^\|([^|]*)\|/.exec(row)[1].replaceAll("`", "").trim(), row);
+  }
+  const prose = appendMissing(
+    ...[current.manual, delta.manual].map((lines) =>
+      lines.filter((line) => !line.startsWith("|")).join("\n"),
+    ),
+  );
+  const table = [...header, ...rows.values()].join("\n");
+  const manual = [prose, table].filter(Boolean).join("\n\n");
+  return [runs, manual && `### Manual\n\n${manual}`]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+function suiteHeader(currentHeader, deltaHeader) {
+  const label = (line) => /^\*\*([^*]+):\*\*/.exec(line)?.[1];
+  const dated = (line) => /\d{4}-\d{2}-\d{2}/.exec(line)?.[0] ?? "";
+  const lines = currentHeader.split("\n");
+  for (const line of deltaHeader.split("\n").filter(label)) {
+    const at = lines.findIndex((one) => label(one) === label(line));
+    if (at < 0) lines.push(line);
+    else if (!(dated(line) && dated(line) < dated(lines[at]))) lines[at] = line;
+  }
+  return lines.join("\n");
+}
+
+function withDerivedStatus(text) {
+  const suite = parseSuite(text);
+  const cases = suite.journeys.flatMap((journey) => journey.cases);
+  const status = deriveStatus(
+    statusCounts(cases),
+    cases.length,
+    Boolean(suite.reviewedLapsed),
+  );
+  return text.replace(/^\*\*Status:\*\* .*$/m, `**Status:** ${status}`);
+}
+
 function mergeSuite(currentText, deltaText, capability) {
   if (currentText === null || currentText === undefined) return deltaText;
-  if (currentText === deltaText) return currentText;
-  const current = currentText ?? deltaText;
-  const currentDoc = {
-    heading: rootSections(current).heading,
-    sections: documentSections(current),
-  };
-  const deltaDoc = { heading: "", sections: documentSections(deltaText) };
-  const journeyHeading = /^.+-US-?\d+\b/i;
-  const groupId = (section) =>
-    /^(.+?-US-?\d+[a-z]?)\b/i.exec(section.heading)[1];
-  const caseId = (section) => /(\S+-TC\d+-\d+)\b/i.exec(section.heading)?.[1];
-  const currentGroups = new Map(
-    currentDoc.sections
-      .filter(
-        (section) =>
-          section.level === 2 && journeyHeading.test(section.heading),
-      )
-      .map((section) => [groupId(section), section]),
+  const texts = [currentText, deltaText].map((text) =>
+    text.replace(/\r\n/g, "\n"),
   );
+  if (texts[0] === texts[1]) return texts[0];
+  const docs = texts.map((text) => {
+    const sections = documentSections(text);
+    const headerEnd = Math.min(
+      ...sections.map((section) => section.line),
+      text.split("\n").length + 1,
+    );
+    const header = text
+      .split("\n")
+      .slice(0, headerEnd - 1)
+      .join("\n")
+      .trimEnd();
+    for (const section of sections)
+      if (
+        section.level === 2 &&
+        !SUITE_SECTIONS.has(section.heading) &&
+        !JOURNEY_GROUP.test(section.heading)
+      )
+        throw new Error(
+          `${capability}: test-case suite section \`## ${section.heading}\` has no fold rule; fold it by hand into the change's suite`,
+        );
+    return { header, sections };
+  });
+  const [current, delta] = docs;
+  const named = (doc, name) => sectionByName(doc.sections, name)?.raw;
+  const groupsOf = (doc) =>
+    doc.sections.filter(
+      (section) => section.level === 2 && JOURNEY_GROUP.test(section.heading),
+    );
+  const groupId = (section) => JOURNEY_GROUP.exec(section.heading)[1];
+  const caseId = (section) => /(\S+-TC\d+-\d+)\b/i.exec(section.heading)?.[1];
   const isCase = (section) => Boolean(caseId(section));
-  for (const incoming of deltaDoc.sections.filter(
-    (section) => section.level === 2 && journeyHeading.test(section.heading),
-  )) {
+  const currentGroups = new Map(
+    groupsOf(current).map((section) => [groupId(section), section]),
+  );
+  for (const incoming of groupsOf(delta)) {
     const existing = currentGroups.get(groupId(incoming));
     const cases = new Map(
       (existing?.children ?? [])
@@ -497,7 +628,10 @@ function mergeSuite(currentText, deltaText, capability) {
     );
     for (const testCase of cases.values())
       rendered.push(renderSection(testCase));
-    currentGroups.set(groupId(incoming), { render: rendered.join("\n\n") });
+    currentGroups.set(groupId(incoming), {
+      heading: incoming.heading,
+      render: rendered.join("\n\n"),
+    });
   }
   if (currentGroups.size === 0) {
     // Unknown suite shapes are unsafe to replace. A conflict must be resolved
@@ -506,34 +640,44 @@ function mergeSuite(currentText, deltaText, capability) {
       `${capability}: cannot safely merge this test-case suite; include the complete resulting suite in the change`,
     );
   }
-  const headerEnd = Math.min(
-    ...currentDoc.sections.map((section) => section.line),
-    current.split("\n").length + 1,
+  const usOrder = (section) => {
+    const [, , number, letter] = JOURNEY_GROUP.exec(section.heading);
+    return Number(number) + (letter ? letter.charCodeAt(0) / 1000 : 0);
+  };
+  const ruled = /\n+---$/;
+  const groups = [...currentGroups.values()]
+    .sort((a, b) => usOrder(a) - usOrder(b))
+    .map((section) => section.render ?? renderSection(section));
+  const separator = groups.some((one) => ruled.test(one))
+    ? "\n\n---\n\n"
+    : "\n\n";
+  const parts = [suiteHeader(current.header, delta.header)];
+  const background = appendMissing(
+    named(current, "Background"),
+    named(delta, "Background"),
   );
-  const header = current
-    .split("\n")
-    .slice(0, headerEnd - 1)
-    .join("\n")
-    .trimEnd();
-  const groups = [...currentGroups.values()].map(
-    (section) => section.render ?? renderSection(section),
+  if (background) parts.push(`## Background\n\n${background}`);
+  const closing = ruled.test(groupsOf(current).at(-1)?.raw ?? "")
+    ? "\n\n---"
+    : "";
+  parts.push(
+    `${groups.map((one) => one.replace(ruled, "")).join(separator)}${closing}`,
   );
-  const endings = [];
-  for (const name of ["Settled", "Reconciliation", "Out of suite"]) {
-    const old = sectionByName(currentDoc.sections, name);
-    const next = sectionByName(deltaDoc.sections, name);
-    if (!old && !next) continue;
-    const lines = [
-      ...new Set(
-        [
-          ...(old?.raw.split("\n") ?? []),
-          ...(next?.raw.split("\n") ?? []),
-        ].filter((line) => line.trim() !== ""),
-      ),
-    ];
-    endings.push(`## ${name}\n\n${lines.join("\n")}`);
+  for (const name of SUITE_LISTS.slice(0, 2)) {
+    const merged = mergeList(named(current, name), named(delta, name));
+    if (merged) parts.push(`## ${name}\n\n${merged}`);
   }
-  const merged = `${header}${groups.length ? `\n\n${groups.join("\n\n")}` : ""}${endings.length ? `\n\n${endings.join("\n\n")}` : ""}\n`;
+  const reconciliation = mergeReconciliation(
+    named(current, "Reconciliation"),
+    named(delta, "Reconciliation"),
+  );
+  if (reconciliation) parts.push(`## Reconciliation\n\n${reconciliation}`);
+  const outOfSuite = mergeList(
+    named(current, "Out of suite"),
+    named(delta, "Out of suite"),
+  );
+  if (outOfSuite) parts.push(`## Out of suite\n\n${outOfSuite}`);
+  const merged = withDerivedStatus(`${parts.join("\n\n")}\n`);
   const caseIds = new Set();
   for (const [, id] of merged.matchAll(/^###\s+(\S+-TC\d+-\d+)\b/gim)) {
     if (caseIds.has(id))
@@ -1598,4 +1742,4 @@ export function acceptChange(
   }
 }
 
-export { contractOutputs, json as prettyJson };
+export { contractOutputs, json as prettyJson, mergeSuite };
