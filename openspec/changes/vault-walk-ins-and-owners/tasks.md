@@ -180,7 +180,7 @@ Lands once every grade10 group is green and its implementation verified.
 - [ ] 6.5 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
-## 7. The collector reads (grade10)
+## 7. The collector reads (grade10) (owner: @ecchochan)
 
 - [ ] 7.1 Cover the reads: names by case ids in batches of 100 with an absent
       account left out, a treasurer refused the names, the filter narrowing
