@@ -41,7 +41,7 @@ both SPAs deploy from one commit in one window — Migration Plan, step 2.
 - [x] 1.6 Verify: `pnpm --filter @grade10/i18n run test`,
       `pnpm run typecheck`, `pnpm run lint`
 
-## 2. The preview letters (grade10-spec)
+## 2. The preview letters (grade10-spec) (owner: @ecchochan)
 
 - [x] 2.1 Write `apps/emails/emails/vault/fixtures.ts` as one `LetterFacts`
       member per `NotifyKind`, the data the worker's `render.test.tsx` reads
