@@ -526,7 +526,7 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 - [x] 12.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 13. The live loan on the case page (grade10)
+## 13. The live loan on the case page (grade10) (owner: @ecchochan)
 
 Follows group 12: its cards mount in the view group 12 builds, and its stories
 append to `CaseDetailView.stories.tsx`.
