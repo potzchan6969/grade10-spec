@@ -988,7 +988,7 @@ Stage (b).
       red first; then run 15.9's checks (Q139,
       `grade10-admin-grading-counter-SC-115`)
 
-## 16. The batch, the ship and the grader's stages (grade10)
+## 16. The batch, the ship and the grader's stages (grade10) (owner: @ecchochan)
 
 Stage (b).
 
