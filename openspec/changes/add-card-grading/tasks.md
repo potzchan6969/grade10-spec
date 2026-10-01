@@ -1354,7 +1354,7 @@ Stage (c).
       hand it over or vault it, the submission staying `collected`, its tests
       red first; then run 19.7's checks (Q137,
       `grade10-admin-grading-counter-SC-114`)
-- [ ] 19.13 Start a card's storage at day 90 after the later of the ready day
+- [x] 19.13 Start a card's storage at day 90 after the later of the ready day
       and the day it came back to the shop in `dueByCard`, months counted on the
       shop's days, its tests red first; then run 19.7's checks (Q141,
       `grade10-site-grading-submission-lifecycle-SC-66`,
