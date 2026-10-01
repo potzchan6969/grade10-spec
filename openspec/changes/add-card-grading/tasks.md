@@ -2422,7 +2422,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       HTML and the fee sheet and Your submissions loading until the page
       reads them; then run 31.7's checks
 
-## 32. The dev routes and the isolated stack (grade10)
+## 32. The dev routes and the isolated stack (grade10) (owner: @ecchochan)
 
 Both walks drive these routes, so it lands with stage (b).
 
