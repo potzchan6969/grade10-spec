@@ -46,13 +46,14 @@ Runs once per row of **Test data**.
 
 1. Enter the row's maximum in the custom maximum on the bid panel.
 2. Confirm the commitment.
-3. Read the current bid and the leader.
+3. Read the current bid, the leader, the bid count and Recent Bids.
 
 **Expected Results:**
 
 * Grade10 accepts the commitment.
 * The current bid is 0 plus the currency's lowest increment, the row's current bid after, not 0.
 * The current bid is not the increment of the tier the maximum sits in.
+* The bid count reads 1, and Recent Bids shows one bid at the row's current bid after.
 * Customer leads.
 
 ### grade10-site-auction-auto-bidding-US1-TC6-1: Maximum one minor unit below the minimum on a zero start is refused
@@ -138,19 +139,55 @@ Runs once per row of **Test data**.
 * Customer A wins.
 * The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0.
 
+### grade10-site-auction-auto-bidding-US1-TC8-1: Second maximum on a zero start must clear one increment above the opening price
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Pre-conditions:**
+
+* Bid-time holds are off.
+* `<listing_1>` starts at 0 `HKD`, and customer A's maximum `<user A maximum>` stands alone at `<opening price>`.
+* customer B(card linked) is signed in on a separate session, on the lot page for `<listing_1>`.
+
+**Test data:**
+
+| `<user B maximum>` | Outcome |
+| --- | --- |
+| 1000 minor units (HKD 10.00), the opening price | Refused, naming 2000 minor units (HKD 20.00); current bid stays `<opening price>`, customer A leads |
+| 2000 minor units (HKD 20.00), the opening price plus one increment | Accepted; current bid 3000 minor units (HKD 30.00), `<user B maximum>` plus 1000; customer A leads |
+
+| Field | Value |
+| --- | --- |
+| `<listing_1>` | An open HKD listing, starting price 0, scheduled close more than an hour away |
+| `<user A maximum>` | 50000 minor units (HKD 500.00) |
+| `<opening price>` | 1000 minor units (HKD 10.00), the lowest HKD increment |
+
+**Steps:**
+
+1. As customer B, enter the row's `<user B maximum>` in the custom maximum on the bid panel.
+2. Confirm the commitment.
+3. Read the current bid, the leader and Recent Bids.
+
+**Expected Results:**
+
+* Step 2 is the row's outcome.
+* Step 3 reads the row's current bid and leader, and `<user A maximum>` appears nowhere.
+
 ---
 
 ## Settled
 
 - A first maximum on a 0 start must reach 0 plus the currency's lowest increment; a first bid of 0 or of one minor unit is a non-goal, and no case asserts either.
-
-## Reconciliation
-
-**Run:** blind feature pass, 2026-09-29. Read: the bundle's `outline.md` (Purpose and Feature set), `durable-user-journeys.md`, `change-user-journeys.md`, `proposal.md`, `decisions.md`, `prd-bidding.md`, `prd-management.md`, `existing-feature-tcs.md` (Reconciliation stripped), `domain-tcs.md` (Reconciliation stripped); `docs/governance/specs-to-test-cases.md`, `docs/governance/tcs-conventions.md`, the `spec-to-tcs` skill, `openspec/config.yaml`; the listing suite of `inventory-auction-media` for shape only. Denied: every `## Requirements` section, this change's `spec.md`, `openspec/specs/`, `openspec/changes/archive/` and every other change.
-
-- **Joined:** `grade10-site-auction-auto-bidding-US1-TC5-1` decides `grade10-site-auction-auto-bidding-SC-30`; `grade10-site-auction-auto-bidding-US1-TC7-1` decides `grade10-site-auction-auto-bidding-SC-31`. Both follow Q19's recommendation, held for the product manager.
-- **Kept, no new scenario:** `grade10-site-auction-auto-bidding-US1-TC6-1` walks the durable first-bid minimum of `grade10-site/auction/bid-increments` at a 0 start, and the refusal below it; the rule is unchanged, the boundary new.
-- **Dropped at the simpler reading:** a second maximum, a tie at the minimum next bid, and a second bidder's minimum on a 0 start. Once a bid stands, bidding runs the durable two-maximum rule on unchanged code, and the durable suite walks it.
-- **Raised, decided by the round:** whether a lone maximum's stand is recorded as that collector's bid (Q25), and whether the bid panel shows a starting price of 0 beside a current bid at the lowest increment (Q26). Neither moves a scenario.
-- **Raised, rejected:** none.
-- **Uncovered anchors:** none.

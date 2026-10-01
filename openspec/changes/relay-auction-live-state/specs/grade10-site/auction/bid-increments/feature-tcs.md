@@ -33,19 +33,20 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Currency | Starting price | Why this row | Minimum next amount |
-| --- | --- | --- | --- |
-| USD | 0 | Zero start | 100 minor units (USD 1.00), the lowest USD increment |
-| HKD | 0 | Zero start | 1000 minor units (HKD 10.00), the lowest HKD increment |
-| JPY | 0 | Zero start | 100 minor units (JPY 100), the lowest JPY increment |
-| HKD | 20000 minor units (HKD 200.00) | Positive start inside the HKD 0 tier | 20000 minor units (HKD 200.00), the starting price |
-| HKD | 500 minor units (HKD 5.00) | Positive start below the lowest HKD increment | 500 minor units (HKD 5.00), the starting price |
-| USD | 10000 minor units (USD 100.00) | Positive start on the USD 100 tier boundary | 10000 minor units (USD 100.00), the starting price |
+| Currency | Starting price | Why this row | Minimum next amount | Quick-bid chip 1x |
+| --- | --- | --- | --- | --- |
+| USD | 0 | Zero start | 100 minor units (USD 1.00), the lowest USD increment | 200 minor units (USD 2.00) |
+| HKD | 0 | Zero start | 1000 minor units (HKD 10.00), the lowest HKD increment | 2000 minor units (HKD 20.00) |
+| JPY | 0 | Zero start | 100 minor units (JPY 100), the lowest JPY increment | 200 minor units (JPY 200) |
+| HKD | 20000 minor units (HKD 200.00) | Positive start inside the HKD 0 tier | 20000 minor units (HKD 200.00), the starting price | 21000 minor units (HKD 210.00) |
+| HKD | 500 minor units (HKD 5.00) | Positive start below the lowest HKD increment | 500 minor units (HKD 5.00), the starting price | 1500 minor units (HKD 15.00) |
+| USD | 10000 minor units (USD 100.00) | Positive start on the USD 100 tier boundary | 10000 minor units (USD 100.00), the starting price | 10500 minor units (USD 105.00) |
 
 **Steps:**
 
 1. Open the bid panel on the listing.
 2. Read the minimum next amount.
+3. Read quick-bid chip 1x.
 
 **Expected Results:**
 
@@ -53,6 +54,7 @@ Runs once per row of **Test data**.
 * On a positive start it is the starting price, not the starting price plus its increment.
 * On a HKD 500 start it is not raised to the lowest increment.
 * On a zero start it is the currency's lowest increment, never 0.
+* Chip 1x reads the minimum next amount plus the increment at it, the row's chip 1x.
 
 ### grade10-site-auction-bid-increments-US1-TC6-1: First bid at the opening price is accepted, then one increment applies
 
@@ -141,6 +143,51 @@ Runs once per row of **Test data**.
 * Step 3: the listing still has no accepted bid.
 * Step 3: the minimum next amount is still the row's opening price.
 
+### grade10-site-auction-bid-increments-US1-TC8-1: Lot starting at the ceiling takes one first bid there
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+
+* Bid-time holds are off.
+* `<listing_1>` is open in the row's currency, starting price the row's `<ceiling>`, with no accepted bid.
+* customer A and customer B are signed in with cards linked, on separate sessions.
+
+**Test data:**
+
+| Currency | `<ceiling>` |
+| --- | --- |
+| USD | 1000000000 minor units (USD 10,000,000.00) |
+| HKD | 8000000000 minor units (HKD 80,000,000.00) |
+| JPY | 150000000000 minor units (JPY 150,000,000,000) |
+
+**Steps:**
+
+1. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
+2. Read the API response.
+3. As customer B, submit a bid of `<ceiling>` plus the increment at it.
+4. Read the API response.
+5. Read `<listing_1>`'s current bid, leader and bid count.
+
+**Expected Results:**
+
+* Step 2: customer A's bid is accepted at `<ceiling>`.
+* Step 4: customer B's bid is refused, naming the ceiling.
+* Step 5: current bid `<ceiling>`, customer A leads, bid count 1.
+
 ---
 
 ## Settled
@@ -148,13 +195,3 @@ Runs once per row of **Test data**.
 - Before any accepted bid the minimum is the opening price: the starting price, or the currency's lowest increment on a 0 start. From the first accepted bid, the current bid plus its tier increment applies.
 - A first bid of 0, or of one minor unit, is a non-goal; no case asserts either.
 - Where a lone maximum above the opening price stands is the auto-bidding suite's; this suite asserts only the minimum.
-
-## Reconciliation
-
-**Run:** blind feature pass, 2026-09-29. Read: the bundle's `outline.md` (Purpose and Feature set), `durable-user-journeys.md`, `change-user-journeys.md`, `proposal.md`, `decisions.md`, `prd-bidding.md`, `existing-feature-tcs.md` (Reconciliation stripped), `domain-tcs.md` (Reconciliation stripped); `docs/governance/specs-to-test-cases.md`, `docs/governance/tcs-conventions.md`, the `spec-to-tcs` skill, `openspec/config.yaml`; this change's auto-bidding suite for shape only, its Reconciliation ignored. Denied: every `## Requirements` section, every `spec.md`, the rest of `openspec/`, `openspec/changes/archive/` and every other change.
-
-- **Joined:** `grade10-site-auction-bid-increments-US1-TC1-2` decides the revised `grade10-site-auction-bid-increments-SC-01` and `grade10-site-auction-bid-increments-SC-12`.
-- **Kept, no new scenario:** `grade10-site-auction-bid-increments-US1-TC6-1` walks `grade10-site-auction-auction-SC-62` and `grade10-site-auction-bid-increments-US1-TC7-1` walks `grade10-site-auction-auction-SC-64` from the minimum's side; the rules sit in `grade10-site/auction/auction`, whose suite walks them too.
-- **Raised, decided by the round:** a lot starting at the currency ceiling (Q30). It moves no scenario.
-- **Raised, rejected:** none.
-- **Uncovered anchors:** none.

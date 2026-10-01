@@ -272,6 +272,44 @@ Runs once per row of **Test data**.
 * Step 3 reads 0 minor units `JPY`.
 * Step 3 reads the listing as `created`.
 
+### grade10-admin-auction-listing-US3-TC25-1: API create with 0 and no currency creates as HKD 0
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_10>` is a draft with every create requirement set except the starting price, and no currency chosen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_10>` | A draft, currency not chosen, starting price empty, every other create requirement set |
+| Starting price | 0 minor units |
+
+**Steps:**
+
+1. Send create for `<listing_10>` to the API with starting price 0 and no currency.
+2. Read `<listing_10>` from the API.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads the listing as `created`.
+* Step 2 reads starting price 0 minor units `HKD`.
+
 ---
 
 ## grade10-admin-auction-listing-US4: Operator puts a listing in front of collectors
@@ -311,11 +349,11 @@ Runs once per row of **Test data**.
 
 1. Open `<listing_8>`.
 2. Publish it now.
-3. Navigate to <grade10 auction url>/`<zero start slug>`.
+3. Navigate to <grade10 store url>/auction/listings/`<zero start slug>`.
 
 **Expected Results:**
 
-* Step 2 moves the listing to `published`.
+* Step 2 moves the listing to `published`, with no starting-price refusal.
 * Step 3 opens `<listing_8>`'s public page.
 
 ### grade10-admin-auction-listing-US4-TC15-1: Published listing refuses a change to a starting price of 0
@@ -359,18 +397,3 @@ Runs once per row of **Test data**.
 ## Settled
 
 None.
-
-## Reconciliation
-
-**Run:** Blind pass read the listing Purpose and Feature set, the durable and change journeys, the change's proposal and decisions, the Auction Management and Bidding PRD pages, the existing listing suite for id continuity, the grade10-admin/auction domain suite, and the rule documents; it was denied every `## Requirements` section and scenario, `openspec/specs/` beyond the bundle, other changes, and the archive.
-
-- **Joined:** `grade10-admin-auction-listing-US1-TC3-2` decides the revised `grade10-admin-auction-listing-SC-03`; `grade10-admin-auction-listing-US3-TC21-1` decides `grade10-admin-auction-listing-SC-125`; `grade10-admin-auction-listing-US3-TC22-1` decides `grade10-admin-auction-listing-SC-126`.
-- **Raised, folded into spec:** a 0 that reads back as 0 and never as empty, folded into `grade10-admin-auction-listing-SC-124`.
-- **Raised, folded into spec:** an absent, null or empty price at an API create is refused and never stored as 0 (Q23), as `grade10-admin-auction-listing-SC-127`.
-- **Raised, folded into spec:** lowering a created listing to 0, as `grade10-admin-auction-listing-SC-128`.
-- **Raised, folded into spec:** a created listing at 0 publishes with no second price check (Q24), as `grade10-admin-auction-listing-SC-129`.
-- **Raised, rejected:** none.
-- **Raised, escalated:** none from this suite. The run raised Q19 itself - what a lone maximum on a 0 start stands at - and folded the recommendation into `grade10-site/auction/auto-bidding`, held for the product manager.
-- **Kept, no new scenario:** `grade10-admin-auction-listing-US4-TC15-1` walks a 0 against the durable rule that a published listing refuses every price write; the boundary is sharper, the rule unchanged.
-- **Left to another suite:** the first-bid minimum on a 0 start is `grade10-site/auction/bid-increments`' rule and the lone-maximum price is `grade10-site/auction/auto-bidding`'s, walked in that capability's suite in this change.
-- **Uncovered anchors:** none.

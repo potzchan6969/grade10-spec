@@ -3,10 +3,6 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
 
-**Out of suite:**
-
-- `grade10-site-auction-listing-page-SC-40` - no closing or final-deadline label between the close and the result: `grade10-site-auction-listing-page-US14-TC1-1` and `grade10-site-auction-listing-page-US14-TC2-1` read the page in that gap, and task 7.1's closing panel tests
-
 ## grade10-site-auction-listing-page-US12: Collector sees another bid on the lot without reloading
 
 **As a** collector,
@@ -181,6 +177,90 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
+### grade10-site-auction-listing-page-US12-TC5-1: Leader's own standing turns to Outbid without a reload
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-12
+
+**Pre-conditions:**
+
+* Bid-time holds are off.
+* customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<user A maximum>`, and is on its lot page.
+* customer B(card linked) is signed in on a separate session, on the same lot page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
+| `<current bid>` | 480000 minor units |
+| `<user A maximum>` | 500000 minor units |
+| `<user B maximum>` | 600000 minor units, above `<user A maximum>` |
+| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
+
+**Steps:**
+
+1. As customer A, read the standing on the bid panel.
+2. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+3. As customer A, without reloading, read the standing, Highest bid and the next valid bid.
+
+**Expected Results:**
+
+* Step 1 reads Leading, with Your maximum `<user A maximum>`.
+* Step 3 reads Outbid, with no reload.
+* Step 3 reads Highest bid `<user A maximum>` plus `<increment>`.
+* Step 3 shows the next valid bid, Highest bid plus its increment.
+
+### grade10-site-auction-listing-page-US12-TC6-1: Live updates name no bidder and no maximum
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-12
+
+**Pre-conditions:**
+
+* customer A(signed in) leads `<listing_8>` with maximum `<user A maximum>`.
+* customer C(signed out) is on the lot page for `<listing_8>`, with the browser's network inspector recording its live connection.
+* customer B(card linked) is signed in on a separate session, on the same lot page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
+| `<user A maximum>` | 900000 minor units |
+| `<user B maximum>` | 600000 minor units, below `<user A maximum>` |
+
+**Steps:**
+
+1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+2. As customer C, read every message the live connection received after step 1.
+
+**Expected Results:**
+
+* Step 2 shows an update carrying the new price, bid count and close.
+* No message carries `<user A maximum>`, an account id, an email or a card detail.
+* Any bidder a message names appears only by the lot's pseudonym.
+
 ---
 
 ## grade10-site-auction-listing-page-US13: Collector reads the same time left as every other page
@@ -264,13 +344,15 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read Time left at `<last moment>`.
-2. Read Time left just after the close passes.
+1. Watch Time left from 10 seconds before the close.
+2. Read Time left at `<last moment>`.
+3. Read Time left just after the close passes.
 
 **Expected Results:**
 
-* At step 1 Time left reads 1 second, never 0.
-* At step 2 Time left reads 0 or the lot reads Closed.
+* Through step 1 Time left shows whole seconds only, never tenths.
+* At step 2 Time left reads 1 second, never 0.
+* At step 3 Time left reads 0 or the lot reads Closed.
 
 ### grade10-site-auction-listing-page-US13-TC3-1: Countdown corrects itself after the page was away
 
@@ -483,22 +565,47 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * At step 2 the bid panel reads Authorizing….
-* At step 4 the bid panel reads Your bid did not go through.
+* At step 4 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
 * The lot reads Did not win for customer A, with customer B's price as Highest bid.
 
-## Reconciliation
+### grade10-site-auction-listing-page-US14-TC4-1: A bid reaching the auction after the close reads in existing words
 
-**Run:** QA2, 2026-10-01. QA1's blind pass read the frozen Purpose and Feature set, the change's journeys, `proposal.md`, `decisions.md` with its empty `## Raised`, the linked pages under `docs/prds/` (auction display and bidding, the auction service), `openspec/config.yaml`'s context, the durable suites and the change's domain draft with their `## Reconciliation` stripped, and the two rulebooks; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both readings, the three deltas, `tech-design.md`, `tasks.md` and the en, ko, zh-Hans and zh-Hant catalogues. It is a statement, not proof.
+**Classification:**
 
-- **Joined** - `grade10-site-auction-listing-page-US12-TC1-1` into `grade10-site-auction-listing-page-SC-29`; `grade10-site-auction-listing-page-US12-TC2-1` into `grade10-site-auction-listing-page-SC-31`; `grade10-site-auction-listing-page-US12-TC3-1` into `grade10-site-auction-listing-page-SC-32`, its flag-off row into `grade10-site-auction-auction-SC-78`; `grade10-site-auction-listing-page-US13-TC1-1` into `grade10-site-auction-listing-page-SC-33`; `grade10-site-auction-listing-page-US13-TC2-1` into `grade10-site-auction-listing-page-SC-34`; `grade10-site-auction-listing-page-US13-TC3-1` into `grade10-site-auction-listing-page-SC-35`, its reconnect row held by the requirement's own reconnect clause; `grade10-site-auction-listing-page-US13-TC4-1` into `grade10-site-auction-listing-page-SC-36`; `grade10-site-auction-listing-page-US14-TC1-1` into `grade10-site-auction-listing-page-SC-37` and `grade10-site-auction-listing-page-SC-38`; `grade10-site-auction-listing-page-US14-TC2-1` into `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-40` and `grade10-site-auction-auction-SC-71`; `grade10-site-auction-listing-page-US14-TC3-1` into `grade10-site-auction-listing-page-SC-39`
-- **Raised, folded into spec** - `grade10-site-auction-listing-page-US12-TC4-1`, a page that lost its live connection catching up when it returns, as `grade10-site-auction-listing-page-SC-41`, cited in tasks 7.1 and 7.3; the result for a bidder whose only bid confirmed after the close: Did not win, since they bid on the lot, as the My Auctions record also reads it - `grade10-site-auction-listing-page-SC-39` now names it, matching `grade10-site-auction-listing-page-US14-TC3-1`
-- **Raised, escalated** - whether the viewer's own standing turns to Outbid live, landed as Q12; the existing "Your bid did not go through" string also saying the card was not authorized, landed as Q13
-- **Raised, rejected** - none this run
-- **Added by QA2** - `grade10-site-auction-listing-page-SC-42`, a later recorded close taking the page from Closed back to Extended bidding: the requirement stated it and no scenario did. No case walks it, since a bid in the last millisecond cannot be placed by hand; task 7.1's closing panel tests decide it
-- **Covered at domain** - `grade10-site-auction-e2e-US07-TC03-2`, an extension restarting the countdown on an open page, `grade10-site-auction-listing-page-SC-30`
-- **Covered at domain** - `grade10-site-auction-e2e-US07-TC04-1`, the lot page's Time left agreeing with a catalogue card on a skewed device
-- **Covered at domain** - `grade10-site-auction-e2e-US12-TC01-1`, Won and Did not win on both bidders' pages, then on My Auctions
-- **Patched, not re-run** - `grade10-site-auction-listing-page-US13-TC4-1` set its correction the wrong way: a service clock later than the page assumes takes time off, which is always allowed, so the case now sets it earlier, the way that would add time. `grade10-site-auction-listing-page-US14-TC1-1`'s no-bid row and `grade10-site-auction-listing-page-US14-TC2-1` read Ended, not Unsold: the page's word for a lot closed with no bids is Ended with No bids under it, and the requirement's result table and `grade10-site-auction-listing-page-SC-37` now say so. All keep `<v>`
-- **Settled by the artifacts, not raised** - "Did not win" against "Didn't win": both are existing strings, Did not win on the lot page (`auctionListing.youDidntWin`) and Didn’t win on My Auctions (`auctionRecord.didntWin`), so each spec keeps its own. A countdown before any time read answers runs from the served document's render time, then the device clock, until a probe answers - the Clock values carry on leaf, now stated in the tech design
-- **Contradicted** - none
-- **Uncovered anchors** - none: `grade10-site-auction-listing-page-US-12` has four cases, `grade10-site-auction-listing-page-US-13` four, `grade10-site-auction-listing-page-US-14` three, and the Close and result leaf closes through the header's list
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* Bid-time holds are off.
+* customer B leads `<listing_9>` at `<leader price>`, its close under a minute away.
+* customer A(card linked) is signed in and on the lot page for `<listing_9>`.
+* customer A's bid requests are delayed so they reach the auction 10 seconds after they are sent.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | An HKD listing in extended bidding, led by customer B, no cap |
+| `<leader price>` | 480000 minor units |
+| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+
+**Steps:**
+
+1. Place `<bid amount>` 3 seconds before the close.
+2. Wait until the close is recorded.
+3. Read the bid panel and the lot's state.
+
+**Expected Results:**
+
+* The bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
+* No new label or wording appears for the late bid.
+* Highest bid reads `<leader price>`, and the lot reads Did not win for customer A.

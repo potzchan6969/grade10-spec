@@ -38,7 +38,7 @@
 | <extension duration> | 1800 seconds |
 | <time left before bid> | 5 minutes |
 | <leader price> | 530000 HKD minor units |
-| <increment> | 25000 HKD minor units |
+| <increment> | 8000 HKD minor units (HKD 80.00), the HK$4,000 tier at <user B maximum> |
 | <user A maximum> | 800000 HKD minor units |
 | <user B maximum> | 555000 HKD minor units, below <user A maximum> |
 
@@ -74,7 +74,8 @@
 
 * <listing_8> is in extended bidding, led by customer A, and the recorded close is <time left before bid> away.
 * customer A is on the lot page for <listing_8>.
-* customer C is on <grade10 auction url> with <listing_8>'s card in All auctions, on a device whose clock is <device skew>.
+* <listing_8> is set as a Featured slide.
+* customer C is on <grade10 auction url> with <listing_8>'s Featured slide and All auctions card in view, on a device whose clock is <device skew>.
 * customer B is signed in with a linked card, on a separate session, on the lot page for <listing_8>.
 
 **Test data:**
@@ -86,18 +87,20 @@
 | <leader price> | 530000 HKD minor units |
 | <user A maximum> | 800000 HKD minor units |
 | <user B maximum> | 900000 HKD minor units, above <user A maximum> |
+| <increment> | 20000 HKD minor units (HKD 200.00), the HK$8,000 tier at <user A maximum> |
 | <device skew> | 3 minutes behind |
 
 **Steps:**
 
 1. As customer B, enter <user B maximum> in the custom maximum on the bid panel and confirm the bid.
-2. As customer C, without reloading, read <listing_8>'s card.
+2. As customer C, without reloading, read <listing_8>'s All auctions card and Featured slide.
 3. As customer A, without reloading, read Highest bid and Time left at the same moment.
 
 **Expected Results:**
 
-* The card's current bid and the lot page's Highest bid both read <user A maximum> plus the increment.
-* The card's countdown and the lot page's Time left agree to the second.
+* The card, the slide and the lot page's Highest bid all read <user A maximum> plus <increment>.
+* The card's and the slide's Ends in and the lot page's Time left agree to the second.
+* The slide still reads LIVE BIDDING, with no Extended label.
 * Neither reads <device skew> off, and neither page reloaded.
 
 ---
@@ -126,7 +129,7 @@
 **Pre-conditions:**
 
 * customer A leads <listing_15> at <final price> with maximum <user A maximum>.
-* customer B bid <user B bid> on <listing_15> and was outbid.
+* customer B committed <user B maximum> on <listing_15> and was outbid.
 * customer A and customer B are signed in on separate sessions, both on the lot page for <listing_15>.
 * <listing_15>'s recorded close is under a minute away, and no further bid will be placed.
 
@@ -135,9 +138,9 @@
 | Field | Value |
 | --- | --- |
 | <listing_15> | An HKD listing in extended bidding, led by customer A |
-| <final price> | 530000 minor units |
+| <final price> | 513000 minor units, <user B maximum> plus its 8000 increment |
 | <user A maximum> | 800000 minor units, above <final price> |
-| <user B bid> | 505000 minor units, below <final price> |
+| <user B maximum> | 505000 minor units, below <final price> |
 
 **Steps:**
 
@@ -152,4 +155,45 @@
 * Once the close passes, both pages read Closed with no result until the close is recorded.
 * Step 2 reads Won and step 3 reads Did not win, with Highest bid <final price> on both.
 * Step 4's row reads Won, with Current bid <final price>.
-* Step 5's row reads Didn't win, with Current bid <final price>, not <user B bid>.
+* Step 5's row reads Didn't win, with Current bid <final price>, not <user B maximum>.
+
+### grade10-site-auction-e2e-US12-TC02-1: Catalogue card and lot page turn at the close without a reload
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* customer A leads <listing_16> at <final price>, and is on its lot page.
+* customer C is on <grade10 auction url> with <listing_16>'s card in All auctions.
+* <listing_16>'s recorded close is under a minute away, and no further bid will be placed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_16> | An HKD listing in extended bidding, led by customer A |
+| <final price> | 513000 minor units |
+
+**Steps:**
+
+1. Wait through the recorded close on both pages, without reloading.
+2. As customer A, read the lot's state once the result shows.
+3. As customer C, read <listing_16>'s card.
+
+**Expected Results:**
+
+* Once the close passes, customer A's page reads Closed with no result until the close is recorded.
+* Step 2 reads Won, with Highest bid <final price>.
+* Step 3's card reads Ended and names when it ended, with no watch control.
+* Neither page reloaded.
