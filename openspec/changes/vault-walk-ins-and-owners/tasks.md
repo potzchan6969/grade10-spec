@@ -311,7 +311,7 @@ Q27 stands open on the designer's boards.
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
-## 9. The collector SPA's line (grade10)
+## 9. The collector SPA's line (grade10) (owner: @ecchochan)
 
 - [ ] 9.1 Cover the list's line for a draft staff opened, its reopening in the
       wizard at the photograph step, and a draft the collector cancelled
