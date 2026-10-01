@@ -17,7 +17,7 @@ group adds or names the tests that prove it, and changes no grant.
 - [ ] 2.3 Assert `PERMISSION_STATEMENTS` equals the delta's table exactly, keys and actions in order, with no `finance` resource and no `kyc:write` (`shared-auth-roles-SC-21`)
 - [ ] 2.4 Verify: `pnpm run typecheck` and `pnpm run test` for `packages/grade10-auth/contracts` and the root `pnpm run lint` in grade10; every id in 2.1 to 2.3 found by `grep -r "shared-auth-roles-SC-" packages/grade10-auth/contracts/test`.
 
-## 3. Identity documents and self-approval on the vault and grading routes (grade10)
+## 3. Identity documents and self-approval on the vault and grading routes (grade10) (owner: @ecchochan)
 
 - [ ] 3.1 Cite the scenarios in the identity capture and signed document cases of `apps/backend/grade10/vault/test/db/permissions.spec.ts`, and add a case where a treasurer reads the case detail and is refused the identity record, in their own commit (`shared-auth-roles-SC-11`, `shared-auth-roles-SC-13`)
 - [ ] 3.2 Add a case where staff are refused the money book and a payout, beside the treasurer cases (`shared-auth-roles-SC-12`)
