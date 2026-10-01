@@ -6,7 +6,8 @@ order: 4
 ---
 
 A person's roles come from one closed set — `user`, `staff`, `support`,
-`auditor`, `admin` — and a name outside it is dropped rather than honoured.
+`finance`, `treasurer`, `auditor`, `admin` — and a name outside it is dropped
+rather than honoured.
 
 The rule that matters most is how a grant is checked. A product asks whether the
 caller holds a *permission*, never whether their role string matches something.
@@ -44,14 +45,40 @@ refuses to run. A raw byte route — an identity capture, a sealed document, an
 item photo — climbs the same ladder.
 :::
 
-:::callout{kind="warning"}
-The code and the architecture docs use two roles that this spec's closed set
-does not name. `finance` reads the auction and collects its money, and holds
-nothing else. `treasurer` is a real role too: the vault's grants table depends
-on it, and it is deliberately disjoint from what `staff` hold so that a payout
-takes two people. Either the spec or the code is out of date, and it is the
-spec.
-:::
+## Permissions
+
+A permission is one resource and one action, written `resource:action`, from a
+list every product shares; a permission outside the list grants nothing.
+
+| Resource | Actions |
+| --- | --- |
+| `user` | `create` · `list` · `ban` · `set-role` · `delete` |
+| `session` | `list` · `revoke` |
+| `store` | `read` · `write` |
+| `loyalty` | `read` · `adjust` · `invite` · `catalog` · `finance` · `demote` · `cancel` |
+| `auction` | `read` · `write` · `operate` · `reserve` · `moderate` · `settle` · `payment` · `refund` · `shipment` |
+| `vault` | `read` · `operate` · `approve` · `payout` |
+| `kyc` | `read` |
+| `grading` | `read` · `operate` · `approve` |
+| `appointment` | `read` · `manage` |
+| `inventory` | `read` · `write` |
+| `audit` | `read` |
+
+- 🚧 **No `finance` resource** — lending is the vault's financed lane, so its
+  cases and money sit under `vault`
+- 🚧 **Identity documents** — `kyc:read` reaches the identity capture and the
+  signed document printed from it; reading a vault case does not, and there is
+  no `kyc:write`
+
+### Vault, Split by Cost
+
+| Runs the case | Sets what it costs | Moves money |
+| --- | --- | --- |
+| `vault:operate` | `vault:approve` — a valuation, offer terms, a decline, a forfeiture | `vault:payout` — a payout, a repayment, a reversal, the money book |
+
+- 🚧 **Staff** — hold `vault:operate` and `vault:approve`, and `kyc:read`
+- 🚧 **Treasurer** — holds `vault:read` and `vault:payout`, and no identity
+  document
 
 :::callout{kind="warning"}
 Two-factor is the second of the three gates and no capability of this
