@@ -55,7 +55,7 @@ export function formatExtensionDurationValue(
 export function shouldExtendCloseAt(
   closesAtMs: number,
   policy: ListingExtensionPolicy,
-  nowMs = Date.now(),
+  nowMs: number,
 ): boolean {
   const { windowMs } = extensionPolicyToMs(policy);
   const remainingMs = closesAtMs - nowMs;
@@ -64,7 +64,7 @@ export function shouldExtendCloseAt(
 
 export function extendRecordedCloseAt(
   policy: ListingExtensionPolicy,
-  nowMs = Date.now(),
+  nowMs: number,
 ): number {
   const { durationMs } = extensionPolicyToMs(policy);
   return nowMs + durationMs;

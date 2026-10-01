@@ -262,21 +262,16 @@ export function formatRelativeAt(
 }
 
 /**
- * Bumps a tick-stored clock forward when a row instant is newer than the last
- * tick, so live bids stamped with `Date.now()` are not treated as future.
- * Leaves an explicit fixed `now` unchanged when every instant is already past.
+ * Moves a floored clock tick up to the newest row instant past it, so a bid
+ * stamped after the last tick reads as just placed rather than in the future.
+ * It never reads the device clock: the tick comes from the page's clock, and
+ * a row newer than the tick is younger than one tick.
  */
 export function resolveActivityNow(
   storedNow: number,
   ...instants: number[]
 ): number {
-  let reference = storedNow;
-  for (const instant of instants) {
-    if (instant > reference) {
-      reference = Math.max(instant, Date.now());
-    }
-  }
-  return reference;
+  return Math.max(storedNow, ...instants);
 }
 
 export function formatActivityAt(
