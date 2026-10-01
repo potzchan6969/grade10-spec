@@ -2119,7 +2119,7 @@ Stage (b).
       read of the submission page, the reference as plain text where no case
       matches (Q133, `grade10-site-grading-submission-lifecycle-SC-63`)
 
-## 28. The console's queue, tiles and one submission (grade10)
+## 28. The console's queue, tiles and one submission (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's recorded worker. Stage (b).
 
