@@ -156,7 +156,7 @@ group reads this one's exports.
 - [x] 4.5 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 5. The letters (grade10)
+## 5. The letters (grade10) (owner: @ecchochan)
 
 The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
