@@ -1,0 +1,283 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "1da1f8c02bfcced603e674c6276126d17e8ce56ee7dad59c0641edad96b1ea03"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "1656d3b7283189ea8a594c916ab8356e86e502c9",
+    "capturedAt": "2026-10-01T07:24:08.258Z",
+    "targets": [
+      {
+        "path": "openspec/changes/complete-vault-collector-flow/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/money-book/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/money-book/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: The arrears are summed above the list",
+          "Requirement: The arrears list every live loan past its due date",
+          "Requirement: The register answers what the range took out of the business",
+          "Requirement: The register is taken out of the console as a file",
+          "Requirement: The register lists every money record in a period"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/money-book/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A case reads on the console in the words the collector reads",
+          "Requirement: An act the case withholds says what it is waiting for",
+          "Requirement: An operator's session is verified with a second factor, and stays verified for twelve hours",
+          "Requirement: An operator's session is verified, and stays verified for twelve hours",
+          "Requirement: Search is exact on a contact, prefix on a case id, and leaves a trail",
+          "Requirement: The case opens on today's visit, step by step",
+          "Requirement: The custody tab reads back where the item has been",
+          "Requirement: The held list counts what is held and says what each item carries",
+          "Requirement: The identity panel reads the six states the record holds",
+          "Requirement: The queue cuts cases by what they are waiting for"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A case carries a six-character reference",
+          "Requirement: A case carries between one and ten photographs",
+          "Requirement: A collector opens a request for one item",
+          "Requirement: A photograph is stored without its location and read under a trail",
+          "Requirement: A request states one item, in the brand's own currency",
+          "Requirement: The last step reads the request back before it sends"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A case is read as meeting one fact",
+          "Requirement: A case page answers only to the collector whose case it is",
+          "Requirement: A case reads the stage it has reached and whose the item is",
+          "Requirement: An ended case reads in the collector's words",
+          "Requirement: The collector's own moves run from their case page"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A message naming a due date says when the borrower will hear next",
+          "Requirement: A money message tables its figures and carries how to pay",
+          "Requirement: A value nobody has set is bracketed outside production and refuses the act in production",
+          "Requirement: Every message carries the case line and the sender's footer",
+          "Requirement: The forfeiture notice states what it acts under and what follows it",
+          "Requirement: The invitation to verify names the visit it prepares for",
+          "Requirement: The vault sends twenty-four messages, each about the case it names",
+          "Requirement: The vault sends twenty-three messages, each about the case it names"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A document can be verified by anyone holding its digest",
+          "Requirement: Every sealed document a collector holds is taken in one download",
+          "Requirement: The key terms ticked at the counter are the loan agreement's own",
+          "Requirement: The signing link is single-use, short-lived and bound to one device"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/loan-and-settlement/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/loan-and-settlement/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A live loan lists each repayment and what it left owing",
+          "Requirement: A live loan names the reminders still to come",
+          "Requirement: How to pay is one block wherever an amount owed is named",
+          "Requirement: The advance is recorded by a second person and starts the term",
+          "Requirement: The console states the rule before the operator acts",
+          "Requirement: The forfeiture notice reads on the borrower's case",
+          "Requirement: What a loan owes is computed at every read"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/loan-and-settlement/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: An erasure is refused while any of the person's cases is in flight",
+          "Requirement: Each class of kept data has a review window per brand",
+          "Requirement: The collector files the ask to be forgotten from Your data and cancels it inside the window",
+          "Requirement: The collector reads what the vault holds about them on one page",
+          "Requirement: Your data names each class the vault keeps and the window it is kept for",
+          "Requirement: Your data shows where the identity stands and never the identity itself"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A collector answers the live offer from the case page",
+          "Requirement: A refused answer is named where the answer was given",
+          "Requirement: Every offer is judged against the brand's lending policy",
+          "Requirement: In production an unset bound or an unnamed lender refuses the offer",
+          "Requirement: Only the offer that stands takes an answer"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/visit-booking/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/visit-booking/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A booked visit is confirmed with the shop, the slot and what to do before the day",
+          "Requirement: A sibling case reads the visit its lead holds and offers no picker of its own",
+          "Requirement: The picker offers the same shops and slots to a first booking and to a move",
+          "Requirement: The visit is one calendar entry the collector's own calendar opens"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/visit-booking/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/users/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/users/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A filing or a cancel sent again answers the request already there",
+          "Requirement: A person holds one open erasure request at a time",
+          "Requirement: An operator who can ban can ban and unban",
+          "Requirement: An operator's erasure request bans the account",
+          "Requirement: The account holder files their own erasure request and cancels it inside the window"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/users/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/page-blocks/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/page-blocks/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: The empty panel says nothing is here yet",
+          "Requirement: The fact card draws its parts in one order",
+          "Requirement: The loading cards are one busy status",
+          "Requirement: The note list draws a divider between two lines",
+          "Requirement: The page blocks export",
+          "Requirement: The stage rail marks the stage reached"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/page-blocks/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/vault-case/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/vault-case/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: The accept confirmation reads the terms before the answer",
+          "Requirement: The empty vault home reads the way in",
+          "Requirement: The vault case exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/vault-case/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

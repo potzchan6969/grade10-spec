@@ -266,7 +266,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 6.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 7. Erasure, filed by the account holder (grade10)
+## 7. Erasure, filed by the account holder (grade10) (owner: @ecchochan)
 
 - [x] 7.1 Cover both workers: self files with no ban, self cancels without
       lifting a conduct ban, an operator filing converts an open self-filed
