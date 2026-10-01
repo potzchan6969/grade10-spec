@@ -1060,7 +1060,7 @@ Stage (b).
       `grade10-admin-grading-batches-SC-15`, `grade10-admin-grading-batches-SC-16`,
       `grade10-admin-grading-batches-SC-57`,
       `grade10-site-grading-collector-notifications-SC-29`)
-- [ ] 16.9 Refuse a ship date earlier than the day of the batch's cut-off on the
+- [x] 16.9 Refuse a ship date earlier than the day of the batch's cut-off on the
       shop's clock, its test red first (Q129,
       `grade10-admin-grading-batches-SC-56`)
 
