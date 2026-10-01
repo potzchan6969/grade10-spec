@@ -160,7 +160,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       statement, the save act reading the words the caller passes; then run
       3.7's checks (`shared-ui-grading-submission-SC-74`)
 
-## 4. The submission blocks and the barrel (grade10-spec)
+## 4. The submission blocks and the barrel (grade10-spec) (owner: @ecchochan)
 
 - [x] 4.1 Write the stories and the tests for the eight submission blocks and
       the barrel, one story per state (`shared-ui-grading-submission-SC-29`,
