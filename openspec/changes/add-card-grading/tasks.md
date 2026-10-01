@@ -824,7 +824,7 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
 - [x] 13.10 Lift `batchTiles.safe` into one `safeStanding(tx)` and expose it
       as `admin.safeStanding` under `grading:read`, its test red first; then
       run 13.8's checks (`grade10-admin-grading-counter-SC-108`)
-- [ ] 13.11 Refuse a card declared above `courier_cover_minor` at `checkCard`
+- [x] 13.11 Refuse a card declared above `courier_cover_minor` at `checkCard`
       with `ABOVE_COVER`, naming the cover and offering no higher level, the
       setting unset refusing the check in production, its test red first;
       needs 16.8's migration; then run 13.8's checks (Q143,
