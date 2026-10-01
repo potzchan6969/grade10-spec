@@ -555,6 +555,7 @@
         "payout_recorded": "Paid out {amount} at declared value",
         "payout_reversed": "Payout reversed: the card turned up",
         "upcharge_waived": "Upcharge waived",
+        "storage_waived": "Storage fee waived",
         "handed_back": "Handed back {count, plural, one {# card} other {# cards}}",
         "collected": "Collected",
         "cancelled": "Submission cancelled",
@@ -573,6 +574,7 @@
       "storageAccruing": "Storage fee from day {day}",
       "noticeDue": "Notice due",
       "payoutPastWindow": "Payout past its window",
+      "transferUnconfirmed": "Transfer unconfirmed",
       "messageNotSent": "Message not sent"
     }
   },
