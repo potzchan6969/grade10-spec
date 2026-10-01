@@ -1426,7 +1426,7 @@ Stage (c).
       (Q146, `grade10-site-grading-submission-lifecycle-SC-64`,
       `grade10-site-grading-submission-lifecycle-SC-65`)
 
-## 21. The sweeps (grade10)
+## 21. The sweeps (grade10) (owner: @ecchochan)
 
 Stage (c). No case in the change's suites decides the repair lists of 21.7 or
 the slow lane of 21.8; walk 34 decides them.
