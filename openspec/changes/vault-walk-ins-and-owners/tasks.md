@@ -78,7 +78,7 @@ Lands once every grade10 group is green and its implementation verified.
 - [ ] 4.3 Verify: `pnpm run check:migrations`, `pnpm db:status`,
       `pnpm run test:backend`
 
-## 5. Opening a walk-in (grade10)
+## 5. Opening a walk-in (grade10) (owner: @ecchochan)
 
 - [ ] 5.0 Extract the gate `submitIntake` holds inline
       (`cases/intake.ts:248-258`) into `requireStatementShown(brand,
