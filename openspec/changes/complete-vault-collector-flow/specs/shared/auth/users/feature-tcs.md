@@ -1,6 +1,6 @@
 # shared/auth/users Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## shared-auth-users-US2: Operator bans and unbans an account
