@@ -64,6 +64,8 @@ list every product shares; a permission outside the list grants nothing.
 | `inventory` | `read` · `write` |
 | `audit` | `read` |
 
+- 🚧 **Moving items** — `inventory:transfer` joins `inventory` with
+  [Items](/p/grade10-admin/inventory/items#permissions)
 - 🚧 **No `finance` resource** — lending is the vault's financed lane, so its
   cases and money sit under `vault`
 - 🚧 **Identity documents** — `kyc:read` reaches the identity capture and the
@@ -72,13 +74,14 @@ list every product shares; a permission outside the list grants nothing.
 
 ### Vault, Split by Cost
 
-| Runs the case | Sets what it costs | Moves money |
+| Runs the flow | Sets what it costs | Moves money |
 | --- | --- | --- |
-| `vault:operate` | `vault:approve` — a valuation, offer terms, a decline, a forfeiture | `vault:payout` — a payout, a repayment, a reversal, the money book |
+| `vault:operate` — intake, identity, papers, custody | `vault:approve` — a valuation, offer terms, a decline, a forfeiture | `vault:payout` — a payout, a repayment, a reversal, the money book, the finance position |
 
-- 🚧 **Staff** — hold `vault:operate` and `vault:approve`, and `kyc:read`
+- 🚧 **Staff** — holds `vault:operate` and `vault:approve`, and `kyc:read`
 - 🚧 **Treasurer** — holds `vault:read` and `vault:payout`, and no identity
   document
+- 🚧 **Money** — `vault:payout` is the only vault grant that moves money
 
 :::callout{kind="warning"}
 Two-factor is the second of the three gates and no capability of this
