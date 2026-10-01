@@ -9,24 +9,24 @@ handles for them, one section per product.
 
 ## Sections
 
-- 🚧 **URL** - `admin.grade10.com/vault/collectors/<user id>`, under the
+- **URL** - `admin.grade10.com/vault/collectors/<user id>`, under the
   Vault entry in the nav, opened from a collector's name on the queue and
   held items, and from **The collector's cases** in a case's header, which
   any `vault:read` holder sees
-- 🚧 **Who** - `vault:read` opens it: staff, treasurers and admins
-- 🚧 **Header** - the account's name and email for staff and admins, under
+- **Who** - `vault:read` opens it: staff, treasurers and admins
+- **Header** - the account's name and email for staff and admins, under
   the grant [Operator Console](/p/grade10-site/vault/operator-console#permissions)
   names; a treasurer reads the collector's short id and no name, and the
   contact stays on each case
-- 🚧 **Vault cases** - every case the collector holds, with its reference,
+- **Vault cases** - every case the collector holds, with its reference,
   item, status and lane, newest-touched first, each opening its case
 - 🚧 **Items** - every item the collector owns but a retired one, marked by
   a place or not, under `inventory:read` -
   [Items](/p/grade10-admin/inventory/items#owners)
-- 🚧 **Sections stand alone** - a section the operator may not read, or that
+- **Sections stand alone** - a section the operator may not read, or that
   fails to load, shows its own refusal or error; the other sections still
   load
-- 🚧 **On the audit chain** - each opening records who read which collector,
+- **On the audit chain** - each opening records who read which collector,
   the way a search does
 
 :::detail{title="Product decisions" for="pm"}

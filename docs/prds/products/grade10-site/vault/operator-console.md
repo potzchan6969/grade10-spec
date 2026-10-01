@@ -59,25 +59,26 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **Held items, at a glance** — tiles: in the vault, per shop, with a loan
   running, waiting for a pickup; rows carry held since, days held, status,
   outstanding and whether a pickup is booked
-- 🚧 **Collector by name** — rows name each case's collector for staff and
+- **Collector by name** — rows name each case's collector for staff and
   admins, never a treasurer
-- 🚧 **Narrow by collector** — a click on the name shows only that
+- **Narrow by collector** — a click on the name shows only that
   collector's cases; a link beside it opens their
   [Collector Page](/p/grade10-admin/console/collector-page)
-- 🚧 **Which name reads are recorded** — a page of names and a list narrowed
+- **Which name reads are recorded** — a page of names and a list narrowed
   to one collector each write an entry on the audit chain, as a search and a
   collector page do; a list that names nobody writes none
-- 🚧 **Walk-ins** — staff open a draft for a customer at the counter under
+- **Walk-ins** — staff open a draft for a customer at the counter under
   the customer's own account; nothing about the case is emailed; the customer
   asks for their own sign-in link on their phone at `grade10.com/vault`,
   finds the draft on their list and sends it with the wizard's third step;
   staff type no name, and an account the walk-in creates reads by its email
   handle until the customer names themselves
-- 🚧 **An address signed in to before** — a walk-in is refused when the
+- **An address signed in to before** — a walk-in is refused when the
   address belongs to an account someone has signed in to
-- 🚧 **The statement first** — the counter shows the collection statement
+- **The statement first** — the counter shows the collection statement
   before staff type the address, and the open keeps the version shown; in
-  production the open is refused while the statement is unwritten —
+  production the open is refused while the statement is unwritten, so the
+  walk-in is dark in production until Legal's statement lands —
   [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
 - 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register knows, its facts filled in -
@@ -105,7 +106,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   only on a row this operator did not record
 - **Appointments section**: add or retire a shop, weekly rules, exceptions,
   the day's offered slots and bookings, each booking opening its case
-- 🚧 **The collector's cases** — a link in the header opens the case's
+- **The collector's cases** — a link in the header opens the case's
   [Collector Page](/p/grade10-admin/console/collector-page), for any
   `vault:read` holder
 - **Today's visit, in order** — the Case tab opens on the counter's steps
@@ -137,7 +138,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position |
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
 
-- 🚧 **Walk-ins and names** — `vault:operate` also opens a walk-in;
+- **Walk-ins and names** — `vault:operate` also opens a walk-in;
   `kyc:read` also opens collector names on the queue, held items and
   collector page; a treasurer sees none
 
