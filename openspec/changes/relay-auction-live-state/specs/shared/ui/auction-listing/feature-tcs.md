@@ -564,31 +564,28 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** Bid enrollment
 
-**Blocked:** The product owner - whether setup names the missing card or attestation, or only keeps continue disabled as built (Q36).
-
 **Pre-conditions:**
 
 * Storybook renders `EnrollmentSetupSheet` open.
 
 **Test data:**
 
-| Card entered | Attestation checked | Continue | Says missing |
-| --- | --- | --- | --- |
-| No | No | Disabled | Card and attestation |
-| Yes | No | Disabled | Attestation |
-| No | Yes | Disabled | Card |
-| Yes | Yes | Enabled | Nothing |
+| Card entered | Attestation checked | Continue |
+| --- | --- | --- |
+| No | No | Disabled |
+| Yes | No | Disabled |
+| No | Yes | Disabled |
+| Yes | Yes | Enabled |
 
 **Steps:**
 
 1. Set the card field to <card entered>.
 2. Set the attestation to <attestation checked>.
-3. Read the continue control and the setup's message.
+3. Read the continue control.
 
 **Expected Results:**
 
 * Continue is <continue>.
-* The setup names <says missing> as missing.
 
 ### shared-ui-auction-listing-US1-TC17-1: A supplied accessory sits at the recent-bids header's end
 
@@ -662,6 +659,6 @@ Runs once per row of **Test data**.
 | TC6-1: a leader's typed raise starts at the greater of the next minimum and the maximum plus 100, and chip 1× is not that floor | **Folded in:** the modified requirement's last sentence and durable `shared-ui-auction-listing-SC-37` |
 | TC1-1, TC2-1: the buyer fee inline at 20%, absent signed out | **Folded in:** durable `shared-ui-auction-listing-SC-44`, `shared-ui-auction-listing-SC-45` |
 | TC7-1 to TC15-1, TC17-1, TC18-1: exports, gallery sources and strip, consumer labels, bid-row time, personal bidding, the enrollment signal, the accessory and lost standing | **Folded in:** durable `shared-ui-auction-listing-SC-01`, `-SC-02`, `-SC-03`, `-SC-04`, `-SC-05`, `-SC-06`, `-SC-07`, `-SC-08`, `auction-listing-SC-13`, `auction-listing-SC-22`, `-SC-09`, `-SC-31`, `-SC-10`, `-SC-33`, `-SC-20`, `-SC-21`, `-SC-26`, `-SC-27`, `-SC-12`, `-SC-46`; this change does not alter them |
-| TC16-1: setup keeps continue disabled until a card and an attestation, and says which is missing | **Raised:** Q36 - the Feature-set leaf and the page say setup names what is missing; no requirement states it and the built sheet only disables continue. Disabled continue is durable `shared-ui-auction-listing-SC-16`; the case is **Blocked** until Q36 lands |
+| TC16-1: setup keeps continue disabled until a card and an attestation, and says which is missing | **Folded in:** durable `shared-ui-auction-listing-SC-16` (Q36) - setup names nothing, so QA2 dropped the Says missing column and its step; the case stays draft |
 
 **Uncovered anchors:** none for this change. Its three scenarios each have a case. The durable scenarios no case here asserts - `-SC-11`, `-SC-14`, `-SC-14a`, `-SC-15`, `-SC-17`, `-SC-18`, `-SC-19`, `-SC-24`, `-SC-25`, `-SC-28`, `-SC-29`, `-SC-30`, `-SC-32`, `-SC-34` - are untouched by this change and owed by the durable suite.

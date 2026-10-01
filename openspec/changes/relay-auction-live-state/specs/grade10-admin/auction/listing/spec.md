@@ -1,3 +1,5 @@
+# grade10-admin/auction/listing Specification
+
 ## Feature set
 
 - Draft save
@@ -61,6 +63,7 @@ unchanged.
 The draft form and write contract SHALL NOT offer or accept a listing-level
 minimum increment.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xue rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-01 - Operator saves an empty draft
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -68,6 +71,7 @@ minimum increment.
 - **WHEN** they save a listing with no title, prices, or window
 - **THEN** Grade10 persists a draft that is absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-vnl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-02 - Operator saves a partial draft
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -75,6 +79,7 @@ minimum increment.
 - **WHEN** they save a draft with a title and no starting price
 - **THEN** Grade10 persists the title and leaves the listing a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-r6p rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-03 - Draft rejects a malformed price
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -82,6 +87,7 @@ minimum increment.
 - **WHEN** an operator sets its starting price to a negative or non-integer amount
 - **THEN** Grade10 refuses the write and leaves the starting price unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2pj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-04 - Draft rejects a malformed slug
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -89,6 +95,7 @@ minimum increment.
 - **WHEN** an operator sets its slug to `Charizard PSA 9`
 - **THEN** Grade10 refuses the write and leaves the slug unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-bso rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-05 - Unauthorized draft save is refused
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -96,6 +103,7 @@ minimum increment.
 - **WHEN** they save a draft
 - **THEN** Grade10 refuses and persists no listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2ij rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-56 - Draft rejects an unsupported currency
 **Serves:** Draft save - draft rejects an unsupported currency
 
@@ -160,6 +168,7 @@ test-mode payment credentials instead of live money, so the house can
 rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rj8 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-24 - Operator corrects a created listing's starting price
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -168,6 +177,7 @@ be refused.
 - **THEN** Grade10 stores 150000 minor units `HKD`
 - **AND** the listing remains created
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-o1z rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-25 - Published listing refuses a price change
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -176,6 +186,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the starting price remains 100000 minor units
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-yly rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-26 - Scheduled close at in the past is refused at create
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -184,6 +195,7 @@ be refused.
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-zr3 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-27 - Extension window without a duration is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -192,6 +204,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-bvf rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-27a - Omitted extension fields default to 30 minutes
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -200,6 +213,7 @@ be refused.
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 stores an extension duration of 1800 seconds
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ynn rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-28 - Sandbox cannot change after create
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -208,6 +222,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains sandbox
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-8on rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-70 - A negative extension duration is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 

@@ -1,3 +1,5 @@
+# grade10-site/auction/listing-page Specification
+
 ## Purpose
 
 What one lot's address serves: the lot's own page, in the response before any

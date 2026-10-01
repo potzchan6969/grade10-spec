@@ -1,3 +1,5 @@
+# shared/ui/auction-listing Specification
+
 ## Feature set
 
 - Surface exports
@@ -26,7 +28,7 @@
   - Supplied copy: every user-visible string arrives through props
 - Bid enrollment
   - Named exports: the enrollment setup blocks and the signal the bid card reads
-  - Setup gates: continuing waits on a card and an attestation, and says which is missing
+  - Setup gates: continuing waits on a card and an attestation
   - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header

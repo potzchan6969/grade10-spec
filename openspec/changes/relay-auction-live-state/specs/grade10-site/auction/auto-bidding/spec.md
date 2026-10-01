@@ -1,3 +1,5 @@
+# grade10-site/auction/auto-bidding Specification
+
 ## Feature set
 
 - Commit a maximum
@@ -73,6 +75,7 @@ history even when the challenger does not lead. The two records in the equal-
 maximum row SHALL share the resolution's timestamp group and SHALL NOT represent
 intermediate increments.
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-arz rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-09 - A challenger below the leader's maximum raises the price only
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -81,6 +84,7 @@ intermediate increments.
 - **THEN** A still leads
 - **AND** the current bid is 23500 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-5mw rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-11 - A challenger above the leader's maximum takes the lead
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -89,6 +93,7 @@ intermediate increments.
 - **THEN** B leads
 - **AND** the current bid is 820000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-hvc rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-15 - The step to lead cannot exceed the new leader's maximum
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -97,6 +102,7 @@ intermediate increments.
 - **THEN** B leads
 - **AND** the current bid is 810000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-wgx rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-16 - A challenge lands at the two-maximum price, not a ladder
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -105,6 +111,7 @@ intermediate increments.
 - **THEN** B leads at 54000 minor units
 - **AND** Grade10 has not accepted intermediate bids between 20000 and 54000
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-edj rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-10 - A challenger raises again, still below
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -112,6 +119,7 @@ intermediate increments.
 - **WHEN** B raises their maximum from 22500 to 30000 minor units
 - **THEN** A still leads at 31000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-bqs rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-12 - The first bidder is overtaken by a higher maximum
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -119,6 +127,7 @@ intermediate increments.
 - **WHEN** B commits a maximum of 50000 minor units
 - **THEN** B leads at 23500 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-xwb rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-13 - The overtaken bidder raises but stays below
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -126,6 +135,7 @@ intermediate increments.
 - **WHEN** A raises their maximum to 30000 minor units
 - **THEN** B still leads at 31000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-n5u rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-14 - The overtaken bidder raises past the leader
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -133,6 +143,7 @@ intermediate increments.
 - **WHEN** A raises their maximum to 60000 minor units
 - **THEN** A leads at 51000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-52s rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-17 - A tie goes to the earlier commitment
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
@@ -143,6 +154,7 @@ intermediate increments.
 - **AND** the public history then records B's automatic response at 60000 minor units
 - **AND** both records belong to the same resolution timestamp group
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-eiw rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-18 - A tie is not a refusal
 **Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
 

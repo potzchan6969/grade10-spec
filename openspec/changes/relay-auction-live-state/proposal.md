@@ -118,18 +118,14 @@ None.
 
 ## Open Questions
 
-- **Q36** - whether enrollment setup names what is missing, or only keeps
-  continue disabled as built; a gap in `shared/ui/auction-listing` this
-  change does not touch - [Raised](decisions.md#raised)
-
-The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31 to Q35,
+The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31 to Q36,
 and `allow-zero-starting-price`'s interview settled Q16 to Q30 -
 [Decisions](decisions.md#decisions).
 
 ## References
 
 - [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
-- [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
+- [Account Record](../../specs/grade10-site/auction/account-record/spec.md)
 - [Auction Display · Auction Details](../../../docs/prds/products/grade10-site/auction/display.md#auction-details)
 - [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
 - [Auction Service · Money invariants](../../../docs/prds/platform/auction-service.md#money-invariants)

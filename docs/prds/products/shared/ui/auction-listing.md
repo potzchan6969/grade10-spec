@@ -81,10 +81,8 @@ Enrollment](/p/grade10-site/auction/bidding#auction-panel).
 | **ready** | Everything enabled; a maximum commits through the card |
 
 - **Setup blocks** — the enrollment setup blocks are named exports;
-  continuing waits on a card and an attestation
-- ❓ **What is missing** — whether setup names the missing card or
-  attestation, or only keeps continue disabled as built; the product owner
-  confirms
+  continue stays disabled until a card and an attestation are in place, and
+  setup does not name which is missing
 
 ## Custom Maximum
 

@@ -1,3 +1,5 @@
+# grade10-site/auction/account-record Specification
+
 ## Feature set
 
 - **Watching a listing**
@@ -72,6 +74,7 @@ carry no minimum next valid bid.
 Every amount SHALL be an integer count of minor units with an ISO 4217 currency
 code.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-2h8 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-14 - The highest bidder is Leading
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -79,6 +82,7 @@ code.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Leading
 
+<!-- trace:scenario id=g10.auction-account-record.SC-ana rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-15 - Outbid carries the minimum next bid
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -89,6 +93,7 @@ code.
 - **AND** the row carries the minimum next valid bid as an integer count of
   minor units with its ISO 4217 currency code
 
+<!-- trace:scenario id=g10.auction-account-record.SC-3pi rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-16 - A refused bid says why it was refused
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -98,6 +103,7 @@ code.
 - **THEN** that listing's Status is Bid not accepted
 - **AND** the row says the bid was below the minimum next bid
 
+<!-- trace:scenario id=g10.auction-account-record.SC-91l rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-17 - A bid awaiting acceptance is not a standing
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -134,6 +140,7 @@ present separate Active, Won, and Didn't win section groups. The durable
 Bidding History index remains the source for listing-level history and its
 Active/Completed filtering.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-44t rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-18 - A won listing sits under Won
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -141,6 +148,7 @@ Active/Completed filtering.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Won
 
+<!-- trace:scenario id=g10.auction-account-record.SC-5y1 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-19 - A listing lost at close sits under Didn't win
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 

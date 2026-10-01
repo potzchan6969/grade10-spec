@@ -1,3 +1,5 @@
+# grade10-site/auction/auction Specification
+
 ## Purpose
 
 Grade10's card-auction capability lets collectors browse an Auction listing and
@@ -317,6 +319,7 @@ bidder, their committed maximum on that listing.
 Scenario `grade10-site-auction-auction-SC-07a` keeps its title with its id. The
 title is historical: a listing no longer carries an extension window.
 
+<!-- trace:scenario id=g10.auction-auction.SC-jsr rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-04 - A bid must meet the next increment
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -325,6 +328,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 refuses the bid and names the minimum valid amount
 - **AND** it creates no accepted bid or card authorization for that attempt
 
+<!-- trace:scenario id=g10.auction-auction.SC-5ao rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-05 - A bid outside the window is refused
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -333,6 +337,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 refuses the bid
 - **AND** it does not create an accepted bid or change the recorded close
 
+<!-- trace:scenario id=g10.auction-auction.SC-2js rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-06 - A late valid bid extends the close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -342,6 +347,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the recorded close becomes 20:40 UTC
 - **AND** a further price-moving bid accepted at 20:35 UTC moves it to 21:05 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-p70 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07 - An extension cap limits an otherwise eligible extension
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -351,6 +357,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** it accepts the bid without changing the recorded close
 - **AND** the listing closes at its scheduled close plus that cap
 
+<!-- trace:scenario id=g10.auction-auction.SC-n8w rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07a - Window and duration may differ
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -359,6 +366,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** 20:00 UTC arrives
 - **THEN** the listing is in extended bidding with recorded close 20:05 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-z62 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07b - Extension off does not move the close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -368,6 +376,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing closes at its scheduled close
 - **AND** it does not enter extended bidding
 
+<!-- trace:scenario id=g10.auction-auction.SC-dnt rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-08 - A bidder sees live bid facts
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -376,6 +385,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 returns the current bid, bid count, and the bidder's highest accepted bid
 - **AND** it does not disclose another bidder's identity or card authorization facts
 
+<!-- trace:scenario id=g10.auction-auction.SC-a33 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-19 - A listing with no bid closes at its scheduled close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -385,6 +395,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing closes at its scheduled close
 - **AND** it does not enter extended bidding
 
+<!-- trace:scenario id=g10.auction-auction.SC-cib rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-20 - One bid is enough to enter extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -394,6 +405,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing is in extended bidding with recorded close 20:30 UTC
 - **AND** with no further bid it closes at 20:30 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-z5s rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-21 - A bid before the scheduled close does not move the close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -402,6 +414,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** Grade10 accepts a valid bid at 19:59 UTC
 - **THEN** the recorded close is still 20:00 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-h4d rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-22 - A bid at the scheduled close counts toward entry
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -410,6 +423,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** Grade10 accepts a valid bid at exactly 20:00:00 UTC
 - **THEN** the listing is in extended bidding with recorded close 20:30:00 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-ch5 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-23a - Each listing runs its own extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -419,6 +433,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the first listing's recorded close is 20:40 UTC
 - **AND** the second listing's recorded close is still 20:30 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-bz7 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-24 - A new bidder may bid during extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 

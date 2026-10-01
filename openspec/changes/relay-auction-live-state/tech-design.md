@@ -81,7 +81,11 @@ that lands.
   (`promotePendingBid`, inline or by webhook) accepts it under the lock,
   judged by the clock read after the lock. Past the effective close it
   answers `too_late` and releases the hold
-- **Holds off** - the bid is judged when placed (Q2)
+- **Holds off** - `placeBid` accepts the bid inside its own locked
+  transaction, so it is judged once, when placed, and a close right after it
+  never finds it `pending` (Q2). A `pending` bid left from before holds were
+  turned off is refused when its promotion lands past the effective close or
+  below a price that has moved
 - **The close** - marks every still-`pending` bid `lost` and releases its
   hold, so a lone pending first bid at S leaves the lot unsold
 - **Extension** - only a bid whose resolution raises the public price sets
@@ -217,7 +221,12 @@ a bid of 0 that `bids`' `maximum > 0 AND amount > 0` check refuses. `topAmount
    `HKD`, 100 `JPY` (Q19, Q27). `bidFloor`'s no-bid branch,
    `resolveStandingMaxima`'s lone-leader branch and its public record, and the
    demo's `FakeAuctionService` call it; every reader of the published minimum
-   goes through `bidFloor`. Rejected: a 0-start case inline in each path;
+   goes through `bidFloor`. The published minimum follows accepted state
+   alone: the lot page, the cards and live frames pass no pending maximum,
+   so a bid still confirming never raises it, as bid-increments' "The
+   minimum uses the amount being beaten" and auto-bidding's "Maximum stays
+   private" require; only the writer's floor under the lock counts pending
+   bids. Rejected: a 0-start case inline in each path;
    storing the opening price on the listing; `nextBidAmount` of the starting
    price for every first bid
 2. **A non-negative whole amount for the starting price only** - one local

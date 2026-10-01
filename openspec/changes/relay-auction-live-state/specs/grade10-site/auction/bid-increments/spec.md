@@ -1,3 +1,5 @@
+# grade10-site/auction/bid-increments Specification
+
 ## Feature set
 
 - Currency schedules
@@ -50,6 +52,7 @@ apply a USD, HKD, or JPY schedule to another currency.
 Scenario `grade10-site-auction-bid-increments-SC-01` keeps its title with its
 id. The title is historical: a first bid may stand on the starting price.
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-vqb rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-01 - A first bid clears the starting-price tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -57,6 +60,7 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 20000 minor units, the starting price
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-mn9 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-02 - A boundary selects the higher tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -64,6 +68,7 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** Grade10 calculates its minimum bid
 - **THEN** the minimum bid is 10500 minor units
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-u6t rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-03 - A bid may exceed the minimum
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -71,6 +76,7 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** a collector bids 12000 minor units
 - **THEN** Grade10 accepts the bid
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-b2w rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-04 - A bid below the minimum is refused
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -78,6 +84,7 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** a collector bids 10499 minor units
 - **THEN** Grade10 refuses the bid and names 10500 minor units as the minimum
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-ijk rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-05 - An open listing publishes its next minimum
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -96,6 +103,7 @@ the result at the leader's maximum. The result is the minimum next amount.
 Grade10 SHALL accept any whole amount at or above the minimum next amount and
 refuse an amount below it. It SHALL not create intermediate bids.
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-xjw rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
 **Serves:** Minimum bid - a manual floor uses the current public price
 
