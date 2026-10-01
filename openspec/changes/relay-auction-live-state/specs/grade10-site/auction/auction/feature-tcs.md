@@ -2,8 +2,6 @@
 
 **Status:** in-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
-**Out of suite:** grade10-site-auction-auction-SC-04, grade10-site-auction-auction-SC-08, grade10-site-auction-auction-SC-63, grade10-site-auction-auction-SC-73, grade10-site-auction-auction-SC-75, grade10-site-auction-auction-SC-76, grade10-site-auction-auction-SC-77, grade10-site-auction-auction-SC-79
-
 ## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
 **As a** bidder,
@@ -55,7 +53,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<opening price>`, never 0.
 * The bid count reads 1, and Recent Bids shows the bid as You.
 
-### grade10-site-auction-auction-US2-TC16-2: First bid below a positive starting price is refused, naming it
+### grade10-site-auction-auction-US2-TC16-2: First bid below the opening price is refused, naming it
 
 Runs once per row of **Test data**.
 
@@ -80,11 +78,14 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Currency | `<start>` | `<bid amount>` |
-| --- | --- | --- |
-| HKD | 20000 minor units (HKD 200.00) | 19999 minor units (HKD 199.99), one minor unit below the start |
-| USD | 50000 minor units (USD 500.00) | 49999 minor units (USD 499.99), one minor unit below the start |
-| JPY | 20000 minor units (JPY 20,000) | 19999 minor units (JPY 19,999), one minor unit below the start |
+| Currency | `<start>` | `<opening price>` | `<bid amount>` |
+| --- | --- | --- | --- |
+| HKD | 20000 minor units (HKD 200.00) | 20000 minor units (HKD 200.00), the start itself | 19999 minor units (HKD 199.99), one minor unit below |
+| USD | 50000 minor units (USD 500.00) | 50000 minor units (USD 500.00), the start itself | 49999 minor units (USD 499.99), one minor unit below |
+| JPY | 20000 minor units (JPY 20,000) | 20000 minor units (JPY 20,000), the start itself | 19999 minor units (JPY 19,999), one minor unit below |
+| HKD | 0 minor units (HKD 0.00), zero start | 1000 minor units (HKD 10.00), the lowest increment | 999 minor units (HKD 9.99), one minor unit below |
+| USD | 0 minor units (USD 0.00), zero start | 100 minor units (USD 1.00), the lowest increment | 99 minor units (USD 0.99), one minor unit below |
+| JPY | 0 minor units (JPY 0), zero start | 100 minor units (JPY 100), the lowest increment | 99 minor units (JPY 99), one minor unit below |
 
 **Steps:**
 
@@ -94,7 +95,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Grade10 refuses the bid, naming `<start>` as the minimum.
+* Grade10 refuses the bid, naming `<opening price>` as the minimum.
 * No accepted bid is recorded, and the bid count stays 0.
 
 ### grade10-site-auction-auction-US2-TC17-1: Start on a tier boundary takes that tier's increment, not the one below
@@ -216,6 +217,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- |
 | Open, scheduled close 20:00:00 UTC | 19:59:50 UTC | 19:59:58 UTC | 20:00:00 UTC, unchanged |
 | Extended bidding, recorded close 20:30:00 UTC, extension duration 1800s (30mins), no cap | 20:29:50 UTC | 20:29:58 UTC | 20:59:58 UTC, `<confirm time>` plus 1800s |
+| Open, scheduled close 20:00:00 UTC, extension duration 0s | 19:59:55 UTC | 20:00:00.000 UTC, exactly the scheduled close, at the limit | 20:00:00 UTC, unchanged |
 
 | Field | Value |
 | --- | --- |
@@ -259,10 +261,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<listing_2>` state | `<effective close>` | `<placed at>` | `<confirm time>` |
-| --- | --- | --- | --- |
-| Extended bidding, extension duration 1800s (30mins), no cap | 20:30:00 UTC | 20:29:55 UTC | 20:30:01 UTC |
-| Open, extension duration 0s | 20:00:00 UTC | 19:59:55 UTC | 20:00:01 UTC |
+| `<listing_2>` state | `<recorded close>` | `<effective close>` | `<placed at>` | `<confirm time>` |
+| --- | --- | --- | --- | --- |
+| Extended bidding, extension duration 1800s (30mins), no cap | 20:30:00 UTC | 20:30:00 UTC, the recorded close | 20:29:55 UTC | 20:30:01 UTC |
+| Extended bidding, extension duration 1800s (30mins), no cap | 20:30:00 UTC | 20:30:00 UTC, the recorded close | 20:29:55 UTC | 20:30:00.000 UTC, exactly the effective close, at the limit |
+| Open, extension duration 0s | 20:00:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 19:59:55 UTC | 20:00:01 UTC |
 
 | Field | Value |
 | --- | --- |
@@ -280,7 +283,7 @@ Runs once per row of **Test data**.
 
 * The bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
 * Highest bid stays `<leader price>`, and customer B still leads.
-* The recorded close stays `<effective close>`.
+* The recorded close stays `<recorded close>`.
 * customer A's authorization for `<bid amount>` is released.
 * `<listing_2>` closes with customer B winning at `<leader price>`.
 
@@ -460,7 +463,7 @@ Runs once per row of **Test data**.
 * `<listing_6>` never entered extended bidding.
 * It is closed at 20:00:00 UTC, with its one bidder winning.
 
-### grade10-site-auction-auction-US11-TC7-1: A due lot is recorded closed at its close, not at the sweep
+### grade10-site-auction-auction-US11-TC7-1: A due lot is recorded closed at its close, its lag measured
 
 **Classification:**
 
@@ -468,16 +471,16 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** performance
+* **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
 
 **Pre-conditions:**
 
-* customer A leads `<listing_7>` and is on its lot page.
+* customer A leads `<listing_7>`.
 * `<listing_7>`'s recorded close is about two minutes away, and no other bid will be placed.
 
 **Test data:**
@@ -490,12 +493,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Wait for the recorded close.
-2. Read the lot's result on customer A's open page.
+2. Read the API response for `<listing_7>`.
+3. Read the close lag recorded for `<listing_7>`.
 
 **Expected Results:**
 
-* The lot's close is recorded before the next sweep, well inside `<sweep interval>`, and its close lag is recorded.
-* customer A's page reads Closed with no result, then Won, without a reload.
+* Step 2 reads `<listing_7>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`.
+* Step 3 gives the time from the recorded close to the committed close.
 
 ### grade10-site-auction-auction-US11-TC8-1: A lot whose alarm missed is still settled
 
@@ -537,7 +541,7 @@ Runs once per row of **Test data**.
 * `<listing_8>` is recorded closed `<recorded by>`, with customer A winning.
 * Before then, `<listing_8>` takes no bid and reports no result.
 
-### grade10-site-auction-auction-US11-TC9-1: Close rules hold with the live relay flag off
+### grade10-site-auction-auction-US11-TC9-2: A lot no page has open is recorded closed at its close
 
 Runs once per row of **Test data**.
 
@@ -546,7 +550,7 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
 * **Layer:** api
@@ -556,37 +560,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The `auction.realtime` flag is off.
-* customer B leads `<listing_11>` at `<leader price>`, and its effective close is `<effective close>`.
-* customer A(card linked) is signed in and can bid on `<listing_11>`.
+* `<listing_11>` is in the row's state, and no page has it open.
+* Nobody reads `<listing_11>` until step 2.
 
 **Test data:**
 
-| Bid-time holds | `<placed at>` | `<counts at>` |
+| `<listing_11>` state | `<close>` | `<result>` |
 | --- | --- | --- |
-| On | 20:29:55 UTC | Payment confirms at 20:30:01 UTC |
-| Off | 20:30:01 UTC | Placed at 20:30:01 UTC |
+| An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap | its recorded close | Closed, customer A winning at `<leader price>` |
+| An open HKD listing with no accepted bid, extension duration 1800s (30mins) | its scheduled close | Closed unsold, never in extended bidding |
 
 | Field | Value |
 | --- | --- |
-| `<listing_11>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap |
-| `<effective close>` | 20:30:00 UTC, the recorded close |
 | `<leader price>` | 480000 minor units |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<sweep interval>` | 300s (5mins) |
 
 **Steps:**
 
-1. As customer A, place `<bid amount>` at `<placed at>`.
-2. Wait until `<counts at>` passes.
-3. Read the API response for `<listing_11>`.
-4. Wait until `<listing_11>` is recorded closed.
-5. Read the API response for `<listing_11>`.
+1. Wait until 10 seconds past `<close>`.
+2. Read the API response for `<listing_11>`.
 
 **Expected Results:**
 
-* At step 3 customer A's bid is not accepted, and the recorded close stays `<effective close>`.
-* With holds on, customer A's authorization for `<bid amount>` is released.
-* At step 5 customer B wins at `<leader price>`.
+* `<listing_11>` reads `<result>`, recorded within seconds of `<close>`.
+* The close is recorded before the next sweep, well inside `<sweep interval>`.
 
 ### grade10-site-auction-auction-US11-TC10-1: Public reads give the close terms and the service's time
 
@@ -624,6 +621,52 @@ Runs once per row of **Test data**.
 * Step 1 gives scheduled close 20:00:00 UTC and recorded close 20:25:00 UTC.
 * Step 1 gives extension duration 1800s and extension cap 3600s.
 * Step 2 gives the auction service's current time, not the caller's.
+
+### grade10-site-auction-auction-US11-TC11-1: Leader's raise confirmed after the close loses, the earlier lead stands
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-11
+
+**Pre-conditions:**
+
+* Bid-time holds are on.
+* customer A leads `<listing_13>` at `<leader price>` with maximum `<user A maximum>`, its authorization held.
+* customer A's authorization for `<raised maximum>` is held until `<confirm time>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_13>` | An HKD listing in extended bidding, recorded close 20:30:00 UTC, extension duration 1800s (30mins), no cap |
+| `<leader price>` | 530000 minor units |
+| `<user A maximum>` | 800000 minor units |
+| `<raised maximum>` | 900000 minor units |
+| `<placed at>` | 20:29:55 UTC |
+| `<confirm time>` | 20:30:01 UTC, after the effective close |
+
+**Steps:**
+
+1. As customer A, raise the maximum to `<raised maximum>` at `<placed at>`.
+2. Wait until `<listing_13>` is recorded closed.
+3. Read the API response for `<listing_13>`.
+4. Read customer A's card authorizations for `<listing_13>`.
+
+**Expected Results:**
+
+* `<listing_13>` closes at 20:30:00 UTC, customer A winning at `<leader price>`.
+* customer A's maximum stays `<user A maximum>`.
+* The authorization for `<raised maximum>` is released.
+* The authorization for `<user A maximum>` is kept.
 
 ---
 
@@ -730,42 +773,3 @@ Runs once per row of **Test data**.
 - A valid bid in an extension case is placed by a bidder who does not lead, so it moves the price and restarts the timer; a leader raising their own maximum moves nothing, and is US12's case (decision Q5).
 - Between the effective close and the recorded close, a lot takes no bid and names no result; the public status stays Active until the close is recorded (decision Q3).
 - A bid at exactly the scheduled close counts on every listing, extension on or off; with no extension reach the effective close is one millisecond after the scheduled close (decision Q34).
-
-## Reconciliation
-
-**Run:** QA2 rerun, 2026-10-01, for change `relay-auction-live-state`. Joined QA1's blind cases, written from the re-frozen anchors (Purpose, Feature set, `user-journeys.md`, `proposal.md`, `decisions.md` with `## Raised`, and the change's `domain-tcs.md`), with the delta scenarios, `tech-design.md`, `tasks.md` and the built code on `feat/relay-auction-live-state` in grade10, read to settle QA1's raised questions. QA1 was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive. QA2 added two rows to US11-TC5: a bid at exactly a recorded close, and a bid after a close with a cap of 0.
-
-| Finding | Disposition |
-| --- | --- |
-| US2-TC15: a first bid at the opening price is accepted, never standing at 0 | **Folded in:** `grade10-site-auction-auction-SC-62`; the next minimum after it is asserted by `grade10-site-auction-bid-increments-US1-TC6-1` |
-| US2-TC16: a first bid below a positive start is refused, naming the start | **Folded in:** `grade10-site-auction-auction-SC-64` |
-| US2-TC17, US2-TC18: the first bid needs the start plus its tier increment | **Rejected:** reversed by Q19 and Q27; both cases are deprecated |
-| US11-TC1: a confirm before the effective close counts, extending only in extended bidding | **Folded in:** `grade10-site-auction-auction-SC-69`, `grade10-site-auction-auction-SC-21` |
-| US11-TC2: a confirm after the effective close loses, its hold released, "Your bid did not go through." alone | **Folded in:** `grade10-site-auction-auction-SC-67`; the words are `grade10-site-auction-listing-page-SC-39` (Q13) |
-| US11-TC3: a lone first bid confirming after the scheduled close leaves the lot unsold | **Folded in:** `grade10-site-auction-auction-SC-68`. QA1's raised question on that bidder's My Auctions row is answered for Your Standing (Didn't win, by the after-close requirement) and for Current bid by Q32 (as on any unsold lot's row), in `grade10-site-auction-account-record-US10-TC4-1` |
-| US11-TC4: with holds off a bid in the last second counts when placed | **Folded in:** `grade10-site-auction-auction-SC-86` |
-| US11-TC5: no bid counts at or after the effective close while the close is unrecorded | **Folded in:** `grade10-site-auction-auction-SC-05`, `grade10-site-auction-auction-SC-74`, `grade10-site-auction-auction-SC-85`, `grade10-site-auction-auction-SC-87`, `grade10-site-auction-auction-SC-84`; the bid refused while settling is held back is `grade10-site-auction-auction-SC-74`'s refusal answered whatever the close does |
-| US11-TC5, rows with a duration or a cap of 0 | **Settled:** Q34 - a bid at exactly the scheduled close counts on every listing, as `grade10-site-auction-auction-SC-83` and rule 2 of the window requirement state; the Effective close term now ends that window one millisecond after the scheduled close, so the anchor stands. The rows' effective close and limit bid moved to 20:00:00.001 UTC; the case stays draft and is no longer blocked |
-| US11-TC6: a cap of 0 closes at the scheduled close | **Folded in:** `grade10-site-auction-auction-SC-84` |
-| US11-TC7: a due lot is recorded closed at its close, not at the sweep | **Folded in:** `grade10-site-auction-auction-SC-70`; the case keeps a page open, and the alarm with no page open is the room test in task 6.1 |
-| US11-TC8: a missed alarm is settled by a read, or by the sweep | **Folded in:** `grade10-site-auction-auction-SC-71`, `grade10-site-auction-auction-SC-72` |
-| US11-TC9: the close rules hold with `auction.realtime` off | **Folded in:** `grade10-site-auction-auction-SC-78`. QA1's raised question, whether the lot's alarm still settles a due lot with the flag off, is **Escalated:** Q33. As built, the flag turns the rooms off and their alarms with them (`roomListingEvents` returns no events, and the socket routes answer 404), so a read past the close or the sweep records the close, while Q11 lists the settle rule as unflagged and the flag paragraph says every other requirement holds. Recommended: as built; the flag paragraph and `grade10-site-auction-auction-SC-78` say a read or the sweep records a due close while the flag is off. The case asserts no timing and stays as written |
-| US11-TC10: public reads give the close terms and the service's time | **Folded in:** `grade10-site-auction-auction-SC-80`; that the time read is not cached is the route test in task 6.1 |
-| US12-TC1: equal maxima at a higher price extend, the earlier keeping the lead | **Folded in:** `grade10-site-auction-auction-SC-82` |
-| US12-TC2: a leader's raise leaves the close where it was | **Folded in:** `grade10-site-auction-auction-SC-81` |
-| Durable US2-TC7-1 and US2-TC10-1 say "a valid bid" without naming who bids, so under Q5 a leader's own raise would read as extending | **Rejected:** not a contradiction - every accepted bid from a bidder who does not lead moves the price, so the cases verify what they did; they are the reviewer's `actual` cases. Recorded in `## Settled`; `/tcs-review` may pin the bidder in the wording without a version bump. US2-TC8-1's bidder has no earlier bid, so it is unambiguous |
-| Q28, quick-bid chip 1x before any bid, has no scenario in this change and no case in its suites | **Escalated:** Q35. The chip rule lives in `shared/ui/auction-listing` ("the current bid plus those multiples"), which this change does not modify. Recommended: a modified `shared/ui/auction-listing` block in this change - before any bid, the chips step from the opening price - with one scenario; it adds a capability, so its QA1 and Dev readings run for that capability |
-
-- **Covered at domain** - `grade10-site-auction-e2e-US07-TC04-1` walks `grade10-site-auction-auction-SC-65` and `grade10-site-auction-auction-SC-66`: a bid in extended bidding moves the card's price and its countdown with the lot page, without a reload
-- **Covered at domain** - `grade10-site-auction-e2e-US12-TC02-1` walks `grade10-site-auction-auction-SC-88`: the card shows no result until the close is recorded, then Ended, without a reload
-- **Covered at domain** - `grade10-site-auction-e2e-US07-TC03-2` walks `grade10-site-auction-auction-SC-06` with a price-moving auto-bid
-- **Out of suite** - `grade10-site-auction-auction-SC-04` and `grade10-site-auction-auction-SC-08`, carried unchanged in the modified block: `grade10-site-auction-bid-increments-US1-TC4-1` and `grade10-site-auction-auto-bidding-US2-TC3-1` walk them
-- **Out of suite** - `grade10-site-auction-auction-SC-63`: `grade10-site-auction-bid-increments-US1-TC7-1` refuses a first bid below the lowest increment on a 0 start, and task 11.1's bidding test refuses 1 minor unit on a `USD` 0 start
-- **Out of suite** - `grade10-site-auction-auction-SC-73`: two settles racing is task 5.1's `settleIfDue` test; no page can time it
-- **Out of suite** - `grade10-site-auction-auction-SC-75`: the version rule is task 3.1's trigger tests and task 7.1's `higherVersion` test
-- **Out of suite** - `grade10-site-auction-auction-SC-76` and `grade10-site-auction-auction-SC-77`: `grade10-site-auction-listing-page-US12-TC6-1` and `grade10-site-auction-listing-page-US12-TC3-1` walk them, and task 6.1 asserts the frame contents
-- **Out of suite** - `grade10-site-auction-auction-SC-79`: the `gone` frame is task 6.1's room test, and the page's re-read on it task 7.1's
-- **Carried** - `grade10-site-auction-auction-SC-07`, `grade10-site-auction-auction-SC-07a`, `grade10-site-auction-auction-SC-07b`, `grade10-site-auction-auction-SC-19`, `grade10-site-auction-auction-SC-20`, `grade10-site-auction-auction-SC-21`, `grade10-site-auction-auction-SC-22`, `grade10-site-auction-auction-SC-23a` and `grade10-site-auction-auction-SC-24` keep the durable cases US2-TC6-1 to US2-TC14-1
-
-**Uncovered anchors:** none. Journeys US-02, US-11 and US-12 each have cases; the `Catalogue`, `Closing a due lot`, `Live relay` and `Public contract` scenarios are folded, covered at domain or out of suite above.
-
