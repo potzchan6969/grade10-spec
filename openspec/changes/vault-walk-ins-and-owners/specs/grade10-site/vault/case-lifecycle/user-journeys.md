@@ -1,5 +1,12 @@
 ## Context user journeys
 
+### grade10-site-vault-case-lifecycle-US-01: Collector calls off a request before the item is in the vault
+
+**As a** collector,
+**I want** to end my own request at any point before I hand the item over,
+**so that** nothing is left open in my name and any visit I booked goes with
+it.
+
 ### grade10-site-vault-case-lifecycle-US-03: Operator moves a case through the counter without stepping over a guard
 
 **As a** member of shop staff,

@@ -1,8 +1,8 @@
 # UI: Vault walk-ins and owners
 
 No Figma frame and no canvas board draws any screen below yet; the designer
-owes every board under Flags, and the change's record says so under
-`awaiting: ui-design`. Until a board lands, each screen is the composition
+owes every board under Flags, and whether the first version waits on them
+is open as [Q27](decisions.md#decisions). Until a board lands, each screen is the composition
 named here, drawn from the console's and the store's existing blocks, and
 nothing below invents a look: a state no block carries is flagged for the
 designer, never drawn locally. [decisions.md](decisions.md) owns the scope,
@@ -65,14 +65,14 @@ written here.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Closed | Open a walk-in in the queue's header, for `vault:operate` only | `grade10-admin-vault-operator-queue-US-10` |
-| Statement first | the collection statement shown before staff type, its version kept by the open (Q17); in production the open refuses while the statement is unwritten (Q24) | `grade10-admin-vault-operator-queue-US-10` |
-| Empty | email, category, title, description, lane and amount, photos; no name; Open case disabled | `grade10-admin-vault-operator-queue-US-10` |
-| Photos added | the photos in a `MediaGallery`, n of 10, each removable | `grade10-admin-vault-operator-queue-US-10` |
-| Opening | Open case pending; the form held | `grade10-admin-vault-operator-queue-US-10` |
-| Opened | the new draft opens on its own page | `grade10-admin-vault-operator-queue-US-10` |
-| Signed-in address | a `Notice` naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-US-10` |
-| Refused otherwise | the worker's refusal in words beside the field it names | `grade10-admin-vault-operator-queue-US-10` |
+| Closed | Open a walk-in in the queue's header, for `vault:operate` only | `grade10-admin-vault-operator-queue-SC-63` |
+| Statement first | the collection statement shown before staff type, its version kept by the open (Q17); in production the open refuses while the statement is unwritten (Q24) | `grade10-admin-vault-operator-queue-SC-58` |
+| Empty | email, category, title, description, lane and amount, photos; no name and no contact number; Open case disabled until a category and a title are given, a photograph not needed | `grade10-admin-vault-operator-queue-SC-79` |
+| Photos added | the photos in a `MediaGallery`, n of 10, each removable | `grade10-admin-vault-operator-queue-SC-75` |
+| Opening | Open case pending; the form held | **Out of suite:** the dialog's pending state, drawn by the `WalkInDialog` story in `packages/vault/admin-frontend` and checked in its review |
+| Opened | the new draft opens on its own page | `grade10-admin-vault-operator-queue-SC-55` |
+| Signed-in address | a `Notice` naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-57` |
+| Refused otherwise | the worker's refusal in words beside the field it names | `grade10-admin-vault-operator-queue-SC-76` |
 
 Grader and cert arrive with `add-item-registry`. The form is built without
 waiting on counsel's statement text (Q24).
@@ -81,44 +81,51 @@ waiting on counsel's statement text (Q24).
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Listed | the draft in the Drafts view, as any draft reads there; nothing to value or book; Cancel offered; **The collector's cases** in the header | `grade10-admin-vault-operator-queue-US-10` |
-| Sent | it leaves Drafts for Needs staff, as any submitted case | `grade10-site-vault-case-intake-US-06` |
-| Cancelled for a typo | the draft and staff's photos are removed from the account at the wrong address, never listed there as cancelled, and nobody is emailed | `grade10-site-vault-case-lifecycle-US-06` |
+| Listed | the draft in the Drafts view, as any draft reads there; nothing to value or book; Cancel offered; **The collector's cases** in the header | `grade10-admin-vault-operator-queue-SC-55` |
+| Sent | it leaves Drafts for Needs staff, as any submitted case | `grade10-site-vault-case-intake-SC-34` |
+| Cancelled for a typo | the draft and every photograph on it are removed from the account at the wrong address, never listed there as cancelled, and nobody is emailed; staff's Closed view lists it under its reference, its item reading as erased | `grade10-site-vault-case-lifecycle-SC-41` |
 
 ### Queue and held items, collector
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Named | each row's collector by account name, or by the email handle of an account the walk-in created until the customer names themselves; a click narrowing to that collector, and a link beside it to their collector page | `grade10-admin-vault-operator-queue-US-11` |
-| Name unavailable | the short id and "name unavailable"; the rest of the row and the list stand | `grade10-admin-vault-operator-queue-US-11` |
-| Treasurer | a treasurer reads the rows as today, with no collector column | `grade10-admin-console-collector-page-US-02` |
-| Narrowed to one collector | the collector's name above the rows, the count for that collector, and a control clearing it | `grade10-admin-vault-operator-queue-US-12` |
-| Narrowed, none | the collector holds no case in this cut | `grade10-admin-vault-operator-queue-US-12` |
+| Named | each row's collector by account name, or by the email handle of an account the walk-in created until the customer names themselves; a click narrowing to that collector, and a link beside it to their collector page | `grade10-admin-vault-operator-queue-SC-66` |
+| Name unavailable | the short id and "name unavailable"; the rest of the row and the list stand | `grade10-admin-vault-operator-queue-SC-69` |
+| Treasurer | a treasurer reads the rows as today, with no collector column | `grade10-admin-vault-operator-queue-SC-70` |
+| Narrowed to one collector | the collector's name above the rows, the count for that collector, and a control clearing it | `grade10-admin-vault-operator-queue-SC-71` |
+| Narrowed, none | the collector holds no case in this cut | `grade10-admin-vault-operator-queue-SC-73` |
+| Narrowed to nobody | an unknown or malformed id reads as a collector holding no case | `grade10-admin-vault-operator-queue-SC-77` |
+| Overdue and search | neither names a collector nor narrows by one | `grade10-admin-vault-operator-queue-SC-78` |
 
 ### Collector page v1
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Loading | each section's own `Status` pending | `grade10-admin-console-collector-page-US-01` |
-| Header | the account's name and email | `grade10-admin-console-collector-page-US-01` |
-| Header, treasurer | the short id and no name; the contact stays on each case | `grade10-admin-console-collector-page-US-02` |
-| Header, unavailable | the short id and "name unavailable"; the sections still load | `grade10-admin-console-collector-page-US-01` |
-| Vault cases | reference, item, status, lane, last touched, each opening its case; paged | `grade10-admin-console-collector-page-US-01` |
-| Vault cases, none | the collector holds no vault case | `grade10-admin-console-collector-page-US-01` |
-| Section failed | the section's own error with retry; the others stand | `grade10-admin-console-collector-page-US-01` |
-| Unknown collector | nobody answers to that id | `grade10-admin-console-collector-page-US-01` |
+| Loading | each section's own `Status` pending | `grade10-admin-console-collector-page-SC-17` |
+| Header | the account's name and email | `grade10-admin-console-collector-page-SC-08` |
+| Header, treasurer | the short id and no name; the contact stays on each case | `grade10-admin-console-collector-page-SC-09` |
+| Header, unavailable | the short id and "name unavailable", no email; the sections still load | `grade10-admin-console-collector-page-SC-10` |
+| Header, no vault case | the short id and "holds no vault case"; no name or email | `grade10-admin-console-collector-page-SC-22` |
+| Header failed | the header's own error and a retry; the cases still listed | `grade10-admin-console-collector-page-SC-20` |
+| Their cases on the queue | a link in the header opening the queue narrowed to the collector, for every reader | `grade10-admin-console-collector-page-SC-19` |
+| Vault cases | reference, item, status, lane, last touched, each opening its case; paged | `grade10-admin-console-collector-page-SC-12` |
+| Vault cases, none | the collector holds no vault case | `grade10-admin-console-collector-page-SC-14` |
+| Section failed | the section's own error with retry; the others stand | `grade10-admin-console-collector-page-SC-16` |
+| Unknown collector | nobody answers to that id | `grade10-admin-console-collector-page-SC-11` |
 
 ### Send a draft staff opened
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Signing in | the site's existing sign-in dialog | `grade10-site-vault-case-intake-US-06` |
-| Listed as a draft | the draft on the collector's list, reading that staff opened it at the counter; it reopens in the wizard | `grade10-site-vault-case-intake-US-06` |
-| The wizard's own | the third step's read-back, statement tick and send, with its own states | `grade10-site-vault-case-intake-US-06` |
-| Cancelled before sending | a draft the collector cancelled reads as any cancelled draft; one staff cancelled leaves the list | `grade10-site-vault-case-lifecycle-US-06` |
+| Signing in | the site's existing sign-in dialog | **Out of suite:** the site's sign-in dialog, stated in `shared/auth/sign-in` |
+| Listed as a draft | the draft on the collector's list, reading that staff opened it at the counter; it reopens in the wizard | `grade10-site-vault-case-intake-SC-32` |
+| The wizard's own | the third step's read-back, statement tick and send, with its own states | `grade10-site-vault-case-intake-SC-34` |
+| Photo removed | the photograph step offers removing any photograph, staff's or their own, before the send | `grade10-site-vault-case-intake-SC-37` |
+| Cancelled before sending | a draft the collector cancelled reads as any cancelled draft; one staff cancelled leaves the list | `grade10-site-vault-case-lifecycle-SC-44` |
 
 ## Flags
 
 - **Every board is missing** - the walk-in form, the collector column and
   filter, and the collector page; each row above is the designer's to draw,
-  and the change waits on them in its record
+  and Q27 builds them on the console's existing blocks now, each replaced
+  when its board lands

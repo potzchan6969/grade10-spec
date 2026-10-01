@@ -150,6 +150,9 @@ released`, guarded on nothing outstanding and no packet open.
   another under the right address; the account at the wrong address is not
   emailed and keeps nothing: the draft and staff's photos are removed from
   it rather than listed as cancelled
+- 🚧 **The collector's own cancel** — a draft staff opened that the
+  collector cancels stays on their list as any cancelled draft; only staff's
+  cancel and the clock remove it
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - **Every ending reads on the case** — in the collector's words: the

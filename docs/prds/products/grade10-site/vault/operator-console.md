@@ -64,6 +64,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **Narrow by collector** — a click on the name shows only that
   collector's cases; a link beside it opens their
   [Collector Page](/p/grade10-admin/console/collector-page)
+- 🚧 **Which name reads are recorded** — a page of names and a list narrowed
+  to one collector each write an entry on the audit chain, as a search and a
+  collector page do; a list that names nobody writes none
 - 🚧 **Walk-ins** — staff open a draft for a customer at the counter under
   the customer's own account; nothing about the case is emailed; the customer
   asks for their own sign-in link on their phone at `grade10.com/vault`,
@@ -72,6 +75,10 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   handle until the customer names themselves
 - 🚧 **An address signed in to before** — a walk-in is refused when the
   address belongs to an account someone has signed in to
+- 🚧 **The statement first** — the counter shows the collection statement
+  before staff type the address, and the open keeps the version shown; in
+  production the open is refused while the statement is unwritten —
+  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
 - 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register knows, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
