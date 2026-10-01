@@ -38,3 +38,11 @@ visit was closed as missed, or who asked for the item back,
 **I want** the page to say so in my own words, that the case is still where it
 was, and what to do next,
 **so that** I do not take a closed offer or a closed visit for a closed case.
+
+### grade10-site-vault-case-lifecycle-US-06: Operator opens a walk-in again under the right address
+
+**As a** member of shop staff who typed a customer's address wrong,
+**I want** to cancel the unsent draft and open it again under the right
+address,
+**so that** the customer can send it, and the account at the wrong address
+is never emailed and keeps nothing of it.

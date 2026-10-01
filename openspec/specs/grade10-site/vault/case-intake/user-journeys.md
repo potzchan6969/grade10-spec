@@ -34,3 +34,11 @@ have read the collection statement,
 **I want** a short reference for my case,
 **so that** I can read it out at the counter and type it as the transfer
 reference at my bank.
+
+### grade10-site-vault-case-intake-US-06: Collector sends a request staff opened for them at the counter
+
+**As a** collector whose request staff opened at the counter,
+**I want** to sign in on my own phone, read the request and the photos back,
+and tick that I have read the collection statement before I send it,
+**so that** nothing happens to my item on a request I have not seen, and a
+request typed under the wrong address is never emailed.

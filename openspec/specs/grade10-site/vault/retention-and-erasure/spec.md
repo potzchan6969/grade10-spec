@@ -35,11 +35,13 @@ account and an operator runs.
     signature stay under a named hold
   - Whichever class: contact, staff free text and the collector's own actor
     ids go, and owed mail goes with them
+  - A walk-in removed: a draft staff opened and then cancelled, or run out,
+    is purged as an unsigned case, the collector's own actor ids rewritten
 - What cannot be rewritten
   - Append-only records: money, corrections, valuations, movements, history
     and the audit trail take no update and no delete
-  - The one exception: the collector's own actor id in the history, which
-    erasure rewrites
+  - The one exception: the collector's own actor id in the history and the
+    photograph-read trail, which an erasure or a walk-in's removal rewrites
 - Your data
   - One page under the account: what is kept, where the identity stands, what
     has been signed and the ask, in one place rather than on a closed case
@@ -164,6 +166,11 @@ A case that ended without a sealed document SHALL be purged: its photographs,
 the item's own words and the ceremony's personal data SHALL be deleted, and
 the identity binding behind it SHALL be released.
 
+A draft staff opened at the counter that staff cancel, or whose clock ends it,
+SHALL be purged the same way at that moment, as
+`grade10-site/vault/case-lifecycle` states, whether or not the person is
+erased.
+
 A case that ended after custody SHALL be held: the sealed documents, the
 identity record and its photograph SHALL be kept under a hold named on the
 case, with no clock. The hold SHALL say which it is — evidence of a signed
@@ -211,6 +218,14 @@ moment of erasure, never from a list read earlier.
 - **WHEN** the person is erased
 - **THEN** those entries name an erased collector, the entries themselves stand, and staff actors are untouched
 
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-44 - A removed walk-in is purged and loses the collector's actor id
+**Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
+
+- **GIVEN** a draft staff opened, whose title the collector changed after signing in
+- **WHEN** staff cancel it
+- **THEN** its photographs and item text are gone and its history entries name no collector
+- **AND** staff's own entries stand, and a later erasure of that account finds nothing of the case left to rewrite
+
 ### Requirement: Nothing recorded is rewritten
 
 No database session SHALL be able to update or delete a money record, a
@@ -219,8 +234,8 @@ audit-trail entry. A correction is an append, and so is every other change of
 mind.
 
 The one exception SHALL be the actor column of the history and the
-photograph-read trail, which an erasure rewrites so that a person's own id
-does not survive their erasure.
+photograph-read trail, which an erasure or a walk-in's removal rewrites so
+that a person's own id does not survive it.
 
 <!-- trace:scenario id=g10.vault-retention-and-erasure.SC-qfh rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-10 - An update to a money record is refused

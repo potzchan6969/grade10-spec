@@ -20,6 +20,7 @@ is what the collector hears about them.
   - The action link: every message opens the case at its own address
   - Twenty-four messages: one per thing worth telling, the identity-check
     invitation among them, English, to the case's own address
+  - Silence on a draft staff opened: its expiry and its cancel send nothing
 - Reminders
   - Before the due date: a week's warning and one the day before
   - While it is overdue: one every seventh day, naming the balance and that
@@ -79,6 +80,10 @@ Where one event has several true meanings, the act that writes it SHALL name
 the message: a request that ran out untouched, one that ran out unbooked, and
 one closed after a missed visit are three messages, not one.
 
+A draft staff opened at the counter SHALL end in silence: its expiry and its
+cancel, whoever cancels it, SHALL send nothing and owe nothing, because its
+address was typed at the counter and nobody has shown it is theirs.
+
 <!-- trace:scenario id=g10.vault-collector-notifications.SC-fp2 rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-01 - Every event is decided
 **Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
@@ -92,6 +97,20 @@ one closed after a missed visit are three messages, not one.
 
 - **GIVEN** three cases ended by an untouched draft, by nobody booking, and by a missed visit
 - **THEN** each collector is told the true one of the three, not one shared wording
+
+#### Scenario: grade10-site-vault-collector-notifications-SC-35 - An unsent walk-in that runs out tells nobody
+**Serves:** What is sent - the sweep ending a draft staff opened that nobody sent
+
+- **GIVEN** a draft staff opened at the counter and untouched for 8 days
+- **WHEN** the clocks end it
+- **THEN** no message is sent about it and none is owed
+
+#### Scenario: grade10-site-vault-collector-notifications-SC-36 - A cancelled walk-in tells nobody
+**Serves:** grade10-site/vault/case-lifecycle#grade10-site-vault-case-lifecycle-US-06 - the operator cancels a draft opened under the wrong address
+
+- **GIVEN** a draft staff opened at the counter
+- **WHEN** staff cancel it, or the collector cancels it
+- **THEN** no message is sent about it and none is owed
 
 ### Requirement: A borrower is reminded before the due date and while it is overdue
 
