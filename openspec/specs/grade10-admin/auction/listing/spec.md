@@ -21,6 +21,7 @@ optional alt live in `grade10-site/auction/listing-media`.
   - Catalogue fields: an operator may write copy and taxonomy before publish
 - Prices and window
   - Writable before publish: starting price, close, extension duration, and cap can change until the listing is live
+  - Starting price of 0: a draft and create accept 0 in USD, HKD and JPY; a negative, non-whole or empty price is refused, and empty is never stored as 0
 - Publish
   - Now or scheduled: a created listing publishes immediately or at a set time
 - Call off
@@ -93,7 +94,7 @@ minimum increment.
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
 - **GIVEN** a draft listing
-- **WHEN** an operator sets its starting price to a non-positive or non-integer amount
+- **WHEN** an operator sets its starting price to a negative or non-integer amount
 - **THEN** Grade10 refuses the write and leaves the starting price unchanged
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-2pj rev=1 -->
@@ -120,6 +121,15 @@ minimum increment.
 - **WHEN** an operator sets its currency to EUR
 - **THEN** Grade10 refuses the write
 - **AND** the currency is unchanged
+
+#### Scenario: grade10-admin-auction-listing-SC-124 - Draft saves a starting price of 0
+**Serves:** grade10-admin-auction-listing-US-01 - Operator prices an unfinished no-reserve lot at nothing
+
+- **GIVEN** a draft listing in `USD`
+- **WHEN** an operator sets its starting price to 0 minor units
+- **THEN** Grade10 stores a starting price of 0 minor units `USD`
+- **AND** the draft reads back 0, not an empty price
+- **AND** the listing remains a draft
 
 ### Requirement: Create validates required fields on the form and the API
 
@@ -355,8 +365,9 @@ to set:
 - **Currency** — an operator chooses an ISO 4217 three-letter code from the
   platform's supported currency list. Omitted at create SHALL store Grade10's
   store currency (`HKD`).
-- **Starting price** — integer minor units greater than zero when set. Empty
-  is allowed only while `draft`.
+- **Starting price** — integer minor units, 0 or greater, when set. 0 is a
+  set starting price and satisfies create; it is not an empty one. Empty is
+  allowed only while `draft`.
 - **Minimum increment** — integer minor units greater than zero when set.
   Empty is allowed only while `draft`.
 - The form SHALL show each entered minor-unit price as a separately formatted
@@ -455,6 +466,53 @@ be refused.
 - **WHEN** an operator sets an extension duration of -60 seconds
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
+
+#### Scenario: grade10-admin-auction-listing-SC-125 - Create accepts a starting price of 0
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a no-reserve lot that opens at nothing
+
+- **GIVEN** three drafts complete except for price, in `USD`, `HKD`, and `JPY`
+- **WHEN** an authorized operator sets each starting price to 0 minor units and creates each listing
+- **THEN** the form and the API accept each create
+- **AND** each listing is created with a starting price of 0 minor units in its currency
+
+#### Scenario: grade10-admin-auction-listing-SC-125a - Create with 0 and no currency stores HKD 0
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a draft complete except for price, with no currency chosen
+- **WHEN** a create is sent to the API with a starting price of 0 minor units
+- **THEN** the listing is created with a starting price of 0 minor units `HKD`
+
+#### Scenario: grade10-admin-auction-listing-SC-126 - Create refuses a negative starting price on the API
+**Serves:** grade10-admin-auction-listing-US-03 - A script cannot create what the form refuses
+
+- **GIVEN** a draft complete except for price, in `HKD`
+- **WHEN** a create is sent straight to the API with a starting price of -1 minor unit
+- **THEN** Grade10 refuses the create
+- **AND** the listing remains a draft
+
+#### Scenario: grade10-admin-auction-listing-SC-127 - An empty starting price is not stored as 0 at create
+**Serves:** grade10-admin-auction-listing-US-03 - An operator who forgot the price cannot create a free lot
+
+- **GIVEN** a draft complete except for price, in `USD`
+- **WHEN** a create is sent to the API with the starting price absent, null, or an empty string
+- **THEN** Grade10 refuses the create
+- **AND** the draft's starting price stays empty, not 0
+
+#### Scenario: grade10-admin-auction-listing-SC-128 - Operator lowers a created listing's starting price to 0
+**Serves:** grade10-admin-auction-listing-US-03 - Operator turns a priced lot into a no-reserve one before it goes live
+
+- **GIVEN** a created listing with a starting price of 1000000 minor units `JPY`
+- **WHEN** an authorized operator sets its starting price to 0 minor units
+- **THEN** Grade10 stores 0 minor units `JPY`
+- **AND** the listing remains created
+
+#### Scenario: grade10-admin-auction-listing-SC-129 - A listing starting at 0 publishes
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a no-reserve lot in front of collectors
+
+- **GIVEN** a created listing with a starting price of 0 minor units `USD`
+- **WHEN** an authorized operator publishes it now
+- **THEN** the listing is published
+- **AND** its slug opens the public listing
 
 ### Requirement: Publish happens now or at a scheduled time
 

@@ -11,6 +11,7 @@
 **As a** bidder,
 **I want** my first bid on a lot to bookmark it and tell me once that alerts are on,
 **so that** I do not need a separate Watch and I am not reminded on every visit.
+
 ### grade10-site-auction-account-record-US-08: Winner opens settlement from My Auctions
 
 **As a** winner,
@@ -53,3 +54,9 @@ did not win.
 **As a** collector
 **I want** my lots split into Active, Upcoming and Ended tabs
 **so that** I see what needs me now without scrolling past closed and unopened lots.
+
+### grade10-site-auction-account-record-US-10: Bidder reads each lot's price and result on My Auctions
+
+**As a** bidder,
+**I want** each lot I bid on to show the auction's current or final price and, once it closes, whether I won,
+**so that** I know what a lot sold for and whether I lost it without opening the lot.
