@@ -12,10 +12,10 @@ group adds or names the tests that prove it, and changes no grant.
 
 ## 2. Role and vocabulary tests (grade10) (owner: @ecchochan)
 
-- [ ] 2.1 Tests in `packages/grade10-auth/contracts/test/roles.test.ts`, one `it` per scenario with the id in its title, in their own commit; `shared-auth-roles-SC-18` moves out of the mapping `it` into its own titled `it` asserting the exact admin list, and `shared-auth-roles-SC-20` is its own titled `it` over `parseRoles("finance,treasurer")` (`shared-auth-roles-SC-12`, `shared-auth-roles-SC-13`, `shared-auth-roles-SC-16`, `shared-auth-roles-SC-18`, `shared-auth-roles-SC-19`, `shared-auth-roles-SC-20`)
-- [ ] 2.2 Name the durable scenarios the delta carries in the titles of the `it`s that already prove them (`shared-auth-roles-SC-01`, `shared-auth-roles-SC-02`, `shared-auth-roles-SC-07`, `shared-auth-roles-SC-08`, `shared-auth-roles-SC-09`, `shared-auth-roles-SC-10`), and add the auction write case (`shared-auth-roles-SC-07a`)
-- [ ] 2.3 Assert `PERMISSION_STATEMENTS` equals the delta's table exactly, keys and actions in order, with no `finance` resource and no `kyc:write` (`shared-auth-roles-SC-21`)
-- [ ] 2.4 Verify: `pnpm run typecheck` and `pnpm run test` for `packages/grade10-auth/contracts` and the root `pnpm run lint` in grade10; every id in 2.1 to 2.3 found by `grep -r "shared-auth-roles-SC-" packages/grade10-auth/contracts/test`.
+- [x] 2.1 Tests in `packages/grade10-auth/contracts/test/roles.test.ts`, one `it` per scenario with the id in its title, in their own commit; `shared-auth-roles-SC-18` moves out of the mapping `it` into its own titled `it` asserting the exact admin list, and `shared-auth-roles-SC-20` is its own titled `it` over `parseRoles("finance,treasurer")` (`shared-auth-roles-SC-12`, `shared-auth-roles-SC-13`, `shared-auth-roles-SC-16`, `shared-auth-roles-SC-18`, `shared-auth-roles-SC-19`, `shared-auth-roles-SC-20`)
+- [x] 2.2 Name the durable scenarios the delta carries in the titles of the `it`s that already prove them (`shared-auth-roles-SC-01`, `shared-auth-roles-SC-02`, `shared-auth-roles-SC-07`, `shared-auth-roles-SC-08`, `shared-auth-roles-SC-09`, `shared-auth-roles-SC-10`), and add the auction write case (`shared-auth-roles-SC-07a`)
+- [x] 2.3 Assert `PERMISSION_STATEMENTS` equals the delta's table exactly, keys and actions in order, with no `finance` resource and no `kyc:write` (`shared-auth-roles-SC-21`)
+- [x] 2.4 Verify: `pnpm run typecheck` and `pnpm run test` for `packages/grade10-auth/contracts` and the root `pnpm run lint` in grade10; every id in 2.1 to 2.3 found by `grep -r "shared-auth-roles-SC-" packages/grade10-auth/contracts/test`.
 
 ## 3. Identity documents and self-approval on the vault and grading routes (grade10) (owner: @ecchochan)
 
