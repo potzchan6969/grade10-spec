@@ -11,16 +11,16 @@ use them; each page supplies the words, the figures and the callbacks.
 
 ## The Blocks
 
-- 🚧 **`FactCard`** - one titled card of facts: a lead, label and value
+- **`FactCard`** - one titled card of facts: a lead, label and value
   rows, a body and actions, each drawn only when given
-- 🚧 **`FactCardSkeleton`** - the cards a read will fill, as one loading
+- **`FactCardSkeleton`** - the cards a read will fill, as one loading
   line a screen reader hears once
-- 🚧 **`NoteList`** - short lines one under the other, a divider between two
+- **`NoteList`** - short lines one under the other, a divider between two
   lines and none after the last
-- 🚧 **`StageRail`** - stages in order with the current one marked; an ended
+- **`StageRail`** - stages in order with the current one marked; an ended
   case stays where it ended, and a narrow screen scrolls the rail, not the
   page
-- 🚧 **`EmptyPanel`** - nothing here yet: a title, the line under it and the
+- **`EmptyPanel`** - nothing here yet: a title, the line under it and the
   way out
 
 A page finds each block by the slot it gives it; given none, a block keeps

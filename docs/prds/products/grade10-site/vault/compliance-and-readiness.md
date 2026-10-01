@@ -55,10 +55,10 @@ it; no statute here is asserted.
   photos and text stay under the hold, no clock
 - **Erasure, never signed** — everything is purged and the identity released
 - **Messages never sent** — queued and parked mail goes whichever class the case falls in
-- 🚧 **Process** — the collector files the ask from Your data and can cancel
+- **Process** — the collector files the ask from Your data and can cancel
   it inside the **7-day** window; then an admin runs each product from the
   console — [Account Data](/platform/account-data#erasure)
-- 🚧 **Your data** — a page under the collector's account: what the vault keeps
+- **Your data** — a page under the collector's account: what the vault keeps
   and for how long, per class; the identity standing — verified until when,
   checked how, never the name or document; every signed document in one download;
   and the ask to be forgotten, refused in words while a case is in flight
@@ -73,7 +73,7 @@ it; no statute here is asserted.
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
 | Database backups | one check grades the gaps file against the registry, run by the build and by the nightly alike, across every environment | two age recipients, one green nightly, a restore drill |
-| 🚧 Second factor | required in production only, for every brand; optional in staging and development | — |
+| Second factor | required in production only, for every brand; optional in staging and development | — |
 | A read that names a person | yes — a search records who searched, when, the kind of term and how many cases matched, never the term | — |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 

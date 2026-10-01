@@ -104,7 +104,7 @@ every bound unset and writes no offer in production.
 - **The split** — staff set terms and forfeit; treasurers record money,
   correct it and read the book; the two roles share no grant, `admin` holds
   both, and per case the person who priced the loan may not pay it out
-- 🚧 **Said before the act** — the offer dialog shows the cap, the presets, the
+- **Said before the act** — the offer dialog shows the cap, the presets, the
   interest, total, late-day figure and annualised rate it derives, and the six
   gates; the vault dialog its two preconditions; the payout dialog the two
   people, the due date and the reminder days the recording fixes
@@ -124,20 +124,20 @@ every bound unset and writes no offer in production.
 - **What the collector sees** — the offer and what is owed, as the
   [Case page](/p/grade10-site/vault/collector-pages#case-page) lists them; no
   annualised rate and no payoff quote with a validity: the balance is the quote
-- 🚧 **How to pay** — one block: the lender's FPS id, its bank account under the
+- **How to pay** — one block: the lender's FPS id, its bank account under the
   lender's registered name, the case reference as the transfer reference, or
   card or cash at the counter; under the balance with the daily figure after
   the deadline and the reminder dates, and in every money message
-- 🚧 **Each repayment, to the borrower** — its value date, method and the balance after it
-- 🚧 **Past due** — the reminders sent with their days; before a notice, the next weekly
+- **Each repayment, to the borrower** — its value date, method and the balance after it
+- **Past due** — the reminders sent with their days; before a notice, the next weekly
   one by its date and that a written notice naming a date to pay by may follow, on no
   day set; once one is sent, its date to pay by, before which nothing can be taken
 - **Where a borrower pays** — the lender's own FPS id and bank account, one
   set per brand beside its legal identity; Finance supplies both, readiness
   item 11 on [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case),
   and every production offer refuses while unset
-- 🚧 **Unset, outside production** — the block prints `[fpsId]` and `[bankAccount]`
-- 🚧 **Unset, in production** — the counter line alone: pay by card or cash at
+- **Unset, outside production** — the block prints `[fpsId]` and `[bankAccount]`
+- **Unset, in production** — the counter line alone: pay by card or cash at
   the counter; no money message goes until both are set again
 - **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
 

@@ -64,7 +64,7 @@ withdrawn.
 A case with a check still out is not a case with no identity, and the screen
 says which — an operator arranging a visit needs to know the difference.
 
-🚧 The console's identity panel shows only these six states, never the
+The console's identity panel shows only these six states, never the
 provider's finer ones.
 
 ## Verdict
