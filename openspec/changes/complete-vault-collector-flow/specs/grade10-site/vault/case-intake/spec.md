@@ -67,6 +67,7 @@ A collector SHALL open a vault request from their own account, in three steps:
 An unsent request SHALL be reopenable at the step it was left on, and SHALL
 carry photographs only while it is unsent.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-gfr rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-01 - A request is opened and reopened
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -74,6 +75,7 @@ carry photographs only while it is unsent.
 - **THEN** it is listed as an unsent request on their own list
 - **AND** reopening it returns them to its photograph step
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-nkl rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-02 - A photograph is refused once the request is sent
 **Serves:** Opening a request - a photograph is refused once the request is sent
 
@@ -100,12 +102,14 @@ name, and no case SHALL be opened with it.
 
 A collector with several items SHALL open one request for each.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-yru rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-03 - A request in another currency is refused
 **Serves:** grade10-site-vault-case-intake-US-02 - Collector sends in a card they only want kept safe
 
 - **WHEN** a request is opened naming a currency that is not the brand's
 - **THEN** it is refused by name and no case exists
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-lmq rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-04 - A number is stored one way
 **Serves:** Describing the item - a number is stored one way
 
@@ -147,6 +151,7 @@ A case SHALL carry at most ten photographs. Each SHALL be a JPEG, PNG or WebP
 of at most 20 MB - 20,971,520 bytes - and anything else SHALL be refused by name before it is
 stored. The same bytes offered twice SHALL attach one photograph.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-e09 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-08 - An eleventh photograph is refused
 **Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
@@ -154,12 +159,14 @@ stored. The same bytes offered twice SHALL attach one photograph.
 - **WHEN** another is offered
 - **THEN** it is refused by name and nothing is stored
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-vs1 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-09 - A file of another kind is refused
 **Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **WHEN** a file that is not one of the three image types is offered
 - **THEN** it is refused by name and nothing is stored
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-uls rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-10 - The same photograph twice is one photograph
 **Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
@@ -192,12 +199,14 @@ A photograph SHALL be served to the case's owner and to staff holding the
 vault read grant, and to nobody else. Every read SHALL be recorded in a ledger
 that is never rewritten.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-jw9 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-11 - Location metadata never reaches the vault
 **Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **WHEN** a photograph carrying a location is offered
 - **THEN** what is stored carries none
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-5ui rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-12 - A photograph is not another collector's to read
 **Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 

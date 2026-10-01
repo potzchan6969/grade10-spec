@@ -403,6 +403,7 @@
       "minimumGradeLabel": "最低评分",
       "grades": "成绩以评级公司的说法显示",
       "cert": "证书编号",
+      "vaultCase": "金库个案",
       "refusedReason": "柜台拒收 · {reason}",
       "withdrawnRefund": "已取回 · 已退回 {amount}",
       "movedUpLine": "升级到 {level}，需补 {amount}",
@@ -486,7 +487,7 @@
       "reminders": "我们会在 {days} 提醒你。提醒本身不收任何费用。",
       "storage": "自 {day} 起，每张每月 {rate} 保管费。费用在此累计，须于领回前付清。",
       "notice": "{day} 发出书面通知。",
-      "noticeLine": "由寄出日起计的 30 日，尚余 {daysLeft, plural, other {# 日}}，于 {day} 届满。",
+      "noticeLine": "由寄出日起计的 {period} 日，尚余 {daysLeft, plural, other {# 日}}，于 {day} 届满。",
       "afterNotice": "在此之后，不会再有进一步处理：卡牌仍然是你的，卡壳可以转入金库寄存。",
       "closing": "入壳卡牌一律不寄出。想干脆留在这里？可用上面的金库寄存。"
     },

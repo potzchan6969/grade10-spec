@@ -85,6 +85,7 @@ than from a second one, ordered by the visit's slot time earliest first. Where
 the cut holds nothing, the landing view SHALL say no visit is booked for
 today.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-77a rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-01 - Today is the shop's day
 **Serves:** grade10-admin-vault-operator-queue-US-01 - Operator opens the shop and sees what is waiting
 
@@ -92,6 +93,7 @@ today.
 - **WHEN** the Today view is read
 - **THEN** the visit's case is in it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-90m rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-02 - Every status has exactly one home
 **Serves:** grade10-admin-vault-operator-queue-US-01 - Operator opens the shop and sees what is waiting
 
@@ -144,6 +146,7 @@ The answer SHALL be one page and SHALL say when more matched than were handed
 back. A search that matches no case SHALL say so, rather than reading as a
 queue with nothing in it.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-02a rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-07 - A number is found however it was typed
 **Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
 
@@ -158,6 +161,7 @@ queue with nothing in it.
 - **WHEN** an operator searches for `９８７６ ５４３２`, or for `852 9876 5432` with no `+`
 - **THEN** the case is found, and the search records neither term
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-m6s rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-08 - A search records itself without the term
 **Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
 
@@ -165,6 +169,7 @@ queue with nothing in it.
 - **THEN** the audit trail carries one entry naming the operator, the instant, that the term was an address, and the number of matches
 - **AND** the address appears in no column of it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4px rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-09 - Listing the queue records nothing
 **Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
 

@@ -50,11 +50,11 @@ vendor is involved.
 - **Terms explained first** — the counter records that the key terms were
   explained, with a recording reference where there is one, before a loan
   packet may be prepared; the borrower signs a line saying it happened
-- 🚧 **Key terms, ticked from the agreement** — the dialog prints the loan
+- **Key terms, ticked from the agreement** — the dialog prints the loan
   agreement's own terms from the table above, each ticked before the loan
   packet opens, and records the one fact: explained, with the recording
   reference where there is one
-- 🚧 **Every document, in one download** — the collector takes every signed
+- **Every document, in one download** — the collector takes every signed
   document from every case, each with its fingerprint, from
   [Your data](/p/grade10-site/vault/compliance-and-readiness#retention-and-erasure);
   the download is bounded to the cases the page lists and written on the

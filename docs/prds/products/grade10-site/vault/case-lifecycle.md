@@ -129,7 +129,7 @@ released`, guarded on nothing outstanding and no packet open.
 
 - 🚧 **A draft staff opened** — ends on the **7-day** draft clock and on a
   cancel with no email
-- 🚧 **A lapsed offer reads as one** — the offer's own expiry is read at the
+- **A lapsed offer reads as one** — the offer's own expiry is read at the
   read, and the case stays `offer_made`, open for another —
   [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
 
@@ -152,7 +152,7 @@ released`, guarded on nothing outstanding and no packet open.
   it rather than listed as cancelled
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
-- 🚧 **Every ending reads on the case** — in the collector's words: the
+- **Every ending reads on the case** — in the collector's words: the
   reason staff gave, that the request was called off and by whom, the clock
   that ended it, or the figure the item settled with the notice date and the
   date to pay by; nothing left to do but start again

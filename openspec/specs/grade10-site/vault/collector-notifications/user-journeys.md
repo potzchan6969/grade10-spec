@@ -17,7 +17,7 @@ straight to it,
 
 ### grade10-site-vault-collector-notifications-US-03: Signer leaves with the documents they signed
 
-**As** somebody who has just signed at the counter,
+**As a** person who has just signed at the counter,
 **I want** the sealed set mailed to me once, with the documents attached,
 **so that** I hold my own copy without asking for one.
 
@@ -28,3 +28,17 @@ straight to it,
 attempts, and to be able to send it again,
 **so that** a provider outage costs a delay rather than a customer who was
 never told.
+
+### grade10-site-vault-collector-notifications-US-05: Borrower reads the figures in the message itself
+
+**As a** borrower,
+**I want** every money message to table the amount, the date, what a late day
+costs and how to pay, and the notice to name the clause, the date to pay by
+and that a person decides,
+**so that** the message is a record I can act on without opening the page.
+
+### grade10-site-vault-collector-notifications-US-06: Collector is invited to verify before the visit
+
+**As a** collector with a visit booked and no identity on file,
+**I want** the invitation to name the visit, the slot and what to bring,
+**so that** I can verify at home and turn up prepared.

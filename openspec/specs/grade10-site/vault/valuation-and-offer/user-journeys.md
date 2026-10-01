@@ -28,3 +28,11 @@ ask for.
 **I want** custody terms agreed against the valuation instead,
 **so that** the item is taken in on the same paper rather than my request being
 declined or cancelled for want of a lender.
+
+### grade10-site-vault-valuation-and-offer-US-05: Collector reads and answers an offer that replaced the last
+
+**As a** collector whose offer was replaced by a new one,
+**I want** the page to say the old offer is gone and show the new one's terms
+with Accept and Decline on it,
+**so that** I answer the offer that stands and never the one that was
+withdrawn.

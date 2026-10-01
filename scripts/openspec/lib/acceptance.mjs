@@ -10,9 +10,11 @@ import {
 } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
+import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
 import {
   outline,
   sectionSpan,
+  trimBlank,
 } from "../../../tools/manual/src/store/markdown.mts";
 import {
   deltaKindOf,
@@ -20,7 +22,11 @@ import {
   deltaSections,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
+const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
+const MARKED_SCENARIO =
+  /<!-- trace:scenario id=(\S+)[^\n]*\n#### Scenario: (\S+)/g;
 const HASH = (value) => createHash("sha256").update(value).digest("hex");
 const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const CONTRACT_NAMES = new Set([
@@ -84,16 +90,10 @@ function walkFiles(root, dir, found = []) {
 
 function sectionContent(text, anchor) {
   const roots = outline(text);
-  const slug = (value) =>
-    value
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N} -]/gu, "")
-      .trim()
-      .replace(/[\s-]+/g, "-");
   const all = [];
   const visit = (sections) =>
     sections.forEach((section) => {
-      if (slug(section.heading) === anchor) all.push(section);
+      if (sectionSlug(section.heading) === anchor) all.push(section);
       visit(section.children);
     });
   visit(roots);
@@ -201,7 +201,18 @@ function usId(heading) {
   return /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(heading)?.[1] ?? null;
 }
 
-function mergeJourneys(currentText, deltaText, changeId, capability) {
+function journeyIds(text) {
+  const section = sectionByName(documentSections(text ?? ""), "User journeys");
+  return new Set((section?.children ?? []).map((one) => usId(one.heading)));
+}
+
+function mergeJourneys(
+  currentText,
+  deltaText,
+  changeId,
+  capability,
+  priorText,
+) {
   if (/\*\*Walked by:\*\*/.test(deltaText)) return currentText ?? deltaText;
   const current = currentText ?? deltaText;
   const currentDoc = {
@@ -219,6 +230,8 @@ function mergeJourneys(currentText, deltaText, changeId, capability) {
       .map((section) => [usId(section.heading), section]),
   );
   const retired = new Set(readRetiredIds(currentDoc.sections));
+  const durableIds = new Set(currentText ? live.keys() : []);
+  const ownIds = journeyIds(priorText);
   const deltaHeld = [
     "User journeys",
     "Context user journeys",
@@ -237,6 +250,14 @@ function mergeJourneys(currentText, deltaText, changeId, capability) {
           `${capability}: journey ${id} appears more than once in its delta`,
         );
       deltaIds.add(id);
+      if (
+        section.heading === "ADDED User journeys" &&
+        durableIds.has(id) &&
+        !ownIds.has(id)
+      )
+        throw new Error(
+          `${capability}: added journey ${id} already exists in the durable journeys; renumber it`,
+        );
       live.set(id, journey);
       retired.delete(id);
     }
@@ -342,12 +363,30 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   return `${lines.join("\n").replace(/\n*$/, "\n")} `.trimEnd();
 }
 
-function mergePurpose(currentSpec, deltaPurpose, capability, priorText) {
+function purposeOf(text) {
+  return sectionByName(rootSections(text).sections, "Purpose")?.raw;
+}
+
+function mergePurpose(
+  currentSpec,
+  deltaPurpose,
+  capability,
+  priorText,
+  baseText,
+) {
   if (!deltaPurpose) return currentSpec;
   const currentPurpose = sectionByName(
     rootSections(currentSpec).sections,
     "Purpose",
   );
+  if (
+    !priorText &&
+    typeof baseText === "string" &&
+    purposeOf(baseText) !== currentPurpose?.raw
+  )
+    throw new Error(
+      `${capability}: accepted Purpose changed since this delta's Purpose was written; fold the durable Purpose's changes into this delta's Purpose and commit it`,
+    );
   if (priorText) {
     const priorPurpose = sectionByName(
       rootSections(priorText).sections,
@@ -417,42 +456,177 @@ function validatedRenamedPairs(section, capability) {
   return pairs;
 }
 
+const SUITE_LISTS = ["Raised", "Settled", "Out of suite"];
+const SUITE_SECTIONS = new Set([
+  "Background",
+  "Reconciliation",
+  ...SUITE_LISTS,
+]);
+const JOURNEY_GROUP = /^(.+?-US-?(\d+)([a-z]?))\b/i;
+
+function paragraphs(text) {
+  return (text ?? "")
+    .split(/\n[ \t]*\n/)
+    .map((one) => one.trim())
+    .filter(Boolean);
+}
+
+function appendMissing(currentText, deltaText) {
+  const kept = paragraphs(currentText);
+  for (const one of paragraphs(deltaText))
+    if (!kept.includes(one)) kept.push(one);
+  return kept.join("\n\n");
+}
+
+function listItems(text) {
+  const items = [];
+  let fresh = true;
+  for (const line of (text ?? "").split("\n")) {
+    if (line.trim() === "") fresh = true;
+    else if (fresh || /^([-*] |\*None yet\b)/.test(line)) {
+      items.push(line);
+      fresh = false;
+    } else items[items.length - 1] += `\n${line}`;
+  }
+  return items;
+}
+
+function mergeList(currentText, deltaText) {
+  const items = [
+    ...new Set([...listItems(currentText), ...listItems(deltaText)]),
+  ];
+  const real = items.filter((item) => !/^\*None yet\b/.test(item));
+  const kept = real.length ? real : items.slice(0, 1);
+  const isItem = (item) => /^[-*] /.test(item);
+  if (kept.length === 0) return "";
+  return kept.reduce(
+    (text, item, i) =>
+      `${text}${isItem(item) && isItem(kept[i - 1]) ? "\n" : "\n\n"}${item}`,
+  );
+}
+
+function splitManual(raw) {
+  const lines = (raw ?? "").split("\n");
+  const start = lines.findIndex((line) => line.trim() === "### Manual");
+  if (start < 0) return { runs: trimBlank(lines), manual: [] };
+  const after = lines.findIndex(
+    (line, i) => i > start && /^#{1,3} /.test(line),
+  );
+  const end = after < 0 ? lines.length : after;
+  return {
+    runs: trimBlank([...lines.slice(0, start), ...lines.slice(end)]),
+    manual: lines.slice(start + 1, end),
+  };
+}
+
+function mergeReconciliation(currentRaw, deltaRaw) {
+  const current = splitManual(currentRaw);
+  const delta = splitManual(deltaRaw);
+  const runs =
+    delta.runs && !current.runs.includes(delta.runs)
+      ? [current.runs, delta.runs].filter(Boolean).join("\n\n")
+      : current.runs;
+  const tables = [current.manual, delta.manual].map((lines) =>
+    lines.filter((line) => line.startsWith("|")),
+  );
+  const header = (tables[0].length ? tables[0] : tables[1]).slice(0, 2);
+  const rows = new Map();
+  for (const row of [...tables[0].slice(2), ...tables[1].slice(2)]) {
+    rows.set(/^\|([^|]*)\|/.exec(row)[1].replaceAll("`", "").trim(), row);
+  }
+  const prose = appendMissing(
+    ...[current.manual, delta.manual].map((lines) =>
+      lines.filter((line) => !line.startsWith("|")).join("\n"),
+    ),
+  );
+  const table = [...header, ...rows.values()].join("\n");
+  const manual = [prose, table].filter(Boolean).join("\n\n");
+  return [runs, manual && `### Manual\n\n${manual}`]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+function suiteHeader(currentHeader, deltaHeader) {
+  const label = (line) => /^\*\*([^*]+):\*\*/.exec(line)?.[1];
+  const dated = (line) => /\d{4}-\d{2}-\d{2}/.exec(line)?.[0] ?? "";
+  const lines = currentHeader.split("\n");
+  for (const line of deltaHeader.split("\n").filter(label)) {
+    const at = lines.findIndex((one) => label(one) === label(line));
+    if (at < 0) lines.push(line);
+    else if (!(dated(line) && dated(line) < dated(lines[at]))) lines[at] = line;
+  }
+  return lines.join("\n");
+}
+
+function withDerivedStatus(text) {
+  const suite = parseSuite(text);
+  const cases = suite.journeys.flatMap((journey) => journey.cases);
+  const status = deriveStatus(
+    statusCounts(cases),
+    cases.length,
+    Boolean(suite.reviewedLapsed),
+  );
+  return text.replace(/^\*\*Status:\*\* .*$/m, `**Status:** ${status}`);
+}
+
 function mergeSuite(currentText, deltaText, capability) {
   if (currentText === null || currentText === undefined) return deltaText;
-  if (currentText === deltaText) return currentText;
-  const current = currentText ?? deltaText;
-  const currentDoc = {
-    heading: rootSections(current).heading,
-    sections: documentSections(current),
-  };
-  const deltaDoc = { heading: "", sections: documentSections(deltaText) };
-  const journeyHeading = /^.+-US-?\d+\b/i;
-  const currentGroups = new Map(
-    currentDoc.sections
-      .filter(
-        (section) =>
-          section.level === 2 && journeyHeading.test(section.heading),
-      )
-      .map((section) => [section.heading, section]),
+  const texts = [currentText, deltaText].map((text) =>
+    text.replace(/\r\n/g, "\n"),
   );
-  const isCase = (section) => /-TC\d+-\d+\b/i.test(section.heading);
-  for (const incoming of deltaDoc.sections.filter(
-    (section) => section.level === 2 && journeyHeading.test(section.heading),
-  )) {
-    const existing = currentGroups.get(incoming.heading);
+  if (texts[0] === texts[1]) return texts[0];
+  const docs = texts.map((text) => {
+    const sections = documentSections(text);
+    const headerEnd = Math.min(
+      ...sections.map((section) => section.line),
+      text.split("\n").length + 1,
+    );
+    const header = text
+      .split("\n")
+      .slice(0, headerEnd - 1)
+      .join("\n")
+      .trimEnd();
+    for (const section of sections)
+      if (
+        section.level === 2 &&
+        !SUITE_SECTIONS.has(section.heading) &&
+        !JOURNEY_GROUP.test(section.heading)
+      )
+        throw new Error(
+          `${capability}: test-case suite section \`## ${section.heading}\` has no fold rule; fold it by hand into the change's suite`,
+        );
+    return { header, sections };
+  });
+  const [current, delta] = docs;
+  const named = (doc, name) => sectionByName(doc.sections, name)?.raw;
+  const groupsOf = (doc) =>
+    doc.sections.filter(
+      (section) => section.level === 2 && JOURNEY_GROUP.test(section.heading),
+    );
+  const groupId = (section) => JOURNEY_GROUP.exec(section.heading)[1];
+  const caseId = (section) => /(\S+-TC\d+-\d+)\b/i.exec(section.heading)?.[1];
+  const isCase = (section) => Boolean(caseId(section));
+  const currentGroups = new Map(
+    groupsOf(current).map((section) => [groupId(section), section]),
+  );
+  for (const incoming of groupsOf(delta)) {
+    const existing = currentGroups.get(groupId(incoming));
     const cases = new Map(
       (existing?.children ?? [])
         .filter(isCase)
-        .map((one) => [one.heading, one]),
+        .map((one) => [caseId(one), one]),
     );
     for (const testCase of incoming.children.filter(isCase))
-      cases.set(testCase.heading, testCase);
+      cases.set(caseId(testCase), testCase);
     const rendered = [`## ${incoming.heading}`, incoming.body.trim()].filter(
       Boolean,
     );
     for (const testCase of cases.values())
       rendered.push(renderSection(testCase));
-    currentGroups.set(incoming.heading, { render: rendered.join("\n\n") });
+    currentGroups.set(groupId(incoming), {
+      heading: incoming.heading,
+      render: rendered.join("\n\n"),
+    });
   }
   if (currentGroups.size === 0) {
     // Unknown suite shapes are unsafe to replace. A conflict must be resolved
@@ -461,39 +635,65 @@ function mergeSuite(currentText, deltaText, capability) {
       `${capability}: cannot safely merge this test-case suite; include the complete resulting suite in the change`,
     );
   }
-  const headerEnd = Math.min(
-    ...currentDoc.sections.map((section) => section.line),
-    current.split("\n").length + 1,
+  const usOrder = (section) => {
+    const [, , number, letter] = JOURNEY_GROUP.exec(section.heading);
+    return Number(number) + (letter ? letter.charCodeAt(0) / 1000 : 0);
+  };
+  const ruled = /\n+---$/;
+  const groups = [...currentGroups.values()]
+    .sort((a, b) => usOrder(a) - usOrder(b))
+    .map((section) => section.render ?? renderSection(section));
+  const separator = groups.some((one) => ruled.test(one))
+    ? "\n\n---\n\n"
+    : "\n\n";
+  const parts = [suiteHeader(current.header, delta.header)];
+  const background = appendMissing(
+    named(current, "Background"),
+    named(delta, "Background"),
   );
-  const header = current
-    .split("\n")
-    .slice(0, headerEnd - 1)
-    .join("\n")
-    .trimEnd();
-  const groups = [...currentGroups.values()].map(
-    (section) => section.render ?? renderSection(section),
+  if (background) parts.push(`## Background\n\n${background}`);
+  const closing = ruled.test(groupsOf(current).at(-1)?.raw ?? "")
+    ? "\n\n---"
+    : "";
+  parts.push(
+    `${groups.map((one) => one.replace(ruled, "")).join(separator)}${closing}`,
   );
-  const endings = [];
-  for (const name of ["Settled", "Reconciliation", "Out of suite"]) {
-    const old = sectionByName(currentDoc.sections, name);
-    const next = sectionByName(deltaDoc.sections, name);
-    if (!old && !next) continue;
-    const lines = [
-      ...new Set(
-        [
-          ...(old?.raw.split("\n") ?? []),
-          ...(next?.raw.split("\n") ?? []),
-        ].filter((line) => line.trim() !== ""),
-      ),
-    ];
-    endings.push(`## ${name}\n\n${lines.join("\n")}`);
+  for (const name of SUITE_LISTS.slice(0, 2)) {
+    const merged = mergeList(named(current, name), named(delta, name));
+    if (merged) parts.push(`## ${name}\n\n${merged}`);
   }
-  return `${header}${groups.length ? `\n\n${groups.join("\n\n")}` : ""}${endings.length ? `\n\n${endings.join("\n\n")}` : ""}\n`;
+  const reconciliation = mergeReconciliation(
+    named(current, "Reconciliation"),
+    named(delta, "Reconciliation"),
+  );
+  if (reconciliation) parts.push(`## Reconciliation\n\n${reconciliation}`);
+  const outOfSuite = mergeList(
+    named(current, "Out of suite"),
+    named(delta, "Out of suite"),
+  );
+  if (outOfSuite) parts.push(`## Out of suite\n\n${outOfSuite}`);
+  const merged = withDerivedStatus(`${parts.join("\n\n")}\n`);
+  const caseIds = new Set();
+  for (const [, id] of merged.matchAll(/^###\s+(\S+-TC\d+-\d+)\b/gim)) {
+    if (caseIds.has(id))
+      throw new Error(
+        `${capability}: test case ${id} appears more than once in the merged suite; renumber it`,
+      );
+    caseIds.add(id);
+  }
+  return merged;
 }
 
-function foldOne(durablePath, deltaText, capability, priorText = null) {
+function foldOne(
+  durablePath,
+  deltaText,
+  capability,
+  priorText = null,
+  baseText = null,
+) {
   const durableExists = existsSync(durablePath);
   let durable = durableExists ? readFileSync(durablePath, "utf8") : "";
+  const original = durable;
   const delta = outline(deltaText).find((section) => section.level === 1);
   if (!delta) throw new Error(`${capability}: delta has no title`);
   if (!durableExists) durable = `# ${delta.heading}\n`;
@@ -508,7 +708,13 @@ function foldOne(durablePath, deltaText, capability, priorText = null) {
     throw new Error(
       `${capability}: new durable spec needs a Purpose section before acceptance`,
     );
-  durable = mergePurpose(durable, deltaPurpose, capability, priorText);
+  durable = mergePurpose(
+    durable,
+    deltaPurpose,
+    capability,
+    priorText,
+    baseText,
+  );
   const deltaFeatureSet = delta.children.find(
     (section) => section.heading === "Feature set",
   );
@@ -589,7 +795,73 @@ function foldOne(durablePath, deltaText, capability, priorText = null) {
   } else {
     durable = `${durable.replace(/\n*$/, "\n\n")}## Requirements\n\n${body}\n`;
   }
+  const kept = new Set(
+    [...durable.matchAll(TRACE_MARKER)].map((match) => match[1]),
+  );
+  for (const [name, block] of requirementBlocks(original))
+    for (const [, id, scenario] of block.raw.matchAll(MARKED_SCENARIO))
+      if (
+        !kept.has(id) &&
+        new RegExp(
+          `^#### Scenario: ${RegExp.escape(scenario)}(\\s|$)`,
+          "m",
+        ).test(durable)
+      )
+        throw new Error(
+          `${capability}: the fold drops trace marker ${id} from scenario ${scenario} in requirement ${name}; carry it in the delta`,
+        );
   return durable;
+}
+
+function gitText(root, ...args) {
+  const result = spawnSync("git", args, { cwd: root, encoding: "utf8" });
+  return result.status === 0 ? result.stdout : null;
+}
+
+/** The durable spec as it stood when the delta's Purpose last changed ("" if
+ * it did not exist yet), so a first acceptance cannot replace a Purpose
+ * another change wrote since. A rebase rewrites that commit onto newer main,
+ * so after a rebase the check cannot see drift from before it. */
+function durableWhenPurposeWritten(root, deltaPath, durablePath) {
+  const skip = (why) => {
+    console.warn(`${deltaPath}: Purpose drift not checked - ${why}`);
+    return null;
+  };
+  const log = gitText(root, "log", "--format=%H", "--", deltaPath)
+    ?.split("\n")
+    .filter(Boolean);
+  if (!log?.length) return skip("the delta has no git history");
+  const current = purposeOf(readFileSync(join(root, deltaPath), "utf8"));
+  let written = null;
+  for (const commit of log) {
+    const text = gitText(root, "show", `${commit}:${deltaPath}`);
+    if (text === null || purposeOf(text) !== current) break;
+    written = commit;
+  }
+  if (!written) return skip("its Purpose has uncommitted edits");
+  if (written === log.at(-1)) {
+    const shallow = gitText(root, "rev-parse", "--is-shallow-repository");
+    const followed = gitText(
+      root,
+      "log",
+      "--follow",
+      "--format=%H",
+      "--",
+      deltaPath,
+    );
+    if (shallow?.trim() === "true")
+      console.warn(
+        `${deltaPath}: Purpose drift checked only from ${written}, the shallow history's edge`,
+      );
+    else if (
+      followed &&
+      followed.split("\n").filter(Boolean).length > log.length
+    )
+      console.warn(
+        `${deltaPath}: Purpose drift checked only from ${written}, where the delta was renamed`,
+      );
+  }
+  return gitText(root, "show", `${written}:${durablePath}`) ?? "";
 }
 
 function previousDurableSnapshots(root, changeId) {
@@ -639,11 +911,13 @@ function contractOutputs(root, changeId) {
       .replace(/\/spec\.md$/, "");
     const target = durableFor(root, relativeCapability, "spec.md");
     const targetRel = relative(root, target).replaceAll("\\", "/");
+    const priorText = prior.get(targetRel) ?? null;
     const folded = foldOne(
       target,
       readFileSync(join(root, path), "utf8"),
       relativeCapability,
-      prior.get(targetRel) ?? null,
+      priorText,
+      priorText ? null : durableWhenPurposeWritten(root, path, targetRel),
     );
     outputs.set(targetRel, folded);
     const sourceDir = dirname(join(root, path));
@@ -660,7 +934,13 @@ function contractOutputs(root, changeId) {
       const sourceText = readFileSync(source, "utf8");
       const merged =
         name === "user-journeys.md"
-          ? mergeJourneys(currentText, sourceText, changeId, relativeCapability)
+          ? mergeJourneys(
+              currentText,
+              sourceText,
+              changeId,
+              relativeCapability,
+              prior.get(targetKey),
+            )
           : mergeSuite(currentText, sourceText, dir);
       outputs.set(targetKey, merged);
     }
@@ -1457,4 +1737,4 @@ export function acceptChange(
   }
 }
 
-export { contractOutputs, json as prettyJson };
+export { contractOutputs, json as prettyJson, mergeSuite };

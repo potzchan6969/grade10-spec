@@ -11,9 +11,9 @@ The vault's cards, lists, rails and loading cards are
 
 ## The Blocks
 
-- 🚧 **`VaultAcceptOfferDialog`** - the total, what a late day costs and
+- **`VaultAcceptOfferDialog`** - the total, what a late day costs and
   what will be signed, before Accept; a refusal stays beside the terms
-- 🚧 **`VaultCasesEmpty`** - the vault home with no case yet: the intro,
+- **`VaultCasesEmpty`** - the vault home with no case yet: the intro,
   Start a request, How it works and the draft cap
 
 Every state is reachable from a story with props alone; the pages the blocks

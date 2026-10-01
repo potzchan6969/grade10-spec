@@ -513,8 +513,8 @@ bring, and what to settle.
 - **When to come** - the page SHALL give the shop's hours and SHALL say that no
   booking is needed.
 - **What is due** - the page SHALL show one figure to settle, the unsettled
-  upcharge and the storage accrued to the day together, and SHALL say it is due
-  at the counter.
+  upcharge, the storage accrued to the day and any payout to repay together,
+  and SHALL say it is due at the counter.
 - **Settle first** - nothing SHALL be handed back while anything is due.
 - **Nothing due** - where nothing is owed the page SHALL say so rather than show
   a figure of zero.
@@ -639,6 +639,9 @@ that is a vault case rather than storage on the submission.
 - **At the counter** - a slab SHALL be able to go straight into a vault case at
   the same hand-back, and the card's outcome SHALL read Vaulted with a link to
   the case.
+- **The link** - the case SHALL be found from the reference recorded at the
+  counter each time the page is read; where no case matches it, the reference
+  SHALL show as plain text with no link.
 - **Where the duties are** - the identity check and the custody agreement for
   that slab SHALL be the vault case's, under
   `grade10-site/vault/case-intake`, and SHALL NOT be asked for by the
@@ -655,6 +658,13 @@ that is a vault case rather than storage on the submission.
 - **WHEN** one slab is put into a vault case at the counter
 - **THEN** that card reads Vaulted and links its case
 - **AND** it is not counted for storage on the submission, and the receipt says it went to the vault
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-63 - A vault reference that matches no case reads as plain text
+**Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector leaves a slab with the shop rather than carrying it home
+
+- **GIVEN** a vaulted card whose recorded reference matches no vault case
+- **WHEN** the submission page is read
+- **THEN** the card reads Vaulted with the reference as plain text and no link, and once a case with that reference exists the next read links it
 
 ### Requirement: Cards left uncollected walk reminders, then storage, then a written notice
 
@@ -682,6 +692,12 @@ became ready to collect.
 - **Nothing pauses it** - the rungs SHALL be counted from the ready day
   whatever the collector books or names, and a card SHALL leave the ladder only
   by being collected, vaulted or paid out.
+- **The shop's day** - every rung SHALL be counted on the `Asia/Hong_Kong` day
+  from the ready day.
+- **Nothing left to hand back** - a ready submission with no card left on the
+  ladder, every card collected, vaulted or paid out, SHALL climb no rung, SHALL
+  be sent no reminder, notice or ready message, and SHALL read as ended; no
+  status of its own is added.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-35 - The rungs are counted from the ready day
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who has not come in is nudged before being charged
@@ -714,13 +730,31 @@ became ready to collect.
 - **THEN** the rungs still count from the ready day and the storage is still accruing
 - **AND** only a card collected, vaulted or paid out has left the ladder
 
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-64 - A rung falls on the shop's day
+**Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who has not come in is nudged before being charged
+
+- **GIVEN** a submission that became ready at 23:30 on 1 January on the shop's clock
+- **WHEN** the ladder is read
+- **THEN** the first reminder falls on 31 January on the shop's clock, whatever the hour the ready day ended in UTC
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-65 - A submission whose every card is paid out climbs no rung
+**Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector whose cards are all settled is not chased for cards the shop no longer holds
+
+- **GIVEN** a ready submission of two cards, both recorded not returned and paid out
+- **WHEN** 30, 90 and 180 days pass
+- **THEN** no reminder, storage or notice is sent or accrued, and the page reads the submission as ended
+
 ### Requirement: Storage accrues per card held and per month started
 
 Storage is a nudge rather than a price, derived from the ready day and the
 cards the shop still holds.
 
 - **The fee** - storage SHALL be 3000 HKD minor units per card still held at the
-  shop, per month started from day 90 after the submission became ready.
+  shop, per month started from day 90 after the later of the day the
+  submission became ready and the day that card came back to the shop.
+- **The months** - a month SHALL be counted on the shop's days: the first
+  starts at the midnight beginning day 90, and each next on that day of the
+  month; a day the next month lacks comes round on its last day.
 - **A part month** - a month begun SHALL count as a whole month.
 - **Which cards** - a card withdrawn, paid out or vaulted SHALL NOT be counted.
 - **Derived** - the figure SHALL be worked out when it is read, from the ready
@@ -743,6 +777,20 @@ cards the shop still holds.
 - **WHEN** the collector reads what is due
 - **THEN** the storage is 6000 HKD minor units, for the two cards still held
 
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-66 - Storage months come round on the day storage began
+**Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector reads what the wait has cost so far
+
+- **GIVEN** a ready submission of one card that became ready on 1 January, storage beginning on 1 April
+- **WHEN** what is due is read on 1 May
+- **THEN** the storage is 6000 HKD minor units, two months started
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-67 - A card the grader held starts its storage from the day it came back
+**Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector is not charged storage for the months a card spent with the grader
+
+- **GIVEN** a submission ready on 1 January with one card held by the grader, that card back at the shop on 1 March
+- **WHEN** what is due is read on 15 April
+- **THEN** the other cards owe storage from 1 April and the held card owes none until 30 May
+
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-40 - Storage is settled before the cards are handed back
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector settles the wait at the counter and takes the slabs
 
@@ -756,7 +804,7 @@ A card lost or damaged in the grader's hands or in transit is settled by the
 shop, and the collector waits on nobody else's claim.
 
 - **The amount** - the payout SHALL be the card's declared value, with the
-  card's fee and cover refunded beside it.
+  card's fee refunded beside it; the cover SHALL NOT be refunded.
 - **The window** - the payout SHALL be made within 14 days of the day the batch
   was received at the shop.
 - **The routes** - the payout SHALL go by one of two routes, at the till or by
@@ -768,14 +816,16 @@ shop, and the collector waits on nobody else's claim.
 - **The shop claims** - the payout SHALL NOT wait on a claim against the grader
   or the courier.
 - **Reversed** - a card that turns up later SHALL reverse the payout on the same
-  record, and the card SHALL go back on the submission with its outcome.
+  record, and the card SHALL go back on the submission with its outcome; the
+  payout and the fee are then due, repaid at the till before the card is
+  handed back.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-41 - A lost card is paid out at its declared value with its fee back
 **Serves:** grade10-site-grading-submission-lifecycle-US-05 - the collector is made whole for a card that never came back
 
 - **GIVEN** a card declared at 800000 HKD minor units whose batch was received on a known day, recorded as not returned
 - **WHEN** the payout is made at the till
-- **THEN** the collector is paid 800000 HKD minor units with the card's fee and cover refunded beside it, within 14 days of that day
+- **THEN** the collector is paid 800000 HKD minor units with the card's fee refunded beside it and the cover kept, within 14 days of that day
 - **AND** the page shows the payout, its route and its reference
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-42 - A damaged card is told the same day
@@ -792,6 +842,13 @@ shop, and the collector waits on nobody else's claim.
 - **WHEN** the card turns up
 - **THEN** the payout is reversed on the same record
 - **AND** the card is back on the submission with its outcome, and the page shows the reversal
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-68 - A card that turns up is repaid before it goes home
+**Serves:** grade10-site-grading-submission-lifecycle-US-05 - the collector gets the card back and the page says what happened to the money
+
+- **GIVEN** a card paid out at 800000 HKD minor units with its fee of 60000 refunded, since found and its payout reversed
+- **WHEN** the collector reads the page
+- **THEN** 860000 HKD minor units read due to repay at the counter, and the card is handed back only once they are paid
 
 ### Requirement: After collection the submission keeps the graded record
 

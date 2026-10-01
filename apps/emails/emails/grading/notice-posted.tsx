@@ -17,7 +17,7 @@ export type NoticePostedProps = {
 
 export default function NoticePostedEmail({
   noticeDay = previewSubmission.noticeDay,
-  noticeDays = 30,
+  noticeDays = 90,
 }: NoticePostedProps) {
   const {
     noticeEndsAt,
@@ -69,5 +69,5 @@ export default function NoticePostedEmail({
 
 NoticePostedEmail.PreviewProps = {
   noticeDay: previewSubmission.noticeDay,
-  noticeDays: 30,
+  noticeDays: 90,
 } satisfies NoticePostedProps;

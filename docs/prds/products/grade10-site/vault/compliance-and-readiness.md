@@ -38,7 +38,7 @@ it; no statute here is asserted.
 - **Retention windows** — days after a case ends, per class: agreements
   **2,555**, photos **2,555**, identity **1,825**; seven years is the
   business-record window recalled for Hong Kong, five the AML window
-- 🚧 **The submission record** — its own class, case records, **2,555** days
+- 🚧 **The submission record** — case records carry it, **2,555** days
   from the day it ended — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **The review is a review** — the sweep flags a case past its window and
   deletes nothing; deletion on expiry is a second decision, and a class with
@@ -55,10 +55,10 @@ it; no statute here is asserted.
   photos and text stay under the hold, no clock
 - **Erasure, never signed** — everything is purged and the identity released
 - **Messages never sent** — queued and parked mail goes whichever class the case falls in
-- 🚧 **Process** — the collector files the ask from Your data and can cancel
+- **Process** — the collector files the ask from Your data and can cancel
   it inside the **7-day** window; then an admin runs each product from the
   console — [Account Data](/platform/account-data#erasure)
-- 🚧 **Your data** — a page under the collector's account: what the vault keeps
+- **Your data** — a page under the collector's account: what the vault keeps
   and for how long, per class; the identity standing — verified until when,
   checked how, never the name or document; every signed document in one download;
   and the ask to be forgotten, refused in words while a case is in flight
@@ -73,7 +73,7 @@ it; no statute here is asserted.
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
 | Database backups | one check grades the gaps file against the registry, run by the build and by the nightly alike, across every environment | two age recipients, one green nightly, a restore drill |
-| 🚧 Second factor | required in production only, for every brand; optional in staging and development | — |
+| Second factor | required in production only, for every brand; optional in staging and development | — |
 | A read that names a person | yes — a search records who searched, when, the kind of term and how many cases matched, never the term | — |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 
@@ -111,9 +111,10 @@ Every item is a value or an act outside the code, with who closes it;
    consent text, the collection statement, the forfeiture notice's operative
    text, a notices clause making email to the case's address good service, any
    summary or warning the regime prescribes beside the loan agreement, the
-   complaints escalation line, and the Chinese versions of each; production
-   refuses the act that would print an unset one — the notice's send, the
-   collection statement's send — and brackets print outside production only
+   complaints escalation line, and the Chinese versions of each; a drafted
+   wording prints until counsel replaces it; only a text with no draft refuses
+   its act in production — today the collection statement's send alone — and
+   brackets print outside production only
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
    the chain verifying on the restored copy
@@ -182,7 +183,7 @@ the code holds until they do.
 | Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
 | The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer; `check:libs` lists them among its unset values, six of them Grade10's own | Legal |
 | The complaints contact | TBC Owner | A monitored mailbox on the brand's domain, a phone and the shop's address, in every email's footer and on the paper; counsel adds the escalation line. Until it is given, production refuses every act that sends a vault email or mints a paper, and brackets print outside production only | Owner; the escalation line Legal |
-| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built, production refuses the send while the wording is unset, and brackets print outside production only | Legal |
+| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure and drafted sentences are built and print until counsel replaces them; in production the send refuses while the licence line or where to pay is unset | Legal |
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |

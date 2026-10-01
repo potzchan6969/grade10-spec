@@ -7,9 +7,10 @@ other order a group depends on is a prose line under that group's heading.
 
 The four migrations `0000_grading_schema.sql` to `0003_seed_settings.sql` land
 whole in group 9: nothing is live and the `grading` gate hides the site's pages
-on uat and production. `0004_waivers_kind.sql` and `0005_notice_period.sql`
-land in groups 19 and 20, each applied before the pull request that reads it
-deploys. A task appended after a group's verify step runs that group's checks
+on uat and production. `0004_batch_shipments.sql`, `0005_waivers_kind.sql`,
+`0006_payout_received.sql` and `0007_notice_period.sql` land in groups 16, 19,
+19 and 20, numbered in that deploy order, each applied before the pull request
+that reads it deploys. A task appended after a group's verify step runs that group's checks
 again. Three stages deploy, and each grade10 group's prose line names
 the one it lands in — (a) the shared modules, the three providers and the
 registered worker answering its health probe; (b) plan through ship, the money
@@ -18,7 +19,7 @@ payouts and erasure, with walk 34. Each e2e spec lands with the stage that
 reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 (b)'s ship is proven by group 16's service tests alone.
 
-## 1. The collector's words (grade10-spec)
+## 1. The collector's words (grade10-spec) (owner: @ecchochan)
 
 - [x] 1.1 Name every key of the new `grading` namespace in the vocabulary type
       first, so `pnpm --filter @grade10/i18n run test` refuses each language
@@ -47,11 +48,11 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 - [x] 1.8 Name `grading.plan.review.saveChanges`, the editor's save, in the
       vocabulary type first, then answer it in every language 1.2 answers;
       then run 1.7's checks
-- [ ] 1.9 Give `grading.submission.ladder.noticeLine` a `{period}` argument in
+- [x] 1.9 Give `grading.submission.ladder.noticeLine` a `{period}` argument in
       place of its written 30, in the vocabulary type first, then in every
       language 1.2 answers; then run 1.7's checks
 
-## 2. The three rungs on `Text` (grade10-spec)
+## 2. The three rungs on `Text` (grade10-spec) (owner: @ecchochan)
 
 - [x] 2.1 Write the stories for the three rungs beside `Text` — the `display`
       size, the `mono` face and the `warning` tone, one story per rung — and
@@ -67,7 +68,7 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
       `pnpm run test:stories:design-system`, `pnpm run typecheck`,
       `pnpm run lint`
 
-## 3. The planning blocks (grade10-spec)
+## 3. The planning blocks (grade10-spec) (owner: @ecchochan)
 
 Composes the design-system primitives group 2 widens. Every export takes
 `copy`, `locale` and `className`, and renders with no application behind it.
@@ -159,7 +160,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       statement, the save act reading the words the caller passes; then run
       3.7's checks (`shared-ui-grading-submission-SC-74`)
 
-## 4. The submission blocks and the barrel (grade10-spec)
+## 4. The submission blocks and the barrel (grade10-spec) (owner: @ecchochan)
 
 - [x] 4.1 Write the stories and the tests for the eight submission blocks and
       the barrel, one story per state (`shared-ui-grading-submission-SC-29`,
@@ -250,7 +251,7 @@ Composes the design-system primitives group 2 widens. Every export takes
 - [x] 4.8 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm check:manual`, `pnpm run typecheck`, `pnpm run lint`
 
-## 5. The preview letters (grade10-spec)
+## 5. The preview letters (grade10-spec) (owner: @ecchochan)
 
 Its evidence is group 22's `email/letters/render.test.tsx` in grade10, which
 reads these fixtures back; a failure there is a fix here.
@@ -269,7 +270,7 @@ reads these fixtures back; a failure there is a fix here.
       the facts group, the blocks that kind carries and `PrimaryCta`
 - [x] 5.4 Verify: `pnpm run email:build`, `pnpm run typecheck`, `pnpm run lint`
 
-## 6. Provisioning the grading database, its buckets and its fonts (grade10)
+## 6. Provisioning the grading database, its buckets and its fonts (grade10) (owner: @ecchochan)
 
 Lands before any config names an id, so no placeholder ever owes
 `check-config.mjs`'s `AWAITING` map an entry. Writes no code, so opens with no
@@ -288,7 +289,7 @@ test task; verified by `pnpm run db:status` and the uploads listed, with
 - [ ] 6.4 Verify: `pnpm run db:status`, with the two Hyperdrive configs, the
       three buckets and the Noto Sans TC upload listed per environment
 
-## 7. The shared lifts and the ceremony's no-identity option (grade10)
+## 7. The shared lifts and the ceremony's no-identity option (grade10) (owner: @ecchochan)
 
 Needs `complete-vault-collector-flow` merged: it creates `BaseLayout`, the dev
 outbox and `packages/storybook`, and writes the two helpers this group lifts.
@@ -333,7 +334,7 @@ Stage (a).
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`,
       `pnpm run test`
 
-## 8. The three provider entrypoints (grade10)
+## 8. The three provider entrypoints (grade10) (owner: @ecchochan)
 
 Stage (a).
 
@@ -368,7 +369,7 @@ Stage (a).
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 9. The grading worker, its schema and the registries (grade10)
+## 9. The grading worker, its schema and the registries (grade10) (owner: @ecchochan)
 
 Needs groups 1 to 5 merged to this store's `main`: task 9.2 bumps the pointer
 the words and the blocks arrive on. Stage (a).
@@ -427,7 +428,7 @@ the words and the blocks arrive on. Stage (a).
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 10. The derived answers (grade10)
+## 10. The derived answers (grade10) (owner: @ecchochan)
 
 Every other application group reads this one's exports. Stage (b).
 
@@ -482,7 +483,7 @@ Every other application group reads this one's exports. Stage (b).
 - [x] 10.7 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
-## 11. The plan, the paste and the collector's own acts (grade10)
+## 11. The plan, the paste and the collector's own acts (grade10) (owner: @ecchochan)
 
 Stage (b).
 
@@ -595,7 +596,7 @@ Stage (b).
       Bulk drop-off at its slot once, after the commit
       (`grade10-site-grading-dropoff-booking-SC-30`)
 
-## 12. The drop-off, the joiner and the shared visit (grade10)
+## 12. The drop-off, the joiner and the shared visit (grade10) (owner: @ecchochan)
 
 Stage (b).
 
@@ -702,7 +703,7 @@ Stage (b).
       (`grade10-site-grading-submission-plan-SC-61`,
       `grade10-site-grading-submission-plan-SC-63`)
 
-## 13. The hand-in, the till and the safe (grade10)
+## 13. The hand-in, the till and the safe (grade10) (owner: @ecchochan)
 
 Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
 
@@ -820,11 +821,16 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       (`grade10-admin-grading-counter-SC-106`,
       `grade10-admin-grading-counter-SC-107`,
       `grade10-admin-grading-counter-SC-84`)
-- [ ] 13.10 Lift `batchTiles.safe` into one `safeStanding(tx)` and expose it
+- [x] 13.10 Lift `batchTiles.safe` into one `safeStanding(tx)` and expose it
       as `admin.safeStanding` under `grading:read`, its test red first; then
       run 13.8's checks (`grade10-admin-grading-counter-SC-108`)
+- [x] 13.11 Refuse a card declared above `courier_cover_minor` at `checkCard`
+      with `ABOVE_COVER`, naming the cover and offering no higher level, the
+      setting unset refusing the check in production, its test red first;
+      needs 16.8's migration; then run 13.8's checks (Q143,
+      `grade10-admin-grading-counter-SC-113`)
 
-## 14. The two templates and the intake receipt (grade10)
+## 14. The two templates and the intake receipt (grade10) (owner: @ecchochan)
 
 Stage (b).
 
@@ -913,7 +919,7 @@ Stage (b).
 - [x] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
-## 15. The counter's ceremony and the sealed copies (grade10)
+## 15. The counter's ceremony and the sealed copies (grade10) (owner: @ecchochan)
 
 Stage (b).
 
@@ -977,8 +983,12 @@ Stage (b).
       `admin.signingLink` (`grade10-admin-grading-counter-SC-45`)
 - [x] 15.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 15.10 Refuse a production seal with `SETTING_UNAPPROVED` while any
+      setting the document prints has no `approved_by`, naming it, its test
+      red first; then run 15.9's checks (Q139,
+      `grade10-admin-grading-counter-SC-115`)
 
-## 16. The batch, the ship and the grader's stages (grade10)
+## 16. The batch, the ship and the grader's stages (grade10) (owner: @ecchochan)
 
 Stage (b).
 
@@ -1037,8 +1047,24 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-10`)
 - [x] 16.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [x] 16.8 Write `0004_batch_shipments.sql` as the Migration Plan names it; then
+      ship every batch as one or more shipments, its tests red first:
+      `shipBatch` takes the shipments, each with its cards, courier, tracking
+      and insured total read against the HKD setting `courier_cover_minor`,
+      refusing a shipment past the cover, a card in no shipment or in two, and
+      an unset cover in production, and moving every submission in one act
+      once every shipment is recorded; the batch keeps only its order number
+      and ship date, `BatchRow` reading courier and tracking from its
+      shipments; each collector is told the tracking of each shipment carrying
+      their cards (Q128, Q143, `grade10-admin-grading-batches-SC-13`,
+      `grade10-admin-grading-batches-SC-15`, `grade10-admin-grading-batches-SC-16`,
+      `grade10-admin-grading-batches-SC-57`,
+      `grade10-site-grading-collector-notifications-SC-29`)
+- [x] 16.9 Refuse a ship date earlier than the day of the batch's cut-off on the
+      shop's clock, its test red first (Q129,
+      `grade10-admin-grading-batches-SC-56`)
 
-## 17. Receiving, the scans and finishing (grade10)
+## 17. Receiving, the scans and finishing (grade10) (owner: @ecchochan)
 
 Stage (c).
 
@@ -1125,8 +1151,15 @@ Stage (c).
       a line settled neither way
       (`grade10-admin-grading-batches-SC-24`,
       `grade10-admin-grading-batches-SC-51`)
+- [x] 17.11 Match a manifest line in a later batch at the same grader to a
+      card recorded held in an earlier received batch by its intake id, let
+      `resolveManifestLine` name such a card, and have its scan record cert,
+      grade and the grader's words and clear `held`, its collector sent the
+      grades for that card the day it is scanned, its tests red first; then
+      run 17.9's checks (Q142, `grade10-admin-grading-batches-SC-58`,
+      `grade10-admin-grading-counter-SC-36`)
 
-## 18. Hand-back, collection and the vault case (grade10)
+## 18. Hand-back, collection and the vault case (grade10) (owner: @ecchochan)
 
 Stage (c).
 
@@ -1233,7 +1266,7 @@ Stage (c).
       (`grade10-admin-grading-counter-SC-54`,
       `grade10-site-grading-counter-documents-SC-20`)
 
-## 19. Payouts, waivers and what is due (grade10)
+## 19. Payouts, waivers and what is due (grade10) (owner: @ecchochan)
 
 Stage (c).
 
@@ -1295,15 +1328,44 @@ Stage (c).
       per request (`grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-103`)
-- [ ] 19.9 Write `0004_waivers_kind.sql` as the Migration Plan names it; then
+- [ ] 19.9 Write `0005_waivers_kind.sql` as the Migration Plan names it; then
       `waive` in place of `waiveUpcharge`, the ask and the record carrying
       `kind` and `dueNow` netting each kind against its own waivers, its
       tests red first; then run 19.7's checks
       (`grade10-admin-grading-counter-SC-109`,
       `grade10-admin-grading-counter-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
+- [ ] 19.10 Put a reversed payout and its refunded fee back on the submission as
+      one `repayment` due — `money_lines.kind` and `DUE_KINDS` taking it in
+      19.9's migration, `pos_repayment_variant` ringing it, Q47's no-earn rule
+      covering it and no waiver reaching it — settled at the till by
+      `recordSettlement` as any due line, so the hand-back is refused while it
+      is unpaid, its test red first (Q131, Q138,
+      `grade10-admin-grading-counter-SC-110`,
+      `grade10-site-grading-submission-lifecycle-SC-68`)
+- [ ] 19.11 Write `0006_payout_received.sql` as the Migration Plan names it; then
+      add `markPayoutReceived` under `grading:approve`: a till payout stamped
+      received at recording, a transfer only by this act, moving no money and
+      refusing a payout already received by name; the console's Money tab
+      offers Mark received on a transfer not yet received (Q132,
+      `grade10-admin-grading-counter-SC-111`)
+- [ ] 19.12 Hand back a card whose payout was reversed on a `collected`
+      submission: settle its repayment, mint a receipt for that card alone and
+      hand it over or vault it, the submission staying `collected`, its tests
+      red first; then run 19.7's checks (Q137,
+      `grade10-admin-grading-counter-SC-114`)
+- [ ] 19.13 Start a card's storage at day 90 after the later of the ready day
+      and the day it came back to the shop in `dueByCard`, months counted on the
+      shop's days, its tests red first; then run 19.7's checks (Q141,
+      `grade10-site-grading-submission-lifecycle-SC-66`,
+      `grade10-site-grading-submission-lifecycle-SC-67`)
+- [ ] 19.14 Refund only the fee line on the payout path, the cover kept, and
+      cover a storage waiver in `settlement.ts`'s netting with a test, its
+      tests red first; then run 19.7's checks (Q138,
+      `grade10-admin-grading-counter-SC-62`,
+      `grade10-site-grading-submission-lifecycle-SC-41`)
 
-## 20. The uncollected ladder and the written notice (grade10)
+## 20. The uncollected ladder and the written notice (grade10) (owner: @ecchochan)
 
 Stage (c).
 
@@ -1329,7 +1391,7 @@ Stage (c).
       tracking together, and writing one `notices` row per submission so a
       double-click is a no-op (`grade10-admin-grading-counter-SC-65`,
       `grade10-admin-grading-counter-SC-66`)
-- [x] 20.4 Run the thirty days from the posting date, offer nothing further
+- [ ] 20.4 Run the pinned `notice_period_days` from the posting date (see 20.6), offer nothing further
       once they have passed, and leave the cards the collector's
       (`grade10-admin-grading-counter-SC-67`,
       `grade10-admin-grading-counter-SC-68`,
@@ -1338,7 +1400,7 @@ Stage (c).
       `grade10-site-grading-collector-notifications-SC-15`)
 - [x] 20.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 20.6 Write `0005_notice_period.sql` as the Migration Plan names it; then
+- [ ] 20.6 Write `0007_notice_period.sql` as the Migration Plan names it; then
       `notice_period_days` in `GRADING_SEEDED_SETTINGS`, pinned as the
       seventh term and read by `noticeEnds`, clause 6 and the notice letter,
       `pinnedTermsOf` throwing on a term missing and `NOTICE_PERIOD_DAYS`
@@ -1358,8 +1420,13 @@ Stage (c).
       `grade10-admin-grading-counter-SC-68`,
       `grade10-site-grading-submission-lifecycle-SC-36`,
       `grade10-site-grading-submission-lifecycle-SC-37`)
+- [ ] 20.8 Skip every rung, the storage letter, the notice and the ready letter
+      for a submission with no card left on the ladder, and count every rung
+      on the `Asia/Hong_Kong` day, its tests red first; then run 20.5's checks
+      (Q146, `grade10-site-grading-submission-lifecycle-SC-64`,
+      `grade10-site-grading-submission-lifecycle-SC-65`)
 
-## 21. The sweeps (grade10)
+## 21. The sweeps (grade10) (owner: @ecchochan)
 
 Stage (c). No case in the change's suites decides the repair lists of 21.7 or
 the slow lane of 21.8; walk 34 decides them.
@@ -1458,11 +1525,24 @@ the slow lane of 21.8; walk 34 decides them.
 - [ ] 21.11 Restart the plan's clock from a cancelled visit as from a missed
       one, its test red first: `lastVisitEndedAt` over `dropoff_missed`,
       `dropoff_cancelled` and `dropoff_detached` replaces `lastMissedVisitAt`
-      at every call site, and `planClockAt` takes `visitEndedAt`; then run
+      at every call site, and `planClockAt` takes `visitEndedAt`; `planNudges`
+      reads the same clock and nudges once per clock start (Q144); then run
       21.10's checks (`grade10-site-grading-dropoff-booking-SC-31`,
-      `grade10-site-grading-dropoff-booking-SC-28`)
+      `grade10-site-grading-dropoff-booking-SC-28`,
+      `grade10-site-grading-submission-plan-SC-64`)
+- [ ] 21.12 Send the list-saved message once from the daily sweep for a plan kept
+      with no drop-off booked as the `planLinks` list, `plan_saved` joining
+      `ONCE_PER_SUBMISSION_KINDS`, never on the collector leaving the page, the
+      plan read as it stands when the sweep runs (Q145); a plan already mailed
+      under the old immediate send is not mailed again, its existing
+      `plan_saved` row holding the once-only index; move Finish later and Save for
+      later off their immediate send, and update `plan.spec.ts`'s
+      `US6-TC1-1` walk to read the letter after the sweep (Q134,
+      `grade10-site-grading-submission-plan-SC-38`,
+      `grade10-site-grading-collector-notifications-SC-26`,
+      `grade10-site-grading-collector-notifications-SC-28`)
 
-## 22. The letters (grade10)
+## 22. The letters (grade10) (owner: @ecchochan)
 
 Needs group 5 merged to this store's `main`: the render test reads the store's
 fixtures through `external/grade10-spec`. Stage (c).
@@ -1530,8 +1610,15 @@ fixtures through `external/grade10-spec`. Stage (c).
       failure as the vault does
 - [x] 22.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
+- [ ] 22.10 Print the shop's weekly hours from the diary and the shop phone in every
+      letter's footer, and name the brand's main shop, the setting
+      `main_shop_id`, on a submission with no visit (Q135, Q136,
+      `grade10-site-grading-collector-notifications-SC-27`)
+- [ ] 22.11 Hold a sweep letter that would print an unset value in production:
+      the row stays due and unclaimed and `grading.sweep.repair` names the
+      value, its test red first (`grade10-site-grading-collector-notifications-SC-30`)
 
-## 23. Retention and erasure (grade10)
+## 23. Retention and erasure (grade10) (owner: @ecchochan)
 
 Stage (c). From group 11 a collector's row holds an email, a name, a phone
 and a named collector, and `plan_attempts` holds the address each plan was
@@ -1587,8 +1674,14 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       site's own grading client, each block failing on its own, the ask
       withheld while any hold of either product stands and each named in the
       collector's words (`grade10-site-vault-retention-and-erasure-SC-33`)
+- [ ] 23.9 Date `retentionReviews` from the later of a submission's terminal event
+      and the day nothing is owed either way, and refuse an erasure while money
+      is due on a submission at any status, a repayment included, its tests
+      red first; then run 23.7's checks (Q20,
+      `grade10-site-vault-retention-and-erasure-SC-42`,
+      `grade10-site-vault-retention-and-erasure-SC-43`)
 
-## 24. The console's reads, the settings and the grants (grade10)
+## 24. The console's reads, the settings and the grants (grade10) (owner: @ecchochan)
 
 Stage (b).
 
@@ -1721,8 +1814,13 @@ Stage (b).
       (`grade10-site-grading-submission-plan-SC-60`,
       `grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-71`)
+- [x] 24.15 Add `courier_cover_minor` (money), `main_shop_id` and
+      `pos_repayment_variant` to the settings, each unset until its owner
+      writes it, the grant table naming every batch act under
+      `grading:operate`, its tests red first (Q143, Q136,
+      `grade10-admin-grading-counter-SC-116`)
 
-## 25. The collector's home, the wizard and the paste sheet (grade10)
+## 25. The collector's home, the wizard and the paste sheet (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and the worker of groups 11 and 24: the tests run
 25.2's transport on the real router in-process, and the stories replay
@@ -1856,7 +1954,7 @@ read this group's stories. Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-59`,
       `grade10-site-grading-submission-plan-SC-32`)
 
-## 26. The collector's drop-off screens (grade10)
+## 26. The collector's drop-off screens (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
@@ -1890,7 +1988,7 @@ Stage (b).
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
-## 27. The collector's submission page (grade10)
+## 27. The collector's submission page (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
@@ -1946,7 +2044,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-14`,
       `grade10-site-grading-submission-lifecycle-SC-17`,
       `grade10-site-grading-submission-lifecycle-SC-19`)
-- [ ] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
+- [x] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
       submission: the code, the hours and the one figure to settle or none, a
       name saved and replaced, an empty name naming nobody, Remove leaving
       nobody named, and naming refused once the cards are collected
@@ -2017,8 +2115,11 @@ Stage (b).
       `{period}` from the detail's terms, its test red first; needs 1.9,
       and lands with stage (c) after 20.6; then run 27.9's checks
       (`grade10-site-grading-submission-lifecycle-SC-36`)
+- [ ] 27.14 Link a vaulted card's case by resolving its recorded reference at each
+      read of the submission page, the reference as plain text where no case
+      matches (Q133, `grade10-site-grading-submission-lifecycle-SC-63`)
 
-## 28. The console's queue, tiles and one submission (grade10)
+## 28. The console's queue, tiles and one submission (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's recorded worker. Stage (b).
 
@@ -2100,8 +2201,12 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       naming its kind and the record read back under the card, its tests
       red first; needs 19.9; then run 28.6's checks
       (`grade10-admin-grading-counter-SC-109`)
+- [ ] 28.12 Badge Transfer unconfirmed on a row whose transfer payout has no
+      `received_at`, and count those on the To settle tile beside every kind
+      due, its tests red first; then run 28.6's checks (Q140,
+      `grade10-admin-grading-counter-SC-112`)
 
-## 29. The console's hand-in and hand-back runbooks (grade10)
+## 29. The console's hand-in and hand-back runbooks (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's recorded worker. Stage (b).
 
@@ -2155,12 +2260,12 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       `onStarted(id)`, and `IntakeRunbook` always takes a `submissionId`
 - [x] 29.9 Give `IntakeRunbook` and `HandbackRunbook` a `recordHref`, the one
       press to the record, its test red first; 31.5 routes it
-- [ ] 29.10 Open `IntakeRunbook` on `admin.safeStanding` and turn a list the
+- [x] 29.10 Open `IntakeRunbook` on `admin.safeStanding` and turn a list the
       safe cannot take to Book the next drop-off before the first check, its
       tests red first; needs 13.10; then run 29.7's checks
       (`grade10-admin-grading-counter-SC-108`)
 
-## 30. The console's batches, receiving, the notice and the settings (grade10)
+## 30. The console's batches, receiving, the notice and the settings (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's recorded worker; types against
 36.1 from the start, and its reads and acts answer once the rest of group 36
@@ -2261,8 +2366,12 @@ lands. Stage (c).
       `PostNoticeDialog` and the timeline's notice entry, the detail carrying
       `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
       checks (`grade10-admin-grading-counter-SC-67`)
+- [x] 30.10 Draw the ship form's Split into shipments on `GA4`'s components, one block
+      per shipment with its cards, courier, tracking and insured total against
+      the cover, and keep manifest entry typed with no import (Q128, Q130,
+      `grade10-admin-grading-batches-SC-57`, `grade10-admin-grading-batches-SC-23`)
 
-## 31. The application wiring (grade10)
+## 31. The application wiring (grade10) (owner: @ecchochan)
 
 Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 (b).
@@ -2313,7 +2422,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       HTML and the fee sheet and Your submissions loading until the page
       reads them; then run 31.7's checks
 
-## 32. The dev routes and the isolated stack (grade10)
+## 32. The dev routes and the isolated stack (grade10) (owner: @ecchochan)
 
 Both walks drive these routes, so it lands with stage (b).
 
@@ -2344,7 +2453,7 @@ Both walks drive these routes, so it lands with stage (b).
       the isolated stack's start, so the site's `/book?service=grading` link
       resolves on the dev and e2e stacks; then run 32.6's checks
 
-## 33. The walk — the plan, the drop-off and the hand-in (grade10)
+## 33. The walk — the plan, the drop-off and the hand-in (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-card-grading`) as its input,
 and groups 31 and 32 landed. `POST /dev/submissions/seed` stands in for what
@@ -2398,7 +2507,7 @@ and `ready_at` that stand in for waiting. Stage (b).
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
-## 34. The walk — the batch, the hand-back and what is left behind (grade10)
+## 34. The walk — the batch, the hand-back and what is left behind (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-card-grading`) as its input,
 and groups 31 and 32 landed. `POST /dev/submissions/seed` stands in for what
@@ -2420,7 +2529,9 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-admin-grading-counter-US-05`,
       `grade10-admin-grading-counter-US-06`,
       `grade10-admin-grading-counter-US-09`,
-      `grade10-admin-grading-counter-US-10`,
+      `grade10-admin-grading-counter-US-10`, the held card back in a later
+      batch then the second hand-back (`grade10-admin-grading-counter-US4-TC10-1`,
+      `grade10-admin-grading-batches-US2-TC19-1`),
       `grade10-admin-grading-counter-US-11`,
       `grade10-admin-grading-counter-US-13`,
       `grade10-site-grading-counter-documents-US-03`,
@@ -2440,7 +2551,10 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-site-vault-retention-and-erasure-US-03`,
       `grade10-site-vault-retention-and-erasure-US-04`)
 - [ ] 34.4 Flip the cases these walks decide with
-      `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
+      `pnpm run tcs:automated <case…> --decided-by <walk path>` — among them
+      `grade10-admin-grading-batches-US1-TC18-1` and
+      `grade10-admin-grading-batches-US1-TC19-1`, and the reworded shipment
+      cases `batch.spec.ts` already decides — in the walks'
       own commit, and name in the counter suite and in this change's
       `rounds.md` row the three that stay walked by hand — the till at
       hand-back (`grade10-admin-grading-counter-US4-TC5-1`), the identity
@@ -2451,7 +2565,7 @@ and `ready_at` that stand in for waiting. Stage (c).
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
-## 35. The manual (grade10-spec)
+## 35. The manual (grade10-spec) (owner: @ecchochan)
 
 Lands once groups 1 to 34 and 36 are green and the change is deployed.
 
@@ -2462,16 +2576,18 @@ Lands once groups 1 to 34 and 36 are green and the change is deployed.
       and `index.md`, `docs/prds/products/shared/ui/grading-submission.md`, and
       the grading lines of
       `docs/prds/products/grade10-site/vault/compliance-and-readiness.md`
-- [ ] 35.3 Leave ❓ on what nobody has answered — the custodian the submission
-      agreement prints, the certificate's no-identity line, a queue view for
-      `planned`, and every default Operations, Commercial and Legal still owe
-      on the settings table — and say on `console.md` that a money setting is
-      unset until its owner writes it with a second approver
+- [ ] 35.3 Keep the readiness items on `index.md` matching what production
+      refuses until a person sets it — the custodian's name and the complaints
+      contact refusing the seal and every message, the certificate's
+      no-identity line refusing the seal, the fee sheet and every money
+      setting unset and refused by name until their owner writes them with a
+      second approver, each bracketed outside production — and say on
+      `console.md` that a money setting is unset until its owner writes it
 - [ ] 35.4 Verify: `pnpm check:manual`,
       `pnpm run validate:changes add-card-grading`,
       `pnpm run archive:preflight add-card-grading`
 
-## 36. The batch list, a new batch, the receiving lines and the notice's address (grade10)
+## 36. The batch list, a new batch, the receiving lines and the notice's address (grade10) (owner: @ecchochan)
 
 The worker's side of group 30, after groups 17 and 24. Its first task lands
 the types group 30 builds against; group 30's reads and acts answer once the
@@ -2595,7 +2711,7 @@ rest lands. Stage (c).
 - [ ] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 37. The status rail on the store's stage rail (grade10-spec)
+## 37. The status rail on the store's stage rail (grade10-spec) (owner: @ecchochan)
 
 Appended at landing, as `complete-vault-collector-flow` Q117 decided. Its own
 group because the rail's scroll wrapper changes the DOM the slot sits on.

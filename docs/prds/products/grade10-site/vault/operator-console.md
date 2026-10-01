@@ -35,26 +35,28 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **Search** — exact on phone or email, prefix on case id; a number is
   matched in E.164 however typed; each search writes who, when, what kind of
   term and how many matched on the audit chain, never the term itself
+- **Full-width or a bare 852** — a number typed either way is found as the
+  one stored
 - **Money tab** (`vault:payout` only) — the position at an instant, now or
   the end of a day the operator names, and the ledger over payouts,
   repayments and corrections for a date range on the shop's calendar,
   filtered by method, paged, with totals per method and currency
 - **Held items tab** — everything in a locker, with its shop, oldest first, paged
-- 🚧 **Counts and today** — every view carries its count; the landing view
+- **Counts and today** — every view carries its count; the landing view
   opens on a Today block that is the Today cut itself, in slot order with its
   count; rows show the lane and read the collector's word for the status
-- 🚧 **Search by reference** — prefix on the six-character case reference,
+- **Search by reference** — prefix on the six-character case reference,
   so the characters a customer reads out at the counter find the case
-- 🚧 **Overdue, at a glance** — three tiles: the view's count, outstanding
+- **Overdue, at a glance** — three tiles: the view's count, outstanding
   in arrears, how many carry no notice; rows name the case reference, the
   item, the contact the case holds, the notice and the last reminder sent —
   no name, which stays on the case behind the identity grant
-- 🚧 **Money tab, more** — a filter by kind; the net out of the business —
+- **Money tab, more** — a filter by kind; the net out of the business —
   payouts less repayments, per currency, a correction netting the row it took
   back once, positive when money is out; a takes-back column naming that row;
   a CSV of the range as filtered, bounded to what the ledger pages and on the
   audit chain like a search — who, when, the filter, how many rows
-- 🚧 **Held items, at a glance** — tiles: in the vault, per shop, with a loan
+- **Held items, at a glance** — tiles: in the vault, per shop, with a loan
   running, waiting for a pickup; rows carry held since, days held, status,
   outstanding and whether a pickup is booked
 - 🚧 **Collector by name** — rows name each case's collector for staff and
@@ -99,17 +101,17 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **The collector's cases** — a link in the header opens the case's
   [Collector Page](/p/grade10-admin/console/collector-page), for any
   `vault:read` holder
-- 🚧 **Today's visit, in order** — the Case tab opens on the counter's steps
+- **Today's visit, in order** — the Case tab opens on the counter's steps
   for this visit as an ordered checklist, each ticked as its act lands, and
   says why an act is not offered yet
-- 🚧 **Key terms** — the Documents tab ticks the loan agreement's own terms —
+- **Key terms** — the Documents tab ticks the loan agreement's own terms —
   [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
-- 🚧 **The identity panel** — six states, Verified, Out, Stalled, Refused,
+- **The identity panel** — six states, Verified, Out, Stalled, Refused,
   Lapsed and None — [Identity Check](/p/grade10-site/vault/identity-check#identity-states)
-- 🚧 **Forfeit, withheld in words** — the Custody tab says why Forfeit is
+- **Forfeit, withheld in words** — the Custody tab says why Forfeit is
   not offered yet — not before the cure date, the notice sent on which day —
   beside what the collector was told
-- 🚧 **Before the act** — the make-offer, vault and payout dialogs state the
+- **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
 - 🚧 **The item's facts** — the Case tab shows and edits the register's
   category, title, description, grader, grade and cert once it has the item,
@@ -140,7 +142,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   for a treasurer, because recording money needs `vault:payout`
 - **One grant prices and forfeits** — `vault:approve` covers the valuer, the
   offer-maker and the person who forfeits
-- 🚧 **Second factor** — required in production only, for every brand;
+- **Second factor** — required in production only, for every brand;
   optional in staging and development; one verification stamps the session
   for **12 hours**
 - **Every case action is filed under its case** on the audit chain

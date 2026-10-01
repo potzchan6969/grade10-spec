@@ -432,7 +432,7 @@ own.
 **Serves:** Listing the cards - a collector lists a card the reference matched by name alone
 
 - **GIVEN** a card matched in the reference, carrying no set and no number
-  (`Q109`: the reference names neither)
+  (Q109: the reference names neither)
 - **WHEN** `GradingCardList` renders it
 - **THEN** the card reads as matched, from its name alone
 - **AND** rendering it raises no error

@@ -10,7 +10,7 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 ## grade10-site-vault-retention-and-erasure-US4: Collector who graded cards is forgotten by the same request
 
 **As a** collector who has closed their account after grading cards,
-**I want** the one erasure request to reach my submissions as it reaches my vault cases, refused by name while a submission is between booked and ready, an upcharge is unsettled or ready cards are uncollected, and otherwise keeping only the sealed documents and the photographs in the vault's classes and the submission record in a class of its own, each for the window the table names from the day the submission ended, and no identity record at all,
+**I want** the one erasure request to reach my submissions as it reaches my vault cases, refused by name while a submission is between booked and ready, money is still due on one or ready cards are uncollected, and otherwise keeping only the sealed documents and the photographs in the vault's classes and the submission record in the vault's case records, each for the window the table names from the later of the day the submission ended and the day nothing is owed either way, and no identity record at all,
 **so that** grading keeps nothing of mine the vault would not keep, and I ask once.
 
 ### grade10-site-vault-retention-and-erasure-US4-TC1-1: Ended submission's documents, photographs and record survive erasure
@@ -166,7 +166,7 @@ Runs once per row of **Test data**.
 | `<submission_4>` | Grading answers |
 | --- | --- |
 | `checked_in`, between booked and ready | Refused, naming `<submission_4>` and cards with the grader |
-| `ready`, with an unsettled upcharge | Refused, naming `<submission_4>` and the unsettled upcharge |
+| `ready`, with an unsettled upcharge | Refused, naming `<submission_4>` and the money unsettled |
 | `ready`, with cards uncollected | Refused, naming `<submission_4>` and the cards waiting to be collected |
 
 **Steps:**
@@ -447,6 +447,77 @@ Runs once per row of **Test data**.
 * `<submission_11>` is reported under agreements, photos and case records.
 * It is reported under no identity class.
 
+### grade10-site-vault-retention-and-erasure-US4-TC12-1: A transfer not yet received holds the window
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-04
+
+**Pre-conditions:**
+
+* Grading's slow sweep lane is run as the Background says.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <submission_12> | a submission whose last card was paid out by transfer 2,600 days ago and marked received 2,550 days ago |
+
+**Steps:**
+
+1. Run the retention review.
+2. Read the classes the review reports `<submission_12>` under.
+
+**Expected Results:**
+
+* Step 2: `<submission_12>` is reported under no class, its windows measured from the day the transfer was marked received.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US4-TC13-1: A repayment due on a collected submission refuses the erasure
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-04
+
+**Pre-conditions:**
+
+* admin(holds the erasure grant) is on `<grade10 admin erasure url>` with the collector's request filed and aged past its window.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <submission_13> | the collector's only submission, collected, a card on it found and its payout reversed, the repayment unpaid |
+
+**Steps:**
+
+1. Click Erase on grading.
+
+**Expected Results:**
+
+* Step 1: refused, naming `<submission_13>` and the money unsettled.
+
+---
+
 ## Settled
 
 *None yet — suite pending review.*
@@ -462,8 +533,8 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-US4-TC3-1` | Covered, corrected | `grade10-site-vault-retention-and-erasure-SC-36`, with the record's window from `grade10-site-vault-retention-and-erasure-SC-28`. The draft kept the submission record after the erasure of a submission nobody signed; the author's ruling on the raised `planned` question says it is purged with the account like any unsigned record. The case now reads the record and its 2,555-day window before the run and the purge after it |
 | `grade10-site-vault-retention-and-erasure-US4-TC4-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-31` — the `checked_in` row; `grade10-site-vault-retention-and-erasure-SC-32` — the unsettled upcharge and the uncollected cards |
 | `grade10-site-vault-retention-and-erasure-US4-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-31` — one live submission refuses the whole ask and the closed vault case beside it is untouched |
-| Raised: does a submission still `planned` block or take part in the erasure? | Answered by the author | A `planned` submission was never booked, so it holds nothing and blocks nothing, and it is purged with the account like any unsigned record. Landed as `Q67` in the change's `decisions.md`; `grade10-site-vault-retention-and-erasure-SC-38` states it and `grade10-site-vault-retention-and-erasure-US4-TC7-1` walks it |
-| Raised: what day count does the submission record's own class carry? | Answered by the scenario pass | The submission record is the vault's case-records class, 2,555 days under Grade10, which the requirement's class table already states and `grade10-site-vault-retention-and-erasure-SC-28` reads. Landed as `Q68`; the day count is on the vault's compliance page as a 🚧 row, and `grade10-site-vault-retention-and-erasure-US4-TC1-1` and `grade10-site-vault-retention-and-erasure-US4-TC3-1` carry the figure the blind pass left as a placeholder |
+| Raised: does a submission still `planned` block or take part in the erasure? | Answered by the author | A `planned` submission was never booked, so it holds nothing and blocks nothing, and it is purged with the account like any unsigned record. Landed as Q67 in the change's `decisions.md`; `grade10-site-vault-retention-and-erasure-SC-38` states it and `grade10-site-vault-retention-and-erasure-US4-TC7-1` walks it |
+| Raised: what day count does the submission record's own class carry? | Answered by the scenario pass | The submission record is the vault's case-records class, 2,555 days under Grade10, which the requirement's class table already states and `grade10-site-vault-retention-and-erasure-SC-28` reads. Landed as Q68; the day count is on the vault's compliance page as a 🚧 row, and `grade10-site-vault-retention-and-erasure-US4-TC1-1` and `grade10-site-vault-retention-and-erasure-US4-TC3-1` carry the figure the blind pass left as a placeholder |
 | `grade10-site-vault-retention-and-erasure-SC-30` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC6-1`. Every retention case the blind pass wrote reads a submission that has ended; none reads one still with the grader |
 | `grade10-site-vault-retention-and-erasure-SC-33` | Half reached | Case added: `grade10-site-vault-retention-and-erasure-US4-TC8-1`. `grade10-site-vault-retention-and-erasure-US4-TC4-1` files the ask and reads the refusal; the withheld words, and that nothing is filed at all, are this case's |
 | `grade10-site-vault-retention-and-erasure-SC-34` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC7-1`, a row per end event. The blind pass ran the erasure in its pre-conditions and never read the non-refusal as an outcome |
@@ -471,6 +542,8 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-SC-38` | Written on the ruling | `grade10-site-vault-retention-and-erasure-US4-TC7-1`'s first row |
 | `grade10-site-vault-retention-and-erasure-US4-TC10-1` | Case added | The vault's end-to-end walk found the erasure block reading grading's holds with no case to walk when grading cannot answer. The rule is `grade10-site-vault-retention-and-erasure-SC-15` in `complete-vault-collector-flow`'s delta on this capability: a block that cannot be answered names what failed and leaves the answered blocks standing, so the ask block stays unanswered and offers nothing to file, as `grade10-site-vault-retention-and-erasure-SC-33` withholds it while cards are out |
 | Design row `Erasure refused` | Closed | `ui-design.md`'s Your data table, the vault's Your data block, reads `grade10-site-vault-retention-and-erasure-SC-33` |
+| `grade10-site-vault-retention-and-erasure-SC-42` | Case added at the acceptance review | `grade10-site-vault-retention-and-erasure-US4-TC12-1`: the window waits for nothing owed either way, Q20's own reading |
+| `grade10-site-vault-retention-and-erasure-SC-43` | Case added at the acceptance review | `grade10-site-vault-retention-and-erasure-US4-TC13-1`: a reversed payout's repayment is money unsettled on a collected submission, decided by the product owner, 2026-10-01 |
 
 ### Manual
 

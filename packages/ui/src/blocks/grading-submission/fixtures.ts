@@ -439,6 +439,7 @@ const CARD_RECORD_COPY: GradingCardRecordCopy = {
   minimumGradeLabel: "Minimum grade",
   certificateLabel: "Certificate",
   lookupLabel: "Look it up",
+  vaultCaseLabel: "Vault case",
 };
 
 const FRONT_PHOTO = {
@@ -473,6 +474,7 @@ const GRADE_CARDS_COPY: GradingGradeCardsCopy = {
   certificateLabel: "Certificate",
   lookupLabel: "Look it up",
   ungradedCodeLabel: "Grader’s code",
+  vaultCaseLabel: "Vault case",
 };
 
 const GRADED_CARD: GradingGradeCard = {
@@ -552,7 +554,7 @@ const LADDER_RUNGS = [
     id: "notice-180",
     label: "Written notice, day 180",
     on: NOTICE_ON,
-    line: "We write to you and give you 30 days from the posting day.",
+    line: "We write to you and give you 90 days from the posting day.",
   },
 ];
 

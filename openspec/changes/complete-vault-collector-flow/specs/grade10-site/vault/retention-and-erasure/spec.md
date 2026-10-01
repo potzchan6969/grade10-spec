@@ -216,7 +216,7 @@ order:
    day it was filed and the day an erasure may run.
 5. Inside the window the page SHALL offer to cancel the request, and a
    cancelled request SHALL leave the page offering the ask again.
-6. Once the window has passed the page SHALL offer no cancel, and SHALL say
+6. From the day an erasure may run the page SHALL offer no cancel, and SHALL say
    that each product erases what it holds.
 7. A hold standing while a request is open SHALL be named beside the request,
    with that the erasure waits until the hold lifts.
@@ -234,7 +234,7 @@ order:
 - **AND** no request is filed
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-24 - The collector files the ask and reads when it may run
-**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `shared/auth/users#shared-auth-users-US-05` - a collector filing the ask for themselves rather than asking an operator to file it
+**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `shared/auth/users#shared-auth-users-US-06` - a collector filing the ask for themselves rather than asking an operator to file it
 
 - **GIVEN** a collector with nothing in the vault's way
 - **WHEN** they ask to be forgotten and confirm the ask
@@ -242,9 +242,9 @@ order:
 - **AND** the page names the day it was filed and the day an erasure may run
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-25 - The collector cancels inside the window
-**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `shared/auth/users#shared-auth-users-US-05` - a collector changing their mind before anything is erased
+**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `shared/auth/users#shared-auth-users-US-06` - a collector changing their mind before anything is erased
 
-- **GIVEN** a collector whose request is filed and whose window has not passed
+- **GIVEN** a collector whose request is filed, before the day an erasure may run
 - **WHEN** they cancel the request
 - **THEN** the page offers the ask again
 - **AND** no filed request stands
@@ -258,14 +258,39 @@ order:
 - **AND** the hold is named beside it, with that the erasure waits until the hold lifts
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-27 - Once the window has passed the page offers no cancel
-**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `shared/auth/users#shared-auth-users-US-05` - a collector reading the page after the window they could have cancelled in
+**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `shared/auth/users#shared-auth-users-US-06` - a collector reading the page after the window they could have cancelled in
 
-- **GIVEN** a collector whose filed request has passed its window
+- **GIVEN** a collector whose filed request has reached the day an erasure may run
 - **WHEN** they open Your data
 - **THEN** no cancel is offered
 - **AND** the page says each product erases what it holds
 
 ## MODIFIED Requirements
+
+### Requirement: Each class of kept data has a review window per brand
+
+Each brand SHALL hold a review window, in days after a case ends, for each of
+four classes:
+
+| Class | What it covers | Grade10 |
+| --- | --- | --- |
+| Agreements | the sealed documents of a case | 2,555 days |
+| Identity | the identity record and its photograph | 1,825 days |
+| Photos | the item photographs | 2,555 days |
+| Case records | the record of each case - its contact, the item's words, its events and the messages sent about it | 2,555 days |
+
+The window SHALL be a decision per brand and never per environment.
+
+A class with no window SHALL be reported as undecided; it SHALL NOT be read as
+zero and SHALL NOT be flagged as due.
+
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-tr9 rev=1 -->
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-01 - A class nobody has decided is reported as such
+**Serves:** grade10-site-vault-retention-and-erasure-US-03 - Compliance officer sees what is being kept too long
+
+- **GIVEN** a brand with no window set for its identity records
+- **WHEN** the review runs
+- **THEN** the class is reported as undecided and no case is flagged for it
 
 ### Requirement: An erasure is refused while any of the person's cases is in flight
 
@@ -278,6 +303,7 @@ Erasure SHALL be asked for on the account, and each product SHALL answer for
 its own data. A run that stops part-way SHALL leave the rest for the next run
 rather than failing the whole.
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-7k7 rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-04 - A live loan blocks the erasure
 **Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
 
@@ -285,6 +311,7 @@ rather than failing the whole.
 - **WHEN** their erasure is run
 - **THEN** it is refused, naming the running case, and neither case is touched
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-res rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-05 - A case that goes live mid-run is not erased
 **Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
 

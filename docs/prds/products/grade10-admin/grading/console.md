@@ -72,13 +72,17 @@ One intake label per card, the cards sealed into the intake bag with the printed
   a card that does not fit waits for the next; its states: open until the cut-off → closed Thursday 19:00, ships the
   next day → with the grader, its stage in its own words → back, unchecked, badged after a day → closed when received
 - 🚧 **New batch** — opened for a grader and a level before their first card, which then joins it rather than a second
-- 🚧 **The ship form** — the packing list, one line per intake id; the grader's order number; insured to the declared
-  total against the courier's written cover figure; courier, tracking and the ship date, never in the future; the
-  estimate back, the level's counted from the ship day
-- ❓ **Above the courier's cover** — a batch past the courier's written figure is split or held — Operations
-- ❓ **A ship date before the cut-off** — refused, or taken as typed — Operations
+- 🚧 **The ship form** — the packing list, one line per intake id; the grader's order number; one or more shipments,
+  each with its cards, courier and tracking, insured to its cards' declared total against the courier's cover; the ship
+  date, never in the future; the estimate back, the level's counted from the ship day
+- 🚧 **The courier's cover** — `grading.courier_cover_minor`, an approved setting in HKD written from the courier's
+  letter; unset, the ship is refused in production
+- 🚧 **Above the courier's cover** — a batch past the cover ships split into shipments, each with its own cards and
+  tracking and each insured under the cover; one submission's cards may travel apart
+- 🚧 **A card above the cover** — refused at the card check, since no shipment could carry it
+- 🚧 **A ship date before the cut-off** — refused on the field
 - 🚧 **Mark as shipped** — `checked_in → sent` for every submission in the batch, each collector emailed the tracking
-  and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
+  of each shipment carrying their cards and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
 - 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's value against its cap
 - 🚧 **The safe's cap** — HKD 300,000 of declared value in the safe until cover is bought
 
@@ -88,7 +92,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
   which the payout window counts from; it reads back, unchecked, `graded → returned`; the manifest follows
 - 🚧 **The manifest and the invoice** — enter before the first scan; a line naming no card in the batch holds finishing
   as unmatched until staff name the card it meant or close it as the grader's error, with a reason
-- ❓ **How they enter** — imported as a file, or typed as the morning read is — Operations
+- 🚧 **How they enter** — typed, as the morning read is; no file is imported
 - 🚧 **Scan and match** — each scan matches a cert to a card by the intake id on the grader's manifest; a cert already
   held by another submission is refused by name; counters: scanned, matched, ungraded, upcharges and their sum
 - 🚧 **Exceptions on the card** — ungraded, with the grader's code and note, the fee standing; an upcharge, the sheet's
@@ -96,13 +100,12 @@ One intake label per card, the cards sealed into the intake bag with the printed
   not scanned, finished as held by the grader with its expected date or as not returned; damaged, photographed in the box
 - 🚧 **A card no line names** — a card that went out in the batch and that no manifest line names holds finishing, as a
   card on the manifest does, until it is scanned or recorded held or not returned
-- ❓ **A slab the manifest leaves out** — in the box but on no line: staff add a line for its card to the entered
-  manifest as the grader's omission, filed as a resolved line is, and its cert then scans — Operations
-- ❓ **An ungraded line with no code** — whether a manifest line with no grade must carry the grader's code, or may come
-  with neither code nor note, the card then reading ungraded with nothing more — Operations
-- ❓ **A held card coming home** — taken to come back in a later box: its manifest line matches the card held from the
-  earlier batch by its intake id, and a second hand-back closes the submission; whether it may also come back on its
-  own, outside any batch — Operations
+- 🚧 **A slab the manifest leaves out** — in the box but on no line: staff add a line for its card to the entered
+  manifest as the grader's omission, filed as a resolved line is, and its cert then scans
+- 🚧 **An ungraded line with no code** — a manifest line with no grade takes the grader's code and note where it gives
+  them; a line with neither is taken, and the card reads ungraded with nothing more
+- 🚧 **A held card coming home** — it comes back in a later box from the grader, never on its own: its manifest line
+  matches the card held from the earlier batch by its intake id, and a second hand-back closes the submission
 - 🚧 **Finish receiving** — `returned → ready` for every submission in the batch, each collector emailed the
   pickup code and what is due, a card held, not returned or damaged the day it is recorded; a batch saved half scanned keeps its scans
 
@@ -114,9 +117,12 @@ One intake label per card, the cards sealed into the intake bag with the printed
   grader's words, the outcome; refuse or add a card at hand-in; withdraw one at Handed in until the batch closes
 - 🚧 **Money tab** — paid at hand-in with the POS reference, the upcharge, storage accrued, what is due, refunds and
   payouts; once the cards are back, a waiver or a payout, its own record by till or transfer, reversed if the card turns up
-- ❓ **After a reversal** — whether the collector repays the payout and the refunded fee at the till — Operations
-- ❓ **A payout received** — stamped when a till payout is recorded; a transfer by a later act, or not at all — Operations
-- ❓ **A storage waiver for the whole submission** — one ceremony for four cards, or per card as the upcharge is — Operations
+- 🚧 **After a reversal** — the collector repays the payout and the refunded fee at the till before the card goes home;
+  on a submission already collected, the found card alone is handed back while the submission stays collected
+- 🚧 **What a payout refunds** — the fee; the cover is kept, since it paid for the protection the payout drew on
+- 🚧 **A payout received** — stamped when a till payout is recorded; a transfer by a later Mark received act, and until
+  then its row badges Transfer unconfirmed, counted in To settle
+- 🚧 **A storage waiver** — per card, as the upcharge is; there is no waiver for the whole submission
 - 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter carried it
 - 🚧 **Timeline tab** — every event with its figures and the grader's stages in its words; staff-only entries stay here
 - 🚧 **Cancel** — staff cancel a planned or booked submission from its page on the collector's word, the drop-off going
@@ -154,7 +160,8 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 
 🚧 **Every default is a setting the console reads** — never a constant, and each row stands until its owner confirms
 it; the fee sheet is pinned to a submission at booking and every figure the agreement prints at signing, so a change
-reaches only submissions not yet booked:
+reaches only submissions not yet booked; in production a seal is refused while a figure it prints has no approver,
+so a seeded default waits for its owner:
 
 | Setting | Default | Confirms |
 | --- | --- | --- |
@@ -166,13 +173,15 @@ reaches only submissions not yet booked:
 | `grading.storage_from_day` | 90 | Operations |
 | `grading.storage_fee_per_card_month` | HKD 30 | Commercial |
 | `grading.notice_day` | 180 | Operations; the notice's form is Legal's |
-| `grading.notice_period_days` | ❓ 90, from the posting date; pinned at signing | Legal |
+| `grading.notice_period_days` | 90, from the posting date; pinned at signing | Legal |
 | `grading.settlement_days` | 14, from the day the batch is received at the shop | Operations |
 | `grading.id_glance_threshold` | HKD 10,000 | Operations |
 | `grading.safe_declared_cap` | HKD 300,000 | Commercial, Legal |
+| `grading.courier_cover_minor` | unset until written from the courier's letter; a card declared above it is refused at the check | Operations |
+| `grading.main_shop_id` | the diary shop a letter names for a submission with no visit | Operations |
 | `grading.reference_usd_rate` | 7.84 HKD to 1 USD, decided by the user; the rate the review's upcharge warning reads a USD reference sale at, written by one approve holder as it is not charged | Operations |
-| the fee sheet | ❓ one setting per grader and level, to the grader's top tier: ceiling, fee, cover rate, estimate, cards a submission | Commercial |
-| the grader's stages | ❓ each grader's own; PSA's published order stages — Arrived, Order Prep, Research & ID, Grading, Assembly, QA Checks, Completed, Shipped — Completed moving the grades in; CGC's and BGS's open until their levels open | Operations |
+| the fee sheet | one setting per grader and level, to the grader's top tier: ceiling, fee, cover rate, estimate, cards a submission; unset until Commercial writes it, and a read refuses by name meanwhile — [readiness item 6](/p/grade10-site/grading#before-the-first-submission) | Commercial |
+| the grader's stages | each grader's own; PSA's published order stages — Arrived, Order Prep, Research & ID, Grading, Assembly, QA Checks, Completed, Shipped — Completed moving the grades in; CGC's and BGS's open until their levels open | Operations |
 | the diary services | the Grading drop-off at about 20 minutes, its Bulk variant at about 45, the customer-bookable Grading visit; names, durations and horizon | Product, Engineering |
 
 ## Grants
@@ -181,7 +190,7 @@ reaches only submissions not yet booked:
 | --- | --- | --- |
 | 🚧 `grading:read` | staff, admin | the queue, the batches, one submission with its documents and money |
 | 🚧 `grading:operate` | staff, admin | write a walk-in's list, check, refuse, mint, hand in, cancel before the visit starts or a card is checked or refused, open a batch, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
-| 🚧 `grading:approve` | staff, admin | a waiver of the upcharge, a payout for a card not returned or damaged, a settings write |
+| 🚧 `grading:approve` | staff, admin | a waiver of the upcharge or a card's storage, a payout for a card not returned or damaged, marking a transfer payout received, a settings write |
 
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
   and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
@@ -223,17 +232,22 @@ reaches only submissions not yet booked:
 | Send again is a letter's copy | Decided | Only a sealed document a letter has already carried is sent again; before the hand-in the agreement is downloaded on the iPad, and a send is refused by name | Product |
 | Staff notifications | Decided | The queue is the inbox; nothing is emailed to staff | Product |
 | Drafts on the queue | Decided | A `planned` submission stays off the queue until booked; the collector's own list holds it | Product |
-| The link to a vault case | ❓ Open | Grading records the case's six-character reference as typed, and nothing checks that the case exists; how the submission's page links the case from its reference | Product |
+| The link to a vault case | Decided | Grading records the case's six-character reference as typed, and nothing checks that the case exists at the counter; the submission's page finds the case from the reference each time it is read, and shows the reference as plain text where no case matches - decided by the product owner, 2026-10-01 | Product |
 | The safe's cap | Decided | HKD 300,000 of declared value in the safe, ready slabs counted, read before the first card is checked and refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |
-| Every default a setting | ❓ Open | Each row of the settings table, adopted from the canvas until its owner confirms or changes it; pinned to a submission at booking and at signing | Operations, Commercial, Legal, Product |
-| Staff-only history entries | ❓ Open | Only a price reference that would not answer, a repair on our copy of the diary's booking and a card checked at the desk stay off the collector's history; a payout taken back and an upcharge written off show there, so the history never claims money the collector no longer has | Operations |
+| Every default a setting | Decided | Each row of the settings table, adopted from the canvas until its owner confirms or changes it under readiness items 6 and 7; pinned to a submission at booking and at signing - decided by the round (product owner delegated this run) | Operations, Commercial, Legal, Product |
+| Staff-only history entries | Decided | Only a price reference that would not answer, a repair on our copy of the diary's booking and a card checked at the desk stay off the collector's history; a payout taken back and an upcharge written off show there, so the history never claims money the collector no longer has - decided by the round (product owner delegated this run) | Operations |
 | Buttons follow the machine | Decided | Each act shows only at the statuses the contract publishes, cancel never once the visit starts or a card is checked or refused, and the worker refuses independently | Engineering |
 | Counter intake | Decided | A walk-in books the customer-bookable visit and the cards are listed at the counter; the runbook is the same | Product |
 | When the section opens to the shop | Decided | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
-| How many may still join today | ❓ Open | The batch closing tile counts the drop-offs booked today at its grader and level and not yet handed in, and only on the day the batch closes; on any other day it shows none | Product |
-| A diary outage during hand-in | ❓ Open | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again. Whether a letter may print from a kept copy of the shop, so the act stands | Operations |
-| An ungraded line with no code | ❓ Open | A manifest line with no grade records the card ungraded, and the code and the note are each taken where the grader gave one; whether a line with neither is refused at entry | Operations |
-| A held card coming home | ❓ Open | Taken to come back in a later box from the grader: receiving matches its manifest line to the card held from an earlier batch by its intake id, records what the grader gave, and a second hand-back closes the submission. Whether it may also come back on its own, outside any batch | Operations |
-| The order of the batches not yet received | ❓ Open | Recommended: what waits on the shop first — back unchecked, ships today, past the estimate — then the rest with the grader by the day each is due back, then the open batches | Product |
-| A slab the manifest leaves out | ❓ Open | Recommended: a staff act adds one line for its card to the entered manifest, filed as the grader's omission and audited the way a resolved line is, and the cert then scans onto it. A scan that skips the manifest, and holding the batch for a corrected manifest, are ruled out | Operations |
+| How many may still join today | Decided | The batch closing tile counts the drop-offs booked today at its grader and level and not yet handed in, and only on the day the batch closes; on any other day it shows none - decided by the round (product owner delegated this run) | Product |
+| A diary outage during hand-in | Decided | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again; no letter prints from a kept copy of the shop - decided by the round (product owner delegated this run) | Operations |
+| An ungraded line with no code | Decided | A manifest line with no grade records the card ungraded, and the code and the note are each taken where the grader gave one; a line with neither is taken, not refused at entry - decided by the round (product owner delegated this run) | Operations |
+| A held card coming home | Decided | It comes back in a later box from the grader: receiving matches its manifest line to the card held from an earlier batch by its intake id, records what the grader gave, and a second hand-back closes the submission; nothing receives it on its own, outside any batch - decided by the round (product owner delegated this run) | Operations |
+| The order of the batches not yet received | Decided | What waits on the shop first — back unchecked, ships today, past the estimate — then the rest with the grader by the day each is due back, then the open batches - decided by the round (product owner delegated this run) | Product |
+| A slab the manifest leaves out | Decided | A staff act adds one line for its card to the entered manifest, filed as the grader's omission and audited the way a resolved line is, and the cert then scans onto it. A scan that skips the manifest, and holding the batch for a corrected manifest, are ruled out - decided by the round (product owner delegated this run) | Operations |
+| A card above the courier's cover | Decided | The cover is an approved HKD setting, and a card declared above it is refused at the card check, before any money is taken - decided by the product owner, 2026-10-01 | Operations |
+| A found card after collection | Decided | Its hand-back acts are offered on that card while the submission stays collected; nothing moves backwards - decided by the product owner, 2026-10-01 | Product |
+| What a payout refunds | Decided | The fee only; the cover is kept - decided by the product owner, 2026-10-01 | Product |
+| A seeded figure before its owner confirms | Decided | The seed stays, and a production seal refuses a printed setting with no approver recorded - decided by the product owner, 2026-10-01 | Legal |
+| Transfers not yet received | Decided | A Transfer unconfirmed badge on the queue, counted in To settle - decided by the product owner, 2026-10-01 | Operations |
 :::

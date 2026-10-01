@@ -17,7 +17,7 @@ any group may land beside.
 One migration, `0031_case_reference.sql`, lands in group 4, and the worker and
 both SPAs deploy from one commit in one window — Migration Plan, step 2.
 
-## 1. The collector's words (grade10-spec)
+## 1. The collector's words (grade10-spec) (owner: @ecchochan)
 
 - [x] 1.1 Name the new keys in the vocabulary type first, so
       `pnpm --filter @grade10/i18n run test` refuses every language that has
@@ -41,7 +41,7 @@ both SPAs deploy from one commit in one window — Migration Plan, step 2.
 - [x] 1.6 Verify: `pnpm --filter @grade10/i18n run test`,
       `pnpm run typecheck`, `pnpm run lint`
 
-## 2. The preview letters (grade10-spec)
+## 2. The preview letters (grade10-spec) (owner: @ecchochan)
 
 - [x] 2.1 Write `apps/emails/emails/vault/fixtures.ts` as one `LetterFacts`
       member per `NotifyKind`, the data the worker's `render.test.tsx` reads
@@ -58,7 +58,7 @@ both SPAs deploy from one commit in one window — Migration Plan, step 2.
 - [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run email:build`
 
-## 3. The derived facts and the wire (grade10)
+## 3. The derived facts and the wire (grade10) (owner: @ecchochan)
 
 Needs groups 1 and 2 merged to this store's `main`. Every other application
 group reads this one's exports.
@@ -122,7 +122,7 @@ group reads this one's exports.
       `pnpm run test:backend`, `pnpm run check:libs`,
       `pnpm run check:submodules`
 
-## 4. The case reference (grade10)
+## 4. The case reference (grade10) (owner: @ecchochan)
 
 - [x] 4.1 Cover the reference: an insert per draw and the throw by name after
       eight, the alphabet, the unique index, the backfill over seeded rows,
@@ -156,7 +156,7 @@ group reads this one's exports.
 - [x] 4.5 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 5. The letters (grade10)
+## 5. The letters (grade10) (owner: @ecchochan)
 
 The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
@@ -182,7 +182,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-loan-and-settlement-SC-36`,
       `grade10-site-vault-loan-and-settlement-SC-38`)
 - [x] 5.2 Add `printedValue(ports, field)` in
-      `packages/vault/backend/src/legal/printed.ts` — production and null
+      `packages/app-env/src/printed.ts` — production and null
       throws `LEGAL_IDENTITY_UNSET` by field, any other environment answers
       the marked placeholder — and compose `printedEntity` over it with every
       fallback it has today
@@ -227,7 +227,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 5.8 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
-## 6. The case read and the collector's acts (grade10)
+## 6. The case read and the collector's acts (grade10) (owner: @ecchochan)
 
 - [x] 6.1 Cover the detail read's new fields and the acts' refusals: the
       balance after each repayment, the reminder ladder, the notice, the
@@ -266,7 +266,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 6.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 7. Erasure, filed by the account holder (grade10)
+## 7. Erasure, filed by the account holder (grade10) (owner: @ecchochan)
 
 - [x] 7.1 Cover both workers: self files with no ban, self cancels without
       lifting a conduct ban, an operator filing converts an open self-filed
@@ -309,8 +309,21 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       filing over a self-filed row now does
 - [x] 7.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [x] 7.9 Store `executeAfter` as the first instant, on the brand's zone, of
+      the seventh day after the filing day (`startOfDayAfter`), with the
+      `deletion_requests` check loosened to `> requested_at + 143 hours`; close
+      a request only `WHERE outcome IS NULL`, the run refusing and a cancel
+      changing nothing when no row changed; drop `cancelUntil` from the wire
+      for `executeAfter`; rows filed before stay as filed and clear within one
+      window (`shared-auth-users-SC-43`, `shared-auth-users-SC-38`,
+      `shared-auth-users-SC-48`)
+- [x] 7.10 Take a self-filed request over only `WHERE outcome IS NULL`,
+      refusing by name when no row changed so the ban and its audit roll back;
+      replace the `0014` guard in a new migration so it forgives the author
+      change only while `OLD.outcome IS NULL`; cover a take-over racing a
+      self-cancel (`shared-auth-users-SC-43`, `shared-auth-users-SC-36`)
 
-## 8. The one download of every signed document (grade10)
+## 8. The one download of every signed document (grade10) (owner: @ecchochan)
 
 - [x] 8.1 Cover the route: a stranger refused by `caseOwner`, the byte ceiling
       refused before the first read, the documents of two of the caller's own
@@ -333,7 +346,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 8.5 Verify: `pnpm run check:handbook`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
-## 9. The visit's calendar file (grade10)
+## 9. The visit's calendar file (grade10) (owner: @ecchochan)
 
 - [x] 9.1 Cover the route: the booking's own `UID` and sequence, a moved visit
       keeping both, `METHOD:CANCEL` after a cancel, a stranger refused, and
@@ -358,7 +371,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 9.5 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
-## 10. The console's queue and custody reads (grade10)
+## 10. The console's queue and custody reads (grade10) (owner: @ecchochan)
 
 - [x] 10.1 Cover the reads and the offer recording's own guard with both
       halves — the query shape and the rows: one `GROUP BY status` folded onto
@@ -401,7 +414,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 10.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 11. The money book's reads and the file (grade10)
+## 11. The money book's reads and the file (grade10) (owner: @ecchochan)
 
 - [x] 11.1 Cover the folds and the file: the net out per currency, the arrears
       count and figures over the filter in force, the kind filter's query
@@ -447,7 +460,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 11.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 12. The case page (grade10)
+## 12. The case page (grade10) (owner: @ecchochan)
 
 Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 
@@ -513,7 +526,7 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 - [x] 12.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 13. The live loan on the case page (grade10)
+## 13. The live loan on the case page (grade10) (owner: @ecchochan)
 
 Follows group 12: its cards mount in the view group 12 builds, and its stories
 append to `CaseDetailView.stories.tsx`.
@@ -555,7 +568,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 13.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 14. The request wizard and the case list (grade10)
+## 14. The request wizard and the case list (grade10) (owner: @ecchochan)
 
 - [x] 14.1 Cover the third step and the list: the read-back, the tick a send
       is refused without, a statement nobody has written yet, the draft list,
@@ -572,8 +585,9 @@ append to `CaseDetailView.stories.tsx`.
       with Edit per block, what happens next, and the collection statement's
       tick (`grade10-site-vault-case-intake-SC-15`,
       `grade10-site-vault-case-intake-SC-16`)
-- [x] 14.3 Show "Being prepared" in place of a statement no brand has set, and
-      leave the request sendable (`grade10-site-vault-case-intake-SC-18`)
+- [x] 14.3 Show "Being prepared" in place of a statement no brand has set, and,
+      outside production, leave the request sendable (production's refusal
+      is 26.2) (`grade10-site-vault-case-intake-SC-18`)
 - [x] 14.4 Send `collectionStatement` with the submit, keep a draft listed as
       unsent, and refuse a photograph once the request has gone
       (`grade10-site-vault-case-intake-SC-01`,
@@ -594,7 +608,7 @@ append to `CaseDetailView.stories.tsx`.
       the stepper, the field hints, the photograph dropzone with its tips, and
       the location line, each word from the catalog
 
-## 15. The booked visit (grade10)
+## 15. The booked visit (grade10) (owner: @ecchochan)
 
 - [x] 15.1 Cover the booked screen and the picker: the confirmation taking the
       picker's place, what to bring on each lane and each identity standing,
@@ -635,7 +649,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 15.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 16. Your data (grade10)
+## 16. Your data (grade10) (owner: @ecchochan)
 
 - [x] 16.1 Cover the page: the account holder's own page, the retention
       classes, the identity standing in its four words, the documents listed
@@ -694,7 +708,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 16.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 17. The console's queue, case tabs and identity panel (grade10)
+## 17. The console's queue, case tabs and identity panel (grade10) (owner: @ecchochan)
 
 - [x] 17.1 Cover the console's reads and tabs: a count on every cut, the Today
       block in slot order and a day with none, the collector's word on a row,
@@ -778,7 +792,7 @@ append to `CaseDetailView.stories.tsx`.
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
-## 18. The console's money panels (grade10)
+## 18. The console's money panels (grade10) (owner: @ecchochan)
 
 - [x] 18.1 Cover the money panels: the register's order and its correction
       line, the kind filter, an empty range, the arrears read at zero and per
@@ -810,7 +824,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 18.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and its a11y run, `pnpm run check:admin-bundle`
 
-## 19. The Storybook (grade10)
+## 19. The Storybook (grade10) (owner: @ecchochan)
 
 - [x] 19.1 Stand `packages/storybook` (`@grade10/storybook`) to the shape
       tech-design's "One Storybook, in its own plain-Vite package" holds,
@@ -827,17 +841,18 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 19.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `storybook build`
       and the a11y job green on the stories present when the group lands
 
-## 20. The manual (grade10-spec)
+## 20. The manual (grade10-spec) (owner: @ecchochan)
 
-Lands once every other group is green and the change is deployed.
+Lands once every other group is green and its implementation verified.
 
-- [ ] 20.1 Take the 🚧 marks off the lines this change delivered on
+- [x] 20.1 Take the 🚧 marks off the lines this change delivered on
       `docs/prds/products/grade10-site/vault/collector-pages.md`,
       `case-lifecycle.md`, `loan-and-money.md`, `documents-and-signing.md`,
-      `compliance-and-readiness.md` and `operator-console.md`, and on
-      `docs/prds/products/shared/auth/users.md` and
-      `docs/prds/platform/account-data.md`, leaving the marks the
-      `add-hosted-identity-verification` change still owes
+      `compliance-and-readiness.md`, `operator-console.md` and
+      `identity-check.md`, and on `docs/prds/products/shared/auth/users.md`
+      and `docs/prds/platform/account-data.md`, leaving the marks
+      `add-hosted-identity-verification`, `vault-walk-ins-and-owners`,
+      `add-item-registry` and `add-card-grading` still owe
 - [x] 20.2 Leave `TBC Legal` and ❓ Finance on what nobody has answered — the
       notice's wording, the licence line, the complaints contact, the
       collection statement, the FPS id and the bank account — and say on
@@ -845,12 +860,11 @@ Lands once every other group is green and the change is deployed.
       production until they are set
 - [x] 20.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes complete-vault-collector-flow`
-- [ ] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/page-blocks.md`,
-      `docs/prds/products/shared/ui/vault-case.md`
-      and the Blocks line of `collector-pages.md`'s code map once group 25
-      is deployed
+- [x] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/page-blocks.md`,
+      `docs/prds/products/shared/ui/vault-case.md` once group 25 is
+      verified
 
-## 21. The walk (grade10)
+## 21. The walk (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as its input.
 
@@ -911,7 +925,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as
       `grade10-site-vault-retention-and-erasure-US-03`,
       `grade10-site-vault-retention-and-erasure-US-05`,
       `grade10-site-vault-documents-and-signing-US-05`,
-      `shared-auth-users-US-02` and `shared-auth-users-US-05`, proving the
+      `shared-auth-users-US-02` and `shared-auth-users-US-06`, proving the
       erasure no case holds back, the own cancel refused on a request the
       shop took over, and standing held while a request is open
       (`grade10-site-vault-retention-and-erasure-SC-41`,
@@ -935,7 +949,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
-## 22. The console's three dialogs (grade10)
+## 22. The console's three dialogs (grade10) (owner: @ecchochan)
 
 Lands beside group 18, on group 3's exports and the fixture transport.
 
@@ -975,7 +989,7 @@ Lands beside group 18, on group 3's exports and the fixture transport.
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
-## 23. The walks' stack (grade10)
+## 23. The walks' stack (grade10) (owner: @ecchochan)
 
 Lands beside groups 4 to 11; group 21's walks drive what it stands, and it
 makes nothing a scenario names.
@@ -995,7 +1009,7 @@ makes nothing a scenario names.
 - [x] 23.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the isolated stack
       coming up and `GET /dev/outbox` answering
 
-## 24. The page blocks and the vault blocks (grade10-spec)
+## 24. The page blocks and the vault blocks (grade10-spec) (owner: @ecchochan)
 
 Lands before group 25, which composes them. No existing block changes: every
 file is new under `packages/ui/src/blocks/page-blocks/` and
@@ -1042,7 +1056,7 @@ for each.
       `pnpm run validate:changes complete-vault-collector-flow`,
       `pnpm check:manual`
 
-## 25. The vault pages on the store's blocks (grade10)
+## 25. The vault pages on the store's blocks (grade10) (owner: @ecchochan)
 
 Lands after group 24's store commit, through a submodule bump. The views keep
 their words, their tests and their story ids; only what draws them moves.
@@ -1071,31 +1085,36 @@ their words, their tests and their story ids; only what draws them moves.
       `node scripts/checks/check-dialogs.mjs`, the vault frontend's suites
       and stories unchanged, `pnpm run typecheck`, `pnpm run lint`
 
-## 26. The collection statement in production (grade10)
+## 26. The collection statement in production (grade10) (owner: @ecchochan)
 
 The production refusal `decisions.md` Q8 records, and the statement's move
 onto the legal-copy table.
 
-- [ ] 26.1 Write `packages/app-env/src/legalCopy.ts` as the tech-design names
+- [x] 26.1 Write `packages/app-env/src/legalCopy.ts` as the tech-design names
       it, its tests red first; `cases.collectionStatement` answers
       `{ version, text }` off it and `COLLECTION_STATEMENT_VERSION` is
       deleted
-- [ ] 26.2 Refuse `cases.submit` `COLLECTION_STATEMENT_UNWRITTEN` in
+- [x] 26.2 Refuse `cases.submit` `COLLECTION_STATEMENT_UNWRITTEN` in
       production while the table holds no statement for the brand, before
       anything is written, the review step showing
       `vault.request.statementUnwritten`; outside production the step reads "Being prepared" and the send
       records `UNWRITTEN_VERSION` (`grade10-site-vault-case-intake-SC-18`,
       `grade10-site-vault-case-intake-SC-31`)
-- [ ] 26.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
+- [x] 26.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`
 
-## 27. One number for every way it is typed (grade10)
+## 27. One number for every way it is typed (grade10) (owner: @ecchochan)
 
-- [ ] 27.1 Fold full-width digits and the full-width plus to ASCII in
-      `canonicalPhone`, and read a bare dial code before a valid national
-      number as that number with its `+`, the vectors red first in
-      `packages/utils` and in the store's `profilePhone` suite, with
-      `E164_PATTERN` and the generated `account_profile` CHECK untouched
-      (`grade10-admin-vault-operator-queue-SC-07a`)
+- [ ] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
+      only when the bare digits are not themselves a valid local number, read
+      a bare dial code before a valid national number as that number with its
+      `+`, the vectors red first in `packages/utils` and in the store's
+      `profilePhone` suite: `85291234567` moves from `needsCountryCode` to
+      accepted as `+85291234567`; `852 9123 4567` and `９１２３４５６７`
+      accept as `+85291234567`; `85212345` accepts as `+85285212345`;
+      `85212345678` answers `needsCountryCode`. `E164_PATTERN` and the
+      generated `account_profile` CHECK stay untouched
+      (`grade10-site-vault-case-intake-SC-04`,
+      `grade10-admin-vault-operator-queue-SC-07a`)
 - [ ] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run test:backend`

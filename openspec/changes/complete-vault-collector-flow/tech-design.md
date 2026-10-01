@@ -172,7 +172,7 @@ what refuses them.
   `howToPay: NullOr({ payee, fpsId, bankAccount, reference })`, null on every
   case but a live loan; `reference` is the case reference
 - **`printedValue(ports, field)`** in
-  `packages/vault/backend/src/legal/printed.ts` is the primitive: production
+  `packages/app-env/src/printed.ts` is the primitive: production
   and null throws `LEGAL_IDENTITY_UNSET` naming the field, any other
   environment answers a marked `[fpsId]` placeholder
 - **`printedEntity` and `printedPayee` compose over it** — every name, the
@@ -291,11 +291,12 @@ they live where the legal identity does and carry a version the way
 
 ### One stored number for every way it is typed
 
-- `canonicalPhone` in `packages/utils/src/phone.ts` folds full-width digits
-  (U+FF10 to U+FF19) and the full-width plus (U+FF0B) to their ASCII forms
-  before it strips spacing, and reads bare digits that are the brand's dial
-  code followed by a number matching its national plan as that number with
-  its `+` — `852 9876 5432` stores as `+85298765432`; any other bare number
+- `canonicalPhone` in `packages/utils/src/phone.ts` applies
+  `normalize("NFKC")`, folding full-width digits, plus, brackets, hyphen and
+  full stop to ASCII, before it strips spacing, and, only when the bare digits
+  are not themselves a valid local number, reads bare digits that are the
+  brand's dial code followed by a number matching its national plan as that
+  number with its `+` — `852 9876 5432` stores as `+85298765432`; any other bare number
   still answers `needsCountryCode`, and `E164_PATTERN`, with the store's
   generated `account_profile` CHECK, does not move (Q121)
 - **Platform, not vault** — the store's profile and the till's identify read
@@ -504,8 +505,8 @@ The spec governs what each message names; this is the shape.
 - **Backend** (`packages/vault/backend/test/`, whose vitest `include` widens to
   `test/**/*.test.ts?(x)` so a render test is collected) —
   `cases/reference.test.ts` (an attempt per draw, the throw by name, the
-  alphabet), `legal/printed.test.ts` (production throws, the placeholder
-  outside it, per field, `printedEntity`'s fallbacks unchanged),
+  alphabet), `packages/app-env/test/printed.test.ts` (production throws, the
+  placeholder outside it, per field, `printedEntity`'s fallbacks unchanged),
   `money/netOut.test.ts`, `money/arrearsSummary.test.ts` (the fold and its
   ceiling), and `email/letters/render.test.tsx` as one table over `LETTERS`,
   kind → blocks and attachments, reading the store's fixtures
@@ -639,8 +640,8 @@ applies the ban.
 the seventh day after the filing day. A cancel is refused from that instant
 (`ERASURE_WINDOW_PASSED`) and the run is refused before it
 (`ERASURE_NOT_MATURED`). **Closed once** — the cancel and the run each write
-`outcome` only `WHERE id = ? AND outcome IS NULL` and refuse unless one row
-changed.
+`outcome` only `WHERE id = ? AND outcome IS NULL`; a cancel that changes no row
+changes nothing, and the run refuses.
 
 ## API Contracts
 

@@ -73,8 +73,8 @@ fee sheet it is booked on. The visit it is handed in on is
     the agreement prints those figures
   - A changed sheet: reaches plans not yet booked and no others
 - Keeping the plan
-  - Under the email given: the plan is kept there and its link is mailed the
-    moment the collector leaves
+  - Under the email given: the plan is kept there and its link is mailed once
+    by the daily sweep while it stays unbooked
   - Any device, no account: the link opens the plan wherever it is read
   - Signing in lists them all: the same email and no password lists every
     submission, open and closed
@@ -875,9 +875,9 @@ without ever making an account.
 step, and that email SHALL be asked for before the plan is kept where the
 collector has given none.
 
-**The link** - a link to the plan SHALL be emailed the moment the collector
-leaves the wizard, and SHALL open the plan on any device with no account and no
-password.
+**The link** - a link to the plan SHALL be emailed once, by the daily sweep,
+to a plan kept with no drop-off booked, never on the collector leaving the
+page, and SHALL open the plan on any device with no account and no password.
 
 **What a reopened plan shows** - a plan reopened SHALL show its cards, its
 estimate, the day it is kept until, and the offer to book the drop-off.
@@ -885,13 +885,13 @@ estimate, the day it is kept until, and the offer to book the drop-off.
 **Signing in** - signing in with the same email and no password SHALL list
 every submission under that email, open and closed.
 
-#### Scenario: grade10-site-grading-submission-plan-SC-38 - Leaving the wizard keeps the plan and mails its link
+#### Scenario: grade10-site-grading-submission-plan-SC-38 - Leaving the wizard keeps the plan and the daily sweep mails its link
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector who stops halfway and wants to finish another day
 
 - **GIVEN** a collector part way through the wizard who has given their email
-- **WHEN** they leave without booking
+- **WHEN** they leave without booking, and the daily sweep runs
 - **THEN** the plan is kept
-- **AND** a link to it is emailed to that address
+- **AND** a link to it is emailed to that address once, by the sweep
 
 #### Scenario: grade10-site-grading-submission-plan-SC-39 - The emailed link opens the plan on another device
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector finishing on a second device
@@ -929,13 +929,17 @@ every submission under that email, open and closed.
 An old list is priced on a stale sheet and referenced against stale sales, so a
 plan nobody books is let go rather than kept.
 
-**The nudge** - a plan with no drop-off booked SHALL be nudged once, 21 days
-after it was kept, with the link to it.
+**The clock's start** - the plan's clock SHALL start on the later of the day it
+was kept and the day its last visit ended without a hand-in, cancelled or
+missed; both days below SHALL be counted from that start, on the
+Asia/Hong_Kong day.
 
-**The expiry** - a plan with no drop-off booked SHALL expire 30 days after it
-was kept, and the collector SHALL be told.
+**The nudge** - a plan with no drop-off booked SHALL be nudged once per clock
+start, 21 days after it, with the link to it, so a plan whose clock restarts
+never expires unwarned.
 
-**The clock** - both days SHALL be counted on the Asia/Hong_Kong day.
+**The expiry** - a plan with no drop-off booked SHALL expire 30 days after its
+clock's start, and the collector SHALL be told.
 
 **Nothing owed** - an expired plan SHALL leave nothing paid and nothing owed,
 and SHALL offer starting a submission again.
@@ -975,3 +979,10 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **WHEN** the day turns
 - **THEN** the plan does not expire
 - **AND** no nudge and no expiry message is sent
+
+#### Scenario: grade10-site-grading-submission-plan-SC-64 - A cancelled visit restarts the plan's clock and its nudge
+**Serves:** grade10-site-grading-submission-plan-US-08 - a collector who booked, then cancelled, is warned again before the plan lets go
+
+- **GIVEN** a plan kept on 1 March, nudged on 22 March, then booked and its visit cancelled on 25 March
+- **WHEN** the days turn
+- **THEN** the plan is nudged again on 15 April and expires on 24 April, not on 31 March

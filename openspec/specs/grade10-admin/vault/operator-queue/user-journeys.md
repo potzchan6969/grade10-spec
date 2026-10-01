@@ -26,3 +26,38 @@ to walk the whole customer list.
 **I want** to name the shop and locker when I take an item in, and to list
 everything we hold,
 **so that** anybody can be told which vault an item is sitting in.
+
+### grade10-admin-vault-operator-queue-US-05: Operator finds the case by the reference read out
+
+**As a** member of shop staff,
+**I want** the six characters a customer reads out to find their case,
+**so that** I need not ask for their phone number or email.
+
+### grade10-admin-vault-operator-queue-US-06: Operator reads the shop's day at a glance
+
+**As a** member of shop staff starting a shift,
+**I want** a count on every view and today's visits in slot order,
+**so that** I know the day's load before I open a case.
+
+### grade10-admin-vault-operator-queue-US-07: Operator walks the visit in order
+
+**As a** member of shop staff with a customer at the counter,
+**I want** the case to list the visit's steps in order, tick each as it
+lands, and say why an act is not offered yet,
+**so that** a shop of three runs the flow from the screen rather than from
+memory.
+
+### grade10-admin-vault-operator-queue-US-08: Operator reads why a late loan cannot be forfeited yet
+
+**As a** member of shop staff,
+**I want** the custody tab to say in words why Forfeit is not offered — not
+before the cure date, the notice sent on which day,
+**so that** I never take an item a day early.
+
+### grade10-admin-vault-operator-queue-US-09: Operator reads the identity state the record names
+
+**As a** member of shop staff arranging a visit,
+**I want** the identity panel to say Verified, Out, Stalled, Refused, Lapsed
+or None,
+**so that** I know whether to send the check again, wait, or do it at the
+counter.
