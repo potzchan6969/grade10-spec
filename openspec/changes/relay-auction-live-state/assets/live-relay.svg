@@ -1,198 +1,215 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 60 1016 932" role="img" data-preset="classic" aria-labelledby="auction-live-our-design-archify-diagram-title" aria-describedby="auction-live-our-design-archify-diagram-description" data-diagram="auction-live-our-design">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 60 896 1052" role="img" data-preset="classic" aria-labelledby="live-relay-archify-diagram-title" aria-describedby="live-relay-archify-diagram-description" data-diagram="live-relay">
 <style>
-svg[data-diagram="auction-live-our-design"]{--arrow:var(--muted-foreground, light-dark(#94a3b8, #64748b));--arrow-emphasis:var(--primary, light-dark(#059669, #34d399));--backend-fill:light-dark(rgba(52, 211, 153, 0.18), rgba(6, 78, 59, 0.4));--backend-stroke:light-dark(#059669, #34d399);--cloud-fill:light-dark(rgba(251, 191, 36, 0.18), rgba(120, 53, 15, 0.3));--cloud-stroke:light-dark(#d97706, #fbbf24);--database-fill:light-dark(rgba(167, 139, 250, 0.2), rgba(76, 29, 149, 0.4));--database-stroke:light-dark(#7c3aed, #a78bfa);--external-fill:light-dark(rgba(148, 163, 184, 0.18), rgba(30, 41, 59, 0.5));--external-stroke:light-dark(#64748b, #94a3b8);--grid:var(--border-subtle, light-dark(#e2e8f0, #1e293b));--lane-fill:var(--background, light-dark(rgba(248, 250, 252, 0.65), rgba(15, 23, 42, 0.22)));--lane-stroke:var(--border, light-dark(#cbd5e1, #334155));--mask:var(--background, light-dark(#ffffff, #0f172a));--messagebus-stroke:light-dark(#ea580c, #fb923c);--security-stroke:light-dark(#e11d48, #fb7185);--text:var(--foreground, light-dark(#0f172a, #ffffff));--text-dim:var(--muted-foreground, light-dark(#94a3b8, #475569));--text-muted:var(--muted-foreground, light-dark(#64748b, #94a3b8))}
-svg[data-diagram="auction-live-our-design"] .c-grid{stroke: var(--grid); fill: none;}
-svg[data-diagram="auction-live-our-design"] .c-mask{fill: var(--mask); stroke: none;}
-svg[data-diagram="auction-live-our-design"] .c-backend{fill: var(--backend-fill); stroke: var(--backend-stroke);}
-svg[data-diagram="auction-live-our-design"] .c-database{fill: var(--database-fill); stroke: var(--database-stroke);}
-svg[data-diagram="auction-live-our-design"] .c-cloud{fill: var(--cloud-fill); stroke: var(--cloud-stroke);}
-svg[data-diagram="auction-live-our-design"] .c-external{fill: var(--external-fill); stroke: var(--external-stroke);}
-svg[data-diagram="auction-live-our-design"] .t-primary{fill: var(--text);}
-svg[data-diagram="auction-live-our-design"] .t-muted{fill: var(--text-muted);}
-svg[data-diagram="auction-live-our-design"] .t-dim{fill: var(--text-dim);}
-svg[data-diagram="auction-live-our-design"] .t-backend{fill: var(--backend-stroke);}
-svg[data-diagram="auction-live-our-design"] .t-messagebus{fill: var(--messagebus-stroke);}
-svg[data-diagram="auction-live-our-design"] .semantic-sigil{fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.76; pointer-events: none;}
-svg[data-diagram="auction-live-our-design"] .semantic-sigil > *{vector-effect: non-scaling-stroke;}
-svg[data-diagram="auction-live-our-design"] .s-backend{color: var(--backend-stroke);}
-svg[data-diagram="auction-live-our-design"] .s-database{color: var(--database-stroke);}
-svg[data-diagram="auction-live-our-design"] .s-cloud{color: var(--cloud-stroke);}
-svg[data-diagram="auction-live-our-design"] .s-external{color: var(--external-stroke);}
-svg[data-diagram="auction-live-our-design"] .a-default{stroke: var(--arrow); fill: none;}
-svg[data-diagram="auction-live-our-design"] .a-emphasis{stroke: var(--arrow-emphasis); fill: none;}
-svg[data-diagram="auction-live-our-design"] .a-dashed{stroke: var(--database-stroke); fill: none; stroke-dasharray: 4,4;}
-svg[data-diagram="auction-live-our-design"] .m-default{fill: var(--arrow);}
-svg[data-diagram="auction-live-our-design"] .m-emphasis{fill: var(--arrow-emphasis);}
-svg[data-diagram="auction-live-our-design"] .m-security{fill: var(--security-stroke);}
-svg[data-diagram="auction-live-our-design"] .m-dashed{fill: var(--database-stroke);}
-svg[data-diagram="auction-live-our-design"] .c-lane{fill: var(--lane-fill); stroke: var(--lane-stroke); stroke-dasharray: 6,6;}
+svg[data-diagram="live-relay"]{--arrow:var(--muted-foreground, light-dark(#94a3b8, #64748b));--arrow-emphasis:var(--primary, light-dark(#059669, #34d399));--backend-fill:light-dark(rgba(52, 211, 153, 0.18), rgba(6, 78, 59, 0.4));--backend-stroke:light-dark(#059669, #34d399);--cloud-fill:light-dark(rgba(251, 191, 36, 0.18), rgba(120, 53, 15, 0.3));--cloud-stroke:light-dark(#d97706, #fbbf24);--database-fill:light-dark(rgba(167, 139, 250, 0.2), rgba(76, 29, 149, 0.4));--database-stroke:light-dark(#7c3aed, #a78bfa);--external-fill:light-dark(rgba(148, 163, 184, 0.18), rgba(30, 41, 59, 0.5));--external-stroke:light-dark(#64748b, #94a3b8);--grid:var(--border-subtle, light-dark(#e2e8f0, #1e293b));--lane-fill:var(--background, light-dark(rgba(248, 250, 252, 0.65), rgba(15, 23, 42, 0.22)));--lane-stroke:var(--border, light-dark(#cbd5e1, #334155));--mask:var(--background, light-dark(#ffffff, #0f172a));--messagebus-stroke:light-dark(#ea580c, #fb923c);--security-stroke:light-dark(#e11d48, #fb7185);--text:var(--foreground, light-dark(#0f172a, #ffffff));--text-dim:var(--muted-foreground, light-dark(#94a3b8, #475569));--text-muted:var(--muted-foreground, light-dark(#64748b, #94a3b8))}
+svg[data-diagram="live-relay"] .c-grid{stroke: var(--grid); fill: none;}
+svg[data-diagram="live-relay"] .c-mask{fill: var(--mask); stroke: none;}
+svg[data-diagram="live-relay"] .c-backend{fill: var(--backend-fill); stroke: var(--backend-stroke);}
+svg[data-diagram="live-relay"] .c-database{fill: var(--database-fill); stroke: var(--database-stroke);}
+svg[data-diagram="live-relay"] .c-cloud{fill: var(--cloud-fill); stroke: var(--cloud-stroke);}
+svg[data-diagram="live-relay"] .c-external{fill: var(--external-fill); stroke: var(--external-stroke);}
+svg[data-diagram="live-relay"] .t-primary{fill: var(--text);}
+svg[data-diagram="live-relay"] .t-muted{fill: var(--text-muted);}
+svg[data-diagram="live-relay"] .t-dim{fill: var(--text-dim);}
+svg[data-diagram="live-relay"] .t-backend{fill: var(--backend-stroke);}
+svg[data-diagram="live-relay"] .t-messagebus{fill: var(--messagebus-stroke);}
+svg[data-diagram="live-relay"] .semantic-sigil{fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.76; pointer-events: none;}
+svg[data-diagram="live-relay"] .semantic-sigil > *{vector-effect: non-scaling-stroke;}
+svg[data-diagram="live-relay"] .s-backend{color: var(--backend-stroke);}
+svg[data-diagram="live-relay"] .s-database{color: var(--database-stroke);}
+svg[data-diagram="live-relay"] .s-cloud{color: var(--cloud-stroke);}
+svg[data-diagram="live-relay"] .s-external{color: var(--external-stroke);}
+svg[data-diagram="live-relay"] .a-default{stroke: var(--arrow); fill: none;}
+svg[data-diagram="live-relay"] .a-emphasis{stroke: var(--arrow-emphasis); fill: none;}
+svg[data-diagram="live-relay"] .a-dashed{stroke: var(--database-stroke); fill: none; stroke-dasharray: 4,4;}
+svg[data-diagram="live-relay"] .m-default{fill: var(--arrow);}
+svg[data-diagram="live-relay"] .m-emphasis{fill: var(--arrow-emphasis);}
+svg[data-diagram="live-relay"] .m-security{fill: var(--security-stroke);}
+svg[data-diagram="live-relay"] .m-dashed{fill: var(--database-stroke);}
+svg[data-diagram="live-relay"] .c-lane{fill: var(--lane-fill); stroke: var(--lane-stroke); stroke-dasharray: 6,6;}
 </style>
-        <title id="auction-live-our-design-archify-diagram-title">How our live auction relays a change</title>
-        <desc id="auction-live-our-design-archify-diagram-description">A sequence diagram generated by Archify.</desc>
+        <title id="live-relay-archify-diagram-title">How a committed change reaches every open page</title>
+        <desc id="live-relay-archify-diagram-description">A sequence diagram generated by Archify.</desc>
         
         <defs>
-          <marker id="auction-live-our-design-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <marker id="live-relay-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
             <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
           </marker>
-          <marker id="auction-live-our-design-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <marker id="live-relay-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
             <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
           </marker>
-          <marker id="auction-live-our-design-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <marker id="live-relay-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
             <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
           </marker>
-          <marker id="auction-live-our-design-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <marker id="live-relay-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
             <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
           </marker>
-          <pattern id="auction-live-our-design-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <pattern id="live-relay-grid" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
           </pattern>
         </defs>
         
-        <rect width="100%" height="100%" fill="url(#auction-live-our-design-grid)" />
+        <rect width="100%" height="100%" fill="url(#live-relay-grid)" />
         
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="166" width="984" height="216" rx="10" class="c-lane" stroke-width="1"/>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="382" width="984" height="378" rx="10" class="c-lane" stroke-width="1"/>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="2" x="48" y="760" width="984" height="220" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="0" x="48" y="166" width="864" height="198" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="1" x="48" y="364" width="864" height="336" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="2" x="48" y="700" width="864" height="196" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="segment" data-composition-frame-id="3" x="48" y="896" width="864" height="204" rx="10" class="c-lane" stroke-width="1"/>
         
-        <path d="M 118.5 142 L 118.5 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
-        <path d="M 262.66666666666663 142 L 262.66666666666663 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
-        <path d="M 406.8333333333333 142 L 406.8333333333333 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
-        <path d="M 551 142 L 551 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
-        <path d="M 695.1666666666666 142 L 695.1666666666666 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
-        <path d="M 839.3333333333333 142 L 839.3333333333333 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
-        <path d="M 983.5 142 L 983.5 1015" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 109.5 142 L 109.5 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 236.66666666666669 142 L 236.66666666666669 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 363.83333333333337 142 L 363.83333333333337 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 491 142 L 491 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 618.1666666666667 142 L 618.1666666666667 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 745.3333333333334 142 L 745.3333333333334 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
+        <path d="M 872.5 142 L 872.5 1085" class="a-default" stroke-width="0.8" stroke-dasharray="3,7"/>
         
         
-        <g data-step="clock" data-edge-from="pages" data-edge-to="auction" data-edge-label="GET /api/public/time × 3" data-edge-key="0" data-edge-id="clock">
-          <path data-composition-edge-from="pages" data-composition-edge-to="auction" data-composition-edge-id="clock" data-composition-points="976.5,196;413.8333333333333,196" d="M 976.5 196 L 413.8333333333333 196" class="a-default" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="probes" data-edge-from="pages" data-edge-to="auction" data-edge-label="3 probes to /public/time" data-edge-key="0" data-edge-id="probes">
+          <path data-composition-edge-from="pages" data-composition-edge-to="auction" data-composition-edge-id="probes" data-composition-points="243.66666666666669,196;611.1666666666667,196" d="M 243.66666666666669 196 L 611.1666666666667 196" class="a-default" stroke-width="1.4" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="626.7666666666667" y="176" width="136.8" height="16" rx="3" class="c-mask"/>
-          <text x="695.1666666666666" y="186" class="t-backend" font-size="9" text-anchor="middle">GET /api/public/time × 3</text>
+          <rect x="359.01666666666677" y="176" width="136.8" height="16" rx="3" class="c-mask"/>
+          <text x="427.41666666666674" y="186" class="t-backend" font-size="9" text-anchor="middle">3 probes to /public/time</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="214" class="t-dim" font-size="7">shortest round trip sets the page clock</text>
+        <text data-detail="fine" x="255.66666666666669" y="214" class="t-dim" font-size="7">the fastest sets the page clock; countdowns round up</text>
         </g>
-        <g data-step="joins" data-edge-from="pages" data-edge-to="listing" data-edge-label="opens /live/listing" data-edge-key="1" data-edge-id="joins">
-          <path data-composition-edge-from="pages" data-composition-edge-to="listing" data-composition-edge-id="joins" data-composition-points="976.5,240;702.1666666666666,240" d="M 976.5 240 L 702.1666666666666 240" class="a-default" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="joins" data-edge-from="pages" data-edge-to="room" data-edge-label="opens a socket" data-edge-key="1" data-edge-id="joins">
+          <path data-composition-edge-from="pages" data-composition-edge-to="room" data-composition-edge-id="joins" data-composition-points="243.66666666666669,240;484,240" d="M 243.66666666666669 240 L 484 240" class="a-default" stroke-width="1.4" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="783.9333333333333" y="220" width="110.8" height="16" rx="3" class="c-mask"/>
-          <text x="839.3333333333333" y="230" class="t-backend" font-size="9" text-anchor="middle">opens /live/listing</text>
+          <rect x="321.4333333333334" y="220" width="84.8" height="16" rx="3" class="c-mask"/>
+          <text x="363.83333333333337" y="230" class="t-backend" font-size="9" text-anchor="middle">opens a socket</text>
         </g>
-        <text data-detail="fine" x="714.1666666666666" y="258" class="t-dim" font-size="7">anonymous; public data only</text>
+        <text data-detail="fine" x="255.66666666666669" y="258" class="t-dim" font-size="7">behind the auction.realtime flag; it only sends a keepalive</text>
         </g>
-        <g data-step="load" data-edge-from="listing" data-edge-to="auction" data-edge-label="reads the listing" data-edge-key="2" data-edge-id="load">
-          <path data-composition-edge-from="listing" data-composition-edge-to="auction" data-composition-edge-id="load" data-composition-points="688.1666666666666,284;413.8333333333333,284" d="M 688.1666666666666 284 L 413.8333333333333 284" class="a-dashed" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead-dashed)"/>
+        <g data-step="reads-for-hello" data-edge-from="room" data-edge-to="auction" data-edge-label="reads the lot" data-edge-key="2" data-edge-id="reads-for-hello">
+          <path data-composition-edge-from="room" data-composition-edge-to="auction" data-composition-edge-id="reads-for-hello" data-composition-points="498,284;611.1666666666667,284" d="M 498 284 L 611.1666666666667 284" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="500.8" y="264" width="100.4" height="16" rx="3" class="c-mask"/>
-          <text x="551" y="274" class="t-messagebus" font-size="9" text-anchor="middle">reads the listing</text>
+          <rect x="514.7833333333334" y="264" width="79.60000000000001" height="16" rx="3" class="c-mask"/>
+          <text x="554.5833333333334" y="274" class="t-messagebus" font-size="9" text-anchor="middle">reads the lot</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="302" class="t-dim" font-size="7">only when DO storage woke empty</text>
         </g>
-        <g data-step="hello" data-edge-from="listing" data-edge-to="pages" data-edge-label="first frame: whole listing" data-edge-key="3" data-edge-id="hello">
-          <path data-composition-edge-from="listing" data-composition-edge-to="pages" data-composition-edge-id="hello" data-composition-points="702.1666666666666,328;976.5,328" d="M 702.1666666666666 328 L 976.5 328" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="hello" data-edge-from="room" data-edge-to="pages" data-edge-label="hello: the lot at its version" data-edge-key="3" data-edge-id="hello">
+          <path data-composition-edge-from="room" data-composition-edge-to="pages" data-composition-edge-id="hello" data-composition-points="484,328;243.66666666666669,328" d="M 484 328 L 243.66666666666669 328" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="765.7333333333332" y="308" width="147.20000000000002" height="16" rx="3" class="c-mask"/>
-          <text x="839.3333333333333" y="318" class="t-muted" font-size="9" text-anchor="middle">first frame: whole listing</text>
+          <rect x="282.4333333333334" y="308" width="162.8" height="16" rx="3" class="c-mask"/>
+          <text x="363.83333333333337" y="318" class="t-muted" font-size="9" text-anchor="middle">hello: the lot at its version</text>
         </g>
-        <text data-detail="fine" x="714.1666666666666" y="346" class="t-dim" font-size="7">kept in DO storage for the next join</text>
         </g>
-        <g data-step="bids" data-edge-from="bidder" data-edge-to="storefront" data-edge-label="places a bid" data-edge-key="4" data-edge-id="bids">
-          <path data-composition-edge-from="bidder" data-composition-edge-to="storefront" data-composition-edge-id="bids" data-composition-points="125.5,412;255.66666666666663,412" d="M 125.5 412 L 255.66666666666663 412" class="a-default" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="writes" data-edge-from="bidder" data-edge-to="auction" data-edge-label="bid, or its payment confirms" data-edge-key="4" data-edge-id="writes">
+          <path data-composition-edge-from="bidder" data-composition-edge-to="auction" data-composition-edge-id="writes" data-composition-points="116.5,394;611.1666666666667,394" d="M 116.5 394 L 611.1666666666667 394" class="a-default" stroke-width="1.4" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="153.38333333333333" y="392" width="74.4" height="16" rx="3" class="c-mask"/>
-          <text x="190.58333333333331" y="402" class="t-backend" font-size="9" text-anchor="middle">places a bid</text>
+          <rect x="285.03333333333336" y="374" width="157.6" height="16" rx="3" class="c-mask"/>
+          <text x="363.83333333333337" y="384" class="t-backend" font-size="9" text-anchor="middle">bid, or its payment confirms</text>
         </g>
         </g>
-        <g data-step="forwards" data-edge-from="storefront" data-edge-to="auction" data-edge-label="placeBid for this user" data-edge-key="5" data-edge-id="forwards">
-          <path data-composition-edge-from="storefront" data-composition-edge-to="auction" data-composition-edge-id="forwards" data-composition-points="269.66666666666663,456;399.8333333333333,456" d="M 269.66666666666663 456 L 399.8333333333333 456" class="a-default" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="commits" data-edge-from="auction" data-edge-to="postgres" data-edge-label="commits under the listing lock" data-edge-key="5" data-edge-id="commits">
+          <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="commits" data-composition-points="625.1666666666667,438;738.3333333333334,438" d="M 625.1666666666667 438 L 738.3333333333334 438" class="a-emphasis" stroke-width="1.8" marker-end="url(#live-relay-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="271.55" y="436" width="126.4" height="16" rx="3" class="c-mask"/>
-          <text x="334.75" y="446" class="t-backend" font-size="9" text-anchor="middle">placeBid for this user</text>
+          <rect x="597.75" y="418" width="168" height="16" rx="3" class="c-mask"/>
+          <text x="681.75" y="428" class="t-backend" font-size="9" text-anchor="middle">commits under the listing lock</text>
         </g>
+        <text data-detail="fine" x="637.1666666666667" y="456" class="t-dim" font-size="7">clock read after the lock; version rises</text>
         </g>
-        <g data-step="commits" data-edge-from="auction" data-edge-to="postgres" data-edge-label="commits under the listing lock" data-edge-key="6" data-edge-id="commits">
-          <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="commits" data-composition-points="413.8333333333333,500;544,500" d="M 413.8333333333333 500 L 544 500" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-our-design-arrowhead-emphasis)"/>
+        <g data-step="signals" data-edge-from="auction" data-edge-to="room" data-edge-label="after commit: listing changed" data-edge-key="6" data-edge-id="signals">
+          <path data-composition-edge-from="auction" data-composition-edge-to="room" data-composition-edge-id="signals" data-composition-points="611.1666666666667,482;498,482" d="M 611.1666666666667 482 L 498 482" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="394.91666666666663" y="480" width="168" height="16" rx="3" class="c-mask"/>
-          <text x="478.91666666666663" y="490" class="t-backend" font-size="9" text-anchor="middle">commits under the listing lock</text>
+          <rect x="473.1833333333334" y="462" width="162.8" height="16" rx="3" class="c-mask"/>
+          <text x="554.5833333333334" y="472" class="t-messagebus" font-size="9" text-anchor="middle">after commit: listing changed</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="518" class="t-dim" font-size="7">the version rises</text>
+        <text data-detail="fine" x="510" y="500" class="t-dim" font-size="7">best effort; the next change heals it</text>
         </g>
-        <g data-step="answers" data-edge-from="storefront" data-edge-to="bidder" data-edge-label="accepted, or why not" data-edge-key="7" data-edge-id="answers">
-          <path data-composition-edge-from="storefront" data-composition-edge-to="bidder" data-composition-edge-id="answers" data-composition-points="255.66666666666663,544;125.5,544" d="M 255.66666666666663 544 L 125.5 544" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="reads-back" data-edge-from="room" data-edge-to="auction" data-edge-label="re-reads the committed lot" data-edge-key="7" data-edge-id="reads-back">
+          <path data-composition-edge-from="room" data-composition-edge-to="auction" data-composition-edge-id="reads-back" data-composition-points="498,526;611.1666666666667,526" d="M 498 526 L 611.1666666666667 526" class="a-default" stroke-width="1.4" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="132.58333333333331" y="524" width="116" height="16" rx="3" class="c-mask"/>
-          <text x="190.58333333333331" y="534" class="t-muted" font-size="9" text-anchor="middle">accepted, or why not</text>
+          <rect x="480.98333333333335" y="506" width="147.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="554.5833333333334" y="516" class="t-backend" font-size="9" text-anchor="middle">re-reads the committed lot</text>
         </g>
+        <text data-detail="fine" x="510" y="544" class="t-dim" font-size="7">the room decides nothing</text>
         </g>
-        <g data-step="reread" data-edge-from="auction" data-edge-to="postgres" data-edge-label="reads the committed listing" data-edge-key="8" data-edge-id="reread">
-          <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="reread" data-composition-points="413.8333333333333,588;544,588" d="M 413.8333333333333 588 L 544 588" class="a-dashed" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead-dashed)"/>
+        <g data-step="state" data-edge-from="room" data-edge-to="pages" data-edge-label="state: whole lot, new version" data-edge-key="8" data-edge-id="state">
+          <path data-composition-edge-from="room" data-composition-edge-to="pages" data-composition-edge-id="state" data-composition-points="484,570;243.66666666666669,570" d="M 484 570 L 243.66666666666669 570" class="a-emphasis" stroke-width="1.8" marker-end="url(#live-relay-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="402.71666666666664" y="568" width="152.4" height="16" rx="3" class="c-mask"/>
-          <text x="478.91666666666663" y="578" class="t-messagebus" font-size="9" text-anchor="middle">reads the committed listing</text>
+          <rect x="282.4333333333334" y="550" width="162.8" height="16" rx="3" class="c-mask"/>
+          <text x="363.83333333333337" y="560" class="t-backend" font-size="9" text-anchor="middle">state: whole lot, new version</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="606" class="t-dim" font-size="7">waitUntil; a lost announce only costs time</text>
+        <text data-detail="fine" x="255.66666666666669" y="588" class="t-dim" font-size="7">the alarm re-arms to the next deadline</text>
         </g>
-        <g data-step="publish" data-edge-from="auction" data-edge-to="listing" data-edge-label="publish: handed read" data-edge-key="9" data-edge-id="publish">
-          <path data-composition-edge-from="auction" data-composition-edge-to="listing" data-composition-edge-id="publish" data-composition-points="413.8333333333333,632;688.1666666666666,632" d="M 413.8333333333333 632 L 688.1666666666666 632" class="a-dashed" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead-dashed)"/>
+        <g data-step="relays" data-edge-from="room" data-edge-to="catalogue" data-edge-label="card changed" data-edge-key="9" data-edge-id="relays">
+          <path data-composition-edge-from="room" data-composition-edge-to="catalogue" data-composition-edge-id="relays" data-composition-points="484,614;370.83333333333337,614" d="M 484 614 L 370.83333333333337 614" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="493" y="612" width="116" height="16" rx="3" class="c-mask"/>
-          <text x="551" y="622" class="t-messagebus" font-size="9" text-anchor="middle">publish: handed read</text>
+          <rect x="390.2166666666667" y="594" width="74.4" height="16" rx="3" class="c-mask"/>
+          <text x="427.4166666666667" y="604" class="t-messagebus" font-size="9" text-anchor="middle">card changed</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="650" class="t-dim" font-size="7">ListingLive does not re-query</text>
         </g>
-        <g data-step="state" data-edge-from="listing" data-edge-to="pages" data-edge-label="listing frame, new version" data-edge-key="10" data-edge-id="state">
-          <path data-composition-edge-from="listing" data-composition-edge-to="pages" data-composition-edge-id="state" data-composition-points="702.1666666666666,676;976.5,676" d="M 702.1666666666666 676 L 976.5 676" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-our-design-arrowhead-emphasis)"/>
+        <g data-step="cards" data-edge-from="catalogue" data-edge-to="pages" data-edge-label="card state" data-edge-key="10" data-edge-id="cards">
+          <path data-composition-edge-from="catalogue" data-composition-edge-to="pages" data-composition-edge-id="cards" data-composition-points="356.83333333333337,658;243.66666666666669,658" d="M 356.83333333333337 658 L 243.66666666666669 658" class="a-emphasis" stroke-width="1.8" marker-end="url(#live-relay-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="765.7333333333332" y="656" width="147.20000000000002" height="16" rx="3" class="c-mask"/>
-          <text x="839.3333333333333" y="666" class="t-backend" font-size="9" text-anchor="middle">listing frame, new version</text>
+          <rect x="268.25" y="638" width="64" height="16" rx="3" class="c-mask"/>
+          <text x="300.25" y="648" class="t-backend" font-size="9" text-anchor="middle">card state</text>
         </g>
+        <text data-detail="fine" x="255.66666666666669" y="676" class="t-dim" font-size="7">at most one frame a second</text>
         </g>
-        <g data-step="card" data-edge-from="listing" data-edge-to="catalogue" data-edge-label="card summary" data-edge-key="11" data-edge-id="card">
-          <path data-composition-edge-from="listing" data-composition-edge-to="catalogue" data-composition-edge-id="card" data-composition-points="702.1666666666666,720;832.3333333333333,720" d="M 702.1666666666666 720 L 832.3333333333333 720" class="a-default" stroke-width="1.4" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="alarm" data-edge-from="room" data-edge-to="auction" data-edge-label="alarm: settleIfDue" data-edge-key="11" data-edge-id="alarm">
+          <path data-composition-edge-from="room" data-composition-edge-to="auction" data-composition-edge-id="alarm" data-composition-points="498,730;611.1666666666667,730" d="M 498 730 L 611.1666666666667 730" class="a-emphasis" stroke-width="1.8" marker-end="url(#live-relay-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="730.05" y="700" width="74.4" height="16" rx="3" class="c-mask"/>
-          <text x="767.25" y="710" class="t-backend" font-size="9" text-anchor="middle">card summary</text>
+          <rect x="501.78333333333336" y="710" width="105.60000000000001" height="16" rx="3" class="c-mask"/>
+          <text x="554.5833333333334" y="720" class="t-backend" font-size="9" text-anchor="middle">alarm: settleIfDue</text>
         </g>
-        <text data-detail="fine" x="714.1666666666666" y="738" class="t-dim" font-size="7">id, close, top, next minimum</text>
+        <text data-detail="fine" x="510" y="748" class="t-dim" font-size="7">pages show Closed, no result yet</text>
         </g>
-        <g data-step="cards" data-edge-from="catalogue" data-edge-to="pages" data-edge-label="summary to catalogue pages" data-edge-key="12" data-edge-id="cards">
-          <path data-composition-edge-from="catalogue" data-composition-edge-to="pages" data-composition-edge-id="cards" data-composition-points="846.3333333333333,764;976.5,764" d="M 846.3333333333333 764 L 976.5 764" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-our-design-arrowhead-emphasis)"/>
+        <g data-step="settles" data-edge-from="auction" data-edge-to="postgres" data-edge-label="extends or closes under the lock" data-edge-key="12" data-edge-id="settles">
+          <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="settles" data-composition-points="625.1666666666667,774;738.3333333333334,774" d="M 625.1666666666667 774 L 738.3333333333334 774" class="a-emphasis" stroke-width="1.8" marker-end="url(#live-relay-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="837.8166666666666" y="744" width="147.20000000000002" height="16" rx="3" class="c-mask"/>
-          <text x="911.4166666666666" y="754" class="t-backend" font-size="9" text-anchor="middle">summary to catalogue pages</text>
+          <rect x="592.55" y="754" width="178.4" height="16" rx="3" class="c-mask"/>
+          <text x="681.75" y="764" class="t-backend" font-size="9" text-anchor="middle">extends or closes under the lock</text>
         </g>
-        <text data-detail="fine" x="858.3333333333333" y="782" class="t-dim" font-size="7">no per-card socket from a listing page</text>
+        <text data-detail="fine" x="637.1666666666667" y="792" class="t-dim" font-size="7">idempotent; settling twice is a no-op</text>
         </g>
-        <g data-step="alarm" data-edge-from="listing" data-edge-to="auction" data-edge-label="alarm: settle the listing" data-edge-key="13" data-edge-id="alarm">
-          <path data-composition-edge-from="listing" data-composition-edge-to="auction" data-composition-edge-id="alarm" data-composition-points="688.1666666666666,808;413.8333333333333,808" d="M 688.1666666666666 808 L 413.8333333333333 808" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-our-design-arrowhead-emphasis)"/>
+        <g data-step="settled" data-edge-from="auction" data-edge-to="room" data-edge-label="the settled lot" data-edge-key="13" data-edge-id="settled">
+          <path data-composition-edge-from="auction" data-composition-edge-to="room" data-composition-edge-id="settled" data-composition-points="611.1666666666667,818;498,818" d="M 611.1666666666667 818 L 498 818" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="480" y="788" width="142" height="16" rx="3" class="c-mask"/>
-          <text x="551" y="798" class="t-backend" font-size="9" text-anchor="middle">alarm: settle the listing</text>
+          <rect x="509.58333333333337" y="798" width="90" height="16" rx="3" class="c-mask"/>
+          <text x="554.5833333333334" y="808" class="t-muted" font-size="9" text-anchor="middle">the settled lot</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="826" class="t-dim" font-size="7">at the recorded close; cron is the net</text>
         </g>
-        <g data-step="settles" data-edge-from="auction" data-edge-to="postgres" data-edge-label="closeOne under the lock" data-edge-key="14" data-edge-id="settles">
-          <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="settles" data-composition-points="413.8333333333333,852;544,852" d="M 413.8333333333333 852 L 544 852" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-our-design-arrowhead-emphasis)"/>
+        <g data-step="result" data-edge-from="room" data-edge-to="pages" data-edge-label="state: the result, or a later close" data-edge-key="14" data-edge-id="result">
+          <path data-composition-edge-from="room" data-composition-edge-to="pages" data-composition-edge-id="result" data-composition-points="484,862;243.66666666666669,862" d="M 484 862 L 243.66666666666669 862" class="a-emphasis" stroke-width="1.8" marker-end="url(#live-relay-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="413.1166666666666" y="832" width="131.60000000000002" height="16" rx="3" class="c-mask"/>
-          <text x="478.91666666666663" y="842" class="t-backend" font-size="9" text-anchor="middle">closeOne under the lock</text>
+          <rect x="266.83333333333337" y="842" width="194" height="16" rx="3" class="c-mask"/>
+          <text x="363.83333333333337" y="852" class="t-backend" font-size="9" text-anchor="middle">state: the result, or a later close</text>
         </g>
-        <text data-detail="fine" x="425.8333333333333" y="870" class="t-dim" font-size="7">idempotent; the sweep does the same</text>
+        <text data-detail="fine" x="255.66666666666669" y="880" class="t-dim" font-size="7">Won or Unsold appears now</text>
         </g>
-        <g data-step="settled" data-edge-from="auction" data-edge-to="listing" data-edge-label="settled read, next close" data-edge-key="15" data-edge-id="settled">
-          <path data-composition-edge-from="auction" data-composition-edge-to="listing" data-composition-edge-id="settled" data-composition-points="413.8333333333333,896;688.1666666666666,896" d="M 413.8333333333333 896 L 688.1666666666666 896" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#auction-live-our-design-arrowhead)"/>
+        <g data-step="overdue" data-edge-from="pages" data-edge-to="auction" data-edge-label="a read finds the lot overdue" data-edge-key="15" data-edge-id="overdue">
+          <path data-composition-edge-from="pages" data-composition-edge-to="auction" data-composition-edge-id="overdue" data-composition-points="243.66666666666669,926;611.1666666666667,926" d="M 243.66666666666669 926 L 611.1666666666667 926" class="a-default" stroke-width="1.4" marker-end="url(#live-relay-arrowhead)"/>
         <g data-detail="context">
-          <rect x="482.6" y="876" width="136.8" height="16" rx="3" class="c-mask"/>
-          <text x="551" y="886" class="t-muted" font-size="9" text-anchor="middle">settled read, next close</text>
+          <rect x="348.61666666666673" y="906" width="157.6" height="16" rx="3" class="c-mask"/>
+          <text x="427.41666666666674" y="916" class="t-backend" font-size="9" text-anchor="middle">a read finds the lot overdue</text>
         </g>
+        <text data-detail="fine" x="255.66666666666669" y="944" class="t-dim" font-size="7">2 s or more past its deadline; alarm lost</text>
         </g>
-        <g data-step="ended" data-edge-from="listing" data-edge-to="pages" data-edge-label="ended, or extended again" data-edge-key="16" data-edge-id="ended">
-          <path data-composition-edge-from="listing" data-composition-edge-to="pages" data-composition-edge-id="ended" data-composition-points="702.1666666666666,940;976.5,940" d="M 702.1666666666666 940 L 976.5 940" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-our-design-arrowhead-emphasis)"/>
+        <g data-step="deferred" data-edge-from="auction" data-edge-to="postgres" data-edge-label="settleIfDue after answering" data-edge-key="16" data-edge-id="deferred">
+          <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="deferred" data-composition-points="625.1666666666667,970;738.3333333333334,970" d="M 625.1666666666667 970 L 738.3333333333334 970" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="770.9333333333333" y="920" width="136.8" height="16" rx="3" class="c-mask"/>
-          <text x="839.3333333333333" y="930" class="t-backend" font-size="9" text-anchor="middle">ended, or extended again</text>
+          <rect x="605.55" y="950" width="152.4" height="16" rx="3" class="c-mask"/>
+          <text x="681.75" y="960" class="t-messagebus" font-size="9" text-anchor="middle">settleIfDue after answering</text>
         </g>
-        <text data-detail="fine" x="714.1666666666666" y="958" class="t-dim" font-size="7">storage cleared when closed; else re-armed</text>
+        <text data-detail="fine" x="637.1666666666667" y="988" class="t-dim" font-size="7">skips a lot another transaction holds</text>
+        </g>
+        <g data-step="net" data-edge-from="sweep" data-edge-to="postgres" data-edge-label="settleIfDue on every due lot" data-edge-key="17" data-edge-id="net">
+          <path data-composition-edge-from="sweep" data-composition-edge-to="postgres" data-composition-edge-id="net" data-composition-points="865.5,1014;752.3333333333334,1014" d="M 865.5 1014 L 752.3333333333334 1014" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>
+        <g data-detail="context">
+          <rect x="730.1166666666668" y="994" width="157.6" height="16" rx="3" class="c-mask"/>
+          <text x="808.9166666666667" y="1004" class="t-messagebus" font-size="9" text-anchor="middle">settleIfDue on every due lot</text>
+        </g>
+        <text data-detail="fine" x="764.3333333333334" y="1032" class="t-dim" font-size="7">the net; each hit counts as a repair</text>
+        </g>
+        <g data-step="heals" data-edge-from="auction" data-edge-to="room" data-edge-label="listing changed" data-edge-key="18" data-edge-id="heals">
+          <path data-composition-edge-from="auction" data-composition-edge-to="room" data-composition-edge-id="heals" data-composition-points="611.1666666666667,1058;498,1058" d="M 611.1666666666667 1058 L 498 1058" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>
+        <g data-detail="context">
+          <rect x="509.58333333333337" y="1038" width="90" height="16" rx="3" class="c-mask"/>
+          <text x="554.5833333333334" y="1048" class="t-messagebus" font-size="9" text-anchor="middle">listing changed</text>
+        </g>
+        <text data-detail="fine" x="510" y="1076" class="t-dim" font-size="7">every commit signals, as above</text>
         </g>
         
         <g data-graph-role="segment-label" data-segment-id="0">
@@ -200,86 +217,90 @@ svg[data-diagram="auction-live-our-design"] .c-lane{fill: var(--lane-fill); stro
           <text x="62" y="157" class="t-dim" font-size="9" font-weight="600">A page joins</text>
         </g>
         <g data-graph-role="segment-label" data-segment-id="1">
-          <rect x="56" y="360" width="71.2" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="373" class="t-dim" font-size="9" font-weight="600">A bid lands</text>
+          <rect x="56" y="342" width="97.2" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="355" class="t-dim" font-size="9" font-weight="600">A writer commits</text>
         </g>
         <g data-graph-role="segment-label" data-segment-id="2">
-          <rect x="56" y="738" width="112.8" height="18" rx="3" class="c-mask"/>
-          <text x="62" y="751" class="t-dim" font-size="9" font-weight="600">The deadline passes</text>
+          <rect x="56" y="678" width="112.8" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="691" class="t-dim" font-size="9" font-weight="600">The deadline passes</text>
+        </g>
+        <g data-graph-role="segment-label" data-segment-id="3">
+          <rect x="56" y="874" width="102.4" height="18" rx="3" class="c-mask"/>
+          <text x="62" y="887" class="t-dim" font-size="9" font-weight="600">Nobody reached it</text>
         </g>
         
-        <g data-step="bidder" id="auction-live-our-design-node-bidder" data-node-id="bidder" data-node-label="Bidder" aria-label="Focus Bidder, browser, Sequence participant" data-node-kind="external" data-node-sublabel="browser" data-node-context="Sequence participant">
-          <title>Bidder · browser · Sequence participant</title>
-          <rect x="62" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="62" y="72" width="113" height="54" rx="6" class="c-external" stroke-width="1.5"/>
+        <g data-step="bidder" id="live-relay-node-bidder" data-node-id="bidder" data-node-label="Bidder" aria-label="Focus Bidder, storefront, Sequence participant" data-node-kind="external" data-node-sublabel="storefront" data-node-context="Sequence participant">
+          <title>Bidder · storefront · Sequence participant</title>
+          <rect x="62" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="62" y="72" width="95" height="54" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(68 78) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="118.5" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Bidder</text>
-          <text data-detail="context" x="118.5" y="111" class="t-muted" font-size="7" text-anchor="middle">browser</text>
+          <text data-node-label="" data-detail-anchor="" x="109.5" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Bidder</text>
+          <text data-detail="context" x="109.5" y="111" class="t-muted" font-size="7" text-anchor="middle">storefront</text>
         </g>
-        <g data-step="storefront" id="auction-live-our-design-node-storefront" data-node-id="storefront" data-node-label="Storefront" aria-label="Focus Storefront, session, Sequence participant" data-node-kind="backend" data-node-sublabel="session" data-node-context="Sequence participant">
-          <title>Storefront · session · Sequence participant</title>
-          <rect x="206.16666666666663" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="206.16666666666663" y="72" width="113" height="54" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(212.16666666666663 78) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="262.66666666666663" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Storefront</text>
-          <text data-detail="context" x="262.66666666666663" y="111" class="t-muted" font-size="7" text-anchor="middle">session</text>
-        </g>
-        <g data-step="auction" id="auction-live-our-design-node-auction" data-node-id="auction" data-node-label="Auction worker" aria-label="Focus Auction worker, decides, Sequence participant" data-node-kind="backend" data-node-sublabel="decides" data-node-context="Sequence participant">
-          <title>Auction worker · decides · Sequence participant</title>
-          <rect x="350.3333333333333" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="350.3333333333333" y="72" width="113" height="54" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(356.3333333333333 78) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="406.8333333333333" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Auction worker</text>
-          <text data-detail="context" x="406.8333333333333" y="111" class="t-muted" font-size="7" text-anchor="middle">decides</text>
-        </g>
-        <g data-step="postgres" id="auction-live-our-design-node-postgres" data-node-id="postgres" data-node-label="Postgres" aria-label="Focus Postgres, the only truth, Sequence participant" data-node-kind="database" data-node-sublabel="the only truth" data-node-context="Sequence participant">
-          <title>Postgres · the only truth · Sequence participant</title>
-          <rect x="494.5" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="494.5" y="72" width="113" height="54" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(500.5 78) scale(0.6875)">
-            <ellipse cx="8" cy="4" rx="5" ry="2"/>
-            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="551" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Postgres</text>
-          <text data-detail="context" x="551" y="111" class="t-muted" font-size="7" text-anchor="middle">the only truth</text>
-        </g>
-        <g data-step="listing" id="auction-live-our-design-node-listing" data-node-id="listing" data-node-label="ListingLive" aria-label="Focus ListingLive, relay, alarm, last read, Sequence participant" data-node-kind="cloud" data-node-sublabel="relay, alarm, last read" data-node-context="Sequence participant">
-          <title>ListingLive · relay, alarm, last read · Sequence participant</title>
-          <rect x="638.6666666666666" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="638.6666666666666" y="72" width="113" height="54" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(644.6666666666666 78) scale(0.6875)">
-            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="695.1666666666666" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">ListingLive</text>
-          <text data-detail="context" x="695.1666666666666" y="111" class="t-muted" font-size="7" text-anchor="middle">relay, alarm, last read</text>
-        </g>
-        <g data-step="catalogue" id="auction-live-our-design-node-catalogue" data-node-id="catalogue" data-node-label="CatalogueLive" aria-label="Focus CatalogueLive, card hub, Sequence participant" data-node-kind="cloud" data-node-sublabel="card hub" data-node-context="Sequence participant">
-          <title>CatalogueLive · card hub · Sequence participant</title>
-          <rect x="782.8333333333333" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="782.8333333333333" y="72" width="113" height="54" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(788.8333333333333 78) scale(0.6875)">
-            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="839.3333333333333" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">CatalogueLive</text>
-          <text data-detail="context" x="839.3333333333333" y="111" class="t-muted" font-size="7" text-anchor="middle">card hub</text>
-        </g>
-        <g data-step="pages" id="auction-live-our-design-node-pages" data-node-id="pages" data-node-label="Pages" aria-label="Focus Pages, auction and catalogue, Sequence participant" data-node-kind="external" data-node-sublabel="auction and catalogue" data-node-context="Sequence participant">
-          <title>Pages · auction and catalogue · Sequence participant</title>
-          <rect x="927" y="72" width="113" height="54" rx="6" class="c-mask"/>
-          <rect x="927" y="72" width="113" height="54" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(933 78) scale(0.6875)">
+        <g data-step="pages" id="live-relay-node-pages" data-node-id="pages" data-node-label="Open pages" aria-label="Focus Open pages, every viewer, Sequence participant" data-node-kind="external" data-node-sublabel="every viewer" data-node-context="Sequence participant">
+          <title>Open pages · every viewer · Sequence participant</title>
+          <rect x="189.16666666666669" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="189.16666666666669" y="72" width="95" height="54" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(195.16666666666669 78) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="983.5" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Pages</text>
-          <text data-detail="context" x="983.5" y="111" class="t-muted" font-size="7" text-anchor="middle">auction and catalogue</text>
+          <text data-node-label="" data-detail-anchor="" x="236.66666666666669" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Open pages</text>
+          <text data-detail="context" x="236.66666666666669" y="111" class="t-muted" font-size="7" text-anchor="middle">every viewer</text>
+        </g>
+        <g data-step="catalogue" id="live-relay-node-catalogue" data-node-id="catalogue" data-node-label="Catalogue room" aria-label="Focus Catalogue room, relays cards, Sequence participant" data-node-kind="cloud" data-node-sublabel="relays cards" data-node-context="Sequence participant">
+          <title>Catalogue room · relays cards · Sequence participant</title>
+          <rect x="316.33333333333337" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="316.33333333333337" y="72" width="95" height="54" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(322.33333333333337 78) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="363.83333333333337" y="94" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">Catalogue room</text>
+          <text data-detail="context" x="363.83333333333337" y="111" class="t-muted" font-size="7" text-anchor="middle">relays cards</text>
+        </g>
+        <g data-step="room" id="live-relay-node-room" data-node-id="room" data-node-label="Lot room" aria-label="Focus Lot room, relay and alarm, Sequence participant" data-node-kind="cloud" data-node-sublabel="relay and alarm" data-node-context="Sequence participant">
+          <title>Lot room · relay and alarm · Sequence participant</title>
+          <rect x="443.5" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="443.5" y="72" width="95" height="54" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(449.5 78) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="491" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Lot room</text>
+          <text data-detail="context" x="491" y="111" class="t-muted" font-size="7" text-anchor="middle">relay and alarm</text>
+        </g>
+        <g data-step="auction" id="live-relay-node-auction" data-node-id="auction" data-node-label="Auction worker" aria-label="Focus Auction worker, decides, Sequence participant" data-node-kind="backend" data-node-sublabel="decides" data-node-context="Sequence participant">
+          <title>Auction worker · decides · Sequence participant</title>
+          <rect x="570.6666666666667" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="570.6666666666667" y="72" width="95" height="54" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(576.6666666666667 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="618.1666666666667" y="94" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">Auction worker</text>
+          <text data-detail="context" x="618.1666666666667" y="111" class="t-muted" font-size="7" text-anchor="middle">decides</text>
+        </g>
+        <g data-step="postgres" id="live-relay-node-postgres" data-node-id="postgres" data-node-label="Postgres" aria-label="Focus Postgres, the only truth, Sequence participant" data-node-kind="database" data-node-sublabel="the only truth" data-node-context="Sequence participant">
+          <title>Postgres · the only truth · Sequence participant</title>
+          <rect x="697.8333333333334" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="697.8333333333334" y="72" width="95" height="54" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(703.8333333333334 78) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="745.3333333333334" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Postgres</text>
+          <text data-detail="context" x="745.3333333333334" y="111" class="t-muted" font-size="7" text-anchor="middle">the only truth</text>
+        </g>
+        <g data-step="sweep" id="live-relay-node-sweep" data-node-id="sweep" data-node-label="Cron sweep" aria-label="Focus Cron sweep, every 5 minutes, Sequence participant" data-node-kind="backend" data-node-sublabel="every 5 minutes" data-node-context="Sequence participant">
+          <title>Cron sweep · every 5 minutes · Sequence participant</title>
+          <rect x="825" y="72" width="95" height="54" rx="6" class="c-mask"/>
+          <rect x="825" y="72" width="95" height="54" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(831 78) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="872.5" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cron sweep</text>
+          <text data-detail="context" x="872.5" y="111" class="t-muted" font-size="7" text-anchor="middle">every 5 minutes</text>
         </g>
         
       </svg>
