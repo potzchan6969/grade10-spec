@@ -1343,7 +1343,7 @@ Stage (c).
       is unpaid, its test red first (Q131, Q138,
       `grade10-admin-grading-counter-SC-110`,
       `grade10-site-grading-submission-lifecycle-SC-68`)
-- [ ] 19.11 Write `0006_payout_received.sql` as the Migration Plan names it; then
+- [x] 19.11 Write `0006_payout_received.sql` as the Migration Plan names it; then
       add `markPayoutReceived` under `grading:approve`: a till payout stamped
       received at recording, a transfer only by this act, moving no money and
       refusing a payout already received by name; the console's Money tab
