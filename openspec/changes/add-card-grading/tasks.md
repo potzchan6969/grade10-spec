@@ -1064,7 +1064,7 @@ Stage (b).
       shop's clock, its test red first (Q129,
       `grade10-admin-grading-batches-SC-56`)
 
-## 17. Receiving, the scans and finishing (grade10)
+## 17. Receiving, the scans and finishing (grade10) (owner: @ecchochan)
 
 Stage (c).
 
