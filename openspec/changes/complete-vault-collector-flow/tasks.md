@@ -323,7 +323,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       change only while `OLD.outcome IS NULL`; cover a take-over racing a
       self-cancel (`shared-auth-users-SC-43`, `shared-auth-users-SC-36`)
 
-## 8. The one download of every signed document (grade10)
+## 8. The one download of every signed document (grade10) (owner: @ecchochan)
 
 - [x] 8.1 Cover the route: a stranger refused by `caseOwner`, the byte ceiling
       refused before the first read, the documents of two of the caller's own
