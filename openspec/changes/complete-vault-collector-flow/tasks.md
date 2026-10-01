@@ -122,7 +122,7 @@ group reads this one's exports.
       `pnpm run test:backend`, `pnpm run check:libs`,
       `pnpm run check:submodules`
 
-## 4. The case reference (grade10)
+## 4. The case reference (grade10) (owner: @ecchochan)
 
 - [x] 4.1 Cover the reference: an insert per draw and the throw by name after
       eight, the alphabet, the unique index, the backfill over seeded rows,
