@@ -1,7 +1,7 @@
 schema: grade10-planning
 created: 2026-09-30
 hands:
-  pm: "@brianchacha6969"
+  pm: "@ecchochan"
 depends_on:
   - vault-walk-ins-and-owners
   - fix-roles-spec-divergence
