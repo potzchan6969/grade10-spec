@@ -824,7 +824,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 18.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and its a11y run, `pnpm run check:admin-bundle`
 
-## 19. The Storybook (grade10)
+## 19. The Storybook (grade10) (owner: @ecchochan)
 
 - [x] 19.1 Stand `packages/storybook` (`@grade10/storybook`) to the shape
       tech-design's "One Storybook, in its own plain-Vite package" holds,
