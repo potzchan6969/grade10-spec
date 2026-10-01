@@ -1681,7 +1681,7 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       `grade10-site-vault-retention-and-erasure-SC-42`,
       `grade10-site-vault-retention-and-erasure-SC-43`)
 
-## 24. The console's reads, the settings and the grants (grade10)
+## 24. The console's reads, the settings and the grants (grade10) (owner: @ecchochan)
 
 Stage (b).
 
