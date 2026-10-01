@@ -71,7 +71,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(collector) is signed in on <grade10 vault url>.
-* Staff opened `<draft_1>` for the collector at the counter with `<item_1>`, a slab the register knows: trading card, PSA, grade 10, `AB12345`.
+* Staff opened `<draft_1>` for the collector at the counter with `<item_1>`, a slab the register holds under this collector: trading card, PSA, grade 10, `AB12345`.
 
 **Steps:**
 
@@ -106,7 +106,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(collector) is signed in.
-* Staff opened `<draft_1>` for the collector at the counter with `<item_1>`, a slab the register knows: trading card titled `<title_1>`.
+* Staff opened `<draft_1>` for the collector at the counter with `<item_1>`, a slab the register holds under this collector: trading card titled `<title_1>`.
 
 **Steps:**
 
@@ -128,6 +128,7 @@ Runs once per row of **Test data**.
 - **Added by QA2** - `grade10-site-vault-case-intake-US1-TC24-1` for `grade10-site-vault-case-intake-SC-34`, the worker's refusal, which the blind case reached only through the interface
 - **Raised, answered by the round** - the customer's description edit on a linked draft changes the request alone (Q47, `grade10-site-vault-case-intake-SC-33`)
 - **Raised, escalated** - none
+- **Round 4** - `grade10-site-vault-case-intake-SC-33` and `grade10-site-vault-case-intake-SC-34` hold only for a slab the register holds under the customer at the counter, the one the walk-in form fills; `grade10-site-vault-case-intake-US1-TC23-1` and `grade10-site-vault-case-intake-US1-TC24-1` now say so
 - **Rejected** - none
 - **Contradicted** - none
 - **Uncovered anchors** - none: US-01 has a case for each of the three scenarios; the modified requirement's other scenarios keep their durable cases

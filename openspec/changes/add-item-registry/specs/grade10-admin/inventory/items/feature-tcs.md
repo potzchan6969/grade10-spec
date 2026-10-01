@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite:** grade10-admin-inventory-items-SC-05 - grade10's inventory service and repository tests, which find no product or stock row after a register act (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-06 - the ZZZ panel's surface test in grade10's `apps/admin` (tasks 11.1, 11.2); grade10-admin-inventory-items-SC-15 - `ItemFactsDialog`'s component tests and `FormDialog`'s stories (task 11.1); grade10-admin-inventory-items-SC-20 - the repository test applying each word twice (task 4.1); grade10-admin-inventory-items-SC-21 - `tell`'s service test; no console path opens two marks in this release (task 4.1); grade10-admin-inventory-items-SC-22 - `tell`'s service test for the race, and `ItemPanel`'s component test for the slab line (tasks 4.1, 11.1); grade10-admin-inventory-items-SC-37 - the transfer service test, which sees no message sent (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-39 - the transfer service test of a second send (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-56 - the list's keyset test over PGlite (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-66 - the retention review's gauge test (tasks 6.1, 6.3)
+**Out of suite:** grade10-admin-inventory-items-SC-05 - grade10's inventory service and repository tests, which find no product or stock row after a register act (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-06 - the ZZZ panel's surface test in grade10's `apps/admin` (tasks 11.1, 11.2); grade10-admin-inventory-items-SC-15 - `ItemFactsDialog`'s component tests and `FormDialog`'s stories (task 11.1); grade10-admin-inventory-items-SC-20 - the repository test applying each case state twice and out of order (task 4.1); grade10-admin-inventory-items-SC-21 - `tell`'s service test; no console path opens two marks in this release (task 4.1); grade10-admin-inventory-items-SC-22 - `tell`'s service test for the race, and `ItemPanel`'s component test for the slab line (tasks 4.1, 11.1); grade10-admin-inventory-items-SC-37 - the transfer service test, which sees no message sent (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-39 - the transfer service test of a second send (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-56 - the list's keyset test over PGlite (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-66 - the retention review's gauge test (tasks 6.1, 6.3); grade10-admin-inventory-items-SC-72 - the `items.*` routers' audit declaration tests, which find ids, owner kinds and the retire code and no email, term or reason text in each entry (tasks 5.1, 5.8)
 
 ## Background
 
@@ -549,6 +549,36 @@ Runs once per row of **Test data**.
 * Step 9 reads not marked and owned by the lender's registered name.
 * Its newest move reads from `<collector A>` to the lender, made by the vault on `<case_14>`.
 * Step 10 lists that one item.
+
+### grade10-admin-inventory-items-US1-TC15-1: A search from the marked tab reads every item
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-items-US-01
+
+**Pre-conditions:**
+
+* admin(staff) is on <grade10 admin items url>, on the marked tab.
+* `<item_25>` is titled "Rolex Submariner" and no place marks it; `<item_26>` is titled "Submariner box" and is retired as lost.
+
+**Steps:**
+
+1. Type `submariner` into the search field.
+2. Read the list.
+
+**Expected Results:**
+
+* `<item_25>` and `<item_26>` are both listed.
+* `<item_26>` is badged retired; `<item_25>` is not.
 
 ---
 
@@ -1121,12 +1151,14 @@ Runs once per row of **Test data**.
 1. Read the owner and the title.
 2. Click Transfer.
 3. Choose the custodian and type a reason.
-4. Click Transfer in the dialog.
+4. Type the title `Charizard 1999 Base Set`.
+5. Click Transfer in the dialog.
 
 **Expected Results:**
 
 * Step 1 reads the owner as erased and the title as erased; Transfer is offered.
-* The page reads the custodian as owner.
+* Step 2 asks for a title; after step 3 Transfer is still disabled, and after step 4 it is enabled.
+* The page reads the custodian as owner and `Charizard 1999 Base Set` as the title.
 * The top move reads from erased to the custodian.
 
 ### grade10-admin-inventory-items-US3-TC7-1: A move never names the lender
@@ -1219,6 +1251,37 @@ Runs once per row of **Test data**.
 * Step 1 offers no Transfer and no proof to open; the moves still read.
 * Step 2 is refused and returns no file.
 * Step 3 is refused and the owner is unchanged.
+
+### grade10-admin-inventory-items-US3-TC10-1: Transfer stays disabled while the new owner is the present one
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-items-US-03
+
+**Pre-conditions:**
+
+* admin(staff) is on <grade10 admin item page url> for `<item_27>`.
+* `<item_27>` is owned by `<collector B>` and no place marks it.
+
+**Steps:**
+
+1. Click Transfer.
+2. Type `<collector B>`'s email as the new owner and type a reason.
+3. Replace the owner with `<collector A>`'s email.
+
+**Expected Results:**
+
+* After step 2 Transfer is disabled.
+* After step 3 Transfer is enabled.
 
 ---
 
@@ -1406,6 +1469,7 @@ Runs once per row of **Test data**.
 
 * `<item_17>` reads live and offers Edit, Transfer and Retire.
 * It leaves the retired tab of Items.
+* The audit log's restore entry names `<item_17>` and does not carry the reason's text.
 
 ### grade10-admin-inventory-items-US5-TC4-1: A restore is refused while a live item holds its cert
 
@@ -1591,7 +1655,7 @@ Runs once per row of **Test data**.
 
 * `<item_19>` reads not marked; the place row still reads closed by hand.
 
-### grade10-admin-inventory-items-US6-TC4-1: A forfeit after a hand close still moves the item to the lender
+### grade10-admin-inventory-items-US6-TC4-1: A hand close on a forfeited case moves the item to the lender once
 
 **Classification:**
 
@@ -1608,19 +1672,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<item_19>` is owned by `<collector A>`; its mark on `<case_19>` was closed by hand.
+* admin(staff) holds `inventory:write`.
+* `<item_19>` is owned by `<collector A>`, and its mark on `<case_19>` is open.
 * `<case_19>` reads forfeited, and the vault's word ending the mark, naming the lender, is held back and not yet delivered.
 
 **Steps:**
 
-1. Deliver the vault's held-back word for `<case_19>` to the register.
+1. Close the mark on `<case_19>` with a reason.
 2. Navigate to <grade10 admin item page url> for `<item_19>`.
+3. Deliver the vault's held-back word for `<case_19>` to the register.
+4. Reload the page.
 
 **Expected Results:**
 
-* The place row still reads closed by hand.
+* Step 2's place row reads closed by hand, naming who closed it.
 * `<item_19>` reads owned by the lender's registered name.
 * Its newest move reads from `<collector A>` to the lender, made by the vault on `<case_19>`.
+* Step 4 reads the same: the mark closed by hand and one move to the lender.
 
 ---
 
@@ -1880,6 +1948,7 @@ Runs once per row of **Test data**.
 * `<collector F>`'s side of the move reads as erased, and the reason is gone.
 * The other party's side still reads.
 * The proof cell reads as the row says.
+* Step 1's inventory line reads nothing remaining, whether or not the proof is kept.
 
 ### grade10-admin-inventory-items-US8-TC4-1: Running the erasure a second time changes nothing
 
@@ -1919,7 +1988,8 @@ Runs once per row of **Test data**.
 - **Contradicted, spec corrected** - none
 - **Folded into the spec** - the cert typed in lower case or with spaces, which `grade10-admin-inventory-items-US1-TC3-1` gains as a row and `grade10-admin-inventory-items-SC-53` as a search, as Q48; Edit offered on a marked item, which `grade10-admin-inventory-items-SC-40` now states, as Q22; the register's ten categories on the register dialog, which `grade10-admin-inventory-items-SC-03` now states, as Q4; the owners settling once the mark closes, Q51, as `grade10-admin-inventory-items-SC-70`
 - **Added by QA2** - `grade10-admin-inventory-items-US1-TC12-1` for `grade10-admin-inventory-items-SC-26`, the place row with the vault down; `grade10-admin-inventory-items-US1-TC13-1` for `grade10-admin-inventory-items-SC-70`, also reaching `grade10-admin-inventory-items-SC-23`'s neutral close; `grade10-admin-inventory-items-US1-TC14-1`, the proposal's whole path from the register's side - registered at the valuation, named on the custody agreement, marked at vaulting, moved to the lender at the forfeit - reaching `grade10-admin-inventory-items-SC-24` and `grade10-admin-inventory-items-SC-42`; `grade10-admin-inventory-items-US6-TC4-1` for `grade10-admin-inventory-items-SC-43`; `grade10-admin-inventory-items-US6-TC2-1` gains a row for `grade10-admin-inventory-items-SC-29`'s close sent while the vault cannot be asked; `grade10-admin-inventory-items-US1-TC8-1` gains the open case under valuation, Q52
-- **Raised, answered by the round** - a cert typed in lower case (Q48); read-only states no role reaches (Q45: stated per grant, so `grade10-admin-inventory-items-US2-TC9-1`, `grade10-admin-inventory-items-US3-TC9-1` run with a test operator given that grant set); a forfeit's move on the item and the audit log (Q46); the 2,555-day limit (Q34); a transfer to the present owner (Q49); a restore and a hand close on the audit log (Q50); editing while marked (Q22); which owner stands after release (Q51); and the scenario pass's own: the fill taking open cases past the valuation (Q52), the late forfeit word after a hand close (Q53), grade and cert with every grader (Q54), proof retention (Q34), the lender on Register (Q14)
-- **Raised, escalated** - Q55, whether the All tab lists retired items; `grade10-admin-inventory-items-US1-TC2-1` and `grade10-admin-inventory-items-SC-51` assert neither way until it is answered
+- **Raised, answered by the round** - a cert typed in lower case (Q48); read-only states no role reaches (Q45: stated per grant, so `grade10-admin-inventory-items-US2-TC9-1`, `grade10-admin-inventory-items-US3-TC9-1` run with a test operator given that grant set); a forfeit's move on the item and the audit log (Q46); the 2,555-day limit (Q34); a transfer to the present owner (Q49); a restore and a hand close on the audit log (Q50); editing while marked (Q22); which owner stands after release (Q51); and the scenario pass's own: grade and cert with every grader (Q54), proof retention (Q34), the lender on Register (Q14)
+- **Raised, escalated** - Q55, whether the All tab lists retired items; `grade10-admin-inventory-items-US1-TC2-1` and `grade10-admin-inventory-items-SC-51` assert neither way until it is answered. Q52, the fill taking open cases past the valuation, and Q53, the late forfeit word after a hand close, reopened by round 4: the requirements state each recommendation, and `grade10-admin-inventory-items-US1-TC8-1` and `grade10-admin-inventory-items-US6-TC4-1` assert it until the owner answers
+- **Round 4** - `grade10-admin-inventory-items-SC-71`, a search over every item whatever the tab, gets `grade10-admin-inventory-items-US1-TC15-1`; `grade10-admin-inventory-items-SC-72`, an act's audit entry by its ids, is out of suite; `grade10-admin-inventory-items-SC-73`, a title on a move from an erased owner, is reached by `grade10-admin-inventory-items-US3-TC6-1`; `grade10-admin-inventory-items-SC-74`, a kept proof not left remaining, by `grade10-admin-inventory-items-US8-TC3-1`; `grade10-admin-inventory-items-SC-75`, Transfer disabled for the present owner, gets `grade10-admin-inventory-items-US3-TC10-1`, its retry half held by `TransferItemDialog`'s component test (task 11.1); `grade10-admin-inventory-items-SC-43` now reads Q53's recommendation and `grade10-admin-inventory-items-US6-TC4-1` walks it; `grade10-admin-inventory-items-SC-48`'s reason stays on the item and `grade10-admin-inventory-items-US5-TC3-1` reads the audit entry without it
 - **Rejected** - none
 - **Uncovered anchors** - none: each of US-01 to US-08 has cases, every Feature set group is reached by a case or by **Out of suite**, and no domain suite sits above this capability

@@ -120,7 +120,9 @@ See [Non-Goals](decisions.md#non-goals).
   owner names and the collector page this change adds to, so the vault deltas
   wait for it; `fix-roles-spec-divergence` writes the vocabulary table the
   new grant joins; `add-card-grading`'s own spec line on where a valuation
-  reads the grade is corrected by the change that next moves grading
+  reads the grade is corrected by the change that next moves grading;
+  `complete-vault-collector-flow`, implemented, archives before this change,
+  since both fold case-intake's "A request states one item"
 
 No domain impact: `shared/auth/domain-tcs.md` traces `shared-auth-roles-US-02`,
 and neither of its cases walks an inventory grant; the new grant is walked
@@ -137,10 +139,12 @@ is walked whole from the register's side in the items suite.
   only through a forfeit (`decisions.md` Q14); erasure keeps an erased
   owner's item category, grader, grade and cert (`decisions.md` Q38); both
   taken as recommended at landing, and Legal confirms the rows
-- **Product** - whether the All tab lists retired items, what happens when the
+- **Product** - whether the fill also registers open cases past Start
+  valuation, whether a hand close on a forfeited case moves the item to the
+  lender, whether the All tab lists retired items, what happens when the
   vault marks an item retired after its valuation, and whether the loan
   agreement and the release receipt print the register's facts
-  (`decisions.md` Q55 to Q57), each with a recommendation
+  (`decisions.md` Q52, Q53, Q55 to Q57), each with a recommendation
 - **Design** - Items is a detail page of Inventory, reached from its header,
   and only one item's page shows when it was last edited (`decisions.md` Q41
   and Q42); the boards, the search hint and when the walk-in lookup runs are

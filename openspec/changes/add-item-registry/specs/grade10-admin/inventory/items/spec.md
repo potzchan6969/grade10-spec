@@ -39,8 +39,10 @@ release the vault is the only place (`grade10-site/vault/case-lifecycle`).
   - Transfer: to an account by its exact email or to the custodian, with a
     reason and an optional proof, traced on the item and the audit log
   - Refused while marked: naming the place that marks it
-  - Forfeit to the lender: the vault's closing word moves it, never a staff
-    move
+  - Same owner: Transfer waits while the new owner is the present one
+  - An erased owner: moved the same way, with a new title
+  - Forfeit to the lender: the vault's closing word or a hand close on a
+    forfeited case moves it, never a staff move
   - Proof: opened only by those who may move an item, each opening audited
 - Retiring an item
   - Four reasons: duplicate, lost, destroyed, left the platform; refused
@@ -50,7 +52,7 @@ release the vault is the only place (`grade10-site/vault/case-lifecycle`).
 - Finding an item
   - Three lists: marked by default, every item, retired
   - One search: the owner's exact email, an item id, a grader and cert, else
-    title or description; never a name
+    title or description, over every item whatever the tab; never a name
   - A collector's items: their section on the collector page, every live item
     they own
 - Erasure
@@ -58,11 +60,14 @@ release the vault is the only place (`grade10-site/vault/case-lifecycle`).
   - The person goes: the owner, the title, the description and their side of
     each move
   - The object stays: category, grader, grade and cert
-  - Proof kept: while the other party remains, for at most 2,555 days from the
-    move
+  - Proof kept: while the other party remains, flagged for review at the
+    brand's agreements window and never deleted by the clock; not counted as
+    remaining on the checklist
 - Who may act
   - Four grants: inventory read, write and transfer, and the identity read for
     names; the treasurer holds none
+  - Audit: every act on the log by its ids, never an email, a search term or
+    a reason's text
 
 ## ADDED Requirements
 
@@ -297,15 +302,16 @@ no staff register or transfer SHALL name the lender.
 
 A place keeping an item tells the register what it has already done, and the
 register SHALL apply it without refusing it. In this release the vault is the
-only place, and it says three things:
+only place, and it tells the register where each case stands:
 
-| The vault says | The register |
+| The vault's case | The register |
 | --- | --- |
-| The item is registered | records the item under the case's collector with the facts the vault named, unless the item already exists |
-| The item is marked | opens the vault's mark for that case, recording the owner the vault named |
-| The mark ends | closes the vault's mark for that case; where the vault names the lender, moves the item to the lender |
+| Valued, not yet in custody | records the item under the case's collector with the facts the vault named, unless the item already exists |
+| In custody | also opens the vault's mark for that case, recording the owner the vault named |
+| Custody ended | also closes the vault's mark for that case; where the case was forfeited, moves the item to the lender |
 
-- **Once** - a word told again SHALL change nothing.
+- **Once** - a word told again, or one the register is already past, SHALL
+  change nothing.
 - **Marked or not** - an item SHALL read as marked while any place's mark on
   it is open, read from the marks and never stored.
 - **Several marks** - a mark SHALL be opened beside any other open mark on
@@ -408,6 +414,8 @@ held: released, unwound, forfeited or erased.
   item SHALL read as not marked unless another place still marks it.
 - **Final** - a later word from the vault SHALL NOT reopen a mark closed by
   hand.
+- **A forfeited case** - a hand close on a case the vault reads as forfeited
+  SHALL move the item to the lender, as the next requirement reads.
 
 #### Scenario: grade10-admin-inventory-items-SC-28 - A mark the vault let go of is closed by hand
 **Serves:** grade10-admin-inventory-items-US-06 - staff free an item whose release never reached the register
@@ -476,9 +484,12 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
   changed owner SHALL say so. Every move SHALL be on the audit log.
 - **No message** - a move SHALL send nothing to either owner.
 - **An erased owner** - an item whose owner was erased SHALL move the same
-  way.
+  way, with a title given in the move, since the erasure cleared it.
 - **Refused** - a move SHALL be refused by name on a retired item and to the
   owner the item already has.
+- **Same owner** - Transfer SHALL stay disabled while the new owner named is
+  the present one, and a same-owner refusal answering a resent transfer SHALL
+  read as moved.
 
 #### Scenario: grade10-admin-inventory-items-SC-33 - An item moves to an account with its proof
 **Serves:** grade10-admin-inventory-items-US-03 - staff record a sale between two collectors at the counter
@@ -530,6 +541,24 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **WHEN** the same move to Ben Lee is sent again
 - **THEN** it is refused by name and the item has one move to Ben Lee
 
+#### Scenario: grade10-admin-inventory-items-SC-73 - A move from an erased owner names a new title
+**Serves:** grade10-admin-inventory-items-US-03 - staff move an item whose owner was erased and whose title went with them
+
+- **GIVEN** an item no place marks whose owner was erased
+- **WHEN** staff open Transfer
+- **THEN** it asks for a title, and Transfer stays disabled until a title, an owner and a reason are given
+- **AND** a transfer sent without a title is refused by name, and one with a title moves the item under that title
+
+#### Scenario: grade10-admin-inventory-items-SC-75 - Transfer waits while the new owner is the present one
+**Serves:** grade10-admin-inventory-items-US-03 - staff cannot move an item to the owner it already has, and a retry reads as done
+
+- **GIVEN** an item owned by Ben Lee
+- **WHEN** staff name `ben@example.com` as the new owner
+- **THEN** Transfer stays disabled
+- **GIVEN** a transfer to Ana Wong that landed while its answer was lost
+- **WHEN** staff send it again and it is refused as the present owner
+- **THEN** the dialog reads as moved, and the item shows Ana Wong and one move to her
+
 ### Requirement: A move is refused while a place marks the item
 
 While any place marks an item, a transfer SHALL be refused by name, naming the
@@ -554,8 +583,10 @@ place and its case, and the item's page SHALL offer no Transfer.
 
 When the vault's word ending its mark names the lender, the register SHALL move
 the item to the lender in the same act, recorded as a move made by the vault on
-that case. It SHALL do so whether or not staff had closed the mark by hand. No
-other act SHALL move an item to the lender.
+that case. Close mark on a case the vault reads as forfeited SHALL do the same
+in its own act, recorded as the vault's move on that case, and a later word
+from the vault SHALL move nothing once that case has a move. No other act
+SHALL move an item to the lender.
 
 #### Scenario: grade10-admin-inventory-items-SC-42 - The forfeit's word moves the item to the lender
 **Serves:** Moving an item - the lender comes to own a forfeited item without anybody moving it
@@ -565,12 +596,14 @@ other act SHALL move an item to the lender.
 - **THEN** the mark is closed and the item is owned by the lender
 - **AND** its newest move reads from the collector to the lender, made by the vault on that case
 
-#### Scenario: grade10-admin-inventory-items-SC-43 - A forfeit after a hand close still reaches the lender
-**Serves:** Moving an item - the vault's late word after staff freed a stuck mark
+#### Scenario: grade10-admin-inventory-items-SC-43 - A hand close on a forfeited case moves the item to the lender once
+**Serves:** Moving an item - staff free a stuck mark on a case the vault forfeited
 
-- **GIVEN** an item whose vault mark staff closed by hand
+- **GIVEN** an item owned by the collector whose vault case is forfeited and whose mark is still open
+- **WHEN** staff close the mark by hand
+- **THEN** the place row names who closed it, and the item is owned by the lender, its newest move made by the vault on that case
 - **WHEN** the vault's word ending the mark arrives, naming the lender
-- **THEN** the mark stays closed by hand and the item is owned by the lender
+- **THEN** the mark stays closed by hand and no second move is added
 
 ### Requirement: A proof opens only for those who may move an item
 
@@ -604,7 +637,7 @@ marks the item, naming the place.
   when; it SHALL keep its history, leave the default list and list under
   Retired with its reason; no Edit, Transfer or Retire SHALL be offered.
 - **Restore** - a holder of `inventory:write` SHALL restore a retired item
-  with a reason, which the audit log keeps; a restore SHALL be refused by name
+  with a reason, which the item keeps; a restore SHALL be refused by name
   while a live item holds its grader and cert, naming that item.
 
 #### Scenario: grade10-admin-inventory-items-SC-46 - A duplicate record is retired
@@ -629,7 +662,8 @@ marks the item, naming the place.
 
 - **GIVEN** an item retired as lost
 - **WHEN** staff restore it with a reason
-- **THEN** it reads as live with its facts and history, and the audit log keeps the reason
+- **THEN** it reads as live with its facts and history, keeping the reason
+- **AND** the audit log records the restore, naming the item and not the reason's text
 
 #### Scenario: grade10-admin-inventory-items-SC-49 - A restore onto a live slab is refused
 **Serves:** grade10-admin-inventory-items-US-05 - staff restore a record whose slab was registered again
@@ -650,7 +684,8 @@ back to it from one item's page.
 - **One search** - one field SHALL read, in order: the owner's exact email,
   an item id, a listed grader followed by a cert, and otherwise a match on
   title or description. A grader and cert SHALL be read in any case and
-  trimmed. No search SHALL read an owner's name.
+  trimmed. A search SHALL read every item whatever tab is open, a retired
+  match badged retired. No search SHALL read an owner's name.
 - **Empty** - a list holding nothing SHALL say so, naming the list; a search
   matching nothing SHALL say so, naming the search, with a way to clear it.
 - **Not found** - an item id nobody holds SHALL read as not found.
@@ -694,6 +729,13 @@ back to it from one item's page.
 - **GIVEN** an item titled "Rolex Submariner" owned by Ana Wong, and an item whose description says "1999 base set"
 - **WHEN** staff search `submariner`, then `base set`, then `Ana Wong`
 - **THEN** the first finds the watch, the second finds the card, and the third finds neither by its owner
+
+#### Scenario: grade10-admin-inventory-items-SC-71 - A search reads every item whatever the tab
+**Serves:** grade10-admin-inventory-items-US-01 - staff search from the marked tab for an item no place marks
+
+- **GIVEN** an item no place marks titled "Rolex Submariner", and a retired item titled "Submariner box"
+- **WHEN** staff on the marked tab search `submariner`
+- **THEN** both are listed, and the retired one is badged retired
 
 #### Scenario: grade10-admin-inventory-items-SC-55 - An empty list and an empty search say which
 **Serves:** grade10-admin-inventory-items-US-01 - staff tell no items from a search that missed
@@ -778,9 +820,11 @@ Inventory SHALL answer the account erasure checklist.
 - **The object stays** - category, grader, grade and cert SHALL stay.
 - **Proof** - a move's proof SHALL stay while the other party is the
   custodian, the lender or an account not erased, and SHALL go otherwise,
-  the move reading "proof removed"; a proof kept past **2,555** days from its
-  move SHALL be flagged for review, as the agreements window is, and SHALL NOT
-  be deleted by the clock.
+  the move reading "proof removed"; a kept proof SHALL be flagged for review
+  at the brand's agreements window, **2,555** days for Grade10, and SHALL
+  never be deleted by the clock.
+- **Remaining** - a kept proof SHALL NOT be counted as remaining on the
+  erasure checklist.
 - **Twice** - an erasure run again SHALL change nothing.
 
 #### Scenario: grade10-admin-inventory-items-SC-63 - An erasure waits while an item is marked
@@ -805,6 +849,13 @@ Inventory SHALL answer the account erasure checklist.
 - **WHEN** an admin erases them
 - **THEN** both moves lose the person's side and the reason
 - **AND** the first keeps its proof and the second reads "proof removed"
+
+#### Scenario: grade10-admin-inventory-items-SC-74 - A kept proof is not left remaining
+**Serves:** grade10-admin-inventory-items-US-08 - the admin reads an erasure as done while the custodian keeps its proof
+
+- **GIVEN** a person who moved an item to the custodian with a proof
+- **WHEN** an admin erases them
+- **THEN** inventory's checklist line reads nothing remaining, and the proof is kept
 
 #### Scenario: grade10-admin-inventory-items-SC-66 - An old proof is flagged, never deleted by the clock
 **Serves:** Erasure - the review of what the register keeps after an erasure
@@ -838,3 +889,20 @@ the worker requires SHALL be one declaration.
 - **WHEN** staff and a treasurer each open an item and try to edit, move and retire it
 - **THEN** staff are allowed all three
 - **AND** the treasurer is refused the item itself, naming `inventory:read`
+
+### Requirement: Every act on the register is on the audit log by its ids
+
+Every act on the register - register, edit, transfer, retire, restore, close
+a mark, open a proof, and finding an owner by email - SHALL be on the audit
+log with who, when and the item, recording ids, owner kinds, the account an
+email found or that none was found, and a retire's reason as its code. A
+typed reason SHALL be named by the row that holds it. An entry SHALL NOT carry
+an email, a search term or a reason's text.
+
+#### Scenario: grade10-admin-inventory-items-SC-72 - An act's audit entry names ids, never an email, a term or a reason
+**Serves:** Who may act - the audit log answers who did what without copying what the act named
+
+- **GIVEN** staff who search `ana@example.com`, register an item under it, move the item to `ben@example.com` with the reason "Sold to Ben at the counter", and retire another as lost
+- **WHEN** an admin reads those entries on the audit log
+- **THEN** each names who, when and the item; the move names Ana Wong's and Ben Lee's account ids and its move row; the retire reads `lost`
+- **AND** no entry carries either email, the search term or the reason's text

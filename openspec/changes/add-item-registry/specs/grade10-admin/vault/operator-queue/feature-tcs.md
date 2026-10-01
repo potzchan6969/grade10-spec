@@ -136,7 +136,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3 shows `<item_1>`'s category, title, grader, grade and cert, read-only.
+* Step 3 shows `<item_1>`'s category, title, grader, grade and cert, read-only, and fills the form's category and title from them.
 * The draft opens under `<walk-in account>`.
 * The Case tab reads `<item_1>`'s facts and links `<item_1>`.
 * The register holds no second item with PSA and `AB12345`.
@@ -165,19 +165,21 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the walk-in dialog from the queue's header.
-2. Type `<walk-in email>`, the item's facts, PSA and `AB99999`.
-3. Open the draft.
+2. Type `<walk-in email>` and the item's facts, then PSA and `AB99999` with no grade.
+3. Type grade 9 and open the draft.
 4. Have the customer at `<walk-in email>` send the draft from their phone.
 5. Start the valuation on the case.
 6. Search Items for PSA and `AB99999`.
 
 **Expected Results:**
 
-* Step 2 fills nothing in from the register.
+* Step 2 fills nothing in from the register, and the draft cannot be opened until a grade is typed.
 * Before step 5 the register holds no item with PSA and `AB99999`.
-* Step 6 finds one item under the account at `<walk-in email>`, carrying PSA and `AB99999`.
+* Step 6 finds one item under the account at `<walk-in email>`, carrying PSA, 9 and `AB99999`.
 
 ### grade10-admin-vault-operator-queue-US20-TC3-1: A known slab owned by someone else is found naming its owner
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -194,9 +196,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(staff) is on <grade10 admin vault queue url>.
+* admin(the grants in **Test data**) is on <grade10 admin vault queue url>.
 * `<item_2>` is live, owned by `<collector B>`, no place marks it, carrying PSA and `AB22222`.
 * `<walk-in email>` belongs to no account anybody has signed in to.
+
+**Test data:**
+
+| Grants | The owner reads |
+| --- | --- |
+| staff, holding `kyc:read` | `<collector B>` by name, the read on the audit log |
+| `vault:operate` and `inventory:read`, not `kyc:read` | `<collector B>`'s short id |
 
 **Steps:**
 
@@ -207,7 +216,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3 shows `<item_2>`'s facts and names `<collector B>` as its owner.
+* Step 3 shows `<item_2>`'s facts and its owner as **Test data** reads, and fills nothing in the form.
 * The draft opens under the account at `<walk-in email>` and takes `<item_2>`.
 * `<item_2>` is still owned by `<collector B>`.
 
@@ -334,12 +343,12 @@ Runs once per row of **Test data**.
 
 * admin(staff) is on <grade10 admin vault case page url> for `<case_10>`.
 * `<case_10>` is a request `<collector A>` sent from their phone, submitted and naming no slab.
-* `<item_5>` is live, owned by `<collector A>`, no place marks it, carrying PSA and `AB55555`.
+* `<item_5>` is live, owned by `<collector A>`, no place marks it, carrying PSA, grade 10 and `AB55555`.
 
 **Steps:**
 
 1. Click Start valuation on the Case tab.
-2. Choose PSA and type ` ab55555 `.
+2. Choose PSA, type grade 10 and ` ab55555 `.
 3. Start the valuation.
 4. Read the item's facts on the Case tab.
 5. Search Items for PSA and `AB55555`.
@@ -348,7 +357,7 @@ Runs once per row of **Test data**.
 
 * Step 2 shows `<item_5>`'s facts, read-only.
 * `<case_10>` reads under valuation.
-* Step 4 reads `<item_5>`'s facts and links `<item_5>`.
+* Step 4 reads `<item_5>`'s facts and links `<item_5>`, and the collector's request still reads as they sent it.
 * Step 5 lists `<item_5>` alone.
 
 ---
@@ -539,6 +548,7 @@ until it does,
 - **Added by QA2** - `grade10-admin-vault-operator-queue-US20-TC7-1` for `grade10-admin-vault-operator-queue-SC-65`, the slab named at Start valuation, which no blind case reached; `grade10-admin-vault-operator-queue-US21-TC5-1` for `grade10-admin-vault-operator-queue-SC-66`, the treasurer's Case tab, landed as Q44
 - **Raised, answered by the round** - the treasurer's Case tab (Q44, `grade10-admin-vault-operator-queue-SC-66`); a retired cert at the walk-in (Q20: read as retired, a new item at the valuation, `grade10-admin-vault-operator-queue-SC-61`); where staff name the slab at Start valuation (Q21: the act's own dialog, now a design state anchored on `grade10-admin-vault-operator-queue-SC-65`); a cert in lower case or with spaces (Q48, `grade10-admin-vault-operator-queue-SC-59`)
 - **Raised, escalated** - none
+- **Round 4** - a slab is named by grader, grade and cert together: `grade10-admin-vault-operator-queue-SC-60` and `grade10-admin-vault-operator-queue-SC-65` now carry the grade, walked by `grade10-admin-vault-operator-queue-US20-TC2-1` and `grade10-admin-vault-operator-queue-US20-TC7-1`; the form fills the category and title only for the customer's own slab, `grade10-admin-vault-operator-queue-SC-59` in `grade10-admin-vault-operator-queue-US20-TC1-1`; another owner is named only behind `kyc:read`, else by short id, and fills nothing, `grade10-admin-vault-operator-queue-SC-62` in `grade10-admin-vault-operator-queue-US20-TC3-1`'s two rows
 - **Rejected** - none
 - **Contradicted** - none: every QA1 outcome agrees with the delta and `tech-design.md`'s lookup table
 - **Uncovered anchors** - none: US-20 and US-21 have cases for every scenario, and the context journeys US-03 and US-04 each gain one

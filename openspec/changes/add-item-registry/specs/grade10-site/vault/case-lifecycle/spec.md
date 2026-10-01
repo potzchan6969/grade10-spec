@@ -6,8 +6,9 @@
   - The register told: starting the valuation registers the item, vaulting
     marks it, and release, unwind and forfeit close the mark, a forfeit
     naming the lender
-  - The owner on the register: preparing documents is refused while the
-    register names an owner other than the case's collector
+  - The owner on the register: preparing documents registers the item if
+    nothing has yet, and is refused while the register names an owner other
+    than the case's collector
 
 ## ADDED Requirements
 
@@ -18,14 +19,15 @@ move that does it, and SHALL never wait on the register to commit a move:
 
 | Move | The register is told |
 | --- | --- |
-| Starting the valuation | the item is registered under the case's collector, with the case's category, title, description and any slab staff named |
+| Starting the valuation | the item is registered under the case's collector, with the case's category, title, description and any slab staff named by grader, grade and cert |
 | Confirming the item vaulted | the vault marks the item |
 | Release, and unwinding from the vault | the vault's mark ends |
 | Forfeiture | the vault's mark ends, and the item belongs to the lender |
 
-- **Owed with the move** - what the register is told SHALL be recorded in the
-  move's own transaction and delivered until the register has it, each word
-  once and in the order the moves happened.
+- **Owed with the move** - that the register is owed the case's state SHALL
+  be recorded in the move's own transaction, and the case's state as it then
+  stands SHALL be delivered until the register has it; a state told twice or
+  late SHALL change nothing.
 - **Nothing else** - a corrected advance, a corrected repayment, a move
   between lockers, every move before the valuation, and a decline, cancel or
   expiry before custody SHALL tell the register nothing; an item registered at
@@ -79,17 +81,20 @@ move that does it, and SHALL never wait on the register to commit a move:
 ### Requirement: Preparing documents waits on the register's owner
 
 Preparing a case's documents SHALL read the case's item from the register
-first, and SHALL be refused by name:
+first, registering it in the same act where nothing has registered the case's
+item yet, and SHALL be refused by name:
 
 | While | The refusal |
 | --- | --- |
 | The register names an owner other than the case's collector | names the owner the register shows, linking the item, where staff can transfer it |
-| The register does not yet hold the item | says the item is still being registered |
+| The register does not yet hold the item it was told of | says the item is still being registered |
 | The register cannot be asked | says the register cannot be read now |
 
 The Documents tab SHALL NOT offer Prepare documents while the register names
 another owner, and SHALL say so in a line naming that owner and linking the
-item.
+item. The line and the refusal SHALL name the owner by name for a holder of
+`kyc:read`, the read on the audit log, and by the account's short id
+otherwise.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-46 - Another owner withholds Prepare documents
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff learn before the paper is printed that the slab is registered to someone else
@@ -97,6 +102,7 @@ item.
 - **GIVEN** an accepted case whose collector is Ana Wong, linked to an item the register shows as Ben Lee's
 - **WHEN** staff read its Documents tab
 - **THEN** Prepare documents is not offered, and a line names Ben Lee and links the item
+- **AND** for staff without `kyc:read` the line names Ben Lee's short id instead
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-47 - A prepare under another owner is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - the register's owner changed after the tab was opened
@@ -104,6 +110,7 @@ item.
 - **GIVEN** a Documents tab offering Prepare documents, and the item then moved to Ben Lee
 - **WHEN** staff prepare the documents
 - **THEN** it is refused, naming Ben Lee and linking the item, and the case stays where it was
+- **AND** for staff without `kyc:read` the refusal names Ben Lee's short id instead
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-48 - A prepare the register cannot answer is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff are told why the paper could not be printed
@@ -118,3 +125,10 @@ item.
 - **GIVEN** an accepted case whose item's registration has not reached the register
 - **WHEN** staff prepare the documents
 - **THEN** it is refused, saying the item is still being registered, and nothing is rendered
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-51 - A prepare registers an item nothing has registered yet
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - staff prepare the papers of a case the fill has not reached
+
+- **GIVEN** an accepted case valued before the register opened, which the fill has not reached
+- **WHEN** staff prepare the documents
+- **THEN** the item is registered under the case's collector and the custody agreement prints its facts

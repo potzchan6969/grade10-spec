@@ -6,7 +6,8 @@
   - Item facts: one of the register's ten categories, a title, a description
     and an optional contact number
   - A known slab on a draft: on a draft staff opened with a slab the register
-    knows, the collector changes only the photos and the description
+    holds under that collector, the collector changes only the photos and the
+    description
 
 ## MODIFIED Requirements
 
@@ -84,8 +85,9 @@ A collector with several items SHALL open one request for each.
 
 ### Requirement: A draft holding a slab the register knows changes only its photos and description
 
-On a draft staff opened with a slab the item register already holds, the
-category, title, grader, grade and cert SHALL be read from the register, and
+On a draft staff opened with a slab the item register already holds under the
+customer at the counter, the category, title, grader, grade and cert SHALL be
+read from the register, and
 the collector's edits SHALL change only the photographs and the request's
 description, never the register's.
 An edit to any other fact of that draft SHALL be refused by name.
@@ -93,7 +95,7 @@ An edit to any other fact of that draft SHALL be refused by name.
 #### Scenario: grade10-site-vault-case-intake-SC-33 - The collector edits the photos and the description of a linked draft
 **Serves:** grade10-site-vault-case-intake-US-01 - the collector checks a draft staff opened with their slab
 
-- **GIVEN** a draft staff opened with a slab the register holds as a trading card titled "Charizard 1999 Base Set", PSA `10`
+- **GIVEN** a draft staff opened with a slab the register holds under this collector as a trading card titled "Charizard 1999 Base Set", PSA `10`
 - **WHEN** the collector opens it on their phone
 - **THEN** the category and title read as the register holds them and offer no field
 - **AND** adding a photograph and changing the description are both kept
@@ -102,6 +104,6 @@ An edit to any other fact of that draft SHALL be refused by name.
 #### Scenario: grade10-site-vault-case-intake-SC-34 - An edit to the register's facts is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - the case and the register never tell two stories of one slab
 
-- **GIVEN** a draft staff opened with a slab the register holds
+- **GIVEN** a draft staff opened with a slab the register holds under this collector
 - **WHEN** an edit to its category or title is sent
 - **THEN** it is refused by name and the draft keeps the register's facts

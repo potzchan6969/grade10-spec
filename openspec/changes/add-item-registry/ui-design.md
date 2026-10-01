@@ -33,7 +33,7 @@ beside each delta own who walks it.
 | Items | none yet - the designer's | `admin.grade10.com/inventory/items` | new `ItemsPanel` → `SectionHeader`, `Search`, `Tabs`, `Tab`, `TabPanel`, `Table`, `Row`, `Cell`, `At`, `Status`, `StatusBadge`, `CursorPager`, `Notice`, `Link`, `Button` |
 | One item | none yet | `admin.grade10.com/inventory/items/:itemId` | new `ItemPanel` → `SectionHeader`, `Panel`, `Figure`, `At`, `Badge`, `StatusBadge`, `Notice`, `Table`, `Row`, `Cell`, `Status`, `Text`, `Link`, `Button` |
 | Register and edit | none yet | dialog from Items' header, and from one item | new `ItemFactsDialog` → `FormDialog`, `Select`, `TextField`, `NotesField`, `OwnerField`, `Text`, `Notice`, `Link` |
-| Transfer | none yet | dialog from one item | new `TransferItemDialog` → `FormDialog`, `OwnerField`, `NotesField`, `FilePicker`, `Text`, `Button`, `Notice`; the proof drawn as the auction's `ProofFilesField` composes it |
+| Transfer | none yet | dialog from one item | new `TransferItemDialog` → `FormDialog`, `OwnerField`, `TextField`, `NotesField`, `ProofFilesField`, `Text`, `Button`, `Notice` |
 | Retire | none yet | dialog from one item | new `RetireItemDialog` → `FormDialog` (`destructive`), `ChoiceList`, `Choice`, `Notice` |
 | Close a mark | none yet | dialog from the place row on one item | `PromptDialog` |
 | Case tab facts | none yet | `admin.grade10.com/vault/cases/:caseId`, the Case tab | `CaseDetailPanel`, new `ItemFactsSection` → `SectionHeader`, `Figure`, `Status`, `Notice`, `Button`, `Link`, and `ItemFactsDialog` |
@@ -55,8 +55,10 @@ beside each delta own who walks it.
 `Badge`, `Notice`, `Link`, `Button`, `Text`, `FormDialog`, `PromptDialog`,
 `Select`, `TextField`, `NotesField`, `ChoiceList`, `Choice`, `FilePicker`.
 `FormDialog` carries `destructive`; `PromptDialog` carries a required
-reason; `Notice` carries a retry `Button` in its `actions`. No store block,
-primitive or token is new or changed.
+reason; `Notice` carries a retry `Button` in its `actions`. `ProofFilesField`
+moves into `@grade10/frontend-console` from the auction's order dialogs, which
+then import it from there, unchanged; it composes `FilePicker`. No store
+block, primitive or token is new or changed.
 
 ### Store primitives - existing, `@grade10/design-system`
 
@@ -125,6 +127,7 @@ One cell, used by Items, one item and each move's from and to.
 | All | every item, marked or not | `grade10-admin-inventory-items-SC-51` |
 | Retired | retired items and why each was retired | `grade10-admin-inventory-items-SC-51` |
 | Search | one `Search` field reading the owner's exact email, an item id, a grader and cert, else a title or description | `grade10-admin-inventory-items-SC-54` |
+| Search past the tab | a search lists every item whatever tab is open; a retired match carries a retired `Badge` | `grade10-admin-inventory-items-SC-71` |
 | Paged | `CursorPager` under the rows | `grade10-admin-inventory-items-SC-56` |
 | None in a tab | `Status` empty, naming the tab | `grade10-admin-inventory-items-SC-55` |
 | No match | `Status` empty, naming the search and a way to clear it | `grade10-admin-inventory-items-SC-55` |
@@ -138,6 +141,10 @@ One cell, used by Items, one item and each move's from and to.
 | Header | `SectionHeader`, its `back` returning to Items | `grade10-admin-inventory-items-SC-50` |
 | Facts | category, title, description, grader, grade, cert, the owner cell, and who edited it last and when | `grade10-admin-inventory-items-SC-12` |
 | Marked | the place row: the vault, its case reference and the case's status as a `StatusBadge`, linking the case | `grade10-admin-inventory-items-SC-25` |
+| Two places | one place row per open mark, each naming its own case | `grade10-admin-inventory-items-SC-21` |
+| Status unavailable | the place row names the vault and the case reference, its status reading unavailable | `grade10-admin-inventory-items-SC-26` |
+| Closed by the vault | the place row reads closed by the vault on its day, with no reason | `grade10-admin-inventory-items-SC-23` |
+| Slab the vault named | a `Notice` naming the grader, grade and cert the vault named, `Link` in its `actions` to the item that holds them | `grade10-admin-inventory-items-SC-22` |
 | Transfer and Retire not offered | Transfer and Retire are not offered; a line names the vault and the case | `grade10-admin-inventory-items-SC-40` |
 | Not marked | Transfer and Retire offered | `grade10-admin-inventory-items-SC-24` |
 | Owners disagree | a warning `Notice` showing the vault's owner and the register's | `grade10-admin-inventory-items-SC-27` |
@@ -146,11 +153,16 @@ One cell, used by Items, one item and each move's from and to.
 | No proof | the proof cell reads that none was given | `grade10-admin-inventory-items-SC-34` |
 | Proof removed | "proof removed" in the proof cell | `grade10-admin-inventory-items-SC-65` |
 | No moves | the moves section says the item has not changed owner | `grade10-admin-inventory-items-SC-38` |
+| Forfeit move | the move reads from the collector to the lender, made by the vault on that case | `grade10-admin-inventory-items-SC-42` |
 | Without `inventory:transfer` | no Transfer, and no proof to open | `grade10-admin-inventory-items-SC-45` |
-| Read-only | without `inventory:write`, no Register, Edit, Retire or Close mark | `grade10-admin-inventory-items-SC-14` |
+| Read-only | without `inventory:write`, no Register, Edit, Retire, Restore or Close mark | `grade10-admin-inventory-items-SC-14` |
 | Mark left open | Close mark on the place row, for `inventory:write` only | `grade10-admin-inventory-items-SC-28` |
+| Still held | no Close mark on the place row while the vault holds the item | `grade10-admin-inventory-items-SC-29` |
 | Closed by hand | the place row names who closed it, when and why | `grade10-admin-inventory-items-SC-28` |
 | Retired | reads only, with the reason and when; no Edit, Transfer or Retire | `grade10-admin-inventory-items-SC-46` |
+| Restore offered | Restore on a retired item, for `inventory:write` only, on `PromptDialog` with a required reason | `grade10-admin-inventory-items-SC-48` |
+| Restored | the item reads live with its facts and history | `grade10-admin-inventory-items-SC-48` |
+| Restore refused | an error `Notice` in the dialog naming the live item that holds the grader and cert, `Link` in its `actions` | `grade10-admin-inventory-items-SC-49` |
 | Erased owner | the owner cell reads as erased and the title reads as erased; Transfer still offered | `grade10-admin-inventory-items-SC-64` |
 | Not found | no item has that id | `grade10-admin-inventory-items-SC-57` |
 | Forbidden | names `inventory:read` | `grade10-admin-inventory-items-SC-58` |
@@ -162,7 +174,7 @@ One cell, used by Items, one item and each move's from and to.
 | Empty | category, title, description, grader, and the owner in `OwnerField`; Register disabled | `grade10-admin-inventory-items-SC-10` |
 | No grader | grade and cert hidden; clearing the grader clears both | `grade10-admin-inventory-items-SC-02` |
 | Grader chosen | grade and cert shown | `grade10-admin-inventory-items-SC-02` |
-| Grader not listed | the Description field's `description` says a grader not listed, its grade and cert go in the description | `grade10-admin-inventory-items-SC-03` |
+| Grader not listed | the Description field's `description` says the description prints on the custody agreement, and that a grader not listed, its grade and cert go in it | `grade10-admin-inventory-items-SC-03`, `grade10-site-vault-documents-and-signing-SC-32` |
 | Too long | the title's (200) or the description's (2,000) refusal | `grade10-admin-inventory-items-SC-04` |
 | Edit | the owner read-only, as a `Text` line; the owner changes only through Transfer | `grade10-admin-inventory-items-SC-13` |
 | Cert taken | a `Notice` in the dialog's body, `Link` in its `actions`: this grader and cert are already on <title> | `grade10-admin-inventory-items-SC-07` |
@@ -187,6 +199,8 @@ Used by Register and Transfer, never by Edit.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Empty | the new owner, a reason and an optional proof; Transfer disabled until the owner and a reason are given | `grade10-admin-inventory-items-SC-35` |
+| Present owner | Transfer disabled while the new owner named is the present one; a same-owner refusal after a resend reads as moved | `grade10-admin-inventory-items-SC-75` |
+| Erased owner | a required title `TextField`; Transfer disabled until it is given | `grade10-admin-inventory-items-SC-73` |
 | Proof picked | the file's name in a `Text` line with a Remove `Button`, under the picker | `grade10-admin-inventory-items-SC-36` |
 | Proof refused | the refusal under the picker: up to 5 PDF, PNG or JPG files, each at most 10 MB | `grade10-admin-inventory-items-SC-36` |
 | Refused while marked | an error `Notice` naming the place, when a mark landed after the page opened | `grade10-admin-inventory-items-SC-41` |
@@ -229,28 +243,28 @@ Used by Register and Transfer, never by Edit.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Slab fields | grader and cert, added to the walk-in form by this change | `grade10-admin-vault-operator-queue-SC-59` |
+| Slab fields | grader, grade and cert, added to the walk-in form by this change, all three or none | `grade10-admin-vault-operator-queue-SC-60` |
 | Looking up | pending | `grade10-admin-vault-operator-queue-SC-59` |
 | Register unreachable | an error with retry; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-64` |
-| Found | the register's facts, read-only, corrected on the Case tab; the case takes that item, and the customer's edits to the draft touch only its photos and description | `grade10-admin-vault-operator-queue-SC-59` |
+| Found | the register's facts, read-only, corrected on the Case tab; the form fills category and title from them; the case takes that item, and the customer's edits to the draft touch only its photos and description | `grade10-admin-vault-operator-queue-SC-59` |
 | Not found | nothing filled; the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-SC-60` |
 | Retired cert | reads as retired | `grade10-admin-vault-operator-queue-SC-61` |
-| Another owner | found, naming its owner; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-SC-62` |
+| Another owner | found, filling nothing; the owner by name for `kyc:read`, else by short id; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-SC-62` |
 | Marked by another case | a `Notice` in the dialog's body, `Link` in its `actions`: refused, naming and linking the case; that mark is closed first | `grade10-admin-vault-operator-queue-SC-63` |
 
 ### Start valuation slab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Slab fields | grader and cert, offered when the case has named no slab, with the walk-in's lookup states | `grade10-admin-vault-operator-queue-SC-65` |
-| Found | the register's facts, read-only; the case takes that item rather than registering a second | `grade10-admin-vault-operator-queue-SC-65` |
+| Slab fields | grader, grade and cert, offered when the case has named no slab, with the walk-in's lookup states | `grade10-admin-vault-operator-queue-SC-65` |
+| Found | the register's facts, read-only; the case takes that item rather than registering a second, and the request stays as sent | `grade10-admin-vault-operator-queue-SC-65` |
 
 ### Documents tab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Another owner | Prepare documents is not offered; a line names the owner the register shows and links the item, where staff can transfer it | `grade10-site-vault-case-lifecycle-SC-46` |
-| Refused at Prepare | an error naming the owner the register now shows, linking the item | `grade10-site-vault-case-lifecycle-SC-47` |
+| Another owner | Prepare documents is not offered; a line names the owner the register shows, by name for `kyc:read`, else by short id, and links the item, where staff can transfer it | `grade10-site-vault-case-lifecycle-SC-46` |
+| Refused at Prepare | an error naming the owner the register now shows the same way, linking the item | `grade10-site-vault-case-lifecycle-SC-47` |
 | Register pending | an error saying the item is still being registered | `grade10-site-vault-case-lifecycle-SC-49` |
 | Register unreachable | an error saying the register cannot be read now | `grade10-site-vault-case-lifecycle-SC-48` |
 

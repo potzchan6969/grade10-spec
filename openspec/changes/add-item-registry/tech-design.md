@@ -38,10 +38,11 @@ repository's unless it says `grade10-spec`.
 
 **Goals:**
 
-- The register is inventory's own tables; the vault never waits on inventory to
-  commit a case act
-- Every vault fact the register mirrors is a due row committed with the fact
-  and delivered at least once, deduplicated by the register
+- The register is inventory's own tables; no case act but Prepare documents
+  waits on inventory
+- Every vault fact the register mirrors is owed by one due row per case,
+  committed with the fact; the case's state is computed at delivery and
+  applied by the register as an idempotent upsert that only moves forward
 - Marked or not, owners disagreeing and a name are read, never stored
 
 **Non-Goals:**
@@ -57,64 +58,71 @@ repository's unless it says `grade10-spec`.
 `grade10-admin/inventory/items` governs what an item says and who owns it.
 The record lives in `packages/inventory/backend` beside the catalogue, in
 tables of its own (Q1): `items`, `item_marks`, `item_moves`,
-`item_move_proofs`, plus the staging and dedupe tables below. Nothing joins
+`item_move_proofs`, plus the proof staging table and the `cert_taken` record
+below. Nothing joins
 `products` or `inventories`, so a slab never becomes stock (Q26).
 
 - **Rejected** - a new service and database (a deploy and a binding for
   nothing); columns on `products` (a product counts units)
 
-### The vault tells the register through a due row committed with the fact
+### The vault owes the register its case's state, one due row per case
 
 `grade10-site/vault/case-lifecycle` governs when the vault registers, marks and
-lets go. Each of those acts writes one `vault.register_words` row in the
-transaction that moves the case, and the vault drains the rows to inventory
-over a new named entrypoint, `VaultItemsService`
+lets go. Each act that changes what the register should read raises one
+`vault.register_dues` row for the case in the transaction that moves the case
 (`docs/conventions/backend.md`, "A guaranteed side effect is a due row
-committed with its fact").
+committed with its fact"):
 
-| Vault act | Word | Carries |
-| --- | --- | --- |
-| Start valuation (`submitted → under_valuation`) | `registered` | item id, case id and reference, the collector, category, title, description, grader, grade, cert |
-| Confirm vaulted (`signing → vaulted`) | `marked` | item id, case id and reference, the collector |
-| Release (`→ released`), unwind (`vaulted → cancelled`) | `unmarked` | item id, case id |
-| Forfeit (`active → forfeited`) | `unmarked` | item id, case id, `newOwner: lender` |
+| Vault act | Raises the case's due row |
+| --- | --- |
+| Start valuation (`submitted → under_valuation`) | yes; the vault mints `itm_<uuid>`, or takes the id a lookup found, into `case_items.register_item_id` |
+| Confirm vaulted (`signing → vaulted`) | yes |
+| Release (`→ released`), unwind (`vaulted → cancelled`), forfeit (`active → forfeited`) | yes |
+| Erasure of the case | yes |
+| A corrected advance, a locker move, a decline or cancel before custody | no |
 
-- **One word per kind per case** - unique `(case_id, kind)`. A corrected
-  advance (`active → vaulted`) writes nothing, so a case is marked once and
-  let go once
-- **The vault mints the item id** at Start valuation (`itm_<uuid>`) or takes
-  the id a lookup found, and writes it to `case_items.register_item_id` in the
-  same transaction, so the case knows its item before the register does and
-  every later word names it
-- **Ordered per item** - a row is claimable only while no earlier undelivered
-  row (`seq`) names the same item; a parked row holds the rest of that item's
-  words back, loudly
-- **Delivered three ways, one ledger** - a best-effort attempt after the
-  act's commit (`waitUntil`, since the row is the guarantee); the fast lane's
-  `registerWords` list (15 minutes, `@grade10/postgres/ladder`, cap 12, then
-  parked and counted on `vault.register.parked`); and `prepareCaseDocuments`,
-  which delivers its own case's rows before it reads the register
+- **The row holds no payload** - `case_id`, `version`, `delivered_version`
+  and the delivery ladder's columns. The delivery reads the case as it then
+  stands and sends its state: the item id, the case's reference, the
+  collector, the case's category, title and description, the named slab,
+  custody opened or closed, forfeited, erased. No personal fact sits in the
+  row, and an erased case registers nothing: its delivery stamps the row and
+  sends nothing
+- **Delivered three ways, one row** - a best-effort attempt after the act's
+  commit (`waitUntil`, since the row is the guarantee); the fast lane's
+  `registerDues` list (15 minutes, `@grade10/postgres/ladder`, cap 12, then
+  parked and counted on `vault.register.parked`); and Prepare documents,
+  which delivers its own case inline before it reads the register
+- **Order does not matter** - the state is read at delivery and the register
+  only moves forward, so a late or repeated delivery changes nothing and one
+  case never waits on another
 - **Refusal is a fault here** - a queued fact (`cross-service.md`): any answer
-  but `applied` or `duplicate` costs a rung; a missing binding answers
-  `unreachable` and costs none
+  but `applied` costs a rung; a missing binding answers `unreachable` and
+  costs none
 - **Rejected** - the register reserving before the vault acts (Q6, Q30); a
   synchronous call inside the case transaction, which ties every counter act to
-  inventory's uptime
+  inventory's uptime; an ordered per-item ledger of words, which stores the
+  collector's facts in the vault's outbox, lets one bad word hold back every
+  later one, and needs a dedupe table on the register's side
 
-### The register mirrors and never refuses
+### The register applies a case's state as a forward-only upsert
 
-`VaultItemsService.tell(word)` applies a word in one inventory transaction
-that first inserts `(place, word_id)` into `place_words`; a conflict answers
-`duplicate` and changes nothing. Otherwise:
+`VaultItemsService.tell(state)` applies one case's state in one inventory
+transaction, locking the item row:
 
-| Word | Item absent | Item present |
-| --- | --- | --- |
-| `registered` | insert the item under the collector; a grader and cert a live item already holds registers the item without its slab and records outcome `cert_taken` naming that item | nothing changes (a walk-in linked a known slab) |
-| `marked` | refused `ITEM_UNKNOWN`, a fault: ordering makes it unreachable | open mark `(item, vault, case)` with the vault's owner, unless one exists for that case, open or closed |
-| `unmarked` | refused `ITEM_UNKNOWN` | close the case's mark if open, closer `place`; with `newOwner: lender`, move the owner to the lender with a move row by the vault, unless the lender already owns it |
+| The case's state | The register |
+| --- | --- |
+| Any | inserts the item under the collector if absent; a grader and cert a live item already holds registers the item without its slab and writes its `item_cert_taken` row naming that item |
+| Custody opened | opens the mark `(item, vault, case)` with the vault's owner, unless a row exists for that case, open or closed |
+| Custody closed | closes the case's mark if open, closer `place`; inserts it opened and closed where it was never opened |
+| Forfeited | moves the owner to the lender with a move row by the vault on that case, unless that case already has a move |
 
-- **A hand close is final** - a later `marked` for the same case finds the
+- **A hand close is final** - a later state for the same case finds the
   closed row and leaves it (Q19)
+- **A hand close on a forfeited case moves the item** - Close mark reads the
+  case as forfeited from the vault and writes the vault's move to the lender
+  in its own transaction; the later state finds the case's move and moves
+  nothing (Q53, recommended A)
 - **Owners disagreeing is read** - an open mark keeps the owner the vault
   named; the item page compares it with the item's owner at the read (Q6)
 - **A neutral close** - a mark records who closed it, never why the vault
@@ -133,12 +141,12 @@ lock by reading open marks, naming the place and its reference.
 Close mark is offered only while the vault reads the item as no longer held
 (Q29), and the worker refuses it independently. Inventory binds the vault's new
 named entrypoint `InventoryVaultService` with one read,
-`casesOf({ caseIds }) → [{ caseId, reference, status, held }]`, `held` meaning
-an open `custody_items` row on a case not erased. The item page reads the
+`casesOf({ caseIds }) → [{ caseId, reference, status, held, forfeited }]`,
+`held` meaning an open `custody_items` row on a case not erased. The item page reads the
 place row's status through the same call (fault as value: "status
 unavailable"); the close treats a fault as a refusal, `PLACE_UNREACHABLE`.
 
-- **A declared cycle** - vault → inventory carries words, inventory → vault
+- **A declared cycle** - vault → inventory carries case states, inventory → vault
   reads custody; store ↔ loyalty is the precedent. Deploy order is in the
   Migration Plan
 - **Rejected** - trusting the console's offer alone, which lets a crafted
@@ -147,22 +155,26 @@ unavailable"); the close treats a fault as a refusal, `PLACE_UNREACHABLE`.
 
 ### Walk-in and Start valuation find a known slab through the vault
 
-The walk-in form and Start valuation send an optional grader and cert to the
-vault, which asks `VaultItemsService.lookupSlab({ grader, cert })` before its
-transaction (Ask, fault as value: the form keeps what was typed). The cert is
-trimmed and capitalised by the contracts' one cert schema, the same one
-`items.register`, `items.edit` and the search read (Q48).
+The walk-in form and Start valuation send an optional
+`slab: { grader, grade, cert }`, all three or none, to the vault, which asks
+`VaultItemsService.lookupSlab({ grader, cert })` before its transaction (Ask,
+fault as value: the form keeps what was typed). The cert is trimmed and
+capitalised by the contracts' one cert schema, the same one `items.register`,
+`items.edit` and the search read (Q48). Taking an item only sets
+`case_items.register_item_id`; `case_items` keeps the collector's request
+(Q35).
 
 | Lookup answer | The vault does |
 | --- | --- |
-| A live item, no open mark | `register_item_id` = that item; `case_items` takes its category and title; the Case tab reads it |
+| A live item the customer at the counter owns, no open mark | links it; on a walk-in the form fills category and title from the register; the Case tab reads it |
+| A live item under another owner, no open mark | links it and fills nothing; the owner reads by name behind `kyc:read`, else by short id; Prepare documents is refused until the owner matches |
 | A live item another case marks | refuses `SLAB_MARKED`, naming the case |
-| A live item under another owner | links it; Prepare documents is refused until the owner matches |
-| A retired item, or none | keeps the typed pair in `case_items.slab_grader`, `slab_cert` for the `registered` word |
+| A retired item, or none | keeps the slab in `case_items.slab_grader`, `slab_grade`, `slab_cert` for the registration |
 
-The walk-in's linked draft keeps `register_item_id`; the collector's draft
-edit (`vault-walk-ins-and-owners`) refuses category and title on a linked
-draft (Q43), and photographs and the description stay theirs.
+The walk-in's linked draft keeps `register_item_id`; where the form filled
+from the register, the collector's draft edit (`vault-walk-ins-and-owners`)
+refuses category and title (Q43), and photographs and the description stay
+theirs.
 
 ### The Case tab and the valuation read the register; the vault keeps the request
 
@@ -181,18 +193,24 @@ answered forbidden and the section names the grant (Q44).
 `prepareCaseDocuments` already reads identity and the shop over bindings
 before its locked commit. It adds:
 
-1. Deliver the case's undelivered words (awaited)
-2. `VaultItemsService.itemOf({ itemId })` - absent refuses
-   `REGISTER_PENDING`; unreachable refuses `REGISTER_UNREACHABLE`; an owner
-   that is not this case's collector refuses `ITEM_OWNER_DIFFERS`, naming the
-   owner
-3. Render the custody agreement from the register's category, title,
+1. A case with no `register_item_id` (one valued before the register
+   opened) mints it and raises its due row under the case lock, so a case the
+   fill has not reached registers here
+2. Deliver the case's due row inline (awaited)
+3. `VaultItemsService.itemOf({ itemId })` - absent refuses
+   `REGISTER_PENDING`, meaning only that the delivery has not landed;
+   unreachable refuses `REGISTER_UNREACHABLE`; an owner that is not this
+   case's collector refuses `ITEM_OWNER_DIFFERS`, naming the owner by name
+   behind `kyc:read` and by short id otherwise
+4. Render the custody agreement from the register's category, title,
    description, grader, grade and cert; the sealed PDF is the snapshot, and a
    re-prepare reads again (Q22)
 
 The case read (`cases.detail`) asks `itemOf` too, fault as value, so the
 Documents tab withholds Prepare documents under "another owner" before staff
-press it.
+press it. The vault names that owner the way it names a collector
+(`vault-walk-ins-and-owners`): `accountsByUserIds` for a caller holding
+`kyc:read`, the read audited, else the short id.
 
 ### Names are read per page behind `kyc:read`
 
@@ -212,6 +230,8 @@ new private bucket `INVENTORY_ITEM_PROOFS` and stages it in
 (`inventory:transfer`), which streams the object and writes an audit entry.
 The storage area's `referenced` check is the proof rows, so the existing
 orphan sweep removes an object no row names, including those erasure frees.
+The dialog's picker is the auction's `ProofFilesField`, moved into
+`@grade10/frontend-console` so both products import one field.
 
 ### Erasure is inventory's own router
 
@@ -222,19 +242,28 @@ lists one line per marked item the person owns
 one transaction: owner → erased with `title` and `description` null; each move
 naming the person loses their side and its reason; a proof survives only where
 the other side is the custodian, the lender or an account not erased; the
-person's id leaves `item_marks.place_owner_user_id` and `place_words`
-payloads. Rerunning finds nothing to do (Q17, Q34, Q38).
+person's id leaves `item_marks.place_owner_user_id`. A kept proof is a
+retention exemption, never counted in `remaining`. Rerunning finds nothing to
+do (Q17, Q34, Q38).
 
 ### Backfill is a slow-lane list in the vault
 
-`registerBackfill` writes, per case, the words the live path would have
-written, so one receiver serves both. It takes cases with no
-`register_item_id`, not erased, that reached custody or are past Start
-valuation and still open; per case, under the case lock: mint the id, then
-`registered`, `marked` where custody opened, and `unmarked` where it closed
-(`newOwner: lender` on `forfeited`). The unique `(case_id, kind)` and the
-`register_item_id IS NULL` filter make a rerun a no-op; the list ends when it
-finds nothing, and `vault.register.backfill_remaining` reads zero (Q10, Q32).
+`registerBackfill` takes cases with no `register_item_id`, not erased, that
+reached custody or are past Start valuation and still open; per case, under
+the case lock, it mints the id and raises the case's due row. The live
+delivery then sends the case's state like any other, so one receiver serves
+both. The `register_item_id IS NULL` filter makes a rerun a no-op; the list
+ends when it finds nothing, and `vault.register.backfill_remaining` reads zero
+(Q10, Q32, Q52).
+
+### Every act declares its audit entry by ids
+
+Each `items.*` procedure declares `auditDetails` and `auditSubject` (the item
+id). The entry records ids, owner kinds, the account an email resolved to and
+the retire code; a typed reason is named by its row (the move, the mark, the
+item's restore), never copied, and no entry carries an email or a search term
+(Q50). `items.resolveOwner` keeps its read grant and declares the found id or
+none.
 
 ### Categories are one list in inventory's contracts
 
@@ -271,11 +300,12 @@ changes live in `vault`.
 | `retired_at`, `retired_by`, `retired_reason` | `timestamptz`, `text`, `text` | yes | all or none; reason in `duplicate` · `lost` · `destroyed` · `left_platform` |
 | `created_at`, `created_by` | `timestamptz`, `text` | no | `created_by` is a staff id or `vault` |
 | `updated_at`, `updated_by` | `timestamptz`, `text` | no | the last edit, shown on one item's page |
-| `owner_erased_at` | `timestamptz` | yes | |
+| `restored_at`, `restored_by`, `restored_reason` | `timestamptz`, `text`, `text` | yes | the last restore; all or none |
 
 - `ck_items_slab` - grader, grade and cert all null or all set
 - `ck_items_owner` - `(owner_kind = 'account') = (owner_user_id IS NOT NULL)`
-- `ck_items_title` - `title IS NOT NULL OR owner_erased_at IS NOT NULL`
+- `ck_items_title` - `title IS NOT NULL OR owner_kind = 'erased'`; a
+  transfer from an erased owner carries a title
 - `uq_items_live_slab` - unique `(grader, cert)` `WHERE retired_at IS NULL AND cert IS NOT NULL`
 - `idx_items_owner_user_id`, `idx_items_created_at_id` (paging)
 
@@ -307,26 +337,27 @@ changes live in `vault`.
 | `reason` | `text` | yes | ≤ 500; null only after an erasure |
 | `moved_at` | `timestamptz` | no | |
 
-`idx_item_moves_item_moved_at` on `(item_id, moved_at DESC)`.
+`idx_item_moves_item_moved_at` on `(item_id, moved_at DESC)`;
+`uq_item_moves_item_place_ref` unique `(item_id, place_ref)` `WHERE place_ref
+IS NOT NULL`, so a case moves its item once.
 
 `item_move_proofs`: `id` PK, `move_id` FK, `object_key`, `file_name`,
 `content_type` CHECK in PDF, PNG, JPEG, `byte_size` CHECK `> 0 AND ≤ 10485760`,
 `position` `0..4`, unique `(move_id, position)`. `item_proof_uploads` is the
 auction's staging shape keyed `(item_id, key)`, reclaimed after a day.
 
-### `inventory.place_words`
+### `inventory.item_cert_taken`
 
-`place` `text`, `word_id` `text`, PK `(place, word_id)`; `item_id` `text`,
-`kind` `text`, `outcome` `text` (`applied` · `cert_taken`), `detail` `jsonb`
-(the other item on `cert_taken`), `received_at`. The item page reads
-`cert_taken` rows to show staff the slab the vault named.
+`item_id` `text` PK FK `items`; `grader`, `grade`, `cert` `text`, the slab the
+vault named; `held_by_item_id` `text`; `recorded_at`. The item page reads it
+to show staff the slab the vault named and the item that holds it.
 
 ### Vault changes
 
 | Table | Change |
 | --- | --- |
-| `vault.case_items` | add `register_item_id text NULL` (indexed), `slab_grader text NULL`, `slab_cert text NULL`; replace `ck_case_items_category` with the ten (`NOT VALID`, then `VALIDATE`) |
-| `vault.register_words` | new: `id text` PK (`rw_<uuid>`, the register's dedupe key), `seq bigint` identity, `case_id` FK, `item_id text`, `kind text` CHECK, `payload jsonb` whole, `attempts int` default 0, `next_attempt_at`, `delivered_at`, `parked_at`, `last_error`, `created_at`; unique `(case_id, kind)`; index `(next_attempt_at, seq) WHERE delivered_at IS NULL AND parked_at IS NULL` |
+| `vault.case_items` | add `register_item_id text NULL` (indexed), `slab_grader`, `slab_grade`, `slab_cert` `text NULL`, all three or none; replace `ck_case_items_category` with the ten (`NOT VALID`, then `VALIDATE`) |
+| `vault.register_dues` | new: `case_id` PK FK, `version int` default 1, `delivered_version int` default 0, `attempts int` default 0, `next_attempt_at`, `parked_at`, `last_error`, `updated_at`; index `(next_attempt_at) WHERE delivered_version < version AND parked_at IS NULL` |
 
 ```mermaid
 erDiagram
@@ -334,11 +365,10 @@ erDiagram
   ITEMS ||--o{ ITEM_MOVES : "moved"
   ITEM_MOVES ||--o{ ITEM_MOVE_PROOFS : "proved by"
   ITEMS ||--o{ ITEM_PROOF_UPLOADS : "staged for"
-  ITEMS ||--o{ PLACE_WORDS : "told by"
+  ITEMS ||--o| ITEM_CERT_TAKEN : "slab the vault named"
   VAULT_CASES ||--|| CASE_ITEMS : "one item"
   CASE_ITEMS }o..|| ITEMS : "register_item_id (no FK, other service)"
-  VAULT_CASES ||--o{ REGISTER_WORDS : "owes"
-  REGISTER_WORDS }o..|| PLACE_WORDS : "word id, deduped"
+  VAULT_CASES ||--o| REGISTER_DUES : "owes its state"
   ITEM_MARKS }o..|| VAULT_CASES : "place_ref (no FK)"
 ```
 
@@ -348,82 +378,85 @@ disagreeing, names, the place row's status.
 
 ## Service Interfaces
 
-### Vault: write a word with its act
+### Vault: owe the register with the act
 
-`appendRegisterWord(tx, { caseId, itemId, kind, payload, at })` - called by
-the transitions above inside their transaction, after the status write.
-`INSERT … ON CONFLICT (case_id, kind) DO NOTHING`, so a retried act writes
-nothing twice.
+`oweRegister(tx, caseId)` - called by the transitions above inside their
+transaction, after the status write: `INSERT … ON CONFLICT (case_id) DO UPDATE
+SET version = version + 1, parked_at = NULL, attempts = 0`.
 
-Example - Start valuation on case `vc_1` (collector `u_9`):
+Example - Start valuation on case `vc_1`:
 
 | Row | Written |
 | --- | --- |
 | `vault_cases` | `status: under_valuation` |
-| `case_items` | `register_item_id: itm_4f…` |
-| `register_words` | `{ id: rw_a1, seq: 88, case_id: vc_1, item_id: itm_4f…, kind: registered, payload: { caseReference: "K7P2QX", owner: { kind: "account", userId: "u_9" }, facts: { category: "trading_card", title: "Charizard 1999", description: null, grader: "PSA", grade: "10", cert: "12345678" } } }` |
+| `case_items` | `register_item_id: itm_4f…`, `slab_grader: PSA`, `slab_grade: 10`, `slab_cert: 12345678` |
+| `register_dues` | `{ case_id: vc_1, version: 1, delivered_version: 0 }` |
 
-### Vault: deliver words
+### Vault: deliver a case's state
 
-`deliverRegisterWords(db, register, { caseId?, limit })` → `{ delivered, failed, parked }`.
-One row per transaction: claim (`FOR UPDATE SKIP LOCKED`, the ordering
-predicate), call `tell`, then stamp `delivered_at`, or raise `attempts` and
-`next_attempt_at`, or park at the cap - claim and stamp commit together.
+`deliverRegisterDues(db, register, { caseId?, limit })` → `{ delivered, failed, parked }`.
+Per row: claim (`FOR UPDATE SKIP LOCKED`) and note `version`, read the case's
+state, call `tell`, then set `delivered_version` to the noted version, or
+raise `attempts` and `next_attempt_at`, or park at the cap. An act that raised
+`version` meanwhile leaves the row due.
 
 ### Inventory: `VaultItemsService`
 
 | Method | Input | Success | Refusal |
 | --- | --- | --- | --- |
-| `tell` | `RegisterWord` (`wordId`, `kind`, `itemId`, `caseId`, `caseReference`, `owner?`, `facts?`, `newOwner?`, `at`) | `{ outcome: "applied" \| "duplicate" \| "cert_taken" }` | `ITEM_UNKNOWN`, `WORD_MALFORMED` |
+| `tell` | `CaseState` (`itemId`, `caseId`, `caseReference`, `owner`, `facts`, `custody: "none" \| "open" \| "closed"`, `forfeited`, `at`) | `{ outcome: "applied" \| "cert_taken" }` | `STATE_MALFORMED` |
 | `lookupSlab` | `{ grader, cert }` | `{ item: ItemFacts & { owner, retired, openMarks: [{ place, ref, label }] } \| null }` | `GRADER_UNKNOWN` |
 | `itemOf` | `{ itemId }` | `{ item: ItemFacts & { owner } \| null }` | - |
 
-One transaction per `tell`; the `place_words` insert is its first statement
-and its idempotency.
+One transaction per `tell`, locking the item row; applying a state twice
+writes nothing the second time.
 
-Example - the forfeit's `unmarked` on `itm_4f…`:
+Example - the forfeited state of `vc_1` on `itm_4f…`:
 
 | Row | Before | After |
 | --- | --- | --- |
-| `place_words` | - | `(vault, rw_c3, applied)` |
 | `item_marks` | open, `place_ref vc_1` | `closed_at`, `closed_by_kind: place` |
 | `items` | `owner_kind: account, u_9` | `owner_kind: lender` |
 | `item_moves` | - | `account u_9 → lender`, actor `place vault`, `place_ref vc_1`, reason `Forfeited to the lender by the vault` |
 
 ### Vault: `InventoryVaultService`
 
-`casesOf({ caseIds ≤ 100 })` → `[{ caseId, reference, status, held }]`; an id
-the vault does not hold is absent. Read only.
+`casesOf({ caseIds ≤ 100 })` → `[{ caseId, reference, status, held, forfeited }]`;
+an id the vault does not hold is absent. Read only.
 
 ### Inventory: console acts
 
-Each is an `elevatedProcedure` (audit row written by the ladder); each
-mutation locks the item row `FOR UPDATE` first.
+Each is an `elevatedProcedure` declaring `auditDetails` and `auditSubject`
+(audit row written by the ladder); each mutation locks the item row
+`FOR UPDATE` first.
 
 | Act | Grant | Input | Writes | Refusals |
 | --- | --- | --- | --- | --- |
 | `items.register` | write | category, title, description?, grader?, grade?, cert?, owner (`account` email or `custodian`) | `items` | `ITEM_CERT_TAKEN` (names the item), `OWNER_NOT_FOUND`, field limits |
 | `items.edit` | write | item id, the six facts | `items`, `updated_*` | `ITEM_RETIRED`, `ITEM_CERT_TAKEN` |
-| `items.transfer` | transfer | item id, to (`account` email or `custodian`), reason, proof keys ≤ 5 | `items`, `item_moves`, `item_move_proofs`; deletes the used uploads | `ITEM_MARKED` (place, reference), `ITEM_RETIRED`, `ITEM_SAME_OWNER`, `OWNER_NOT_FOUND`, `PROOF_REFUSED` |
+| `items.transfer` | transfer | item id, to (`account` email or `custodian`), reason, title (required from an erased owner), proof keys ≤ 5 | `items`, `item_moves`, `item_move_proofs`; deletes the used uploads | `ITEM_MARKED` (place, reference), `ITEM_RETIRED`, `ITEM_SAME_OWNER`, `TITLE_REQUIRED`, `OWNER_NOT_FOUND`, `PROOF_REFUSED` |
 | `items.retire` | write | item id, reason | `retired_*` | `ITEM_MARKED`, `ITEM_RETIRED` |
-| `items.restore` | write | item id, reason | clears `retired_*` | `ITEM_NOT_RETIRED`, `ITEM_CERT_TAKEN` |
-| `items.closeMark` | write | mark id, reason | `item_marks` closed by staff | `MARK_STILL_HELD`, `PLACE_UNREACHABLE`; a closed mark answers as closed |
+| `items.restore` | write | item id, reason | clears `retired_*`, sets `restored_*` | `ITEM_NOT_RETIRED`, `ITEM_CERT_TAKEN` |
+| `items.closeMark` | write | mark id, reason | `item_marks` closed by staff; on a forfeited case, the vault's move to the lender unless the case has one | `MARK_STILL_HELD`, `PLACE_UNREACHABLE`; a closed mark answers as closed |
 | `items.proof` | transfer | proof id | audit row | `PROOF_REMOVED` |
 
 The owner's email is resolved with `accountByEmail` before the transaction; a
-retried transfer is refused `ITEM_SAME_OWNER`, so a double click moves once.
+retried transfer is refused `ITEM_SAME_OWNER`, so a double click moves once,
+and the dialog reads that refusal as moved. The dialog keeps Transfer
+disabled while the owner it resolved is the present one.
 
 ### Inventory: reads
 
 | Read | Grant | Answers |
 | --- | --- | --- |
 | `items.list` | read | `{ tab: marked \| all \| retired, q?, ownerUserId?, cursor? }` → rows of id, title, category, grader, cert, owner (name behind `kyc:read`), open places; keyset on `(created_at, id)`, marked on the newest open mark |
-| `items.get` | read | the facts, owner, `updatedAt`, `updatedBy`, retired, marks with each case's status from `casesOf`, owners disagreeing, `cert_taken` words, moves with proofs (proof ids only for `inventory:transfer`) |
+| `items.get` | read | the facts, owner, `updatedAt`, `updatedBy`, retired, marks with each case's status from `casesOf`, owners disagreeing, the `item_cert_taken` row, moves with proofs (proof ids only for `inventory:transfer`) |
 | `items.resolveOwner` | read | `{ email }` → `{ userId, name \| null } \| null` |
 
 `q` is read in order: an exact email (`@`), an item id (`itm_`), a listed
 grader followed by a cert, both read in any case and the cert trimmed (Q48),
-otherwise a case-insensitive match on title or description.
+otherwise a case-insensitive match on title or description. A search ignores
+the tab and reads every item, returning `retired` on each row for the badge.
 
 ## API Contracts
 
@@ -436,7 +469,8 @@ otherwise a case-insensitive match on title or description.
 - **Vault, additive** - `cases.detail` gains
   `item: { registerItemId: string | null, register: { state: "pending" | "registered" | "unavailable", owner?, ownerMatches? } }`;
   `valuation.start` and the walk-in open take an optional
-  `slab: { grader, grade?, cert }`; new `cases.lookupSlab` (`vault:operate`);
+  `slab: { grader, grade, cert }`, all three required together; new
+  `cases.lookupSlab` (`vault:operate`);
   new refusals `REGISTER_PENDING`, `REGISTER_UNREACHABLE`,
   `ITEM_OWNER_DIFFERS`, `SLAB_MARKED`
 - **Auth contracts** - `inventory: ["read", "write", "transfer"]`; `staff`
@@ -445,18 +479,20 @@ otherwise a case-insensitive match on title or description.
 
 ## Risks / Trade-offs
 
-- [A word parked behind a bad payload holds back every later word for that
-  item] → `vault.register.parked` gauge and alarm; Close mark is the person's
-  way out for a stuck mark, and an engineer hands the row back
-- [Two counters register the same new slab before either word lands] →
+- [A case's due row parks] → that case alone waits; `vault.register.parked`
+  gauge and alarm; Prepare documents delivers its own case inline, Close mark
+  is the person's way out for a stuck mark, and an engineer hands the row
+  back
+- [Two counters register the same new slab before either state lands] →
   `uq_items_live_slab` keeps one; the second item registers without its slab
   and the item page shows the pair the vault named, for staff to retire one
   as a duplicate
-- [A transfer lands between the prepare read and the commit] → the mark word
+- [A transfer lands between the prepare read and the commit] → the case's state
   carries the vault's owner, and the item page shows both owners
-- [The inventory ↔ vault cycle] → deploy the vault's `InventoryVaultService`
-  before inventory's binding to it; until then the place row reads "status
-  unavailable" and Close mark refuses `PLACE_UNREACHABLE`
+- [The inventory ↔ vault cycle] → inventory deploys first with no `VAULT`
+  binding, then the vault bound to inventory, then inventory is bound to the
+  vault; until then the place row reads "status unavailable" and Close mark
+  refuses `PLACE_UNREACHABLE`
 - [Inventory down at Prepare documents] → `REGISTER_UNREACHABLE`, named on
   the Documents tab; every other case act still commits
 - [Names leak through the audit-free email search] → the read declares an
@@ -477,19 +513,18 @@ otherwise a case-insensitive match on title or description.
    `pnpm db:migrate --env=<env> --db=inventory`
 4. **Vault migration**, after `vault-walk-ins-and-owners`' migrations - the
    three `case_items` columns, the category check widened `NOT VALID` with a
-   `VALIDATE` statement, `register_words`
-5. **Deploy the vault** with `InventoryVaultService` and its words written but
-   its `INVENTORY_ITEMS` binding absent: words wait, nothing is lost
-6. **Deploy inventory** with `VaultItemsService` and the `VAULT` binding, and
-   the new private bucket
-7. **Bind the vault to inventory** and deploy; the fast lane drains the
-   waiting words; the slow lane's `registerBackfill` runs until
-   `vault.register.backfill_remaining` reads zero
+   `VALIDATE` statement, `register_dues`
+5. **Deploy inventory** with `VaultItemsService` and the new private bucket,
+   and no `VAULT` binding: the place row reads "status unavailable"
+6. **Deploy the vault** with `InventoryVaultService` and its `INVENTORY_ITEMS`
+   binding; the fast lane delivers the due rows, and the slow lane's
+   `registerBackfill` runs until `vault.register.backfill_remaining` reads zero
+7. **Bind inventory to the vault** and deploy
 8. **The console** - Items, one item, the Case tab slots, the collector
    section, the erasure line
 
-Rollback: unbind `INVENTORY_ITEMS` from the vault - words keep accumulating and
-deliver on rebinding; the register's tables stay.
+Rollback: unbind `INVENTORY_ITEMS` from the vault - due rows keep accumulating
+and deliver on rebinding; the register's tables stay.
 
 ## Open Questions
 
