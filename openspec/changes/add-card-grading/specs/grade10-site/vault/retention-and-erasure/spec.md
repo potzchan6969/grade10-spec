@@ -6,8 +6,8 @@ What the vault keeps after a case ends, what it deletes when the person asks to
 be forgotten, what it keeps anyway because it is the evidence that an agreement
 existed, and the page the person reads all three on.
 
-It answers for a collector's grading submissions on the same table and the same
-request, so one review and one erasure path serve both products.
+It answers for a collector's grading submissions too, on the same table and the
+same request, so one review and one erasure path serve both products.
 
 Two mechanisms, kept apart on purpose: a review that flags a case past its
 window and acts on nothing, and an erasure the person asks for from their own
