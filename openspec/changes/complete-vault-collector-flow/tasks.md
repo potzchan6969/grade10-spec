@@ -568,7 +568,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 13.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 14. The request wizard and the case list (grade10)
+## 14. The request wizard and the case list (grade10) (owner: @ecchochan)
 
 - [x] 14.1 Cover the third step and the list: the read-back, the tick a send
       is refused without, a statement nobody has written yet, the draft list,
