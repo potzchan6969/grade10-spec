@@ -1954,7 +1954,7 @@ read this group's stories. Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-59`,
       `grade10-site-grading-submission-plan-SC-32`)
 
-## 26. The collector's drop-off screens (grade10)
+## 26. The collector's drop-off screens (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
