@@ -17,7 +17,7 @@ any group may land beside.
 One migration, `0031_case_reference.sql`, lands in group 4, and the worker and
 both SPAs deploy from one commit in one window — Migration Plan, step 2.
 
-## 1. The collector's words (grade10-spec)
+## 1. The collector's words (grade10-spec) (owner: @ecchochan)
 
 - [x] 1.1 Name the new keys in the vocabulary type first, so
       `pnpm --filter @grade10/i18n run test` refuses every language that has
