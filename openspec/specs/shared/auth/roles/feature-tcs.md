@@ -1,7 +1,7 @@
 # shared/auth/roles Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** approved
+**Reviewed:** 2026-10-01, tcs-rules r4
 
 ## shared-auth-roles-US1: Collector holds the user role only
 
@@ -9,14 +9,13 @@
 **I want** my roles to be `user` only,
 **so that** I cannot act as staff by accident.
 
-<!-- trace:case id=g10.shared-roles.TC-gda rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC1-1: Collector without an operator grant is user only
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -26,67 +25,109 @@
 * **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
-Signed in as a collector who has never been granted an operator role.
+
+* customer(has never been granted an operator role) is signed in on <grade10 store url>.
 
 **Steps:**
 
-1. Ask a product of this brand who is calling.
+1. Read who is calling.
 
 **Expected Results:**
 
 * The caller's roles are `user` only.
 
-<!-- trace:case id=g10.shared-roles.TC-5hv rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC2-1: Unknown role name is dropped
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
-A signed-in person whose stored roles include a name that is not in the closed set.
+
+* customer(stored roles include <unknown role>) is signed in on <grade10 store url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <unknown role> | intern |
 
 **Steps:**
 
-1. Ask a product of this brand who is calling.
+1. Read who is calling.
 
 **Expected Results:**
 
-* That unknown name is not among the roles.
+* `intern` is not among the caller's roles.
 
-<!-- trace:case id=g10.shared-roles.TC-l66 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC3-1: User role cannot take an operator action
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
-Signed in as a person whose only role is `user`.
+
+* customer(roles are `user` only) is signed in.
 
 **Steps:**
 
-1. Request an operator action.
+1. On <grade10 admin users url>, try to ban an account.
 
 **Expected Results:**
 
-* The system refuses it.
+* The ban is refused.
+
+### shared-auth-roles-US1-TC4-1: Admin console rejects a user sign-in
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** exploratory
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-roles-US-01
+
+**Pre-conditions:**
+
+* customer(roles are `user` only) is signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <collector email> | collector@example.com, an address whose roles are `user` only |
+
+**Steps:**
+
+1. Sign in as <collector email> on <grade10 admin url>.
+
+**Expected Results:**
+
+* The admin console rejects the sign-in.
 
 ---
 
@@ -96,251 +137,277 @@ Signed in as a person whose only role is `user`.
 **I want** each action allowed only when my role grants that permission,
 **so that** support cannot set roles, staff cannot ban, and an unknown permission grants nothing.
 
-<!-- trace:case id=g10.shared-roles.TC-m1b rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC1-1: Support cannot set roles but can still list and ban
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
-Signed in as an operator whose role is `support`.
+
+* admin(role `support`) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <subject user id> | An account that does not hold `admin` |
+| <subject session> | A session of an account that does not hold `admin` |
 
 **Steps:**
 
-1. Try to set another person's roles.
-2. List users, ban an account that is not admin, and list and revoke a non-admin session.
+1. On <grade10 admin users url>, try to change another account's roles.
+2. List the accounts.
+3. Ban <subject user id>.
+4. End <subject session>.
 
 **Expected Results:**
 
-* Setting roles is refused.
-* Listing users, banning, and listing and revoking sessions still work.
+* The role change is refused.
+* Listing accounts, the ban, and ending the session are allowed.
 
-<!-- trace:case id=g10.shared-roles.TC-cd2 rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC2-1: Staff cannot list or ban users
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
-Signed in as an operator whose role is `staff`.
+
+* admin(role `staff`) is signed in.
 
 **Steps:**
 
-1. Try to list users.
+1. On <grade10 admin users url>, try to list accounts.
 2. Try to ban an account.
 
 **Expected Results:**
 
-* Both requests are refused.
+* The list is refused.
+* The ban is refused.
 
-<!-- trace:case id=g10.shared-roles.TC-67z rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC3-1: Unknown permission grants nothing
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-A product checks a permission name that is not in the vocabulary.
-
-**Steps:**
-
-1. Request that action as any signed-in person.
-
-**Expected Results:**
-
-* The system refuses it.
-
-<!-- trace:case id=g10.shared-roles.TC-ni5 rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
-### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-Signed in as an operator whose role is `staff`.
-
-**Steps:**
-
-1. Take a store write action.
-2. Take an auction operate action.
-
-**Expected Results:**
-
-* Both actions are allowed.
-
-<!-- trace:case id=g10.shared-roles.TC-c1m rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
-### shared-auth-roles-US2-TC5-1: Auditor reads the trail and nothing else
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-Signed in as a person whose only operator role is `auditor`.
-
-**Steps:**
-
-1. Read the identity audit trail.
-2. Try a ban, a store write, and a role change.
-
-**Expected Results:**
-
-* Reading the trail is allowed.
-* The ban, store write, and role change are refused.
-
-<!-- trace:case id=g10.shared-roles.TC-ozo rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
-### shared-auth-roles-US2-TC6-1: Combined roles stack their grants
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-Signed in as a person holding `support` and `staff`.
-
-**Steps:**
-
-1. List users.
-2. Write to the store.
-
-**Expected Results:**
-
-* Both actions are allowed.
-
-<!-- trace:case id=g10.shared-roles.TC-8ru rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
-### shared-auth-roles-US2-TC7-1: Operator cannot widen what a role grants
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `user:set-role`.
-
-**Steps:**
-
-1. Navigate to <grade10 admin users url>.
-2. Check what can be changed for another account.
-
-**Expected Results:**
-
-* Who holds a role can be changed.
-* What that role grants cannot be changed.
-
-<!-- trace:case id=g10.shared-roles.TC-pp1 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
-### shared-auth-roles-US2-TC8-1: Refund processing is granted to staff and admin
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Permission checks
-
-**Pre-conditions:**
-
-* One caller has role `staff`; another has role `admin`.
-
-**Steps:**
-
-1. Each caller requests the refund action.
-
-**Expected Results:**
-
-* Both callers are allowed by `auction:refund`.
-
-<!-- trace:case id=g10.shared-roles.TC-z15 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
-### shared-auth-roles-US2-TC9-1: Settlement permission is not required for a refund
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Permission checks
+* **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 
-* A staff caller has refund processing but not payment settlement.
+* A signed-in person is on <grade10 store url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <unknown permission> | store:explode |
 
 **Steps:**
 
-1. Request the refund action.
+1. Request an action that requires <unknown permission>.
 
 **Expected Results:**
 
-* The action is allowed.
-* The caller is not granted any settlement permission.
+* The action is refused.
 
+### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(role `staff`) is signed in.
+
+**Steps:**
+
+1. Write a store record on <grade10 admin url>.
+2. Operate the auction catalog on <grade10 admin auction catalog url>.
+
+**Expected Results:**
+
+* The store write is allowed.
+* The auction operate action is allowed.
+
+### shared-auth-roles-US2-TC5-1: Auditor reads the trail and nothing else
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(only operator role is `auditor`) is signed in.
+
+**Steps:**
+
+1. Read the identity audit trail on <grade10 admin audit url>.
+2. On <grade10 admin users url>, try to ban an account.
+3. Try a store write on <grade10 admin url>.
+4. Try to change another account's roles.
+
+**Expected Results:**
+
+* Reading the trail is allowed.
+* The ban, the store write, and the role change are refused.
+
+### shared-auth-roles-US2-TC6-1: Combined roles stack their grants
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(holds `support` and `staff`) is signed in.
+
+**Steps:**
+
+1. List accounts on <grade10 admin users url>.
+2. Write a store record on <grade10 admin url>.
+
+**Expected Results:**
+
+* The list is allowed.
+* The store write is allowed.
+
+### shared-auth-roles-US2-TC7-1: Operator cannot widen what a role grants
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:set-role`) is signed in.
+
+**Steps:**
+
+1. Open another account on <grade10 admin users url>.
+2. Read what can be changed for that account.
+
+**Expected Results:**
+
+* Who holds a role can be changed.
+* What that role grants cannot be changed.
+
+### shared-auth-roles-US2-TC8-1: Admin can record a refund
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(role `admin`) is signed in.
+
+**Steps:**
+
+1. Request a refund, which requires `auction:refund`, on <grade10 admin auction url>.
+
+**Expected Results:**
+
+* The refund is allowed.
+
+### shared-auth-roles-US2-TC9-1: Settlement permission is not required for a refund
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(role `staff`) is signed in.
+* That caller holds refund processing and does not hold payment settlement.
+
+**Steps:**
+
+1. Request a refund, which requires `auction:refund`, on <grade10 admin auction url>.
+2. Read the caller's grants.
+
+**Expected Results:**
+
+* The refund is allowed.
+* The caller does not hold `auction:settle`.
