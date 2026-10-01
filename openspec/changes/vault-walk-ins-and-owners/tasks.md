@@ -19,7 +19,7 @@ lands once every grade10 group is verified; group 11 is the walk.
 - [ ] 1.3 Verify: `pnpm --filter @grade10/i18n run test`,
       `pnpm run typecheck`, `pnpm run lint`
 
-## 2. The manual (grade10-spec)
+## 2. The manual (grade10-spec) (owner: @ecchochan)
 
 Lands once every grade10 group is green and its implementation verified.
 
