@@ -16,8 +16,6 @@ is `grade10-admin/vault/money-book`; the case machine the buttons follow is
 - The queue
   - Cut by what waits: every status belongs to exactly one status view, and
     the rest are queries
-  - Today, cut where the rows are: the shop's own day decides it, in the read
-    rather than in the browser
   - Rows that explain themselves: the badge names why a case is waiting on a
     person
   - Keyset paging: a page, a backlog count and a control that says whether
