@@ -1,0 +1,271 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "e28dbe8568ffd316fce9a46a207992cdf3445a785e027d5ad5db7ed60d00d222"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "66a4ca7b2d3a6314d2a6b17bb86a18e8e861d6d6",
+    "capturedAt": "2026-10-01T10:44:37.546Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-card-grading/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/grading/batches/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/grading/batches/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A batch is one shop, one grader and one level",
+          "Requirement: A batch saved part-scanned keeps its scans",
+          "Requirement: A batch's word is read from its own stamps",
+          "Requirement: A card that did not come back is recorded on the card",
+          "Requirement: A card the grader held comes home in a later box",
+          "Requirement: A scan matches one cert to one card",
+          "Requirement: A slab the manifest leaves out is added to it",
+          "Requirement: Finishing receiving makes every submission ready at once",
+          "Requirement: Shipping a batch is one act over every submission in it",
+          "Requirement: The batch list puts what waits on the shop first",
+          "Requirement: The box is recorded arrived once its grades are in",
+          "Requirement: The counters read the batch as it is scanned",
+          "Requirement: The cut-off closes the batch and the next day ships it",
+          "Requirement: The estimate is a date, and a re-estimate takes a reason",
+          "Requirement: The grader's stage is recorded from a closed set",
+          "Requirement: The insured total is read against the courier's written cover",
+          "Requirement: The manifest and the invoice enter before the first scan",
+          "Requirement: The safe holds no more declared value than its cap",
+          "Requirement: The tiles read what the shop is holding",
+          "Requirement: The upcharge is the fee sheet's difference"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/grading/batches/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/grading/counter/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/grading/counter/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A card is withdrawn until its batch closes",
+          "Requirement: A document is minted only when the counter is ready for it",
+          "Requirement: A hand-in is refused whole rather than done in part",
+          "Requirement: A payout is its own record, with its route and its reversal",
+          "Requirement: A refused card carries its reason in the collector's words and is never charged",
+          "Requirement: A row says why its submission is waiting on somebody",
+          "Requirement: A sealed document and the grades message can be handed over again",
+          "Requirement: A setting pinned to a submission never moves under it",
+          "Requirement: A slab goes into a vault case from the hand-back step",
+          "Requirement: A waiver, a payout and a money setting each take a reason and a second approve holder",
+          "Requirement: An act is offered only where it can run, and the worker refuses independently",
+          "Requirement: An operator's session is verified, and stays verified for twelve hours",
+          "Requirement: Every act on a submission is filed under that submission",
+          "Requirement: Every act sits behind one of three grants",
+          "Requirement: Every default the counter runs on is a setting, read and never compiled in",
+          "Requirement: Four tiles stand over the counter",
+          "Requirement: Hand-back at the counter runs as one flow",
+          "Requirement: Hand-in at the counter runs as one flow",
+          "Requirement: One submission opens into a header and four tabs",
+          "Requirement: Only the collector or the person they named leaves with the cards",
+          "Requirement: The queue cuts submissions by what they are waiting for",
+          "Requirement: The timeline carries every event with its figures, and staff-only entries stay in the console",
+          "Requirement: The written notice is a counter act with a posting date"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/grading/counter/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/collector-notifications/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/collector-notifications/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A card refused at the counter and a collector named on the page send no message",
+          "Requirement: A failed send is owed, and rides the vault's ladder",
+          "Requirement: A value nobody has set is bracketed outside production and refuses the act in production",
+          "Requirement: Cards waiting to be collected are told at each rung, and nothing follows the notice",
+          "Requirement: Every event decides its message, or decides silence",
+          "Requirement: Every message ends with the submission's line and the shop's footer",
+          "Requirement: Grading sends nineteen messages, each about the submission it names",
+          "Requirement: The submission sends the drop-off's messages, and the collector hears from nobody else"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/collector-notifications/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/counter-documents/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/counter-documents/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A document is refused rather than sealed while a fact it prints is unset",
+          "Requirement: A submission is papered by three documents, and a withdrawn card by a receipt of its own",
+          "Requirement: Every document reaches the collector three ways, each with its fingerprint",
+          "Requirement: Every figure a document prints is pinned at signing",
+          "Requirement: The counter's ceremony asks for no identity and takes the name from the booking",
+          "Requirement: The hand-back receipt prints what was handed back and closes the submission",
+          "Requirement: The intake receipt records what was handed in against what was paid",
+          "Requirement: The submission agreement prints the submission and carries seven clauses"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/counter-documents/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/dropoff-booking/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/dropoff-booking/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A missed visit is closed by the diary and costs nothing but the day",
+          "Requirement: A walk-in books the Grading visit and lists the cards at the counter",
+          "Requirement: Grading takes three diary services and owns every message about the visit",
+          "Requirement: One visit holds a second submission",
+          "Requirement: The booked page says what the visit is and what to bring",
+          "Requirement: The chosen day names the batch the cards leave in",
+          "Requirement: The collector books the drop-off from the submission",
+          "Requirement: The visit is moved or cancelled any time before it starts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/dropoff-booking/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/submission-lifecycle/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/submission-lifecycle/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A card is withdrawn until its batch closes",
+          "Requirement: A card that did not come back is paid out at its declared value",
+          "Requirement: A ready submission carries a pickup code and one figure to settle",
+          "Requirement: A slab goes into a vault case at the same counter",
+          "Requirement: A submission holds one of ten statuses",
+          "Requirement: A submission is cancelled until its visit starts or the counter takes a card, and expires when nobody books",
+          "Requirement: After collection the submission keeps the graded record",
+          "Requirement: Cards are released to the collector or the one person they named",
+          "Requirement: Cards left uncollected walk reminders, then storage, then a written notice",
+          "Requirement: Every card carries one outcome",
+          "Requirement: Storage accrues per card held and per month started",
+          "Requirement: The collector names one person to collect",
+          "Requirement: The fee follows the card's outcome",
+          "Requirement: The grade is the grader's decision",
+          "Requirement: The page offers only the acts the status allows",
+          "Requirement: The page reads one word, one chip and one rail",
+          "Requirement: The submission page opens to the collector and to the emailed link",
+          "Requirement: The upcharge is the fee sheet's difference between the two levels",
+          "Requirement: While the cards are with the grader the page reads its stages and the estimate"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/submission-lifecycle/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/submission-plan/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/submission-plan/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A card above the level's ceiling goes in a second submission on the same drop-off",
+          "Requirement: A card is matched in the card price reference or kept in the collector's own words",
+          "Requirement: A collector plans a submission in three steps",
+          "Requirement: A pasted list accounts for every line",
+          "Requirement: A plan is priced on the fee sheet it was booked on",
+          "Requirement: A plan lives under the email given and needs no account",
+          "Requirement: A plan with no drop-off booked is nudged, then expires",
+          "Requirement: Cards a submission is a column of the fee sheet",
+          "Requirement: Every card carries a declared value, and may carry a minimum grade",
+          "Requirement: One fee sheet per grader, one row per level",
+          "Requirement: One submission is one grader and one level",
+          "Requirement: The estimate is the fee a card times the cards, with the cover line where the level carries one",
+          "Requirement: The grading home says what grading is and offers two ways in",
+          "Requirement: The review states the schedule, the totals and the upcharge before anything is booked"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/grading/submission-plan/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A submission that was signed keeps its evidence and one nobody signed is purged",
+          "Requirement: An erasure is refused by name while a submission is live",
+          "Requirement: Grading's records are kept under the vault's classes, measured from the submission's end"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/grading-submission/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/grading-submission/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Every word, figure and act arrives through props",
+          "Requirement: One person can be named to collect",
+          "Requirement: One place for the money lines",
+          "Requirement: The editable card list carries a card and what is missing on it",
+          "Requirement: The fee sheet draws every grader's levels",
+          "Requirement: The grade cards read the grader's words",
+          "Requirement: The grading submission exports",
+          "Requirement: The level picker opens a level or names what closed it",
+          "Requirement: The paste sheet accounts for every line",
+          "Requirement: The pickup card says what to bring",
+          "Requirement: The rail marks the stage a submission reached",
+          "Requirement: The record after hand-in reads as the cards were handed in",
+          "Requirement: The review shows the schedule, the totals and what a card could cost",
+          "Requirement: The status word and whose move it is are one pair",
+          "Requirement: The uncollected ladder dates every rung"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/grading-submission/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

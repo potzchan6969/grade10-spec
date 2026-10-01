@@ -19,7 +19,7 @@ payouts and erasure, with walk 34. Each e2e spec lands with the stage that
 reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 (b)'s ship is proven by group 16's service tests alone.
 
-## 1. The collector's words (grade10-spec)
+## 1. The collector's words (grade10-spec) (owner: @ecchochan)
 
 - [x] 1.1 Name every key of the new `grading` namespace in the vocabulary type
       first, so `pnpm --filter @grade10/i18n run test` refuses each language
