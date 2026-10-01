@@ -256,7 +256,7 @@ Lands once every grade10 group is green and its implementation verified.
 - [ ] 7.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 8. The console's walk-in and collector column (grade10)
+## 8. The console's walk-in and collector column (grade10) (owner: @ecchochan)
 
 Built on the console's existing blocks, as `ui-design.md` composes them, while
 Q27 stands open on the designer's boards.
