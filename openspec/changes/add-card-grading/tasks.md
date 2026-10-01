@@ -830,7 +830,7 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       needs 16.8's migration; then run 13.8's checks (Q143,
       `grade10-admin-grading-counter-SC-113`)
 
-## 14. The two templates and the intake receipt (grade10)
+## 14. The two templates and the intake receipt (grade10) (owner: @ecchochan)
 
 Stage (b).
 
