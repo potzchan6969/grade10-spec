@@ -58,7 +58,7 @@ both SPAs deploy from one commit in one window — Migration Plan, step 2.
 - [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run email:build`
 
-## 3. The derived facts and the wire (grade10)
+## 3. The derived facts and the wire (grade10) (owner: @ecchochan)
 
 Needs groups 1 and 2 merged to this store's `main`. Every other application
 group reads this one's exports.
