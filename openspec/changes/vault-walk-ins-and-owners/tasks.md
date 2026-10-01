@@ -42,7 +42,7 @@ Lands once every grade10 group is green and its implementation verified.
 
 ## 3. The contracts (grade10) (owner: @ecchochan)
 
-- [ ] 3.1 Cover the grant map and the wire both ways: every new procedure and
+- [x] 3.1 Cover the grant map and the wire both ways: every new procedure and
       byte route in `ADMIN_PERMISSIONS` and `ROUTE_PERMISSIONS` against the
       router, the walk-in on `vault:operate`, the name reads on `kyc:read`,
       and the new fields decoding on the fixtures
