@@ -1,2 +1,4 @@
 schema: grade10-planning
 created: 2026-09-30
+awaiting:
+  specs: "2026-10-01, the requirements and scenarios after the blind suite - @ecchochan"
