@@ -371,7 +371,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 9.5 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
-## 10. The console's queue and custody reads (grade10)
+## 10. The console's queue and custody reads (grade10) (owner: @ecchochan)
 
 - [x] 10.1 Cover the reads and the offer recording's own guard with both
       halves — the query shape and the rows: one `GROUP BY status` folded onto
