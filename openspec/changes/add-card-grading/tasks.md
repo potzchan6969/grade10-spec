@@ -1335,7 +1335,7 @@ Stage (c).
       (`grade10-admin-grading-counter-SC-109`,
       `grade10-admin-grading-counter-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
-- [ ] 19.10 Put a reversed payout and its refunded fee back on the submission as
+- [x] 19.10 Put a reversed payout and its refunded fee back on the submission as
       one `repayment` due — `money_lines.kind` and `DUE_KINDS` taking it in
       19.9's migration, `pos_repayment_variant` ringing it, Q47's no-earn rule
       covering it and no waiver reaching it — settled at the till by
