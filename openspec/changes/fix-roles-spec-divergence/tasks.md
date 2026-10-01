@@ -24,7 +24,7 @@ group adds or names the tests that prove it, and changes no grant.
 - [ ] 3.3 Cite the scenario in the existing self-approval cases - the offer's maker refused the payout and a recorder refused the reversal in `apps/backend/grade10/vault/test/db/money.spec.ts`, `SAME_APPROVER` in `packages/grading/backend/test/counter/approvals.repo.test.ts` and `packages/grading/backend/test/settings/approvals.repo.test.ts` - and add one where a person holding `staff` and `treasurer` makes an offer and is refused its payout (`shared-auth-roles-SC-22`)
 - [ ] 3.4 Verify: `pnpm run test:backend` for the vault and grading workers in grade10.
 
-## 4. The walk (grade10)
+## 4. The walk (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review fix-roles-spec-divergence`)
 as its input, and groups 2 and 3 landed; `/tcs-run-sheet` executes the cases
