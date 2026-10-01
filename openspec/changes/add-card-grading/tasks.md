@@ -1820,7 +1820,7 @@ Stage (b).
       `grading:operate`, its tests red first (Q143, Q136,
       `grade10-admin-grading-counter-SC-116`)
 
-## 25. The collector's home, the wizard and the paste sheet (grade10)
+## 25. The collector's home, the wizard and the paste sheet (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and the worker of groups 11 and 24: the tests run
 25.2's transport on the real router in-process, and the stories replay
