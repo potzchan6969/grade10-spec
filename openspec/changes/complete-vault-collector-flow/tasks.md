@@ -1085,7 +1085,7 @@ their words, their tests and their story ids; only what draws them moves.
       `node scripts/checks/check-dialogs.mjs`, the vault frontend's suites
       and stories unchanged, `pnpm run typecheck`, `pnpm run lint`
 
-## 26. The collection statement in production (grade10)
+## 26. The collection statement in production (grade10) (owner: @ecchochan)
 
 The production refusal `decisions.md` Q8 records, and the statement's move
 onto the legal-copy table.
