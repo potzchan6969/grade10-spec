@@ -151,15 +151,19 @@ that lands.
   3 probes to `/public/time`, the shortest round trip sets the anchor;
   re-probed on reconnect, on becoming visible, on `pageshow`, every 10
   minutes and on a wall-clock jump; a correction under 1 s never raises a
-  displayed countdown (`frontend/src/core/live/serverClock.ts`)
+  displayed countdown (`frontend/src/core/live/serverClock.ts`). Until a
+  probe answers, the clock runs from the served document's render time at
+  the navigation's response start, so it carries on from what was served;
+  with neither, it runs on the device clock until a later probe answers
 - **One frame loop** - `createFrameClockStore` from `@grade10/ui` drives every
   countdown through `ClockProvider`, and `remainingSeconds` rounds up; the app
   hands it the server clock, so the store's blocks and the app read one clock
 - **Live queries** - `liveAuctionSocket.ts` holds one ref-counted socket per
   room; each feature's live hook writes frames into the query it already
   reads, and `higherVersion` as `structuralSharing` keeps a racing fetch from
-  going back. After 3 failed transports a page polls; a lot still `closing`
-  refetches until its result arrives
+  going back. A `gone` frame re-reads the lot, which then reads called off.
+  After 3 failed transports a page polls; a lot still `closing` refetches
+  until its result arrives
 - **My Auctions** - bidding rows carry `topAmountMinor` and take their phase
   from `liveClock`, so a `closing` lot keeps its standing in Active until the
   close commits

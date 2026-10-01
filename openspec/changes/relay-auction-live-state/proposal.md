@@ -81,8 +81,14 @@ None.
 
 ## Open Questions
 
-None. The product owner's rulings of 2026-10-01 settle every question this
-change raised - [Decisions](decisions.md#decisions).
+The product owner's rulings of 2026-10-01 settle Q1 to Q11. Planning raised
+four more, each with a recommended answer - [Decisions](decisions.md#decisions):
+
+- **Q12** - whether a bidder's own standing turns to Outbid live
+- **Q13** - which words show for a bid that did not count, since the existing
+  string also says the card was not authorized
+- **Q14** - whether the Bounded late window leaf is reworded
+- **Q15** - which of this change and `allow-zero-starting-price` archives first
 
 ## References
 

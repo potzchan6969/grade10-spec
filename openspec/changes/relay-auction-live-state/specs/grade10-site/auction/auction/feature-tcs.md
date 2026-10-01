@@ -3,6 +3,21 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
 
+**Out of suite:**
+
+- `grade10-site-auction-auction-SC-65` - a bid moving a catalogue card: `grade10-site-auction-e2e-US07-TC04-1` in the domain suite, and the catalogue live hook's tests in grade10 (task 8.1)
+- `grade10-site-auction-auction-SC-66` - an extension restarting a card's countdown: `grade10-site-auction-e2e-US07-TC04-1` in the domain suite, and task 8.1's tests
+- `grade10-site-auction-auction-SC-70` - the lot's own timer closing it with no page open: the settle tests in grade10 (task 5.1) and the room's alarm tests (task 6.1); `grade10-site-auction-auction-US11-TC7-1` walks the same close with a page open
+- `grade10-site-auction-auction-SC-71` - a read settling an overdue lot: `grade10-site-auction-auction-US11-TC8-1`'s first row, and task 5.1's deferred-settle tests
+- `grade10-site-auction-auction-SC-72` - the sweep settling what nothing reached: `grade10-site-auction-auction-US11-TC8-1`'s second row, and task 5.1's sweep tests
+- `grade10-site-auction-auction-SC-73` - two settles racing on one lot: task 5.1's race tests over the listing lock; two settles at one instant cannot be placed by hand
+- `grade10-site-auction-auction-SC-75` - an older update losing to a newer one: the version trigger tests (task 3.1) and the `higherVersion` tests (task 7.1)
+- `grade10-site-auction-auction-SC-76` - a live update carrying only public facts: the room's frame tests (task 6.1)
+- `grade10-site-auction-auction-SC-77` - a page with no live connection catching up: `grade10-site-auction-listing-page-US12-TC3-1` on the lot page, and task 8.1's polling tests for the catalogue
+- `grade10-site-auction-auction-SC-78` - the flag off leaving the close rules on: `grade10-site-auction-listing-page-US12-TC3-1`'s second row, and task 6.1's flag-off route tests
+- `grade10-site-auction-auction-SC-79` - a called-off lot leaving open pages: task 6.1's `gone` frame tests and task 7.1's page tests
+- `grade10-site-auction-auction-SC-80` - the public time read: task 6.1's time route tests; the `grade10-site-auction-listing-page-US13` cases read its effect on the countdown
+
 ## grade10-site-auction-auction-US11: Bidder is held to the close with everyone else
 
 **As a** bidder,
@@ -303,7 +318,6 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_7>` | An HKD listing in extended bidding, led by customer A |
-| `<settle wait>` | About 1 second after the recorded close |
 | `<sweep interval>` | 300s (5mins) |
 
 **Steps:**
@@ -313,8 +327,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The lot's close is recorded within `<settle wait>` of the recorded close.
-* customer A's page reads Won within `<settle wait>`, well inside `<sweep interval>`.
+* The lot's close is recorded before the next sweep, well inside `<sweep interval>`, and its close lag is recorded.
+* customer A's page reads Closed with no result, then Won, without a reload.
 
 ### grade10-site-auction-auction-US11-TC8-1: A lot whose alarm missed is still settled
 
@@ -452,3 +466,22 @@ Runs once per row of **Test data**.
 * Highest bid stays `<leader price>`.
 * The recorded close stays `<close before raise>`, and Time left keeps counting to it.
 * The lot closes at `<close before raise>`, customer A winning at `<leader price>`.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-01. QA1's blind pass read the frozen Purpose and Feature set, the change's journeys, `proposal.md`, `decisions.md` with its empty `## Raised`, the linked pages under `docs/prds/` (auction display and bidding, the auction service), `openspec/config.yaml`'s context, the durable suites and the change's domain draft with their `## Reconciliation` stripped, and the two rulebooks; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both readings, the three deltas, `tech-design.md`, `tasks.md` and the en, ko, zh-Hans and zh-Hant catalogues. It is a statement, not proof.
+
+- **Joined** - `grade10-site-auction-auction-US11-TC1-1` into `grade10-site-auction-auction-SC-69`, its first row held by the durable `grade10-site-auction-auction-SC-21`; `grade10-site-auction-auction-US11-TC2-1` into `grade10-site-auction-auction-SC-67`, its bid panel words into `grade10-site-auction-listing-page-SC-39`; `grade10-site-auction-auction-US11-TC3-1` into `grade10-site-auction-auction-SC-68`; `grade10-site-auction-auction-US11-TC5-1` into `grade10-site-auction-auction-SC-85`, `grade10-site-auction-auction-SC-84` and `grade10-site-auction-auction-SC-07b` by row, with the refusal while settling is held back into `grade10-site-auction-auction-SC-74`; `grade10-site-auction-auction-US11-TC6-1` into `grade10-site-auction-auction-SC-84`; `grade10-site-auction-auction-US11-TC7-1` into `grade10-site-auction-auction-SC-70`; `grade10-site-auction-auction-US11-TC8-1` into `grade10-site-auction-auction-SC-71` and `grade10-site-auction-auction-SC-72`; `grade10-site-auction-auction-US12-TC1-1` into `grade10-site-auction-auction-SC-82`; `grade10-site-auction-auction-US12-TC2-1` into `grade10-site-auction-auction-SC-81`
+- **Raised, folded into spec** - `grade10-site-auction-auction-US11-TC4-1`, a bid counting when placed with holds off: the requirement stated it and no scenario did, now `grade10-site-auction-auction-SC-86`, cited in tasks 4.1 and 4.2
+- **Raised, escalated** - the Bounded late window leaf reading as the end of all extended bidding, landed as Q14; this change and `allow-zero-starting-price` both modifying the window requirement, landed as Q15
+- **Raised, rejected** - none this run
+- **Covered at domain** - `grade10-site-auction-e2e-US07-TC03-2`, a price-moving bid in extended bidding restarting the timer on an open page, the durable `grade10-site-auction-auction-SC-06` under Q5
+- **Covered at domain** - `grade10-site-auction-e2e-US07-TC04-1`, the catalogue card and the lot page agreeing after an extension, `grade10-site-auction-auction-SC-65` and `grade10-site-auction-auction-SC-66`
+- **Covered at domain** - `grade10-site-auction-e2e-US12-TC01-1`, one result on the lot page and My Auctions once the close is recorded
+- **Out of suite** - the scenarios listed under the header, each serving a Feature-set group rather than a journey and naming where it is decided
+- **Patched, not re-run** - `grade10-site-auction-auction-US11-TC7-1` drops its one-second bound and asserts a close recorded before the next sweep with its lag recorded: the proposal measures the close lag rather than asserting it, and the PRD's "about a second" is the normal case, not a bound. It keeps `<v>`
+- **Settled by the artifacts, not raised** - where the late window ends with no cap, or a cap at or above the duration: the late window bounds only a lot whose extended bidding is not yet recorded; once it is, the effective close is the recorded close, which each price-moving bid moves, up to the scheduled close plus any cap, so lot C closes at 21:05 (the window requirement's Effective close and steps 5 to 7, the tech design's clock table). The bidding PRD's and the auction service PRD's 🚧 lines, which read as a hard end, were reworded to say so. No auction journey walks Live relay, Live cards or Service time: the rulebook lets a group-served scenario be closed by a domain case or `**Out of suite:**`, which is how they are closed here. Between the close and the recorded close the public status stays Active and the page shows Closed with no result (Q3, `grade10-site-auction-auction-SC-71`)
+- **Unchanged durable cases** - `grade10-site-auction-auction-US2-TC10-1` holds under Q5, since its bids come from a non-leader and move the price; it stays `actual`
+- **Contradicted** - none
+- **Uncovered anchors** - none: `grade10-site-auction-auction-US-11` has eight cases, `grade10-site-auction-auction-US-12` two, and the Closing a due lot, Live relay, Live cards and Service time leaves close through the header's list
+- **Not walked by any case** - `grade10-site-auction-auction-SC-83`, a bid at exactly the scheduled close with extension off: an exact millisecond cannot be placed by hand, so task 4.1's tests decide it

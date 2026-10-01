@@ -107,6 +107,14 @@ a live connection SHALL catch up by polling.
 - **THEN** the page shows the new current bid on its next poll, without a
   reload
 
+#### Scenario: grade10-site-auction-listing-page-SC-41 - A page that lost its live connection catches up when it returns
+**Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
+
+- **GIVEN** a collector on an open lot's page whose live connection dropped
+- **WHEN** a bid from another page is accepted, and the connection then
+  returns
+- **THEN** the page shows the new current bid and bid count without a reload
+
 ### Requirement: A lot counts down on the auction service's clock
 
 A lot page SHALL count down on the auction service's clock, never the
@@ -163,7 +171,7 @@ bidding.
 | The winner | Sold | Won |
 | Another bidder | Sold | Did not win |
 | Anyone else | Sold | The winning bid |
-| Anyone | No winner | Unsold |
+| Anyone | No winner | Ended, with No bids under it |
 
 The page SHALL use only existing words for the moments around the close:
 
@@ -179,7 +187,7 @@ The page SHALL use only existing words for the moments around the close:
 - **GIVEN** a bidder leading a lot on its page
 - **WHEN** the effective close passes and the close is recorded later
 - **THEN** until it is recorded the page shows Closed with no result, and
-  never Unsold or Did not win
+  never Ended or Did not win
 - **AND** once it is recorded the page shows Won, without a reload
 
 #### Scenario: grade10-site-auction-listing-page-SC-38 - A losing bidder reads Did not win from the record
@@ -193,11 +201,11 @@ The page SHALL use only existing words for the moments around the close:
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
 - **GIVEN** a bidder whose bid shows Authorizing… as the lot's effective close
-  passes
+  passes, on a lot another bidder leads
 - **WHEN** its payment confirms after the close
 - **THEN** the page shows Your bid did not go through
-- **AND** once the close is recorded the page shows the recorded result
-  without that bid
+- **AND** once the close is recorded the page shows Did not win, with the
+  current bid as it stood without that bid
 
 #### Scenario: grade10-site-auction-listing-page-SC-40 - No new state appears between the close and the result
 **Serves:** `Close and result` - the page between the effective close and the recorded close
@@ -207,3 +215,12 @@ The page SHALL use only existing words for the moments around the close:
 - **WHEN** the page shows the lot
 - **THEN** its status reads Closed with no result, and no label names a
   closing or final-deadline state
+
+#### Scenario: grade10-site-auction-listing-page-SC-42 - A later close returns the page to Extended bidding
+**Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
+
+- **GIVEN** a lot page showing Closed with no result past the deadline it
+  counted to
+- **WHEN** a later recorded close arrives for that lot
+- **THEN** the page shows Extended bidding and counts to the later close
+- **AND** its bid controls are enabled again

@@ -114,6 +114,15 @@ through.
 - **THEN** the bid counts and the recorded close becomes the extension
   duration after 20:29:59 UTC
 
+#### Scenario: grade10-site-auction-auction-SC-86 - With holds off a bid counts when placed
+**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
+
+- **GIVEN** bid-time holds are off, and a listing in extended bidding with an
+  extension duration of 1800 seconds and recorded close 20:30:00 UTC
+- **WHEN** a valid bid that moves the price is placed at 20:29:59 UTC
+- **THEN** the bid counts when placed, with no wait for a payment
+- **AND** the recorded close becomes 20:59:59 UTC
+
 ### Requirement: A due lot is settled at its close
 
 Grade10 SHALL settle a listing when a deadline passes: open bidding at its

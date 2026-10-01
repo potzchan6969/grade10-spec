@@ -3,6 +3,10 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
 
+**Out of suite:**
+
+- `grade10-site-auction-listing-page-SC-40` - no closing or final-deadline label between the close and the result: `grade10-site-auction-listing-page-US14-TC1-1` and `grade10-site-auction-listing-page-US14-TC2-1` read the page in that gap, and task 7.1's closing panel tests
+
 ## grade10-site-auction-listing-page-US12: Collector sees another bid on the lot without reloading
 
 **As a** collector,
@@ -333,7 +337,7 @@ Runs once per row of **Test data**.
 
 * `<listing_3>` is open, its close about 10 minutes away.
 * customer A is on the lot page for `<listing_3>`.
-* The auction service's time, read on customer A's return, is `<correction>` later than the page's countdown assumes.
+* The auction service's time, read on customer A's return, is `<correction>` earlier than the page's countdown assumes, so the new reading would add time.
 
 **Test data:**
 
@@ -388,7 +392,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Led by customer A | customer A | Won |
 | Led by customer A, customer B outbid | customer B | Did not win |
-| Open with no accepted bid | customer A | Unsold |
+| Open with no accepted bid | customer A | Ended, with No bids under it |
 
 **Steps:**
 
@@ -437,7 +441,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Through steps 1 to 3 the page reads Closed with no result.
-* No step shows Won, Did not win or Unsold before the close is recorded.
+* No step shows Won, Did not win or Ended before the close is recorded.
 * After step 4 the page reads Won, without a reload.
 
 ### grade10-site-auction-listing-page-US14-TC3-1: A bid still confirming at the close reads in existing words
@@ -481,3 +485,20 @@ Runs once per row of **Test data**.
 * At step 2 the bid panel reads Authorizing….
 * At step 4 the bid panel reads Your bid did not go through.
 * The lot reads Did not win for customer A, with customer B's price as Highest bid.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-01. QA1's blind pass read the frozen Purpose and Feature set, the change's journeys, `proposal.md`, `decisions.md` with its empty `## Raised`, the linked pages under `docs/prds/` (auction display and bidding, the auction service), `openspec/config.yaml`'s context, the durable suites and the change's domain draft with their `## Reconciliation` stripped, and the two rulebooks; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both readings, the three deltas, `tech-design.md`, `tasks.md` and the en, ko, zh-Hans and zh-Hant catalogues. It is a statement, not proof.
+
+- **Joined** - `grade10-site-auction-listing-page-US12-TC1-1` into `grade10-site-auction-listing-page-SC-29`; `grade10-site-auction-listing-page-US12-TC2-1` into `grade10-site-auction-listing-page-SC-31`; `grade10-site-auction-listing-page-US12-TC3-1` into `grade10-site-auction-listing-page-SC-32`, its flag-off row into `grade10-site-auction-auction-SC-78`; `grade10-site-auction-listing-page-US13-TC1-1` into `grade10-site-auction-listing-page-SC-33`; `grade10-site-auction-listing-page-US13-TC2-1` into `grade10-site-auction-listing-page-SC-34`; `grade10-site-auction-listing-page-US13-TC3-1` into `grade10-site-auction-listing-page-SC-35`, its reconnect row held by the requirement's own reconnect clause; `grade10-site-auction-listing-page-US13-TC4-1` into `grade10-site-auction-listing-page-SC-36`; `grade10-site-auction-listing-page-US14-TC1-1` into `grade10-site-auction-listing-page-SC-37` and `grade10-site-auction-listing-page-SC-38`; `grade10-site-auction-listing-page-US14-TC2-1` into `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-40` and `grade10-site-auction-auction-SC-71`; `grade10-site-auction-listing-page-US14-TC3-1` into `grade10-site-auction-listing-page-SC-39`
+- **Raised, folded into spec** - `grade10-site-auction-listing-page-US12-TC4-1`, a page that lost its live connection catching up when it returns, as `grade10-site-auction-listing-page-SC-41`, cited in tasks 7.1 and 7.3; the result for a bidder whose only bid confirmed after the close: Did not win, since they bid on the lot, as the My Auctions record also reads it - `grade10-site-auction-listing-page-SC-39` now names it, matching `grade10-site-auction-listing-page-US14-TC3-1`
+- **Raised, escalated** - whether the viewer's own standing turns to Outbid live, landed as Q12; the existing "Your bid did not go through" string also saying the card was not authorized, landed as Q13
+- **Raised, rejected** - none this run
+- **Added by QA2** - `grade10-site-auction-listing-page-SC-42`, a later recorded close taking the page from Closed back to Extended bidding: the requirement stated it and no scenario did. No case walks it, since a bid in the last millisecond cannot be placed by hand; task 7.1's closing panel tests decide it
+- **Covered at domain** - `grade10-site-auction-e2e-US07-TC03-2`, an extension restarting the countdown on an open page, `grade10-site-auction-listing-page-SC-30`
+- **Covered at domain** - `grade10-site-auction-e2e-US07-TC04-1`, the lot page's Time left agreeing with a catalogue card on a skewed device
+- **Covered at domain** - `grade10-site-auction-e2e-US12-TC01-1`, Won and Did not win on both bidders' pages, then on My Auctions
+- **Patched, not re-run** - `grade10-site-auction-listing-page-US13-TC4-1` set its correction the wrong way: a service clock later than the page assumes takes time off, which is always allowed, so the case now sets it earlier, the way that would add time. `grade10-site-auction-listing-page-US14-TC1-1`'s no-bid row and `grade10-site-auction-listing-page-US14-TC2-1` read Ended, not Unsold: the page's word for a lot closed with no bids is Ended with No bids under it, and the requirement's result table and `grade10-site-auction-listing-page-SC-37` now say so. All keep `<v>`
+- **Settled by the artifacts, not raised** - "Did not win" against "Didn't win": both are existing strings, Did not win on the lot page (`auctionListing.youDidntWin`) and Didn’t win on My Auctions (`auctionRecord.didntWin`), so each spec keeps its own. A countdown before any time read answers runs from the served document's render time, then the device clock, until a probe answers - the Clock values carry on leaf, now stated in the tech design
+- **Contradicted** - none
+- **Uncovered anchors** - none: `grade10-site-auction-listing-page-US-12` has four cases, `grade10-site-auction-listing-page-US-13` four, `grade10-site-auction-listing-page-US-14` three, and the Close and result leaf closes through the header's list

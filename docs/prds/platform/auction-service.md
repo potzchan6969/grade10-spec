@@ -94,7 +94,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - A bid confirmed at exactly `scheduled_ends_at` is accepted when extension is on, so the lot's first deadline is one millisecond after it
 - Listing state carries the extension policy (`extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
-- 🚧 The late window ends at `scheduled_ends_at` plus the reach, and a cap of zero leaves none, so a confirm after the effective close is refused however far the sweep lags
+- 🚧 Until the first extension is written, the late window ends at `scheduled_ends_at` plus the reach; after it, at `ends_at`. A cap of zero leaves none, so a confirm after the effective close is refused however far the sweep lags
 
 ## Public reads and cache
 

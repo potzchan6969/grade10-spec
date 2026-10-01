@@ -54,10 +54,11 @@ when the timer runs out with no new bid.
   confirmation after the close loses with no grace and its hold is released,
   and a lone first bid still confirming at the scheduled close leaves the lot
   unsold. With bid-time holds off, a bid counts when placed
-- 🚧 **No bid after the close** — however late the close is recorded, the
-  last bid the lot can take is at the scheduled close plus the extension
-  duration or the cap, whichever is shorter; a cap of **0** turns extended
-  bidding off, as a duration of **0** does
+- 🚧 **No bid after the close** — however late the close is recorded, no bid
+  counts at or after the effective close. Until extended bidding is recorded,
+  that is the scheduled close plus the extension duration or the cap,
+  whichever is shorter; once it is, it is the recorded close. A cap of **0**
+  turns extended bidding off, as a duration of **0** does
 
 ### Auto-Bidding
 
