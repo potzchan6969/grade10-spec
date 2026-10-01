@@ -57,7 +57,7 @@ the pages carry is the product; this file carries the surface.
 | Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered, a walk-in's included | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
 | Refuse a card | `GA7` | dialog from the hand-in runbook | `RefuseCardDialog` → `FormDialog`, `ChoiceList`, `Choice`, `NotesField`, `Notice` |
 | Batches | `GA4` | `/grading/batches` | `BatchesPanel`, `ShipBatchForm`, `ReestimateDialog` → `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `CursorPager`, `CheckList`, `Check`, `ChoiceList`, `Choice`, `NotesField`, `TextField`, `DateField`, `MoneyField`, `FormDialog`, `Notice`, `Button` |
-| Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `FilePicker`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
+| Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
 | Hand-back runbook | `GA6`, `G18` | `/grading/submissions/:submissionId` while the hand-back is offered | `HandbackRunbook` → `CheckList`, `Check`, `Panel`, `TextField`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `Notice`, `Button`, `Link`, `Code` |
 | One submission | `GA3` | `/grading/submissions/:submissionId` while no runbook is offered, or with `?view=record`; one press from the runbook, and the runbook one press from it | `SubmissionPanel` → `Tabs`, `Tab`, `TabPanel`, `StatusBadge`, `Badge`, `Panel`, `EntryList`, `Entry`, `Table`, `Row`, `Cell`, `Money`, `At`, `FormDialog`, `MoneyField`, `DateField`, `NotesField`, `Notice`, `Button`, `Link` |
 | Written notice | none drawn; `GA1`'s Notice due badge and `M18` | dialog from the Ready view or the submission | `PostNoticeDialog` → `FormDialog`, `Text`, `DateField`, `TextField`, `Notice` |
@@ -96,10 +96,10 @@ parts, `Tabs`, `Text`, `TextInput`, `Textarea`, `HStack`, `VStack`.
   and `RadioCard` no published set, so the rungs and the level card are code
   ahead of design, recorded here as
   [`design-code-sync.md`](../../../docs/governance/design-code-sync.md) asks
-- ❓ **An `h1` rung on `Text`** — `TextElement` offers `span`, `p`, `div`,
+- **No `h1` rung on `Text`** — `TextElement` offers `span`, `p`, `div`,
   `h2` and `h3`, so the grading home's title is an `h2` with its sections
-  `h3` under it, as vault's surface is; whether the design system adds an
-  `h1` rung for a page's title is Design's
+  `h3` under it, as vault's surface is; an `h1` rung is the design system's
+  to add, not this change's
 
 ### `@grade10/ui` — new, work in this repository
 
@@ -701,12 +701,13 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 | Badge: Uncollected 30 d | ready 30 days and not collected | `grade10-admin-grading-counter-SC-07` |
 | Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-SC-10` |
 | Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-SC-08` |
-| Badge: Payout past its window | a payout owed and unmade past the settlement window, 14 days from the day the batch was received (`decisions.md` Q24) | `grade10-admin-grading-counter-SC-09` |
+| Badge: Payout past its window | a payout owed and not yet recorded past the settlement window, 14 days from the day the batch was received (`decisions.md` Q24); an unreceived transfer does not count | `grade10-admin-grading-counter-SC-09` |
+| Badge: Transfer unconfirmed | a transfer payout recorded and not yet marked received, counted on To settle (`decisions.md` Q140) | `grade10-admin-grading-counter-SC-112` |
 | Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-admin-grading-counter-SC-11` |
 | Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-counter-SC-87` |
 | Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-counter-SC-87` |
 | Tile: Ready, uncollected | the count and how many past 30 days | `grade10-admin-grading-counter-SC-12` |
-| Tile: To settle | the sum and the count of upcharges | `grade10-admin-grading-counter-SC-13` |
+| Tile: To settle | the sum of what is due (upcharges, storage, repayments) and the submissions owing it; the transfers unconfirmed | `grade10-admin-grading-counter-SC-13`, `grade10-admin-grading-counter-SC-112` |
 | Empty view | `EmptyState` in the view | `grade10-admin-grading-counter-SC-05` |
 | Loading | the console's async status line | **Out of suite:** the panel's colocated test |
 | Error | the console's async status line, retry | **Out of suite:** the panel's colocated test |
@@ -790,9 +791,12 @@ Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-adm
 | Order and older batches | every batch not yet received on each page, what waits on the shop first: back unchecked, closed with cards to ship, past the estimate, then the rest with the grader soonest due, then open; the received ones newest first behind the pager | `grade10-admin-grading-batches-SC-55` |
 | Empty | no batch; New batch | `grade10-admin-grading-batches-SC-44` |
 | New batch | grader, and only the levels the grader's active sheet carries; a card that fits neither waits | `grade10-admin-grading-batches-SC-44` |
-| Ship form (`GA4`) | the checklist: packing list printed, the grader's form filled, insured to the declared total against the courier's cover; courier and tracking, order number, shipped on, estimated back; Mark as shipped · email n collectors | `grade10-admin-grading-batches-SC-43` |
-| Above the courier's cover | the insured line in the warning tone; split or hold, ❓ Operations' on the console page (`decisions.md` Q29) | `grade10-admin-grading-batches-SC-15` |
+| Ship form (`GA4`) | the checklist: packing list printed, the grader's form filled; order number, shipped on, estimated back; one shipment block with its courier and tracking, insured to its cards' declared total against the courier's cover setting, read-only; Mark as shipped · email n collectors | `grade10-admin-grading-batches-SC-43` |
+| Cover unset | Mark as shipped refused naming the courier's cover, in production (`decisions.md` Q143) | `grade10-admin-grading-batches-SC-16` |
+| Above the courier's cover | the insured line in the warning tone; Mark as shipped refused as one shipment, and Split into shipments offered (`decisions.md` Q128) | `grade10-admin-grading-batches-SC-15` |
+| Split into shipments | one block per shipment: its cards picked from the packing list, courier and tracking, its insured total against the cover; a card in no shipment or a shipment past the cover named; Mark as shipped once every card is in one | `grade10-admin-grading-batches-SC-57` |
 | Shipped on in the future | refused on the field | `grade10-admin-grading-batches-SC-12` |
+| Shipped on before the cut-off | refused on the field (`decisions.md` Q129) | `grade10-admin-grading-batches-SC-56` |
 | Incomplete | Mark as shipped disabled naming the field | `grade10-admin-grading-batches-SC-13` |
 | Shipping | pending | **Out of suite:** the panel's colocated test |
 | Shipped | every submission at Sent; the letters sent | `grade10-admin-grading-batches-SC-11` |
@@ -808,7 +812,7 @@ Stories `grading-admin-receiving-receive-panel--`.
 | --- | --- | --- |
 | Header (`GA5`) | the batch, grader · level, cards from submissions, the grader's last stage with the day it was recorded, arrived; the progress | `grade10-admin-grading-batches-SC-29` |
 | Before the manifest | Scan disabled; Enter the manifest and the invoice first | `grade10-admin-grading-batches-SC-23` |
-| Manifest entry | `FilePicker` or typed lines, ❓ Operations' on the console page (`decisions.md` Q50) | `grade10-admin-grading-batches-SC-23` |
+| Manifest entry | typed lines, as the morning read is; no file to import (`decisions.md` Q130) | `grade10-admin-grading-batches-SC-23` |
 | Invoice entry | the invoice's lines and total | `grade10-admin-grading-batches-SC-23` |
 | Unmatched manifest line | a line naming no intake id in the batch listed unmatched; Finish held | `grade10-admin-grading-batches-SC-24` |
 | Line resolved | on an unmatched line, the batch's card it meant named, or the line closed as the grader's error with the reason; the line reads its card, unscanned, until the cert scans, or reads closed with its reason | `grade10-admin-grading-batches-SC-51` |
@@ -973,12 +977,10 @@ Stories `grading-admin-settings-settings-panel--`.
   `grade10-admin-grading-counter-SC-89`)
 - **Refusal words** — the grading `RefusalWords` for the doc-sign codes
   grading can meet are `tech-design.md`'s, over `grading.ceremony`
-- **❓ Operations** — whether the manifest and the invoice enter as a file or
-  typed (`GA5` draws Import and the read types the rest), and whether a batch
-  above the courier's cover is split or held; the rows above draw both forms,
-  and the ❓ sits on
-  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving)
-  (`decisions.md` Q29, Q50)
+- **Operations' answers** — the manifest and the invoice are typed, so
+  `GA5`'s Import is not built; a batch above the courier's cover ships split
+  into shipments each under it, a form `GA4` does not draw
+  (`decisions.md` Q128, Q130)
 - **Legal words** — the receipt's first clause when a named person collects
   prints as drawn until Legal confirms it (`decisions.md` Q48); the row
   prefills the name

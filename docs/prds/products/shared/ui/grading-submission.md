@@ -99,6 +99,6 @@ blocks are what draws them. The design record is the change's
 | Two card lists | Decided | An editable planning list and a read-only record are two blocks, because one carries fields and callbacks the other never renders; a third for the visit is not needed, the booking set already ships it | Design |
 | The drop-off is the diary's | Decided | The shop, the day, the time, the confirmation and the visit card are the appointment-booking exports unchanged; grading adds the batch line and its own three-step rail in the application | Design |
 | The status word and the chip are one block | Decided | Every board draws them as one pair, and the status table pairs them, so one block keeps the two from disagreeing | Design |
-| A page's title | ❓ Open | `Text` offers no `h1`, so a grading page's title is an `h2` with its sections `h3` under it, as vault's is; whether the design system adds an `h1` rung | Design |
+| A page's title | Decided | `Text` offers no `h1`, so a grading page's title is an `h2` with its sections `h3` under it, as vault's is; an `h1` rung is the design system's to add, not this change's - decided by the round (product owner delegated this run) | Design |
 | Story ids | Decided | `grading-submission-<component>--<state>`, the package's own `<Capability>/<Component>` title, the state being the design record's row in kebab-case | Design |
 :::

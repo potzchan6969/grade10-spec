@@ -486,7 +486,7 @@
       "reminders": "We remind you on {days}. {count, plural, one {The reminder never costs anything.} other {Reminders never cost anything.}}",
       "storage": "From {day}, a storage fee of {rate} a card a month. It accrues here and is due before collection.",
       "notice": "Written notice on {day}.",
-      "noticeLine": "{daysLeft, plural, one {# day} other {# days}} left of the 30 from the posting date, until {day}.",
+      "noticeLine": "{daysLeft, plural, one {# day} other {# days}} left of the {period} from the posting date, until {day}.",
       "afterNotice": "After it, nothing further follows: the cards stay yours, and a slab can go into a vault case.",
       "closing": "We do not ship slabs back. Rather keep them here on purpose? Vault it, above."
     },

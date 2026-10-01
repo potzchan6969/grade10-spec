@@ -38,7 +38,7 @@ it; no statute here is asserted.
 - **Retention windows** — days after a case ends, per class: agreements
   **2,555**, photos **2,555**, identity **1,825**; seven years is the
   business-record window recalled for Hong Kong, five the AML window
-- 🚧 **The submission record** — its own class, case records, **2,555** days
+- 🚧 **The submission record** — case records carry it, **2,555** days
   from the day it ended — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **The review is a review** — the sweep flags a case past its window and
   deletes nothing; deletion on expiry is a second decision, and a class with

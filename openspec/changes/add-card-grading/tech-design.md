@@ -268,10 +268,10 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   `deriveSlots`'s own day derivation (`slots.ts`) filters by too, now shared
   rather than duplicated, so a retired or not-yet-begun rule is never
   offered. `availability_exceptions` (a one-off closure or override day) is
-  a different table this method still does not read — ❓ **Open**: a shop
-  closed for a single day still prints its weekly hours as open on it;
-  raised for a later change, since the pickup card's own scope was the
-  weekly rule, not the exception calendar
+  a different table this method still does not read: a shop closed for a
+  single day still prints its weekly hours as open on it, and reading the
+  exception calendar is a later change, since the pickup card's own scope was
+  the weekly rule
 
 ### The till: one line to one card, read back by the order's name
 
@@ -281,7 +281,8 @@ this is how the paid order reaches the submission.
 - The grading products are Shopify products of product type
   `Grading Service`: one per fee-sheet row plus cover, upcharge and storage;
   their variant ids are data, `fee_sheet.pos_variant_id` and the settings
-  `pos_cover_variant`, `pos_upcharge_variant`, `pos_storage_variant`. The
+  `pos_cover_variant`, `pos_upcharge_variant`, `pos_storage_variant`,
+  `pos_repayment_variant`, each unset until Commercial writes it. The
   loyalty exclusion is the product type already listed; no new rule
 - `GradingStoreServiceApi.orderByName(name)` — a new entrypoint on the store
   worker — answers `{ orderRef, orderName, paidAt, lines }` with the
@@ -333,11 +334,10 @@ this is how the paid order reaches the submission.
   `deps.kyc.read`: a `not_required` packet skips the read, the refusal chain
   skips `KYC_REQUIRED` and the name rung, and the certificate prints its
   no-identity line. Grading's `DocSignDeps.kyc` throws by name if ever read
-- **The custodian** — ❓ Legal, through the PM: grading's submission agreement
-  prints the brand's one `LEGAL_IDENTITY.grade10.legalName`, the table being
-  per brand and never per product, unless Legal has registered a second entity
-  for grading. Recommended as stated; a per-product field is owed only if the
-  answer names a different company
+- **The custodian** — grading's submission agreement prints the brand's one
+  `LEGAL_IDENTITY.grade10.legalName`, the table being per brand and never per
+  product (Q52); Legal supplies the name, readiness item 1, and a per-product
+  field is owed only if Legal registers a second company for grading
 - The ceremony mounts at `${config.services.grading}/api/sign` through
   `registerSigningRoutes`; `routes/signing.ts`, `documents/deps.ts`,
   `storage/areas.ts` and the two guard migrations are the vault's files in
@@ -423,15 +423,16 @@ this is how the paid order reaches the submission.
   `storage_from_day` on `Asia/Hong_Kong` days, and `dueNow(input, asOf)` over
   a declared `DueNowInput`. **One settlement rule for every kind**: accrued
   less the settled `money_lines` rows of that kind less the waivers of that
-  kind, upcharge and storage alike, so a storage fee rung at the till clears
+  kind, upcharge, storage and repayment alike (no waiver reaches a
+  repayment), so a storage fee rung at the till clears
   and `collect` can pass. The expected upcharge is `upchargeOf(pinned_fee_sheet, level,
   submission_cards.moved_to_level)` per card, stored nowhere
 - **Currency is named beside every amount that is not HKD.**
-  `invoice_total_minor` carries `invoice_currency` and `cover_figure_minor`
-  carries `cover_currency`; `shipBatch` compares the declared total to the
-  cover figure only inside one currency, refusing `OVER_COVER` above it and
-  `CURRENCY_MISMATCH` otherwise. No rate is stored; the conversion stays
-  Operations'
+  `invoice_total_minor` carries `invoice_currency`. The courier's cover is
+  the HKD setting `courier_cover_minor` (Q143), so `shipBatch` compares each
+  shipment's declared total to it with no rate, refusing `OVER_COVER` above
+  it and `COVER_UNSET` in production while it is unset; `checkCard` refuses
+  `ABOVE_COVER` on a card declared above it
 - **A payout** is `payouts` — declared value, the fee refund line beside it,
   `route` till or transfer, `recorded_by`, `approved_by`; a reversal is one
   `payout_reversals` row keyed `payout_id PK`, the vault's `money_adjustments`
@@ -497,7 +498,7 @@ this is how the paid order reaches the submission.
   seeded once at start by `POST /dev/settings`
 - **The notice period is a setting, pinned at signing.**
   `notice_period_days` joins `GRADING_SEEDED_SETTINGS`, seeded at 90 by
-  `0005_notice_period.sql` until counsel confirms it (Q26), and is copied
+  `0007_notice_period.sql` until counsel confirms it (Q26), and is copied
   into `pinned_terms` at the mint as the seventh term, so a submission
   sealed under 90 days keeps them if the setting later moves (Q43). The
   constant `NOTICE_PERIOD_DAYS` is deleted: `noticeEnds` takes the pinned
@@ -523,7 +524,8 @@ order pinned by a test. Every row carries its own `kind` and an explicit
 | List | Predicate | Writes | Kind · Lane |
 | --- | --- | --- | --- |
 | `retriedNotifications` | `notification_retries` due | the send, or the row leased for a further attempt | repair · fast |
-| `planNudges` | `planned`/`booked` holding no visit, `created_at` a day short of `plan_nudge_days`, `NOT EXISTS plan_nudged` | the event and the letter | routine · fast |
+| `planLinks` | `planned` holding no visit when the sweep runs, `NOT EXISTS plan_saved` | the event and the letter, `plan_saved` once per submission on the once-only index | routine · fast |
+| `planNudges` | `planned`/`booked` holding no visit, the plan's clock start (`planClockAt`, the later of `created_at` and the last visit ended without a hand-in) a day short of `plan_nudge_days`, no `plan_nudged` at or after that start | the event and the letter | routine · fast |
 | `visitReminders` | `booked`, the visit resolved through `visit_owner_id` starting within two days — every submission it carries, the owner and each joiner, ordered by the visit's own `appointment_at` | the event and the letter | routine · fast |
 | `uncollectedReminders` | `ready`, no notice posted, more pinned reminder days come (a day wide) than told | the event and the letter | routine · fast |
 | `storageStarted` | `ready`, no notice posted, the pinned storage day come (a day wide), `NOT EXISTS storage_started` | the event and the letter | routine · fast |
@@ -904,8 +906,7 @@ handback, damaged)`, `object_key UNIQUE`, `taken_by`, `at`; the
 | `id` | `text PK` | `bt_<uuid>`; the human label is derived at the read from the shop, the pair and the cut-off date |
 | `location_id`, `grader`, `level` | `text NOT NULL`, `grader` CHECK | the shop and the pair; unique with `cutoff_at` |
 | `cutoff_at` | `timestamptz(3) NOT NULL` | derived by `openBatchFor(location, grader, level, now)` from `settings.batch_cutoff` on `Asia/Hong_Kong` |
-| `ship_date`, `courier`, `tracking`, `order_number` | `date`; `text` | the ship date never in the future |
-| `cover_figure_minor`, `cover_currency` | `bigint`, `text` | the courier's written cover and its currency |
+| `ship_date`, `order_number` | `date`; `text` | the ship date never in the future; the courier, the tracking and the insured total live on each `batch_shipments` row |
 | `invoice_ref`, `invoice_total_minor`, `invoice_currency` | `text`, `bigint`, `text` | entered before the first scan |
 | `manifest_entered_at`, `received_at`, `finished_at` | `timestamptz(3)` | |
 
@@ -948,9 +949,9 @@ event names its reading.
 | `fee_sheet` | `grader` CHECK, `level` (PK); `ceiling_minor`, `fee_minor`, `cover_bps`, `estimate_weeks`, `cards_min`, `cards_max`, `pos_variant_id`, `active`, `updated_by`, `approved_by`, `updated_at`, `version integer NOT NULL DEFAULT 1` | the four-eyes CHECK |
 | `settings` | `key` (PK); `value jsonb NOT NULL`; `updated_by`, `approved_by`, `updated_at`, `version integer NOT NULL DEFAULT 1` | the four-eyes CHECK; the console's keys plus the three variants, `batch_cutoff { weekday, time }` and `booked_expiry_days` |
 | `pos_orders` | `order_ref` (PK), `submission_id FK NOT NULL`, `order_name NOT NULL`, `method` | append-only; the claim: one order pays one submission, its receipt number and how it was paid kept once |
-| `money_lines` | `id`, `submission_id FK NOT NULL`, `card_id FK NOT NULL`, `kind CHECK (fee, cover, upcharge, storage, refund)`, `amount_minor > 0`, `pos_order_ref FK pos_orders NOT NULL`, `pos_line_ref` (nullable, recorded), `pos_line_no` (null on a refund), `refund_of_line_id FK`, `paid_at`, `recorded_by`, `recorded_at` | append-only; unique `(pos_order_ref, pos_line_no)` on a paid line, unique `refund_of_line_id` on a refund |
+| `money_lines` | `id`, `submission_id FK NOT NULL`, `card_id FK NOT NULL`, `kind CHECK (fee, cover, upcharge, storage, repayment, refund)`, `amount_minor > 0`, `pos_order_ref FK pos_orders NOT NULL`, `pos_line_ref` (nullable, recorded), `pos_line_no` (null on a refund), `refund_of_line_id FK`, `paid_at`, `recorded_by`, `recorded_at` | append-only; unique `(pos_order_ref, pos_line_no)` on a paid line, unique `refund_of_line_id` on a refund |
 | `approval_requests` | `id`, `act CHECK (payout, reversal, waiver, setting, fee_sheet)`, `submission_id`, `card_id`, `params jsonb NOT NULL` (a payout's route, a reversal's found card), `bank_ref`, `reason`, `expected_updated_at`, `expected_version`, `setting_key`, `setting_value`, `fee_sheet_grader`, `fee_sheet_level`, `fee_sheet_row`, `requested_by`, `requested_at` | append-only, `bank_ref` and `reason` the only columns erasure may clear; the shape CHECK gives each act its own columns |
-| `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `recorded_at` | append-only; the four-eyes CHECK; plain index on `card_id` |
+| `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `recorded_at`, `received_at`, `received_by` | append-only; the four-eyes CHECK; plain index on `card_id` |
 | `payout_reversals` | `payout_id PK FK`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK |
 | `waivers` | `id`, `submission_id`, `card_id`, `kind CHECK (upcharge, storage)`, `amount_minor`, `recorded_by`, `approved_by`, `approval_request_id UNIQUE NOT NULL`, `at` | append-only; the same CHECK; plain index on `card_id`; `0005_waivers_kind.sql` renames `upcharge_waivers` and adds `kind` |
 | `notices` | `submission_id PK FK`, `posted_on date`, `tracking NOT NULL`, `recorded_by`, `at` | one per submission, which is the replay guard a double-click needs |
@@ -1043,7 +1044,7 @@ events, distinct by kind and instant).
 | `mintAgreement(db, deps, args)` | submission | the packet and token | the document rendered first, so an unset printed value refuses before the transaction; refuses while any card is unchecked; pins the terms |
 | `recordFeePaid(db, store, args)` | submission, order name | the lines, `ORDER_NOT_FOUND`, `ORDER_AMBIGUOUS`, `ORDER_NOT_PAID`, `POS_LINES_MISMATCH` | binding read outside; one transaction, `ON CONFLICT DO NOTHING`, so a repeat answers the lines already written |
 | `handIn(db, args)` | submission | `checked_in` | `safe_declared_cap` row `FOR UPDATE`, then the open batch, then the submission; refuses `AGREEMENT_UNSEALED`, `FEE_UNPAID`, `SAFE_CAP`; intake ids, the grader onto each card, the receipt, one event |
-| `shipBatch(db, mail, args)` | batch, courier, tracking, order number, insured, cover | `shipped` | refuses `OVER_COVER`, `CURRENCY_MISMATCH`, `BATCH_CONFLICT`; one transaction: the batch, `markShipped` per submission in id order, events; letters after |
+| `shipBatch(db, mail, args)` | batch, order number, ship date, shipments (cards, courier, tracking) | `shipped` | refuses `OVER_COVER` per shipment, `CARD_UNSHIPPED`, `COVER_UNSET`, `BATCH_CONFLICT`; one transaction: the batch, `markShipped` per submission in id order, events; letters after |
 | `recordBatchStage(db, mail, args)` | batch, stage | the batch, and `graded` on the move stage | under `lockBatch`; a repeat of the same stage is a no-op; letters after commit |
 | `reestimateBatch(db, mail, args)` | batch, date, reason | the batch | one transaction, one event per submission; a repeat of the same date is a no-op; letters after |
 | `openBatchFor(tx, args)` | shop, grader, level, instant | the trio's open batch, and whether this call inserted it; refuses `BATCH_CONFLICT` where the batch at that cut-off shipped while the call waited on it | the one way a batch is opened, `handIn` and `admin.openBatch` alike; the cut-off setting share-locked; the standing open batch answered, else inserted `ON CONFLICT DO NOTHING` and read back |
@@ -1230,7 +1231,7 @@ change creates are imported from their shared home by both products.
   first's total; the desk's earlier `safeStanding` read is a courtesy, never
   the guard
 - **[A submission sealed under six terms reads a seventh]** →
-  `0005_notice_period.sql` backfills `noticePeriodDays: 30`, the figure its
+  `0007_notice_period.sql` backfills `noticePeriodDays: 30`, the figure its
   clause 6 printed, into every `pinned_terms` row that lacks it, and
   `pinnedTermsOf` throws by name on a term missing rather than print nothing,
   so a row minted between the migration and the deploy fails loudly until
@@ -1305,9 +1306,15 @@ change creates are imported from their shared home by both products.
    always), `0002_sign_lifecycle_guards.sql`
    (`docSignProtectionSql`), `0003_seed_settings.sql`. They create tables in
    their own file and touch no `DESTRUCTIVE` or `LOCKING` pattern, so none
-   owes an annotation. Two land after them, one concern each, applied
-   staging then production before the pull request that reads them deploys,
-   step 7's way. `0004_waivers_kind.sql` adds `kind text NOT NULL DEFAULT
+   owes an annotation. Four land after them, one concern each and numbered
+   in the order their groups deploy, applied staging then production before
+   the pull request that reads them deploys, step 7's way.
+   `0004_batch_shipments.sql` (16.8) creates `batch_shipments (id, batch_id,
+   courier, tracking, insured_minor)`, adds a `shipment_id` to each batch
+   card, drops `batches.courier`, `tracking`, `cover_figure_minor` and
+   `cover_currency`, and widens the settings key CHECK to take
+   `courier_cover_minor` and `main_shop_id`; nothing deployed has shipped a live batch, so its
+   `-- contract:` line says so. `0005_waivers_kind.sql` (19.9, 19.10) adds `kind text NOT NULL DEFAULT
    'upcharge' CHECK (kind IN ('upcharge', 'storage'))`, drops the default,
    and renames `upcharge_waivers` to `waivers` with what `0000` and `0001`
    named after the table: the function `upcharge_waivers_block_mutation`,
@@ -1319,7 +1326,10 @@ change creates are imported from their shared home by both products.
    `idx_grading_upcharge_waivers_submission_id`; the rename is
    `check:migrations`'s destructive pattern, so the file carries a
    `-- contract:` line saying nothing deployed writes the old name once the
-   pull request deploys. `0005_notice_period.sql` inserts the seed
+   pull request deploys; the same file widens `money_lines.kind` to take
+   `repayment` and the settings key CHECK to take `pos_repayment_variant`. `0006_payout_received.sql` (19.11) adds `payouts.received_at`
+   and `received_by`, backfilling each till payout from its `recorded_at`.
+   `0007_notice_period.sql` (20.6) inserts the seed
    `ON CONFLICT ("key") DO NOTHING` and backfills `pinned_terms` with
    `WHERE pinned_terms IS NOT NULL AND NOT (pinned_terms ? 'noticePeriodDays')`,
    an `UPDATE` on a table it did not create, so it carries the `-- lock:`
@@ -1357,13 +1367,67 @@ change creates are imported from their shared home by both products.
 
 ## Open Questions
 
-- ❓ **Every default on the console's table** — Operations, Commercial and
-  Legal on the pages; each is a settings write through `updateSetting` with a
-  second approver, touching no code
-- ❓ **The custodian the submission agreement prints** — Legal, through the
-  PM; grading prints the brand's one `LEGAL_IDENTITY.grade10.legalName` unless
-  Legal has registered a second entity, which would be one field on the table
-- ❓ **A queue view for `planned`** (Q36) — Product; one more cut on
-  `admin.queue`
-- ❓ **The certificate's no-identity line** — Legal's wording; the arm
-  prints what `printedValue` answers for it
+What people still supply is a readiness item on
+[Grading · Before the First Submission](../../../docs/prds/products/grade10-site/grading/index.md#before-the-first-submission),
+and none of it touches code:
+
+- **Every default on the console's table** — items 6 and 7, each a settings
+  write through `updateSetting` with a second approver
+- **The custodian the submission agreement prints** — item 1, the brand's one
+  `LEGAL_IDENTITY.grade10.legalName` (Q52)
+- **The certificate's no-identity line** — item 11; the arm prints what
+  `printedValue` answers for it, so production refuses the seal while it is
+  unset and a bracket prints outside production
+
+A queue view for `planned` stays out: Q36 keeps a plan off the queue until it
+is booked.
+
+The product owner's answers of 2026-10-01 add build work, each in its task;
+where an answer left the mechanism open, the round completed it at landing:
+
+- **Shipments** (Q128, 16.8, 30.10) — a `batch_shipments` row per parcel
+  with its courier, tracking and insured total, and a shipment id on each
+  batch card; `shipBatch` writes them and moves the submissions in one
+  transaction, refusing `OVER_COVER` per shipment and `CARD_UNSHIPPED`
+- **The ship date** (Q129, 16.9) — refused below the cut-off's local day,
+  the same field check as a date ahead of today
+- **A reversal repaid** (Q131, Q138, 19.10) — the reversal accrues a
+  `repayment` due of the payout and the fee on the card; `dueNow` nets it like
+  any kind, `pos_repayment_variant` rings it, it earns no points (Q47) and no
+  waiver reaches it
+- **A found card after collection** (Q137, 19.12) — the hand-back acts take a
+  card whose payout was reversed on a `collected` submission, minting a
+  receipt for that card alone; the status does not move
+- **The cover setting** (Q143, 13.11, 16.8) — `courier_cover_minor` in
+  `settings`, approve-written; `checkCard` refuses `ABOVE_COVER`
+- **A held card's return** (Q142, 17.11) — a manifest line naming a card
+  `held` in an earlier received batch at the same grader matches it; the scan
+  records cert and grade, clears `held`, and the grades letter goes for that
+  card
+- **The seal and an unapproved figure** (Q139, 15.10) — in production
+  `mintAgreement` refuses `SETTING_UNAPPROVED` while a printed setting has no
+  `approved_by`
+- **Nothing left to hand back** (Q146, 20.8) — `readyNoNotice` and every rung's
+  list skip a submission with no card on the ladder
+- **Storage per card** (Q141, 19.13) — `dueByCard` starts a card's storage at
+  day 90 after the later of the ready day and the day it came back
+- **Retention's window** (Q20, 23.9) — `retentionReviews` dates a submission
+  from the later of its terminal event and the day nothing is owed either way
+- **A sweep letter with an unset value** (22.11) — the row stays due and
+  unclaimed and fires `grading.sweep.repair`, naming the value
+- **The transfer badge** (Q140, 28.12) — `Transfer unconfirmed` derived from a
+  transfer payout with no `received_at`, counted on the To settle tile
+- **Mark received** (Q132, 19.11) — `payouts.received_at` and
+  `received_by`, written at recording for the till and by
+  `markPayoutReceived` for a transfer, under the submission lock
+- **The plan's link** (Q134, Q145, 21.12) — the `planLinks` list, its
+  `plan_saved` row once per submission on the partial unique index the other
+  once-only kinds use (`ONCE_PER_SUBMISSION_KINDS`), read as the plan stands
+  when the sweep runs
+- **The plan's clock** (Q144, 21.11) — `planNudges` reads `planClockAt` and
+  nudges once per clock start
+- **The footer** (Q135, Q136, 22.10) — `listShopHours` and the shop phone
+  from the diary; the brand's main shop, the setting `main_shop_id`, where no
+  visit is held
+- **The vault link** (Q133, 27.14) — the submission read resolves the
+  recorded reference through the vault's read; a miss is plain text

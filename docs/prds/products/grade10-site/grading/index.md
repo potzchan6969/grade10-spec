@@ -66,10 +66,13 @@ vault's pages are, and on no lane the public reaches —
 
 Every item is a value or an act outside the code, with who closes it.
 
-1. *Legal* — **The custodian's registered name** — printed on both documents
-   and every email
+1. *Legal* — **The custodian's registered name** — the brand's one, the
+   vault's custodian, printed on both documents and every email; production
+   refuses the seal and every message while it is unset, and a bracket prints
+   outside production
 2. *Owner* — **The complaints contact** — a monitored mailbox, a phone and the
-   shop's address, on both documents and every email
+   shop's address, on both documents and every email; counsel adds the
+   escalation line; unset, it refuses as item 1 does
 3. *Legal* — **The notice's form** — its wording, whether email alone serves,
    and the period it gives from posting, seeded at **90** days
 4. *Legal* — **The retention classes** — grading's rows on the vault's table
@@ -79,15 +82,26 @@ Every item is a value or an act outside the code, with who closes it.
    collectibles terms in writing; clause 5 changes the day a policy is bought
    and the safe's cap stands until then
 6. *Commercial* — **The fee sheet** — one per grader and level, replacing the
-   example figures the pages carry, to the grader's top tier, written before
-   the first production booking
+   example figures the pages carry, to the grader's top tier; every figure is
+   unset until it is written, and a read of an unset figure refuses by name
 7. *Operations, Commercial* — **The settings** — every row of the console's
-   table confirmed or changed —
-   [Grading Console](/p/grade10-admin/grading/console#settings)
+   table confirmed or changed, the grader's stages among them; the money rows
+   are unset and refuse by name until written, the rest run on the table's
+   defaults — [Grading Console](/p/grade10-admin/grading/console#settings)
 8. *Product, Engineering* — **The diary services** — the drop-off, its Bulk
    variant and the walk-in's visit, named and sized in the diary
 9. *Operations* — **Till products** — every product behind a grading variant
    carries type `Grading Service` or tag `no-earn`
+10. *Legal* — **Counsel's wording** — clauses 4, 5 and 6, the hand-back
+    receipt's first clause for a named person and its line naming the first
+    receipt, and the withdrawal receipt's clauses, each printing as drafted
+    until counsel replaces it; and whether the agreement prints the postal
+    address beside the signature, on no page until counsel asks
+11. *Legal* — **The certificate's no-identity line** — what a grading
+    packet's certificate prints in place of an identity; production refuses
+    the seal while it is unset, and a bracket prints outside production
+12. *Owner* — **The look-up pages** — each grader's cert-verification address,
+    read off its public site, confirmed against a live cert
 
 - 🚧 **The seal refuses a placeholder** — in production an agreement or a
   receipt cannot be sealed while a fact it prints is unset; outside

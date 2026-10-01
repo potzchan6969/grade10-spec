@@ -552,7 +552,7 @@ const LADDER_RUNGS = [
     id: "notice-180",
     label: "Written notice, day 180",
     on: NOTICE_ON,
-    line: "We write to you and give you 30 days from the posting day.",
+    line: "We write to you and give you 90 days from the posting day.",
   },
 ];
 

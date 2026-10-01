@@ -145,7 +145,7 @@ See [Non-Goals](decisions.md#non-goals).
   grading classes, the submission agreement, the intake and hand-back receipts
   and the intake and hand-back photographs in the vault's agreements and
   photos classes, and the submission record, name, email, phone, postal
-  address, the list, the code and the messages, as a class of its own, all at
+  address, the list, the code and the messages, in the vault's case records, all at
   the vault's windows and each measured from the submission's end event; no
   identity class; and the in-flight refusal reaches a live submission, one
   between booked and ready, an unsettled upcharge or ready cards uncollected,
@@ -229,7 +229,9 @@ first submission owns (`decisions.md` Q18, Q19).
 
 Every clock, figure and wording the canvas adopted is a decided row in
 `decisions.md`, taken as recommended at landing; the owner named confirms the
-value on the page its ❓ sits on, and the decided row holds until then.
+value through its readiness item on
+[Grading · Before the First Submission](../../../docs/prds/products/grade10-site/grading/index.md#before-the-first-submission),
+and the decided row holds until then.
 
 - **Operations** — the clocks (`Q23`, `Q33`); the payout window of 14 days from
   the day the batch is received, at the till or by bank transfer (`Q24`); the
@@ -237,10 +239,15 @@ value on the page its ❓ sits on, and the decided row holds until then.
   cards a submission as the fee sheet's fewest and most columns (`Q28`); the
   manifest and the invoice entered before the first scan, an unmatched line
   holding finishing (`Q50`); the batch closed Thursday 19:00 and shipped the
-  next day (`Q17`). Still Operations' on
-  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving):
-  whether the manifest enters as a file or typed (`Q50`), and whether a batch
-  above the courier's written cover is split or held (`Q29`).
+  next day (`Q17`). The product owner settled the rest on 2026-10-01: the
+  manifest typed (`Q130`), a batch above the courier's cover split into
+  shipments (`Q128`), a ship date before the cut-off refused (`Q129`), a
+  reversed payout repaid at the till (`Q131`) and a transfer payout marked
+  received by its own act (`Q132`).
+- **Product, settled by the owner** — the vault case linked from its reference
+  when read (`Q133`), the plan's link sent by the daily sweep (`Q134`), the
+  emails' hours from the diary with the shop phone (`Q135`), and the brand's
+  main shop on a letter with no visit (`Q136`).
 - **Commercial** — the fee sheet, one setting per grader and level to the
   grader's top tier, with cover as its own line at 1.5% of the declared value
   per card at Express and Super Express (`Q27`); the fee's fate per outcome
@@ -257,8 +264,9 @@ value on the page its ❓ sits on, and the decided row holds until then.
   it prints is unset (`Q48`); the notice by registered post and email, its
   period a setting pinned at signing and seeded at 90 days (`Q26`); the
   grading classes at the vault's retention windows (`Q20`, `Q68`). Legal's
-  confirmations are ❓ on
-  [Documents and Signing](../../../docs/prds/products/grade10-site/grading/documents.md).
+  confirmations are readiness items 1, 3, 4, 10 and 11, and the
+  certificate's no-identity line refuses the seal in production until
+  counsel writes it.
 - **Product** — the three diary services, their durations and the diary's
   own horizon (`Q30`); a `planned` submission off the queue (`Q36`); a
   reference outage keeping every line as typed (`Q46`); slabs shipped back

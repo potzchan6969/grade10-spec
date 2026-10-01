@@ -6,8 +6,8 @@ What the vault keeps after a case ends, what it deletes when the person asks to
 be forgotten, what it keeps anyway because it is the evidence that an agreement
 existed, and the page the person reads all three on.
 
-It answers for a collector's grading submissions on the same table and the same
-request, so one review and one erasure path serve both products.
+It answers for a collector's grading submissions too, on the same table and the
+same request, so one review and one erasure path serve both products.
 
 Two mechanisms, kept apart on purpose: a review that flags a case past its
 window and acts on nothing, and an erasure the person asks for from their own
@@ -23,6 +23,8 @@ account and an operator runs.
   - The review is a review: it flags, gauges and writes nothing, so a wrong
     number costs a review and not a record
   - An unset window: flagged as undecided rather than treated as zero
+  - Four classes: the agreements, the identity records behind them, the item
+    photographs, and the record of each case
 - Erasure
   - Asked on the account: the person asks once and every product answers
   - A case in flight blocks: nothing is erased while an item is held or a loan
@@ -45,15 +47,15 @@ account and an operator runs.
     for, and that a review deletes nothing by itself
   - The identity standing: verified until when and checked how — never the name
     and never the document
-  - Every signed document: the one download, offered from here and bounded to
-    what the page lists
+  - Every signed document: offered from here as the one download
+    `grade10-site/vault/documents-and-signing` defines
   - The ask and its refusal: filed here and cancelled here inside the window,
     and withheld in words while an item is held or a loan is running
 - Grading's records
   - The vault's classes carry grading's paper: the submission agreement, the
     two receipts and the hand-in and hand-back photographs sit in agreements
     and photos, at the same windows
-  - A class of its own: the submission record — the collector's name, email,
+  - Case records carry the submission record: the collector's name, email,
     phone and postal address, the list, the pickup code and the messages
   - Measured from the submission's end: collected, cancelled, expired, or its
     last card paid out
@@ -82,8 +84,10 @@ each at the window the brand holds for that class:
 **The class is the kind of data** - Case records is named by what the record is
 and never by the product that holds it.
 
-**Measured from the end** - each window SHALL run from the day the submission
-ended: collected, cancelled, expired, or its last card paid out.
+**Measured from the end** - each window SHALL run from the later of the day
+the submission ended (collected, cancelled, expired, or its last card paid
+out) and the day nothing is owed either way: no due unsettled and no payout
+owed or unreceived.
 
 **A submission still running** - one that has not ended SHALL be reported under
 no class.
@@ -110,6 +114,13 @@ held for one.
 - **WHEN** the review runs
 - **THEN** its windows are measured from the day of that payout
 
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-42 - A transfer not yet received holds the window
+**Serves:** `grade10-site-vault-retention-and-erasure-US-04`, `grade10-site-vault-retention-and-erasure-US-03` - the person answerable for what the shop keeps reading a submission dated from when the money settled
+
+- **GIVEN** a submission whose last card was paid out by transfer, marked received 10 days after that payout
+- **WHEN** the review runs
+- **THEN** its windows are measured from the day the transfer was marked received
+
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-30 - A submission that has not ended is reported under no class
 **Serves:** `grade10-site-vault-retention-and-erasure-US-04`, `grade10-site-vault-retention-and-erasure-US-03` - the person answerable for what the shop keeps reading a list that names nothing still in hand
 
@@ -126,8 +137,9 @@ submission and which hold stands.
 **Booked through ready** - a submission at any status from booked to ready
 SHALL refuse.
 
-**An upcharge unsettled** - a submission whose cards are ready with money still
-due on it SHALL refuse.
+**Money unsettled** - a submission with money still due on it, an upcharge,
+storage or the repayment of a reversed payout, SHALL refuse, whatever its
+status.
 
 **Ready cards uncollected** - a submission whose cards are ready and not yet
 collected SHALL refuse.
@@ -136,7 +148,7 @@ collected SHALL refuse.
 named.
 
 **A submission that has ended** - collected, cancelled, expired, or its last
-card paid out - SHALL refuse nothing.
+card paid out - with nothing due on it SHALL refuse nothing.
 
 **A submission never booked** - one still planned SHALL refuse nothing, and
 holds nothing for the review to report.
@@ -161,10 +173,17 @@ filing.
 
 - **GIVEN** a collector whose only submission is ready with an upcharge still due
 - **WHEN** their erasure is run
-- **THEN** it is refused, naming the unsettled upcharge
+- **THEN** it is refused, naming the money unsettled
 - **GIVEN** a collector whose only submission is ready with nothing due and its cards still at the shop
 - **WHEN** their erasure is run
 - **THEN** it is refused, naming the cards waiting to be collected
+
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-43 - A repayment due on a collected submission refuses the erasure
+**Serves:** `grade10-site-vault-retention-and-erasure-US-04`, `grade10-site-vault-retention-and-erasure-US-02` - an operator told that a found card's repayment is still in the way
+
+- **GIVEN** a collector whose only submission is collected, a card on it found and its payout reversed, the repayment unpaid
+- **WHEN** their erasure is run
+- **THEN** it is refused, naming the money unsettled
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-33 - The ask is withheld in the collector's own words while cards are out
 **Serves:** grade10-site-vault-retention-and-erasure-US-04 - a collector asking to be forgotten while their cards are still being graded

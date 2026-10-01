@@ -33,7 +33,7 @@
 ### grade10-site-grading-submission-plan-US-06: Collector finds the plan again from the emailed link or the signed-in home
 
 **As a** collector who leaves the wizard before booking,
-**I want** the plan kept under the email I gave and its link mailed to me the moment I leave, opening on any device with no account, and the home page to list every submission under that email once I sign in with it and no password,
+**I want** the plan kept under the email I gave and its link mailed to me once by the next daily sweep while it stays unbooked, opening on any device with no account, and the home page to list every submission under that email once I sign in with it and no password,
 **so that** I can finish on another day, and find every old submission, without a password or a second list.
 
 ### grade10-site-grading-submission-plan-US-07: Collector reads the review before booking

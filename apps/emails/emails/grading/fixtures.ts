@@ -322,7 +322,7 @@ export const GRADING_FIXTURES: GradingLetterFacts = {
   },
   notice_posted: {
     noticeDay: previewSubmission.noticeDay,
-    noticeDays: 30,
+    noticeDays: 90,
   },
   collected: {
     collectedAt: previewSubmission.collectedAt,

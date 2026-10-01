@@ -24,10 +24,12 @@ means to the collector is `grade10-site/grading/submission-lifecycle`.
     shop first, and the received ones behind it, newest first
 - Shipping the batch
   - What leaves with it: the packing list of intake ids, the grader's order
-    number, and the courier and its tracking
-  - Insured to the declared total: read against the courier's written cover
-    figure before it goes
-  - A ship date that is not ahead of today
+    number, and one or more shipments, each with its courier and tracking
+  - Insured to the declared total: each shipment read against the courier's
+    cover, an approved setting in HKD, before it goes
+  - Split to fit the cover: a batch above the cover goes as two or more
+    shipments, each insured at or under it
+  - A ship date that is not ahead of today and not before the cut-off
   - One act, every submission: marking it shipped moves every submission in it
     and tells every collector
 - The grader's stages
@@ -51,6 +53,8 @@ means to the collector is `grade10-site/grading/submission-lifecycle`.
   - Half done, kept: a batch saved part-scanned keeps its scans
   - Finished at once: every submission in the batch becomes ready together,
     each collector told what is due
+  - A held card comes home: a later box at the same grader brings back a card
+    held from an earlier one, matched to it by intake id
 - What did not come back
   - Held by the grader: recorded with the date it is expected, the rest of the
     cards going on
@@ -278,24 +282,30 @@ moves and every collector hears on the same act.
 1. The operator opens the ship form on a batch that has closed.
 2. The packing list is printed: one line per intake id in the batch.
 3. The grader's order number is recorded.
-4. The courier and its tracking are recorded.
-5. The insured total - the sum of the declared values of the cards in the
-   batch - is read on the form rather than entered, and the courier's written
-   cover figure and that figure's currency are recorded.
+4. Each shipment is recorded with its cards, its courier and its tracking: one
+   shipment in the common case, two or more where the batch is above the
+   courier's cover.
+5. Each shipment's insured total - the sum of the declared values of its
+   cards - is read on the form rather than entered, against the courier's
+   cover setting.
 6. The ship date is recorded, never later than today.
 7. The batch is marked shipped: every submission in it moves from Handed in to
    With the grader, the estimate back is set from the ship day, and every
-   collector in the batch is told the tracking and that date.
+   collector in the batch is told that date and the tracking of each shipment
+   carrying their cards.
 
 **Held until it is complete** - the act SHALL be refused while the order
-number, the courier, the tracking, the cover figure or the ship date is unset,
-naming what is unset.
+number, the ship date, the courier's cover setting, or any shipment's courier
+or tracking is unset, or while a card is in no shipment, naming what is unset.
 
 **Not before it closes** - the ship form SHALL open only on a batch that has
 closed, and a batch still open SHALL offer no way to ship it.
 
 **A date ahead of today** - a ship date later than the shop's today SHALL be
 refused on the field.
+
+**A date before the cut-off** - a ship date earlier than the day of the
+batch's cut-off on the shop's clock SHALL be refused on the field.
 
 **One act, one send** - the act SHALL move every submission in the batch
 together or none of them, and SHALL tell each collector once.
@@ -322,8 +332,8 @@ refused by name and SHALL send nothing further.
 **Serves:** grade10-admin-grading-batches-US-01 - the operator sends the parcel with one press rather than opening each submission
 
 - **GIVEN** a closed batch holding three submissions, each at Handed in, with
-  its order number, courier, tracking, insured total, cover figure and ship
-  date recorded
+  its order number, its ship date and one shipment carrying every card with
+  its courier and tracking recorded
 - **WHEN** it is marked shipped
 - **THEN** all three submissions read With the grader, the batch reads Shipped
   with its estimate back counted from the ship day, and each of the three
@@ -335,10 +345,17 @@ refused by name and SHALL send nothing further.
 - **WHEN** a ship date later than the shop's today is entered on the ship form
 - **THEN** it is refused on the field, and the batch is not shipped
 
+#### Scenario: grade10-admin-grading-batches-SC-56 - A ship date before the cut-off is refused
+**Serves:** grade10-admin-grading-batches-US-01 - the operator cannot record a parcel as gone before its batch closed
+
+- **GIVEN** a batch whose cut-off was Thursday 19:00 on the shop's clock
+- **WHEN** a ship date of the Wednesday before is entered on the ship form
+- **THEN** it is refused on the field, and the batch is not shipped
+
 #### Scenario: grade10-admin-grading-batches-SC-13 - The act is held while a field it needs is unset
 **Serves:** grade10-admin-grading-batches-US-01 - the operator is told what the form still wants before the parcel leaves
 
-- **GIVEN** a closed batch with no tracking recorded
+- **GIVEN** a closed batch whose one shipment has no tracking recorded
 - **WHEN** the operator tries to mark it shipped
 - **THEN** the act is refused naming the tracking, and no submission moves
 
@@ -355,24 +372,32 @@ refused by name and SHALL send nothing further.
 The parcel is insured to what it carries, and the courier's own written figure
 is what that is read against.
 
-**Derived, never typed** - the insured total SHALL be the sum of the declared
-values of the cards in the batch, read on the ship form as a figure staff
-cannot enter or change, and SHALL be recorded on the batch as the figure
+**The cover is a setting** - the courier's written cover figure SHALL be the
+setting `grading.courier_cover_minor`, in HKD minor units, written and
+approved by a `grading:approve` holder from the courier's letter; in
+production an unset cover SHALL refuse the ship by name.
+
+**Derived, never typed** - each shipment's insured total SHALL be the sum of
+the declared values of its cards, read on the ship form as a figure staff
+cannot enter or change, and SHALL be recorded on the shipment as the figure
 declared to the courier.
 
-**The comparison** - the insured total SHALL be compared to the courier's
-written cover figure before the batch is shipped.
+**Above the cover** - a shipment whose insured total is above the cover SHALL
+be refused, naming its total and the cover.
 
-**Above the cover** - a batch whose insured total is above the cover figure
-SHALL be refused, naming the total and the cover figure.
+**Split to fit** - a batch whose total is above the cover SHALL be shipped as
+two or more shipments, each carrying its own cards, courier and tracking and
+its own insured total at or under the cover; every card in the batch SHALL be
+in exactly one shipment, one submission's cards MAY travel in more than one,
+and the batch SHALL be marked shipped in one act once every shipment is
+recorded.
 
-**One currency** - the two SHALL be compared only where they carry the same
-currency; where they differ the batch SHALL be refused and no rate SHALL be
-applied.
+**No card above the cover** - a card declared above the cover never reaches a
+batch: the hand-in refuses it at check-in, as
+`grade10-admin/grading/counter` states.
 
-**Named beside the figure** - the cover figure SHALL carry its currency
-wherever it is read, and any amount that is not HKD SHALL name its currency
-beside it.
+**One currency** - the cover and the declared values are both HKD, so no rate
+SHALL ever be applied between them.
 
 #### Scenario: grade10-admin-grading-batches-SC-43 - The ship form reads the insured total off the cards in the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator declares to the courier what the parcel is worth without adding it up
@@ -387,20 +412,35 @@ beside it.
 #### Scenario: grade10-admin-grading-batches-SC-15 - A declared total above the courier's cover is refused
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel worth more than the courier has agreed to cover
 
-- **GIVEN** a closed batch with an insured total of 45000000 HKD minor units
-  and a written cover figure of 30000000 HKD minor units
+- **GIVEN** a closed batch recorded as one shipment insured at 45000000 HKD
+  minor units, and a cover setting of 30000000 HKD minor units
 - **WHEN** the operator tries to mark it shipped
 - **THEN** it is refused naming 45000000 HKD minor units against 30000000 HKD
   minor units, and no submission moves
 
-#### Scenario: grade10-admin-grading-batches-SC-16 - A cover figure in another currency is refused, never converted
-**Serves:** grade10-admin-grading-batches-US-01 - the operator reads a cover figure written in the courier's own money rather than a rate nobody agreed
+#### Scenario: grade10-admin-grading-batches-SC-57 - A batch above the cover ships split into shipments each under it
+**Serves:** grade10-admin-grading-batches-US-01 - the operator sends a batch worth more than the courier covers without leaving any parcel uncovered
 
-- **GIVEN** a closed batch with an insured total of 45000000 HKD minor units
-  and a written cover figure of 1000000 USD minor units
+- **GIVEN** a closed batch of cards declared at 20000000, 15000000 and 10000000
+  HKD minor units, the first two in one submission, and a cover setting of
+  30000000 HKD minor units
+- **WHEN** the operator records two shipments, one of the first card and one
+  of the other two, each with its courier and tracking, and marks the batch
+  shipped
+- **THEN** the shipments read 20000000 and 25000000 HKD minor units insured,
+  every submission in the batch reads With the grader, and each collector is
+  told the tracking of each shipment carrying their cards - the collector
+  whose two cards travel apart is told both, each with its card
+- **AND** a shipment whose total passes 30000000 HKD minor units, or a card left
+  in no shipment, is refused by name and nothing moves
+
+#### Scenario: grade10-admin-grading-batches-SC-16 - An unset courier cover holds the ship
+**Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel against a cover nobody has written down
+
+- **GIVEN** a production brand whose `grading.courier_cover_minor` is unset
+  and a closed batch with every shipment recorded
 - **WHEN** the operator tries to mark it shipped
-- **THEN** it is refused because the two figures are in different currencies,
-  and no rate is applied to either
+- **THEN** it is refused naming the courier's cover, and no submission moves
 
 ### Requirement: The grader's stage is recorded from a closed set
 
@@ -541,6 +581,10 @@ front of the operator before a single slab is scanned.
 **First** - the grader's manifest and its invoice SHALL be entered before any
 slab in that batch is scanned, and scanning SHALL be closed until they are.
 
+**Typed** - the manifest and the invoice SHALL be typed by staff, line by
+line, the way the morning read of the grader's stages is; no file SHALL be
+imported.
+
 **What a manifest line carries** - each line SHALL carry:
 
 | Field | Meaning |
@@ -556,14 +600,16 @@ slab in that batch is scanned, and scanning SHALL be closed until they are.
 and that total's currency.
 
 **A line that matches nothing** - a manifest line naming no intake id in the
-batch SHALL be held as unmatched until staff resolve it, and SHALL hold the
-batch from being finished.
+batch, and no card held from an earlier batch at the same grader, SHALL be
+held as unmatched until staff resolve it, and SHALL hold the batch from being
+finished.
 
 **Resolving a line** - staff SHALL resolve an unmatched line one of two ways:
-naming the card in the batch the line meant, after which the line scans onto
-that card; or closing it as the grader's error with a reason, which stands on
-the line. A card outside the batch, or a close with no reason, SHALL be refused
-by name. A line resolved either way SHALL no longer hold the batch.
+naming the card the line meant, in the batch or held from an earlier batch at
+the same grader, after which the line scans onto that card; or closing it as
+the grader's error with a reason, which stands on the line. Any other card, or
+a close with no reason, SHALL be refused by name. A line resolved either way
+SHALL no longer hold the batch.
 
 **One line each** - a manifest repeating a line number, a cert or an intake id
 SHALL be refused by name, and nothing entered.
@@ -574,7 +620,8 @@ SHALL be refused by name, and nothing entered.
 - **GIVEN** a batch reading Back, unchecked with no manifest entered
 - **WHEN** the operator opens it to receive
 - **THEN** scanning is closed and the batch asks for the manifest and the
-  invoice first, and scanning opens once both are entered
+  invoice first, typed line by line with no file to import, and scanning opens
+  once both are entered
 
 #### Scenario: grade10-admin-grading-batches-SC-24 - A manifest line naming no intake id in the batch is held unmatched
 **Serves:** grade10-admin-grading-batches-US-02 - the operator sees the grader's line that belongs to nothing the shop sent
@@ -613,7 +660,8 @@ grader, batches already received included, naming the submission that holds
 it, and nothing SHALL be recorded.
 
 **Returned raw** - a card the grader graded nothing SHALL be recorded ungraded
-with the grader's code and its note.
+with the grader's code and its note, each where the manifest line gives one;
+a line carrying neither SHALL be taken, not refused.
 
 #### Scenario: grade10-admin-grading-batches-SC-25 - A scan matches the cert to the card the manifest names
 **Serves:** grade10-admin-grading-batches-US-02 - the operator works down the box slab by slab and each one finds its card
@@ -869,6 +917,35 @@ message SHALL name the day the grader holds it until.
   returned and tries again
 - **THEN** the first finish is refused naming that card and no submission
   moves, and the second makes every submission in the batch ready
+
+### Requirement: A card the grader held comes home in a later box
+
+The grader keeps a card for a further look and sends it back with a later
+order, and the shop closes the gap on that one card.
+
+**Matched by intake id** - a manifest line in a later batch at the same grader
+whose intake id names a card recorded held in an earlier received batch SHALL
+match that card, and its scan SHALL record the cert, the grade and the
+grader's words on it and clear held.
+
+**Only a held card** - a line naming a card that is not held, or held at
+another grader, SHALL stay unmatched.
+
+**The collector is told** - the card's grades SHALL be posted to its collector
+the day it is scanned, and its submission SHALL then read Ready to collect for
+that card, with the second hand-back offered at the counter.
+
+#### Scenario: grade10-admin-grading-batches-SC-58 - A held card comes home in a later box
+**Serves:** grade10-admin-grading-batches-US-02 - the operator closes the gap on the one card the grader kept without opening the earlier batch again
+
+- **GIVEN** a card recorded held in received batch A at PSA, its submission
+  ready for its other cards
+- **WHEN** batch B from PSA arrives, its manifest names that card's intake id,
+  and the cert is scanned
+- **THEN** the card carries the cert and the grade, it no longer reads held,
+  its collector is told the grades that day, and its submission offers the
+  second hand-back
+- **AND** a line naming a card held at CGC is listed unmatched
 
 ### Requirement: The upcharge is the fee sheet's difference
 
