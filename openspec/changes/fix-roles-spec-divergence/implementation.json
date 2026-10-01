@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "694643b310f35e76a6a6c7a717ae4aee0755b7b9726bdbf983767c20af551d70"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5d529ebf786458c4c0f54a84263f84a348e4b1c6",
+    "capturedAt": "2026-10-01T14:34:08.422Z",
+    "targets": [
+      {
+        "path": "openspec/specs/shared/auth/roles/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/roles/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A person holds roles from a closed set",
+          "Requirement: Each role grants a fixed set of permissions",
+          "Requirement: Nobody approves an act they recorded",
+          "Requirement: The permission vocabulary is a closed set of resources and actions"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/roles/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "7a144a02087a181282631af114b9219ddc62647b",
+      "components": [
+        "auth",
+        "grading-service",
+        "vault-service",
+        "web"
+      ]
+    }
+  ]
+}

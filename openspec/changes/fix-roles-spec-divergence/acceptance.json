@@ -1,0 +1,75 @@
+{
+  "version": 2,
+  "change": "fix-roles-spec-divergence",
+  "baseline": "4ee5ded54163fc2a925993c1ac3eda20ee826fce5af26513ea248d3c7f4eb9d5",
+  "fingerprint": "694643b310f35e76a6a6c7a717ae4aee0755b7b9726bdbf983767c20af551d70",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-01T14:27:45.812Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/fix-roles-spec-divergence/decisions.md",
+      "sha256": "0bbb590663a1f15187d5c2febb71966dc4bf57a9d74dbd4c9c5d1fa9c4a9238d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fix-roles-spec-divergence/proposal.md",
+      "sha256": "1474062c099da0c3f2317e5e3ec354c7139446075c9c3980741981a150f2f90c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fix-roles-spec-divergence/specs/shared/auth/roles/feature-tcs.md",
+      "sha256": "409ed5da342a9a4d330c45ce2eaf530042f681634d6784d6420f1a9b8440d815",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fix-roles-spec-divergence/specs/shared/auth/roles/spec.md",
+      "sha256": "3235542b638035cffe841ee37243ae87b5c5584628501708059ae43c50a676b7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fix-roles-spec-divergence/specs/shared/auth/roles/user-journeys.md",
+      "sha256": "07997acedddc2953ce62d9d0d0a71c40dd4fb964b5ed810355795e401fd423b0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fix-roles-spec-divergence/tech-design.md",
+      "sha256": "352d749e8902c4d4ff3cac82e7c384820549869af8882ef041b73eb457cb9019",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/feature-tcs.md",
+      "sha256": "923a3143497818be8878d056c0105b8714126793231b8ae62df6a68199e22b36",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/spec.md",
+      "sha256": "c6286e52e6d84cc23686a64dd04fa00e8b39c181425451f726158f312a8fe382",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/user-journeys.md",
+      "sha256": "819ba578a20b43975769c288ccbcec82b590e8ca44deede1d47a3239e135915f",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/shared/auth/roles/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A person holds roles from a closed set",
+        "Requirement: Each role grants a fixed set of permissions",
+        "Requirement: Nobody approves an act they recorded",
+        "Requirement: The permission vocabulary is a closed set of resources and actions"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

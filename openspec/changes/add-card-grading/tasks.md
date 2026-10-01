@@ -1328,14 +1328,14 @@ Stage (c).
       per request (`grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-103`)
-- [ ] 19.9 Write `0005_waivers_kind.sql` as the Migration Plan names it; then
+- [x] 19.9 Write `0005_waivers_kind.sql` as the Migration Plan names it; then
       `waive` in place of `waiveUpcharge`, the ask and the record carrying
       `kind` and `dueNow` netting each kind against its own waivers, its
       tests red first; then run 19.7's checks
       (`grade10-admin-grading-counter-SC-109`,
       `grade10-admin-grading-counter-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
-- [ ] 19.10 Put a reversed payout and its refunded fee back on the submission as
+- [x] 19.10 Put a reversed payout and its refunded fee back on the submission as
       one `repayment` due — `money_lines.kind` and `DUE_KINDS` taking it in
       19.9's migration, `pos_repayment_variant` ringing it, Q47's no-earn rule
       covering it and no waiver reaching it — settled at the till by
@@ -1343,23 +1343,23 @@ Stage (c).
       is unpaid, its test red first (Q131, Q138,
       `grade10-admin-grading-counter-SC-110`,
       `grade10-site-grading-submission-lifecycle-SC-68`)
-- [ ] 19.11 Write `0006_payout_received.sql` as the Migration Plan names it; then
+- [x] 19.11 Write `0006_payout_received.sql` as the Migration Plan names it; then
       add `markPayoutReceived` under `grading:approve`: a till payout stamped
       received at recording, a transfer only by this act, moving no money and
       refusing a payout already received by name; the console's Money tab
       offers Mark received on a transfer not yet received (Q132,
       `grade10-admin-grading-counter-SC-111`)
-- [ ] 19.12 Hand back a card whose payout was reversed on a `collected`
+- [x] 19.12 Hand back a card whose payout was reversed on a `collected`
       submission: settle its repayment, mint a receipt for that card alone and
       hand it over or vault it, the submission staying `collected`, its tests
       red first; then run 19.7's checks (Q137,
       `grade10-admin-grading-counter-SC-114`)
-- [ ] 19.13 Start a card's storage at day 90 after the later of the ready day
+- [x] 19.13 Start a card's storage at day 90 after the later of the ready day
       and the day it came back to the shop in `dueByCard`, months counted on the
       shop's days, its tests red first; then run 19.7's checks (Q141,
       `grade10-site-grading-submission-lifecycle-SC-66`,
       `grade10-site-grading-submission-lifecycle-SC-67`)
-- [ ] 19.14 Refund only the fee line on the payout path, the cover kept, and
+- [x] 19.14 Refund only the fee line on the payout path, the cover kept, and
       cover a storage waiver in `settlement.ts`'s netting with a test, its
       tests red first; then run 19.7's checks (Q138,
       `grade10-admin-grading-counter-SC-62`,
@@ -2196,7 +2196,7 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       (`grade10-admin-grading-counter-SC-106`,
       `grade10-admin-grading-counter-SC-107`,
       `grade10-admin-grading-counter-SC-84`)
-- [ ] 28.11 Offer Waive the storage on `MoneyTab` beside Waive the upcharge,
+- [x] 28.11 Offer Waive the storage on `MoneyTab` beside Waive the upcharge,
       per card and while that card's storage is unsettled, the request
       naming its kind and the record read back under the card, its tests
       red first; needs 19.9; then run 28.6's checks
