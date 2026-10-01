@@ -324,14 +324,23 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   }
   const splitGroups = (raw) => {
     const groups = new Map();
-    let current = null;
+    let items = null;
     for (const line of raw.split("\n")) {
       if (/^-\s+/.test(line)) {
-        current = line.trim();
-        if (!groups.has(current)) groups.set(current, []);
-      } else if (current && line.trim() !== "") groups.get(current).push(line);
+        const group = line.trim();
+        if (!groups.has(group)) groups.set(group, []);
+        items = groups.get(group);
+      } else if (!items || line.trim() === "") continue;
+      else if (/^ {2}-\s+/.test(line) || items.length === 0) items.push([line]);
+      else items.at(-1).push(line);
     }
     return groups;
+  };
+  const textOf = (item) => item.map((line) => line.trim()).join(" ");
+  const labelOf = (item) => {
+    const text = item[0].trim().replace(/^-\s+/, "");
+    const match = /^\*\*([^*]+?):?\*\*|^([^:`]+):(?=\s|$)/.exec(text);
+    return (match?.[1] ?? match?.[2])?.trim() || null;
   };
   const baseGroups = splitGroups(currentFeature?.raw ?? "");
   const deltaGroups = splitGroups(deltaFeature.raw);
@@ -342,14 +351,31 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
       `${capability}: cannot safely merge this Feature set; use its bullet-group form or rebase a complete compatible result`,
     );
   }
-  for (const [group, children] of deltaGroups) {
+  for (const [group, deltaItems] of deltaGroups) {
     if (!baseGroups.has(group)) baseGroups.set(group, []);
-    const known = new Set(baseGroups.get(group).map((line) => line.trim()));
-    for (const line of children)
-      if (!known.has(line.trim())) baseGroups.get(group).push(line);
+    const items = baseGroups.get(group);
+    const holding = (pool, label) =>
+      label
+        ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
+        : [];
+    for (const item of deltaItems) {
+      const label = labelOf(item);
+      const matches = holding(items, label);
+      for (const [side, count] of [
+        ["durable", matches.length],
+        ["delta", holding(deltaItems, label).length],
+      ])
+        if (count > 1)
+          throw new Error(
+            `${capability}: Feature set group "${group}" holds label "${label}" more than once in the ${side} spec; make its labels unique before folding`,
+          );
+      if (matches.length === 1) items[matches[0]] = item;
+      else if (!items.some((one) => textOf(one) === textOf(item)))
+        items.push(item);
+    }
   }
   const body = [...baseGroups]
-    .map(([group, children]) => [group, ...children].join("\n"))
+    .map(([group, items]) => [group, ...items.flat()].join("\n"))
     .join("\n");
   const rendered = `## Feature set\n\n${body}\n`;
   const span = sectionSpan(currentSpec, "Feature set");
@@ -1737,4 +1763,4 @@ export function acceptChange(
   }
 }
 
-export { contractOutputs, json as prettyJson, mergeSuite };
+export { contractOutputs, json as prettyJson, mergeFeatureSet, mergeSuite };

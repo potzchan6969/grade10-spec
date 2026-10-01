@@ -17,6 +17,7 @@ import {
   acceptanceReadiness,
   acceptChange,
   contractTargetDiffs,
+  mergeFeatureSet,
   mergeSuite,
   prepareAcceptance,
   verifyAcceptance,
@@ -1237,5 +1238,87 @@ test("suite fold of the vault erasure suite with grading's delta keeps every sec
   assert.match(
     merged,
     /\n\n---\n\n## grade10-site-vault-retention-and-erasure-US5/,
+  );
+});
+
+const featureSpec = (body) =>
+  `# Roles\n\n## Purpose\n\nRoles grant.\n\n## Feature set\n\n${body}\n## Requirements\n\n### Requirement: Roles\n\nThe system SHALL grant.\n`;
+const foldFeatures = (durable, delta) =>
+  mergeFeatureSet(
+    featureSpec(durable),
+    `# Roles\n\n## Feature set\n\n${delta}\n## MODIFIED Requirements\n`,
+    "shared/auth/roles",
+    null,
+  );
+
+test("feature set fold replaces the durable line carrying the delta line's label, in place", () => {
+  const merged = foldFeatures(
+    "- Closed role set\n  - Named roles: user, admin\n  - Unknown: dropped\n- **Grants**\n  - **Refund** — separate from settlement,\n    and audited\n  - Stacking: roles stack\n",
+    "- Closed role set\n  - Named roles: user, staff, admin\n- **Grants**\n  - **Refund** — separate from settlement\n",
+  );
+  assert.match(
+    merged,
+    /## Feature set\n\n- Closed role set\n {2}- Named roles: user, staff, admin\n {2}- Unknown: dropped\n- \*\*Grants\*\*\n {2}- \*\*Refund\*\* — separate from settlement\n {2}- Stacking: roles stack\n\n## Requirements/,
+  );
+  assert.doesNotMatch(merged, /user, admin|and audited/);
+});
+
+test("feature set fold adds an unlabelled line and a new label beside the durable ones", () => {
+  const merged = foldFeatures(
+    "- Closed role set\n  - Named roles: user, admin\n  - roles never widen\n",
+    "- Closed role set\n  - roles never widen\n  - roles are closed\n  - Unknown: dropped\n",
+  );
+  assert.match(
+    merged,
+    /- Closed role set\n {2}- Named roles: user, admin\n {2}- roles never widen\n {2}- roles are closed\n {2}- Unknown: dropped\n/,
+  );
+});
+
+test("feature set fold is idempotent over its own output", () => {
+  const delta =
+    "- Closed role set\n  - Named roles: user, staff, admin\n- New group\n  - Fresh: line\n";
+  const once = foldFeatures(
+    "- Closed role set\n  - Named roles: user, admin\n",
+    delta,
+  );
+  const twice = mergeFeatureSet(
+    once,
+    `# Roles\n\n## Feature set\n\n${delta}`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.equal(twice, once);
+});
+
+test("feature set fold refuses a label the durable group holds twice", () => {
+  assert.throws(
+    () =>
+      foldFeatures(
+        "- Closed role set\n  - Named roles: user\n  - Named roles: admin\n",
+        "- Closed role set\n  - Named roles: user, admin\n",
+      ),
+    /shared\/auth\/roles: Feature set group "- Closed role set" holds label "Named roles" more than once in the durable spec/,
+  );
+});
+
+test("feature set fold refuses a label the delta group carries twice", () => {
+  assert.throws(
+    () =>
+      foldFeatures(
+        "- Closed role set\n  - Named roles: user\n",
+        "- Closed role set\n  - Named roles: user, staff\n  - Named roles: admin\n",
+      ),
+    /holds label "Named roles" more than once in the delta spec/,
+  );
+});
+
+test("feature set fold reads only a colon followed by a space as a label", () => {
+  const merged = foldFeatures(
+    "- Links\n  - See https://a.example\n  - Create with `user:create`\n  - **Opens:** 09:00 daily\n",
+    "- Links\n  - See https://b.example\n  - Create with `user:delete`\n  - **Opens:** 10:00 daily\n",
+  );
+  assert.match(
+    merged,
+    /- Links\n {2}- See https:\/\/a\.example\n {2}- Create with `user:create`\n {2}- \*\*Opens:\*\* 10:00 daily\n {2}- See https:\/\/b\.example\n {2}- Create with `user:delete`\n/,
   );
 });
