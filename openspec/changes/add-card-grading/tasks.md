@@ -1365,7 +1365,7 @@ Stage (c).
       `grade10-admin-grading-counter-SC-62`,
       `grade10-site-grading-submission-lifecycle-SC-41`)
 
-## 20. The uncollected ladder and the written notice (grade10)
+## 20. The uncollected ladder and the written notice (grade10) (owner: @ecchochan)
 
 Stage (c).
 
