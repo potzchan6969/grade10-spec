@@ -1,6 +1,6 @@
 # grade10-site/grading/collector-notifications Test Cases
 
-**Status:** approved
+**Status:** in-review
 **Reviewed:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**

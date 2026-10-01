@@ -1,6 +1,6 @@
 # grade10-admin/grading/batches Test Cases
 
-**Status:** approved
+**Status:** in-review
 **Reviewed:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
