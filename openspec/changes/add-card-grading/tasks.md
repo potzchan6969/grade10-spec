@@ -68,7 +68,7 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
       `pnpm run test:stories:design-system`, `pnpm run typecheck`,
       `pnpm run lint`
 
-## 3. The planning blocks (grade10-spec)
+## 3. The planning blocks (grade10-spec) (owner: @ecchochan)
 
 Composes the design-system primitives group 2 widens. Every export takes
 `copy`, `locale` and `className`, and renders with no application behind it.
