@@ -768,13 +768,13 @@ A collector who lost an email gets the same sealed copy rather than a new one.
 
 **What can be sent again** - every sealed document a letter has already
 carried, and the message telling the collector the grades are in, SHALL be
-sendable to the collector again from the console (`Q113`). The handed-in
+sendable to the collector again from the console (Q113). The handed-in
 message carries the agreement and the intake receipt, and the message at
 collection carries the hand-back receipt.
 
 **Not yet carried** - a sealed document no letter has carried SHALL NOT be
 offered to send again, and a send SHALL be refused by name with nothing sent
-(`Q113`). Before the hand-in the agreement is downloaded on the iPad there and
+(Q113). Before the hand-in the agreement is downloaded on the iPad there and
 then.
 
 **What is sent** - sending again SHALL send the copy already sealed, changing

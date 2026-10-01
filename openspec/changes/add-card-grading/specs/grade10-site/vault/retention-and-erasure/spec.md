@@ -23,6 +23,8 @@ account and an operator runs.
   - The review is a review: it flags, gauges and writes nothing, so a wrong
     number costs a review and not a record
   - An unset window: flagged as undecided rather than treated as zero
+  - Four classes: the agreements, the identity records behind them, the item
+    photographs, and the record of each case
 - Erasure
   - Asked on the account: the person asks once and every product answers
   - A case in flight blocks: nothing is erased while an item is held or a loan
@@ -45,15 +47,15 @@ account and an operator runs.
     for, and that a review deletes nothing by itself
   - The identity standing: verified until when and checked how — never the name
     and never the document
-  - Every signed document: the one download, offered from here and bounded to
-    what the page lists
+  - Every signed document: offered from here as the one download
+    `grade10-site/vault/documents-and-signing` defines
   - The ask and its refusal: filed here and cancelled here inside the window,
     and withheld in words while an item is held or a loan is running
 - Grading's records
   - The vault's classes carry grading's paper: the submission agreement, the
     two receipts and the hand-in and hand-back photographs sit in agreements
     and photos, at the same windows
-  - A class of its own: the submission record — the collector's name, email,
+  - Case records carry the submission record: the collector's name, email,
     phone and postal address, the list, the pickup code and the messages
   - Measured from the submission's end: collected, cancelled, expired, or its
     last card paid out

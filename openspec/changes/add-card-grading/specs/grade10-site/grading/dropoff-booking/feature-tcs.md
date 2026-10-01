@@ -1140,7 +1140,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | `grade10-site-grading-dropoff-booking-US1-TC1-1` | Covered | The booked visit, the batch named before the cut-off and the booked page; one expected result added so the case also reaches the other half of the booked-message rule, that the diary sends nothing of its own |
 | `grade10-site-grading-dropoff-booking-US1-TC2-1` | Covered | The day past the cut-off naming the next batch |
-| `grade10-site-grading-dropoff-booking-US1-TC3-1` | Raised, answered, folded | The blind pass could not tell whether a visit at the cut-off instant falls in that week's batch. Answered inclusive and folded as a scenario; landed as `Q53` |
+| `grade10-site-grading-dropoff-booking-US1-TC3-1` | Raised, answered, folded | The blind pass could not tell whether a visit at the cut-off instant falls in that week's batch. Answered inclusive and folded as a scenario; landed as Q53 |
 | `grade10-site-grading-dropoff-booking-US1-TC4-1` | Covered | The requirement's outstanding-read clause, stated beside the failed read; the skeleton itself is presentation and is read against the view's story |
 | `grade10-site-grading-dropoff-booking-US1-TC5-1` | Covered | The day with nothing free, applied to every day in the horizon |
 | `grade10-site-grading-dropoff-booking-US1-TC6-1` | Covered | The day past the service's horizon |
@@ -1155,16 +1155,16 @@ Runs once per row of **Test data**.
 | `grade10-site-grading-dropoff-booking-US4-TC2-1` | Covered | Two lists passing twenty taking the longer visit at the same slot |
 | `grade10-site-grading-dropoff-booking-US4-TC3-1` | Folded | The Cancels row is the owner's cancel; the Misses row reached no scenario, and the requirement's "cancels or misses" is folded as a scenario of its own |
 | `grade10-site-grading-dropoff-booking-US5-TC1-1` | Covered | The walk-in booking the Grading visit with a name and an email |
-| `grade10-site-grading-dropoff-booking-US5-TC2-1` | Dropped, `deprecated` | The walk-in books on the diary's own booking-details form, which asks the fields the diary asks for; grading adds no field and no validation of its own, so a refusal on a blank field tests `grade10-site/appointment/booking`, not this capability. Landed as `Q56` |
+| `grade10-site-grading-dropoff-booking-US5-TC2-1` | Dropped, `deprecated` | The walk-in books on the diary's own booking-details form, which asks the fields the diary asks for; grading adds no field and no validation of its own, so a refusal on a blank field tests `grade10-site/appointment/booking`, not this capability. Landed as Q56 |
 | `grade10-site-grading-dropoff-booking-US6-TC1-1` | Covered | Twenty cards taking the Bulk visit, and the Bulk booking said to take about 45 minutes |
 | `grade10-site-grading-dropoff-booking-US6-TC2-1` | Covered | Twenty cards taking the Bulk visit; the below-twenty partition is the booking requirement's step 2 |
 | A booked list edited past twenty | Case added, added after the run | `grade10-site-grading-dropoff-booking-US6-TC3-1`: decided outside the blind pass; a booked list edited past twenty resizes the visit as a join does, at the same slot |
 | The booking surface listing the visit and neither drop-off | Case added | `grade10-site-grading-dropoff-booking-US5-TC3-1` — the booking page lists the Grading visit and neither drop-off |
 | The day back counted from the ship day | Case added | `grade10-site-grading-dropoff-booking-US1-TC9-1` — the estimated day back counts from the day the batch leaves |
 | The vault on the same visit | Case added | `grade10-site-grading-dropoff-booking-US1-TC10-1` — the vault line on the booked page |
-| Neither move nor cancel once the visit has started | Case added | `grade10-site-grading-dropoff-booking-US2-TC3-1`. It also answers the blind pass's question about the window between a visit's start and the shop closing it: Move and Cancel are offered until the start instant and not after. Landed as `Q55` |
+| Neither move nor cancel once the visit has started | Case added | `grade10-site-grading-dropoff-booking-US2-TC3-1`. It also answers the blind pass's question about the window between a visit's start and the shop closing it: Move and Cancel are offered until the start instant and not after. Landed as Q55 |
 | The walk-in's cards listed at the desk | Case added | `grade10-site-grading-dropoff-booking-US5-TC4-1` — the walk-in's cards listed at the desk, with grading silent about the visit |
-| The page reading booked until the diary answers | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as a scenario and walked by `grade10-site-grading-dropoff-booking-US3-TC3-1`; landed as `Q54` |
+| The page reading booked until the diary answers | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as a scenario and walked by `grade10-site-grading-dropoff-booking-US3-TC3-1`; landed as Q54 |
 | A move never offering its own slot back | Case added, added after the run | `grade10-site-grading-dropoff-booking-US2-TC4-1`: moving the drop-off never offers its own current slot back, since the diary already counts it taken |
 | A cancelled visit restarting the plan's clock | Case added, added after the run | `grade10-site-grading-dropoff-booking-US2-TC5-1`: decided at landing; a visit cancelled without a hand-in restarts the plan's clock from the day of the cancel, as a missed one does |
 

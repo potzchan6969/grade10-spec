@@ -145,7 +145,7 @@ See [Non-Goals](decisions.md#non-goals).
   grading classes, the submission agreement, the intake and hand-back receipts
   and the intake and hand-back photographs in the vault's agreements and
   photos classes, and the submission record, name, email, phone, postal
-  address, the list, the code and the messages, as a class of its own, all at
+  address, the list, the code and the messages, in the vault's case records, all at
   the vault's windows and each measured from the submission's end event; no
   identity class; and the in-flight refusal reaches a live submission, one
   between booked and ready, an unsettled upcharge or ready cards uncollected,
