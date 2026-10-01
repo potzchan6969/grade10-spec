@@ -703,7 +703,7 @@ Stage (b).
       (`grade10-site-grading-submission-plan-SC-61`,
       `grade10-site-grading-submission-plan-SC-63`)
 
-## 13. The hand-in, the till and the safe (grade10)
+## 13. The hand-in, the till and the safe (grade10) (owner: @ecchochan)
 
 Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
 
