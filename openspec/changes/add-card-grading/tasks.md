@@ -596,7 +596,7 @@ Stage (b).
       Bulk drop-off at its slot once, after the commit
       (`grade10-site-grading-dropoff-booking-SC-30`)
 
-## 12. The drop-off, the joiner and the shared visit (grade10)
+## 12. The drop-off, the joiner and the shared visit (grade10) (owner: @ecchochan)
 
 Stage (b).
 
