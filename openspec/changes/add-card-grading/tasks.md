@@ -2366,7 +2366,7 @@ lands. Stage (c).
       `PostNoticeDialog` and the timeline's notice entry, the detail carrying
       `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
       checks (`grade10-admin-grading-counter-SC-67`)
-- [ ] 30.10 Draw the ship form's Split into shipments on `GA4`'s components, one block
+- [x] 30.10 Draw the ship form's Split into shipments on `GA4`'s components, one block
       per shipment with its cards, courier, tracking and insured total against
       the cover, and keep manifest entry typed with no import (Q128, Q130,
       `grade10-admin-grading-batches-SC-57`, `grade10-admin-grading-batches-SC-23`)
