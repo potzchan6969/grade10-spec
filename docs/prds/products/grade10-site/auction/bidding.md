@@ -397,8 +397,8 @@ the account's registered address, and the letters about a won lot are
   recipient, lot and when it was sent, never the body
 - **Log retention** — **90 days**; troubleshooting only. Resend keeps the
   durable trail
-- ❓ **Hold line on the non-winner letter** — whether the body also says the
-  card hold is being released; Product confirms
+- **No hold line on the non-winner letter** — the letter does not mention the
+  card hold; My Auctions shows its state
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the bid, maximum and close invariants, and the sweeps
@@ -494,7 +494,7 @@ surface.
 | No-bids close copy | Decided | Watch-only get the watched-ended letter (Ended only — never unsold, no sale or Highest bid); sold closes use watched-sold with Sold for. No bidder letter when nobody bid. | Product |
 | Unsubscribe | Decided | Stop means mute for this auction: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
-| Hold line on the non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
+| Hold line on the non-winner letter | Decided | The letter omits it; My Auctions shows the hold state. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
 :::
