@@ -2371,7 +2371,7 @@ lands. Stage (c).
       the cover, and keep manifest entry typed with no import (Q128, Q130,
       `grade10-admin-grading-batches-SC-57`, `grade10-admin-grading-batches-SC-23`)
 
-## 31. The application wiring (grade10)
+## 31. The application wiring (grade10) (owner: @ecchochan)
 
 Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 (b).
