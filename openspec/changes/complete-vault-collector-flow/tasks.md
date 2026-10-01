@@ -346,7 +346,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 8.5 Verify: `pnpm run check:handbook`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
-## 9. The visit's calendar file (grade10)
+## 9. The visit's calendar file (grade10) (owner: @ecchochan)
 
 - [x] 9.1 Cover the route: the booking's own `UID` and sequence, a moved visit
       keeping both, `METHOD:CANCEL` after a cancel, a stranger refused, and
