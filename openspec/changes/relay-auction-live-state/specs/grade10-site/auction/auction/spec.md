@@ -30,7 +30,6 @@ effective close, and relays every committed change to the pages open on it. A
   - After the commit: each committed bid, extension and close reaches every open lot page and catalogue card, read back from the database
   - Relays decide nothing: the relay holds no state the database does not, so losing it loses nothing
   - Polling fallback: a page that cannot hold a live line polls
-  - Rollout flag: the live relay ships behind `auction.realtime`; the close rules ship without one
 - Public contract
   - Listing and extension terms: a consumer reads the scheduled close, the recorded close, the extension duration, and the cap
   - Service time: a public read gives the auction service's clock
