@@ -2453,7 +2453,7 @@ Both walks drive these routes, so it lands with stage (b).
       the isolated stack's start, so the site's `/book?service=grading` link
       resolves on the dev and e2e stacks; then run 32.6's checks
 
-## 33. The walk — the plan, the drop-off and the hand-in (grade10)
+## 33. The walk — the plan, the drop-off and the hand-in (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-card-grading`) as its input,
 and groups 31 and 32 landed. `POST /dev/submissions/seed` stands in for what
