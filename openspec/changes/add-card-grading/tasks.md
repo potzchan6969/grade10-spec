@@ -1037,6 +1037,16 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-10`)
 - [x] 16.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 16.8 Ship a batch above the courier's cover split into shipments, its test
+      red first: `shipBatch` takes one or more shipments, each with its cards,
+      courier, tracking and insured total read against the cover in one
+      currency, refusing a shipment past the cover, a card in no shipment or in
+      two, and moving every submission in one act once every shipment is
+      recorded; each collector is told their shipment's tracking (Q128,
+      `grade10-admin-grading-batches-SC-15`, `grade10-admin-grading-batches-SC-57`)
+- [ ] 16.9 Refuse a ship date earlier than the day of the batch's cut-off on the
+      shop's clock, its test red first (Q129,
+      `grade10-admin-grading-batches-SC-56`)
 
 ## 17. Receiving, the scans and finishing (grade10)
 
@@ -1302,6 +1312,15 @@ Stage (c).
       (`grade10-admin-grading-counter-SC-109`,
       `grade10-admin-grading-counter-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
+- [ ] 19.10 Put a reversed payout and its refunded fee back on the submission as due,
+      settled at the till by `recordSettlement` as any due line, so the hand-back
+      is refused while either is unpaid, its test red first (Q131,
+      `grade10-admin-grading-counter-SC-110`)
+- [ ] 19.11 Add `markPayoutReceived` under `grading:approve`: a till payout stamped
+      received at recording, a transfer only by this act, moving no money and
+      refusing a payout already received by name; the console's Money tab
+      offers Mark received on a transfer not yet received (Q132,
+      `grade10-admin-grading-counter-SC-111`)
 
 ## 20. The uncollected ladder and the written notice (grade10)
 
@@ -1461,6 +1480,13 @@ the slow lane of 21.8; walk 34 decides them.
       at every call site, and `planClockAt` takes `visitEndedAt`; then run
       21.10's checks (`grade10-site-grading-dropoff-booking-SC-31`,
       `grade10-site-grading-dropoff-booking-SC-28`)
+- [ ] 21.12 Send the list-saved message once from the daily sweep for a plan kept
+      with no drop-off booked, never on the collector leaving the page, a
+      plan booked before the sweep sent none; move Finish later and Save for
+      later off their immediate send, and update `plan.spec.ts`'s
+      `US6-TC1-1` walk to read the letter after the sweep (Q134,
+      `grade10-site-grading-submission-plan-SC-38`,
+      `grade10-site-grading-collector-notifications-SC-26`)
 
 ## 22. The letters (grade10)
 
@@ -1530,6 +1556,9 @@ fixtures through `external/grade10-spec`. Stage (c).
       failure as the vault does
 - [x] 22.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
+- [ ] 22.10 Print the shop's weekly hours from the diary and the shop phone in every
+      letter's footer, and name the brand's main shop on a submission with no
+      visit (Q135, Q136, `grade10-site-grading-collector-notifications-SC-27`)
 
 ## 23. Retention and erasure (grade10)
 
@@ -2017,6 +2046,9 @@ Stage (b).
       `{period}` from the detail's terms, its test red first; needs 1.9,
       and lands with stage (c) after 20.6; then run 27.9's checks
       (`grade10-site-grading-submission-lifecycle-SC-36`)
+- [ ] 27.14 Link a vaulted card's case by resolving its recorded reference at each
+      read of the submission page, the reference as plain text where no case
+      matches (Q133, `grade10-site-grading-submission-lifecycle-SC-63`)
 
 ## 28. The console's queue, tiles and one submission (grade10)
 
@@ -2261,6 +2293,10 @@ lands. Stage (c).
       `PostNoticeDialog` and the timeline's notice entry, the detail carrying
       `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
       checks (`grade10-admin-grading-counter-SC-67`)
+- [ ] 30.10 Draw the ship form's Split into shipments on `GA4`'s components, one block
+      per shipment with its cards, courier, tracking and insured total against
+      the cover, and keep manifest entry typed with no import (Q128, Q130,
+      `grade10-admin-grading-batches-SC-57`, `grade10-admin-grading-batches-SC-23`)
 
 ## 31. The application wiring (grade10)
 

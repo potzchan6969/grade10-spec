@@ -19,6 +19,9 @@ collector hears about them.
     submission was planned under
   - The action link: every message opens the submission at its own address,
     which needs no account
+  - The plan's link: sent once by the daily sweep for a plan left unbooked
+  - The footer's shop: its hours from the diary and its phone; the brand's
+    main shop where no visit is booked
   - What each message carries: the facts the collector would otherwise have to
     ask for, and the documents where a document exists
 - Silence on purpose
@@ -95,6 +98,14 @@ submission was planned under, each carrying an action link to the submission:
 - **What it names** — every message SHALL state the facts it is about rather than only linking to them, and SHALL leave out a paragraph whose fact does not stand for this submission.
 - **Not back with the box** — a card recorded held by the grader, not returned or damaged SHALL be told in the message for a card not back with the box, sent the day it is recorded; a held card SHALL be named with the day the grader holds it until.
 - **What it attaches** — the handed-in message SHALL carry the intake receipt and the signed agreement, the hand-back receipt SHALL carry the signed receipt, and the drop-off booked message SHALL carry a calendar file.
+- **The plan's link** — the list-saved message SHALL be sent once, by the daily sweep, for a plan kept with no drop-off booked; a plan booked before the sweep reaches it SHALL be sent none, and nothing SHALL wait on the collector closing the page.
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-26 - The daily sweep sends a plan left unbooked its link once
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector who left the wizard without booking finds the plan again from their inbox
+
+- **GIVEN** one plan kept yesterday with no drop-off booked, and a second kept yesterday and booked since
+- **WHEN** the daily sweep runs, and runs again the next day
+- **THEN** the first plan's collector is sent the list-saved message with its link once, and the second is sent none
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-03 - The link opens the submission with no account
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector going straight from the message to the page rather than signing in
@@ -272,14 +283,22 @@ takes the act it was about down with it.
 Every message closes the same way, whatever it is about.
 
 - **The submission's line** — every message SHALL carry the submission's id and what it holds — the cards, the grader and the level — directly above the footer.
-- **Who is writing** — the footer SHALL name the custodian under its registered name trading as Grade10, the shop and its address, and the complaints contact.
+- **Who is writing** — the footer SHALL name the custodian under its registered name trading as Grade10, the shop and its address, the shop's opening hours from the diary's weekly rules, the shop phone, and the complaints contact.
+- **Which shop** — the shop SHALL be the one the submission's visit is at; a submission with no visit SHALL name the brand's main shop.
 - **The clock** — every date and time in a message SHALL be stated on the shop's clock, `Asia/Hong_Kong`, and the footer SHALL say so.
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-19 - The footer names the submission and who is writing
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading their own submission id off a message to quote at the shop
 
 - **WHEN** any message is sent about a submission
-- **THEN** it carries that submission's id, its cards, grader and level directly above a footer naming the custodian under its registered name trading as Grade10, the shop and its address, and the complaints contact
+- **THEN** it carries that submission's id, its cards, grader and level directly above a footer naming the custodian under its registered name trading as Grade10, the shop and its address, its weekly opening hours from the diary, the shop phone, and the complaints contact
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-27 - A plan with no visit names the brand's main shop
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading where to go before any drop-off is booked
+
+- **GIVEN** a plan kept with no drop-off booked
+- **WHEN** its list-saved message is sent
+- **THEN** the footer names the brand's main shop, its address, its weekly hours from the diary and its phone
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-20 - Every date is the shop's
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector abroad reading a date they can turn up on

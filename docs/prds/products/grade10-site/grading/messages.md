@@ -45,11 +45,9 @@ new event cannot ship silent:
 - **Registered post** — the written notice goes by registered post and by
   email the same day; whether email alone serves is counsel's, readiness item 3
   on [Grading](/p/grade10-site/grading#before-the-first-submission)
-- ❓ **The plan's link, when it goes** — sent when the collector leaves the wizard without booking; the server
-  cannot see a tab close — Product
-- ❓ **Opening hours and the contact** — the diary's weekly rules or a written line; the shop phone or a
-  WhatsApp number — Operations
-- ❓ **The shop on a plan's letter** — which shop a submission with no visit yet prints — Product
+- 🚧 **The plan's link, when it goes** — once, by the daily sweep, for a plan left with no drop-off booked
+- 🚧 **Opening hours and the contact** — the shop's weekly hours from the diary, and the shop phone
+- 🚧 **The shop on a plan's letter** — a submission with no visit yet names the brand's main shop
 
 <!-- story: an email in the grading shell, with the footer -->
 

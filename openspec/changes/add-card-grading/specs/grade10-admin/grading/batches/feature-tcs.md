@@ -755,6 +755,83 @@
 
 ---
 
+### grade10-admin-grading-batches-US1-TC18-1: A batch above the courier's cover ships split into shipments each under it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the ship form of <closed batch> at <grade10 admin grading batches url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch> | a closed PSA · Regular batch of three cards declared 20000000, 15000000 and 10000000 (HKD, minor units) |
+| Courier's written cover | 30000000, HKD |
+
+**Steps:**
+
+1. Enter the courier's written cover and try Mark as shipped as one shipment.
+2. Split into two shipments: the first card alone, then the other two, each with its courier and tracking.
+3. Mark as shipped.
+
+**Expected Results:**
+
+* Step 1: refused, naming 45000000 against 30000000 HKD minor units; nothing moves.
+* Step 2: the shipments read 20000000 and 25000000 HKD minor units insured, each under the cover.
+* Step 3: every submission in the batch reads With the grader, and each collector is told the tracking of the shipment carrying their cards.
+
+---
+
+### grade10-admin-grading-batches-US1-TC19-1: A ship date before the cut-off is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the ship form of <closed batch>, every other field filled.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <closed batch> | a PSA · Regular batch whose cut-off was Thursday 19:00 on the shop's clock |
+
+**Steps:**
+
+1. Enter the Wednesday before the cut-off as Shipped on.
+2. Try Mark as shipped.
+
+**Expected Results:**
+
+* Step 1: the date is refused on the field.
+* Step 2: the batch is not shipped and no submission moves.
+
+---
+
 ## grade10-admin-grading-batches-US2: Operator receives a batch against the grader's manifest
 
 **As a** member of shop staff opening a returned box,
@@ -2378,7 +2455,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-batches-US1-TC2-1` | Folded | No scenario said a batch still taking cards offers no way to ship it; folded as a scenario, with the rule on the shipping requirement |
 | `grade10-admin-grading-batches-US1-TC3-1` | Reached | A ship date ahead of today refused |
 | `grade10-admin-grading-batches-US1-TC4-1` | Reached | The act held while a field it needs is unset |
-| `grade10-admin-grading-batches-US1-TC5-1` | Reached | A declared total above the courier's cover refused. The case reads the warning tone, the scenario the refusal: the same rule at two altitudes. Whether a batch over the cover is split or held is Q29's open ❓ and is not in either |
+| `grade10-admin-grading-batches-US1-TC5-1` | Reached | A declared total above the courier's cover refused. The case reads the warning tone, the scenario the refusal: the same rule at two altitudes. A batch over the cover ships split into shipments each under it, Q128, stated by `grade10-admin-grading-batches-SC-57` |
 | `grade10-admin-grading-batches-US1-TC6-1` | Reached | Marking it shipped moves every submission and tells every collector |
 | `grade10-admin-grading-batches-US1-TC7-1` | Folded | The console opens a batch for a trio before its first card, which no scenario said; folded as a scenario, with the rule beside `Opened on first use`. Its second reading, a card at another level, is walked by `grade10-admin-grading-batches-US1-TC17-1` |
 | `grade10-admin-grading-batches-US1-TC8-1` | Retired at review, `deprecated` | The read grant is `grade10-admin/grading/counter`'s grant rule (the console shows only what the operator may do), walked in the counter suite; the batches spec never stated it |
@@ -2430,6 +2507,8 @@ Runs once per row of **Test data**.
 | The list putting what waits on the shop first | Case added, added after the run | `grade10-admin-grading-batches-US1-TC16-1`: decided outside the blind pass, Product's question on the console page taken as recommended; every batch not yet received on each page in that order, the rest paged newest first |
 | A card at another level waiting for its own batch | Case added at review | `grade10-admin-grading-batches-US1-TC17-1`: no case walked it; the case at the other level joins its own batch and leaves the open one unchanged |
 | Two operators shipping one parcel, a box finished twice, two desks against one shelf | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
+| A batch above the cover split into shipments | Case added, added after the run | `grade10-admin-grading-batches-US1-TC18-1`: decided by the product owner after the run (Q128), stated by `grade10-admin-grading-batches-SC-57` |
+| A ship date before the cut-off | Case added, added after the run | `grade10-admin-grading-batches-US1-TC19-1`: decided by the product owner after the run (Q129), stated by `grade10-admin-grading-batches-SC-56` |
 
 ### Manual
 

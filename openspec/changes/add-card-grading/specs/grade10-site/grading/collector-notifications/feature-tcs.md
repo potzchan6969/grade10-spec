@@ -400,6 +400,79 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-grading-collector-notifications-US1-TC12-1: The daily sweep sends a plan left unbooked its link once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* <unbooked plan> and <booked plan> were kept yesterday.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <unbooked plan> | a plan kept with no drop-off booked |
+| <booked plan> | a plan kept and booked since |
+
+**Steps:**
+
+1. Let the daily sweep run.
+2. Let it run again the next day.
+
+**Expected Results:**
+
+* Step 1: <unbooked plan>'s collector receives the list-saved message with its link; <booked plan>'s receives none.
+* Step 2: nothing further is sent to either.
+
+---
+
+### grade10-site-grading-collector-notifications-US1-TC13-1: A plan with no visit names the brand's main shop, its hours and its phone
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* <unbooked plan> is due its list-saved message.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <unbooked plan> | a plan kept with no drop-off booked |
+
+**Steps:**
+
+1. Read the list-saved message's footer.
+
+**Expected Results:**
+
+* Step 1: it names the brand's main shop, its address, its weekly hours from the diary and its phone.
+
+---
+
 ## grade10-site-grading-collector-notifications-US2: Collector is not emailed about what the counter already told them
 
 **As a** collector who was refused a card at the counter or who named someone to collect on the page,
@@ -724,6 +797,8 @@ Runs once per row of **Test data**.
 | The booked message and the missed message | Out of suite: `grade10-site/grading/dropoff-booking`'s suite | Their only anchor is that capability's journey |
 | The reminders, the storage message, the notice and nothing after it | Out of suite: `grade10-site/grading/submission-lifecycle`'s suite | The uncollected ladder is walked there, by that suite's `US8` cases |
 | Production refusing the act rather than send a blank | Out of suite: `grade10-admin/grading/counter`'s suite | The operator handing a list in meets the refusal there |
+| The plan's link sent by the sweep | Case added, added after the run | `grade10-site-grading-collector-notifications-US1-TC12-1`: decided by the product owner after the run (Q134), stated by `grade10-site-grading-collector-notifications-SC-26` |
+| The footer's shop, hours and phone | Case added, added after the run | `grade10-site-grading-collector-notifications-US1-TC13-1`: decided by the product owner after the run (Q135, Q136), stated by `grade10-site-grading-collector-notifications-SC-27` |
 
 **Uncovered anchors:** none. Every journey of this capability — `grade10-site-grading-collector-notifications-US-01`, `grade10-site-grading-collector-notifications-US-02`, `grade10-site-grading-collector-notifications-US-03` — and every feature set group a scenario serves is walked by a living case.
 

@@ -2536,6 +2536,86 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-admin-grading-counter-US9-TC9-1: A reversed payout is repaid at the till before the card goes home
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+
+* <found card> was paid out at the till and its payout reversed by two approve holders.
+* admin(holds grading:operate) opens the Hand-back runbook of its submission.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <found card> | declared 400000 (HKD, minor units), fee 15000, paid out, found and reversed |
+
+**Steps:**
+
+1. Read what is due on the runbook.
+2. Try to close the hand-back before paying.
+3. Settle the due at the till and close.
+
+**Expected Results:**
+
+* Step 1: 415000 HKD minor units are due: the payout and the refunded fee.
+* Step 2: refused while either is unpaid.
+* Step 3: the card is handed back and the submission closes.
+
+---
+
+### grade10-admin-grading-counter-US9-TC10-1: A transfer payout is stamped received by its own act
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+
+* admin(holds grading:approve) is on the Money tab of a submission carrying <till payout> and <transfer payout>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <till payout> | a payout recorded at the till |
+| <transfer payout> | a payout recorded by bank transfer with its reference |
+
+**Steps:**
+
+1. Read both payouts.
+2. Mark <transfer payout> received.
+3. Mark it received again.
+
+**Expected Results:**
+
+* Step 1: <till payout> reads received from its recording; <transfer payout> reads not yet received.
+* Step 2: <transfer payout> reads received with the day and who marked it; no money moves.
+* Step 3: refused by name.
+
+---
+
 ## grade10-admin-grading-counter-US10: Operator answers a collector from one submission's tabs
 
 **As a** member of shop staff opening a submission,
@@ -4206,6 +4286,8 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
 | `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test, `grade10:packages/grading/backend/src/testing/suites/audit.ts` — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
 | `grade10-admin-grading-counter-SC-11` | Out of suite | **Out of suite:** `grade10-site/grading/submission-lifecycle`'s feature suite, where `grade10-site/grading/collector-notifications` routes its uncollected ladder; no counter case reads the queue row's badge |
+| A reversed payout repaid at the till | Case added, added after the run | `grade10-admin-grading-counter-US9-TC9-1`: decided by the product owner after the run (Q131), stated by `grade10-admin-grading-counter-SC-110` |
+| A transfer payout marked received | Case added, added after the run | `grade10-admin-grading-counter-US9-TC10-1`: decided by the product owner after the run (Q132), stated by `grade10-admin-grading-counter-SC-111` |
 
 ### Manual
 

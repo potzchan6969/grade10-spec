@@ -1455,10 +1455,10 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 ## grade10-site-grading-submission-plan-US6: Collector finds the plan again from the emailed link or the signed-in home
 
 **As a** collector who leaves the wizard before booking,
-**I want** the plan kept under the email I gave and its link mailed to me the moment I leave, opening on any device with no account, and the home page to list every submission under that email once I sign in with it and no password,
+**I want** the plan kept under the email I gave and its link mailed to me once by the next daily sweep while it stays unbooked, opening on any device with no account, and the home page to list every submission under that email once I sign in with it and no password,
 **so that** I can finish on another day, and find every old submission, without a password or a second list.
 
-### grade10-site-grading-submission-plan-US6-TC1-1: Finishing later keeps the plan and mails its link at once
+### grade10-site-grading-submission-plan-US6-TC1-1: Finishing later keeps the plan and the daily sweep mails its link
 
 **Classification:**
 
@@ -1490,12 +1490,12 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 1. Enter `<collector email>` in About you.
 2. Click Finish later.
 3. Leave the page.
-4. Read the last letter to `<collector email>` in grading's outbox.
+4. Let the daily sweep run, and read the letters to `<collector email>` in grading's outbox.
 
 **Expected Results:**
 
 * The plan is kept under the email entered.
-* An email carrying the plan's link is sent the moment the page is left.
+* Nothing is sent on leaving the page; the daily sweep sends one email carrying the plan's link.
 
 ### grade10-site-grading-submission-plan-US6-TC2-1: Finishing later with no email asks for one first
 
@@ -2365,7 +2365,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 | Manual | Why |
 | --- | --- |
-| `US6-TC1-1` the link mailed on leaving | the mail is read in an inbox; a script drives the plan being kept and no further |
+| `US6-TC1-1` the link mailed by the sweep | the mail is read in an inbox; a script drives the plan being kept and no further |
 | `US8-TC1-1` the nudge at day 21 | the day is moved and the nudge is read in an inbox |
 | `US8-TC2-1` the expiry at day 30 | the same clock, and the words on the expired page |
 | `US6-TC7-1`, `US6-TC8-1` a changed fee sheet | a console settings write sits between the two reads |

@@ -73,8 +73,8 @@ fee sheet it is booked on. The visit it is handed in on is
     the agreement prints those figures
   - A changed sheet: reaches plans not yet booked and no others
 - Keeping the plan
-  - Under the email given: the plan is kept there and its link is mailed the
-    moment the collector leaves
+  - Under the email given: the plan is kept there and its link is mailed once
+    by the daily sweep while it stays unbooked
   - Any device, no account: the link opens the plan wherever it is read
   - Signing in lists them all: the same email and no password lists every
     submission, open and closed
@@ -875,9 +875,9 @@ without ever making an account.
 step, and that email SHALL be asked for before the plan is kept where the
 collector has given none.
 
-**The link** - a link to the plan SHALL be emailed the moment the collector
-leaves the wizard, and SHALL open the plan on any device with no account and no
-password.
+**The link** - a link to the plan SHALL be emailed once, by the daily sweep,
+to a plan kept with no drop-off booked, never on the collector leaving the
+page, and SHALL open the plan on any device with no account and no password.
 
 **What a reopened plan shows** - a plan reopened SHALL show its cards, its
 estimate, the day it is kept until, and the offer to book the drop-off.
@@ -885,13 +885,13 @@ estimate, the day it is kept until, and the offer to book the drop-off.
 **Signing in** - signing in with the same email and no password SHALL list
 every submission under that email, open and closed.
 
-#### Scenario: grade10-site-grading-submission-plan-SC-38 - Leaving the wizard keeps the plan and mails its link
+#### Scenario: grade10-site-grading-submission-plan-SC-38 - Leaving the wizard keeps the plan and the daily sweep mails its link
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector who stops halfway and wants to finish another day
 
 - **GIVEN** a collector part way through the wizard who has given their email
-- **WHEN** they leave without booking
+- **WHEN** they leave without booking, and the daily sweep runs
 - **THEN** the plan is kept
-- **AND** a link to it is emailed to that address
+- **AND** a link to it is emailed to that address once, by the sweep
 
 #### Scenario: grade10-site-grading-submission-plan-SC-39 - The emailed link opens the plan on another device
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector finishing on a second device

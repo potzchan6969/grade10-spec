@@ -1370,3 +1370,24 @@ and none of it touches code:
 
 A queue view for `planned` stays out: Q36 keeps a plan off the queue until it
 is booked.
+
+The product owner's answers of 2026-10-01 add build work, each in its task:
+
+- **Shipments** (Q128, 16.8, 30.10) — a `batch_shipments` row per parcel
+  with its courier, tracking and insured total, and a shipment id on each
+  batch card; `shipBatch` writes them and moves the submissions in one
+  transaction, refusing `OVER_COVER` per shipment and `CARD_UNSHIPPED`
+- **The ship date** (Q129, 16.9) — refused below the cut-off's local day,
+  the same field check as a date ahead of today
+- **A reversal repaid** (Q131, 19.10) — the reversal adds the payout and the
+  fee to the card's due, so `dueNow` and `recordSettlement` read it with no
+  new kind of line
+- **Mark received** (Q132, 19.11) — `payouts.received_at` and
+  `received_by`, written at recording for the till and by
+  `markPayoutReceived` for a transfer, under the submission lock
+- **The plan's link** (Q134, 21.12) — a once-per-submission `plan_saved`
+  sweep row on the partial unique index the other once-only kinds use
+- **The footer** (Q135, Q136, 22.10) — `listShopHours` and the shop phone
+  from the diary; the brand's main shop where no visit is held
+- **The vault link** (Q133, 27.14) — the submission read resolves the
+  recorded reference through the vault's read; a miss is plain text

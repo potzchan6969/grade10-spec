@@ -239,10 +239,15 @@ and the decided row holds until then.
   cards a submission as the fee sheet's fewest and most columns (`Q28`); the
   manifest and the invoice entered before the first scan, an unmatched line
   holding finishing (`Q50`); the batch closed Thursday 19:00 and shipped the
-  next day (`Q17`). Still Operations' on
-  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving):
-  whether the manifest enters as a file or typed (`Q50`), and whether a batch
-  above the courier's written cover is split or held (`Q29`).
+  next day (`Q17`). The product owner settled the rest on 2026-10-01: the
+  manifest typed (`Q130`), a batch above the courier's cover split into
+  shipments (`Q128`), a ship date before the cut-off refused (`Q129`), a
+  reversed payout repaid at the till (`Q131`) and a transfer payout marked
+  received by its own act (`Q132`).
+- **Product, settled by the owner** — the vault case linked from its reference
+  when read (`Q133`), the plan's link sent by the daily sweep (`Q134`), the
+  emails' hours from the diary with the shop phone (`Q135`), and the brand's
+  main shop on a letter with no visit (`Q136`).
 - **Commercial** — the fee sheet, one setting per grader and level to the
   grader's top tier, with cover as its own line at 1.5% of the declared value
   per card at Express and Super Express (`Q27`); the fee's fate per outcome

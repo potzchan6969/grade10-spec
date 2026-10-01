@@ -114,8 +114,8 @@ to book later.
   no drop-off on its page; it asks for the level through Edit the list, and a
   booking or a join sent for it is refused by name
 - 🚧 **Finish later** — the plan is kept under the email given and its link
-  is emailed the moment the collector leaves; it opens on any device with no
-  account
+  is emailed once by the daily sweep while it stays unbooked; it opens on any
+  device with no account
 - 🚧 **Changing a kept list** — Edit the list opens the wizard on the kept
   plan and saves the same submission, never a second one; the wizard never
   books, the submission page does. Once a drop-off is booked the cards and the

@@ -1074,6 +1074,43 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-grading-submission-lifecycle-US6-TC7-1: A vault reference that matches no case reads as plain text
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-06
+
+**Pre-conditions:**
+
+* collector(signed in under the booking email) owns a collected submission with <vaulted card>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <vaulted card> | a card vaulted at the counter under a reference that matches no vault case |
+
+**Steps:**
+
+1. Open the submission page.
+2. Open a vault case under that reference, then open the submission page again.
+
+**Expected Results:**
+
+* Step 1: the card reads Vaulted with the reference as plain text and no link.
+* Step 2: the card links the case.
+
+---
+
 ## grade10-site-grading-submission-lifecycle-US7: Collector names somebody else to collect
 
 **As a** collector who cannot come in,
@@ -2198,6 +2235,7 @@ Runs once per row of **Test data**.
 | `grade10-site-grading-submission-lifecycle-SC-60` | Case added, added after the run | `US1-TC8-1`: decided outside the blind pass, after a plan kept signed out landed on not found; the wizard opens the page on the access the emailed link carries |
 | `grade10-site-grading-submission-lifecycle-SC-61` | Case added, added after the run | `US10-TC5-1`: decided outside the blind pass; one window for both hands, so the cancel goes once the visit's start time comes or a card is checked or refused, a desk that started early included. `US11-TC2-1` became `US11-TC2-2` beside it: the cancel goes with the edit once the counter acts, and a cancel from a stale page is refused |
 | `grade10-site-grading-submission-lifecycle-SC-62` | Case added, added after the run | `US11-TC3-1`: decided outside the blind pass; the editor saves the same submission at Planned and Booked and books nothing |
+| A vault reference matching no case | Case added, added after the run | `grade10-site-grading-submission-lifecycle-US6-TC7-1`: decided by the product owner after the run (Q133), stated by `grade10-site-grading-submission-lifecycle-SC-63` |
 
 **Uncovered anchors:** none. Every journey US-01 to US-11 carries cases, and the one feature-set anchor, The statuses, is listed out of suite above.
 

@@ -1016,6 +1016,15 @@ SHALL refuse a second by name.
 same record, with its own reason and second approve holder, and the card SHALL
 go back on the submission; nothing already recorded SHALL be edited.
 
+**Repaid at the till** - a reversal SHALL put the payout and the refunded fee
+on the submission as due, settled at the till as any due line, and the card
+SHALL NOT be handed back while either is unpaid.
+
+**Received** - a payout at the till SHALL be stamped received when it is
+recorded; a payout by transfer SHALL be stamped received only by a later Mark
+received act on that record, by an approve holder, which moves no money and
+SHALL be refused by name on a payout already received.
+
 #### Scenario: grade10-admin-grading-counter-SC-62 - A payout pays the declared value and refunds the fee
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1037,12 +1046,26 @@ go back on the submission; nothing already recorded SHALL be edited.
 - **WHEN** an approve holder reverses the payout with a reason and a second approve holder
 - **THEN** the reversal is written on that record, the payout itself is left as it was, and the card is back on the submission
 
+#### Scenario: grade10-admin-grading-counter-SC-110 - A reversed payout is repaid at the till before the card goes home
+**Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
+
+- **GIVEN** a card paid out at 400000 HKD minor units with its fee of 15000 HKD minor units refunded, since found and the payout reversed
+- **WHEN** the hand-back is prepared
+- **THEN** 415000 HKD minor units are due on the submission, settled at the till, and the card is not handed back until they are paid
+
 #### Scenario: grade10-admin-grading-counter-SC-96 - A payout by transfer carries its reference
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
 - **GIVEN** a card declared at 300000 HKD minor units recorded as not returned
 - **WHEN** an approve holder records the payout by bank transfer with a second approve holder who is not them
 - **THEN** the record carries the transfer as its route with the transfer's reference, and the card's fee refunded beside it
+
+#### Scenario: grade10-admin-grading-counter-SC-111 - A transfer payout is stamped received by its own act
+**Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
+
+- **GIVEN** a payout recorded at the till and a payout recorded by bank transfer
+- **WHEN** both are read, then an approve holder marks the transfer received, then marks it again
+- **THEN** the till payout reads received from its recording and the transfer reads not yet received until the act, after which it reads received with the day and who marked it, and the second mark is refused by name
 
 #### Scenario: grade10-admin-grading-counter-SC-97 - A payout recorded late says it is late
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
@@ -1230,7 +1253,7 @@ so a section an operator cannot use is not offered.
 | --- | --- | --- |
 | `grading:read` | staff, admin | the queue with its badges, tiles and day strip; one submission with its cards, money, documents and timeline; the settings, read-only |
 | `grading:operate` | staff, admin | starting the visit, checking, adding and refusing a card, minting a document, recording the fee paid, handing in, withdrawing a card, handing back, opening a vault case for a slab, posting the written notice, sending a document or the grades message again |
-| `grading:approve` | staff, admin | waiving an upcharge, recording and reversing a payout, and writing a setting or a fee-sheet row |
+| `grading:approve` | staff, admin | waiving an upcharge, recording and reversing a payout, marking a transfer payout received, and writing a setting or a fee-sheet row |
 
 **The settings** - `grading:read` SHALL open the settings read-only, and only
 `grading:approve` SHALL edit them.
@@ -1337,6 +1360,7 @@ An act absent is better than an act refused, and the console is never the guard.
 | Show, copy or send a sealed document or the grades message again | operate | once the document is sealed |
 | Waive an upcharge or a card's storage | approve | `returned`, `ready` |
 | Record or reverse a payout | approve | `returned`, `ready`, `collected` |
+| Mark a transfer payout received | approve | `returned`, `ready`, `collected` |
 | Write a setting or a fee-sheet row | approve | every status |
 
 **Cancel** - cancelling a submission SHALL never be offered once its visit has

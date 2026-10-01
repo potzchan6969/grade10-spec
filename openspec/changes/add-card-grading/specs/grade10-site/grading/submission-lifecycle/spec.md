@@ -639,6 +639,9 @@ that is a vault case rather than storage on the submission.
 - **At the counter** - a slab SHALL be able to go straight into a vault case at
   the same hand-back, and the card's outcome SHALL read Vaulted with a link to
   the case.
+- **The link** - the case SHALL be found from the reference recorded at the
+  counter each time the page is read; where no case matches it, the reference
+  SHALL show as plain text with no link.
 - **Where the duties are** - the identity check and the custody agreement for
   that slab SHALL be the vault case's, under
   `grade10-site/vault/case-intake`, and SHALL NOT be asked for by the
@@ -655,6 +658,13 @@ that is a vault case rather than storage on the submission.
 - **WHEN** one slab is put into a vault case at the counter
 - **THEN** that card reads Vaulted and links its case
 - **AND** it is not counted for storage on the submission, and the receipt says it went to the vault
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-63 - A vault reference that matches no case reads as plain text
+**Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector leaves a slab with the shop rather than carrying it home
+
+- **GIVEN** a vaulted card whose recorded reference matches no vault case
+- **WHEN** the submission page is read
+- **THEN** the card reads Vaulted with the reference as plain text and no link, and once a case with that reference exists the next read links it
 
 ### Requirement: Cards left uncollected walk reminders, then storage, then a written notice
 

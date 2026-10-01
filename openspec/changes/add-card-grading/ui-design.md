@@ -57,7 +57,7 @@ the pages carry is the product; this file carries the surface.
 | Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered, a walk-in's included | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
 | Refuse a card | `GA7` | dialog from the hand-in runbook | `RefuseCardDialog` → `FormDialog`, `ChoiceList`, `Choice`, `NotesField`, `Notice` |
 | Batches | `GA4` | `/grading/batches` | `BatchesPanel`, `ShipBatchForm`, `ReestimateDialog` → `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `CursorPager`, `CheckList`, `Check`, `ChoiceList`, `Choice`, `NotesField`, `TextField`, `DateField`, `MoneyField`, `FormDialog`, `Notice`, `Button` |
-| Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `FilePicker`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
+| Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
 | Hand-back runbook | `GA6`, `G18` | `/grading/submissions/:submissionId` while the hand-back is offered | `HandbackRunbook` → `CheckList`, `Check`, `Panel`, `TextField`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `Notice`, `Button`, `Link`, `Code` |
 | One submission | `GA3` | `/grading/submissions/:submissionId` while no runbook is offered, or with `?view=record`; one press from the runbook, and the runbook one press from it | `SubmissionPanel` → `Tabs`, `Tab`, `TabPanel`, `StatusBadge`, `Badge`, `Panel`, `EntryList`, `Entry`, `Table`, `Row`, `Cell`, `Money`, `At`, `FormDialog`, `MoneyField`, `DateField`, `NotesField`, `Notice`, `Button`, `Link` |
 | Written notice | none drawn; `GA1`'s Notice due badge and `M18` | dialog from the Ready view or the submission | `PostNoticeDialog` → `FormDialog`, `Text`, `DateField`, `TextField`, `Notice` |
@@ -791,8 +791,10 @@ Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-adm
 | Empty | no batch; New batch | `grade10-admin-grading-batches-SC-44` |
 | New batch | grader, and only the levels the grader's active sheet carries; a card that fits neither waits | `grade10-admin-grading-batches-SC-44` |
 | Ship form (`GA4`) | the checklist: packing list printed, the grader's form filled, insured to the declared total against the courier's cover; courier and tracking, order number, shipped on, estimated back; Mark as shipped · email n collectors | `grade10-admin-grading-batches-SC-43` |
-| Above the courier's cover | the insured line in the warning tone; split or hold, ❓ Operations' on the console page (`decisions.md` Q29) | `grade10-admin-grading-batches-SC-15` |
+| Above the courier's cover | the insured line in the warning tone; Mark as shipped refused as one shipment, and Split into shipments offered (`decisions.md` Q128) | `grade10-admin-grading-batches-SC-15` |
+| Split into shipments | one block per shipment: its cards picked from the packing list, courier and tracking, its insured total against the cover; a card in no shipment or a shipment past the cover named; Mark as shipped once every card is in one | `grade10-admin-grading-batches-SC-57` |
 | Shipped on in the future | refused on the field | `grade10-admin-grading-batches-SC-12` |
+| Shipped on before the cut-off | refused on the field (`decisions.md` Q129) | `grade10-admin-grading-batches-SC-56` |
 | Incomplete | Mark as shipped disabled naming the field | `grade10-admin-grading-batches-SC-13` |
 | Shipping | pending | **Out of suite:** the panel's colocated test |
 | Shipped | every submission at Sent; the letters sent | `grade10-admin-grading-batches-SC-11` |
@@ -808,7 +810,7 @@ Stories `grading-admin-receiving-receive-panel--`.
 | --- | --- | --- |
 | Header (`GA5`) | the batch, grader · level, cards from submissions, the grader's last stage with the day it was recorded, arrived; the progress | `grade10-admin-grading-batches-SC-29` |
 | Before the manifest | Scan disabled; Enter the manifest and the invoice first | `grade10-admin-grading-batches-SC-23` |
-| Manifest entry | `FilePicker` or typed lines, ❓ Operations' on the console page (`decisions.md` Q50) | `grade10-admin-grading-batches-SC-23` |
+| Manifest entry | typed lines, as the morning read is; no file to import (`decisions.md` Q130) | `grade10-admin-grading-batches-SC-23` |
 | Invoice entry | the invoice's lines and total | `grade10-admin-grading-batches-SC-23` |
 | Unmatched manifest line | a line naming no intake id in the batch listed unmatched; Finish held | `grade10-admin-grading-batches-SC-24` |
 | Line resolved | on an unmatched line, the batch's card it meant named, or the line closed as the grader's error with the reason; the line reads its card, unscanned, until the cert scans, or reads closed with its reason | `grade10-admin-grading-batches-SC-51` |
@@ -973,12 +975,10 @@ Stories `grading-admin-settings-settings-panel--`.
   `grade10-admin-grading-counter-SC-89`)
 - **Refusal words** — the grading `RefusalWords` for the doc-sign codes
   grading can meet are `tech-design.md`'s, over `grading.ceremony`
-- **❓ Operations** — whether the manifest and the invoice enter as a file or
-  typed (`GA5` draws Import and the read types the rest), and whether a batch
-  above the courier's cover is split or held; the rows above draw both forms,
-  and the ❓ sits on
-  [Grading Console · Receiving](../../../docs/prds/products/grade10-admin/grading/console.md#receiving)
-  (`decisions.md` Q29, Q50)
+- **Operations' answers** — the manifest and the invoice are typed, so
+  `GA5`'s Import is not built; a batch above the courier's cover ships split
+  into shipments each under it, a form `GA4` does not draw
+  (`decisions.md` Q128, Q130)
 - **Legal words** — the receipt's first clause when a named person collects
   prints as drawn until Legal confirms it (`decisions.md` Q48); the row
   prefills the name

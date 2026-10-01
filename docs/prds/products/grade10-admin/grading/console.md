@@ -75,8 +75,9 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **The ship form** — the packing list, one line per intake id; the grader's order number; insured to the declared
   total against the courier's written cover figure; courier, tracking and the ship date, never in the future; the
   estimate back, the level's counted from the ship day
-- ❓ **Above the courier's cover** — a batch past the courier's written figure is split or held — Operations
-- ❓ **A ship date before the cut-off** — refused, or taken as typed — Operations
+- 🚧 **Above the courier's cover** — a batch past the courier's written figure ships split into shipments, each with
+  its own cards and tracking and each insured under the cover
+- 🚧 **A ship date before the cut-off** — refused on the field
 - 🚧 **Mark as shipped** — `checked_in → sent` for every submission in the batch, each collector emailed the tracking
   and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
 - 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's value against its cap
@@ -88,7 +89,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
   which the payout window counts from; it reads back, unchecked, `graded → returned`; the manifest follows
 - 🚧 **The manifest and the invoice** — enter before the first scan; a line naming no card in the batch holds finishing
   as unmatched until staff name the card it meant or close it as the grader's error, with a reason
-- ❓ **How they enter** — imported as a file, or typed as the morning read is — Operations
+- 🚧 **How they enter** — typed, as the morning read is; no file is imported
 - 🚧 **Scan and match** — each scan matches a cert to a card by the intake id on the grader's manifest; a cert already
   held by another submission is refused by name; counters: scanned, matched, ungraded, upcharges and their sum
 - 🚧 **Exceptions on the card** — ungraded, with the grader's code and note, the fee standing; an upcharge, the sheet's
@@ -113,8 +114,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
   grader's words, the outcome; refuse or add a card at hand-in; withdraw one at Handed in until the batch closes
 - 🚧 **Money tab** — paid at hand-in with the POS reference, the upcharge, storage accrued, what is due, refunds and
   payouts; once the cards are back, a waiver or a payout, its own record by till or transfer, reversed if the card turns up
-- ❓ **After a reversal** — whether the collector repays the payout and the refunded fee at the till — Operations
-- ❓ **A payout received** — stamped when a till payout is recorded; a transfer by a later act, or not at all — Operations
+- 🚧 **After a reversal** — the collector repays the payout and the refunded fee at the till before the card goes home
+- 🚧 **A payout received** — stamped when a till payout is recorded; a transfer by a later Mark received act
 - 🚧 **A storage waiver** — per card, as the upcharge is; there is no waiver for the whole submission
 - 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter carried it
 - 🚧 **Timeline tab** — every event with its figures and the grader's stages in its words; staff-only entries stay here
@@ -180,7 +181,7 @@ reaches only submissions not yet booked:
 | --- | --- | --- |
 | 🚧 `grading:read` | staff, admin | the queue, the batches, one submission with its documents and money |
 | 🚧 `grading:operate` | staff, admin | write a walk-in's list, check, refuse, mint, hand in, cancel before the visit starts or a card is checked or refused, open a batch, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
-| 🚧 `grading:approve` | staff, admin | a waiver of the upcharge, a payout for a card not returned or damaged, a settings write |
+| 🚧 `grading:approve` | staff, admin | a waiver of the upcharge, a payout for a card not returned or damaged, marking a transfer payout received, a settings write |
 
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
   and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
@@ -222,7 +223,7 @@ reaches only submissions not yet booked:
 | Send again is a letter's copy | Decided | Only a sealed document a letter has already carried is sent again; before the hand-in the agreement is downloaded on the iPad, and a send is refused by name | Product |
 | Staff notifications | Decided | The queue is the inbox; nothing is emailed to staff | Product |
 | Drafts on the queue | Decided | A `planned` submission stays off the queue until booked; the collector's own list holds it | Product |
-| The link to a vault case | ❓ Open | Grading records the case's six-character reference as typed, and nothing checks that the case exists; how the submission's page links the case from its reference | Product |
+| The link to a vault case | Decided | Grading records the case's six-character reference as typed, and nothing checks that the case exists at the counter; the submission's page finds the case from the reference each time it is read, and shows the reference as plain text where no case matches - decided by the product owner, 2026-10-01 | Product |
 | The safe's cap | Decided | HKD 300,000 of declared value in the safe, ready slabs counted, read before the first card is checked and refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |
 | Every default a setting | Decided | Each row of the settings table, adopted from the canvas until its owner confirms or changes it under readiness items 6 and 7; pinned to a submission at booking and at signing - decided by the round (product owner delegated this run) | Operations, Commercial, Legal, Product |
 | Staff-only history entries | Decided | Only a price reference that would not answer, a repair on our copy of the diary's booking and a card checked at the desk stay off the collector's history; a payout taken back and an upcharge written off show there, so the history never claims money the collector no longer has - decided by the round (product owner delegated this run) | Operations |
