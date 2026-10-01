@@ -372,7 +372,7 @@ Q27 stands open on the designer's boards.
 - [ ] 10.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run, `pnpm run check:admin-bundle`
 
-## 11. The walk (grade10)
+## 11. The walk (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review vault-walk-ins-and-owners`) as
 its input, and groups 3 to 10 landed; `/tcs-run-sheet` executes the manual
