@@ -16,14 +16,14 @@ lands once every grade10 group is verified; group 11 is the walk.
       opened the request at the counter and it waits for the collector to
       check and send it — in `packages/i18n/messages/shared/<locale>/vault.json`
       for `en`, `zh-Hant`, `zh-Hans` and `ko`
-- [ ] 1.3 Verify: `pnpm --filter @grade10/i18n run test`,
+- [x] 1.3 Verify: `pnpm --filter @grade10/i18n run test`,
       `pnpm run typecheck`, `pnpm run lint`
 
 ## 2. The manual (grade10-spec) (owner: @ecchochan)
 
 Lands once every grade10 group is green and its implementation verified.
 
-- [ ] 2.1 Take the 🚧 marks off the lines this change delivered:
+- [x] 2.1 Take the 🚧 marks off the lines this change delivered:
       **Collector by name**, **Narrow by collector**, **Walk-ins**, **An
       address signed in to before**, **The statement first**, **The
       collector's cases** and **Walk-ins and names** on
@@ -34,10 +34,10 @@ Lands once every grade10 group is green and its implementation verified.
       audit chain** on `docs/prds/products/grade10-admin/console/collector-page.md`,
       leaving the marks `add-item-registry` and `complete-vault-collector-flow`
       still owe
-- [ ] 2.2 Leave `TBC Legal` on the collection statement's wording, and say on
+- [x] 2.2 Leave `TBC Legal` on the collection statement's wording, and say on
       `operator-console.md` that the walk-in refuses in production until it is
       set: the walk-in is dark in production until Legal's statement lands
-- [ ] 2.3 Verify: `pnpm check:manual`, then
+- [x] 2.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes vault-walk-ins-and-owners`
 
 ## 3. The contracts (grade10) (owner: @ecchochan)
