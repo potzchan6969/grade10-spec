@@ -270,7 +270,7 @@ reads these fixtures back; a failure there is a fix here.
       the facts group, the blocks that kind carries and `PrimaryCta`
 - [x] 5.4 Verify: `pnpm run email:build`, `pnpm run typecheck`, `pnpm run lint`
 
-## 6. Provisioning the grading database, its buckets and its fonts (grade10)
+## 6. Provisioning the grading database, its buckets and its fonts (grade10) (owner: @ecchochan)
 
 Lands before any config names an id, so no placeholder ever owes
 `check-config.mjs`'s `AWAITING` map an entry. Writes no code, so opens with no
