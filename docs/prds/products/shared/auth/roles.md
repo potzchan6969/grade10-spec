@@ -64,8 +64,6 @@ list every product shares; a permission outside the list grants nothing.
 | `inventory` | `read` · `write` |
 | `audit` | `read` |
 
-- 🚧 **Moving items** — `inventory:transfer` joins `inventory` with
-  [Items](/p/grade10-admin/inventory/items#permissions)
 - **No `finance` resource** — lending is the vault's financed lane, so its
   cases and money sit under `vault`
 - **Identity documents** — `kyc:read` reaches the identity capture and the
