@@ -2565,7 +2565,7 @@ and `ready_at` that stand in for waiting. Stage (c).
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
-## 35. The manual (grade10-spec)
+## 35. The manual (grade10-spec) (owner: @ecchochan)
 
 Lands once groups 1 to 34 and 36 are green and the change is deployed.
 
