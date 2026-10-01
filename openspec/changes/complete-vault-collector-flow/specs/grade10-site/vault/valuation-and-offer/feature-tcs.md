@@ -491,6 +491,43 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-vault-valuation-and-offer-US1-TC14-1: An unset loan particular refuses the offer in production
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-01
+
+**Pre-conditions:**
+
+* The environment is production.
+* Every lending bound and the lender's registered name are set.
+* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
+  for a case in `under_valuation` carrying `<valuation_1>`.
+
+**Test data:**
+
+| Unset value | Named in the refusal |
+| --- | --- |
+| licence number | the licence number |
+| FPS id | the FPS id |
+
+**Steps:**
+
+1. Leave the row's value unset, then send an offer inside every lending bound.
+
+**Expected Results:**
+
+* Every row is refused by name, naming the row's value, and no offer is written.
+
 ## grade10-site-vault-valuation-and-offer-US2: Collector answers an offer from their own phone
 
 **As a** collector,
@@ -1046,6 +1083,7 @@ the anchors after both landed.
 | US1-TC11-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-11` |
 | US1-TC12-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-02` |
 | US1-TC13-1 | Covered elsewhere | `grade10-admin-vault-operator-queue-SC-12` — making an offer sits behind the vault approve grant |
+| US1-TC14-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-31` for the licence line, `grade10-site-vault-valuation-and-offer-SC-32` for where to pay; written with the owner's approval of M1 at acceptance |
 | US2-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-22` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-16` for the case accepted |
 | US2-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-23` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-14` for the request staying open |
 | US2-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-16` and `grade10-site-vault-valuation-and-offer-SC-17` — the expiry is judged when the acceptance lands; the shop's clock is how the page reads that instant, not a second rule |
@@ -1074,3 +1112,4 @@ the anchors after both landed.
 | --- | --- |
 | US1-TC10-1 | The refusal outside production is proved by US1-TC4-1. What a person walks is the brand's production configuration before the shop lends: no run is made against production |
 | US1-TC11-1 | Same reading, for the lender's registered name |
+| US1-TC14-1 | Same reading, for the licence number and the FPS id |

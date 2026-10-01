@@ -323,3 +323,4 @@ Runs once per row of **Test data**.
 | `shared-ui-vault-case-US1-TC17-1` - the overlay | Kept | The requirement's table names the overlay beside Escape as a way back; the case walks Go back and Escape, the two a tester reaches without aiming at the backdrop, and `shared-ui-vault-case-SC-19` names the same two |
 | The fact card, loading, note list and stage rail cases | Moved | To `shared/ui/page-blocks` when those blocks were generalised for grading's pages: `US1-TC4-1` to `US1-TC15-1` and `SC-04` to `SC-17`, with the raised rows `Q113` and `Q114` |
 | The other 8 cases | Joined, unchanged | Each reaches the one scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
+| Every case in this suite | Blind reading owed | One hand wrote both readings, so a blind QA1 pass is owed at the post-build suite review; acceptance does not wait on it |

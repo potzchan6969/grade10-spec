@@ -602,6 +602,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | WhatsApp number, typed | +852 9123 4567 |
 | WhatsApp number, typed | 85291234567 |
+| WhatsApp number, typed | ９１２３ ４５６７ |
 
 **Steps:**
 
@@ -609,7 +610,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Both rows store the same canonical E.164 number against the case.
+* Every row stores the same canonical E.164 number against the case.
 
 ---
 

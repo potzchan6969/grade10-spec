@@ -11,7 +11,7 @@ hold, a wizard to open another, and each case's own page.
   address and reads the language off the collector's cookie, so `/tc/vault`
   matches nothing; signing in is asked for in a dialog, never a redirect
   1. `grade10.com/vault` — the list and the wizard
-  2. 🚧 `grade10.com/vault/new` — the wizard, where Start another request lands
+  2. `grade10.com/vault/new` — the wizard, where Start another request lands
   3. `grade10.com/vault/cases/<id>` — one case, the address every email links to
   4. `grade10.com/vault/sign#<token>` — the signing ceremony, opened from the
      QR code or link staff hand over; no account needed
@@ -26,13 +26,15 @@ hold, a wizard to open another, and each case's own page.
 - **Start a request** — opens the wizard; **3** unsent drafts at most per
   account
 - **A draft** — reopens on its photo step from the list
+- 🚧 **Start another request** — lands on the wizard at `grade10.com/vault/new`
 
 ## Request wizard
 
 1. *Collector* — **Describe the item** — category (one of the register's
    ten, below), title (≤ **200** characters), description (≤ **2,000**),
    WhatsApp number (optional, unverified, in E.164, refused if not a
-   number), and the lane question: a loan and how much
+   number, and asked for its country code when it reads as one from
+   elsewhere), and the lane question: a loan and how much
 2. *Collector* — **Photograph it** — **1 to 10** photos, JPEG, PNG or WebP,
    ≤ **20 MB** each; location metadata is stripped before and after upload
 3. *Collector* — **Send it in** — needs at least one photo; the case becomes
@@ -42,6 +44,9 @@ hold, a wizard to open another, and each case's own page.
   what happens next, and takes the collector's tick that they have read the
   personal information collection statement before it sends; in production
   the send is refused while the statement is unwritten
+- 🚧 **One number however typed** — full-width digits and `852` before a
+  local number store as the same number; a number from elsewhere with no
+  country code is asked for one
 - 🚧 **Ten categories** — the register's —
   [Items](/p/grade10-admin/inventory/items#values)
 - 🚧 **A slab staff found** — on a draft staff opened with a slab the register
@@ -167,7 +172,7 @@ hold, a wizard to open another, and each case's own page.
   `NOTIFY_FOR_EVENT`; copy in `email/messages.ts`; reminders in
   `sweeps/remind.ts`; retries in `db/schema/notificationRetries.ts`,
   `notify/sealed.ts` and `sweeps/notify.ts`
-- 🚧 **Blocks** — `packages/ui/src/blocks/vault-case` in this store,
+- **Blocks** — `packages/ui/src/blocks/vault-case` in this store,
   [Vault Blocks](/p/shared/ui/vault-case); the slices word them and compose
   them
 - **Copy** — `packages/i18n/messages/shared/{en,zh-Hant,zh-Hans,ko}/vault.json`

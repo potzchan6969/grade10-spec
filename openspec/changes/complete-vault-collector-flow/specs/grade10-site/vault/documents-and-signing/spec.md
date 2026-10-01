@@ -155,6 +155,7 @@ receives it. The token SHALL be stored only as a digest.
 The link SHALL last 30 minutes, SHALL be usable once, and SHALL be bound to
 the first device that opens it. A signer needs no account.
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-h1q rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-10 - A link opened on a second device is refused
 **Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
@@ -162,6 +163,7 @@ the first device that opens it. A signer needs no account.
 - **WHEN** it is opened on another
 - **THEN** it is refused by name and nothing is shown
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-y38 rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-11 - A link past its window is refused
 **Serves:** The ceremony - a link past its window is refused
 
@@ -190,12 +192,14 @@ from the stored bytes, and the chain entry re-checked against the rows it
 describes. The answer SHALL be computed afresh every time and never cached,
 and an operator's re-check SHALL itself be recorded.
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-ebj rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-18 - A digest nobody sealed answers as unknown
 **Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 
 - **WHEN** a digest the vault never sealed is verified
 - **THEN** the answer says it is not one of ours and names nobody
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-ngu rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-19 - A packet is re-derived rather than asserted
 **Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 

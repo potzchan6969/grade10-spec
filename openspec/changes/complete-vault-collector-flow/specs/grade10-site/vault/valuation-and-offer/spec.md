@@ -181,6 +181,7 @@ one gate SHALL apply all of them:
 
 A bound nobody has set SHALL allow everything outside production.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-sgl rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-06 - A rate above the band is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -188,6 +189,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer of 600 basis points over a 60-day term is written
 - **THEN** it is refused by name, because 600 over 60 days is 300 per 30 days
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-3m0 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-07 - One band judges every term
 **Serves:** What the brand lends under - one band judges every term
 
@@ -195,6 +197,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer of 500 basis points over a 60-day term is written
 - **THEN** it is accepted, because 500 over 60 days is 250 per 30 days
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-lyt rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-08 - A term the brand does not write is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -202,6 +205,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer over 45 days is written
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-33m rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-09 - An expiry past the validity window is refused
 **Serves:** What the brand lends under - an expiry past the validity window is refused
 
@@ -220,3 +224,57 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer of 1,000,001 HKD minor units is written, every other bound
   met
 - **THEN** it is refused by name, naming the loan-to-value bound
+
+### Requirement: In production an unset bound or an unnamed lender refuses the offer
+
+In production, an offer SHALL be refused by name while the brand has left any
+bound but grace unset - loan to value, either end of the rate band, the term
+presets, offer validity, the accrual ceiling or the forfeiture-notice period -
+and separately while anything the loan it leads to prints is unset: the
+lender's registered name, the trading name, the licence number, the licence
+wording, the FPS id or the bank account. Each refusal SHALL name what is
+missing.
+
+Neither SHALL refuse a deploy, and neither SHALL refuse a storage case: a shop
+whose lender is still being registered SHALL keep taking items into custody.
+
+Outside production both SHALL be allowed, so that a brand can rehearse the
+flow before its values are decided.
+
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-do8 rev=1 -->
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-10 - A production offer under a null bound is refused
+**Serves:** What the brand lends under - a production offer under a null bound is refused
+
+- **GIVEN** a brand in production with no loan-to-value bound set
+- **WHEN** an offer is written
+- **THEN** it is refused by name, naming the bound
+
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-xk5 rev=1 -->
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-11 - A production offer with no lender named is refused
+**Serves:** What the brand lends under - a production offer with no lender named is refused
+
+- **GIVEN** a brand in production whose lender has no registered name
+- **WHEN** an offer is written
+- **THEN** it is refused by name
+
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-e9b rev=1 -->
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-12 - Custody still opens
+**Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
+
+- **GIVEN** the same brand
+- **WHEN** a storage case is taken through to the vault
+- **THEN** nothing refuses it
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-31 - A production offer with no licence line is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - a production offer whose loan would print no licence is refused
+
+- **GIVEN** a brand in production whose lender is named and whose licence number is unset
+- **WHEN** an offer is written
+- **THEN** it is refused by name, naming the licence number
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-32 - A production offer with nowhere to pay is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - a production offer whose loan would name nowhere to pay is refused
+
+- **GIVEN** a brand in production with every bound and the licence line set and no FPS id
+- **WHEN** an offer is written
+- **THEN** it is refused by name, naming the FPS id

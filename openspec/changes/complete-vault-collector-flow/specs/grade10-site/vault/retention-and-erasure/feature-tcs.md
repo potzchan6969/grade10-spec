@@ -944,7 +944,7 @@ stands, and where I ask to be forgotten,
 
 **Pre-conditions:**
 
-* The collector's request is filed and its window has not passed.
+* The collector's request is filed and it is before the day an erasure may run.
 * The collector is signed in.
 
 **Steps:**
@@ -974,7 +974,7 @@ stands, and where I ask to be forgotten,
 
 **Pre-conditions:**
 
-* The collector's filed request has passed its window.
+* The collector's filed request has reached the day an erasure may run.
 * The collector is signed in.
 
 **Steps:**

@@ -582,3 +582,4 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | The fact card, loading, note list and stage rail cases | Moved | From `shared/ui/vault-case`, `US1-TC4-1` to `US1-TC15-1`, renamed to `US1-TC3-1` to `US1-TC14-1`, their scenarios `SC-04` to `SC-17` renamed to `shared-ui-page-blocks-SC-03` to `SC-16`; the raised rows `Q113` and `Q114` stand as settled there |
 | `shared-ui-page-blocks-US1-TC1-1`, `-TC2-1`, `-TC15-1`, `-TC16-1` | Written with the move | The export contract, the reach, the empty panel and the slot, each reaching the one scenario that states it |
+| The coordinator's cases | Blind reading owed | `US1-TC1-1`, `-TC2-1`, `-TC15-1` and `-TC16-1` get a blind QA1 pass at the post-build suite review; acceptance does not wait on it |

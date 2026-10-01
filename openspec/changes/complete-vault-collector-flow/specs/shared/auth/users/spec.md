@@ -2,10 +2,11 @@
 
 ## Purpose
 
-How an operator on either brand lists people in the identity directory, bans
-and unbans them, and changes their roles, and how an account holder files and
-cancels their own request to be forgotten. Listing and ending their sessions
-is `shared/auth/sessions`. Recording those actions is `shared/auth/audit`.
+How an operator on either brand lists people in the identity directory, creates
+a passwordless Auth account for someone who has never signed in, bans and
+unbans them, and changes their roles, and how an account holder files and
+cancels their own request to be forgotten. Listing and ending their sessions is
+`shared/auth/sessions`. Recording those actions is `shared/auth/audit`.
 Auction bidder bans belong to auction, not here.
 
 ## Feature set
@@ -15,12 +16,18 @@ Auction bidder bans belong to auction, not here.
   - Narrowed list: elevated or user population, a named elevated role, status, and verification combine; caller chooses order (newest first when none)
   - Banned remain: a banned account stays in the directory
 - Ban and unban
-  - Stops money and sign-in: a ban ends sessions and refuses new ones; unban restores sign-in
+  - Stops money and sign-in: a ban ends sessions and refuses new sign-ins; unban restores sign-in
   - No ban of admin: no caller bans an account that holds `admin` (peers included); self-ban stays refused
+  - Closes within 70 seconds: even a cached browse read stops answering signed in, not only a mutation or an elevated call
 - Role changes
   - Set-role edits: clearing operator roles leaves a user; own account included
   - Peer strip refused: an operator cannot remove `admin` from another admin
   - Self-strip: an admin may remove their own `admin` when not last
+  - Reflects within 70 seconds: even a cached browse read reflects the new roles, not only an elevated call
+- Account create
+  - Grant-gated create: only `user:create` creates; a non-`user` role also needs `user:set-role`
+  - Passwordless Auth row: name, email, and roles from the closed set; no loyalty enroll, invite mail, or password
+  - Duplicate email refused: never a second Auth row for an email that already exists
 - Erasure requests
   - One open request: a person holds one at a time, and it closes once
   - Filed by the account holder: from a product's own data page, and cancelled
@@ -72,11 +79,11 @@ it SHALL carry its own day an erasure may run.
 
 - **GIVEN** a person whose erasure request is already cancelled
 - **WHEN** that request is closed a second time
-- **THEN** the system refuses the second close
-- **AND** the request stays cancelled
+- **THEN** the request stays cancelled
+- **AND** nothing about the person changes
 
 #### Scenario: shared-auth-users-SC-44 - A person asks again after cancelling
-**Serves:** shared-auth-users-US-05 - somebody who changed their mind once and asks to be forgotten again later
+**Serves:** shared-auth-users-US-06 - somebody who changed their mind once and asks to be forgotten again later
 
 - **GIVEN** a person whose earlier request was cancelled
 - **WHEN** they ask to be forgotten again
@@ -110,7 +117,7 @@ day an erasure may run, read on the brand's own zone, which
 erased what it holds.
 
 #### Scenario: shared-auth-users-SC-45 - The account holder files their own request
-**Serves:** shared-auth-users-US-05 - somebody asking to be forgotten from their own account rather than at an operator's desk
+**Serves:** shared-auth-users-US-06 - somebody asking to be forgotten from their own account rather than at an operator's desk
 
 - **GIVEN** a signed-in person with no request open
 - **WHEN** they ask to be forgotten from their own data page
@@ -119,7 +126,7 @@ erased what it holds.
   may run, seven days later
 
 #### Scenario: shared-auth-users-SC-46 - A request the person filed themselves bans nothing
-**Serves:** shared-auth-users-US-05 - somebody who filed the ask and comes back to read it before the window runs out
+**Serves:** shared-auth-users-US-06 - somebody who filed the ask and comes back to read it before the window runs out
 
 - **GIVEN** a person whose own erasure request is open
 - **WHEN** they sign in, and a product reads who is calling
@@ -127,7 +134,7 @@ erased what it holds.
 - **AND** the product reports that person
 
 #### Scenario: shared-auth-users-SC-47 - The account holder cancels inside the window
-**Serves:** shared-auth-users-US-05 - somebody changing their mind before anything of theirs is erased
+**Serves:** shared-auth-users-US-06 - somebody changing their mind before anything of theirs is erased
 
 - **GIVEN** a person whose own request is open, on the sixth day after the day
   it was filed
@@ -136,7 +143,7 @@ erased what it holds.
 - **AND** no request is open for them
 
 #### Scenario: shared-auth-users-SC-48 - A cancel on the day an erasure may run is refused
-**Serves:** shared-auth-users-US-05 - somebody coming back to the ask on the day the days they could have taken it back in run out
+**Serves:** shared-auth-users-US-06 - somebody coming back to the ask on the day the days they could have taken it back in run out
 
 - **GIVEN** a person whose own request was filed seven days ago, so that today
   is the day an erasure may run
@@ -158,11 +165,6 @@ NOT sign in and SHALL NOT be treated as signed in.
 
 **Cancelling** - cancelling an operator's request inside the window SHALL close
 it as cancelled and SHALL lift the ban that filing applied.
-
-**Standing waits for the request** - while an erasure request is open, whoever
-filed it, a ban or an unban of that account SHALL be refused by name and the
-account's standing SHALL stay as it is. The request closing, cancelled or
-completed, is what changes standing.
 
 **Over a request the person filed** - an operator filing where the account
 holder's own request is already open SHALL make that one request the
@@ -196,7 +198,7 @@ SHALL end only by running or by an operator's cancel.
 - **AND** that person can sign in again
 
 #### Scenario: shared-auth-users-SC-36 - An operator filing over the person's own request takes it over
-**Serves:** `shared-auth-users-US-02`, `shared-auth-users-US-05` - an operator filing for somebody who had already asked for themselves
+**Serves:** `shared-auth-users-US-02`, `shared-auth-users-US-06` - an operator filing for somebody who had already asked for themselves
 
 - **GIVEN** a person whose own erasure request is open and who can still sign in
 - **WHEN** an operator who holds `user:delete` files that person's erasure
@@ -205,22 +207,13 @@ SHALL end only by running or by an operator's cancel.
 - **AND** the day an erasure may run is unchanged
 
 #### Scenario: shared-auth-users-SC-40 - The take-over leaves the person no cancel of their own
-**Serves:** shared-auth-users-US-05 - somebody who asked for themselves and tries to take the ask back once the shop has taken it over
+**Serves:** shared-auth-users-US-06 - somebody who asked for themselves and tries to take the ask back once the shop has taken it over
 
 - **GIVEN** a person whose own request an operator's filing took over
 - **WHEN** they, or anything acting as them, ask to cancel it through their own
   request
 - **THEN** the system refuses the cancel
 - **AND** the request stays open as the one the shop filed
-
-#### Scenario: shared-auth-users-SC-42 - Standing does not change while an erasure request is open
-**Serves:** shared-auth-users-US-02 - an operator reaching for Ban or Unban on an account whose erasure is under way
-
-- **GIVEN** a person with an open erasure request
-- **WHEN** an operator bans or unbans that account
-- **THEN** the system refuses it by name
-- **AND** the account's standing is unchanged
-- **AND** the request is still open
 
 #### Scenario: shared-auth-users-SC-41 - An erasure over an admin is refused
 **Serves:** shared-auth-users-US-02 - an operator reaching for the erasure of an account that no ban may touch
@@ -249,7 +242,7 @@ erasure filing applied it. An account banned before the request was filed SHALL
 stay banned when the request is cancelled.
 
 #### Scenario: shared-auth-users-SC-37 - A second ask answers the open request
-**Serves:** shared-auth-users-US-05 - somebody who asks again because the first ask looked as though it had not landed
+**Serves:** shared-auth-users-US-06 - somebody who asks again because the first ask looked as though it had not landed
 
 - **GIVEN** a person whose own request is open
 - **WHEN** they ask to be forgotten again
@@ -257,7 +250,7 @@ stay banned when the request is cancelled.
 - **AND** only that one request stands
 
 #### Scenario: shared-auth-users-SC-38 - A cancel with nothing open changes nothing
-**Serves:** shared-auth-users-US-05 - somebody cancelling from a page that was open before their request closed
+**Serves:** shared-auth-users-US-06 - somebody cancelling from a page that was open before their request closed
 
 - **GIVEN** a person with no open erasure request
 - **WHEN** a cancel is sent for them
@@ -272,3 +265,121 @@ stay banned when the request is cancelled.
 - **WHEN** that request is cancelled
 - **THEN** the account is still banned
 - **AND** that person cannot sign in
+
+## MODIFIED Requirements
+
+### Requirement: An operator who can ban can ban and unban
+
+The system SHALL let a caller ban or unban an account only when they hold
+`user:ban`. A ban SHALL last until an unban. After a ban, that person SHALL
+NOT sign in, SHALL NOT be treated as signed in, and SHALL NOT complete a
+money-moving action. That person SHALL NOT be treated as signed in on an
+ordinary cached read either, not only on a mutation or an elevated call; this
+SHALL hold for every read that starts 70 seconds or more after the ban. A
+money-moving
+action SHALL re-check identity so a ban cannot be ignored. The operator
+SHALL be able to include a reason on a ban. A caller SHALL NOT ban their own
+account. A caller SHALL NOT ban an account that holds `admin`, including
+when the caller also holds `admin`. The last remaining `admin` SHALL NOT be
+banned. A caller without the grant SHALL be refused, and the account SHALL
+be unchanged. Banning an already-banned account SHALL leave it banned.
+
+While an erasure request for that account is open, whoever filed it, a ban or
+an unban SHALL be refused by name and the account SHALL be unchanged; the
+request closing, cancelled or completed, is what changes standing.
+
+<!-- trace:scenario id=g10.shared-users.SC-bc9 rev=1 -->
+#### Scenario: shared-auth-users-SC-06 - A ban stops money-moving
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** an operator who holds `user:ban`
+- **WHEN** they ban an account
+- **THEN** that person cannot complete a money-moving action
+
+<!-- trace:scenario id=g10.shared-users.SC-1m7 rev=1 -->
+#### Scenario: shared-auth-users-SC-07 - A banned person cannot sign in
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a banned account
+- **WHEN** that person completes a sign-in method
+- **THEN** they are not signed in
+
+<!-- trace:scenario id=g10.shared-users.SC-57f rev=1 -->
+#### Scenario: shared-auth-users-SC-08 - A banned person is not signed in
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a person who signed in and is then banned
+- **WHEN** a product reads who is calling
+- **THEN** it reports no person
+
+<!-- trace:scenario id=g10.shared-users.SC-qss rev=1 -->
+#### Scenario: shared-auth-users-SC-09 - An unban lets them sign in again
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a banned account
+- **WHEN** an operator who can ban unbans it
+- **THEN** that person can sign in again
+
+<!-- trace:scenario id=g10.shared-users.SC-s2t rev=1 -->
+#### Scenario: shared-auth-users-SC-10 - A caller who cannot ban is refused
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a signed-in operator who does not hold `user:ban`
+- **WHEN** they try to ban an account
+- **THEN** the system refuses the request
+- **AND** the account remains unbanned
+
+<!-- trace:scenario id=g10.shared-users.SC-dbb rev=1 -->
+#### Scenario: shared-auth-users-SC-11 - An operator cannot ban themselves
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** an operator who holds `user:ban`
+- **WHEN** they try to ban their own account
+- **THEN** the system refuses the request
+- **AND** their account remains unbanned
+
+<!-- trace:scenario id=g10.shared-users.SC-v7f rev=1 -->
+#### Scenario: shared-auth-users-SC-12 - Support cannot ban an admin
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a person whose operator role is `support`
+- **WHEN** they try to ban an account that holds `admin`
+- **THEN** the system refuses the request
+- **AND** the account remains unbanned
+
+<!-- trace:scenario id=g10.shared-users.SC-uoq rev=1 -->
+#### Scenario: shared-auth-users-SC-13 - The last admin cannot be banned
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** the only account that holds `admin`
+- **WHEN** an operator who can ban tries to ban it
+- **THEN** the system refuses the request
+- **AND** the account remains unbanned
+
+<!-- trace:scenario id=g10.shared-users.SC-y5y rev=1 -->
+#### Scenario: shared-auth-users-SC-25 - An admin cannot ban another admin
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** an operator who holds `admin` and `user:ban`
+- **AND** another account that holds `admin`
+- **WHEN** they try to ban that account
+- **THEN** the system refuses the request
+- **AND** the account remains unbanned
+
+#### Scenario: shared-auth-users-SC-34 - A ban closes a cached read within 70 seconds
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
+
+- **GIVEN** a person who signed in and holds a signed cookie cache that has
+  not yet expired
+- **WHEN** an operator who can ban bans that account
+- **THEN** an ordinary browse read that starts 70 seconds or more after the
+  ban reports no person, even though the cookie cache would not have expired
+
+#### Scenario: shared-auth-users-SC-42 - Standing does not change while an erasure request is open
+**Serves:** shared-auth-users-US-02 - an operator reaching for Ban or Unban on an account whose erasure is under way
+
+- **GIVEN** a person with an open erasure request
+- **WHEN** an operator bans or unbans that account
+- **THEN** the system refuses it by name
+- **AND** the account's standing is unchanged
+- **AND** the request is still open
