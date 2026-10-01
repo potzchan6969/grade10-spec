@@ -27,6 +27,7 @@
   "automaticMaximumRaiseTitle": "Raise your automatic maximum",
   "backToAuctions": "Back to auctions",
   "bidCount": "{count, plural, one {# bid} other {# bids}}",
+  "bidDidNotGoThrough": "Your bid did not go through.",
   "bidHistory": "Bid history",
   "bidHistoryWinner": "Winner",
   "bidHistoryYou": "You",

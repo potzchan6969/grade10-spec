@@ -27,6 +27,7 @@
   "automaticMaximumRaiseTitle": "자동 최대 금액 올리기",
   "backToAuctions": "경매로 돌아가기",
   "bidCount": "{count, plural, other {입찰 #회}}",
+  "bidDidNotGoThrough": "입찰이 진행되지 않았습니다.",
   "bidHistory": "입찰 내역",
   "bidHistoryWinner": "낙찰",
   "bidHistoryYou": "나",

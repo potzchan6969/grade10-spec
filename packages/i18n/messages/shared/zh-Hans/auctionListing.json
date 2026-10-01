@@ -27,6 +27,7 @@
   "automaticMaximumRaiseTitle": "提高自动最高出价金额",
   "backToAuctions": "返回拍卖",
   "bidCount": "{count, plural, other {# 次出价}}",
+  "bidDidNotGoThrough": "出价未成功。",
   "bidHistory": "出价记录",
   "bidHistoryWinner": "得标",
   "bidHistoryYou": "你",
