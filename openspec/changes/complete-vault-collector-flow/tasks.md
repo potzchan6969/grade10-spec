@@ -989,7 +989,7 @@ Lands beside group 18, on group 3's exports and the fixture transport.
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
-## 23. The walks' stack (grade10)
+## 23. The walks' stack (grade10) (owner: @ecchochan)
 
 Lands beside groups 4 to 11; group 21's walks drive what it stands, and it
 makes nothing a scenario names.
