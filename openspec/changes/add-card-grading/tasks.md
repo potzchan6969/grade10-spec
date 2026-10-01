@@ -2196,7 +2196,7 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       (`grade10-admin-grading-counter-SC-106`,
       `grade10-admin-grading-counter-SC-107`,
       `grade10-admin-grading-counter-SC-84`)
-- [ ] 28.11 Offer Waive the storage on `MoneyTab` beside Waive the upcharge,
+- [x] 28.11 Offer Waive the storage on `MoneyTab` beside Waive the upcharge,
       per card and while that card's storage is unsettled, the request
       naming its kind and the record read back under the card, its tests
       red first; needs 19.9; then run 28.6's checks
