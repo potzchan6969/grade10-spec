@@ -841,7 +841,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 19.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `storybook build`
       and the a11y job green on the stories present when the group lands
 
-## 20. The manual (grade10-spec)
+## 20. The manual (grade10-spec) (owner: @ecchochan)
 
 Lands once every other group is green and its implementation verified.
 
