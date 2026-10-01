@@ -524,7 +524,7 @@ order pinned by a test. Every row carries its own `kind` and an explicit
 | List | Predicate | Writes | Kind · Lane |
 | --- | --- | --- | --- |
 | `retriedNotifications` | `notification_retries` due | the send, or the row leased for a further attempt | repair · fast |
-| `planLinks` | `planned` holding no visit when the sweep runs, `NOT EXISTS plan_saved` | the event and the letter, `plan_saved` once per submission on the once-only index | routine · fast |
+| `planLinks` | `planned` or `booked` holding no visit when the sweep runs, kept before the shop's today, `NOT EXISTS plan_link_sent` | `plan_link_sent` once per submission on the once-only index, and the `plan_saved` letter on a second link minted into `plan_link_hash` beside the page's | routine · fast |
 | `planNudges` | `planned`/`booked` holding no visit, the plan's clock start (`planClockAt`, the later of `created_at` and the last visit ended without a hand-in) a day short of `plan_nudge_days`, no `plan_nudged` at or after that start | the event and the letter | routine · fast |
 | `visitReminders` | `booked`, the visit resolved through `visit_owner_id` starting within two days — every submission it carries, the owner and each joiner, ordered by the visit's own `appointment_at` | the event and the letter | routine · fast |
 | `uncollectedReminders` | `ready`, no notice posted, more pinned reminder days come (a day wide) than told | the event and the letter | routine · fast |
@@ -554,10 +554,11 @@ answering the question it was for.
   null rather than blocking or throwing, and each row's own failure is
   caught and reported (`rowError`) rather than aborting the rungs behind it.
   The once-per-submission kinds (`ONCE_PER_SUBMISSION_KINDS` in
-  `grading-contracts`: `plan_nudged`, `storage_started`) carry a partial
+  `grading-contracts`: `storage_started`, `plan_link_sent`) carry a partial
   unique index as the backstop a claim's own re-check cannot cover on its
   own: event absence read in the page phase is a read-then-write race two
-  overlapping passes both pass
+  overlapping passes both pass; `plan_nudged` carries its own, keyed on the
+  clock start its details name, one nudge per start
 - **The visit reminder is every submission the visit carries**, not the
   cache the owner alone holds: a joiner's own row never caches
   `appointment_at`/`booking_ref`, so the page reads the visit resolved
@@ -666,7 +667,8 @@ answering the question it was for.
   stored in `submissions.access_hash`, and the raw value travels only in the
   link's fragment (`/grading/submissions/:id#t=…`); `GradingApi` lifts it out
   and sends it as a header, and one `submissionAccess` resolver on the worker
-  verifies it by digest beside the session arm, where a signed-in caller's
+  verifies it by digest against `access_hash` or `plan_link_hash` beside
+  the session arm, where a signed-in caller's
   email must equal `submissions.email`. No TTL — the grant lives from
   `plan_saved` to `collected` — and revocation is a re-mint the `handed_in`
   and `ready` letters carry
@@ -852,6 +854,7 @@ CGC or BGS batch.
 | `status` | `text NOT NULL CHECK` | the ten, rendered from `SUBMISSION_STATUSES` |
 | `user_id`, `email`, `full_name`, `phone` | `text`, email `NOT NULL` | the plan lives under the email |
 | `access_hash` | `text NOT NULL` | sha256 of the link's token; re-minted on revocation |
+| `plan_link_hash` | `text` | sha256 of the token the daily plan-link letter carries, minted by `planLinks`; nulled by every re-mint |
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
 | `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
 | `pinned_terms` | `jsonb` | the seven terms at the agreement's mint, `notice_period_days` among them |
@@ -1421,9 +1424,11 @@ where an answer left the mechanism open, the round completed it at landing:
   `received_by`, written at recording for the till and by
   `markPayoutReceived` for a transfer, under the submission lock
 - **The plan's link** (Q134, Q145, 21.12) — the `planLinks` list, its
-  `plan_saved` row once per submission on the partial unique index the other
-  once-only kinds use (`ONCE_PER_SUBMISSION_KINDS`), read as the plan stands
-  when the sweep runs
+  `plan_link_sent` row once per submission on the partial unique index the
+  other once-only kinds use (`ONCE_PER_SUBMISSION_KINDS`), read as the plan
+  stands when the sweep runs; the letter's link is minted into
+  `plan_link_hash` beside the page's, so it revokes nothing, and the next
+  re-mint revokes both
 - **The plan's clock** (Q144, 21.11) — `planNudges` reads `planClockAt` and
   nudges once per clock start
 - **The footer** (Q135, Q136, 22.10) — `listShopHours` and the shop phone
