@@ -1,5 +1,4 @@
-import { Step } from "@grade10/design-system/components/display/step";
-import { Stepper } from "@grade10/design-system/components/display/stepper";
+import { StageRail } from "../page-blocks/stage-rail";
 
 /** The seven stages a submission passes, in order. Named as the catalog's
  * `submission.stage` family names them, so a consumer hands the family over
@@ -49,27 +48,16 @@ function GradingStatusRail({
   ended,
   className,
 }: GradingStatusRailProps) {
-  const reached = STAGES.indexOf(stage);
-
   return (
-    <Stepper className={className} data-slot="grading-status-rail">
-      {STAGES.map((name, index) => (
-        <Step
-          description={index === reached ? ended : undefined}
-          key={name}
-          label={copy[name]}
-          showLeadingConnector={index > 0}
-          showTrailingConnector={index < STAGES.length - 1}
-          state={
-            index < reached
-              ? "completed"
-              : index === reached
-                ? "progress"
-                : "upcoming"
-          }
-        />
-      ))}
-    </Stepper>
+    <StageRail
+      className={className}
+      copy={{
+        stages: STAGES.map((id) => ({ id, label: copy[id] })),
+        ended,
+      }}
+      current={stage}
+      slot="grading-status-rail"
+    />
   );
 }
 

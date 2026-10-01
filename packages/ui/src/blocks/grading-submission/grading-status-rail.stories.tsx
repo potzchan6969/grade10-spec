@@ -20,7 +20,8 @@ export const Booked: Story = { args: { stage: "booked" } };
 
 export const HandedIn: Story = { args: { stage: "handedIn" } };
 
-/** The stage reached is marked, the earlier ones done, the later ones not
+/** The stage reached is marked, the earlier ones done, the later ones not,
+ * on the store's stage rail under the block's slot
  * (shared-ui-grading-submission-SC-32). */
 export const Sent: Story = {
   args: { stage: "sent" },
@@ -41,6 +42,10 @@ export const Sent: Story = {
       "upcoming",
     ]);
     expect(canvas.getByText("Home")).toBeInTheDocument();
+    expect(canvas.getByRole("list").parentElement).toHaveAttribute(
+      "data-slot",
+      "grading-status-rail",
+    );
   },
 };
 
