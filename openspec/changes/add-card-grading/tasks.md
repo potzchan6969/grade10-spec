@@ -1618,7 +1618,7 @@ fixtures through `external/grade10-spec`. Stage (c).
       the row stays due and unclaimed and `grading.sweep.repair` names the
       value, its test red first (`grade10-site-grading-collector-notifications-SC-30`)
 
-## 23. Retention and erasure (grade10)
+## 23. Retention and erasure (grade10) (owner: @ecchochan)
 
 Stage (c). From group 11 a collector's row holds an email, a name, a phone
 and a named collector, and `plan_attempts` holds the address each plan was
