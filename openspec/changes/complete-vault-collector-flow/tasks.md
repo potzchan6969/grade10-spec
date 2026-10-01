@@ -1056,7 +1056,7 @@ for each.
       `pnpm run validate:changes complete-vault-collector-flow`,
       `pnpm check:manual`
 
-## 25. The vault pages on the store's blocks (grade10)
+## 25. The vault pages on the store's blocks (grade10) (owner: @ecchochan)
 
 Lands after group 24's store commit, through a submodule bump. The views keep
 their words, their tests and their story ids; only what draws them moves.
