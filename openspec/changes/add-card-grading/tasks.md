@@ -2507,7 +2507,7 @@ and `ready_at` that stand in for waiting. Stage (b).
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
-## 34. The walk — the batch, the hand-back and what is left behind (grade10)
+## 34. The walk — the batch, the hand-back and what is left behind (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-card-grading`) as its input,
 and groups 31 and 32 landed. `POST /dev/submissions/seed` stands in for what
