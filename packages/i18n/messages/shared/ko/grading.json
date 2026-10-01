@@ -403,6 +403,7 @@
       "minimumGradeLabel": "최저 등급",
       "grades": "감정사의 표현 그대로의 결과",
       "cert": "인증 번호",
+      "vaultCase": "금고 보관 건",
       "refusedReason": "창구에서 반려 · {reason}",
       "withdrawnRefund": "회수함 · {amount} 환불됨",
       "movedUpLine": "{level} 상향으로 {amount} 추가",

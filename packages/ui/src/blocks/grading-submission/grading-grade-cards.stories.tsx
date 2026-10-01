@@ -272,3 +272,41 @@ export const Damaged: Story = {
     expectBadges(canvasElement, args.cards);
   },
 };
+
+/** A slab the collector left in the vault reads Vaulted and links its case;
+ * one whose reference matches no case reads the reference as plain text
+ * (grade10-site-grading-submission-lifecycle-SC-34,
+ * grade10-site-grading-submission-lifecycle-SC-63). */
+export const Vaulted: Story = {
+  args: {
+    cards: [
+      {
+        ...GRADED_CARD,
+        outcome: "vaulted",
+        outcomeLabel: "Vaulted",
+        vaultCase: { reference: "VC-1182", href: "/vault/cases/case_1182" },
+      },
+      {
+        ...GRADED_CARD,
+        id: "card_blastoise",
+        name: "Blastoise, Base Set 2/102",
+        certificate: "PSA 84213378",
+        outcome: "vaulted",
+        outcomeLabel: "Vaulted",
+        vaultCase: { reference: "VC-1183" },
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getAllByText("Vaulted")[0]).toHaveAttribute(
+      "data-variant",
+      "default",
+    );
+    expect(canvas.getByRole("link", { name: "VC-1182" })).toHaveAttribute(
+      "href",
+      "/vault/cases/case_1182",
+    );
+    expect(canvas.getByText("VC-1183").closest("a")).toBeNull();
+  },
+};

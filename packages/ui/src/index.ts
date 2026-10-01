@@ -401,6 +401,7 @@ export type {
   GradingPhoto,
   GradingReferenceSale,
   GradingTone,
+  GradingVaultCase,
 } from "./blocks/grading-submission/types";
 // shared-ui/loyalty-membership
 export {

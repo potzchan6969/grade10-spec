@@ -7,8 +7,12 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { outcomeTone } from "./grading-card-record";
-import type { GradingCardOutcome, GradingPhoto } from "./types";
+import { outcomeTone, VaultCaseLine } from "./grading-card-record";
+import type {
+  GradingCardOutcome,
+  GradingPhoto,
+  GradingVaultCase,
+} from "./types";
 
 /** One card once the grader's reading is in. Every word is the grader's. */
 type GradingGradeCard = {
@@ -37,6 +41,8 @@ type GradingGradeCard = {
    * this line once the submission is collected
    * (`grade10-site-grading-submission-lifecycle-SC-41`, `SC-43`). */
   payoutLine?: string;
+  /** The case a vaulted slab went into, as `GradingCardRecord` draws it. */
+  vaultCase?: GradingVaultCase;
 };
 
 type GradingGradeCardsCopy = {
@@ -46,6 +52,7 @@ type GradingGradeCardsCopy = {
   certificateLabel: string;
   lookupLabel: string;
   ungradedCodeLabel: string;
+  vaultCaseLabel: string;
 };
 
 type GradingGradeCardsProps = {
@@ -171,6 +178,13 @@ function GradeCard({
                 <Link href={card.lookupHref}>{copy.lookupLabel}</Link>
               ) : null}
             </HStack>
+          ) : null}
+          {!ungraded && card.vaultCase ? (
+            <VaultCaseLine
+              label={copy.vaultCaseLabel}
+              slot="grading-grade-card-vault-case"
+              vaultCase={card.vaultCase}
+            />
           ) : null}
           {!ungraded && card.slabPhotograph ? (
             <img

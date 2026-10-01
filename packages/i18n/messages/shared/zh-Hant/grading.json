@@ -403,6 +403,7 @@
       "minimumGradeLabel": "最低評分",
       "grades": "成績以評級公司的說法顯示",
       "cert": "證書編號",
+      "vaultCase": "金庫個案",
       "refusedReason": "櫃檯拒收 · {reason}",
       "withdrawnRefund": "已取回 · 已退回 {amount}",
       "movedUpLine": "升級到 {level}，需補 {amount}",

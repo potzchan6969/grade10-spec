@@ -403,6 +403,7 @@
       "minimumGradeLabel": "最低评分",
       "grades": "成绩以评级公司的说法显示",
       "cert": "证书编号",
+      "vaultCase": "金库个案",
       "refusedReason": "柜台拒收 · {reason}",
       "withdrawnRefund": "已取回 · 已退回 {amount}",
       "movedUpLine": "升级到 {level}，需补 {amount}",

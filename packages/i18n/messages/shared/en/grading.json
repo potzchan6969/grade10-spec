@@ -403,6 +403,7 @@
       "minimumGradeLabel": "Minimum grade",
       "grades": "Grades in the grader’s words",
       "cert": "Cert",
+      "vaultCase": "Vault case",
       "refusedReason": "Refused at the counter · {reason}",
       "withdrawnRefund": "Withdrawn · {amount} refunded",
       "movedUpLine": "{amount} due for {level}",

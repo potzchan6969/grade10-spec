@@ -319,10 +319,38 @@ export const Vaulted: Story = {
         outcome: "vaulted",
         outcomeLabel: "Vaulted",
         outcomeLine: "It opened vault case VC-1182.",
+        vaultCase: { reference: "VC-1182", href: "/vault/cases/case_1182" },
       },
     ],
   },
   play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
     expectOutcomes(canvasElement, args.cards);
+    expect(canvas.getByRole("link", { name: "VC-1182" })).toHaveAttribute(
+      "href",
+      "/vault/cases/case_1182",
+    );
+  },
+};
+
+/** Vaulted under a reference that matches no case: the reference as plain
+ * text, with no link (grade10-site-grading-submission-lifecycle-SC-63). */
+export const VaultedUnmatched: Story = {
+  args: {
+    cards: [
+      {
+        ...HANDED_IN,
+        outcome: "vaulted",
+        outcomeLabel: "Vaulted",
+        outcomeLine: "It went into the vault at the counter.",
+        vaultCase: { reference: "VC-1182" },
+      },
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expectOutcomes(canvasElement, args.cards);
+    expect(canvas.getByText("VC-1182")).toBeInTheDocument();
+    expect(canvas.queryByRole("link")).toBeNull();
   },
 };

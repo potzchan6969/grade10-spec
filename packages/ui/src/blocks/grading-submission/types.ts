@@ -92,6 +92,10 @@ type GradingCardMatch = {
 /** A photograph the shop took, with the words that name it. */
 type GradingPhoto = { src: string; alt: string };
 
+/** The vault case a vaulted card went into, by the reference recorded at the
+ * counter; `href` only where that reference matches a case. */
+type GradingVaultCase = { reference: string; href?: string };
+
 export type {
   GradingCardMatch,
   GradingCardOutcome,
@@ -103,4 +107,5 @@ export type {
   GradingPhoto,
   GradingReferenceSale,
   GradingTone,
+  GradingVaultCase,
 };

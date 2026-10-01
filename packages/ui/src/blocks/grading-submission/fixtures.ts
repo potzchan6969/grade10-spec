@@ -439,6 +439,7 @@ const CARD_RECORD_COPY: GradingCardRecordCopy = {
   minimumGradeLabel: "Minimum grade",
   certificateLabel: "Certificate",
   lookupLabel: "Look it up",
+  vaultCaseLabel: "Vault case",
 };
 
 const FRONT_PHOTO = {
@@ -473,6 +474,7 @@ const GRADE_CARDS_COPY: GradingGradeCardsCopy = {
   certificateLabel: "Certificate",
   lookupLabel: "Look it up",
   ungradedCodeLabel: "Grader’s code",
+  vaultCaseLabel: "Vault case",
 };
 
 const GRADED_CARD: GradingGradeCard = {

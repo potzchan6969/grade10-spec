@@ -13,6 +13,7 @@ import type {
   GradingMoney,
   GradingPhoto,
   GradingTone,
+  GradingVaultCase,
 } from "./types";
 
 /**
@@ -40,6 +41,31 @@ function outcomeTone(outcome: GradingCardOutcome): GradingTone {
   return OUTCOME_TONE[outcome];
 }
 
+/** The case a vaulted card went into: its reference links the case where
+ * one matches, and reads as plain text where none does. */
+function VaultCaseLine({
+  label,
+  vaultCase,
+  slot,
+}: {
+  label: string;
+  vaultCase: GradingVaultCase;
+  slot: string;
+}) {
+  return (
+    <HStack data-slot={slot} gap="sm" vAlign="center">
+      <Text size="sm">{`${label}:`}</Text>
+      {vaultCase.href ? (
+        <Link href={vaultCase.href}>{vaultCase.reference}</Link>
+      ) : (
+        <Text face="mono" size="sm">
+          {vaultCase.reference}
+        </Text>
+      )}
+    </HStack>
+  );
+}
+
 /** One card as the shop recorded it. */
 type GradingRecordCard = {
   id: string;
@@ -59,6 +85,8 @@ type GradingRecordCard = {
   lookupHref?: string;
   photographs?: { front: GradingPhoto; back: GradingPhoto };
   slabPhotograph?: GradingPhoto;
+  /** The case a vaulted card went into. */
+  vaultCase?: GradingVaultCase;
 };
 
 type GradingCardRecordCopy = {
@@ -68,6 +96,7 @@ type GradingCardRecordCopy = {
   minimumGradeLabel: string;
   certificateLabel: string;
   lookupLabel: string;
+  vaultCaseLabel: string;
 };
 
 type GradingCardRecordProps = GradingLocaleProps & {
@@ -116,6 +145,13 @@ function GradingCardRecord({
               <Text data-slot="grading-card-record-line" size="sm">
                 {card.outcomeLine}
               </Text>
+              {card.vaultCase ? (
+                <VaultCaseLine
+                  label={copy.vaultCaseLabel}
+                  slot="grading-card-record-vault-case"
+                  vaultCase={card.vaultCase}
+                />
+              ) : null}
               <Text size="sm" tone="secondary">
                 {`${copy.declaredValueLabel}: ${formatGradingMoney(card.declaredValue, locale)}`}
               </Text>
@@ -181,4 +217,4 @@ export type {
   GradingCardRecordProps,
   GradingRecordCard,
 };
-export { GradingCardRecord, outcomeTone };
+export { GradingCardRecord, outcomeTone, VaultCaseLine };
