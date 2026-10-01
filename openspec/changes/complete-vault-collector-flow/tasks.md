@@ -460,7 +460,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 11.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 12. The case page (grade10)
+## 12. The case page (grade10) (owner: @ecchochan)
 
 Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 
