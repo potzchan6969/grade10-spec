@@ -39,6 +39,7 @@ beside each delta own who walks it.
 | Case tab facts | none yet | `admin.grade10.com/vault/cases/:caseId`, the Case tab | `CaseDetailPanel`, new `ItemFactsSection` → `SectionHeader`, `Figure`, `Status`, `Notice`, `Button`, `Link`, and `ItemFactsDialog` |
 | Valuation | none yet | `ValuationDialog` from `CaseFlowPanel`, on the Case tab | `ValuationDialog`, gaining a read-only `Text` line |
 | Walk-in known slab | none yet | the walk-in dialog from the queue's header | `WalkInDialog` from `vault-walk-ins-and-owners`, gaining `Select`, `TextField`, `Text`, `Status`, `Notice`, `Button`, `Link` |
+| Start valuation slab | none yet | the Start valuation act from `CaseFlowPanel`, on the Case tab | the act's dialog, gaining the walk-in's grader and cert fields and their lookup states |
 | Documents tab | none yet | `admin.grade10.com/vault/cases/:caseId`, the Documents tab | `DocumentsPanel`, `WithheldActs` → `Text`, `Link` |
 | Custody agreement | none yet | the paper, not a screen | `packages/vault/backend/src/documents/templates/custodyAgreement.ts`; no block |
 | Collector page Items | none yet | `admin.grade10.com/vault/collectors/:userId` | `CollectorPage` from `vault-walk-ins-and-owners`, new `CollectorItemsSection` → `SectionHeader`, `Panel`, Items' table, `CursorPager`, `Status`, `Notice` |
@@ -140,6 +141,7 @@ One cell, used by Items, one item and each move's from and to.
 | Transfer and Retire not offered | Transfer and Retire are not offered; a line names the vault and the case | `grade10-admin-inventory-items-SC-40` |
 | Not marked | Transfer and Retire offered | `grade10-admin-inventory-items-SC-24` |
 | Owners disagree | a warning `Notice` showing the vault's owner and the register's | `grade10-admin-inventory-items-SC-27` |
+| Owners settled | once the mark closes, the register's owner and no warning | `grade10-admin-inventory-items-SC-70` |
 | Moves | a `Table` of each move: from and to as owner cells, who, when, why, and the proof as a download | `grade10-admin-inventory-items-SC-33` |
 | No proof | the proof cell reads that none was given | `grade10-admin-inventory-items-SC-34` |
 | Proof removed | "proof removed" in the proof cell | `grade10-admin-inventory-items-SC-65` |
@@ -177,7 +179,7 @@ Used by Register and Transfer, never by Edit.
 | Found | the account's name as the field's `description` | `grade10-admin-inventory-items-SC-10` |
 | Not found | no account has that email; the dialog's act stays disabled | `grade10-admin-inventory-items-SC-11` |
 | Name unavailable | the short id and "name unavailable"; the dialog's act enabled | `grade10-admin-inventory-items-SC-69` |
-| Entity on Register | the custodian or the lender, chosen in a `ChoiceList` | `grade10-admin-inventory-items-SC-19` |
+| Entity on Register | the custodian only, chosen in a `ChoiceList`; never the lender, which only a forfeit reaches (Q14, Q28) | `grade10-admin-inventory-items-SC-19` |
 | Entity on Transfer | the custodian only, never the lender | `grade10-admin-inventory-items-SC-19` |
 
 ### Transfer
@@ -213,6 +215,7 @@ Used by Register and Transfer, never by Edit.
 | Facts shown | the register's category, title, description, grader, grade and cert in place of the request's, linking the item; the collector's request stays as they sent it | `grade10-admin-vault-operator-queue-SC-56` |
 | Editable | Edit opens `ItemFactsDialog`, with its own states, for `inventory:write` | `grade10-admin-vault-operator-queue-SC-57` |
 | Read-only | the facts without Edit, for a `vault:read` holder without `inventory:write` | `grade10-admin-vault-operator-queue-SC-57` |
+| Forbidden | names `inventory:read` and shows no facts, for a `vault:read` holder without it, as the treasurer is; the rest of the tab stands | `grade10-admin-vault-operator-queue-SC-66` |
 | Register unreachable | this section's own error with retry; the rest of the tab stands | `grade10-admin-vault-operator-queue-SC-58` |
 
 ### Valuation
@@ -235,12 +238,21 @@ Used by Register and Transfer, never by Edit.
 | Another owner | found, naming its owner; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-SC-62` |
 | Marked by another case | a `Notice` in the dialog's body, `Link` in its `actions`: refused, naming and linking the case; that mark is closed first | `grade10-admin-vault-operator-queue-SC-63` |
 
+### Start valuation slab
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Slab fields | grader and cert, offered when the case has named no slab, with the walk-in's lookup states | `grade10-admin-vault-operator-queue-SC-65` |
+| Found | the register's facts, read-only; the case takes that item rather than registering a second | `grade10-admin-vault-operator-queue-SC-65` |
+
 ### Documents tab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Another owner | Prepare documents is not offered; a line names the owner the register shows and links the item, where staff can transfer it | `grade10-site-vault-case-lifecycle-SC-46` |
 | Refused at Prepare | an error naming the owner the register now shows, linking the item | `grade10-site-vault-case-lifecycle-SC-47` |
+| Register pending | an error saying the item is still being registered | `grade10-site-vault-case-lifecycle-SC-49` |
+| Register unreachable | an error saying the register cannot be read now | `grade10-site-vault-case-lifecycle-SC-48` |
 
 ### Custody agreement
 
@@ -276,7 +288,7 @@ Used by Register and Transfer, never by Edit.
 
 - ❓ **Every board is missing** - the designer's: Items, one item, register
   and edit, transfer, retire and close-a-mark, the Case tab's facts, the
-  valuation's slab line, the walk-in's slab fields, Prepare documents
+  valuation's slab line, the walk-in's and Start valuation's slab fields, Prepare documents
   blocked, the collector page's Items section and the erasure checklist's
   lines; the change waits on them in its record
 - Q41 **Where Items sits in the nav** - a detail page of Inventory, reached

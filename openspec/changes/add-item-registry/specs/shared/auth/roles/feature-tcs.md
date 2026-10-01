@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
+**Out of suite:** shared-auth-roles-SC-24 - no role holds `inventory:write` without `inventory:transfer`; the grant split is held by the role and vocabulary tests in grade10's `packages/grade10-auth/contracts/test/roles.test.ts` and the items service tests (tasks 2.1, 5.1), and walked by `grade10-admin-inventory-items-US3-TC9-1`
 
 ## shared-auth-roles-US2: Operator's grants follow the closed vocabulary
 
@@ -80,3 +81,14 @@ Runs once per row of **Test data**.
 
 * Each step is refused.
 * `<item_1>` keeps its title, its owner and its moves.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journey, the proposal, `decisions.md` with its empty `## Raised`, the Roles and Items PRD pages, the durable roles suite and `shared/auth/domain-tcs.md` with their Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite, the delta spec, `tech-design.md`, `tasks.md` and the items delta. It is a statement, not proof.
+
+- **Folded** - `shared-auth-roles-US2-TC15-1` into `shared-auth-roles-SC-23` for staff and admin, also reaching `grade10-admin-inventory-items-SC-44`; `shared-auth-roles-US2-TC16-1` into `shared-auth-roles-SC-23` for the treasurer and `grade10-admin-inventory-items-SC-68`
+- **Added by QA2** - none
+- **Raised, answered by the round** - read-only grant sets no role holds (Q45); `shared-auth-roles-SC-24` is stated for that reason and is out of suite
+- **Rejected** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none: US-02 has two new cases beside the durable fourteen; the modified requirements' other scenarios keep their durable cases

@@ -137,6 +137,10 @@ is walked whole from the register's side in the items suite.
   only through a forfeit (`decisions.md` Q14); erasure keeps an erased
   owner's item category, grader, grade and cert (`decisions.md` Q38); both
   taken as recommended at landing, and Legal confirms the rows
+- **Product** - whether the All tab lists retired items, what happens when the
+  vault marks an item retired after its valuation, and whether the loan
+  agreement and the release receipt print the register's facts
+  (`decisions.md` Q55 to Q57), each with a recommendation
 - **Design** - Items is a detail page of Inventory, reached from its header,
   and only one item's page shows when it was last edited (`decisions.md` Q41
   and Q42); the boards, the search hint and when the walk-in lookup runs are

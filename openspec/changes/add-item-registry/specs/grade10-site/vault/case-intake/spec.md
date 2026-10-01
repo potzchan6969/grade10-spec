@@ -86,7 +86,8 @@ A collector with several items SHALL open one request for each.
 
 On a draft staff opened with a slab the item register already holds, the
 category, title, grader, grade and cert SHALL be read from the register, and
-the collector's edits SHALL change only the photographs and the description.
+the collector's edits SHALL change only the photographs and the request's
+description, never the register's.
 An edit to any other fact of that draft SHALL be refused by name.
 
 #### Scenario: grade10-site-vault-case-intake-SC-33 - The collector edits the photos and the description of a linked draft
@@ -96,6 +97,7 @@ An edit to any other fact of that draft SHALL be refused by name.
 - **WHEN** the collector opens it on their phone
 - **THEN** the category and title read as the register holds them and offer no field
 - **AND** adding a photograph and changing the description are both kept
+- **AND** the register's description is unchanged, since the edit changes the request alone
 
 #### Scenario: grade10-site-vault-case-intake-SC-34 - An edit to the register's facts is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - the case and the register never tell two stories of one slab

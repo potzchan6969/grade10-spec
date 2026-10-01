@@ -139,3 +139,14 @@ from memory.
 **Expected Results:**
 
 * The dialog shows no grader, grade or cert line; valued-at is offered as usual.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journeys, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Operator Console and Items PRD pages, and the durable valuation-and-offer suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite, the delta spec, `tech-design.md`, `tasks.md` and the operator-queue delta. It is a statement, not proof.
+
+- **Folded** - `grade10-site-vault-valuation-and-offer-US1-TC15-1` into `grade10-site-vault-valuation-and-offer-SC-35`: a valuation keeps no grader, grade or cert of its own, so one sent with them leaves the register as it was; `grade10-site-vault-valuation-and-offer-US6-TC1-1` into `grade10-site-vault-valuation-and-offer-SC-33`; `grade10-site-vault-valuation-and-offer-US6-TC2-1` into `grade10-site-vault-valuation-and-offer-SC-35`; `grade10-site-vault-valuation-and-offer-US6-TC3-1` into `grade10-site-vault-valuation-and-offer-SC-34`
+- **Added by QA2** - none
+- **Raised** - none from this suite
+- **Rejected** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none: US-06 has a case for each scenario, and US-01 gains one

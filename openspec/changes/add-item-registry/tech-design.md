@@ -149,7 +149,9 @@ unavailable"); the close treats a fault as a refusal, `PLACE_UNREACHABLE`.
 
 The walk-in form and Start valuation send an optional grader and cert to the
 vault, which asks `VaultItemsService.lookupSlab({ grader, cert })` before its
-transaction (Ask, fault as value: the form keeps what was typed).
+transaction (Ask, fault as value: the form keeps what was typed). The cert is
+trimmed and capitalised by the contracts' one cert schema, the same one
+`items.register`, `items.edit` and the search read (Q48).
 
 | Lookup answer | The vault does |
 | --- | --- |
@@ -171,7 +173,8 @@ section and the valuation's slab line are views of
 `items.edit` under `inventory:write`. `CaseDetailPanel` takes them as two
 render slots the app page fills, so neither admin package imports the other.
 No `registerItemId`, or the register answering not found, reads as
-registration pending.
+registration pending; a caller without `inventory:read`, the treasurer, is
+answered forbidden and the section names the grant (Q44).
 
 ### Prepare documents reads the register in its render phase
 
@@ -419,8 +422,8 @@ retried transfer is refused `ITEM_SAME_OWNER`, so a double click moves once.
 | `items.resolveOwner` | read | `{ email }` → `{ userId, name \| null } \| null` |
 
 `q` is read in order: an exact email (`@`), an item id (`itm_`), a listed
-grader followed by a cert, otherwise a case-insensitive match on title or
-description.
+grader followed by a cert, both read in any case and the cert trimmed (Q48),
+otherwise a case-insensitive match on title or description.
 
 ## API Contracts
 

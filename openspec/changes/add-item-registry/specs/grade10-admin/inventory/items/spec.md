@@ -80,7 +80,7 @@ stock. An item SHALL carry exactly these facts:
 | Description | optional, at most 2,000 characters; every other fact about the object |
 | Grader | none, or one of: PSA, BGS, CGC, SGC, TAG, PCGS, NGC, PMG |
 | Grade | as printed on the slab; required with a grader, and absent without one |
-| Cert | as printed on the slab, kept trimmed and in capitals; required with a grader, and absent without one |
+| Cert | as printed on the slab, trimmed and put in capitals wherever it is typed; required with a grader, and absent without one |
 | Owner | one account, the custodian, the lender, or no one once the owner is erased |
 
 - **A grader not listed** - a slab from any other grader SHALL be registered
@@ -108,7 +108,7 @@ stock. An item SHALL carry exactly these facts:
 
 - **WHEN** staff read the register dialog's description field
 - **THEN** it says a grader not listed, its grade and its cert go in the description
-- **AND** the grader field offers only the eight listed graders
+- **AND** the grader field offers only the eight listed graders, and the category field only the ten categories
 
 #### Scenario: grade10-admin-inventory-items-SC-04 - A title or a description past its cap is refused
 **Serves:** grade10-admin-inventory-items-US-02 - staff learn the limit before the item is saved
@@ -174,6 +174,8 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 
 - **Last edited** - one item's page SHALL show who changed its facts last and
   when; the Items list SHALL show no last-edited column.
+- **While marked** - Edit SHALL be offered whether or not a place marks the
+  item; only Transfer and Retire wait on the mark.
 - **Without the grant** - an operator without `inventory:write` SHALL be
   offered no Register, Edit, Retire, Restore or Close mark, and the worker
   SHALL refuse each by name.
@@ -359,7 +361,8 @@ only place, and it says three things:
   vault cannot be read the status SHALL read as unavailable and the row SHALL
   stand.
 - **Owners that disagree** - where the owner a place named on its open mark
-  is not the item's owner, the page SHALL warn, showing both owners.
+  is not the item's owner, the page SHALL warn, showing both owners. Once the
+  mark closes the item's own owner SHALL stand, with no warning.
 - **A marked item** - Transfer and Retire SHALL NOT be offered, and a line
   SHALL name the vault and the case instead.
 - **Not marked** - Transfer and Retire SHALL be offered, to the grants that
@@ -385,6 +388,13 @@ only place, and it says three things:
 - **GIVEN** an item owned by one account, marked by the vault for a case whose collector is another
 - **WHEN** staff open the item
 - **THEN** a warning shows the vault's owner and the register's owner
+
+#### Scenario: grade10-admin-inventory-items-SC-70 - The register's owner stands once the vault lets go
+**Serves:** grade10-admin-inventory-items-US-01 - staff read who owns the item after the case that disagreed has ended
+
+- **GIVEN** an item owned by one account, marked by the vault for a case whose collector is another
+- **WHEN** the vault releases the item and staff open it
+- **THEN** it reads not marked, owned by the register's owner, with no warning and no new move
 
 ### Requirement: Staff close a mark the vault no longer has
 
@@ -531,6 +541,7 @@ place and its case, and the item's page SHALL offer no Transfer.
 - **GIVEN** an item the vault marks for case `K7P2QX`
 - **WHEN** staff open it
 - **THEN** Transfer and Retire are not offered, and a line names the vault and `K7P2QX`
+- **AND** Edit is still offered
 
 #### Scenario: grade10-admin-inventory-items-SC-41 - A mark landing under an open dialog refuses the move
 **Serves:** grade10-admin-inventory-items-US-04 - staff move an item the vault marked after the page was opened
@@ -638,7 +649,8 @@ back to it from one item's page.
   marking it, each row opening its item.
 - **One search** - one field SHALL read, in order: the owner's exact email,
   an item id, a listed grader followed by a cert, and otherwise a match on
-  title or description. No search SHALL read an owner's name.
+  title or description. A grader and cert SHALL be read in any case and
+  trimmed. No search SHALL read an owner's name.
 - **Empty** - a list holding nothing SHALL say so, naming the list; a search
   matching nothing SHALL say so, naming the search, with a way to clear it.
 - **Not found** - an item id nobody holds SHALL read as not found.
@@ -673,7 +685,7 @@ back to it from one item's page.
 #### Scenario: grade10-admin-inventory-items-SC-53 - An item id or a grader and cert finds one item
 **Serves:** grade10-admin-inventory-items-US-01 - staff read a slab's label or a link they were sent
 
-- **WHEN** staff search an item's id, and then `PSA 12345678`
+- **WHEN** staff search an item's id, then `PSA 12345678`, then ` psa 12345678 `
 - **THEN** each lists that one item
 
 #### Scenario: grade10-admin-inventory-items-SC-54 - Words search the title and the description, never a name

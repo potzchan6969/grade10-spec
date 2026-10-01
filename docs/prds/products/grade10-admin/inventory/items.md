@@ -62,9 +62,10 @@ mark the vault no longer has.
 - 🚧 **The place decides** - the register never refuses what the vault has
   already done; where the vault and the register disagree on the owner, the
   item's page shows staff both owners
-- 🚧 **Items already in the vault** - every case that reached custody
-  appears as an item under its collector, marked while the item is in the
-  vault; an erased collector's case is left out, a forfeited case's item
+- 🚧 **Items already in the vault** - every case that reached custody, and
+  every open case past the start of its valuation, appears as an item under
+  its collector, marked while the item is in the vault; an erased collector's
+  case is left out, a forfeited case's item
   belongs to the lender, and staff retire a second record of one object when
   they find it
 - 🚧 **A mark left open** - staff close a mark the vault no longer has, with
@@ -114,7 +115,7 @@ mark the vault no longer has.
   owner is erased; they describe the object
 - 🚧 **Moves they were part of** - their side and the reason go; a proof
   stays while the other party is the custodian, the lender or a live
-  account, for at most **2,555** days from the move
+  account, and is flagged for review **2,555** days after the move
 
 ## Permissions
 

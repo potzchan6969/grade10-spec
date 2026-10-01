@@ -27,8 +27,9 @@ move that does it, and SHALL never wait on the register to commit a move:
   move's own transaction and delivered until the register has it, each word
   once and in the order the moves happened.
 - **Nothing else** - a corrected advance, a corrected repayment, a move
-  between lockers and every move before the valuation SHALL tell the register
-  nothing.
+  between lockers, every move before the valuation, and a decline, cancel or
+  expiry before custody SHALL tell the register nothing; an item registered at
+  the valuation stays registered, not marked, under its collector.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-41 - Starting the valuation registers the item
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff start valuing a request and the register gains the item
@@ -68,6 +69,13 @@ move that does it, and SHALL never wait on the register to commit a move:
 - **WHEN** its advance is taken back and the case returns to `vaulted`
 - **THEN** the register still holds one open mark for the case and nothing else is told
 
+#### Scenario: grade10-site-vault-case-lifecycle-SC-50 - A case that ends before custody leaves its item registered
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - staff decline or cancel a case they have started valuing
+
+- **GIVEN** a case under valuation whose item is registered under its collector
+- **WHEN** staff decline it, or it is cancelled
+- **THEN** the item stays registered under the collector, not marked, with no move
+
 ### Requirement: Preparing documents waits on the register's owner
 
 Preparing a case's documents SHALL read the case's item from the register
@@ -103,3 +111,10 @@ item.
 - **GIVEN** an accepted case, and the register not answering
 - **WHEN** staff prepare the documents
 - **THEN** it is refused, saying the register cannot be read now, and nothing is rendered
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-49 - A prepare before the register holds the item is refused by name
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - staff are told the item is still being registered
+
+- **GIVEN** an accepted case whose item's registration has not reached the register
+- **WHEN** staff prepare the documents
+- **THEN** it is refused, saying the item is still being registered, and nothing is rendered

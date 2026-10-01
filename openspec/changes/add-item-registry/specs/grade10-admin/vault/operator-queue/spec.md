@@ -23,6 +23,9 @@ they sent it.
   holder of `inventory:write`; a `vault:read` holder without it SHALL read
   the facts with no Edit. The worker SHALL refuse the edit without
   `inventory:write`.
+- **Without the register's read** - for a `vault:read` holder without
+  `inventory:read`, such as the treasurer, the section SHALL name
+  `inventory:read` and show no facts, and the rest of the tab SHALL stand.
 - **Unreachable** - where the register cannot be read, the section SHALL show
   its own error with a retry, and the rest of the tab SHALL stand.
 
@@ -57,12 +60,21 @@ they sent it.
 - **THEN** the item's facts section shows its own error with a retry
 - **AND** the case's acts and timeline stand
 
+#### Scenario: grade10-admin-vault-operator-queue-SC-66 - A treasurer's Case tab names the register's grant
+**Serves:** grade10-admin-vault-operator-queue-US-21 - a treasurer reading a case to pay against it is not shown who owns which item
+
+- **GIVEN** a registered case, and a treasurer, who holds `vault:read` and no inventory grant
+- **WHEN** they open its Case tab
+- **THEN** the item's facts section names `inventory:read` and shows no facts
+- **AND** the rest of the tab stands
+
 ### Requirement: A slab the register knows is taken rather than typed again
 
 The first time staff name a case's slab - opening a walk-in's draft, or
 starting the valuation of a case that has not named one - staff SHALL be able
 to give its grader and cert, and the vault SHALL look the pair up in the
-register while the form keeps what was typed:
+register, the cert trimmed and in capitals, while the form keeps what was
+typed:
 
 | The register answers | The case |
 | --- | --- |
@@ -79,7 +91,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff take in a slab a collector brought before
 
 - **GIVEN** a live item with PSA `12345678` owned by the customer at the counter, which no case marks
-- **WHEN** staff type PSA and `12345678` on the walk-in form
+- **WHEN** staff type PSA and ` 12345678 ` on the walk-in form
 - **THEN** the form says it is looking the slab up, then shows the register's facts read-only
 - **WHEN** staff open the draft
 - **THEN** the case takes that item, and its Case tab reads the item's facts
