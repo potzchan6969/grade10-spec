@@ -117,9 +117,11 @@
 * **Type:** security
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/roles.spec.ts`
 
 **Pre-conditions:**
 
@@ -153,9 +155,11 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/roles.spec.ts`
 
 **Pre-conditions:**
 
@@ -200,9 +204,11 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/roles.spec.ts`
 
 **Pre-conditions:**
 
@@ -242,9 +248,11 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/roles.spec.ts`
 
 **Pre-conditions:**
 
