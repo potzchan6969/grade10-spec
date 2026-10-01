@@ -1349,7 +1349,7 @@ Stage (c).
       refusing a payout already received by name; the console's Money tab
       offers Mark received on a transfer not yet received (Q132,
       `grade10-admin-grading-counter-SC-111`)
-- [ ] 19.12 Hand back a card whose payout was reversed on a `collected`
+- [x] 19.12 Hand back a card whose payout was reversed on a `collected`
       submission: settle its repayment, mint a receipt for that card alone and
       hand it over or vault it, the submission staying `collected`, its tests
       red first; then run 19.7's checks (Q137,
