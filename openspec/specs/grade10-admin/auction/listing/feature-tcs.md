@@ -2583,6 +2583,7 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 **Run:** QA2, 2026-09-30, after the anchors moved on Q10, Q13 and Q14. QA1's blind pass read the Feature set, the journeys, `decisions.md`, the proposal, the linked PRD sections, the durable suite and the domain suite with their Reconciliation stripped, and the two rulebooks; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both suites, both deltas, `tech-design.md` and `tasks.md`. It is a statement, not proof.
+
 - **Raised, folded into spec** - a close whose only bids are `outbid`, its top bid demoted, releasing like one with no bids (`grade10-admin-auction-listing-US9-TC1-2`'s second row), as `grade10-admin-auction-listing-SC-146`, cited in tasks 3.1, 3.2 and 7.1; Relist on the row once released, outside a campaign, once per listing, as `grade10-admin-auction-listing-SC-137`, `grade10-admin-auction-listing-SC-141`, `grade10-admin-auction-listing-SC-142` and `grade10-admin-auction-listing-SC-143`; the note dated by the successful release, as `grade10-admin-auction-listing-SC-134`
 - **Raised, escalated** - the words an operator reads when a relist Save is refused, landed as Q15, the refusal's name shown inline
 - **Raised, rejected** - none this run; a Relist on a called-off listing stays refused by Q10

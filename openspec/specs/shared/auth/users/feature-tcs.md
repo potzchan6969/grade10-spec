@@ -1015,6 +1015,8 @@ without reading every account.
 * Every listed account holds no elevated role.
 * An account that holds `admin` is not listed.
 
+---
+
 ## shared-auth-users-US5: Operator creates an Auth account
 
 **As an** operator holding `user:create`,
@@ -1271,6 +1273,8 @@ Signed in as admin(holds `user:create`). No Auth account holds <empty-roles emai
 
 * Step 1 succeeds.
 * Step 2 opens that account with roles `user` only.
+
+---
 
 ## shared-auth-users-US6: Account holder files their own request to be forgotten
 
@@ -1566,8 +1570,6 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * The request stays cancelled, closed on the day it was first cancelled.
 * Nothing about the person changes: no ban is applied or lifted.
 
----
-
 ## Settled
 
 - Empty role selection at create leaves the account as `user` only (Q13).
@@ -1583,24 +1585,36 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 ## Reconciliation
 
 **Run:** Blind pass read Purpose, Feature set, user-journeys.md, decisions.md (Raised included), the linked Users · Ban and Unban / Role Changes PRD sections, this suite for id continuity, and `shared/auth/domain-tcs.md` for id continuity, all with Reconciliation/Requirements stripped. Denied: every Requirements section, openspec/specs/ beyond Purpose, Feature set and the domain suite, openspec/changes/archive/. (Change: `close-revoked-session-cache-gap`.)
+
 **Raised, folded into spec**
+
 - The in-flight-read boundary - first folded into both requirements as "the next read that starts after", then replaced by the 70-second bound.
+
 **Raised, rejected**
+
 - Which endpoints count as cached versus elevated — tech-design's job, not a suite question.
 - Per-session versus per-user invalidation keying - does not change any case's observable expected result here.
+
 **Raised, landed as decisions**
+
 - Empty role selection — Q13.
 - Name and email required — Q14.
 - The in-flight-read boundary - `close-revoked-session-cache-gap` decisions.md Q4, superseded by Q5.
+
 **Uncovered anchors**
+
 - All scenarios under Account create / US-05 covered by US5-TC1 through TC7.
 - Cross-account isolation on ban and role change (an admin action on one account must not touch another account's cache) is not observable through a black-box signed-in/permissions read. **Out of suite:** the per-user cache-version helper's own unit test in grade10.
 - The 70-second bound at a location other than the one the ban or role change was made at is not observable on a single-location stack, where the change reaches the next read at once. **Out of suite:** grade10's cache-version settling-window unit test and the auth worker's before/after-race regression test.
 - All other scenarios under Ban and unban / US-02 and Role changes / US-03, the 70-second closing and reflecting included, are covered by `US2-TC1-1` through `US2-TC7-1` and `US3-TC1-1` through `US3-TC7-1` above.
+
 **Verdicts (@sean, quick pass in chat, not a full `/tcs-review`)**
+
 - `US2-TC7-1` — Retired (`deprecated`), on writing its Playwright walk: `US2-TC1-1`'s own cached-read assertion (`store.page`'s pre-ban session, read with no `fresh` flag) already proves the same close once its `test.fail` placeholder for the then-unfixed cache is removed. A Case That Already Exists Is Not Written Twice.
 - `US3-TC7-1` — Approved (`actual`).
+
 **Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` and `openspec/changes/archive/` entirely, and `tech-design.md`. Fourteen cases came back over two journeys; the scenario pass issued `shared-auth-users-SC-36` to `shared-auth-users-SC-39`, `shared-auth-users-SC-43` to `shared-auth-users-SC-50`.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `shared-auth-users-US2-TC1-1` to `shared-auth-users-US2-TC7-1` | Carried | ban and unban behaviour the durable spec already states and this delta does not touch; the cases came across with the journey as the durable suite words them, and the erasure cases take the ids after them |
@@ -1622,7 +1636,9 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC11-1` |
 | `shared-auth-users-SC-42` | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC12-1` walks it, a row per filer |
 | Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-45`, `shared-auth-users-SC-46`, `shared-auth-users-SC-47`, `shared-auth-users-SC-44` and `shared-auth-users-SC-48`, beside the vault scenarios that state what the same rows render |
+
 ### Manual
+
 | Manual | Why |
 | --- | --- |
 | `shared-auth-users-US6-TC1-1` | a person reads the confirmation: that it names the seven days and says the ask can be cancelled inside them |
