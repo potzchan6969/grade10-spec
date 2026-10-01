@@ -9,10 +9,10 @@ lands once every grade10 group is verified; group 11 is the walk.
 
 ## 1. The collector's words (grade10-spec) (owner: @ecchochan)
 
-- [ ] 1.1 Name `vault.list.openedAtCounter` in the vocabulary type first, so
+- [x] 1.1 Name `vault.list.openedAtCounter` in the vocabulary type first, so
       `pnpm --filter @grade10/i18n run test` refuses every language that has
       not answered it
-- [ ] 1.2 Answer `vault.list.openedAtCounter` — the list's line saying staff
+- [x] 1.2 Answer `vault.list.openedAtCounter` — the list's line saying staff
       opened the request at the counter and it waits for the collector to
       check and send it — in `packages/i18n/messages/shared/<locale>/vault.json`
       for `en`, `zh-Hant`, `zh-Hans` and `ko`
