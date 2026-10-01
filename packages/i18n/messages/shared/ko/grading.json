@@ -555,6 +555,7 @@
         "payout_recorded": "신고 가액 {amount} 보상",
         "payout_reversed": "카드를 다시 찾아 보상 취소",
         "upcharge_waived": "상향 차액 면제",
+        "storage_waived": "보관료 면제",
         "handed_back": "{count, plural, one {카드 #장} other {카드 #장}} 전달",
         "collected": "수령 완료",
         "cancelled": "신청 취소됨",
@@ -573,6 +574,7 @@
       "storageAccruing": "{day}일째부터 보관료 발생",
       "noticeDue": "서면 통지 필요",
       "payoutPastWindow": "환급 기한 초과",
+      "transferUnconfirmed": "이체 미확인",
       "messageNotSent": "메시지 미발송"
     }
   },

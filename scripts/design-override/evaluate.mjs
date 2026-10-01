@@ -6,7 +6,8 @@ import { readFileSync, realpathSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseTeamMap, TEAM_MAP } from "../openspec/lib/team-parse.mjs";
-import { git, requireGit } from "./git.mjs";
+import { git, readAt, requireGit } from "./git.mjs";
+import { normalize } from "./lines.mjs";
 import { lookStops } from "./look.mjs";
 import { mergeStops } from "./merge.mjs";
 import { readMessage } from "./message.mjs";
@@ -56,7 +57,7 @@ export function loadSettings() {
   return { ...paths, designers };
 }
 
-export function evaluate(settings, sha) {
+function readCommit(sha) {
   const [parents, author, committer, subject, ...body] = git([
     "log",
     "-1",
@@ -64,16 +65,18 @@ export function evaluate(settings, sha) {
     sha,
   ]).split("\n");
   const { override, coAuthors } = readMessage(body.join("\n"));
-  const people = [author, committer]
-    .map((email) => email.toLowerCase())
-    .concat(coAuthors);
-  const exempt = settings.designers.some(({ email }) => people.includes(email));
-  const heads = parents.split(" ").filter(Boolean);
-  const rule = heads.length > 1 ? "merge" : "look";
-  let stops = [];
-  if (rule === "merge") stops = mergeStops(heads, sha, settings.merge);
-  else if (heads.length === 1 && !exempt)
-    stops = lookStops(heads[0], sha, settings.look);
+  return {
+    sha,
+    subject,
+    override,
+    heads: parents.split(" ").filter(Boolean),
+    people: [author, committer]
+      .map((email) => email.toLowerCase())
+      .concat(coAuthors),
+  };
+}
+
+function verdict({ sha, subject, override }, rule, stops) {
   stops.sort((a, b) => a.file.localeCompare(b.file) || (a.n ?? 0) - (b.n ?? 0));
   return {
     sha,
@@ -83,4 +86,41 @@ export function evaluate(settings, sha) {
     override,
     stopped: stops.length > 0 && !override,
   };
+}
+
+export function evaluate(settings, sha) {
+  const commit = readCommit(sha);
+  const { heads, people } = commit;
+  const exempt = settings.designers.some(({ email }) => people.includes(email));
+  if (heads.length > 1)
+    return verdict(commit, "merge", mergeStops(heads, sha, settings.merge));
+  if (heads.length === 1 && !exempt)
+    return verdict(commit, "look", lookStops(heads[0], sha, settings.look));
+  return verdict(commit, "look", []);
+}
+
+const holds = (rev, { file, before }) =>
+  (readAt(rev, file) ?? "")
+    .split("\n")
+    .some((line) => normalize(line) === normalize(before));
+
+/**
+ * A rebase or cherry-pick that moved `original` onto another parent, read as
+ * the merge it is: the new parent and `original`, over `original`'s own parent.
+ * It stops on the lines its new parent brought that it drops; a line of
+ * `original`'s own it drops, as a fixup squashed in, is its own edit. Like a
+ * merge, nobody is exempt.
+ */
+export function evaluateReplay(settings, sha, original) {
+  const commit = readCommit(sha);
+  const [onto] = commit.heads;
+  const [base, ...more] = readCommit(original).heads;
+  const moved =
+    commit.heads.length === 1 && base && more.length === 0 && base !== onto;
+  const stops = moved
+    ? mergeStops([onto, original], sha, settings.merge, base).filter(
+        (stop) => holds(onto, stop) && !holds(original, stop),
+      )
+    : [];
+  return verdict(commit, "replay", stops);
 }

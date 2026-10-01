@@ -17,11 +17,19 @@ const SCRATCH_IDENTITY = {
 };
 
 /** Git's merge of the parents, as a tree; a conflict leaves its markers in. */
-function gitMerge([head, ...rest]) {
+function gitMerge([head, ...rest], base) {
   let tree;
   for (const other of rest) {
     const out = git(
-      ["merge-tree", "--write-tree", "--no-messages", "-z", head, other],
+      [
+        "merge-tree",
+        "--write-tree",
+        "--no-messages",
+        "-z",
+        ...(base ? ["--merge-base", base] : []),
+        head,
+        other,
+      ],
       { ok: [0, 1] },
     );
     tree = out.split("\0")[0];
@@ -42,10 +50,13 @@ function holder(parents, file, line) {
   return undefined;
 }
 
-/** The lines `result` (a sha, or the index) drops that git's merge of `parents` keeps. */
-export function mergeStops(parents, result, paths) {
+/**
+ * The lines `result` (a sha, or the index) drops that git's merge of
+ * `parents` keeps; `base` pins the merge base, as a replayed commit's own parent.
+ */
+export function mergeStops(parents, result, paths, base) {
   const lines = removedLines(
-    gitMerge(parents),
+    gitMerge(parents, base),
     result,
     paths,
     (_path, text) => {

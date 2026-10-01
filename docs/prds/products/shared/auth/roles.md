@@ -28,10 +28,10 @@ can hold roles it should not, but it cannot invent a permission for one.
 - **Refund processing** — `auction:refund`, held by `staff` and `admin`;
   recording an auction refund, apart from `auction:payment`, which collects
   money — [Auction Management](/p/grade10-admin/auction/management#grants)
-- 🚧 **Moving items** — `inventory:transfer`, held by `staff` and `admin`;
-  moving an item to a new owner and opening its proof —
-  [Items](/p/grade10-admin/inventory/items#permissions)
-- 🚧 **Staff and treasurer together** — one person may hold both, and the
+- ❓ **Moving items** — `inventory:transfer`, held by `staff` and `admin`;
+  moving an item to a new owner and opening its proof; product confirms it
+  through `add-item-registry` — [Items](/p/grade10-admin/inventory/items#permissions)
+- **Staff and treasurer together** — one person may hold both, and the
   grants stack; no act that approves another is taken by the person who
   recorded it, so a step that needs two people still needs two
 
@@ -64,11 +64,9 @@ list every product shares; a permission outside the list grants nothing.
 | `inventory` | `read` · `write` |
 | `audit` | `read` |
 
-- 🚧 **Moving items** — `inventory:transfer` joins `inventory` with
-  [Items](/p/grade10-admin/inventory/items#permissions)
-- 🚧 **No `finance` resource** — lending is the vault's financed lane, so its
+- **No `finance` resource** — lending is the vault's financed lane, so its
   cases and money sit under `vault`
-- 🚧 **Identity documents** — `kyc:read` reaches the identity capture and the
+- **Identity documents** — `kyc:read` reaches the identity capture and the
   signed document printed from it; reading a vault case does not, and there is
   no `kyc:write`
 
@@ -78,10 +76,10 @@ list every product shares; a permission outside the list grants nothing.
 | --- | --- | --- |
 | `vault:operate` — intake, identity, papers, custody | `vault:approve` — a valuation, offer terms, a decline, a forfeiture | `vault:payout` — a payout, a repayment, a reversal, the money book, the finance position |
 
-- 🚧 **Staff** — holds `vault:operate` and `vault:approve`, and `kyc:read`
-- 🚧 **Treasurer** — holds `vault:read` and `vault:payout`, and no identity
+- **Staff** — holds `vault:operate` and `vault:approve`, and `kyc:read`
+- **Treasurer** — holds `vault:read` and `vault:payout`, and no identity
   document
-- 🚧 **Money** — `vault:payout` is the only vault grant that moves money
+- **Money** — `vault:payout` is the only vault grant that moves money
 
 :::callout{kind="warning"}
 Two-factor is the second of the three gates and no capability of this

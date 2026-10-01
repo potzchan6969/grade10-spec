@@ -555,6 +555,7 @@
         "payout_recorded": "按申报价值赔偿 {amount}",
         "payout_reversed": "卡牌寻回，赔偿已撤回",
         "upcharge_waived": "升级差额已豁免",
+        "storage_waived": "保管费已豁免",
         "handed_back": "已交回 {count, plural, one {# 张卡牌} other {# 张卡牌}}",
         "collected": "已领回",
         "cancelled": "清单已取消",
@@ -573,6 +574,7 @@
       "storageAccruing": "第 {day} 天起计仓存费",
       "noticeDue": "须寄出书面通知",
       "payoutPastWindow": "赔付已逾期",
+      "transferUnconfirmed": "转账未确认",
       "messageNotSent": "讯息未发送"
     }
   },

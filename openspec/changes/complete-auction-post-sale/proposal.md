@@ -124,3 +124,4 @@ See [Non-Goals](decisions.md#non-goals).
 - [Auction Management · Payment Settings](../../../docs/prds/products/grade10-admin/auction/management.md#payment-settings)
 - [Auction Management · Grants](../../../docs/prds/products/grade10-admin/auction/management.md#grants)
 - [Auction Management · Test Winners](../../../docs/prds/products/grade10-admin/auction/management.md#test-winners)
+- [Roles and Permissions · Permissions](../../../docs/prds/products/shared/auth/roles.md#permissions)
