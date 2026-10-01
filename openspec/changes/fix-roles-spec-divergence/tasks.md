@@ -3,7 +3,7 @@
 The grade10 work is verification: the code already enforces the delta, so each
 group adds or names the tests that prove it, and changes no grant.
 
-## 1. Roles manual page (grade10-spec)
+## 1. Roles manual page (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 Rewrite the opening of `docs/prds/products/shared/auth/roles.md` to name the seven roles, `finance` and `treasurer` included, and add a short section on the vocabulary's eleven resources and the vault split by cost, each new line 🚧 until implementation is verified
 - [ ] 1.2 Delete the `warning` callout that says the spec does not name `finance` and `treasurer`; keep the ❓ line on staff and treasurer together
