@@ -18,3 +18,10 @@
 **I want** to move or cancel my visit up to the slot, and to hear about it
 whether I moved it or the shop did,
 **so that** missing one day does not cost me the case.
+
+### grade10-site-vault-visit-booking-US-04: Collector puts the visit in their calendar
+
+**As a** collector who has just booked,
+**I want** a confirmation naming the shop, the slot and what to bring, and
+the visit added to my phone's calendar,
+**so that** I turn up on the day, prepared.

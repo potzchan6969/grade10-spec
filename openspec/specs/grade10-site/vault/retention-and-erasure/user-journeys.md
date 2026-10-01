@@ -22,3 +22,10 @@ exists.
 told which windows nobody has decided,
 **so that** deleting is a decision somebody makes rather than something that
 happens on a clock.
+
+### grade10-site-vault-retention-and-erasure-US-05: Collector reads what the vault keeps about them
+
+**As a** collector,
+**I want** one page that says what is kept, for how long, where my identity
+stands, and where I ask to be forgotten,
+**so that** I know what I am asking for before I ask.
