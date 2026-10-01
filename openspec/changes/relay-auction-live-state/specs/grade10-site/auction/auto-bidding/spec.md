@@ -1,3 +1,38 @@
+## Feature set
+
+- Commit a maximum
+  - First maximum opens bidding: an accepted cap takes the lead at the opening
+    price - the starting price, or the currency's lowest increment on a 0 start -
+    while the cap itself stays hidden
+  - Raise only: a leader may raise their maximum; lowering or withdrawing it is
+    refused
+  - Validity: a maximum below the listing's minimum next bid is refused
+- Own standing
+  - Own row: a bidder sees their maximum, the current bid, and whether they lead
+    as three distinct facts
+  - Maximum stays private: another bidder cannot read or derive the leader's
+    cap from public listing facts
+- Two-maximum price
+  - Current bid from two maxima: the price is the lesser of the leader's
+    maximum and the second-highest plus one increment
+  - Earlier commitment wins a tie: an equal later maximum is accepted, creates
+    the challenger's record followed by the earlier leader's automatic response
+    at the same resolved amount, and does not displace the leader
+  - One resolution per commitment: Grade10 does not step through intermediate
+    increments
+- Card authorization
+  - Optional authorization: disabled by default; maximum commitments and automatic bids do not wait for or create a bid-time authorization
+  - Hold for the maximum: the authorization covers the committed cap, not the
+    current bid, and stays one active hold per bidder per listing
+  - Failed raise: a raise the card cannot cover leaves the maximum, leader, and
+    price unchanged
+- Auto-bid as a bid
+  - Counted and recorded: a bid Grade10 places counts in the bid count and
+    history as placed on that bidder's behalf
+  - Extended bidding: a maximum committed before the close counts toward entry,
+    an auto bid during extended bidding restarts the timer as a manual bid
+    would, and standing maxima do not keep bidding
+
 ## MODIFIED Requirements
 
 ### Requirement: Two-maximum rule

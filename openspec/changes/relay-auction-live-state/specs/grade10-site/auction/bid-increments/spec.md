@@ -1,3 +1,18 @@
+## Feature set
+
+- Currency schedules
+  - Fixed policy: Grade10 owns the USD, HKD, and JPY tiers
+  - Currency boundary: unsupported currencies cannot price an auction
+- Minimum bid
+  - One lookup rule: manual and proxy bidding select the tier from the amount
+    being beaten
+  - Opening price: before any bid, the minimum is the starting price, or the
+    currency's lowest increment on a 0 start
+  - Flexible offer: a bidder may exceed, but not fall below, the minimum
+- Bid ceiling
+  - Per-currency ceiling: one upper limit for every lot in USD, HKD, and JPY
+  - Refusal above it: a manual bid or an auto-bid maximum above the ceiling is refused
+
 ## MODIFIED Requirements
 
 ### Requirement: Grade10 owns the supported-currency schedules

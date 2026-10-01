@@ -3,7 +3,9 @@
 - [ ] 1.1 Pin the shared clock in Storybook scenario tests: one frame loop drives every countdown block, a countdown rounds up, and a block reads its clock from `ClockProvider` (`grade10-site-auction-listing-page-SC-34`)
 - [ ] 1.2 Add `ClockProvider`, `createFrameClockStore`, `useRemainingSeconds` and `remainingSeconds` to `@grade10/ui`, and move the countdown, the Featured banner, bid history and user bid history onto them with their props unchanged and no new copy (`grade10-site-auction-listing-page-SC-34`)
 - [ ] 1.3 Keep the 🚧 lines this change delivers in `docs/prds/products/grade10-site/auction/bidding.md`, `display.md` and `docs/prds/platform/auction-service.md` matching the accepted contract, and lift them once implementation is verified
-- [ ] 1.4 Verify: `pnpm --filter @grade10/ui` story tests, `pnpm run validate:changes relay-auction-live-state`, `pnpm check:manual`
+- [ ] 1.4 Keep the 🚧 lines on Auction Management · Listings and Bidding · Auction Logic matching the deltas while groups 10 to 12 land; the two unmarked lines they overturn - "positive" in Listings' Refused line (Q20) and "plus one increment" in Bidding's A first maximum line (Q27) - are rewritten when the 🚧 comes off
+- [x] 1.5 Add `auctionListing.bidDidNotGoThrough` in en, ko, zh-Hans and zh-Hant, each holding that locale's existing first sentence of `authorizationProviderFailure`, which keeps its full string (Q13)
+- [ ] 1.6 Verify: `pnpm --filter @grade10/ui` story tests, `pnpm --filter @grade10/i18n test`, `pnpm run validate:changes relay-auction-live-state`, `pnpm check:manual`
 
 ## 2. Clock Rule and Live Contracts (grade10)
 
@@ -62,10 +64,33 @@
 - [ ] 9.2 Carry `topAmountMinor` on bidding rows and read each row's phase from the clock rule (`grade10-site-auction-account-record-SC-64`, `grade10-site-auction-account-record-SC-65`, `grade10-site-auction-account-record-SC-66`, `grade10-site-auction-account-record-SC-67`)
 - [ ] 9.3 Verify: auction db lane, account-record frontend tests, `pnpm run typecheck`, `pnpm run lint`
 
-## 10. The Walk (grade10)
+## 10. Listing Writes Accept 0 (grade10)
 
-Uses the `feature-tcs.md` suites as its input, reviewed with `/tcs-review relay-auction-live-state`; `/tcs-run-sheet` executes manual cases when needed. Groups 2 to 9 have landed.
+Groups 10 to 12 are built in grade10 #667, from `allow-zero-starting-price`; each is ticked once its tests are verified against this change.
 
-- [ ] 10.1 One browser walk per journey, end to end through the storefront with `auction.realtime` on, kept in `apps/frontend/grade10/e2e/tests/auction/`: two bidders on one lot see each bid, the extension at the scheduled close, Closed then the result without a reload; a leader's raise does not extend; a late confirmation does not go through; My Auctions shows the final price to winner and loser (`grade10-site-auction-auction-US-11`, `grade10-site-auction-auction-US-12`, `grade10-site-auction-listing-page-US-12`, `grade10-site-auction-listing-page-US-13`, `grade10-site-auction-listing-page-US-14`, `grade10-site-auction-account-record-US-10`)
-- [ ] 10.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; the cases that stay manual are named in the walk's `rounds.md` row
-- [ ] 10.3 Verify: the auction e2e suite, `pnpm run tcs:validate`
+- [ ] 10.1 Tests in `apps/backend/grade10/auction/test/db/listings/` and `packages/grade10-auction/backend/test/services/listings/`: a draft saves 0 and reads back 0, not null; a draft refuses -1 and 0.5; create takes 0 in `USD`, `HKD` and `JPY`; an API create refuses -1, and an absent, null or empty price, leaving the draft's price empty; a created listing lowers to 0 and stays created; a created listing at 0 publishes and its slug opens it - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`, `grade10-admin-auction-listing-SC-126`, `grade10-admin-auction-listing-SC-127`, `grade10-admin-auction-listing-SC-128`, `grade10-admin-auction-listing-SC-129`
+- [ ] 10.2 Take the router's existing `nonNegativeInt` for `startingPrice` alone on the draft, update and create inputs in `backend/src/trpc/routers/listings.ts`, the create input staying non-nullable; regenerate `packages/api-docs/generated/auction.json` - `grade10-admin-auction-listing-SC-126`, `grade10-admin-auction-listing-SC-127`
+- [ ] 10.3 One local starting-price check in `services/listings/` - a safe integer, 0 or more - used by `draft.ts` and `schedule.ts`, with the refusal "starting price must be whole minor units, 0 or more" under `INVALID_PRICING`, and an empty price kept null through both - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`, `grade10-admin-auction-listing-SC-128`, `grade10-admin-auction-listing-SC-129`
+- [ ] 10.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` for auction
+
+## 11. The Opening Price (grade10)
+
+- [ ] 11.1 Tests: `openingPrice` returns a positive starting price unchanged and 100 `USD`, 1000 `HKD`, 100 `JPY` for 0; in `apps/backend/grade10/auction/test/db/bidding/`, a first bid at an `HKD` starting price of 20000 is accepted and the next minimum is 21000, a first bid of 19999 is refused naming 20000, the published minimum before any bid on an `HKD` 0 start is 1000, a first bid of 1 minor unit on a `USD` 0 start is refused naming 100, a lone maximum on a 0 start stands at the opening price and writes one public bid there, never 0, a lone bidder on a 0 start closes as winner at the opening price, and a sandbox test bid runs on a 0 start - `grade10-site-auction-auction-SC-62`, `grade10-site-auction-auction-SC-63`, `grade10-site-auction-auction-SC-64`, `grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-12`, `grade10-site-auction-auto-bidding-SC-30`, `grade10-site-auction-auto-bidding-SC-31`
+- [ ] 11.2 Add `openingPrice(currency, startingPriceMinor)` beside `nextBidAmount` in `packages/grade10-auction/contracts/src/bidIncrements.ts`, and call it in `bidFloor`'s no-bid branch, in `resolveStandingMaxima`'s lone-leader `resolvedAmountMinor` and its public record, and in the demo's `FakeAuctionService` - `grade10-site-auction-auction-SC-63`, `grade10-site-auction-bid-increments-SC-12`, `grade10-site-auction-auto-bidding-SC-30`, `grade10-site-auction-auto-bidding-SC-31`
+- [ ] 11.3 Drop `startingPrice > 0` from `isEligibleTestListing` in `services/bidding/testBids.ts`, and take the existing `nonNegativeMinorUnits` for the test-bid listing's `startingPrice` in `contracts/src/admin.ts`
+- [ ] 11.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` for auction, the `placeBid`, `autoBidding` and `resolveStandingMaxima` specs among them
+
+## 12. The Listing Editor Accepts 0 (grade10)
+
+- [ ] 12.1 Tests beside `ListingEditor.tsx`: an entered 0 shows no error and a formatted zero amount in each currency, and saves and creates as 0; an empty field stays empty and create refuses it; -1 is refused with "Starting price must be a whole amount, 0 or more." - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`
+- [ ] 12.2 `priceError` accepts `amountMinor >= 0` for the starting price, refuses null only where the price is required, and reads "Starting price must be a whole amount, 0 or more." - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`
+- [ ] 12.3 Verify: `pnpm run typecheck`, `pnpm run lint`, and the admin-frontend listings tests
+
+## 13. The Walk (grade10)
+
+Uses the `feature-tcs.md` suites as its input, reviewed with `/tcs-review relay-auction-live-state`; `/tcs-run-sheet` executes manual cases when needed. Groups 2 to 12 have landed.
+
+- [ ] 13.1 One browser walk per journey, end to end through the storefront with `auction.realtime` on, kept in `apps/frontend/grade10/e2e/tests/auction/`: two bidders on one lot see each bid, the extension at the scheduled close, Closed then the result without a reload; a leader's raise does not extend; a late confirmation does not go through; My Auctions shows the final price to winner and loser (`grade10-site-auction-auction-US-11`, `grade10-site-auction-auction-US-12`, `grade10-site-auction-listing-page-US-12`, `grade10-site-auction-listing-page-US-13`, `grade10-site-auction-listing-page-US-14`, `grade10-site-auction-account-record-US-10`)
+- [ ] 13.2 Walk `grade10-admin-auction-listing-US-01`, `grade10-admin-auction-listing-US-03` and `grade10-admin-auction-listing-US-04` through the admin listing editor, and `grade10-site-auction-auto-bidding-US-01`, `grade10-site-auction-auction-US-02` and `grade10-site-auction-bid-increments-US-01` through the collector's bid panel on a 0-start lot and a positive-start lot with no bid, end to end, kept as the change's end-to-end suite under `apps/frontend/grade10/e2e/tests/auction/`
+- [ ] 13.3 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; the cases that stay manual are named in the walk's `rounds.md` row
+- [ ] 13.4 Verify: the auction e2e suite, `pnpm run tcs:validate`

@@ -1,5 +1,5 @@
 **Author:** @mason5991 - 2026-09-30
-**Co-author:** @ecchochan - 2026-10-01
+**Co-author:** @ecchochan - 2026-10-01; @jeffffej0909 - 2026-09-29, for the zero starting price
 
 ## Why
 
@@ -45,6 +45,30 @@ bidder's My Auctions Ended row shows the auction's final price.
 **Rollout** - rooms and sockets ship behind the `auction.realtime` flag; the
 close rules ship without one.
 
+## Zero Starting Price
+
+Folded from `allow-zero-starting-price` (Q15). Operators cannot run a
+no-reserve lot that opens at nothing: create refuses a starting price of 0. A
+0 start lets the market set the price from the first bid.
+
+**Metric** - share of created listings that start at 0, and their first-bid
+rate against listings with a positive start.
+
+- **Starting price of 0 accepted** - a draft and create accept 0 in USD, HKD
+  and JPY; negative and non-whole amounts are still refused - **BREAKING**
+  against the current rule that a starting price is greater than zero
+- **Opening price** - the first bid must reach the starting price, or the
+  currency's lowest increment on a 0 start, and a lone bidder stands there;
+  one increment above the current bid applies from the second bid (Q19)
+- **One first-bid rule** - `bid-increments`, which asked for the starting
+  price plus its increment, is rewritten to the opening price, so the two
+  bidding specs and the application agree (Q27)
+- **Built** - its code is merged in grade10 (#667)
+- **Suites above** - no domain or product case turns on the starting price:
+  the grade10-site auction domain suite's first bid stands at the starting
+  price, which the opening price keeps, and no grade10-admin product or
+  domain case reads it
+
 ## Non-Goals
 
 See [Non-Goals](decisions.md#non-goals).
@@ -57,14 +81,19 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/auction` - when a bid counts, which bids extend, the
-  bounded late window, who settles a due lot, and the live relay after a
+- `grade10-site/auction/auction` - a first bid meets the opening price, when a
+  bid counts, which bids extend, the late window ending at the effective close, who settles a due lot, and the live relay after a
   commit
 - `grade10-site/auction/listing-page` - the service clock, live updates
   without a reload, Closed with no result until the close commits, and Won
   or Did not win from the committed result
 - `grade10-site/auction/account-record` - a bidding row's money is the
   auction's current or final price
+- `grade10-admin/auction/listing` - a starting price may be 0
+- `grade10-site/auction/auto-bidding` - a lone maximum on a 0 start stands at
+  the lowest increment, not at 0 (Q19)
+- `grade10-site/auction/bid-increments` - before any bid, the minimum is the
+  opening price, not the starting price plus its increment (Q27)
 
 ## Impact
 
@@ -75,25 +104,25 @@ None.
 - **Storefront frontends** - the service clock and live updates on the lot
   page, the catalogue and Featured; the store's countdown blocks read one
   clock that rounds up
+- **grade10-admin** - the listing form and API validation accept a starting
+  price of 0
+- **Copy catalogue** - one key added, holding each locale's existing first
+  sentence of the failed-bid string (Q13); no new wording
 - **Unchanged** - the three lot statuses in `grade10-site/auction/lot-status`,
-  the copy catalogue, Postgres as the only authority, and the sweep
+  Postgres as the only authority, and the sweep
 - **Flow** - [assets/live-relay.svg](assets/live-relay.svg)
 
 ## Open Questions
 
-The product owner's rulings of 2026-10-01 settle Q1 to Q11. Planning raised
-four more, each with a recommended answer - [Decisions](decisions.md#decisions):
-
-- **Q12** - whether a bidder's own standing turns to Outbid live
-- **Q13** - which words show for a bid that did not count, since the existing
-  string also says the card was not authorized
-- **Q14** - whether the Bounded late window leaf is reworded
-- **Q15** - which of this change and `allow-zero-starting-price` archives first
+None. The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31, and
+`allow-zero-starting-price`'s interview settled Q16 to Q30 -
+[Decisions](decisions.md#decisions).
 
 ## References
 
 - [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
 - [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
 - [Auction Display · Auction Details](../../../docs/prds/products/grade10-site/auction/display.md#auction-details)
+- [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
 - [Auction Service · Money invariants](../../../docs/prds/platform/auction-service.md#money-invariants)
 - [Auction Service · Live lots](../../../docs/prds/platform/auction-service.md#live-lots)

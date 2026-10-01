@@ -35,6 +35,9 @@ close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
 - Live lot updates
   - Without a reload: another page's accepted bid, an extension or a close
     shows with the new price, bid count and close
+  - Own standing follows: when the lot's version rises, the page reads the
+    viewer's own standing again, so Outbid shows without a reload while live
+    updates stay anonymous
   - Polling fallback: a page that cannot hold a live line still catches up
 - One service clock
   - Service time: the countdown runs on the auction service's clock, whatever

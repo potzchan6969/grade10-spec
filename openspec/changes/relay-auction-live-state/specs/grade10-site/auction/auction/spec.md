@@ -12,10 +12,11 @@ effective close, and relays every committed change to the pages open on it. A
   - Absolute close: the highest accepted bid wins; there is no reserve
   - Live cards: catalogue and Featured cards show each committed bid, extension and close without a reload
 - Bidding window
-  - Scheduled start and close: a bid must meet the increment between the scheduled start and the recorded close
+  - Scheduled start and close: a bid must meet the minimum next amount between the scheduled start and the effective close
+  - Opening price: a first bid must reach the starting price, or the currency's lowest increment on a 0 start
   - Extended bidding after the close: a lot with a bid by its scheduled close stays open until bidding stops, lot by lot, up to an optional cap
   - A price move restarts the timer: only a bid that moves the public price extends; a leader raising their own maximum does not
-  - Bounded late window: no bid counts after the scheduled close plus the shorter of the extension duration and the cap; a duration or a cap of 0 means no extension
+  - Late window ends at the effective close: no bid counts at or after it, however late the close is recorded; a duration or a cap of 0 means no extension
 - Card authorization
   - Optional authorization: disabled by default; a valid bid does not wait for or create a bid-time authorization hold
   - One hold per bidder: an outbid authorization is released; a delayed lower hold cannot land
@@ -259,9 +260,10 @@ this clock under `grade10-site/auction/listing-page`.
 
 Each listing SHALL have a scheduled bidding start and a scheduled close. A
 bidder MAY place a bid only from the scheduled start until the listing's
-effective close. A valid bid SHALL meet or exceed the current bid plus the
-listing's configured increment; when there is no current bid, it SHALL meet or
-exceed the starting price.
+effective close. A valid bid SHALL meet or exceed the minimum next amount that
+`grade10-site/auction/bid-increments` sets; before any accepted bid, that is
+the listing's opening price - its starting price, or the currency's lowest
+increment when the starting price is 0.
 
 Each listing SHALL carry an **extension duration** in whole seconds, and MAY
 carry an **extension cap** in whole seconds. An extension duration of zero, or
@@ -321,7 +323,7 @@ title is historical: a listing no longer carries an extension window.
 #### Scenario: grade10-site-auction-auction-SC-04 - A bid must meet the next increment
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
-- **GIVEN** an open listing with a current bid and configured increment
+- **GIVEN** an open listing with a current bid
 - **WHEN** a bidder submits less than the next valid bid amount
 - **THEN** Grade10 refuses the bid and names the minimum valid amount
 - **AND** it creates no accepted bid or card authorization for that attempt
@@ -480,3 +482,25 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** a valid bid arrives at 20:11 UTC
 - **THEN** Grade10 refuses it
 - **AND** the listing closes at 20:10 UTC with the earlier bid winning
+
+#### Scenario: grade10-site-auction-auction-SC-62 - A first bid may stand on the starting price
+**Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
+
+- **GIVEN** an open `HKD` listing with a starting price of 20000 minor units and no accepted bid
+- **WHEN** a bidder bids 20000 minor units
+- **THEN** Grade10 accepts the bid and the current bid is 20000 minor units
+- **AND** the next minimum is 21000 minor units
+
+#### Scenario: grade10-site-auction-auction-SC-64 - A first bid below the starting price is refused
+**Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
+
+- **GIVEN** an open `HKD` listing with a starting price of 20000 minor units and no accepted bid
+- **WHEN** a bidder bids 19999 minor units
+- **THEN** Grade10 refuses the bid and names 20000 minor units as the minimum valid amount
+
+#### Scenario: grade10-site-auction-auction-SC-63 - A first bid on a 0 start must reach the lowest increment
+**Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot that starts at nothing
+
+- **GIVEN** an open `USD` listing with a starting price of 0 and no accepted bid
+- **WHEN** a bidder bids 1 minor unit
+- **THEN** Grade10 refuses the bid and names 100 minor units as the minimum valid amount

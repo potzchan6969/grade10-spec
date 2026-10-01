@@ -9,7 +9,11 @@ countdown ran on the device's timer and rounded down. The proposal holds the
 motivation; the deltas hold the behaviour:
 [auction](specs/grade10-site/auction/auction/spec.md),
 [listing-page](specs/grade10-site/auction/listing-page/spec.md),
-[account-record](specs/grade10-site/auction/account-record/spec.md).
+[account-record](specs/grade10-site/auction/account-record/spec.md), and for
+the zero starting price folded from `allow-zero-starting-price` (Q15),
+[listing](specs/grade10-admin/auction/listing/spec.md),
+[auto-bidding](specs/grade10-site/auction/auto-bidding/spec.md) and
+[bid-increments](specs/grade10-site/auction/bid-increments/spec.md).
 
 The implementation is built on `feat/relay-auction-live-state` in grade10.
 Its plan of record, `docs/temp/auction-realtime-plan.md` there, is overruled
@@ -168,6 +172,63 @@ that lands.
   from `liveClock`, so a `closing` lot keeps its standing in Active until the
   close commits
 
+### Refusal Words
+
+- **`auctionListing.bidDidNotGoThrough`** - a key of its own holding each
+  locale's existing first sentence of `authorizationProviderFailure`, shown
+  alone for a confirm after the close and a bid refused at or after it (Q13).
+  `authorizationProviderFailure` keeps its full string where it shows today
+
+### Zero Starting Price
+
+Folded from `allow-zero-starting-price`; built in grade10 #667. Four checks
+refused a starting price of 0, and none of them is a database constraint:
+`auction_listings.starting_price` is a nullable `bigint` with no check.
+
+| Where | What refused 0 |
+| --- | --- |
+| `packages/grade10-auction/admin-frontend/.../ListingEditor.tsx` | `priceError` - `amountMinor > 0`, "must be an amount above zero" |
+| `packages/grade10-auction/backend/src/trpc/routers/listings.ts` | `startingPrice: positiveInt` on the draft, update and create inputs |
+| `packages/grade10-auction/backend/src/services/listings/draft.ts` and `schedule.ts` | `isMinorAmount` from `@grade10/utils/money` - `> 0` |
+| `packages/grade10-auction/contracts/src/admin.ts` | the test-bid listing's `startingPrice: positiveMinorUnits`, and `testBids.ts`'s `startingPrice > 0` eligibility |
+
+The read-back already copes: `displayed()` formats any non-null amount
+through `formatMinor`, so 0 reads as a zero amount (Q21). Two bidding paths
+read the starting price as a price, and both broke at 0: `bidFloor` returned
+`startingPrice` before any bid, taking a first maximum of 1 minor unit on a 0
+start; `resolveStandingMaxima` stood a lone maximum at `startingPrice`, writing
+a bid of 0 that `bids`' `maximum > 0 AND amount > 0` check refuses. `topAmount
+= 0` stays the "no bid yet" sentinel read by `bidFloor`, `history.ts`,
+`ListingsPanel` and the catalogue card.
+
+1. **One opening-price helper** - `openingPrice(currency, startingPriceMinor)`
+   beside `nextBidAmount` in
+   `packages/grade10-auction/contracts/src/bidIncrements.ts`: the starting
+   price when above 0, else `nextBidAmount(currency, 0)` - 100 `USD`, 1000
+   `HKD`, 100 `JPY` (Q19, Q27). `bidFloor`'s no-bid branch,
+   `resolveStandingMaxima`'s lone-leader branch and its public record, and the
+   demo's `FakeAuctionService` call it; every reader of the published minimum
+   goes through `bidFloor`. Rejected: a 0-start case inline in each path;
+   storing the opening price on the listing; `nextBidAmount` of the starting
+   price for every first bid
+2. **A non-negative whole amount for the starting price only** - one local
+   check in `services/listings/`, shared by `draft.ts` and `schedule.ts`: a
+   safe integer, 0 or more, refused as "starting price must be whole minor
+   units, 0 or more" under `INVALID_PRICING`. The tRPC inputs reuse the
+   router's `nonNegativeInt` for `startingPrice` only. Rejected: relaxing
+   `isMinorAmount`, which every bid, hold and payment amount relies on; a new
+   `@grade10/utils/money` helper for two callers; relaxing `positiveInt`
+   wholesale
+3. **Empty stays null end to end** - the form keeps `null` for an empty field
+   and `0` for an entered 0; `priceError` refuses `null` where the price is
+   required and accepts `>= 0`. The create input stays non-nullable, so an
+   absent or null price fails the schema (Q23). Rejected: decoding an empty
+   string to 0 at the edge
+4. **Sandbox test bids take a 0 start** - `testBids.ts` drops its
+   `startingPrice > 0` eligibility and the contract reuses
+   `nonNegativeMinorUnits`; `minimumNextAmount` stays positive because
+   `bidFloor` returns the opening price
+
 ## Database Schema
 
 Owner: the auction database, schema `auction`; migration
@@ -219,6 +280,16 @@ All additive; a browser from the previous deploy keeps working.
   `hasAcceptedBid`, `ledgerTotal`, `extensionSeconds` and
   `extensionCapSeconds`; My Auctions bidding rows add `topAmountMinor`
 
+The zero starting price widens three admin fields; every client that sent a
+valid value still does, and `packages/api-docs/generated/auction.json` is
+regenerated.
+
+| Procedure | Field | Before | After |
+| --- | --- | --- | --- |
+| Listing draft save and update | `startingPrice` | `nullish(positiveInt)` | `nullish(nonNegativeInt)` |
+| Listing create | `startingPrice` | `positiveInt` | `nonNegativeInt` |
+| Admin test-bid listing read | `startingPrice` | `positiveMinorUnits` | `nonNegativeMinorUnits` |
+
 ## Risks / Trade-offs
 
 - [A signal is lost after commit] → the next signal, a reconnect's `hello`, a
@@ -232,9 +303,12 @@ All additive; a browser from the previous deploy keeps working.
 - [A socket cannot open] → the page polls
 - [A deploy restarts every room] → jittered reconnect, one single-flight read
   per room; stored alarms survive
-- [Overlap with `allow-zero-starting-price`] → both modify the auction's
-  window requirement; whichever is accepted second rebases its block onto
-  the first
+- [A reader treats `startingPrice` as truthy and hides a 0] → a sweep found
+  no truthy reads in `packages` or `apps`; the admin and site tests render a
+  0 start and assert a zero amount, not "—"
+- [A lone leader at 0 writes a zero-amount bid] → `openingPrice` is never 0,
+  and `bids`' `amount > 0` check stays as the backstop, so `topAmount = 0`
+  still means no bid
 - [Two switches per environment] → the worker's `auction.realtime` and the
   storefront's `AUCTION_REALTIME` turn on together; either alone degrades to
   polling, never to a wrong state
@@ -253,3 +327,7 @@ All additive; a browser from the previous deploy keeps working.
    `apps/backend/grade10/feature-config.ts` and `AUCTION_REALTIME` in
    `apps/frontend/grade10/src/config.ts`, per environment. Rollback turns both
    off: the routes answer 404, writers stop signalling, pages poll
+4. **Zero starting price** - already deployed with grade10 #667, backend
+   before the admin frontend, so a form that sends 0 never met a service that
+   refuses it. A backend rollback is safe only while no 0-start listing is
+   published, since bidding on one needs the new `bidFloor`

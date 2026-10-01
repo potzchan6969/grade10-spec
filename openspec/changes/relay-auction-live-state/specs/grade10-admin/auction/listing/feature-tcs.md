@@ -366,11 +366,11 @@ None.
 
 - **Joined:** `grade10-admin-auction-listing-US1-TC3-2` decides the revised `grade10-admin-auction-listing-SC-03`; `grade10-admin-auction-listing-US3-TC21-1` decides `grade10-admin-auction-listing-SC-125`; `grade10-admin-auction-listing-US3-TC22-1` decides `grade10-admin-auction-listing-SC-126`.
 - **Raised, folded into spec:** a 0 that reads back as 0 and never as empty, folded into `grade10-admin-auction-listing-SC-124`.
-- **Raised, folded into spec:** an absent, null or empty price at an API create is refused and never stored as 0 (Q8), as `grade10-admin-auction-listing-SC-127`.
+- **Raised, folded into spec:** an absent, null or empty price at an API create is refused and never stored as 0 (Q23), as `grade10-admin-auction-listing-SC-127`.
 - **Raised, folded into spec:** lowering a created listing to 0, as `grade10-admin-auction-listing-SC-128`.
-- **Raised, folded into spec:** a created listing at 0 publishes with no second price check (Q9), as `grade10-admin-auction-listing-SC-129`.
+- **Raised, folded into spec:** a created listing at 0 publishes with no second price check (Q24), as `grade10-admin-auction-listing-SC-129`.
 - **Raised, rejected:** none.
-- **Raised, escalated:** none from this suite. The run raised Q4 itself - what a lone maximum on a 0 start stands at - and folded the recommendation into `grade10-site/auction/auto-bidding`, held for the product manager.
+- **Raised, escalated:** none from this suite. The run raised Q19 itself - what a lone maximum on a 0 start stands at - and folded the recommendation into `grade10-site/auction/auto-bidding`, held for the product manager.
 - **Kept, no new scenario:** `grade10-admin-auction-listing-US4-TC15-1` walks a 0 against the durable rule that a published listing refuses every price write; the boundary is sharper, the rule unchanged.
 - **Left to another suite:** the first-bid minimum on a 0 start is `grade10-site/auction/bid-increments`' rule and the lone-maximum price is `grade10-site/auction/auto-bidding`'s, walked in that capability's suite in this change.
 - **Uncovered anchors:** none.

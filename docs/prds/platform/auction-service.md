@@ -168,7 +168,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - The page probes again after sleep, a reconnect or a return to the tab, and a correction under a second never makes a countdown jump up
 - One animation-frame loop drives every countdown on the page while it is visible and redraws a countdown only when its displayed value changes; nothing counts timer ticks, so nothing drifts
 - A countdown rounds up, so it reads 0 only once the deadline has passed
-- ❓ Tenths of a second in a lot's last 10 seconds - whole seconds ship first, and the designer decides at review
+- A countdown shows whole seconds only, a lot's last 10 seconds included, so no new countdown state is drawn
 
 ## Data model
 

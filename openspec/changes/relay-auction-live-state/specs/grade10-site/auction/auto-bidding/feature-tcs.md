@@ -148,9 +148,9 @@ Runs once per row of **Test data**.
 
 **Run:** blind feature pass, 2026-09-29. Read: the bundle's `outline.md` (Purpose and Feature set), `durable-user-journeys.md`, `change-user-journeys.md`, `proposal.md`, `decisions.md`, `prd-bidding.md`, `prd-management.md`, `existing-feature-tcs.md` (Reconciliation stripped), `domain-tcs.md` (Reconciliation stripped); `docs/governance/specs-to-test-cases.md`, `docs/governance/tcs-conventions.md`, the `spec-to-tcs` skill, `openspec/config.yaml`; the listing suite of `inventory-auction-media` for shape only. Denied: every `## Requirements` section, this change's `spec.md`, `openspec/specs/`, `openspec/changes/archive/` and every other change.
 
-- **Joined:** `grade10-site-auction-auto-bidding-US1-TC5-1` decides `grade10-site-auction-auto-bidding-SC-30`; `grade10-site-auction-auto-bidding-US1-TC7-1` decides `grade10-site-auction-auto-bidding-SC-31`. Both follow Q4's recommendation, held for the product manager.
+- **Joined:** `grade10-site-auction-auto-bidding-US1-TC5-1` decides `grade10-site-auction-auto-bidding-SC-30`; `grade10-site-auction-auto-bidding-US1-TC7-1` decides `grade10-site-auction-auto-bidding-SC-31`. Both follow Q19's recommendation, held for the product manager.
 - **Kept, no new scenario:** `grade10-site-auction-auto-bidding-US1-TC6-1` walks the durable first-bid minimum of `grade10-site/auction/bid-increments` at a 0 start, and the refusal below it; the rule is unchanged, the boundary new.
 - **Dropped at the simpler reading:** a second maximum, a tie at the minimum next bid, and a second bidder's minimum on a 0 start. Once a bid stands, bidding runs the durable two-maximum rule on unchanged code, and the durable suite walks it.
-- **Raised, decided by the round:** whether a lone maximum's stand is recorded as that collector's bid (Q10), and whether the bid panel shows a starting price of 0 beside a current bid at the lowest increment (Q11). Neither moves a scenario.
+- **Raised, decided by the round:** whether a lone maximum's stand is recorded as that collector's bid (Q25), and whether the bid panel shows a starting price of 0 beside a current bid at the lowest increment (Q26). Neither moves a scenario.
 - **Raised, rejected:** none.
 - **Uncovered anchors:** none.
