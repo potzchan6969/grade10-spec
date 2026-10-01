@@ -1328,7 +1328,7 @@ Stage (c).
       per request (`grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-103`)
-- [ ] 19.9 Write `0005_waivers_kind.sql` as the Migration Plan names it; then
+- [x] 19.9 Write `0005_waivers_kind.sql` as the Migration Plan names it; then
       `waive` in place of `waiveUpcharge`, the ask and the record carrying
       `kind` and `dueNow` netting each kind against its own waivers, its
       tests red first; then run 19.7's checks
