@@ -1266,7 +1266,7 @@ Stage (c).
       (`grade10-admin-grading-counter-SC-54`,
       `grade10-site-grading-counter-documents-SC-20`)
 
-## 19. Payouts, waivers and what is due (grade10)
+## 19. Payouts, waivers and what is due (grade10) (owner: @ecchochan)
 
 Stage (c).
 
