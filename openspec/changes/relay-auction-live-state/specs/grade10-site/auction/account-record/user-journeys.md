@@ -1,22 +1,19 @@
-# User journeys - account-record
+## Context user journeys
 
-## Added
+### grade10-site-auction-account-record-US-02: See where I stand across every listing I bid on
 
-None.
+As a bidder, I want one place that says which of my listings I still lead and
+which I have lost, so that I can act on the ones that still need me before they
+close.
 
-## Changed
+## ADDED User journeys
 
-### Collector reads Ended on My Auctions after a multi-bidder close
+### grade10-site-auction-account-record-US-10: Bidder reads each lot's price and result on My Auctions
 
-After settle, the winner's Ended row shows the winning top and an Awaiting
-Setup path. A losing bidder's Ended row shows the same auction top and Didn’t
-win - not only that bidder's own maximum.
+**As a** bidder,
+**I want** each lot I bid on to show the auction's current or final price and, once it closes, whether I won,
+**so that** I know what a lot sold for and whether I lost it without opening the lot.
 
-## Retired
+## MODIFIED User journeys
 
-None.
-
-## Relied on
-
-- Account record Ended grouping and status vocabulary
-- Auction top after settle from auction close
+## REMOVED User journeys

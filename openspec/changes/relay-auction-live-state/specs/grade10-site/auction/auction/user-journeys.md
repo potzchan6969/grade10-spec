@@ -1,27 +1,29 @@
-# User journeys - auction
+## Context user journeys
 
-## Added
+### grade10-site-auction-auction-US-02: Collector places a card-backed bid inside the window
 
-### Service announces a bid or close to open pages
+**As a** bidder,
+**I want** a lot I bid on by its close to stay open until bidding stops,
+**so that** a bid placed at the last second can always be answered, up to the lot's cap.
 
-After Postgres commits an accepted bid or a settle, the auction's live room
-re-reads public state and pushes it to every connected auction page. The
-catalogue hub pushes a card summary for that auction. A page that misses the
-push reads the public auction on its next poll.
+**Accepted by:**
 
-## Changed
+- `grade10-site-auction-auction-SC-23` — The default bid path creates no authorization hold
 
-### Close past the recorded end
+## ADDED User journeys
 
-When the recorded close is due, the auction enters Closing while still
-published. Settle may close it or restart extended bidding. A late public read
-two seconds past the deadline may settle; the five-minute cron remains the net.
+### grade10-site-auction-auction-US-11: Bidder is held to the close with everyone else
 
-## Retired
+**As a** bidder,
+**I want** a lot to stop taking bids at its close for everyone, and a bid to count only once its payment confirms before then,
+**so that** nobody wins with a bid that arrived after the close, and a card hold for a bid that did not count is released.
 
-None.
+### grade10-site-auction-auction-US-12: Bidder keeps a lot open only by moving its price
 
-## Relied on
+**As a** bidder,
+**I want** extended bidding to restart only when a bid moves the lot's price,
+**so that** a leader cannot keep a lot open by raising their own maximum.
 
-- Absolute auction, extension, and auto-bidding from Bidding
-- Public listing read contract
+## MODIFIED User journeys
+
+## REMOVED User journeys

@@ -1,37 +1,32 @@
-# User journeys - listing-page
+## Context user journeys
 
-## Added
+### grade10-site-auction-listing-page-US-04: Collector reads a live lot while scripts load
 
-### Collector watches one auction with another collector
+**As a** collector,
+**I want** the lot I was served to stay on screen once scripts finish loading,
+**so that** nothing I was reading blanks into a placeholder and no value
+disagrees with what the document carried.
 
-Two signed-in collectors open the same live auction. Each sets a private
-maximum. When the maxima are equal, the earlier maximum stays leading and both
-pages show the shared hammer. A later raise on one page updates the standing
-bid on the other without a full navigation.
+## ADDED User journeys
 
-### Collector stays through extended bidding and settle
+### grade10-site-auction-listing-page-US-12: Collector sees another bid on the lot without reloading
 
-An auction is already in extended bidding. An accepted bid restarts the close
-timer and keeps the Time left (extended) label. When the timer runs out with
-no new bid, settle closes the auction: the leader sees Auction won; everyone
-else who bid sees Did not win. Neither page shows Ended only because its clock
-passed the recorded close.
+**As a** collector,
+**I want** a bid placed on another page to show on mine with the new price and close, without a reload,
+**so that** I bid against the price that stands.
 
-## Changed
+### grade10-site-auction-listing-page-US-13: Collector reads the same time left as every other page
 
-### Countdown on the auction page
+**As a** collector,
+**I want** the lot's countdown to agree with every other page on that lot, whatever my device's clock says,
+**so that** the time I see left is the time I have.
 
-The remaining time follows the auction service clock so browsers and machines
-on the same auction stay aligned. After the device sleeps, the live line
-reconnects, or the tab becomes visible again, the page re-probes the service
-clock and corrects drift without jumping the countdown up for a sub-second
-skew.
+### grade10-site-auction-listing-page-US-14: Bidder waits on a closed lot for its result
 
-## Retired
+**As a** bidder,
+**I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
+**so that** I am never shown a result the auction has not decided.
 
-None.
+## MODIFIED User journeys
 
-## Relied on
-
-- Extended bidding and auto-bidding rules from Bidding
-- Auction address and served standing from listing-page
+## REMOVED User journeys
