@@ -227,7 +227,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 5.8 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
-## 6. The case read and the collector's acts (grade10)
+## 6. The case read and the collector's acts (grade10) (owner: @ecchochan)
 
 - [x] 6.1 Cover the detail read's new fields and the acts' refusals: the
       balance after each repayment, the reminder ladder, the notice, the
