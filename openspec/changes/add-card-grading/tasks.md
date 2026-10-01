@@ -2206,7 +2206,7 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       due, its tests red first; then run 28.6's checks (Q140,
       `grade10-admin-grading-counter-SC-112`)
 
-## 29. The console's hand-in and hand-back runbooks (grade10)
+## 29. The console's hand-in and hand-back runbooks (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's recorded worker. Stage (b).
 
