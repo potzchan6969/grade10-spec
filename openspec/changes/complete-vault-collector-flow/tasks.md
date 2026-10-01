@@ -1105,7 +1105,7 @@ onto the legal-copy table.
 
 ## 27. One number for every way it is typed (grade10) (owner: @ecchochan)
 
-- [ ] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
+- [x] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
       only when the bare digits are not themselves a valid local number, read
       a bare dial code before a valid national number as that number with its
       `+`, the vectors red first in `packages/utils` and in the store's
@@ -1116,5 +1116,5 @@ onto the legal-copy table.
       generated `account_profile` CHECK stay untouched
       (`grade10-site-vault-case-intake-SC-04`,
       `grade10-admin-vault-operator-queue-SC-07a`)
-- [ ] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run test:backend`
