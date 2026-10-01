@@ -78,7 +78,7 @@ svg[data-diagram="live-relay"] .c-lane{fill: var(--lane-fill); stroke: var(--lan
           <rect x="321.4333333333334" y="220" width="84.8" height="16" rx="3" class="c-mask"/>
           <text x="363.83333333333337" y="230" class="t-backend" font-size="9" text-anchor="middle">opens a socket</text>
         </g>
-        <text data-detail="fine" x="255.66666666666669" y="258" class="t-dim" font-size="7">behind the auction.realtime flag; it only sends a keepalive</text>
+        <text data-detail="fine" x="255.66666666666669" y="258" class="t-dim" font-size="7">it only sends a keepalive</text>
         </g>
         <g data-step="reads-for-hello" data-edge-from="room" data-edge-to="auction" data-edge-label="reads the lot" data-edge-key="2" data-edge-id="reads-for-hello">
           <path data-composition-edge-from="room" data-composition-edge-to="auction" data-composition-edge-id="reads-for-hello" data-composition-points="498,284;611.1666666666667,284" d="M 498 284 L 611.1666666666667 284" class="a-dashed" stroke-width="1.4" marker-end="url(#live-relay-arrowhead-dashed)"/>

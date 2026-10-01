@@ -76,7 +76,7 @@
       "to": "room",
       "y": 240,
       "label": "opens a socket",
-      "note": "behind the auction.realtime flag; it only sends a keepalive"
+      "note": "it only sends a keepalive"
     },
     {
       "id": "reads-for-hello",

@@ -6,6 +6,8 @@
 - [ ] 1.4 Keep the 🚧 lines on Auction Management · Listings and Bidding · Auction Logic matching the deltas while groups 10 to 12 land; the two unmarked lines they overturn - "positive" in Listings' Refused line (Q20) and "plus one increment" in Bidding's A first maximum line (Q27) - are rewritten when the 🚧 comes off
 - [x] 1.5 Add `auctionListing.bidDidNotGoThrough` in en, ko, zh-Hans and zh-Hant, each holding that locale's existing first sentence of `authorizationProviderFailure`, which keeps its full string (Q13)
 - [ ] 1.6 Verify: `pnpm --filter @grade10/ui` story tests, `pnpm --filter @grade10/i18n test`, `pnpm run validate:changes relay-auction-live-state`, `pnpm check:manual`
+- [ ] 1.7 Tests: a `quickMaximumPresetAmount` case in `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts` for a non-leader before any bid - opening price 48000, increment 2000, chips 50000, 52000 and 56000 - beside its leader and current-bid cases, and the bid card's `LiveNoBids` story asserting no chip reads the opening price; both fail today, where chip 1x reads the opening price itself (`shared-ui-auction-listing-SC-35`, `shared-ui-auction-listing-SC-36`, `shared-ui-auction-listing-SC-52`)
+- [ ] 1.8 Step a non-leader's chips from the opening price before any bid in `quickMaximumPresetAmount`, so chip 1x is the opening price plus one increment and the opening price stays the custom field's minimum (Q28) (`shared-ui-auction-listing-SC-52`)
 
 ## 2. Clock Rule and Live Contracts (grade10)
 
@@ -38,9 +40,9 @@
 
 ## 6. Rooms and Routes (grade10)
 
-- [ ] 6.1 Tests: the time route, the socket routes' 404 with the flag off, `Origin` and rate refusals, `hello`, `state` and `gone` frames, the alarm settling through `AuctionRoomWork`, and frames carrying only public facts (`grade10-site-auction-auction-SC-75`, `grade10-site-auction-auction-SC-76`, `grade10-site-auction-auction-SC-78`, `grade10-site-auction-auction-SC-79`, `grade10-site-auction-auction-SC-80`)
+- [ ] 6.1 Tests: the time route, `Origin` and rate refusals, `hello`, `state` and `gone` frames, the alarm settling through `AuctionRoomWork`, and frames carrying only public facts (`grade10-site-auction-auction-SC-75`, `grade10-site-auction-auction-SC-76`, `grade10-site-auction-auction-SC-79`, `grade10-site-auction-auction-SC-80`)
 - [ ] 6.2 Add `GET /auction/api/public/time` (`grade10-site-auction-auction-SC-80`)
-- [ ] 6.3 Add the `AuctionRoom` class for lots and the catalogue, `AuctionRoomWork`, the `/live/lot/<id>` and `/live/catalogue` routes, and the `auction.realtime` flag gating routes and signals (`grade10-site-auction-auction-SC-75`, `grade10-site-auction-auction-SC-76`, `grade10-site-auction-auction-SC-78`, `grade10-site-auction-auction-SC-79`)
+- [ ] 6.3 Add the `AuctionRoom` class for lots and the catalogue, `AuctionRoomWork`, the `/live/lot/<id>` and `/live/catalogue` routes, and the writers' signal after commit (`grade10-site-auction-auction-SC-75`, `grade10-site-auction-auction-SC-76`, `grade10-site-auction-auction-SC-79`)
 - [ ] 6.4 Bind `AUCTION_ROOM`, `ROOM_WORK` and `LIVE_CONNECT_LIMITER` per environment with the room's class migration, and document the deploy order and monitors in `docs/deployment.md` and `docs/operations.md`
 - [ ] 6.5 Verify: auction workers lane, the room load script against staging, `pnpm run typecheck`, `pnpm run lint`
 
@@ -92,7 +94,7 @@ Groups 10 to 12 are built in grade10 #667, from `allow-zero-starting-price`; eac
 
 Uses the `feature-tcs.md` suites as its input, reviewed with `/tcs-review relay-auction-live-state`; `/tcs-run-sheet` executes manual cases when needed. Groups 2 to 12 have landed.
 
-- [ ] 13.1 One browser walk per journey, end to end through the storefront with `auction.realtime` on, kept in `apps/frontend/grade10/e2e/tests/auction/`: two bidders on one lot see each bid and the outbid one reads Outbid, the extension at the scheduled close, Closed then the result without a reload; a leader's raise does not extend; a late confirmation does not go through; My Auctions shows the final price to winner and loser (`grade10-site-auction-auction-US-11`, `grade10-site-auction-auction-US-12`, `grade10-site-auction-listing-page-US-12`, `grade10-site-auction-listing-page-US-13`, `grade10-site-auction-listing-page-US-14`, `grade10-site-auction-account-record-US-10`)
+- [ ] 13.1 One browser walk per journey, end to end through the storefront, kept in `apps/frontend/grade10/e2e/tests/auction/`: two bidders on one lot see each bid and the outbid one reads Outbid, the extension at the scheduled close, Closed then the result without a reload; a leader's raise does not extend; a late confirmation does not go through; My Auctions shows the final price to winner and loser (`grade10-site-auction-auction-US-11`, `grade10-site-auction-auction-US-12`, `grade10-site-auction-listing-page-US-12`, `grade10-site-auction-listing-page-US-13`, `grade10-site-auction-listing-page-US-14`, `grade10-site-auction-account-record-US-10`)
 - [ ] 13.2 Walk `grade10-admin-auction-listing-US-01`, `grade10-admin-auction-listing-US-03` and `grade10-admin-auction-listing-US-04` through the admin listing editor, and `grade10-site-auction-auto-bidding-US-01`, `grade10-site-auction-auction-US-02` and `grade10-site-auction-bid-increments-US-01` through the collector's bid panel on a 0-start lot and a positive-start lot with no bid, end to end, kept as the change's end-to-end suite under `apps/frontend/grade10/e2e/tests/auction/`
 - [ ] 13.3 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; the cases that stay manual are named in the walk's `rounds.md` row
 - [ ] 13.4 Verify: the auction e2e suite, `pnpm run tcs:validate`

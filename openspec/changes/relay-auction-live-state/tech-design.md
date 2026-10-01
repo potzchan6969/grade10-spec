@@ -121,8 +121,7 @@ that lands.
   signal; `noListingEvents` is the explicit opt-out for tests and fixtures.
   `scripts/checks/check-listing-lock.mjs` refuses a `.for("update")` on
   listings outside `lock.ts`
-- **Production adapter** - calls the room on `waitUntil`, best effort, and
-  does nothing while `auction.realtime` is off
+- **Production adapter** - calls the room on `waitUntil`, best effort
 - **Rejected** - writers sending the state (a wrong or out-of-order state);
   `LISTEN`/`NOTIFY` (Hyperdrive carries none, and a held connection keeps
   Neon awake)
@@ -283,7 +282,7 @@ All additive; a browser from the previous deploy keeps working.
 | Route | Answer |
 | --- | --- |
 | `GET /auction/api/public/time` | the worker's clock, `no-store`, no database |
-| `GET /auction/api/public/live/lot/<listingId>` | WebSocket upgrade; 404 while `auction.realtime` is off; `Origin` and a per-IP limit checked; no database read |
+| `GET /auction/api/public/live/lot/<listingId>` | WebSocket upgrade; `Origin` and a per-IP limit checked; no database read |
 | `GET /auction/api/public/live/catalogue` | the same, for the catalogue room |
 
 - **Payload fields** - listing, summary and Featured payloads add `version`,
@@ -319,9 +318,6 @@ regenerated.
 - [A lone leader at 0 writes a zero-amount bid] → `openingPrice` is never 0,
   and `bids`' `amount > 0` check stays as the backstop, so `topAmount = 0`
   still means no bid
-- [Two switches per environment] → the worker's `auction.realtime` and the
-  storefront's `AUCTION_REALTIME` turn on together; either alone degrades to
-  polling, never to a wrong state
 
 ## Migration Plan
 
@@ -331,12 +327,9 @@ regenerated.
 2. **Room class alone** - the deploy that introduces `AuctionRoom`, its
    `new_sqlite_classes` migration, `AUCTION_ROOM`, `ROOM_WORK` and
    `LIVE_CONNECT_LIMITER` is a whole `wrangler deploy` carrying no other app,
-   because it is a rollback barrier; the close rules ship in it, unflagged
-   (Q11)
-3. **Flag flip** - `auction.realtime` in
-   `apps/backend/grade10/feature-config.ts` and `AUCTION_REALTIME` in
-   `apps/frontend/grade10/src/config.ts`, per environment. Rollback turns both
-   off: the routes answer 404, writers stop signalling, pages poll
+   because it is a rollback barrier
+3. **Rooms, sockets and the close rules** - ship together with no flag
+   (Q11); a rollback is a code revert, which leaves the room class deployed
 4. **Zero starting price** - already deployed with grade10 #667, backend
    before the admin frontend, so a form that sends 0 never met a service that
    refuses it. A backend rollback is safe only while no 0-start listing is

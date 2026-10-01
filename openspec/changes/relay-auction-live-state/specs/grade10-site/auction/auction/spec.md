@@ -209,9 +209,6 @@ no result. A page that cannot hold a live connection SHALL poll. Live updates
 SHALL carry nothing a public listing read does not: no bidder identity, no
 private maximum, no storefront and no card facts.
 
-The relay ships behind the `auction.realtime` flag. With the flag off, pages
-poll as before and every other requirement of this capability holds.
-
 #### Scenario: grade10-site-auction-auction-SC-75 - An older update does not replace a newer one
 **Serves:** `Live relay` - updates and reads arrive out of order
 
@@ -233,16 +230,6 @@ poll as before and every other requirement of this capability holds.
 - **WHEN** a bid on that listing is accepted
 - **THEN** the page shows the new current bid on its next poll, without a
   reload
-
-#### Scenario: grade10-site-auction-auction-SC-78 - The flag off leaves the close rules on
-**Serves:** `Live relay` - the relay is switched off
-
-- **GIVEN** `auction.realtime` is off
-- **WHEN** a page opens a listing and a bid on it is accepted
-- **THEN** the page opens no live connection and shows the bid on its next
-  poll
-- **AND** the listing still closes at its effective close and refuses a bid
-  after it
 
 #### Scenario: grade10-site-auction-auction-SC-79 - A lot that stops being public leaves open pages
 **Serves:** `Live relay` - a listing is called off while pages are open

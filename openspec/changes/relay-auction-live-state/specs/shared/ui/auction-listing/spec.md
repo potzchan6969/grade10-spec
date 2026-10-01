@@ -43,3 +43,46 @@
   - Separate from chips: the first chip is not that typed minimum
 - Lost standing
   - Badge only: Did not win remains; no authorization-release banner
+
+## MODIFIED Requirements
+
+### Requirement: Quick-bid chips step the listing increment
+
+`ListingAuctionBidCard` SHALL offer three quick-bid amounts: 1×, 2×, and 4×
+the listing increment supplied on the view.
+
+When the viewer leads with a committed maximum, those amounts SHALL be that
+maximum plus those multiples. When the viewer does not lead, they SHALL be
+the current bid plus those multiples, and before any bid the opening price
+plus those multiples.
+
+The first chip SHALL NOT be replaced by the typed raise floor.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-7o5 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-35 - A leader's chips step from the committed max
+**Serves:** Quick bids - a leader's chips step from the committed max
+
+- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+  increment is 4000 minor units, and whose viewer leads with a maximum of
+  200000 minor units
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 204000, 208000, and 216000 HKD minor units
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-t9f rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-36 - A collector who does not lead steps from the current bid
+**Serves:** Quick bids - a collector who does not lead steps from the current bid
+
+- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+  increment is 4000 minor units, and whose viewer has a maximum of 116000
+  minor units and does not lead
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
+
+#### Scenario: shared-ui-auction-listing-SC-52 - Before any bid the chips step from the opening price
+**Serves:** Quick bids - a collector meets the chips on a lot nobody has bid on
+
+- **GIVEN** an HKD listing with no accepted bid, whose opening price is 48000
+  minor units and whose increment is 2000 minor units
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 50000, 52000, and 56000 HKD minor units
+- **AND** no chip reads the opening price itself
