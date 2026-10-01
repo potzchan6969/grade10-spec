@@ -12,6 +12,7 @@ import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
 import { deliver, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 import { escapeSlackText } from "./lib/wording.mjs";
+import { absentAt } from "./store-main.mjs";
 
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -41,7 +42,7 @@ export function parseChangedFiles(output) {
   const fields = output.split("\0").filter(Boolean);
   const changed = [];
 
-  for (let index = 0; index < fields.length; ) {
+  for (let index = 0; index < fields.length;) {
     const status = fields[index++];
     if (status.startsWith("R") || status.startsWith("C")) {
       changed.push({
@@ -262,13 +263,12 @@ export async function showAt(root, ref, path) {
   try {
     const { stdout } = await exec("git", ["show", `${ref}:${path}`], {
       cwd: root,
-      maxBuffer: 16 * 1024 * 1024,
+      maxBuffer: Infinity,
     });
     return stdout;
   } catch (error) {
     const said = String(error?.stderr ?? "");
-    if (/does not exist in|exists on disk, but not in/.test(said))
-      return undefined;
+    if (absentAt(root, ref, said)) return undefined;
     throw new Error(
       `git show ${ref}:${path} refused in ${root}: ${(said || error.message).trim()}`,
       { cause: error },

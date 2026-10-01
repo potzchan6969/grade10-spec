@@ -447,7 +447,7 @@ async function changedFiles(base, head) {
   const { stdout } = await exec(
     "git",
     ["diff", "--name-status", "--find-renames", `${base}...${head}`],
-    { cwd: rootDirectory },
+    { cwd: rootDirectory, maxBuffer: Infinity },
   );
   return stdout
     .split("\n")
@@ -471,6 +471,7 @@ async function deletedStoryStates(base, changed) {
       .map(async ({ path }) => {
         const { stdout } = await exec("git", ["show", `${base}:${path}`], {
           cwd: rootDirectory,
+          maxBuffer: Infinity,
         });
         const source = ts.createSourceFile(
           path,

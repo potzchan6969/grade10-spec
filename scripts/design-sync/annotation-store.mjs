@@ -200,20 +200,11 @@ export function normalizeRelatedFiles(relatedFiles, { storeRoot } = {}) {
 
 function gitDirtyPaths(storeRoot, paths) {
   if (!paths.length) return "";
-  try {
-    const output = execFileSync(
-      "git",
-      ["status", "--porcelain", "--untracked-files=all", "--", ...paths],
-      {
-        cwd: resolve(storeRoot),
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "ignore"],
-      },
-    );
-    return output.trim();
-  } catch {
-    return "";
-  }
+  return execFileSync(
+    "git",
+    ["status", "--porcelain", "--untracked-files=all", "--", ...paths],
+    { cwd: resolve(storeRoot), encoding: "utf8", maxBuffer: Infinity },
+  ).trim();
 }
 
 function transactionWrite(files) {

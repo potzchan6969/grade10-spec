@@ -21,6 +21,7 @@ try {
   const validation = spawnSync("pnpm", ["run", "validate:changes", changeId], {
     cwd: root,
     encoding: "utf8",
+    maxBuffer: Infinity,
   });
   if (validation.status !== 0)
     throw new Error(

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
   mkdir,
@@ -1653,6 +1654,18 @@ test("Replacement node requires explicit old-to-new decision", () => {
   assert.equal(accepted.remaining.status, "clean");
 });
 
+async function gitStore(prefix) {
+  const directory = await mkdtemp(join(tmpdir(), prefix));
+  execFileSync("git", ["init", "-q"], { cwd: directory });
+  return directory;
+}
+
+function commitStore(directory) {
+  const git = (...args) => execFileSync("git", args, { cwd: directory });
+  git("add", "-A");
+  git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "store");
+}
+
 test("CLI acceptance writes one atomic baseline transaction", async () => {
   const baseline = {
     schemaVersion: 2,
@@ -1675,7 +1688,7 @@ test("CLI acceptance writes one atomic baseline transaction", async () => {
   };
   const snapshot = normalizeObservation(observation());
   const finding = scanSnapshot({ baseline, snapshot }).findings[0];
-  const directory = await mkdtemp(join(tmpdir(), "grade10-annotation-"));
+  const directory = await gitStore("grade10-annotation-");
   const baselinePath = join(directory, "baseline.json");
   const snapshotPath = join(directory, "snapshot.json");
   const decisionsPath = join(directory, "decisions.json");
@@ -1700,6 +1713,7 @@ test("CLI acceptance writes one atomic baseline transaction", async () => {
         2,
       )}\n`,
     );
+    commitStore(directory);
 
     const originalLog = console.log;
     console.log = () => {};
@@ -1731,7 +1745,10 @@ test("CLI acceptance writes one atomic baseline transaction", async () => {
       accepted.entries[`${fileKey}:2:1`].annotations[0].noImpactReason,
       "The wording change has no implementation impact.",
     );
-    assert.deepEqual((await readdir(directory)).sort(), [
+    const written = (await readdir(directory)).filter(
+      (name) => name !== ".git",
+    );
+    assert.deepEqual(written.sort(), [
       "baseline.json",
       "decisions.json",
       "snapshot.json",
@@ -1885,9 +1902,7 @@ test("Acceptance refuses a baseline outside the registered store", async () => {
 });
 
 test("Atomic related OpenSpec patch validates before writing", async () => {
-  const directory = await mkdtemp(
-    join(tmpdir(), "grade10-annotation-transaction-"),
-  );
+  const directory = await gitStore("grade10-annotation-transaction-");
   const baselinePath = join(
     directory,
     "scripts",
@@ -1922,6 +1937,7 @@ test("Atomic related OpenSpec patch validates before writing", async () => {
     });
     await writeFile(baselinePath, `${JSON.stringify(oldBaseline, null, 2)}\n`);
     await writeFile(relatedPath, oldSpec);
+    commitStore(directory);
 
     const result = applyAcceptanceTransaction({
       storeRoot: directory,
