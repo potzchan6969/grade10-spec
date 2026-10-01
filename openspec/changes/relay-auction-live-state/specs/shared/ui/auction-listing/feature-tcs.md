@@ -100,6 +100,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- | --- | --- |
 | HKD | 20000 (HK$200) | 1000 (HK$10) | 21000 | 22000 | 24000 |
 | JPY | 20000 (¥20,000) | 500 (¥500) | 20500 | 21000 | 22000 |
+| USD | 100 ($1), a first bid at a 0 start's opening price | 100 ($1) | 200 | 300 | 500 |
 
 **Steps:**
 
@@ -150,7 +151,7 @@ Runs once per row of **Test data**.
 * Three chips read <leader maximum> plus 1×, 2× and 4× <increment>.
 * No chip reads <current bid> plus an increment.
 
-### shared-ui-auction-listing-US1-TC5-1: Before any bid, chips step from the opening price
+### shared-ui-auction-listing-US1-TC5-2: Before any bid, chip 1× is the opening price
 
 Runs once per row of **Test data**.
 
@@ -161,7 +162,7 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** regression, release
+* **Suites:** smoke, regression, release
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -176,20 +177,22 @@ Runs once per row of **Test data**.
 
 | Currency | Starting price | Opening price | Increment | Chip 1× | Chip 2× | Chip 4× |
 | --- | --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 20000, the starting price | 1000 (HK$10) | 21000 | 22000 | 24000 |
-| USD | 0 | 100 ($1), the lowest increment | 100 ($1) | 200 | 300 | 500 |
-| HKD | 0 | 1000 (HK$10), the lowest increment | 1000 (HK$10) | 2000 | 3000 | 5000 |
+| HKD | 20000 (HK$200) | 20000, the starting price | 1000 (HK$10) | 20000 | 21000 | 23000 |
+| USD | 0 | 100 ($1), the lowest increment | 100 ($1) | 100 | 200 | 400 |
+| HKD | 0 | 1000 (HK$10), the lowest increment | 1000 (HK$10) | 1000 | 2000 | 4000 |
 
 **Steps:**
 
 1. Scroll to the quick bids on the panel.
 2. Read each chip's amount.
+3. Click the 1× chip.
 
 **Expected Results:**
 
-* Three chips read <opening price> plus 1×, 2× and 4× <increment>.
-* Chip 1× does not read <opening price> itself.
-* On a 0 start, no chip reads 0 plus an increment alone.
+* Step 2: chip 1× reads <opening price> itself, not <opening price> plus an increment.
+* Step 2: chips 2× and 4× read <chip 2×> and <chip 4×>, one and three increments above chip 1×.
+* Step 2: on a 0 start, no chip reads 0.
+* Step 3: the amount entered is <opening price>.
 
 ### shared-ui-auction-listing-US1-TC6-1: A leader's typed raise starts above their maximum
 

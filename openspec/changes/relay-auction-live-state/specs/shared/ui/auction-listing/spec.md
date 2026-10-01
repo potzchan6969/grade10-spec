@@ -53,8 +53,9 @@ the listing increment supplied on the view.
 
 When the viewer leads with a committed maximum, those amounts SHALL be that
 maximum plus those multiples. When the viewer does not lead, they SHALL be
-the current bid plus those multiples, and before any bid the opening price
-plus those multiples.
+the current bid plus those multiples, except that before any bid the 1×
+amount SHALL be the view's minimum bid, the opening price itself; the 2× and
+4× amounts still add their multiples to the current bid on the view.
 
 The first chip SHALL NOT be replaced by the typed raise floor.
 
@@ -78,11 +79,12 @@ The first chip SHALL NOT be replaced by the typed raise floor.
 - **WHEN** the bid card renders quick-bid chips
 - **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
 
-#### Scenario: shared-ui-auction-listing-SC-52 - Before any bid the chips step from the opening price
+#### Scenario: shared-ui-auction-listing-SC-52 - Before any bid chip 1x is the opening price
 **Serves:** Quick bids - a collector meets the chips on a lot nobody has bid on
 
-- **GIVEN** an HKD listing with no accepted bid, whose opening price is 48000
-  minor units and whose increment is 2000 minor units
+- **GIVEN** an HKD listing with no accepted bid, whose view carries an
+  opening price of 48000 minor units as both its minimum bid and its current
+  bid, and an increment of 2000 minor units
 - **WHEN** the bid card renders quick-bid chips
-- **THEN** the three amounts are 50000, 52000, and 56000 HKD minor units
-- **AND** no chip reads the opening price itself
+- **THEN** the three amounts are 48000, 52000, and 56000 HKD minor units
+- **AND** the 48000 chip is captioned as the next eligible bid
