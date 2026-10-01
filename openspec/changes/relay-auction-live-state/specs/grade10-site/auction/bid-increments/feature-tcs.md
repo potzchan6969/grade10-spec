@@ -33,20 +33,19 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Currency | Starting price | Why this row | Minimum next amount | Quick-bid chip 1x |
-| --- | --- | --- | --- | --- |
-| USD | 0 | Zero start | 100 minor units (USD 1.00), the lowest USD increment | 200 minor units (USD 2.00) |
-| HKD | 0 | Zero start | 1000 minor units (HKD 10.00), the lowest HKD increment | 2000 minor units (HKD 20.00) |
-| JPY | 0 | Zero start | 100 minor units (JPY 100), the lowest JPY increment | 200 minor units (JPY 200) |
-| HKD | 20000 minor units (HKD 200.00) | Positive start inside the HKD 0 tier | 20000 minor units (HKD 200.00), the starting price | 21000 minor units (HKD 210.00) |
-| HKD | 500 minor units (HKD 5.00) | Positive start below the lowest HKD increment | 500 minor units (HKD 5.00), the starting price | 1500 minor units (HKD 15.00) |
-| USD | 10000 minor units (USD 100.00) | Positive start on the USD 100 tier boundary | 10000 minor units (USD 100.00), the starting price | 10500 minor units (USD 105.00) |
+| Currency | Starting price | Why this row | Minimum next amount |
+| --- | --- | --- | --- |
+| USD | 0 | Zero start | 100 minor units (USD 1.00), the lowest USD increment |
+| HKD | 0 | Zero start | 1000 minor units (HKD 10.00), the lowest HKD increment |
+| JPY | 0 | Zero start | 100 minor units (JPY 100), the lowest JPY increment |
+| HKD | 20000 minor units (HKD 200.00) | Positive start inside the HKD 0 tier | 20000 minor units (HKD 200.00), the starting price |
+| HKD | 500 minor units (HKD 5.00) | Positive start below the lowest HKD increment | 500 minor units (HKD 5.00), the starting price |
+| USD | 10000 minor units (USD 100.00) | Positive start on the USD 100 tier boundary | 10000 minor units (USD 100.00), the starting price |
 
 **Steps:**
 
 1. Open the bid panel on the listing.
 2. Read the minimum next amount.
-3. Read quick-bid chip 1x.
 
 **Expected Results:**
 
@@ -54,7 +53,6 @@ Runs once per row of **Test data**.
 * On a positive start it is the starting price, not the starting price plus its increment.
 * On a HKD 500 start it is not raised to the lowest increment.
 * On a zero start it is the currency's lowest increment, never 0.
-* Chip 1x reads the minimum next amount plus the increment at it, the row's chip 1x.
 
 ### grade10-site-auction-bid-increments-US1-TC6-1: First bid at the opening price is accepted, then one increment applies
 
@@ -198,12 +196,12 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-01 for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
+**Run:** QA2 reconciliation 2026-10-01, rerun after Q28 and Q35, for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
 
 | Finding | Disposition |
 | --- | --- |
 | Before any bid the minimum is the opening price: the starting price on a positive start, below the lowest increment included, and the lowest increment on a 0 start | **Folded in:** `grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-12` (Q19, Q27) |
-| Chip 1x before any bid reads the opening price plus one increment | **Escalated:** Q35 - Q28 settles the amount, but no scenario in this change states it: the chip rule lives in `shared/ui/auction-listing` · Quick-bid chips, which this change does not modify. Recorded in `grade10-site/auction/auction`'s reconciliation, the capability that raised Q28 |
+| TC1-2: chip 1x before any bid reads the opening price plus one increment | **Rejected:** Q28 - chip 1x before any bid is the opening price itself; the chips are `shared/ui/auction-listing`'s, written by this change as `shared-ui-auction-listing-SC-52` (Q35) and asserted by `shared-ui-auction-listing-US1-TC5-2`. QA2 dropped the chip column and step; the case stays draft |
 | A first bid at the opening price is accepted, then the opening price plus its tier increment is the minimum | **Folded in:** `grade10-site-auction-auction-SC-62`, `grade10-site-auction-bid-increments-SC-02` and the requirement's after-an-accepted-bid rule |
 | A first bid below the opening price is refused, naming it | **Folded in:** `grade10-site-auction-auction-SC-63`, `grade10-site-auction-auction-SC-64`, `grade10-site-auction-bid-increments-SC-04` |
 | A lot starting at the ceiling takes one first bid there and refuses the next | **Folded in:** durable `grade10-site-auction-bid-increments-SC-08` and `grade10-site-auction-bid-increments-SC-11`, unchanged by this change (Q30) |

@@ -96,6 +96,8 @@ None.
   the lowest increment, not at 0 (Q19)
 - `grade10-site/auction/bid-increments` - before any bid, the minimum is the
   opening price, not the starting price plus its increment (Q27)
+- `shared/ui/auction-listing` - before any bid, quick-bid chip 1x is the
+  opening price itself, and chips 2x and 4x step from it (Q28, Q35)
 
 ## Impact
 
@@ -116,8 +118,12 @@ None.
 
 ## Open Questions
 
-None. The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31 to
-Q35, and `allow-zero-starting-price`'s interview settled Q16 to Q30 -
+- **Q36** - whether enrollment setup names what is missing, or only keeps
+  continue disabled as built; a gap in `shared/ui/auction-listing` this
+  change does not touch - [Raised](decisions.md#raised)
+
+The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31 to Q35,
+and `allow-zero-starting-price`'s interview settled Q16 to Q30 -
 [Decisions](decisions.md#decisions).
 
 ## References

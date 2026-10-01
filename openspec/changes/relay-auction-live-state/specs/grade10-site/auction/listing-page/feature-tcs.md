@@ -91,8 +91,6 @@
 
 ### grade10-site-auction-listing-page-US12-TC3-1: A page with no live line still catches up without a reload
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** major
@@ -109,15 +107,10 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
-* customer A is on the lot page for `<listing_1>`, under `<condition>`.
+* customer A is on the lot page for `<listing_1>`, with the browser's live connection to the auction blocked.
 * customer B(card linked) is signed in on a separate session, on the same lot page.
 
 **Test data:**
-
-| `<condition>` |
-| --- |
-| The browser's live connection to the auction is blocked |
-| The `auction.realtime` flag is off |
 
 | Field | Value |
 | --- | --- |
@@ -703,7 +696,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | US12-TC1: another session's bid shows price and bid count without a reload | **Folded in:** `grade10-site-auction-listing-page-SC-29` |
 | US12-TC2: the scheduled close with a bid turns to Extended bidding | **Folded in:** `grade10-site-auction-listing-page-SC-31` |
-| US12-TC3: a page with the live line blocked, or `auction.realtime` off, catches up by polling | **Folded in:** `grade10-site-auction-listing-page-SC-32`; the flag-off row also walks `grade10-site-auction-auction-SC-77` |
+| US12-TC3: a page with the live line blocked catches up by polling | **Folded in:** `grade10-site-auction-listing-page-SC-32`, `grade10-site-auction-auction-SC-77`. QA2 dropped the case's `auction.realtime` row: no flag exists (Q11) |
 | US12-TC4: a page that lost its line catches up when it returns | **Folded in:** `grade10-site-auction-listing-page-SC-41` |
 | US12-TC5: the leader's standing turns to Outbid with the next valid bid, without a reload | **Folded in:** `grade10-site-auction-listing-page-SC-43` (Q12) |
 | US12-TC6: live updates carry no maximum, account, email or card | **Folded in:** `grade10-site-auction-listing-page-SC-43` (AND clause); the frame contract is `grade10-site-auction-auction-SC-76` |

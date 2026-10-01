@@ -177,9 +177,9 @@ Runs once per row of **Test data**.
 
 | Currency | Starting price | Opening price | Increment | Chip 1× | Chip 2× | Chip 4× |
 | --- | --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 20000, the starting price | 1000 (HK$10) | 20000 | 21000 | 23000 |
-| USD | 0 | 100 ($1), the lowest increment | 100 ($1) | 100 | 200 | 400 |
-| HKD | 0 | 1000 (HK$10), the lowest increment | 1000 (HK$10) | 1000 | 2000 | 4000 |
+| HKD | 20000 (HK$200) | 20000, the starting price | 1000 (HK$10) | 20000 | 22000 | 24000 |
+| USD | 0 | 100 ($1), the lowest increment | 100 ($1) | 100 | 300 | 500 |
+| HKD | 0 | 1000 (HK$10), the lowest increment | 1000 (HK$10) | 1000 | 3000 | 5000 |
 
 **Steps:**
 
@@ -190,7 +190,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: chip 1× reads <opening price> itself, not <opening price> plus an increment.
-* Step 2: chips 2× and 4× read <chip 2×> and <chip 4×>, one and three increments above chip 1×.
+* Step 2: chip 1× is captioned as the next eligible bid.
+* Step 2: chips 2× and 4× read <chip 2×> and <chip 4×>, <opening price> plus two and four increments.
 * Step 2: on a 0 start, no chip reads 0.
 * Step 3: the amount entered is <opening price>.
 
@@ -563,6 +564,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** Bid enrollment
 
+**Blocked:** The product owner - whether setup names the missing card or attestation, or only keeps continue disabled as built (Q36).
+
 **Pre-conditions:**
 
 * Storybook renders `EnrollmentSetupSheet` open.
@@ -644,3 +647,21 @@ Runs once per row of **Test data**.
 
 * Step 1: the standing reads Did not win.
 * Step 2: no card-authorization-release banner shows.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-01, for change `relay-auction-live-state`. Joined QA1's blind cases, written from the frozen Feature set and `user-journeys.md`, the change's `proposal.md` and `decisions.md` with `## Raised`, the linked pages under `docs/prds/` and the durable suite, with this delta's scenarios, the durable requirements beside them, `tech-design.md`, `tasks.md` and the built block in `packages/ui`. QA1 was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive.
+
+| Finding | Disposition |
+| --- | --- |
+| TC5-2: before any bid chip 1× is the opening price, on a positive start and a 0 start, and no chip reads 0 | **Folded in:** `shared-ui-auction-listing-SC-52` (Q28, Q35) |
+| TC5-2: chips 2× and 4× before any bid read one and three increments above chip 1× | **Rejected:** Q28 and `shared-ui-auction-listing-SC-52` - they add two and four increments to the opening price, as built in `quickMaximumPresetAmount`. QA2 rewrote the rows' amounts; the case stays draft |
+| `shared-ui-auction-listing-SC-52`'s caption, chip 1× as the next eligible bid; no blind case asserted it | **Patched:** TC5-2 asserts the caption |
+| TC3-1: a non-leader's chips step from the current bid, a first bid at a 0 start's opening price included | **Folded in:** `shared-ui-auction-listing-SC-36` |
+| TC4-1: a leader's chips step from the committed maximum | **Folded in:** `shared-ui-auction-listing-SC-35` |
+| TC6-1: a leader's typed raise starts at the greater of the next minimum and the maximum plus 100, and chip 1× is not that floor | **Folded in:** the modified requirement's last sentence and durable `shared-ui-auction-listing-SC-37` |
+| TC1-1, TC2-1: the buyer fee inline at 20%, absent signed out | **Folded in:** durable `shared-ui-auction-listing-SC-44`, `shared-ui-auction-listing-SC-45` |
+| TC7-1 to TC15-1, TC17-1, TC18-1: exports, gallery sources and strip, consumer labels, bid-row time, personal bidding, the enrollment signal, the accessory and lost standing | **Folded in:** durable `shared-ui-auction-listing-SC-01`, `-SC-02`, `-SC-03`, `-SC-04`, `-SC-05`, `-SC-06`, `-SC-07`, `-SC-08`, `auction-listing-SC-13`, `auction-listing-SC-22`, `-SC-09`, `-SC-31`, `-SC-10`, `-SC-33`, `-SC-20`, `-SC-21`, `-SC-26`, `-SC-27`, `-SC-12`, `-SC-46`; this change does not alter them |
+| TC16-1: setup keeps continue disabled until a card and an attestation, and says which is missing | **Raised:** Q36 - the Feature-set leaf and the page say setup names what is missing; no requirement states it and the built sheet only disables continue. Disabled continue is durable `shared-ui-auction-listing-SC-16`; the case is **Blocked** until Q36 lands |
+
+**Uncovered anchors:** none for this change. Its three scenarios each have a case. The durable scenarios no case here asserts - `-SC-11`, `-SC-14`, `-SC-14a`, `-SC-15`, `-SC-17`, `-SC-18`, `-SC-19`, `-SC-24`, `-SC-25`, `-SC-28`, `-SC-29`, `-SC-30`, `-SC-32`, `-SC-34` - are untouched by this change and owed by the durable suite.
