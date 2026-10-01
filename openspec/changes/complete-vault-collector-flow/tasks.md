@@ -1090,22 +1090,22 @@ their words, their tests and their story ids; only what draws them moves.
 The production refusal `decisions.md` Q8 records, and the statement's move
 onto the legal-copy table.
 
-- [x] 26.1 Write `packages/app-env/src/legalCopy.ts` as the tech-design names
+- [ ] 26.1 Write `packages/app-env/src/legalCopy.ts` as the tech-design names
       it, its tests red first; `cases.collectionStatement` answers
       `{ version, text }` off it and `COLLECTION_STATEMENT_VERSION` is
       deleted
-- [x] 26.2 Refuse `cases.submit` `COLLECTION_STATEMENT_UNWRITTEN` in
+- [ ] 26.2 Refuse `cases.submit` `COLLECTION_STATEMENT_UNWRITTEN` in
       production while the table holds no statement for the brand, before
       anything is written, the review step showing
       `vault.request.statementUnwritten`; outside production the step reads "Being prepared" and the send
       records `UNWRITTEN_VERSION` (`grade10-site-vault-case-intake-SC-18`,
       `grade10-site-vault-case-intake-SC-31`)
-- [x] 26.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
+- [ ] 26.3 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`, `pnpm run test`
 
 ## 27. One number for every way it is typed (grade10) (owner: @ecchochan)
 
-- [x] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
+- [ ] 27.1 Fold the input with `normalize("NFKC")` in `canonicalPhone`, and,
       only when the bare digits are not themselves a valid local number, read
       a bare dial code before a valid national number as that number with its
       `+`, the vectors red first in `packages/utils` and in the store's
@@ -1116,5 +1116,5 @@ onto the legal-copy table.
       generated `account_profile` CHECK stay untouched
       (`grade10-site-vault-case-intake-SC-04`,
       `grade10-admin-vault-operator-queue-SC-07a`)
-- [x] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [ ] 27.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run test:backend`
