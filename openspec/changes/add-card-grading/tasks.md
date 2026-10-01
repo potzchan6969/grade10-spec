@@ -1542,7 +1542,7 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-26`,
       `grade10-site-grading-collector-notifications-SC-28`)
 
-## 22. The letters (grade10)
+## 22. The letters (grade10) (owner: @ecchochan)
 
 Needs group 5 merged to this store's `main`: the render test reads the store's
 fixtures through `external/grade10-spec`. Stage (c).
