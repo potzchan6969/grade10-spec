@@ -792,7 +792,7 @@ append to `CaseDetailView.stories.tsx`.
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
-## 18. The console's money panels (grade10)
+## 18. The console's money panels (grade10) (owner: @ecchochan)
 
 - [x] 18.1 Cover the money panels: the register's order and its correction
       line, the kind filter, an empty range, the arrears read at zero and per
