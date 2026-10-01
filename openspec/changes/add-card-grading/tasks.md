@@ -369,7 +369,7 @@ Stage (a).
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 9. The grading worker, its schema and the registries (grade10)
+## 9. The grading worker, its schema and the registries (grade10) (owner: @ecchochan)
 
 Needs groups 1 to 5 merged to this store's `main`: task 9.2 bumps the pointer
 the words and the blocks arrive on. Stage (a).
