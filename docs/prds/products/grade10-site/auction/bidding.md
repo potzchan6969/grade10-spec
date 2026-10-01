@@ -160,7 +160,7 @@ Blocks](/p/shared/ui/auction-listing).
 | Rule | Value |
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** of the winning bid, the rate only, always on; the amount first appears on the invoice |
-| Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid, from the opening price before any bid, or from their own maximum when they lead |
+| Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999**; a typed decimal mark is refused |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Hold window | The provider's returned capture deadline, where it offers extended authorization |

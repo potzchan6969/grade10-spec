@@ -37,7 +37,7 @@
   - Increment steps: three chips at 1×, 2×, and 4× the listing increment
   - Leader base: chips add those steps to the committed maximum
   - Field base: chips add those steps to the current public bid
-  - Opening base: before any bid, chips add those steps to the opening price
+  - Opening base: before any bid, chip 1x is the opening price, the next eligible bid
 - Raise floor
   - Leader minimum: a typed raise starts at the maximum plus 100 minor units
   - Separate from chips: the first chip is not that typed minimum
