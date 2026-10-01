@@ -1009,7 +1009,7 @@ makes nothing a scenario names.
 - [x] 23.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the isolated stack
       coming up and `GET /dev/outbox` answering
 
-## 24. The page blocks and the vault blocks (grade10-spec)
+## 24. The page blocks and the vault blocks (grade10-spec) (owner: @ecchochan)
 
 Lands before group 25, which composes them. No existing block changes: every
 file is new under `packages/ui/src/blocks/page-blocks/` and
