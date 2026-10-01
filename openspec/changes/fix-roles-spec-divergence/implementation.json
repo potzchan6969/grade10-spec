@@ -32,12 +32,7 @@
     {
       "repository": "9gag/grade10",
       "commit": "7a144a02087a181282631af114b9219ddc62647b",
-      "components": [
-        "auth",
-        "grading-service",
-        "vault-service",
-        "web"
-      ]
+      "components": ["auth", "grading-service", "vault-service", "web"]
     }
   ]
 }
