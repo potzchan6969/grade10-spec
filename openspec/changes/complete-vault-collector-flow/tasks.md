@@ -949,7 +949,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
-## 22. The console's three dialogs (grade10)
+## 22. The console's three dialogs (grade10) (owner: @ecchochan)
 
 Lands beside group 18, on group 3's exports and the fixture transport.
 
