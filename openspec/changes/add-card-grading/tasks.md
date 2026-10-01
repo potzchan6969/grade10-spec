@@ -289,7 +289,7 @@ test task; verified by `pnpm run db:status` and the uploads listed, with
 - [ ] 6.4 Verify: `pnpm run db:status`, with the two Hyperdrive configs, the
       three buckets and the Noto Sans TC upload listed per environment
 
-## 7. The shared lifts and the ceremony's no-identity option (grade10)
+## 7. The shared lifts and the ceremony's no-identity option (grade10) (owner: @ecchochan)
 
 Needs `complete-vault-collector-flow` merged: it creates `BaseLayout`, the dev
 outbox and `packages/storybook`, and writes the two helpers this group lifts.
