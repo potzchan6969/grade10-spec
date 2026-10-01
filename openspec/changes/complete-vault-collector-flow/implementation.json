@@ -285,5 +285,72 @@
       "commit": "3bc161df39669f380be12f2d2291869c89552b42",
       "components": ["auth", "vault-service", "web"]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "ecchochan",
+    "reviewedAt": "2026-10-01T18:50:58.855Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": ["Feature set"],
+        "classification": "editorial",
+        "reason": "#776 drops the pre-acceptance Today line the add-only fold left beside the accepted one; the accepted wording (the brand's own zone) stays"
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+        "anchors": ["Purpose"],
+        "classification": "semantic",
+        "reason": "add-card-grading (#767) widens the capability to grading submissions on the same table and request; the vault's own classes, windows and holds are unchanged",
+        "evidence": [
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/sweeps/retention.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/erasure/eraseUser.repo.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/trpc/erasureRouter.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/frontend/src/features/custody/retention/presentation/views/YourDataView.test.tsx (SC-33, US4-TC10-1)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+        "anchors": ["Feature set"],
+        "classification": "semantic",
+        "reason": "add-card-grading (#767) adds the Grading's records group; no vault line moves, and the vault reads a live submission as a hold on Your data",
+        "evidence": [
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/sweeps/retention.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/erasure/eraseUser.repo.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/trpc/erasureRouter.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/frontend/src/features/custody/retention/presentation/views/YourDataView.test.tsx (SC-33, US4-TC10-1)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "add-card-grading (#767) adds US4 and its Background and sets the suite to in-review under tcs-rules r4; no vault case is edited, and US4-TC8-1 and US4-TC10-1 walk the vault's Your data over grading's holds",
+        "evidence": [
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/sweeps/retention.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/erasure/eraseUser.repo.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/trpc/erasureRouter.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/frontend/src/features/custody/retention/presentation/views/YourDataView.test.tsx (SC-33, US4-TC10-1)",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts (US4-TC10-1)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "add-card-grading (#767) adds journey US-04; the vault's journeys are unchanged",
+        "evidence": [
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/sweeps/retention.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/erasure/eraseUser.repo.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/backend/test/trpc/erasureRouter.test.ts",
+          "9gag/grade10@3bc161df39669f380be12f2d2291869c89552b42:packages/vault/frontend/src/features/custody/retention/presentation/views/YourDataView.test.tsx (SC-33, US4-TC10-1)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/users/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "#766 moves separators and adds blank lines between the reconciliation runs; no case changes"
+      }
+    ]
+  }
 }
