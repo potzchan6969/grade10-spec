@@ -283,11 +283,7 @@
     {
       "repository": "9gag/grade10",
       "commit": "3bc161df39669f380be12f2d2291869c89552b42",
-      "components": [
-        "auth",
-        "vault-service",
-        "web"
-      ]
+      "components": ["auth", "vault-service", "web"]
     }
   ]
 }
