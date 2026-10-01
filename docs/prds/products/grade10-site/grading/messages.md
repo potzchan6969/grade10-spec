@@ -42,8 +42,9 @@ new event cannot ship silent:
 - 🚧 **A failed send is kept** — every message rides the vault's retry ladder
   and parks with its reason —
   [Collector Pages](/p/grade10-site/vault/collector-pages)
-- ❓ **Registered post** — whether email alone serves the written notice —
-  Legal
+- **Registered post** — the written notice goes by registered post and by
+  email the same day; whether email alone serves is counsel's, readiness item 3
+  on [Grading](/p/grade10-site/grading#before-the-first-submission)
 - ❓ **The plan's link, when it goes** — sent when the collector leaves the wizard without booking; the server
   cannot see a tab close — Product
 - ❓ **Opening hours and the contact** — the diary's weekly rules or a written line; the shop phone or a
@@ -69,5 +70,5 @@ new event cannot ship silent:
 | Email only, English | Decided | No SMS and no WhatsApp automation; the console's click-to-chat templates are staff-pressed | Product |
 | The link needs no account | Decided | Every message links to the submission page, which the emailed link opens on any device | Product |
 | A held card is told in the not-back message | Decided | Told the day it is recorded, with the day the grader holds it until, inside the message for a card not back with the box; the set of messages does not grow for it | Product |
-| The notice's channels | ❓ Open | By email and by registered post to the address taken at signing, the day staff post it; whether email alone serves | Legal |
+| The notice's channels | Decided | By email and by registered post to the address taken at signing, the day staff post it; whether email alone serves is counsel's to confirm before the first submission | Legal |
 :::

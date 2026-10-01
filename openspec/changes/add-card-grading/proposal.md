@@ -229,7 +229,9 @@ first submission owns (`decisions.md` Q18, Q19).
 
 Every clock, figure and wording the canvas adopted is a decided row in
 `decisions.md`, taken as recommended at landing; the owner named confirms the
-value on the page its ❓ sits on, and the decided row holds until then.
+value through its readiness item on
+[Grading · Before the First Submission](../../../docs/prds/products/grade10-site/grading/index.md#before-the-first-submission),
+and the decided row holds until then.
 
 - **Operations** — the clocks (`Q23`, `Q33`); the payout window of 14 days from
   the day the batch is received, at the till or by bank transfer (`Q24`); the
@@ -257,8 +259,9 @@ value on the page its ❓ sits on, and the decided row holds until then.
   it prints is unset (`Q48`); the notice by registered post and email, its
   period a setting pinned at signing and seeded at 90 days (`Q26`); the
   grading classes at the vault's retention windows (`Q20`, `Q68`). Legal's
-  confirmations are ❓ on
-  [Documents and Signing](../../../docs/prds/products/grade10-site/grading/documents.md).
+  confirmations are readiness items 1, 3, 4, 10 and 11, and the
+  certificate's no-identity line refuses the seal in production until
+  counsel writes it.
 - **Product** — the three diary services, their durations and the diary's
   own horizon (`Q30`); a `planned` submission off the queue (`Q36`); a
   reference outage keeping every line as typed (`Q46`); slabs shipped back

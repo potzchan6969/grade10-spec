@@ -2462,11 +2462,13 @@ Lands once groups 1 to 34 and 36 are green and the change is deployed.
       and `index.md`, `docs/prds/products/shared/ui/grading-submission.md`, and
       the grading lines of
       `docs/prds/products/grade10-site/vault/compliance-and-readiness.md`
-- [ ] 35.3 Leave ❓ on what nobody has answered — the custodian the submission
-      agreement prints, the certificate's no-identity line, a queue view for
-      `planned`, and every default Operations, Commercial and Legal still owe
-      on the settings table — and say on `console.md` that a money setting is
-      unset until its owner writes it with a second approver
+- [ ] 35.3 Keep the readiness items on `index.md` matching what production
+      refuses until a person sets it — the custodian's name and the complaints
+      contact refusing the seal and every message, the certificate's
+      no-identity line refusing the seal, the fee sheet and every money
+      setting unset and refused by name until their owner writes them with a
+      second approver, each bracketed outside production — and say on
+      `console.md` that a money setting is unset until its owner writes it
 - [ ] 35.4 Verify: `pnpm check:manual`,
       `pnpm run validate:changes add-card-grading`,
       `pnpm run archive:preflight add-card-grading`

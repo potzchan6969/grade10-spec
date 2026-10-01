@@ -72,20 +72,22 @@ withdrawn early.
      (Cap. 456) and under this clause, and holds the proceeds, less what is
      owed and the sale's costs, for the customer
   7. Governing law Hong Kong SAR; the complaints contact
-- ❓ **Custodian registered name** — printed as the party trading as Grade10
-  on both documents and every email — Legal
-- ❓ **Complaints contact** — printed on both documents and every email —
-  Owner; the escalation line Legal
-- ❓ **The postal address on the paper** — kept with the signature, and
-  printed on no page; stamped beside the signature at the seal if Legal
-  wants it on the agreement — Legal
-- ❓ **Clause 5** — changes the day a policy is bought; until then the
-  courier's cover and the safe's cap stand — Commercial, Legal
-- ❓ **Clause 4's wording** — keeping the cards until the upcharge is paid is
-  a draft for counsel — Legal
-- ❓ **Clause 6's wording** — the notice period is a setting pinned at
-  signing, seeded at 90 days; counsel words the clause and the notice
-  together — Legal
+- **Custodian registered name** — the brand's one registered legal name,
+  printed as the party trading as Grade10 on both documents and every email;
+  Legal supplies it, readiness item 1 on
+  [Grading](/p/grade10-site/grading#before-the-first-submission), and in
+  production the seal and every message refuse while it is unset
+- **Complaints contact** — printed on both documents and every email; the
+  Owner supplies it and Legal the escalation line, readiness item 2, under
+  the same refusal
+- **The postal address on the paper** — kept with the signature and printed
+  on no page unless counsel asks for it beside the signature, readiness item 10
+- **Clause 5** — changes the day a policy is bought; until then the
+  courier's cover and the safe's cap stand, readiness item 5
+- **Clauses 4 and 6** — print as drafted until counsel replaces them,
+  readiness item 10; the notice period clause 6 gives is the setting pinned
+  at signing, seeded at 90 days, and counsel words the clause and the notice
+  together
 
 ## The Intake Receipt
 
@@ -103,16 +105,16 @@ withdrawn early.
 - 🚧 **Three clauses** — the customer inspected each item and accepted it in
   the condition handed back; nothing is outstanding; the submission is closed
   and the graded record stays on the submission page
-- ❓ **The first clause when a named person collects** — names them in the
-  customer's place — Legal
+- **The first clause when a named person collects** — names them in the
+  customer's place, as drafted until counsel replaces it, readiness item 10
 - 🚧 **Refused while anything is due** — the receipt cannot be prepared until
   the balance is settled, every item is ticked and a lost or damaged card is
   paid out; sealed, the submission closes
 - 🚧 **A card held by the grader** — the receipt names the card still out,
   and a second receipt closes the submission, printing only that card and
   naming the first by its date and fingerprint
-- ❓ **The line naming the first receipt** — its words; the draft's stand
-  until then — Legal
+- **The line naming the first receipt** — as drafted until counsel replaces
+  it, readiness item 10
 - 🚧 **A slab vaulted instead** — the receipt says the card went to the vault
   rather than the customer
 
@@ -121,7 +123,7 @@ withdrawn early.
 - 🚧 **Printed** — the card withdrawn, the fee refunded for it and the day;
   issued as the card is withdrawn, listed on the submission page with its
   fingerprint and attached to the withdrawal email
-- ❓ **Its clauses** — Legal
+- **Its clauses** — as drafted until counsel replaces them, readiness item 10
 
 <!-- story: the agreement and the receipt on the iPad -->
 
@@ -145,8 +147,8 @@ withdrawn early.
 | The postal address is one line | Decided | Taken at signing, prefilled, kept only for the clause 6 notice; no other use | Legal |
 | English governs | Decided | The documents and every email are English; the screen's chrome speaks the collector's language, as the vault's does | Legal |
 | Clause 6 keeps the disposal basis | Decided | The clause names the Ordinance although the first release stops at the notice, so the paper a collector signs already carries the ground a later change acts on | Legal |
-| The bracketed facts | ❓ Open | The custodian's registered name and the complaints contact print on both documents and every email; the receipt's first clause for a named person; clause 6's windows; the withdrawal receipt's clauses and the second receipt's line naming the first | Legal; the complaints contact Owner |
+| The bracketed facts | Decided | The custodian's registered name and the complaints contact print on both documents and every email, and in production the seal and every message refuse while either is unset; the receipt's first clause for a named person, clause 6, the withdrawal receipt's clauses and the second receipt's line naming the first print as drafted until counsel replaces them; readiness items 1, 2 and 10 - decided by the round (product owner delegated this run) | Legal; the complaints contact Owner |
 | The withdrawal receipt is issued | Decided | The till has already refunded the fee, so a receipt for money already moved needs no signature, as the intake receipt needs none | Product |
-| Which entity is the custodian | ❓ Open | The agreement names the brand's one registered legal name, the same custodian the vault's papers print, unless a second company is registered for grading | Legal |
-| Clause 5 | ❓ Open | Stands as drawn until a policy is bought; the day it is, the clause changes | Commercial, Legal |
+| Which entity is the custodian | Decided | The agreement names the brand's one registered legal name, the same custodian the vault's papers print, unless a second company is registered for grading; Legal supplies the name, readiness item 1 - decided by the round (product owner delegated this run) | Legal |
+| Clause 5 | Decided | Stands as drawn until a policy is bought; the day it is, the clause changes, readiness item 5 - decided by the round (product owner delegated this run) | Commercial, Legal |
 :::

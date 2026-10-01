@@ -29,9 +29,9 @@ and the internal id never reaches the collector; `cancelled` is theirs until the
 | `cancelled` | Cancelled | — | — | retention runs from this day |
 | `expired` | Expired | — | — | retention runs from this day |
 
-- ❓ **Each card's grade at Grades are in** — the grades reach the page when the
-  cards are checked back in at the shop; whether they show once the grader
-  posts them, before the cards are back — Product
+- 🚧 **Each card's grade at Grades are in** — the page shows the grader's
+  stage alone; the grades reach it when the cards are checked back in at the
+  shop, never before the cards are back
 
 ## A Card's Outcome
 
@@ -84,15 +84,16 @@ it changes; the rest of the cards carry on:
 | --- | --- | --- |
 | 30 and 60 | a reminder each, costing nothing | Operations |
 | 90 | a storage fee of HKD 30 a card a month accrues, due before collection | Commercial the amount, Operations the day |
-| 180 | ❓ the written notice is due: staff post it by registered post to the address taken at signing and email it the same day, giving the notice period pinned at signing, **90** days until counsel confirms, from the posting date | Legal: the form, whether email alone serves, the period |
-| after the notice period | ❓ clause 6 lets the cards be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456) and its own power of sale, the proceeds less what is owed and the sale's costs held for the collector; nothing is built for it yet | Legal |
+| 180 | the written notice is due: staff post it by registered post to the address taken at signing and email it the same day, giving the notice period pinned at signing, **90** days until counsel confirms, from the posting date | Legal: the form, whether email alone serves, the period |
+| after the notice period | clause 6 lets the cards be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456) and its own power of sale, the proceeds less what is owed and the sale's costs held for the collector; nothing is built for it yet | Legal |
 
 - 🚧 **Storage per card still at the shop** — a month started since day 90
   counts; a card withdrawn, paid out or vaulted does not, and it is one line
   per card held at the till
 - 🚧 **The rungs never pause** — they count from the ready day; only collecting, vaulting or a payout leaves it
 - 🚧 **A part month** — counts as a whole month
-- ❓ **Every card paid out** — whether that submission has ended, for erasure and retention — Product
+- 🚧 **Every card paid out** — the submission has ended, for erasure and
+  retention, on the day its last card is paid out
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
   for it; the posting date and tracking are recorded, and the days the notice gives run from it
 - 🚧 **After the notice** — the release stops here: the cards stay the
@@ -108,8 +109,9 @@ it changes; the rest of the cards carry on:
 
 - 🚧 **The pickup code** — four digits on the page and in the ready email,
   shown at the counter; with it the shop's hours, walk in, and what is due
-- ❓ **A shop closed for a single day** — the hours shown are the weekly
-  ones; a one-off closure still shows the shop open that day — Operations
+- **A shop closed for a single day** — the hours shown are the weekly ones,
+  so a one-off closure still shows the shop open that day; reading the
+  diary's closures is a later change
 - 🚧 **The ID glance** — above the threshold an ID matching the name, nothing
   kept and no identity check; at or below it the code and the name release
 - 🚧 **The threshold** — HKD 10,000 declared in total
@@ -132,10 +134,10 @@ it changes; the rest of the cards carry on:
 - 🚧 **The graded record** — grade, grader and cert per slab with a look-up
   link, the slab photographs from hand-back, and the three documents, each
   with its fingerprint and a download; on the page and in the account
-- ❓ **The look-up page** — one cert-verification page a grader, `{cert}`
-  filled in; each was read off that grader's public site, not confirmed
-  against a live cert — owner confirms or corrects PSA's, CGC's and BGS's
-  own, in `@grade10/grading-contracts`
+- **The look-up page** — one cert-verification page a grader, `{cert}`
+  filled in, each read off that grader's public site; the owner confirms each
+  against a live cert, readiness item 12 on
+  [Grading](/p/grade10-site/grading#before-the-first-submission)
 - 🚧 **Never stock** — a collector's slab never enters the catalogue; a vault
   valuation reads its grader, grade and cert from the item register; an
   auction consignment reads the record from here —

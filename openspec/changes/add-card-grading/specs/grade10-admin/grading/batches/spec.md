@@ -613,7 +613,8 @@ grader, batches already received included, naming the submission that holds
 it, and nothing SHALL be recorded.
 
 **Returned raw** - a card the grader graded nothing SHALL be recorded ungraded
-with the grader's code and its note.
+with the grader's code and its note, each where the manifest line gives one;
+a line carrying neither SHALL be taken, not refused.
 
 #### Scenario: grade10-admin-grading-batches-SC-25 - A scan matches the cert to the card the manifest names
 **Serves:** grade10-admin-grading-batches-US-02 - the operator works down the box slab by slab and each one finds its card

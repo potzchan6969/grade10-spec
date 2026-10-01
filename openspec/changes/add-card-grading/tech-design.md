@@ -268,10 +268,10 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   `deriveSlots`'s own day derivation (`slots.ts`) filters by too, now shared
   rather than duplicated, so a retired or not-yet-begun rule is never
   offered. `availability_exceptions` (a one-off closure or override day) is
-  a different table this method still does not read — ❓ **Open**: a shop
-  closed for a single day still prints its weekly hours as open on it;
-  raised for a later change, since the pickup card's own scope was the
-  weekly rule, not the exception calendar
+  a different table this method still does not read: a shop closed for a
+  single day still prints its weekly hours as open on it, and reading the
+  exception calendar is a later change, since the pickup card's own scope was
+  the weekly rule
 
 ### The till: one line to one card, read back by the order's name
 
@@ -333,11 +333,10 @@ this is how the paid order reaches the submission.
   `deps.kyc.read`: a `not_required` packet skips the read, the refusal chain
   skips `KYC_REQUIRED` and the name rung, and the certificate prints its
   no-identity line. Grading's `DocSignDeps.kyc` throws by name if ever read
-- **The custodian** — ❓ Legal, through the PM: grading's submission agreement
-  prints the brand's one `LEGAL_IDENTITY.grade10.legalName`, the table being
-  per brand and never per product, unless Legal has registered a second entity
-  for grading. Recommended as stated; a per-product field is owed only if the
-  answer names a different company
+- **The custodian** — grading's submission agreement prints the brand's one
+  `LEGAL_IDENTITY.grade10.legalName`, the table being per brand and never per
+  product (Q52); Legal supplies the name, readiness item 1, and a per-product
+  field is owed only if Legal registers a second company for grading
 - The ceremony mounts at `${config.services.grading}/api/sign` through
   `registerSigningRoutes`; `routes/signing.ts`, `documents/deps.ts`,
   `storage/areas.ts` and the two guard migrations are the vault's files in
@@ -1357,13 +1356,17 @@ change creates are imported from their shared home by both products.
 
 ## Open Questions
 
-- ❓ **Every default on the console's table** — Operations, Commercial and
-  Legal on the pages; each is a settings write through `updateSetting` with a
-  second approver, touching no code
-- ❓ **The custodian the submission agreement prints** — Legal, through the
-  PM; grading prints the brand's one `LEGAL_IDENTITY.grade10.legalName` unless
-  Legal has registered a second entity, which would be one field on the table
-- ❓ **A queue view for `planned`** (Q36) — Product; one more cut on
-  `admin.queue`
-- ❓ **The certificate's no-identity line** — Legal's wording; the arm
-  prints what `printedValue` answers for it
+What people still supply is a readiness item on
+[Grading · Before the First Submission](../../../docs/prds/products/grade10-site/grading/index.md#before-the-first-submission),
+and none of it touches code:
+
+- **Every default on the console's table** — items 6 and 7, each a settings
+  write through `updateSetting` with a second approver
+- **The custodian the submission agreement prints** — item 1, the brand's one
+  `LEGAL_IDENTITY.grade10.legalName` (Q52)
+- **The certificate's no-identity line** — item 11; the arm prints what
+  `printedValue` answers for it, so production refuses the seal while it is
+  unset and a bracket prints outside production
+
+A queue view for `planned` stays out: Q36 keeps a plan off the queue until it
+is booked.

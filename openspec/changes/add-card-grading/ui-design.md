@@ -96,10 +96,10 @@ parts, `Tabs`, `Text`, `TextInput`, `Textarea`, `HStack`, `VStack`.
   and `RadioCard` no published set, so the rungs and the level card are code
   ahead of design, recorded here as
   [`design-code-sync.md`](../../../docs/governance/design-code-sync.md) asks
-- ❓ **An `h1` rung on `Text`** — `TextElement` offers `span`, `p`, `div`,
+- **No `h1` rung on `Text`** — `TextElement` offers `span`, `p`, `div`,
   `h2` and `h3`, so the grading home's title is an `h2` with its sections
-  `h3` under it, as vault's surface is; whether the design system adds an
-  `h1` rung for a page's title is Design's
+  `h3` under it, as vault's surface is; an `h1` rung is the design system's
+  to add, not this change's
 
 ### `@grade10/ui` — new, work in this repository
 

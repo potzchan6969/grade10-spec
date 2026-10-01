@@ -15,8 +15,10 @@ cover line at Express and Super Express buys transit cover to the card's
 declared value beyond it, priced per card and rounded to the cent when read.
 Both are paid at the counter once the cards are checked.
 
-- ❓ **Commercial** — every figure below is an example modelled on PSA's
-  sheet; one sheet per grader and level, and CGC and BGS need their own
+- **Commercial** — every figure below is an example modelled on PSA's sheet;
+  Commercial writes one sheet per grader and level, CGC and BGS their own,
+  readiness item 6 on [Grading](/p/grade10-site/grading#before-the-first-submission),
+  and until then a read of an unset figure refuses by name
 
 | Level | Declared value up to | Cards a submission | Fee a card | Cover a card | Back in about |
 | --- | --- | --- | --- | --- | --- |
@@ -30,9 +32,9 @@ Both are paid at the counter once the cards are checked.
 
 | Rule | Value | Confirms |
 | --- | --- | --- |
-| Cards a submission | ❓ 1 to 20 from Value to Super Express, 20 to 100 at Bulk; the fee sheet's fewest and most columns | Operations |
-| Bulk | ❓ from 20 cards, and the longer drop-off | Operations |
-| Above the top ceiling | ❓ the grader's top tier is on the sheet; above its ceiling, ask at the counter | Commercial |
+| Cards a submission | 1 to 20 from Value to Super Express, 20 to 100 at Bulk; the fee sheet's fewest and most columns | Operations |
+| Bulk | from 20 cards, and the longer drop-off | Operations |
+| Above the top ceiling | the grader's top tier is on the sheet; above its ceiling, ask at the counter | Commercial |
 | Cover | 1.5% of the declared value a card at Express and Super Express, its own line on the estimate, the review, the till and the agreement's schedule | Commercial |
 | Turnaround | the grader's published time plus two weeks, counted from the day the batch leaves | Commercial |
 | Reference rate | 7.84 HKD to 1 USD at the start; staff move it on the console — [Settings](/p/grade10-admin/grading/console#settings) | Operations |
@@ -167,7 +169,7 @@ Express for the card now would be $1,200; Regular is $600, plus $600 only on a
 | No account needed | Decided | The plan lives under the email given and the emailed link opens it; signing in with the same email lists every submission, with no password | Product |
 | A plan lapses | Decided | Nudged at 21 days and expired at 30 with no drop-off booked, told by a short email; the clock runs from the later of the day the plan was kept and the day its last visit ended without a hand-in, cancelled or missed; prices and references move, so an old list is not kept | Operations |
 | Cards a submission | Decided | Bulk 20 to 100 from a pasted list, every other level 1 to 20, the fee sheet's fewest and most columns; above it a second submission on another day. Revisited once dealer volume is known | Operations |
-| Fee sheet | ❓ Open | Example figures modelled on PSA's; Commercial supplies one sheet per grader and level, ceiling, fee, cover rate, estimate and cards a submission | Commercial |
+| Fee sheet | Decided | Example figures modelled on PSA's; Commercial supplies one sheet per grader and level, ceiling, fee, cover rate, estimate and cards a submission, readiness item 6, and a figure is unset and refused by name until written - decided by the round (product owner delegated this run) | Commercial |
 | Fee policies | Decided | The fee stands on an ungraded card, a refused card is never charged, a withdrawn card is refunded at the till; told on the review step and in clause 3 | Commercial |
 | The reference's currency | Decided | The warning turns a USD sale into HKD at a rate staff set on the console, 7.84 HKD to 1 USD at the start, rounded to the cent; a rate that moves daily is not fetched, because the warning is a caution and the fee sheet, not the sale, is what is charged. Decided by the user | Operations |
 | A grader with only example figures | Decided | Example figures are not figures supplied: CGC's and BGS's levels are listed and marked as carrying no figures, and none of them can be picked until Commercial supplies their sheets | Product |
