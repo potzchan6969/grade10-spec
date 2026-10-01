@@ -67,7 +67,7 @@ Lands once every grade10 group is green and its implementation verified.
 - [ ] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm run check:submodules`
 
-## 4. The opener column (grade10)
+## 4. The opener column (grade10) (owner: @ecchochan)
 
 - [ ] 4.1 Cover the migration: applied over a database at
       `0032_case_reference.sql`, it leaves every existing case's opener null
