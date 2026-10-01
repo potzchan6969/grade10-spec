@@ -32,5 +32,5 @@ that stay manual.
 
 - [x] 4.1 Add `finance` and `support` to `OperatorRole` in `apps/frontend/grade10/e2e/helpers/vault-console.ts`
 - [x] 4.2 Walk each journey end to end by calling the procedures the console's buttons call, through `mutateProcedure` and `queryProcedure` in `apps/frontend/grade10/e2e/helpers/vault.ts` with their `service` argument widened to every product the walk reaches, kept as `apps/frontend/grade10/e2e/tests/auth/roles.spec.ts`: a collector holds `user` only; support, staff, finance and auditor are allowed and refused by grant; staff run a vault case to its offer and stop at the money, and a treasurer records the payout and is refused the identity document (`shared-auth-roles-US-01`, `shared-auth-roles-US-02`, `shared-auth-roles-US-03`)
-- [ ] 4.3 In grade10-spec, flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by apps/frontend/grade10/e2e/tests/auth/roles.spec.ts` once the walk lands; name the cases that stay manual in the suite and in the walk's `rounds.md` row
+- [x] 4.3 In grade10-spec, flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by apps/frontend/grade10/e2e/tests/auth/roles.spec.ts` once the walk lands; name the cases that stay manual in the suite and in the walk's `rounds.md` row
 - [x] 4.4 Verify: `pnpm run test:e2e` for the walk and `pnpm run build` in grade10.
