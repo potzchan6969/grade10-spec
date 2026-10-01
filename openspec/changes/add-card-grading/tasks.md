@@ -1988,7 +1988,7 @@ Stage (b).
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
-## 27. The collector's submission page (grade10)
+## 27. The collector's submission page (grade10) (owner: @ecchochan)
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
