@@ -116,6 +116,7 @@
     "photosTitle": "Show us the item",
     "photosMessage": "At least one photograph. They are only ever seen by our staff.",
     "addPhoto": "Add a photograph",
+    "removePhoto": "Remove this photograph",
     "photoCount": "{count, plural, one {# photograph attached} other {# photographs attached}}",
     "send": "Send it in",
     "finishLater": "Finish later",

@@ -116,6 +116,7 @@
     "photosTitle": "讓我們看看物品",
     "photosMessage": "至少一張相片。相片只有我們的職員看得到。",
     "addPhoto": "加入相片",
+    "removePhoto": "移除這張相片",
     "photoCount": "{count, plural, other {已附上 # 張相片}}",
     "send": "送出申請",
     "finishLater": "稍後再填",

@@ -116,6 +116,7 @@
     "photosTitle": "물품을 보여 주세요",
     "photosMessage": "사진 한 장 이상. 사진은 저희 직원만 볼 수 있습니다.",
     "addPhoto": "사진 추가",
+    "removePhoto": "이 사진 삭제",
     "photoCount": "{count, plural, other {사진 #장 첨부됨}}",
     "send": "제출하기",
     "finishLater": "나중에 마저 쓰기",
