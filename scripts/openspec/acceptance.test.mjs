@@ -92,6 +92,28 @@ test("acceptance fingerprint is deterministic and binds the folded durable scope
   ]);
 });
 
+// A page link resolves on the id the manual renders the heading with, so a
+// link `pnpm check:manual` accepts is one acceptance can scope.
+test("a page anchor resolves on the manual's heading id", () => {
+  const { root, files } = sandbox();
+  const proposal = join(root, "openspec/changes/build-alpha/proposal.md");
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#product-decisions",
+      "alpha.md#a-card-s-outcome",
+    ),
+  );
+  writeFileSync(
+    join(root, "docs/prds/products/site/alpha.md"),
+    "# Alpha\n\n## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
 // The suites above a capability travel with it: a domain suite one level up
 // and a product suite two levels up publish beside the durable specs, once
 // however many capabilities reach them, every case under its id and status.

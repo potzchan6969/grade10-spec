@@ -10,6 +10,7 @@ import {
 } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
+import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
 import {
   outline,
   sectionSpan,
@@ -87,16 +88,10 @@ function walkFiles(root, dir, found = []) {
 
 function sectionContent(text, anchor) {
   const roots = outline(text);
-  const slug = (value) =>
-    value
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N} -]/gu, "")
-      .trim()
-      .replace(/[\s-]+/g, "-");
   const all = [];
   const visit = (sections) =>
     sections.forEach((section) => {
-      if (slug(section.heading) === anchor) all.push(section);
+      if (sectionSlug(section.heading) === anchor) all.push(section);
       visit(section.children);
     });
   visit(roots);
