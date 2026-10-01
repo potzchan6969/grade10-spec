@@ -2711,7 +2711,7 @@ rest lands. Stage (c).
 - [ ] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 37. The status rail on the store's stage rail (grade10-spec)
+## 37. The status rail on the store's stage rail (grade10-spec) (owner: @ecchochan)
 
 Appended at landing, as `complete-vault-collector-flow` Q117 decided. Its own
 group because the rail's scroll wrapper changes the DOM the slot sits on.
