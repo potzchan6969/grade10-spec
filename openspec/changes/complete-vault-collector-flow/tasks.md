@@ -845,7 +845,7 @@ append to `CaseDetailView.stories.tsx`.
 
 Lands once every other group is green and its implementation verified.
 
-- [ ] 20.1 Take the 🚧 marks off the lines this change delivered on
+- [x] 20.1 Take the 🚧 marks off the lines this change delivered on
       `docs/prds/products/grade10-site/vault/collector-pages.md`,
       `case-lifecycle.md`, `loan-and-money.md`, `documents-and-signing.md`,
       `compliance-and-readiness.md`, `operator-console.md` and
@@ -860,7 +860,7 @@ Lands once every other group is green and its implementation verified.
       production until they are set
 - [x] 20.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes complete-vault-collector-flow`
-- [ ] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/page-blocks.md`,
+- [x] 20.4 Take the 🚧 marks off `docs/prds/products/shared/ui/page-blocks.md`,
       `docs/prds/products/shared/ui/vault-case.md` once group 25 is
       verified
 
