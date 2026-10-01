@@ -486,7 +486,7 @@
       "reminders": "我們會在 {days} 提醒你。提醒本身不收任何費用。",
       "storage": "自 {day} 起，每張每月 {rate} 保管費。費用在此累計，須於領回前付清。",
       "notice": "{day} 發出書面通知。",
-      "noticeLine": "由寄出日起計的 30 日，尚餘 {daysLeft, plural, other {# 日}}，於 {day} 屆滿。",
+      "noticeLine": "由寄出日起計的 {period} 日，尚餘 {daysLeft, plural, other {# 日}}，於 {day} 屆滿。",
       "afterNotice": "在此之後，不會再有進一步處理：卡牌仍然是你的，卡殼可以轉入金庫寄存。",
       "closing": "入殼卡牌一律不寄出。想乾脆留在這裡？可用上面的金庫寄存。"
     },

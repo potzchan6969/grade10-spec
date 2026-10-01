@@ -98,7 +98,7 @@ export const Notice: Story = {
             ...rung,
             passed: true,
             postedOn: NOTICE_POSTED_ON,
-            noticeLine: "30 days from the posting day.",
+            noticeLine: "90 days from the posting day.",
           }
         : { ...rung, passed: true },
     ),
@@ -107,7 +107,7 @@ export const Notice: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Notice posted 20 Sep 2026")).toBeInTheDocument();
     expect(
-      canvas.getByText("30 days from the posting day."),
+      canvas.getByText("90 days from the posting day."),
     ).toBeInTheDocument();
   },
 };

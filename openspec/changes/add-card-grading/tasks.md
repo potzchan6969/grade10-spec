@@ -47,7 +47,7 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 - [x] 1.8 Name `grading.plan.review.saveChanges`, the editor's save, in the
       vocabulary type first, then answer it in every language 1.2 answers;
       then run 1.7's checks
-- [ ] 1.9 Give `grading.submission.ladder.noticeLine` a `{period}` argument in
+- [x] 1.9 Give `grading.submission.ladder.noticeLine` a `{period}` argument in
       place of its written 30, in the vocabulary type first, then in every
       language 1.2 answers; then run 1.7's checks
 
