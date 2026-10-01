@@ -334,7 +334,7 @@ Stage (a).
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`,
       `pnpm run test`
 
-## 8. The three provider entrypoints (grade10)
+## 8. The three provider entrypoints (grade10) (owner: @ecchochan)
 
 Stage (a).
 
