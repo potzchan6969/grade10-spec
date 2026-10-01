@@ -251,7 +251,7 @@ Composes the design-system primitives group 2 widens. Every export takes
 - [x] 4.8 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm check:manual`, `pnpm run typecheck`, `pnpm run lint`
 
-## 5. The preview letters (grade10-spec)
+## 5. The preview letters (grade10-spec) (owner: @ecchochan)
 
 Its evidence is group 22's `email/letters/render.test.tsx` in grade10, which
 reads these fixtures back; a failure there is a fix here.
