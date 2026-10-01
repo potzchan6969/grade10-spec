@@ -864,7 +864,7 @@ Lands once every other group is green and its implementation verified.
       `docs/prds/products/shared/ui/vault-case.md` once group 25 is
       verified
 
-## 21. The walk (grade10)
+## 21. The walk (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as its input.
 
