@@ -1,0 +1,724 @@
+{
+  "version": 2,
+  "change": "add-card-grading",
+  "baseline": "4f26c276075c26f5a0b62036efc923de4668cc4a622b72aebe8a17fe289479a2",
+  "fingerprint": "e28dbe8568ffd316fce9a46a207992cdf3445a785e027d5ad5db7ed60d00d222",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-01T09:43:09.306Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#batches",
+      "sha256": "7c002437045fe5fa093bf83b001663fb8bbf7047c778a116d36653c051b3f9c3",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#grants",
+      "sha256": "1f50c29933b0291699ab7dae30bd88152473a6cf8581f0cc8df5f2f1b8756a1a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#hand-back",
+      "sha256": "b3de3777064cbacc0cce5e5263bb3058421f51e41a6c9ef8595037f0c076a530",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#hand-in",
+      "sha256": "1e223af6d348eff67e24bccc9479df5031d80771eea21112debf1beae8280eb6",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#one-submission",
+      "sha256": "c8ae97c5992ac75f730b058b8f9a28f92f9c7f6a78fd88e9047291fa479691bd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#queue",
+      "sha256": "a7f080ca6934c23af4a6763a928b5693a32b6c3c70b5105071b0f897f318f8e7",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#receiving",
+      "sha256": "ed546ecbf0877b343dbc6f116e55f0714edd5192914c17efd6acfec7e7ea4feb",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#settings",
+      "sha256": "e1422b11ff97c8a50f67e6e65b0ecf98b14dab48a96d22d83b00dc81c84b0a54",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/grading/console.md#written-notice",
+      "sha256": "910d946d10ee8348cef164e3c1275a4663e4caf046d90325dad6a42a921b3c5f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/documents.md#the-documents",
+      "sha256": "6b34e47f1352b8be357c0161709f3c1a36004458309ad94a04540df1c95529b8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/documents.md#the-hand-back-receipt",
+      "sha256": "cebd0b8db1ce26fbd2a1658b466d68d964fcdcd1bfa9c03b3d77ab7c84e36f7a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/documents.md#the-intake-receipt",
+      "sha256": "9dd81e80ec88614a04af218a189eed28cecbb08fde8f9db3a72041983b919b06",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/documents.md#the-submission-agreement",
+      "sha256": "618beca4dd863bb9e985fc71b040816f6de0779dd8fa28f67582f8c73823657d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/drop-off.md#before-you-come",
+      "sha256": "fc76ec16d18d0466a20d54d6de7640bccd40faa7bc8ecf6064a35343d4365239",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/drop-off.md#booking",
+      "sha256": "e7cbc73499026ad0a8b47fc719c695171c74faa418b2029f236da4736effdfc5",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/drop-off.md#rules",
+      "sha256": "8f8900a20bd30b87e8561c5a8f1f609a7dcc095cb2393b76093d71294745a585",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/index.md#before-the-first-submission",
+      "sha256": "904b48ab1a283b01780c7b87cb10eb206a9b2a37e115ea45ae2bd864d06c3c09",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/index.md#users",
+      "sha256": "f8924d448acac7c96bff37dc101646a95fdebf50b5cbb6f1ba9951343fc890d4",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/index.md#where-it-is-open",
+      "sha256": "bd37b8ad6d81488d689c01f237de52f2dc4d7fd6be350829abdc0aad70af60a4",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/messages.md#messages",
+      "sha256": "efd7669aefb227bad0775df65e89279905bca5a1cee43eab30e938401f825b6c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/planning.md#caps-and-clocks",
+      "sha256": "b12fbfd28e612541ae2a0258ffc15e0edcdd1f3de0b9f119588edc91be564bf3",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/planning.md#fee-sheet",
+      "sha256": "4d8d535c6c54be472bddca55f3b2c106033e64f352cf5f2a7b5ffb84195dbd3d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/planning.md#the-wizard",
+      "sha256": "e32c9cfefc6f3b485bc99f08f49a3af866676f0f3178a066dceef44245051ec1",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#a-card-s-outcome",
+      "sha256": "ce81689efbb433885c83999fb2d1a88521bd6989b31814c7de91e4ea028133ec",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#exceptions",
+      "sha256": "02b87411d186f88d3a3de229b18d5859ae2e0c88205febdc42f5101764c8e4d4",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#not-collected",
+      "sha256": "ca4232094150a2d02159b93717a16f69d77b3a2db70af29de688fb5fc53cbc5b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#ready-to-collect",
+      "sha256": "ca9ea1a70d4d88329e3dfc9c5f747dd19260456eb723145d1d2ca11c997ce469",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#statuses",
+      "sha256": "db369096874c0dd734d41ef8d67ff2e27a3869edf6db3be89f22fd73aee41e90",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#the-fee-by-outcome",
+      "sha256": "6a244374b0dbf536d5632ebbdbe2f8f45f36a06eed4fba1a95f24dba10f54e86",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#the-record-after-collection",
+      "sha256": "b7fd5d315bd037d01eb3b9d45db89bca822085642922202d2c1b6d7cbf22075c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#what-a-collector-can-do",
+      "sha256": "3c5e0dd65480bbabaf1f85d2040b58c65e91536a329bb4a5a955a5628ae676bc",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/compliance-and-readiness.md#retention-and-erasure",
+      "sha256": "ef8d4311bcd6a848152f5ea37e7e20c7c153c73fe10dc7908358e437550804ae",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/grading-submission.md#the-blocks",
+      "sha256": "4b1da901a93cb60bb5cd79ddbe5f121b5a9371f67af7e30ab9ea6acfac3a4937",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/decisions.md",
+      "sha256": "3e90682e72dfa448bfef4405cd272349ce57af9cfe6f8ca606a37ce93fa87efe",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/proposal.md",
+      "sha256": "f80656da2d0bd41a8d2f5f8b99ccc048ae46ff7be4e3bdc7a49f7275cc11eac4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-admin/grading/batches/feature-tcs.md",
+      "sha256": "988e4f043b3031e883c5231573706dbf0b5dbad5a2fb1b9aa268a023c2d1a17b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-admin/grading/batches/spec.md",
+      "sha256": "5bb353628662f9a3b2b44cb3df69b61891bd233cd11817b928b8971eb625b735",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-admin/grading/batches/user-journeys.md",
+      "sha256": "99d57f01f5586df1a8ce191db4979f534bfd16a338b5420cd8979c55e9daa4b8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-admin/grading/counter/feature-tcs.md",
+      "sha256": "4bb8b05537d85b47966784594fa938b1a97ce78f91c73835fd5fe3371f9d134f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-admin/grading/counter/spec.md",
+      "sha256": "6aff9cec7ce1584483ccd27dd76b1a654437e28e988626633658da33014ea870",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-admin/grading/counter/user-journeys.md",
+      "sha256": "7e1f2313c89e32c05f4a29ce5fb924ec118416425eaa5e8fe895a0fbf836ad5f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/collector-notifications/feature-tcs.md",
+      "sha256": "1460f8783e21909fcecdddc7e5f2565bd66a9d3c6553ffab0d402079484ca80c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/collector-notifications/spec.md",
+      "sha256": "bd238b13de101809a2be2f27bcb3eae5033ebbad750eb4e45d44a923aeac84ba",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/collector-notifications/user-journeys.md",
+      "sha256": "bfa2e6c08b195c9c5071aa4fe32c5c94242b33758ec7b7c860a6e7df29a5f40a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/counter-documents/feature-tcs.md",
+      "sha256": "3ace981f525b2b2dc0ec263ab786e68338619c90e2e0136209404392025d343e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/counter-documents/spec.md",
+      "sha256": "8063f6e6b05ab0bfc39e40e692ad29097ee588156d5070f4cc8dc2b4ea70be20",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/counter-documents/user-journeys.md",
+      "sha256": "1e40b3f037e9697456c5443652f537e630cf0f6155038bd7aebd7d289c97d5be",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/dropoff-booking/feature-tcs.md",
+      "sha256": "6693173e625f05db18a81e1611b38a221c7e65391037f5116eeb3c292038311f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/dropoff-booking/spec.md",
+      "sha256": "4e5adbdf30e64f319aacf0cbf267f929230e31edcece3e981c858429718a6b48",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/dropoff-booking/user-journeys.md",
+      "sha256": "efb5a55ee04e060628b6c8d3b570c6399bdc43049787f39147fdface74bf54e0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/submission-lifecycle/feature-tcs.md",
+      "sha256": "7f8a458f1ecbfa2d4c498727260c09f1b586dea0f3db39313c4eb431a6cea520",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/submission-lifecycle/spec.md",
+      "sha256": "426338fd9e6cc9e9e75d8d2449c713d3689b96012fd890899f47fdec2c548fb3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/submission-lifecycle/user-journeys.md",
+      "sha256": "3ce2c8856c7c5aaaa0600989ece7a95564c42b2370ae1daf8ed283b706cb3a3a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/submission-plan/feature-tcs.md",
+      "sha256": "8d79a2006b9c9e3358ec8e91024539b31466091b7807176b8e765e1617e3dbc9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/submission-plan/spec.md",
+      "sha256": "b8233ef6c2a5f55db58249cc8307525c79d44ab93c4b5f5bc65bfd41d65d8fb7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/grading/submission-plan/user-journeys.md",
+      "sha256": "5aae62003f329df64fc5f7d31e1f15fb57472459dd5880130dc497032e126245",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+      "sha256": "61efff331840580fe06df4708880f1431deed1d8c5e8450eea8d7b310010b575",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/vault/retention-and-erasure/spec.md",
+      "sha256": "6954df4483331f9e8b4c936694830ccce3a63e8d582a509506f0cc3090dd1516",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+      "sha256": "4cb21e3c4f738d2afa46546293e93e90318c299841ac5ed00f6501cb99b419dd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/shared/ui/grading-submission/feature-tcs.md",
+      "sha256": "ecab33c9f7beabe58e016d06219fc7cd66fcb2fcc5eb36999d09d59f625f4595",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/shared/ui/grading-submission/spec.md",
+      "sha256": "cef3a32d730bf99803f03db90bf9fcdb47fed70ad61de0b486260275a04dad95",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/specs/shared/ui/grading-submission/user-journeys.md",
+      "sha256": "70e1c700122bc76ca747136ebf6d0e21c9aee492f6ce3acbe5d3559640c2cba6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/tech-design.md",
+      "sha256": "4919195f70db20404a87364f79ed506564c4a277295b405a5baaf9b542acd5af",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-card-grading/ui-design.md",
+      "sha256": "9551c76db35928d9887ee3a8d5cea8d8d5278d12b6525e0e0516a290e270598e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/batches/feature-tcs.md",
+      "sha256": "988e4f043b3031e883c5231573706dbf0b5dbad5a2fb1b9aa268a023c2d1a17b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/batches/spec.md",
+      "sha256": "6318e46167a334f9fd567eac364eb39928cc262cc6be32ac7efce5c4a4064d2d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/batches/user-journeys.md",
+      "sha256": "3b7fa6d821f0d7218e91bffc569f440493eb9c9e646ae68138108ec90c097899",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/counter/feature-tcs.md",
+      "sha256": "4bb8b05537d85b47966784594fa938b1a97ce78f91c73835fd5fe3371f9d134f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/counter/spec.md",
+      "sha256": "00a598a794355c3f40ef3d4af35f8b3b23445b2aa5ecc6c32b13b13e07e8cecf",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/counter/user-journeys.md",
+      "sha256": "a4709d669c12a706e716867316e7d0a1237bd54a1efcdd8bdb39fa961df5fbb6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/collector-notifications/feature-tcs.md",
+      "sha256": "1460f8783e21909fcecdddc7e5f2565bd66a9d3c6553ffab0d402079484ca80c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/collector-notifications/spec.md",
+      "sha256": "c9b9f60371ddd05f86fb002aeec3f3208bf9a9dadd1868e417e6628c6fe3f7cb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/collector-notifications/user-journeys.md",
+      "sha256": "c8086e76f927686882ec189f5eb63bdcca550f04bea7bd2eac4cf4b6714e6c9e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/counter-documents/feature-tcs.md",
+      "sha256": "3ace981f525b2b2dc0ec263ab786e68338619c90e2e0136209404392025d343e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/counter-documents/spec.md",
+      "sha256": "10981a21e82ca67134d6615d3f59a7ff65291d38cee4a5d2cc6e0af8641e1d1a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/counter-documents/user-journeys.md",
+      "sha256": "2f05565c3144f4de3ad16b33bda48cacaad4edf2305470387b2947ba0e4762f7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/dropoff-booking/feature-tcs.md",
+      "sha256": "6693173e625f05db18a81e1611b38a221c7e65391037f5116eeb3c292038311f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/dropoff-booking/spec.md",
+      "sha256": "130c447dc96b536154487aca48e0791b8b25b0376f0e5d73a747a7a4949819b7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/dropoff-booking/user-journeys.md",
+      "sha256": "13e9a2aa603ab638f99c4f342caabfb6d4a4dd04096688c5e61abd8b1aa5969f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-lifecycle/feature-tcs.md",
+      "sha256": "7f8a458f1ecbfa2d4c498727260c09f1b586dea0f3db39313c4eb431a6cea520",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-lifecycle/spec.md",
+      "sha256": "4528d1cbe906fd1a071c0de0c93c82855cb9702a57d3a28ce3f6b3318e115551",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-lifecycle/user-journeys.md",
+      "sha256": "52b816c0299594e703e265d1cbd52c072a539263a9013ab22b49b28a55f5100c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-plan/feature-tcs.md",
+      "sha256": "8d79a2006b9c9e3358ec8e91024539b31466091b7807176b8e765e1617e3dbc9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-plan/spec.md",
+      "sha256": "d7c5115cde6366afa8bb44137303e788b1b160f329c03eef83b9f5714299edf9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-plan/user-journeys.md",
+      "sha256": "15e62891fb486190dae8c773b36d3ef402e821859ca3acfe996f4bd5fc205545",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+      "sha256": "83b40c13fabdd7c9c835fe9f32b09d906714dcc777cfbde9bcda8a566ce5656b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+      "sha256": "6342cc0250a131337f44d3a73e4a3b4380ae3fbdadf636e46c68094438ce3a6d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+      "sha256": "2fc7b6dc46a2a210968a485f8cbce888aa74d32a48436019948d2f6f77ca7baf",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/grading-submission/feature-tcs.md",
+      "sha256": "ecab33c9f7beabe58e016d06219fc7cd66fcb2fcc5eb36999d09d59f625f4595",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/grading-submission/spec.md",
+      "sha256": "3c29a9c654a079006c6cc1fc743562f78cc446141a964d357d3249d737a94cd8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/grading-submission/user-journeys.md",
+      "sha256": "70e1c700122bc76ca747136ebf6d0e21c9aee492f6ce3acbe5d3559640c2cba6",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-card-grading/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/batches/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/batches/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A batch is one shop, one grader and one level",
+        "Requirement: A batch saved part-scanned keeps its scans",
+        "Requirement: A batch's word is read from its own stamps",
+        "Requirement: A card that did not come back is recorded on the card",
+        "Requirement: A card the grader held comes home in a later box",
+        "Requirement: A scan matches one cert to one card",
+        "Requirement: A slab the manifest leaves out is added to it",
+        "Requirement: Finishing receiving makes every submission ready at once",
+        "Requirement: Shipping a batch is one act over every submission in it",
+        "Requirement: The batch list puts what waits on the shop first",
+        "Requirement: The box is recorded arrived once its grades are in",
+        "Requirement: The counters read the batch as it is scanned",
+        "Requirement: The cut-off closes the batch and the next day ships it",
+        "Requirement: The estimate is a date, and a re-estimate takes a reason",
+        "Requirement: The grader's stage is recorded from a closed set",
+        "Requirement: The insured total is read against the courier's written cover",
+        "Requirement: The manifest and the invoice enter before the first scan",
+        "Requirement: The safe holds no more declared value than its cap",
+        "Requirement: The tiles read what the shop is holding",
+        "Requirement: The upcharge is the fee sheet's difference"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/batches/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/counter/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/counter/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A card is withdrawn until its batch closes",
+        "Requirement: A document is minted only when the counter is ready for it",
+        "Requirement: A hand-in is refused whole rather than done in part",
+        "Requirement: A payout is its own record, with its route and its reversal",
+        "Requirement: A refused card carries its reason in the collector's words and is never charged",
+        "Requirement: A row says why its submission is waiting on somebody",
+        "Requirement: A sealed document and the grades message can be handed over again",
+        "Requirement: A setting pinned to a submission never moves under it",
+        "Requirement: A slab goes into a vault case from the hand-back step",
+        "Requirement: A waiver, a payout and a money setting each take a reason and a second approve holder",
+        "Requirement: An act is offered only where it can run, and the worker refuses independently",
+        "Requirement: An operator's session is verified, and stays verified for twelve hours",
+        "Requirement: Every act on a submission is filed under that submission",
+        "Requirement: Every act sits behind one of three grants",
+        "Requirement: Every default the counter runs on is a setting, read and never compiled in",
+        "Requirement: Four tiles stand over the counter",
+        "Requirement: Hand-back at the counter runs as one flow",
+        "Requirement: Hand-in at the counter runs as one flow",
+        "Requirement: One submission opens into a header and four tabs",
+        "Requirement: Only the collector or the person they named leaves with the cards",
+        "Requirement: The queue cuts submissions by what they are waiting for",
+        "Requirement: The timeline carries every event with its figures, and staff-only entries stay in the console",
+        "Requirement: The written notice is a counter act with a posting date"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/grading/counter/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/collector-notifications/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/collector-notifications/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A card refused at the counter and a collector named on the page send no message",
+        "Requirement: A failed send is owed, and rides the vault's ladder",
+        "Requirement: A value nobody has set is bracketed outside production and refuses the act in production",
+        "Requirement: Cards waiting to be collected are told at each rung, and nothing follows the notice",
+        "Requirement: Every event decides its message, or decides silence",
+        "Requirement: Every message ends with the submission's line and the shop's footer",
+        "Requirement: Grading sends nineteen messages, each about the submission it names",
+        "Requirement: The submission sends the drop-off's messages, and the collector hears from nobody else"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/collector-notifications/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/counter-documents/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/counter-documents/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A document is refused rather than sealed while a fact it prints is unset",
+        "Requirement: A submission is papered by three documents, and a withdrawn card by a receipt of its own",
+        "Requirement: Every document reaches the collector three ways, each with its fingerprint",
+        "Requirement: Every figure a document prints is pinned at signing",
+        "Requirement: The counter's ceremony asks for no identity and takes the name from the booking",
+        "Requirement: The hand-back receipt prints what was handed back and closes the submission",
+        "Requirement: The intake receipt records what was handed in against what was paid",
+        "Requirement: The submission agreement prints the submission and carries seven clauses"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/counter-documents/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/dropoff-booking/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/dropoff-booking/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A missed visit is closed by the diary and costs nothing but the day",
+        "Requirement: A walk-in books the Grading visit and lists the cards at the counter",
+        "Requirement: Grading takes three diary services and owns every message about the visit",
+        "Requirement: One visit holds a second submission",
+        "Requirement: The booked page says what the visit is and what to bring",
+        "Requirement: The chosen day names the batch the cards leave in",
+        "Requirement: The collector books the drop-off from the submission",
+        "Requirement: The visit is moved or cancelled any time before it starts"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/dropoff-booking/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-lifecycle/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-lifecycle/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A card is withdrawn until its batch closes",
+        "Requirement: A card that did not come back is paid out at its declared value",
+        "Requirement: A ready submission carries a pickup code and one figure to settle",
+        "Requirement: A slab goes into a vault case at the same counter",
+        "Requirement: A submission holds one of ten statuses",
+        "Requirement: A submission is cancelled until its visit starts or the counter takes a card, and expires when nobody books",
+        "Requirement: After collection the submission keeps the graded record",
+        "Requirement: Cards are released to the collector or the one person they named",
+        "Requirement: Cards left uncollected walk reminders, then storage, then a written notice",
+        "Requirement: Every card carries one outcome",
+        "Requirement: Storage accrues per card held and per month started",
+        "Requirement: The collector names one person to collect",
+        "Requirement: The fee follows the card's outcome",
+        "Requirement: The grade is the grader's decision",
+        "Requirement: The page offers only the acts the status allows",
+        "Requirement: The page reads one word, one chip and one rail",
+        "Requirement: The submission page opens to the collector and to the emailed link",
+        "Requirement: The upcharge is the fee sheet's difference between the two levels",
+        "Requirement: While the cards are with the grader the page reads its stages and the estimate"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-lifecycle/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-plan/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-plan/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A card above the level's ceiling goes in a second submission on the same drop-off",
+        "Requirement: A card is matched in the card price reference or kept in the collector's own words",
+        "Requirement: A collector plans a submission in three steps",
+        "Requirement: A pasted list accounts for every line",
+        "Requirement: A plan is priced on the fee sheet it was booked on",
+        "Requirement: A plan lives under the email given and needs no account",
+        "Requirement: A plan with no drop-off booked is nudged, then expires",
+        "Requirement: Cards a submission is a column of the fee sheet",
+        "Requirement: Every card carries a declared value, and may carry a minimum grade",
+        "Requirement: One fee sheet per grader, one row per level",
+        "Requirement: One submission is one grader and one level",
+        "Requirement: The estimate is the fee a card times the cards, with the cover line where the level carries one",
+        "Requirement: The grading home says what grading is and offers two ways in",
+        "Requirement: The review states the schedule, the totals and the upcharge before anything is booked"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/grading/submission-plan/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A submission that was signed keeps its evidence and one nobody signed is purged",
+        "Requirement: An erasure is refused by name while a submission is live",
+        "Requirement: Grading's records are kept under the vault's classes, measured from the submission's end"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/grading-submission/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/grading-submission/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Every word, figure and act arrives through props",
+        "Requirement: One person can be named to collect",
+        "Requirement: One place for the money lines",
+        "Requirement: The editable card list carries a card and what is missing on it",
+        "Requirement: The fee sheet draws every grader's levels",
+        "Requirement: The grade cards read the grader's words",
+        "Requirement: The grading submission exports",
+        "Requirement: The level picker opens a level or names what closed it",
+        "Requirement: The paste sheet accounts for every line",
+        "Requirement: The pickup card says what to bring",
+        "Requirement: The rail marks the stage a submission reached",
+        "Requirement: The record after hand-in reads as the cards were handed in",
+        "Requirement: The review shows the schedule, the totals and what a card could cost",
+        "Requirement: The status word and whose move it is are one pair",
+        "Requirement: The uncollected ladder dates every rung"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/grading-submission/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
