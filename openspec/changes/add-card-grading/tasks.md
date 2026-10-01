@@ -1159,7 +1159,7 @@ Stage (c).
       run 17.9's checks (Q142, `grade10-admin-grading-batches-SC-58`,
       `grade10-admin-grading-counter-SC-36`)
 
-## 18. Hand-back, collection and the vault case (grade10)
+## 18. Hand-back, collection and the vault case (grade10) (owner: @ecchochan)
 
 Stage (c).
 
