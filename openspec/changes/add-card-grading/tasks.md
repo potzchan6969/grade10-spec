@@ -1151,7 +1151,7 @@ Stage (c).
       a line settled neither way
       (`grade10-admin-grading-batches-SC-24`,
       `grade10-admin-grading-batches-SC-51`)
-- [ ] 17.11 Match a manifest line in a later batch at the same grader to a
+- [x] 17.11 Match a manifest line in a later batch at the same grader to a
       card recorded held in an earlier received batch by its intake id, let
       `resolveManifestLine` name such a card, and have its scan record cert,
       grade and the grader's words and clear `held`, its collector sent the
