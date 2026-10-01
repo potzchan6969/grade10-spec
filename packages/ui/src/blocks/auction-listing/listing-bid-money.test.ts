@@ -171,4 +171,29 @@ describe("quickMaximumPresetAmount", () => {
       136_000,
     );
   });
+
+  it.each([
+    {
+      openingMinor: 48_000,
+      incrementMinor: 2_000,
+      chips: [48_000, 52_000, 56_000],
+    },
+    { openingMinor: 1_000, incrementMinor: 100, chips: [1_000, 1_200, 1_400] },
+  ])(
+    "reads 1× as the opening price $openingMinor before any bid",
+    ({ openingMinor, incrementMinor, chips }) => {
+      const noBids = {
+        isLeadingWithMaximum: false,
+        hasBids: false,
+        floorMaximumMinor: openingMinor,
+        incrementMinor,
+        currentBidMinor: openingMinor,
+      } as const;
+      expect(
+        [1, 2, 4].map((multiples) =>
+          quickMaximumPresetAmount({ ...noBids, multiples }),
+        ),
+      ).toEqual(chips);
+    },
+  );
 });
