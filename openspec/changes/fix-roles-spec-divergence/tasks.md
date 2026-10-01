@@ -5,10 +5,10 @@ group adds or names the tests that prove it, and changes no grant.
 
 ## 1. Roles manual page (grade10-spec) (owner: @ecchochan)
 
-- [ ] 1.1 Rewrite the opening of `docs/prds/products/shared/auth/roles.md` to name the seven roles, `finance` and `treasurer` included, and add a short section on the vocabulary's eleven resources and the vault split by cost, each new line 🚧 until implementation is verified
-- [ ] 1.2 Delete the `warning` callout that says the spec does not name `finance` and `treasurer`; keep the ❓ line on staff and treasurer together
+- [x] 1.1 Rewrite the opening of `docs/prds/products/shared/auth/roles.md` to name the seven roles, `finance` and `treasurer` included, and add a short section on the vocabulary's eleven resources and the vault split by cost, each new line 🚧 until implementation is verified
+- [x] 1.2 Delete the `warning` callout that says the spec does not name `finance` and `treasurer`; keep the ❓ line on staff and treasurer together
 - [ ] 1.3 Take 🚧 off the lines 1.1 added once implementation is verified, before the change archives
-- [ ] 1.4 Verify: `pnpm check:manual`, `pnpm run validate:changes fix-roles-spec-divergence` and `pnpm run lint` in grade10-spec.
+- [x] 1.4 Verify: `pnpm check:manual`, `pnpm run validate:changes fix-roles-spec-divergence` and `pnpm run lint` in grade10-spec.
 
 ## 2. Role and vocabulary tests (grade10) (owner: @ecchochan)
 
