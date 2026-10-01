@@ -74,6 +74,7 @@
     "empty": "아직 맡기신 물품이 없습니다.",
     "start": "신청 시작하기",
     "opened": "{day} 작성",
+    "openedAtCounter": "매장에서 직원이 대신 작성했습니다 — 확인한 뒤 제출해 주세요.",
     "askedFor": "{amount} 신청",
     "visitBooked": "{when} 방문 예약됨",
     "noVisit": "방문 예약 없음",

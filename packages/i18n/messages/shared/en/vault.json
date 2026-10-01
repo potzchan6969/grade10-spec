@@ -74,6 +74,7 @@
     "empty": "You have not asked us to hold anything yet.",
     "start": "Start a request",
     "opened": "Opened {day}",
+    "openedAtCounter": "Opened for you at the counter — check it and send it when you are ready.",
     "askedFor": "Asked for {amount}",
     "visitBooked": "Visit booked for {when}",
     "noVisit": "No visit booked",

@@ -74,6 +74,7 @@
     "empty": "你还没有把任何物品交给我们保管。",
     "start": "开始申请",
     "opened": "{day} 开立",
+    "openedAtCounter": "员工已在柜台为你开立 — 请检查后再送出。",
     "askedFor": "申请 {amount}",
     "visitBooked": "已预约 {when} 到店",
     "noVisit": "尚未预约到店",
