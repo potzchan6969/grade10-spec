@@ -75,6 +75,11 @@ and the recorded close. An extension SHALL restart the countdown toward the
 new recorded close at once, labelled Extended bidding. A page that cannot hold
 a live connection SHALL catch up by polling.
 
+When a committed change raises the lot's version, the page SHALL read the
+signed-in viewer's own standing again, so Outbid and the minimum next valid
+bid show without a reload. The standing comes from that viewer's own read;
+live updates stay anonymous.
+
 #### Scenario: grade10-site-auction-listing-page-SC-29 - Another page's bid shows without a reload
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -118,6 +123,18 @@ a live connection SHALL catch up by polling.
   returns
 - **THEN** the page shows the new current bid and bid count without a reload
 
+#### Scenario: grade10-site-auction-listing-page-SC-43 - A leader outbid from another page reads Outbid without a reload
+**Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
+
+- **GIVEN** a signed-in bidder leading an open `HKD` lot at 120000 minor units,
+  with its page open
+- **WHEN** another bidder's bid of 130000 minor units is accepted from another
+  page
+- **THEN** the bidder's page shows the current bid 130000 minor units and their
+  standing Outbid, with 134000 minor units as the minimum next valid bid,
+  without a reload
+- **AND** the live update that reached the page names neither bidder
+
 ### Requirement: A lot counts down on the auction service's clock
 
 A lot page SHALL count down on the auction service's clock, never the
@@ -127,7 +144,8 @@ to the tab. A correction of less than one second SHALL NOT make a displayed
 countdown go up.
 
 A countdown SHALL round up to the whole second, so it reads 0 only once the
-deadline has passed.
+deadline has passed. It SHALL show whole seconds only, the last 10 seconds
+included.
 
 #### Scenario: grade10-site-auction-listing-page-SC-33 - A wrong device clock shows the right time left
 **Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
@@ -160,6 +178,15 @@ deadline has passed.
 - **WHEN** a new reading of the service clock moves it back by 0.5 seconds
 - **THEN** the countdown does not read more than 30 seconds
 
+#### Scenario: grade10-site-auction-listing-page-SC-44 - The last seconds count in whole seconds
+**Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
+
+- **GIVEN** a lot page whose deadline is 9.5 seconds away on the auction
+  service's clock
+- **WHEN** the countdown shows, and again 6.4 seconds later
+- **THEN** it reads 10 seconds, then 4 seconds
+- **AND** it never shows tenths of a second
+
 ### Requirement: A lot shows its result only once the close is recorded
 
 Past the lot's effective close and until its close is recorded, the page SHALL
@@ -181,7 +208,7 @@ The page SHALL use only existing words for the moments around the close:
 | Moment | Words |
 | --- | --- |
 | A bid's payment is confirming | Authorizing… |
-| A bid that did not count, including one confirmed after the close | Your bid did not go through |
+| A bid that did not count: one confirmed after the close, or one placed at or after it | Your bid did not go through, alone, without the sentence that the card was not authorized |
 | A price-moving bid extends the lot | Extended bidding |
 
 #### Scenario: grade10-site-auction-listing-page-SC-37 - The winner reads Closed, then Won
@@ -206,7 +233,8 @@ The page SHALL use only existing words for the moments around the close:
 - **GIVEN** a bidder whose bid shows Authorizing… as the lot's effective close
   passes, on a lot another bidder leads
 - **WHEN** its payment confirms after the close
-- **THEN** the page shows Your bid did not go through
+- **THEN** the page shows Your bid did not go through, and not that the card
+  was not authorized
 - **AND** once the close is recorded the page shows Did not win, with the
   current bid as it stood without that bid
 
@@ -227,3 +255,21 @@ The page SHALL use only existing words for the moments around the close:
 - **WHEN** a later recorded close arrives for that lot
 - **THEN** the page shows Extended bidding and counts to the later close
 - **AND** its bid controls are enabled again
+
+#### Scenario: grade10-site-auction-listing-page-SC-45 - A bid at the close reads only that it did not go through
+**Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
+
+- **GIVEN** a bidder on the page of a lot whose effective close has just passed,
+  before the page has disabled its bid controls
+- **WHEN** they place a bid and Grade10 refuses it as past the close
+- **THEN** the page shows Your bid did not go through, and not that the card
+  was not authorized
+
+#### Scenario: grade10-site-auction-listing-page-SC-46 - A lot with no winner reads Ended with No bids
+**Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
+
+- **GIVEN** a bidder whose lone first bid on a lot was still confirming at its
+  scheduled close, with the lot's page open
+- **WHEN** the close is recorded with no winner
+- **THEN** the page shows Ended, with No bids under it, without a reload
+- **AND** it shows neither Won nor Did not win

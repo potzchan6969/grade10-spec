@@ -160,14 +160,21 @@ that lands.
   the navigation's response start, so it carries on from what was served;
   with neither, it runs on the device clock until a later probe answers
 - **One frame loop** - `createFrameClockStore` from `@grade10/ui` drives every
-  countdown through `ClockProvider`, and `remainingSeconds` rounds up; the app
-  hands it the server clock, so the store's blocks and the app read one clock
+  countdown through `ClockProvider`, and `remainingSeconds` rounds up to whole
+  seconds, the last 10 included (Q31); the app hands it the server clock
+  (`core/live/liveClock.ts`), so the store's blocks and the app read one clock
 - **Live queries** - `liveAuctionSocket.ts` holds one ref-counted socket per
   room; each feature's live hook writes frames into the query it already
   reads, and `higherVersion` as `structuralSharing` keeps a racing fetch from
   going back. A `gone` frame re-reads the lot, which then reads called off.
   After 3 failed transports a page polls; a lot still `closing` refetches
   until its result arrives
+- **Own standing follows the version** - `useListingUi` refetches the
+  signed-in viewer's standing whenever the lot's `version` rises above the one
+  it last saw, so Outbid, the minimum next bid, a hold that confirmed too late
+  and the recorded result read from the viewer's own authenticated read (Q12).
+  Frames carry no standing. Rejected: a per-viewer frame (a public room would
+  have to know who holds each socket)
 - **My Auctions** - bidding rows carry `topAmountMinor` and take their phase
   from `liveClock`, so a `closing` lot keeps its standing in Active until the
   close commits
@@ -178,6 +185,9 @@ that lands.
   locale's existing first sentence of `authorizationProviderFailure`, shown
   alone for a confirm after the close and a bid refused at or after it (Q13).
   `authorizationProviderFailure` keeps its full string where it shows today
+- **Where it shows** - `bidRefusalCopy` maps `NOT_BIDDABLE` to it, and the lot
+  view shows it when the standing re-read finds the viewer's confirming bid
+  `lost` past the close; a card that failed to authorize keeps the full string
 
 ### Zero Starting Price
 

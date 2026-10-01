@@ -66,6 +66,17 @@ close is recorded.
 - **THEN** the card's countdown counts to the new recorded close without a
   reload
 
+#### Scenario: grade10-site-auction-auction-SC-88 - A card past its close shows no result until the close is recorded
+**Serves:** `Catalogue` - a collector reads a lot's card as its close passes
+
+- **GIVEN** a catalogue card on a lot whose effective close has passed and
+  whose close is not yet recorded
+- **WHEN** the card shows the lot
+- **THEN** it shows the existing closed state with the current bid as it
+  stood, and no result
+- **AND** once the close is recorded it shows the recorded result without a
+  reload
+
 ### Requirement: A bid counts when its payment confirms
 
 With bid-time authorization holds on, a bid SHALL count at the moment its
@@ -331,7 +342,7 @@ title is historical: a listing no longer carries an extension window.
 #### Scenario: grade10-site-auction-auction-SC-05 - A bid outside the window is refused
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
-- **GIVEN** a listing whose scheduled start has not arrived or whose recorded close has passed
+- **GIVEN** a listing whose scheduled start has not arrived or whose effective close has passed
 - **WHEN** a bidder submits a bid
 - **THEN** Grade10 refuses the bid
 - **AND** it does not create an accepted bid or change the recorded close
@@ -482,6 +493,17 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** a valid bid arrives at 20:11 UTC
 - **THEN** Grade10 refuses it
 - **AND** the listing closes at 20:10 UTC with the earlier bid winning
+
+#### Scenario: grade10-site-auction-auction-SC-87 - A bid at the recorded close does not count, however late the close is recorded
+**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
+
+- **GIVEN** listing C of the worked example, in extended bidding with recorded
+  close 21:05:00 UTC after the price-moving bid at 20:35:00 UTC, and its close
+  not yet recorded
+- **WHEN** a valid bid that would move the price arrives at exactly 21:05:00
+  UTC, or at 21:05:30 UTC
+- **THEN** Grade10 refuses it and the recorded close stays 21:05:00 UTC
+- **AND** when the close is recorded, the bid from 20:35:00 UTC wins
 
 #### Scenario: grade10-site-auction-auction-SC-62 - A first bid may stand on the starting price
 **Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
