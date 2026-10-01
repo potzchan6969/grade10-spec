@@ -649,7 +649,7 @@ append to `CaseDetailView.stories.tsx`.
 - [x] 15.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
-## 16. Your data (grade10)
+## 16. Your data (grade10) (owner: @ecchochan)
 
 - [x] 16.1 Cover the page: the account holder's own page, the retention
       classes, the identity standing in its four words, the documents listed
