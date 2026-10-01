@@ -919,7 +919,7 @@ Stage (b).
 - [x] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
-## 15. The counter's ceremony and the sealed copies (grade10)
+## 15. The counter's ceremony and the sealed copies (grade10) (owner: @ecchochan)
 
 Stage (b).
 
