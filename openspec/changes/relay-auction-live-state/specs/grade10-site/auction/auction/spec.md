@@ -286,7 +286,7 @@ own, whatever campaign it belongs to.
 | Term | Value |
 | --- | --- |
 | **Extension reach** | The shorter of the extension duration and the cap; 0 when extended bidding is off |
-| **Effective close** | The recorded close once extended bidding has started; before that, the scheduled close plus the extension reach for a listing with an accepted bid, and the scheduled close otherwise |
+| **Effective close** | The recorded close once extended bidding has started; before that, the scheduled close plus the extension reach for a listing with an accepted bid and extended bidding on, and one millisecond after the scheduled close otherwise, so a bid at exactly the scheduled close counts |
 | **Price-moving bid** | An accepted bid after which the current bid is higher than before it |
 
 A listing is **in extended bidding** from its scheduled close until its

@@ -387,8 +387,6 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
 
-**Blocked:** Product owner - the rows bidding at exactly 20:00:00 UTC with a duration or a cap of 0 expect a refusal, while the requirement counts a bid at exactly the scheduled close on every listing (Q34).
-
 **Pre-conditions:**
 
 * Bid-time holds are off.
@@ -405,10 +403,10 @@ Runs once per row of **Test data**.
 | 1800s (30mins) | 600s (10mins) | 20:05:00 UTC | 20:10:00 UTC, the cap | 20:10:01 UTC |
 | 1800s (30mins) | None | 20:10:00 UTC | 20:40:00 UTC, the recorded close | 20:40:00 UTC, at the limit |
 | 1800s (30mins) | None | 20:10:00 UTC | 20:40:00 UTC, the recorded close | 20:40:01 UTC |
-| 1800s (30mins) | 0s | 19:58:00 UTC | 20:00:00 UTC | 20:00:00 UTC, at the limit |
-| 1800s (30mins) | 0s | 19:58:00 UTC | 20:00:00 UTC | 20:00:01 UTC |
-| 0s | None | 19:58:00 UTC | 20:00:00 UTC | 20:00:00 UTC, at the limit |
-| 0s | None | 19:58:00 UTC | 20:00:00 UTC | 20:00:01 UTC |
+| 1800s (30mins) | 0s | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:00.001 UTC, at the limit |
+| 1800s (30mins) | 0s | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:01 UTC |
+| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:00.001 UTC, at the limit |
+| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:01 UTC |
 
 | Field | Value |
 | --- | --- |
@@ -424,7 +422,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 is refused.
-* At step 2 no accepted bid is added, the recorded close stays `<effective close>`, and `<listing_5>` is still not recorded closed.
+* At step 2 no accepted bid is added, the recorded close does not move, and `<listing_5>` is still not recorded closed.
 * At step 4 `<listing_5>` is closed with customer B winning.
 
 ### grade10-site-auction-auction-US11-TC6-1: Extension cap of 0 closes the lot at its scheduled close
@@ -731,6 +729,7 @@ Runs once per row of **Test data**.
 - The price a lone maximum stands at on a 0 start is auto-bidding's case, not this suite's.
 - A valid bid in an extension case is placed by a bidder who does not lead, so it moves the price and restarts the timer; a leader raising their own maximum moves nothing, and is US12's case (decision Q5).
 - Between the effective close and the recorded close, a lot takes no bid and names no result; the public status stays Active until the close is recorded (decision Q3).
+- A bid at exactly the scheduled close counts on every listing, extension on or off; with no extension reach the effective close is one millisecond after the scheduled close (decision Q34).
 
 ## Reconciliation
 
@@ -743,10 +742,10 @@ Runs once per row of **Test data**.
 | US2-TC17, US2-TC18: the first bid needs the start plus its tier increment | **Rejected:** reversed by Q19 and Q27; both cases are deprecated |
 | US11-TC1: a confirm before the effective close counts, extending only in extended bidding | **Folded in:** `grade10-site-auction-auction-SC-69`, `grade10-site-auction-auction-SC-21` |
 | US11-TC2: a confirm after the effective close loses, its hold released, "Your bid did not go through." alone | **Folded in:** `grade10-site-auction-auction-SC-67`; the words are `grade10-site-auction-listing-page-SC-39` (Q13) |
-| US11-TC3: a lone first bid confirming after the scheduled close leaves the lot unsold | **Folded in:** `grade10-site-auction-auction-SC-68`. QA1's raised question on that bidder's My Auctions row is answered for Your Standing (Didn't win, by the after-close requirement) and **Escalated** for Current bid: Q32, in `grade10-site-auction-account-record-US10-TC4-1` |
+| US11-TC3: a lone first bid confirming after the scheduled close leaves the lot unsold | **Folded in:** `grade10-site-auction-auction-SC-68`. QA1's raised question on that bidder's My Auctions row is answered for Your Standing (Didn't win, by the after-close requirement) and for Current bid by Q32 (as on any unsold lot's row), in `grade10-site-auction-account-record-US10-TC4-1` |
 | US11-TC4: with holds off a bid in the last second counts when placed | **Folded in:** `grade10-site-auction-auction-SC-86` |
 | US11-TC5: no bid counts at or after the effective close while the close is unrecorded | **Folded in:** `grade10-site-auction-auction-SC-05`, `grade10-site-auction-auction-SC-74`, `grade10-site-auction-auction-SC-85`, `grade10-site-auction-auction-SC-87`, `grade10-site-auction-auction-SC-84`; the bid refused while settling is held back is `grade10-site-auction-auction-SC-74`'s refusal answered whatever the close does |
-| US11-TC5, rows bidding at exactly 20:00:00 UTC with a duration or a cap of 0: refused | **Escalated:** Q34 - the readings state opposite things. `grade10-site-auction-auction-SC-83`, rule 2 of the window requirement, durable `grade10-site-auction-auction-SC-22`, the tech design and the built clock count a bid at exactly the scheduled close on every listing; the Feature-set leaf "no bid counts at or after the effective close" and the auction service page's clock table ("the last instant included when extension is on") refuse it when extension is off. Recommended: it counts on every listing, as built; the Effective close term says the scheduled close is inside the window, so the anchor stands, and the service page drops "when extension is on". The case stays draft, **Blocked:** product owner |
+| US11-TC5, rows with a duration or a cap of 0 | **Settled:** Q34 - a bid at exactly the scheduled close counts on every listing, as `grade10-site-auction-auction-SC-83` and rule 2 of the window requirement state; the Effective close term now ends that window one millisecond after the scheduled close, so the anchor stands. The rows' effective close and limit bid moved to 20:00:00.001 UTC; the case stays draft and is no longer blocked |
 | US11-TC6: a cap of 0 closes at the scheduled close | **Folded in:** `grade10-site-auction-auction-SC-84` |
 | US11-TC7: a due lot is recorded closed at its close, not at the sweep | **Folded in:** `grade10-site-auction-auction-SC-70`; the case keeps a page open, and the alarm with no page open is the room test in task 6.1 |
 | US11-TC8: a missed alarm is settled by a read, or by the sweep | **Folded in:** `grade10-site-auction-auction-SC-71`, `grade10-site-auction-auction-SC-72` |

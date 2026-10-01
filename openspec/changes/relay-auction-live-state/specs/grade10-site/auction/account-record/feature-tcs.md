@@ -149,8 +149,6 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-account-record-US-10
 
-**Blocked:** Product owner - what Current bid reads on the row of a lot that closed unsold (Q32).
-
 **Pre-conditions:**
 
 * Bid-time card holds are on.
@@ -175,7 +173,7 @@ Runs once per row of **Test data**.
 
 * The row is in the Ended tab, and Your Standing reads Didn't win.
 * The row says the card hold is releasing or released, never charged.
-* Current bid reads the zero amount a lot with no bid shows, not `<first bid>`.
+* Current bid reads as on any unsold lot's row, not `<first bid>`.
 
 
 ## Reconciliation
@@ -189,7 +187,7 @@ Runs once per row of **Test data**.
 | QA1 raised: which tab holds the row between the effective and the recorded close, and what Your Standing reads | **Settled by the artifacts:** the open-standing requirement and `grade10-site-auction-account-record-SC-65` - Active tab, the open Status kept, no minimum next valid bid, never Ending soon. TC2-1 patched to assert it; `<v>` kept, the case still draft |
 | Open row shows the auction's current price, not the collector's bid (`grade10-site-auction-account-record-US10-TC3-1`) | **Folded in:** `grade10-site-auction-account-record-SC-64` |
 | QA1 raised: a lone first bid confirming after the scheduled close - the row's standing | **Settled by the artifacts:** after the close the row reads exactly Won or Didn't win from the recorded result; nobody won, so Didn't win, with the durable hold-release detail. New case `grade10-site-auction-account-record-US10-TC4-1` |
-| QA1 raised: the same row's Current bid on a lot that closed unsold | **Escalated:** Q32 - recommended: the zero amount every no-bid row shows today, no new copy. TC4-1 stays draft, **Blocked:** product owner |
+| QA1 raised: the same row's Current bid on a lot that closed unsold | **Settled:** Q32 - the row reads as any unsold lot's row, with no new copy; a bid still pending at the effective close loses (Q1), and with holds off a bid is pending only for milliseconds. TC4-1 patched to assert it and no longer blocked; the case stays draft |
 | Outbid row past the effective close, before the close is recorded | **Rejected as a scenario:** the requirement already states it (open Status kept, no minimum next valid bid); no blind case asserts it apart from Leading |
 | Open-window statuses Leading, Outbid, Bid submitted, Bid not accepted, and Won or Didn't win after the close | **Out of suite:** `grade10-site-auction-account-record-SC-14` to `grade10-site-auction-account-record-SC-19` serve the context journey `grade10-site-auction-account-record-US-02`, unchanged by this delta; the durable suite's `grade10-site-auction-account-record-US2-TC1-1`, `grade10-site-auction-account-record-US2-TC2-1` and `grade10-site-auction-account-record-US4-TC1-1` assert them |
 

@@ -42,8 +42,10 @@ bidder's My Auctions Ended row shows the auction's final price.
   and after the close the standing reads Won or Did not win from the
   committed result
 
-**Rollout** - rooms and sockets ship behind the `auction.realtime` flag; the
-close rules ship without one.
+**Rollout** - rooms, sockets and the close rules ship with no flag; a
+rollback is a code revert. The room class deploys alone first, after
+migration 0013, because a Durable Object migration is a rollback barrier
+(Q11).
 
 ## Zero Starting Price
 
@@ -114,15 +116,9 @@ None.
 
 ## Open Questions
 
-The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31, and
-`allow-zero-starting-price`'s interview settled Q16 to Q30 -
-[Decisions](decisions.md#decisions). QA2 raised four more, each with a
-recommended answer in [Raised](decisions.md#raised):
-
-- **Q32** - Current bid on a bidder's row for a lot that closed unsold
-- **Q33** - whether the lot's own timer settles a due lot with `auction.realtime` off
-- **Q34** - whether a bid at exactly the scheduled close counts with extension off
-- **Q35** - where Q28's quick-bid chip rule is written
+None. The product owner's rulings of 2026-10-01 settle Q1 to Q15 and Q31 to
+Q35, and `allow-zero-starting-price`'s interview settled Q16 to Q30 -
+[Decisions](decisions.md#decisions).
 
 ## References
 
