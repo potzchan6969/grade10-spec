@@ -52,7 +52,7 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
       place of its written 30, in the vocabulary type first, then in every
       language 1.2 answers; then run 1.7's checks
 
-## 2. The three rungs on `Text` (grade10-spec)
+## 2. The three rungs on `Text` (grade10-spec) (owner: @ecchochan)
 
 - [x] 2.1 Write the stories for the three rungs beside `Text` — the `display`
       size, the `mono` face and the `warning` tone, one story per rung — and
