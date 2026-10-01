@@ -6,9 +6,11 @@ import {
   type FrameClockOptions,
   remainingSeconds,
   useClockNow,
+  useClockSelection,
   useClockStore,
   useRemainingSeconds,
 } from "../../index";
+import { holdSelection } from "./listing-clock";
 
 const publicClockStore: ClockStore | undefined = undefined;
 const publicFrameClockOptions: FrameClockOptions | undefined = undefined;
@@ -44,6 +46,26 @@ describe("the frame clock", () => {
 
     expect(store.getServerSnapshot()).toBe(40_000);
     expect(store.getSnapshot()).toBe(42_000);
+  });
+});
+
+describe("a held clock selection", () => {
+  const sameSecond = (held: { second: number }, next: { second: number }) =>
+    held.second === next.second;
+
+  it("answers the held object while equal reads a fresh one the same", () => {
+    const held = { current: null };
+    const first = holdSelection(held, { second: 1 }, sameSecond);
+
+    expect(holdSelection(held, { second: 1 }, sameSecond)).toBe(first);
+    expect(holdSelection(held, { second: 2 }, sameSecond)).not.toBe(first);
+  });
+
+  it("answers each fresh object when equal is identity", () => {
+    const held = { current: null };
+    const first = holdSelection(held, { second: 1 }, Object.is);
+
+    expect(holdSelection(held, { second: 1 }, Object.is)).not.toBe(first);
   });
 });
 
@@ -96,6 +118,7 @@ describe("clock public entry", () => {
       createFrameClockStore,
       remainingSeconds,
       useClockNow,
+      useClockSelection,
       useClockStore,
       useRemainingSeconds,
     ]) {

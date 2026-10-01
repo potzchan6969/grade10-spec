@@ -145,11 +145,13 @@ export {
 } from "./blocks/auction-listing/listing-bid-money";
 export {
   ClockProvider,
+  type ClockSelectionOptions,
   type ClockStore,
   createFrameClockStore,
   type FrameClockOptions,
   remainingSeconds,
   useClockNow,
+  useClockSelection,
   useClockStore,
   useRemainingSeconds,
 } from "./blocks/auction-listing/listing-clock";

@@ -3,6 +3,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useRef,
   useSyncExternalStore,
 } from "react";
 
@@ -119,20 +120,43 @@ function useClockStore(): ClockStore {
 
 const idle = () => () => undefined;
 
-/** Re-renders only when `select` answers a different value. */
+type ClockSelectionOptions<T> = {
+  /** Subscribes to the clock only while true; defaults to true. */
+  active?: boolean;
+  /** Whether two selections read the same; defaults to `Object.is`. */
+  equal?: (held: T, next: T) => boolean;
+};
+
+type HeldSelection<T> = { current: { value: T } | null };
+
+/** The held selection while `equal` reads `next` the same, so the store sees one stable snapshot. */
+function holdSelection<T>(
+  held: HeldSelection<T>,
+  next: T,
+  equal: (held: T, next: T) => boolean,
+): T {
+  if (held.current != null && equal(held.current.value, next)) {
+    return held.current.value;
+  }
+  held.current = { value: next };
+  return next;
+}
+
+/** Re-renders only when `equal` reads the selection as changed. */
 function useClockSelection<T>(
   select: (nowMs: number) => T,
-  active: boolean,
+  { active = true, equal = Object.is }: ClockSelectionOptions<T> = {},
 ): T {
   const store = useClockStore();
+  const held = useRef<{ value: T } | null>(null);
   const subscribe = useCallback(
     (onTick: () => void) => store.subscribe(onTick),
     [store],
   );
   return useSyncExternalStore(
     active ? subscribe : idle,
-    () => select(store.getSnapshot()),
-    () => select(store.getServerSnapshot()),
+    () => holdSelection(held, select(store.getSnapshot()), equal),
+    () => holdSelection(held, select(store.getServerSnapshot()), equal),
   );
 }
 
@@ -141,24 +165,23 @@ function useRemainingSeconds(deadlineMs: number | null): number | null {
   return useClockSelection(
     (nowMs) =>
       deadlineMs == null ? null : remainingSeconds(deadlineMs, nowMs),
-    deadlineMs != null,
+    { active: deadlineMs != null },
   );
 }
 
 /** The clock floored to `unitMs`, for displays that change by the minute or the quarter. */
 function useClockNow(unitMs: number): number {
-  return useClockSelection(
-    (nowMs) => Math.floor(nowMs / unitMs) * unitMs,
-    true,
-  );
+  return useClockSelection((nowMs) => Math.floor(nowMs / unitMs) * unitMs);
 }
 
-export type { ClockStore, FrameClockOptions };
+export type { ClockSelectionOptions, ClockStore, FrameClockOptions };
 export {
   ClockProvider,
   createFrameClockStore,
+  holdSelection,
   remainingSeconds,
   useClockNow,
+  useClockSelection,
   useClockStore,
   useRemainingSeconds,
 };
