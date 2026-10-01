@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   existsSync,
@@ -234,6 +235,211 @@ test("acceptance keeps the durable journeys of a file with no title", () => {
   assert.ok(
     journeys.indexOf("site-search-US-01") <
       journeys.indexOf("site-search-US-03"),
+  );
+});
+
+function writeDurable(root, name, content) {
+  const target = join(root, "openspec/specs/site/search", name);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, content);
+}
+
+function git(root, ...args) {
+  execFileSync("git", args, { cwd: root, stdio: "pipe" });
+}
+
+function commitAll(root, message) {
+  git(root, "add", "-A");
+  git(
+    root,
+    "-c",
+    "user.name=t",
+    "-c",
+    "user.email=t@t",
+    "commit",
+    "-qm",
+    message,
+  );
+}
+
+const SEARCH_DELTA = "openspec/changes/build-alpha/specs/site/search";
+
+test("an added journey that reuses a durable journey id is refused", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-02: Reader uses existing search\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## ADDED User journeys\n\n### site-search-US-02: Reader saves a search\n\nNew journey.\n",
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /added journey site-search-US-02 already exists.*renumber/,
+  );
+});
+
+test("a test case id already held by another durable journey is refused", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "feature-tcs.md",
+    "# Search cases\n\n## site-search-US-02\n\n### site-search-TC02-01: Existing case\n\nExisting coverage.\n\n## Reconciliation\n\nExisting reconciliation.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US-03\n\n### site-search-TC02-01: New case\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /test case site-search-TC02-01 appears more than once.*renumber/,
+  );
+});
+
+test("a retitled journey group and case replace their durable copies by id", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "feature-tcs.md",
+    "# Search cases\n\n## site-search-US2: Reader uses search\n\n### site-search-US2-TC1-1: Old case title\n\nOld coverage.\n\n### site-search-US2-TC2-1: Kept case\n\nKept coverage.\n\n## Reconciliation\n\nExisting reconciliation.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n### site-search-US2-TC1-1: New case title\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  const suite = prepareAcceptance(root, CHANGE).outputs.get(
+    "openspec/specs/site/search/feature-tcs.md",
+  );
+  assert.match(suite, /## site-search-US2: Reader searches and saves/);
+  assert.doesNotMatch(suite, /Reader uses search|Old case title/);
+  assert.match(suite, /site-search-US2-TC1-1: New case title/);
+  assert.match(suite, /site-search-US2-TC2-1: Kept case/);
+});
+
+test("a first acceptance refuses a Purpose written before the durable Purpose last changed", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    "# Search\n\n## Purpose\n\nReaders search.\n\n## Requirements\n\n### Requirement: Existing search\n\nThe system SHALL preserve existing search.\n",
+  );
+  git(root, "init", "-q");
+  commitAll(root, "delta written");
+  writeDurable(
+    root,
+    "spec.md",
+    "# Search\n\n## Purpose\n\nReaders search and save searches.\n\n## Requirements\n\n### Requirement: Existing search\n\nThe system SHALL preserve existing search.\n",
+  );
+  commitAll(root, "another change archives");
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /site\/search: accepted Purpose changed since this delta's Purpose was written; fold the durable Purpose's changes into this delta's Purpose and commit it/,
+  );
+
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  writeFileSync(
+    deltaPath,
+    readFileSync(deltaPath, "utf8").replace(
+      "Readers find items.",
+      "Readers find, search and save items.",
+    ),
+  );
+  commitAll(root, "delta rebased");
+  assert.doesNotThrow(() => prepareAcceptance(root, CHANGE));
+});
+
+test("a fold that drops a durable scenario's trace marker is refused unless its requirement is removed", () => {
+  const { root } = sandbox();
+  const durable =
+    "# Search\n\n## Purpose\n\nReaders find items.\n\n## Requirements\n\n### Requirement: Search results\n\nThe system SHALL return items.\n\n<!-- trace:scenario id=g10.site-search.SC-a1b rev=1 -->\n#### Scenario: site-search-SC-01 - Results match\n\n- **WHEN** a reader searches\n- **THEN** items appear\n";
+  writeDurable(root, "spec.md", durable);
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  const original = readFileSync(deltaPath, "utf8");
+  writeFileSync(
+    deltaPath,
+    original.replace("## ADDED Requirements", "## MODIFIED Requirements"),
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /site\/search: the fold drops trace marker g10\.site-search\.SC-a1b/,
+  );
+
+  writeFileSync(
+    deltaPath,
+    original
+      .replace("## ADDED Requirements", "## MODIFIED Requirements")
+      .replace(
+        "#### Scenario: site-search-SC-01",
+        "<!-- trace:scenario id=g10.site-search.SC-a1b rev=1 -->\n#### Scenario: site-search-SC-01",
+      ),
+  );
+  assert.doesNotThrow(() => prepareAcceptance(root, CHANGE));
+
+  writeFileSync(
+    deltaPath,
+    original.replace(
+      /## ADDED Requirements[\s\S]*$/,
+      "## REMOVED Requirements\n\n### Requirement: Search results\n\n**Reason**: Retired.\n",
+    ),
+  );
+  assert.doesNotThrow(() => prepareAcceptance(root, CHANGE));
+});
+
+test("a MODIFIED requirement may delete a scenario together with its marker", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    "# Search\n\n## Purpose\n\nReaders find items.\n\n## Requirements\n\n### Requirement: Search results\n\nThe system SHALL return items.\n\n<!-- trace:scenario id=g10.site-search.SC-a1b rev=1 -->\n#### Scenario: site-search-SC-01 - Results match\n\n- **WHEN** a reader searches\n- **THEN** items appear\n\n<!-- trace:scenario id=g10.site-search.SC-c2d rev=1 -->\n#### Scenario: site-search-SC-02 - Empty query\n\n- **WHEN** a reader searches nothing\n- **THEN** nothing appears\n",
+  );
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  writeFileSync(
+    deltaPath,
+    readFileSync(deltaPath, "utf8")
+      .replace("## ADDED Requirements", "## MODIFIED Requirements")
+      .replace(
+        "#### Scenario: site-search-SC-01",
+        "<!-- trace:scenario id=g10.site-search.SC-a1b rev=1 -->\n#### Scenario: site-search-SC-01",
+      ),
+  );
+  assert.doesNotThrow(() => prepareAcceptance(root, CHANGE));
+});
+
+test("a first acceptance refuses a Purpose written before another change created the durable spec", () => {
+  const { root } = sandbox();
+  git(root, "init", "-q");
+  commitAll(root, "delta written");
+  writeDurable(
+    root,
+    "spec.md",
+    "# Search\n\n## Purpose\n\nReaders search.\n\n## Requirements\n\n### Requirement: Existing search\n\nThe system SHALL preserve existing search.\n",
+  );
+  commitAll(root, "another change archives first");
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /site\/search: accepted Purpose changed since this delta's Purpose was written/,
+  );
+});
+
+test("a skipped Purpose drift check says why", (t) => {
+  const { root } = sandbox();
+  git(root, "init", "-q");
+  commitAll(root, "delta written");
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  writeFileSync(
+    deltaPath,
+    readFileSync(deltaPath, "utf8").replace(
+      "Readers find items.",
+      "Readers find more items.",
+    ),
+  );
+  const warn = t.mock.method(console, "warn", () => {});
+  prepareAcceptance(root, CHANGE);
+  assert.match(
+    warn.mock.calls.map((call) => call.arguments.join(" ")).join("\n"),
+    /site\/search\/spec\.md: Purpose drift not checked - its Purpose has uncommitted edits/,
   );
 });
 

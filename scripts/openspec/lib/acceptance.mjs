@@ -21,6 +21,9 @@ import {
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
 
+const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
+const MARKED_SCENARIO =
+  /<!-- trace:scenario id=(\S+)[^\n]*\n#### Scenario: (\S+)/g;
 const HASH = (value) => createHash("sha256").update(value).digest("hex");
 const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const CONTRACT_NAMES = new Set([
@@ -201,7 +204,18 @@ function usId(heading) {
   return /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(heading)?.[1] ?? null;
 }
 
-function mergeJourneys(currentText, deltaText, changeId, capability) {
+function journeyIds(text) {
+  const section = sectionByName(documentSections(text ?? ""), "User journeys");
+  return new Set((section?.children ?? []).map((one) => usId(one.heading)));
+}
+
+function mergeJourneys(
+  currentText,
+  deltaText,
+  changeId,
+  capability,
+  priorText,
+) {
   if (/\*\*Walked by:\*\*/.test(deltaText)) return currentText ?? deltaText;
   const current = currentText ?? deltaText;
   const currentDoc = {
@@ -219,6 +233,8 @@ function mergeJourneys(currentText, deltaText, changeId, capability) {
       .map((section) => [usId(section.heading), section]),
   );
   const retired = new Set(readRetiredIds(currentDoc.sections));
+  const durableIds = new Set(currentText ? live.keys() : []);
+  const ownIds = journeyIds(priorText);
   const deltaHeld = [
     "User journeys",
     "Context user journeys",
@@ -237,6 +253,14 @@ function mergeJourneys(currentText, deltaText, changeId, capability) {
           `${capability}: journey ${id} appears more than once in its delta`,
         );
       deltaIds.add(id);
+      if (
+        section.heading === "ADDED User journeys" &&
+        durableIds.has(id) &&
+        !ownIds.has(id)
+      )
+        throw new Error(
+          `${capability}: added journey ${id} already exists in the durable journeys; renumber it`,
+        );
       live.set(id, journey);
       retired.delete(id);
     }
@@ -342,12 +366,30 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   return `${lines.join("\n").replace(/\n*$/, "\n")} `.trimEnd();
 }
 
-function mergePurpose(currentSpec, deltaPurpose, capability, priorText) {
+function purposeOf(text) {
+  return sectionByName(rootSections(text).sections, "Purpose")?.raw;
+}
+
+function mergePurpose(
+  currentSpec,
+  deltaPurpose,
+  capability,
+  priorText,
+  baseText,
+) {
   if (!deltaPurpose) return currentSpec;
   const currentPurpose = sectionByName(
     rootSections(currentSpec).sections,
     "Purpose",
   );
+  if (
+    !priorText &&
+    typeof baseText === "string" &&
+    purposeOf(baseText) !== currentPurpose?.raw
+  )
+    throw new Error(
+      `${capability}: accepted Purpose changed since this delta's Purpose was written; fold the durable Purpose's changes into this delta's Purpose and commit it`,
+    );
   if (priorText) {
     const priorPurpose = sectionByName(
       rootSections(priorText).sections,
@@ -427,32 +469,35 @@ function mergeSuite(currentText, deltaText, capability) {
   };
   const deltaDoc = { heading: "", sections: documentSections(deltaText) };
   const journeyHeading = /^.+-US-?\d+\b/i;
+  const groupId = (section) =>
+    /^(.+?-US-?\d+[a-z]?)\b/i.exec(section.heading)[1];
+  const caseId = (section) => /(\S+-TC\d+-\d+)\b/i.exec(section.heading)?.[1];
   const currentGroups = new Map(
     currentDoc.sections
       .filter(
         (section) =>
           section.level === 2 && journeyHeading.test(section.heading),
       )
-      .map((section) => [section.heading, section]),
+      .map((section) => [groupId(section), section]),
   );
-  const isCase = (section) => /-TC\d+-\d+\b/i.test(section.heading);
+  const isCase = (section) => Boolean(caseId(section));
   for (const incoming of deltaDoc.sections.filter(
     (section) => section.level === 2 && journeyHeading.test(section.heading),
   )) {
-    const existing = currentGroups.get(incoming.heading);
+    const existing = currentGroups.get(groupId(incoming));
     const cases = new Map(
       (existing?.children ?? [])
         .filter(isCase)
-        .map((one) => [one.heading, one]),
+        .map((one) => [caseId(one), one]),
     );
     for (const testCase of incoming.children.filter(isCase))
-      cases.set(testCase.heading, testCase);
+      cases.set(caseId(testCase), testCase);
     const rendered = [`## ${incoming.heading}`, incoming.body.trim()].filter(
       Boolean,
     );
     for (const testCase of cases.values())
       rendered.push(renderSection(testCase));
-    currentGroups.set(incoming.heading, { render: rendered.join("\n\n") });
+    currentGroups.set(groupId(incoming), { render: rendered.join("\n\n") });
   }
   if (currentGroups.size === 0) {
     // Unknown suite shapes are unsafe to replace. A conflict must be resolved
@@ -488,12 +533,28 @@ function mergeSuite(currentText, deltaText, capability) {
     ];
     endings.push(`## ${name}\n\n${lines.join("\n")}`);
   }
-  return `${header}${groups.length ? `\n\n${groups.join("\n\n")}` : ""}${endings.length ? `\n\n${endings.join("\n\n")}` : ""}\n`;
+  const merged = `${header}${groups.length ? `\n\n${groups.join("\n\n")}` : ""}${endings.length ? `\n\n${endings.join("\n\n")}` : ""}\n`;
+  const caseIds = new Set();
+  for (const [, id] of merged.matchAll(/^###\s+(\S+-TC\d+-\d+)\b/gim)) {
+    if (caseIds.has(id))
+      throw new Error(
+        `${capability}: test case ${id} appears more than once in the merged suite; renumber it`,
+      );
+    caseIds.add(id);
+  }
+  return merged;
 }
 
-function foldOne(durablePath, deltaText, capability, priorText = null) {
+function foldOne(
+  durablePath,
+  deltaText,
+  capability,
+  priorText = null,
+  baseText = null,
+) {
   const durableExists = existsSync(durablePath);
   let durable = durableExists ? readFileSync(durablePath, "utf8") : "";
+  const original = durable;
   const delta = outline(deltaText).find((section) => section.level === 1);
   if (!delta) throw new Error(`${capability}: delta has no title`);
   if (!durableExists) durable = `# ${delta.heading}\n`;
@@ -508,7 +569,13 @@ function foldOne(durablePath, deltaText, capability, priorText = null) {
     throw new Error(
       `${capability}: new durable spec needs a Purpose section before acceptance`,
     );
-  durable = mergePurpose(durable, deltaPurpose, capability, priorText);
+  durable = mergePurpose(
+    durable,
+    deltaPurpose,
+    capability,
+    priorText,
+    baseText,
+  );
   const deltaFeatureSet = delta.children.find(
     (section) => section.heading === "Feature set",
   );
@@ -589,7 +656,73 @@ function foldOne(durablePath, deltaText, capability, priorText = null) {
   } else {
     durable = `${durable.replace(/\n*$/, "\n\n")}## Requirements\n\n${body}\n`;
   }
+  const kept = new Set(
+    [...durable.matchAll(TRACE_MARKER)].map((match) => match[1]),
+  );
+  for (const [name, block] of requirementBlocks(original))
+    for (const [, id, scenario] of block.raw.matchAll(MARKED_SCENARIO))
+      if (
+        !kept.has(id) &&
+        new RegExp(
+          `^#### Scenario: ${RegExp.escape(scenario)}(\\s|$)`,
+          "m",
+        ).test(durable)
+      )
+        throw new Error(
+          `${capability}: the fold drops trace marker ${id} from scenario ${scenario} in requirement ${name}; carry it in the delta`,
+        );
   return durable;
+}
+
+function gitText(root, ...args) {
+  const result = spawnSync("git", args, { cwd: root, encoding: "utf8" });
+  return result.status === 0 ? result.stdout : null;
+}
+
+/** The durable spec as it stood when the delta's Purpose last changed ("" if
+ * it did not exist yet), so a first acceptance cannot replace a Purpose
+ * another change wrote since. A rebase rewrites that commit onto newer main,
+ * so after a rebase the check cannot see drift from before it. */
+function durableWhenPurposeWritten(root, deltaPath, durablePath) {
+  const skip = (why) => {
+    console.warn(`${deltaPath}: Purpose drift not checked - ${why}`);
+    return null;
+  };
+  const log = gitText(root, "log", "--format=%H", "--", deltaPath)
+    ?.split("\n")
+    .filter(Boolean);
+  if (!log?.length) return skip("the delta has no git history");
+  const current = purposeOf(readFileSync(join(root, deltaPath), "utf8"));
+  let written = null;
+  for (const commit of log) {
+    const text = gitText(root, "show", `${commit}:${deltaPath}`);
+    if (text === null || purposeOf(text) !== current) break;
+    written = commit;
+  }
+  if (!written) return skip("its Purpose has uncommitted edits");
+  if (written === log.at(-1)) {
+    const shallow = gitText(root, "rev-parse", "--is-shallow-repository");
+    const followed = gitText(
+      root,
+      "log",
+      "--follow",
+      "--format=%H",
+      "--",
+      deltaPath,
+    );
+    if (shallow?.trim() === "true")
+      console.warn(
+        `${deltaPath}: Purpose drift checked only from ${written}, the shallow history's edge`,
+      );
+    else if (
+      followed &&
+      followed.split("\n").filter(Boolean).length > log.length
+    )
+      console.warn(
+        `${deltaPath}: Purpose drift checked only from ${written}, where the delta was renamed`,
+      );
+  }
+  return gitText(root, "show", `${written}:${durablePath}`) ?? "";
 }
 
 function previousDurableSnapshots(root, changeId) {
@@ -639,11 +772,13 @@ function contractOutputs(root, changeId) {
       .replace(/\/spec\.md$/, "");
     const target = durableFor(root, relativeCapability, "spec.md");
     const targetRel = relative(root, target).replaceAll("\\", "/");
+    const priorText = prior.get(targetRel) ?? null;
     const folded = foldOne(
       target,
       readFileSync(join(root, path), "utf8"),
       relativeCapability,
-      prior.get(targetRel) ?? null,
+      priorText,
+      priorText ? null : durableWhenPurposeWritten(root, path, targetRel),
     );
     outputs.set(targetRel, folded);
     const sourceDir = dirname(join(root, path));
@@ -660,7 +795,13 @@ function contractOutputs(root, changeId) {
       const sourceText = readFileSync(source, "utf8");
       const merged =
         name === "user-journeys.md"
-          ? mergeJourneys(currentText, sourceText, changeId, relativeCapability)
+          ? mergeJourneys(
+              currentText,
+              sourceText,
+              changeId,
+              relativeCapability,
+              prior.get(targetKey),
+            )
           : mergeSuite(currentText, sourceText, dir);
       outputs.set(targetKey, merged);
     }
