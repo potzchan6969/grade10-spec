@@ -1814,7 +1814,7 @@ Stage (b).
       (`grade10-site-grading-submission-plan-SC-60`,
       `grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-71`)
-- [ ] 24.15 Add `courier_cover_minor` (money), `main_shop_id` and
+- [x] 24.15 Add `courier_cover_minor` (money), `main_shop_id` and
       `pos_repayment_variant` to the settings, each unset until its owner
       writes it, the grant table naming every batch act under
       `grading:operate`, its tests red first (Q143, Q136,
