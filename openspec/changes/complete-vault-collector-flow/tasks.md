@@ -608,7 +608,7 @@ append to `CaseDetailView.stories.tsx`.
       the stepper, the field hints, the photograph dropzone with its tips, and
       the location line, each word from the catalog
 
-## 15. The booked visit (grade10)
+## 15. The booked visit (grade10) (owner: @ecchochan)
 
 - [x] 15.1 Cover the booked screen and the picker: the confirmation taking the
       picker's place, what to bring on each lane and each identity standing,
