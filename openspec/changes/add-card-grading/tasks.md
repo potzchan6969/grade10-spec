@@ -428,7 +428,7 @@ the words and the blocks arrive on. Stage (a).
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 10. The derived answers (grade10)
+## 10. The derived answers (grade10) (owner: @ecchochan)
 
 Every other application group reads this one's exports. Stage (b).
 
