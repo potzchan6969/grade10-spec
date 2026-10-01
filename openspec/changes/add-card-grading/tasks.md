@@ -2044,7 +2044,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-14`,
       `grade10-site-grading-submission-lifecycle-SC-17`,
       `grade10-site-grading-submission-lifecycle-SC-19`)
-- [ ] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
+- [x] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
       submission: the code, the hours and the one figure to settle or none, a
       name saved and replaced, an empty name naming nobody, Remove leaving
       nobody named, and naming refused once the cards are collected
