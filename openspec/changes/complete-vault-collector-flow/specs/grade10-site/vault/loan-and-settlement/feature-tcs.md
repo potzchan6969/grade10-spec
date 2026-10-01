@@ -590,6 +590,43 @@ Runs once per row of **Test data**.
 * Release is refused by name, naming that a balance is still outstanding
 * The case stays `active`
 
+### grade10-site-vault-loan-and-settlement-US2-TC10-1: A part payment at the counter is refused while nowhere to pay is set
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Pre-conditions:**
+
+* A production brand whose FPS id is unset
+* The case is `active`, its payout of 10,000,000 (HKD) at 3% for 30 days
+  recorded, owing 10,300,000 (HKD)
+* staff(shop staff) is at the counter recording a repayment
+
+**Test Data:**
+
+| Repayment | Result |
+| --- | --- |
+| 5,000,000 (HKD) | refused by name, naming the FPS id; nothing written |
+| 10,300,000 (HKD) | recorded; the loan settles |
+
+**Steps:**
+
+1. Record each repayment in turn.
+
+**Expected Results:**
+
+* Every row reads as its Result column says
+
 ### grade10-site-vault-loan-and-settlement-US2-TC9-1: Total interest owed never passes the brand's accrual ceiling of the principal
 
 **Classification:**
@@ -1608,6 +1645,7 @@ the proposal links, and this file for id continuity. It was denied every
 | `US4-TC1-1` to `US4-TC6-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-19` to `grade10-site-vault-loan-and-settlement-SC-22` and the forfeiture requirement's refusals |
 | `grade10-site-vault-loan-and-settlement-SC-33` | Scenario no case reached | Case added: `US4-TC7-1`, the borrower's page holding the date the notice named after the brand shortens its period |
 | `US5-TC1-1`, `US5-TC2-1`, `US5-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-35` and `grade10-site-vault-loan-and-settlement-SC-36` |
+| `US2-TC10-1` | Folded | The counter's part payment while Finance's values are unset was unstated, though the money message it would send is refused; folded as `grade10-site-vault-loan-and-settlement-SC-52` under the how-to-pay requirement, decided by the acceptance review (product owner delegated this run) |
 | `US5-TC4-1`, the production row | Answered, case amended | What a production borrower reads while Finance's values are unset was undecided. Answered as the counter line alone, with no account fields, and folded as `grade10-site-vault-loan-and-settlement-SC-47`; its bracketed row is `grade10-site-vault-loan-and-settlement-SC-38`. The send's own refusal is `grade10-site/vault/collector-notifications`' rule and its suite walks it, so the case keeps its page rows alone. Raised in `decisions.md`, landed as Q118. Decided on the loan and money page: the counter line alone, card or cash at the counter. |
 | `grade10-site-vault-loan-and-settlement-SC-37` | Scenario no case reached | Case added: `US5-TC5-1`, a storage case naming no account |
 | `US6-TC1-1`, `US6-TC2-1`, `US6-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-27` and `grade10-site-vault-loan-and-settlement-SC-28`; the value-date order `US6-TC3-1` walks is the requirement's own **Order** rule, and the allocation and never-restarts lines beside a repayment are the design's copy, carrying no rule of their own |

@@ -229,10 +229,13 @@ in every message about money.
   total a day past the reading less the rounded total at it, so it never
   disagrees with what the page will owe.
 - **A value nobody has set** — outside production the block SHALL print a
-  marked placeholder in place of the unset value. In production an unset FPS
-  id or bank account SHALL NOT be printed: the block SHALL NOT be shown, and
-  in its place the live loan SHALL show the counter line alone — pay by card
-  or cash at the counter. The act that would send a
+  marked placeholder in place of the unset value. In production an unset
+  payee name, FPS id or bank account SHALL NOT be printed: the block SHALL NOT
+  be shown, and in its place the live loan SHALL show the counter line alone —
+  pay by card or cash at the counter. Until the value is set again, the
+  counter SHALL record only a repayment that settles the loan; one leaving
+  anything owed SHALL be refused by name, since its message would carry how
+  to pay. The act that would send a
   message carrying an unset value is refused by
   `grade10-site/vault/collector-notifications`, which states that rule.
 
@@ -272,11 +275,20 @@ in every message about money.
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower on a brand whose account is not set yet is still told where to pay
 
 - **GIVEN** a production brand whose live loan was advanced while its FPS id
-  and bank account were set, both since cleared
+  and bank account were set, its FPS id since cleared
 - **WHEN** the borrower reads that live loan
 - **THEN** no payee, no FPS id, no bank account and no transfer reference is
   shown, and the case shows the counter line alone — pay by card or cash at
   the counter
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-52 - A part payment at the counter is refused while nowhere to pay is set
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - the borrower is never sent a balance with no way to pay it
+
+- **GIVEN** that loan, its FPS id still cleared
+- **WHEN** a repayment leaving anything owed is recorded at the counter
+- **THEN** it is refused by name, naming the unset value
+- **AND** nothing is written, and a repayment that settles the loan is still
+  recorded
 
 ### Requirement: The console states the rule before the operator acts
 
