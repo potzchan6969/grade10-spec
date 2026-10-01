@@ -7,7 +7,7 @@ frontends working against the fixture transports rather than a running
 worker. Group 4's migration lands before group 5. Group 2 is the manual and
 lands once every grade10 group is verified; group 11 is the walk.
 
-## 1. The collector's words (grade10-spec)
+## 1. The collector's words (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 Name `vault.list.openedAtCounter` in the vocabulary type first, so
       `pnpm --filter @grade10/i18n run test` refuses every language that has

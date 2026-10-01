@@ -1,0 +1,128 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "3164c4fbbceba266d734222e00286350cdfec74ad0fcddf7fea0c3c63a689f21"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5da7fafa04256647cf1eb8114430ee5f3a4cfcfc",
+    "capturedAt": "2026-10-01T19:28:02.382Z",
+    "targets": [
+      {
+        "path": "openspec/changes/vault-walk-ins-and-owners/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A collector's page answers under the Vault entry",
+          "Requirement: A collector's page is reached from their name and from a case",
+          "Requirement: Each opening of a collector's page is recorded",
+          "Requirement: Each section of a collector's page reads and fails on its own",
+          "Requirement: The header names the collector to whoever holds the identity grant",
+          "Requirement: The vault cases section lists every case the collector holds"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A collector's name narrows the queue and the held items",
+          "Requirement: A row names whose case it is",
+          "Requirement: An account a walk-in creates reads by its email handle",
+          "Requirement: Every act sits behind a named grant",
+          "Requirement: Every read that names a collector, or lists one collector's cases, is recorded",
+          "Requirement: Search is exact on a contact, prefix on a case id, and leaves a trail",
+          "Requirement: Staff open a draft for a customer at the counter",
+          "Requirement: The console opens no case of its own"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A case carries between one and ten photographs",
+          "Requirement: A collector opens a request for one item",
+          "Requirement: A draft staff opened is the collector's to change and send",
+          "Requirement: An account holds at most three unsent requests"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A draft staff opened ends silently and leaves nothing on the account",
+          "Requirement: The case's owner may call it off before custody"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Every event decides its message, or decides silence"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A case nobody signed is purged, and one that was signed is held",
+          "Requirement: Nothing recorded is rewritten"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
