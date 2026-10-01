@@ -2260,7 +2260,7 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       `onStarted(id)`, and `IntakeRunbook` always takes a `submissionId`
 - [x] 29.9 Give `IntakeRunbook` and `HandbackRunbook` a `recordHref`, the one
       press to the record, its test red first; 31.5 routes it
-- [ ] 29.10 Open `IntakeRunbook` on `admin.safeStanding` and turn a list the
+- [x] 29.10 Open `IntakeRunbook` on `admin.safeStanding` and turn a list the
       safe cannot take to Book the next drop-off before the first check, its
       tests red first; needs 13.10; then run 29.7's checks
       (`grade10-admin-grading-counter-SC-108`)
