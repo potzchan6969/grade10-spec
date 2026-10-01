@@ -27,9 +27,8 @@ highest accepted bid at the close wins it.
 ### Extended Bidding
 
 Until the scheduled close, no bid moves the recorded close. At it, a listing
-with at least one accepted bid enters extended bidding: every accepted bid,
-from anyone, sets the close to the full extension duration after that bid,
-and the listing closes when the timer runs out with no new bid.
+with at least one accepted bid enters extended bidding, and the listing closes
+when the timer runs out with no new bid.
 
 | Listing, scheduled close 20:00 | Bids by 20:00 | Bids after | Closes |
 | --- | --- | --- | --- |
@@ -46,6 +45,19 @@ and the listing closes when the timer runs out with no new bid.
   campaign it belongs to
 - **Accepted once** — a bid advances the highest bid atomically, so a delayed
   lower bid never displaces a higher one however the network reorders them
+- 🚧 **A price move restarts the timer** — an accepted bid that moves the
+  price, from anyone, sets the close to the full extension duration after it.
+  Equal maxima at a higher price move it: at 1,000, with A's maximum at 2,000,
+  B's maximum of 2,000 makes the price 2,000, A keeps the lead as the earlier,
+  and the lot extends. A leader raising their own maximum does not
+- 🚧 **A bid counts when its payment confirms** — judged at that moment; a
+  confirmation after the close loses with no grace and its hold is released,
+  and a lone first bid still confirming at the scheduled close leaves the lot
+  unsold. With bid-time holds off, a bid counts when placed
+- 🚧 **No bid after the close** — however late the close is recorded, the
+  last bid the lot can take is at the scheduled close plus the extension
+  duration or the cap, whichever is shorter; a cap of **0** turns extended
+  bidding off, as a duration of **0** does
 
 ### Auto-Bidding
 
@@ -131,6 +143,7 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 | --- | --- |
 | Below the next minimum | Refused, naming the minimum |
 | Before the start, or after the recorded close | Refused |
+| 🚧 A card authorization that confirms after the close | **Your bid did not go through**, and the hold is released |
 | Above the currency's ceiling | Refused, naming the ceiling; the price, the leader and every maximum stay as they were |
 | At or above the bar without a verified identity | Held at the storefront, with where to verify; nothing is recorded |
 | No linked card, or a declined hold when holds are on | Refused before the bid stands — [Auction Panel](/p/grade10-site/auction/bidding#auction-panel) |
@@ -280,7 +293,7 @@ the same facts sit in the five-column table.
 | Column | What it shows |
 | --- | --- |
 | Lot | The key image, the title and the close |
-| Current bid | The lot's current bid |
+| Current bid | 🚧 The auction's current price, or its final price once it closes — never the collector's own bid |
 | 🚧 **Your Standing** | Leading · Outbid, with the next valid bid · Bid submitted · Bid not accepted, and why · Won, reading the order's status (Awaiting Setup, Setup Overdue, Preparing Invoice, Pending Payment, Payment Overdue, Payment Verifying, Partially Paid, …) · Didn't win, with whether the card hold is being released or released · `--` for a watch-only lot |
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
@@ -288,6 +301,8 @@ the same facts sit in the five-column table.
 - **Tabs** — Active, Upcoming and Ended by bidding window, opening on
   Active; the title count stays the total, and an empty tab says it has no
   lots
+- 🚧 **After the close** — Your Standing reads Won or Didn't win once the
+  result is recorded, never from the page's own clock
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
@@ -446,7 +461,9 @@ surface.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Absolute sale | Decided | No reserve and no buy-now price; the highest accepted bid at the close wins. | Product |
-| Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on every accepted bid, and ends at the listing's optional cap. A listing with no bid, or with the duration set to 0, closes on schedule. | Product |
+| Extended bidding | 🚧 In flight | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product (`relay-auction-live-state`) |
+| A bid counts when its payment confirms | 🚧 In flight | A confirmation after the close loses with no grace and its hold is released; a lone first bid still confirming at the scheduled close leaves the lot unsold. A grace was ruled out: the payment event would not arrive before the close anyway, and the moment payment succeeded is the decision. | Product (`relay-auction-live-state`) |
+| My Auctions price | 🚧 In flight | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product (`relay-auction-live-state`) |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; equal-max non-leaders show an Info tip in the amount tone (when maximums match, the earlier one leads). Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |

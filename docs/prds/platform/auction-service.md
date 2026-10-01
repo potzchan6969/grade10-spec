@@ -94,7 +94,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - A bid confirmed at exactly `scheduled_ends_at` is accepted when extension is on, so the lot's first deadline is one millisecond after it
 - Listing state carries the extension policy (`extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
-- 🚧 Today the late window has no upper bound and ignores a cap of zero, so while the sweep lags a confirm after the effective close is accepted; the fix bounds it at `scheduled_ends_at` plus the reach
+- 🚧 The late window ends at `scheduled_ends_at` plus the reach, and a cap of zero leaves none, so a confirm after the effective close is refused however far the sweep lags
 
 ## Public reads and cache
 
@@ -150,9 +150,9 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 | closed or settled, or canceled after it was listed | ended | none | no |
 
 - Readers use the stored row alone, so the catalogue's paging stays on its columns; only a writer holding the lock asks whether an accepted bid exists
-- The room's alarm writes the first extension one millisecond after `scheduled_ends_at`, so the stored `ends_at` is the truth within a second; frames carry whether an accepted bid exists as a hint, so a page shows Extended bidding at the scheduled close without a flash of Closing
-- A page never shows Ended from its own clock: at the effective close it shows Closing until the room says Ended or brings a later close
-- A new close resets the countdown at once, and at the cap the page says it is the final deadline
+- The room's alarm writes the first extension one millisecond after `scheduled_ends_at`, so the stored `ends_at` is the truth within a second; frames carry whether an accepted bid exists as a hint, so a page shows Extended bidding at the scheduled close without a flash of Closed
+- A page never shows a result from its own clock: at the effective close it shows the existing Closed state with no result until the room brings the result or a later close; the closing phase is never a public status, which stays Upcoming, Active or Ended
+- A new close resets the countdown at once
 
 ### Whoever reaches a due lot first settles it
 

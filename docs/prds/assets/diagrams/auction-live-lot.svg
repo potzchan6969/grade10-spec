@@ -151,7 +151,7 @@ svg[data-diagram="auction-live-lot"] .c-lane{fill: var(--lane-fill); stroke: var
           <rect x="504.69999999999993" y="716" width="121.2" height="16" rx="3" class="c-mask"/>
           <text x="565.3" y="726" class="t-backend" font-size="9" text-anchor="middle">alarm: settle the lot</text>
         </g>
-        <text data-detail="fine" x="435.7" y="754" class="t-dim" font-size="7">at the effective close; pages show Closing</text>
+        <text data-detail="fine" x="435.7" y="754" class="t-dim" font-size="7">at the effective close; pages show Closed, no result yet</text>
         </g>
         <g data-step="settles" data-edge-from="auction" data-edge-to="postgres" data-edge-label="extends or closes under the lock" data-edge-key="12" data-edge-id="settles">
           <path data-composition-edge-from="auction" data-composition-edge-to="postgres" data-composition-edge-id="settles" data-composition-points="423.7,780;558.3,780" d="M 423.7 780 L 558.3 780" class="a-emphasis" stroke-width="1.8" marker-end="url(#auction-live-lot-arrowhead-emphasis)"/>
