@@ -414,7 +414,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 - [x] 10.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 11. The money book's reads and the file (grade10)
+## 11. The money book's reads and the file (grade10) (owner: @ecchochan)
 
 - [x] 11.1 Cover the folds and the file: the net out per currency, the arrears
       count and figures over the filter in force, the kind filter's query
