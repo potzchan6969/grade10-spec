@@ -1047,7 +1047,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-10`)
 - [x] 16.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 16.8 Write `0004_batch_shipments.sql` as the Migration Plan names it; then
+- [x] 16.8 Write `0004_batch_shipments.sql` as the Migration Plan names it; then
       ship every batch as one or more shipments, its tests red first:
       `shipBatch` takes the shipments, each with its cards, courier, tracking
       and insured total read against the HKD setting `courier_cover_minor`,
