@@ -48,7 +48,8 @@ zero after the backfill; ownership moves recorded with who, why and when
 - **Forfeit moves the item to the lender** - when the vault closes its mark,
   never by a staff move
 - **Retire** - a duplicate, a lost or destroyed item, or one that left the
-  platform; final, and the item reads only after it
+  platform; the item reads only after it, and staff restore it with a
+  reason while no live item holds its cert
 - **A collector's items** - their own section on the collector page, every
   item they own but a retired one
 - **Erasure reaches the register** - inventory answers the erasure checklist,
@@ -120,6 +121,15 @@ See [Non-Goals](decisions.md#non-goals).
   wait for it; `fix-roles-spec-divergence` writes the vocabulary table the
   new grant joins; `add-card-grading`'s own spec line on where a valuation
   reads the grade is corrected by the change that next moves grading
+
+No domain impact: `shared/auth/domain-tcs.md` traces `shared-auth-roles-US-02`,
+and neither of its cases walks an inventory grant; the new grant is walked
+in the roles suite.
+
+No domain impact: `grade10-site/vault` has no domain suite, and the path this
+change lays across four of its capabilities - registered at the valuation,
+named on the agreement, marked at vaulting, moved to the lender at a forfeit -
+is walked whole from the register's side in the items suite.
 
 ## Open questions
 

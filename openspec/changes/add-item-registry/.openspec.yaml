@@ -7,8 +7,8 @@ depends_on:
   - vault-walk-ins-and-owners
   - fix-roles-spec-divergence
 awaiting:
-  specs: "2026-09-30, the vault deltas wait for vault-walk-ins-and-owners to be
-    accepted and published - @brianchacha6969"
+  specs: "2026-10-02, the requirements are written; the vault deltas are rebased
+    onto vault-walk-ins-and-owners' published text before acceptance - @ecchochan"
   ui-design: "2026-09-30, no board draws Items, one item, the register, transfer,
     retire and close-mark dialogs, the Case tab facts, the walk-in lookup or the
     collector page's Items section - design"
