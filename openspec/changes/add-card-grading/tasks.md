@@ -1359,7 +1359,7 @@ Stage (c).
       shop's days, its tests red first; then run 19.7's checks (Q141,
       `grade10-site-grading-submission-lifecycle-SC-66`,
       `grade10-site-grading-submission-lifecycle-SC-67`)
-- [ ] 19.14 Refund only the fee line on the payout path, the cover kept, and
+- [x] 19.14 Refund only the fee line on the payout path, the cover kept, and
       cover a storage waiver in `settlement.ts`'s netting with a test, its
       tests red first; then run 19.7's checks (Q138,
       `grade10-admin-grading-counter-SC-62`,
