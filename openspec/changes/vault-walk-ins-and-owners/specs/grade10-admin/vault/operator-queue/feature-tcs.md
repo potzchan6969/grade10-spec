@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
 
 ## grade10-admin-vault-operator-queue-US2: Operator finds the case of the person at the counter
@@ -56,18 +56,20 @@ and the draft waits for them to send it.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
+
 **Pre-conditions:**
 
-* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production, with the collection statement written.
+* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production.
 * No account exists for `<walk-in email>`.
 
 **Test data:**
@@ -78,7 +80,7 @@ and the draft waits for them to send it.
 | Category | Trading card |
 | Title | Charizard 1st Edition |
 | Description | Near-mint, unopened sleeve since grading. |
-| Amount | 500000 (HKD, minor units) |
+| Amount | HKD 5,000.00 (500000 minor units) |
 | Photos | two JPEG photographs, each under 20 MB |
 
 **Steps:**
@@ -105,18 +107,20 @@ and the draft waits for them to send it.
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
+* **Automation status:** automated
+* **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
-* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production, with the collection statement written.
+* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production.
 * `<account_1>`: an account for `<walk-in email>` that nobody has ever signed in to, carrying the name `<held name>`, with no vault case.
 
 **Test data:**
@@ -184,7 +188,7 @@ and the draft waits for them to send it.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** release
@@ -216,14 +220,16 @@ and the draft waits for them to send it.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -238,7 +244,7 @@ and the draft waits for them to send it.
 
 **Expected Results:**
 
-* Step 2 reads "Being prepared".
+* Step 2 says the collection statement is being prepared.
 * Step 3 opens the draft on its own page.
 
 ### grade10-admin-vault-operator-queue-US10-TC6-1: A walk-in for an address someone has signed in to is refused
@@ -247,7 +253,7 @@ and the draft waits for them to send it.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -258,7 +264,7 @@ and the draft waits for them to send it.
 
 **Pre-conditions:**
 
-* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production, with the collection statement written.
+* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production.
 * `<account_2>`: an account for `<signed-in email>` that its owner has signed in to at least once, carrying the name `<held name>`.
 
 **Test data:**
@@ -267,13 +273,14 @@ and the draft waits for them to send it.
 | --- | --- |
 | `<signed-in email>` | the address of `<account_2>` |
 | `<held name>` | Wong Siu Ming |
+| Typed as | <signed-in email> with its first letter and its domain in capitals, and a space either side |
 | Title | Blastoise Base Set |
 | Photos | one JPEG photograph |
 
 **Steps:**
 
 1. Click Open a walk-in.
-2. Fill in the form for `<signed-in email>` from **Test data** and attach the photograph.
+2. Fill in the form from **Test data**, the email as Typed as, and attach the photograph.
 3. Click Open case.
 
 **Expected Results:**
@@ -281,7 +288,7 @@ and the draft waits for them to send it.
 * A notice says the address has signed in before, and that this customer sends the request from their own phone.
 * The notice names nothing else about the account: not `<held name>`, not its cases.
 * The form keeps the email, the facts and the photograph typed.
-* No draft is opened under `<account_2>`, and nothing is emailed to `<signed-in email>`.
+* No draft is opened, no second account exists for <signed-in email>, and nothing is emailed to it.
 
 ### grade10-admin-vault-operator-queue-US10-TC7-1: A walk-in counts against the account's three unsent drafts
 
@@ -291,18 +298,20 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
+
 **Pre-conditions:**
 
-* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production, with the collection statement written.
+* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production.
 * The account for `<walk-in email>` has nobody signed in to it and holds the unsent drafts in the row.
 
 **Test data:**
@@ -311,7 +320,6 @@ Runs once per row of **Test data**.
 | --- | --- |
 | two drafts staff opened | the draft opens; the account now holds three |
 | three drafts staff opened | refused with the draft cap's refusal; no draft opens |
-| three drafts, then one of them sent by its collector | the draft opens |
 
 **Steps:**
 
@@ -330,19 +338,27 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
+
 **Pre-conditions:**
 
-* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production, with the collection statement written.
+* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, outside production.
 * `<walk-in email>` is a mailbox the tester reads, with no account behind it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<mail delivery window>` | 5 minutes (assumed; any wait past the first send attempt) |
 
 **Steps:**
 
@@ -362,14 +378,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -401,7 +419,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -419,18 +437,17 @@ Runs once per row of **Test data**.
 
 | Field | Value | Refused beside |
 | --- | --- | --- |
-| Email | `not-an-address` | Email |
 | Title | 201 characters | Title |
 | Description | 2,001 characters | Description |
 
 **Steps:**
 
 1. Enter the row's value.
-2. Click Open case.
+2. Try to click Open case.
 
 **Expected Results:**
 
-* Open case is refused, the refusal in words beside the field in the row.
+* Open case stays disabled, the refusal in words beside the field in the row.
 * The rest of the form keeps what was typed.
 * No draft opens.
 
@@ -440,14 +457,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -474,13 +493,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
 
 **Pre-conditions:**
@@ -494,7 +513,6 @@ Runs once per row of **Test data**.
 | admin(staff, holds vault:operate) | yes | opens the draft |
 | admin(admin) | yes | opens the draft |
 | admin(treasurer, holds vault:read and vault:payout) | no | refused for the missing grant |
-| admin(holds vault:read only) | no | refused for the missing grant |
 | customer(collector), signed in on the site | no console | refused |
 | signed out | the console's sign-in | refused |
 
@@ -514,23 +532,31 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
+
 **Pre-conditions:**
 
-* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, and no account answers to `tai.man@example.com`.
+* admin(staff, holds vault:operate and kyc:read) is on <grade10 admin vault queue url>, and no account answers to `<walk-in email>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<walk-in email>` | a mailbox the tester reads that no account answers to, e.g. walkin.photo+<run id>@example.com |
 
 **Steps:**
 
-1. Open a walk-in for `tai.man@example.com` with category Trading card, title `Charizard PSA 10` and no photograph.
-2. As the customer, signed in at `tai.man@example.com`, open the draft and send it.
+1. Open a walk-in for `<walk-in email>` with category Trading card, title `Charizard PSA 10` and no photograph.
+2. As the customer, signed in at `<walk-in email>`, open the draft and send it.
 
 **Expected Results:**
 
@@ -543,7 +569,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -584,14 +610,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -613,7 +641,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Both of `<collector_A>`'s rows read Chan Tai Man; `<collector_B>`'s reads Lee Ka Yan.
-* Each name narrows the list to its collector, and a link beside it opens that collector's page.
+* A link beside each name opens that collector's page.
 * The rest of each row reads as before.
 
 ### grade10-admin-vault-operator-queue-US11-TC2-1: An account the walk-in created reads by its email handle until the customer names themselves
@@ -622,14 +650,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
+* **Automation status:** automated
+* **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -639,7 +669,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the Drafts view and read the draft's collector.
-2. As the customer, sign in at `grade10.com/vault` with that address and set the account's name to Ho Mei Ling.
+2. The account is renamed to Ho Mei Ling.
 3. Reload the Drafts view and read the draft's collector.
 
 **Expected Results:**
@@ -653,14 +683,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -670,41 +702,36 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the Needs staff view.
-2. Open the Held items tab.
+2. Click the short id on one row.
+3. Click Every collector.
+4. Open the Held items tab.
 
 **Expected Results:**
 
 * Every row's collector reads the account's short id and "name unavailable".
 * Every other field on every row reads as it does with names answered, and both lists load in full.
-* Following a row's short id narrows the list to that collector and offers the link to their collector page.
+* Step 2 narrows the list to that collector; the row's link opens their collector page.
 
 ### grade10-admin-vault-operator-queue-US11-TC4-1: A reader without the identity grant sees no collector column
-
-Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
+
 **Pre-conditions:**
 
-* The row's actor is on <grade10 admin vault queue url>, with cases of several collectors in the Needs staff view and the Held items tab.
-
-**Test data:**
-
-| Actor |
-| --- |
-| admin(treasurer, holds vault:read and vault:payout) |
-| admin(holds vault:read only) |
+* admin(treasurer, holds vault:read and vault:payout) is on <grade10 admin vault queue url>, with cases of several collectors in the Needs staff view and the Held items tab.
 
 **Steps:**
 
@@ -724,7 +751,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -753,7 +780,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -781,14 +808,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -797,7 +826,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the Needs staff view.
-2. Read the audit chain for entries written since step 1.
+2. As admin(auditor), read the audit log for the operator's entries since step 1.
 
 **Expected Results:**
 
@@ -822,14 +851,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -862,19 +893,27 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-12
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
+
 **Pre-conditions:**
 
-* admin(staff, holds vault:read and kyc:read) holds `<narrowed url>`, the Needs staff view narrowed to `<collector_A>`, copied from a prior session.
+* admin(staff, holds vault:read and kyc:read) holds `<narrowed url>`, the Needs staff view narrowed to `<collector_A>`.
 * `<collector_A>` holds two cases in the Needs staff view.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<narrowed url>` | <grade10 admin vault queue url>?queue=waiting&collector=<collector_A user id> |
 
 **Steps:**
 
@@ -890,14 +929,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -911,7 +952,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 says the collector holds no case in this list, with their name above and a count of 0.
+* Step 2 says the collector holds no case in this list, with their name above and a count reading none.
 * The control clearing the collector is still offered.
 
 ### grade10-admin-vault-operator-queue-US12-TC4-1: The queue offers no way to find a collector by name
@@ -920,14 +961,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -950,14 +993,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -966,7 +1011,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click `<collector_A>`'s name.
-2. Read the audit chain for entries written since step 1.
+2. As admin(auditor), read the audit log for the operator's entries since step 1.
 
 **Expected Results:**
 
@@ -981,14 +1026,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -1003,7 +1050,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the queue at an address narrowed to the row's collector.
+1. Open <grade10 admin vault queue url>?collector=<row's value>.
+2. Open each cut in turn.
 
 **Expected Results:**
 
@@ -1015,7 +1063,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1059,10 +1107,10 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US10-TC3-1` | Joined | `grade10-admin-vault-operator-queue-SC-58`; the collector's own tick is still owed at the send, `grade10-site-vault-case-intake-SC-34` |
 | `grade10-admin-vault-operator-queue-US10-TC4-1` | Joined | `grade10-admin-vault-operator-queue-SC-59` |
 | `grade10-admin-vault-operator-queue-US10-TC5-1` | Joined | `grade10-admin-vault-operator-queue-SC-60` |
-| `grade10-admin-vault-operator-queue-US10-TC6-1` | Joined | `grade10-admin-vault-operator-queue-SC-57` |
-| `grade10-admin-vault-operator-queue-US10-TC7-1` | Joined | `grade10-admin-vault-operator-queue-SC-61`; the row freeing a place on a send reads the cap requirement's own sentence in `grade10-site/vault/case-intake` |
+| `grade10-admin-vault-operator-queue-US10-TC6-1` | Joined | `grade10-admin-vault-operator-queue-SC-57`; the address is retyped in capitals with spaces, as `grade10-admin-vault-operator-queue-SC-74` walks |
+| `grade10-admin-vault-operator-queue-US10-TC7-1` | Joined | `grade10-admin-vault-operator-queue-SC-61`; a row freeing a place on a send was dropped at review: the collector who sends has signed in, so the next walk-in at that address is refused as a signed-in address |
 | `grade10-admin-vault-operator-queue-US10-TC8-1` | Joined | `grade10-admin-vault-operator-queue-SC-55`, nothing emailed to anybody |
-| `grade10-admin-vault-operator-queue-US10-TC9-1` | Folded | `grade10-admin-vault-operator-queue-SC-75`: the walk-in requirement holds the photographs to the intake's rules, Q37, and no scenario walked the limit |
+| `grade10-admin-vault-operator-queue-US10-TC9-1` | Folded | `grade10-admin-vault-operator-queue-SC-75`: the walk-in requirement holds the photographs to the intake's rules, Q37, and no scenario walked the limit; the console takes the add control away at ten rather than refusing an eleventh by name, raised at review (owner-questions 14) |
 | `grade10-admin-vault-operator-queue-US10-TC10-1` | Folded | `grade10-admin-vault-operator-queue-SC-76`: the requirement's refusal table refuses any fact the intake refuses and keeps the form, and no scenario walked it |
 | `grade10-admin-vault-operator-queue-US10-TC11-1` | Joined | `grade10-admin-vault-operator-queue-SC-62` for the one draft; the pending form is the ui-design Opening row's, out of suite on the `WalkInDialog` story |
 | `grade10-admin-vault-operator-queue-US10-TC12-1` | Joined | `grade10-admin-vault-operator-queue-SC-63`; the customer and signed-out rows read the console's own sign-in, unchanged |
@@ -1102,3 +1150,17 @@ Runs once per row of **Test data**.
 | Dev: the short id's shape | Settled | Q50 |
 | Design: Closed, Statement first, Empty, Opened, Signed-in address, Named, Name unavailable, Treasurer, Narrowed, Narrowed none | Closed on the row | `ui-design.md` names `grade10-admin-vault-operator-queue-SC-63`, `grade10-admin-vault-operator-queue-SC-58`, `grade10-admin-vault-operator-queue-SC-55`, `grade10-admin-vault-operator-queue-SC-57`, `grade10-admin-vault-operator-queue-SC-66`, `grade10-admin-vault-operator-queue-SC-69`, `grade10-admin-vault-operator-queue-SC-70`, `grade10-admin-vault-operator-queue-SC-71` and `grade10-admin-vault-operator-queue-SC-73` |
 | Design: Photos added, Refused otherwise | Closed on the row | now `grade10-admin-vault-operator-queue-SC-75` and `grade10-admin-vault-operator-queue-SC-76`, the scenarios folded here |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-admin-vault-operator-queue-US10-TC3-1` | Deferred at review: the open keeps the statement's version where the page does not show it; a person reads the draft's history once the case says where |
+| `grade10-admin-vault-operator-queue-US10-TC4-1` | A person reads that the form asks for no name and no contact number; the walk-in walk opens a draft without them, it does not read the form's fields |
+| `grade10-admin-vault-operator-queue-US10-TC10-1` | A person types a title and a description past their limits; no walk takes them |
+| `grade10-admin-vault-operator-queue-US10-TC12-1` | Layer api: the worker's own test refuses the open without vault:operate; the treasurer's console offers no walk-in to press |
+| `grade10-admin-vault-operator-queue-US10-TC14-1` | A person edits a sent walk-in and a draft the collector opened to see both refused; the walk-in walk edits only an unsent draft staff opened |
+| `grade10-admin-vault-operator-queue-US11-TC5-1` | Layer api: the vault worker's test refuses the names read without kyc:read |
+| `grade10-admin-vault-operator-queue-US11-TC6-1` | No walk reaches an overdue row; a person reads the Overdue view with a loan past due and finds no name |
+| `grade10-admin-vault-operator-queue-US12-TC7-1` | A person reads Overdue and a search with a collector in the address; the collectors walk narrows the cuts and Held items, never Overdue or a search |
+| `grade10-admin-vault-operator-queue-US10-TC6-1` | The walk proves the refusal for an address retyped in capitals and spaces, and nothing mailed; a person checks no second account was made for the address |

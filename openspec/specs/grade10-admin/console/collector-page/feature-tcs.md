@@ -1,6 +1,6 @@
 # grade10-admin/console/collector-page Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
 **Out of suite:** `grade10-admin-console-collector-page-SC-07` — the vault worker's test of `admin.collectorCases` with the audit write failing; `grade10-admin-console-collector-page-SC-17` — the `CollectorPage` story with the header held pending, and its colocated test.
 
@@ -17,14 +17,16 @@ every vault case they hold,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -53,7 +55,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -92,28 +94,31 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
 * admin(staff, holds vault:read and kyc:read) is on <grade10 admin vault queue url>, and `<collector_A>` holds a vault case.
+* admin(auditor, holds audit:read) is signed in to the console's audit trail.
 
 **Steps:**
 
 1. Open `<collector_A>`'s collector page.
 2. Reload the page.
-3. Read the audit chain for entries written since step 1.
+3. As admin(auditor), read the audit trail for entries since step 1 naming `<collector_A user id>`.
 
 **Expected Results:**
 
-* Each opening's reads of the header and of the cases are recorded, each entry naming who read `<collector_A>` and when, as a search's entry does.
+* Steps 1 and 2 each leave a header-read entry and a cases-read entry naming the staff member, the time and `<collector_A user id>`.
 * No entry holds `<collector_A>`'s name or email.
 
 ### grade10-admin-console-collector-page-US1-TC4-1: The vault cases section pages and says whether there is more
@@ -122,7 +127,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -135,6 +140,12 @@ Runs once per row of **Test data**.
 
 * admin(staff, holds vault:read and kyc:read) is on `<collector_D>`'s collector page.
 * `<collector_D>` holds `<page size>` plus one vault cases.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<page size>` | 50, the console's page (Q43) |
 
 **Steps:**
 
@@ -153,27 +164,29 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
 * admin(staff, holds vault:read and kyc:read) is signed in to the console.
-* `<collector_E>`, named Lee Ka Yan, is an account holding no vault case.
+* `<account_E>`, named Lee Ka Yan, is an account that has never held a vault case.
 
 **Steps:**
 
-1. Open `admin.grade10.com/vault/collectors/<collector_E user id>`.
+1. Open `admin.grade10.com/vault/collectors/<account_E user id>`.
 
 **Expected Results:**
 
-* The header reads Lee Ka Yan and their email.
+* The header shows `<account_E>`'s short id and says it holds no vault case.
 * The vault cases section says the collector holds no vault case.
 
 ### grade10-admin-console-collector-page-US1-TC6-1: A name the account service cannot answer reads as unavailable and the cases still load
@@ -182,7 +195,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -202,7 +215,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The header reads `<collector_A>`'s short id and "name unavailable".
+* The header reads `<collector_A>`'s short id and "name unavailable", and no email.
 * The vault cases section lists both cases.
 
 ### grade10-admin-console-collector-page-US1-TC7-1: A section that fails shows its own error and retry while the other stands
@@ -213,19 +226,21 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
 * admin(staff, holds vault:read and kyc:read) is signed in to the console, and `<collector_A>`, named Chan Tai Man, holds two vault cases.
-* The read behind the row's failing section fails once, then answers.
+* The read behind the row's failing section fails until the tester clicks its retry, then answers.
 
 **Test data:**
 
@@ -252,14 +267,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -357,18 +374,20 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
+
 **Pre-conditions:**
 
-* `<collector_A>`, named Chan Tai Man, holds two vault cases, `<case_1>` and `<case_2>`.
+* `<collector_A>`, named Chan Tai Man, holds two submitted vault cases, `<case_1>` and `<case_2>`, neither with a visit booked.
 
 **Test data:**
 
@@ -381,10 +400,12 @@ Runs once per row of **Test data**.
 
 1. As the row's actor, open `<collector_A>`'s collector page.
 2. Follow **Their cases on the queue** in the header.
+3. Open the Needs staff view.
 
 **Expected Results:**
 
-* The queue opens narrowed to `<collector_A>`, listing `<case_1>` and `<case_2>` and no other case.
+* The queue opens on its landing view, narrowed to `<collector_A>`.
+* Needs staff lists `<case_1>` and `<case_2>` and no other case.
 
 ### grade10-admin-console-collector-page-US1-TC12-1: Cases removed from the account or erased are not listed
 
@@ -420,14 +441,16 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -454,31 +477,24 @@ shown a name my role does not hold.
 
 ### grade10-admin-console-collector-page-US2-TC1-1: A treasurer reads the collector's cases under their short id and no name
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-02
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
+
 **Pre-conditions:**
 
-* The row's actor is on the page of `<case_2>`, a live loan of `<collector_A>`, named Chan Tai Man at `tai.man@example.com`, who holds two vault cases.
-
-**Test data:**
-
-| Actor |
-| --- |
-| admin(treasurer, holds vault:read and vault:payout) |
-| admin(holds vault:read only) |
+* admin(treasurer, holds vault:read and vault:payout) is on the page of `<case_2>`, a live loan of `<collector_A>`, named Chan Tai Man at `tai.man@example.com`, who holds two vault cases.
 
 **Steps:**
 
@@ -491,7 +507,7 @@ Runs once per row of **Test data**.
 * Step 1 opens `admin.grade10.com/vault/collectors/<collector_A user id>`.
 * The header reads `<collector_A>`'s short id; it carries no name and no email.
 * The vault cases section lists both cases with reference, item, status, lane and last touched.
-* Step 3 shows the contact the case holds, as before this change.
+* Step 3's case page shows `tai.man@example.com` as its contact.
 
 ### grade10-admin-console-collector-page-US2-TC2-1: The header's name read refuses a caller without the identity grant
 
@@ -499,7 +515,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -541,7 +557,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-console-collector-page-US1-TC2-1` | Joined | `grade10-admin-console-collector-page-SC-03` for the held row and the case header's link, as the requirement states it for every vault read holder; Q39 decided that a search result names no collector, so the three search rows reach the page through the found case's header |
 | `grade10-admin-console-collector-page-US1-TC3-1` | Joined | `grade10-admin-console-collector-page-SC-06`; a reload is a second opening, and the header's read is recorded with the cases' (Q55) |
 | `grade10-admin-console-collector-page-US1-TC4-1` | Joined | `grade10-admin-console-collector-page-SC-13`; the page size is 50, Q43 |
-| `grade10-admin-console-collector-page-US1-TC5-1` | Joined | `grade10-admin-console-collector-page-SC-14` and `grade10-admin-console-collector-page-SC-08` |
+| `grade10-admin-console-collector-page-US1-TC5-1` | Joined | `grade10-admin-console-collector-page-SC-14`, with the header `grade10-admin-console-collector-page-SC-22` states for an account that never held a case; rewritten at review, as the header no longer names such an account |
 | `grade10-admin-console-collector-page-US1-TC6-1` | Joined | `grade10-admin-console-collector-page-SC-10` |
 | `grade10-admin-console-collector-page-US1-TC7-1` | Joined | `grade10-admin-console-collector-page-SC-16` for the cases row and `grade10-admin-console-collector-page-SC-20` for the header row, Q51 |
 | `grade10-admin-console-collector-page-US1-TC8-1` | Joined | `grade10-admin-console-collector-page-SC-11`, the malformed id reading the same, Q40 |
@@ -563,3 +579,15 @@ Runs once per row of **Test data**.
 | Raised: which journey owns the treasurer's rows | Settled | Q48; walked by `grade10-admin-vault-operator-queue-US11-TC4-1` |
 | Raised by this pass: the header when its read fails | Settled | Q51, `grade10-admin-console-collector-page-SC-20` |
 | Design: Loading, Header, Header treasurer, Header unavailable, Vault cases, Vault cases none, Section failed, Unknown collector | Closed on the row | `ui-design.md` names `grade10-admin-console-collector-page-SC-17`, `grade10-admin-console-collector-page-SC-08`, `grade10-admin-console-collector-page-SC-09`, `grade10-admin-console-collector-page-SC-10`, `grade10-admin-console-collector-page-SC-12`, `grade10-admin-console-collector-page-SC-14`, `grade10-admin-console-collector-page-SC-16` and `grade10-admin-console-collector-page-SC-11` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-admin-console-collector-page-US1-TC4-1` | Sixty seeded cases is a fixture, not a walk; the worker's test pages them, and a person reads the section's more line |
+| `grade10-admin-console-collector-page-US1-TC6-1` | An account service that answers nothing for one account is not something the isolated stack can stand; the header's component test decides it |
+| `grade10-admin-console-collector-page-US1-TC9-1` | Deferred at review: rows whose outcomes no rule states, and a console grant the tester has to choose |
+| `grade10-admin-console-collector-page-US1-TC10-1` | Deferred at review: a case whose account was erased has no route by hand, and no test decides it yet |
+| `grade10-admin-console-collector-page-US1-TC12-1` | Deferred at review: no route erases one case of a collector by hand, and no test decides it yet |
+| `grade10-admin-console-collector-page-US2-TC2-1` | Layer api: the vault worker's test refuses the header's read without kyc:read |
+| `grade10-admin-console-collector-page-US1-TC2-1` | The walk takes four routes; a person takes the search by phone number, which the seed cannot give a case |

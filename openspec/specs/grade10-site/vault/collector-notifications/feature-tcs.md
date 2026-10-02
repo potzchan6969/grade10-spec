@@ -1,6 +1,6 @@
 # grade10-site/vault/collector-notifications Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-01, tcs-rules r4
 **Out of suite:** `grade10-site-vault-collector-notifications-SC-27` — its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that capability's suite walks the money email it names.
 
@@ -515,7 +515,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -528,6 +528,7 @@ Runs once per row of **Test data**.
 
 * `<case_1>` is a walk-in staff opened for `<walk-in email>`, a mailbox the tester reads, in the row's state.
 * admin(staff, holds vault:operate) is on `<case_1>`'s page.
+* `<mail delivery window>` is 5 minutes (assumed; any wait past the first send attempt).
 
 **Test data:**
 
@@ -540,12 +541,11 @@ Runs once per row of **Test data**.
 
 1. Cancel `<case_1>` and confirm.
 2. Wait <mail delivery window>.
-3. Read `<walk-in email>`'s inbox and the case's Custody tab for what the collector was told.
+3. Read `<walk-in email>`'s inbox.
 
 **Expected Results:**
 
 * The message matches the row.
-* An unsent draft's cancel leaves no message owed or parked.
 
 ### grade10-site-vault-collector-notifications-US2-TC15-1: A draft staff opened expires with no untouched email
 
@@ -555,7 +555,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -566,7 +566,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's draft has gone untouched for 7 days, and its address is a mailbox the tester reads.
+* The row's draft has gone untouched for 8 days, and its address is a mailbox the tester reads.
+* `<mail delivery window>` is 5 minutes (assumed; any wait past the first send attempt).
 
 **Test data:**
 
@@ -1112,3 +1113,5 @@ reconciliation folded one more,
 | `US5-TC8-1` | The walk proves the offer's six rows; a person confirms the prose around them repeats none of them |
 | `US6-TC1-1` | The isolated stack configures no hosted verification provider, so e-kyc raises no check and the invitation is never sent |
 | `US6-TC2-1` | As above |
+| `grade10-site-vault-collector-notifications-US2-TC14-1` | A person cancels both rows and reads the mailbox; the vault worker's walk-ins test decides nothing is owed for the unsent one |
+| `grade10-site-vault-collector-notifications-US2-TC15-1` | The draft runs out seven days from its last touch; a person moves the clock or waits, and reads the mailbox |
