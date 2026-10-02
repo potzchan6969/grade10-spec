@@ -11,7 +11,7 @@
 - Changing what grade10 shows: grade10#773, #783, #785, #789 and #795 already show it. The one code change is the refusal log's fields
 - Post-sale payment states and their card capture on the admin side: `complete-auction-post-sale` removes those requirements whole
 - The paragraph in "A winner reads their own payment and shipment state" that points at the old hold requirement: `clarify-auction-shipping-progress-copy` folds that requirement while in flight and drops it there
-- "An Unsold close releases the listing's inventory hold" and its demoted top bid: `release-stock-on-unsold-close` owns that requirement while in flight
+- The demoted top bid in "An Unsold close releases the listing's inventory hold": it names no card, and a lot left with only outbid bids still closes Unsold
 - Renaming the `authorizationMessage` and `authorizationStatus` props on the store's bid blocks: they carry the bid form's refusal, and the block is the store's
 - Three requirements other changes fold while in flight, each carrying this change's hold-free text in its own delta: the winner's payment requirement, renamed from "The bid-time hold is released, never captured" (`complete-auction-post-sale`), "Operator may call off a listing that has not closed" and "Collectors never see hidden lots" (`define-public-auction-identifiers`)
 - A retried bid answering its first outcome by a key per attempt: its own change, since it builds a contract field, a column and a client retry, while this change records what runs
