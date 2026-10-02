@@ -3,7 +3,7 @@
 ## 1. The store's blocks and words (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 A test in its own commit: `packages/ui/src/index.test.ts` reads the public entry and finds none of `VaultCases`, `VaultCasesEmpty`, `VaultAcceptOfferDialog` and the eleven types beside them (`shared-ui-vault-case-SC-01`, `shared-ui-vault-case-SC-02`, `shared-ui-vault-case-SC-03`)
-- [ ] 1.2 Remove `packages/ui/src/blocks/vault-case/` whole, its exports in `packages/ui/src/index.ts`, and the preview stories that import it (`shared-ui-vault-case-SC-01`)
+- [ ] 1.2 Remove `packages/ui/src/blocks/vault-case/` whole, its exports in `packages/ui/src/index.ts`, and the block's own stories (`shared-ui-vault-case-SC-01`)
 - [ ] 1.3 Remove `title`, `intro`, `packetStatus`, `event`, `list`, `lane`, `request`, `case`, `money`, `visit`, `verify` and `data` from `packages/i18n/messages/shared/{en,ko,zh-Hans,zh-Hant}/vault.json`, and `nav.vault` from each shared `chrome.json`, after a search of grade10 at the claimed baseline finds no reader. Keep `status`, `category` and `ceremony`
 - [ ] 1.4 Remove `packages/i18n/messages/grade10/{en,zh-Hans,zh-Hant}/vault.json` and `messages/zzz/ko/vault.json` with their imports and `vault:` entries in `packages/i18n/src/catalogs.ts`
 - [ ] 1.5 Verify: `pnpm --filter @grade10/ui test`, `pnpm --filter @grade10/i18n test`, the typecheck of both, and `pnpm run validate:changes retire-vault-collector-site` in grade10-spec.
@@ -18,7 +18,8 @@ Each scenario a removed view alone decided gets a test on the worker or the cont
 - [ ] 2.4 `packages/vault/backend/test/cases/wire.test.ts`: repayments in value-date order with the balance each left, reversed ones left out; the forfeiture notice's written and pay-by dates; how to pay null while a value is unset (`grade10-site-vault-loan-and-settlement-SC-27`, `-SC-28`, `-SC-32`, `-SC-34`, `-SC-52`)
 - [ ] 2.5 `packages/vault/backend/test/cases/yourData.repo.test.ts`: the classes with their days, the identity answered or failed, signed documents by case, the next cursor and the holds (`grade10-site-vault-retention-and-erasure-SC-12`, `-SC-17`, `-SC-19`, `-SC-21`, `-SC-22`, `-SC-39`, `-SC-40`); `packages/vault/backend/test/trpc/erasureRouter.test.ts`: filing and cancelling inside the window, refused by name with each hold (`-SC-24`, `-SC-26`); a live grading submission accepts the filing and refuses the run (`-SC-43`)
 - [ ] 2.6 `packages/vault/backend/test/routes/documents.test.ts`: the zip answers one Your data page of cases by cursor, an empty archive to a collector who signed nothing, and refuses a request with no session (`grade10-site-vault-documents-and-signing-SC-27`, `-SC-38`); `packages/vault/backend/test/routes/visit.test.ts` keeps refusing by name a case the diary never booked (`grade10-site-vault-visit-booking-SC-32`)
-- [ ] 2.7 Verify: the touched test files and `pnpm run typecheck` for `packages/vault/backend` and `packages/vault/contracts`.
+- [ ] 2.7 The tests already on the branch, each in its own commit: `packages/vault/backend/test/cases/photos.repo.test.ts` reads a photograph's trail (`grade10-site-vault-case-intake-SC-09`); `packages/vault/backend/test/cases/intake.repo.test.ts` (`grade10-site-vault-case-intake-SC-13`); `packages/vault/backend/test/trpc/collectorRouter.test.ts`: the collector's list carries each case's own visit (`grade10-site-vault-visit-booking-SC-30`)
+- [ ] 2.8 Verify: the touched test files and `pnpm run typecheck` for `packages/vault/backend` and `packages/vault/contracts`.
 
 ## 3. The site (grade10) (owner: @ecchochan)
 
@@ -34,8 +35,16 @@ Takes the draft `feature-tcs.md` as its input once groups 2 and 3 have landed; h
 
 - [ ] 4.1 Walk the collector's side of `request`, `offer`, `loan`, `visit`, `walk-in` and `your-data` under `apps/frontend/grade10/e2e/tests/vault/`, and `grading/uncollected.spec.ts`, against the collector API through `page.request` with `queryProcedure` and `mutateProcedure` in `e2e/helpers/vault.ts`; the console and the ceremony stay walked through their screens (`grade10-site-vault-case-lifecycle-SC-16`, `-SC-17`, `-SC-19`, `-SC-37`, `-SC-39`, `grade10-site-vault-valuation-and-offer-SC-22`, `-SC-23`, `-SC-26`, `-SC-27`, `-SC-29`, `grade10-site-vault-documents-and-signing-SC-17`)
 - [ ] 4.2 Walk the sign-in ask at the bidding history in the navigation walk (`grade10-site-site-navigation-SC-17` to `-SC-25`)
-- [ ] 4.3 In grade10-spec, flip the cases each test decides with `pnpm run tcs:automated <case…> --decided-by <path>` once they land: each draft case still `Decided by` a walk whose rewrite dropped its title moves to the API walk or worker test that cites it, or back to manual, named in the walk's `rounds.md` row; the deprecated cases whose subject is a removed screen keep no `Decided by`
-- [ ] 4.4 Verify: the vault, grading and navigation walks green in CI.
+- [ ] 4.3 In grade10-spec, flip the draft cases each test decides with `pnpm run tcs:automated <case…> --decided-by <path>` once they land: a draft case still `Decided by` a walk whose rewrite dropped its title moves to the API walk or worker test that cites it, or back to manual, named in the walk's `rounds.md` row; a deprecated case keeps the `Decided by` it was copied with, neither flipped nor retargeted
+- [ ] 4.4 The automated cases this change re-versions from `-1` to `-2` land as drafts walked through the API; once each walk lands, retitle its test `[<case>-1]` to `[<case>-2]` where the title names it, and flip it with `pnpm run tcs:automated <case>-2 --decided-by <path>`:
+  - `vault/request.spec.ts`: `grade10-site-vault-case-intake-` US1-TC1, US1-TC2, US1-TC3, US1-TC4, US1-TC6 (titled), US1-TC7, US1-TC8, US1-TC9, US1-TC10, US1-TC14, US1-TC15, US1-TC16 (titled), US1-TC18, US1-TC19, US4-TC1, US4-TC4, US5-TC1, US5-TC8 (titled); `grade10-site-vault-case-lifecycle-` US1-TC1 (titled), US1-TC2, US1-TC3 (titled)
+  - `vault/walk-in.spec.ts`, all titled: `grade10-site-vault-case-intake-` US6-TC1, US6-TC3, US6-TC4, US6-TC5, US6-TC6, and US6-TC7 (a titled draft); `grade10-site-vault-case-lifecycle-` US6-TC1, US6-TC2, US6-TC4, US6-TC5
+  - `vault/offer.spec.ts`: `grade10-site-vault-valuation-and-offer-` US2-TC1, US2-TC2, US2-TC4, US2-TC5, US2-TC6, US5-TC2, US5-TC3 (titled), US2-TC7, US2-TC9, US2-TC10, US2-TC11, US5-TC1; `grade10-site-vault-case-lifecycle-` US2-TC1, US5-TC1, US5-TC2, US5-TC3, US5-TC4, US5-TC5, US5-TC8, US5-TC10, US5-TC12
+  - `vault/loan.spec.ts`: `grade10-site-vault-loan-and-settlement-` US1-TC1 (titled), US5-TC2 (a titled draft), US2-TC1, US5-TC1, US5-TC5, US6-TC1, US6-TC2, US6-TC3, US6-TC7, US6-TC8; `grade10-site-vault-case-lifecycle-` US4-TC1, US4-TC2, US4-TC5
+  - `vault/visit.spec.ts`: `grade10-site-vault-visit-booking-` US1-TC4, US4-TC12 (titled), US1-TC1, US1-TC2, US1-TC7, US1-TC8, US1-TC9, US1-TC10, US4-TC1 to US4-TC7, US4-TC13; `grade10-site-vault-documents-and-signing-` US1-TC1, US1-TC2, US1-TC10 (titled)
+  - `vault/your-data.spec.ts`: `grade10-site-vault-documents-and-signing-` US5-TC2; `grade10-site-vault-retention-and-erasure-` US1-TC5, US1-TC6, US1-TC7, US5-TC1, US5-TC8, US5-TC13, US5-TC16, US5-TC17
+  - `grading/uncollected.spec.ts`: `grade10-site-vault-retention-and-erasure-` US4-TC5
+- [ ] 4.5 Verify: the vault, grading and navigation walks green in CI.
 
 ## 5. The manual (grade10-spec) (owner: @ecchochan)
 

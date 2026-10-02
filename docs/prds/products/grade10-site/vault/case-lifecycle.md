@@ -61,6 +61,10 @@ guarded on the offer not having expired. Declining returns the case to
 agreed at the counter take either lane `under_valuation → accepted` with no
 offer; either lane may end at `declined` by staff here.
 
+❓ A decline past the offer's expiry is taken until the expiry sweep closes
+the offer, where an accept is refused at once; the owner confirms whether a
+later change adds that guard.
+
 # Signing and custody
 Who the collector is, what they sign, where the item goes.
 

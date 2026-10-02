@@ -18,8 +18,6 @@
 - FROM: `### Requirement: A case page answers only to the collector whose case it is`
 - TO: `### Requirement: A case answers only to the collector whose case it is`
 
-## MODIFIED Requirements
-
 ### Requirement: The collector's own moves are acts on their own case
 
 Two moves belong to the collector, and each is an act on the case it is
@@ -83,6 +81,28 @@ read, naming the collector as who called it off.
 - **WHEN** they call the request off naming the instant they read it at
 - **THEN** the act is refused by name as a case that moved
 - **AND** the case is unchanged
+
+### Requirement: A case answers only to the collector whose case it is
+
+A case belongs to one collector, and the worker tells nobody else that it
+exists.
+
+**One answer for both** - a read of, or an act on, an id that answers to no
+case and a case belonging to another collector SHALL both be refused as the
+same case not found.
+
+**No distinction** - the refusal SHALL carry nothing that tells the two
+apart.
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-39 - Another collector's case reads as not found
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who opens a case that is not theirs learns nothing about it
+
+- **GIVEN** a signed-in collector and a case belonging to somebody else
+- **WHEN** they read it or answer its offer by its id
+- **THEN** they are refused with the same not found an id nobody was issued answers
+- **AND** nothing in the refusal says which of the two they met
+
+## MODIFIED Requirements
 
 ### Requirement: An ended case reads in the collector's words
 
@@ -338,26 +358,6 @@ stored on the case.
 - **GIVEN** a case that expired on an abandonment clock
 - **WHEN** its owner reads it
 - **THEN** it reads that the case is closed, naming the day
-
-### Requirement: A case answers only to the collector whose case it is
-
-A case belongs to one collector, and the worker tells nobody else that it
-exists.
-
-**One answer for both** - a read of, or an act on, an id that answers to no
-case and a case belonging to another collector SHALL both be refused as the
-same case not found.
-
-**No distinction** - the refusal SHALL carry nothing that tells the two
-apart.
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-39 - Another collector's case reads as not found
-**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who opens a case that is not theirs learns nothing about it
-
-- **GIVEN** a signed-in collector and a case belonging to somebody else
-- **WHEN** they read it or answer its offer by its id
-- **THEN** they are refused with the same not found an id nobody was issued answers
-- **AND** nothing in the refusal says which of the two they met
 
 ### Requirement: A draft staff opened ends silently and leaves nothing on the account
 

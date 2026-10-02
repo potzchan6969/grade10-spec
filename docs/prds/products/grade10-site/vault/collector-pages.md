@@ -92,8 +92,8 @@ again.
 - **A draft staff opened** — under the collector's own account as a draft
   opened at the counter; they check it and send it, and nothing is valued or
   emailed before they send it
-- ❓ **Sending a walk-in** — with no collector screen, a customer has nowhere
-  to send the draft staff opened for them; @tangconst and the owner confirm
+- **Sending a walk-in** — until the collector's screens ship, a draft staff
+  opened waits, and ends silently on its own clock
 - **History** — every event the collector may see, actor kind only, never a
   staff id; the counter's own records stay staff-only
 - **Clocks** — a day and a deadline, on the case and in every email, are
@@ -142,11 +142,11 @@ again.
   reason; the case badges for staff, who can hand it back to the queue
 - **WhatsApp** — a click-to-chat link staff press, with six templates; no
   automation, no inbound channel
-- ❓ **Where a message links** — every email's case link is
+- **Where a message links** — every email's case link keeps
   `grade10.com/vault/cases/<id>`, the identity invitation's
   `grade10.com/vault/verify#<secret>`, and a sign-in started there returns
-  there; none finds a page until the collector's screens ship. @tangconst and
-  the owner confirm the addresses those screens answer at
+  there; each lands on the not-found surface until the collector's screens
+  ship
 
 ## Specs and journeys
 

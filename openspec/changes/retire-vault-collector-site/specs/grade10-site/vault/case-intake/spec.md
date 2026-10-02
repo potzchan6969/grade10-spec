@@ -23,49 +23,6 @@
 - FROM: `### Requirement: The last step reads the request back before it sends`
 - TO: `### Requirement: A send answers for the collection statement in force`
 
-## MODIFIED Requirements
-
-### Requirement: A collector opens a request for one item
-
-A collector SHALL open a vault request from their own account, or find one
-staff opened for them at the counter as `grade10-admin/vault/operator-queue`
-states, and carry it through three acts on the worker:
-
-1. Open it with the item's facts: its category, a title, an optional
-   description, an optional contact number, and whether they want a loan
-   against it and for how much.
-2. Photograph it: attach at least one and at most ten photographs.
-3. Send it in.
-
-An unsent request SHALL take the collector's edits and photographs until it
-is sent, and SHALL be listed among the collector's own cases as unsent. It
-SHALL carry photographs only while it is unsent. An edit to the facts of a
-request already sent SHALL be refused by name, and the request SHALL keep
-what it was sent with.
-
-<!-- trace:scenario id=g10.vault-case-intake.SC-gfr rev=1 -->
-#### Scenario: grade10-site-vault-case-intake-SC-01 - A request is opened and reopened
-**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
-
-- **WHEN** a collector opens a request and leaves it unsent
-- **THEN** their own cases list it as an unsent request
-- **AND** it still takes an edit to its facts and a photograph
-
-<!-- trace:scenario id=g10.vault-case-intake.SC-nkl rev=1 -->
-#### Scenario: grade10-site-vault-case-intake-SC-02 - A photograph is refused once the request is sent
-**Serves:** Opening a request - a photograph is refused once the request is sent
-
-- **GIVEN** a request the collector has sent in
-- **WHEN** a further photograph is offered for it
-- **THEN** it is refused by name and nothing is stored
-
-#### Scenario: grade10-site-vault-case-intake-SC-43 - A sent request takes no edit to its facts
-**Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back and changes the request only until it goes
-
-- **GIVEN** a request the collector has sent in, titled as they sent it
-- **WHEN** an edit to its title is sent
-- **THEN** it is refused by name and the request keeps the title it was sent with
-
 ### Requirement: A send answers for the collection statement in force
 
 Before the collector sends, the draft reads back what the send will carry,
@@ -125,6 +82,49 @@ and the send answers for the personal information collection statement.
 - **WHEN** the collector sends the request
 - **THEN** the send is refused by name
 - **AND** the request stays a draft
+
+## MODIFIED Requirements
+
+### Requirement: A collector opens a request for one item
+
+A collector SHALL open a vault request from their own account, or find one
+staff opened for them at the counter as `grade10-admin/vault/operator-queue`
+states, and carry it through three acts on the worker:
+
+1. Open it with the item's facts: its category, a title, an optional
+   description, an optional contact number, and whether they want a loan
+   against it and for how much.
+2. Photograph it: attach at least one and at most ten photographs.
+3. Send it in.
+
+An unsent request SHALL take the collector's edits and photographs until it
+is sent, and SHALL be listed among the collector's own cases as unsent. It
+SHALL carry photographs only while it is unsent. An edit to the facts of a
+request already sent SHALL be refused by name, and the request SHALL keep
+what it was sent with.
+
+<!-- trace:scenario id=g10.vault-case-intake.SC-gfr rev=1 -->
+#### Scenario: grade10-site-vault-case-intake-SC-01 - A request is opened and reopened
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request and leaves it unsent
+- **THEN** their own cases list it as an unsent request
+- **AND** it still takes an edit to its facts and a photograph
+
+<!-- trace:scenario id=g10.vault-case-intake.SC-nkl rev=1 -->
+#### Scenario: grade10-site-vault-case-intake-SC-02 - A photograph is refused once the request is sent
+**Serves:** Opening a request - a photograph is refused once the request is sent
+
+- **GIVEN** a request the collector has sent in
+- **WHEN** a further photograph is offered for it
+- **THEN** it is refused by name and nothing is stored
+
+#### Scenario: grade10-site-vault-case-intake-SC-43 - A sent request takes no edit to its facts
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back and changes the request only until it goes
+
+- **GIVEN** a request the collector has sent in, titled as they sent it
+- **WHEN** an edit to its title is sent
+- **THEN** it is refused by name and the request keeps the title it was sent with
 
 ### Requirement: A case carries a six-character reference
 

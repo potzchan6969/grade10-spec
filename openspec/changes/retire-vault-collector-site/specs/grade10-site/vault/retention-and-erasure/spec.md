@@ -29,8 +29,6 @@ account and an operator runs.
 - FROM: `### Requirement: The collector reads what the vault holds about them on one page`
 - TO: `### Requirement: The collector reads what the vault holds about them under their own account`
 
-## MODIFIED Requirements
-
 ### Requirement: The collector reads what the vault holds about them under their own account
 
 Your data is one read under the collector's own account, and it answers for
@@ -74,6 +72,8 @@ part it answered.
 - **WHEN** the identity standing cannot be answered
 - **THEN** the read names the identity standing as failed
 - **AND** it carries what is kept, the signed documents, what stands in the way and the ask
+
+## MODIFIED Requirements
 
 ### Requirement: Your data names each class the vault keeps and the window it is kept for
 

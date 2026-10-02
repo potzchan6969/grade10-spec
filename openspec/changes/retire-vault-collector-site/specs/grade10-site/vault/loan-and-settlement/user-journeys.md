@@ -1,5 +1,13 @@
 ## Context user journeys
 
+### grade10-site-vault-loan-and-settlement-US-01: Treasurer records the advance that starts the loan
+
+**As a** treasurer,
+**I want** to write down a transfer that has already left the bank, against
+the day it left,
+**so that** the borrower's term runs from the day they got the money and
+nobody can price and pay out one loan alone.
+
 ### grade10-site-vault-loan-and-settlement-US-02: Borrower repays and takes the item home
 
 **As a** borrower,

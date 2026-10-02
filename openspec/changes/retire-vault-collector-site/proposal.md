@@ -29,9 +29,9 @@ the worker's API rather than a site page.
 - **The suites keep what the worker proves** - a case whose subject is a
   removed screen is deprecated, never deleted; a case that proves the worker
   stays and is walked against the API.
-- **Questions left for the screens** - where a mailed link lands, how a
-  walk-in draft is sent, and the screens themselves are marked ❓ on the
-  manual for @tangconst and the owner.
+- **Until the screens ship** - a mailed link keeps its address and lands on
+  the not-found surface, and a walk-in draft waits and ends on its own clock;
+  the screens themselves are left open on the manual for @tangconst.
 
 Goals and non-goals are in [`decisions.md`](decisions.md).
 
@@ -82,8 +82,8 @@ Goals and non-goals are in [`decisions.md`](decisions.md).
   `/profile/data`, the Your data button and the Vault item; the vault's e2e
   walks call the worker's API instead of the site; `/vault/sign` and the
   console are unchanged.
-- **In-flight changes** - `vault-home-case-cards` draws cards this change
-  removes and archives before this change is accepted. `add-item-registry`
+- **In-flight changes** - `vault-home-case-cards`, now archived, drew cards
+  this change removes. `add-item-registry`
   group 12 builds the wizard's first step, which no longer exists.
   `add-hosted-identity-verification` draws a page at `/vault/verify`, the
   address this change takes off, and its tasks 1.2, 1.5 and group 13 name it.
@@ -102,13 +102,8 @@ their recommendations in [`decisions.md`](decisions.md).
 
 ## References
 
-- [Collector Pages · Case List](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-list)
-- [Collector Pages · Request Wizard](../../../docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard)
-- [Collector Pages · Case Page](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-page)
-- [Collector Pages · Booking a Visit](../../../docs/prds/products/grade10-site/vault/collector-pages.md#booking-a-visit)
-- [Collector Pages · Messages](../../../docs/prds/products/grade10-site/vault/collector-pages.md#messages)
+- [Collector Pages](../../../docs/prds/products/grade10-site/vault/collector-pages.md)
 - [Vault · Where It Is Open](../../../docs/prds/products/grade10-site/vault/index.md#where-it-is-open)
-- [Compliance and Readiness · Retention and Erasure](../../../docs/prds/products/grade10-site/vault/compliance-and-readiness.md#retention-and-erasure)
-- [Vault Case Blocks · The Blocks](../../../docs/prds/products/shared/ui/vault-case.md#the-blocks)
+- [Vault Blocks · The Blocks](../../../docs/prds/products/shared/ui/vault-case.md#the-blocks)
 - [Carried Surfaces · What Each Lane Carries](../../../docs/prds/products/grade10-site/site/carried-surfaces.md#what-each-lane-carries)
 - [Vault digital twin](../../../docs/references/grade10-vault-digital-twin.md) - @tangconst's working notes for the screens

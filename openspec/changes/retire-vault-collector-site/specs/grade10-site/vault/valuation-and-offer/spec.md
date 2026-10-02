@@ -15,8 +15,6 @@
 - FROM: `### Requirement: A refused answer is named where the answer was given`
 - TO: `### Requirement: A refused answer is named to whoever gave it`
 
-## MODIFIED Requirements
-
 ### Requirement: A collector answers the live offer on their own case
 
 The collector answers the offer their case holds as an act on that case, and
@@ -45,6 +43,12 @@ booked visit as it was.
 **Declining keeps the request** - a decline SHALL close the offer as declined
 by the collector, return the case to `under_valuation`, and leave a booked
 visit standing.
+
+**A decline and the expiry** - a decline SHALL be judged against no expiry:
+until the expiry sweep closes the offer, a decline past the offer's expiry
+SHALL be taken as above; once the sweep has closed the offer as expired, a
+decline SHALL be refused by name as naming no open offer. Only an accept is
+refused as an offer that ran out.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-21 - The offer reads with its terms and its valuation
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector reads every figure they are being asked to agree to before they answer
@@ -84,6 +88,35 @@ visit standing.
 - **WHEN** they read their own cases before that day and again after the offer has lapsed
 - **THEN** the first read gives the day to answer by and the second gives none
 
+### Requirement: A refused answer is named to whoever gave it
+
+An offer can run out, and a case can move, between the collector reading it
+and their answer landing.
+
+**What it names** - a refused answer SHALL say which happened: the offer ran
+out, the offer was replaced, or the case moved under the answer.
+
+**Nothing moves** - a refused answer SHALL leave the case and its offers as
+they were, so the next read shows where the case now stands.
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-28 - An offer that ran out under the reader
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose offer lapsed under them is told where they answered
+
+- **GIVEN** a collector who read a case whose offer then expired
+- **WHEN** they accept it
+- **THEN** the answer is refused by name as an offer that ran out
+- **AND** the next read reads an offer that ran out
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-29 - A case that moved under the answer
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose case moved under them reads why the answer did not land
+
+- **GIVEN** a collector who read a live offer that the counter accepted a moment later
+- **WHEN** they accept it, naming the instant they read it at
+- **THEN** the answer is refused by name as a case that moved under the answer
+- **AND** the next read reads where the case now stands
+
+## MODIFIED Requirements
+
 ### Requirement: Only the offer that stands takes an answer
 
 A case that has been counter-offered carries both offers and answers the live
@@ -114,30 +147,3 @@ the live offer open and unanswered.
 - **GIVEN** the same case
 - **WHEN** an answer names the superseded offer
 - **THEN** it is refused by name and the live offer is still open and unanswered
-
-### Requirement: A refused answer is named to whoever gave it
-
-An offer can run out, and a case can move, between the collector reading it
-and their answer landing.
-
-**What it names** - a refused answer SHALL say which happened: the offer ran
-out, the offer was replaced, or the case moved under the answer.
-
-**Nothing moves** - a refused answer SHALL leave the case and its offers as
-they were, so the next read shows where the case now stands.
-
-#### Scenario: grade10-site-vault-valuation-and-offer-SC-28 - An offer that ran out under the reader
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose offer lapsed under them is told where they answered
-
-- **GIVEN** a collector who read a case whose offer then expired
-- **WHEN** they accept it
-- **THEN** the answer is refused by name as an offer that ran out
-- **AND** the next read reads an offer that ran out
-
-#### Scenario: grade10-site-vault-valuation-and-offer-SC-29 - A case that moved under the answer
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose case moved under them reads why the answer did not land
-
-- **GIVEN** a collector who read a live offer that the counter accepted a moment later
-- **WHEN** they accept it, naming the instant they read it at
-- **THEN** the answer is refused by name as a case that moved under the answer
-- **AND** the next read reads where the case now stands

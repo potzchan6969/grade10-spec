@@ -79,6 +79,11 @@ Runs once per row of **Test data**.
 | `<product>` | `<withheld address>` |
 | --- | --- |
 | Vault | The signing ceremony |
+| Vault | The case list, `/vault` |
+| Vault | The request, `/vault/new` |
+| Vault | A case's page, `/vault/cases/<case id>` |
+| Vault | The identity check, `/vault/verify` |
+| Vault | Your data, `/profile/data` |
 | Booking | Booking a visit |
 | Booking | The private link from a booking's mail |
 | Booking | A collector's own visits |
@@ -92,50 +97,6 @@ Runs once per row of **Test data**.
 
 * Step 1 returns status 404.
 * Step 2 renders the not-found surface, not a `<product>` surface.
-
----
-
-### grade10-site-site-carried-surfaces-US6-TC14-1: The collector's vault screens answer not-found on the public lanes
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-carried-surfaces-US-06
-
-**Pre-conditions:**
-
-* The sites under test are <grade10 public site url> and <grade10 preview site url>.
-
-**Test data:**
-
-| `<vault screen address>` |
-| --- |
-| The case list, `/vault` |
-| The request, `/vault/new` |
-| A case's page, `/vault/cases/<case id>` |
-| The identity check, `/vault/verify` |
-| Your data, `/profile/data` |
-
-**Steps:**
-
-1. Fetch `<vault screen address>` on <grade10 public site url>.
-2. Open the same address in the browser.
-3. Fetch `<vault screen address>` on <grade10 preview site url>.
-
-**Expected Results:**
-
-* Steps 1 and 3 return status 404.
-* Step 2 renders the not-found surface, not a vault surface.
 
 ---
 
@@ -380,10 +341,12 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `apps/frontend/grade10/src/surfaces.ts` and `MarketingPage.tsx`. It is a statement, not proof.
 
-- **Raised, folded into spec** - the collector's vault screens not found on every lane, from `grade10-site-site-carried-surfaces-US6-TC14-1` and `grade10-site-site-carried-surfaces-US8-TC9-1`, as `grade10-site-site-carried-surfaces-SC-40`; tasks 3.1, 3.2 and the tech design now cite `grade10-site-site-carried-surfaces-SC-22`, `-SC-26` and `-SC-40` in place of the store's and booking's scenarios
+- **Raised, folded into spec** - the collector's vault screens not found on every lane, from `US6-TC14-1` and `grade10-site-site-carried-surfaces-US8-TC9-1`, as `grade10-site-site-carried-surfaces-SC-40`; tasks 3.1, 3.2 and the tech design now cite `grade10-site-site-carried-surfaces-SC-22`, `-SC-26` and `-SC-40` in place of the store's and booking's scenarios
 - **Raised, escalated** - the front door's vault card, landed as Q20
 - **Raised, rejected** - none
-- **Joined** - `grade10-site-site-carried-surfaces-SC-28` into `grade10-site-site-carried-surfaces-US6-TC1-2`; `grade10-site-site-carried-surfaces-SC-25` into `grade10-site-site-carried-surfaces-US8-TC3-2`
+- **Carried into a bump** - `US6-TC14-1`, the collector's vault screens on the public lanes, leaves the delta: its five addresses are rows of `grade10-site-site-carried-surfaces-US6-TC1-2`, and `grade10-site-site-carried-surfaces-US8-TC9-1` holds them on the lanes that carry the vault
+- **New ids kept** - `grade10-site-site-carried-surfaces-US5-TC11-1`, no link to a collector vault screen on a carrying lane; `grade10-site-site-carried-surfaces-US8-TC9-1`, the ceremony alone answering there
+- **Joined** - `grade10-site-site-carried-surfaces-SC-28` and `-SC-40` into `grade10-site-site-carried-surfaces-US6-TC1-2`; `grade10-site-site-carried-surfaces-SC-25` into `grade10-site-site-carried-surfaces-US8-TC3-2`
 - **Corrected** - `grade10-site-site-carried-surfaces-US8-TC5-2` finds a button and card for the store alone on the front door; `grade10-site-site-carried-surfaces-US8-TC6-2` fetches the store, booking, the profile and membership, the four sets `grade10-site-site-carried-surfaces-SC-27` keeps shut, and no vault address; both count five waiting products
 - **Added by QA2** - none
 - **Contradicted** - none

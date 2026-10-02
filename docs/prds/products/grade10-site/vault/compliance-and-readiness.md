@@ -64,10 +64,8 @@ it; no statute here is asserted.
   in one download; and whether a case in flight holds the ask
 - ❓ **Your data on screen** — where the collector reads it and files the ask;
   @tangconst designs it
-- ❓ **Asking while a submission is live** — nothing refuses the ask to be
-  forgotten while a grading submission is live; grading's erasure refuses
-  only when an admin runs it. The owner confirms whether filing the ask is
-  refused then
+- **Asking while a submission is live** — filing the ask is accepted;
+  grading's erasure refuses when an admin runs it
 
 ## Evidence
 

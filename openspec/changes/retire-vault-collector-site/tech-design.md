@@ -41,8 +41,8 @@ page drew.
 ### What leaves the store
 
 - **The block** - `packages/ui/src/blocks/vault-case/` goes whole, with the
-  exports at `packages/ui/src/index.ts` lines 722-742 and the preview
-  stories that import it
+  exports at `packages/ui/src/index.ts` lines 722-742 and the block's own
+  stories
 - **The negative contract** - one test in `packages/ui/src/index.test.ts`
   reads the public entry and finds none of the three components or eleven
   types (`shared-ui-vault-case-SC-01`, `-SC-02`, `-SC-03`). It lands
@@ -96,6 +96,11 @@ and the PDFs name template ids, so no key behind a mail or a document moves.
   `intake.repo.test.ts` (`grade10-site-vault-case-intake-SC-13`),
   `photos.repo.test.ts` (`-SC-09`), `collectorRouter.test.ts`
   (`grade10-site-vault-visit-booking-SC-30`), and the groups in `tasks.md`
+- **The e-KYC slice** - `packages/e-kyc/frontend` stays, unmounted, as
+  `add-hosted-identity-verification`'s slice; `design-override.config.json`
+  drops it from the site's packages, because `check-store-blocks` derives a
+  site's packages from the app's dependencies and the site no longer depends
+  on it
 - **The rule** - a test asserts the field the worker answers, never a word or
   a control. A read the worker cannot answer is not tested; the requirement
   says what the collector's account carries

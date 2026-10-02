@@ -19,9 +19,10 @@ made.
 - 🚧 **Where** — `admin.grade10.com/vault` for the shop and
   `grade10.com/vault/sign#<token>` for the iPad; one host and a path per
   surface, and a vanity domain redirects to it
-- ❓ **The collector's address** — where the collector's own screens answer;
-  @tangconst designs them —
-  [Collector Pages](/p/grade10-site/vault/collector-pages)
+- **The collector's address** — mailed links keep `grade10.com/vault/cases/<id>`
+  and `grade10.com/vault/verify#<secret>`, which land on the not-found surface
+  until the collector's screens ship —
+  [Collector Pages](/p/grade10-site/vault/collector-pages#messages)
 - **Money** — the brand's currency in whole cents, recorded by a person
   after the bank moved it and against the date it moved; a payout takes two
   people, and a correction takes a second holder of the money grant
