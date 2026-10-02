@@ -25,7 +25,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 2.6 Bump `external/grade10-spec` to group 1
 - [ ] 2.7 Verify: `pnpm --dir packages/grade10-auth/contracts run generate:rbac-docs`, `pnpm run typecheck`, `pnpm run test:backend`
 
-## 3. The register's tables (grade10)
+## 3. The register's tables (grade10) (owner: @ecchochan)
 
 - [ ] 3.1 Tests first, in their own commit: `*.repo.test.ts` over PGlite for the live-slab index, the owner and slab checks, mark uniqueness and one forfeit move per case, with `*.drizzle.test.ts` for the list's keyset and search predicates (`grade10-admin-inventory-items-SC-07`, `grade10-admin-inventory-items-SC-08`, `grade10-admin-inventory-items-SC-09`, `grade10-admin-inventory-items-SC-49`)
 - [ ] 3.2 The migration for `items`, `item_marks`, `item_moves`, `item_move_proofs`, `item_proof_uploads` and `item_cert_taken` in `apps/backend/grade10/inventory`, with its snapshot, and the new id columns on inventory's pinned list in `scripts/checks/check-erasure-consumers.mjs` until 6.4 makes inventory a consumer (`grade10-admin-inventory-items-SC-07`, `grade10-admin-inventory-items-SC-09`)
