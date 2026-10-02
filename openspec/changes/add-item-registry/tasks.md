@@ -116,7 +116,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review add-item-registry`) as its input; 
 - [ ] 13.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own commit; the ones that stay manual are named in the suite and in the walk's `rounds.md` row
 - [ ] 13.3 Verify: `pnpm run test:e2e` for the walks, `pnpm --dir external/grade10-spec run trace -- validate --app-root "$PWD"`
 
-## 14. The manual (grade10-spec)
+## 14. The manual (grade10-spec) (owner: @ecchochan)
 
 Lands once group 13 is green.
 
