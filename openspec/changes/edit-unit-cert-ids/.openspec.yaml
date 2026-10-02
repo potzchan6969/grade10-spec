@@ -3,5 +3,3 @@ created: 2026-10-02
 depends_on: release-stock-on-unsold-close
 hands:
   pm: "@mason5991"
-awaiting:
-  specs: "The feature set, scenarios and delta on grade10-admin/inventory/catalog, from /planning-dev"
