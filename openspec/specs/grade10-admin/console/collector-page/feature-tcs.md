@@ -22,9 +22,11 @@ every vault case they hold,
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -58,9 +60,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -97,9 +101,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -165,9 +171,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -225,9 +233,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -264,9 +274,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -369,9 +381,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -434,9 +448,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -472,9 +488,11 @@ shown a name my role does not hold.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -563,3 +581,14 @@ shown a name my role does not hold.
 | Raised: which journey owns the treasurer's rows | Settled | Q48; walked by `grade10-admin-vault-operator-queue-US11-TC4-1` |
 | Raised by this pass: the header when its read fails | Settled | Q51, `grade10-admin-console-collector-page-SC-20` |
 | Design: Loading, Header, Header treasurer, Header unavailable, Vault cases, Vault cases none, Section failed, Unknown collector | Closed on the row | `ui-design.md` names `grade10-admin-console-collector-page-SC-17`, `grade10-admin-console-collector-page-SC-08`, `grade10-admin-console-collector-page-SC-09`, `grade10-admin-console-collector-page-SC-10`, `grade10-admin-console-collector-page-SC-12`, `grade10-admin-console-collector-page-SC-14`, `grade10-admin-console-collector-page-SC-16` and `grade10-admin-console-collector-page-SC-11` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-admin-console-collector-page-US1-TC4-1` | Sixty seeded cases is a fixture, not a walk; the worker's test pages them, and a person reads the section's more line |
+| `grade10-admin-console-collector-page-US1-TC6-1` | An account service that answers nothing for one account is not something the isolated stack can stand; the header's component test decides it |
+| `grade10-admin-console-collector-page-US1-TC9-1` | Deferred at review: rows whose outcomes no rule states, and a console grant the tester has to choose |
+| `grade10-admin-console-collector-page-US1-TC10-1` | Deferred at review: a case whose account was erased has no route by hand, and no test decides it yet |
+| `grade10-admin-console-collector-page-US1-TC12-1` | Deferred at review: no route erases one case of a collector by hand, and no test decides it yet |
+| `grade10-admin-console-collector-page-US2-TC2-1` | Layer api: the vault worker's test refuses the header's read without kyc:read |

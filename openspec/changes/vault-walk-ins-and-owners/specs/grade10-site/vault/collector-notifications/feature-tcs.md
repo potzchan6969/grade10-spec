@@ -99,3 +99,10 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | `grade10-site-vault-collector-notifications-US2-TC14-1` | Joined | *A cancelled walk-in tells nobody* for the unsent draft; the sent one is *A walk-in the collector sent is cancelled as any case*, told as any cancelled case. The collector's own cancel of an unsent one is walked, silent, by `grade10-site-vault-case-lifecycle-US1-TC4-1` |
 | `grade10-site-vault-collector-notifications-US2-TC15-1` | Joined | *An unsent walk-in that runs out tells nobody*; the collector's own draft keeps the untouched email *Three endings, three messages* names |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-vault-collector-notifications-US2-TC14-1` | A person cancels both rows and reads the mailbox; the worker's test decides nothing is owed for the unsent one |
+| `grade10-site-vault-collector-notifications-US2-TC15-1` | The draft clock is eight days; a person moves the clock or waits, and reads the mailbox |

@@ -22,9 +22,11 @@ request typed under the wrong address is never emailed.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -102,9 +104,11 @@ request typed under the wrong address is never emailed.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -132,9 +136,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -168,9 +174,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -201,9 +209,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -240,9 +250,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -278,3 +290,9 @@ Runs once per row of **Test data**.
 | *Nothing happens to an unsent draft staff opened* | Case added | `grade10-site-vault-case-intake-US6-TC6-1` |
 | *The collector removes a photograph from an unsent request* | Case added | `grade10-site-vault-case-intake-US6-TC7-1`, Q19 and Q53: removal on any unsent draft of the collector's own |
 | *A sent request's photographs stay* | Case added | `grade10-site-vault-case-intake-US6-TC7-1`'s fourth step |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-vault-case-intake-US6-TC2-1` | A person changes staff's facts and photographs before the send; the walk-in walk sends them as staff typed them |

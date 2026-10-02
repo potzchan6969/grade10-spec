@@ -70,9 +70,11 @@ is never emailed and keeps nothing of it.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -113,9 +115,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -200,9 +204,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -231,9 +237,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -276,3 +284,10 @@ Runs once per row of **Test data**.
 | Dev: the collector's own photographs on a removed draft | Settled | Q49; every photograph on it is removed |
 | Dev: a removed walk-in reading as erased on staff's Closed view | Settled | Q29 |
 | Design: Cancelled for a typo, Cancelled before sending | Closed on the row | `ui-design.md` names `grade10-site-vault-case-lifecycle-SC-41` and `grade10-site-vault-case-lifecycle-SC-44`; the second row is Q28's |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-vault-case-lifecycle-US1-TC4-1` | A person cancels a draft staff opened from the collector's side and reads the mailbox; the worker's test decides it stays listed |
+| `grade10-site-vault-case-lifecycle-US6-TC3-1` | Deferred at review: a row the pre-condition contradicts, and the collector's own list is never read |

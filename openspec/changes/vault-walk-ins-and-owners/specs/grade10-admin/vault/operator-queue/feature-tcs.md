@@ -61,9 +61,11 @@ and the draft waits for them to send it.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -110,9 +112,11 @@ and the draft waits for them to send it.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -221,9 +225,11 @@ and the draft waits for them to send it.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -252,9 +258,11 @@ and the draft waits for them to send it.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -297,9 +305,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -335,9 +345,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -373,9 +385,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -451,9 +465,11 @@ Runs once per row of **Test data**.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -524,9 +540,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -600,9 +618,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -638,9 +658,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -669,9 +691,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -702,9 +726,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -790,9 +816,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -831,9 +859,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -871,9 +901,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -905,9 +937,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -935,9 +969,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -965,9 +1001,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -996,9 +1034,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -1113,3 +1153,17 @@ Runs once per row of **Test data**.
 | Dev: the short id's shape | Settled | Q50 |
 | Design: Closed, Statement first, Empty, Opened, Signed-in address, Named, Name unavailable, Treasurer, Narrowed, Narrowed none | Closed on the row | `ui-design.md` names `grade10-admin-vault-operator-queue-SC-63`, `grade10-admin-vault-operator-queue-SC-58`, `grade10-admin-vault-operator-queue-SC-55`, `grade10-admin-vault-operator-queue-SC-57`, `grade10-admin-vault-operator-queue-SC-66`, `grade10-admin-vault-operator-queue-SC-69`, `grade10-admin-vault-operator-queue-SC-70`, `grade10-admin-vault-operator-queue-SC-71` and `grade10-admin-vault-operator-queue-SC-73` |
 | Design: Photos added, Refused otherwise | Closed on the row | now `grade10-admin-vault-operator-queue-SC-75` and `grade10-admin-vault-operator-queue-SC-76`, the scenarios folded here |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-admin-vault-operator-queue-US10-TC3-1` | Deferred at review: the open keeps the statement's version where the page does not show it; a person reads the draft's history once the case says where |
+| `grade10-admin-vault-operator-queue-US10-TC4-1` | A person reads that the form asks for no name and no contact number; the walk-in walk opens a draft without them, it does not read the form's fields |
+| `grade10-admin-vault-operator-queue-US10-TC10-1` | Deferred at review: the console shows a refused fact in the dialog's footer, where the scenario says beside the field (owner-questions 14) |
+| `grade10-admin-vault-operator-queue-US10-TC12-1` | Layer api: the worker's own test refuses the open without vault:operate; the treasurer's console offers no walk-in to press |
+| `grade10-admin-vault-operator-queue-US10-TC14-1` | A person edits a sent walk-in and a draft the collector opened to see both refused; the walk-in walk edits only an unsent draft staff opened |
+| `grade10-admin-vault-operator-queue-US11-TC5-1` | Layer api: the vault worker's test refuses the names read without kyc:read |
+| `grade10-admin-vault-operator-queue-US11-TC6-1` | A person reads the Overdue view for a name; the money book's walk reads its rows, not the absence of a collector |
+| `grade10-admin-vault-operator-queue-US12-TC7-1` | A person reads Overdue and a search with a collector in the address; the collectors walk narrows Needs staff and Held items alone |
+| `grade10-admin-vault-operator-queue-US2-TC7-1` | Deferred at review: its last result states a rule no run can see |

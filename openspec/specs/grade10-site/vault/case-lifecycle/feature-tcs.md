@@ -1112,9 +1112,11 @@ is never emailed and keeps nothing of it.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -1155,9 +1157,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -1242,9 +1246,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -1273,9 +1279,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -1365,3 +1373,5 @@ Runs once per row of **Test data**.
 | `US4-TC4-1` | A person reads the figure, the notice date and the date to pay by against the notice that was sent |
 | `US5-TC4-1`, `US5-TC5-1`, `US5-TC6-1`, `US5-TC7-1` | A person reads that the fact and the one thing to do next are the collector's words, not the status word |
 | `US5-TC14-1` | A person reads which of the two facts the page leads with |
+| `grade10-site-vault-case-lifecycle-US1-TC4-1` | A person cancels a draft staff opened from the collector's side and reads the mailbox; the worker's test decides it stays listed |
+| `grade10-site-vault-case-lifecycle-US6-TC3-1` | Deferred at review: a row the pre-condition contradicts, and the collector's own list is never read |

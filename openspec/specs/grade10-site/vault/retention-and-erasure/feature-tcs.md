@@ -1620,3 +1620,4 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-US4-TC4-1` | A person reads the refusal as words on Your data — which submission it names and which hold it names — where an API test decides only that the ask was refused |
 | `grade10-site-vault-retention-and-erasure-US4-TC5-1` | A person reads one refusal over two products on one page and checks the vault case beside it is not offered as erasable |
 | `grade10-site-vault-retention-and-erasure-US4-TC8-1` | Nothing is filed, so no request exists for a test to assert on: the whole case is the words in the block and the control that is withheld rather than refused on press |
+| `grade10-site-vault-retention-and-erasure-US2-TC4-1` | Layer api: the worker's test reads the purged history and the rewrite; a person runs the erasure on staging |

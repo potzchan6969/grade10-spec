@@ -50,3 +50,9 @@ exists.
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | *A removed walk-in is purged and loses the collector's actor id* | Case added | `grade10-site-vault-retention-and-erasure-US2-TC4-1` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-vault-retention-and-erasure-US2-TC4-1` | Layer api: the worker's test reads the purged history and the rewrite; a person runs the erasure on staging |
