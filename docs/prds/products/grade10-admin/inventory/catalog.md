@@ -85,16 +85,17 @@ product history.
   a Cert ID is regular stock rather than a Cert record.
 - 🚧 **Every unit in Cert ID details** — View Cert IDs lists each Cert record
   and the regular stock without a Cert ID: one `No Cert ID` row for the
-  available units with their count, and one for each active hold with its
-  holder and remaining count. A `No Cert ID` row shows the history of regular
-  stock. Sold and withdrawn regular stock is not listed, because no unit of it
-  is tracked
-- 🚧 **Cert ID correction** — an available Cert record's Cert ID can be
-  changed to another Cert ID not used on the same product. An available unit
-  of regular stock can be given a Cert ID with its Grade Issuer, and Grade,
-  Autograph Grade and Serial where known; it becomes a Cert record and leaves
-  the `No Cert ID` count. A reserved, sold, withdrawn or vaulted unit keeps its
-  Cert ID, and a Cert ID cannot be cleared
+  available units with their count, shown whenever regular stock has any
+  history, and one for each active hold with its holder and remaining count. A
+  `No Cert ID` row shows the history of regular stock. Sold, withdrawn and
+  vaulted regular stock is not listed, because no unit of it is tracked
+- 🚧 **Cert ID correction** — a Cert record that has only been intaken can
+  have its Cert ID changed to another one no record of the product holds, in
+  any status. An available unit of regular stock can be given a Cert ID with
+  its Grade Issuer, and Grade, Autograph Grade and Serial where known; it
+  becomes a Cert record and leaves the `No Cert ID` count. A record that has
+  ever been reserved, sold, withdrawn, vaulted or listed keeps its Cert ID, and
+  a Cert ID cannot be cleared or read `No Cert ID`
 - 🚧 **Cert ID change in history** — each change is one history entry with
   its time, actor, the Cert ID before and after (`No Cert ID` before an
   assignment) and optional remarks, and it shows in that unit's history
