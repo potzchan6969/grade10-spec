@@ -1,0 +1,159 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "97ea3aab88ebf9d93282223d4396766bc10832342f320aa0cbd378675593f2a5"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "2785e23da87f059d6d9216154fd14fbf29e1fb9e",
+    "capturedAt": "2026-10-02T03:37:42.629Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-item-registry/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The Items section lists every live item the collector owns"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/items/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/items/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A forfeit moves the item to the lender",
+          "Requirement: A move is refused while a place marks the item",
+          "Requirement: A place's word is mirrored and never refused",
+          "Requirement: A proof opens only for those who may move an item",
+          "Requirement: An erasure reaches the register",
+          "Requirement: An item has one owner, read by name",
+          "Requirement: An item is one object, and says what it is in fixed facts",
+          "Requirement: An item the company buys or is given belongs to the custodian",
+          "Requirement: Every act on the register is on the audit log by its ids",
+          "Requirement: Four grants open the register",
+          "Requirement: One item's page says which place marks it and whether the owners agree",
+          "Requirement: One slab is one live item",
+          "Requirement: Staff close a mark the vault no longer has",
+          "Requirement: Staff find an item in three lists and one search",
+          "Requirement: Staff move an item no place marks to its new owner",
+          "Requirement: Staff register an item and correct its facts",
+          "Requirement: Staff retire an item and restore it"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/items/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A slab the register knows is taken rather than typed again",
+          "Requirement: The Case tab reads the item's facts from the register"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A draft holding a slab the register knows changes only its photos and description",
+          "Requirement: A request states one item, in the brand's own currency"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Preparing documents waits on the register's owner",
+          "Requirement: The item register is told what the case does with the item"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A case is papered by three documents, each printing its own facts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A valuation is read beside the item's grader, grade and cert"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/roles/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/roles/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Each role grants a fixed set of permissions",
+          "Requirement: The permission vocabulary is a closed set of resources and actions"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/roles/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

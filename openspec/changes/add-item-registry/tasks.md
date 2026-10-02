@@ -9,7 +9,7 @@ inventory groups (3 to 6), the vault groups (7 to 9) and the frontend groups
 rather than a running worker. Group 13 is the walk, and group 14, in
 grade10-spec, takes the manual's marks off once the walk is green.
 
-## 1. The category words (grade10-spec)
+## 1. The category words (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 Name `comic`, `banknote`, `stamp` and `memorabilia` under `vault.category` in the vocabulary type first, so `pnpm --filter @grade10/i18n run test` refuses every language that has not answered them
 - [ ] 1.2 Answer the four words in `packages/i18n/messages/shared/<locale>/vault.json` for `en`, `ko`, `zh-Hans` and `zh-Hant`
