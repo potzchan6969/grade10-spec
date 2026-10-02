@@ -28,7 +28,7 @@ through.
   - Wait inside a design: a written design may wait on its frame
   - Deltas across changes: two in-flight deltas that fold one requirement are named to each other, however each is headed
   - Manual where written: a Manual table outside the reconciliation is refused where the suite is validated
-  - Walk ids signed: the application repository's tick refuses a walk id whose case is not actual
+  - Walk ids signed: the application repository's tick refuses a walk id of the ticking change whose case is not actual
 
 ## ADDED Requirements
 
@@ -218,12 +218,13 @@ The manual's checks SHALL count a capability a change declares as a `specs/<capa
 
 ### Requirement: The application repository's tick refuses an unsigned walk id
 
-`pnpm plan done` SHALL read every bracketed case id in the group's end-to-end files, in the pass that reads a task's scenario ids, and SHALL refuse the tick for one whose case is not `actual` in the store clone the registry names — draft, deprecated, or not issued — naming the id and its status.
+`pnpm plan done` SHALL read every bracketed case id in the group's end-to-end files, in the pass that reads a task's scenario ids, and SHALL refuse the tick for one the ticking change owns that is not `actual` in the store clone the registry names — draft, deprecated, or an older revision of a case its suite holds — or one no live suite issues under any revision, naming the id and its status. The change owns a case its own suites head; an id another change issued is that change's to sign and does not hold the tick.
 
 #### Scenario: shared-planning-agent-rounds-SC-104 - A walk carrying a draft case's id
 **Serves:** shared-planning-agent-rounds-US-11 - no walk carries an id QA has not signed
 
-- **GIVEN** a spec's test is titled with a case id whose case is `draft`
+- **GIVEN** a spec's test is titled with a case id the ticking change's suite holds as `draft`
 - **WHEN** the engineer ticks the walk's group
 - **THEN** the tick is refused naming the id and its status
 - **AND** the same tick passes once the case is `actual`
+- **AND** a `draft` id another change issued, in the same file, does not hold the tick

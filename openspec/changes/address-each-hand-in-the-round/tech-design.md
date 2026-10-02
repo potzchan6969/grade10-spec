@@ -179,8 +179,10 @@ alone, and a tick is never held (SC-38).
 
 `Q14`. `grade10`'s `plan.mjs` `done` extends its scenario-id pass: for each
 end-to-end file the group's tree holds, every `[<capability>-US<n>-TC<m>-<v>]`
-in a test title is looked up in the store clone's suite, and one whose case
-is not `actual` refuses the tick naming the id and its status. `tcs-to-e2e`
+in a test title is looked up in the store clone's suites, and one the ticking
+change's suite holds short of `actual`, or at an older revision, or one no
+live suite issues, refuses the tick naming the id and its status; another
+change's id is that change's to sign. `tcs-to-e2e`
 and `docs/architecture/e2e.md` point at the rule. Rejected: a `check-walk`
 command, a Playwright reporter, reading the submodule.
 
@@ -193,7 +195,7 @@ command, a Playwright reporter, reading the submodule.
 | `citesId(text, id)` (`lib/cites.mjs`) | a file's text, an id | whether the id appears with no digit after it |
 | `plan:land … --tests "<sc>: <path>" [--app-root <dir>] [--unrun "<why>"]` | the cell, the application root | the row; refuses a path its clone does not hold or that carries no such id |
 | `relay-post.mjs --row <Q>` | a held row's id | one reply in the thread mentioning the row's hand, once per change, round and row |
-| `pnpm plan done <change> <group>` (grade10) | the group | the tick, or the scenario id no test cites, or the case id not yet actual |
+| `pnpm plan done <change> <group>` (grade10) | the group | the tick, or the scenario id no test cites, or the change's own case id not yet actual |
 
 ## Risks / Trade-offs
 

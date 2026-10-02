@@ -179,7 +179,8 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **The cited test carries the id** — a row, or a suite's Manual row, that
   credits a test the file does not cite is refused
 - 🚧 **A walk's ids are signed** — in the application repository, a walk that
-  carries a case id whose case is still draft is refused
+  carries a case of the change ticking it that is still draft is refused; a
+  draft another change left in the same file is that change's to sign
 
 ## Checks
 
