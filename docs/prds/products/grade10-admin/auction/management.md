@@ -115,6 +115,14 @@ the card is in the winner's hands. The collector's half is
   removing the last item once created; prices, window, slug or sandbox on a
   published listing, and every write on a closed, settled or canceled one
 
+:::detail{title="Listings code map" for="engineer"}
+- **Close** — `sweeps/close.ts`
+- **Stock release** — `sweeps/stockRelease.ts`
+- **Relist save** — `services/listings/draft.ts`
+- **Architecture** —
+  [auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md)
+:::
+
 ## Campaigns
 
 A campaign is a catalogue cover: an event many listings belong to, with a

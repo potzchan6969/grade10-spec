@@ -113,3 +113,9 @@ product history.
   tag target. Removing a media Cert tag or retagging leaves the originally tagged
   source item untagged. Removing a physical unit removes its Cert record and
   the source media tied to that record; Inventory records the unit as withdrawn
+
+:::detail{title="Intake code map" for="engineer"}
+- **Release input** — `ReleaseInput` in `packages/inventory/contracts`
+- **Reservations** — `ReservationGroup.tsx`
+- **Change history** — `ChangeHistoryDialog.tsx`
+:::
