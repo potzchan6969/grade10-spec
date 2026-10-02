@@ -59,7 +59,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 6.4 Add inventory to the registry of erasure consumers and to the console's checklist list
 - [ ] 6.5 Verify: `pnpm run test:backend`, `pnpm run check:libs`
 
-## 7. The vault's due rows (grade10)
+## 7. The vault's due rows (grade10) (owner: @ecchochan)
 
 - [ ] 7.1 Tests first, in their own commit: transition tests that each act raises the case's one due row in its own transaction, a corrected advance and a decline or cancel before custody raising none; the delivery reading the case's state, an erased case sending nothing, an act during delivery leaving the row due, retry and park against a fake register; and `casesOf` answering held and forfeited (`grade10-admin-inventory-items-SC-28`, `grade10-site-vault-case-lifecycle-SC-49`, `grade10-site-vault-case-lifecycle-SC-50`, `grade10-site-vault-case-lifecycle-SC-51`, `grade10-site-vault-case-lifecycle-SC-52`, `grade10-site-vault-case-lifecycle-SC-53`, `grade10-site-vault-case-lifecycle-SC-58`, `grade10-admin-inventory-items-SC-24`)
 - [ ] 7.2 The migration: `case_items.register_item_id`, `slab_grader`, `slab_grade`, `slab_cert` (all three or none), `facts_from_register`, the category check widened to the ten `NOT VALID` then validated, and `register_dues`; with its snapshot
