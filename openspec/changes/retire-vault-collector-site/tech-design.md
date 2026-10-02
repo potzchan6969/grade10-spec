@@ -114,20 +114,20 @@ and the PDFs name template ids, so no key behind a mail or a document moves.
   `walk-in`, `your-data` or `grading/uncollected` after the rewrite drops their
   titles. The walk group flips each to its API test with `pnpm run
   tcs:automated`, or back to manual by name in `rounds.md`
-- [Q13 is open: a mailed `CASE_PATH` or `VERIFY_PATH` link answers not-found]
-  → The recommendation keeps the addresses so links mailed now land on the
-  screens once they ship; the risk is a collector who follows a mail before
-  then. Settled by the owner before acceptance
-- [Q14 is open: a walk-in draft has no screen to send it] → The draft ends on
+- [A mailed `CASE_PATH` or `VERIFY_PATH` link answers not-found (Q13)]
+  → The addresses stay, so links mailed now land on the screens once they
+  ship; the risk is a collector who follows a mail before then
+- [A walk-in draft has no screen to send it (Q14)] → The draft ends on
   its own clock (`grade10-site-vault-case-lifecycle-SC-41` to `-SC-48`), so
   nothing is stranded; staff tell the customer at the counter
-- [Q15 is open: the retention requirement takes its recommendation] → The
-  filing is accepted while a grading submission is live, and grading's
-  erasure refuses when an admin runs it
-  (`grade10-site-vault-retention-and-erasure-SC-33`). A different answer
-  rewrites that requirement before acceptance
+- [The ask is filed while a grading submission is live (Q15)] → The filing
+  is accepted, and grading's erasure refuses when an admin runs it
+  (`grade10-site-vault-retention-and-erasure-SC-33`), a requirement
+  `add-card-grading` owns
 - [In-flight changes build on what goes (Q12)] → `vault-home-case-cards`
-  archives first. `add-item-registry` group 12 has no wizard;
+  has archived. `add-item-registry` group 12 has no wizard, and it keeps the
+  two case-intake requirements it folds, as `add-card-grading` keeps the
+  live-submission erasure requirement: this change modifies neither;
   `add-hosted-identity-verification` tasks 1.2, 1.5 and group 13 draw a page
   at `/vault/verify` and need `vault.verify` words this change removes;
   `add-card-grading` points the collector at Your data. Each change owns its

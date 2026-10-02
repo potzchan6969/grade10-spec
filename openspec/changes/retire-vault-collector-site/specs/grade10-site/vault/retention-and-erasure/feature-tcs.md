@@ -356,8 +356,6 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
 
-**Blocked:** The owner - whether a live grading submission refuses the collector's own filing is Q15, held; the case follows its recommendation, which the requirement takes.
-
 **Pre-conditions:**
 
 * customer(closed account) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
@@ -1303,7 +1301,7 @@ Runs once per row of **Test data**.
 **Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/erasure.ts`, `eraseUser` and `collectorHoldOf`, `cases/yourData.ts` and `retention.ts`. It is a statement, not proof.
 
 - **Raised, folded into spec** - none
-- **Raised, escalated** - the refusal on filing, landed as Q16; a live grading submission stays Q15's, held. The delta's MODIFIED requirement already takes Q15's recommendation: the filing is accepted and grading's erasure refuses the run
+- **Raised, escalated** - the refusal on filing, landed as Q16; a live grading submission is Q15's, settled by its recommendation: the filing is accepted and grading's erasure refuses the run, as `add-card-grading`'s requirement holds
 - **Raised, rejected** - none
 - **Revised** - `grade10-site-vault-retention-and-erasure-US4-TC3-1` files the ask through the API, keeping `<v>`; `grade10-site-vault-retention-and-erasure-US4-TC5-2` accepts the filing and has the admin's run refused beside grading, naming the submission, blocked on Q15
 - **Deprecated as duplicates** - `grade10-site-vault-retention-and-erasure-US5-TC3-1` and `grade10-site-vault-retention-and-erasure-US5-TC15-1`; `grade10-site-vault-retention-and-erasure-US5-TC20-1` holds their purpose

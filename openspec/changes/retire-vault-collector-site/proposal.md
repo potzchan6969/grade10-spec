@@ -96,9 +96,9 @@ Goals and non-goals are in [`decisions.md`](decisions.md).
 
 ## Open questions
 
-Held in [`decisions.md`](decisions.md): where a mailed link lands (Q13), how
-a walk-in draft is sent (Q14), and an ask to be forgotten while a grading
-submission is live (Q15).
+None. Where a mailed link lands (Q13), how a walk-in draft is sent (Q14) and
+an ask to be forgotten while a grading submission is live (Q15) are settled by
+their recommendations in [`decisions.md`](decisions.md).
 
 ## References
 
