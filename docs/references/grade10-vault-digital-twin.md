@@ -12,12 +12,12 @@ loan — [Vault](../prds/products/grade10-site/vault/index.md).
 - **Service flow** — Cursor canvas
   `canvases/vault-digital-twin-flow.canvas.tsx` (open beside chat)
 - **Collector UI** — Storybook workbench (`pnpm run storybook:workbench`):
-  - `Pages/Vault Submit`
-  - `Pages/Vault Submission Confirmation`
-  - `Pages/Vault Intake Tracker`
-  - `Pages/Vault Portfolio`
-  - `Pages/Vault Item Detail`
-  - `Pages/Vault Request Retrieval`
+  - `Pages/Vault/Submit`
+  - `Pages/Vault/Submission Confirmation`
+  - `Pages/Vault/Intake Tracker`
+  - `Pages/Vault/Portfolio`
+  - `Pages/Vault/Item Detail`
+  - `Pages/Vault/Request Retrieval`
 
 ## Settled Decisions
 

@@ -184,7 +184,7 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
 }
 
 const meta = {
-  title: "Pages/Vault Portfolio",
+  title: "Pages/Vault/Portfolio",
   component: VaultPortfolioPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

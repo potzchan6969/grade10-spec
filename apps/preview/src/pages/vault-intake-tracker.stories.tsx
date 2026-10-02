@@ -144,7 +144,7 @@ function VaultIntakeTrackerPage({ phase }: { phase: TrackerPhase }) {
 }
 
 const meta = {
-  title: "Pages/Vault Intake Tracker",
+  title: "Pages/Vault/Intake Tracker",
   component: VaultIntakeTrackerPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

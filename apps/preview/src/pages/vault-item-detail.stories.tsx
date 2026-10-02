@@ -123,7 +123,7 @@ function VaultItemDetailPage() {
 }
 
 const meta = {
-  title: "Pages/Vault Item Detail",
+  title: "Pages/Vault/Item Detail",
   component: VaultItemDetailPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -121,7 +121,7 @@ function VaultRequestRetrievalPage() {
 }
 
 const meta = {
-  title: "Pages/Vault Request Retrieval",
+  title: "Pages/Vault/Request Retrieval",
   component: VaultRequestRetrievalPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

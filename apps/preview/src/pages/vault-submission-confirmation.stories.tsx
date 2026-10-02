@@ -152,7 +152,7 @@ function VaultSubmissionConfirmationPage() {
 }
 
 const meta = {
-  title: "Pages/Vault Submission Confirmation",
+  title: "Pages/Vault/Submission Confirmation",
   component: VaultSubmissionConfirmationPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

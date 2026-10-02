@@ -202,7 +202,7 @@ function VaultSubmitPage() {
 }
 
 const meta = {
-  title: "Pages/Vault Submit",
+  title: "Pages/Vault/Submit",
   component: VaultSubmitPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
