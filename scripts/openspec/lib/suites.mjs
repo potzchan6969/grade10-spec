@@ -260,9 +260,18 @@ export function readSpecIds(specPath) {
       if (g) groups.add(g[1].replace(/:.*$/, "").trim());
     }
   }
+  // A retired journey still names the deprecated cases that walked it: a
+  // change's REMOVED heading before the fold, a `## Retired` line after it.
+  const retired = new Set();
+  let section = "";
   for (const line of `${text}\n${stories}`.split("\n")) {
+    const h = line.match(/^##\s+(.+?)\s*$/);
+    if (h) section = h[1];
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
-    if (j) journeys.set(j[1], j[2]);
+    if (j && section === "REMOVED User journeys") retired.add(j[1]);
+    else if (j) journeys.set(j[1], j[2]);
+    const r = section === "Retired" && line.match(/^[-*]\s+`([\w-]+-US-\d+)`/);
+    if (r) retired.add(r[1]);
     const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
     const inline = line.match(SCENARIO_BULLET);
@@ -270,6 +279,7 @@ export function readSpecIds(specPath) {
   }
   return {
     journeys,
+    retired,
     scenarios,
     groups,
     // A capability nobody walks routes its anchors to the feature set. It is
@@ -291,6 +301,7 @@ export function readSpecIds(specPath) {
  * level down, so a domain case can trace the journeys it crosses. */
 export function readDomainIds(dir, root = ROOT) {
   const journeys = new Map();
+  const retired = new Set();
   const scenarios = new Set();
   let found = false;
   const rel = relative(root, dir);
@@ -310,10 +321,14 @@ export function readDomainIds(dir, root = ROOT) {
       if (!ids) continue;
       found = true;
       for (const [id, title] of ids.journeys) journeys.set(id, title);
+      for (const id of ids.retired) retired.add(id);
       for (const id of ids.scenarios) scenarios.add(id);
     }
   }
-  return found ? { journeys, scenarios, hasJourneySection: true } : null;
+  for (const id of journeys.keys()) retired.delete(id);
+  return found
+    ? { journeys, retired, scenarios, hasJourneySection: true }
+    : null;
 }
 
 /** The active change spec roots under a store. */

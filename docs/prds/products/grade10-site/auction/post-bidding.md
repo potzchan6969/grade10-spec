@@ -15,9 +15,8 @@ Bidding stops, the result is fixed at once, and only the winner gets an order.
 - **Every lot reads Ended** — with or without a winner, whatever happens to
   the order afterwards — [Lot
   Status](/p/grade10-site/auction/display#auction-details)
-- **Every hold is released** — at the close, for everyone; a winner's hold is
-  never captured, and a losing bidder's My Auctions row says whether it is
-  being released or released
+- **No card was charged** — nothing was held on any card while bidding; a
+  losing bidder's My Auctions row says their card was not charged
 - **The winner** — gets the auction-won letter asking for setup by `Confirm
   by …`, naming no amount; their My Auctions row reads Won with View order,
   and the lot joins My Auction Orders

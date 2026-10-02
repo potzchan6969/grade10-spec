@@ -67,19 +67,19 @@ the card is in the winner's hands. The collector's half is
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
-- **Call off** — any time before the close, bids or not; live holds and the
-  stock are released, the listing leaves browse and search, and its canonical
+- **Call off** — any time before the close, bids or not; the stock is
+  released, the listing leaves browse and search, and its canonical
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
-- 🚧 **Unsold close** — a listing that closes with no winner releases its
+- **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
   Stock · Intake](/p/grade10-admin/inventory/catalog#intake)
-- 🚧 **Stock already held** — a listing that closed Unsold before this ships
-  still holds its stock. One release frees every such hold, and each shows in
-  the inventory history as released by that clean-up
-- 🚧 **Relist** — an Unsold listing offers Relist, which opens a new draft
+- **Stock already held** — a listing that closed Unsold before the release
+  rule shipped still holds its stock. One release frees every such hold, and
+  each shows in the inventory history as released by that clean-up
+- **Relist** — an Unsold listing offers Relist, which opens a new draft
   with the same product, quantity, Cert ID choice, title, copy, price, currency
   and gallery. The draft takes its own stock hold on Save, gets its own slug
   and listing code, sets its own window, and carries no bids or history from
@@ -95,7 +95,7 @@ the card is in the winner's hands. The collector's half is
   A picked direct-upload file is previewed and stored only on confirm; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
-- 🚧 **Cert-aware inventory media** - a listing for one Cert ID starts with
+- **Cert-aware inventory media** - a listing for one Cert ID starts with
   untagged product media and media tagged to that Cert. Media tagged to another
   Cert stays in a separately labelled drawer until the operator deliberately
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
@@ -149,19 +149,21 @@ Operator-curated slides on the collector catalogue's Featured band —
 | --- | --- |
 | Slots | At most **3**, in operator order |
 | Each slot | One published Active or Upcoming listing, and one **front page image** uploaded for that slot |
-| Front page canvas | 🚧 **2400 × 1500** (landscape 8:5). Keep the subject in the centre; the stage crops from the edges as the viewport changes |
-| Front page file | 🚧 JPEG or WebP; aim at most **400 KB** after encode |
+| Front page canvas | **2400 × 1500** (landscape 8:5). Keep the subject in the centre; the stage crops from the edges as the viewport changes |
+| Front page file | JPEG or WebP; aim at most **400 KB** after encode |
 
-- 🚧 **Manage Featured** — from the Listings tab, beside Create listing; opens
+- **Manage Featured** — from the Listings tab, beside Create listing; opens
   a sub-page of the ordered slots. An authorized operator fills, orders,
   replaces and clears slots there. A slot without both a listing and its front
   page image is not shown on `/auction`. Ended listings cannot fill a slot
-- 🚧 **Front page image** — one image per slot, uploaded for the carousel; not
+- **Front page image** — one image per slot, uploaded for the carousel; not
   picked from the listing gallery and not the campaign cover. It is the banner
   background and the slab on that slide. The upload brief is the canvas and
   file rows above. If it fails to load on the site, the slide uses the lot’s
   first gallery image, or the stage’s default background colour if that is
   missing too — no broken-image chrome
+
+::spec{id="grade10-admin/auction/featured"}
 
 ## Orders
 
@@ -355,8 +357,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
-- **The hold** — released at the close, never captured; every failed payment
-  attempt stays in the invoice log
+- **Failed payments** - every failed payment attempt stays in the invoice log
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -466,6 +467,8 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 
 ::cases{id="grade10-admin/auction/campaign"}
 
+::cases{id="grade10-admin/auction/featured"}
+
 ::cases{id="grade10-admin/auction/post-sale"}
 
 ::cases{id="grade10-admin/auction/payment-settings"}
@@ -494,13 +497,14 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Catalogue Featured | 🚧 In flight | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
+| Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
-| Unsold stock | 🚧 In flight | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
+| Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
-| Payment source | Decided | The order tells a card payment through Stripe from money an operator records, and neither captures the bid-time hold, which is released at the close. | Product and Finance |
+| Cert-aware inventory media | Decided | A Cert listing's main selector offers untagged product media and media tagged to that Cert; other Cert media sits in a labelled drawer and joins only through an explicit Add that names the source Cert ID. A No Cert ID listing starts with untagged media only. Existing listing-edit authority covers the drawer; selected sources are copied into the gallery snapshot. | Product |
+| Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |

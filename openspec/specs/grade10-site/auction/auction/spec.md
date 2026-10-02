@@ -3,9 +3,10 @@
 ## Purpose
 
 Grade10's card-auction capability lets collectors browse an Auction listing and
-place a card-backed bid within its scheduled window, closes each listing at its
-effective close, and relays every committed change to the pages open on it. A
-**listing** is the sole customer-facing term for one auctioned card.
+place a bid on their card on file within its scheduled window, closes each
+listing at its effective close, and relays every committed change to the pages
+open on it. A **listing** is the sole customer-facing term for one auctioned
+card.
 
 ## Feature set
 
@@ -19,27 +20,52 @@ effective close, and relays every committed change to the pages open on it. A
   - Opening price: a first bid must reach the starting price, or the currency's lowest increment on a 0 start
   - A price move restarts the timer: only a bid that moves the public price extends; a leader raising their own maximum does not
   - Late window ends at the effective close: no bid counts at or after it, however late the close is recorded; a duration or a cap of 0 means no extension
-- Card authorization
-  - Optional authorization: disabled by default; a valid bid does not wait for or create a bid-time authorization hold
-  - One hold per bidder: an outbid authorization is released; a delayed lower hold cannot land
-  - A bid counts when its payment confirms: a confirm after the effective close loses with no grace and its hold is released; with holds off, a bid counts when placed
-  - Lone first bid still confirming: at the scheduled close it leaves the lot unsold, and its hold is released
 - Public contract
   - Listing and extension terms: a consumer reads the scheduled close, the recorded close, the extension duration, and the cap
   - Service time: a public read gives the auction service's clock
-- Stripe failures
-  - Explicit handling: incomplete configuration and a missed webhook are repaired without double-charging
 - Identity bar on a bid
   - Held at the storefront: a bid at or above the bar is held before the auction hears of it
   - A verified bidder above the bar bids; another is sent to verify
 - Closing a due lot
   - Closed at the close: a lot is settled at its deadline by whichever reaches it first - the lot's own alarm, then a read that finds it overdue
   - Sweep as the net: the five-minute sweep still settles any lot nobody reached
-  - Bids never settle: a bid or a payment confirm refuses a lot past its effective close and never closes it
+  - Bids never settle: a bid refuses a lot past its effective close; its
+    answer never waits on or depends on the close
 - Live relay
   - After the commit: each committed bid, extension and close reaches every open lot page and catalogue card, read back from the database
   - Relays decide nothing: the relay holds no state the database does not, so losing it loses nothing
   - Polling fallback: a page that cannot hold a live line polls
+- Featured catalogue band
+  - Dedicated Featured read: `/auction` loads Featured from its own public answer, separate from All auctions
+  - Operator slides: when at least one complete slot is set, `/auction` leads with a full-width carousel of those slides in operator order
+  - Slide facts: each slide shows the slot's front page image as banner and slab (load failure falls back to the lot's first gallery image, else the stage default background), lot title, status chrome by lot status, relative Ends in / Opens in from served close or open, and money on Active only (current bid rolls when the amount increases after first paint; Upcoming shows no money until the lot opens)
+  - Open lot: Bid Now on Active or View Auction on Upcoming opens that lot's details page
+  - Progress: dots advance among two or three slides; on a small viewport stage previous/next and swipe also advance; a single slide needs no multi-dot advance or stage previous/next
+- Quiet catalogue
+  - Featured then All auctions: the only sections on `/auction` in this layout; Featured is absent when no complete slot is set
+  - No category section: no Categories heading, tiles, or busy filter chrome
+  - Resting All auctions: every visible lot including featured ones, in the catalogue resting order below Featured when Featured is present
+  - All auctions load more: infinite scroll appends the next batch; Boneyard skeleton cards while that batch settles; no pagination
+  - Upcoming cards hide money: an Upcoming All auctions card shows no starting bid until the lot is Active
+- Catalogue watch
+  - Shared watch on cards: All auctions cards use the same watch as the lot page and My Auctions; closed lots show none
+- Card on file
+  - No card hold: a bid stands when it is accepted; nothing is held or charged
+    on the card when a collector bids
+  - Accepted or refused at once: a bid is judged under the lot's lock and
+    answered in one reply
+- Refused attempts
+  - Not a bid: a refused attempt writes no bid, no standing and no history,
+    and moves nobody's row
+  - Said on the bid form: the refusal shows on the bid form, in words that
+    name what the bidder can do
+  - Operator-side record: each refusal is one structured operational log
+    naming the bidder, the lot, the code, the amount and the floor or ceiling
+  - Lost answer: a bid whose answer is lost on the way back reads as placed
+    when the bidder's standing holds it
+- Erased leader
+  - Runner-up takes the lead: the highest maximum left leads, priced from the
+    maxima left and never above the price before the erasure
 
 ## Requirements
 
@@ -49,19 +75,20 @@ The storefront that forwards a bid SHALL compare the bid's amount to the
 brand's bar before the auction hears of it. At or above the bar it SHALL
 forward the bid only for a bidder whose standing is `verified` on the day of
 the bid, and SHALL otherwise refuse the bid naming that a verified identity is
-needed and where to verify — no hold is taken and the auction records nothing.
+needed and where to verify, and the auction records nothing.
 Below the bar a bid SHALL ask nothing about identity. On a brand that deploys
 no identity store the bar SHALL not exist.
 
-<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-16 - An unverified bidder above the bar is held at the storefront
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a signed-in bidder whose standing is `unverified` or `expired`
 - **WHEN** they place a bid of the bar or more
-- **THEN** the bid is refused as needing a verified identity, the auction
-  records no bid and takes no hold, and the bidder is told to verify from
-  their account
+- **THEN** the bid is refused as needing a verified identity, and the
+  auction records no bid
+- **AND** the bid form says: Bids this high need a verified identity. Verify
+  from your account, then bid again.
 
 <!-- trace:scenario id=g10.auction-auction.SC-d78 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-17 - A verified bidder above the bar bids
@@ -184,18 +211,18 @@ bidder, their committed maximum on that listing.
 Scenario `grade10-site-auction-auction-SC-07a` keeps its title with its id. The
 title is historical: a listing no longer carries an extension window.
 
-<!-- trace:scenario id=g10.auction-auction.SC-jsr rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-jsr rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-04 - A bid must meet the next increment
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with a current bid
 - **WHEN** a bidder submits less than the next valid bid amount
 - **THEN** Grade10 refuses the bid and names the minimum valid amount
-- **AND** it creates no accepted bid or card authorization for that attempt
+- **AND** it records no bid for that attempt
 
 <!-- trace:scenario id=g10.auction-auction.SC-5ao rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-05 - A bid outside the window is refused
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** a listing whose scheduled start has not arrived or whose effective close has passed
 - **WHEN** a bidder submits a bid
@@ -204,7 +231,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-2js rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-06 - A late valid bid extends the close
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** a listing in extended bidding with an extension duration of 1800
   seconds and recorded close 20:30 UTC
@@ -214,7 +241,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-p70 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07 - An extension cap limits an otherwise eligible extension
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** a listing in extended bidding with an extension cap, whose recorded
   close is its scheduled close plus that cap
@@ -224,7 +251,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-n8w rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07a - Window and duration may differ
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with scheduled close 20:00 UTC, an extension
   duration of 300 seconds, and one accepted bid before 20:00 UTC
@@ -233,7 +260,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-z62 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07b - Extension off does not move the close
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing whose extension duration is zero and which has an
   accepted bid
@@ -241,18 +268,18 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing closes at its scheduled close
 - **AND** it does not enter extended bidding
 
-<!-- trace:scenario id=g10.auction-auction.SC-dnt rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-dnt rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-08 - A bidder sees live bid facts
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an authenticated bidder with an accepted bid on an open listing
 - **WHEN** the bidder reads that listing
 - **THEN** Grade10 returns the current bid, bid count, and the bidder's highest accepted bid
-- **AND** it does not disclose another bidder's identity or card authorization facts
+- **AND** it does not disclose another bidder's identity or card facts
 
 <!-- trace:scenario id=g10.auction-auction.SC-a33 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-19 - A listing with no bid closes at its scheduled close
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with no accepted bid and an extension duration of
   1800 seconds
@@ -262,7 +289,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-cib rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-20 - One bid is enough to enter extended bidding
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with scheduled close 20:00 UTC, an extension
   duration of 1800 seconds, and exactly one accepted bid before 20:00 UTC
@@ -272,7 +299,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-z5s rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-21 - A bid before the scheduled close does not move the close
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with scheduled close 20:00 UTC and an extension
   duration of 1800 seconds
@@ -281,7 +308,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-h4d rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-22 - A bid at the scheduled close counts toward entry
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with no accepted bid, scheduled close 20:00:00 UTC,
   and an extension duration of 1800 seconds
@@ -290,7 +317,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-ch5 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-23a - Each listing runs its own extended bidding
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** two listings with scheduled close 20:00 UTC, both in extended
   bidding with recorded close 20:30 UTC
@@ -300,7 +327,7 @@ title is historical: a listing no longer carries an extension window.
 
 <!-- trace:scenario id=g10.auction-auction.SC-bz7 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-24 - A new bidder may bid during extended bidding
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** a listing in extended bidding, and a collector who placed no bid on
   it before its scheduled close
@@ -332,7 +359,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** the recorded close becomes 20:40 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-83 - A bid at the scheduled close counts with extension off
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing whose extension duration is zero, with scheduled
   close 20:00:00 UTC and a current bid of 100000 HKD minor units
@@ -342,7 +369,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** the listing closes at 20:00:00 UTC with that bid winning
 
 #### Scenario: grade10-site-auction-auction-SC-84 - A cap of zero turns extended bidding off
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** an open listing with an extension duration of 1800 seconds, an
   extension cap of 0, and an accepted bid before its scheduled close
@@ -393,62 +420,6 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** a bidder bids 1 minor unit
 - **THEN** Grade10 refuses the bid and names 100 minor units as the minimum valid amount
 
-### Requirement: Card-backed bids have one releasable authorization per bidder and listing
-
-Before accepting a bid, Grade10 SHALL obtain a Stripe card authorization for
-that bidder and active listing using a selected saved or recent payment method.
-For each bidder/listing pair, Grade10 SHALL maintain at most one active
-authorization and SHALL raise it only when the bidder raises their committed
-bid amount. A bid is accepted only after its corresponding authorized outcome
-is recorded.
-
-When a bidder is outbid by a higher accepted bid, Grade10 SHALL immediately
-mark that bidder's active authorization for asynchronous release. It SHALL also
-mark every unsuccessful bidder's authorization for asynchronous release when the
-listing closes. Stripe webhook signatures SHALL be verified over the unmodified
-raw body before processing; provider events and bid requests SHALL be
-idempotent. A delayed authorization for a bid that is no longer high enough
-SHALL be marked for release and SHALL NOT become an accepted bid.
-
-<!-- trace:scenario id=g10.auction-auction.SC-mrb rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-09 - An outbid authorization is released
-**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
-
-- **GIVEN** a bidder has the active authorization for an open listing
-- **WHEN** Grade10 accepts a higher valid bid from another bidder
-- **THEN** Grade10 marks the outbid bidder's authorization for asynchronous release
-- **AND** the outbid bidder no longer has an eligible top authorization for that listing
-- **AND** Grade10 records the Stripe release outcome when it arrives
-
-<!-- trace:scenario id=g10.auction-auction.SC-uha rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-10 - Concurrent bids keep the highest valid outcome
-**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
-
-- **GIVEN** two bidders submit different valid bid amounts against the same current listing state
-- **WHEN** Grade10 evaluates the requests concurrently
-- **THEN** it records bid outcomes in one listing order
-- **AND** the current bid is the highest valid accepted amount
-- **AND** no lower bid can overwrite that current bid
-
-<!-- trace:scenario id=g10.auction-auction.SC-8h7 rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-11 - A delayed lower authorization cannot land
-**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
-
-- **GIVEN** a bidder's card authorization is pending for a listing
-- **AND** Grade10 has accepted a higher valid bid before Stripe confirms that pending authorization
-- **WHEN** Stripe later confirms the lower authorization
-- **THEN** Grade10 releases the lower authorization
-- **AND** it does not record that lower bid as accepted or change the current bid
-
-<!-- trace:scenario id=g10.auction-auction.SC-fna rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-12 - An invalid or duplicate Stripe event changes nothing twice
-**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
-
-- **GIVEN** Grade10 receives a Stripe authorization, release, or capture webhook
-- **WHEN** the webhook signature is invalid or its provider event was already processed
-- **THEN** Grade10 rejects the invalid event or returns the duplicate outcome without another state transition
-- **AND** it does not duplicate a bid, hold, release, capture, invoice, or order state
-
 ### Requirement: Public Auction contracts use listing and extension terms
 
 Public Auction contracts, routes, and customer-visible content SHALL use
@@ -471,50 +442,6 @@ using `extension` terminology. It SHALL NOT expose an extension window.
   duration, and the extension cap when set
 - **AND** it exposes no extension window and no reserve state
 
-### Requirement: Stripe configuration and delayed authorization facts are handled explicitly
-
-Grade10 SHALL require the configured Stripe account, payment-method capability,
-webhook secret, and authorization/capture capability before it offers a
-card-backed Auction action. Missing configuration or an unsupported Stripe
-outcome SHALL fail the affected action explicitly without exposing credentials,
-card data, or customer address data. A scheduled reconciliation SHALL query
-Stripe by the recorded provider reference to repair a delayed or missed valid
-webhook.
-
-<!-- trace:scenario id=g10.auction-auction.SC-lk6 rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-14 - Stripe configuration is incomplete
-**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
-
-- **GIVEN** an Auction operation requiring Stripe
-- **WHEN** required Stripe configuration is absent or does not support the required authorization/capture action
-- **THEN** Grade10 fails that operation explicitly naming the unavailable capability
-- **AND** it does not silently create a bid or fixture-backed outcome
-
-<!-- trace:scenario id=g10.auction-auction.SC-9io rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-15 - A missed authorization webhook is repaired
-**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
-
-- **GIVEN** Stripe has confirmed a bid authorization but Grade10 has not processed its webhook
-- **WHEN** scheduled reconciliation reaches its recorded provider reference
-- **THEN** Grade10 reads that authorization outcome
-- **AND** it applies the authorization outcome exactly once
-
-### Requirement: A standard bid does not require a bid-time authorization
-
-When bid-time authorization holds are disabled, Grade10 SHALL accept a valid
-bid without waiting for or creating a bid-time authorization. The existing
-hold-backed behavior remains governed by
-`grade10-site/auction/bid-payment-method` when enabled.
-
-<!-- trace:scenario id=g10.auction-auction.SC-t3k rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-23 - The default bid path creates no authorization hold
-**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
-
-- **GIVEN** bid-time authorization holds are disabled
-- **WHEN** a collector submits a valid bid on an open listing
-- **THEN** Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe
-- **AND** it creates no bid-time authorization
-
 ### Requirement: The catalogue has one resting order
 
 The Auction catalogue SHALL list the lots a collector can see by their external
@@ -535,6 +462,10 @@ list no lot twice and skip none.
 
 A collector MAY ask for another order the catalogue can answer; it replaces the
 resting order and is settled on the lot record the same way.
+
+**All auctions** — every visible lot, including lots that also appear in
+Featured, in that resting order. When Featured is present, All auctions SHALL
+sit below it.
 
 <!-- trace:scenario id=g10.auction-auction.SC-5vk rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-25 - Open lots lead the catalogue
@@ -574,6 +505,15 @@ resting order and is settled on the lot record the same way.
 - **THEN** the lots are in the same order as reading the catalogue whole
 - **AND** no lot is listed twice and none is missing
 
+#### Scenario: grade10-site-auction-auction-SC-40 - Featured lots still appear in All auctions below Featured
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** at least one complete Featured slide and that lot also among the
+  visible catalogue lots
+- **WHEN** a collector opens `/auction`
+- **THEN** All auctions sits below Featured
+- **AND** the featured lot appears again in All auctions in the resting order
+
 ### Requirement: Catalogue cards follow each lot live
 
 Every catalogue card and Featured slide SHALL show each committed bid,
@@ -610,64 +550,6 @@ close is recorded.
 - **AND** once the close is recorded it shows the recorded result without a
   reload
 
-### Requirement: A bid counts when its payment confirms
-
-With bid-time authorization holds on, a bid SHALL count at the moment its
-card authorization confirms, judged then against the listing's window. With
-holds off, a bid SHALL count when it is placed.
-
-| Confirms | Outcome |
-| --- | --- |
-| Before the effective close | The bid counts, and may move the price and the close |
-| At or after the effective close | The bid does not count, and its hold is released. No grace |
-| Never, while the listing closes | The close marks the bid lost and releases its hold |
-
-A bid still confirming SHALL NOT count toward entering extended bidding. A
-listing whose only bid is still confirming at its scheduled close SHALL close
-unsold. The bidder whose bid did not count SHALL be told their bid did not go
-through.
-
-#### Scenario: grade10-site-auction-auction-SC-67 - A confirmation after the close loses
-**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
-
-- **GIVEN** bid-time holds are on, and a listing whose effective close is
-  20:30:00 UTC with a leader at 120000 HKD minor units
-- **WHEN** a bid of 130000 HKD minor units placed at 20:29:59 UTC has its
-  authorization confirmed at 20:30:01 UTC
-- **THEN** the bid does not count, and the current bid stays 120000 HKD minor
-  units
-- **AND** its hold is released
-- **AND** the recorded close does not move
-
-#### Scenario: grade10-site-auction-auction-SC-68 - A lone first bid still confirming leaves the lot unsold
-**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
-
-- **GIVEN** bid-time holds are on, extension duration 1800 seconds, and a
-  listing whose only bid is still confirming at its scheduled close
-- **WHEN** the listing settles
-- **THEN** it closes unsold at its scheduled close and does not enter extended
-  bidding
-- **AND** that bid is lost and its hold is released
-
-#### Scenario: grade10-site-auction-auction-SC-69 - A confirmation before the close counts
-**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
-
-- **GIVEN** bid-time holds are on, and a listing in extended bidding with
-  recorded close 20:30:00 UTC
-- **WHEN** a valid bid that moves the price has its authorization confirmed at
-  20:29:59 UTC
-- **THEN** the bid counts and the recorded close becomes the extension
-  duration after 20:29:59 UTC
-
-#### Scenario: grade10-site-auction-auction-SC-86 - With holds off a bid counts when placed
-**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
-
-- **GIVEN** bid-time holds are off, and a listing in extended bidding with an
-  extension duration of 1800 seconds and recorded close 20:30:00 UTC
-- **WHEN** a valid bid that moves the price is placed at 20:29:59 UTC
-- **THEN** the bid counts when placed, with no wait for a payment
-- **AND** the recorded close becomes 20:59:59 UTC
-
 ### Requirement: A due lot is settled at its close
 
 Grade10 SHALL settle a listing when a deadline passes: open bidding at its
@@ -678,13 +560,14 @@ settles it:
 1. The listing's own timer, at the deadline
 2. Any read that finds the listing past its effective close, after it answers
    and without delaying the answer
-3. The five-minute sweep, for a listing nothing else reached
+3. A bid refused because the listing is past its effective close, after the
+   refusal is answered and without delaying it
+4. The five-minute sweep, for a listing nothing else reached
 
-Settling a listing twice SHALL change nothing the first did not. A bid or a
-payment confirmation that finds a listing past its effective close SHALL be
-refused and SHALL NOT close the listing; its answer SHALL NOT depend on
-whether a close succeeds. Until the close is recorded, a public read SHALL NOT
-report the listing Ended or name a result.
+Settling a listing twice SHALL change nothing the first did not. A bid that
+finds a listing past its effective close SHALL be refused, and its answer SHALL
+NOT wait on or depend on the close. Until the close is recorded, a public read
+SHALL NOT report the listing Ended or name a result.
 
 #### Scenario: grade10-site-auction-auction-SC-70 - A lot closes at its close with nobody watching
 **Serves:** `Closing a due lot` - the listing's own timer settles it
@@ -717,8 +600,8 @@ report the listing Ended or name a result.
 
 - **GIVEN** a listing past its effective close
 - **WHEN** its timer and a read settle it at the same moment
-- **THEN** it is closed once, with one outcome, one winner order when it sold,
-  and one release per losing hold
+- **THEN** it is closed once, with one outcome and one winner order when it
+  sold
 
 #### Scenario: grade10-site-auction-auction-SC-74 - A bid past the close does not close the lot
 **Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
@@ -784,3 +667,497 @@ this clock under `grade10-site/auction/listing-page`.
 - **WHEN** a page reads the public time twice, one second apart
 - **THEN** each answer is the auction service's time when it answered
 - **AND** neither answer may be cached
+
+### Requirement: Featured leads the catalogue when complete slides are set
+
+`/auction` SHALL open with a Featured band when at least one complete slide is
+available, and SHALL omit that band when none are. Featured SHALL be loaded
+from its own public read, separate from the All auctions catalogue page.
+
+**Complete slide** — a Featured slot that holds both an eligible lot and its
+front page image, and whose lot is published Active or Upcoming at read time
+**Order** — slides appear in the operator's slot order
+**Absent** — with no complete slide, the page has no Featured band
+
+#### Scenario: grade10-site-auction-auction-SC-43 - Featured appears when a complete slide is set
+**Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
+
+- **GIVEN** at least one complete Featured slot with a published Active or
+  Upcoming lot and its front page image
+- **WHEN** a collector opens `/auction`
+- **THEN** the page leads with Featured in operator order
+
+
+#### Scenario: grade10-site-auction-auction-SC-57 - Featured loads from its own public read
+**Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
+
+- **GIVEN** at least one complete Featured slide
+- **WHEN** a collector opens `/auction`
+- **THEN** Featured is answered by the dedicated Featured public read
+- **AND** that answer includes each slide's front page image and the banner lot facts
+
+#### Scenario: grade10-site-auction-auction-SC-30 - Featured is absent when no complete slide is set
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** every Featured slot is empty or incomplete, or every filled slot's
+  lot is no longer published Active or Upcoming
+- **WHEN** a collector opens `/auction`
+- **THEN** the page shows no Featured band
+- **AND** All auctions is the first catalogue section
+
+### Requirement: Each Featured slide shows the curated lot facts
+
+Each Featured slide SHALL show the facts in this table. Money amounts SHALL be
+an integer count of minor units paired with an ISO 4217 currency code. The
+slide MAY compose `FeaturedAuctionsBanner` with `ListingRollingMoneyDisplay`
+and `ListingCountdownDisplay`.
+
+| Fact | Shows |
+| --- | --- |
+| Front page image | The slot's uploaded image as banner background and lot slab; if it fails to load, the lot's first gallery image, else the stage default background |
+| Title | The lot's title |
+| Status | Active: LIVE BIDDING with a live status dot. Upcoming: UPCOMING with no live status dot |
+| Countdown | Relative **Ends in** (Active) or **Opens in** (Upcoming) with the All auctions short remaining form; no Extended label; recorded close moves with the same freshness as the live current bid |
+| Money | Active: served current bid; rolls when that amount **increases** after first paint. Upcoming: no money until the lot opens |
+| Open lot | Active: Bid Now. Upcoming: View Auction. Either opens that lot's details page |
+
+#### Scenario: grade10-site-auction-auction-SC-31 - A Featured slide shows front page image, title, status, countdown and bid
+**Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
+
+- **GIVEN** a complete Featured slide for a published Active lot with a served
+  close and a current bid in minor units and ISO currency
+- **WHEN** a collector views that slide on `/auction`
+- **THEN** the slide shows the slot front page image as banner and slab, the lot title,
+  LIVE BIDDING with a live status dot, relative Ends in from the served close,
+  and the current bid as minor units with that currency code
+
+#### Scenario: grade10-site-auction-auction-SC-32 - The current bid rolls when the served amount increases
+**Serves:** grade10-site-auction-auction-US-10 - Collector sees a live Featured bid and clock
+
+- **GIVEN** an Active Featured slide whose served current bid **increases** after
+  first paint while the collector is on `/auction`
+- **WHEN** the new amount is shown
+- **THEN** the current bid updates with a rolling number to the new minor-unit
+  amount and currency code
+
+#### Scenario: grade10-site-auction-auction-SC-33 - An Upcoming Featured slide counts down to open
+**Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
+
+- **GIVEN** a complete Featured slide for a published Upcoming lot with a
+  served open time
+- **WHEN** a collector views that slide
+- **THEN** the slide shows UPCOMING with no live status dot, View Auction, and
+  Opens in from the served open
+- **AND** the slide shows no starting bid and no money amount
+
+### Requirement: Bid Now or View Auction opens the lot details page
+
+An Active Featured slide SHALL offer Bid Now. An Upcoming Featured slide SHALL
+offer View Auction. Activating either SHALL open that lot's details page.
+
+#### Scenario: grade10-site-auction-auction-SC-34 - Bid Now opens an Active lot's details page
+**Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot
+
+- **GIVEN** an Active Featured slide
+- **WHEN** the collector activates Bid Now
+- **THEN** that lot's details page opens
+
+#### Scenario: grade10-site-auction-auction-SC-58 - View Auction opens an Upcoming lot's details page
+**Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot
+
+- **GIVEN** an Upcoming Featured slide
+- **WHEN** the collector activates View Auction
+- **THEN** that lot's details page opens
+
+### Requirement: Progress advances among two or three Featured slides
+
+When Featured holds two or three complete slides, `/auction` SHALL show
+progress that advances among them. On a small viewport the stage SHALL also
+offer previous/next and horizontal swipe to advance among those slides. A
+single complete slide SHALL NOT require multi-dot advance or stage previous/next.
+Progress MAY use `CarouselProgress`.
+
+#### Scenario: grade10-site-auction-auction-SC-35 - Progress advances among two or three slides
+**Serves:** grade10-site-auction-auction-US-07 - Collector advances Featured slides
+
+- **GIVEN** two or three complete Featured slides on `/auction`
+- **WHEN** the collector advances with the progress control, or on a small
+  viewport with stage previous/next or a horizontal swipe
+- **THEN** each curated slide becomes visible in turn without leaving Featured
+
+#### Scenario: grade10-site-auction-auction-SC-36 - One Featured slide needs no multi-dot advance
+**Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
+
+- **GIVEN** exactly one complete Featured slide
+- **WHEN** a collector views Featured
+- **THEN** that slide is shown
+- **AND** multi-dot advance among slides is not required
+- **AND** stage previous/next is not required
+
+### Requirement: The catalogue layout is Featured then All auctions only
+
+On `/auction` in this layout, the only catalogue sections SHALL be Featured
+(when present) and All auctions. The page SHALL NOT show a Categories heading,
+category tiles, or busy filter chrome.
+
+#### Scenario: grade10-site-auction-auction-SC-37 - The quiet layout has no category section
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** a collector opens `/auction` with or without Featured
+- **WHEN** the page is shown
+- **THEN** there is no Categories heading, no category tiles, and no busy
+  filter chrome
+- **AND** the only catalogue sections are Featured when present and All
+  auctions
+
+
+#### Scenario: grade10-site-auction-auction-SC-42 - The catalogue address stays /auction without a category query
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** a collector opens the Auction catalogue from the Auction nav
+- **WHEN** the page is shown
+- **THEN** the address is `/auction` with no category query
+
+### Requirement: All auctions cards use the shared watch
+
+Each All auctions card that may be watched SHALL offer the same watch as the
+lot page and My Auctions. A closed lot's card SHALL show no watch. The card MAY
+compose `AuctionCard` with `WatchButton`.
+
+#### Scenario: grade10-site-auction-auction-SC-38 - A signed-in collector watches from an All auctions card
+**Serves:** grade10-site-auction-auction-US-09 - Collector watches from an All auctions card
+
+- **GIVEN** a signed-in collector reading an open lot on All auctions
+- **WHEN** they toggle watch on that card
+- **THEN** the lot is watched or unwatched the same way as on the lot page and
+  My Auctions
+
+#### Scenario: grade10-site-auction-auction-SC-39 - A closed lot's card shows no watch
+**Serves:** grade10-site-auction-auction-US-09 - Collector watches from an All auctions card
+
+- **GIVEN** an Ended lot on All auctions
+- **WHEN** a collector reads its card
+- **THEN** the card shows no watch control
+
+
+#### Scenario: grade10-site-auction-auction-SC-41 - Featured remains when All auctions is empty
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** at least one complete Featured slide and no lots in All auctions
+- **WHEN** a collector opens `/auction`
+- **THEN** Featured is shown
+- **AND** All auctions shows that there are no auctions
+
+### Requirement: All auctions loads more as the collector scrolls
+
+All auctions SHALL NOT show pagination controls. When more lots remain than the
+list has shown, scrolling near the end of All auctions SHALL load the next
+batch. While that batch is loading, All auctions SHALL append Boneyard skeleton
+cards below the lots already shown and SHALL keep those lots visible. When no
+further lots remain, no load trigger SHALL appear.
+
+#### Scenario: grade10-site-auction-auction-SC-59 - More All auctions lots load on scroll
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** All auctions holds more lots than the first batch shows
+- **WHEN** the collector scrolls near the end of the shown lots
+- **THEN** the next batch of lots is loaded
+- **AND** lots already shown stay visible
+- **AND** the combined list stays in the catalogue resting order
+
+#### Scenario: grade10-site-auction-auction-SC-60 - Loading more shows skeleton cards
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** All auctions is loading the next batch
+- **WHEN** the collector reads the list
+- **THEN** Boneyard skeleton cards appear below the lots already shown
+- **AND** those lots remain visible above the skeletons
+
+### Requirement: Upcoming catalogue cards withhold money until open
+
+An Upcoming lot on Featured or on an All auctions card SHALL NOT show a starting
+bid or other money amount. Money SHALL appear once the lot is Active (Featured
+current bid; All auctions current bid).
+
+#### Scenario: grade10-site-auction-auction-SC-61 - An Upcoming All auctions card shows no money
+**Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
+
+- **GIVEN** an Upcoming lot on All auctions
+- **WHEN** a collector reads its card
+- **THEN** the card shows no starting bid and no money amount
+- **AND** the card still shows Opens in from the served open
+
+### Requirement: A bid counts when it is accepted
+
+Grade10 SHALL judge each bid in one step under the listing's lock - every
+refusal rule, then the bid accepted or refused - and answer the bidder with
+that outcome in the same reply. An accepted bid SHALL count from that moment,
+judged against the listing's window at that moment. It stands on the card
+linked to the bidder's account, under `grade10-site/auction/bid-payment-method`:
+nothing SHALL be held, authorized or charged on the card when a collector bids,
+and no bid SHALL wait on a payment provider. No bid SHALL be left between
+accepted and refused.
+
+Bids that arrive together SHALL be judged one at a time in one listing order,
+each against the state the one before it left.
+
+| Arrives | Outcome |
+| --- | --- |
+| Before the effective close | Judged at once; if accepted, it counts and may move the price and the close |
+| At or after the effective close | Refused, with no grace |
+
+<!-- trace:scenario id=g10.auction-auction.SC-t3k rev=2 -->
+#### Scenario: grade10-site-auction-auction-SC-23 - A bid holds nothing on the card
+**Serves:** grade10-site-auction-auction-US-02 - a collector with a linked card bids on an open lot
+
+- **WHEN** a collector with a linked card submits a valid bid on an open listing
+- **THEN** Grade10 accepts the bid under the listing's bid rules in the same
+  answer
+- **AND** nothing is held, authorized or charged on the card, and no payment
+  provider is asked
+
+<!-- trace:scenario id=g10.auction-auction.SC-uha rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-10 - Concurrent bids keep the highest valid outcome
+**Serves:** grade10-site-auction-auction-US-02 - two collectors bid on one lot at the same moment
+
+- **GIVEN** two bidders submit different valid bid amounts against the same current listing state
+- **WHEN** Grade10 evaluates the requests concurrently
+- **THEN** it records bid outcomes in one listing order
+- **AND** the current bid is the highest valid accepted amount
+- **AND** no lower bid can overwrite that current bid
+
+#### Scenario: grade10-site-auction-auction-SC-86 - A bid in the last second counts when accepted
+**Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
+
+- **GIVEN** a listing in extended bidding with an extension duration of 1800
+  seconds and recorded close 20:30:00 UTC
+- **WHEN** a valid bid that moves the price arrives at 20:29:59 UTC
+- **THEN** Grade10 accepts it, and it counts in that answer
+- **AND** the recorded close becomes 20:59:59 UTC
+
+### Requirement: A refused bid places nothing
+
+A bid Grade10 refuses SHALL place nothing. It SHALL write no bid, no standing,
+no bidding-history entry and no My Auctions row, and SHALL move nothing: not
+the price, the leader, the close, the bid count, any bidder's maximum or row,
+nor the listing's version, so no open page is sent an update. A bid refused
+past the effective close starts the close after it is answered, under "A due
+lot is settled at its close"; that close moves the version, and the refusal
+does not. The bidder's record SHALL never show a refused attempt.
+
+The bid form SHALL say why under the bid action, in the words below, and
+nowhere else: never in a toast, and never in the words the server sent.
+
+| Refused when | Code | The bid form says |
+| --- | --- | --- |
+| The amount is not a whole count of minor units above zero, checked by the bid form before it sends | None: the request is never sent | Enter a valid amount. |
+| At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. |
+| Below the minimum next bid | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
+| Above the currency's ceiling | `AMOUNT_TOO_HIGH` | Maximum bid is {amount}. with the ceiling |
+| Not above the bidder's own maximum on the listing | `MAXIMUM_NOT_RAISED` | Your new maximum must be higher than your current one. |
+| No linked card, or the bidder was never registered with one | `PAYMENT_METHOD_REQUIRED`, `NOT_REGISTERED` | Link a card to bid. |
+| Another card after the first accepted bid on the listing | `PAYMENT_METHOD_REFUSED` | This listing's card is locked after the first accepted bid. |
+| Bidding is suspended on the account | `SUSPENDED` | Bidding is suspended on this account. Contact Us to resolve it. |
+| The account is banned from bidding | `BANNED` | This account cannot bid. |
+| Before the start or at or after the effective close, an unknown listing, another currency, an erased bidder, or a refusal with no row above | `NOT_BIDDABLE`, `LISTING_NOT_FOUND`, `CURRENCY_MISMATCH`, `BIDDER_DELETED` | Your bid did not go through. |
+
+The auction's request schema refuses an amount that is not a whole count of
+minor units above zero before `INVALID_AMOUNT` can be answered, so the bid form
+never shows that code. Where several refusals apply, the first in this order
+answers: unknown listing, not biddable, not registered, suspended, banned, erased
+bidder, another currency, above the ceiling, maximum not raised, below the
+minimum, no card, another card. The storefront answers the identity bar before
+the auction hears of the bid.
+
+Each refusal the auction service answers SHALL be one structured operational
+log entry at the auction service, naming the bidder, the listing, the code, the
+maximum sent and, where the refusal names one, the floor or the ceiling: the
+minimum next bid or the currency's highest maximum. The entry is for operators and SHALL NOT reach the bidder's record.
+
+#### Scenario: grade10-site-auction-auction-SC-89 - A refused first bid leaves no trace
+**Serves:** grade10-site-auction-auction-US-14 - a collector's first bid on a lot is refused because the price moved
+
+- **GIVEN** an open `HKD` listing at a current bid of 120000 HKD minor units,
+  whose minimum next bid is 124000 HKD minor units, and a collector with a
+  linked card and no bid on it
+- **WHEN** they submit a maximum of 122000 HKD minor units
+- **THEN** the bid form says Minimum bid is {amount}. with 124000 HKD minor
+  units
+- **AND** the listing is on neither their My Auctions nor their bidding
+  history
+- **AND** the current bid, the leader and the bid count are unchanged
+
+#### Scenario: grade10-site-auction-auction-SC-90 - An Outbid bidder's refused raise leaves their row where it was
+**Serves:** grade10-site-auction-auction-US-14 - an Outbid bidder's raise is refused because the price moved
+
+- **GIVEN** bidder B, Outbid with a maximum of 110000 HKD minor units on an
+  open `HKD` listing whose minimum next bid is 124000 HKD minor units
+- **WHEN** B submits a maximum of 122000 HKD minor units
+- **THEN** the bid form says Minimum bid is {amount}. with 124000 HKD minor
+  units
+- **AND** B's My Auctions row still reads Outbid, in the same place
+- **AND** B's maximum stays 110000 HKD minor units and their bidding history
+  gains no entry
+
+#### Scenario: grade10-site-auction-auction-SC-91 - Each refusal reads in its own words
+**Serves:** grade10-site-auction-auction-US-14 - the bidder reads why a bid was refused
+
+- **WHEN** a bid is refused for any reason the refusal table names
+- **THEN** the bid form shows that row's words under the bid action
+- **AND** no toast opens
+
+#### Scenario: grade10-site-auction-auction-SC-92 - The server's words never reach the bid form
+**Serves:** grade10-site-auction-auction-US-14 - a refusal the bid form has no words of its own for
+
+- **WHEN** the auction refuses a bid with a code the table gives no words of
+  its own, or with a message of its own
+- **THEN** the bid form says Your bid did not go through.
+- **AND** none of the server's message shows
+
+#### Scenario: grade10-site-auction-auction-SC-93 - A refusal is kept for operators only
+**Serves:** grade10-site-auction-auction-US-14 - an operator reads a refusal the bidder's record never shows
+
+- **GIVEN** the refused first bid of `grade10-site-auction-auction-SC-89`
+- **WHEN** the auction service answers the refusal
+- **THEN** it writes one operational log entry naming the bidder, the listing,
+  `AMOUNT_TOO_LOW`, 122000 HKD minor units sent and a floor of 124000 HKD minor
+  units
+- **AND** nothing of the refusal reaches the bidder's record, bidding history
+  or My Auctions
+
+### Requirement: A bid whose answer is lost reads as placed when the bidder's standing holds it
+
+When the answer to a bid never reaches the bid form, the form SHALL read the
+bidder's own standing on that listing before it says anything:
+
+| The standing read | The bid form |
+| --- | --- |
+| Holds the maximum just sent | Reads the bid as placed: no error, and the panel, standing and history read again |
+| Holds another maximum or none, or the read fails | Says Could not place this bid. under the bid action, and logs the cause |
+
+A first bid read as placed this way still bookmarks the listing with email
+alerts on, since the auction wrote the watch when it accepted the bid. It is
+the one exception to the announcement under
+`grade10-site/auction/account-record`: the announcement SHALL NOT show, because
+the auction recorded it as made when it accepted the bid and the standing read
+does not carry it.
+
+#### Scenario: grade10-site-auction-auction-SC-94 - A committed bid behind a lost answer reads as placed
+**Serves:** grade10-site-auction-auction-US-02 - a collector's bid commits but its answer is lost on the way back
+
+- **GIVEN** a collector submits a maximum of 130000 HKD minor units on an open
+  `HKD` listing, and the auction accepts it
+- **WHEN** the answer is lost on the way back to the bid form
+- **THEN** the bid form shows no error
+- **AND** the panel shows their maximum of 130000 HKD minor units and their
+  standing
+
+#### Scenario: grade10-site-auction-auction-SC-95 - A lost answer with no bid behind it says so
+**Serves:** grade10-site-auction-auction-US-02 - a collector's bid gets no answer and placed nothing
+
+- **GIVEN** a collector submits a maximum of 130000 HKD minor units on an open
+  `HKD` listing
+- **WHEN** the answer is lost, and the standing read holds another maximum or
+  none, or fails
+- **THEN** the bid form says Could not place this bid. under the bid action
+- **AND** the cause is logged
+
+### Requirement: Erasing a bidder re-stands each lot on the maxima left
+
+When a bidder's account is erased under `shared/auth/users`, Grade10 SHALL
+withdraw every standing maximum they hold on a listing whose close is not yet
+recorded, under that listing's lock, and re-stand the listing from the maxima
+left. The withdrawn bids read as canceled.
+
+1. The highest maximum left leads; between equal maxima, the earlier accepted
+   one leads.
+2. The price is the lowest of the price before the erasure, the new leader's
+   maximum, and the next maximum left plus the increment
+   `grade10-site/auction/bid-increments` selects for that maximum.
+3. With one maximum left, the price is the lower of the price before and the
+   opening price.
+4. With no maximum left, the listing has no leader and no current bid, and the
+   next bid must reach the opening price.
+5. The price SHALL never rise above the price before the erasure. When neither
+   the leader nor the price changes, nothing beyond the withdrawal is written.
+6. Otherwise Grade10 records one bid placed on the new leader's behalf at the
+   new price, and the new leader reads as Leading. The recorded close does not
+   move.
+
+Worked example. A `USD` listing opening at 10000 USD minor units, every amount
+in USD minor units; the increment at each next maximum here is 500.
+
+| Maxima before | Price before | Erased | Leader after | Price after |
+| --- | ---: | --- | --- | ---: |
+| A 20000, B 15000, C 12000 | 15500 | A | B | 12500 |
+| A 20000, B 15000, C 12000 | 15500 | B | A | 12500 |
+| A 50000, B 19800, C 10000 | 20000 | C | A | 20000, unchanged |
+| A 20000, B 15000, C 11000 | 15500 | C | A | 15500, unchanged |
+| A 20000, B 15000 | 15500 | A | B | 10000 |
+| A alone | 10000 | A | None | None |
+
+In the third row the next maximum plus one increment is 20300, above the price
+before, so the price stays.
+
+#### Scenario: grade10-site-auction-auction-SC-96 - The runner-up takes the lead from the maxima left
+**Serves:** grade10-site-auction-auction-US-13 - the leader's account is erased and the runner-up's maximum is highest left
+
+- **GIVEN** an open `USD` listing where A leads with a maximum of 20000, B holds
+  15000 and C holds 12000, at a price of 15500, all in USD minor units
+- **WHEN** A's account is erased
+- **THEN** A's bids on the listing read as canceled
+- **AND** B leads at 12500 USD minor units with a maximum of 15000 USD minor
+  units
+- **AND** the public bid history records one bid placed on B's behalf at 12500
+  USD minor units
+
+#### Scenario: grade10-site-auction-auction-SC-97 - Erasing the bidder who set the price re-prices the leader
+**Serves:** grade10-site-auction-auction-US-13 - the bidder whose maximum set the price is erased
+
+- **GIVEN** an open `USD` listing where A leads with a maximum of 20000, B holds
+  15000 and C holds 12000, at a price of 15500, all in USD minor units
+- **WHEN** B's account is erased
+- **THEN** A still leads, at 12500 USD minor units
+
+#### Scenario: grade10-site-auction-auction-SC-98 - A leader whose maximum outgrew the price keeps it
+**Serves:** grade10-site-auction-auction-US-13 - the erasure would price the lot above where it stood
+
+- **GIVEN** an open `USD` listing where A leads at 20000 USD minor units, after
+  raising their maximum from 20000 to 50000, with B at 19800 and C at 10000
+- **WHEN** C's account is erased
+- **THEN** A still leads at 20000 USD minor units
+- **AND** nothing is written beyond C's withdrawn bids
+
+#### Scenario: grade10-site-auction-auction-SC-99 - Erasing a bidder who set nothing moves nothing
+**Serves:** grade10-site-auction-auction-US-13 - a bidder below the runner-up is erased
+
+- **GIVEN** an open `USD` listing where A leads with a maximum of 20000, B holds
+  15000 and C holds 11000, at a price of 15500, all in USD minor units
+- **WHEN** C's account is erased
+- **THEN** A still leads at 15500 USD minor units, on the same bid
+
+#### Scenario: grade10-site-auction-auction-SC-100 - One maximum left stands at the opening price
+**Serves:** grade10-site-auction-auction-US-13 - the leader is erased and one bidder is left
+
+- **GIVEN** an open `USD` listing opening at 10000 USD minor units, where A
+  leads with a maximum of 20000 and B holds 15000, at a price of 15500, all in
+  USD minor units
+- **WHEN** A's account is erased
+- **THEN** B leads at 10000 USD minor units
+
+#### Scenario: grade10-site-auction-auction-SC-101 - Erasing the only bidder leaves no leader
+**Serves:** grade10-site-auction-auction-US-13 - the lot's only bidder is erased
+
+- **GIVEN** an open `USD` listing opening at 10000 USD minor units whose only
+  bidder A leads at 10000 USD minor units
+- **WHEN** A's account is erased
+- **THEN** the listing has no leader and no current bid
+- **AND** the next bid must reach 10000 USD minor units
+
+#### Scenario: grade10-site-auction-auction-SC-102 - A re-stood lot closes on its new leader
+**Serves:** grade10-site-auction-auction-US-13 - a lot re-stood after an erasure reaches its close
+
+- **GIVEN** the listing of `grade10-site-auction-auction-SC-97`, with extended
+  bidding off, re-stood with A leading at 12500 USD minor units
+- **WHEN** its scheduled close passes
+- **THEN** it closes sold to A at 12500 USD minor units

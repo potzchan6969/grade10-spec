@@ -11,13 +11,7 @@
 **As a** signed-in collector with no linked card,
 **I want** setup to leave me ready to bid immediately and to move me to
 enrolled after my first accepted bid,
-**so that** the panel does not wait for a bid-time authorization that the
-backend does not require.
-
-**Accepted by:**
-
-- `grade10-site-auction-bid-panel-enrollment-SC-15` — Card linking leaves the collector ready to bid
-- `grade10-site-auction-bid-panel-enrollment-SC-16` — An accepted bid moves directly to enrolled
+**so that** I can bid the moment the card is linked.
 
 ### grade10-site-auction-bid-panel-enrollment-US-03: Collector changes the linked card before their first bid
 

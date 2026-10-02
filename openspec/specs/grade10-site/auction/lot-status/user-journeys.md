@@ -16,4 +16,4 @@
 
 **As a** bidder,
 **I want** a called-off lot I bid on to stay in My Auctions,
-**so that** I can see my card hold was released.
+**so that** I can see my card was not charged.

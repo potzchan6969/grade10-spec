@@ -1,7 +1,7 @@
 # shared/ui/auction-listing Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-10-01, tcs-rules r4
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## shared-ui-auction-listing-US1: The listing page blocks' rendering contract
 
@@ -616,7 +616,7 @@ Runs once per row of **Test data**.
 * Step 1: the marker shows at the header's trailing edge.
 * Step 2: the header renders with nothing in that place.
 
-### shared-ui-auction-listing-US1-TC18-1: A lost standing shows the badge and no release banner
+### shared-ui-auction-listing-US1-TC18-2: A lost standing shows the badge and no banner
 
 **Classification:**
 
@@ -638,16 +638,21 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read the standing on the bid card.
-2. Scan the card for a hold-release banner.
+2. Scan the card for a banner.
 
 **Expected Results:**
 
 * Step 1: the standing reads Did not win.
-* Step 2: no card-authorization-release banner shows.
+* Step 2: no banner shows on the card.
 
 ## Raised
 
 - None; this change introduces no unresolved product question.
+
+## Settled
+
+- A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the lot card (decisions Q2).
+- The linked-card tooltip scenario keeps its title, since retitling needs a new id (decisions Q18).
 
 ## Reconciliation
 
@@ -666,3 +671,12 @@ Runs once per row of **Test data**.
 | TC16-1: setup keeps continue disabled until a card and an attestation, and says which is missing | **Folded in:** durable `shared-ui-auction-listing-SC-16` (Q36) - setup names nothing, so QA2 dropped the Says missing column and its step; the case stays draft |
 
 **Uncovered anchors:** none for this change. Its three scenarios each have a case. The durable scenarios no case here asserts - `-SC-11`, `-SC-14`, `-SC-14a`, `-SC-15`, `-SC-17`, `-SC-18`, `-SC-19`, `-SC-24`, `-SC-25`, `-SC-28`, `-SC-29`, `-SC-30`, `-SC-32`, `-SC-34` - are untouched by this change and owed by the durable suite.
+
+**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
+
+- **Folded in** - `shared-ui-auction-listing-SC-46` by `shared-ui-auction-listing-US1-TC18-2`
+- **Revised** - QA1 kept `shared-ui-auction-listing-US1-TC18-1`, but it now reads no banner of any kind under a lost standing, so it moves up a revision
+- **Out of suite** - the enrollment blocks' props, which no longer take `authorizing` or `authorizationRefused`: the store's type check and the block stories. `shared-ui-auction-listing-SC-30` changed its Serves line only and stands by its story
+- **Raised, answered** - Q18: `shared-ui-auction-listing-SC-30` keeps its title, since retitling needs a new id, recommended; answer in `## Settled`
+- **Contradicted** - none
+- **Uncovered anchors** - none

@@ -121,7 +121,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 | Product | Refuses while | Erases |
 | --- | --- | --- |
 | Appointment | never | Nulls `bookings.user_id` in the named lane; the seat stays as the shop's record of its own day |
-| Auction | uncaptured settlement, unit in transit, or a live payment hold | Bidder name and email, watches, fulfillment address and proof documents, and the Stripe customer. `user_id` stays as an opaque key on bids and settlements |
+| Auction | uncaptured settlement, or unit in transit | Bidder name and email, watches, fulfillment address and proof documents, and the Stripe customer; the bidder's maxima on running lots are withdrawn and the runner-up re-stands. `user_id` stays as an opaque key on bids and settlements |
 | Store | never | Profile and push subscriptions deleted; checkout address, vendor customer ref and an operator's claim notes cleared off the person's own rows; pairing marked deleted, which drops the phone it last pushed. Order, event, claim, code and handle ids stay |
 | Inventory | 🚧 a place marks an item the person owns | 🚧 Owner removed, title reading as erased, description cleared, the person's side of each move and its reason cleared; a transfer proof kept while the other party is the custodian, the lender or a live account |
 | Vault | a case still in custody or otherwise unerasable | Every case that named the person — phone, email, decline reason, item titles, photos, notes, signer details — and the identity binding released over the kyc port |
@@ -170,7 +170,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 | userId ↔ Stripe customer id | store schema, written before first use |
 | Catalog | Shopify, fetched live behind Workers Cache — no mirror |
 | Orders and items | store schema; Stripe holds the payment objects |
-| Auctions, bids, holds, settlement | auction service ([Auction Service](/platform/auction-service)) |
+| Auctions, bids, settlement | auction service ([Auction Service](/platform/auction-service)) |
 
 ## Q & A
 

@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "6b1757344b119c59f3000c56dd0331067763e3e0ca3703d70521976a12b3546d"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "2ed6eca068bfe3ee0645e1183affc00272b68a75",
+    "capturedAt": "2026-10-02T15:27:17.435Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/analytics/analytics/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/analytics/analytics/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The browser may send client event names only",
+          "Requirement: The browser sends client event names only"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/analytics/analytics/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A bid bookmarks the listing on My Auctions",
+          "Requirement: A bidder's standing while a listing is open",
+          "Requirement: A losing bidder is told what happened to their card hold",
+          "Requirement: A losing bidder reads that their card was not charged",
+          "Requirement: An open listing reads Leading or Outbid"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "8c2eda945cc71468885bc900f57868dea0343586",
+      "components": [
+        "auction-service",
+        "web"
+      ]
+    }
+  ]
+}

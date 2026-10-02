@@ -83,6 +83,22 @@ product history.
 - **Copy-level facts** - each Cert record carries its required Cert ID, issuer,
   grade, autograph grade, and serial; grade remains source text. A unit without
   a Cert ID is regular stock rather than a Cert record.
+- 🚧 **Every unit in Cert ID details** — View Cert IDs lists each Cert record
+  and the regular stock without a Cert ID: one `No Cert ID` row for the
+  available units with their count, shown whenever regular stock has any
+  history, and one for each active hold with its holder and remaining count. A
+  `No Cert ID` row shows the history of regular stock. Sold, withdrawn and
+  vaulted regular stock is not listed, because no unit of it is tracked
+- 🚧 **Cert ID correction** — a Cert record that has only been intaken can
+  have its Cert ID changed to another one no record of the product holds, in
+  any status. An available unit of regular stock can be given a Cert ID with
+  its Grade Issuer, and Grade, Autograph Grade and Serial where known; it
+  becomes a Cert record and leaves the `No Cert ID` count. A record that has
+  ever been reserved, sold, withdrawn, vaulted or listed keeps its Cert ID, and
+  a Cert ID cannot be cleared or read `No Cert ID`
+- 🚧 **Cert ID change in history** — each change is one history entry with
+  its time, actor, the Cert ID before and after (`No Cert ID` before an
+  assignment) and optional remarks, and it shows in that unit's history
 - **Explicit reservation unit** — every reservation selects one Cert ID or
   explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Product bulk import** — upload product names and typed schema attributes
@@ -99,23 +115,40 @@ product history.
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
-- 🚧 **Unsold auction stock** — when an Auction listing closes Unsold, its hold
+- **Unsold auction stock** — when an Auction listing closes Unsold, its hold
   closes as released, available rises by the held units, and the product
   page and the history both name the listing. A hold left over from a listing
   that closed Unsold earlier is released once and reads the same. The
   release's remarks say an Unsold listing released it
-- 🚧 **History** — each entry shows when it happened, its action, quantity
+- **History** — each entry shows when it happened, its action, quantity
   and actor, the holder — the listing a hold belongs to, by listing code and
   title — and its remarks
-- 🚧 **Cert-scoped media** - an Inventory image or video stays product-level
+- **Cert-scoped media** - an Inventory image or video stays product-level
   when untagged, or is tagged to one same-product Cert record. Every Cert
   record has a Cert ID; regular stock without a Cert ID has no Cert record or
   tag target. Removing a media Cert tag or retagging leaves the originally tagged
   source item untagged. Removing a physical unit removes its Cert record and
   the source media tied to that record; Inventory records the unit as withdrawn
 
+:::detail{title="Product decisions" for="pm"}
+Cert-scoped source media keeps product-level shared images while letting an
+operator mark which physical Cert a photo belongs to, without inventing a
+second gallery.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Cert media tag identity | Decided | The tag stores the immutable Cert record id. Every Cert record has a printed Cert ID used for display only. | Product |
+| One Cert per source item | Decided | A source item is untagged and shared, or tagged to exactly one same-product Cert record. Regular stock without a Cert ID has no Cert record and cannot be a tag target. | Product |
+| Retag and remove | Decided | An authorized Inventory operator may tag or untag. Retagging leaves the item untagged; assigning another Cert is a separate tag. Physical removal of an available Cert unit withdraws it, deletes its Cert record and its tagged source media, and leaves other product media and saved Auction snapshots unchanged. | Product |
+:::
+
 :::detail{title="Intake code map" for="engineer"}
 - **Release input** — `ReleaseInput` in `packages/inventory/contracts`
 - **Reservations** — `ReservationGroup.tsx`
 - **Change history** — `ChangeHistoryDialog.tsx`
+- **Cert ID correction and assignment** — `correctCertId` and `assignCertId`
+  in `services/inventoryMutations.ts`
+- **Copy facts** — `normalizeUnitFacts` in `services/unitFacts.ts`
+- **Unit history** — the `unit` filter in `repositories/changelogs.ts`
+- **Cert ID details** — `CertIdDetailDialog.tsx`
 :::

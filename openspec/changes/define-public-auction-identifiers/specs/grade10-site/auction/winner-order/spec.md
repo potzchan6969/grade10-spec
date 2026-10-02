@@ -45,7 +45,6 @@
   - Receipt identifier: every receipt carries its existing unique receipt ID; receipt contents remain outside this identifier change
   - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
 - Settlement
-  - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
   - Single fresh charge: one transaction for the final amount, retryable on failure
 - Payment deadline
   - Seven days from close: a fixed end to the winner's obligation, unmoved by anything they do to the invoice

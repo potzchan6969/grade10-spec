@@ -889,6 +889,29 @@ describe("permanent ids across the whole store", () => {
     ]);
   });
 
+  it("passes a REMOVED requirement naming the ids an archived change issued", async () => {
+    const root = changing(
+      "first",
+      [
+        "## REMOVED Requirements",
+        "",
+        "### Requirement: Beta was here",
+        "",
+        "**Reason:** Nothing does it now.",
+        "",
+        "**Migration:** beta-SC-01 retires.",
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/archive/2026-01-01-add-beta/proposal.md":
+          proposal("Add beta"),
+        "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/beta/spec.md":
+          "## ADDED Requirements\n\n### Requirement: Beta was here\n\n#### Scenario: beta-SC-01 - it was here\n\n- **WHEN** asked\n- **THEN** it happened\n",
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([]);
+  });
+
   it("fails an ADDED requirement issuing an id the durable spec issues", async () => {
     const root = changing(
       "reissuing",

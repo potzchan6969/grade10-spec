@@ -17,8 +17,8 @@ Owner-only — nobody but the collector sees their record.
   - Payment Verifying: a won lot whose payment proof waits for an operator reads Payment Verifying
   - Winner's payment and shipment: lets a winner follow their own listing to
     delivery without contacting Grade10.
-  - Losing bidder's card hold: says what happened to their authorization, so a
-    pending hold is not read as a charge.
+  - Losing bidder's card hold: none is taken, so the row says the card was not
+    charged and a lost listing is not read as a charge.
   - Result from the record: Your Standing reads Won or Didn't win from the
     recorded result, never from the page's own clock.
 - **Watching a listing**
@@ -37,7 +37,9 @@ Owner-only — nobody but the collector sees their record.
     the detailed index, filters, and listing story come from
     `grade10-site/auction/bidding-history`.
   - Standing while open: says whether the collector still leads, and what the
-    next valid bid must clear when they do not.
+    next valid bid must clear when they do not; a refused attempt adds no row
+    and moves no Status, so a leader stays Leading and an outbid collector
+    stays Outbid.
   - Three groups: separates the listings that still need the collector from
     the ones that are finished.
   - Auction's price: a bidding row shows the auction's current price, or its
@@ -257,90 +259,6 @@ Unwatch while a bid stands.
 - **THEN** the row offers no Unwatch
 - **AND** their standing is unchanged
 
-### Requirement: A bidder's standing while a listing is open
-
-A My Auctions row for a listing the collector has bid on SHALL be an
-account-facing summary. The detailed index, private action log, and listing
-chronology SHALL follow the `grade10-site/auction/bidding-history` contract;
-this capability SHALL NOT create a second bidding history or event log.
-
-A listing on My Auctions whose bidding window is open and on which the
-collector has bid SHALL carry exactly one of these values in Status.
-
-| State | When |
-| --- | --- |
-| Leading | The collector's bid is the highest valid bid |
-| Outbid | A higher valid bid stands. Carries the minimum next valid bid |
-| Bid submitted | The collector placed a bid Grade10 has not yet accepted |
-| Bid not accepted | Grade10 refused the collector's last bid. Carries which of: below the minimum next bid, the window had closed, or card authorization failed |
-
-Status SHALL NOT use Ending soon, Scheduled, Live, or Active. Close
-urgency SHALL appear with the listing identity.
-
-The row's price SHALL be the auction's current bid on that listing, never the
-collector's own bid. A listing past its effective close whose close is not yet
-recorded SHALL keep its open Status, SHALL stay in the Active tab, and SHALL
-carry no minimum next valid bid.
-
-Every amount SHALL be an integer count of minor units with an ISO 4217 currency
-code.
-
-<!-- trace:scenario id=g10.auction-account-record.SC-2h8 rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-14 - The highest bidder is Leading
-**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
-
-- **GIVEN** an open listing on which the collector holds the highest valid bid
-- **WHEN** they open My Auctions
-- **THEN** that listing's Status is Leading
-
-<!-- trace:scenario id=g10.auction-account-record.SC-ana rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-15 - Outbid carries the minimum next bid
-**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
-
-- **GIVEN** an open listing on which a higher valid bid than the collector's
-  stands
-- **WHEN** they open My Auctions
-- **THEN** that listing's Status is Outbid
-- **AND** the row carries the minimum next valid bid as an integer count of
-  minor units with its ISO 4217 currency code
-
-<!-- trace:scenario id=g10.auction-account-record.SC-3pi rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-16 - A refused bid says why it was refused
-**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
-
-- **GIVEN** a collector whose last bid on an open listing was refused for being
-  below the minimum next bid
-- **WHEN** they open My Auctions
-- **THEN** that listing's Status is Bid not accepted
-- **AND** the row says the bid was below the minimum next bid
-
-<!-- trace:scenario id=g10.auction-account-record.SC-91l rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-17 - A bid awaiting acceptance is not a standing
-**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
-
-- **GIVEN** a collector who has placed a bid Grade10 has not yet accepted
-- **WHEN** they open My Auctions
-- **THEN** that listing's Status is Bid submitted
-- **AND** the row does not claim they are Leading
-
-#### Scenario: grade10-site-auction-account-record-SC-64 - An outbid row shows the auction's price
-**Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
-
-- **GIVEN** an open listing on which the collector bid 100000 HKD minor units
-  and the current bid is 120000 HKD minor units
-- **WHEN** they open My Auctions
-- **THEN** that row's price is 120000 HKD minor units
-
-#### Scenario: grade10-site-auction-account-record-SC-65 - A lot past its close keeps its standing until the close is recorded
-**Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
-
-- **GIVEN** a listing past its effective close, whose close is not yet
-  recorded, on which the collector holds the highest valid bid
-- **WHEN** they open My Auctions
-- **THEN** that row is in the Active tab with Status Leading and no minimum
-  next valid bid
-- **AND** it reads neither Won nor Didn't win
-
 ### Requirement: The Bidding page groups by what is still owed
 
 After close, a listing the collector bid on SHALL carry exactly one of **Won**
@@ -543,46 +461,6 @@ remove them.
 - **THEN** the first listing's state is Pending Payment
 - **AND** the second listing's state is Processing
 
-### Requirement: A losing bidder is told what happened to their card hold
-
-A listing whose Status is Didn't win on which the collector held a card
-authorization SHALL say whether that authorization is still being released or
-is released. When no bid-time authorization exists, Grade10 SHALL show no hold
-release status. Grade10 SHALL NOT describe an authorization as released while
-its release is still in flight.
-
-A listing the collector bid on that was called off SHALL appear with Didn't
-win standing carrying the same statement about their authorization, while the
-listing remains published.
-
-<!-- trace:scenario id=g10.auction-account-record.SC-uvr rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-25 - A release in flight says so
-**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
-
-- **GIVEN** a closed listing the collector did not win, whose authorization
-  Grade10 has marked for release and whose release is not complete
-- **WHEN** they open My Auctions
-- **THEN** the row says the hold is being released
-- **AND** it does not say the hold is released
-
-<!-- trace:scenario id=g10.auction-account-record.SC-dtm rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-26 - A completed release says so
-**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
-
-- **GIVEN** the same listing once its release is complete
-- **WHEN** the collector opens My Auctions
-- **THEN** the row says the hold is released
-
-<!-- trace:scenario id=g10.auction-account-record.SC-2e8 rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-27 - A called-off listing tells the bidder about the hold
-**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
-
-- **GIVEN** a listing the collector bid on that Grade10 called off and still
-  publishes
-- **WHEN** they open My Auctions
-- **THEN** that listing's Status is Didn't win
-- **AND** the row says what happened to their authorization
-
 ### Requirement: The record belongs to its owner alone
 
 Grade10 SHALL resolve an auction record from the caller's session and no other
@@ -717,16 +595,17 @@ again for that pair.
 
 ### Requirement: A bid bookmarks the listing on My Auctions
 
-When a signed-in collector places a bid on a listing, Grade10 SHALL enroll
-that listing on My Auctions as a bookmark if it is not already there. The
-collector SHALL NOT need a separate Watch for that listing to appear.
+When a signed-in collector places a bid Grade10 accepts on a listing, Grade10
+SHALL enroll that listing on My Auctions as a bookmark if it is not already
+there. The collector SHALL NOT need a separate Watch for that listing to
+appear.
 
-<!-- trace:scenario id=g10.auction-account-record.SC-7on rev=1 -->
+<!-- trace:scenario id=g10.auction-account-record.SC-7on rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-42 - A first bid enrolls My Auctions
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a signed-in collector who does not watch a listing
-- **WHEN** they place a bid on it
+- **WHEN** they place a bid on it that Grade10 accepts
 - **THEN** that listing is on My Auctions
 - **AND** Status reflects their bid standing
 
@@ -860,3 +739,125 @@ SHALL NOT record payment, confirm or change an address, or change order status.
 - **WHEN** the collector selects the row's order entry point
 - **THEN** the matching auction order opens
 - **AND** no payment, address, or order-status write occurs on My Auctions
+
+### Requirement: An open listing reads Leading or Outbid
+
+A My Auctions row for a listing the collector has bid on SHALL be an
+account-facing summary. The detailed index, private action log, and listing
+chronology SHALL follow the `grade10-site/auction/bidding-history` contract;
+this capability SHALL NOT create a second bidding history or event log.
+
+A listing on My Auctions whose bidding window is open and on which the
+collector has bid SHALL carry exactly one of these values in Status.
+
+| State | When |
+| --- | --- |
+| Leading | The collector's bid is the highest valid bid |
+| Outbid | A higher valid bid stands. Carries the minimum next valid bid |
+
+A refused attempt SHALL NOT be a bid. It SHALL add no row to My Auctions and
+SHALL change no row's Status or price: a leader whose raise is refused stays
+Leading, and an outbid collector whose raise is refused stays Outbid. The
+refusal SHALL NOT appear on My Auctions; the bid form shows it.
+
+Status SHALL NOT use Ending soon, Scheduled, Live, or Active. Close
+urgency SHALL appear with the listing identity.
+
+The row's price SHALL be the auction's current bid on that listing, never the
+collector's own bid. A listing past its effective close whose close is not yet
+recorded SHALL keep its open Status, SHALL stay in the Active tab, and SHALL
+carry no minimum next valid bid.
+
+Every amount SHALL be an integer count of minor units with an ISO 4217 currency
+code.
+
+<!-- trace:scenario id=g10.auction-account-record.SC-2h8 rev=1 -->
+#### Scenario: grade10-site-auction-account-record-SC-14 - The highest bidder is Leading
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
+
+- **GIVEN** an open listing on which the collector holds the highest valid bid
+- **WHEN** they open My Auctions
+- **THEN** that listing's Status is Leading
+
+<!-- trace:scenario id=g10.auction-account-record.SC-ana rev=1 -->
+#### Scenario: grade10-site-auction-account-record-SC-15 - Outbid carries the minimum next bid
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
+
+- **GIVEN** an open listing on which a higher valid bid than the collector's
+  stands
+- **WHEN** they open My Auctions
+- **THEN** that listing's Status is Outbid
+- **AND** the row carries the minimum next valid bid as an integer count of
+  minor units with its ISO 4217 currency code
+
+#### Scenario: grade10-site-auction-account-record-SC-69 - A leader whose raise is refused stays Leading
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
+
+- **GIVEN** an open listing on which the collector holds the highest valid bid
+- **WHEN** Grade10 refuses their raise
+- **AND** they open My Auctions
+- **THEN** that listing's Status is Leading
+- **AND** the refused raise has not moved the row's price
+
+#### Scenario: grade10-site-auction-account-record-SC-70 - A refused first bid adds no row
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
+
+- **GIVEN** an open listing the collector has neither watched nor bid on
+- **WHEN** their first bid on it is refused
+- **AND** they open My Auctions
+- **THEN** no row for that listing appears in any tab
+
+#### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
+**Serves:** grade10-site-auction-account-record-US-02 - a refused raise leaves the collector reading the standing they had
+
+- **GIVEN** an open `HKD` listing on which the collector is Outbid with a
+  maximum of 25000 HKD minor units, at a current bid of 30000 HKD minor units
+  and a minimum next bid of 31000 HKD minor units
+- **WHEN** they raise their maximum to 30500 HKD minor units, and Grade10
+  refuses it as below the minimum
+- **AND** they open My Auctions
+- **THEN** that listing's Status is Outbid
+- **AND** the row's price is still 30000 HKD minor units
+
+#### Scenario: grade10-site-auction-account-record-SC-64 - An outbid row shows the auction's price
+**Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
+
+- **GIVEN** an open listing on which the collector bid 100000 HKD minor units
+  and the current bid is 120000 HKD minor units
+- **WHEN** they open My Auctions
+- **THEN** that row's price is 120000 HKD minor units
+
+#### Scenario: grade10-site-auction-account-record-SC-65 - A lot past its close keeps its standing until the close is recorded
+**Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
+
+- **GIVEN** a listing past its effective close, whose close is not yet
+  recorded, on which the collector holds the highest valid bid
+- **WHEN** they open My Auctions
+- **THEN** that row is in the Active tab with Status Leading and no minimum
+  next valid bid
+- **AND** it reads neither Won nor Didn't win
+
+### Requirement: A losing bidder reads that their card was not charged
+
+A listing whose Status is Didn't win SHALL say that the collector's card was
+not charged. A listing the collector bid on that was called off SHALL appear
+with Didn't win standing carrying the same statement, while the listing
+remains published. A Won listing SHALL NOT carry it.
+
+#### Scenario: grade10-site-auction-account-record-SC-68 - A lot lost at the close says the card was not charged
+**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder knows they were not charged
+
+- **GIVEN** a closed listing the collector bid on and did not win
+- **WHEN** they open My Auctions
+- **THEN** that listing's Status is Didn't win
+- **AND** the row says their card was not charged
+
+<!-- trace:scenario id=g10.auction-account-record.SC-2e8 rev=2 -->
+#### Scenario: grade10-site-auction-account-record-SC-27 - A called-off listing says the card was not charged
+**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder knows they were not charged
+
+- **GIVEN** a listing the collector bid on that Grade10 called off and still
+  publishes
+- **WHEN** they open My Auctions
+- **THEN** that listing's Status is Didn't win
+- **AND** the row says their card was not charged

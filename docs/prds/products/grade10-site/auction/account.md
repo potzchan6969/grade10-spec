@@ -47,8 +47,8 @@ Link](/p/shared/auth/sign-in#following-the-link).
   recognised wherever Grade10 asks: at a bid, a high-value checkout or a vault
   visit — [KYC](/p/grade10-site/account/kyc)
 - **Held, not refused** — a bid at or above the bar from an unverified
-  collector is held at the storefront and told where to verify; no card hold
-  is taken and the auction records nothing — [Bidding · Auction
+  collector is held at the storefront and told where to verify; the auction
+  records nothing — [Bidding · Auction
   Logic](/p/grade10-site/auction/bidding#auction-logic)
 
 ## Delivery Address Management

@@ -63,9 +63,8 @@ close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
     state with no result until the close is recorded
   - Result from the record: Won, Did not win or Unsold comes from the recorded
     result, never from the page's own clock
-  - Existing words only: Authorizing… while a payment confirms, Your bid did
-    not go through for a bid that did not count, Extended bidding for an
-    extension
+  - Existing words only: Extended bidding for an extension, and a bid refused
+    past the close in the bid form's own words
 
 ## Requirements
 
@@ -459,7 +458,7 @@ included.
 - **THEN** it reads 10 seconds, then 4 seconds
 - **AND** it never shows tenths of a second
 
-### Requirement: A lot shows its result only once the close is recorded
+### Requirement: A lot reads Closed until its close is recorded, then its result
 
 Past the lot's effective close and until its close is recorded, the page SHALL
 show the existing Closed state with no result, the current bid as it stood,
@@ -479,8 +478,7 @@ The page SHALL use only existing words for the moments around the close:
 
 | Moment | Words |
 | --- | --- |
-| A bid's payment is confirming | Authorizing… |
-| A bid that did not count: one confirmed after the close, or one placed at or after it | Your bid did not go through, alone, without the sentence that the card was not authorized |
+| A bid refused as placed at or after the close | Your bid did not go through. - the bid form's own words for that refusal, under the bid action |
 | A price-moving bid extends the lot | Extended bidding |
 
 #### Scenario: grade10-site-auction-listing-page-SC-37 - The winner reads Closed, then Won
@@ -523,14 +521,14 @@ The page SHALL use only existing words for the moments around the close:
 - **GIVEN** a bidder on the page of a lot whose effective close has just passed,
   before the page has disabled its bid controls
 - **WHEN** they place a bid and Grade10 refuses it as past the close
-- **THEN** the page shows Your bid did not go through, and not that the card
-  was not authorized
+- **THEN** the bid form shows Your bid did not go through. under the bid
+  action, and no other words about the bid
 
-#### Scenario: grade10-site-auction-listing-page-SC-46 - A lot with no winner reads Ended with No bids
-**Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
+#### Scenario: grade10-site-auction-listing-page-SC-47 - A lot nobody bid on reads Ended with No bids
+**Serves:** grade10-site-auction-listing-page-US-14 - a collector with the page open waits on a lot that took no bid
 
-- **GIVEN** a bidder whose lone first bid on a lot was still confirming at its
-  scheduled close, with the lot's page open
+- **GIVEN** a lot with no accepted bid, its page open
 - **WHEN** the close is recorded with no winner
-- **THEN** the page shows Ended, with No bids under it, without a reload
+- **THEN** the page shows Closed, then Ended with No bids under it, without a
+  reload
 - **AND** it shows neither Won nor Did not win

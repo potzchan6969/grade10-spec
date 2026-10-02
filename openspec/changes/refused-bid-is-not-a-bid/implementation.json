@@ -1,0 +1,205 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "bc0b2899fb9461c8abd2088f83ee01f870f366396ed701d3640101324cbbace9"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "1ed10565045685f9b8039d8ef262bf3f52cb0a2b",
+    "capturedAt": "2026-10-02T17:20:08.765Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/analytics/analytics/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/analytics/analytics/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The browser sends client event names only"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/analytics/analytics/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An open listing reads Leading or Outbid"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A bid at or above the identity bar needs a verified bidder",
+          "Requirement: A bid counts when it is accepted",
+          "Requirement: A bid counts when its payment confirms",
+          "Requirement: A bid whose answer is lost reads as placed when the bidder's standing holds it",
+          "Requirement: A due lot is settled at its close",
+          "Requirement: A refused bid places nothing",
+          "Requirement: A standard bid does not require a bid-time authorization",
+          "Requirement: Bids are valid only within the scheduled, extendable window",
+          "Requirement: Card-backed bids have one releasable authorization per bidder and listing",
+          "Requirement: Erasing a bidder re-stands each lot on the maxima left",
+          "Requirement: Stripe configuration and delayed authorization facts are handled explicitly"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A bidder commits a maximum",
+          "Requirement: Maximum commitments and automatic bids take nothing from the card",
+          "Requirement: Maximum commitments and automatic bids work without a bid-time authorization",
+          "Requirement: The card authorization covers the committed maximum"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-panel-enrollment/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-panel-enrollment/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A bid commit answers in one step",
+          "Requirement: Age attestation is collected once per account in setup",
+          "Requirement: Backend authorization selection preserves bid-panel states",
+          "Requirement: The bid panel enrollment states"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-panel-enrollment/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-payment-method/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-payment-method/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A bid stands on the linked card, which the first accepted bid locks to the listing",
+          "Requirement: A hold requests eligible authorization capabilities",
+          "Requirement: A linked method authorizes on bid commit",
+          "Requirement: A listing authorization covers the committed maximum",
+          "Requirement: A provider refusal resolves the attempted raise",
+          "Requirement: An outbid authorization is cancelled without capture",
+          "Requirement: Bid-CTA authorization failure copy"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-payment-method/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A storefront account has one index of the listings it bid on",
+          "Requirement: A storefront account has one retained bidding index",
+          "Requirement: Account bidding chronology labels maximum events as maximums",
+          "Requirement: Account bidding chronology labels the maximums set and raised",
+          "Requirement: Every accepted maximum action leaves a private event",
+          "Requirement: Every server-evaluated maximum action leaves a private event",
+          "Requirement: Maximum-only bidding records resolve the boundary cases",
+          "Requirement: One listing history combines public movement and private meaning",
+          "Requirement: One listing history combines public movement and private meaning in whole decisions",
+          "Requirement: Private bidding history follows the storefront identity boundary",
+          "Requirement: The lot personal bidding dialog separates maximum history from bids placed"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A lot reads Closed until its close is recorded, then its result",
+          "Requirement: A lot shows its result only once the close is recorded"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: A lot close opens an order that waits for the winner's address"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Lost standing does not show card-release banner copy",
+          "Requirement: Lost standing shows the Did not win badge alone",
+          "Requirement: The listing surface exports bid enrollment blocks"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

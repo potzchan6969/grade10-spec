@@ -25,7 +25,6 @@ winner.
 - Settlement
   - Card only for the winner while `pending`: the order offers one payment method; every other method is an operator's backup
   - Expired ends self-service Pay: when the invoice is `expired`, card Pay is hidden and Contact Us appears in the overdue alert
-  - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
 - Payment deadline
   - Seven days from send: the window opens when the winner has an amount to pay, not before
   - Absolute datetime display: the deadline is shown as a datetime in the winner's zone; no countdown

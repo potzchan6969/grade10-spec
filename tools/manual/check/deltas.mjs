@@ -421,7 +421,10 @@ function readDeltaFiles(root, changes) {
         // The journeys live beside the delta now, so the ids a change issues
         // are the two files' together — scanning spec.md alone would let a
         // `-US-` number be handed out twice.
-        ids: [...idsIn(text), ...idsIn(journeysBeside(root, file))],
+        ids: [
+          ...idsIn(withoutRemoved(text)),
+          ...idsIn(withoutRemoved(journeysBeside(root, file))),
+        ],
         requirements: deltaRequirements(sections),
       });
     }
@@ -741,6 +744,12 @@ function archivedIds(root) {
 }
 
 const idsIn = (text) => text.match(ISSUED_ID) ?? [];
+
+/** A REMOVED section names the ids it retires; retiring an id is not issuing
+ * it, and once the fold drops it from the durable files the mention would
+ * read as the id handed out a second time. */
+const withoutRemoved = (text) =>
+  text.replace(/^## REMOVED [^\n]*\n[\s\S]*?(?=^## |(?![\s\S]))/gm, "");
 
 /** The `user-journeys.md` beside a delta, as written — empty when the
  * change leans on the durable journeys, and holding `**Walked by:** nobody`

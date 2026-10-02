@@ -52,7 +52,7 @@ authoritative event data.
   - Leader minimum: a typed raise starts at the maximum plus 100 minor units
   - Separate from chips: the first chip is not that typed minimum
 - Lost standing
-  - Badge only: Did not win remains; no authorization-release banner
+  - Badge only: Did not win remains, with no banner
 
 ## Requirements
 
@@ -254,8 +254,9 @@ SHALL render that node in place of the placeholder and SHALL treat card
 readiness as `paymentMethodReady`. It SHALL receive all user-visible copy
 through props or a dedicated copy object the export names; it SHALL supply no
 default user-visible copy. It SHALL NOT accept `authorizing` or
-`authorizationRefused` props; authorization pending and refusal belong on the
-bid-commit surface under `grade10-site/auction/bid-payment-method`.
+`authorizationRefused` props. A refused bid's words SHALL show under the bid
+card's bid action, through the bid card's `authorizationStatus` and
+`authorizationMessage` props, and never in the setup sheet.
 
 `PaymentMethodRow` SHALL receive a payment brand, masked number, optional
 `onChange`, and copy that includes `paymentMethod` plus
@@ -329,7 +330,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 
 <!-- trace:scenario id=g10.shared-auction-listing.SC-ji6 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-30 - Linked-card label exposes hold tooltip
-**Serves:** Bid enrollment - linked-card label exposes hold tooltip
+**Serves:** Bid enrollment - the collector reads what the linked card is for beside its label
 
 - **GIVEN** `PaymentMethodRow` rendered with `paymentMethodTooltip` copy
 - **WHEN** it renders
@@ -457,21 +458,6 @@ section header. It SHALL NOT require `recentBidsAccessory` to render.
 - **WHEN** the card renders
 - **THEN** the accessory appears beside the recent-bids label
 - **AND** the public recent-bids list below is unchanged
-
-### Requirement: Lost standing does not show card-release banner copy
-
-`ListingAuctionBidCard` SHALL NOT require a `cardRelease` copy field. When
-viewer standing is lost, the card SHALL show the Did not win status treatment
-and SHALL NOT render authorization-release banner copy under that standing.
-
-<!-- trace:scenario id=g10.shared-auction-listing.SC-ik3 rev=1 -->
-#### Scenario: shared-ui-auction-listing-SC-46 - Lost standing omits release banner
-**Serves:** Lost standing - lost standing omits the release banner
-
-- **GIVEN** a closed listing where the viewer lost
-- **WHEN** the bid card renders
-- **THEN** Did not win status is shown
-- **AND** no card-authorization-release banner copy is shown
 
 ### Requirement: The listing surface exports personal bidding history
 
@@ -687,3 +673,18 @@ omitted with the bid action.
 - **GIVEN** a bid card with `bidEnrollment` `signed-out`
 - **WHEN** it renders
 - **THEN** the buyer-fee line is absent
+
+### Requirement: Lost standing shows the Did not win badge alone
+
+`ListingAuctionBidCard` SHALL NOT require a `cardRelease` copy field. When
+viewer standing is lost, the card SHALL show the Did not win status treatment
+and SHALL render no banner under that standing.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ik3 rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-46 - Lost standing shows no banner
+**Serves:** Lost standing - a bidder who lost reads the badge and nothing under it
+
+- **GIVEN** a closed listing where the viewer lost
+- **WHEN** the bid card renders
+- **THEN** Did not win status is shown
+- **AND** no banner is shown under that standing
