@@ -402,13 +402,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Attach ten photographs.
-2. Look for a way to attach an eleventh.
+2. Attach the eleventh.
 3. Remove one photograph.
 
 **Expected Results:**
 
 * Step 1 shows the ten in the gallery, reading 10 of 10.
-* Step 2 is refused at the limit: the form offers no way to add the eleventh, and the gallery still holds ten.
+* Step 2 is refused at the limit; the gallery still holds ten.
 * Step 3 leaves nine, reading 9 of 10.
 
 ### grade10-admin-vault-operator-queue-US10-TC10-1: The worker's refusal of a field reads beside that field
@@ -443,11 +443,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Enter the row's value.
-2. Click Open case.
+2. Try to click Open case.
 
 **Expected Results:**
 
-* Open case is refused, the refusal in words beside the field in the row.
+* Open case stays disabled, the refusal in words beside the field in the row.
 * The rest of the form keeps what was typed.
 * No draft opens.
 
@@ -1110,7 +1110,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US10-TC6-1` | Joined | `grade10-admin-vault-operator-queue-SC-57`; the address is retyped in capitals with spaces, as `grade10-admin-vault-operator-queue-SC-74` walks |
 | `grade10-admin-vault-operator-queue-US10-TC7-1` | Joined | `grade10-admin-vault-operator-queue-SC-61`; a row freeing a place on a send was dropped at review: the collector who sends has signed in, so the next walk-in at that address is refused as a signed-in address |
 | `grade10-admin-vault-operator-queue-US10-TC8-1` | Joined | `grade10-admin-vault-operator-queue-SC-55`, nothing emailed to anybody |
-| `grade10-admin-vault-operator-queue-US10-TC9-1` | Folded | `grade10-admin-vault-operator-queue-SC-75`: the walk-in requirement holds the photographs to the intake's rules, Q37, and no scenario walked the limit |
+| `grade10-admin-vault-operator-queue-US10-TC9-1` | Folded | `grade10-admin-vault-operator-queue-SC-75`: the walk-in requirement holds the photographs to the intake's rules, Q37, and no scenario walked the limit; the console takes the add control away at ten rather than refusing an eleventh by name, raised at review (owner-questions 14) |
 | `grade10-admin-vault-operator-queue-US10-TC10-1` | Folded | `grade10-admin-vault-operator-queue-SC-76`: the requirement's refusal table refuses any fact the intake refuses and keeps the form, and no scenario walked it |
 | `grade10-admin-vault-operator-queue-US10-TC11-1` | Joined | `grade10-admin-vault-operator-queue-SC-62` for the one draft; the pending form is the ui-design Opening row's, out of suite on the `WalkInDialog` story |
 | `grade10-admin-vault-operator-queue-US10-TC12-1` | Joined | `grade10-admin-vault-operator-queue-SC-63`; the customer and signed-out rows read the console's own sign-in, unchanged |

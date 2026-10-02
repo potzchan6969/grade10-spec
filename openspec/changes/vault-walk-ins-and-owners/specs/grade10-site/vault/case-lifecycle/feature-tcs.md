@@ -97,7 +97,7 @@ is never emailed and keeps nothing of it.
 
 **Expected Results:**
 
-* Step 1 ends `<case_1>`; it reads cancelled.
+* Step 1 ends `<case_1>` as cancelled.
 * Step 2 opens a new draft, `<case_2>`, with a reference of its own, under `<right email>`'s account.
 * Step 3 lists `<case_2>` as a draft staff opened at the counter, and does not list `<case_1>`.
 * Nothing about `<case_1>` or `<case_2>` is emailed to `<wrong email>` or `<right email>`; `<right email>` receives only its sign-in link.
