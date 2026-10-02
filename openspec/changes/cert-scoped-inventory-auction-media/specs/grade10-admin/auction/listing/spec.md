@@ -2,9 +2,14 @@
 
 ## Purpose
 
-Lets an authorized Grade10 operator choose source media for the physical unit
-selected for a listing, make cross-Cert additions deliberately, and edit a
-listing-owned gallery snapshot.
+Lets an authorized Grade10 operator draft, create, and publish an Auction
+listing — incomplete saves first, required fields enforced at create, publish
+now or at a future scheduled time — with an ordered gallery of one to eight
+images or videos from product assets or direct uploads, frozen when saved,
+chosen for the selected physical unit with deliberate cross-Cert additions,
+call one off while it has not closed, and get a lot's stock back, with a
+one-step Relist, when its listing closes with no winner. Named image sizes and
+optional alt live in `grade10-site/auction/listing-media`.
 
 ## Feature set
 

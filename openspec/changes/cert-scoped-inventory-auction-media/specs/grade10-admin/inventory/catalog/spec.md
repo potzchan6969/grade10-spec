@@ -1,8 +1,12 @@
 # grade10-admin/inventory/catalog Specification
 
 ## Purpose
-Lets an authorized Inventory operator keep source media shared at product
-level or associate it with one physical Cert record.
+Gives Grade10 one stock snapshot per catalogue product, quantity-based
+application reservations with remaining / sold / vaulted / released tracking,
+admin oversight by explicit `holder_kind`, an append-only trace of every count
+transition, and an ordered reusable media gallery for Auction listings whose
+source items stay shared at product level or associate with one physical Cert
+record.
 
 ## Feature set
 
@@ -67,6 +71,7 @@ decrement stock by one, increment withdrawn by one, remove the Cert record,
 and delete source media tagged to that record. Untagged product media and
 media tagged to other Cert records SHALL remain unchanged.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fq8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -76,6 +81,7 @@ media tagged to other Cert records SHALL remain unchanged.
 - **THEN** the inventory has zero Cert ID records
 - **AND** the product remains valid for ordinary unnumbered stock
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-irv rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-96 - Intake records a Cert ID under its product
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -84,6 +90,7 @@ media tagged to other Cert records SHALL remain unchanged.
 - **THEN** the inventory owns one record whose displayed identifier is `PSA-123`
 - **AND** that record belongs to the intaken product and no other product
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-a57 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-97 - Duplicate Cert ID is refused
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 

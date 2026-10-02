@@ -123,12 +123,24 @@ product history.
 - **History** — each entry shows when it happened, its action, quantity
   and actor, the holder — the listing a hold belongs to, by listing code and
   title — and its remarks
-- 🚧 **Cert-scoped media** - an Inventory image or video stays product-level
+- **Cert-scoped media** - an Inventory image or video stays product-level
   when untagged, or is tagged to one same-product Cert record. Every Cert
   record has a Cert ID; regular stock without a Cert ID has no Cert record or
   tag target. Removing a media Cert tag or retagging leaves the originally tagged
   source item untagged. Removing a physical unit removes its Cert record and
   the source media tied to that record; Inventory records the unit as withdrawn
+
+:::detail{title="Product decisions" for="pm"}
+Cert-scoped source media keeps product-level shared images while letting an
+operator mark which physical Cert a photo belongs to, without inventing a
+second gallery.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Cert media tag identity | Decided | The tag stores the immutable Cert record id. Every Cert record has a printed Cert ID used for display only. | Product |
+| One Cert per source item | Decided | A source item is untagged and shared, or tagged to exactly one same-product Cert record. Regular stock without a Cert ID has no Cert record and cannot be a tag target. | Product |
+| Retag and remove | Decided | An authorized Inventory operator may tag or untag. Retagging leaves the item untagged; assigning another Cert is a separate tag. Physical removal of an available Cert unit withdraws it, deletes its Cert record and its tagged source media, and leaves other product media and saved Auction snapshots unchanged. | Product |
+:::
 
 :::detail{title="Intake code map" for="engineer"}
 - **Release input** — `ReleaseInput` in `packages/inventory/contracts`
