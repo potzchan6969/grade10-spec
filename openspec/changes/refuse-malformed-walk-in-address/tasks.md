@@ -5,7 +5,7 @@
 - [ ] 1.1 Add the 🚧 line for the address refusal to `docs/prds/products/grade10-site/vault/operator-console.md`, in the Queue section after the signed-in refusal
 - [ ] 1.2 Verify: `pnpm check:manual` and `pnpm run validate:changes refuse-malformed-walk-in-address` in grade10-spec.
 
-## 2. Walk-in form (grade10)
+## 2. Walk-in form (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Tests in `packages/vault/admin-frontend/src/features/custody/cases/presentation/views/WalkInDialog.test.tsx`, in their own commit: a malformed address refused beside the field once it is left, Open case held and nothing sent, the rest of the form kept; no refusal while an address is typed, whether the field was left empty or left holding an address; the refusal cleared as soon as the retyped address meets the rule; the ten-photograph test asserts the input is disabled at ten and keeps its batch that runs past ten (`grade10-admin-vault-operator-queue-SC-95`, `grade10-admin-vault-operator-queue-SC-75`)
 - [ ] 2.2 Check the address in `WalkInDialog.tsx` with the walk-in contract's own address rule, refuse it beside the field when the field is left holding a malformed address, clear the refusal once the address meets the rule, and hold Open case while the address is malformed (`grade10-admin-vault-operator-queue-SC-95`)
