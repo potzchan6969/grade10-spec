@@ -12,6 +12,7 @@ awaiting:
 landed_by:
   proposal: ecchochan
   decisions: ecchochan
+  user-journeys: ecchochan
 reviewed:
   user-journeys: 6034ecfb
   ui-design: 440a03ac
