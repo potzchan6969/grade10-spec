@@ -120,5 +120,5 @@ Needs `feature-tcs.md` reviewed (`/tcs-review add-item-registry`) as its input; 
 
 Lands once group 13 is green.
 
-- [ ] 14.1 Take the 🚧 off each line this change delivers on `inventory/items.md`, `inventory/index.md`, `vault/operator-console.md`, `vault/documents-and-signing.md`, `vault/case-lifecycle.md`, `vault/collector-pages.md`, `console/collector-page.md`, `shared/auth/roles.md` and `platform/account-data.md`, and the line `grading/submission.md` names for the register
-- [ ] 14.2 Verify: `pnpm check:manual`
+- [x] 14.1 Take the 🚧 off each line this change delivers on `inventory/items.md`, `inventory/index.md`, `vault/operator-console.md`, `vault/documents-and-signing.md`, `vault/case-lifecycle.md`, `vault/collector-pages.md`, `console/collector-page.md`, `shared/auth/roles.md` and `platform/account-data.md`, and the line `grading/submission.md` names for the register
+- [x] 14.2 Verify: `pnpm check:manual`
