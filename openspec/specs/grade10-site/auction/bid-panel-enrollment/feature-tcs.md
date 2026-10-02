@@ -33,7 +33,7 @@
 
 | Field | Value |
 | --- | --- |
-| <listing_1> | A live lot taking bids, with recent public bids shown |
+| <listing_1> | A live listing taking bids, with recent public bids shown |
 
 **Steps:**
 
@@ -69,7 +69,7 @@
 
 | Field | Value |
 | --- | --- |
-| <listing_1> | A live lot taking bids, with recent public bids shown |
+| <listing_1> | A live listing taking bids, with recent public bids shown |
 
 **Steps:**
 
@@ -149,7 +149,7 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, no linked card) is on <listing_2 url>.
-* The setup modal is open, from the bid action on this lot.
+* The setup modal is open, from the bid action on this listing.
 
 **Test data:**
 
@@ -646,7 +646,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** exploratory
@@ -701,7 +701,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -713,7 +713,6 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
-* The card on file was linked by completing setup.
 
 **Test data:**
 
@@ -738,7 +737,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -750,7 +749,6 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
-* The card on file was linked by completing setup.
 
 **Test data:**
 
@@ -778,7 +776,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -789,26 +787,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_4>) is on <listing_4 url>.
-* The card on file was linked by completing setup on an earlier lot, with age attestation checked.
+* customer(signed in, card linked on an earlier listing, age already attested, no bid on <listing_4>) is on <listing_4 url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_4> | A new open listing this collector has not bid on; the card was linked on an earlier lot, and age was already attested |
+| <listing_4> | A new open listing this collector has not bid on; the card was linked on an earlier listing, and age was already attested |
+| <the other card> | 5555 5555 5555 4444, a Mastercard. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 
 **Steps:**
 
 1. Click Change on the linked card.
 2. Read age attestation.
-3. Enter a card in the provider-hosted field.
+3. Enter <the other card> in the provider-hosted field.
 4. Read the continue control.
 
 **Expected Results:**
 
 * Age attestation is already checked.
-* Continue reads "Link Card" and enables once the card is entered.
+* Continue reads "Link Card" and enables once <the other card> is entered.
 
 ---
 
@@ -838,7 +836,7 @@ Runs once per row of **Test data**.
 
 * customer(signed in, card linked) is on <listing_5 url>.
 * The card on file was linked by completing setup.
-* This collector's bid was accepted from the bid panel on this lot.
+* This collector's bid was accepted from the bid panel on this listing.
 
 **Test data:**
 
@@ -904,7 +902,7 @@ Runs once per row of **Test data**.
 **so that** I am not asked to link again before I bid.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-c7l rev=1 covers=g10.auction-bid-panel-enrollment.SC-xwd -->
-### grade10-site-auction-bid-panel-enrollment-US5-TC1-1: Card on file carries over to a new lot
+### grade10-site-auction-bid-panel-enrollment-US5-TC1-1: Card on file carries over to a new listing
 
 **Classification:**
 
@@ -922,13 +920,13 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed in, no bid on <listing_6>) is on <listing_6 url>.
-* The card on file was linked by completing setup on an earlier lot.
+* The card on file was linked by completing setup on an earlier listing.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_6> | A new open listing this collector has not bid on; the card was linked on an earlier lot |
+| <listing_6> | A new open listing this collector has not bid on; the card was linked on an earlier listing |
 
 **Steps:**
 
