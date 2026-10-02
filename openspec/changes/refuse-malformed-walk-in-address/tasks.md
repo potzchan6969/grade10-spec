@@ -2,8 +2,8 @@
 
 ## 1. Operator Console page (grade10-spec) (owner: @ecchochan)
 
-- [ ] 1.1 Add the 🚧 line for the address refusal to `docs/prds/products/grade10-site/vault/operator-console.md`, in the Queue section after the signed-in refusal
-- [ ] 1.2 Verify: `pnpm check:manual` and `pnpm run validate:changes refuse-malformed-walk-in-address` in grade10-spec.
+- [x] 1.1 Add the 🚧 line for the address refusal to `docs/prds/products/grade10-site/vault/operator-console.md`, in the Queue section after the signed-in refusal
+- [x] 1.2 Verify: `pnpm check:manual` and `pnpm run validate:changes refuse-malformed-walk-in-address` in grade10-spec.
 
 ## 2. Walk-in form (grade10) (owner: @ecchochan)
 
