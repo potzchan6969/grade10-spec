@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useRemainingSeconds } from "./listing-clock";
 import {
   countdownParts,
   formatAccessibleText,
@@ -6,41 +7,19 @@ import {
 } from "./listing-countdown-digit";
 
 type ListingCountdownDisplayProps = {
+  /** Shown as given when `closesAtMs` is null; it does not tick. */
   initialSeconds: number;
-  /** When set, remaining time is derived from this instant on every tick. */
+  /** When set, remaining time is read from the clock against this instant, rounded up. */
   closesAtMs?: number | null;
   format?: "short" | "long";
 };
-
-function remainingSecondsUntil(closesAtMs: number) {
-  return Math.max(0, Math.floor((closesAtMs - Date.now()) / 1000));
-}
 
 function ListingCountdownDisplay({
   initialSeconds,
   closesAtMs,
   format = "short",
 }: ListingCountdownDisplayProps) {
-  const [seconds, setSeconds] = useState(() =>
-    closesAtMs != null ? remainingSecondsUntil(closesAtMs) : initialSeconds,
-  );
-
-  useEffect(() => {
-    setSeconds(
-      closesAtMs != null ? remainingSecondsUntil(closesAtMs) : initialSeconds,
-    );
-  }, [closesAtMs, initialSeconds]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setSeconds((value) =>
-        closesAtMs != null
-          ? remainingSecondsUntil(closesAtMs)
-          : Math.max(0, value - 1),
-      );
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [closesAtMs]);
+  const seconds = useRemainingSeconds(closesAtMs ?? null) ?? initialSeconds;
 
   const parts = useMemo(
     () => countdownParts(seconds, format),

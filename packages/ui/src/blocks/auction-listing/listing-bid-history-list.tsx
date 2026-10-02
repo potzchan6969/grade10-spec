@@ -22,8 +22,12 @@ import {
   type ShippedLocale,
 } from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
+import { useClockNow } from "./listing-clock";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
+
+/** Relative bid times move in 15-second steps; a newer row reads "just now" on arrival. */
+const ACTIVITY_TICK_MS = 15_000;
 
 type ListingBidHistoryListCopy = {
   you?: string;
@@ -218,31 +222,6 @@ function ListingBidHistoryList({
   return <BidHistoryEntrances key={resetKey} {...props} />;
 }
 
-function useActivityTimeTick(rows: readonly ListingBidHistoryRow[]): number {
-  const [nowMs, setNowMs] = useState(() => Date.now());
-
-  /**
-   * `rows` is a signal, not a read: a replaced list needs a fresh now so
-   * relative times start from the moment the new rows arrived.
-   */
-  // biome-ignore lint/correctness/useExhaustiveDependencies: see above
-  useLayoutEffect(() => {
-    setNowMs(Date.now());
-  }, [rows]);
-
-  useEffect(() => {
-    const hasRecentRow = rows.some((row) => {
-      if (row.timeOverride) return false;
-      return Date.now() - row.acceptedAtMs < 60_000;
-    });
-    const intervalMs = hasRecentRow ? 15_000 : 30_000;
-    const timer = window.setInterval(() => setNowMs(Date.now()), intervalMs);
-    return () => window.clearInterval(timer);
-  }, [rows]);
-
-  return nowMs;
-}
-
 function BidHistoryEntrances({
   copy = {},
   rows,
@@ -253,7 +232,7 @@ function BidHistoryEntrances({
   timeZone,
   activityTimeCopy,
 }: Omit<ListingBidHistoryListProps, "resetKey">) {
-  const nowMs = useActivityTimeTick(rows);
+  const nowMs = useClockNow(ACTIVITY_TICK_MS);
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
   const [enteredIds, setEnteredIds] = useState<ReadonlySet<string>>(

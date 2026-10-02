@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_NOW_MS,
@@ -126,6 +126,24 @@ describe("resolveActivityNow", () => {
 
   it("keeps a fixed reference clock when instants are already past", () => {
     expect(resolveActivityNow(NOW, NOW - 2 * 60_000)).toBe(NOW);
+  });
+
+  it("never reads the device clock, which may run fast", () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW + 5 * 60_000);
+    try {
+      expect(resolveActivityNow(NOW - 20_000, NOW - 5_000)).toBe(NOW - 5_000);
+      expect(
+        formatActivityAt(NOW - 5_000, {
+          locale: "en",
+          timeZone: "Asia/Hong_Kong",
+          copy: COPY,
+          now: NOW - 20_000,
+        }),
+      ).toBe("Just now");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 

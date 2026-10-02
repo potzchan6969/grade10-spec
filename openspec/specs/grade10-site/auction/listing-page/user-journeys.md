@@ -23,6 +23,7 @@
 **As a** collector on a closed lot (sold or unsold),
 **I want** no Watch / Watching control,
 **so that** I am not invited to watch a sale that has already ended.
+
 ### grade10-site-auction-listing-page-US-01: Collector opens a lot at its own address
 
 **As a** collector,
@@ -57,3 +58,21 @@ disagrees with what the document carried.
 **As a** collector,
 **I want** to open a lot's own address from the catalogue without a page load,
 **so that** the lot I picked out of the list is the page I land on.
+
+### grade10-site-auction-listing-page-US-12: Collector sees another bid on the lot without reloading
+
+**As a** collector,
+**I want** a bid placed on another page to show on mine with the new price and close, without a reload,
+**so that** I bid against the price that stands.
+
+### grade10-site-auction-listing-page-US-13: Collector reads the same time left as every other page
+
+**As a** collector,
+**I want** the lot's countdown to agree with every other page on that lot, whatever my device's clock says,
+**so that** the time I see left is the time I have.
+
+### grade10-site-auction-listing-page-US-14: Bidder waits on a closed lot for its result
+
+**As a** bidder,
+**I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
+**so that** I am never shown a result the auction has not decided.

@@ -91,10 +91,10 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - Omitted at create, `extension_seconds` defaults to 1800 seconds (30 minutes); zero turns extended bidding off
 - `scheduled_ends_at + extension_cap_seconds` truncates the tail rather than rejecting a bid, so a cap below the reach is how you spell a hard final deadline, and a cap of zero behaves as extension off
 - A bid that does not move the public price (a bidder raising their own maximum) never extends
-- A bid confirmed at exactly `scheduled_ends_at` is accepted when extension is on, so the lot's first deadline is one millisecond after it
+- A bid confirmed at exactly `scheduled_ends_at` is accepted on every listing, so the lot's first deadline is one millisecond after it
 - Listing state carries the extension policy (`extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
-- 🚧 Today the late window has no upper bound and ignores a cap of zero, so while the sweep lags a confirm after the effective close is accepted; the fix bounds it at `scheduled_ends_at` plus the reach
+- 🚧 Until the first extension is written, the late window ends at `scheduled_ends_at` plus the reach; after it, at `ends_at`. A cap of zero leaves none, so a confirm after the effective close is refused however far the sweep lags
 
 ## Public reads and cache
 
@@ -144,15 +144,15 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 | Lot | Phase | Countdown to | Takes a bid |
 | --- | --- | --- | --- |
 | before `starts_at` | upcoming | `starts_at` | no |
-| from `starts_at` to `scheduled_ends_at`, the last instant included when extension is on | open | `scheduled_ends_at` | yes |
+| from `starts_at` to `scheduled_ends_at`, the last instant included | open | `scheduled_ends_at` | yes |
 | past `scheduled_ends_at`, before the written `ends_at` | extended | `ends_at` | yes |
 | past its effective close, not yet closed | closing | none | no |
 | closed or settled, or canceled after it was listed | ended | none | no |
 
 - Readers use the stored row alone, so the catalogue's paging stays on its columns; only a writer holding the lock asks whether an accepted bid exists
-- The room's alarm writes the first extension one millisecond after `scheduled_ends_at`, so the stored `ends_at` is the truth within a second; frames carry whether an accepted bid exists as a hint, so a page shows Extended bidding at the scheduled close without a flash of Closing
-- A page never shows Ended from its own clock: at the effective close it shows Closing until the room says Ended or brings a later close
-- A new close resets the countdown at once, and at the cap the page says it is the final deadline
+- The room's alarm writes the first extension one millisecond after `scheduled_ends_at`, so the stored `ends_at` is the truth within a second; frames carry whether an accepted bid exists as a hint, so a page shows Extended bidding at the scheduled close without a flash of Closed
+- A page never shows a result from its own clock: at the effective close it shows the existing Closed state with no result until the room brings the result or a later close; the closing phase is never a public status, which stays Upcoming, Active or Ended
+- A new close resets the countdown at once
 
 ### Whoever reaches a due lot first settles it
 
@@ -161,6 +161,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - A read that finds a lot still closing two seconds past its deadline settles it after answering, skipping a lot another transaction holds, so a crowd queues nothing
 - No bid or confirm settles inside its own transaction: it refuses a closing lot, because a close that fails must not fail the bid or the payment webhook that found it
 - The five-minute cron still settles what nobody reached, and counts it as a repair, so the metric shows each time the room was not first
+- No flag gates the rooms or their alarms, so a rollback is a code revert
 
 ### The page clock follows the server
 
@@ -168,7 +169,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - The page probes again after sleep, a reconnect or a return to the tab, and a correction under a second never makes a countdown jump up
 - One animation-frame loop drives every countdown on the page while it is visible and redraws a countdown only when its displayed value changes; nothing counts timer ticks, so nothing drifts
 - A countdown rounds up, so it reads 0 only once the deadline has passed
-- ❓ Tenths of a second in a lot's last 10 seconds - whole seconds ship first, and the designer decides at review
+- A countdown shows whole seconds only, a lot's last 10 seconds included, so no new countdown state is drawn
 
 ## Data model
 

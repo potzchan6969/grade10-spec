@@ -418,6 +418,9 @@ export const LiveNoBids: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
     expect(canvas.getAllByText("No bids yet").length).toBeGreaterThan(0);
+    expect(canvas.getByText("Min. bid").closest("button")).toHaveTextContent(
+      "HK$48,000",
+    );
   },
 };
 

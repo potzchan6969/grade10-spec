@@ -1,420 +1,7 @@
 # grade10-site/auction/account-record Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
-
-## grade10-site-auction-account-record-US5: Watch from the auction with alerts toast
-
-**As a** collector,
-**I want** watching a lot from its page to put it on My Auctions and tell me alerts are on,
-**so that** I can open My Auctions from the toast when I want to manage it.
-
-### grade10-site-auction-account-record-US5-TC1-1: Watched lot lands on My Auctions as watch-only
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-05
-
-**Pre-conditions:**
-
-* customer(signed in, not watching <lot_1>, no bid on <lot_1>) is on <lot_1 url>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
-
-**Steps:**
-
-1. Click the Watch control.
-2. Click View My Auctions in the toast.
-3. Find the <lot_1> row.
-
-**Expected Results:**
-
-* Step 1: a toast says email alerts are on, with View My Auctions.
-* Step 2: My Auctions opens; the title count includes <lot_1>.
-* Step 3: <lot_1> shows once, with key image, title and close.
-* Step 3: Your Standing reads `--`.
-* Step 3: Email alerts switch is on; Unwatch is offered.
-
-### grade10-site-auction-account-record-US5-TC2-1: Watching from the catalogue card lands on My Auctions
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-05
-
-**Pre-conditions:**
-
-* customer(signed in, not watching <lot_1>, no bid on <lot_1>) is on <grade10 auction catalogue url>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
-
-**Steps:**
-
-1. Click the watch control on <lot_1>'s card, bottom right of the image.
-2. Navigate to <my auctions url>.
-
-**Expected Results:**
-
-* Step 1: the card's control reads Watching.
-* Step 2: <lot_1> shows once, Your Standing `--`, email alerts on.
-
-### grade10-site-auction-account-record-US5-TC3-1: A watch is seen only by its owner
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-05
-
-**Pre-conditions:**
-
-* customer A(signed in) watches <lot_1>.
-* customer B(signed in, never watched or bid on <lot_1>) uses a separate session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | An open lot taking bids, watched by customer A only |
-
-**Steps:**
-
-1. As customer B, navigate to <my auctions url>.
-2. As customer B, navigate to <lot_1 url>.
-3. As customer B, open the page source of <lot_1 url>.
-
-**Expected Results:**
-
-* Step 1: <lot_1> is not listed.
-* Step 2: the control reads Watch; no watch count shows.
-* Step 3: no watch count and no watcher's identity appear.
-
----
-
-## grade10-site-auction-account-record-US6: A bid bookmarks and toasts alerts once
-
-**As a** bidder,
-**I want** my first bid on a lot to bookmark it and tell me once that alerts are on,
-**so that** I do not need a separate Watch and I am not reminded on every visit.
-
-### grade10-site-auction-account-record-US6-TC1-1: First bid puts the lot on My Auctions without a Watch
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-06
-
-**Pre-conditions:**
-
-* customer(signed in, enrolled to bid, not watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_2> | An open lot taking bids, with no bid from this collector and no other bidder |
-| <first bid> | The next valid bid shown on the bid panel |
-
-**Steps:**
-
-1. Place <first bid> from the bid panel.
-2. Reload <lot_2 url>.
-3. Navigate to <my auctions url>.
-
-**Expected Results:**
-
-* Step 1: one toast says email alerts are on.
-* Step 2: no alerts toast shows.
-* Step 3: <lot_2> shows once, Your Standing Leading.
-* Step 3: Email alerts switch is on; no Unwatch is offered.
-
-### grade10-site-auction-account-record-US6-TC2-1: Bidding on a watched lot keeps one row
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-06
-
-**Pre-conditions:**
-
-* customer(signed in, enrolled to bid, watching <lot_3>, no bid on <lot_3>) is on <lot_3 url>.
-* The collector also watches <lot_4> without bidding.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_3> | An open lot taking bids, watched by this collector, closing after <lot_4> |
-| <lot_4> | An open lot taking bids, watch-only for this collector, closing before <lot_3> |
-| <first bid> | The next valid bid shown on <lot_3>'s bid panel |
-
-**Steps:**
-
-1. Place <first bid> from the bid panel.
-2. Navigate to <my auctions url>.
-
-**Expected Results:**
-
-* <lot_3> shows once, Your Standing Leading, no Unwatch.
-* <lot_3> sits above <lot_4>: bid rows before watch-only.
-
----
-
-## grade10-site-auction-account-record-US8: Winner opens settlement from My Auctions
-
-**As a** winner,
-**I want** every Won row to open Winner Order without helper clutter,
-**so that** I can continue settlement without reading contact copy on the table.
-
-<!-- trace:case id=g10.auction-account-record.TC-hc2 rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
-### grade10-site-auction-account-record-US8-TC1-1: Every Won row opens its own Winner Order
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-08
-
-**Pre-conditions:**
-
-* customer(signed in) won <lot>, whose order reads the row's state.
-
-**Test data:**
-
-| Order state |
-| --- |
-| Awaiting Setup |
-| Pending Payment |
-| Payment Overdue |
-| Cancelled |
-| Refunded |
-
-**Steps:**
-
-1. Navigate to <my auctions url>.
-2. Click View order on <lot>'s row.
-
-**Expected Results:**
-
-* Step 1: <lot>'s row reads Won with the row's state and offers View order.
-* Step 2: Winner Order opens for <lot>'s order.
-
-<!-- trace:case id=g10.auction-account-record.TC-flb rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
-### grade10-site-auction-account-record-US8-TC2-1: A Didn't win row offers no View order
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-08
-
-**Pre-conditions:**
-
-* customer A(signed in) bid on <lot_9>, which closed with customer B winning.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_9> | A closed lot won by customer B, with customer A's card hold being released |
-
-**Steps:**
-
-1. Navigate to <my auctions url>.
-2. Read <lot_9>'s row.
-
-**Expected Results:**
-
-* Your Standing reads Didn't win, hold being released.
-* No View order is offered.
-
-<!-- trace:case id=g10.auction-account-record.TC-qo0 rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
-### grade10-site-auction-account-record-US8-TC3-1: A Payment Overdue row carries no contact helper
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-08
-
-**Pre-conditions:**
-
-* customer(signed in) won <lot_10>, whose invoice passed its payment deadline unpaid.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_10> | A won lot whose order reads Payment Overdue |
-
-**Steps:**
-
-1. Navigate to <my auctions url>.
-2. Read <lot_10>'s row.
-
-**Expected Results:**
-
-* Your Standing reads Won, Payment Overdue.
-* View order is offered.
-* No helper line and no way to reach Grade10 shows on the row.
-
-<!-- trace:case id=g10.auction-account-record.TC-5uz rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
-### grade10-site-auction-account-record-US8-TC4-1: An Awaiting Setup row carries no confirm-address helper
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-08
-
-**Pre-conditions:**
-
-* customer(signed in) won <lot_11>, whose setup is incomplete inside the setup window.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_11> | A won lot whose order reads Awaiting Setup |
-
-**Steps:**
-
-1. Navigate to <my auctions url>.
-2. Read <lot_11>'s row.
-
-**Expected Results:**
-
-* Your Standing reads Won, Awaiting Setup, with View order.
-* No confirm-address helper line shows on the row.
-
----
-
-## grade10-site-auction-account-record-US9: Won Status shows Setup Overdue and Payment Overdue
-
-**As a** winner scanning My Auctions,
-**I want** overdue won lots to read Setup Overdue or Payment Overdue in Status,
-**so that** I can tell closed self-service from lots still inside their window.
-
-<!-- trace:case id=g10.auction-account-record.TC-lit rev=1 covers=g10.auction-account-record.SC-zid -->
-### grade10-site-auction-account-record-US9-TC1-1: Overdue won lots read Setup Overdue or Payment Overdue
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-09
-
-**Pre-conditions:**
-
-* customer(signed in) won <lot>, in the row's state.
-
-**Test data:**
-
-| Order state | Your Standing | Not |
-| --- | --- | --- |
-| Setup deadline (48 hours from close) passed, setup incomplete | Won, Setup Overdue | Awaiting Setup |
-| Payment deadline (7 days from invoice send) passed, unpaid | Won, Payment Overdue | Pending Payment |
-
-**Steps:**
-
-1. Navigate to <my auctions url>.
-2. Read <lot>'s row.
-
-**Expected Results:**
-
-* Your Standing reads the row's value, never the Not column.
-* The row offers View order.
-* Lot, close and current bid read as on any Won row.
-
----
-
+**Status:** in-review
+**Drafts styled:** 2026-10-01, tcs-rules r4
 
 ## grade10-site-auction-account-record-US1: Mark a listing now and find it again later
 
@@ -883,6 +470,212 @@ Runs once per row of **Test data**.
 * No amount is shown as charged.
 * The row sits after the open lots.
 
+---
+
+## grade10-site-auction-account-record-US5: Watch from the auction with alerts toast
+
+**As a** collector,
+**I want** watching a lot from its page to put it on My Auctions and tell me alerts are on,
+**so that** I can open My Auctions from the toast when I want to manage it.
+
+### grade10-site-auction-account-record-US5-TC1-1: Watched lot lands on My Auctions as watch-only
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-05
+
+**Pre-conditions:**
+
+* customer(signed in, not watching <lot_1>, no bid on <lot_1>) is on <lot_1 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
+
+**Steps:**
+
+1. Click the Watch control.
+2. Click View My Auctions in the toast.
+3. Find the <lot_1> row.
+
+**Expected Results:**
+
+* Step 1: a toast says email alerts are on, with View My Auctions.
+* Step 2: My Auctions opens; the title count includes <lot_1>.
+* Step 3: <lot_1> shows once, with key image, title and close.
+* Step 3: Your Standing reads `--`.
+* Step 3: Email alerts switch is on; Unwatch is offered.
+
+### grade10-site-auction-account-record-US5-TC2-1: Watching from the catalogue card lands on My Auctions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-05
+
+**Pre-conditions:**
+
+* customer(signed in, not watching <lot_1>, no bid on <lot_1>) is on <grade10 auction catalogue url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
+
+**Steps:**
+
+1. Click the watch control on <lot_1>'s card, bottom right of the image.
+2. Navigate to <my auctions url>.
+
+**Expected Results:**
+
+* Step 1: the card's control reads Watching.
+* Step 2: <lot_1> shows once, Your Standing `--`, email alerts on.
+
+### grade10-site-auction-account-record-US5-TC3-1: A watch is seen only by its owner
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-05
+
+**Pre-conditions:**
+
+* customer A(signed in) watches <lot_1>.
+* customer B(signed in, never watched or bid on <lot_1>) uses a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | An open lot taking bids, watched by customer A only |
+
+**Steps:**
+
+1. As customer B, navigate to <my auctions url>.
+2. As customer B, navigate to <lot_1 url>.
+3. As customer B, open the page source of <lot_1 url>.
+
+**Expected Results:**
+
+* Step 1: <lot_1> is not listed.
+* Step 2: the control reads Watch; no watch count shows.
+* Step 3: no watch count and no watcher's identity appear.
+
+---
+
+## grade10-site-auction-account-record-US6: A bid bookmarks and toasts alerts once
+
+**As a** bidder,
+**I want** my first bid on a lot to bookmark it and tell me once that alerts are on,
+**so that** I do not need a separate Watch and I am not reminded on every visit.
+
+### grade10-site-auction-account-record-US6-TC1-1: First bid puts the lot on My Auctions without a Watch
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-06
+
+**Pre-conditions:**
+
+* customer(signed in, enrolled to bid, not watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_2> | An open lot taking bids, with no bid from this collector and no other bidder |
+| <first bid> | The next valid bid shown on the bid panel |
+
+**Steps:**
+
+1. Place <first bid> from the bid panel.
+2. Reload <lot_2 url>.
+3. Navigate to <my auctions url>.
+
+**Expected Results:**
+
+* Step 1: one toast says email alerts are on.
+* Step 2: no alerts toast shows.
+* Step 3: <lot_2> shows once, Your Standing Leading.
+* Step 3: Email alerts switch is on; no Unwatch is offered.
+
+### grade10-site-auction-account-record-US6-TC2-1: Bidding on a watched lot keeps one row
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-06
+
+**Pre-conditions:**
+
+* customer(signed in, enrolled to bid, watching <lot_3>, no bid on <lot_3>) is on <lot_3 url>.
+* The collector also watches <lot_4> without bidding.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_3> | An open lot taking bids, watched by this collector, closing after <lot_4> |
+| <lot_4> | An open lot taking bids, watch-only for this collector, closing before <lot_3> |
+| <first bid> | The next valid bid shown on <lot_3>'s bid panel |
+
+**Steps:**
+
+1. Place <first bid> from the bid panel.
+2. Navigate to <my auctions url>.
+
+**Expected Results:**
+
+* <lot_3> shows once, Your Standing Leading, no Unwatch.
+* <lot_3> sits above <lot_4>: bid rows before watch-only.
+
+---
 
 ## grade10-site-auction-account-record-US7: Collector reads My Auctions by bidding window
 
@@ -1049,14 +842,392 @@ Runs once per row of **Test data**.
 
 ---
 
+## grade10-site-auction-account-record-US8: Winner opens settlement from My Auctions
+
+**As a** winner,
+**I want** every Won row to open Winner Order without helper clutter,
+**so that** I can continue settlement without reading contact copy on the table.
+
+<!-- trace:case id=g10.auction-account-record.TC-hc2 rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
+### grade10-site-auction-account-record-US8-TC1-1: Every Won row opens its own Winner Order
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-08
+
+**Pre-conditions:**
+
+* customer(signed in) won <lot>, whose order reads the row's state.
+
+**Test data:**
+
+| Order state |
+| --- |
+| Awaiting Setup |
+| Pending Payment |
+| Payment Overdue |
+| Cancelled |
+| Refunded |
+
+**Steps:**
+
+1. Navigate to <my auctions url>.
+2. Click View order on <lot>'s row.
+
+**Expected Results:**
+
+* Step 1: <lot>'s row reads Won with the row's state and offers View order.
+* Step 2: Winner Order opens for <lot>'s order.
+
+<!-- trace:case id=g10.auction-account-record.TC-flb rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
+### grade10-site-auction-account-record-US8-TC2-1: A Didn't win row offers no View order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-08
+
+**Pre-conditions:**
+
+* customer A(signed in) bid on <lot_9>, which closed with customer B winning.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_9> | A closed lot won by customer B, with customer A's card hold being released |
+
+**Steps:**
+
+1. Navigate to <my auctions url>.
+2. Read <lot_9>'s row.
+
+**Expected Results:**
+
+* Your Standing reads Didn't win, hold being released.
+* No View order is offered.
+
+<!-- trace:case id=g10.auction-account-record.TC-qo0 rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
+### grade10-site-auction-account-record-US8-TC3-1: A Payment Overdue row carries no contact helper
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-08
+
+**Pre-conditions:**
+
+* customer(signed in) won <lot_10>, whose invoice passed its payment deadline unpaid.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_10> | A won lot whose order reads Payment Overdue |
+
+**Steps:**
+
+1. Navigate to <my auctions url>.
+2. Read <lot_10>'s row.
+
+**Expected Results:**
+
+* Your Standing reads Won, Payment Overdue.
+* View order is offered.
+* No helper line and no way to reach Grade10 shows on the row.
+
+<!-- trace:case id=g10.auction-account-record.TC-5uz rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ewb,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-3pi,g10.auction-account-record.SC-91l,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-xi1,g10.auction-account-record.SC-91a,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-fn7,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb,g10.auction-account-record.SC-uvr,g10.auction-account-record.SC-dtm,g10.auction-account-record.SC-2e8,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-5we,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-zid -->
+### grade10-site-auction-account-record-US8-TC4-1: An Awaiting Setup row carries no confirm-address helper
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-08
+
+**Pre-conditions:**
+
+* customer(signed in) won <lot_11>, whose setup is incomplete inside the setup window.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_11> | A won lot whose order reads Awaiting Setup |
+
+**Steps:**
+
+1. Navigate to <my auctions url>.
+2. Read <lot_11>'s row.
+
+**Expected Results:**
+
+* Your Standing reads Won, Awaiting Setup, with View order.
+* No confirm-address helper line shows on the row.
+
+---
+
+## grade10-site-auction-account-record-US9: Won Status shows Setup Overdue and Payment Overdue
+
+**As a** winner scanning My Auctions,
+**I want** overdue won lots to read Setup Overdue or Payment Overdue in Status,
+**so that** I can tell closed self-service from lots still inside their window.
+
+<!-- trace:case id=g10.auction-account-record.TC-lit rev=1 covers=g10.auction-account-record.SC-zid -->
+### grade10-site-auction-account-record-US9-TC1-1: Overdue won lots read Setup Overdue or Payment Overdue
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) won <lot>, in the row's state.
+
+**Test data:**
+
+| Order state | Your Standing | Not |
+| --- | --- | --- |
+| Setup deadline (48 hours from close) passed, setup incomplete | Won, Setup Overdue | Awaiting Setup |
+| Payment deadline (7 days from invoice send) passed, unpaid | Won, Payment Overdue | Pending Payment |
+
+**Steps:**
+
+1. Navigate to <my auctions url>.
+2. Read <lot>'s row.
+
+**Expected Results:**
+
+* Your Standing reads the row's value, never the Not column.
+* The row offers View order.
+* Lot, close and current bid read as on any Won row.
+
+---
+
+## grade10-site-auction-account-record-US10: Bidder reads each lot's price and result on My Auctions
+
+**As a** bidder,
+**I want** each lot I bid on to show the auction's current or final price and, once it closes, whether I won,
+**so that** I know what a lot sold for and whether I lost it without opening the lot.
+
+### grade10-site-auction-account-record-US10-TC1-1: Ended row shows the final price and the recorded result
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-10
+
+**Pre-conditions:**
+
+* `<lot_1>` closed, its close recorded, customer A winning at `<final price>`.
+* customer B's last bid on `<lot_1>` was `<customer B bid>`.
+* `<viewer>` is signed in.
+
+**Test data:**
+
+| `<viewer>` | `<own last bid>` | `<standing>` |
+| --- | --- | --- |
+| customer A | `<customer A maximum>` | Won |
+| customer B | `<customer B bid>` | Didn't win |
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A closed HKD lot both customers bid on |
+| `<final price>` | 513000 minor units, `<customer B bid>` plus its 8000 increment |
+| `<customer A maximum>` | 800000 minor units, above `<final price>` |
+| `<customer B bid>` | 505000 minor units, customer B's maximum, below `<final price>` |
+
+**Steps:**
+
+1. Navigate to `<my auctions url>`.
+2. Select the Ended tab.
+3. Find `<lot_1>`'s row.
+
+**Expected Results:**
+
+* Current bid reads `<final price>`, not `<own last bid>`.
+* Your Standing reads `<standing>`.
+
+### grade10-site-auction-account-record-US10-TC2-1: Row shows no result before the close is recorded
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-account-record-US-10
+
+**Pre-conditions:**
+
+* customer A(signed in) leads `<lot_2>`.
+* `<lot_2>`'s close has passed, and recording it is held back.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_2>` | An HKD lot led by customer A, its close passed and not yet recorded |
+
+**Steps:**
+
+1. Navigate to `<my auctions url>`.
+2. Find `<lot_2>`'s row and read its tab and Your Standing.
+3. Let recording the close resume.
+4. Reload `<my auctions url>`.
+5. Find `<lot_2>`'s row and read Your Standing.
+
+**Expected Results:**
+
+* At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win.
+* At step 5 the row is in the Ended tab and Your Standing reads Won.
+
+### grade10-site-auction-account-record-US10-TC3-1: Open row shows the auction's current price, not the collector's bid
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-10
+
+**Pre-conditions:**
+
+* customer B(signed in) bid `<customer B bid>` on `<lot_3>`.
+* customer A has since raised `<lot_3>`'s current bid to `<current bid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_3>` | An open HKD lot, its close more than an hour away |
+| `<customer B bid>` | 100000 minor units |
+| `<current bid>` | 120000 minor units, above `<customer B bid>` |
+
+**Steps:**
+
+1. As customer B, navigate to `<my auctions url>`.
+2. Find `<lot_3>`'s row in the Active tab.
+
+**Expected Results:**
+
+* Current bid reads `<current bid>`, not `<customer B bid>`.
+* Your Standing reads Outbid, with the next valid bid.
+
+### grade10-site-auction-account-record-US10-TC4-1: Lone first bid confirming after the close reads Didn't win on an unsold lot
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-account-record-US-10
+
+**Pre-conditions:**
+
+* Bid-time card holds are on.
+* `<lot_4>` has no bid, and its scheduled close is under a minute away.
+* customer B(signed in) placed `<first bid>` on `<lot_4>`, and its payment confirmation is held back.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_4>` | An HKD lot with a starting price of 20000 minor units and no bid |
+| `<first bid>` | 20000 minor units, the opening price |
+
+**Steps:**
+
+1. Wait until `<lot_4>`'s scheduled close has passed and its close is recorded.
+2. Let the payment confirmation resume.
+3. Navigate to `<my auctions url>`.
+4. Select the Ended tab and find `<lot_4>`'s row.
+
+**Expected Results:**
+
+* The row is in the Ended tab, and Your Standing reads Didn't win.
+* The row says the card hold is releasing or released, never charged.
+* Current bid reads as on any unsold lot's row, not `<first bid>`.
+
+---
+
 ## Settled
 
 - `grade10-site-auction-account-record-US3-TC1` and `grade10-site-auction-account-record-US3-TC3` are held by `grade10-site-auction-account-record-US3-TC5`, whose rows read each won status.
-
 - The Won-row control label (View order or Open order) is design copy; either reads as the entry to Winner Order.
-
 - My Auctions carries the mixed standing and order-state values in Status, including Setup Overdue and Payment Overdue.
-
 - Contact for expired payment is Winner Order only (author @tangconst).
 - Didn’t win hold copy stays.
 
@@ -1069,3 +1240,20 @@ Runs once per row of **Test data**.
 | Suite required no row contact / no Won helpers | Folded as SC-22 amend + SC-58 |
 | Hold copy retained for Didn’t win | Covered by redesign/durable hold scenarios; not removed here |
 | My Auctions uses Status for both overdue outcomes | Folded as SC-63 |
+
+**Run:** QA2 rerun, 2026-10-01. QA1's blind pass read the frozen Purpose and Feature set, the change's journeys, `proposal.md`, `decisions.md` with its `## Raised`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s context, the durable suite and the change's domain draft with their `## Reconciliation` stripped; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both readings, the delta, `tech-design.md`, `tasks.md`, and the built My Auctions row mapping in grade10 for reference. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| Ended row shows the final price, not the viewer's own bid, with Won or Didn't win (`grade10-site-auction-account-record-US10-TC1-1`, deprecated by QA1 for the domain walk) | **Rejected:** a second walk of the domain case below |
+| Before the close is recorded the row reads no result; after it, Won (`grade10-site-auction-account-record-US10-TC2-1`) | **Folded in:** `grade10-site-auction-account-record-SC-65`, `grade10-site-auction-account-record-SC-67` |
+| QA1 raised: which tab holds the row between the effective and the recorded close, and what Your Standing reads | **Settled by the artifacts:** the open-standing requirement and `grade10-site-auction-account-record-SC-65` - Active tab, the open Status kept, no minimum next valid bid, never Ending soon. TC2-1 patched to assert it; `<v>` kept, the case still draft |
+| Open row shows the auction's current price, not the collector's bid (`grade10-site-auction-account-record-US10-TC3-1`) | **Folded in:** `grade10-site-auction-account-record-SC-64` |
+| QA1 raised: a lone first bid confirming after the scheduled close - the row's standing | **Settled by the artifacts:** after the close the row reads exactly Won or Didn't win from the recorded result; nobody won, so Didn't win, with the durable hold-release detail. New case `grade10-site-auction-account-record-US10-TC4-1` |
+| QA1 raised: the same row's Current bid on a lot that closed unsold | **Settled:** Q32 - the row reads as any unsold lot's row, with no new copy; a bid still pending at the effective close loses (Q1), and with holds off a bid is pending only for milliseconds. TC4-1 patched to assert it and no longer blocked; the case stays draft |
+| Outbid row past the effective close, before the close is recorded | **Rejected as a scenario:** the requirement already states it (open Status kept, no minimum next valid bid); no blind case asserts it apart from Leading |
+| Open-window statuses Leading, Outbid, Bid submitted, Bid not accepted, and Won or Didn't win after the close | **Out of suite:** `grade10-site-auction-account-record-SC-14` to `grade10-site-auction-account-record-SC-19` serve the context journey `grade10-site-auction-account-record-US-02`, unchanged by this delta; the durable suite's `grade10-site-auction-account-record-US2-TC1-1`, `grade10-site-auction-account-record-US2-TC2-1` and `grade10-site-auction-account-record-US4-TC1-1` assert them |
+
+- **Covered at domain** - `grade10-site-auction-e2e-US12-TC01-1` walks `grade10-site-auction-account-record-SC-66`, `grade10-site-auction-account-record-SC-18` and `grade10-site-auction-account-record-SC-19`: winner and losing bidder read one final price, Won and Didn't win, on My Auctions
+
+**Uncovered anchors:** none. `grade10-site-auction-account-record-US-10` has TC2-1, TC3-1 and TC4-1, and the domain case for the final price on both rows.

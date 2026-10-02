@@ -13,6 +13,8 @@ Grade10-owned schedule for each supported auction currency.
   - One lookup rule: manual and proxy bidding select the tier from the amount
     being beaten
   - Flexible offer: a bidder may exceed, but not fall below, the minimum
+  - Opening price: before any bid, the minimum is the starting price, or the
+    currency's lowest increment on a 0 start
 - Bid ceiling
   - Per-currency ceiling: one upper limit for every lot in USD, HKD, and JPY
   - Refusal above it: a manual bid or an auto-bid maximum above the ceiling is refused
@@ -51,13 +53,16 @@ Grade10 SHALL select the tier with the greatest Price from that does not exceed
 the amount being raised from. It SHALL NOT retain a per-listing increment or
 apply a USD, HKD, or JPY schedule to another currency.
 
+Scenario `grade10-site-auction-bid-increments-SC-01` keeps its title with its
+id. The title is historical: a first bid may stand on the starting price.
+
 <!-- trace:scenario id=g10.auction-bid-increments.SC-vqb rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-01 - A first bid clears the starting-price tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open HKD listing with a starting price of 20000 minor units and no accepted bid
 - **WHEN** a collector reads its minimum bid
-- **THEN** Grade10 reports 21000 minor units
+- **THEN** Grade10 reports 20000 minor units, the starting price
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-mn9 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-02 - A boundary selects the higher tier
@@ -92,8 +97,9 @@ apply a USD, HKD, or JPY schedule to another currency.
 
 ### Requirement: The minimum uses the amount being beaten
 
-Before any accepted bid, Grade10 SHALL add the starting-price tier increment
-to the starting price. After an accepted manual bid, it SHALL add the current
+Before any accepted bid, the minimum next amount SHALL be the listing's
+opening price: the starting price, or the tier increment for 0 when the
+starting price is 0. After an accepted manual bid, it SHALL add the current
 public-price tier increment to that price. With two or more proxy maxima, it
 SHALL add the second-highest maximum's tier increment to that maximum and cap
 the result at the leader's maximum. The result is the minimum next amount.
@@ -108,6 +114,13 @@ refuse an amount below it. It SHALL not create intermediate bids.
 - **GIVEN** an open HKD listing whose current public price is 800000 minor units
 - **WHEN** Grade10 calculates the next minimum
 - **THEN** the minimum is 820000 minor units
+
+#### Scenario: grade10-site-auction-bid-increments-SC-12 - A 0 start opens at the lowest increment
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector enters the opening bid on a lot that starts at nothing
+
+- **GIVEN** an open `HKD` listing with a starting price of 0 and no accepted bid
+- **WHEN** a collector reads its minimum bid
+- **THEN** Grade10 reports 1000 minor units
 
 ### Requirement: Unsupported currencies are refused before auctioning
 

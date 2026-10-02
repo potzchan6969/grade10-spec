@@ -24,7 +24,7 @@ import {
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Gavel } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   type ActivityTimeCopy,
   formatActivityAt,
@@ -32,6 +32,7 @@ import {
   resolveActivityNow,
   type ShippedLocale,
 } from "../../lib/format-datetime";
+import { useClockNow } from "./listing-clock";
 import type {
   ListingUserBidHistoryRow,
   ListingUserMaximumHistoryRow,
@@ -64,6 +65,8 @@ type ListingUserBidHistoryProps = {
 
 type HistoryTab = "maximums" | "bids";
 
+const ACTIVITY_TICK_MS = 30_000;
+
 function ListingUserBidHistory({
   copy,
   maximumRows,
@@ -73,12 +76,7 @@ function ListingUserBidHistory({
   activityTimeCopy,
 }: ListingUserBidHistoryProps) {
   const [open, setOpen] = useState(false);
-  const [nowMs, setNowMs] = useState(() => Date.now());
-
-  useEffect(() => {
-    const timer = window.setInterval(() => setNowMs(Date.now()), 30_000);
-    return () => window.clearInterval(timer);
-  }, []);
+  const nowMs = useClockNow(ACTIVITY_TICK_MS);
 
   const timedRows = useMemo(
     () => [...maximumRows, ...bidRows],

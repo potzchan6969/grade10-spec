@@ -36,7 +36,7 @@ authoritative event data.
   - Supplied copy: every user-visible string arrives through props
 - Bid enrollment
   - Named exports: the enrollment setup blocks and the signal the bid card reads
-  - Setup gates: continuing waits on a card and an attestation, and says which is missing
+  - Setup gates: continuing waits on a card and an attestation
   - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header
@@ -47,6 +47,7 @@ authoritative event data.
   - Increment steps: three chips at 1×, 2×, and 4× the listing increment
   - Leader base: chips add those steps to the committed maximum
   - Field base: chips add those steps to the current public bid
+  - Opening base: before any bid, chip 1x is the opening price, the next eligible bid
 - Raise floor
   - Leader minimum: a typed raise starts at the maximum plus 100 minor units
   - Separate from chips: the first chip is not that typed minimum
@@ -598,7 +599,9 @@ the listing increment supplied on the view.
 
 When the viewer leads with a committed maximum, those amounts SHALL be that
 maximum plus those multiples. When the viewer does not lead, they SHALL be
-the current bid plus those multiples.
+the current bid plus those multiples, except that before any bid the 1×
+amount SHALL be the view's minimum bid, the opening price itself; the 2× and
+4× amounts still add their multiples to the current bid on the view.
 
 The first chip SHALL NOT be replaced by the typed raise floor.
 
@@ -621,6 +624,16 @@ The first chip SHALL NOT be replaced by the typed raise floor.
   minor units and does not lead
 - **WHEN** the bid card renders quick-bid chips
 - **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
+
+#### Scenario: shared-ui-auction-listing-SC-52 - Before any bid chip 1x is the opening price
+**Serves:** Quick bids - a collector meets the chips on a lot nobody has bid on
+
+- **GIVEN** an HKD listing with no accepted bid, whose view carries an
+  opening price of 48000 minor units as both its minimum bid and its current
+  bid, and an increment of 2000 minor units
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 48000, 52000, and 56000 HKD minor units
+- **AND** the 48000 chip is captioned as the next eligible bid
 
 ### Requirement: A leader's typed raise floor is max plus 100 minor units
 

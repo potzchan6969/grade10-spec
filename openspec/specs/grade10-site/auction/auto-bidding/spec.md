@@ -8,8 +8,9 @@ current bid is the second-highest maximum plus the listing increment.
 ## Feature set
 
 - Commit a maximum
-  - First maximum opens bidding: an accepted cap takes the lead at the starting
-    price while the cap itself stays hidden
+  - First maximum opens bidding: an accepted cap takes the lead at the opening
+    price - the starting price, or the currency's lowest increment on a 0 start -
+    while the cap itself stays hidden
   - Raise only: a leader may raise their maximum; lowering or withdrawing it is
     refused
   - Validity: a maximum below the listing's minimum next bid is refused
@@ -165,7 +166,9 @@ operator SHALL see every committed maximum and its Accepted At.
 
 Only the highest and second-highest maxima decide the listing price. The
 highest maximum leads; equal maxima retain the earlier accepted leader. With
-one maximum, the current bid is the starting price. With two or more, the
+one maximum, the current bid is the starting price; on a listing that starts
+at 0 it SHALL be the increment `grade10-site/auction/bid-increments` selects
+for 0, never 0. With two or more, the
 current bid SHALL be the lesser of the leader's maximum and the second-highest
 maximum plus the increment that `grade10-site/auction/bid-increments` selects
 for that second-highest maximum.
@@ -285,6 +288,31 @@ intermediate increments.
 - **THEN** Grade10 accepts C's commitment and reports that C does not lead
 - **AND** the public history records C's accepted action followed by B's automatic response
 - **AND** both records show the resolved amount of 60000 minor units
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-30 - A lone maximum on a 0 start stands at the lowest increment
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector opens bidding on a lot that starts at nothing
+
+- **GIVEN** an open `HKD` listing with a starting price of 0 and no bids
+- **WHEN** a collector commits a maximum of 50000 minor units
+- **THEN** Grade10 accepts the commitment and that collector leads
+- **AND** the current bid is 1000 minor units, not 0
+- **AND** the public history records one bid, that collector's, at 1000 minor units
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-30a - A second maximum on a 0 start clears one increment above the opening price
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
+
+- **GIVEN** an open `HKD` listing with a starting price of 0, where A's
+  maximum of 50000 minor units stands alone at 1000 minor units
+- **WHEN** B commits a maximum of 1000 minor units
+- **THEN** Grade10 refuses it and names 2000 minor units as the minimum
+- **AND** A still leads at 1000 minor units
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-31 - A lone bidder on a 0 start never wins at 0
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector opens bidding on a lot that starts at nothing
+
+- **GIVEN** a `USD` listing with a starting price of 0 and one committed maximum of 100 minor units
+- **WHEN** the listing closes with no other commitment
+- **THEN** that collector wins at 100 minor units
 
 ### Requirement: The card authorization covers the committed maximum
 

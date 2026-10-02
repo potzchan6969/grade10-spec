@@ -7,6 +7,8 @@ import {
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
 } from "../../lib/datetime-fixtures";
+import { createFakeClock } from "./fixtures";
+import { ClockProvider } from "./listing-clock";
 import { ListingUserBidHistory } from "./listing-user-bid-history";
 import type {
   ListingUserBidHistoryRow,
@@ -203,5 +205,40 @@ export const EmptyBidsFrameless: Story = {
     expect(
       within(dialog).queryByText("No bids placed for you yet."),
     ).not.toBeInTheDocument();
+  },
+};
+
+const CLOCK_START_MS = Date.UTC(2026, 0, 5, 12, 0);
+const historyClock = createFakeClock(CLOCK_START_MS);
+
+/** Relative times follow the supplied clock, not the device's. */
+export const FollowsTheClock: Story = {
+  name: "Relative times follow the clock",
+  args: {
+    maximumRows: [],
+    bidRows: [
+      {
+        id: "bid-clock",
+        amountLabel: "HK$4,800",
+        acceptedAtMs: CLOCK_START_MS - 2 * 60_000,
+      },
+    ],
+  },
+  render: (args) => (
+    <ClockProvider store={historyClock.store}>
+      <ListingUserBidHistory {...args} />
+    </ClockProvider>
+  ),
+  play: async () => {
+    historyClock.set(CLOCK_START_MS);
+    const page = within(document.body);
+    const dialog = await page.findByRole("dialog", { name: "Your bidding" });
+    await waitFor(() =>
+      expect(within(dialog).getByText("2 min ago")).toBeVisible(),
+    );
+    historyClock.advance(3 * 60_000);
+    await waitFor(() =>
+      expect(within(dialog).getByText("5 min ago")).toBeVisible(),
+    );
   },
 };

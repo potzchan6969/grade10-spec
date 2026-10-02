@@ -23,6 +23,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRemainingSeconds } from "./listing-clock";
 import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";
 
 /** Auto-advance dwell per slide. */
@@ -40,8 +41,6 @@ const COPY_BLUR_PX = 2;
 /** Horizontal page on the small-viewport stage. */
 const SLIDE_MS = 250;
 const SLIDE_EASE = CROSSFADE_EASE;
-
-const HOUR_MS = 60 * 60 * 1000;
 
 /** Fraction of stage width that commits a swipe to the next slide. */
 const SWIPE_THRESHOLD = 0.2;
@@ -204,11 +203,10 @@ function unit(count: number, word: string) {
 }
 
 /**
- * List-card short remaining — `7d 0h 7m` down to `12m 05s`, or `now` at zero.
- * Not the lot-page rolling digit countdown.
+ * List-card short remaining from whole seconds rounded up — `7d 0h 7m` down
+ * to `12m 05s`, or `now` at zero. Not the lot-page rolling digit countdown.
  */
-function remainingParts(ms: number) {
-  const total = Math.max(0, Math.floor(ms / 1000));
+function remainingParts(total: number) {
   const days = Math.floor(total / 86400);
   const hours = Math.floor((total % 86400) / 3600);
   const minutes = Math.floor((total % 3600) / 60);
@@ -232,25 +230,6 @@ function remainingParts(ms: number) {
   };
 }
 
-function useNow(targetMs: number) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    let timer = 0;
-    const tick = () => {
-      const next = Date.now();
-      setNow(next);
-      const left = targetMs - next;
-      timer = window.setTimeout(tick, left > HOUR_MS ? 60_000 : 1_000);
-    };
-    timer = window.setTimeout(
-      tick,
-      targetMs - Date.now() > HOUR_MS ? 60_000 : 1_000,
-    );
-    return () => window.clearTimeout(timer);
-  }, [targetMs]);
-  return now;
-}
-
 /** Relative Ends in / Opens in — neutral colour; never invents Ended chrome. */
 function BannerCountdown({
   countdown,
@@ -259,9 +238,7 @@ function BannerCountdown({
   countdown: FeaturedAuctionsBannerCountdown;
   copy: FeaturedAuctionsBannerCopy;
 }) {
-  const now = useNow(countdown.atMs);
-  const left = countdown.atMs - now;
-  const parts = remainingParts(left);
+  const parts = remainingParts(useRemainingSeconds(countdown.atMs) ?? 0);
   const lead = countdown.kind === "opens" ? copy.opensIn : copy.endsIn;
   const target = new Date(countdown.atMs).toISOString();
 

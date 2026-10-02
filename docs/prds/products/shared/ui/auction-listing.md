@@ -81,7 +81,8 @@ Enrollment](/p/grade10-site/auction/bidding#auction-panel).
 | **ready** | Everything enabled; a maximum commits through the card |
 
 - **Setup blocks** — the enrollment setup blocks are named exports;
-  continuing waits on a card and an attestation, and says which is missing
+  continue stays disabled until a card and an attestation are in place, and
+  setup does not name which is missing
 
 ## Custom Maximum
 
@@ -95,7 +96,7 @@ cancelled; when holds are on it also says the hold matches the maximum.
   typed or pasted; the previous valid draft stays, nothing is clamped
 - 🚧 **Quick bids** — three chips at 1×, 2× and 4× the listing increment:
   from the current bid when the collector does not lead, from their committed
-  maximum when they do
+  maximum when they do; before any bid, chip 1× is the opening price itself
 - 🚧 **A leader's typed raise** — starts at the greater of the listing's next
   minimum and their maximum plus 100 minor units; that floor is not the first
   chip

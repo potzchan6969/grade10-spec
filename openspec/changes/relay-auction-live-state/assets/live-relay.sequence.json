@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "How a committed change reaches every open page",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [960, 1150]
+  },
+  "participants": [
+    {
+      "id": "bidder",
+      "type": "external",
+      "label": "Bidder",
+      "sublabel": "storefront"
+    },
+    {
+      "id": "pages",
+      "type": "external",
+      "label": "Open pages",
+      "sublabel": "every viewer"
+    },
+    {
+      "id": "catalogue",
+      "type": "cloud",
+      "label": "Catalogue room",
+      "sublabel": "relays cards"
+    },
+    {
+      "id": "room",
+      "type": "cloud",
+      "label": "Lot room",
+      "sublabel": "relay and alarm"
+    },
+    {
+      "id": "auction",
+      "type": "backend",
+      "label": "Auction worker",
+      "sublabel": "decides"
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "Postgres",
+      "sublabel": "the only truth"
+    },
+    {
+      "id": "sweep",
+      "type": "backend",
+      "label": "Cron sweep",
+      "sublabel": "every 5 minutes"
+    }
+  ],
+  "segments": [
+    { "from": 166, "to": 364, "label": "A page joins" },
+    { "from": 364, "to": 700, "label": "A writer commits" },
+    { "from": 700, "to": 896, "label": "The deadline passes" },
+    { "from": 896, "to": 1100, "label": "Nobody reached it" }
+  ],
+  "messages": [
+    {
+      "id": "probes",
+      "from": "pages",
+      "to": "auction",
+      "y": 196,
+      "label": "3 probes to /public/time",
+      "note": "the fastest sets the page clock; countdowns round up"
+    },
+    {
+      "id": "joins",
+      "from": "pages",
+      "to": "room",
+      "y": 240,
+      "label": "opens a socket",
+      "note": "it only sends a keepalive"
+    },
+    {
+      "id": "reads-for-hello",
+      "from": "room",
+      "to": "auction",
+      "y": 284,
+      "label": "reads the lot",
+      "variant": "dashed"
+    },
+    {
+      "id": "hello",
+      "from": "room",
+      "to": "pages",
+      "y": 328,
+      "label": "hello: the lot at its version",
+      "variant": "return"
+    },
+    {
+      "id": "writes",
+      "from": "bidder",
+      "to": "auction",
+      "y": 394,
+      "label": "bid, or its payment confirms"
+    },
+    {
+      "id": "commits",
+      "from": "auction",
+      "to": "postgres",
+      "y": 438,
+      "label": "commits under the listing lock",
+      "variant": "emphasis",
+      "note": "clock read after the lock; version rises"
+    },
+    {
+      "id": "signals",
+      "from": "auction",
+      "to": "room",
+      "y": 482,
+      "label": "after commit: listing changed",
+      "variant": "dashed",
+      "note": "best effort; the next change heals it"
+    },
+    {
+      "id": "reads-back",
+      "from": "room",
+      "to": "auction",
+      "y": 526,
+      "label": "re-reads the committed lot",
+      "note": "the room decides nothing"
+    },
+    {
+      "id": "state",
+      "from": "room",
+      "to": "pages",
+      "y": 570,
+      "label": "state: whole lot, new version",
+      "variant": "emphasis",
+      "note": "the alarm re-arms to the next deadline"
+    },
+    {
+      "id": "relays",
+      "from": "room",
+      "to": "catalogue",
+      "y": 614,
+      "label": "card changed",
+      "variant": "dashed"
+    },
+    {
+      "id": "cards",
+      "from": "catalogue",
+      "to": "pages",
+      "y": 658,
+      "label": "card state",
+      "variant": "emphasis",
+      "note": "at most one frame a second"
+    },
+    {
+      "id": "alarm",
+      "from": "room",
+      "to": "auction",
+      "y": 730,
+      "label": "alarm: settleIfDue",
+      "variant": "emphasis",
+      "note": "pages show Closed, no result yet"
+    },
+    {
+      "id": "settles",
+      "from": "auction",
+      "to": "postgres",
+      "y": 774,
+      "label": "extends or closes under the lock",
+      "variant": "emphasis",
+      "note": "idempotent; settling twice is a no-op"
+    },
+    {
+      "id": "settled",
+      "from": "auction",
+      "to": "room",
+      "y": 818,
+      "label": "the settled lot",
+      "variant": "return"
+    },
+    {
+      "id": "result",
+      "from": "room",
+      "to": "pages",
+      "y": 862,
+      "label": "state: the result, or a later close",
+      "variant": "emphasis",
+      "note": "Won or Unsold appears now"
+    },
+    {
+      "id": "overdue",
+      "from": "pages",
+      "to": "auction",
+      "y": 926,
+      "label": "a read finds the lot overdue",
+      "note": "2 s or more past its deadline; alarm lost"
+    },
+    {
+      "id": "deferred",
+      "from": "auction",
+      "to": "postgres",
+      "y": 970,
+      "label": "settleIfDue after answering",
+      "variant": "dashed",
+      "note": "skips a lot another transaction holds"
+    },
+    {
+      "id": "net",
+      "from": "sweep",
+      "to": "postgres",
+      "y": 1014,
+      "label": "settleIfDue on every due lot",
+      "variant": "dashed",
+      "note": "the net; each hit counts as a repair"
+    },
+    {
+      "id": "heals",
+      "from": "auction",
+      "to": "room",
+      "y": 1058,
+      "label": "listing changed",
+      "variant": "dashed",
+      "note": "every commit signals, as above"
+    }
+  ]
+}

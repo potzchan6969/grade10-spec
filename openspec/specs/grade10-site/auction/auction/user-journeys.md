@@ -7,6 +7,7 @@
 first, and to keep that order as I read on,
 **so that** what I can still bid on is in front of me and reading further never
 shows me a lot twice or skips one.
+
 ### grade10-site-auction-auction-US-01: Collector browses Auction listings
 
 **As a** collector,
@@ -34,3 +35,15 @@ shows me a lot twice or skips one.
 **As a** collector bidding the bar or more on a lot,
 **I want** to be told at once that a verified identity is needed and where to get one,
 **so that** my card is not held for a bid the auction cannot take, and I can verify and bid again before the lot closes.
+
+### grade10-site-auction-auction-US-11: Bidder is held to the close with everyone else
+
+**As a** bidder,
+**I want** a lot to stop taking bids at its close for everyone, and a bid to count only once its payment confirms before then,
+**so that** nobody wins with a bid that arrived after the close, and a card hold for a bid that did not count is released.
+
+### grade10-site-auction-auction-US-12: Bidder keeps a lot open only by moving its price
+
+**As a** bidder,
+**I want** extended bidding to restart only when a bid moves the lot's price,
+**so that** a leader cannot keep a lot open by raising their own maximum.

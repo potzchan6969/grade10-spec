@@ -1,7 +1,8 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** approved
+**Status:** in-review
 **Reviewed:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-10-01, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -683,6 +684,102 @@ hold is being let go.
 * Time left shows <extension duration>.
 * The lot closes, and no further bid is placed.
 
+### grade10-site-auction-e2e-US07-TC03-2: Price-moving auto-bid in extended bidding restarts the timer on the open page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auction-US-12, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-listing-page-US-12
+
+**Pre-conditions:**
+
+* customer A leads <listing_8> with maximum <user A maximum> and is on its lot page.
+* customer B is signed in with a linked card, on a separate session, on the same lot page.
+* <listing_8> is in extended bidding, and the recorded close is <time left before bid> away.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_8> | A listing in extended bidding, led by customer A, current bid <leader price> |
+| <extension duration> | 1800 seconds |
+| <time left before bid> | 5 minutes |
+| <leader price> | 530000 HKD minor units |
+| <increment> | 8000 HKD minor units (HKD 80.00), the HK$4,000 tier at <user B maximum> |
+| <user A maximum> | 800000 HKD minor units |
+| <user B maximum> | 555000 HKD minor units, below <user A maximum> |
+
+**Steps:**
+
+1. As customer A, read Time left on the lot page.
+2. As customer B, enter <user B maximum> in the custom maximum on the bid panel and confirm the bid.
+3. As customer A, without reloading, read Highest bid and Time left on the open lot page.
+4. Wait <extension duration> with no further bid.
+
+**Expected Results:**
+
+* Step 3 reads Highest bid <user B maximum> plus <increment>, and customer A still leads.
+* Step 3 reads Time left <extension duration>, labelled Extended bidding, with no reload.
+* The lot closes after step 4, and no further bid is placed.
+
+### grade10-site-auction-e2e-US07-TC04-1: Catalogue card and open lot page agree after an extension
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-12, grade10-site-auction-listing-page-US-13
+
+**Pre-conditions:**
+
+* <listing_8> is in extended bidding, led by customer A, and the recorded close is <time left before bid> away.
+* customer A is on the lot page for <listing_8>.
+* <listing_8> is set as a Featured slide.
+* customer C is on <grade10 auction url> with <listing_8>'s Featured slide and All auctions card in view, on a device whose clock is <device skew>.
+* customer B is signed in with a linked card, on a separate session, on the lot page for <listing_8>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_8> | A listing in extended bidding, led by customer A, current bid <leader price> |
+| <time left before bid> | 5 minutes |
+| <leader price> | 530000 HKD minor units |
+| <user A maximum> | 800000 HKD minor units |
+| <user B maximum> | 900000 HKD minor units, above <user A maximum> |
+| <increment> | 20000 HKD minor units (HKD 200.00), the HK$8,000 tier at <user A maximum> |
+| <device skew> | 3 minutes behind |
+
+**Steps:**
+
+1. As customer B, enter <user B maximum> in the custom maximum on the bid panel and confirm the bid.
+2. As customer C, without reloading, read <listing_8>'s All auctions card and Featured slide.
+3. As customer A, without reloading, read Highest bid and Time left at the same moment.
+
+**Expected Results:**
+
+* The card, the slide and the lot page's Highest bid all read <user A maximum> plus <increment>.
+* The card's and the slide's Ends in and the lot page's Time left agree to the second.
+* The slide still reads LIVE BIDDING, with no Extended label.
+* Neither reads <device skew> off, and neither page reloaded.
+
+---
+
 ## grade10-site-auction-e2e-US08: Collector's private bidding facts stay private
 
 **As a** collector,
@@ -1024,6 +1121,7 @@ finds it.
 * A delayed lower authorization is released rather than becoming the current bid.
 * Each user reads only their own maximum, and every standing change is explained by an event in their own history.
 * Every surprise is written up with the amounts, the order, and the timing that produced it.
+
 ---
 
 ## grade10-site-auction-e2e-US11: Collector follows an old link to a hidden lot
@@ -1072,3 +1170,112 @@ withdrawn.
 * Step 3: response status is 404 and the Page not found screen is on screen.
 
 <!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->
+
+---
+
+## grade10-site-auction-e2e-US12: Bidders follow a lot through its close to their record
+
+**As a** bidder,
+**I want** the lot page and My Auctions to show one final price and one result once the close is recorded,
+**so that** what I read on either is what the auction decided.
+
+### grade10-site-auction-e2e-US12-TC01-1: Winner and losing bidder read one result on the lot and My Auctions
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14, grade10-site-auction-account-record-US-10
+
+**Pre-conditions:**
+
+* customer A leads <listing_15> at <final price> with maximum <user A maximum>.
+* customer B committed <user B maximum> on <listing_15> and was outbid.
+* customer A and customer B are signed in on separate sessions, both on the lot page for <listing_15>.
+* <listing_15>'s recorded close is under a minute away, and no further bid will be placed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_15> | An HKD listing in extended bidding, led by customer A |
+| <final price> | 513000 minor units, <user B maximum> plus its 8000 increment |
+| <user A maximum> | 800000 minor units, above <final price> |
+| <user B maximum> | 505000 minor units, below <final price> |
+
+**Steps:**
+
+1. Wait through the recorded close on both pages, without reloading.
+2. As customer A, read the lot's state.
+3. As customer B, read the lot's state.
+4. As customer A, navigate to <my auctions url>, select the Ended tab and find <listing_15>'s row.
+5. As customer B, navigate to <my auctions url>, select the Ended tab and find <listing_15>'s row.
+
+**Expected Results:**
+
+* Once the close passes, both pages read Closed with no result until the close is recorded.
+* Step 2 reads Won and step 3 reads Did not win, with Highest bid <final price> on both.
+* Step 4's row reads Won, with Current bid <final price>.
+* Step 5's row reads Didn't win, with Current bid <final price>, not <user B maximum>.
+
+### grade10-site-auction-e2e-US12-TC02-1: Catalogue card and lot page turn at the close without a reload
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* customer A leads <listing_16> at <final price>, and is on its lot page.
+* customer C is on <grade10 auction url> with <listing_16>'s card in All auctions.
+* <listing_16>'s recorded close is under a minute away, and no further bid will be placed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_16> | An HKD listing in extended bidding, led by customer A |
+| <final price> | 513000 minor units |
+
+**Steps:**
+
+1. Wait through the recorded close on both pages, without reloading.
+2. As customer A, read the lot's state once the result shows.
+3. As customer C, read <listing_16>'s card.
+
+**Expected Results:**
+
+* Once the close passes, customer A's page reads Closed with no result until the close is recorded.
+* Until then, customer C's card shows its existing closed state with <final price> and no result.
+* Step 2 reads Won, with Highest bid <final price>.
+* Step 3's card reads Ended and names when it ended, with no watch control.
+* Neither page reloaded.
+
+## Reconciliation
+
+**Run:** QA2 rerun, 2026-10-01, for change `relay-auction-live-state`. Joined the domain cases, composed from the journeys of auction, listing-page, account-record and auto-bidding, with the delta scenarios of those capabilities. QA2 added one expected result to US12-TC02: the card's closed state with no result before the close is recorded.
+
+| Finding | Disposition |
+| --- | --- |
+| US07-TC03: a price-moving auto-bid in extended bidding restarts the open page's countdown | **Folded in:** `grade10-site-auction-auction-SC-06`, `grade10-site-auction-listing-page-SC-30`; the feature suites leave both to this case |
+| US07-TC04: the card, the Featured slide and the lot page agree after an extension, on the service clock | **Folded in:** `grade10-site-auction-auction-SC-65`, `grade10-site-auction-auction-SC-66`, `grade10-site-auction-listing-page-SC-33`; the auction suite leaves the first two to this case |
+| US12-TC01: winner and losing bidder read one result and one final price on the lot and on My Auctions | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-38`, `grade10-site-auction-account-record-SC-66`; account-record leaves `grade10-site-auction-account-record-SC-18` and `grade10-site-auction-account-record-SC-19` to this case |
+| US12-TC02: the card and the lot page turn at the close without a reload | **Folded in:** `grade10-site-auction-auction-SC-88`, `grade10-site-auction-listing-page-SC-37` |
+
+**Uncovered anchors:** none. Every case traces two or more capabilities' journeys.
