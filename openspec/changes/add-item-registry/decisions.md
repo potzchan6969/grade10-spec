@@ -89,6 +89,7 @@
 | Q58 | Where does Items' search say what it reads? | In the field's placeholder, since `Search` has no description slot; the hint goes once staff type - the designer's, settled by the owner by its recommendation, 2026-10-02 | A description line under the field, which `Search` does not offer |
 | Q59 | When does the walk-in's slab lookup run? | When the cert field loses focus with grader and cert both filled - the designer's, settled by the owner by its recommendation, 2026-10-02 | On every keystroke, which asks the register for every partial cert |
 | Q60 | Does the first version wait on the designer's boards? | No: each screen is built on the console's existing blocks, as `ui-design.md` composes it, and replaced when its board lands, as `vault-walk-ins-and-owners` Q27 does - settled by the owner, 2026-10-02 | Waiting on every board, which holds the register behind design work no requirement depends on |
+| Q61 | Who builds the wizard's register step - the ten categories and a known slab's read-only facts? | The designer, with the rest of the collector site under `retire-vault-collector-site`; this change keeps the backend's refusal and the wire's `factsFromRegister`, and drops group 12 - the owner, 2026-10-02 | Building the step on the site the owner removed, which the designer would redraw |
 
 ## Raised
 
