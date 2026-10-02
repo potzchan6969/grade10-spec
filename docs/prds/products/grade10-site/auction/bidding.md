@@ -200,7 +200,7 @@ authorization rather than adding a second.
 | **Authorization failed** | **Your card could not be authorized. Try another card.** on the bid action, and the controls stay usable |
 | **Leading** | Their maximum, the current bid and Leading |
 | **Outbid** | Outbid, and the next valid bid |
-| **Lost** | Did not win, with no hold-release copy; that reads on My Auctions |
+| **Lost** | Did not win; My Auctions says the card was not charged |
 | **Open, no bids** | **No bids yet** under the starting bid |
 | **Closed, no bids** | **Ended** as the result, and **No bids** under it — never **No bids yet** |
 
@@ -297,7 +297,7 @@ the same facts sit in the five-column table.
 | --- | --- |
 | Lot | The key image, the title and the close |
 | Current bid | The auction's current price, or its final price once it closes — never the collector's own bid |
-| 🚧 **Your Standing** | Leading · Outbid, with the next valid bid · Bid submitted · Bid not accepted, and why · Won, reading the order's status (Awaiting Setup, Setup Overdue, Preparing Invoice, Pending Payment, Payment Overdue, Payment Verifying, Partially Paid, …) · Didn't win, with whether the card hold is being released or released · `--` for a watch-only lot |
+| 🚧 **Your Standing** | Leading · Outbid, with the next valid bid; a refused attempt moves neither · Won, reading the order's status (Awaiting Setup, Setup Overdue, Preparing Invoice, Pending Payment, Payment Overdue, Payment Verifying, Partially Paid, …) · Didn't win, saying the card was not charged · `--` for a watch-only lot |
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
 
@@ -397,8 +397,8 @@ the account's registered address, and the letters about a won lot are
   recipient, lot and when it was sent, never the body
 - **Log retention** — **90 days**; troubleshooting only. Resend keeps the
   durable trail
-- **No hold line on the non-winner letter** — the letter does not mention the
-  card hold; My Auctions shows its state
+- **No card line on the non-winner letter** - the letter does not mention the
+  card; My Auctions says it was not charged
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the bid, maximum and close invariants, and the sweeps
@@ -440,7 +440,7 @@ inbox.
 | Bidder | Wants the lot, cannot sit on the page | Sets a maximum once and still competes; raises it, never lowers it. |
 | Bidder | Bidding across several lots that close the same evening | Sees which they lead, which they lost, and which closes next, and reaches the one that needs a bid in one step. |
 | Collector | Found a lot, not ready to bid | Marks it, leaves, and hears in time to come back. |
-| Losing bidder | Bid and did not win | Confirms the outcome and that the card hold is released, so a pending authorization is not read as a charge. |
+| Losing bidder | Bid and did not win | Confirms the outcome and that the card was not charged, so a lost lot is not read as a charge. |
 | Auction operator | A dispute about who led, or a collector who says they were never told | Reads each maximum with when it was accepted, and which letters went to that address. |
 
 **Not in scope.** Reserve prices. Lowering or withdrawing a maximum, or
@@ -487,15 +487,15 @@ surface.
 | Watch ≠ email alerts | Decided | Watch is list membership; email alerts are a per-lot preference, on by default when watched, off on unwatch; mute is not unwatch. An account-wide Auction email alerts switch covers every lot without clearing lists. | Product |
 | Privacy of a watch | Decided | Visible only to its owner; no public count. Operators see a Watchers column on the admin Listings table. | Product and design |
 | One table | 🚧 In flight | My Auctions is one bookmark table with bid rows first, Your Standing separating commitment from watch-only (`--`), close urgency beside the listing identity, and no Bidding or Watching sections; a lot both watched and bid on appears once, and Unwatch is offered only without a bid. | Product and design |
-| Your Standing column | 🚧 In flight | Leading, Outbid, Bid submitted, Bid not accepted, Won, or Didn't win for bid rows; `--` for watch-only. Close urgency is not a standing value. | Product and design (@tangconst) |
+| Your Standing column | 🚧 In flight | Leading, Outbid, Won, or Didn't win for bid rows; a refused attempt adds no row and moves no standing; `--` for watch-only. Close urgency is not a standing value. | Product and design (@tangconst) |
 | Called-off leaves the list | 🚧 In flight | A called-off lot is hidden, so it leaves the watched list; supersedes "survives close" for called-off lots and the watchlist delta's own "shown as called off". | Product |
 | Won hands off to orders | Decided | Every Won row offers View order into Winner Order and no helper lines; the order status vocabulary is the auction's. | Product (@tangconst) |
-| Card holds stated plainly | Decided | A losing bidder's row names being released or released, because a pending authorization on a bank statement reads as a charge. | Product and finance |
+| Not charged, stated plainly | Decided | A losing bidder's row says the card was not charged, because a lost lot must not read as a charge. | Product and finance |
 | Letter audiences | Decided | Start letters reach watchers; close-in-24h and extended-bidding reach a bidder who unwatched while alerts stay on; new-bid letters coalesce to the current leading bid; bid beats watch and a win beats both, so nobody gets two letters for one event. | Product |
 | No-bids close copy | Decided | Watch-only get the watched-ended letter (Ended only — never unsold, no sale or Highest bid); sold closes use watched-sold with Sold for. No bidder letter when nobody bid. | Product |
 | Unsubscribe | Decided | Stop means mute for this auction: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
-| Hold line on the non-winner letter | Decided | The letter omits it; My Auctions shows the hold state. | Product |
+| Card line on the non-winner letter | Decided | The letter omits it; My Auctions says the card was not charged. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
 :::
