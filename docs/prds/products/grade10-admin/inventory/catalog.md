@@ -83,6 +83,21 @@ product history.
 - **Copy-level facts** - each Cert record carries its required Cert ID, issuer,
   grade, autograph grade, and serial; grade remains source text. A unit without
   a Cert ID is regular stock rather than a Cert record.
+- 🚧 **Every unit in Cert ID details** — View Cert IDs lists each Cert record
+  and the regular stock without a Cert ID: one `No Cert ID` row for the
+  available units with their count, and one for each active hold with its
+  holder and remaining count. A `No Cert ID` row shows the history of regular
+  stock. Sold and withdrawn regular stock is not listed, because no unit of it
+  is tracked
+- 🚧 **Cert ID correction** — an available Cert record's Cert ID can be
+  changed to another Cert ID not used on the same product. An available unit
+  of regular stock can be given a Cert ID with its Grade Issuer, and Grade,
+  Autograph Grade and Serial where known; it becomes a Cert record and leaves
+  the `No Cert ID` count. A reserved, sold, withdrawn or vaulted unit keeps its
+  Cert ID, and a Cert ID cannot be cleared
+- 🚧 **Cert ID change in history** — each change is one history entry with
+  its time, actor, the Cert ID before and after (`No Cert ID` before an
+  assignment) and optional remarks, and it shows in that unit's history
 - **Explicit reservation unit** — every reservation selects one Cert ID or
   explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Product bulk import** — upload product names and typed schema attributes
