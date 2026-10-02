@@ -98,7 +98,6 @@ Failed, refused, and idempotent no-op writes SHALL append neither history nor
 audit.
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-l3a rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-23 - Product update records operator and snapshots
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -110,7 +109,6 @@ audit.
 - **AND** before contains `Card A` and after contains `Card B`
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-y6f rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-24 - Intake history carries the added quantity
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -122,7 +120,6 @@ audit.
 - **AND** before and after show stock increasing by three
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-1i4 rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-25 - Reserve history records hold and snapshot
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -133,7 +130,6 @@ audit.
 - **AND** before and after show reserved increasing by two
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-k0a rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-26 - Release history records hold and snapshot
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -144,7 +140,6 @@ audit.
 - **AND** before and after show reserved decreasing by two
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-vgc rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-27 - Terminal history records action details
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -156,7 +151,6 @@ audit.
 - **AND** one `withdraw` change records the withdrawn quantity and reason
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-cyf rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-28 - Refused write leaves history unchanged
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -166,7 +160,6 @@ audit.
 - **THEN** no new change is appended
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-ses rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-41 - Sell-from-reservation history
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -179,7 +172,6 @@ audit.
   decreasing by two
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-7oz rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-42 - Vault-from-reservation history
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -192,7 +184,6 @@ audit.
   decreasing by two
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-txu rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-43 - Adjust history records new quantity
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -204,7 +195,6 @@ audit.
   increasing by two
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-pgg rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-44 - Adjust decrease records freed quantity
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -215,7 +205,6 @@ audit.
 - **AND** before and after show reserved decreasing by three
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-6lr rev=1 -->
-
 #### Scenario: grade10-admin-inventory-catalog-SC-45 - Change-product history records both inventories
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
