@@ -97,3 +97,15 @@ prepared for that product.
 **As an** inventory admin,
 **I want** the stock of an auction that closed with no winner to show as available, with the hold closed and the listing named on the product page and in the history,
 **so that** I can trust the count and see why it moved.
+
+### grade10-admin-inventory-catalog-US-14: Inventory admin accounts for every unit in Cert ID details
+
+**As an** inventory admin,
+**I want** Cert ID details to list the regular stock without a Cert ID beside the Cert records, by state and holder,
+**so that** I can see where every unit of the product is without adding up the counts myself.
+
+### grade10-admin-inventory-catalog-US-15: Inventory admin corrects or assigns a unit's Cert ID
+
+**As an** inventory admin,
+**I want** to change a wrong Cert ID on an available unit, or give an available unit of regular stock its Cert ID, from Cert ID details,
+**so that** the record matches the card on the shelf without removing the unit and losing its history.

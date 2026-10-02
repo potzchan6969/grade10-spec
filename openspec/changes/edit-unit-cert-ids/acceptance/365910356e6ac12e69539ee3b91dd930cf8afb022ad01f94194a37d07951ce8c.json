@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "change": "edit-unit-cert-ids",
+  "baseline": "9289ef10eda006fe86356177325528a6b6177bb1f742c3f92a1fc561314fb866",
+  "fingerprint": "365910356e6ac12e69539ee3b91dd930cf8afb022ad01f94194a37d07951ce8c",
+  "reviewedBy": "@mason5991",
+  "acceptedAt": "2026-10-02T16:07:31.495Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/catalog.md#intake",
+      "sha256": "4bbb793b12e8b380d4fe6d14f821e95c88f4d1700f3e740a997a18e7aac514a5",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/edit-unit-cert-ids/decisions.md",
+      "sha256": "12c0774fd4471e6631aceeb824fc2912b83aa9f24b6e73189c7c8b1afd48375e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/edit-unit-cert-ids/proposal.md",
+      "sha256": "49dd620a7b06386786d81a5ba582d064beeb26a91cbf64f148483dad8564dfd5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/edit-unit-cert-ids/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "ab8d377871e404e2ca0b089b01c48bcc8a9e965d2ef69119e0385ea179e1388e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/edit-unit-cert-ids/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "9c19203f42286dca9fb3d7801b9109cd18de2f4bdf35a2e81feb8e10bd399936",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/edit-unit-cert-ids/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "f043156cbca03bcb740398a75cb3295cc87463ac7a8543321cc5cc4f367d8efe",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/edit-unit-cert-ids/tech-design.md",
+      "sha256": "12d4afbe16f73caefbcc8b1cfdff495cd891286a23bb36ae81b9443e4c0f0e59",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "f66c76e75505198d2c65c0d2563842b125034199d82a275d2bebd09dd69b7a16",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "d5a4d9a847105fc3800e7ca3f1e4a55e5f42df6ec3cbd3a4b99e410aca23fe61",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "b00282c25eed34d2aecc55598f9bb6ff4309420b71ac130c0183bacb3feaa46b",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A Cert ID change lands whole against holds and other changes",
+        "Requirement: An available unit of regular stock can be given a Cert ID",
+        "Requirement: An unmoved Cert record's Cert ID can be corrected",
+        "Requirement: Cert ID details lists every unit the product holds",
+        "Requirement: Cert ID details shows each unit's history",
+        "Requirement: Change history fields identify every transition",
+        "Requirement: Only an inventory admin who may write inventory changes a Cert ID",
+        "Requirement: The product page and history name each hold's holder"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
