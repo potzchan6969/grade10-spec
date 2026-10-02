@@ -10,3 +10,4 @@
 - Ending the loan
   - The notice, on the case: the borrower's read carries the day it was
     written, the date to pay by, and that nothing can be taken before that date
+- How to pay

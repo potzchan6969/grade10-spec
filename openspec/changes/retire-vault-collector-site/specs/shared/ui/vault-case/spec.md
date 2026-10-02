@@ -19,6 +19,9 @@ are `shared/ui/page-blocks`.
 - Accepting an offer
   - The terms before the answer: retired with the accept confirmation
   - While the answer is in flight: retired with the accept confirmation
+- An empty vault home
+  - The intro and the start action, the How it works steps, the empty panel
+    and the draft cap, in that order
 - The vault home's cases
   - The way in and the count: retired with the vault home
   - A card per case: retired with the vault home

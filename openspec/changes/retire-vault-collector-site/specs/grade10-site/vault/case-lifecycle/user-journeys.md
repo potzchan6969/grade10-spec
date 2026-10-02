@@ -7,6 +7,14 @@
 **so that** nothing is left open in my name and any visit I booked goes with
 it.
 
+### grade10-site-vault-case-lifecycle-US-02: Collector who stops answering is not left with an open case
+
+**As a** collector,
+**I want** a request I never came back to to end by itself, with a message
+saying so,
+**so that** I am not waiting on a case nobody is working and my item is not
+expected at a counter.
+
 ### grade10-site-vault-case-lifecycle-US-04: Collector reads how their case ended
 
 **As a** collector whose case ended without a release,

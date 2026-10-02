@@ -1,5 +1,13 @@
 ## Context user journeys
 
+### grade10-site-vault-loan-and-settlement-US-02: Borrower repays and takes the item home
+
+**As a** borrower,
+**I want** what I owe to be the same figure whenever I ask, and a part payment
+to cut what my arrears run on,
+**so that** I can pay some now and the rest later without being charged for
+money I have already returned.
+
 ### grade10-site-vault-loan-and-settlement-US-05: Borrower knows where to send the money
 
 **As a** borrower with a loan running,
