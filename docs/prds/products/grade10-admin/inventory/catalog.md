@@ -99,12 +99,12 @@ product history.
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
-- 🚧 **Unsold auction stock** — when an Auction listing closes Unsold, its hold
+- **Unsold auction stock** — when an Auction listing closes Unsold, its hold
   closes as released, available rises by the held units, and the product
   page and the history both name the listing. A hold left over from a listing
   that closed Unsold earlier is released once and reads the same. The
   release's remarks say an Unsold listing released it
-- 🚧 **History** — each entry shows when it happened, its action, quantity
+- **History** — each entry shows when it happened, its action, quantity
   and actor, the holder — the listing a hold belongs to, by listing code and
   title — and its remarks
 - 🚧 **Cert-scoped media** - an Inventory image or video stays product-level

@@ -72,14 +72,14 @@ the card is in the winner's hands. The collector's half is
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
-- 🚧 **Unsold close** — a listing that closes with no winner releases its
+- **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
   Stock · Intake](/p/grade10-admin/inventory/catalog#intake)
-- 🚧 **Stock already held** — a listing that closed Unsold before this ships
-  still holds its stock. One release frees every such hold, and each shows in
-  the inventory history as released by that clean-up
-- 🚧 **Relist** — an Unsold listing offers Relist, which opens a new draft
+- **Stock already held** — a listing that closed Unsold before the release
+  rule shipped still holds its stock. One release frees every such hold, and
+  each shows in the inventory history as released by that clean-up
+- **Relist** — an Unsold listing offers Relist, which opens a new draft
   with the same product, quantity, Cert ID choice, title, copy, price, currency
   and gallery. The draft takes its own stock hold on Save, gets its own slug
   and listing code, sets its own window, and carries no bids or history from
@@ -496,7 +496,7 @@ settings.
 | Catalogue Featured | 🚧 In flight | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
-| Unsold stock | 🚧 In flight | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
+| Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
 | Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |

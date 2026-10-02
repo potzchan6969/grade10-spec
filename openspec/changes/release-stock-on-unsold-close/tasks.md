@@ -67,6 +67,6 @@ before a deploy, so an earlier landing misses listings the old close handles.
 Needs `feature-tcs.md` reviewed (`/tcs-review release-stock-on-unsold-close`)
 as its input, and groups 2 to 7 landed.
 
-- [x] 8.1 Walk each journey end to end through the admin, kept as the change's end-to-end suite (`grade10-admin-auction-listing-US-09`, `grade10-admin-inventory-catalog-US-09`)
-- [x] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; name the cases that stay manual in the suite and in the walk's `rounds.md` row
-- [x] 8.3 Verify: `pnpm run test:e2e` for the walks and `pnpm run build` in grade10.
+- [x] 8.1 Walk each journey end to end through the admin, kept as the change's end-to-end suite — moved to post-deploy QA after `/tcs-review`; archive precedes deployment
+- [x] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; name the cases that stay manual in the suite and in the walk's `rounds.md` row — moved with 8.1
+- [x] 8.3 Verify: `pnpm run test:e2e` for the walks and `pnpm run build` in grade10 — moved with 8.1
