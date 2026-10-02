@@ -51,7 +51,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 5.8 `auditDetails` and `auditSubject` (the item id) on every `items.*` procedure, recording ids, owner kinds, the resolved user id and the retire code, and naming a typed reason by its row; `items.resolveOwner` declaring the found id or none (`grade10-admin-inventory-items-SC-72`)
 - [ ] 5.9 Verify: `pnpm run test:backend`, `pnpm --dir packages/api-docs run generate` (commit), `pnpm run check:libs`, `pnpm run typecheck`
 
-## 6. The register's erasure and retention (grade10)
+## 6. The register's erasure and retention (grade10) (owner: @ecchochan)
 
 - [ ] 6.1 Tests first, in their own commit: erasure service and repository tests, and the retention gauge (`grade10-admin-inventory-items-SC-63`, `grade10-admin-inventory-items-SC-64`, `grade10-admin-inventory-items-SC-65`, `grade10-admin-inventory-items-SC-66`, `grade10-admin-inventory-items-SC-67`, `grade10-admin-inventory-items-SC-74`)
 - [ ] 6.2 `packages/inventory/backend/src/erasure/` over `createErasureRouter`: the holds per marked item, and the one-transaction erase of owners, titles, descriptions, move sides and reasons and place owners, keeping a proof only while its other side remains and never counting a kept proof as remaining (`grade10-admin-inventory-items-SC-63`, `grade10-admin-inventory-items-SC-64`, `grade10-admin-inventory-items-SC-65`, `grade10-admin-inventory-items-SC-67`, `grade10-admin-inventory-items-SC-74`)
