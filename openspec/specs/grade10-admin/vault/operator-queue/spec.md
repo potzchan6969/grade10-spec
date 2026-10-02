@@ -94,6 +94,8 @@ buttons follow is `grade10-site/vault/case-lifecycle`; one collector's page is
   - A malformed address: refused beside its field before anything is sent,
     by the worker's own rule for an address
   - Ten photographs at most: at ten the form offers no way to add another
+  - A loan of zero: refused beside its field before anything is sent, by the
+    worker's own rule for the amount
 
 ## Requirements
 
@@ -782,6 +784,7 @@ SHALL sit in the Drafts view until the customer sends it.
 | Statement not in force | the version the form showed is not the one in force |
 | A fact | any fact `grade10-site/vault/case-intake` refuses |
 | Not an email address | the address does not meet the worker's rule for an email address; the form SHALL refuse it beside the address field when staff leave the field holding it, and not before; once shown, the refusal SHALL clear as soon as the address meets the rule or is emptied, and SHALL NOT show again until staff next leave the field; the walk-in SHALL NOT open while the address is malformed; an empty address is not refused, Open case waiting for one |
+| A loan of zero | a loan is chosen and the amount is not more than zero; the form SHALL refuse it beside the loan field when staff leave the field holding it, and not before; once shown, the refusal SHALL clear as soon as the amount is more than zero or is emptied, and SHALL NOT show again until staff next leave the field; choosing a lane SHALL clear it and keep the amount; the walk-in SHALL NOT open while the amount fails the rule, unless staff choose storage only, which sends no amount; an empty amount is not refused, Open case waiting for one |
 
 A refused open SHALL write no case, and the form SHALL keep what was typed.
 Every case SHALL be opened under an account, and every identity SHALL stay
@@ -886,6 +889,14 @@ draft staff opened.
 - **GIVEN** a walk-in form holding a category and a title, and the address `mei.chan@example`
 - **WHEN** the operator leaves the address field
 - **THEN** it is refused by name beside the address, and the walk-in cannot be opened
+- **AND** nothing is sent, and the form keeps what was typed
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-96 - A loan of zero is refused beside its field
+**Serves:** grade10-admin-vault-operator-queue-US-10 - the operator asks the customer how much before the draft opens
+
+- **GIVEN** a walk-in form holding an address, a category and a title, a loan chosen, and the amount `0`
+- **WHEN** the operator leaves the loan field
+- **THEN** it is refused by name beside the loan field, and the walk-in cannot be opened
 - **AND** nothing is sent, and the form keeps what was typed
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-79 - A walk-in opens with no photograph

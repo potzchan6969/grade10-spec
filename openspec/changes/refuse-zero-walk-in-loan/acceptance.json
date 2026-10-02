@@ -1,0 +1,127 @@
+{
+  "version": 2,
+  "change": "refuse-zero-walk-in-loan",
+  "baseline": "9815cb7e2df745693aa5a8ddf7141d733295f46ed61f0a3494fc2533c22f59c0",
+  "fingerprint": "804091c045fd5700f13a5dfe5400b0886b0eac3b3f30774769d8754a71fa0b24",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-02T06:52:31.759Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard",
+      "sha256": "58d0b59a56fbe1b0c12971b26547f0baae5a7b4d34b9c9152966784d908c2a1b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#queue",
+      "sha256": "d3215e50d6af7c98f741e537ae127695c11a9011b3f433bbb4025de44ac9f42b",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/decisions.md",
+      "sha256": "bf64c1197d5c0adb4aab49ca2c877d93783c37850edd6ba7632c5aaca77de687",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/proposal.md",
+      "sha256": "d1dfbb26345e8660e0ff751b8c51eaad7fedbdb8d0d49ac21cb86f48ed79d7c3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "c5a257c01168b07fa81f998525c1fdfd6271cb1e3e93279d7a9baaf4e956267d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "24d645a9bddbb4ba3774dc01d8ec90fcbee8b06131559600f9bdc9bcf81b7f4a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "717a46a06dcae09fb106e3c554591a89ffcd19f467eae46f892a8891abc256ea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "75b595900d539d782f483a012b7b9e53c74f23cfd358548295e5313f3cf50f3b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "6bad5291cf0c1324838cf35781c17ec941d415078b690be1d3fd469dcda6fc04",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "29765245c07bfab2509b82ae2658ee8ec7828f7302156e0e588ee38cd3b0dd01",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-zero-walk-in-loan/tech-design.md",
+      "sha256": "2fac1105ab5af24f29d1548a82dae26e0272cab5a6241b32843c53209d4c13d6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "a2838b9420ef7dd00c96672f649b17a7f77dc3da3a17576c900d0ed5fb744f3b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "ea88cd9d97c2bfa1a5f70e3211aab9555f404430a52876ac5956a911d664d2af",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "dfeccf346d0c8ea976e7f4eabea24e1d1d36e026ed5a813d69a4e3602e973048",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "be75b4eeb8d499e86f7f8b56770c1da17546c2138e413bab1db231d4f09cbec9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "cdb835f7d0aecfd630868002da335e7938bbc3036d63c5d49c56ac343280e8a4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "34cf9bd88f57fb03b7e6cc7f75a0b585cbf61d85aac7ef16e7aa6b03bd343e14",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Staff open a draft for a customer at the counter"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The financing amount decides the lane"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
