@@ -60,6 +60,9 @@ None.
   ended listing whose unit was released shows the corrected Cert ID.
 - **Site** - none; a live listing holds its unit, and a held unit cannot be
   changed.
+- **Suites above** - no domain impact: Inventory has no domain suite and the
+  change touches one capability. No product impact: no case in
+  `product-tcs.md` traces the journeys this change leans on.
 
 ## Depends On
 
