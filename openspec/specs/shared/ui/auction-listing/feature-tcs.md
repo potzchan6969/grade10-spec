@@ -12,7 +12,6 @@
 **so that** every storefront composing them shows me the same thing.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-qgl rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
-
 ### shared-ui-auction-listing-US1-TC1-1: Buyer fee shows inline at 20%
 
 **Classification:**
@@ -44,7 +43,6 @@
 * Step 3: no buyer-fee tooltip opens.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5tu rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
-
 ### shared-ui-auction-listing-US1-TC2-1: Signed-out panel omits the fee line
 
 **Classification:**
