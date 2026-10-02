@@ -17,9 +17,9 @@
 
 Takes the draft `feature-tcs.md` as its input once group 2 has landed; human QA reviews the suites with `/tcs-review refuse-zero-walk-in-loan` after deployment. While the cases are draft, the walk's titles cite scenarios and carry no bracketed case id.
 
-- [ ] 3.1 Walk the walk-in cases in `apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`, titled by `grade10-admin-vault-operator-queue-SC-96`: a loan of zero refused on leaving the field with nothing sent and cleared by an amount more than zero, the draft opened financed; Storage only lifting the refusal and a loan bringing the amount back, refused again once the field is left; `-1` and `0.004` refused in the field's own words. Walk the wizard's loan of zero in `apps/frontend/grade10/e2e/tests/vault/request.spec.ts`, titled by `grade10-site-vault-case-intake-SC-42`: the field takes no zero, Continue refused, storage only moving on (`grade10-admin-vault-operator-queue-US-10`, `grade10-site-vault-case-intake-US-01`)
-- [ ] 3.2 In grade10-spec, flip the cases each test decides with `pnpm run tcs:automated <case…> --decided-by <path>` once they land: the walk-in cases by `walk-in.spec.ts`, the wizard's by `request.spec.ts`, the intake's refusal by `collectorRouter.test.ts`; name the cases that stay manual in the walk's `rounds.md` row
-- [ ] 3.3 Verify: the walk-in and request walks green in CI.
+- [x] 3.1 Walk the walk-in cases in `apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`, titled by `grade10-admin-vault-operator-queue-SC-96`: a loan of zero refused on leaving the field with nothing sent and cleared by an amount more than zero, the draft opened financed; Storage only lifting the refusal and a loan bringing the amount back, refused again once the field is left; `-1` and `0.004` refused in the field's own words. Walk the wizard's loan of zero in `apps/frontend/grade10/e2e/tests/vault/request.spec.ts`, titled by `grade10-site-vault-case-intake-SC-42`: the field takes no zero, Continue refused, storage only moving on (`grade10-admin-vault-operator-queue-US-10`, `grade10-site-vault-case-intake-US-01`)
+- [x] 3.2 In grade10-spec, flip the cases each test decides with `pnpm run tcs:automated <case…> --decided-by <path>` once they land: the walk-in cases by `walk-in.spec.ts`, the wizard's by `request.spec.ts`, the intake's refusal by `collectorRouter.test.ts`; name the cases that stay manual in the walk's `rounds.md` row
+- [x] 3.3 Verify: the walk-in and request walks green in CI.
 
 ## 4. The manual (grade10-spec) (owner: @ecchochan)
 
