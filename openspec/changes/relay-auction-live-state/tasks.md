@@ -21,7 +21,7 @@
 - [ ] 3.2 Migration `0013_listing_version`: the `version` column and its triggers armed `ENABLE ALWAYS`, through the counter-trigger helper in `@grade10/postgres` (`grade10-site-auction-auction-SC-75`)
 - [ ] 3.3 Verify: migration checks, `pnpm run test:pg` for the auction schema
 
-## 4. Close Rules (grade10)
+## 4. Close Rules (grade10) (owner: @ecchochan)
 
 - [ ] 4.1 Tests: the bounded late window, a cap of 0, a bid at exactly the scheduled close, a confirm after the effective close, a lone pending first bid, a bid with holds off counting when placed, a bid at or past the recorded close in extended bidding, and which bids extend (`grade10-site-auction-auction-SC-05`, `grade10-site-auction-auction-SC-67`, `grade10-site-auction-auction-SC-68`, `grade10-site-auction-auction-SC-69`, `grade10-site-auction-auction-SC-81`, `grade10-site-auction-auction-SC-82`, `grade10-site-auction-auction-SC-83`, `grade10-site-auction-auction-SC-84`, `grade10-site-auction-auction-SC-85`, `grade10-site-auction-auction-SC-86`, `grade10-site-auction-auction-SC-87`)
 - [ ] 4.2 Bound the bid and confirm paths at the scheduled close plus the extension reach, count a bid at exactly the scheduled close, judge a bid with holds off when placed, refuse a bid at or past the effective close however late the close is recorded, and read a cap of 0 as extension off (`grade10-site-auction-auction-SC-05`, `grade10-site-auction-auction-SC-83`, `grade10-site-auction-auction-SC-84`, `grade10-site-auction-auction-SC-85`, `grade10-site-auction-auction-SC-86`, `grade10-site-auction-auction-SC-87`)
