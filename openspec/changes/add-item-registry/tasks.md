@@ -112,9 +112,9 @@ grade10-spec, takes the manual's marks off once the walk is green.
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-item-registry`) as its input; `/tcs-run-sheet` executes manual cases when needed. Runs once groups 2 to 12 have landed.
 
-- [ ] 13.1 One walk per journey, end to end through the console or the collector's phone on the e2e stack with both workers bound: `grade10-admin-inventory-items-US-01` to `US-06` and `US-08`; `grade10-admin-console-collector-page-US-03`; `grade10-admin-vault-operator-queue-US-20` and `US-21`; `grade10-site-vault-valuation-and-offer-US-06`; `grade10-site-vault-documents-and-signing-US-06`; and a case from walk-in to forfeit walking `grade10-site-vault-case-lifecycle-US-03`, `grade10-site-vault-case-intake-US-01` and `shared-auth-roles-US-02`, kept as the change's end-to-end suite - the collector's own walks (`grade10-site-vault-case-intake-US-01`, `grade10-site-vault-documents-and-signing-US-06`) moved to the designer with the site's screens, 2026-10-02; the console's walks stand
-- [ ] 13.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own commit; the ones that stay manual are named in the suite and in the walk's `rounds.md` row
-- [ ] 13.3 Verify: `pnpm run test:e2e` for the walks, `pnpm --dir external/grade10-spec run trace -- validate --app-root "$PWD"`
+- [x] 13.1 One walk per journey, end to end through the console or the collector's phone on the e2e stack with both workers bound: `grade10-admin-inventory-items-US-01` to `US-06` and `US-08`; `grade10-admin-console-collector-page-US-03`; `grade10-admin-vault-operator-queue-US-20` and `US-21`; `grade10-site-vault-valuation-and-offer-US-06`; `grade10-site-vault-documents-and-signing-US-06`; and a case from walk-in to forfeit walking `grade10-site-vault-case-lifecycle-US-03`, `grade10-site-vault-case-intake-US-01` and `shared-auth-roles-US-02`, kept as the change's end-to-end suite - the collector's own walks (`grade10-site-vault-case-intake-US-01`, `grade10-site-vault-documents-and-signing-US-06`) moved to the designer with the site's screens, 2026-10-02; the console's walks stand
+- [x] 13.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own commit; the ones that stay manual are named in the suite and in the walk's `rounds.md` row
+- [x] 13.3 Verify: `pnpm run test:e2e` for the walks, `pnpm --dir external/grade10-spec run trace -- validate --app-root "$PWD"`
 
 ## 14. The manual (grade10-spec) (owner: @ecchochan)
 
