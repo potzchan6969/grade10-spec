@@ -8,7 +8,7 @@
 - [ ] 1.6 Verify: `pnpm --filter @grade10/ui` story tests, `pnpm --filter @grade10/i18n test`, `pnpm run validate:changes relay-auction-live-state`, `pnpm check:manual`
 - [ ] 1.7 Tests, no behaviour change: the block already reads chip 1x as the opening price before any bid, and no test covers it - the `quickMaximumPresetAmount` cases in `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts` all have a bid. Add a non-leader case there with no bid - opening price 48000 as the floor and the current bid, increment 2000, chips 48000, 52000 and 56000 - and a `LiveNoBids` play in `listing-auction-bid-card.stories.tsx` asserting the "Min. bid" chip reads the opening price (Q28) (`shared-ui-auction-listing-SC-52`)
 
-## 2. Clock Rule and Live Contracts (grade10)
+## 2. Clock Rule and Live Contracts (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Tests: the `liveClock` case table, its SQL twin over the same table, the round-up rule, and the frame codecs decoding a missing `version` as 0 (`grade10-site-auction-auction-SC-83`, `grade10-site-auction-auction-SC-84`, `grade10-site-auction-auction-SC-76`)
 - [ ] 2.2 Add `liveClock`, `nextDeadlineAt` and the lot and catalogue frame codecs to `@grade10/auction-contracts`, and the additive payload fields `version`, `hasAcceptedBid`, `ledgerTotal`, `extensionSeconds`, `extensionCapSeconds` and `topAmountMinor` (`grade10-site-auction-auction-SC-76`, `grade10-site-auction-auction-SC-83`, `grade10-site-auction-auction-SC-84`)
