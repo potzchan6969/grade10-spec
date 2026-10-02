@@ -6,8 +6,8 @@ order: 15
 
 The parts a site page composes rather than drawing its own: a titled card of
 facts and its loading cards, short lines one under the other, a rail of
-stages, and an empty panel. The vault's and grading's collector pages both
-use them; each page supplies the words, the figures and the callbacks.
+stages, and an empty panel. Grading's collector pages use them; each page
+supplies the words, the figures and the callbacks.
 
 ## The Blocks
 
@@ -24,8 +24,7 @@ use them; each page supplies the words, the figures and the callbacks.
   way out
 
 A page finds each block by the slot it gives it; given none, a block keeps
-the design system's own. The vault's own blocks are
-[Vault Blocks](/p/shared/ui/vault-case).
+the design system's own.
 
 ::story{id="page-blocks-factcard--every-part" title="A fact card with every part"}
 

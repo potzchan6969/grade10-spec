@@ -55,13 +55,19 @@ it; no statute here is asserted.
   photos and text stay under the hold, no clock
 - **Erasure, never signed** — everything is purged and the identity released
 - **Messages never sent** — queued and parked mail goes whichever class the case falls in
-- **Process** — the collector files the ask from Your data and can cancel
-  it inside the **7-day** window; then an admin runs each product from the
-  console — [Account Data](/platform/account-data#erasure)
-- **Your data** — a page under the collector's account: what the vault keeps
-  and for how long, per class; the identity standing — verified until when,
-  checked how, never the name or document; every signed document in one download;
-  and the ask to be forgotten, refused in words while a case is in flight
+- **Process** — the collector files the ask on their own account and can
+  cancel it inside the **7-day** window; then an admin runs each product from
+  the console — [Account Data](/platform/account-data#erasure)
+- **Your data** — what the collector reads under their own account: what the
+  vault keeps and for how long, per class; the identity standing — verified
+  until when, checked how, never the name or document; every signed document
+  in one download; and whether a case in flight holds the ask
+- ❓ **Your data on screen** — where the collector reads it and files the ask;
+  @tangconst designs it
+- ❓ **Asking while a submission is live** — nothing refuses the ask to be
+  forgotten while a grading submission is live; grading's erasure refuses
+  only when an admin runs it. The owner confirms whether filing the ask is
+  refused then
 
 ## Evidence
 
@@ -190,14 +196,14 @@ the code holds until they do.
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
-| Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
+| Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector's Your data names the seeded windows meanwhile | Legal |
 | Owner of a bought or gifted item | TBC Legal | Posture: the custodian; the lender comes to own an item only through a forfeit, so stock stays apart from collateral - [Items](/p/grade10-admin/inventory/items#owners) | Legal |
 | An erased owner's item | TBC Legal | Posture: the category, grader, grade and cert stay once the owner is erased, since they describe the object and a cleared cert lets one slab register twice; the owner, the title, the description and the person's side of each move go - [Items](/p/grade10-admin/inventory/items#erasure) | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
 | The collection statement | TBC Legal | One personal information collection statement per brand, for every product, versioned; each send and each walk-in keeps the version it showed. In production the send and a walk-in's open are refused while it is unwritten; outside production it reads “Being prepared”. A draft for counsel is written; changed at landing, superseding the round's answer | Legal |
 | One rule for the complaints contact | Decided | The paper refuses an unset contact in production too, so the field keeps one rule | Product |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
-| Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |
+| Your data is one read for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing under their own account, and files the ask to be forgotten there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal; the screen is @tangconst's to draw | Product |
 | Forfeiture | TBC Legal | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item. What follows turns on the regime: under the pawnbroking reading the item is the lender's and nothing further is owed; under the money-lending reading, as recalled, the lender sells it and returns what is left after the debt and the sale's costs. Posture until Legal names it: the forfeit settles the debt with no shortfall claimed, and no forfeited item is sold before the regime is named; handing it back to the borrower stays open. Changed at landing, superseding the round's answer | Legal |
 | A document held under another account | Decided | Flag, never refuse: a refusal needs an override the vault has nowhere and would strand a customer with two accounts | Owner |
 | Residency | Decided | Every Neon project in `ap-southeast-1`, the nearest region to Hong Kong and one stated home; Datadog stays in the US on the standing rule that logs carry no personal data | Legal |

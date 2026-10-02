@@ -296,7 +296,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | `packages/appointment` | locations' availability rules, slot derivation, bookings, and their outcomes, plus its own worker | what a case is — the case reference is an opaque string |
 | `packages/doc-sign` | packets, their documents, signers, tokens, signatures, sign events, templates, the ceremony routes, and both the signer's ceremony and the operator's mint surface | which product it signs for; it is a library with no worker and no database of its own |
 | `packages/e-kyc` | the KYC service: the verified record and its per-product case bindings, the vocabulary, masking and hashing, the adult and expiry predicates, the per-product entrypoints, and the worker that owns the database and the capture bucket | anything about vaults, loans, or cases — a case reference is an opaque string |
-| `packages/vault` | the case, its transitions, valuation, custody, money, documents, uploads, notifications, sweeps, and the customer-facing slices | how a slot is derived or how a PDF is sealed |
+| `packages/vault` | the case, its transitions, valuation, custody, money, documents, uploads, notifications and sweeps | how a slot is derived or how a PDF is sealed |
 
 ### A generic package never learns what a case is
 
@@ -330,12 +330,12 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 
 | Where | What |
 | --- | --- |
-| `packages/vault/{contracts,backend,frontend,admin-frontend}` | the case vocabulary and wire schemas, the service, and both sides' feature slices — customer-facing and operator-facing |
+| `packages/vault/{contracts,backend,admin-frontend}` | the case vocabulary and wire schemas, the service, and the operator-facing feature slices |
 | `packages/appointment/{contracts,backend}` | the booking contract and the service, including its named per-product entrypoints |
 | `packages/doc-sign/{contracts,backend,frontend}` | the packet model, the tables and routes, and the ceremony UI |
 | `packages/e-kyc/{contracts,backend}` | the verified record, its case bindings, and the store's worker |
 | `apps/backend/grade10/{vault,appointment,e-kyc}` | the deployments: migrations, buckets, cron triggers, Hyperdrive, and the bindings between them. `e-kyc` has no route and no `ServiceId` — every caller reaches it over `KYC_SERVICE` |
-| `apps/frontend/grade10/src/pages/vault` | the request wizard, a customer's cases, booking, and the signing page |
+| `apps/frontend/grade10/src/pages/vault` | the signing page |
 | `apps/admin/grade10/src/pages/{vault,appointments}` | the route shells that mount the panels; the case panels, the payout tab and the `wa.me` link builder live in `packages/vault/admin-frontend` |
 | `packages/grade10-auth/contracts/src/schemas.ts` | the `vault` and `appointment` statements and the roles that hold them |
 | `neondb/registry.sh` | the databases and their nightly backups; the vault and the KYC service are Neon projects of their own, all of them in `ap-southeast-1` |

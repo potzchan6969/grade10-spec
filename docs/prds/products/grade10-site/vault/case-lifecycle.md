@@ -55,7 +55,7 @@ in production the offer is refused while a bound or the lender's name is
 unset. A counter-offer supersedes; staff can withdraw back to `under_valuation`.
 
 ## Collector or staff — Accept the offer
-`offer_made → accepted`, from the collector's own case page or the counter,
+`offer_made → accepted`, by the collector on their own case or at the counter,
 guarded on the offer not having expired. Declining returns the case to
 `under_valuation` with the offer closed and the request open. Custody terms
 agreed at the counter take either lane `under_valuation → accepted` with no
