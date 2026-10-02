@@ -8,7 +8,7 @@
 - [ ] 1.4 With the fold, rewrite the hold wording left in durable suites and journeys no delta carries: the grade10-site lot-status suite's "so that" line, its pre-condition of a bid holding a bid-time authorization and its result of a released hold, and the same "so that" line in its journeys, each rewritten to say the card was not charged; grade10-admin listing's call-off case that checks and releases live authorizations, and its demoted top bid whose card hold failed; grade10-site bid-increments' "Bid-time holds are off." pre-condition; and the bidding-history row in `openspec/specs/grade10-site/README.md`, from "every retained bidding interaction" to every bid placed. The grade10-admin auction domain suite's wire-request case is `complete-auction-post-sale`'s
 - [ ] 1.5 Verify: `pnpm check:manual`, `pnpm run tcs:validate` and `pnpm run validate:changes refused-bid-is-not-a-bid` in grade10-spec
 
-## 2. The refusal log and the refusal rows (grade10)
+## 2. The refusal log and the refusal rows (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Test first: a refusal logs `auction bid refused` once, naming the bidder, the lot, the code, the maximum sent and the floor or ceiling `grade10-site-auction-auction-SC-93`
 - [ ] 2.2 `placeBid()` adds `storefront`, `userId`, `maximumMinor`, and the refusal's `minimumNextAmount` or `ceilingMinor`, to the line, picked field by field
