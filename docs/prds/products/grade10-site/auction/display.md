@@ -190,7 +190,7 @@ never the collector's bid or order, and every page reads the same value.
 - **Hidden lots** — drafts have no public address. Called-off lots are not in
   the catalogue, search or filters but remain directly accessible at their
   canonical address; My Auctions shows a called-off lot to a collector who bid
-  on it, saying the card hold was released when there was one
+  on it, saying their card was not charged
 - **Between the close and the result** — once a lot's close passes, every
   page shows it Closed with no result yet; Won or Unsold appears when the
   close is recorded, normally within about a second and at worst at the next
@@ -239,7 +239,7 @@ external one does not.
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Collector | Browsing or watching lots | Sees at a glance whether a lot can still be bid on. |
-| Bidder | Bid on a lot that was called off | Still sees the lot, and that their card hold was released. |
+| Bidder | Bid on a lot that was called off | Still sees the lot, and that their card was not charged. |
 
 **Not in scope.** The winner's order status, which Ended never describes. The
 Active and Completed filters in bidding history.
@@ -251,7 +251,7 @@ Active and Completed filters in bidding history.
 | The catalogue page | Decided | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Between the close and the result | Decided | Three statuses stay. Past the close and before the result is recorded, pages show the existing Closed state with no result, and Won or Unsold when the close commits. A fourth status, Closing, with its own copy was ruled out: a new state in four languages for a gap normally under a second. | Product |
-| Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
+| Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, saying their card was not charged. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |

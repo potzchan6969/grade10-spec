@@ -88,7 +88,7 @@ Enrollment](/p/grade10-site/auction/bidding#auction-panel).
 
 Under Set your private maximum, an always-on line says that Grade10 bids only
 as needed up to the maximum and that it can be raised but never lowered or
-cancelled; when holds are on it also says the hold matches the maximum.
+cancelled.
 
 - 🚧 **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
@@ -112,9 +112,8 @@ cancelled; when holds are on it also says the hold matches the maximum.
 
 ## Lost Standing
 
-- **No release banner on the lot card** — when the viewer lost, the bid card
-  shows Did not win without card-authorization-release banner copy; hold
-  release copy on My Auctions stays with that capability when a hold exists
+- **No banner on the lot card** - when the viewer lost, the bid card shows
+  Did not win and nothing more; My Auctions says the card was not charged
 
 ## Extended Bidding Copy
 

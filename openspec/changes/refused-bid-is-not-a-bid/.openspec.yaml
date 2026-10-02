@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-10-02
+hands:
+  pm: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: "nothing a reader sees moves: grade10#773, #785 and #795 already show every outcome this record writes down"
+page_waived: "grade10 already shows every outcome (grade10#773, #783, #785, #789, #795), so the pages state it unmarked and no 🚧 line waits on this change"

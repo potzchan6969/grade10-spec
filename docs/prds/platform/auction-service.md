@@ -236,7 +236,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 
 ### A refused attempt places nothing
 
-- `placeBid` answers with the refusal's code and logs `auction bid refused` with it
+- `placeBid` answers with the refusal's code and logs `auction bid refused` once, with the bidder, the lot, the code, the maximum sent, and the floor or ceiling the refusal names; the log is the operators' record, never the bidder's
 - It writes no bid, no standing and no history row, so the attempt shows only on the bid form that made it
 - A refusal for a lot past its close hands the lot to the settle after answering
 
