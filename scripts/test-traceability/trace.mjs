@@ -268,7 +268,10 @@ function checkMarkdownMarkerScope(value, currentScope, issue) {
   return currentScope ?? scope;
 }
 
-function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
+export function parseTraceGraph({
+  storeRoot = scriptRoot,
+  appRoot = null,
+} = {}) {
   const roots = {
     storeRoot: resolve(storeRoot),
     appRoot: appRoot && resolve(appRoot),

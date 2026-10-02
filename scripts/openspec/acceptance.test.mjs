@@ -318,7 +318,7 @@ test("a test case id already held by another durable journey is refused", () => 
   );
   assert.throws(
     () => prepareAcceptance(root, CHANGE),
-    /test case site-search-TC02-01 appears more than once.*renumber/,
+    /test case site-search-TC02 appears more than once in the merged suite; give the new case the next unused TC number/,
   );
 });
 
@@ -886,8 +886,13 @@ test("spec:accept commits folded files and acceptance only after both validators
       return { status: 0, stdout: "", stderr: "" };
     },
   });
-  assert.deepEqual(commands, [
-    `run validate:changes ${CHANGE}`,
+  assert.equal(commands.length, 4);
+  assert.equal(commands[0], `run validate:changes ${CHANGE}`);
+  assert.match(
+    commands[1],
+    /^run tcs:validate --root \S+folded-store-\S+ --require-suites$/,
+  );
+  assert.deepEqual(commands.slice(2), [
     "check:manual",
     `run validate:changes ${CHANGE}`,
   ]);
@@ -924,7 +929,7 @@ test("spec:accept rolls back every durable and acceptance file when validation r
         expectedBaseline: before.baselineFingerprint,
         runCommand() {
           calls += 1;
-          return calls === 2
+          return calls === 3
             ? { status: 1, stdout: "manual refusal", stderr: "" }
             : { status: 0, stdout: "", stderr: "" };
         },
@@ -935,7 +940,56 @@ test("spec:accept rolls back every durable and acceptance file when validation r
     assert.equal(existsSync(join(root, path)), false);
   }
   assert.equal(verifyAcceptance(root, CHANGE).ok, false);
-  assert.deepEqual(calls, 2);
+  assert.deepEqual(calls, 3);
+});
+
+test("spec:accept validates the folded store in a copy and writes nothing when it fails", () => {
+  const { root } = sandbox();
+  const before = prepareAcceptance(root, CHANGE);
+  let folded = null;
+  assert.throws(
+    () =>
+      acceptChange(root, CHANGE, {
+        reviewedBy: "@pm",
+        expectedBaseline: before.baselineFingerprint,
+        runCommand(args) {
+          if (args[1] !== "tcs:validate") return { status: 0 };
+          const tree = args[3];
+          folded = readFileSync(
+            join(tree, "openspec/specs/site/search/feature-tcs.md"),
+            "utf8",
+          );
+          return { status: 1, stdout: "TC1 appears more than once" };
+        },
+      }),
+    /tcs:validate refused the folded store:\nTC1 appears more than once/,
+  );
+  assert.equal(
+    folded,
+    before.outputs.get("openspec/specs/site/search/feature-tcs.md"),
+  );
+  for (const [path] of before.outputs)
+    assert.equal(existsSync(join(root, path)), false);
+});
+
+test("spec:accept refuses a folded file whose trace marker is out of place", () => {
+  const { root } = sandbox();
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search test cases\n\n## site-search-US1: Journey 1\n\n### site-search-US1-TC1-1: A case\n\n* **Status:** draft\n\n<!-- trace:case id=g.search.TC-z1 rev=1 covers=g.search.SC-z1 -->\n\n## Reconciliation\n\nThe blind reading agreed with the feature set.\n",
+  );
+  const before = prepareAcceptance(root, CHANGE);
+  assert.throws(
+    () =>
+      acceptChange(root, CHANGE, {
+        reviewedBy: "@pm",
+        expectedBaseline: before.baselineFingerprint,
+        runCommand: () => ({ status: 0 }),
+      }),
+    /trace markers in the folded files sit away from their headings:\n- openspec\/specs\/site\/search\/feature-tcs\.md:\d+ \[marker-adjacency\]/,
+  );
+  for (const [path] of before.outputs)
+    assert.equal(existsSync(join(root, path)), false);
 });
 
 const caseBlock = (id, status = "draft") =>
@@ -944,7 +998,187 @@ const suiteOf = (...parts) =>
   `# site/search Test Cases\n\n**Status:** pending-review\n\n${parts.join("\n\n")}\n`;
 const group = (n, ...cases) =>
   [`## site-search-US${n}: Journey ${n}`, ...cases].join("\n\n");
-const merge = (current, delta) => mergeSuite(current, delta, "site/search");
+const merge = (current, delta) =>
+  mergeSuite(current, delta, "site/search", "2026-10-02");
+const reviewed = (text) =>
+  text.replace(
+    "**Status:** pending-review",
+    "**Status:** approved\n**Reviewed:** 2026-09-29, tcs-rules r4",
+  );
+
+test("suite fold puts a revised case where its earlier revision stood", () => {
+  const merged = merge(
+    suiteOf(
+      group(
+        1,
+        caseBlock("site-search-US1-TC1-1", "actual"),
+        "<!-- trace:case id=g.search.TC-a1 rev=1 covers=g.search.SC-a1 -->",
+        caseBlock("site-search-US1-TC2-1", "actual"),
+        caseBlock("site-search-US1-TC3-1", "actual"),
+      ),
+    ),
+    suiteOf(
+      group(
+        1,
+        caseBlock("site-search-US1-TC2-2"),
+        caseBlock("site-search-US1-TC4-1"),
+      ),
+    ),
+  );
+  const order = [...merged.matchAll(/^### (\S+):/gm)].map((one) => one[1]);
+  assert.deepEqual(order, [
+    "site-search-US1-TC1-1",
+    "site-search-US1-TC2-2",
+    "site-search-US1-TC3-1",
+    "site-search-US1-TC4-1",
+  ]);
+  assert.match(
+    merged,
+    /<!-- trace:case id=g\.search\.TC-a1 rev=2 [^\n]*-->\n### site-search-US1-TC2-2:/,
+  );
+});
+
+test("suite fold keeps the marker above a journey's first case when the change rewrites the journey", () => {
+  const marker =
+    "<!-- trace:case id=g.search.TC-b1 rev=1 covers=g.search.SC-b1 -->";
+  const merged = merge(
+    suiteOf(
+      `## site-search-US1: Journey 1\n\nThe durable story.\n\n${marker}\n${caseBlock("site-search-US1-TC1-1", "actual")}`,
+    ),
+    suiteOf(group(1, caseBlock("site-search-US1-TC2-1"))),
+  );
+  assert.match(
+    merged,
+    /## site-search-US1: Journey 1\n\n<!-- trace:case id=g\.search\.TC-b1 rev=1 [^\n]*-->\n### site-search-US1-TC1-1:/,
+  );
+});
+
+test("suite fold refuses a journey child it cannot place", () => {
+  assert.throws(
+    () =>
+      merge(
+        suiteOf(
+          group(
+            1,
+            caseBlock("site-search-US1-TC1-1"),
+            "### Notes\n\nKept by hand.",
+          ),
+        ),
+        suiteOf(group(1, caseBlock("site-search-US1-TC2-1"))),
+      ),
+    /`### Notes` under `## site-search-US1: Journey 1` is not a test case the fold can place/,
+  );
+});
+
+test("suite fold refuses a durable suite that already repeats a TC number", () => {
+  assert.throws(
+    () =>
+      merge(
+        suiteOf(
+          group(
+            1,
+            caseBlock("site-search-US1-TC1-1"),
+            caseBlock("site-search-US1-TC1-2"),
+          ),
+        ),
+        suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))),
+      ),
+    /site-search-US1-TC1 appears more than once in the durable suite; repair the durable suite first/,
+  );
+});
+
+test("suite fold needs its date", () => {
+  assert.throws(
+    () =>
+      mergeSuite(
+        suiteOf(group(1, caseBlock("site-search-US1-TC1-1"))),
+        suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))),
+        "site/search",
+      ),
+    /site\/search: a suite fold needs its date/,
+  );
+});
+
+test("suite fold drops a None. placeholder once the other side lists items", () => {
+  const merged = merge(
+    suiteOf(
+      group(1, caseBlock("site-search-US1-TC1-1")),
+      "## Settled\n\n- Kept.",
+    ),
+    suiteOf(
+      group(2, caseBlock("site-search-US2-TC1-1")),
+      "## Settled\n\nNone.",
+    ),
+  );
+  assert.match(merged, /## Settled\n\n- Kept\.\n$/);
+});
+
+test("suite fold refuses a case older than the durable revision", () => {
+  assert.throws(
+    () =>
+      merge(
+        suiteOf(group(1, caseBlock("site-search-US1-TC2-2"))),
+        suiteOf(group(1, caseBlock("site-search-US1-TC2-1"))),
+      ),
+    /site-search-US1-TC2-1 is an older revision than the durable suite's site-search-US1-TC2-2/,
+  );
+});
+
+test("suite fold refuses a TC number the change's suite holds twice", () => {
+  assert.throws(
+    () =>
+      merge(
+        suiteOf(group(1, caseBlock("site-search-US1-TC1-1"))),
+        suiteOf(
+          group(
+            1,
+            caseBlock("site-search-US1-TC2-1"),
+            caseBlock("site-search-US1-TC2-2"),
+          ),
+        ),
+      ),
+    /test case site-search-US1-TC2 appears more than once in the change's suite/,
+  );
+});
+
+test("suite fold lapses the Reviewed line of an approved suite it adds a draft to", () => {
+  const merged = merge(
+    reviewed(suiteOf(group(1, caseBlock("site-search-US1-TC1-1", "actual")))),
+    suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))),
+  );
+  assert.match(merged, /^\*\*Status:\*\* reopened$/m);
+  assert.match(
+    merged,
+    /^\*\*Reviewed:\*\* 2026-09-29, tcs-rules r4, lapsed 2026-10-02$/m,
+  );
+  assert.equal(
+    merge(merged, suiteOf(group(2, caseBlock("site-search-US2-TC1-1")))),
+    merged,
+  );
+});
+
+test("suite fold keeps the Reviewed line of a suite that stays approved", () => {
+  const merged = merge(
+    reviewed(suiteOf(group(1, caseBlock("site-search-US1-TC1-1", "actual")))),
+    suiteOf(group(2, caseBlock("site-search-US2-TC1-1", "actual"))),
+  );
+  assert.match(merged, /^\*\*Status:\*\* approved$/m);
+  assert.match(merged, /^\*\*Reviewed:\*\* 2026-09-29, tcs-rules r4$/m);
+});
+
+test("suite fold keeps a journey's added cases inside its rules", () => {
+  const merged = merge(
+    suiteOf(
+      group(1, caseBlock("site-search-US1-TC1-1"), "---"),
+      group(2, caseBlock("site-search-US2-TC1-1")),
+    ),
+    suiteOf(group(1, caseBlock("site-search-US1-TC2-1"))),
+  );
+  assert.match(
+    merged,
+    /Body of site-search-US1-TC1-1\.\n\n### site-search-US1-TC2-1[\s\S]*Body of site-search-US1-TC2-1\.\n\n---\n\n## site-search-US2/,
+  );
+});
 
 test("suite fold renders the delta's Background before the first journey", () => {
   const merged = merge(
