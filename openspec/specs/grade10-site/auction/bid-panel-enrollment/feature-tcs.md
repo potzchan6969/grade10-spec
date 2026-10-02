@@ -901,11 +901,13 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-c7l rev=1 covers=g10.auction-bid-panel-enrollment.SC-xwd -->
 ### grade10-site-auction-bid-panel-enrollment-US5-TC1-1: Card on file carries over to a new listing
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
@@ -916,14 +918,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, no bid on <listing_6>) is on <listing_6 url>.
-* The card on file was linked by completing setup on an earlier listing.
+* customer(signed in, card linked on <the earlier listing>, no bid on <listing_6>) is on <listing_6 url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | <listing_6> | A new open listing this collector has not bid on; the card was linked on an earlier listing |
+
+| `<the earlier listing>` | What this collector did there | Change on <listing_6> |
+| --- | --- | --- |
+| Another open listing | Linked the card through setup, placed no bid | Offered |
+| Another open listing | Linked the card through setup, then placed an accepted bid, so Change is no longer offered there | Offered |
 
 **Steps:**
 
