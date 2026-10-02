@@ -1,6 +1,7 @@
 # grade10-site/vault/case-lifecycle Test Cases
 
-**Status:** pending-review
+**Status:** in-review
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-vault-case-lifecycle-US1: Collector calls off a request before the item is in the vault
 
@@ -38,6 +39,115 @@ it.
 **Expected Results:**
 
 * Cancel this request is not offered anywhere on the page.
+
+---
+
+### grade10-site-vault-case-lifecycle-US1-TC5-1: The collector calls off their own request as an act on the case
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's request before the item is in the vault, holding a live offer and a booked visit.
+* `<collector email>` is the collector's mailbox, which the tester reads.
+
+**Steps:**
+
+1. Call off `<case_1>` as an act on the collector's own case.
+2. Ask for the collector's own read of `<case_1>`.
+3. Read `<collector email>`'s inbox.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads `<case_1>` cancelled, called off by the collector.
+* Step 2 reads the offer closed and the visit cancelled.
+* Step 3 holds a letter saying the request was called off.
+
+---
+
+### grade10-site-vault-case-lifecycle-US1-TC6-1: Calling off is refused once the item is in the vault
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's case, standing as the row says.
+
+**Test data:**
+
+| `<case_1>` stands | Lane |
+| --- | --- |
+| The item is in the vault | Storage |
+| The item is in the vault and the loan is live | Financed |
+
+**Steps:**
+
+1. Call off `<case_1>` as an act on the collector's own case.
+2. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name.
+* Step 2 still reads `<case_1>` as the row's state.
+
+---
+
+### grade10-site-vault-case-lifecycle-US1-TC7-1: Another collector cannot call off the case
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer A holds `<case_1>`, a request before the item is in the vault.
+* customer B holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+
+**Steps:**
+
+1. As customer B, call off `<case_1>`.
+2. As customer A, ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is refused, and the response carries none of `<case_1>`'s facts.
+* Step 2 reads `<case_1>` as it stood before step 1.
 
 ---
 
@@ -236,6 +346,49 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The ownership chip reads Collected, with the release date.
+
+---
+
+### grade10-site-vault-case-lifecycle-US4-TC6-1: The collector's own read of an ended case says why it ended
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's case, ended as the row says.
+
+**Test data:**
+
+| Ending | How it ended | The read carries |
+| --- | --- | --- |
+| Declined | Staff declined it under valuation, giving `<staff reason>` | `<staff reason>`, word for word |
+| Cancelled | Staff called it off before the item was in the vault | That staff called it off, and when |
+| Expired | No visit was booked before its clock ran out | Which clock ran out |
+| Forfeited | Staff forfeited it after a notice's date to pay by passed | The figure the item settled, the day the notice was written and its date to pay by |
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_1>`.
+2. Read the API response.
+
+**Expected Results:**
+
+* Step 2 reads `<case_1>` ended as the row's ending.
+* Step 2 carries what the row's read carries.
 
 ---
 
@@ -583,3 +736,157 @@ Runs once per row of **Test data**.
 
 * Both read the ownership chip With us.
 * Both name the same day the item has been held since.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC15-1: The collector asks for the item back as an act on their own case
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's case on the storage lane; the item is in the vault and nothing is owed.
+
+**Steps:**
+
+1. Ask for the item back on `<case_1>` as an act on the collector's own case.
+2. Ask for the collector's own read of `<case_1>`.
+3. Ask for the item back on `<case_1>` again.
+4. Ask for the collector's own read of `<case_1>` again.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads that the item was asked back, with the one thing to do next.
+* Step 2 still reads the item in the vault.
+* Step 4 reads one ask, not two.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC16-1: Asking for the item back is refused where it is not the collector's to ask
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer A holds `<case_1>`, standing as the row says.
+* The row's asker holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+
+**Test data:**
+
+| `<case_1>` stands | Asker | Step 1 |
+| --- | --- | --- |
+| The item is in the vault | customer B | Refused; the response carries none of `<case_1>`'s facts |
+| A request sent, the item not yet in the vault | customer A | Refused by name |
+
+**Steps:**
+
+1. As the row's asker, ask for the item back on `<case_1>`.
+2. As customer A, ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is answered as the row says.
+* Step 2 reads no ask for the item back.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC17-1: The collector's own read names the fact the case meets and keeps its status
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's case, meeting the row's fact.
+
+**Test data:**
+
+| Fact | How `<case_1>` meets it |
+| --- | --- |
+| The offer ran out | Its live offer passed its own expiry with no answer |
+| The offer was declined | The collector declined its live offer |
+| The offer was replaced | Staff wrote a counter-offer over its live offer |
+| The visit was missed | Its item is in the vault, and its visit was closed as missed |
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_1>`.
+2. Read the API response.
+
+**Expected Results:**
+
+* Step 2 names the row's fact, with the one thing to do next.
+* Step 2 reads `<case_1>` at the status it held before the fact.
+* Step 2 does not read `<case_1>` as ended.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC18-1: A case is read only by the collector who holds it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer A holds `<case_1>`, a sent request.
+* customer B holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<unissued id>` is a case id the vault never issued.
+
+**Steps:**
+
+1. As customer B, ask for a read of `<case_1>` by its id.
+2. As customer B, ask for a read of `<unissued id>`.
+
+**Expected Results:**
+
+* Step 1 is refused, and the response carries none of `<case_1>`'s facts.
+* Step 1's refusal matches step 2's; nothing tells the two apart.

@@ -17,6 +17,12 @@ it,
 **so that** I learn the page is not there instead of waiting on one that will
 never render.
 
+### grade10-site-site-carried-surfaces-US-07: Collector signed in on the public site opens the account menu
+
+**As a** signed-in collector,
+**I want** the account menu to name only the pages the site can open for me,
+**so that** no item in it takes me to a page the site refuses.
+
 ### grade10-site-site-carried-surfaces-US-08: Collector uses a product on the lane it is open on
 
 **As a** collector,

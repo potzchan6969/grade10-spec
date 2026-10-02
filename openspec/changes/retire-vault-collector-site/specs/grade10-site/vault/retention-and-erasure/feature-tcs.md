@@ -1,6 +1,7 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review
+**Status:** in-review
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-vault-retention-and-erasure-US1: Collector asks to be forgotten and the vault answers for its own data
 
@@ -132,6 +133,49 @@ Runs once per row of **Test data**.
   reason.
 * Cancel the request remains the only offered action; nothing shows the
   closed case as having cleared the hold.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US1-TC8-1: Filing the ask while a case is in flight is refused by name
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector has filed no ask to be forgotten.
+* The collector's vault cases stand as the row says.
+
+**Test data:**
+
+| The collector's cases | Case in flight |
+| --- | --- |
+| `<case_1>`, its item in the vault | `<case_1>` |
+| `<case_1>`, its loan running | `<case_1>` |
+| `<case_1>` released; `<case_2>`, its item in the vault | `<case_2>` |
+
+**Steps:**
+
+1. File the ask to be forgotten under the collector's own account.
+2. Ask for the collector's own read under their account.
+
+**Expected Results:**
+
+* Step 1 is refused by name, naming the row's case in flight.
+* Step 2 reads no ask filed.
 
 ---
 
@@ -713,3 +757,239 @@ stands, and where I ask to be forgotten,
 
 * No cancel is offered.
 * The page says each product erases what it holds.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US5-TC19-1: The collector's own read under the account names what is kept, the standing, the documents and the ask
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector's identity check is verified until `<verified until>`.
+* The collector holds sealed documents on two released cases, `<case_1>` and `<case_2>`, and no case in flight.
+* The collector has filed no ask to be forgotten.
+
+**Test data:**
+
+| Class | Window |
+| --- | --- |
+| Agreements | 2,555 days |
+| Identity records | 1,825 days |
+| Item photographs | 2,555 days |
+| Case records | 2,555 days |
+
+**Steps:**
+
+1. Ask for the collector's own read under their account.
+2. Read the API response.
+
+**Expected Results:**
+
+* Step 2 names each class in **Test data** with its window, read as days after the case ends.
+* Step 2 reads the identity verified until `<verified until>`, and how it was checked.
+* Step 2 lists every sealed document under its case, and offers the one download over them.
+* Step 2 reads no ask filed, and that one may be filed.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US5-TC20-1: The standing in the read never carries the name or the document
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector's identity record stands as the row says.
+
+**Test data:**
+
+| Identity record | Standing read |
+| --- | --- |
+| A check verified until `<verified until>` | Verified until `<verified until>`, and how it was checked |
+| Never asked for | No identity on file |
+| A check submitted on `<day>`, undecided | A check is out since `<day>` |
+| A check started on `<day>`, undecided long enough to stand as stalled | A check is out since `<day>` |
+| The last check expired on `<day>` | The last check expired on `<day>` |
+| The last check decided not accepted on `<day>` | The last check was not accepted on `<day>` |
+
+**Steps:**
+
+1. Ask for the collector's own read under their account.
+2. Read the identity standing in the API response.
+
+**Expected Results:**
+
+* Step 2 reads the row's standing.
+* The response carries no legal name, date of birth, document type, document number or photograph.
+* The response names no reason and no stage of a check.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US5-TC21-1: The read under the account is refused without a session
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* The tester holds no session on <grade10 site url>.
+
+**Steps:**
+
+1. Ask for the collector's own read under an account, with no session.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* The response names no class, standing, document or ask.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US5-TC22-1: The collector files the ask under their account and the read names its days
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector has filed no ask, and no case of theirs is in flight.
+* The clock reads `<filing day>` on the brand's zone.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<filing day>` | 2 October, Asia/Hong_Kong |
+| `<may run>` | 00:00 on 9 October, Asia/Hong_Kong: the first instant of the seventh day after `<filing day>` |
+
+**Steps:**
+
+1. File the ask to be forgotten under the collector's own account.
+2. Ask for the collector's own read under their account.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads the ask filed on `<filing day>`.
+* Step 2 reads that an erasure may run from `<may run>`, and that the ask may be cancelled before then.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US5-TC23-1: The collector cancels the ask inside the window
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector filed the ask to be forgotten, and the clock reads before the instant an erasure may run.
+
+**Steps:**
+
+1. Cancel the ask under the collector's own account.
+2. Ask for the collector's own read under their account.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads no ask filed, and that one may be filed.
+
+---
+
+### grade10-site-vault-retention-and-erasure-US5-TC24-1: A cancel at the limit of the window
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector filed the ask on 2 October, Asia/Hong_Kong; an erasure may run from 00:00 on 9 October, Asia/Hong_Kong.
+* The clock reads the row's time.
+
+**Test data:**
+
+| Clock | Step 1 |
+| --- | --- |
+| 23:59 on 8 October, Asia/Hong_Kong | Accepted |
+| 00:00 on 9 October, Asia/Hong_Kong | Refused by name |
+
+**Steps:**
+
+1. Cancel the ask under the collector's own account.
+2. Ask for the collector's own read under their account.
+
+**Expected Results:**
+
+* Step 1 is answered as the row says.
+* Step 2 reads the ask still filed wherever step 1 was refused.

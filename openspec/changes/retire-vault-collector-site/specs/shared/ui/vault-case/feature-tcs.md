@@ -1,6 +1,7 @@
 # shared/ui/vault-case Test Cases
 
-**Status:** pending-review
+**Status:** in-review
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## shared-ui-vault-case-US1: The vault collector's blocks
 
@@ -911,3 +912,36 @@ Runs once per row of **Test data**.
 
 * The card reads <title>, the two chips, the facts ending in <reference>, the next step, the calendar line, then <note>, in that order.
 * The control is named <title> and described by <reference>.
+
+---
+
+### shared-ui-vault-case-US1-TC37-1: The package entry exports no vault collector block
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The export contract
+
+**Pre-conditions:**
+
+* The store's `packages/ui/src/index.ts` is open.
+
+**Steps:**
+
+1. Search the exports for `VaultCases`, `VaultCasesEmpty` and `VaultAcceptOfferDialog`.
+2. Search the exports for `VaultCasesCard`, `VaultCasesEmptyStep`, and any `Props` or `Copy` type of the three.
+3. Find `BookingConfirmation` and `BookingManageCard`.
+
+**Expected Results:**
+
+* Step 1 finds none of the three.
+* Step 2 finds none of those types.
+* Step 3 finds both booking cards exported from the package entry.

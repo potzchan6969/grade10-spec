@@ -1,6 +1,7 @@
 # grade10-site/vault/loan-and-settlement Test Cases
 
-**Status:** pending-review
+**Status:** in-review
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-vault-loan-and-settlement-US2: Borrower repays and takes the item home
 
@@ -45,6 +46,40 @@ money I have already returned.
 * Both reads show the same figure: 10,300,000 (HKD) — the whole term's
   interest owed in full from day one
 * The figure is principal plus interest exactly, half-up rounded
+
+---
+
+### grade10-site-vault-loan-and-settlement-US2-TC11-1: The borrower's read gives one figure owed across two reads
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
+* The clock reads 20 September, and no money is recorded between the two reads.
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+2. Ask for the borrower's own read of `<case_1>` again.
+
+**Expected Results:**
+
+* Step 1 reads 10,300,000 HKD minor units outstanding: the principal plus the whole term's interest.
+* Step 1 names the due date, 1 October, and the instant it computed the figure at.
+* Step 2 reads the same figure owed and the same due date.
 
 ---
 
@@ -507,3 +542,160 @@ after it, and the final notice with its date to pay by,
 * The card names the next weekly reminder by its date
 * The card says a written notice naming a date to pay by may follow, and
   names no day for it
+
+---
+
+### grade10-site-vault-loan-and-settlement-US6-TC10-1: The borrower's read lists each repayment with its value date, method and balance after
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
+* The repayments in the row are recorded on `<case_1>`, and the clock reads 25 September.
+
+**Test data:**
+
+| Repayments recorded | The read lists |
+| --- | --- |
+| None | No repayment; 10,300,000 outstanding |
+| 3,000,000 by FPS, value-dated 10 September | That repayment, 10 September, FPS, balance after 7,300,000 |
+| 3,000,000 by FPS, value-dated 10 September; 2,000,000 in cash at the counter, value-dated 20 September | Both: 10 September, FPS, 7,300,000; then 20 September, cash, 5,300,000 |
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+2. Read the repayments in the API response.
+
+**Expected Results:**
+
+* Step 2 lists what the row's read lists, in value-date order.
+* Each balance after equals 10,300,000 less every repayment value-dated on or before it.
+
+---
+
+### grade10-site-vault-loan-and-settlement-US6-TC11-1: A repayment taken back leaves the borrower's read as if never recorded
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
+* 3,000,000 by FPS value-dated 10 September and 2,000,000 in cash value-dated 20 September are recorded on `<case_1>`.
+* A second money holder, not its recorder, took the 10 September repayment back.
+* The clock reads 25 September.
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+2. Read the repayments in the API response.
+
+**Expected Results:**
+
+* Step 2 lists the 20 September repayment alone.
+* Its balance after reads 8,300,000: 10,300,000 less 2,000,000.
+* Outstanding reads 8,300,000.
+
+---
+
+### grade10-site-vault-loan-and-settlement-US6-TC12-1: Before a notice, the borrower's read carries the reminder dates
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
+* No forfeiture notice has been sent on `<case_1>`, and the clock reads the row's day.
+
+**Test data:**
+
+| Day of the read | The read carries |
+| --- | --- |
+| 20 September | Reminders to come on 24 September and 30 September |
+| 10 October | Reminders sent 24 September, 30 September and 8 October; the next on 15 October; a written notice may follow |
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+2. Read the reminders in the API response.
+
+**Expected Results:**
+
+* Step 2 carries what the row's read carries.
+* Reminders fall 7 days and 1 day before the due date, then every 7 days overdue.
+
+---
+
+### grade10-site-vault-loan-and-settlement-US6-TC13-1: Once a notice is sent, the borrower's read carries its dates and no reminder to come
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
+* Staff sent the forfeiture notice on `<case_1>` on 10 October; the brand's notice period is 14 days.
+* The clock reads 12 October.
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+2. Read the notice and the reminders in the API response.
+
+**Expected Results:**
+
+* Step 2 reads the notice written on 10 October.
+* Step 2 reads the date to pay by: 24 October, the notice day plus 14 days.
+* Step 2 reads that nothing can be taken before 24 October.
+* Step 2 carries no reminder to come.

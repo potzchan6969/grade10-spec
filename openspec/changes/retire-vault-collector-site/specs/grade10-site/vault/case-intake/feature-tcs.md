@@ -1,6 +1,7 @@
 # grade10-site/vault/case-intake Test Cases
 
-**Status:** pending-review
+**Status:** in-review
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-vault-case-intake-US1: Collector sends in a card they want cash against
 
@@ -476,6 +477,199 @@ have read the collection statement,
 
 ---
 
+### grade10-site-vault-case-intake-US4-TC8-1: A draft reads back whole, and each fact changes until the send
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's unsent draft, financed, carrying the facts and the two photographs in **Test data**.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<category>` | One of the register's ten categories |
+| `<title>` | Charizard 1st Edition |
+| `<description>` | Any text of 2,000 characters or fewer |
+| `<contact number>` | +852 9123 4567, read back in its one stored form |
+| `<amount>` | 500000 HKD minor units |
+| `<photo_1>`, `<photo_2>` | Two JPEG photographs, each 20 MB or less |
+| `<new title>` | Charizard 1st Edition PSA 9 |
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_1>`.
+2. Read the API response.
+3. Change the title of `<case_1>` to `<new title>`.
+4. Ask for the collector's own read of `<case_1>` again.
+
+**Expected Results:**
+
+* Step 2 returns `<category>`, `<title>`, `<description>`, `<contact number>` and `<amount>`, and both `<photo_1>` and `<photo_2>`.
+* Step 3 is accepted.
+* Step 4 returns `<new title>`; every other fact and both photographs are unchanged.
+* `<case_1>` is still a draft.
+
+---
+
+### grade10-site-vault-case-intake-US4-TC9-1: The send carries the collector's word on the statement and keeps its version
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's unsent draft, its item facts and one photograph complete.
+* The collection statement stands at `<statement version>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<statement version>` | The version the vault offers at the send; outside production with no wording set, the unwritten version |
+
+**Steps:**
+
+1. Ask for the collection statement the vault offers at the send.
+2. Send `<case_1>`, giving the collector's word that they read `<statement version>`.
+3. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 names `<statement version>`.
+* Step 2 is accepted.
+* Step 3 reads `<case_1>` as submitted, and the send keeps `<statement version>`.
+
+---
+
+### grade10-site-vault-case-intake-US4-TC10-1: A send without the collector's word on the statement is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's unsent draft, its item facts and one photograph complete.
+
+**Steps:**
+
+1. Send `<case_1>` without the collector's word on the collection statement.
+2. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name.
+* Step 2 still reads `<case_1>` as a draft.
+
+---
+
+### grade10-site-vault-case-intake-US4-TC11-1: A request already sent takes no change to its facts
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_2>` is a request the collector sent, titled `<title>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<title>` | Charizard 1st Edition |
+| `<new title>` | Charizard 1st Edition PSA 9 |
+
+**Steps:**
+
+1. Change the title of `<case_2>` to `<new title>`.
+2. Ask for the collector's own read of `<case_2>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name.
+* Step 2 still returns `<title>`.
+
+---
+
+### grade10-site-vault-case-intake-US4-TC12-1: A send is refused in production while the statement wording is unset
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The environment is production, and Legal's collection statement wording is unset.
+* `<case_1>` is the collector's unsent draft, its item facts and one photograph complete.
+
+**Steps:**
+
+1. Send `<case_1>`, giving the collector's word on the collection statement.
+2. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name.
+* Step 2 still reads `<case_1>` as a draft.
+
+---
+
 ## grade10-site-vault-case-intake-US5: Collector gets a reference they can say and type
 
 **As a** collector,
@@ -601,3 +795,195 @@ reference at my bank.
 **Expected Results:**
 
 * The case opens at its own address instead of starting a visit booking.
+
+---
+
+### grade10-site-vault-case-intake-US5-TC9-1: One reference on the collector's read, the letter and the counter's search
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is a request the collector sent; at least one letter about it has reached `<collector email>`, a mailbox the tester reads.
+* admin(staff, holds vault:read) is on <grade10 admin vault queue url>.
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_1>`.
+2. Read the reference in the API response.
+3. Open the latest letter about `<case_1>` in `<collector email>`.
+4. As staff, search the queue by that reference.
+
+**Expected Results:**
+
+* Step 2 reads six characters, drawn only from digits and capitals without 0, O, 1, I and L.
+* The API response still keys `<case_1>` by its id.
+* Step 3's letter carries the same reference.
+* Step 4 finds `<case_1>`.
+
+---
+
+## grade10-site-vault-case-intake-US6: Collector sends a request staff opened for them at the counter
+
+**As a** collector whose request staff opened at the counter,
+**I want** to sign in on my own phone, read the request and the photos back,
+and tick that I have read the collection statement before I send it,
+**so that** nothing happens to my item on a request I have not seen, and a
+request typed under the wrong address is never emailed.
+
+### grade10-site-vault-case-intake-US6-TC8-1: A draft staff opened is among the collector's cases and changes like their own
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-06
+
+**Pre-conditions:**
+
+* Staff opened walk-in draft `<case_1>` for `<walk-in email>`, financed, with staff's photographs `<photo_a>` and `<photo_b>`.
+* customer(collector) holds a session on `<walk-in email>`'s account on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector holds `<photo_c>`, a JPEG photograph of their own, 20 MB or less.
+
+**Steps:**
+
+1. Ask for the collector's own cases.
+2. Change the description of `<case_1>`.
+3. Remove `<photo_a>` from `<case_1>`.
+4. Add `<photo_c>` to `<case_1>`.
+5. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 lists `<case_1>` as a draft, marked as opened at the counter.
+* Steps 2, 3 and 4 are accepted.
+* Step 5 returns the new description, `<photo_b>` and `<photo_c>`, and not `<photo_a>`.
+* `<case_1>` is still a draft opened at the counter.
+
+---
+
+### grade10-site-vault-case-intake-US6-TC9-1: The collector sends a draft staff opened as their own act
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-06
+
+**Pre-conditions:**
+
+* Staff opened walk-in draft `<case_1>` for `<walk-in email>`, with one of staff's photographs.
+* customer(collector) holds a session on `<walk-in email>`'s account on <grade10 site url> and acts through the vault's API, with no site page.
+* The collection statement stands at `<statement version>`.
+* admin(staff, holds vault:read) is on <grade10 admin vault queue url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<statement version>` | The version the vault offers at the send; outside production with no wording set, the unwritten version |
+
+**Steps:**
+
+1. Send `<case_1>`, giving the collector's word that they read `<statement version>`.
+2. Ask for the collector's own read of `<case_1>`.
+3. As staff, open the queue's Needs staff view.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads `<case_1>` as submitted, and the send keeps `<statement version>`.
+* Step 3 lists `<case_1>`; it has left the Drafts view.
+
+---
+
+### grade10-site-vault-case-intake-US6-TC10-1: The statement shown at the counter does not stand for the collector's word
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-06
+
+**Pre-conditions:**
+
+* Staff opened walk-in draft `<case_1>` for `<walk-in email>`, with one of staff's photographs; its open kept the statement shown at the counter.
+* customer(collector) holds a session on `<walk-in email>`'s account on <grade10 site url> and acts through the vault's API, with no site page.
+
+**Steps:**
+
+1. Send `<case_1>` without the collector's word on the collection statement.
+2. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name.
+* Step 2 still reads `<case_1>` as a draft opened at the counter.
+
+---
+
+### grade10-site-vault-case-intake-US6-TC11-1: A draft staff opened is in no other collector's read
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-06
+
+**Pre-conditions:**
+
+* Staff opened walk-in draft `<case_1>` under `<walk-in email>`'s account, with two of staff's photographs.
+* customer(collector) holds a session on another account on <grade10 site url> and acts through the vault's API, with no site page.
+* The tester holds `<photo_1 address>`, the address `<case_1>`'s staff case page loads its first photograph from.
+
+**Steps:**
+
+1. Ask for the collector's own cases.
+2. Ask for the collector's own read of `<case_1>` by its id.
+3. Open `<photo_1 address>` under the same session.
+
+**Expected Results:**
+
+* Step 1 does not list `<case_1>`.
+* Step 2 is refused, and the response carries none of `<case_1>`'s facts.
+* Step 3 is refused; the photograph is not served.
