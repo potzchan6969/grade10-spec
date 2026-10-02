@@ -508,3 +508,59 @@ test("refuses a case whose trace marker rev differs from its <v>, and passes one
   );
   assert.doesNotMatch(out, /case `demo-alpha-US1-TC2-2` is at/);
 });
+
+test("a retired journey holds only deprecated cases, which may still trace it", () => {
+  const base = "openspec/specs/demo/alpha";
+  const retiredCase = (status) =>
+    CASE(1)
+      .replace("demo-alpha-US1-TC1-1", "demo-alpha-US2-TC1-1")
+      .replace("**Status:** draft", `**Status:** ${status}`)
+      .replace("**Trace:** demo-alpha-US-01", "**Trace:** demo-alpha-US-02");
+  const suite = (status) =>
+    [
+      "# demo/alpha Test Cases",
+      "",
+      "**Status:** in-review",
+      "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      "**As a** collector,",
+      "**I want** the thing,",
+      "**so that** it is done.",
+      "",
+      CASE(1),
+      "## demo-alpha-US2: Collector waits for the old thing",
+      "",
+      "**As a** collector,",
+      "**I want** the old thing,",
+      "**so that** it was done.",
+      "",
+      retiredCase(status),
+    ].join("\n");
+  const files = specFiles(base);
+  files[`${base}/user-journeys.md`] +=
+    "\n## Retired\n\n- `demo-alpha-US-02` - Retired by demo.\n";
+  const at = (status) => {
+    const root = mkdtempSync(join(tmpdir(), "retired-journey-"));
+    for (const [name, content] of Object.entries({
+      ...files,
+      [`${base}/feature-tcs.md`]: suite(status),
+    })) {
+      const file = join(root, name);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, content);
+    }
+    return run(root).stdout;
+  };
+
+  const deprecated = at("deprecated");
+  assert.doesNotMatch(deprecated, /demo-alpha-US-02/);
+
+  const live = at("draft");
+  assert.match(
+    live,
+    /journey `demo-alpha-US-02` is retired, so every case under it is deprecated/,
+  );
+  assert.match(live, /traces `demo-alpha-US-02`, which is neither a journey/);
+});
