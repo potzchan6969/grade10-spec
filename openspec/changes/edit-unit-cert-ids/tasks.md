@@ -31,7 +31,7 @@ Needs group 2's migration and contracts landed.
 - [ ] 4.4 Add `inventory.assignCertId` as an `inventory:write` elevated procedure audited against the product (`grade10-admin-inventory-catalog-SC-164`)
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 5. Unit history and available regular stock (grade10)
+## 5. Unit history and available regular stock (grade10) (owner: @mason5991)
 
 Needs group 2's contracts landed.
 
