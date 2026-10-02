@@ -67,7 +67,10 @@
       },
       {
         "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
-        "anchors": ["Feature set", "Requirement: Two-maximum rule"]
+        "anchors": [
+          "Feature set",
+          "Requirement: Two-maximum rule"
+        ]
       },
       {
         "path": "openspec/specs/grade10-site/auction/auto-bidding/user-journeys.md",
@@ -146,7 +149,9 @@
       },
       {
         "path": "openspec/specs/grade10-site/auction/auction/spec.md",
-        "anchors": ["Requirement: Catalogue cards follow each lot live"],
+        "anchors": [
+          "Requirement: Catalogue cards follow each lot live"
+        ],
         "classification": "semantic",
         "reason": "The bid count shows on the catalogue card only; the Featured slide shows none, as the owner decided on 2026-10-02",
         "evidence": [
@@ -162,7 +167,9 @@
       },
       {
         "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
-        "anchors": ["Requirement: Two-maximum rule"],
+        "anchors": [
+          "Requirement: Two-maximum rule"
+        ],
         "classification": "semantic",
         "reason": "SC-16 reads 51000, not 54000: below HK$800 the HKD step is 1000 minor units, so A's maximum of 50000 plus one step is 51000",
         "evidence": [
@@ -207,5 +214,15 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "70a391e50ad4cbd95e37e085c4ee26d87798c139",
+      "components": [
+        "admin",
+        "auction-service",
+        "web"
+      ]
+    }
+  ]
 }
