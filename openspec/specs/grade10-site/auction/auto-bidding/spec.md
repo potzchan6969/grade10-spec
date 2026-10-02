@@ -233,8 +233,8 @@ intermediate increments.
 
 - **GIVEN** an HKD listing with a starting price of 20000 minor units and A's maximum of 50000 minor units
 - **WHEN** B commits a maximum of 80000 minor units
-- **THEN** B leads at 54000 minor units
-- **AND** Grade10 has not accepted intermediate bids between 20000 and 54000
+- **THEN** B leads at 51000 minor units
+- **AND** Grade10 has not accepted intermediate bids between 20000 and 51000
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-edj rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-10 - A challenger raises again, still below
