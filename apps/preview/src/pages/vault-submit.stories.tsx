@@ -1,9 +1,9 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
@@ -217,7 +217,9 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Submit to Vault" }),
     ).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Add another slab" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Add another slab" }),
+    ).toBeVisible();
     expect(canvas.getByText("Ship to us")).toBeVisible();
   },
 };

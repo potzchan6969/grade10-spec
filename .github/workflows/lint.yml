@@ -153,3 +153,33 @@ jobs:
       - name: Validate durable specs
         if: ${{ !cancelled() }}
         run: openspec validate --specs
+
+  # Main takes direct pushes and its ruleset requires no checks, so a red gate
+  # here stops nothing: this says so in the channel the lint-fix post uses.
+  notify-main-red:
+    needs: [biome, openspec]
+    if: failure() && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions: {}
+
+    steps:
+      - name: Notify Slack that Lint failed on main
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ env.SLACK_NOTI_CHANNEL }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "mrkdwn_in": ["text"],
+                  "color": "#d73a49",
+                  "fallback": "Lint failed on main.",
+                  "pretext": ":x: Lint failed on main",
+                  "text": "Head: *`${{ github.sha }}`*\nbiome: ${{ needs.biome.result }}, openspec: ${{ needs.openspec.result }}",
+                  "footer": "${{ env.SLACK_NOTI_FOOTER }}",
+                  "footer_icon": "${{ env.SLACK_NOTI_FOOTER_ICON }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

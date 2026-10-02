@@ -2,7 +2,8 @@
 
 **Status:** reopened
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
-**Drafts styled:** 2026-10-01, tcs-rules r4
+**Drafts styled:** 2026-10-02, tcs-rules r4
+**Out of suite:** `grade10-site-auction-watchlist-SC-04` — signed-out watch from catalogue cards
 
 ## grade10-site-auction-auction-US1: Collector browses Auction listings
 
@@ -48,20 +49,20 @@
 
 ---
 
-## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
+## grade10-site-auction-auction-US2: Collector places a bid inside the window
 
 **As a** bidder,
 **I want** a lot I bid on by its close to stay open until bidding stops,
 **so that** a bid placed at the last second can always be answered, up to the lot's cap.
 
-<!-- trace:case id=g10.auction-auction.TC-b19 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### grade10-site-auction-auction-US2-TC5-1: The default bid path creates no authorization hold
+<!-- trace:case id=g10.auction-auction.TC-b19 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
+### grade10-site-auction-auction-US2-TC5-2: A bid stands when accepted, with nothing held on the card
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -72,17 +73,27 @@
 
 **Pre-conditions:**
 
-* Bid-time authorization holds are disabled.
-* A collector is signed in on an open listing with a valid linked card.
+* customer(card linked, no bid on `<listing_25>`) is signed in.
+* `<listing_25>` is open inside its window.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_25>` | An open HKD listing taking bids, current bid `<current bid>` |
+| `<current bid>` | 480000 minor units (HKD 4,800.00) |
+| `<bid amount>` | 505000 minor units (HKD 5,050.00), at or above the minimum next bid |
 
 **Steps:**
 
-1. Submit a valid bid on the open listing.
-2. Read the bid result.
+1. Submit `<bid amount>` on `<listing_25>`.
+2. Read the API response.
+3. Read the linked card's activity at the card provider.
 
 **Expected Results:**
 
-* Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe.
+* Step 2 accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider.
+* Step 3 shows nothing held or charged on the card for `<listing_25>`.
 
 <!-- trace:case id=g10.auction-auction.TC-rj4 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC10-1: Bid during extended bidding restarts the timer
@@ -454,7 +465,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time authorization holds are disabled.
 * `<listing_21>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
 * customer(card linked, no bid on `<listing_21>`) is signed in and on `<listing_21>`.
 
@@ -501,7 +511,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time authorization holds are disabled.
 * `<listing_22>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
 * customer(card linked, no bid on `<listing_22>`) is signed in.
 
@@ -610,6 +619,48 @@ Runs once per row of **Test data**.
 * The minimum next bid reads `<start>` plus `<tier increment>` = `<first-bid minimum>`.
 * It never reads `<start>` itself, and never 0.
 
+### grade10-site-auction-auction-US2-TC19-1: Two bids at once are judged one after the other
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-02
+
+**Pre-conditions:**
+
+* `<listing_26>` is open inside its window, current bid `<current bid>`.
+* customer A(card linked) and customer B(card linked) are signed in on separate sessions, neither holding a bid on `<listing_26>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_26>` | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` |
+| `<current bid>` | 480000 minor units (HKD 4,800.00) |
+| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
+| `<bid A>` | 505000 minor units (HKD 5,050.00) |
+| `<bid B>` | 600000 minor units (HKD 6,000.00), above `<bid A>` |
+
+**Steps:**
+
+1. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_26>` at the same moment.
+2. Read both API responses.
+3. Read `<listing_26>` from the public listing API.
+
+**Expected Results:**
+
+* Each response is one answer: accepted with a standing, or refused.
+* customer B leads, and Highest bid reads `<bid A>` plus `<increment>`.
+* No lower bid overwrites that Highest bid, whichever response arrived first.
+
 ---
 
 ## grade10-site-auction-auction-US3: Collector's card hold is released when they are outbid
@@ -618,14 +669,14 @@ Runs once per row of **Test data**.
 **I want** one authorization per listing, released when I am outbid,
 **so that** a delayed lower hold or a duplicate Stripe event cannot take a second bite.
 
-<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC1-1: Outbid authorization is marked for release
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -658,14 +709,14 @@ Runs once per row of **Test data**.
 * Customer A no longer holds an eligible top authorization for `<listing_1>`.
 * Grade10 records the Stripe release outcome when it arrives.
 
-<!-- trace:case id=g10.auction-auction.TC-g81 rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-g81 rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC2-1: Concurrent bids keep the highest valid outcome
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -696,14 +747,14 @@ Runs once per row of **Test data**.
 * The current bid is the highest valid accepted amount.
 * No lower bid overwrites that current bid.
 
-<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC3-1: Delayed lower authorization cannot land
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -728,14 +779,14 @@ Runs once per row of **Test data**.
 * It does not record that lower bid as accepted.
 * The current bid is unchanged.
 
-<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC4-1: Invalid or duplicate Stripe event changes nothing twice
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -767,14 +818,14 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * No bid, hold, release, capture, invoice or order state is duplicated.
 
-<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC5-1: Incomplete Stripe configuration fails the operation explicitly
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -797,14 +848,14 @@ Runs once per row of **Test data**.
 * Grade10 fails the operation, naming the unavailable capability.
 * No bid or fixture-backed outcome is created.
 
-<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC6-1: Missed authorization webhook is repaired once
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -835,16 +886,16 @@ Runs once per row of **Test data**.
 
 **As a** collector bidding the bar or more on a lot,
 **I want** to be told at once that a verified identity is needed and where to get one,
-**so that** my card is not held for a bid the auction cannot take, and I can verify and bid again before the lot closes.
+**so that** the auction records nothing for a bid it cannot take, and I can verify and bid again before the lot closes.
 
-<!-- trace:case id=g10.auction-auction.TC-zsd rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
-### grade10-site-auction-auction-US4-TC1-1: Verified bidder's bid at the bar is forwarded as any other
+<!-- trace:case id=g10.auction-auction.TC-zsd rev=2 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
+### grade10-site-auction-auction-US4-TC1-2: Verified bidder's bid at the bar is forwarded as any other
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -872,14 +923,16 @@ Runs once per row of **Test data**.
 
 1. Enter `<bid at the bar>` in the bid field and select **Place Bid**.
 2. Read Highest bid and the bid count.
+3. Read `<card>`'s activity at the card provider.
 
 **Expected Results:**
 
-* The bid is forwarded and accepted as any other — no refusal names a verified identity.
-* Highest bid reads `<bid at the bar>`, and one hold for it stands against `<card>`.
+* The bid is forwarded and accepted as any other - no refusal names a verified identity.
+* Highest bid reads `<bid at the bar>`, and the bid count rises by one.
+* Step 3 shows nothing held or charged on `<card>`.
 
-<!-- trace:case id=g10.auction-auction.TC-5gi rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
-### grade10-site-auction-auction-US4-TC2-1: Bidder without a verified standing is held at the storefront at and above the bar
+<!-- trace:case id=g10.auction-auction.TC-5gi rev=2 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
+### grade10-site-auction-auction-US4-TC2-2: Bidder without a verified standing is held at the storefront at and above the bar
 
 Runs once per row of **Test data**.
 
@@ -887,7 +940,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -898,29 +951,38 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_12>`.
+* The user is signed in with `<card>` saved on an account whose standing is the one the row names, holds no bid on `<listing_12>`, and is on `<listing_12>`.
 * `<listing_12>` is live, inside its window, and its minimum next bid is `<bar>`.
 
 **Test data:**
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded, no hold taken |
-| `unverified` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded, no hold taken |
-| `expired` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded, no hold taken |
-| `expired` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded, no hold taken |
+| `unverified` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded |
+| `unverified` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded |
+| `expired` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded |
+| `expired` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded |
+
+| Field | Value |
+| --- | --- |
+| `<card>` | Visa ending 4242 |
+| `<bar>` | 12000000 minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
 
 **Steps:**
 
 1. Enter the bid amount the row names in the bid field and select **Place Bid**.
-2. Read the refusal.
+2. Read the refusal on the bid form.
 3. Reload `<listing_12>` and read Highest bid and the bid count.
+4. Navigate to `<my auctions url>` and look for `<listing_12>`.
+5. Navigate to `<grade10 bids url>` and look for `<listing_12>`.
 
 **Expected Results:**
 
-* The bid is refused as needing a verified identity, and the refusal says to verify from the account.
-* Highest bid and the bid count are unchanged — the auction records no bid.
-* No hold is taken against `<card>`.
+* The bid is refused as needing a verified identity, and the refusal says where to verify from the account.
+* Highest bid and the bid count are unchanged - the auction records no bid.
+* Step 4 shows no row for `<listing_12>`.
+* Step 5 shows no entry for `<listing_12>`.
 
 <!-- trace:case id=g10.auction-auction.TC-49i rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
 ### grade10-site-auction-auction-US4-TC3-1: Bid below the bar asks nothing of any bidder
@@ -969,10 +1031,8 @@ Runs once per row of **Test data**.
 ## grade10-site-auction-auction-US5: Collector reads the catalogue in one order
 
 **As a** collector,
-**I want** the catalogue to lead with the lots I can bid on, soonest to close
-first, and to keep that order as I read on,
-**so that** what I can still bid on is in front of me and reading further never
-shows me a lot twice or skips one.
+**I want** All auctions to lead with the lots I can bid on, soonest to close first, and to keep that order as I read on — below Featured when Featured is present, with no category section —,
+**so that** what I can still bid on is in front of me and reading further never shows me a lot twice or skips one.
 
 ### grade10-site-auction-auction-US5-TC1-1: Open lots lead the catalogue
 
@@ -1117,13 +1177,820 @@ shows me a lot twice or skips one.
 * No lot is listed twice.
 * No lot is missing.
 
+### grade10-site-auction-auction-US5-TC5-1: Empty Featured leaves All auctions only
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is able to open `<grade10 auction catalogue url>`.
+* No complete Featured slot is set.
+* At least one lot is visible in All auctions.
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the page sections.
+
+**Expected Results:**
+
+* No Featured band is present.
+* All auctions is shown with lots in the catalogue resting order.
+
+### grade10-site-auction-auction-US5-TC6-1: Catalogue shows no category chrome
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* Featured may be present or absent.
+
+**Steps:**
+
+1. Read the catalogue page for category chrome.
+
+**Expected Results:**
+
+* There is no Categories heading, no category tiles, and no busy filter chrome.
+* The only sections are Featured when set, then All auctions.
+
+### grade10-site-auction-auction-US5-TC7-1: Empty All auctions still shows Featured when slots are set
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is able to open `<grade10 auction catalogue url>`.
+* At least one complete Featured slot is set.
+* No lots are available for All auctions.
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the Featured band and the All auctions area.
+
+**Expected Results:**
+
+* Featured still shows the curated slide or slides.
+* All auctions shows a message that there are no auctions.
+
+### grade10-site-auction-auction-US5-TC8-1: Featured lots also appear in All auctions resting order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* At least one complete Featured slot is set for `<featured lot>`.
+* `<featured lot>` is among the lots a collector can see.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<featured lot>` | A published lot that fills a complete Featured slot |
+
+**Steps:**
+
+1. Read the Featured band for `<featured lot>`.
+2. Read All auctions for `<featured lot>` and the list order.
+
+**Expected Results:**
+
+* `<featured lot>` appears in Featured and again in All auctions.
+* All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible lot.
+
+### grade10-site-auction-auction-US5-TC9-1: Catalogue address stays indexable at /auction without category query
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is able to open `<grade10 auction catalogue url>`.
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the document canonical and share address.
+
+**Expected Results:**
+
+* Canonical and share address are `/auction` with no category query.
+
+### grade10-site-auction-auction-US5-TC10-1: More All auctions lots load on scroll
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* All auctions holds more lots than the first batch shows.
+
+**Steps:**
+
+1. Read the first batch of All auctions cards.
+2. Scroll near the end of the shown lots.
+3. Wait for the next batch.
+
+**Expected Results:**
+
+* Step 2 shows Boneyard skeleton cards below the lots already shown, or the next batch lands without pagination controls.
+* Step 3 shows additional lots below the first batch.
+* Lots from step 1 stay visible.
+* The combined list stays in the catalogue resting order.
+* No pagination controls appear.
+
+### grade10-site-auction-auction-US5-TC11-1: An Upcoming All auctions card shows no money
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* An Upcoming lot is among All auctions.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<upcoming lot>` | A published Upcoming lot on All auctions |
+
+**Steps:**
+
+1. Find `<upcoming lot>` on All auctions.
+2. Read its card for money and countdown.
+
+**Expected Results:**
+
+* The card shows no starting bid and no money amount.
+* The card shows Opens in from the served open.
+
+---
+
+## grade10-site-auction-auction-US6: Collector reads Featured on the catalogue
+
+**As a** collector opening `/auction`,
+**I want** the operator's Featured slides when any are set — front page image, title,
+status, countdown, current bid and Bid Now —,
+**so that** the lots the house leads with are what I meet first.
+
+### grade10-site-auction-auction-US6-TC01-1: One Featured slide shows front page image title status countdown bid and Bid Now
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-06
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* Exactly one complete Featured slot is set for a published Active lot with its front page image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<featured lot>` | A published Active lot bound to the only complete Featured slot |
+| `<front page image>` | The front page image uploaded for that slot |
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the Featured band and the single slide.
+
+**Expected Results:**
+
+* Featured band is present with one slide.
+* The slide shows `<front page image>` as banner and slab, the lot title, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now.
+
+### grade10-site-auction-auction-US6-TC02-1: Current bid rolls when the served amount increases
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-06
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured lot>` visible.
+* The served current bid for `<featured lot>` is `<bid before>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<featured lot>` | A published Active lot on a complete Featured slide |
+| `<bid before>` | The current bid amount shown on the slide |
+| `<bid after>` | A **higher** served current bid for the same lot after first paint |
+
+**Steps:**
+
+1. Read the current bid on the Featured slide after first paint.
+2. Let the served current bid for `<featured lot>` become `<bid after>`.
+3. Read the current bid on the Featured slide.
+
+**Expected Results:**
+
+* Step 1 shows `<bid before>`.
+* Step 3 shows `<bid after>` with a rolling number as the amount increases.
+
+### grade10-site-auction-auction-US6-TC03-1: Client countdown uses served close or open by lot status
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-06
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* One complete Featured slot is set for the row's lot.
+
+**Test data:**
+
+| Lot status | Served time | Countdown |
+| --- | --- | --- |
+| Active | Served close | Relative Ends in to the served close |
+| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the countdown and status chrome on the Featured slide.
+
+**Expected Results:**
+
+* The countdown matches the row (Ends in or Opens in).
+* Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount.
+
+### grade10-site-auction-auction-US6-TC04-1: Three Featured slides appear in operator order
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-06
+
+**Pre-conditions:**
+
+* customer is able to open `<grade10 auction catalogue url>`.
+* Three complete Featured slots are set in operator order `<lot A>`, `<lot B>`, `<lot C>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published Active or Upcoming lot in Featured slot 1 |
+| `<lot B>` | Published Active or Upcoming lot in Featured slot 2 |
+| `<lot C>` | Published Active or Upcoming lot in Featured slot 3 |
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the Featured slides from first to last.
+
+**Expected Results:**
+
+* Featured shows three slides in order `<lot A>`, then `<lot B>`, then `<lot C>`.
+
+### grade10-site-auction-auction-US6-TC05-1: Incomplete Featured slot is not shown
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-06
+
+**Pre-conditions:**
+
+* customer is able to open `<grade10 auction catalogue url>`.
+* The only Featured slot holds an eligible lot and no front page image, or a front page image and no lot.
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read whether a Featured band is present.
+
+**Expected Results:**
+
+* No Featured band is shown.
+* All auctions is the catalogue content below the page chrome.
+
+---
+
+## grade10-site-auction-auction-US7: Collector advances Featured slides
+
+**As a** collector on `/auction` with more than one Featured slide,
+**I want** to move between slides with the progress control, and on a small
+viewport also with stage previous/next or a horizontal swipe,
+**so that** I can reach every curated lot without leaving the band.
+
+### grade10-site-auction-auction-US7-TC01-1: Progress advances between two Featured slides
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-07
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published lot in Featured slot 1 |
+| `<lot B>` | Published lot in Featured slot 2 |
+
+**Steps:**
+
+1. Read the visible Featured lot.
+2. Activate the progress control to advance to the next slide.
+3. Read the visible Featured lot.
+
+**Expected Results:**
+
+* Step 1 shows `<lot A>`.
+* Step 3 shows `<lot B>`.
+* Progress dots are present for the two slides.
+
+### grade10-site-auction-auction-US7-TC04-1: On a small viewport, stage next advances between two Featured slides
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-07
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` at a small viewport (below `md`).
+* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published lot in Featured slot 1 |
+| `<lot B>` | Published lot in Featured slot 2 |
+
+**Steps:**
+
+1. Read the visible Featured lot.
+2. Activate stage next on the Featured image.
+3. Read the visible Featured lot.
+
+**Expected Results:**
+
+* Step 1 shows `<lot A>`.
+* Step 3 shows `<lot B>`.
+* The stage image pages horizontally to `<lot B>`.
+* Progress dots mark `<lot B>` current.
+
+### grade10-site-auction-auction-US7-TC02-1: Progress reaches every slide when three are set
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-07
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* Three complete Featured slots are set for `<lot A>`, `<lot B>`, `<lot C>` in that order.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published lot in Featured slot 1 |
+| `<lot B>` | Published lot in Featured slot 2 |
+| `<lot C>` | Published lot in Featured slot 3 |
+
+**Steps:**
+
+1. Read the visible Featured lot.
+2. Advance with the progress control until each remaining slide has been shown.
+3. Read each visible Featured lot after each advance.
+
+**Expected Results:**
+
+* The visible lots are `<lot A>`, then `<lot B>`, then `<lot C>` without leaving the Featured band.
+
+### grade10-site-auction-auction-US7-TC03-1: A single Featured slide needs no multi-dot advance
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-07
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* Exactly one complete Featured slot is set.
+
+**Steps:**
+
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the Featured progress control.
+
+**Expected Results:**
+
+* The single slide is shown.
+* There is no multi-dot advance among slides.
+* Stage previous/next is not required.
+
+---
+
+## grade10-site-auction-auction-US8: Collector opens a Featured lot
+
+**As a** collector on a Featured slide,
+**I want** Bid Now when the lot is Active, or View Auction when it is Upcoming,
+to open that lot's details page,
+**so that** I land on the lot the catalogue led with.
+
+### grade10-site-auction-auction-US8-TC01-1: Bid Now opens an Active lot details page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-08
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured lot>` visible.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<featured lot>` | A published **Active** lot on the visible Featured slide |
+| `<lot page url>` | That lot's details page address |
+
+**Steps:**
+
+1. Activate Bid Now on the Featured slide.
+2. Read the page that opens.
+
+**Expected Results:**
+
+* The browser opens `<lot page url>` — the details page for `<featured lot>`.
+
+### grade10-site-auction-auction-US8-TC03-1: View Auction opens an Upcoming lot details page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-08
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<upcoming lot>` visible.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<upcoming lot>` | A published Upcoming lot on the visible Featured slide |
+| `<lot page url>` | That lot's details page address |
+
+**Steps:**
+
+1. Activate View Auction on the Featured slide.
+2. Read the page that opens.
+
+**Expected Results:**
+
+* The browser opens `<lot page url>` — the details page for `<upcoming lot>`.
+
+### grade10-site-auction-auction-US8-TC02-1: Bid Now on a later Active slide opens that slide's lot
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-08
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` with two complete Featured slides for `<lot A>` then `<lot B>`.
+* The progress control has advanced so `<lot B>` is visible.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot A>` | Published **Active** lot in Featured slot 1 |
+| `<lot B>` | Published **Active** lot in Featured slot 2 |
+| `<lot B page url>` | `<lot B>`'s details page address |
+
+**Steps:**
+
+1. Activate Bid Now on the visible Featured slide.
+2. Read the page that opens.
+
+**Expected Results:**
+
+* The browser opens `<lot B page url>` — the details page for `<lot B>`, not `<lot A>`.
+
+---
+
+## grade10-site-auction-auction-US9: Collector watches from an All auctions card
+
+**As a** signed-in collector reading All auctions,
+**I want** the watch control on a card to watch or unwatch that lot the same way as on the lot page and My Auctions,
+**so that** I do not learn a second watch rule on the catalogue.
+
+### grade10-site-auction-auction-US9-TC01-1: Watch on from an All auctions card
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-09
+
+**Pre-conditions:**
+
+* customer(signed in, not watching `<open lot>`) is on `<grade10 auction catalogue url>`.
+* `<open lot>` appears on an All auctions card and is not closed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<open lot>` | A published Active or Upcoming lot on an All auctions card |
+
+**Steps:**
+
+1. Activate watch on the All auctions card for `<open lot>`.
+2. Read the card's watch state.
+3. Open My Auctions and read whether `<open lot>` is watched.
+
+**Expected Results:**
+
+* The card shows the watched state.
+* `<open lot>` is watched the same way as from the lot page and My Auctions.
+
+### grade10-site-auction-auction-US9-TC02-1: Watch off from an All auctions card
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-09
+
+**Pre-conditions:**
+
+* customer(signed in, watching `<open lot>`) is on `<grade10 auction catalogue url>`.
+* `<open lot>` appears on an All auctions card and is not closed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<open lot>` | A published Active or Upcoming lot the collector already watches |
+
+**Steps:**
+
+1. Activate watch off on the All auctions card for `<open lot>`.
+2. Read the card's watch state.
+3. Open My Auctions and read whether `<open lot>` remains watched.
+
+**Expected Results:**
+
+* The card shows the unwatched state.
+* `<open lot>` is no longer watched, same as unwatching from the lot page or My Auctions.
+
+### grade10-site-auction-auction-US9-TC03-1: Closed lot card shows no watch control
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) is on `<grade10 auction catalogue url>`.
+* `<closed lot>` appears on an All auctions card.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<closed lot>` | A closed lot visible in All auctions |
+
+**Steps:**
+
+1. Find the All auctions card for `<closed lot>`.
+2. Read whether a watch control is present on that card.
+
+**Expected Results:**
+
+* The closed lot card shows no watch control.
+
 ---
 
 ## grade10-site-auction-auction-US11: Bidder is held to the close with everyone else
 
 **As a** bidder,
-**I want** a lot to stop taking bids at its close for everyone, and a bid to count only once its payment confirms before then,
-**so that** nobody wins with a bid that arrived after the close, and a card hold for a bid that did not count is released.
+**I want** a lot to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
+**so that** nobody wins with a bid that arrived after the close.
 
 ### grade10-site-auction-auction-US11-TC1-1: Payment confirmed before the effective close counts the bid
 
@@ -1133,7 +2000,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1182,7 +2049,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1232,7 +2099,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1271,7 +2138,7 @@ Runs once per row of **Test data**.
 * `<listing_3>` closes unsold at 20:00:00 UTC, reading Ended with No bids.
 * customer A's authorization is released.
 
-### grade10-site-auction-auction-US11-TC4-1: With holds off a bid placed in the last second counts
+### grade10-site-auction-auction-US11-TC4-1: A bid placed in the last second counts when accepted
 
 **Classification:**
 
@@ -1288,7 +2155,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * `<listing_4>` is in extended bidding and its recorded close is 20:30:00 UTC.
 * customer A(card linked) is signed in and on the lot page for `<listing_4>`.
 
@@ -1331,7 +2197,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * `<listing_5>` has scheduled close 20:00:00 UTC and its extension terms are the row's.
 * customer B's bid was accepted on `<listing_5>` at `<last accepted>`.
 * Settling `<listing_5>` is held back, so its close is not yet recorded at `<bid time>`.
@@ -1567,7 +2432,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1632,7 +2497,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * `<listing_9>` is in extended bidding with its recorded close `<time left before bid>` away.
 * customer A leads `<listing_9>` at `<leader price>` with maximum `<user A maximum>`.
 * customer B(card linked) is signed in on a separate session, on the lot page for `<listing_9>`.
@@ -1676,7 +2540,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * `<listing_10>` is in extended bidding, its recorded close `<close before raise>`.
 * customer A leads `<listing_10>` at `<leader price>` with maximum `<user A maximum>`, and is on its lot page.
 
@@ -1704,10 +2567,316 @@ Runs once per row of **Test data**.
 * The recorded close stays `<close before raise>`, and Time left keeps counting to it.
 * The lot closes at `<close before raise>`, customer A winning at `<leader price>`.
 
+---
+
+## grade10-site-auction-auction-US13: Runner-up takes the lead when the leader's account is erased
+
+**As a** bidder whose maximum is the highest left on a lot,
+**I want** to take the lead at a price set by the maxima still standing when the leader's account is erased,
+**so that** the lot keeps a leader and I never pay more than the price stood at before.
+
+### grade10-site-auction-auction-US13-TC1-1: Highest maximum left leads, priced from the maxima left
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-13
+
+**Pre-conditions:**
+
+* `<listing_27>` is open inside its window, with the row's maxima committed in the row's order.
+* customer A leads `<listing_27>` at `<price before>`.
+* customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
+* customer B is signed in on a separate session.
+
+**Test data:**
+
+| customer A maximum | customer B maximum | customer C maximum | `<price before>` | `<price after>` | Leader after |
+| --- | --- | --- | --- | --- | --- |
+| 200000 minor units (HKD 2,000.00), first | 150000 minor units (HKD 1,500.00) | 120000 minor units (HKD 1,200.00) | 154000 minor units (HKD 1,540.00), customer B's maximum plus 4000 | 124000 minor units (HKD 1,240.00), customer C's maximum plus 4000 | customer B |
+| 200000 minor units (HKD 2,000.00), first | 121000 minor units (HKD 1,210.00) | 120000 minor units (HKD 1,200.00) | 125000 minor units (HKD 1,250.00), customer B's maximum plus 4000 | 121000 minor units (HKD 1,210.00), capped at customer B's maximum | customer B |
+| 150000 minor units (HKD 1,500.00), first | 150000 minor units (HKD 1,500.00), second | 120000 minor units (HKD 1,200.00) | 150000 minor units (HKD 1,500.00), equal maxima, customer A earlier | 124000 minor units (HKD 1,240.00), customer C's maximum plus 4000 | customer B |
+
+| Field | Value |
+| --- | --- |
+| `<listing_27>` | An open HKD listing, starting price 20000 minor units (HKD 200.00), scheduled close more than an hour away |
+| Increment | 4000 minor units (HKD 40.00), the HK$800 tier, at every maximum above |
+
+**Steps:**
+
+1. Read `<listing_27>` from the public listing API.
+2. Erase customer A's account through the account-erasure procedure.
+3. Read `<listing_27>` from the public listing API.
+4. As customer B, read their own standing on `<listing_27>`.
+
+**Expected Results:**
+
+* Step 1 reads Highest bid `<price before>`, led by customer A.
+* Step 3 reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum.
+* Step 3's Highest bid is never above `<price before>`.
+* Step 4 reads the row's leader after: customer B leads, with their own maximum unchanged.
+* customer A's maxima appear nowhere on `<listing_27>`.
+
+### grade10-site-auction-auction-US13-TC2-1: Erasing the only bidder leaves the lot with no leader
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-13
+
+**Pre-conditions:**
+
+* `<listing_28>` is open inside its window, and customer A's maximum is its only maximum.
+* customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_28>` | An open HKD listing, starting price 20000 minor units (HKD 200.00), led by customer A alone at the starting price |
+| customer A maximum | 200000 minor units (HKD 2,000.00) |
+
+**Steps:**
+
+1. Erase customer A's account through the account-erasure procedure.
+2. Read `<listing_28>` from the public listing API.
+
+**Expected Results:**
+
+* `<listing_28>` has no leader and no current bid.
+* The next bid must reach 20000 minor units (HKD 200.00), the opening price.
+* customer A's maximum appears nowhere on `<listing_28>`.
+
+### grade10-site-auction-auction-US13-TC3-1: Erasing a bidder re-prices the lot from the maxima left, never upward
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-13
+
+**Pre-conditions:**
+
+* `<listing_32>` is open inside its window, with the row's maxima committed in the order given, and Highest bid `<price before>`.
+* The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
+
+**Test data:**
+
+| Maxima, in the order committed | `<price before>` | Erased | Leader after | `<price after>` |
+| --- | --- | --- | --- | --- |
+| customer A 20000, customer B 15000, customer C 12000 | 15500 | customer B | customer A | 12500, customer C's maximum plus 500 |
+| customer A 20000 raised to 50000 after customer B 19800, customer C 10000 | 20000 | customer C | customer A | 20000, unchanged: customer B's maximum plus 500 is 20300, above `<price before>` |
+| customer A 20000, customer B 15000, customer C 11000 | 15500 | customer C | customer A | 15500, unchanged, on the same bid |
+| customer A 20000, customer B 15000 | 15500 | customer A | customer B | 10000, the opening price |
+
+| Field | Value |
+| --- | --- |
+| `<listing_32>` | An open USD listing, opening price 10000 minor units (USD 100.00), scheduled close more than an hour away; every amount above is in USD minor units |
+| Increment | 500 minor units (USD 5.00), the USD 100 tier, at every next maximum above |
+
+**Steps:**
+
+1. Read `<listing_32>` from the public listing API, noting its scheduled close.
+2. Erase the row's erased customer's account through the account-erasure procedure.
+3. Read `<listing_32>` from the public listing API.
+
+**Expected Results:**
+
+* Step 1 reads Highest bid `<price before>`.
+* Step 3 reads Highest bid `<price after>`, led by the row's leader after.
+* Step 3's Highest bid is never above `<price before>`.
+* Step 3's scheduled close is the one noted at step 1.
+* The erased customer's maxima appear nowhere on `<listing_32>`.
+
+---
+
+## grade10-site-auction-auction-US14: Bidder reads why a bid was refused, and nothing else moves
+
+**As a** bidder,
+**I want** a refused bid to say why on the bid form and to leave no trace anywhere else,
+**so that** I never read a bid I did not place as one I did.
+
+### grade10-site-auction-auction-US14-TC1-1: A refused bid says why on the bid form and places nothing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-14
+
+**Pre-conditions:**
+
+* customer(card linked, account in the row's state) is signed in and on the lot page for `<listing_29>`.
+* customer holds no bid on `<listing_29>` and does not watch it.
+* `<listing_29>` is in the row's lot state.
+
+**Test data:**
+
+| Refused when | Account state | Lot state | Amount entered | The bid form says |
+| --- | --- | --- | --- | --- |
+| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | 512900 minor units (HKD 5,129), one major unit below `<next minimum>` | Minimum bid is, naming `<next minimum>` |
+| Above the currency's ceiling | In good standing | Open | 8000000100 minor units (HKD 80,000,001.00), one major unit above the ceiling | Maximum bid is, naming the ceiling, HKD 80,000,000 |
+| Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. |
+| Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. |
+| After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. |
+
+| Field | Value |
+| --- | --- |
+| `<listing_29>` | An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` |
+| `<current bid>` | 505000 minor units (HKD 5,050.00) |
+| `<next minimum>` | 513000 minor units (HKD 5,130.00), `<current bid>` plus its 8000 increment |
+| `<bid count>` | 3 |
+
+**Steps:**
+
+1. Enter the row's amount entered in the custom maximum on the bid panel.
+2. Place the bid.
+3. Read the bid form.
+4. Reload the lot page and read Highest bid, the bid count, Recent Bids and the bid panel's standing.
+5. Navigate to `<my auctions url>` and look for `<listing_29>`.
+6. Navigate to `<grade10 bids url>` and look for `<listing_29>`.
+
+**Expected Results:**
+
+* Step 3 shows the row's words on the bid form.
+* Step 4 reads Highest bid `<current bid>`, bid count `<bid count>`, and Recent Bids as before, with no row for the customer.
+* Step 4 shows no Leading or Outbid standing for the customer.
+* Step 5 shows no row for `<listing_29>`.
+* Step 6 shows no entry for `<listing_29>`.
+
+### grade10-site-auction-auction-US14-TC2-1: A rival's refused bid moves nothing for the leader
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-14
+
+**Pre-conditions:**
+
+* customer A leads `<listing_30>` at `<current bid>`, and is signed in on the lot page.
+* customer B(card linked, no bid on `<listing_30>`) is signed in on a separate session, on the same lot page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_30>` | An open HKD listing led by customer A, maximum 800000 minor units (HKD 8,000.00) |
+| `<current bid>` | 505000 minor units (HKD 5,050.00) |
+| `<below minimum>` | 512900 minor units (HKD 5,129), one major unit below `<current bid>` plus its 8000 increment |
+
+**Steps:**
+
+1. As customer B, enter `<below minimum>` in the custom maximum and place the bid.
+2. As customer A, read Highest bid, Recent Bids and the bid panel's standing, without reloading.
+3. As customer A, navigate to `<my auctions url>` and read `<listing_30>`'s row.
+4. As customer A, read their mailbox for a letter about `<listing_30>` sent after step 1.
+
+**Expected Results:**
+
+* Step 1 is refused on customer B's bid form.
+* Step 2 reads Highest bid `<current bid>`, Recent Bids unchanged, and customer A still Leading.
+* Step 3's row reads Leading, with Current bid `<current bid>`.
+* Step 4 finds no new-bid or outbid letter.
+
+### grade10-site-auction-auction-US14-TC3-1: A bid whose answer is lost reads by the bidder's standing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auction-US-14
+
+**Pre-conditions:**
+
+* customer(card linked) is signed in and on the lot page for `<listing_31>`, holding the row's standing before the bid.
+* The network is manipulated to drop the bid at the row's point.
+
+**Test data:**
+
+| Standing before | Bid sent | Dropped | The bid form reads | Standing after |
+| --- | --- | --- | --- | --- |
+| No bid | A first maximum of `<maximum>` | The answer, after the auction accepts the bid | Placed, Leading with Your maximum `<maximum>` | Leading, Your maximum `<maximum>`, a row on My Auctions |
+| No bid | A first maximum of `<maximum>` | The request, before the auction receives it | Could not place this bid. | No bid, no row on My Auctions |
+| Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The answer, after the auction accepts the raise | Placed, Leading with Your maximum `<raised maximum>` | Leading, Your maximum `<raised maximum>` |
+| Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The request, before the auction receives it | Could not place this bid. | Leading, Your maximum `<maximum>` |
+
+| Field | Value |
+| --- | --- |
+| `<listing_31>` | An open HKD listing with no other bidder, starting price 20000 minor units (HKD 200.00) |
+| `<maximum>` | 50000 minor units (HKD 500.00) |
+| `<raised maximum>` | 80000 minor units (HKD 800.00) |
+
+**Steps:**
+
+1. Enter the row's bid in the custom maximum on the bid panel.
+2. Place the bid.
+3. Wait until the bid form settles.
+4. Read the bid form.
+5. Reload the lot page and read the bid panel's standing.
+6. Navigate to `<my auctions url>` and look for `<listing_31>`.
+
+**Expected Results:**
+
+* Step 4 reads the row's words on the bid form, never both placed and refused.
+* Step 5 reads the row's standing after.
+* Step 6 agrees with the row's standing after.
+
 ## Settled
 
 - The identity bar is enforced by the storefront before the auction receives a bid.
-- A refused high-value bid creates neither an auction bid nor a card hold.
 - A brand without an identity store has no identity bar.
 - The first-bid minimum on a listing with no accepted bid is its opening price: the starting price, or the lowest increment on a 0 start; one increment above the current bid applies from the second bid (decisions Q19, Q27).
 - A first bid of 0, or of one minor unit, on a 0 start is a non-goal; no case asserts either.
@@ -1716,6 +2885,21 @@ Runs once per row of **Test data**.
 - Between the effective close and the recorded close, a lot takes no bid and names no result; the public status stays Active until the close is recorded (decision Q3).
 - A bid at exactly the scheduled close counts on every listing, extension on or off; with no extension reach the effective close is one millisecond after the scheduled close (decision Q34).
 - Between the effective close and the recorded close, a public read and a live update give the minimum next bid the lot had before its close: the opening price on a lot with no bid, else the current bid plus its tier increment. No bid at it counts, and no page offers it (decision Q3, `grade10-site/auction/bid-increments`).
+- Progress advances by the progress control; on a small viewport stage previous/next and horizontal swipe also advance. CarouselProgress auto-play is allowed presentation, not a separate product rule for this change
+- One Featured slide need not offer multi-dot advance or stage previous/next; progress may be absent or a single item
+- A Featured lot that is no longer Active or Upcoming leaves the public Featured band at read time; the admin slot remains until cleared or replaced
+- One lot may not occupy two Featured slots
+- Signed-out watch on catalogue cards is owned by `grade10-site/auction/watchlist` (offer sign-in)
+- An operator may replace a filled slot in place; clearing first is not required
+- A slot missing lot or front page image is incomplete, may be saved in admin, and is not shown on `/auction`
+- Nothing is held or charged on a card when a collector bids; no case reads a card authorization, a payment confirmation, an Authorizing state or a bid-time hold switch, and every case that did is deprecated or rewritten here (decisions Q1, Q3, Q5).
+- A refused high-value bid creates no auction bid, no My Auctions row and no Bidding History entry.
+- A refused attempt writes nothing the bidder reads beyond the bid form; its operational log is the operators' record, has no customer surface, and takes no case in this suite (decisions Q6, Q7).
+- The refusal words for no linked card and for another card after the first accepted bid are `grade10-site/auction/bid-payment-method`'s cases; the bar's refusal is US4's; a maximum not above the bidder's own is the domain suite's `grade10-site-auction-e2e-US04-TC03-2`.
+- An erasure is run by the account-erasure procedure, which has no console surface, so the erased-leader cases run at the API layer.
+- Concurrent bids keep their case under US2, now that US3 is retired: the lot's lock judges each bid against what the one before it committed.
+- A first bid whose answer is lost still bookmarks the lot and shows no alerts toast; the retry follow-on change brings the toast back (decisions Q15).
+- Re-standing a lot after an erasure writes no letter to its new leader (decisions Q16).
 
 ## Reconciliation
 
@@ -1755,3 +2939,40 @@ Run: durable carry for add-account-identity-gate; the feature set, journey and s
 - **Covered at domain** — `grade10-site-auction-e2e-US12-TC02-1` walks `grade10-site-auction-auction-SC-88`: the card shows its closed state with no result, then the result, without a reload
 
 **Uncovered anchors:** none. `grade10-site-auction-auction-US-02`, `-US-11` and `-US-12` each have their cases, and the `Catalogue`, `Closing a due lot`, `Live relay` and `Public contract` groups are walked here, at domain or by the tests named above.
+
+**Run:** Blind suite from `.round/blind-input` (Purpose/Feature set, journeys, proposal, decisions, ui-design without scenario dispositions, PRD Catalogue/Featured excerpts, existing site feature-tcs with Reconciliation stripped). Denied: `openspec/specs/` requirements, archive, and any `## Requirements`. Scenario pass read `.round/scenario-input` including durable site requirements and tech-design; denied all feature-tcs and blind drafts.
+
+### Raised, folded
+- Empty All auctions with Featured still present → `grade10-site-auction-auction-SC-41`
+- Catalogue address `/auction` with no category query → `grade10-site-auction-auction-SC-42`
+- Featured absent when no complete eligible slide (including Ended-at-read) → `grade10-site-auction-auction-SC-30`
+- Incomplete slot not shown → `grade10-admin-auction-featured-SC-02` (site coverage via SC-30)
+- Same lot in two slots refused → `grade10-admin-auction-featured-SC-06`
+- Replace in place → stated on fill requirement; covered by fill scenarios
+- View Auction on Upcoming Featured → `grade10-site-auction-auction-SC-58`
+- Bid rolls only on increase after first paint → `grade10-site-auction-auction-SC-32`
+- All auctions infinite scroll and load-more skeletons → `grade10-site-auction-auction-SC-59`, `SC-60`
+- Upcoming hides money on Featured and All auctions → `grade10-site-auction-auction-SC-33`, `SC-61`
+
+### Raised, rejected
+- Auto-advance as a required product behaviour — journey and decisions name collector advance (progress; on small viewports stage previous/next or swipe); auto-play is CarouselProgress presentation only
+- Signed-out watch behaviour on All auctions cards — already required by `grade10-site/auction/watchlist`; not restated here
+
+### Uncovered anchors
+- **Out of suite:** signed-out watch from catalogue — `grade10-site/auction/watchlist` feature suite (`grade10-site-auction-watchlist-SC-04`)
+
+**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
+
+- **Folded in** - `grade10-site-auction-auction-SC-23` by `grade10-site-auction-auction-US2-TC5-2`; `grade10-site-auction-auction-SC-10`, moved to `grade10-site-auction-auction-US-02` with grade10-site-auction-auction-US-03 retired, by `grade10-site-auction-auction-US2-TC19-1`; `grade10-site-auction-auction-SC-86` by `grade10-site-auction-auction-US11-TC4-1`; `grade10-site-auction-auction-SC-16` by `grade10-site-auction-auction-US4-TC2-2`; `grade10-site-auction-auction-SC-89` by the first row of `grade10-site-auction-auction-US14-TC1-1`; `grade10-site-auction-auction-SC-90` by `grade10-site-auction-account-record-US2-TC6-1` and `grade10-site-auction-bidding-history-US1-TC7-1`; `grade10-site-auction-auction-SC-91` by the rows of `grade10-site-auction-auction-US14-TC1-1`, with the card refusals in `grade10-site-auction-bid-payment-method-US1-TC8-1` and `grade10-site-auction-bid-payment-method-US1-TC9-1` and the bar in `grade10-site-auction-auction-US4-TC2-2`; `grade10-site-auction-auction-SC-94` and `grade10-site-auction-auction-SC-95` by `grade10-site-auction-auction-US14-TC3-1`; `grade10-site-auction-auction-SC-96` by `grade10-site-auction-auction-US13-TC1-1`; `grade10-site-auction-auction-SC-101` by `grade10-site-auction-auction-US13-TC2-1`
+- **Covered at domain** - `grade10-site-auction-e2e-US04-TC03-2` reads the bid form's words for a maximum not raised, the row of `grade10-site-auction-auction-SC-91` this suite leaves to it
+- **Added by QA2** - `grade10-site-auction-auction-US13-TC3-1`, one row each for `grade10-site-auction-auction-SC-97`, `grade10-site-auction-auction-SC-98`, `grade10-site-auction-auction-SC-99` and `grade10-site-auction-auction-SC-100`: erasing a bidder who is not the leader, a leader whose maximum outgrew the price, and one maximum left. It also reads that the scheduled close does not move. No blind case erased anyone but the leader
+- **Corrected** - `grade10-site-auction-auction-US13-TC2-1` read only that Highest bid is never above the price before; `grade10-site-auction-auction-SC-101` states no leader and no current bid, with the next bid at the opening price, and the case reads that. `grade10-site-auction-auction-US2-TC19-1` traced the Feature set group Card on file; it traces `grade10-site-auction-auction-US-02`
+- **Revised** - `grade10-site-auction-auction-US2-TC5-2`, `grade10-site-auction-auction-US4-TC1-2` and `grade10-site-auction-auction-US4-TC2-2` stop reading a hold, so they move up a revision and back to draft. `grade10-site-auction-auction-US2-TC15-2`, `grade10-site-auction-auction-US2-TC16-2`, `grade10-site-auction-auction-US11-TC4-1`, `grade10-site-auction-auction-US11-TC5-1`, `grade10-site-auction-auction-US12-TC1-1` and `grade10-site-auction-auction-US12-TC2-1` lose the hold switch pre-condition only, a draft restyle with `<v>` kept
+- **Deprecated** - every `grade10-site-auction-auction-US3` case, with its journey; `grade10-site-auction-auction-US11-TC1-1`, `grade10-site-auction-auction-US11-TC2-1`, `grade10-site-auction-auction-US11-TC3-1` and `grade10-site-auction-auction-US11-TC11-1`, which read a payment confirming around the close
+- **Raised, answered** - Q15: a first bid whose answer is lost still bookmarks the lot, with no alerts toast. Q16: re-standing a lot after an erasure writes no letter to its new leader. Both as grade10 runs, recommended; answers in `## Settled`
+- **Settled by the artifacts** - a refused attempt on a lot later sold leaves that collector reading as a non-bidder (Q6); an erasure never moves the close (the erasure requirement's rule 6); the refusal log names the floor or the ceiling the refusal names (the refusal requirement)
+- **Out of suite** - `grade10-site-auction-auction-SC-92` and the invalid-amount row, which the bid form checks before sending, and the refusal order of `grade10-site-auction-auction-SC-91`: grade10's `bidRefusalCopy.test.ts` and `usePlaceBid.test.tsx`, since a person cannot make the auction send its own words or several refusals at once. `grade10-site-auction-auction-SC-93`: the operational log has no customer surface; grade10's refusal-log test, task 2.1. `grade10-site-auction-auction-SC-102`: grade10's `eraseBidder.spec.ts`, since the re-stood lot must then reach its close
+- **Reworded** - `grade10-site-auction-auction-SC-04` and `grade10-site-auction-auction-SC-08` lose the card authorization from what they assert, "no accepted bid or card authorization" reading "no bid" and "card authorization facts" reading "card facts", with the same meaning; their coverage is as on main
+- **Retired** - grade10-site-auction-auction-SC-67, grade10-site-auction-auction-SC-68 and grade10-site-auction-auction-SC-69, a payment confirming around the close, leave "A bid counts when it is accepted" (Q3); grade10-site-auction-auction-SC-09, grade10-site-auction-auction-SC-11, grade10-site-auction-auction-SC-12, grade10-site-auction-auction-SC-14 and grade10-site-auction-auction-SC-15 retire with their removed requirements. No retired id is reissued
+- **Contradicted** - none
+- **Uncovered anchors** - none. The window and settle scenarios changed only in their hold wording and their Serves lines, and the durable `grade10-site-auction-auction-US2` and `grade10-site-auction-auction-US11` cases still assert them; `grade10-site-auction-auction-SC-73` stays out of suite as main records

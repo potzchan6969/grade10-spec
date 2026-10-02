@@ -15,7 +15,10 @@
       "!tools/manual/public/fixture-snapshot.json",
       "!tools/manual/public/fixture-changes.json",
       "!scripts/diagrams/vendor/archify",
-      "!openspec/changes/**/mock.html"
+      "!openspec/changes/**/mock.html",
+      "!openspec/changes/**/implementation.json",
+      "!openspec/changes/**/acceptance.json",
+      "!openspec/changes/**/acceptance"
     ]
   },
   "formatter": {

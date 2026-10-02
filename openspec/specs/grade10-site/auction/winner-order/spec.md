@@ -72,7 +72,6 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
 - Settlement
-  - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
   - Single fresh charge: one transaction for the final amount, retryable on failure
 - Payment deadline
   - Seven days from close: a fixed end to the winner's obligation, unmoved by anything they do to the invoice
@@ -95,6 +94,7 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Unfinished session: says so and leaves the invoice payable.
   - Confirming: a completed session reads Confirming payment until paid.
 ## Requirements
+
 ### Requirement: Invoice fields
 
 Each invoice SHALL carry these fields. Every amount SHALL be an integer count
@@ -816,8 +816,7 @@ At lot close Grade10 SHALL, for the winner:
 
 1. Create one auction order for the lot, with invoice status `not_issued` and
    fulfilment status `unfulfilled`, per `grade10-site/auction/order-status`.
-2. Release the winner's existing bid-time authorization, when one exists.
-3. Notify the winner that they have won and ask them to confirm a delivery
+2. Notify the winner that they have won and ask them to confirm a delivery
    address, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL NOT issue an invoice at lot close, and SHALL offer the winner no
@@ -828,7 +827,7 @@ an operator to quote, per `grade10-admin/auction/post-sale`. From then on the
 winner SHALL NOT change the address, per "The delivery address locks when the
 invoice is sent".
 
-Order creation, hold release and the winner notice SHALL be idempotent. A lot
+Order creation and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-l0b rev=1 -->
@@ -842,14 +841,13 @@ close delivered more than once SHALL produce one auction order.
 - **AND** issues no invoice
 - **AND** asks the winner to confirm a delivery address
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-2p8 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-2p8 rev=2 -->
 #### Scenario: winner-order-SC-27 - A repeated lot close creates nothing twice
 **Serves:** Invoice at lot close - a repeated lot close creates nothing twice
 
 - **GIVEN** a lot whose close has already created an auction order
 - **WHEN** that same lot close is delivered again
 - **THEN** Grade10 leaves one auction order
-- **AND** does not release the authorization a second time
 - **AND** does not notify the winner a second time
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-sko rev=1 -->
@@ -2516,4 +2514,3 @@ SHALL not derive a second Expired order status.
 - **WHEN** the winner opens it
 - **THEN** the page shows the confirmed address
 - **AND** offers no invoice and no pay control
-

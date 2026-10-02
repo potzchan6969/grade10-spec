@@ -1,0 +1,150 @@
+{
+  "version": 2,
+  "change": "carousel-auction-list-featured",
+  "baseline": "8b0db4f42f160281b033e05046968003350f9fabd5f3321d99e976a10016930c",
+  "fingerprint": "25a51c710b34021b7aff3870b48a02d2c37985859ef7db9615a473fe29d41793",
+  "reviewedBy": "mason5991",
+  "acceptedAt": "2026-10-02T16:11:34.662Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#featured",
+      "sha256": "41e6558ee56e72421cc1690bb92e4b7cc6fc94a0495bc583fb303b5bfa55dd1b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#catalogue",
+      "sha256": "390a281f8db87fc41e9963a4fda25e9c91f8ec9edcedc9980d80f602dadc4637",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/decisions.md",
+      "sha256": "eff4cd8fb252c614f48ee671078b0957c81306ee75b537217b5949e2595e4c16",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/proposal.md",
+      "sha256": "b3f6d0207a211a3fe250a902bef482dfa35e4482063e2cf89cc272d4bc623817",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/specs/grade10-admin/auction/featured/feature-tcs.md",
+      "sha256": "21a0594f3e3942bf1056b2c52a5aba329df8904ffe18c041a3403396a7f61577",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/specs/grade10-admin/auction/featured/spec.md",
+      "sha256": "e8f79a772e83dde565889b6228638d35a92c71108255e7e0f146433eef076398",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/specs/grade10-admin/auction/featured/user-journeys.md",
+      "sha256": "6303441597aeaa5bb4b6176aac066c80f9469dcad06ae5a8f16590d9fefed6b2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/specs/grade10-site/auction/auction/feature-tcs.md",
+      "sha256": "f4f2e03aa359173a7494b4be9d0de4dca02859ed7c0862e918b543f7397ffcdb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/specs/grade10-site/auction/auction/spec.md",
+      "sha256": "09866bf2815ff427d7ebf61f7448295589e7a5dcf4196b1387111686e6701994",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/specs/grade10-site/auction/auction/user-journeys.md",
+      "sha256": "5ce5990847d31038b61edb0bd7d7f324b1b6e5e0f4669f5b054d98f8a764b81c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/tech-design.md",
+      "sha256": "020dce280f56db81dec3ae34744f93486006c9100e5f98f63101315351046c98",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/ui-design.md",
+      "sha256": "bdc8ed98bdc6e4659a785beffff0813feacbf6d38dd1093e6b6ebead34da0d54",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/featured/feature-tcs.md",
+      "sha256": "21a0594f3e3942bf1056b2c52a5aba329df8904ffe18c041a3403396a7f61577",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/featured/spec.md",
+      "sha256": "573f495d8d9564f3c179cfdcd5ef26f5790f0f6ba7ee0b3e83cf55dcfac0e6f1",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/featured/user-journeys.md",
+      "sha256": "390cc86fc1dd71c7fb89d6c0316b2d61d09abdf3481630fa37879b54b5c99429",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+      "sha256": "f9dc396dafcca3dd67dace9f957605182a199eee64e2c84c271d41f5a44c8ede",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+      "sha256": "1d63e6b05a6b4ed41de53384451d39214a9bbd5825ab56acc3f9f72775030f34",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+      "sha256": "6528b2ca594ed35de2d94926744c1194b91f078745e75f3686e9456e655b8034",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/carousel-auction-list-featured/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/featured/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/featured/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A Featured slot is shown on the catalogue only when complete and eligible",
+        "Requirement: An authorized operator fills a Featured slot",
+        "Requirement: An authorized operator reorders and clears Featured slots",
+        "Requirement: Featured curation uses auction catalogue write grants",
+        "Requirement: Featured holds at most three ordered slots",
+        "Requirement: Manage Featured opens from the Listings tab"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/featured/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: All auctions cards use the shared watch",
+        "Requirement: All auctions loads more as the collector scrolls",
+        "Requirement: Bid Now or View Auction opens the lot details page",
+        "Requirement: Each Featured slide shows the curated lot facts",
+        "Requirement: Featured leads the catalogue when complete slides are set",
+        "Requirement: Progress advances among two or three Featured slides",
+        "Requirement: The catalogue has one resting order",
+        "Requirement: The catalogue layout is Featured then All auctions only",
+        "Requirement: Upcoming catalogue cards withhold money until open"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

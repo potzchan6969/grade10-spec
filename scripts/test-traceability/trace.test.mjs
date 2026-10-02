@@ -19,8 +19,6 @@ const validAppFixture = resolve(here, "fixtures/app");
 const invalidStoreFixture = resolve(here, "fixtures/invalid/store");
 const invalidAppFixture = resolve(here, "fixtures/invalid/app");
 const foldStoreFixture = resolve(here, "fixtures/fold/valid");
-const sourceFile = resolve(validStoreFixture, "openspec/specs/demo/spec.md");
-const appTestFile = resolve(validAppFixture, "apps/site/src/sign-in.test.ts");
 
 function runCli(args) {
   return spawnSync(process.execPath, [cli, ...args], {

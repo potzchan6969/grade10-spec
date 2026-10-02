@@ -31,13 +31,6 @@ is still owed, a tracker, and proof of what was handed over,
 **I want** Winner Order to read Setup Overdue with Contact Us and no Confirm,
 **so that** I know self-service setup has stopped and how to reach Grade10.
 
-### winner-order-US-06: Losing bidder gets their hold back when the lot closes
-
-**As a** bidder who did not win,
-**I want** the card hold my bids put there lifted as soon as the lot closes,
-**so that** losing an auction does not leave my money reserved until the
-authorization expires on its own.
-
 ### winner-order-US-08: Winner pays an invoice with a policy premium
 
 **As a** winner of an auction lot,
@@ -104,3 +97,7 @@ current currency minimum,
 **As a** winner
 **I want** to fill in and confirm a delivery address on the order
 **so that** Grade10 can quote shipping to the right place.
+
+## Retired
+
+- `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.

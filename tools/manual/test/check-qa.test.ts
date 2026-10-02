@@ -318,6 +318,31 @@ describe("a case tracing the anchor it walks", () => {
     ]);
   });
 
+  it("lets a deprecated case keep tracing a retired journey, and fails a live one", async () => {
+    const retired = [
+      journeysText([journey("alpha-US-01")]),
+      "",
+      "## Retired",
+      "",
+      "- `alpha-US-09` - Retired by demo.",
+      "",
+    ].join("\n");
+    const root = store({
+      spec: two,
+      journeys: retired,
+      cases: suiteText({
+        cases: [
+          ["alpha-US1-TC1-1", "actual", "alpha-US-01"],
+          ["alpha-US9-TC1-1", "deprecated", "alpha-US-09"],
+          ["alpha-US9-TC2-1", "draft", "alpha-US-09"],
+        ],
+      }),
+    });
+    expect(lines(await check(root), "trace")).toEqual([
+      `${CASES_FILE} — alpha-US9-TC2-1 traces \`alpha-US-09\`, which \`demo-product/alpha\` issues nowhere — retrace it or retire the case`,
+    ]);
+  });
+
   it("leaves a scenario no case reaches for the coverage rule", async () => {
     const root = store({
       spec: specText({
