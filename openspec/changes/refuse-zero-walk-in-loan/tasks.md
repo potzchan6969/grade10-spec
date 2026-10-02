@@ -13,7 +13,7 @@
 - [ ] 2.4 Check the amount in `WalkInDialog.tsx` with the walk-in contract's own amount rule, refuse it beside the loan field when the field is left holding an amount that fails it, clear the refusal once the amount meets the rule or is emptied and whenever a lane is chosen, hold Open case while it fails, and drop the flag that only mirrored `MoneyField`'s own text refusal (`grade10-admin-vault-operator-queue-SC-96`)
 - [ ] 2.5 Verify: the touched test files and `pnpm run typecheck` for `packages/vault/admin-frontend`, `packages/frontend-console` and `packages/vault/backend`; full suites and lint in CI.
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @ecchochan)
 
 Takes the draft `feature-tcs.md` as its input once group 2 has landed; human QA reviews the suites with `/tcs-review refuse-zero-walk-in-loan` after deployment. While the cases are draft, the walk's titles cite scenarios and carry no bracketed case id.
 
