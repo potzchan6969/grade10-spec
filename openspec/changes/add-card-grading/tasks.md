@@ -1835,7 +1835,7 @@ recordings of those runs. `packages/storybook` arrives with
 `packages/*/frontend/src/**` and `packages/*/admin-frontend/src/**` already
 read this group's stories. Stage (b).
 
-- [x] 25.1 Cover the home and the three steps: the signed-out price read, the
+- [ ] 25.1 Cover the home and the three steps: the signed-out price read, the
       home still reading and the home that cannot read, the wizard's step
       marker, the cards step's refusals, the cap and the ceiling, the level
       picker's closed reasons and the review's tick
