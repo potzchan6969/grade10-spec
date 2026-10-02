@@ -161,8 +161,10 @@ The walk-in form and Start valuation send an optional
 fault as value: the form keeps what was typed). The cert is trimmed and
 capitalised by the contracts' one cert schema, the same one `items.register`,
 `items.edit` and the search read (Q48). Taking an item only sets
-`case_items.register_item_id`; `case_items` keeps the collector's request
-(Q35).
+`case_items.register_item_id`, and `case_items.facts_from_register` where the
+item is the customer's own; `case_items` keeps the collector's request (Q35).
+The vault's procedures are `admin.openWalkIn`, `admin.startValuation` and a
+new `admin.lookupSlab` (`vault:operate`).
 
 | Lookup answer | The vault does |
 | --- | --- |
@@ -171,10 +173,11 @@ capitalised by the contracts' one cert schema, the same one `items.register`,
 | A live item another case marks | refuses `SLAB_MARKED`, naming the case |
 | A retired item, or none | keeps the slab in `case_items.slab_grader`, `slab_grade`, `slab_cert` for the registration |
 
-The walk-in's linked draft keeps `register_item_id`; where the form filled
-from the register, the collector's draft edit (`vault-walk-ins-and-owners`)
-refuses category and title (Q43), and photographs and the description stay
-theirs.
+The walk-in's linked draft keeps `register_item_id`; where
+`facts_from_register` is set, the collector's draft edit
+(`vault-walk-ins-and-owners`) refuses category and title (Q43), photographs
+and the description stay theirs, and the collector's case wire carries the
+flag so the wizard reads those two fields only.
 
 ### The Case tab and the valuation read the register; the vault keeps the request
 
@@ -183,7 +186,9 @@ section and the valuation's slab line are views of
 `packages/inventory/admin-frontend` (`ItemFactsSection`, `SlabLine`), reading
 `items.get` by the case's `registerItemId` and editing through
 `items.edit` under `inventory:write`. `CaseDetailPanel` takes them as two
-render slots the app page fills, so neither admin package imports the other.
+render slots the app page fills (`itemFacts`, and `slabLine`, which
+`CaseFlowPanel` passes on to `ValuationDialog`), so neither admin package
+imports the other.
 No `registerItemId`, or the register answering not found, reads as
 registration pending; a caller without `inventory:read`, the treasurer, is
 answered forbidden and the section names the grant (Q44).
@@ -212,28 +217,33 @@ one function both call, and prints the release receipt's item from the same
 facts (Q57); its case was valued after the deploy, or registered by its own
 Prepare documents, so it always has an item id.
 
-The case read (`cases.detail`) asks `itemOf` too, fault as value, so the
-Documents tab withholds Prepare documents under "another owner" before staff
-press it. The vault names that owner the way it names a collector
-(`vault-walk-ins-and-owners`): `accountsByUserIds` for a caller holding
-`kyc:read`, the read audited, else the short id.
+The console's case read (`admin.detail`, and not the collector's own read or
+the answer of every act) asks `itemOf` too, fault as value, as a top-level
+`register` field, so the Documents tab withholds Prepare documents under
+"another owner" before staff press it. The vault names that owner the way it
+names a collector (`vault-walk-ins-and-owners`): its `admin.collectorNames`
+behind `kyc:read`, the read audited, else the short id.
 
 ### Names are read per page behind `kyc:read`
 
 Items, one item, a move's sides and the collector section carry owner ids.
-The router asks auth `accountsByUserIds` once per page (≤ 100) only for a
-caller holding `kyc:read`, and the read declares its audit entry (who read
-which owners). A fault, a missing name or no `kyc:read` answers the short id
-with `nameUnavailable: true`; the page stands. Search by email asks
+Their names come from a separate `items.ownerNames` (`kyc:read`), asked once
+per page with the page's ids (≤ 100, `accountsByUserIds` over inventory's new
+`AccountsPort` on `AUTH_SERVICE`), which declares its audit entry (who read
+which owners), as the vault's `admin.collectorNames` does. A fault, a missing
+name or no `kyc:read` shows the short id with "name unavailable"; the page
+stands. Search by email asks
 `accountByEmail` and filters on the id; no query reads a name (Q18).
 
 ### Proofs follow the auction's two-step upload
 
-`POST /api/items/:itemId/proofs` (`inventory:transfer`) stores one file in a
-new private bucket `INVENTORY_ITEM_PROOFS` and stages it in
-`item_proof_uploads`; `items.transfer` names the staged keys and moves them to
-`item_move_proofs` in its transaction. Opening a proof is `items.proof`
-(`inventory:transfer`), which streams the object and writes an audit entry.
+`PUT /api/items/:itemId/proofs?name=` (`inventory:transfer`, a raw body, as
+the auction's `routes/orderProofs.ts`) stores one file in a new private bucket
+`INVENTORY_ITEM_PROOFS` and stages it in `item_proof_uploads`;
+`items.transfer` names the staged keys and moves them to `item_move_proofs` in
+its transaction. Opening a proof is `GET /api/items/proofs/:proofId`
+(`inventory:transfer`), which streams the object with private, no-store
+headers and appends its audit entry.
 The storage area's `referenced` check is the proof rows, so the existing
 orphan sweep removes an object no row names, including those erasure frees.
 The dialog's picker is the auction's `ProofFilesField`, moved into
@@ -358,8 +368,8 @@ to show staff the slab the vault named and the item that holds it.
 
 | Table | Change |
 | --- | --- |
-| `vault.case_items` | add `register_item_id text NULL` (indexed), `slab_grader`, `slab_grade`, `slab_cert` `text NULL`, all three or none; replace `ck_case_items_category` with the ten (`NOT VALID`, then `VALIDATE`) |
-| `vault.register_dues` | new: `case_id` PK FK, `version int` default 1, `delivered_version int` default 0, `attempts int` default 0, `next_attempt_at`, `parked_at`, `last_error`, `updated_at`; index `(next_attempt_at) WHERE delivered_version < version AND parked_at IS NULL` |
+| `vault.case_items` | add `register_item_id text NULL` (indexed), `slab_grader`, `slab_grade`, `slab_cert` `text NULL`, all three or none, `facts_from_register boolean NOT NULL DEFAULT false`; replace `ck_case_items_category` with the ten (`NOT VALID`, then `VALIDATE`) |
+| `vault.register_dues` | new: `case_id` PK FK, `version int` default 1, `delivered_version int` default 0, `attempts int` default 0, `next_at`, `parked_at`, `last_error`, `updated_at`; index `(next_attempt_at) WHERE delivered_version < version AND parked_at IS NULL` |
 
 ```mermaid
 erDiagram
@@ -399,7 +409,7 @@ Example - Start valuation on case `vc_1`:
 `deliverRegisterDues(db, register, { caseId?, limit })` → `{ delivered, failed, parked }`.
 Per row: claim (`FOR UPDATE SKIP LOCKED`) and note `version`, read the case's
 state, call `tell`, then set `delivered_version` to the noted version, or
-raise `attempts` and `next_attempt_at`, or park at the cap. An act that raised
+raise `attempts` and `next_at`, or park at the cap. An act that raised
 `version` meanwhile leaves the row due.
 
 ### Inventory: `VaultItemsService`
@@ -440,7 +450,7 @@ Each is an `elevatedProcedure` declaring `auditDetails` and `auditSubject`
 | `items.retire` | write | item id, reason | `retired_*` | `ITEM_MARKED`, `ITEM_RETIRED` |
 | `items.restore` | write | item id, reason | clears `retired_*`, sets `restored_*` | `ITEM_NOT_RETIRED`, `ITEM_CERT_TAKEN` |
 | `items.closeMark` | write | mark id, reason | `item_marks` closed by staff; on a forfeited case, the vault's move to the lender unless the case has one | `MARK_STILL_HELD`, `PLACE_UNREACHABLE`; a closed mark answers as closed |
-| `items.proof` | transfer | proof id | audit row | `PROOF_REMOVED` |
+| `GET /api/items/proofs/:proofId` | transfer | proof id | audit row | `PROOF_REMOVED` |
 
 The owner's email is resolved with `accountByEmail` before the transaction; a
 retried transfer is refused `ITEM_SAME_OWNER`, so a double click moves once,
@@ -464,15 +474,19 @@ the tab and reads every item, returning `retired` on each row for the badge.
 
 - **New tRPC** `items.*` on the inventory router, each in
   `ADMIN_PERMISSIONS`, which gains `inventory:transfer`
-- **New route** `POST /api/items/:itemId/proofs`, multipart, one file
+- **New routes** `PUT /api/items/:itemId/proofs`, one file as a raw body,
+  and `GET /api/items/proofs/:proofId`
+- **New tRPC** `items.ownerNames` (`kyc:read`), audited
 - **New tRPC** `erasure.status`, `erasure.erase` on inventory
 - **New RPC** `VaultItemsService` (inventory) and `InventoryVaultService`
   (vault), each a named entrypoint `implements` its contracts surface
-- **Vault, additive** - `cases.detail` gains
-  `item: { registerItemId: string | null, register: { state: "pending" | "registered" | "unavailable", owner?, ownerMatches? } }`;
-  `valuation.start` and the walk-in open take an optional
+- **Vault, additive** - `caseItemSchema` gains `registerItemId` and `slab`;
+  `admin.detail` gains
+  `register: { state: "pending" | "registered" | "unavailable", ownerId?, ownerMatches?, retired? }`;
+  the collector's case wire gains `factsFromRegister`;
+  `admin.startValuation` and `admin.openWalkIn` take an optional
   `slab: { grader, grade, cert }`, all three required together; new
-  `cases.lookupSlab` (`vault:operate`);
+  `admin.lookupSlab` (`vault:operate`);
   new refusals `REGISTER_PENDING`, `REGISTER_UNREACHABLE`,
   `ITEM_OWNER_DIFFERS`, `ITEM_RETIRED`, `SLAB_MARKED`
 - **Auth contracts** - `inventory: ["read", "write", "transfer"]`; `staff`
@@ -504,9 +518,9 @@ the tab and reads every item, returning `retired` on each row for the badge.
   audit entry for every search and every page that resolved names
 - [Proof objects outliving their rows] → the area's `referenced` check is the
   rows, and the orphan sweep removes the rest
-- [Title search over a growing table] → a GIN trigram index on
-  `lower(title || ' ' || coalesce(description, ''))`, added if `pg_trgm` is
-  available, else a sequential scan over a register of thousands
+- [Title search over a growing table] → a sequential scan over a register of
+  thousands; a trigram index waits until the register is large, since the
+  repository tests' database has no `pg_trgm`
 
 ## Migration Plan
 
