@@ -1,0 +1,117 @@
+{
+  "version": 2,
+  "change": "my-auctions-without-bid-holds",
+  "baseline": "9cf691eb537740ecfe1046fe9014991b4d96a9a49b4eb6952689742454516922",
+  "fingerprint": "6b1757344b119c59f3000c56dd0331067763e3e0ca3703d70521976a12b3546d",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-02T15:06:18.110Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/decisions.md",
+      "sha256": "c34b52eaa897e8de45ac8189d4ffbb6bbbfc9058e111c3ed509dc910ccc9708b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/proposal.md",
+      "sha256": "c5a2b9cae1898c8d9006704d1f3dd87b7b393da7be5ee192cf7bdc0f9ccac530",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/specs/grade10-site/analytics/analytics/feature-tcs.md",
+      "sha256": "13f6bf68c31ea423f625ddc371643bf96193d27cca526a3607e3bcefbaade21c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/specs/grade10-site/analytics/analytics/spec.md",
+      "sha256": "b4bfe5f2eab9a2e7b63a9de424c33e847cadaa859d6252e1adff45eaaa4c426b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/specs/grade10-site/analytics/analytics/user-journeys.md",
+      "sha256": "6c9929782062dc161c8500e4f028b4c0d7532f2ff33047afd0be342eb5ed7ae5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "cc7a6c585ff64ce52df2ed9a4b6c5556feda2569c3c08103a6f7c2b597e5f131",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "2db0952fa5c0d1e7175179c599d324fd6bd4d558021171a4e20ddbe9f1ba2415",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/my-auctions-without-bid-holds/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "c927624c8b8e1731522f8e583e09eac1f422934393e2c5db6e61b4a1bcb435c2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/analytics/analytics/feature-tcs.md",
+      "sha256": "41f353b3143a1094f521b20f3984aabd4c9aa41674a9fd691e65c9364d27a34a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/analytics/analytics/spec.md",
+      "sha256": "447024df0845a41e912c48d1531aa7a34789aa56cb818fd674ce4b474ca7d016",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/analytics/analytics/user-journeys.md",
+      "sha256": "6c9929782062dc161c8500e4f028b4c0d7532f2ff33047afd0be342eb5ed7ae5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "870ddecc386d6209a4671bd0a89d3da5ad6e88969d4e0688f2835e4fe644689e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "9163c14b0fdf14376327412500c8fdb6bc1136c629130fda94c80dea8154d6d1",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "0091bd3140f57d34f38778bce17befdf7e58c6c50cbef0471df128b9affe8f6e",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/analytics/analytics/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/analytics/analytics/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The browser may send client event names only",
+        "Requirement: The browser sends client event names only"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/analytics/analytics/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A bid bookmarks the listing on My Auctions",
+        "Requirement: A bidder's standing while a listing is open",
+        "Requirement: A losing bidder is told what happened to their card hold",
+        "Requirement: A losing bidder reads that their card was not charged",
+        "Requirement: An open listing reads Leading or Outbid"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

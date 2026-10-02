@@ -3,7 +3,7 @@
 ## 1. The manual (grade10-spec) (owner: @ecchochan)
 
 - [x] 1.1 On `docs/prds/products/grade10-site/auction/bidding.md`'s My Auctions, list Leading and Outbid as the open-lot Status and say a Didn't win row reads that the card was not charged, unmarked since the build shows it, and drop the hold from its Didn't win value, letters, users and decisions; drop the bid-time hold from `docs/prds/products/grade10-admin/auction/management.md`'s Payment source and from `docs/prds/platform/auction-service.md`
-- [ ] 1.2 With the fold, drop from the durable account-record suite what the fold cannot: the Settled line and the Reconciliation row that keep the hold copy, the hold and Bid submitted wording of the earlier Reconciliation rows on a lone first bid, a pending bid and the open-window statuses, and `SC-3pi`, `SC-91l`, `SC-uvr` and `SC-dtm` from the covers of case markers `TC-hc2`, `TC-qo0` and `TC-5uz`
+- [x] 1.2 With the fold, drop from the durable account-record suite what the fold cannot: the Settled line and the Reconciliation row that keep the hold copy, the hold and Bid submitted wording of the earlier Reconciliation rows on a lone first bid, a pending bid and the open-window statuses, and `SC-3pi`, `SC-91l`, `SC-uvr` and `SC-dtm` from the covers of case markers `TC-hc2`, `TC-qo0` and `TC-5uz`
 - [x] 1.3 Verify: `pnpm check:manual`, `pnpm run tcs:validate` and `pnpm run validate:changes my-auctions-without-bid-holds` in grade10-spec.
 
 ## 2. The build (grade10) (owner: @ecchochan)
