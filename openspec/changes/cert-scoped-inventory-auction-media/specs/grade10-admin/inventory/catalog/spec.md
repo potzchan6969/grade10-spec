@@ -1,8 +1,12 @@
 # grade10-admin/inventory/catalog Specification
 
 ## Purpose
-Lets an authorized Inventory operator keep source media shared at product
-level or associate it with one physical Cert record.
+Gives Grade10 one stock snapshot per catalogue product, quantity-based
+application reservations with remaining / sold / vaulted / released tracking,
+admin oversight by explicit `holder_kind`, an append-only trace of every count
+transition, and an ordered reusable media gallery for Auction listings whose
+source items stay shared at product level or associate with one physical Cert
+record.
 
 ## Feature set
 
