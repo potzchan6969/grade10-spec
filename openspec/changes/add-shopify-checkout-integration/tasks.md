@@ -71,7 +71,7 @@
   test:backend`, `pnpm run typecheck`, `pnpm run lint`, and the relevant
   backend-quality checks before the frontend consumes the new result.
 
-## 4. Storefront checkout and order surfaces (grade10)
+## 4. Storefront checkout and order surfaces (grade10) (owner: @kinisworking)
 
 - [ ] 4.1 Add failing frontend coverage for live review gating, changed-line
   recovery, one hosted invoice, signed-out access, repeated Pay, terminal
