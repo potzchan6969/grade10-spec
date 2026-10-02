@@ -138,9 +138,9 @@ authorization expires on its own.
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
 - **Folded in** - `winner-order-SC-15` and `winner-order-SC-35` by `winner-order-US1-TC5-2`: nothing was held from bidding, and one charge pays the invoice through hosted Checkout; `winner-order-SC-26` and `winner-order-SC-27` lose the hold release only, and their coverage is as on main
-- **Revised** - `winner-order-US1-TC5-2`: QA1 kept the id, but the case no longer reads a hold released, so it moves up a revision; its marker drops `winner-order-SC-12`, `winner-order-SC-13` and `winner-order-SC-14`
-- **Deprecated** - `winner-order-US6-TC1-1` and `winner-order-US6-TC2-1`, with `winner-order-US-06`; a losing bidder reads that their card was not charged on My Auctions, `grade10-site-auction-account-record-US4-TC1-2`
+- **Revised** - `winner-order-US1-TC5-2`: QA1 kept the id, but the case no longer reads a hold released, so it moves up a revision; its marker drops winner-order-SC-12, winner-order-SC-13 and winner-order-SC-14
+- **Deprecated** - `winner-order-US6-TC1-1` and `winner-order-US6-TC2-1`, with winner-order-US-06; a losing bidder reads that their card was not charged on My Auctions, `grade10-site-auction-account-record-US4-TC1-2`
 - **Raised** - none
-- **Retired elsewhere** - `winner-order-SC-12`, `winner-order-SC-13` and `winner-order-SC-14`, the hold released at the close, retire with `complete-auction-post-sale`, which renames their requirement and keeps none of them
+- **Retired elsewhere** - winner-order-SC-12, winner-order-SC-13 and winner-order-SC-14, the hold released at the close, retire with `complete-auction-post-sale`, which renames their requirement and keeps none of them
 - **Contradicted** - none
 - **Uncovered anchors** - none

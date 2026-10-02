@@ -113,6 +113,6 @@ to size, raise or release, and no raise fails on the card.
 
 **Migration:** "Maximum commitments and automatic bids take nothing from the
 card" states that a bid placed on a bidder's behalf needs no card step.
-`grade10-site-auction-auto-bidding-SC-19`,
-`grade10-site-auction-auto-bidding-SC-20` and
-`grade10-site-auction-auto-bidding-SC-21` retire.
+grade10-site-auction-auto-bidding-SC-19,
+grade10-site-auction-auto-bidding-SC-20 and
+grade10-site-auction-auto-bidding-SC-21 retire.

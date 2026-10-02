@@ -239,7 +239,7 @@ customer A(leads with an authorized maximum matching the row) while the current 
 
 - **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `grade10-site-auction-auto-bidding-US5-TC7-2`
 - **Covered at domain** - `grade10-site-auction-e2e-US04-TC03-2` reads the refusal and the bid form's words of `grade10-site-auction-auto-bidding-SC-32`'s second half, a maximum not raised
-- **Revised** - `grade10-site-auction-auto-bidding-US5-TC7-2` reads that nothing is taken from the card; its marker drops `grade10-site-auction-auto-bidding-SC-19`, `grade10-site-auction-auto-bidding-SC-20` and `grade10-site-auction-auto-bidding-SC-21` and covers `grade10-site-auction-auto-bidding-SC-32`. `grade10-site-auction-auto-bidding-US1-TC8-1` loses the hold switch pre-condition only, `<v>` kept
+- **Revised** - `grade10-site-auction-auto-bidding-US5-TC7-2` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `grade10-site-auction-auto-bidding-US1-TC8-1` loses the hold switch pre-condition only, `<v>` kept
 - **Deprecated** - `grade10-site-auction-auto-bidding-US5-TC1-1`, `grade10-site-auction-auto-bidding-US5-TC2-1` and `grade10-site-auction-auto-bidding-US5-TC3-1`, with the hold requirement
 - **Raised** - none
 - **Contradicted** - none

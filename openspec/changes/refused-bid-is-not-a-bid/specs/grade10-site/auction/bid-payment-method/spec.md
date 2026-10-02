@@ -135,8 +135,8 @@ card authorization or on the provider's answer to one.
 
 **Migration:** The bid form's words for every refusal are
 `grade10-site/auction/auction`'s, in "A refused bid places nothing".
-`grade10-site-auction-bid-payment-method-SC-12` and
-`grade10-site-auction-bid-payment-method-SC-13` retire.
+grade10-site-auction-bid-payment-method-SC-12 and
+grade10-site-auction-bid-payment-method-SC-13 retire.
 
 ### Requirement: A listing authorization covers the committed maximum
 
@@ -144,25 +144,25 @@ card authorization or on the provider's answer to one.
 raise is accepted or refused on the auction's rules alone.
 
 **Migration:** Retrying a bid so it answers its first outcome is a later
-change. `grade10-site-auction-bid-payment-method-SC-06`,
-`grade10-site-auction-bid-payment-method-SC-11` and
-`grade10-site-auction-bid-payment-method-SC-08` retire.
+change. grade10-site-auction-bid-payment-method-SC-06,
+grade10-site-auction-bid-payment-method-SC-11 and
+grade10-site-auction-bid-payment-method-SC-08 retire.
 
 ### Requirement: An outbid authorization is cancelled without capture
 
 **Reason:** Being outbid has no authorization to cancel; nothing was held.
 
-**Migration:** `grade10-site-auction-bid-payment-method-SC-07` retires.
+**Migration:** grade10-site-auction-bid-payment-method-SC-07 retires.
 
 ### Requirement: A hold requests eligible authorization capabilities
 
 **Reason:** No hold is created, so no authorization window is requested.
 
-**Migration:** `grade10-site-auction-bid-payment-method-SC-14` retires.
+**Migration:** grade10-site-auction-bid-payment-method-SC-14 retires.
 
 ### Requirement: A provider refusal resolves the attempted raise
 
 **Reason:** No raise asks the provider for anything, so no provider refusal
 can leave a raise pending.
 
-**Migration:** `grade10-site-auction-bid-payment-method-SC-15` retires.
+**Migration:** grade10-site-auction-bid-payment-method-SC-15 retires.

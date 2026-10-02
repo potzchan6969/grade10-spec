@@ -467,8 +467,8 @@ order, so being outbid or losing has nothing to release.
 
 **Migration:** `grade10-site-auction-auction-SC-10` moves to "A bid counts
 when it is accepted", serving `grade10-site-auction-auction-US-02` since
-`grade10-site-auction-auction-US-03` retires. `grade10-site-auction-auction-SC-09`,
-`grade10-site-auction-auction-SC-11` and `grade10-site-auction-auction-SC-12`
+grade10-site-auction-auction-US-03 retires. grade10-site-auction-auction-SC-09,
+grade10-site-auction-auction-SC-11 and grade10-site-auction-auction-SC-12
 retire.
 
 ### Requirement: Stripe configuration and delayed authorization facts are handled explicitly
@@ -478,8 +478,8 @@ authorization outcome or webhook to reconcile. Card linking is
 `grade10-site/auction/bid-panel-enrollment`'s, and the winner's payment is
 `grade10-site/auction/winner-order`'s.
 
-**Migration:** `grade10-site-auction-auction-SC-14` and
-`grade10-site-auction-auction-SC-15` retire.
+**Migration:** grade10-site-auction-auction-SC-14 and
+grade10-site-auction-auction-SC-15 retire.
 
 ### Requirement: A standard bid does not require a bid-time authorization
 
