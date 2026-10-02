@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "25a51c710b34021b7aff3870b48a02d2c37985859ef7db9615a473fe29d41793"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "7c0145744d753c8bd4af5d0236de152612309786",
+    "capturedAt": "2026-10-02T16:46:28.557Z",
+    "targets": [
+      {
+        "path": "openspec/changes/carousel-auction-list-featured/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/featured/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/featured/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A Featured slot is shown on the catalogue only when complete and eligible",
+          "Requirement: An authorized operator fills a Featured slot",
+          "Requirement: An authorized operator reorders and clears Featured slots",
+          "Requirement: Featured curation uses auction catalogue write grants",
+          "Requirement: Featured holds at most three ordered slots",
+          "Requirement: Manage Featured opens from the Listings tab"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/featured/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: All auctions cards use the shared watch",
+          "Requirement: All auctions loads more as the collector scrolls",
+          "Requirement: Bid Now or View Auction opens the lot details page",
+          "Requirement: Each Featured slide shows the curated lot facts",
+          "Requirement: Featured leads the catalogue when complete slides are set",
+          "Requirement: Progress advances among two or three Featured slides",
+          "Requirement: The catalogue has one resting order",
+          "Requirement: The catalogue layout is Featured then All auctions only",
+          "Requirement: Upcoming catalogue cards withhold money until open"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
