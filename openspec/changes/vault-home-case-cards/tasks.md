@@ -5,7 +5,7 @@
 - [ ] 1.3 `vault.list.yourCases` in every shared locale; `vault.list.open` and `vault.list.noVisit` removed from every locale
 - [ ] 1.4 Verify: `pnpm --filter @grade10/ui test`, `pnpm run test:stories:ui`, `pnpm run lint`, `pnpm run typecheck`, `pnpm --filter @grade10/i18n test`, `pnpm check:manual`
 
-## 2. The Site's List (grade10)
+## 2. The Site's List (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 `caseCardOf` and `CaseList.test.tsx` cases for the card's map: both chips, the facts with the reference, the next step, the calendar line with a past visit, the title fallback, opening a case; the `openCaseCard` E2E helper replacing the Open clicks at `request.spec.ts` 375, 580, 612 and `walk-in.spec.ts` 426, 602, and the offer spec reading Answer by as the next step; in their own commit before the code (`grade10-site-vault-valuation-and-offer-SC-25`, `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-intake-SC-01`, `grade10-site-vault-case-intake-SC-32`, `grade10-site-vault-case-intake-SC-23`)
 - [ ] 2.2 One commit: the submodule bump; `visitAhead` exported from `standing.ts`; `chipView.ts` with `OwnershipChip` reading it; `CaseList` rendering `VaultCases` from `caseCardOf`, its `CaseCard`, the Open button and the No visit booked line deleted; `node scripts/checks/check-store-blocks.mjs` (`grade10-site-vault-valuation-and-offer-SC-25`, `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-intake-SC-01`, `grade10-site-vault-case-intake-SC-32`, `grade10-site-vault-case-intake-SC-23`)
