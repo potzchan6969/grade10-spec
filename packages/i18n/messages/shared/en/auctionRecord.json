@@ -26,7 +26,7 @@
   "contact": "Payment details need attention.",
   "belowMinimum": "The bid did not meet the minimum amount.",
   "windowClosed": "The bidding window is closed.",
-  "cardAuthorizationFailed": "Payment authorization did not succeed.",
+  "cardNotCharged": "Your card was not charged.",
   "watch": "Watch",
   "unwatch": "Unwatch",
   "watchAriaLabel": "Watch this auction",
@@ -43,15 +43,12 @@
   "biddingState": {
     "leading": "Leading",
     "outbid": "Outbid",
-    "bid_submitted": "Bid submitted",
     "bid_not_accepted": "Bid not accepted",
     "awaiting_payment": "Awaiting payment",
     "payment_problem": "Payment problem",
     "paid": "Paid",
     "shipped": "Shipped",
-    "delivered": "Delivered",
-    "hold_releasing": "Hold being released",
-    "hold_released": "Hold released"
+    "delivered": "Delivered"
   },
   "bidPlaced": "Bid",
   "openListing": "Open listing",

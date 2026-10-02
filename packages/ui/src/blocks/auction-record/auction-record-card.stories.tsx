@@ -4,7 +4,6 @@ import { AuctionRecordRow } from "./auction-record-row";
 import {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
-  BIDDING_DIDNT_WIN_HOLD_RELEASING,
   BIDDING_ENDED,
   BIDDING_POSTER,
   BIDDING_WON_AWAITING_ADDRESS,
@@ -141,22 +140,13 @@ export const DidntWin: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Didn’t win")).toBeVisible();
+    expect(canvas.getByText("Your card was not charged.")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Unwatch this auction" }),
     ).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("link", { name: /View order/ }),
     ).not.toBeInTheDocument();
-  },
-};
-
-/** Hold releasing after a lost bid — same actions as Didn’t win. */
-export const HoldReleasing: Story = {
-  name: "Hold releasing",
-  render: () => <AuctionCard {...BIDDING_DIDNT_WIN_HOLD_RELEASING} />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Didn’t win")).toBeVisible();
   },
 };
 

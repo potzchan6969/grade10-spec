@@ -11,7 +11,7 @@ import { AuctionRecord } from "./auction-record";
 import {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
-  BIDDING_DIDNT_WIN_HOLD_RELEASING,
+  BIDDING_DIDNT_WIN,
   BIDDING_ENDED,
   BIDDING_POSTER,
   BIDDING_WON_AWAITING_ADDRESS,
@@ -341,7 +341,7 @@ export const Ended: Story = {
 /**
  * Address-first post-auction standing on Won rows, plus Didn’t win and
  * watch-only Ended. Read-only — Won title / View order open Winner Order; no
- * pay control and no row detail helper copy on this surface.
+ * pay control and no payment helper copy on Won rows.
  */
 export const PostAuctionStanding: Story = {
   name: "Post-auction standing",
@@ -360,7 +360,7 @@ export const PostAuctionStanding: Story = {
         BIDDING_WON_DELIVERED,
         BIDDING_WON_CANCELLED,
         BIDDING_WON_REFUNDED,
-        BIDDING_DIDNT_WIN_HOLD_RELEASING,
+        BIDDING_DIDNT_WIN,
         BIDDING_ENDED,
       ]}
       watching={[WATCHING_ENDED]}
@@ -393,9 +393,7 @@ export const PostAuctionStanding: Story = {
     expect(
       canvas.queryByText("Contact Grade10 about payment"),
     ).not.toBeInTheDocument();
-    expect(
-      canvas.queryByText("Card hold being released"),
-    ).not.toBeInTheDocument();
+    expect(canvas.getAllByText("Your card was not charged.")).toHaveLength(2);
     expect(canvas.getAllByText("Didn’t win")).toHaveLength(2);
     expect(canvas.getByText("Ended")).toBeVisible();
     expect(

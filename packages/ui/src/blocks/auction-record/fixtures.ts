@@ -187,8 +187,9 @@ const BIDDING_CHARIZARD = biddingItem({
 const BIDDING_ENDED = biddingItem({
   id: "bid-ended",
   title: "1977 Star Wars Topps Wax Pack",
-  state: "hold_released",
+  state: "ended",
   stateLabel: "Didn’t win",
+  detail: "Your card was not charged.",
   currentBid: "HK$890",
   closesAt: "Ended 7 Sep 2026, 18:00 HKT",
   href: "#lot-wax-pack",
@@ -330,11 +331,12 @@ const BIDDING_WON_REFUNDED = biddingItem({
   copy: ORDER_ROW_COPY,
 });
 
-const BIDDING_DIDNT_WIN_HOLD_RELEASING = biddingItem({
-  id: "didnt-win-releasing",
+const BIDDING_DIDNT_WIN = biddingItem({
+  id: "didnt-win",
   title: "1999 Jungle Flareon Holo PSA 8",
-  state: "hold_releasing",
+  state: "ended",
   stateLabel: "Didn’t win",
+  detail: "Your card was not charged.",
   currentBid: "HK$1,850",
   closesAt: "Ended 15 Sep 2026, 19:00 HKT",
   href: "#lot-flareon",
@@ -343,7 +345,7 @@ const BIDDING_DIDNT_WIN_HOLD_RELEASING = biddingItem({
 export {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
-  BIDDING_DIDNT_WIN_HOLD_RELEASING,
+  BIDDING_DIDNT_WIN,
   BIDDING_EMAIL_ALERTS_COPY,
   BIDDING_ENDED,
   BIDDING_POSTER,

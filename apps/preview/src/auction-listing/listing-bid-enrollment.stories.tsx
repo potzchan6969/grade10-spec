@@ -352,9 +352,7 @@ export const PaymentAuthorization: Story = {
     await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
     await waitFor(() => {
       expect(
-        canvas.getByText(
-          "Your card could not be authorized. Try another card.",
-        ),
+        canvas.getByText("This card could not be used. Try another card."),
       ).toBeVisible();
     });
     expect(

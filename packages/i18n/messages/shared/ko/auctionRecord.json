@@ -26,7 +26,7 @@
   "contact": "결제 정보를 확인해야 합니다.",
   "belowMinimum": "입찰가가 최소 금액에 미치지 못했습니다.",
   "windowClosed": "입찰 시간이 종료되었습니다.",
-  "cardAuthorizationFailed": "결제 승인이 완료되지 않았습니다.",
+  "cardNotCharged": "카드로 결제되지 않았습니다.",
   "watch": "관심 목록에 추가",
   "unwatch": "관심 목록에서 삭제",
   "watchAriaLabel": "이 경매를 관심 목록에 추가",
@@ -43,15 +43,12 @@
   "biddingState": {
     "leading": "최고 입찰",
     "outbid": "상위 입찰 발생",
-    "bid_submitted": "입찰 제출됨",
     "bid_not_accepted": "입찰이 승인되지 않음",
     "awaiting_payment": "결제 대기",
     "payment_problem": "결제 문제",
     "paid": "결제됨",
     "shipped": "배송됨",
-    "delivered": "배달됨",
-    "hold_releasing": "승인 보류 해제 중",
-    "hold_released": "승인 보류 해제됨"
+    "delivered": "배달됨"
   },
   "bidPlaced": "입찰",
   "openListing": "출품작 열기",

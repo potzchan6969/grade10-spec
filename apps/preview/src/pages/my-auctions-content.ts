@@ -237,11 +237,12 @@ const WON_REFUNDED = biddingItem({
   copy: ORDER_ROW_COPY,
 });
 
-const DIDNT_WIN_HOLD_RELEASING = biddingItem({
-  id: "didnt-win-releasing",
+const DIDNT_WIN = biddingItem({
+  id: "didnt-win",
   title: "1999 Jungle Flareon Holo PSA 8",
-  state: "hold_releasing",
+  state: "ended",
   stateLabel: "Didn’t win",
+  detail: "Your card was not charged.",
   currentBid: "HK$1,850",
   closesAt: "Ended 15 Sep 2026, 19:00 HKT",
   href: "#lot-flareon",
@@ -280,7 +281,7 @@ const POST_AUCTION_BIDDING: readonly AuctionRecordRowProps[] = [
   WON_DELIVERED,
   WON_CANCELLED,
   WON_REFUNDED,
-  DIDNT_WIN_HOLD_RELEASING,
+  DIDNT_WIN,
   LEADING,
 ];
 

@@ -146,7 +146,7 @@ export const ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED: ListingBidEnroll
     },
     bidAuthorization: {
       status: "error",
-      message: "Your card could not be authorized. Try another card.",
+      message: "This card could not be used. Try another card.",
     },
   };
 

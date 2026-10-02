@@ -3,7 +3,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   linkACardToBid: "Link a card to bid",
   paymentMethod: "Linked Card",
   paymentMethodTooltip:
-    "We authorize your card for bidding. You're only charged if you win.",
+    "Your card is kept on file for bidding. You're only charged if you win.",
   linkCardEmptyState: "Link a card to place a bid.",
   changeCard: "Change",
   getReadyToBid: "Link a card to bid",
@@ -16,7 +16,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
   signInDemoSubmit: "Continue (Demo)",
-  authorizationDeclined: "Your card could not be authorized. Try another card.",
+  authorizationDeclined: "This card could not be used. Try another card.",
   authorizationProviderFailure:
-    "Your bid did not go through. The card was not authorized.",
+    "Your card could not be checked just now. Try again.",
 } as const;
