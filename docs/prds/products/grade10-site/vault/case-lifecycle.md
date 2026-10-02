@@ -170,6 +170,9 @@ released`, guarded on nothing outstanding and no packet open.
   lender
 - 🚧 **Another owner** - preparing documents is refused while the register
   names someone other than the case's collector
+- 🚧 **A retired item** - preparing documents, or the release receipt, is
+  refused while the register reads the item as retired, until staff restore
+  it - [Items](/p/grade10-admin/inventory/items#retiring-an-item)
 
 ## Specs and journeys
 

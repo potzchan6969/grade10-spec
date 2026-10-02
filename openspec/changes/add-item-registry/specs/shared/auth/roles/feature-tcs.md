@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite:** shared-auth-roles-SC-24 - no role holds `inventory:write` without `inventory:transfer`; the grant split is held by the role and vocabulary tests in grade10's `packages/grade10-auth/contracts/test/roles.test.ts` and the items service tests (tasks 2.1, 5.1), and walked by `grade10-admin-inventory-items-US3-TC9-1`
+**Out of suite:** shared-auth-roles-SC-18 - the exact admin list in grade10's `packages/grade10-auth/contracts/test/roles.test.ts`; shared-auth-roles-SC-20 - a `parseRoles("finance,treasurer")` case in the same file; shared-auth-roles-SC-21 - the exact, ordered `PERMISSION_STATEMENTS` assertion in the same file; shared-auth-roles-SC-24 - no role holds `inventory:write` without `inventory:transfer`; the grant split is held by the role and vocabulary tests in grade10's `packages/grade10-auth/contracts/test/roles.test.ts` and the items service tests (tasks 2.1, 5.1), and walked by `grade10-admin-inventory-items-US3-TC9-1`
 
 ## shared-auth-roles-US2: Operator's grants follow the closed vocabulary
 

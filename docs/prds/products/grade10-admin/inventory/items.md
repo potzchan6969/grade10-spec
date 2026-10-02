@@ -62,12 +62,6 @@ mark the vault no longer has.
 - 🚧 **The place decides** - the register never refuses what the vault has
   already done; where the vault and the register disagree on the owner, the
   item's page shows staff both owners
-- 🚧 **Items already in the vault** - every case that reached custody, and
-  every open case past the start of its valuation, appears as an item under
-  its collector, marked while the item is in the vault; an erased collector's
-  case is left out, a forfeited case's item
-  belongs to the lender, and staff retire a second record of one object when
-  they find it
 - 🚧 **A mark left open** - staff close a mark the vault no longer has, with
   a reason; a later word from the vault does not reopen it; offered only
   while the vault reads the item as no longer held
@@ -98,8 +92,8 @@ mark the vault no longer has.
 
 ## Finding an Item
 
-- 🚧 **Default list** - marked items; staff switch to every item or to
-  retired ones
+- 🚧 **Default list** - marked items; staff switch to every live item,
+  marked or not, or to retired ones
 - 🚧 **Search** - by title or description, by grader and cert, by item id,
   or by the owner's exact email; never by an owner's name - a click on a name opens the
   collector page

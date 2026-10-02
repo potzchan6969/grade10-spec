@@ -31,14 +31,14 @@ they sent it.
 - **Unreachable** - where the register cannot be read, the section SHALL show
   its own error with a retry, and the rest of the tab SHALL stand.
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-55 - The section says registration is pending until the valuation starts
+#### Scenario: grade10-admin-vault-operator-queue-SC-83 - The section says registration is pending until the valuation starts
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff read a case the register does not hold yet
 
 - **GIVEN** a submitted case nobody has started valuing
 - **WHEN** staff open its Case tab
 - **THEN** the item's facts section says the item is registered when the valuation starts
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-56 - The register's facts stand in for the request's
+#### Scenario: grade10-admin-vault-operator-queue-SC-84 - The register's facts stand in for the request's
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff read one story about the item on the case
 
 - **GIVEN** a case whose collector asked about "Charizard card", now registered as "Charizard 1999 Base Set" with PSA `10` and cert `12345678`
@@ -46,7 +46,7 @@ they sent it.
 - **THEN** the section shows the register's category, title, description, PSA, `10` and `12345678`, linking the item
 - **AND** the collector's request still reads "Charizard card", as they sent it
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-57 - Editing the facts needs the register's write grant
+#### Scenario: grade10-admin-vault-operator-queue-SC-85 - Editing the facts needs the register's write grant
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff correct the slab's cert from the case
 
 - **GIVEN** a case whose item is registered
@@ -54,7 +54,7 @@ they sent it.
 - **THEN** the register's edit opens, and the section shows the corrected cert once it lands
 - **AND** an operator holding `vault:read` without `inventory:write` reads the facts with no Edit, and an edit sent anyway is refused by name
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-58 - A register that cannot be read leaves the case standing
+#### Scenario: grade10-admin-vault-operator-queue-SC-86 - A register that cannot be read leaves the case standing
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff work the case while the register is down
 
 - **GIVEN** a registered case, and the register not answering
@@ -62,7 +62,7 @@ they sent it.
 - **THEN** the item's facts section shows its own error with a retry
 - **AND** the case's acts and timeline stand
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-66 - A treasurer's Case tab names the register's grant
+#### Scenario: grade10-admin-vault-operator-queue-SC-94 - A treasurer's Case tab names the register's grant
 **Serves:** grade10-admin-vault-operator-queue-US-21 - a treasurer reading a case to pay against it is not shown who owns which item
 
 - **GIVEN** a registered case, and a treasurer, who holds `vault:read` and no inventory grant
@@ -91,7 +91,7 @@ sent it:
 While the lookup runs the form SHALL say so; where the register cannot be
 asked, the form SHALL show an error with a retry and keep what was typed.
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-59 - A walk-in's slab the register knows is taken
+#### Scenario: grade10-admin-vault-operator-queue-SC-87 - A walk-in's slab the register knows is taken
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff take in a slab a collector brought before
 
 - **GIVEN** a live item with PSA `12345678` owned by the customer at the counter, which no case marks
@@ -100,7 +100,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **WHEN** staff open the draft
 - **THEN** the case takes that item, and its Case tab reads the item's facts
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-60 - An unknown slab is registered when the valuation starts
+#### Scenario: grade10-admin-vault-operator-queue-SC-88 - An unknown slab is registered when the valuation starts
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff take in a slab the register has never seen
 
 - **GIVEN** no item with PSA `87654321`
@@ -108,14 +108,14 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **THEN** the form fills nothing, and the item registered at the start carries PSA, `9` and `87654321`
 - **AND** a slab given with a grader and cert and no grade is refused by name
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-61 - A retired slab reads as retired
+#### Scenario: grade10-admin-vault-operator-queue-SC-89 - A retired slab reads as retired
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff type a slab whose old record was retired
 
 - **GIVEN** a retired item with PSA `12345678` and no live one
 - **WHEN** staff type PSA and `12345678` on the walk-in form
 - **THEN** the form reads the slab as retired, and a new item is registered when the valuation starts
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-62 - A slab under another owner is taken and named
+#### Scenario: grade10-admin-vault-operator-queue-SC-90 - A slab under another owner is taken and named
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff learn at the counter that the slab is registered to someone else
 
 - **GIVEN** a live item with PSA `12345678` owned by another account, which no case marks
@@ -124,21 +124,21 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **AND** for staff without `kyc:read` it names the owner by short id
 - **AND** the case takes the item, and Prepare documents is refused until the owners match
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-63 - A slab another case marks is refused
+#### Scenario: grade10-admin-vault-operator-queue-SC-91 - A slab another case marks is refused
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff cannot take in a slab the vault already keeps
 
 - **GIVEN** a live item with PSA `12345678` the vault marks for case `K7P2QX`
 - **WHEN** staff open a walk-in's draft naming PSA and `12345678`
 - **THEN** it is refused, naming and linking `K7P2QX`, and no case is opened
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-64 - A lookup that cannot reach the register keeps the form
+#### Scenario: grade10-admin-vault-operator-queue-SC-92 - A lookup that cannot reach the register keeps the form
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff retry the lookup without typing the customer again
 
 - **GIVEN** the register not answering
 - **WHEN** staff type a grader and cert on the walk-in form
 - **THEN** the form shows an error with a retry and keeps everything typed
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-65 - Starting a valuation names the slab the same way
+#### Scenario: grade10-admin-vault-operator-queue-SC-93 - Starting a valuation names the slab the same way
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff name the slab of a request sent from a phone when they start valuing it
 
 - **GIVEN** a submitted case that has named no slab, and a live item with PSA, `10` and `12345678` no case marks

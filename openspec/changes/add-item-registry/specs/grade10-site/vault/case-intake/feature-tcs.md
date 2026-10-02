@@ -123,12 +123,12 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journey, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Collector Pages and Items PRD pages, and the durable case-intake suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md` and the operator-queue delta. It is a statement, not proof.
 
-- **Folded** - `grade10-site-vault-case-intake-US1-TC22-1` into `grade10-site-vault-case-intake-SC-32`; `grade10-site-vault-case-intake-US1-TC23-1` into `grade10-site-vault-case-intake-SC-33`, gaining the register's description left unchanged as Q47
-- **Patched, not re-run** - `grade10-site-vault-case-intake-US1-TC23-1` tried the grader, grade and cert on the collector's Describe step, which carries no such field; it now tries the category and the title, the two `grade10-site-vault-case-intake-SC-33` reads from the register
-- **Added by QA2** - `grade10-site-vault-case-intake-US1-TC24-1` for `grade10-site-vault-case-intake-SC-34`, the worker's refusal, which the blind case reached only through the interface
-- **Raised, answered by the round** - the customer's description edit on a linked draft changes the request alone (Q47, `grade10-site-vault-case-intake-SC-33`)
+- **Folded** - `grade10-site-vault-case-intake-US1-TC22-1` into `grade10-site-vault-case-intake-SC-39`; `grade10-site-vault-case-intake-US1-TC23-1` into `grade10-site-vault-case-intake-SC-40`, gaining the register's description left unchanged as Q47
+- **Patched, not re-run** - `grade10-site-vault-case-intake-US1-TC23-1` tried the grader, grade and cert on the collector's Describe step, which carries no such field; it now tries the category and the title, the two `grade10-site-vault-case-intake-SC-40` reads from the register
+- **Added by QA2** - `grade10-site-vault-case-intake-US1-TC24-1` for `grade10-site-vault-case-intake-SC-41`, the worker's refusal, which the blind case reached only through the interface
+- **Raised, answered by the round** - the customer's description edit on a linked draft changes the request alone (Q47, `grade10-site-vault-case-intake-SC-40`)
 - **Raised, escalated** - none
-- **Round 4** - `grade10-site-vault-case-intake-SC-33` and `grade10-site-vault-case-intake-SC-34` hold only for a slab the register holds under the customer at the counter, the one the walk-in form fills; `grade10-site-vault-case-intake-US1-TC23-1` and `grade10-site-vault-case-intake-US1-TC24-1` now say so
+- **Round 4** - `grade10-site-vault-case-intake-SC-40` and `grade10-site-vault-case-intake-SC-41` hold only for a slab the register holds under the customer at the counter, the one the walk-in form fills; `grade10-site-vault-case-intake-US1-TC23-1` and `grade10-site-vault-case-intake-US1-TC24-1` now say so
 - **Rejected** - none
 - **Contradicted** - none
 - **Uncovered anchors** - none: US-01 has a case for each of the three scenarios; the modified requirement's other scenarios keep their durable cases

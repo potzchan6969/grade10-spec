@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite:** grade10-admin-inventory-items-SC-05 - grade10's inventory service and repository tests, which find no product or stock row after a register act (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-06 - the ZZZ panel's surface test in grade10's `apps/admin` (tasks 11.1, 11.2); grade10-admin-inventory-items-SC-15 - `ItemFactsDialog`'s component tests and `FormDialog`'s stories (task 11.1); grade10-admin-inventory-items-SC-20 - the repository test applying each case state twice and out of order (task 4.1); grade10-admin-inventory-items-SC-21 - `tell`'s service test; no console path opens two marks in this release (task 4.1); grade10-admin-inventory-items-SC-22 - `tell`'s service test for the race, and `ItemPanel`'s component test for the slab line (tasks 4.1, 11.1); grade10-admin-inventory-items-SC-37 - the transfer service test, which sees no message sent (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-39 - the transfer service test of a second send (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-56 - the list's keyset test over PGlite (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-66 - the retention review's gauge test (tasks 6.1, 6.3); grade10-admin-inventory-items-SC-72 - the `items.*` routers' audit declaration tests, which find ids, owner kinds and the retire code and no email, term or reason text in each entry (tasks 5.1, 5.8)
+**Out of suite:** grade10-admin-inventory-items-SC-05 - grade10's inventory service and repository tests, which find no product or stock row after a register act (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-06 - the ZZZ panel's surface test in grade10's `apps/admin` (tasks 10.1, 10.2); grade10-admin-inventory-items-SC-15 - `ItemFactsDialog`'s component tests and `FormDialog`'s stories (task 10.1); grade10-admin-inventory-items-SC-20 - the repository test applying each case state twice and out of order (task 4.1); grade10-admin-inventory-items-SC-21 - `tell`'s service test; no console path opens two marks in this release (task 4.1); grade10-admin-inventory-items-SC-22 - `tell`'s service test for the race, and `ItemPanel`'s component test for the slab line (tasks 4.1, 10.1); grade10-admin-inventory-items-SC-37 - the transfer service test, which sees no message sent (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-39 - the transfer service test of a second send (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-56 - the list's keyset test over PGlite (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-66 - the retention review's gauge test (tasks 6.1, 6.3); grade10-admin-inventory-items-SC-72 - the `items.*` routers' audit declaration tests, which find ids, owner kinds and the retire code and no email, term or reason text in each entry (tasks 5.1, 5.8)
 
 ## Background
 
@@ -98,7 +98,7 @@ a place marks it,
 
 **Expected Results:**
 
-* Step 1 lists `<item_1>` and `<item_2>`, marked and not marked alike.
+* Step 1 lists `<item_1>` and `<item_2>`, marked and not marked alike, and not `<item_3>`.
 * Step 2 lists `<item_3>` with lost as why it was retired, and neither live item.
 
 ### grade10-admin-inventory-items-US1-TC3-1: One search finds an item by each key it reads
@@ -289,53 +289,6 @@ Runs once per row of **Test data**.
 * Step 4 is not refused; `<case_7>` reads vaulted.
 * `<item_7>` reads marked by the vault on `<case_7>`.
 * A warning shows the vault's owner, `<collector A>`, and the register's, `<collector B>`.
-
-### grade10-admin-inventory-items-US1-TC8-1: Every case that reached custody is registered once
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** release
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-01
-
-**Pre-conditions:**
-
-* The vault holds `<case_8>` as the row of **Test data** says, with no item registered for it.
-* admin(staff) is signed in to the Grade10 console.
-
-**Test data:**
-
-| `<case_8>` | Item after the backfill |
-| --- | --- |
-| Vaulted, owned by `<collector A>` | one item under `<collector A>`, marked by the vault on `<case_8>` |
-| Repaid, still in the vault | one item under its collector, marked by the vault on `<case_8>` |
-| Released | one item under its collector, not marked |
-| Unwound after vaulting | one item under its collector, not marked |
-| Forfeited | one item under the lender, not marked |
-| Reached custody, collector erased | no item |
-| Under valuation, never vaulted | one item under its collector, not marked |
-| Declined before custody | no item |
-| Cancelled before custody | no item |
-
-**Steps:**
-
-1. Run the backfill of cases already in the vault.
-2. Run the backfill a second time.
-3. Search Items for `<case_8>`'s collector's exact email.
-
-**Expected Results:**
-
-* The register holds the item as the row says, carrying `<case_8>`'s category, title and description.
-* Step 2 adds no second item for `<case_8>`.
 
 ### grade10-admin-inventory-items-US1-TC9-1: An empty tab and a missing item say so
 
@@ -1692,138 +1645,6 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-inventory-items-US7: Operator reads a collector's items on their page
-
-**As a** member of shop staff with a collector at the counter,
-**I want** their page to list every item they own but a retired one, marked
-or not,
-**so that** I can see everything they have with us in one place.
-
-### grade10-admin-inventory-items-US7-TC1-1: The collector page lists every live item the collector owns
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-items-US-07
-
-**Pre-conditions:**
-
-* admin(staff) is signed in to the Grade10 console.
-* `<collector A>` owns `<item_1>`, marked by the vault, `<item_2>`, not marked, and `<item_3>`, retired.
-* `<item_20>` moved from `<collector A>` to `<collector B>`.
-
-**Steps:**
-
-1. Navigate to <grade10 admin collector page url> for `<collector A>`.
-2. Read the Items section.
-3. Click the row of `<item_1>`.
-
-**Expected Results:**
-
-* The section lists `<item_1>` as marked and `<item_2>` as not marked.
-* Each row reads title, category, grader and cert, with no owner column.
-* `<item_3>` and `<item_20>` are not listed.
-* Step 3 opens the page of `<item_1>`.
-
-### grade10-admin-inventory-items-US7-TC2-1: A collector who owns no item reads none
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-items-US-07
-
-**Pre-conditions:**
-
-* admin(staff) is signed in to the Grade10 console.
-* `<collector E>` holds a vault case and owns no item.
-
-**Steps:**
-
-1. Navigate to <grade10 admin collector page url> for `<collector E>`.
-
-**Expected Results:**
-
-* The Items section says the collector owns no item.
-* The vault cases section lists `<collector E>`'s case.
-
-### grade10-admin-inventory-items-US7-TC3-1: A treasurer reads the collector page without its items
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-items-US-07
-
-**Pre-conditions:**
-
-* admin(treasurer only) is signed in to the Grade10 console.
-* `<collector A>` owns `<item_1>` and holds a vault case.
-
-**Steps:**
-
-1. Navigate to <grade10 admin collector page url> for `<collector A>`.
-
-**Expected Results:**
-
-* The Items section is refused, naming `inventory:read`, and lists no item.
-* The header and the vault cases section still load.
-
-### grade10-admin-inventory-items-US7-TC4-1: The items section fails alone
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-07
-
-**Pre-conditions:**
-
-* admin(staff) is signed in to the Grade10 console.
-* The read of `<collector A>`'s items is mocked to fail once, then answer.
-
-**Steps:**
-
-1. Navigate to <grade10 admin collector page url> for `<collector A>`.
-2. Click retry in the Items section.
-
-**Expected Results:**
-
-* Step 1 shows the Items section's own error with a retry.
-* The header and the vault cases section still load.
-* Step 2 lists `<collector A>`'s live items.
-
----
-
 ## grade10-admin-inventory-items-US8: Admin erases a collector who owns items
 
 **As an** admin running an erasure,
@@ -1983,13 +1804,14 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journeys, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Items, Inventory, Collector Page, Roles and Account Data PRD pages, and `shared/auth/domain-tcs.md`; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md`, `ui-design.md` whole, the PRD pages and the six sibling deltas of this change. It is a statement, not proof.
 
-- **Folded** - `grade10-admin-inventory-items-US1-TC1-1` into `grade10-admin-inventory-items-SC-50`, `grade10-admin-inventory-items-SC-12` and `grade10-admin-inventory-items-SC-25`; `grade10-admin-inventory-items-US1-TC2-1` into `grade10-admin-inventory-items-SC-51`; `grade10-admin-inventory-items-US1-TC3-1` into `grade10-admin-inventory-items-SC-52`, `grade10-admin-inventory-items-SC-53` and `grade10-admin-inventory-items-SC-54`; `grade10-admin-inventory-items-US1-TC4-1` into `grade10-admin-inventory-items-SC-54` and `grade10-admin-inventory-items-SC-55`; `grade10-admin-inventory-items-US1-TC5-1` into `grade10-admin-inventory-items-SC-16`, `grade10-admin-inventory-items-SC-17` and `grade10-admin-inventory-items-SC-18`; `grade10-admin-inventory-items-US1-TC6-1` into `grade10-admin-inventory-items-SC-16`; `grade10-admin-inventory-items-US1-TC7-1` into `grade10-admin-inventory-items-SC-27`; `grade10-admin-inventory-items-US1-TC8-1` into `grade10-admin-inventory-items-SC-31` and `grade10-admin-inventory-items-SC-32`; `grade10-admin-inventory-items-US1-TC9-1` into `grade10-admin-inventory-items-SC-55` and `grade10-admin-inventory-items-SC-57`; `grade10-admin-inventory-items-US1-TC10-1` into `grade10-admin-inventory-items-SC-58` and `grade10-admin-inventory-items-SC-68`; `grade10-admin-inventory-items-US1-TC11-1` into `grade10-admin-inventory-items-SC-59`; `grade10-admin-inventory-items-US2-TC1-1` into `grade10-admin-inventory-items-SC-01`, `grade10-admin-inventory-items-SC-10` and `grade10-admin-inventory-items-SC-38`; `grade10-admin-inventory-items-US2-TC2-1` into `grade10-admin-inventory-items-SC-02` and `grade10-admin-inventory-items-SC-19`; `grade10-admin-inventory-items-US2-TC3-1` into `grade10-admin-inventory-items-SC-03`; `grade10-admin-inventory-items-US2-TC4-1` into `grade10-admin-inventory-items-SC-04`; `grade10-admin-inventory-items-US2-TC5-1` into `grade10-admin-inventory-items-SC-07`; `grade10-admin-inventory-items-US2-TC6-1` into `grade10-admin-inventory-items-SC-11` and `grade10-admin-inventory-items-SC-69`; `grade10-admin-inventory-items-US2-TC7-1` into `grade10-admin-inventory-items-SC-12` and `grade10-admin-inventory-items-SC-13`; `grade10-admin-inventory-items-US2-TC8-1` into `grade10-admin-inventory-items-SC-08`; `grade10-admin-inventory-items-US2-TC9-1` into `grade10-admin-inventory-items-SC-14`; `grade10-admin-inventory-items-US3-TC1-1` into `grade10-admin-inventory-items-SC-33`, `grade10-admin-inventory-items-SC-36` and `grade10-admin-inventory-items-SC-38`; `grade10-admin-inventory-items-US3-TC2-1` into `grade10-admin-inventory-items-SC-34` and `grade10-admin-inventory-items-SC-19`; `grade10-admin-inventory-items-US3-TC3-1` into `grade10-admin-inventory-items-SC-35` and `grade10-admin-inventory-items-SC-11`; `grade10-admin-inventory-items-US3-TC4-1` into `grade10-admin-inventory-items-SC-36`; `grade10-admin-inventory-items-US3-TC5-1` into `grade10-admin-inventory-items-SC-36` and `grade10-admin-inventory-items-SC-34`; `grade10-admin-inventory-items-US3-TC6-1` into `grade10-admin-inventory-items-SC-64`; `grade10-admin-inventory-items-US3-TC7-1` into `grade10-admin-inventory-items-SC-19`; `grade10-admin-inventory-items-US3-TC8-1` into `grade10-admin-inventory-items-SC-44`; `grade10-admin-inventory-items-US3-TC9-1` into `grade10-admin-inventory-items-SC-45`; `grade10-admin-inventory-items-US4-TC1-1` into `grade10-admin-inventory-items-SC-40`; `grade10-admin-inventory-items-US4-TC2-1` into `grade10-admin-inventory-items-SC-41`; `grade10-admin-inventory-items-US5-TC1-1` into `grade10-admin-inventory-items-SC-46`; `grade10-admin-inventory-items-US5-TC2-1` into `grade10-admin-inventory-items-SC-09`; `grade10-admin-inventory-items-US5-TC3-1` into `grade10-admin-inventory-items-SC-48`; `grade10-admin-inventory-items-US5-TC4-1` into `grade10-admin-inventory-items-SC-49`; `grade10-admin-inventory-items-US5-TC5-1` into `grade10-admin-inventory-items-SC-47`; `grade10-admin-inventory-items-US6-TC1-1` into `grade10-admin-inventory-items-SC-28`; `grade10-admin-inventory-items-US6-TC2-1` into `grade10-admin-inventory-items-SC-29`; `grade10-admin-inventory-items-US6-TC3-1` into `grade10-admin-inventory-items-SC-30`; `grade10-admin-inventory-items-US7-TC1-1` into `grade10-admin-inventory-items-SC-60`; `grade10-admin-inventory-items-US7-TC2-1` into `grade10-admin-inventory-items-SC-61`; `grade10-admin-inventory-items-US7-TC3-1` and `grade10-admin-inventory-items-US7-TC4-1` into `grade10-admin-inventory-items-SC-62`; `grade10-admin-inventory-items-US8-TC1-1` into `grade10-admin-inventory-items-SC-64`; `grade10-admin-inventory-items-US8-TC2-1` into `grade10-admin-inventory-items-SC-63`; `grade10-admin-inventory-items-US8-TC3-1` into `grade10-admin-inventory-items-SC-65`; `grade10-admin-inventory-items-US8-TC4-1` into `grade10-admin-inventory-items-SC-67`
+- **Folded** - `grade10-admin-inventory-items-US1-TC1-1` into `grade10-admin-inventory-items-SC-50`, `grade10-admin-inventory-items-SC-12` and `grade10-admin-inventory-items-SC-25`; `grade10-admin-inventory-items-US1-TC2-1` into `grade10-admin-inventory-items-SC-51`; `grade10-admin-inventory-items-US1-TC3-1` into `grade10-admin-inventory-items-SC-52`, `grade10-admin-inventory-items-SC-53` and `grade10-admin-inventory-items-SC-54`; `grade10-admin-inventory-items-US1-TC4-1` into `grade10-admin-inventory-items-SC-54` and `grade10-admin-inventory-items-SC-55`; `grade10-admin-inventory-items-US1-TC5-1` into `grade10-admin-inventory-items-SC-16`, `grade10-admin-inventory-items-SC-17` and `grade10-admin-inventory-items-SC-18`; `grade10-admin-inventory-items-US1-TC6-1` into `grade10-admin-inventory-items-SC-16`; `grade10-admin-inventory-items-US1-TC7-1` into `grade10-admin-inventory-items-SC-27`; `grade10-admin-inventory-items-US1-TC9-1` into `grade10-admin-inventory-items-SC-55` and `grade10-admin-inventory-items-SC-57`; `grade10-admin-inventory-items-US1-TC10-1` into `grade10-admin-inventory-items-SC-58` and `grade10-admin-inventory-items-SC-68`; `grade10-admin-inventory-items-US1-TC11-1` into `grade10-admin-inventory-items-SC-59`; `grade10-admin-inventory-items-US2-TC1-1` into `grade10-admin-inventory-items-SC-01`, `grade10-admin-inventory-items-SC-10` and `grade10-admin-inventory-items-SC-38`; `grade10-admin-inventory-items-US2-TC2-1` into `grade10-admin-inventory-items-SC-02` and `grade10-admin-inventory-items-SC-19`; `grade10-admin-inventory-items-US2-TC3-1` into `grade10-admin-inventory-items-SC-03`; `grade10-admin-inventory-items-US2-TC4-1` into `grade10-admin-inventory-items-SC-04`; `grade10-admin-inventory-items-US2-TC5-1` into `grade10-admin-inventory-items-SC-07`; `grade10-admin-inventory-items-US2-TC6-1` into `grade10-admin-inventory-items-SC-11` and `grade10-admin-inventory-items-SC-69`; `grade10-admin-inventory-items-US2-TC7-1` into `grade10-admin-inventory-items-SC-12` and `grade10-admin-inventory-items-SC-13`; `grade10-admin-inventory-items-US2-TC8-1` into `grade10-admin-inventory-items-SC-08`; `grade10-admin-inventory-items-US2-TC9-1` into `grade10-admin-inventory-items-SC-14`; `grade10-admin-inventory-items-US3-TC1-1` into `grade10-admin-inventory-items-SC-33`, `grade10-admin-inventory-items-SC-36` and `grade10-admin-inventory-items-SC-38`; `grade10-admin-inventory-items-US3-TC2-1` into `grade10-admin-inventory-items-SC-34` and `grade10-admin-inventory-items-SC-19`; `grade10-admin-inventory-items-US3-TC3-1` into `grade10-admin-inventory-items-SC-35` and `grade10-admin-inventory-items-SC-11`; `grade10-admin-inventory-items-US3-TC4-1` into `grade10-admin-inventory-items-SC-36`; `grade10-admin-inventory-items-US3-TC5-1` into `grade10-admin-inventory-items-SC-36` and `grade10-admin-inventory-items-SC-34`; `grade10-admin-inventory-items-US3-TC6-1` into `grade10-admin-inventory-items-SC-64`; `grade10-admin-inventory-items-US3-TC7-1` into `grade10-admin-inventory-items-SC-19`; `grade10-admin-inventory-items-US3-TC8-1` into `grade10-admin-inventory-items-SC-44`; `grade10-admin-inventory-items-US3-TC9-1` into `grade10-admin-inventory-items-SC-45`; `grade10-admin-inventory-items-US4-TC1-1` into `grade10-admin-inventory-items-SC-40`; `grade10-admin-inventory-items-US4-TC2-1` into `grade10-admin-inventory-items-SC-41`; `grade10-admin-inventory-items-US5-TC1-1` into `grade10-admin-inventory-items-SC-46`; `grade10-admin-inventory-items-US5-TC2-1` into `grade10-admin-inventory-items-SC-09`; `grade10-admin-inventory-items-US5-TC3-1` into `grade10-admin-inventory-items-SC-48`; `grade10-admin-inventory-items-US5-TC4-1` into `grade10-admin-inventory-items-SC-49`; `grade10-admin-inventory-items-US5-TC5-1` into `grade10-admin-inventory-items-SC-47`; `grade10-admin-inventory-items-US6-TC1-1` into `grade10-admin-inventory-items-SC-28`; `grade10-admin-inventory-items-US6-TC2-1` into `grade10-admin-inventory-items-SC-29`; `grade10-admin-inventory-items-US6-TC3-1` into `grade10-admin-inventory-items-SC-30`; `grade10-admin-inventory-items-US8-TC1-1` into `grade10-admin-inventory-items-SC-64`; `grade10-admin-inventory-items-US8-TC2-1` into `grade10-admin-inventory-items-SC-63`; `grade10-admin-inventory-items-US8-TC3-1` into `grade10-admin-inventory-items-SC-65`; `grade10-admin-inventory-items-US8-TC4-1` into `grade10-admin-inventory-items-SC-67`
 - **Contradicted, case corrected** - `grade10-admin-inventory-items-US2-TC2-1` offered and registered under the lender; Q14, Q28 and the Items page keep the lender to a forfeit, so its second row names the custodian and the design's owner field drops the lender on Register. `grade10-admin-inventory-items-US8-TC3-1` removed a proof 2,556 days old at the erasure; Q34 flags it for review and deletes nothing by the clock, so the row keeps the proof, and the Account Data page's row now says flagged rather than deleted. `grade10-admin-inventory-items-US2-TC9-1` asked for an item both not marked and offering Close mark; its mark is now open on a released case
 - **Contradicted, spec corrected** - none
 - **Folded into the spec** - the cert typed in lower case or with spaces, which `grade10-admin-inventory-items-US1-TC3-1` gains as a row and `grade10-admin-inventory-items-SC-53` as a search, as Q48; Edit offered on a marked item, which `grade10-admin-inventory-items-SC-40` now states, as Q22; the register's ten categories on the register dialog, which `grade10-admin-inventory-items-SC-03` now states, as Q4; the owners settling once the mark closes, Q51, as `grade10-admin-inventory-items-SC-70`
-- **Added by QA2** - `grade10-admin-inventory-items-US1-TC12-1` for `grade10-admin-inventory-items-SC-26`, the place row with the vault down; `grade10-admin-inventory-items-US1-TC13-1` for `grade10-admin-inventory-items-SC-70`, also reaching `grade10-admin-inventory-items-SC-23`'s neutral close; `grade10-admin-inventory-items-US1-TC14-1`, the proposal's whole path from the register's side - registered at the valuation, named on the custody agreement, marked at vaulting, moved to the lender at the forfeit - reaching `grade10-admin-inventory-items-SC-24` and `grade10-admin-inventory-items-SC-42`; `grade10-admin-inventory-items-US6-TC4-1` for `grade10-admin-inventory-items-SC-43`; `grade10-admin-inventory-items-US6-TC2-1` gains a row for `grade10-admin-inventory-items-SC-29`'s close sent while the vault cannot be asked; `grade10-admin-inventory-items-US1-TC8-1` gains the open case under valuation, Q52
+- **Added by QA2** - `grade10-admin-inventory-items-US1-TC12-1` for `grade10-admin-inventory-items-SC-26`, the place row with the vault down; `grade10-admin-inventory-items-US1-TC13-1` for `grade10-admin-inventory-items-SC-70`, also reaching `grade10-admin-inventory-items-SC-23`'s neutral close; `grade10-admin-inventory-items-US1-TC14-1`, the proposal's whole path from the register's side - registered at the valuation, named on the custody agreement, marked at vaulting, moved to the lender at the forfeit - reaching `grade10-admin-inventory-items-SC-24` and `grade10-admin-inventory-items-SC-42`; `grade10-admin-inventory-items-US6-TC4-1` for `grade10-admin-inventory-items-SC-43`; `grade10-admin-inventory-items-US6-TC2-1` gains a row for `grade10-admin-inventory-items-SC-29`'s close sent while the vault cannot be asked
 - **Raised, answered by the round** - a cert typed in lower case (Q48); read-only states no role reaches (Q45: stated per grant, so `grade10-admin-inventory-items-US2-TC9-1`, `grade10-admin-inventory-items-US3-TC9-1` run with a test operator given that grant set); a forfeit's move on the item and the audit log (Q46); the 2,555-day limit (Q34); a transfer to the present owner (Q49); a restore and a hand close on the audit log (Q50); editing while marked (Q22); which owner stands after release (Q51); and the scenario pass's own: grade and cert with every grader (Q54), proof retention (Q34), the lender on Register (Q14)
-- **Raised, escalated** - Q55, whether the All tab lists retired items; `grade10-admin-inventory-items-US1-TC2-1` and `grade10-admin-inventory-items-SC-51` assert neither way until it is answered. Q52, the fill taking open cases past the valuation, and Q53, the late forfeit word after a hand close, reopened by round 4: the requirements state each recommendation, and `grade10-admin-inventory-items-US1-TC8-1` and `grade10-admin-inventory-items-US6-TC4-1` assert it until the owner answers
-- **Round 4** - `grade10-admin-inventory-items-SC-71`, a search over every item whatever the tab, gets `grade10-admin-inventory-items-US1-TC15-1`; `grade10-admin-inventory-items-SC-72`, an act's audit entry by its ids, is out of suite; `grade10-admin-inventory-items-SC-73`, a title on a move from an erased owner, is reached by `grade10-admin-inventory-items-US3-TC6-1`; `grade10-admin-inventory-items-SC-74`, a kept proof not left remaining, by `grade10-admin-inventory-items-US8-TC3-1`; `grade10-admin-inventory-items-SC-75`, Transfer disabled for the present owner, gets `grade10-admin-inventory-items-US3-TC10-1`, its retry half held by `TransferItemDialog`'s component test (task 11.1); `grade10-admin-inventory-items-SC-43` now reads Q53's recommendation and `grade10-admin-inventory-items-US6-TC4-1` walks it; `grade10-admin-inventory-items-SC-48`'s reason stays on the item and `grade10-admin-inventory-items-US5-TC3-1` reads the audit entry without it
+- **Raised, answered by the owner** - Q55, the All tab lists live items only, which `grade10-admin-inventory-items-US1-TC2-1` and `grade10-admin-inventory-items-SC-51` now assert; Q53, Close mark on a forfeited case moves the item to the lender, which `grade10-admin-inventory-items-US6-TC4-1` walks; Q52, no fill of the register, so `grade10-admin-inventory-items-US1-TC8-1` and the fill's requirement are removed
+- **Round 4** - `grade10-admin-inventory-items-SC-71`, a search over every item whatever the tab, gets `grade10-admin-inventory-items-US1-TC15-1`; `grade10-admin-inventory-items-SC-72`, an act's audit entry by its ids, is out of suite; `grade10-admin-inventory-items-SC-73`, a title on a move from an erased owner, is reached by `grade10-admin-inventory-items-US3-TC6-1`; `grade10-admin-inventory-items-SC-74`, a kept proof not left remaining, by `grade10-admin-inventory-items-US8-TC3-1`; `grade10-admin-inventory-items-SC-75`, Transfer disabled for the present owner, gets `grade10-admin-inventory-items-US3-TC10-1`, its retry half held by `TransferItemDialog`'s component test (task 10.1); `grade10-admin-inventory-items-SC-43` now reads Q53's recommendation and `grade10-admin-inventory-items-US6-TC4-1` walks it; `grade10-admin-inventory-items-SC-48`'s reason stays on the item and `grade10-admin-inventory-items-US5-TC3-1` reads the audit entry without it
 - **Rejected** - none
-- **Uncovered anchors** - none: each of US-01 to US-08 has cases, every Feature set group is reached by a case or by **Out of suite**, and no domain suite sits above this capability
+- **Moved** - the collector page's Items section, its journey and its four cases, to `grade10-admin/console/collector-page` once `vault-walk-ins-and-owners` published it
+- **Uncovered anchors** - none: each of US-01 to US-06 and US-08 has cases, every Feature set group is reached by a case or by **Out of suite**, and no domain suite sits above this capability

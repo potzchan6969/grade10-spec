@@ -2,8 +2,8 @@
 
 No Figma frame and no canvas board draws any screen below but the request
 wizard, whose first step is unchanged; the designer owes every other board
-under Flags, and the change's record says so under `awaiting: ui-design`.
-Until a board lands, each screen is the composition named here, drawn from
+under Flags, and the first version does not wait on them
+([Q60](decisions.md#decisions)). Until a board lands, each screen is the composition named here, drawn from
 the console's and the store's existing blocks, and nothing below invents a
 look: a state no block carries is flagged for the designer, never drawn
 locally. [decisions.md](decisions.md) owns the scope, and the journeys
@@ -225,12 +225,12 @@ Used by Register and Transfer, never by Edit.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Registration pending | the section says the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-SC-55` |
-| Facts shown | the register's category, title, description, grader, grade and cert in place of the request's, linking the item; the collector's request stays as they sent it | `grade10-admin-vault-operator-queue-SC-56` |
-| Editable | Edit opens `ItemFactsDialog`, with its own states, for `inventory:write` | `grade10-admin-vault-operator-queue-SC-57` |
-| Read-only | the facts without Edit, for a `vault:read` holder without `inventory:write` | `grade10-admin-vault-operator-queue-SC-57` |
-| Forbidden | names `inventory:read` and shows no facts, for a `vault:read` holder without it, as the treasurer is; the rest of the tab stands | `grade10-admin-vault-operator-queue-SC-66` |
-| Register unreachable | this section's own error with retry; the rest of the tab stands | `grade10-admin-vault-operator-queue-SC-58` |
+| Registration pending | the section says the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-SC-83` |
+| Facts shown | the register's category, title, description, grader, grade and cert in place of the request's, linking the item; the collector's request stays as they sent it | `grade10-admin-vault-operator-queue-SC-84` |
+| Editable | Edit opens `ItemFactsDialog`, with its own states, for `inventory:write` | `grade10-admin-vault-operator-queue-SC-85` |
+| Read-only | the facts without Edit, for a `vault:read` holder without `inventory:write` | `grade10-admin-vault-operator-queue-SC-85` |
+| Forbidden | names `inventory:read` and shows no facts, for a `vault:read` holder without it, as the treasurer is; the rest of the tab stands | `grade10-admin-vault-operator-queue-SC-94` |
+| Register unreachable | this section's own error with retry; the rest of the tab stands | `grade10-admin-vault-operator-queue-SC-86` |
 
 ### Valuation
 
@@ -243,30 +243,31 @@ Used by Register and Transfer, never by Edit.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Slab fields | grader, grade and cert, added to the walk-in form by this change, all three or none | `grade10-admin-vault-operator-queue-SC-60` |
-| Looking up | pending | `grade10-admin-vault-operator-queue-SC-59` |
-| Register unreachable | an error with retry; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-64` |
-| Found | the register's facts, read-only, corrected on the Case tab; the form fills category and title from them; the case takes that item, and the customer's edits to the draft touch only its photos and description | `grade10-admin-vault-operator-queue-SC-59` |
-| Not found | nothing filled; the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-SC-60` |
-| Retired cert | reads as retired | `grade10-admin-vault-operator-queue-SC-61` |
-| Another owner | found, filling nothing; the owner by name for `kyc:read`, else by short id; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-SC-62` |
-| Marked by another case | a `Notice` in the dialog's body, `Link` in its `actions`: refused, naming and linking the case; that mark is closed first | `grade10-admin-vault-operator-queue-SC-63` |
+| Slab fields | grader, grade and cert, added to the walk-in form by this change, all three or none | `grade10-admin-vault-operator-queue-SC-88` |
+| Looking up | pending | `grade10-admin-vault-operator-queue-SC-87` |
+| Register unreachable | an error with retry; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-92` |
+| Found | the register's facts, read-only, corrected on the Case tab; the form fills category and title from them; the case takes that item, and the customer's edits to the draft touch only its photos and description | `grade10-admin-vault-operator-queue-SC-87` |
+| Not found | nothing filled; the item is registered when the valuation starts | `grade10-admin-vault-operator-queue-SC-88` |
+| Retired cert | reads as retired | `grade10-admin-vault-operator-queue-SC-89` |
+| Another owner | found, filling nothing; the owner by name for `kyc:read`, else by short id; Prepare documents is blocked later | `grade10-admin-vault-operator-queue-SC-90` |
+| Marked by another case | a `Notice` in the dialog's body, `Link` in its `actions`: refused, naming and linking the case; that mark is closed first | `grade10-admin-vault-operator-queue-SC-91` |
 
 ### Start valuation slab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Slab fields | grader, grade and cert, offered when the case has named no slab, with the walk-in's lookup states | `grade10-admin-vault-operator-queue-SC-65` |
-| Found | the register's facts, read-only; the case takes that item rather than registering a second, and the request stays as sent | `grade10-admin-vault-operator-queue-SC-65` |
+| Slab fields | grader, grade and cert, offered when the case has named no slab, with the walk-in's lookup states | `grade10-admin-vault-operator-queue-SC-93` |
+| Found | the register's facts, read-only; the case takes that item rather than registering a second, and the request stays as sent | `grade10-admin-vault-operator-queue-SC-93` |
 
 ### Documents tab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Another owner | Prepare documents is not offered; a line names the owner the register shows, by name for `kyc:read`, else by short id, and links the item, where staff can transfer it | `grade10-site-vault-case-lifecycle-SC-46` |
-| Refused at Prepare | an error naming the owner the register now shows the same way, linking the item | `grade10-site-vault-case-lifecycle-SC-47` |
-| Register pending | an error saying the item is still being registered | `grade10-site-vault-case-lifecycle-SC-49` |
-| Register unreachable | an error saying the register cannot be read now | `grade10-site-vault-case-lifecycle-SC-48` |
+| Another owner | Prepare documents is not offered; a line names the owner the register shows, by name for `kyc:read`, else by short id, and links the item, where staff can transfer it | `grade10-site-vault-case-lifecycle-SC-54` |
+| Refused at Prepare | an error naming the owner the register now shows the same way, linking the item | `grade10-site-vault-case-lifecycle-SC-55` |
+| Register pending | an error saying the item is still being registered | `grade10-site-vault-case-lifecycle-SC-57` |
+| Register unreachable | an error saying the register cannot be read now | `grade10-site-vault-case-lifecycle-SC-56` |
+| Item retired | an error saying the item is retired, naming and linking it, where staff can restore it | `grade10-site-vault-case-lifecycle-SC-60` |
 
 ### Custody agreement
 
@@ -276,15 +277,22 @@ Used by Register and Transfer, never by Edit.
 | Graded | grader, grade and certificate number beside the item, as the register held them when the packet was prepared | `grade10-site-vault-documents-and-signing-SC-33` |
 | No grader | nothing printed for grader, grade or certificate number | `grade10-site-vault-documents-and-signing-SC-34` |
 
+### Loan agreement and release receipt
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Collateral | the register's category and title, with grader, grade and certificate number where there is a grader, as the register held them when the packet was prepared | `grade10-site-vault-documents-and-signing-SC-36` |
+| Released item | the same facts on the release receipt, as the register held them when its packet was prepared | `grade10-site-vault-documents-and-signing-SC-37` |
+
 ### Collector page Items
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Items | title, category, grader and cert, marked or not, each row opening its item; paged | `grade10-admin-inventory-items-SC-60` |
-| Retired items | left out; one item's page keeps their history | `grade10-admin-inventory-items-SC-60` |
-| None | the collector owns no item | `grade10-admin-inventory-items-SC-61` |
-| Forbidden | the section names `inventory:read`, which a treasurer does not hold; the others stand | `grade10-admin-inventory-items-SC-62` |
-| Failed | the section's own error with retry; the others stand | `grade10-admin-inventory-items-SC-62` |
+| Items | title, category, grader and cert, marked or not, each row opening its item; paged | `grade10-admin-console-collector-page-SC-23` |
+| Retired items | left out; one item's page keeps their history | `grade10-admin-console-collector-page-SC-23` |
+| None | the collector owns no item | `grade10-admin-console-collector-page-SC-24` |
+| Forbidden | the section names `inventory:read`, which a treasurer does not hold; the others stand | `grade10-admin-console-collector-page-SC-25` |
+| Failed | the section's own error with retry; the others stand | `grade10-admin-console-collector-page-SC-25` |
 
 ### Erasure checklist
 
@@ -296,17 +304,19 @@ Used by Register and Transfer, never by Edit.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Ten categories | the register's ten on the first step, each in the collector's language | `grade10-site-vault-case-intake-SC-32` |
+| Ten categories | the register's ten on the first step, each in the collector's language | `grade10-site-vault-case-intake-SC-39` |
 
 ## Flags
 
-- ❓ **Every board is missing** - the designer's: Items, one item, register
+- Q60 **Every board is missing** - the designer's: Items, one item, register
   and edit, transfer, retire and close-a-mark, the Case tab's facts, the
   valuation's slab line, the walk-in's and Start valuation's slab fields, Prepare documents
   blocked, the collector page's Items section and the erasure checklist's
-  lines; the change waits on them in its record
+  lines; built on the console's existing blocks now, each replaced when its
+  board lands
 - Q41 **Where Items sits in the nav** - a detail page of Inventory, reached
   from its header; the designer may still draw a nav entry of its own
-- ❓ **The search hint** - the designer's: `Search` has no description
-  slot, so the hint can only be the placeholder, which goes once staff type
-- ❓ **When the walk-in lookup runs** - the designer's
+- Q58 **The search hint** - the field's placeholder, since `Search` has no
+  description slot; it goes once staff type
+- Q59 **When the walk-in lookup runs** - when the cert field loses focus
+  with grader and cert both filled

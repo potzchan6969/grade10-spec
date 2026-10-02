@@ -28,9 +28,8 @@ can hold roles it should not, but it cannot invent a permission for one.
 - **Refund processing** — `auction:refund`, held by `staff` and `admin`;
   recording an auction refund, apart from `auction:payment`, which collects
   money — [Auction Management](/p/grade10-admin/auction/management#grants)
-- ❓ **Moving items** — `inventory:transfer`, held by `staff` and `admin`;
-  moving an item to a new owner and opening its proof; product confirms it
-  through `add-item-registry` — [Items](/p/grade10-admin/inventory/items#permissions)
+- 🚧 **Moving items** — `inventory:transfer`, held by `staff` and `admin`;
+  moving an item to a new owner and opening its proof — [Items](/p/grade10-admin/inventory/items#permissions)
 - **Staff and treasurer together** — one person may hold both, and the
   grants stack; no act that approves another is taken by the person who
   recorded it, so a step that needs two people still needs two

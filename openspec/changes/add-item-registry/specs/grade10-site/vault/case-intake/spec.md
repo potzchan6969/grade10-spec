@@ -73,7 +73,7 @@ A collector with several items SHALL open one request for each.
 - **THEN** a new request is opened with a reference of its own
 - **AND** the request already sent keeps its reference and its status
 
-#### Scenario: grade10-site-vault-case-intake-SC-32 - The wizard offers the register's ten categories
+#### Scenario: grade10-site-vault-case-intake-SC-39 - The wizard offers the register's ten categories
 **Serves:** grade10-site-vault-case-intake-US-01 - the collector says what the item is in their own language
 
 - **GIVEN** a collector reading the site in Korean
@@ -92,7 +92,7 @@ the collector's edits SHALL change only the photographs and the request's
 description, never the register's.
 An edit to any other fact of that draft SHALL be refused by name.
 
-#### Scenario: grade10-site-vault-case-intake-SC-33 - The collector edits the photos and the description of a linked draft
+#### Scenario: grade10-site-vault-case-intake-SC-40 - The collector edits the photos and the description of a linked draft
 **Serves:** grade10-site-vault-case-intake-US-01 - the collector checks a draft staff opened with their slab
 
 - **GIVEN** a draft staff opened with a slab the register holds under this collector as a trading card titled "Charizard 1999 Base Set", PSA `10`
@@ -101,7 +101,7 @@ An edit to any other fact of that draft SHALL be refused by name.
 - **AND** adding a photograph and changing the description are both kept
 - **AND** the register's description is unchanged, since the edit changes the request alone
 
-#### Scenario: grade10-site-vault-case-intake-SC-34 - An edit to the register's facts is refused
+#### Scenario: grade10-site-vault-case-intake-SC-41 - An edit to the register's facts is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - the case and the register never tell two stories of one slab
 
 - **GIVEN** a draft staff opened with a slab the register holds under this collector

@@ -33,8 +33,6 @@ release the vault is the only place (`grade10-site/vault/case-lifecycle`).
   - Owners that disagree: recorded on the item and shown to staff
   - A mark left open: staff close it with a reason while the vault no longer
     holds the item, and a later word does not reopen it
-  - Items already in the vault: every case that reached custody registered
-    once
 - Moving an item
   - Transfer: to an account by its exact email or to the custodian, with a
     reason and an optional proof, traced on the item and the audit log
@@ -50,11 +48,9 @@ release the vault is the only place (`grade10-site/vault/case-lifecycle`).
   - After retiring: read only, its cert free for a new item, restored with a
     reason while no live item holds its cert
 - Finding an item
-  - Three lists: marked by default, every item, retired
+  - Three lists: marked by default, every live item, retired
   - One search: the owner's exact email, an item id, a grader and cert, else
     title or description, over every item whatever the tab; never a name
-  - A collector's items: their section on the collector page, every live item
-    they own
 - Erasure
   - Refused while marked: the erasure checklist names each marked item
   - The person goes: the owner, the title, the description and their side of
@@ -441,31 +437,6 @@ held: released, unwound, forfeited or erased.
 - **WHEN** the vault's word that it marked the item arrives
 - **THEN** the mark stays closed by hand
 
-### Requirement: Every case that reached the vault is registered once
-
-When the register opens, every vault case that reached custody SHALL be
-registered once under its collector, with the case's category, title and
-description, marked while the item is in the vault; a case past the start of
-its valuation and not yet ended SHALL be registered the same way. An erased
-collector's case SHALL be left out; a forfeited case's item SHALL belong to the
-lender. A second record of one object SHALL stay until staff retire it as a
-duplicate.
-
-#### Scenario: grade10-admin-inventory-items-SC-31 - Cases already in the vault appear as items
-**Serves:** Marks from places - the register starts with what the vault already holds
-
-- **GIVEN** a case in the vault, a released case, a forfeited case, a case being valued and an erased collector's released case
-- **WHEN** the register is filled from the vault
-- **THEN** the first is marked under its collector, the second is not marked, the third belongs to the lender, the fourth is registered and not marked
-- **AND** the erased collector's case has no item
-
-#### Scenario: grade10-admin-inventory-items-SC-32 - Filling the register twice registers each case once
-**Serves:** Marks from places - a fill that stopped halfway is run again
-
-- **GIVEN** the register already filled from the vault
-- **WHEN** the fill runs again
-- **THEN** no item, mark or move is added
-
 ### Requirement: Staff move an item no place marks to its new owner
 
 A holder of `inventory:transfer` SHALL move an item no place marks:
@@ -678,7 +649,8 @@ Items SHALL be a page of Inventory, reached from Inventory's header, with a way
 back to it from one item's page.
 
 - **Three lists** - Items SHALL open on the items a place marks, and offer
-  every item and the retired items, each paged on a cursor.
+  every live item, marked or not, and the retired items, each paged on a
+  cursor.
 - **The row** - title, category, grader and cert, the owner, and the place
   marking it, each row opening its item.
 - **One search** - one field SHALL read, in order: the owner's exact email,
@@ -707,8 +679,10 @@ back to it from one item's page.
 #### Scenario: grade10-admin-inventory-items-SC-51 - Every item and the retired ones are a tab away
 **Serves:** grade10-admin-inventory-items-US-01 - staff look past what is marked
 
+- **GIVEN** three marked items, two that no place marks and one retired as lost
 - **WHEN** staff switch to every item, then to retired items
-- **THEN** the first lists all five items marked or not, and the second lists only retired items with why each was retired
+- **THEN** the first lists the five live items marked or not, and not the retired one
+- **AND** the second lists only the retired item, with lost as why it was retired
 
 #### Scenario: grade10-admin-inventory-items-SC-52 - The owner's exact email finds their items
 **Serves:** grade10-admin-inventory-items-US-01 - staff answer a collector at the counter who names their address
@@ -770,41 +744,6 @@ back to it from one item's page.
 - **WHEN** staff open the item
 - **THEN** its facts and owner stand, and the moves show their error with a retry
 - **AND** while a part loads it says so
-
-### Requirement: A collector's page lists the items they own
-
-The collector page SHALL hold an Items section for holders of
-`inventory:read`: every item the collector owns but a retired one, marked by a
-place or not, each with its title, category, grader and cert and whether it is
-marked, each opening its item, paged on a cursor.
-
-- **None** - a collector owning no item SHALL read as owning none.
-- **Alone** - without `inventory:read` the section SHALL name the grant, and a
-  section that fails SHALL show its own error with a retry; the page's other
-  sections SHALL stand either way.
-
-#### Scenario: grade10-admin-inventory-items-SC-60 - A collector's live items are on their page
-**Serves:** grade10-admin-inventory-items-US-07 - staff see everything a collector has with the house
-
-- **GIVEN** a collector owning one marked item, one item no place marks and one retired item
-- **WHEN** staff open their collector page
-- **THEN** the Items section lists the first two, each saying whether it is marked and opening its item
-- **AND** the retired item is not listed, and its own page keeps its history
-
-#### Scenario: grade10-admin-inventory-items-SC-61 - A collector who owns nothing reads as owning nothing
-**Serves:** grade10-admin-inventory-items-US-07 - staff are not left wondering whether the section loaded
-
-- **GIVEN** a collector owning no item
-- **WHEN** staff open their page
-- **THEN** the Items section says they own none
-
-#### Scenario: grade10-admin-inventory-items-SC-62 - The section refuses or fails on its own
-**Serves:** grade10-admin-inventory-items-US-07 - the rest of the page still answers the collector
-
-- **GIVEN** a treasurer, who holds no inventory grant, opening a collector's page
-- **WHEN** the page loads
-- **THEN** the Items section names `inventory:read`, and the cases section stands
-- **AND** for staff, an Items section that fails shows its own error with a retry while the cases section stands
 
 ### Requirement: An erasure reaches the register
 

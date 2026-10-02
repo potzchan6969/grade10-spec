@@ -151,13 +151,72 @@ stood when the papers were prepared,
 * The item reads the register's category, title and description.
 * Nothing is printed for grader, grade or certificate number.
 
+### grade10-site-vault-documents-and-signing-US6-TC4-1: The loan agreement's collateral prints the register's item and slab
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-06
+
+**Pre-conditions:**
+
+* admin(staff) is on the Documents tab of <grade10 admin vault case page url> for `<case_4>`, a financed case accepted and ready to prepare.
+* `<case_4>`'s collector asked about "Charizard card"; the register holds its item as a trading card titled "Charizard 1999 Base Set", PSA, grade 10, cert `<cert_4>`.
+
+**Steps:**
+
+1. Click Prepare documents.
+2. Open the loan agreement in the packet.
+
+**Expected Results:**
+
+* The collateral reads "Charizard 1999 Base Set", a trading card, with PSA, grade 10 and certificate number `<cert_4>`.
+* "Charizard card" is not printed.
+
+### grade10-site-vault-documents-and-signing-US6-TC5-1: The release receipt prints the register's item and slab
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-documents-and-signing-US-06
+
+**Pre-conditions:**
+
+* admin(staff) is on the Documents tab of <grade10 admin vault case page url> for `<case_5>`, vaulted and owing nothing.
+* The register holds `<case_5>`'s item as a trading card titled "Charizard 1999 Base Set", PSA, grade 10, cert `<cert_5>`.
+
+**Steps:**
+
+1. Prepare the release receipt.
+2. Open the receipt in its packet.
+
+**Expected Results:**
+
+* The item reads "Charizard 1999 Base Set", a trading card, with PSA, grade 10 and certificate number `<cert_5>`.
+
 ## Reconciliation
 
 **Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journeys, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Documents and Signing and Items PRD pages, and the durable documents-and-signing suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md` and the case-lifecycle delta. It is a statement, not proof.
 
 - **Folded** - `grade10-site-vault-documents-and-signing-US6-TC1-1` into `grade10-site-vault-documents-and-signing-SC-32` and `grade10-site-vault-documents-and-signing-SC-33`; `grade10-site-vault-documents-and-signing-US6-TC2-1` into `grade10-site-vault-documents-and-signing-SC-35`; `grade10-site-vault-documents-and-signing-US6-TC3-1` into `grade10-site-vault-documents-and-signing-SC-34`
-- **Folded where it belongs** - `grade10-site-vault-documents-and-signing-US3-TC8-1`, the worker refusing a packet under another owner, into `grade10-site-vault-case-lifecycle-SC-47`, which owns the refusal; kept here as the worker's half beside `grade10-site-vault-case-lifecycle-US3-TC7-1`'s console walk
-- **Raised, escalated** - Q57, whether the loan agreement's collateral and the release receipt's item print the register's facts; Q22 names the custody agreement alone, so no case asserts the other two
+- **Folded where it belongs** - `grade10-site-vault-documents-and-signing-US3-TC8-1`, the worker refusing a packet under another owner, into `grade10-site-vault-case-lifecycle-SC-55`, which owns the refusal; kept here as the worker's half beside `grade10-site-vault-case-lifecycle-US3-TC7-1`'s console walk
+- **Raised, answered by the owner** - Q57, the loan agreement's collateral and the release receipt's item print the register's facts: `grade10-site-vault-documents-and-signing-SC-36` and `grade10-site-vault-documents-and-signing-SC-37`, walked by `grade10-site-vault-documents-and-signing-US6-TC4-1` and `grade10-site-vault-documents-and-signing-US6-TC5-1`
 - **Rejected** - none
 - **Contradicted** - none
-- **Uncovered anchors** - none: US-06 has a case for each of its four scenarios; `grade10-site-vault-documents-and-signing-SC-01` to `grade10-site-vault-documents-and-signing-SC-04`, carried unchanged by the modified requirement, keep their durable cases under US-03
+- **Uncovered anchors** - none: US-06 has a case for each of its six scenarios; `grade10-site-vault-documents-and-signing-SC-01` to `grade10-site-vault-documents-and-signing-SC-04`, carried unchanged by the modified requirement, keep their durable cases under US-03

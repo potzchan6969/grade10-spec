@@ -193,18 +193,24 @@ answered forbidden and the section names the grant (Q44).
 `prepareCaseDocuments` already reads identity and the shop over bindings
 before its locked commit. It adds:
 
-1. A case with no `register_item_id` (one valued before the register
-   opened) mints it and raises its due row under the case lock, so a case the
-   fill has not reached registers here
+1. A case with no `register_item_id` (one valued before the vault's deploy)
+   mints it and raises its due row under the case lock, so it registers here
 2. Deliver the case's due row inline (awaited)
 3. `VaultItemsService.itemOf({ itemId })` - absent refuses
    `REGISTER_PENDING`, meaning only that the delivery has not landed;
    unreachable refuses `REGISTER_UNREACHABLE`; an owner that is not this
    case's collector refuses `ITEM_OWNER_DIFFERS`, naming the owner by name
-   behind `kyc:read` and by short id otherwise
+   behind `kyc:read` and by short id otherwise; a retired item refuses
+   `ITEM_RETIRED`, naming the item (Q56)
 4. Render the custody agreement from the register's category, title,
-   description, grader, grade and cert; the sealed PDF is the snapshot, and a
-   re-prepare reads again (Q22)
+   description, grader, grade and cert, and the loan agreement's collateral
+   from its category, title, grader, grade and cert; the sealed PDF is the
+   snapshot, and a re-prepare reads again (Q22, Q57)
+
+`prepareReleaseDocument` reads the register through the same steps 2 and 3,
+one function both call, and prints the release receipt's item from the same
+facts (Q57); its case was valued after the deploy, or registered by its own
+Prepare documents, so it always has an item id.
 
 The case read (`cases.detail`) asks `itemOf` too, fault as value, so the
 Documents tab withholds Prepare documents under "another owner" before staff
@@ -246,15 +252,11 @@ person's id leaves `item_marks.place_owner_user_id`. A kept proof is a
 retention exemption, never counted in `remaining`. Rerunning finds nothing to
 do (Q17, Q34, Q38).
 
-### Backfill is a slow-lane list in the vault
+### No fill of the register
 
-`registerBackfill` takes cases with no `register_item_id`, not erased, that
-reached custody or are past Start valuation and still open; per case, under
-the case lock, it mints the id and raises the case's due row. The live
-delivery then sends the case's state like any other, so one receiver serves
-both. The `register_item_id IS NULL` filter makes a rerun a no-op; the list
-ends when it finds nothing, and `vault.register.backfill_remaining` reads zero
-(Q10, Q32, Q52).
+Staging and production hold no vault case, so nothing is filled (Q10, Q52). A
+case valued before the vault's deploy carries no `register_item_id`; its
+Prepare documents mints one and registers it inline, step 1 below.
 
 ### Every act declares its audit entry by ids
 
@@ -406,7 +408,7 @@ raise `attempts` and `next_attempt_at`, or park at the cap. An act that raised
 | --- | --- | --- | --- |
 | `tell` | `CaseState` (`itemId`, `caseId`, `caseReference`, `owner`, `facts`, `custody: "none" \| "open" \| "closed"`, `forfeited`, `at`) | `{ outcome: "applied" \| "cert_taken" }` | `STATE_MALFORMED` |
 | `lookupSlab` | `{ grader, cert }` | `{ item: ItemFacts & { owner, retired, openMarks: [{ place, ref, label }] } \| null }` | `GRADER_UNKNOWN` |
-| `itemOf` | `{ itemId }` | `{ item: ItemFacts & { owner } \| null }` | - |
+| `itemOf` | `{ itemId }` | `{ item: ItemFacts & { owner, retired } \| null }` | - |
 
 One transaction per `tell`, locking the item row; applying a state twice
 writes nothing the second time.
@@ -472,7 +474,7 @@ the tab and reads every item, returning `retired` on each row for the badge.
   `slab: { grader, grade, cert }`, all three required together; new
   `cases.lookupSlab` (`vault:operate`);
   new refusals `REGISTER_PENDING`, `REGISTER_UNREACHABLE`,
-  `ITEM_OWNER_DIFFERS`, `SLAB_MARKED`
+  `ITEM_OWNER_DIFFERS`, `ITEM_RETIRED`, `SLAB_MARKED`
 - **Auth contracts** - `inventory: ["read", "write", "transfer"]`; `staff`
   gains `inventory:transfer`; the description; the regenerated
   `roles-and-permissions.json`
@@ -517,8 +519,7 @@ the tab and reads every item, returning `retired` on each row for the badge.
 5. **Deploy inventory** with `VaultItemsService` and the new private bucket,
    and no `VAULT` binding: the place row reads "status unavailable"
 6. **Deploy the vault** with `InventoryVaultService` and its `INVENTORY_ITEMS`
-   binding; the fast lane delivers the due rows, and the slow lane's
-   `registerBackfill` runs until `vault.register.backfill_remaining` reads zero
+   binding; the fast lane delivers the due rows
 7. **Bind inventory to the vault** and deploy
 8. **The console** - Items, one item, the Case tab slots, the collector
    section, the erasure line

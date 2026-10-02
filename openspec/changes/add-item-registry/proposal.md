@@ -12,7 +12,7 @@ valuation holds "an amount and a note; no grading company, certificate
 number, grade".
 
 **Metric** - items in the vault with no record in the register, held at
-zero after the backfill; ownership moves recorded with who, why and when
+zero; ownership moves recorded with who, why and when
 (none are recorded today).
 
 ## What Changes
@@ -32,8 +32,8 @@ zero after the backfill; ownership moves recorded with who, why and when
   vault no longer has
 - **The vault registers what it takes in** - an item is registered when staff
   start its valuation and is marked from vaulting until release, unwind or
-  forfeit; every case that already reached custody is registered once, and
-  staff retire a second record of one object when they find it
+  forfeit; no vault case exists yet, so nothing is filled, and staff retire
+  a second record of one object when they find it
 - **Grader, grade and cert reach the vault** - on the case's valuation; the
   Case tab and the custody agreement show the register's facts, and the
   collector's request stays as they sent it; a walk-in bringing a slab the
@@ -70,7 +70,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 - `grade10-admin/inventory/items`: the register on the console - what an item
   says, who owns it, finding it, registering and editing it, moving it,
-  retiring it, a collector's items, and erasure; and how a place tells the
+  retiring it, and erasure; and how a place tells the
   register what it keeps - a mark opened and closed by the place, mirrored
   and never refused, a disagreement recorded, the owner moved by a place's
   closing word, and staff closing a mark left open
@@ -84,15 +84,18 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/vault/valuation-and-offer`: a valuation is read beside the
   item's grader, grade and cert
 - `grade10-site/vault/documents-and-signing`: the custody agreement prints
-  the register's category, title and description, with the grader, grade and
-  cert, as they stood when the packet was prepared
+  the register's category, title and description, and the loan agreement's
+  collateral and the release receipt's item its category and title, each with
+  the grader, grade and cert as they stood when its packet was prepared
 - `grade10-site/vault/case-lifecycle`: starting the valuation registers the
   item; vaulting, release, unwind and forfeit open and close its mark;
-  preparing documents is refused while the register names another owner;
-  a forfeit moves the item to the lender
+  preparing documents is refused while the register names another owner or
+  reads the item as retired; a forfeit moves the item to the lender
 - `grade10-site/vault/case-intake`: the request wizard offers the register's
   ten categories; on a draft staff opened with a known slab, the collector
   changes only the photos and the description
+- `grade10-admin/console/collector-page`: an Items section lists every live
+  item the collector owns
 - `shared/auth/roles`: the vocabulary gains `inventory:transfer`, and staff
   and admin hold it
 
@@ -104,8 +107,8 @@ See [Non-Goals](decisions.md#non-goals).
 - **Inventory console** - `packages/inventory/admin-frontend`: Items, one
   item, the move and retire dialogs
 - **Vault worker** - `packages/vault/backend`: registration at the start of
-  valuation, the mark at custody, the backfill, the facts on the custody
-  agreement, the forfeit's owner move
+  valuation, the mark at custody, the facts on the custody agreement, the
+  loan agreement and the release receipt, the forfeit's owner move
 - **Vault console and collector SPA** - `packages/vault/admin-frontend`: the
   item's facts on the Case tab, the known-slab lookup at the walk-in, the
   items section of the collector page; `packages/vault/frontend`: ten
@@ -139,16 +142,10 @@ is walked whole from the register's side in the items suite.
   only through a forfeit (`decisions.md` Q14); erasure keeps an erased
   owner's item category, grader, grade and cert (`decisions.md` Q38); both
   taken as recommended at landing, and Legal confirms the rows
-- **Product** - whether the fill also registers open cases past Start
-  valuation, whether a hand close on a forfeited case moves the item to the
-  lender, whether the All tab lists retired items, what happens when the
-  vault marks an item retired after its valuation, and whether the loan
-  agreement and the release receipt print the register's facts
-  (`decisions.md` Q52, Q53, Q55 to Q57), each with a recommendation
 - **Design** - Items is a detail page of Inventory, reached from its header,
   and only one item's page shows when it was last edited (`decisions.md` Q41
-  and Q42); the boards, the search hint and when the walk-in lookup runs are
-  `ui-design.md`'s flags
+  and Q42); the pages are built on the console's existing blocks until the
+  designer's boards land (`decisions.md` Q60)
 
 ## References
 

@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite:** grade10-site-vault-case-lifecycle-SC-45 - the vault's transition tests, which see no due row raised by a corrected advance (task 7.1); grade10-site-vault-case-lifecycle-SC-49 - the prepare-documents tests over a fake register answering absent; the console reaches this only while a word is parked (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-51 - the prepare-documents tests over a fake register, where a case with no item id is registered inline; the console reaches this only on a case valued before the register opened (tasks 9.1, 9.2)
+**Out of suite:** grade10-site-vault-case-lifecycle-SC-53 - the vault's transition tests, which see no due row raised by a corrected advance (task 7.1); grade10-site-vault-case-lifecycle-SC-57 - the prepare-documents tests over a fake register answering absent; the console reaches this only while a word is parked (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-59 - the prepare-documents tests over a fake register, where a case with no item id is registered inline; the console reaches this only on a case valued before the vault's deploy (tasks 9.1, 9.2)
 
 ## grade10-site-vault-case-lifecycle-US3: Operator moves a case through the counter without stepping over a guard
 
@@ -344,16 +344,47 @@ Runs once per row of **Test data**.
 * Step 2 is refused with an error naming `<collector B>`'s short id, not their name, and linking `<item_10>`.
 * Step 3 does not offer Prepare documents; its line names `<collector B>`'s short id and links `<item_10>`.
 
+### grade10-site-vault-case-lifecycle-US3-TC11-1: A retired item refuses Prepare documents until it is restored
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-03
+
+**Pre-conditions:**
+
+* admin(staff) is on the Documents tab of <grade10 admin vault case page url> for `<case_11>`.
+* `<case_11>` of `<collector A>` is accepted, its identity check recorded and its key terms recorded where its lane needs them; its item `<item_11>` is owned by `<collector A>` and not marked.
+
+**Steps:**
+
+1. In a second tab, retire `<item_11>` as a duplicate.
+2. On the first tab, click Prepare documents.
+3. Restore `<item_11>` with a reason, then click Prepare documents again.
+
+**Expected Results:**
+
+* Step 2 is refused with an error saying the item is retired, naming and linking `<item_11>`; no packet is prepared.
+* Step 3 prepares the packet, and its custody agreement names `<item_11>`.
+
 ## Reconciliation
 
 **Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journey, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Case Lifecycle, Items and Operator Console PRD pages, and the durable case-lifecycle suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md`, `ui-design.md` whole and the items delta. It is a statement, not proof.
 
-- **Folded** - `grade10-site-vault-case-lifecycle-US3-TC1-1` into `grade10-site-vault-case-lifecycle-SC-41`; `grade10-site-vault-case-lifecycle-US3-TC2-1` into `grade10-site-vault-case-lifecycle-SC-42`'s vaulting; `grade10-site-vault-case-lifecycle-US3-TC3-1` into `grade10-site-vault-case-lifecycle-SC-42`'s release and unwind; `grade10-site-vault-case-lifecycle-US3-TC4-1` into `grade10-site-vault-case-lifecycle-SC-43`, gaining the vault's move to the lender as Q46; `grade10-site-vault-case-lifecycle-US3-TC6-1` into `grade10-site-vault-case-lifecycle-SC-46`; `grade10-site-vault-case-lifecycle-US3-TC7-1` into `grade10-site-vault-case-lifecycle-SC-47`
-- **Folded into the spec** - `grade10-site-vault-case-lifecycle-US3-TC5-1`: a decline or cancel after the valuation started leaves the item registered and not marked, which no scenario stated; the "Nothing else" rule now names it and `grade10-site-vault-case-lifecycle-SC-50` carries it
-- **Added by QA2** - `grade10-site-vault-case-lifecycle-US3-TC8-1` for `grade10-site-vault-case-lifecycle-SC-44`; `grade10-site-vault-case-lifecycle-US3-TC9-1` for `grade10-site-vault-case-lifecycle-SC-48`; `grade10-site-vault-case-lifecycle-SC-49`, the third refusal the requirement's table names, was written by QA2 and is out of suite
-- **Round 4** - the other owner is named only behind `kyc:read`, else by short id: `grade10-site-vault-case-lifecycle-SC-46` and `grade10-site-vault-case-lifecycle-SC-47` gain that line, walked by `grade10-site-vault-case-lifecycle-US3-TC10-1`; `grade10-site-vault-case-lifecycle-SC-51`, Prepare documents registering an item nothing has registered, is out of suite; the register is owed the case's state rather than each word in order, which changes no case
-- **Raised, escalated** - Q56, an item retired after its valuation and then vaulted; no case asserts it until it is answered
+- **Folded** - `grade10-site-vault-case-lifecycle-US3-TC1-1` into `grade10-site-vault-case-lifecycle-SC-49`; `grade10-site-vault-case-lifecycle-US3-TC2-1` into `grade10-site-vault-case-lifecycle-SC-50`'s vaulting; `grade10-site-vault-case-lifecycle-US3-TC3-1` into `grade10-site-vault-case-lifecycle-SC-50`'s release and unwind; `grade10-site-vault-case-lifecycle-US3-TC4-1` into `grade10-site-vault-case-lifecycle-SC-51`, gaining the vault's move to the lender as Q46; `grade10-site-vault-case-lifecycle-US3-TC6-1` into `grade10-site-vault-case-lifecycle-SC-54`; `grade10-site-vault-case-lifecycle-US3-TC7-1` into `grade10-site-vault-case-lifecycle-SC-55`
+- **Folded into the spec** - `grade10-site-vault-case-lifecycle-US3-TC5-1`: a decline or cancel after the valuation started leaves the item registered and not marked, which no scenario stated; the "Nothing else" rule now names it and `grade10-site-vault-case-lifecycle-SC-58` carries it
+- **Added by QA2** - `grade10-site-vault-case-lifecycle-US3-TC8-1` for `grade10-site-vault-case-lifecycle-SC-52`; `grade10-site-vault-case-lifecycle-US3-TC9-1` for `grade10-site-vault-case-lifecycle-SC-56`; `grade10-site-vault-case-lifecycle-SC-57`, the third refusal the requirement's table names, was written by QA2 and is out of suite
+- **Round 4** - the other owner is named only behind `kyc:read`, else by short id: `grade10-site-vault-case-lifecycle-SC-54` and `grade10-site-vault-case-lifecycle-SC-55` gain that line, walked by `grade10-site-vault-case-lifecycle-US3-TC10-1`; `grade10-site-vault-case-lifecycle-SC-59`, Prepare documents registering an item nothing has registered, is out of suite; the fill it once stood beside is gone (Q52); the register is owed the case's state rather than each word in order, which changes no case
+- **Raised, answered by the owner** - Q56, an item retired after its valuation: Prepare documents is refused while the register reads it as retired, `grade10-site-vault-case-lifecycle-SC-60`, walked by `grade10-site-vault-case-lifecycle-US3-TC11-1`
 - **Raised, answered by the round** - none other
 - **Rejected** - none
 - **Contradicted** - none
-- **Uncovered anchors** - none: US-03 has a case for every scenario but `grade10-site-vault-case-lifecycle-SC-45` and `grade10-site-vault-case-lifecycle-SC-49`, which are out of suite with their verifiers
+- **Uncovered anchors** - none: US-03 has a case for every scenario but `grade10-site-vault-case-lifecycle-SC-53` and `grade10-site-vault-case-lifecycle-SC-57`, which are out of suite with their verifiers

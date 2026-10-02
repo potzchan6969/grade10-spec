@@ -44,13 +44,6 @@ stays readable.
 **I want** to close the mark that is still showing, with a reason,
 **so that** the item reads as not marked and can be moved or retired.
 
-### grade10-admin-inventory-items-US-07: Operator reads a collector's items on their page
-
-**As a** member of shop staff with a collector at the counter,
-**I want** their page to list every item they own but a retired one, marked
-or not,
-**so that** I can see everything they have with us in one place.
-
 ### grade10-admin-inventory-items-US-08: Admin erases a collector who owns items
 
 **As an** admin running an erasure,
