@@ -67,10 +67,7 @@
       },
       {
         "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
-        "anchors": [
-          "Feature set",
-          "Requirement: Two-maximum rule"
-        ]
+        "anchors": ["Feature set", "Requirement: Two-maximum rule"]
       },
       {
         "path": "openspec/specs/grade10-site/auction/auto-bidding/user-journeys.md",
