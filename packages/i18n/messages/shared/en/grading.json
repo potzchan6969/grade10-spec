@@ -292,6 +292,9 @@
       "cancelled": "Cancelled",
       "expired": "Expired"
     },
+    "state": {
+      "settled": "Nothing left with us"
+    },
     "chip": {
       "waitingOnYou": "Waiting on you",
       "withUs": "With us",
@@ -376,6 +379,7 @@
       "readMostDays": "Read most days · {when}",
       "stages": "{grader}’s stages, in its words. A stage can take days; the estimate is what we promise, the stages are what the grader reports.",
       "estimate": "Back by about {when}",
+      "newDate": "A new date, set {day}. We emailed you the day we set it.",
       "nextStage": "We email you the moment the grades post.",
       "runningLate": "Past {estimate} this reads Running late, the new date shows here with the grader’s stage, and we email it the day we set it. Nothing changes at the counter.",
       "nothingToDo": "Nothing to do while the cards are with the grader."

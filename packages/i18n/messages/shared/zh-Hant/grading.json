@@ -292,6 +292,9 @@
       "cancelled": "已取消",
       "expired": "已過期"
     },
+    "state": {
+      "settled": "我們這裡已沒有你的卡"
+    },
     "chip": {
       "waitingOnYou": "等你行動",
       "withUs": "在我們這邊",
@@ -376,6 +379,7 @@
       "readMostDays": "大部分日子都會查看 · {when}",
       "stages": "以下是 {grader} 自己用的階段說法。一個階段可能要好幾日；預計時間是我們的承諾，階段是評級公司的匯報。",
       "estimate": "預計約於 {when} 送回",
+      "newDate": "新日期於 {day} 訂出，我們已在當日電郵你。",
       "nextStage": "成績一出，我們即電郵通知你。",
       "runningLate": "超過 {estimate} 之後，這裡會顯示「比預期慢」，並列出新日期與評級公司的階段，我們亦會在訂出新日期當日電郵你。櫃檯這邊不受影響。",
       "nothingToDo": "卡片在鑑定師手中時無需操作。"
