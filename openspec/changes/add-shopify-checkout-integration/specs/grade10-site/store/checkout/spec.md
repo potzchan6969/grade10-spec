@@ -268,9 +268,8 @@ migration is introduced and historical acceptance records remain intact.
 Scenarios SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 are retired with this
 requirement. Their identifiers are not reused.
 
-## Retired Scenarios
-
-The removed requirements retire backend-only SC-08, SC-14 and SC-16 without
+**Retired scenarios** - The removed requirements retire backend-only
+SC-08, SC-14 and SC-16 without
 changing their existing implementation. The previous draft's SC-22 through
 SC-32 are withdrawn with the backend intent/recovery plan; current review,
 verification and compatibility behavior is covered by the retained and new

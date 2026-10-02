@@ -26,7 +26,7 @@ Public guest checkout, a separate checkout page and new shared UI exports.
 
 ## Product record
 
-- [Checkout](../../../docs/prds/products/grade10-site/store/checkout.md)
+- [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
 
 ## Capabilities
 

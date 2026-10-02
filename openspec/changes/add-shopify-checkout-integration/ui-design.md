@@ -30,13 +30,13 @@ does not depend on the native Continue shopping action.
 
 ## States
 
-| State | Shows | Journey |
-| --- | --- | --- |
-| Ready drawer | Current basket, accepted tender and estimated total | grade10-site-store-checkout-US-01 |
-| Checkout request pending | Unavailable checkout action | grade10-site-store-checkout-US-01 |
-| Refused or failed | Existing feedback and ready-basket retry | grade10-site-store-checkout-US-02 |
-| Verification required | Existing inline account action | grade10-site-store-checkout-US-01 |
-| Returned pending order | Existing settling state | grade10-site-store-checkout-US-03 |
-| Loading, failed or empty orders | Existing loading, error/Retry or empty/Shop now treatment | grade10-site-store-checkout-US-03 |
-| Shopify confirmation | Static Your Orders link | grade10-site-store-checkout-US-03 |
-| Signed-out collector | Existing sign-in action | grade10-site-store-checkout-US-04 |
+| State | Shows | Journey | Requirement Disposition |
+| --- | --- | --- | --- |
+| Ready drawer | Current basket, accepted tender and estimated total | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02` |
+| Checkout request pending | Unavailable checkout action | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-34` |
+| Refused or failed | Existing feedback and ready-basket retry | grade10-site-store-checkout-US-02 | `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-07`, `grade10-site-store-checkout-SC-38` |
+| Verification required | Existing inline account action | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-37` |
+| Returned pending order | Existing settling state | grade10-site-store-checkout-US-03 | `grade10-site-store-checkout-SC-12` |
+| Loading, failed or empty orders | Existing loading, error/Retry or empty/Shop now treatment | grade10-site-store-checkout-US-03 | **Out of suite:** unchanged order-page states verified in `apps/frontend/grade10/src/pages/orders/OrderHistoryPage.test.tsx` |
+| Shopify confirmation | Static Your Orders link | grade10-site-store-checkout-US-03 | `grade10-site-store-checkout-SC-15` |
+| Signed-out collector | Existing sign-in action | grade10-site-store-checkout-US-04 | `grade10-site-store-checkout-SC-06` |

@@ -39,11 +39,11 @@ Public guest checkout, an embedded card form and a separate checkout page.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/store/checkout` | Is same-session intent reuse required? | Q11 supersedes the earlier intent decision |
+| `grade10-site/store/checkout` | Is same-session intent reuse required? | Q11 |
 | `grade10-site/store/checkout` | Is new refusal recovery required? | Q12 |
 | `grade10-site/store/checkout` | Is provider-response recovery required? | Q13 |
 | `grade10-site/store/checkout` | Is worker-crash recovery required? | Q14 |
-| `grade10-site/store/checkout` | Must an earlier payable invoice close before another Pay? | Q15, confirmed by @kinisworking |
-| `grade10-site/store/checkout` | Do edits made during payment change the purchase or cart-release policy? | Q16, confirmed by @kinisworking |
-| `grade10-site/store/checkout` | Does this change add missing backend logic? | Q17, confirmed by @kinisworking |
-| `grade10-site/store/checkout` | Which state appears if Your Orders has no matching purchase? | Q18, existing order surface under Q17; no new behavior |
+| `grade10-site/store/checkout` | Must an earlier payable invoice close before another Pay? | Q15 |
+| `grade10-site/store/checkout` | Do edits made during payment change the purchase or cart-release policy? | Q16 |
+| `grade10-site/store/checkout` | Does this change add missing backend logic? | Q17 |
+| `grade10-site/store/checkout` | Which state appears if Your Orders has no matching purchase? | Q18 |
