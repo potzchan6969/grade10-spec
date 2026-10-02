@@ -3,10 +3,6 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-24, tcs-rules r3.0
 
-## Purpose
-
-Smoke paths from Inventory Cert media classification into Auction listing galleries.
-
 ## grade10-admin-e2e-US1: Operator starts a listing with its Cert's source media
 
 **As an** Auction operator,
