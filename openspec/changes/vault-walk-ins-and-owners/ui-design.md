@@ -1,10 +1,11 @@
 # UI: Vault walk-ins and owners
 
-No Figma frame and no canvas board draws any screen below yet; the designer
-owes every board under Flags, and whether the first version waits on them
-is open as [Q27](decisions.md#decisions). Until a board lands, each screen is the composition
-named here, drawn from the console's and the store's existing blocks, and
-nothing below invents a look: a state no block carries is flagged for the
+No Figma frame exists. The design canvas is the frame:
+[Vault canvas](https://claude.ai/artifact/BUPaDYBGRH8p5ib5hZk8Su), one board
+per screen, named below by its id (`A14`, `A15`, `C24`). The three boards
+draw the looks the build composed from the console's and the store's
+existing blocks, as [Q27](decisions.md#decisions) directs; the collector
+page has no board yet. A state no block carries is flagged for the
 designer, never drawn locally. [decisions.md](decisions.md) owns the scope,
 and the journeys beside each delta own who walks it.
 
@@ -24,11 +25,11 @@ and the journeys beside each delta own who walks it.
 
 | Screen | Board | Route | Composes |
 | --- | --- | --- | --- |
-| Walk-in form | none yet - the designer's | dialog from the queue's header, `admin.grade10.com/vault` | new `WalkInDialog` → `FormDialog`, `TextField`, `NotesField`, `ChoiceList`, `Choice`, `MoneyField`, `FileButton`, `MediaGallery`, `Notice` |
+| Walk-in form | `A14` | dialog from the queue's header, `admin.grade10.com/vault` | new `WalkInDialog` → `FormDialog`, `TextField`, `NotesField`, `ChoiceList`, `Choice`, `MoneyField`, `FileButton`, `MediaGallery`, `Notice` |
 | Walk-in draft | the Drafts view as it stands | `admin.grade10.com/vault/cases/:caseId` | `CaseDetailPanel`, `WithheldActs` → `Badge`, `Notice`, `Button`, `Link` |
-| Queue and held items, collector | none yet | `admin.grade10.com/vault`, the queue and the Held items tab; the collector in the URL | `CaseQueuePanel`, `CaseQueueTable`, `CustodyHoldingsPanel` → `Table`, `Row`, `Cell`, `Link`, `Status`, `Button` |
+| Queue and held items, collector | `A15` | `admin.grade10.com/vault`, the queue and the Held items tab; the collector in the URL | `CaseQueuePanel`, `CaseQueueTable`, `CustodyHoldingsPanel` → `Table`, `Row`, `Cell`, `Link`, `Status`, `Button` |
 | Collector page v1 | none yet - the designer draws the page | `admin.grade10.com/vault/collectors/:userId` | new `CollectorPage` → `SectionHeader`, `Panel`, `Table`, `Row`, `Cell`, `At`, `StatusBadge`, `CursorPager`, `Status`, `Link` |
-| Send a draft staff opened | the collector flow's list and wizard | `grade10.com/vault`, then the wizard on the draft | `CaseList`, the wizard's third step `RequestReview`, unchanged |
+| Send a draft staff opened | the collector flow's list and wizard; the photograph step `C24` | `grade10.com/vault`, then the wizard on the draft | `CaseList`, the wizard's third step `RequestReview`, unchanged |
 
 ## Components
 
@@ -68,11 +69,11 @@ written here.
 | Closed | Open a walk-in in the queue's header, for `vault:operate` only | `grade10-admin-vault-operator-queue-SC-63` |
 | Statement first | the collection statement shown before staff type, its version kept by the open (Q17); in production the open refuses while the statement is unwritten (Q24) | `grade10-admin-vault-operator-queue-SC-58` |
 | Empty | email, category, title, description, lane and amount, photos; no name and no contact number; Open case disabled until a category and a title are given, a photograph not needed | `grade10-admin-vault-operator-queue-SC-79` |
-| Photos added | the photos in a `MediaGallery`, n of 10, each removable | `grade10-admin-vault-operator-queue-SC-75` |
+| Photos added | the photos in a `MediaGallery`, n of 10; a selected photograph offers **Remove photograph** | `grade10-admin-vault-operator-queue-SC-75` |
 | Opening | Open case pending; the form held | **Out of suite:** the dialog's pending state, drawn by the `WalkInDialog` story in `packages/vault/admin-frontend` and checked in its review |
 | Opened | the new draft opens on its own page | `grade10-admin-vault-operator-queue-SC-55` |
-| Signed-in address | a `Notice` naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-57` |
-| Refused otherwise | the worker's refusal in words beside the field it names | `grade10-admin-vault-operator-queue-SC-76` |
+| Signed-in address | a `Notice` in the dialog's footer naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-57` |
+| Refused otherwise | a title or description past its limit refused in words beside that field, Open case held; a refusal only the worker gives reads in the dialog's footer, beside Cancel and Open case; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-76` |
 
 Grader and cert arrive with `add-item-registry`. The form is built without
 waiting on counsel's statement text (Q24).
@@ -89,10 +90,10 @@ waiting on counsel's statement text (Q24).
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Named | each row's collector by account name, or by the email handle of an account the walk-in created until the customer names themselves; a click narrowing to that collector, and a link beside it to their collector page | `grade10-admin-vault-operator-queue-SC-66` |
-| Name unavailable | the short id and "name unavailable"; the rest of the row and the list stand | `grade10-admin-vault-operator-queue-SC-69` |
+| Named | a Collector column after the item: each row's collector by account name, or by the email handle of an account the walk-in created until the customer names themselves, as a button narrowing to that collector, and a **Collector page** link beside it | `grade10-admin-vault-operator-queue-SC-66` |
+| Name unavailable | the short id followed by "name unavailable", still narrowing and linking; the rest of the row and the list stand | `grade10-admin-vault-operator-queue-SC-69` |
 | Treasurer | a treasurer reads the rows as today, with no collector column | `grade10-admin-vault-operator-queue-SC-70` |
-| Narrowed to one collector | the collector's name above the rows, the count for that collector, and a control clearing it | `grade10-admin-vault-operator-queue-SC-71` |
+| Narrowed to one collector | a line above the rows naming the collector, the same on the queue and Held items, with **Every collector** clearing it; the cuts count that collector's cases | `grade10-admin-vault-operator-queue-SC-71` |
 | Narrowed, none | the collector holds no case in this cut | `grade10-admin-vault-operator-queue-SC-73` |
 | Narrowed to nobody | an unknown or malformed id reads as a collector holding no case | `grade10-admin-vault-operator-queue-SC-77` |
 | Overdue and search | neither names a collector nor narrows by one | `grade10-admin-vault-operator-queue-SC-78` |
@@ -120,12 +121,14 @@ waiting on counsel's statement text (Q24).
 | Signing in | the site's existing sign-in dialog | **Out of suite:** the site's sign-in dialog, stated in `shared/auth/sign-in` |
 | Listed as a draft | the draft on the collector's list, reading that staff opened it at the counter; it reopens in the wizard | `grade10-site-vault-case-intake-SC-32` |
 | The wizard's own | the third step's read-back, statement tick and send, with its own states | `grade10-site-vault-case-intake-SC-34` |
-| Photo removed | the photograph step offers removing any photograph, staff's or their own, before the send | `grade10-site-vault-case-intake-SC-37` |
+| Photo removed | the photograph step shows each photograph as a thumbnail with a text button under it removing it, staff's or their own, before the send | `grade10-site-vault-case-intake-SC-37` |
 | Cancelled before sending | a draft the collector cancelled reads as any cancelled draft; one staff cancelled leaves the list | `grade10-site-vault-case-lifecycle-SC-44` |
 
 ## Flags
 
-- **Every board is missing** - the walk-in form, the collector column and
-  filter, and the collector page; each row above is the designer's to draw,
-  and Q27 builds them on the console's existing blocks now, each replaced
-  when its board lands
+- **The collector page has no board** - its rows above are the designer's
+  to draw; Q27 builds it on the console's existing blocks now, replaced when
+  its board lands
+- **Drawn from the build** - `A14`, `A15` and `C24` draw what the build
+  composed, so the designer reviews them as boards rather than drawing them
+  fresh
