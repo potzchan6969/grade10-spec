@@ -7,10 +7,17 @@ import {
   VaultAcceptOfferDialog,
   type VaultAcceptOfferDialogCopy,
   type VaultAcceptOfferDialogProps,
+  VaultCases,
+  type VaultCasesCard,
+  type VaultCasesChip,
+  type VaultCasesCopy,
   VaultCasesEmpty,
   type VaultCasesEmptyCopy,
   type VaultCasesEmptyProps,
   type VaultCasesEmptyStep,
+  type VaultCasesIcon,
+  type VaultCasesProps,
+  type VaultCasesTone,
 } from "../../index";
 
 // Each block carries a `<Name>Props` and a `<Name>Copy` beside it; a type the
@@ -18,9 +25,15 @@ import {
 type PublicVaultTypes = [
   VaultAcceptOfferDialogCopy,
   VaultAcceptOfferDialogProps,
+  VaultCasesCard,
+  VaultCasesChip,
+  VaultCasesCopy,
   VaultCasesEmptyCopy,
   VaultCasesEmptyProps,
   VaultCasesEmptyStep,
+  VaultCasesIcon,
+  VaultCasesProps,
+  VaultCasesTone,
 ];
 
 const publicVaultTypes: PublicVaultTypes | undefined = undefined;
@@ -44,13 +57,17 @@ const capabilityModules = import.meta.glob<Record<string, unknown>>(
   { eager: true },
 );
 
-const CAPABILITY_EXPORTS = ["VaultAcceptOfferDialog", "VaultCasesEmpty"].sort();
+const CAPABILITY_EXPORTS = [
+  "VaultAcceptOfferDialog",
+  "VaultCases",
+  "VaultCasesEmpty",
+].sort();
 
 describe("vault case public entry", () => {
   // shared-ui-vault-case-SC-01
-  it("exports the two named vault blocks", () => {
-    expect([VaultAcceptOfferDialog, VaultCasesEmpty]).toEqual(
-      Array.from({ length: 2 }, () => expect.any(Function)),
+  it("exports the three named vault blocks", () => {
+    expect([VaultAcceptOfferDialog, VaultCases, VaultCasesEmpty]).toEqual(
+      Array.from({ length: 3 }, () => expect.any(Function)),
     );
   });
 
