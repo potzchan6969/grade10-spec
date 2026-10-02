@@ -35,7 +35,7 @@ vendor is involved.
 | Loan agreement | case, customer, collateral, principal, interest as `X.XX% for a N-day term`, the same rate stated per annum, `Fees: None`, the term as `N days from the Advance Date`, repayable amount, dated, licence, complaints | the lender lends against collateral the custody agreement holds; the term runs from the day the principal is advanced and the date is confirmed in writing then; after it the same daily rate continues, uncompounded and with no further fee; early repayment any day with the term's interest payable in full; release on full repayment; a written notice naming a final date at least **14 days** off before ownership may be taken, and forfeiture is always a person's decision; Hong Kong SAR law; executed by the lender on the advance; the borrower's own line that the key terms were explained before signing |
 | Release of custody | case, customer, item, settled (an amount or "nothing was owed"), released, complaints | handed back in the condition inspected; nothing outstanding; the custody agreement ends |
 
-- 🚧 **The register's item** — the custody agreement names the item by the
+- **The register's item** — the custody agreement names the item by the
   register's category, title and description, and the loan agreement's
   collateral and the release receipt's item by its category and title, each
   with its grader, grade and cert beside it, as the register held them when

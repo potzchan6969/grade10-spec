@@ -24,7 +24,7 @@ has.
 
 ## Items
 
-- 🚧 **One object, one owner** — an item is one physical object and who owns
+- **One object, one owner** — an item is one physical object and who owns
   it, apart from stock — [Items](/p/grade10-admin/inventory/items)
 
 ## Product Assets

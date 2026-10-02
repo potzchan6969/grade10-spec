@@ -20,7 +20,7 @@ handles for them, one section per product.
   contact stays on each case
 - **Vault cases** - every case the collector holds, with its reference,
   item, status and lane, newest-touched first, each opening its case
-- 🚧 **Items** - every item the collector owns but a retired one, marked by
+- **Items** - every item the collector owns but a retired one, marked by
   a place or not, under `inventory:read` -
   [Items](/p/grade10-admin/inventory/items#owners)
 - **Sections stand alone** - a section the operator may not read, or that
