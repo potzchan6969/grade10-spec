@@ -62,8 +62,8 @@ import {
   levelOf,
   PROPERTIES,
   parseSuite,
-  prop,
   productPrefix,
+  prop,
   readDomainIds,
   readPlatformIds,
   readProductIds,
@@ -568,7 +568,10 @@ function checkSuite(root, filePath, rulesRev) {
         for (const id of ids) {
           if (spec.journeys.has(id)) continue;
           if (spec.groups?.has(id)) continue;
-          if (spec.retired?.has(id) && prop(tc, "Status").toLowerCase() === "deprecated")
+          if (
+            spec.retired?.has(id) &&
+            prop(tc, "Status").toLowerCase() === "deprecated"
+          )
             continue;
           if (spec.scenarios.has(id)) {
             warn(
