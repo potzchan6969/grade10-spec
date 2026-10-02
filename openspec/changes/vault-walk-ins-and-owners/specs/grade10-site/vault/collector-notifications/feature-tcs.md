@@ -1,7 +1,7 @@
 # grade10-site/vault/collector-notifications Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-10-01, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-vault-collector-notifications-US2: Collector hears about everything that happens to their case
 
@@ -18,7 +18,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -59,7 +59,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -93,9 +93,9 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** the blind pass read only its bundle: the spec-to-tcs skill and the rulebook, the change's `proposal.md`, `decisions.md` with its `## Raised` table empty, `ui-design.md`, `openspec/config.yaml`'s context, the PRD pages Operator Console, Collector Page, Collector Pages, Case Lifecycle and Compliance and Readiness, and for each of the five capabilities its `## Purpose` and `## Feature set`, the change's `user-journeys.md` and, where one exists, the durable purpose, journeys and suite with its `## Settled` and without its `## Reconciliation`. It was denied every `## Requirements` section, `openspec/specs/` beyond the bundle, `openspec/changes/archive/`, `tech-design.md`, `tasks.md` and the store's `tcs-conventions.md`, so the house style was taken from the existing suites. It wrote two cases under one journey and raised no question for this capability; the scenario pass issued `grade10-site-vault-collector-notifications-SC-35` and `grade10-site-vault-collector-notifications-SC-36` and carried `grade10-site-vault-collector-notifications-SC-01` and `grade10-site-vault-collector-notifications-SC-02` in its MODIFIED block.
+**Run:** the blind pass read only its bundle: the spec-to-tcs skill and the rulebook, the change's `proposal.md`, `decisions.md` with its `## Raised` table empty, `ui-design.md`, `openspec/config.yaml`'s context, the PRD pages Operator Console, Collector Page, Collector Pages, Case Lifecycle and Compliance and Readiness, and for each of the five capabilities its `## Purpose` and `## Feature set`, the change's `user-journeys.md` and, where one exists, the durable purpose, journeys and suite with its `## Settled` and without its `## Reconciliation`. It was denied every `## Requirements` section, `openspec/specs/` beyond the bundle, `openspec/changes/archive/`, `tech-design.md`, `tasks.md` and the store's `tcs-conventions.md`, so the house style was taken from the existing suites. It wrote two cases under one journey and raised no question for this capability; the scenario pass issued *An unsent walk-in that runs out tells nobody* and *A cancelled walk-in tells nobody* and carried *Every event is decided* and *Three endings, three messages* in its MODIFIED block.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `grade10-site-vault-collector-notifications-US2-TC14-1` | Joined | `grade10-site-vault-collector-notifications-SC-36` for the unsent draft; the sent one is `grade10-site-vault-case-lifecycle-SC-45`, told as any cancelled case. The collector's own cancel of an unsent one is walked, silent, by `grade10-site-vault-case-lifecycle-US1-TC4-1` |
-| `grade10-site-vault-collector-notifications-US2-TC15-1` | Joined | `grade10-site-vault-collector-notifications-SC-35`; the collector's own draft keeps the untouched email `grade10-site-vault-collector-notifications-SC-02` names |
+| `grade10-site-vault-collector-notifications-US2-TC14-1` | Joined | *A cancelled walk-in tells nobody* for the unsent draft; the sent one is *A walk-in the collector sent is cancelled as any case*, told as any cancelled case. The collector's own cancel of an unsent one is walked, silent, by `grade10-site-vault-case-lifecycle-US1-TC4-1` |
+| `grade10-site-vault-collector-notifications-US2-TC15-1` | Joined | *An unsent walk-in that runs out tells nobody*; the collector's own draft keeps the untouched email *Three endings, three messages* names |

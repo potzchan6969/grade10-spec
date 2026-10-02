@@ -1,7 +1,7 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-10-01, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-vault-retention-and-erasure-US2: Admin runs an erasure without touching a live case
 
@@ -17,7 +17,7 @@ exists.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
@@ -49,4 +49,4 @@ exists.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `grade10-site-vault-retention-and-erasure-SC-44` | Case added | `grade10-site-vault-retention-and-erasure-US2-TC4-1` |
+| *A removed walk-in is purged and loses the collector's actor id* | Case added | `grade10-site-vault-retention-and-erasure-US2-TC4-1` |

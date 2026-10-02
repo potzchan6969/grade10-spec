@@ -365,7 +365,7 @@ exists.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
