@@ -128,11 +128,7 @@
     {
       "repository": "9gag/grade10",
       "commit": "cc85d13400b5bf22451dc27f8c06f4ebcb490998",
-      "components": [
-        "admin",
-        "vault-service",
-        "web"
-      ]
+      "components": ["admin", "vault-service", "web"]
     }
   ]
 }
