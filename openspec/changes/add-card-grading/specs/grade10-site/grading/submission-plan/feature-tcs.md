@@ -24,7 +24,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -58,7 +58,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -90,7 +90,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -121,7 +121,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -151,7 +151,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -181,7 +181,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -220,7 +220,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -259,7 +259,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -290,7 +290,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -320,7 +320,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -359,7 +359,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -391,7 +391,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -429,7 +429,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -470,7 +470,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -511,7 +511,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -586,7 +586,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -624,7 +624,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -661,7 +661,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -701,7 +701,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -739,7 +739,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -781,7 +781,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -810,7 +810,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -848,7 +848,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -898,7 +898,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -935,7 +935,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -973,7 +973,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1012,7 +1012,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1052,7 +1052,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1091,7 +1091,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1138,7 +1138,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -1176,7 +1176,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1214,7 +1214,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1244,7 +1244,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1283,7 +1283,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1314,7 +1314,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1344,7 +1344,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1377,7 +1377,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1418,7 +1418,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1466,7 +1466,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -1505,7 +1505,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1545,7 +1545,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1580,7 +1580,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1622,7 +1622,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1652,7 +1652,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1681,7 +1681,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1720,7 +1720,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1757,7 +1757,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1792,7 +1792,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1844,7 +1844,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -1882,7 +1882,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1919,7 +1919,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1946,7 +1946,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1978,7 +1978,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2043,7 +2043,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2077,7 +2077,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2117,7 +2117,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2149,7 +2149,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2195,7 +2195,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -2231,7 +2231,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2266,7 +2266,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2296,7 +2296,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
