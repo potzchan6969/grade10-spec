@@ -166,5 +166,135 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "ecchochan",
+    "reviewedAt": "2026-10-02T17:54:05.000Z",
+    "changes": [
+      {
+        "path": "openspec/changes/add-item-registry/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "grade10-spec#819: build notes naming the screens as built on the console's blocks; no state, anchor or requirement changed"
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/items/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "US3-TC4 reworded to what was built on the owner's word (owner-questions 24): the picker offers no way to add a sixth file; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the walk-in's amount and address rules of refuse-zero-walk-in-loan and refuse-malformed-walk-in-address, accepted beside this change; #775 merged them with the register's slab lookup in WalkInDialog, and both walks pass on that commit; the cases added are those changes' own",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/admin-frontend/src/features/custody/cases/presentation/views/WalkInDialog.test.tsx",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "the walk-in's amount and address rules of refuse-zero-walk-in-loan and refuse-malformed-walk-in-address, accepted beside this change; #775 merged them with the register's slab lookup in WalkInDialog, and both walks pass on that commit",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/admin-frontend/src/features/custody/cases/presentation/views/WalkInDialog.test.tsx",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed; a case whose subject was a removed screen is deprecated by that change, none of this change's cases; case-intake also gains refuse-zero-walk-in-loan's refusal of a loan of zero",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/backend/test/trpc/collectorRouter.test.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed; case-intake also gains refuse-zero-walk-in-loan's refusal of a loan of zero",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/backend/test/trpc/collectorRouter.test.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed; a case whose subject was a removed screen is deprecated by that change, none of this change's cases",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/backend/src/testing/suites/registerPaper.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/backend/src/testing/suites/registerPaper.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed; a case whose subject was a removed screen is deprecated by that change, none of this change's cases",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/backend/src/testing/suites/registerPaper.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:packages/vault/backend/src/testing/suites/registerPaper.ts",
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed; a case whose subject was a removed screen is deprecated by that change, none of this change's cases",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "grade10-spec#839 accepted retire-vault-collector-site: the collector's site screens leave and their requirements keep the worker's behaviour without a screen; this change's requirements in the capability read the same as its delta, and no line naming the register, grader, cert or factsFromRegister changed",
+        "evidence": [
+          "9gag/grade10@9ca757a6d09b08afd5db896fb97cd35cdce0f13e:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts"
+        ]
+      }
+    ]
+  }
 }
