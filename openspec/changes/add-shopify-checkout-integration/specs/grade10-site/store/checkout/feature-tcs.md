@@ -1,6 +1,6 @@
 # grade10-site/store/checkout Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-03, tcs-rules r4
 
 ## grade10-site-store-checkout-US1: Collector sends a current cart to hosted payment
@@ -9,7 +9,7 @@
 **I want** to review my current cart and send its accepted tender to Shopify,
 **so that** I pay for the lines and choices I just saw.
 
-### grade10-site-store-checkout-US1-TC1-1: Current drawer lines reach one hosted invoice
+### grade10-site-store-checkout-US1-TC1-2: Current drawer basket and tender reach hosted payment
 
 **Classification:**
 
@@ -18,7 +18,7 @@
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** integration
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -26,24 +26,30 @@
 
 **Pre-conditions:**
 
-* customer(member) is on <grade10 store url> with one available cart line.
+* customer(member) is on <grade10 store url>.
+* The cart holds <reviewed basket> and <accepted tender>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <reviewed basket> | Two available variants, quantities 1 and 2; representative positive quantities |
+| <accepted tender> | One accepted store code and accepted points choice |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the live line review.
-3. Click Pay in the drawer.
-4. Read the Shopify hosted invoice page.
+2. Read the reviewed lines and accepted tender.
+3. Click Proceed to Checkout in the drawer.
+4. Read the hosted invoice.
 
 **Expected Results:**
 
-* The drawer shows current title, quantity, price and availability.
-* Pay is available only after the live review is ready.
-* The drawer shows accepted tender.
-* One pending Grade10 order holds the reviewed variants and quantities.
-* One Shopify hosted invoice opens for the reviewed line.
-* Grade10 shows no embedded payment form.
-* Shopify asks for address, shipping and payment.
+* The drawer shows current quantities, prices and accepted tender.
+* Checkout sends <reviewed basket> with <accepted tender>.
+* The returned hosted URL opens directly from the drawer.
+* The invoice shows the reviewed basket and accepted tender.
+* Shopify collects the shipping address and payment.
 
 ### grade10-site-store-checkout-US1-TC2-1: The drawer estimate leaves final charges to Shopify
 
@@ -62,29 +68,21 @@
 
 **Pre-conditions:**
 
-* customer(member) has a cart line and accepted promo and points choices.
 * customer(member) is on <grade10 store url>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <served shipping address> | An address served by the configured carrier rule |
+* The cart holds available goods and accepted tender.
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Read the subtotal and accepted tender.
-3. Click Pay in the drawer.
-4. Enter <served shipping address> on Shopify.
-5. Read shipping and tax before payment.
+2. Read the estimated total.
+3. Click Proceed to Checkout in the drawer.
+4. Read the hosted invoice totals.
 
 **Expected Results:**
 
-* The drawer shows the subtotal and accepted tender in store currency.
-* The estimate does not present shipping or tax as final.
-* The invoice carries the reviewed basket and accepted tender.
-* Shopify calculates shipping and tax after address entry.
+* The drawer labels the total as an estimate.
+* The estimate excludes final shipping and tax.
+* Shopify calculates final shipping and tax.
 
 ### grade10-site-store-checkout-US1-TC6-1: A served destination receives the store preview rate
 
@@ -92,7 +90,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -123,7 +121,9 @@
 * Both responses show the same configured rate and currency.
 * The carrier request creates no order and changes no cart.
 
-### grade10-site-store-checkout-US1-TC12-1: Unverified goods below the limit reach hosted payment
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US1-TC12-2: Unverified goods below the limit reach hosted payment
 
 **Classification:**
 
@@ -135,7 +135,7 @@
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
@@ -152,16 +152,18 @@
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the live line review.
-3. Click Pay in the drawer.
-4. Read the payment destination.
+2. Wait for the current review.
+3. Click Proceed to Checkout in the drawer.
+4. Read the hosted invoice.
 
 **Expected Results:**
 
-* The verification requirement does not replace the checkout action.
-* One Shopify hosted invoice opens.
+* The account-verification gate does not replace checkout.
+* The returned hosted URL opens.
 
-### grade10-site-store-checkout-US1-TC14-1: Verified goods at the limit reach hosted payment
+### grade10-site-store-checkout-US1-TC14-2: Verified goods at the limit reach hosted payment
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -173,7 +175,7 @@
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
@@ -183,21 +185,22 @@
 
 **Test data:**
 
-| Field | Value |
+| <gross goods> | Expected checkout |
 | --- | --- |
-| <gross goods> | HKD 120,000.00, the verification limit |
+| HKD 120,000.00, the verification limit | Available to the verified buyer |
+| HKD 120,000.01, one minor unit above the limit | Available to the verified buyer |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the live line review.
-3. Click Pay in the drawer.
-4. Read the payment destination.
+2. Wait for the current review.
+3. Click Proceed to Checkout in the drawer.
+4. Read the hosted invoice.
 
 **Expected Results:**
 
-* The verification requirement does not block this verified buyer.
-* One Shopify hosted invoice opens.
+* The verified buyer can use the checkout action.
+* The returned hosted URL opens.
 
 ### grade10-site-store-checkout-US1-TC3-1: Concurrent Pay requests retain one payable invoice
 
@@ -205,7 +208,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -231,13 +234,15 @@
 * The repeat returns the existing invoice or settling state.
 * Only one Shopify invoice is payable.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC4-1: A lost provider response recovers the same invoice
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -262,9 +267,9 @@
 * The response returns that invoice or its settling state.
 * No replacement Shopify invoice is created.
 
-### grade10-site-store-checkout-US1-TC5-1: Basket and tender edits start a new intent
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
-Runs once per row of **Test data**.
+### grade10-site-store-checkout-US1-TC5-2: Edited basket and tender reach a fresh submission
 
 **Classification:**
 
@@ -276,38 +281,36 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-01
-
-**Blocked:** @kinisworking to settle Q15 for an earlier known payable invoice; intent invalidation is settled.
 
 **Pre-conditions:**
 
-* customer(member) has an open checkout intent.
 * customer(member) is on <grade10 store url>.
-* The cart and tender permit <edit>.
+* An earlier hosted invoice remains payable.
+* The drawer holds <changed basket> and <changed tender>.
+* The current basket review and accepted tender are ready.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <edit> | Change an available line quantity from 1 to 2 |
-| <edit> | Replace an accepted promo with a different accepted promo |
-| <edit> | Change the accepted points quantity to a different valid quantity |
+| <changed basket> | Earlier quantity 1 is now 2; an available second variant is added |
+| <changed tender> | Earlier code removed; a different accepted points choice |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Apply <edit> in the drawer.
-3. Wait for the updated live review.
-4. Click Pay in the drawer.
-5. Read the checkout response.
+2. Read the current basket and accepted tender.
+3. Click Proceed to Checkout in the drawer.
+4. Read the returned hosted invoice.
 
 **Expected Results:**
 
-* The edit invalidates the earlier intent.
-* The changed purchase uses a new intent and fingerprint.
-* The old invoice is not returned for the changed purchase.
+* The submission carries the current basket and accepted tender.
+* Existing creation is called again.
+* The returned hosted URL opens.
+* The earlier invoice is ignored, without cancellation or reuse.
 
 ### grade10-site-store-checkout-US1-TC8-1: Terminal intent replay retains its existing outcome
 
@@ -317,7 +320,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -351,13 +354,15 @@ Runs once per row of **Test data**.
 * The response identifies the existing order and terminal outcome.
 * No second Grade10 order or Shopify invoice is created.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC9-1: A worker stop before dispatch permits safe recovery
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -382,13 +387,15 @@ Runs once per row of **Test data**.
 * The retry identifies the same Grade10 order.
 * Only one Shopify invoice is created.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC10-1: An unresolved dispatch requires operator recovery
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -414,13 +421,15 @@ Runs once per row of **Test data**.
 * No replacement Shopify invoice is created.
 * The member cannot start a new purchase until an operator binds or cancels the draft.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC7-1: Unsupported destinations receive no carrier rate
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -450,13 +459,15 @@ Runs once per row of **Test data**.
 * The response contains no carrier rate.
 * No order is created and the cart is unchanged.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC11-1: Same-session reload retains the reviewed checkout intent
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -484,7 +495,9 @@ Runs once per row of **Test data**.
 * Pay returns the existing order and invoice or settling state.
 * No second Grade10 order or Shopify invoice is created.
 
-### grade10-site-store-checkout-US1-TC13-1: Unverified goods at the limit require account verification
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US1-TC13-2: Unverified goods at the limit require account verification
 
 Runs once per row of **Test data**.
 
@@ -498,35 +511,34 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
 
 * customer(member, unverified buyer) is on <grade10 store url>.
-* The cart holds available goods worth <gross goods>.
-* Accepted tender reduces the estimated total below HKD 120,000.
+* The cart holds <gross goods>, with <accepted tender>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| <gross goods> | HKD 120,000.00, the verification limit |
-| <gross goods> | HKD 120,000.01, one minor unit above the limit |
+| <gross goods> | <accepted tender> | Expected checkout |
+| --- | --- | --- |
+| HKD 120,000.00, the verification limit | Accepted points reducing the estimate below HKD 120,000 | Inline verification gate |
+| HKD 120,000.01, one minor unit above the limit | Accepted points reducing the estimate below HKD 120,000 | Inline verification gate |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the live review.
-3. Read the verification message.
+2. Wait for the current review.
+3. Read the inline verification message.
 4. Click the account verification link.
 
 **Expected Results:**
 
-* The inline threshold message replaces the checkout action.
-* The gate uses gross goods before promo and points deductions.
+* The verification message replaces the checkout action.
+* Gross goods trigger the gate despite the lower estimate.
 * The link opens account verification.
-* No Grade10 order or Shopify invoice is created.
+* The frontend sends no checkout creation request.
 
 ### grade10-site-store-checkout-US1-TC15-1: Carrier requests without permission return no usable rate
 
@@ -534,7 +546,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -566,20 +578,22 @@ Runs once per row of **Test data**.
 * No usable carrier rate is returned.
 * No order is created and no cart is changed.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC16-1: Provider binding precedes the hosted response
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Hosted Shopify handoff
+* **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
 
@@ -597,20 +611,22 @@ Runs once per row of **Test data**.
 * No database transaction remains open during the provider call.
 * The provider reference is stored before the hosted URL returns.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC17-1: A changed request conflicts with its existing intent
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Safe repetition and recovery
+* **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
 
@@ -627,13 +643,15 @@ Runs once per row of **Test data**.
 * Intent conflict identifies the original Grade10 order.
 * No new reservation, order or Shopify invoice is created.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC18-1: Terminal replay survives changed catalog and verification facts
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -658,20 +676,22 @@ Runs once per row of **Test data**.
 * New live-money and verification gates do not block replay.
 * No new purchase or provider creation starts.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC19-1: Customer refusal cannot create another invoice
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Safe repetition and recovery
+* **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
 
@@ -688,13 +708,15 @@ Runs once per row of **Test data**.
 * The response reports refusal or recovery.
 * No automatic invoice without the customer replaces this intent.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC20-1: An unresolved dispatch blocks a changed purchase
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -718,13 +740,15 @@ Runs once per row of **Test data**.
 * The unresolved order receives settling or recovery-required handling.
 * No new invoice is created before verified payment or cancellation.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US1-TC21-1: Gross-goods verification refuses Pay despite reduced tender
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -748,15 +772,9 @@ Runs once per row of **Test data**.
 * Gross goods trigger the account-verification requirement.
 * No Grade10 order or Shopify invoice is created.
 
----
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
-## grade10-site-store-checkout-US2: Collector repairs a changed cart line
-
-**As a** collector whose cart changed while the cart drawer was open,
-**I want** the changed line named before I pay,
-**so that** I can fix the basket instead of paying for stale goods.
-
-### grade10-site-store-checkout-US2-TC1-1: Changed drawer lines block payment before handoff
+### grade10-site-store-checkout-US1-TC22-1: A pending request prevents another frontend submission
 
 **Classification:**
 
@@ -764,41 +782,297 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** smoke
+* **Type:** integration
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-store-checkout-US-02
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
 
-* customer(member) is on <grade10 store url> with <changed line>.
-* The live shop read returns <line change> while the drawer opens.
+* customer(member) is on <grade10 store url>.
+* The current basket review and accepted tender are ready.
+* The checkout creation response is mocked to remain pending.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Try the checkout control again while awaiting its response.
+4. Release the response with the existing hosted URL outcome.
+
+**Expected Results:**
+
+* Checkout is unavailable while its request is pending.
+* The frontend sends only the first creation request.
+* The returned hosted URL opens when the response arrives.
+
+### grade10-site-store-checkout-US1-TC23-1: A later Pay creates a fresh submission
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current basket review and accepted tender are ready.
+* An earlier invoice exists for this unchanged basket.
+* Checkout creation is mocked to return a different hosted URL.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the opened payment destination.
+
+**Expected Results:**
+
+* The frontend calls existing creation again.
+* The newly returned hosted URL opens.
+* The earlier invoice does not block or replace this submission.
+
+### grade10-site-store-checkout-US1-TC24-1: Reload does not require an earlier invoice to close
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* An earlier invoice remains payable for the current basket.
+
+**Steps:**
+
+1. Reload <grade10 store url>.
+2. Open the cart drawer.
+3. Wait for the current review.
+4. Click Proceed to Checkout in the drawer.
+
+**Expected Results:**
+
+* The drawer uses current basket and accepted tender.
+* Pay calls existing creation again.
+* The frontend does not wait for the earlier invoice.
+
+### grade10-site-store-checkout-US1-TC25-1: An empty basket offers no hosted payment
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current cart review returns no lines.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the current review.
+3. Read the empty drawer.
+
+**Expected Results:**
+
+* The existing empty state is displayed.
+* No checkout action starts an empty purchase.
+* The frontend sends no checkout creation request.
+
+### grade10-site-store-checkout-US1-TC26-1: Checkout verification response keeps the gate in the drawer
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current basket review and accepted tender are ready.
+* Checkout creation is mocked to return the existing verification-required outcome.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the inline account-verification state.
+4. Click the account verification link.
+
+**Expected Results:**
+
+* The existing inline verification state replaces checkout.
+* No hosted payment destination opens.
+* The account link opens verification.
+
+---
+
+### grade10-site-store-checkout-US1-TC27-1: Pending cart and tender writes prevent payment
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The drawer shows an available basket and accepted tender.
+* The next <write> is mocked to remain pending.
+
+**Test data:**
+
+| <write> | Drawer action |
+| --- | --- |
+| Cart quantity | Increase an available line's quantity |
+| Tender choice | Change the accepted points choice |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Make the drawer action in Test data.
+3. Try the checkout control while the write is pending.
+4. Release the write and its current quote.
+5. Read the checkout control.
+
+**Expected Results:**
+
+* Checkout is unavailable during the pending write.
+* No creation request starts with the earlier facts.
+* Checkout becomes available after current review and quote are ready.
+
+### grade10-site-store-checkout-US1-TC28-1: Failed tender changes preserve the accepted choice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The drawer holds accepted points of 10.
+* Changing points to 20 is mocked to fail.
+* The current quote for the retained choice becomes ready.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <changed line> | One named line previously held in the member cart |
-| <line change> | The line's current price differs from its held price |
-| <line change> | The line is no longer available |
-| <line change> | Available quantity falls below the held quantity |
+| <requested points> | 20, different from the accepted 10; both valid choices in the fixture |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the live review.
-3. Read the changed line notice.
-4. Try the drawer payment action.
+2. Enter <requested points> in the points control.
+3. Wait for the failed change and current quote.
+4. Read the accepted tender.
+5. Click Proceed to Checkout in the drawer.
 
 **Expected Results:**
 
-* The notice names <changed line> and its current shop answer.
-* Pay is unavailable until the basket is repaired.
-* No Grade10 order or Shopify invoice is created.
+* Existing failure feedback appears.
+* The retained accepted points choice remains 10.
+* Pay uses the retained choice with its ready quote.
 
-### grade10-site-store-checkout-US2-TC2-1: Failed drawer reads keep held facts unchecked
+### grade10-site-store-checkout-US1-TC29-1: A settling response opens the existing order surface
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current basket and accepted tender are ready.
+* Creation is mocked to return the existing settling outcome.
+* The existing order read returns that pending purchase.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the opened order surface.
+4. Open the cart drawer.
+
+**Expected Results:**
+
+* The existing order surface shows the pending purchase.
+* No hosted URL or paid result is invented.
+* The cart and tender remain until observed payment.
+
+## grade10-site-store-checkout-US2: Collector repairs a changed cart line
+
+**As a** collector whose cart changed while the cart drawer was open,
+**I want** the changed line named before I pay,
+**so that** I can fix the basket instead of paying for stale goods.
+
+### grade10-site-store-checkout-US2-TC1-2: Changed drawer lines block payment before handoff
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -810,27 +1084,69 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-02
 
 **Pre-conditions:**
 
-* customer(member) is on <grade10 store url> with a held cart line.
-* The live shop read fails.
+* customer(member) is on <grade10 store url>.
+* The cart review is mocked to identify <changed line>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <changed line> | A cart variant reported unavailable by current review |
+| <changed line> | A cart variant repriced by current review |
+| <changed line> | A cart variant reduced by current review |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the failed live review.
-3. Read the drawer summary.
-4. Try the drawer payment action.
-5. Click the review retry control.
+2. Wait for the current review.
+3. Read the named-line feedback.
+4. Try the drawer checkout action.
 
 **Expected Results:**
 
-* Held price and availability are not presented as current.
-* Pay remains unavailable after the failed read.
-* A retry is offered without creating an order or invoice.
+* The feedback names the changed line.
+* Checkout remains unavailable until the basket is ready.
+* The frontend sends no checkout creation request.
+
+### grade10-site-store-checkout-US2-TC2-2: Failed drawer reads keep held facts unchecked
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-02
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current cart review is mocked to fail.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the failed review.
+3. Read the drawer summary.
+4. Try the drawer checkout action.
+
+**Expected Results:**
+
+* Held prices and availability are not presented as current.
+* The drawer displays the existing failed-review state.
+* The existing review retry is offered.
+* Checkout is unavailable.
+* The frontend sends no checkout creation request.
 
 ### grade10-site-store-checkout-US2-TC3-1: Shopify names a line refused during hosted payment
 
@@ -838,7 +1154,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -865,7 +1181,9 @@ Runs once per row of **Test data**.
 * The Grade10 order remains recoverable and unpaid.
 * The member cart remains available for repair and retry.
 
-### grade10-site-store-checkout-US2-TC4-1: Pay rechecks changes after the drawer review
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US2-TC4-2: A named-line checkout refusal permits basket repair
 
 **Classification:**
 
@@ -875,25 +1193,32 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-02
 
 **Pre-conditions:**
 
-* customer(member) has a successful current drawer review.
-* Shopify changes one reviewed line before Pay is received.
+* customer(member) is on <grade10 store url>.
+* The current basket review and accepted tender are ready.
+* Checkout creation is mocked to return its existing named-line refusal.
 
 **Steps:**
 
-1. Submit Pay with the reviewed basket.
-2. Read the checkout response.
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the refused line.
+4. Repair the named line using drawer quantity or removal.
+5. Wait for the current review.
+6. Click Proceed to Checkout when the basket is ready.
 
 **Expected Results:**
 
-* The changed line is named before an order is created.
-* No Grade10 order or Shopify invoice is created.
+* The existing refusal identifies the affected line.
+* No hosted payment destination opens on refusal.
+* The repaired basket receives a current review.
+* The later submission uses existing creation again.
 
 ### grade10-site-store-checkout-US2-TC5-1: Incomplete or contradictory reads cannot authorize payment
 
@@ -903,7 +1228,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -934,37 +1259,39 @@ Runs once per row of **Test data**.
 * The incomplete or contradictory review blocks payment.
 * No Grade10 order or Shopify invoice is created.
 
-### grade10-site-store-checkout-US2-TC6-1: An unfinished live review cannot enable payment
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US2-TC6-2: An unfinished live review cannot enable payment
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-02
 
 **Pre-conditions:**
 
-* customer(member) is on <grade10 store url> with a held cart line.
-* The live shop read is delayed.
+* customer(member) is on <grade10 store url>.
+* The current cart review is mocked to remain pending.
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Read the summary while the review is pending.
-3. Try the drawer payment action.
+2. Read the drawer while review is pending.
+3. Try the drawer checkout action.
 
 **Expected Results:**
 
-* The held facts are not presented as a completed current review.
-* Pay remains unavailable while the live review is pending.
-* No Grade10 order or Shopify invoice is created.
+* Held facts are not shown as a completed current review.
+* Checkout remains unavailable while the review is pending.
+* The frontend sends no checkout creation request.
 
 ### grade10-site-store-checkout-US2-TC7-1: Uncertain gift cleanup cannot replace the invoice
 
@@ -972,7 +1299,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -998,7 +1325,134 @@ Runs once per row of **Test data**.
 * Original payable facts remain available for recovery or settlement.
 * No replacement invoice is created for the intent.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US2-TC8-1: Checkout failure releases the pending control for retry
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-02
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current basket review and accepted tender are ready.
+* Checkout creation is mocked to return its existing failure outcome.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the failure feedback.
+4. Click Proceed to Checkout once the basket is ready.
+
+**Expected Results:**
+
+* The drawer shows existing failure feedback.
+* No hosted URL opens for the failed outcome.
+* Checkout becomes available when the request ends and basket is ready.
+* A later click calls existing creation again.
+
 ---
+
+### grade10-site-store-checkout-US2-TC9-1: Contradictory reviews and failed quotes prevent payment
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-02
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The drawer reads are mocked with <read condition>.
+
+**Test data:**
+
+| <read condition> | Expected checkout |
+| --- | --- |
+| Current review has contradictory line facts | Unavailable |
+| Current tender quote fails | Unavailable |
+| Current tender quote remains pending | Unavailable |
+| Current tender quote contradicts reviewed basket | Unavailable |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the current reads.
+3. Read the drawer feedback.
+4. Try the checkout control.
+
+**Expected Results:**
+
+* Existing feedback shows the unresolved read condition.
+* Checkout is unavailable.
+* The frontend sends no creation request.
+
+### grade10-site-store-checkout-US2-TC10-1: Lost creation responses offer a fresh retry
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-02
+
+**Pre-conditions:**
+
+* customer(member) is on <grade10 store url>.
+* The current basket and accepted tender are ready.
+* Creation is mocked with <response failure>.
+* A later creation returns a hosted URL.
+
+**Test data:**
+
+| <response failure> | Expected treatment |
+| --- | --- |
+| Response lost in transport | Existing failure feedback |
+| Response cannot be decoded | Existing failure feedback |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the failure feedback.
+4. Click Proceed to Checkout once the basket is ready.
+5. Read the opened destination.
+
+**Expected Results:**
+
+* Failure feedback ends the pending submission.
+* It does not promise recovery or absence of an invoice.
+* The later click invokes creation again.
+* The newly returned hosted URL opens.
 
 ## grade10-site-store-checkout-US3: Collector finds the paid order after Shopify
 
@@ -1006,7 +1460,42 @@ Runs once per row of **Test data**.
 **I want** to return to Grade10 and find the order while it settles,
 **so that** I can trust the store did not lose my purchase.
 
-### grade10-site-store-checkout-US3-TC1-1: A pending purchase remains visible while payment settles
+### grade10-site-store-checkout-US3-TC1-2: A pending purchase remains visible after Shopify return
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-03
+
+**Pre-conditions:**
+
+* customer(member) is on Shopify confirmation.
+* The existing orders read is mocked to return the matching pending purchase.
+* The member cart still holds the invoice variants.
+
+**Steps:**
+
+1. Click Grade10 Your Orders on Shopify.
+2. Read the matching order in Your Orders.
+3. Open its existing order detail.
+4. Open the Grade10 cart drawer.
+
+**Expected Results:**
+
+* Your Orders shows the matching pending purchase.
+* The order surface displays its existing settling state.
+* Order detail shows the same purchase.
+* Return alone does not clear the cart or tender.
+
+### grade10-site-store-checkout-US3-TC2-2: Observed payment refreshes the existing cart cleanup
 
 **Classification:**
 
@@ -1014,31 +1503,36 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
+* **Type:** integration
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-03
 
 **Pre-conditions:**
 
-* customer(member) has returned from Shopify.
-* The matching Grade10 order remains pending.
+* customer(member) is on <grade10 orders url>.
+* Existing order reads transition the matching purchase from pending to paid.
+* The resulting cart read excludes paid variants and clears tender.
 
 **Steps:**
 
-1. Open Your Orders on Grade10.
-2. Read the matching purchase.
-3. Wait for its next status update.
+1. Open the matching order detail.
+2. Wait for the existing read to show paid.
+3. Open the cart drawer.
+4. Read its refreshed lines and tender.
 
 **Expected Results:**
 
-* The matching purchase appears among active orders.
-* Pending is shown as settling, not an empty result.
-* The page polls until settlement or a retryable failure.
+* The matching order displays the returned paid state and total.
+* The cart refresh reflects the existing paid-transition result.
+* Whole matching variant lines are absent.
+* Cart tender choices are cleared.
 
-### grade10-site-store-checkout-US3-TC2-1: Paid settlement releases the purchased cart lines
+### grade10-site-store-checkout-US3-TC4-1: Both Shopify confirmation surfaces offer Grade10 Your Orders
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1053,60 +1547,23 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-checkout-US-03
 
-**Blocked:** @kinisworking to settle Q16 when quantity increases during payment; unchanged-cart settlement is settled.
-
 **Pre-conditions:**
 
-* customer(member) is on a Shopify invoice for their Grade10 cart.
-
-**Steps:**
-
-1. Complete the invoice payment on Shopify.
-2. Return to <grade10 store url>.
-3. Open the cart drawer.
-4. Open Your Orders.
-5. Open the matching order detail.
-
-**Expected Results:**
-
-* The order shows paid with Shopify's paid total.
-* The cart no longer contains the paid lines.
-* Your Orders shows the matching paid purchase.
-* The matching order detail opens.
-
-### grade10-site-store-checkout-US3-TC4-1: Both Shopify confirmation surfaces offer Grade10 Your Orders
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-store-checkout-US-03
-
-**Pre-conditions:**
-
-* customer(member) has paid a Shopify invoice.
 * customer(member) is on <confirmation surface>.
+* The matching purchase is returned by existing Grade10 order reads.
 
 **Test data:**
 
-| Field | Value |
+| <confirmation surface> | Expected destination |
 | --- | --- |
-| <confirmation surface> | Shopify Thank You page |
-| <confirmation surface> | Shopify Order status page |
+| Shopify Thank You | Grade10 Your Orders |
+| Shopify Order status | Grade10 Your Orders |
 
 **Steps:**
 
-1. Click Grade10 Your Orders in the Shopify extension.
-2. Read the Grade10 destination.
+1. Read the Grade10 Your Orders link.
+2. Click Grade10 Your Orders.
+3. Read the matching purchase.
 
 **Expected Results:**
 
@@ -1120,7 +1577,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -1145,6 +1602,8 @@ Runs once per row of **Test data**.
 * The Grade10 order moves to paid once.
 * Shopify's paid total and shipping and tax facts are retained.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US3-TC5-1: Invalid payment events cannot settle a purchase
 
 Runs once per row of **Test data**.
@@ -1153,7 +1612,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1186,13 +1645,15 @@ Runs once per row of **Test data**.
 * The event is recorded for diagnosis.
 * No replacement order is created.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US3-TC6-1: Owned detail reads repair missed payment settlement
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -1217,13 +1678,15 @@ Runs once per row of **Test data**.
 * The order converges to paid through the guarded transition.
 * No second invoice is created.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US3-TC7-1: Repeated settlement signals release paid lines once
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -1250,13 +1713,15 @@ Runs once per row of **Test data**.
 * Repeated signals preserve the settled payment facts.
 * The paid cart lines are released once.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US3-TC8-1: Another member cannot read the matching order detail
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1281,13 +1746,15 @@ Runs once per row of **Test data**.
 * No provider read or payment repair is triggered.
 * Customer A's order and cart remain unchanged.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US3-TC9-1: The orders list reads stored purchases without repairing each row
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -1313,7 +1780,95 @@ Runs once per row of **Test data**.
 * Listing triggers no provider repair for each row.
 * Owned detail retains its provider repair path.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US3-TC10-1: Cart edits do not change the invoice purchase
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-03
+
+**Pre-conditions:**
+
+* customer(member) is on an existing hosted invoice.
+* The Grade10 cart is edited during payment to <edited cart>.
+* Existing order reads return <invoice purchase> as paid.
+* Existing cart reads return whole matching variants removed and tender cleared.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <invoice purchase> | Variant A, quantity 1, fixed on the invoice |
+| <edited cart> | Variant A increased to quantity 2; unrelated variant B added |
+
+**Steps:**
+
+1. Return to Grade10 Your Orders.
+2. Open the matching order detail.
+3. Read the purchased lines.
+4. Open the cart drawer.
+
+**Expected Results:**
+
+* The order shows <invoice purchase>, unchanged by later edits.
+* The cart refresh reflects existing whole matching-variant removal.
+* The unrelated variant remains as returned by the cart read.
+* Cart tender choices are cleared.
+
 ---
+
+### grade10-site-store-checkout-US3-TC11-1: Missing purchases retain the existing orders surface
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-03
+
+**Pre-conditions:**
+
+* customer(member) is on Shopify confirmation.
+* The existing orders read is mocked with <orders condition>.
+
+**Test data:**
+
+| <orders condition> | Expected surface | Existing action |
+| --- | --- | --- |
+| Loading | Loading state | None while loading |
+| Failed read | Error state | Retry reads orders again |
+| Empty list | Empty state | Shop now opens the store |
+| Other purchases, none matching | Existing order list | Existing order actions |
+
+**Steps:**
+
+1. Click Grade10 Your Orders on Shopify.
+2. Read the orders surface.
+3. Use the existing action when Test data names one.
+
+**Expected Results:**
+
+* The existing surface matches the returned read condition.
+* Its existing action works as Test data states.
+* No matching purchase or return-specific recovery is invented.
 
 ## grade10-site-store-checkout-US4: Signed-out collector is asked to sign in
 
@@ -1321,7 +1876,7 @@ Runs once per row of **Test data**.
 **I want** checkout to explain the identity requirement,
 **so that** I can sign in before an order or payment is started.
 
-### grade10-site-store-checkout-US4-TC1-1: The public cart drawer requires a member session
+### grade10-site-store-checkout-US4-TC1-2: The public cart drawer requires a member session
 
 **Classification:**
 
@@ -1329,31 +1884,30 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** smoke
+* **Type:** security
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-04
 
 **Pre-conditions:**
 
-* customer is signed out on <grade10 store url> with a cart line.
+* customer is signed out on <grade10 store url>.
 
 **Steps:**
 
-1. Open the cart drawer.
-2. Try to continue to payment.
-3. Read the sign-in outcome.
+1. Open the cart drawer or its sign-in action.
+2. Read the sign-in surface.
 
 **Expected Results:**
 
-* Checkout explains the signed-in requirement.
-* The sign-in surface is shown.
-* No Grade10 order or Shopify invoice is created.
-* Typed email is not public identity proof.
+* The frontend explains the signed-in requirement.
+* The existing sign-in action is offered.
+* No guest basket or public typed-email checkout is offered.
+* The frontend sends no checkout creation request.
 
-### grade10-site-store-checkout-US4-TC2-1: An expired member session cannot start hosted payment
+### grade10-site-store-checkout-US4-TC2-2: An expired session shows the existing sign-in outcome
 
 **Classification:**
 
@@ -1363,25 +1917,28 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-checkout-US-04
 
 **Pre-conditions:**
 
-* customer(member) has a successful drawer review.
-* The member session expires before Pay is received.
+* customer(member) is on <grade10 store url>.
+* The current basket review and accepted tender are ready.
+* Checkout creation is mocked to reject an expired member session.
 
 **Steps:**
 
-1. Submit Pay for the reviewed basket.
-2. Read the checkout response.
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the existing sign-in feedback.
 
 **Expected Results:**
 
-* A fresh signed-in session is required.
-* No Grade10 order or Shopify invoice is created.
+* The frontend presents the existing sign-in outcome.
+* No hosted payment destination opens.
+* The request no longer leaves checkout marked pending.
 
 ### grade10-site-store-checkout-US4-TC3-1: Typed email remains restricted to elevated operator tests
 
@@ -1391,7 +1948,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1421,13 +1978,15 @@ Runs once per row of **Test data**.
 * Typed email cannot authorize public checkout.
 * No identity lookup, order creation or provider call occurs.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US4-TC4-1: An authorized sandbox operator retains typed-email checkout
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1452,13 +2011,15 @@ Runs once per row of **Test data**.
 * The authorized operator bench flow accepts the buyer identity.
 * Its reviewed basket reaches the existing checkout result mapping.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
 ### grade10-site-store-checkout-US4-TC5-1: Production refuses typed-email checkout before identity lookup
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1482,168 +2043,195 @@ Runs once per row of **Test data**.
 * The production boundary refuses typed-email checkout.
 * No identity lookup, order creation or provider call occurs.
 
+**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
+
+### grade10-site-store-checkout-US4-TC6-1: Late responses cannot redirect a different member
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-04
+
+**Pre-conditions:**
+
+* customer A(member) is on <grade10 store url>.
+* The current basket and accepted tender are ready.
+* Customer A's creation response is mocked to remain pending.
+
+**Test data:**
+
+| <session change> | Current collector |
+| --- | --- |
+| Sign out | Signed-out customer |
+| Switch to customer B | Customer B(member), separate basket |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Make <session change> before the response arrives.
+4. Release customer A's hosted URL response.
+5. Read the current surface and browser destination.
+
+**Expected Results:**
+
+* Customer A's late response does not redirect the current collector.
+* It does not show customer A's order or checkout outcome.
+* The current collector keeps their existing session surface.
+
 ## Settled
 
-- Shopify is the hosted payment page; Grade10 is the order of record.
-- The public storefront is signed-in-member only; typed email remains an
-  operator test path in development and staging.
-- Shipping and tax are calculated by Shopify after address entry.
-- One checkout intent owns repeated Pay, reload and response-loss recovery.
-- A paid transition, not the provider return, releases the member cart.
-- The configured carrier callback is token-gated, stateless and shared with
-  the store preview.
+- Frontend only; backend behavior is unchanged.
+- Each new Pay uses existing creation; older invoices are ignored.
+- The invoice fixes the purchase; existing paid cart cleanup is unchanged.
+- No matching purchase uses the existing orders states and actions.
 
 ## Reconciliation
 
-**Run:** 2026-10-03, fresh QA2 after independent QA1 and Dev readings. QA1 read only the frozen `/tmp/grade10-checkout-planning.q9RjMf` bundle: anchors, proposal, decisions, journeys, stripped design, checkout PRD, context, stripped existing suite and domain suite; requirements, technical design, reconciliation, acceptance and archive were denied. QA2 read that bundle, both reports and the current proposal, decisions, journeys, UI design, technical design, scenarios and tasks. Non-anchor drawer, tender, fingerprint/replay and pending-policy clarifications were reread; frozen journey and feature-root anchors remain unchanged.
+- **Run** - Fresh QA2 after frontend-only QA1 and Dev completed independently. QA1 read the frozen bundle `/tmp/grade10-checkout-frontend.QNPBSW`: anchors, proposal, decisions, journeys, UI design, checkout/cart PRDs, context, existing cases without reconciliation and domain cases. Requirements, technical design, application source, acceptance and archive material were denied to QA1. QA2 read both reports, final requirements, technical design, tasks and Q18's existing orders-surface clarification. Dev's final strict validator passed before reconciliation.
+- **Anchors** - All 4 journeys and 4 feature roots are covered. The domain suite asserts no checkout handoff or return outcome; no case is delegated to it and no domain amendment is needed.
+- **Scope** - Q15–Q17 replace invoice reuse/recovery with fresh frontend creation and fixed invoices. Backend, permissions, settlement and carrier behavior are unchanged dependencies. No backend test, engineering task or execution claim is added.
+- **Raised** - QA1's absent matching purchase question lands in Q18. US3 TC11 folds the existing list/loading/error Retry/empty Shop now treatment. Purchase discovery, recovery and a new missing-order message are rejected under Q17–Q18. The answer is retained in Settled without scenario ids.
+- **Added** - QA2 adds frontend boundaries missing from the blind set: pending writes, failed tender retention, settling creation, contradictory/failed quotes, lost/undecodable responses, existing absent-purchase states and late responses after member change. All remain draft/manual. Existing US2 TC2 now explicitly checks availability and retry; this clarifies its existing failed-read run.
 
-### Blind Cases
+### Active Cases
 
-All 32 blind cases are retained at version 1, draft/manual. The joins below are by journey or named feature root; scenario ids appear only in this reconciliation.
+Each row folds a blind case or an added frontend case into the accepted anchors. Scenario identifiers here are temporary reconciliation links only.
 
-| Blind Case | Anchor | Scenario Join | Disposition |
-| --- | --- | --- | --- |
-| `grade10-site-store-checkout-US1-TC1-1` | Current basket and tender; Hosted Shopify handoff | `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-05` | Folded: current line fields, ready-only Pay and local order/no embedded form made explicit. |
-| `grade10-site-store-checkout-US1-TC2-1` | Current basket and tender | `grade10-site-store-checkout-SC-02` | Folded: store currency, accepted tender and Shopify final charges. |
-| `grade10-site-store-checkout-US1-TC3-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-09` | Folded: concurrency retains one order and payable invoice. |
-| `grade10-site-store-checkout-US1-TC4-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-10` | Folded: lost response recovers the original invoice. |
-| `grade10-site-store-checkout-US1-TC5-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-11` | Raised Q15: invalidation is covered; known payable old-invoice policy remains unanswered. |
-| `grade10-site-store-checkout-US1-TC6-1` | Carrier rates | `grade10-site-store-checkout-SC-17` | Folded: shared rate/currency and stateless callback. |
-| `grade10-site-store-checkout-US1-TC7-1` | Carrier rates | `grade10-site-store-checkout-SC-18` | Folded: unsupported destination, no rate or mutation. |
-| `grade10-site-store-checkout-US1-TC8-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-19` | Folded: every terminal-status partition replays without creation. |
-| `grade10-site-store-checkout-US1-TC9-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-20` | Folded: ready recovery retains the order and one dispatch. |
-| `grade10-site-store-checkout-US1-TC10-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-21` | Folded: accepted manual_review already blocks every new member purchase; false Blocked removed. |
-| `grade10-site-store-checkout-US1-TC11-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-23` | Folded: same-session reload retains the intent. |
-| `grade10-site-store-checkout-US1-TC12-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-05` | Folded: accepted below-limit verification partition, not a new threshold. |
-| `grade10-site-store-checkout-US1-TC13-1` | Current basket and tender; Hosted Shopify handoff | `grade10-site-store-checkout-SC-32` | Folded: gross-goods at/above boundary and inline account action; server refusal added separately. |
-| `grade10-site-store-checkout-US1-TC14-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-05` | Folded: accepted verified-at-limit partition. |
-| `grade10-site-store-checkout-US1-TC15-1` | Carrier rates | `grade10-site-store-checkout-SC-17`, `grade10-site-store-checkout-SC-18` | Folded: existing token-gated requirement, not an invented carrier outcome. |
-| `grade10-site-store-checkout-US2-TC1-1` | Current basket and tender | `grade10-site-store-checkout-SC-03` | Folded: quantity reduction added beside price and availability partitions. |
-| `grade10-site-store-checkout-US2-TC2-1` | Current basket and tender | `grade10-site-store-checkout-SC-04` | Folded: failed read keeps facts unchecked and retry available. |
-| `grade10-site-store-checkout-US2-TC3-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-07` | Folded: hosted refusal retains named unpaid, recoverable purchase. |
-| `grade10-site-store-checkout-US2-TC4-1` | Current basket and tender | `grade10-site-store-checkout-SC-22` | Folded: Pay rechecks after the drawer quote. |
-| `grade10-site-store-checkout-US2-TC5-1` | Current basket and tender | `grade10-site-store-checkout-SC-22` | Folded into existing no-stale-handoff requirement: incomplete/contradictory facts refuse without creation; no new UX. |
-| `grade10-site-store-checkout-US2-TC6-1` | Current basket and tender | `grade10-site-store-checkout-SC-01` | Folded into ready-only Pay/review requirement: pending read cannot authorize payment. |
-| `grade10-site-store-checkout-US3-TC1-1` | Order settlement and return | `grade10-site-store-checkout-SC-12` | Folded: pending purchase remains visible and polls. |
-| `grade10-site-store-checkout-US3-TC2-1` | Order settlement and return | `grade10-site-store-checkout-SC-13` | Raised Q16: unchanged-cart release covered; added-quantity removal policy remains unanswered. |
-| `grade10-site-store-checkout-US3-TC3-1` | Order settlement and return | `grade10-site-store-checkout-SC-14` | Folded: reconcile repairs missed payment and retains paid facts. |
-| `grade10-site-store-checkout-US3-TC4-1` | Order settlement and return | `grade10-site-store-checkout-SC-15` | Folded: both hosted confirmation surfaces use static Your Orders link. |
-| `grade10-site-store-checkout-US3-TC5-1` | Order settlement and return | `grade10-site-store-checkout-SC-16` | Folded: unknown reference/wrong shop/invalid signature do not settle. |
-| `grade10-site-store-checkout-US3-TC6-1` | Order settlement and return | `grade10-site-store-checkout-SC-14` | Folded into settlement requirement: owned detail repair uses guarded transition; no new journey. |
-| `grade10-site-store-checkout-US3-TC7-1` | Order settlement and return | `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-14` | Folded: duplicate and reconcile convergence releases once. |
-| `grade10-site-store-checkout-US3-TC8-1` | Order settlement and return | `grade10-site-store-checkout-SC-29` | Folded: ownership refusal now asserts no provider repair. |
-| `grade10-site-store-checkout-US4-TC1-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-06` | Folded: public signed-in boundary. |
-| `grade10-site-store-checkout-US4-TC2-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-06` | Folded: fresh authentication at Pay covers expired session. |
-| `grade10-site-store-checkout-US4-TC3-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-31` | Folded: unauthorized typed email refuses before lookup or side effects. |
-
-### Uncovered Scenarios
-
-The independent draft exposed the following missing claims. Each now has a bounded API draft; none is exempted as a technical detail or delegated to an unrelated domain case.
-
-| Added Case | Anchor | Scenario Join | Disposition |
-| --- | --- | --- | --- |
-| `grade10-site-store-checkout-US1-TC16-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-08` | Added: transaction/provider/bind sequencing. |
-| `grade10-site-store-checkout-US1-TC17-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-24` | Added: changed fingerprint under same key; no new reservation. |
-| `grade10-site-store-checkout-US1-TC18-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-25` | Added: unchanged terminal replay precedes later catalog/KYC gates. |
-| `grade10-site-store-checkout-US1-TC19-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-26` | Added: customer-refusal fallback cannot create again. |
-| `grade10-site-store-checkout-US1-TC20-1` | Safe repetition and recovery | `grade10-site-store-checkout-SC-28` | Added: unresolved dispatch blocks edited/new intent before deadline. |
-| `grade10-site-store-checkout-US1-TC21-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-32` | Added: direct server refusal despite reduced tender. |
-| `grade10-site-store-checkout-US2-TC7-1` | Hosted Shopify handoff; Safe repetition and recovery | `grade10-site-store-checkout-SC-27` | Added: uncertain gift cleanup withholds URL, retains original payable facts. |
-| `grade10-site-store-checkout-US3-TC9-1` | Order settlement and return | `grade10-site-store-checkout-SC-30` | Added: list remains a stored projection; detail retains repair. |
-| `grade10-site-store-checkout-US4-TC4-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-31` | Added: authorized sandbox bench remains available. |
-| `grade10-site-store-checkout-US4-TC5-1` | Hosted Shopify handoff | `grade10-site-store-checkout-SC-31` | Added: production operator refusal precedes identity lookup. |
-
-### Scenario Coverage
-
-| Scenario | Cases Asserting Its Outcome | Disposition |
+| Case | Disposition | Requirement Coverage |
 | --- | --- | --- |
-| `grade10-site-store-checkout-SC-01` | `grade10-site-store-checkout-US1-TC1-1`, `grade10-site-store-checkout-US2-TC6-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-02` | `grade10-site-store-checkout-US1-TC2-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-03` | `grade10-site-store-checkout-US2-TC1-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-04` | `grade10-site-store-checkout-US2-TC2-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-05` | `grade10-site-store-checkout-US1-TC1-1`, `grade10-site-store-checkout-US1-TC12-1`, `grade10-site-store-checkout-US1-TC14-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-06` | `grade10-site-store-checkout-US4-TC1-1`, `grade10-site-store-checkout-US4-TC2-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-07` | `grade10-site-store-checkout-US2-TC3-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-08` | `grade10-site-store-checkout-US1-TC16-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-09` | `grade10-site-store-checkout-US1-TC3-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-10` | `grade10-site-store-checkout-US1-TC4-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-11` | `grade10-site-store-checkout-US1-TC5-1` | Raised Q15 at the old-invoice policy boundary; stated invalidation covered. |
-| `grade10-site-store-checkout-SC-12` | `grade10-site-store-checkout-US3-TC1-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-13` | `grade10-site-store-checkout-US3-TC2-1`, `grade10-site-store-checkout-US3-TC7-1` | Raised Q16 for added quantity; stated unchanged-cart settlement covered. |
-| `grade10-site-store-checkout-SC-14` | `grade10-site-store-checkout-US3-TC3-1`, `grade10-site-store-checkout-US3-TC6-1`, `grade10-site-store-checkout-US3-TC7-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-15` | `grade10-site-store-checkout-US3-TC4-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-16` | `grade10-site-store-checkout-US3-TC5-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-17` | `grade10-site-store-checkout-US1-TC6-1`, `grade10-site-store-checkout-US1-TC15-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-18` | `grade10-site-store-checkout-US1-TC7-1`, `grade10-site-store-checkout-US1-TC15-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-19` | `grade10-site-store-checkout-US1-TC8-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-20` | `grade10-site-store-checkout-US1-TC9-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-21` | `grade10-site-store-checkout-US1-TC10-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-22` | `grade10-site-store-checkout-US2-TC4-1`, `grade10-site-store-checkout-US2-TC5-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-23` | `grade10-site-store-checkout-US1-TC11-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-24` | `grade10-site-store-checkout-US1-TC17-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-25` | `grade10-site-store-checkout-US1-TC18-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-26` | `grade10-site-store-checkout-US1-TC19-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-27` | `grade10-site-store-checkout-US2-TC7-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-28` | `grade10-site-store-checkout-US1-TC20-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-29` | `grade10-site-store-checkout-US3-TC8-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-30` | `grade10-site-store-checkout-US3-TC9-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-31` | `grade10-site-store-checkout-US4-TC3-1`, `grade10-site-store-checkout-US4-TC4-1`, `grade10-site-store-checkout-US4-TC5-1` | Folded; all stated outcomes asserted. |
-| `grade10-site-store-checkout-SC-32` | `grade10-site-store-checkout-US1-TC13-1`, `grade10-site-store-checkout-US1-TC21-1` | Folded; all stated outcomes asserted. |
+| `grade10-site-store-checkout-US1-TC1-2` | Folded: reviewed basket, accepted tender and hosted handoff | SC-01, SC-02, SC-05 |
+| `grade10-site-store-checkout-US1-TC2-1` | Folded: estimate and Shopify final charges | SC-02 |
+| `grade10-site-store-checkout-US1-TC5-2` | Folded: changed basket/tender use fresh creation | SC-33, SC-35 |
+| `grade10-site-store-checkout-US1-TC12-2` | Folded: below-limit gate boundary | SC-01, SC-37 |
+| `grade10-site-store-checkout-US1-TC13-2` | Folded: gross boundary despite accepted points | SC-37 |
+| `grade10-site-store-checkout-US1-TC14-2` | Folded: verified boundary | SC-01, SC-37 |
+| `grade10-site-store-checkout-US1-TC22-1` | Folded: current request guard | SC-34 |
+| `grade10-site-store-checkout-US1-TC23-1` | Folded: same basket can create another invoice | SC-33 |
+| `grade10-site-store-checkout-US1-TC24-1` | Folded: reload uses current creation | SC-33 |
+| `grade10-site-store-checkout-US1-TC25-1` | Folded: existing empty drawer prevents checkout | Current basket and tender; SC-01 ready-basket condition |
+| `grade10-site-store-checkout-US1-TC26-1` | Folded: returned verification gate | SC-37; existing verification outcome |
+| `grade10-site-store-checkout-US1-TC27-1` | Added: cart/tender writes block stale Pay | Review requirement; SC-01, SC-02 |
+| `grade10-site-store-checkout-US1-TC28-1` | Added: failed edit can retain ready accepted tender | Review requirement; SC-02 |
+| `grade10-site-store-checkout-US1-TC29-1` | Added: existing settling response navigation | Handoff Outcomes; SC-12 |
+| `grade10-site-store-checkout-US2-TC1-2` | Folded: changed-line review prevents handoff | SC-03 |
+| `grade10-site-store-checkout-US2-TC2-2` | Folded: failed review keeps facts unchecked and offers retry | SC-04 |
+| `grade10-site-store-checkout-US2-TC4-2` | Folded: named refusal, refresh and repair | SC-07, SC-03 |
+| `grade10-site-store-checkout-US2-TC6-2` | Folded: pending review blocks Pay | Review requirement; SC-01 |
+| `grade10-site-store-checkout-US2-TC8-1` | Folded: resolved failure restores ready retry | Handoff Outcomes; SC-38 failure treatment |
+| `grade10-site-store-checkout-US2-TC9-1` | Added: contradictory review/quote and failed quote | Review requirement; SC-03, SC-04 |
+| `grade10-site-store-checkout-US2-TC10-1` | Added: transport/decode failures promise no recovery | SC-38 |
+| `grade10-site-store-checkout-US3-TC1-2` | Folded: returned pending purchase and unchanged cart | SC-12 |
+| `grade10-site-store-checkout-US3-TC2-2` | Folded: observed pending-to-paid read refreshes cart/tender | SC-12, SC-13 |
+| `grade10-site-store-checkout-US3-TC4-1` | Folded: both static confirmation links | SC-15 |
+| `grade10-site-store-checkout-US3-TC10-1` | Folded: fixed invoice and returned whole-line cleanup | SC-35, SC-36 |
+| `grade10-site-store-checkout-US3-TC11-1` | Added: Q18 uses existing orders states/actions | Return requirement; Q18 |
+| `grade10-site-store-checkout-US4-TC1-2` | Folded: signed-out frontend sends no creation | SC-06 |
+| `grade10-site-store-checkout-US4-TC2-2` | Folded: expired session uses existing sign-in outcome | SC-06; Handoff Outcomes |
+| `grade10-site-store-checkout-US4-TC6-1` | Added: originating session prevents stale UI effects | Member checkout anchor; technical design Service Interfaces |
 
-### Questions
+### Scenarios
 
-- **Rejected recovery question** — accepted published checkout already states that unresolved `manual_review` blocks every new purchase by the member. This was missing from QA1's limited input, not an unanswered policy; TC10 is unblocked without inventing a rule.
-- **Raised Q15** — a known bound unpaid invoice after an edit has no settled cancel-or-remain-payable policy. TC5 stays draft and Blocked at that boundary; SC-11 states invalidation only. The ❓ Changed purchase entry in the checkout PRD and decisions Raised table await @kinisworking.
-- **Raised Q16** — increased current quantity during hosted payment has no settled release amount. TC2 stays draft and Blocked at that boundary; SC-13 covers the unchanged basket. The ❓ Added quantity entry in the checkout PRD and decisions Raised table await @kinisworking.
-- **Rejected empty-cart question** — the shared store-cart contract already hides the entire footer for zero items and renders its empty slots; the cart PRD names the empty story. Checkout does not invent a zero-line payment flow. Cart-drawer/shared component suites own that appearance.
-- **Rejected account-switch question** — shared auth/session requires current-person identity and per-person data keyed by user id; the cart PRD has one member scope and no signed-out lines or guest merge. The technical design clears member/shop-scoped intent storage on logout/switch. Another member cannot reuse the first member's cart, intent or order; checkout adds no account-switch UX.
-- **Remaining anchors** — every frozen journey and root is reached. No scenario is Out of suite; no domain case is credited. Q15 and Q16 remain unanswered product boundaries, not rejected cases or deferred delivery authorization. Acceptance must wait for their source decisions and the dependent reconciliation.
+| Scenario | Case Coverage |
+| --- | --- |
+| SC-01 | US1 TC1, TC12, TC14, TC25, TC27; US2 TC6 |
+| SC-02 | US1 TC1, TC2, TC27, TC28 |
+| SC-03 | US2 TC1, TC4, TC9 |
+| SC-04 | US2 TC2, TC9 |
+| SC-05 | US1 TC1 |
+| SC-06 | US4 TC1, TC2 |
+| SC-07 | US2 TC4 |
+| SC-12 | US1 TC29; US3 TC1, TC2 |
+| SC-13 | US3 TC2 |
+| SC-15 | US3 TC4 |
+| SC-33 | US1 TC5, TC23, TC24 |
+| SC-34 | US1 TC22 |
+| SC-35 | US1 TC5; US3 TC10 |
+| SC-36 | US3 TC10 |
+| SC-37 | US1 TC12, TC13, TC14, TC26 |
+| SC-38 | US2 TC8, TC10 |
+
+- **Out of suite** - Unchanged carrier SC-17 and SC-18 are verified by the existing carrier cases in the current durable `openspec/specs/grade10-site/store/checkout/feature-tcs.md` and the application's existing carrier/shipping lane. This frontend change adds no carrier tests or tasks. Their durable requirement is preserved.
+- **Out of suite** - Exhaustive compatibility mapping for settled, terminal, intent-conflict and recovery-required vocabulary is verified in the application repository's existing `packages/grade10-store/frontend/src/features/orders/checkout/domain/models/CheckoutResolution.test.ts` and the focused fixture gate in tasks 4.8/4.11. This is frontend mapping only; it does not require backend emission or recovery.
+- **Retired scenarios** - SC-08, SC-14 and SC-16 retire through explicit replacement of their broader requirements. SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 retire with intent repetition. Earlier draft SC-22–SC-32 retire with backend/recovery scope. No retired id is reused or treated as uncovered active work.
+- **Tasks** - Groups 2 and 3 contain no active checkbox. Retired addresses in groups 2–5 remain non-checkbox history and are not falsely completed. Active groups contain frontend tests, implementation, focused verification and later authorized staging/manual walks.
+
+### Deprecated Cases
+
+All 27 retain their original issued number, revision and historical behavior. Their disposition rejects the former delivery obligation under Q17; it does not claim the unchanged backend stops working.
+
+| Case | Scope Reason |
+| --- | --- |
+| `grade10-site-store-checkout-US1-TC3-1` | Backend intent reuse withdrawn |
+| `grade10-site-store-checkout-US1-TC4-1` | Backend/provider response recovery withdrawn |
+| `grade10-site-store-checkout-US1-TC6-1` | Existing carrier dependency, no frontend delivery |
+| `grade10-site-store-checkout-US1-TC7-1` | Existing carrier refusal dependency, no frontend delivery |
+| `grade10-site-store-checkout-US1-TC8-1` | Backend terminal replay withdrawn |
+| `grade10-site-store-checkout-US1-TC9-1` | Backend pre-dispatch recovery withdrawn |
+| `grade10-site-store-checkout-US1-TC10-1` | Backend ambiguous-dispatch recovery withdrawn |
+| `grade10-site-store-checkout-US1-TC11-1` | Intent persistence/reload reuse withdrawn |
+| `grade10-site-store-checkout-US1-TC15-1` | Existing carrier token gate unchanged, no frontend delivery |
+| `grade10-site-store-checkout-US1-TC16-1` | Existing provider persistence unchanged, no backend delivery |
+| `grade10-site-store-checkout-US1-TC17-1` | Backend intent fingerprint conflict withdrawn |
+| `grade10-site-store-checkout-US1-TC18-1` | Backend terminal replay despite changed facts withdrawn |
+| `grade10-site-store-checkout-US1-TC19-1` | Backend refusal/deduplication guarantee withdrawn |
+| `grade10-site-store-checkout-US1-TC20-1` | Backend unresolved-dispatch blockade withdrawn |
+| `grade10-site-store-checkout-US1-TC21-1` | Backend gross-goods enforcement unchanged; frontend covered by US1 TC13 |
+| `grade10-site-store-checkout-US2-TC3-1` | Shopify/provider hosted-payment refusal unchanged, no frontend implementation |
+| `grade10-site-store-checkout-US2-TC5-1` | Backend validation/creation guarantee unchanged, not frontend work |
+| `grade10-site-store-checkout-US2-TC7-1` | Backend uncertain invoice cancellation withdrawn |
+| `grade10-site-store-checkout-US3-TC3-1` | Existing reconciliation unchanged, no backend delivery |
+| `grade10-site-store-checkout-US3-TC5-1` | Existing event validation unchanged, no backend delivery |
+| `grade10-site-store-checkout-US3-TC6-1` | Existing order-read repair unchanged, no backend delivery |
+| `grade10-site-store-checkout-US3-TC7-1` | Existing settlement idempotency unchanged, no backend delivery |
+| `grade10-site-store-checkout-US3-TC8-1` | Existing backend ownership unchanged, no permission migration |
+| `grade10-site-store-checkout-US3-TC9-1` | Existing list/detail repair behavior unchanged |
+| `grade10-site-store-checkout-US4-TC3-1` | Existing backend typed-email permission unchanged |
+| `grade10-site-store-checkout-US4-TC4-1` | Existing operator sandbox authorization unchanged |
+| `grade10-site-store-checkout-US4-TC5-1` | Existing operator production gate unchanged |
 
 ### Manual
 
-All rows await implementation and human QA; none records an observed execution or automated proof. API rows name a harness run, not a new operator product surface.
+No case is credited to an executed test. Fixture walks are to be walked in the application's mounted Playwright checkout integration under tasks 4.1/4.8/4.11; real-shop walks require the separately authorized staging work in group 5.
 
 | Manual | Why |
 | --- | --- |
-| `grade10-site-store-checkout-US1-TC1-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC2-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC3-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC4-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC5-1` | to be walked in Group 6 The walk after Q15 is settled; changed-invoice policy |
-| `grade10-site-store-checkout-US1-TC6-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC7-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC8-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC9-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC10-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC11-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC12-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC13-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC14-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC15-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US2-TC1-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US2-TC2-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US2-TC3-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US2-TC4-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US2-TC5-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US2-TC6-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC1-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC2-1` | to be walked in Group 6 The walk after Q16 is settled; added-quantity release |
-| `grade10-site-store-checkout-US3-TC3-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC4-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC5-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC6-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC7-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US3-TC8-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US4-TC1-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US4-TC2-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US4-TC3-1` | to be walked in Group 6 The walk; drawer, hosted payment or API harness outcome |
-| `grade10-site-store-checkout-US1-TC16-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US1-TC17-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US1-TC18-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US1-TC19-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US1-TC20-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US1-TC21-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US2-TC7-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US3-TC9-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US4-TC4-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
-| `grade10-site-store-checkout-US4-TC5-1` | to be walked in Group 6 The walk; Shopify/provider or API harness outcome |
+| `grade10-site-store-checkout-US1-TC1-2` | Hosted invoice basket/tender and address/payment are to be walked in the authorized staging checkout |
+| `grade10-site-store-checkout-US1-TC2-1` | Estimate and Shopify address-aware totals are to be walked in authorized staging |
+| `grade10-site-store-checkout-US1-TC5-2` | Current edited basket and ignored invoice are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC12-2` | Below-limit action is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC13-2` | Gross-limit verification and account link are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC14-2` | Verified-limit action is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC22-1` | Pending control is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC23-1` | Fresh unchanged-basket creation is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC24-1` | Reload without intent reuse is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC25-1` | Empty drawer action is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC26-1` | Returned verification state is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC27-1` | Pending write guards are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC28-1` | Failed edit with retained tender is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC29-1` | Settling navigation is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC1-2` | Changed-line control is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC2-2` | Failed read and retry are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC4-2` | Named refusal and repair are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC6-2` | Pending review is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC8-1` | Resolved failure retry is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC9-1` | Invalid review/quote gating is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US2-TC10-1` | Transport/decode failure copy and retry are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US3-TC1-2` | Pending purchase/cart visibility is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US3-TC2-2` | Observed paid refresh is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US3-TC4-1` | Actual Thank You/Order status extension placement is to be walked in authorized staging |
+| `grade10-site-store-checkout-US3-TC10-1` | Fixed purchase and returned cleanup are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US3-TC11-1` | Existing orders states/actions are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US4-TC1-2` | Signed-out surface is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US4-TC2-2` | Expired session feedback is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US4-TC6-1` | Late response across member changes is to be walked in the mounted fixture integration |

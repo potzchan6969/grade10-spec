@@ -2,47 +2,48 @@
 
 ## Goals
 
-- Let an authenticated member pay for the basket that was just reviewed.
-- Keep one Grade10 order and one Shopify hosted invoice per checkout intent.
-- Recover from provider response loss and missed webhooks without creating a
-  second payable invoice.
-- Make the staging walk a release gate for the real shop, carrier callback and
-  return path.
+- Send the current member basket and accepted tender from the drawer to hosted payment.
+- Handle the existing checkout responses and show the order after return.
+- Integrate the frontend without changing the backend.
 
 ## Non-goals
 
-- An embedded card form or a payment secret in the storefront.
-- Public guest checkout.
-- Moving shipping, tax or address collection into Grade10.
-- A new commerce provider abstraction or production dependency.
-- Production configuration, migration or deployment as part of planning.
+Backend or schema work, new APIs, provider recovery, request idempotency,
+duplicate-invoice prevention, old-invoice cancellation and cart-edit reconciliation.
+Public guest checkout, an embedded card form and a separate checkout page.
 
 ## Decisions
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | When is the basket read? | The cart drawer continuously reviews current lines and quotes accepted tender; the server rechecks at Pay and refuses changed or failed facts before creating an order | A separate checkout page or treating the drawer quote as server authority |
-| Q2 | Which Shopify flow is used? | Use one Shopify Draft Order and its hosted invoice page for each new checkout intent; Shopify owns address, shipping, tax, discount entry and payment | An embedded card form or public Storefront checkout |
-| Q3 | Who may start public checkout? | Require a signed-in member; keep typed-email checkout only on the elevated development and staging operator test surface | Public guest checkout or treating a typed email as identity proof |
-| Q4 | Where are shipping and tax calculated? | Shopify calculates them after the buyer supplies an address; Grade10 shows an estimate and does not present its subtotal as the final charge | Calculating shipping or tax in Grade10 |
-| Q5 | When is the local order written? | Recheck money facts, write the order and lines in one transaction, call Shopify outside it, and record provider references before returning the hosted URL | Calling Shopify inside the transaction or returning before the provider reference is bound |
-| Q6 | What makes a repeated Pay safe? | One web order row owns the opaque intent and canonical fingerprint across every status; unchanged requests replay the existing order or terminal outcome, while changed baskets start a new intent | An open-only uniqueness guard or a replacement invoice on retry |
-| Q7 | How is payment settled? | Use the guarded transition for verified webhooks, reconciliation and order reads; ignore duplicates and cross-shop events | Trusting only the webhook path |
-| Q8 | When is the cart released? | Keep the member cart at Shopify and release paid lines only after the local order reaches `paid` | Clearing the cart when the buyer merely returns from Shopify |
-| Q9 | How are carrier rates exposed? | Reuse the configured token-gated, stateless carrier rule and return no rate for unsupported destinations | A stateful callback or a second shipping rule |
-| Q10 | Where does confirmation return? | Use a Shopify Thank You and Order status extension with a static Grade10 Your Orders link; do not rely on a purchase-specific deep link or the native Continue shopping action | A per-draft return URL or the native Shopify return destination |
-| Q11 | How long does an intent survive a reload? | Keep the same intent key and reviewed fingerprint in the active same-session checkout until the order is terminal; an edit invalidates it | Generating a new key on every reload |
-| Q12 | What happens when Shopify refuses a line after draft creation? | Name the line, keep the local order recoverable but unpaid, and let the collector fix the basket and retry | Marking the order paid or silently dropping the line |
-| Q13 | What happens when the provider response is lost? | Reuse the local intent and provider read or reference; a request marked dispatched stays recovery-only | Creating another Draft Order |
-| Q14 | What happens when the worker stops before the provider call? | A request still marked ready may be claimed again; after dispatch, recovery runs until its deadline and unresolved state becomes `manual_review` until an operator binds or cancels the draft | Retrying creation after dispatch ambiguity |
+| Q1 | When is the basket read? | Use the drawer's continuous current review and quote; preserve the existing server validation at Pay | A separate checkout page or a new backend validation flow |
+| Q2 | Which Shopify flow is used? | Call the existing Draft Order hosted-invoice creation flow for each new Pay submission | An embedded form or a new provider flow |
+| Q3 | Who uses public checkout? | The public frontend requires a signed-in member and uses authenticated checkout; existing operator surfaces and backend permissions remain unchanged | A public guest or typed-email frontend |
+| Q4 | Where are shipping and tax calculated? | Shopify calculates them; the drawer shows an estimate | Presenting the drawer estimate as the final charge |
+| Q5 | Who creates and binds the order? | The existing backend owns order creation and provider references without changes in this plan | New persistence or transaction work |
+| Q6 | What happens on another Pay? | A new submission calls the existing creation flow and may produce another invoice; disable the control while the current frontend request is pending | Reusing an invoice by intent or promising server deduplication |
+| Q7 | Who settles payment? | Existing webhook, reconciliation and order-read behavior remains unchanged; the frontend reads its results | A new backend settlement path |
+| Q8 | What happens to the cart? | Keep existing paid-transition cleanup: remove whole matching variant lines and clear cart tender; frontend refreshes the resulting cart | Quantity subtraction or reconciliation of edits made during payment |
+| Q9 | Who owns carrier rates? | Existing carrier configuration and behavior remain unchanged | Carrier implementation work in this change |
+| Q10 | Where does confirmation return? | A static Grade10 Your Orders link on Shopify Thank You and Order status; reuse existing order surfaces | A purchase-specific link or a new checkout page |
+| Q11 | Does reload reuse an intent? | No frontend intent persistence or replay is required; a later Pay is a new submission | A same-session purchase recovery contract |
+| Q12 | What happens on refusal? | Present the existing named-line refusal or error and allow a fresh submission when the basket is ready | New backend refusal recovery |
+| Q13 | What happens on response loss? | Show the existing failure or settling outcome; do not claim the frontend recovers the prior invoice or prevents duplicates | Provider lookup or dispatch recovery work |
+| Q14 | What happens on a worker crash? | Keep the current backend behavior; no dispatch state, deadline or operator recovery flow is added | A new state machine |
+| Q15 | What happens to an earlier payable invoice? | Ignore it for this integration. Each new Pay uses the existing creation flow; no cancellation or retirement is added | Waiting for the earlier invoice to close |
+| Q16 | What happens to edits during payment? | The invoice fixes the purchase; edits during payment are ignored and existing cart cleanup is unchanged | Repricing the invoice or preserving added quantity through new backend logic |
+| Q17 | What is the delivery scope? | Frontend integration only. Logic absent from the existing backend is not added now | The previous backend intent/replay/recovery plan |
+| Q18 | What if no matching order is returned? | Keep the existing order list, loading, error/Retry and empty/Shop now states; do not invent an order or add purchase recovery | A new return-specific missing-order flow |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/store/checkout` | How long does an intent survive a reload? | Q11 |
-| `grade10-site/store/checkout` | What happens when Shopify refuses a line after draft creation? | Q12 |
-| `grade10-site/store/checkout` | What happens when the provider response is lost? | Q13 |
-| `grade10-site/store/checkout` | What happens when the worker stops before the provider call? | Q14 |
-| `grade10-site/store/checkout` | Q15: After a basket or tender edit, may a known earlier unpaid invoice remain payable, or must cancellation be verified before the changed purchase starts? | ❓ [Checkout Integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness), Changed purchase; Q15 unanswered, @kinisworking |
-| `grade10-site/store/checkout` | Q16: If a member adds quantity to a paid line while at Shopify, does settlement remove only the paid quantity or the entire current line? | ❓ [Checkout Integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness), Added quantity; Q16 unanswered, @kinisworking |
+| `grade10-site/store/checkout` | Is same-session intent reuse required? | Q11 supersedes the earlier intent decision |
+| `grade10-site/store/checkout` | Is new refusal recovery required? | Q12 |
+| `grade10-site/store/checkout` | Is provider-response recovery required? | Q13 |
+| `grade10-site/store/checkout` | Is worker-crash recovery required? | Q14 |
+| `grade10-site/store/checkout` | Must an earlier payable invoice close before another Pay? | Q15, confirmed by @kinisworking |
+| `grade10-site/store/checkout` | Do edits made during payment change the purchase or cart-release policy? | Q16, confirmed by @kinisworking |
+| `grade10-site/store/checkout` | Does this change add missing backend logic? | Q17, confirmed by @kinisworking |
+| `grade10-site/store/checkout` | Which state appears if Your Orders has no matching purchase? | Q18, existing order surface under Q17; no new behavior |

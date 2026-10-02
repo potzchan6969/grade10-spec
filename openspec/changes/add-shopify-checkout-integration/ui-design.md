@@ -1,35 +1,42 @@
 ## Screens
 
-### Shopify Thank You and Order status
+### Grade10 Cart Drawer
 
-No Figma frame or Storybook story exists for Shopify's hosted confirmation
-surface. Shopify's Checkout UI extension editor is the layout source. The
-extension adds one static Grade10 Your Orders link in the Thank You and Order
-status page extension slot; it does not retarget or depend on the native
-Continue shopping button.
+Use the existing drawer's current review, tender estimate, checkout action,
+named-line feedback and inline account-verification state. Reuse the existing
+empty, pending and failed states; no new shared UI export or page is added.
+The checkout action remains unavailable while its request is pending.
 
-### Grade10 cart drawer and order route
+### Grade10 Orders
 
-The cart drawer carries the live review, tender estimate and inline verification gate. The existing Grade10 order route remains the destination after hosted payment. This change adds no separate checkout page or shared component variant.
+Reuse the existing orders list and order detail. Display the states returned by
+the existing backend and refresh the cart after observed payment; do not clear
+it merely on return from Shopify.
+
+### Shopify Thank You and Order Status
+
+Use the existing Shopify extension package and Shopify layout primitives for
+one static Grade10 Your Orders link on both confirmation surfaces. This link
+does not depend on the native Continue shopping action.
 
 ## Components
 
 | Export | Package | Role |
 | --- | --- | --- |
-| Shopify Checkout UI extension `Link` and layout primitives | Shopify checkout extension package in `integrations/shopify-pos/grade10` | Render the static Grade10 Your Orders link on the hosted Thank You and Order status pages |
-| Existing Grade10 orders surface | `apps/frontend/grade10` | Show the matching local order after the member returns |
-| Grade10 checkout and order copy | `@grade10/i18n` | The link label in every supported storefront locale |
-
-No new `@grade10/ui` export or design-system primitive is needed. The
-extension package and its Shopify app configuration are implementation work in
-the application repository.
+| Existing Cart Drawer | `@grade10/ui` | Basket review, tender, pending checkout and inline verification |
+| Existing orders surfaces | `apps/frontend/grade10` | Pending and paid order results |
+| Shopify extension Link | Existing Shopify integration package | Static Your Orders return |
+| Existing checkout copy | `@grade10/i18n` | Localized feedback and link labels |
 
 ## States
 
-### Shopify Thank You and Order status
-
 | State | Shows | Journey |
 | --- | --- | --- |
-| Thank You page | A visible Grade10 Your Orders link | grade10-site-store-checkout-US-03 |
-| Order status page revisit | The same Grade10 Your Orders link and the matching purchase in the orders surface | grade10-site-store-checkout-US-03 |
-| Native Continue shopping action | Shopify owns this native action; the Grade10 link provides the return | grade10-site-store-checkout-US-03 |
+| Ready drawer | Current basket, accepted tender and estimated total | grade10-site-store-checkout-US-01 |
+| Checkout request pending | Unavailable checkout action | grade10-site-store-checkout-US-01 |
+| Refused or failed | Existing feedback and ready-basket retry | grade10-site-store-checkout-US-02 |
+| Verification required | Existing inline account action | grade10-site-store-checkout-US-01 |
+| Returned pending order | Existing settling state | grade10-site-store-checkout-US-03 |
+| Loading, failed or empty orders | Existing loading, error/Retry or empty/Shop now treatment | grade10-site-store-checkout-US-03 |
+| Shopify confirmation | Static Your Orders link | grade10-site-store-checkout-US-03 |
+| Signed-out collector | Existing sign-in action | grade10-site-store-checkout-US-04 |

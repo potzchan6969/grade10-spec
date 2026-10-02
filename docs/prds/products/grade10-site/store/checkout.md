@@ -47,8 +47,8 @@ In Your Orders.
 
 ## Integration readiness
 
-🚧 **Checkout integration** - The live review, hosted handoff, safe recovery
-and settlement run through staging before production enablement.
+🚧 **Checkout integration** - The drawer uses the existing checkout backend
+for hosted handoff and order return; this change adds frontend integration only.
 
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
@@ -64,13 +64,12 @@ to navigate to.
   before any order is made
 - **The cart** — kept while the collector is at Shopify; cleared once the
   order is paid
-- **A second press** — returns the same checkout, never a second order
+- **Another Pay** - A new submission uses the existing creation flow; earlier
+  invoices are ignored and may remain payable
 
-❓ **Changed purchase** - @kinisworking confirms whether an earlier payable
-invoice must be canceled before a basket or tender edit starts another checkout.
-
-❓ **Added quantity** - @kinisworking confirms what remains in the cart when
-the collector adds quantity to a paid line while paying at Shopify.
+- **The invoice** - Fixes the purchase; later cart edits do not change it
+- **Cart cleanup** - Existing payment settlement removes whole matching lines
+  and clears tender choices; this integration adds no cart-edit reconciliation
 
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
