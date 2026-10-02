@@ -15,6 +15,6 @@
 
 Uses `feature-tcs.md` reviewed with `/tcs-review vault-home-case-cards` as its input, after deployment; `/tcs-run-sheet` executes the cases that stay manual.
 
-- [ ] 3.1 The deployed Storybook shows every `Vault Case/VaultCases` story, and the site's list on staging reads as the `VaultCases` story in the same state
-- [ ] 3.2 Flip the cases the stories and the E2E specs decide with `pnpm run tcs:automated <case…> --decided-by <path>`; the ones that stay manual are named in the suite
-- [ ] 3.3 Verify: the store's Storybook workflow on `main`, `pnpm run tcs:validate`
+- [x] 3.1 The deployed Storybook shows every `Vault Case/VaultCases` story, and the site's list on staging reads as the `VaultCases` story in the same state. Dropped: the owner removed the collector site on 2026-10-02, and `retire-vault-collector-site` removes this block with it, so there is nothing to walk
+- [x] 3.2 Flip the cases the stories and the E2E specs decide with `pnpm run tcs:automated <case…> --decided-by <path>`; the ones that stay manual are named in the suite. Dropped: the owner removed the collector site on 2026-10-02, and `retire-vault-collector-site` removes this block with it, so there is nothing to walk
+- [x] 3.3 Verify: the store's Storybook workflow on `main`, `pnpm run tcs:validate`. Dropped: the owner removed the collector site on 2026-10-02, and `retire-vault-collector-site` removes this block with it, so there is nothing to walk
