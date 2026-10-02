@@ -111,11 +111,9 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -184,9 +182,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -245,9 +245,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** `The footer`
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -380,9 +382,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** `Reminders and the notice`
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -412,9 +416,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -485,9 +491,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -523,9 +531,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
@@ -758,9 +768,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
