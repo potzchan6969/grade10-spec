@@ -449,7 +449,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -479,7 +479,7 @@ Signed in as an operator who holds `user:delete`. <a subject user id> holds no o
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -507,7 +507,7 @@ Signed in as an operator who holds `user:delete`. <a subject user id> is banned 
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -535,7 +535,7 @@ Signed in as an operator who holds `user:delete`. <a subject user id> was banned
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -567,7 +567,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1032,7 +1032,7 @@ or an invite mail, and a duplicate never becomes a second account.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -1042,7 +1042,7 @@ or an invite mail, and a duplicate never becomes a second account.
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:create` and `user:set-role`). No Auth account holds <new email>.
+Signed in as operator(holds `user:create` and `user:set-role`). No Auth account holds <new email>.
 
 **Test data:**
 
@@ -1070,7 +1070,7 @@ Signed in as admin(holds `user:create` and `user:set-role`). No Auth account hol
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1080,7 +1080,7 @@ Signed in as admin(holds `user:create` and `user:set-role`). No Auth account hol
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account holds <plain email>.
+Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account holds <plain email>.
 
 **Test data:**
 
@@ -1106,7 +1106,7 @@ Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account ho
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1116,7 +1116,7 @@ Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account ho
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list` and `user:set-role`, not `user:create`). No Auth account holds <attempted email>.
+Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`). No Auth account holds <attempted email>.
 
 **Test data:**
 
@@ -1149,7 +1149,7 @@ Signed in as admin(holds `user:list` and `user:set-role`, not `user:create`). No
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account holds <elevated email>.
+Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account holds <elevated email>.
 
 **Test data:**
 
@@ -1183,7 +1183,7 @@ Signed in as admin(holds `user:create`, not `user:set-role`). No Auth account ho
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:create` and `user:set-role`). Auth already holds <existing email> on <existing account>.
+Signed in as operator(holds `user:create` and `user:set-role`). Auth already holds <existing email> on <existing account>.
 
 **Test data:**
 
@@ -1217,7 +1217,7 @@ Signed in as admin(holds `user:create` and `user:set-role`). Auth already holds 
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:create` and `user:set-role`). No Auth account holds <silent email>. No outbound mail is queued for <silent email>.
+Signed in as operator(holds `user:create` and `user:set-role`). No Auth account holds <silent email>. No outbound mail is queued for <silent email>.
 
 **Test data:**
 
@@ -1255,7 +1255,7 @@ Signed in as admin(holds `user:create` and `user:set-role`). No Auth account hol
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:create`). No Auth account holds <empty-roles email>.
+Signed in as operator(holds `user:create`). No Auth account holds <empty-roles email>.
 
 **Test data:**
 
