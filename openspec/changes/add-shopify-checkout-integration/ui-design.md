@@ -8,10 +8,9 @@ extension adds one static Grade10 Your Orders link in the Thank You and Order
 status page extension slot; it does not retarget or depend on the native
 Continue shopping button.
 
-### Grade10 order route
+### Grade10 cart drawer and order route
 
-The existing Grade10 order route remains the destination. This change adds no
-new Grade10 page layout.
+The cart drawer carries the live review, tender estimate and inline verification gate. The existing Grade10 order route remains the destination after hosted payment. This change adds no separate checkout page or shared component variant.
 
 ## Components
 
@@ -29,8 +28,8 @@ the application repository.
 
 ### Shopify Thank You and Order status
 
-| State | Shows | Spec scenario |
+| State | Shows | Journey |
 | --- | --- | --- |
-| Thank You page | A visible Grade10 Your Orders link | `grade10-site-store-checkout-SC-15` |
-| Order status page revisit | The same Grade10 Your Orders link and the matching purchase in the orders surface | `grade10-site-store-checkout-SC-12` |
-| Native Continue shopping action | Not relied on for the Grade10 return | **Out of suite:** Shopify owns this native action; the Grade10 link is covered by `grade10-site-store-checkout-SC-15` |
+| Thank You page | A visible Grade10 Your Orders link | grade10-site-store-checkout-US-03 |
+| Order status page revisit | The same Grade10 Your Orders link and the matching purchase in the orders surface | grade10-site-store-checkout-US-03 |
+| Native Continue shopping action | Shopify owns this native action; the Grade10 link provides the return | grade10-site-store-checkout-US-03 |

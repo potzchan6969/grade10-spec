@@ -10,32 +10,33 @@ payment lifecycle.
 ## Feature set
 
 - Current basket and tender
-  - Live line review before Pay and again at the payment decision
-  - Accepted promo and points choices beside a subtotal estimate
-  - Shipping and tax left to Shopify's address-aware checkout
+  - Live review: current lines in the cart drawer and a server recheck at Pay
+  - Tender estimate: accepted promo and points choices beside a subtotal
+  - Final charges: Shopify calculates address-aware shipping and tax
 - Hosted Shopify handoff
-  - Signed-in storefront checkout through one Shopify draft-order invoice
-  - Local order and provider references bound before the buyer leaves
-  - Provider refusal kept distinct from a paid order
+  - Member checkout: a fresh signed-in session starts one hosted invoice
+  - Bound handoff: the local order identifies the invoice before redirect
+  - Refusal: unavailable lines remain unpaid and named
 - Safe repetition and recovery
-  - One open checkout intent for repeated Pay actions and lost responses
-  - Provider and store recovery without a second payable invoice
-  - Changed lines named before a stale basket can be paid
+  - Intent replay: repeated Pay and same-session reload retain one purchase
+  - Recovery: uncertain provider state cannot create a second payable invoice
+  - Changed purchase: basket or tender edits invalidate the earlier intent
 - Order settlement and return
-  - Pending orders settle through webhook, reconcile and order reads
-  - Paid orders appear in Your Orders and release the member cart
-  - Shopify confirmation returns the collector to the Grade10 order
+  - Settlement: webhook, reconciliation and owned detail reads converge
+  - Paid purchase: Your Orders shows payment and releases paid cart lines
+  - Return: Shopify confirmation links to Grade10 Your Orders
 - Carrier rates
-  - Shopify asks a token-gated stateless carrier rule for served destinations
-  - The callback and store preview use the same configured rate
+  - Served destinations: a token-gated stateless callback answers Shopify
+  - Shared rate: callback and store preview use the same configuration
 
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Checkout reviews the current member basket before payment
 
-Checkout SHALL make a current decision from the member's cart at both checkout
-open and the Pay action. A result from the cart drawer SHALL never stand in for
-the Pay read.
+The cart drawer SHALL continuously review the member's current basket and quote
+accepted tender while open. Pay SHALL trigger a server recheck; no separate
+checkout page or extra client read before Pay is required. A drawer quote SHALL
+never stand in for the server decision.
 
 **Review** - The checkout SHALL read every line from the live shop, name a line
 whose price, availability or quantity changed, and keep Pay unavailable while
@@ -54,7 +55,7 @@ named line.
 **Serves:** grade10-site-store-checkout-US-01 - The collector reviews the basket before starting hosted payment
 
 - **GIVEN** a signed-in collector has one member-cart line that the shop still sells
-- **WHEN** the collector opens checkout and waits for the live read
+- **WHEN** the collector opens the cart drawer and waits for its live quote
 - **THEN** the line shows the shop's current title, quantity, price and availability
 - **AND** Pay is available only after the read is ready
 
@@ -81,8 +82,8 @@ named line.
 #### Scenario: grade10-site-store-checkout-SC-04 - A failed read keeps held facts unchecked
 **Serves:** grade10-site-store-checkout-US-02 - The collector retries a checkout whose live read failed
 
-- **GIVEN** a collector is on checkout and the live shop read fails
-- **WHEN** the checkout summary renders
+- **GIVEN** a collector's cart drawer is open and the live shop read fails
+- **WHEN** the drawer summary renders
 - **THEN** the last held price and availability are not presented as current
 - **AND** Pay is unavailable
 - **AND** a retry is offered without creating an order
@@ -95,7 +96,8 @@ reviewed basket without relying on client-supplied amounts.
 
 **Storefront boundary** - A signed-out collector SHALL be asked to sign in and
 no public storefront order or Shopify checkout SHALL be created. Typed-email
-checkout MAY exist only on the development and staging operator test surface.
+checkout SHALL exist only on the elevated development and staging operator test
+surface, with the same restriction enforced by the server before any write.
 
 **Order write** - The server SHALL insert the Grade10 order and its lines in
 one transaction, call Shopify outside that transaction, and record the
@@ -146,6 +148,24 @@ embedded payment secret.
 - **THEN** the local order stores the provider checkout reference before the URL is returned
 - **AND** a database transaction never remains open while Shopify is called
 
+<!-- trace:scenario id=g10.store-checkout.SC-ae31 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-31 - Typed email is restricted to the operator sandbox
+**Serves:** grade10-site-store-checkout-US-04 - The collector cannot substitute an email for signed-in checkout
+
+- **GIVEN** a caller lacks elevated operator access or uses production
+- **WHEN** the caller invokes typed-email checkout
+- **THEN** the server refuses before identity lookup, order creation or provider calls
+- **AND** an authorized development or staging operator retains the existing typed-email bench flow
+
+<!-- trace:scenario id=g10.store-checkout.SC-af32 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-32 - Gross goods controls buyer verification
+**Serves:** grade10-site-store-checkout-US-01 - The collector follows the account verification gate before a high-value purchase
+
+- **GIVEN** gross goods are at least HKD 120,000 and the buyer is unverified
+- **WHEN** the basket is reviewed and Pay is attempted with a discount or points choice
+- **THEN** the drawer replaces Pay with an account-verification action
+- **AND** the server refuses before creating an order even when tender reduces the estimate below the threshold
+
 ### Requirement: A checkout intent is safe to repeat
 
 The storefront SHALL identify one checkout intent across the Pay action and a
@@ -170,6 +190,17 @@ recoverable. A retry SHALL use recorded references or a provider read and
 SHALL never re-mint a second invoice for the same intent. A request marked as
 provider-dispatched SHALL remain recovery-only even when no provider reference
 has been recorded.
+
+**Replay order** - Fresh member authentication SHALL precede intent replay.
+Unchanged intent replay SHALL precede new live-money or verification checks;
+later catalog changes SHALL not turn a settled intent into another purchase.
+
+**Creation paths** - A dispatched intent SHALL not create another hosted invoice
+through an automatic customer retry or a gift-retirement fallback. A mismatched
+invoice SHALL not be handed to the collector. Uncertain retirement SHALL keep
+the order recoverable with its original payable facts until cancellation or
+payment is verified. A new changed purchase SHALL wait while an earlier
+dispatch remains unresolved.
 
 <!-- trace:scenario id=g10.store-checkout.SC-i09 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-09 - A repeated Pay uses one checkout
@@ -229,12 +260,77 @@ has been recorded.
 - **AND** no replacement Shopify invoice is created
 - **AND** the member cannot start a new purchase until an operator binds or cancels the provider draft
 
+<!-- trace:scenario id=g10.store-checkout.SC-v22 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-22 - Pay refuses facts changed after the drawer quote
+**Serves:** grade10-site-store-checkout-US-02 - The collector repairs a line that changed after review
+
+- **GIVEN** the drawer quote is ready and a line changes before Pay
+- **WHEN** the member presses Pay
+- **THEN** the server names the changed line and creates no order or invoice
+
+<!-- trace:scenario id=g10.store-checkout.SC-w23 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-23 - Reload retains the purchase intent
+**Serves:** grade10-site-store-checkout-US-01 - The collector resumes a delayed checkout in the same session
+
+- **GIVEN** a member submitted Pay and the response is delayed
+- **WHEN** the same-session page reloads and the unchanged basket is submitted
+- **THEN** the existing order and invoice or settling result are returned
+- **AND** no additional order or invoice is created
+
+<!-- trace:scenario id=g10.store-checkout.SC-x24 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-24 - A reused intent cannot change the purchase
+**Serves:** Safe repetition and recovery - callers cannot rewrite the purchase attached to an intent
+
+- **GIVEN** an intent already identifies a reviewed basket and tender
+- **WHEN** a request repeats its key with different basket or tender choices
+- **THEN** the existing intent-conflict result identifies the original order
+- **AND** no new reservation, order or invoice is created
+
+<!-- trace:scenario id=g10.store-checkout.SC-y25 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-25 - Later catalog changes do not block terminal replay
+**Serves:** grade10-site-store-checkout-US-01 - The collector recognizes an already completed purchase
+
+- **GIVEN** a member's intent is settled and catalog or verification facts later change
+- **WHEN** the freshly authenticated member repeats the unchanged intent
+- **THEN** its existing terminal outcome is returned without a new live-money gate
+- **AND** no new purchase or provider creation is started
+
+<!-- trace:scenario id=g10.store-checkout.SC-z26 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-26 - Customer refusal cannot create a replacement invoice
+**Serves:** Safe repetition and recovery - provider convenience retries retain the purchase guarantee
+
+- **GIVEN** the first dispatched checkout refuses the paired customer
+- **WHEN** checkout handles that refusal
+- **THEN** the collector receives a refusal or recovery result
+- **AND** the same intent does not automatically create another invoice without the customer
+
+<!-- trace:scenario id=g10.store-checkout.SC-aa27 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-27 - Gift cleanup cannot replace an uncertain invoice
+**Serves:** grade10-site-store-checkout-US-02 - The collector avoids paying a basket that no longer matches the accepted gift
+
+- **GIVEN** the created invoice charges a gift that the accepted tender no longer supports
+- **WHEN** cancellation fails or its result is uncertain
+- **THEN** the mismatched invoice is not offered as a valid handoff
+- **AND** the order retains the original payable facts for recovery or settlement
+- **AND** no replacement invoice is created for that intent
+
+<!-- trace:scenario id=g10.store-checkout.SC-ab28 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-28 - Unresolved dispatch blocks a changed purchase
+**Serves:** grade10-site-store-checkout-US-01 - The collector cannot bypass an uncertain purchase by changing its key
+
+- **GIVEN** a member has a dispatched checkout whose provider state is unresolved
+- **WHEN** that member submits a new intent after a basket or tender edit
+- **THEN** checkout returns a settling or recovery-required result for the unresolved order
+- **AND** no new invoice is created until payment or cancellation is verified
+
 ### Requirement: Shopify payment settles one Grade10 order
 
 The store SHALL treat a Shopify hosted invoice as pending until Shopify reports
 payment. A verified webhook SHALL accelerate the same guarded order transition;
 the reconcile pass and the buyer's order read SHALL repair a missed event through
-that transition rather than create another order.
+that transition rather than create another order. Owned detail reads SHALL
+check the member before repair; order lists SHALL project stored orders without
+repairing every row through the provider.
 
 **Settlement** - A paid invoice SHALL move its pending order to `paid` once and
 retain the provider's paid total, goods, shipping, tax and order identity when
@@ -303,6 +399,23 @@ account path SHALL not be the required return destination.
 - **WHEN** the store receives the event
 - **THEN** no Grade10 order moves to `paid`
 - **AND** the event is recorded for diagnosis without creating a replacement order
+
+<!-- trace:scenario id=g10.store-checkout.SC-ac29 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-29 - Another member cannot trigger payment repair
+**Serves:** Order settlement and return - order repair is reached only by the member who owns the order
+
+- **GIVEN** an open order belongs to another member
+- **WHEN** the signed-in caller requests its detail
+- **THEN** no order is disclosed and no provider read or repair is triggered
+
+<!-- trace:scenario id=g10.store-checkout.SC-ad30 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-30 - Order list remains a stored projection
+**Serves:** grade10-site-store-checkout-US-03 - The collector opens Your Orders while background settlement continues
+
+- **GIVEN** a member owns several pending orders
+- **WHEN** the member opens the orders list
+- **THEN** the stored orders are shown without a provider repair for every row
+- **AND** owned detail reads and reconciliation retain their repair paths
 
 ### Requirement: Shopify uses the store's carrier rule
 

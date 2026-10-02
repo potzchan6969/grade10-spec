@@ -21,7 +21,7 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | When is the basket read? | Read every line from the live shop at checkout open and again at Pay; block a failed, stale or contradictory read and name the affected line. **Narrowed 2026-09-29 by `move-checkout-into-cart-drawer`:** that change removes the separate checkout page, so the cart drawer's own continuous live quote now serves the checkout-open read; the Pay-time server recheck this row decided is unchanged | Trusting the cart drawer or reading only once |
+| Q1 | When is the basket read? | The cart drawer continuously reviews current lines and quotes accepted tender; the server rechecks at Pay and refuses changed or failed facts before creating an order | A separate checkout page or treating the drawer quote as server authority |
 | Q2 | Which Shopify flow is used? | Use one Shopify Draft Order and its hosted invoice page for each new checkout intent; Shopify owns address, shipping, tax, discount entry and payment | An embedded card form or public Storefront checkout |
 | Q3 | Who may start public checkout? | Require a signed-in member; keep typed-email checkout only on the elevated development and staging operator test surface | Public guest checkout or treating a typed email as identity proof |
 | Q4 | Where are shipping and tax calculated? | Shopify calculates them after the buyer supplies an address; Grade10 shows an estimate and does not present its subtotal as the final charge | Calculating shipping or tax in Grade10 |
@@ -44,3 +44,5 @@
 | `grade10-site/store/checkout` | What happens when Shopify refuses a line after draft creation? | Q12 |
 | `grade10-site/store/checkout` | What happens when the provider response is lost? | Q13 |
 | `grade10-site/store/checkout` | What happens when the worker stops before the provider call? | Q14 |
+| `grade10-site/store/checkout` | Q15: After a basket or tender edit, may a known earlier unpaid invoice remain payable, or must cancellation be verified before the changed purchase starts? | ❓ [Checkout Integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness), Changed purchase; Q15 unanswered, @kinisworking |
+| `grade10-site/store/checkout` | Q16: If a member adds quantity to a paid line while at Shopify, does settlement remove only the paid quantity or the entire current line? | ❓ [Checkout Integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness), Added quantity; Q16 unanswered, @kinisworking |

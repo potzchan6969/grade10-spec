@@ -4,7 +4,7 @@
 
 ## Why
 
-The checkout page already describes the intended handoff to Shopify, but the
+The cart drawer already describes the intended handoff to Shopify, but the
 store still needs one coherent contract for the live basket read, hosted
 payment, pending order, payment recovery and return to Grade10. Without that
 contract, a changed line can become a stale payment, a lost provider response
@@ -18,8 +18,7 @@ preserved so the integration can show whether stale basket refusals decrease.
 
 ## What changes
 
-- **Current basket** - Re-read every line from the live shop at checkout open
-  and at the payment decision; block stale, failed or contradictory reads.
+- **Current basket** - Review every line in the cart drawer and recheck it on the server at Pay; block stale, failed or contradictory reads.
 - **Hosted handoff** - Send the reviewed basket to one Shopify Draft Order
   invoice while Grade10 remains the order of record.
 - **One intent** - Make a repeated Pay action, same-session reload, terminal
@@ -46,12 +45,11 @@ This change updates:
 
 ### New
 
-- `grade10-site/store/checkout` - the authenticated storefront's live review,
-  Shopify handoff, safe repetition, settlement and carrier-rate contract.
+None.
 
 ### Modified
 
-None.
+- `grade10-site/store/checkout` - amend the accepted checkout contract and delivery plan for the cart drawer, canonical routers and safe provider recovery.
 
 ## Impact
 
@@ -76,17 +74,19 @@ carrier cases.
 
 ## Open questions
 
-None that change the product contract. Exact Shopify dashboard menu names and
+The decisions record holds the unresolved rules for an earlier payable invoice
+after a basket edit and for cart quantities added during hosted payment.
+Acceptance waits for those decisions. Exact Shopify dashboard menu names and
 credentials are operational details to verify during the staging walk.
 
-**Narrowed by `move-checkout-into-cart-drawer` (2026-09-29):** that change
-removes the separate `/checkout` page this proposal assumed, folding the
-checkout-open read into the cart drawer's own continuous live quote - see
-`decisions.md`'s Q1. The Shopify handoff, idempotent-intent, settlement and
-carrier decisions here (Q2, Q5-Q14) are unaffected. The requirement "Checkout
-reviews the current member basket before payment" in
-`specs/grade10-site/store/checkout/spec.md` needs its checkout-open language
-reconciled against that change when both are specified.
+## Planning Amendment
+
+- **Baseline** - Amend the accepted checkout capability in this active change; preserve its acceptance snapshots, first-claim baseline, group numbers, task ids and owners.
+- **Drawer** - The cart drawer's continuous live review replaces the separate checkout-open page; the server still rechecks at Pay.
+- **Routers** - [Grade10 PR #653](https://github.com/9gag/grade10/pull/653) separates checkout creation from quote, coupon and owned-order reads; technical design and tasks use those canonical seams.
+- **Evidence** - Application branch `codex/feat-shopify-checkout-integration` at `e1e14c8d9` accepts but does not forward the intent key, lacks durable intent fields, and has no Shopify order-id recovery lookup.
+- **Cleanup** - Remove `docs/references/shopify-checkout-router-follow-up.md`; delivery decisions and verification belong in this change's technical design, scenarios, suite and tasks.
+- **Exports** - No shared UI exports change; `grade10-site` consumes the drawer and orders behavior, `grade10-admin` retains its sandbox checkout bench, and shared backend changes preserve the ZZZ store's existing contracts.
 
 ## References
 

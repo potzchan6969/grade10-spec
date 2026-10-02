@@ -1,6 +1,6 @@
 ## Context
 
-The Grade10 app already has a checkout page, a shared Store checkout feature,
+The Grade10 app already has a cart drawer, a shared Store checkout feature,
 typed review/quote contracts, a local order machine, a Shopify provider, signed
 webhooks, reconciliation and a stateless carrier callback. The current path
 prices and writes a local order before calling Shopify's Draft Order API, then
@@ -49,8 +49,8 @@ data, provider and browser change, so the design is recorded before tasks.
 
 ### Reuse the existing checkout seams
 
-Keep page composition in `apps/frontend/grade10/src/pages/checkout` and route
-navigation in `apps/frontend/grade10/src/routes/checkout.tsx`. Add the
+Keep composition in the existing cart drawer; no separate `/checkout` page or
+additional client read before Pay is introduced. Add the
 intent/repeat state to the existing shared checkout feature rather than
 creating a second client repository. Extend the shared wire contracts in
 `packages/grade10-store/contracts`, with the backend procedure remaining the
@@ -69,7 +69,8 @@ No provider call is placed inside a database transaction.
 
 ### Store intent identity on the existing order
 
-Add four nullable columns to the existing `store.orders` record:
+Add four nullable columns to the existing `store.orders` record, all defaulting
+to NULL: UUID intent, text hash, checked text state and timestamptz deadline:
 
 | Column | Meaning |
 | --- | --- |
@@ -88,8 +89,9 @@ The client creates an opaque intent with the platform UUID facility and keeps
 it in the active checkout session. A same-session reload reuses it until the
 order is terminal. Editing a line, quantity, promo or points choice clears the
 old intent and creates a new one. The server never trusts a client amount: it
-normalizes the ids and choices, re-reads the live catalog, and computes the
-stored hash after validation.
+normalizes the ids and choices and computes the request hash before lookup.
+Only a new purchase re-reads the live catalog and validates money before the
+order is written.
 
 If the existing order has the same intent and hash, the server returns its
 recorded invoice or a settling response while it is open. A paid or refunded
@@ -117,14 +119,15 @@ marker exists, every retry performs recovery lookup only; it never creates a
 replacement draft. A crash between the marker and the network call is treated
 as ambiguous and follows the same safe path as a lost response.
 
-Extend the Shopify Draft Order port with a recovery lookup keyed by a
+Extend the existing Shopify draft client with a recovery lookup keyed by a
 deterministic correlation tag derived from the local order id. Keep the current
 order-id custom attribute for the completed order, and add a provider-supported
 searchable draft tag such as `grade10_checkout_<order-id>`. The Shopify adapter
 must:
 
 - send that tag on create;
-- query open drafts by the tag after a response loss;
+- query drafts by the tag after a response loss, including completed drafts,
+  and paginate the result completely;
 - verify the exact local-order attribute and expected line/tender fingerprint;
 - accept exactly one matching draft, record its reference and invoice URL, and
   return it; and
@@ -165,10 +168,10 @@ HKD 120,000 threshold until the member has verified standing.
 
 ### Extend the wire outcome without inventing provider data
 
-Keep the existing `created` result for a recorded hosted URL. Add a small
+Keep the existing `created` result for a recorded hosted URL. Use the existing
 wire-level `settling` result carrying the local order id and any already-known
 tender facts when an unchanged intent owns an order but has no safe hosted URL
-yet. Add `settled`, `terminal`, `intentConflict` and `recoveryRequired` replay
+yet. Use the existing `settled`, `terminal`, `intentConflict` and `recoveryRequired` replay
 outcomes with the local order id and server-owned status/detail fields. Both
 `createCheckout` and the operator-only test procedure use the same result
 mapping. The shared frontend checkout resolution maps `settling` to the
@@ -207,7 +210,108 @@ description agrees with Draft Order/invoice handoff and the intent/recovery
 rules in `docs/architecture/commerce.md`. Do not introduce a second durable
 commerce description in the application code.
 
-## Data and interface shape
+## Database Schema
+
+The four columns above are additive; no intent table or historical backfill is
+needed. A new intent-bearing row must be a member-owned web order with a hash
+and dispatch state. Constraints on populated tables use `NOT VALID`; validation
+is explicit. The all-status partial unique index retains intent identity after
+terminal settlement. Its generated migration carries a `-- lock:` explanation
+for the maintenance-window index build because the transactional migration
+applier cannot build it concurrently.
+
+Serialize member intent claims and unresolved-dispatch checks with a
+transaction-scoped member advisory lock, then lock the order row. Preserve the
+existing coupon lock order. No lock spans external catalog, loyalty or Shopify
+calls. Dispatch uses an atomic conditional ready-to-dispatched update and
+commits its fixed deadline and reconciliation due work together.
+
+```mermaid
+erDiagram
+  MEMBER ||--o{ ORDER : owns
+  ORDER ||--|{ ORDER_ITEM : contains
+  ORDER ||--o{ ORDER_COUPON : reserves
+  ORDER ||--o{ ORDER_EVENT : owes
+  ORDER ||--o{ PAYMENT_EVENT : settles
+  ORDER {
+    uuid id PK
+    text user_id
+    uuid checkout_intent_id UK
+    text checkout_request_hash
+    text checkout_create_state
+    timestamptz checkout_recovery_deadline_at
+  }
+```
+
+Member ownership is logical; auth remains a separate database and no new
+cross-database foreign key is introduced. Existing line/event keys remain.
+
+## Service Interfaces
+
+| Seam | Input | Output | Boundary |
+| --- | --- | --- | --- |
+| Claim/replay | Member, UUID, normalized reviewed request/hash | Existing row, candidate id or conflict | Member lock and all-status index; replay precedes reservations |
+| Live decision | Items, member, requested tender | Priced facts or typed refusal | Live catalog and gross-goods KYC before promise |
+| Promise | Stable candidate id, validated basket/tender, intent/hash | Committed order/lines/claims or refusal | Existing transaction includes coupon rides, lines, intent and due work |
+| Reservations | Candidate order id, member, accepted points/coupon | Reserved facts or refusal | External loyalty outside transaction, idempotent by stable order id; compensate failed promise |
+| Mint | Committed order and coupon evaluation | Stored codes or refusal | Existing mint after promise; replay reuses stored mint identity |
+| Dispatch | Order id and expected ready state | Winner or existing row | Marker, deadline and reconcile due row commit before network |
+| Provider create/recovery | Committed request and buyer, or ref/order id | Existing provider outcome or verified recovered draft | Outside transaction; at most one Shopify create for intent-bearing orders |
+| Bind | Order id, dispatched state, ref/URL | Bound row/created result | Reference uniqueness and analytics due record commit before handoff |
+| Settlement | Verified provider fact and local order | Guarded transition/no-op | Paid facts, cart release and owed side effects commit together |
+
+The fingerprint is a versioned SHA-256 digest of normalized ids/quantities,
+requested points and normalized coupon codes/owned coupon id. Exclude live
+prices, calculated totals, device id, session and customer pairing. Compare it before
+live reads on replay, so later catalog changes cannot prevent terminal replay.
+First creation still rechecks server money and KYC. The unique-index loser
+loads the winning row instead of reserving or minting again; any competing
+candidate compensates only its own idempotent holds. Ready recovery reconstructs
+persisted order facts and codes, not mutable tender or catalog requests.
+
+### Shopify Creation Paths
+
+| Existing Path | Intent-Bearing Shopify Rule |
+| --- | --- |
+| Initial `attemptCheckout` create | Only the atomic dispatch winner calls create |
+| `customerRefused` retry without customer | Repair pairing and return definitive refusal; no second create for this intent |
+| `repriceWithoutGifts` retire/recreate | Bind the first ref before cleanup, withhold a mismatched URL, and retire without recreating; confirmed retirement closes through cancellation, collected settles, uncertain retirement stays recovery-only |
+
+Do not remove gift lines or release reservations before cancellation is proven:
+a still-payable draft must retain reconstructible facts for settlement. Existing
+non-gift coupon replacement records accepted tender without another create.
+These guards target intent-bearing Shopify; shared Stripe, POS, legacy cart
+references and other brands retain their existing contracts. A deliberate new
+purchase after confirmed cancellation is distinct from an automatic replacement
+under the same intent; Q6/Q13 do not authorize the latter.
+
+Recovery verifies configured shop, exact local-order attribute, fingerprint and
+persisted line/tender facts. Completed drafts resolve their paid order through
+the existing reader. Missing, mismatched, ambiguous or incomplete search results
+never authorize creation. Adapter recovery retains draft ref/URL while the
+existing payment port vocabulary remains compatible. Use the existing reconcile
+stale interval for the fixed recovery deadline; failure to establish the lookup
+in staging blocks launch.
+
+`Checkout Started` retains the deterministic order-based insert id. First bind
+commits a due analytics record through the existing outbox; replay does not
+enqueue another logical event. Quote/coupon reads emit no accepted-checkout
+event. Recovery metrics name order/state/reason without bearer URLs or secrets.
+
+## API Contracts
+
+PR #653 already landed canonical `quote.*`, `coupons.me`, `orders.get` and
+`orders.list`. Quote/coupon reads remain stateless. Detail proves owner before
+repair; list is a DB projection without provider calls. Preserve deprecated
+checkout aliases and avoid unrelated renames.
+
+Only the existing creation behavior changes: forward the already-accepted
+optional UUID `intentId` to the service for authenticated and authorized test
+procedures, and map the existing result schema variants. Do not extend the
+published union again. `createCheckoutWithEmail` becomes elevated `store:write`
+and sandbox-only, checked before identity lookup or writes; preserve its
+authorized bench inputs, session precedence and sign-in-required result.
+`createCheckoutAsMember` retains its existing elevated/sandbox boundary.
 
 ### Local order relationship
 
@@ -230,11 +334,11 @@ with null intent columns.
 
 ### Procedure input/output
 
-The authenticated create input becomes:
+The authenticated create input retains optional intent during rollout:
 
 ```text
 {
-  intentId: string,
+  intentId?: string,
   items,
   spendPoints?,
   couponCodes?,
@@ -243,7 +347,7 @@ The authenticated create input becomes:
 }
 ```
 
-The amount and currency fields remain server outputs. The result union gains:
+The amount and currency fields remain server outputs. The existing union carries:
 
 ```text
 { outcome: "settling", orderId, discountMinor, discountPoints,
@@ -292,7 +396,7 @@ ambiguous.
 
 ## Migration Plan
 
-1. Land the additive order columns/index and contract changes with tests. The
+1. Land the additive order columns/index and existing-contract wiring with tests. The
    migration is nullable/backward-compatible and does not rewrite or delete
    existing orders.
 2. Deploy the backend/provider recovery code and frontend intent handling with
@@ -306,16 +410,45 @@ ambiguous.
    an ambiguous recovery, sold-out refusal, missed webhook, served and
    unsupported destinations, the Grade10 confirmation link, and the HKD
    120,000 identity gate.
-5. Enable the public staging path only after the manual suite is reviewed and
-   the observed provider behavior matches the requirements. Production
+5. Enable the public staging path only after engineering and provider protocol
+   proof matches the requirements. Human suite review follows deployed
+   implementation with `/tcs-review`. Production
    enablement remains an explicitly authorized release operation.
 6. Roll back by disabling the new storefront path and deploying the previous
    worker; retain the additive columns and recorded legacy orders. Do not drop
    columns or delete provider drafts as part of rollback.
 
+### Bundle Compatibility
+
+Deploy the backend before the new drawer bundle. Missing intent continues the
+legacy path while old bundles are supported; that path cannot promise reload
+idempotency. New Grade10 bundles always send an intent. Gate production rollout
+until old public creation bundles are drained or invalidated. Preserve aliases
+and bench capability while tightening typed-email backend authorization. A
+rollback must not let an older worker recreate intent-bearing orders.
+
+Fresh authentication precedes replay, but move live goods/KYC gating behind
+intent lookup and unchanged replay. The current router's pre-service `goodsGate`
+must not reject a settled replay when catalog prices or KYC later change. A
+new creation still performs server-owned gross-goods KYC before any order.
+
+The browser scopes session storage by member/shop and active basket, clears it
+on member switch/logout, and preserves intent on same-session reload. A storage
+failure refuses a safe handoff rather than silently rotating the key. The
+unresolved-dispatch check also covers a changed intent before new creation,
+not only an order that has already reached manual review.
+
 ## Open Questions
 
-None that change the requirements or implementation order. The exact Shopify
+Two product choices await the human: whether a known earlier bound unpaid
+invoice must be canceled before a changed intent, and whether paid cart release
+removes only paid quantities when the current line grew during payment. The
+draft does not authorize either policy; dependent implementation waits for their
+source decisions. The exact Shopify
 Admin dashboard labels, extension placement and credentials are release-time
 operational details; the staging walkthrough must prove the selected
-configuration before launch.
+configuration before launch. No automatic replacement after customer refusal
+or gift retirement is authorized. If that convenience is wanted it needs an
+explicit new product decision. Delivery must provide elevated, audited bind/
+cancel recovery with provider verification if the existing operator operations
+cannot resolve intent ambiguity; manual database edits are not a recovery API.

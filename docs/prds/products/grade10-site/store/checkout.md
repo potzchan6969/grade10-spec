@@ -66,6 +66,12 @@ to navigate to.
   order is paid
 - **A second press** — returns the same checkout, never a second order
 
+❓ **Changed purchase** - @kinisworking confirms whether an earlier payable
+invoice must be canceled before a basket or tender edit starts another checkout.
+
+❓ **Added quantity** - @kinisworking confirms what remains in the cart when
+the collector adds quantity to a paid line while paying at Shopify.
+
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
 - **The order machine, recovery, refunds** — [commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
