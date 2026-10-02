@@ -9,6 +9,7 @@
 **I want** to commit the most I will pay and raise it later,
 **so that** Grade10 bids for me only as far as needed to lead.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-0x8 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
 ### grade10-site-auction-auto-bidding-US1-TC1-1: First maximum opens bidding at the starting price
 
 Runs once per row of **Test data**.
@@ -50,7 +51,6 @@ An open listing with no bids, with the row's starting price.
 * Customer leads.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7gl rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-
 ### grade10-site-auction-auto-bidding-US1-TC2-1: Maximum below the minimum next bid is refused
 
 Runs once per row of **Test data**.
@@ -92,7 +92,6 @@ An open listing whose current bid and minimum increment match the row.
 * The current bid and the leader are unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-9qy rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-
 ### grade10-site-auction-auto-bidding-US1-TC3-1: Leader raises their own maximum
 
 Runs once per row of **Test data**.
@@ -134,7 +133,6 @@ customer(leads with a committed maximum matching the row) is on that open listin
 * The current bid is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-vq3 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-
 ### grade10-site-auction-auto-bidding-US1-TC4-1: Lowering a maximum is refused
 
 Runs once per row of **Test data**.
@@ -173,8 +171,6 @@ customer(has a committed maximum matching the row) is on that open listing's pag
 
 * Grade10 refuses it.
 * Customer's committed maximum remains the row's committed maximum.
-
----
 
 ### grade10-site-auction-auto-bidding-US1-TC5-1: Lone maximum on a zero start stands at the lowest increment
 
