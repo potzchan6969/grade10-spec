@@ -398,7 +398,6 @@ backend does not require.
 **Pre-conditions:**
 
 * customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
-* The card on file was linked by completing setup.
 * Bid-time holds are off.
 
 **Test data:**
@@ -419,7 +418,6 @@ backend does not require.
 * The panel moves straight to enrolled.
 * Change is not offered for this listing.
 * No hold state is shown.
-* The bid continues under auto-bidding and payment authorization.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-0h4 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC9-1: Default setup copy does not promise a bid-time hold
@@ -823,7 +821,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -835,7 +833,6 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed in, card linked) is on <listing_5 url>.
-* The card on file was linked by completing setup.
 * This collector's bid was accepted from the bid panel on this listing.
 
 **Test data:**
@@ -860,7 +857,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -871,14 +868,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
-* The card on file was linked by completing setup.
+* customer(signed in, card linked, no bid on <listing_7>) is on <listing_7 url>.
+* Bid-time holds are off.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
+| <listing_7> | An open listing taking bids with no other bidder; this collector has a linked card and has not bid on it |
 | <maximum> | The next valid bid shown on the bid panel |
 
 **Steps:**
@@ -890,8 +887,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The setup modal does not open.
-* The bid continues under auto-bidding and payment authorization.
+* Step 3: the setup modal does not open.
+* Step 4: the panel shows Leading, with their maximum and the current bid.
 
 ---
 
