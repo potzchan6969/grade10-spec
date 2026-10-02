@@ -15,7 +15,7 @@
 - [ ] 2.3 An auction migration deletes the refused, requested, `pending` and `lost` rows of `bid_action_logs`, tightens its `type` and `standing` checks, and holds `failure_code` null, with a migration spec `grade10-site-auction-bidding-history-SC-49`, `grade10-site-auction-bidding-history-SC-50`
 - [ ] 2.4 `docs/architecture/auction.md` says a refusal writes nothing the bidder reads and is logged for operators, and links the archived relay change
 
-## 3. The tests name what they prove (grade10)
+## 3. The tests name what they prove (grade10) (owner: @ecchochan)
 
 - [ ] 3.1 Placement and refusal: `grade10-site-auction-auction-SC-89`, `grade10-site-auction-auction-SC-90`, `grade10-site-auction-auction-SC-91`, `grade10-site-auction-auction-SC-92`, `grade10-site-auction-auction-SC-23`, `grade10-site-auction-auction-SC-10`, `grade10-site-auction-auction-SC-86`, `grade10-site-auction-auction-SC-04`, `grade10-site-auction-auction-SC-08`, `grade10-site-auction-auction-SC-16`
 - [ ] 3.2 A lost answer: `grade10-site-auction-auction-SC-94`, `grade10-site-auction-auction-SC-95`
