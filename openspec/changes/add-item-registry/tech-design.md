@@ -407,10 +407,13 @@ Example - Start valuation on case `vc_1`:
 ### Vault: deliver a case's state
 
 `deliverRegisterDues(db, register, { caseId?, limit })` → `{ delivered, failed, parked }`.
-Per row: claim (`FOR UPDATE SKIP LOCKED`) and note `version`, read the case's
-state, call `tell`, then set `delivered_version` to the noted version, or
-raise `attempts` and `next_at`, or park at the cap. An act that raised
-`version` meanwhile leaves the row due.
+Per row: note `version` and `attempts`, read the case's state, call `tell`,
+then set `delivered_version` to the noted version, or raise `attempts` and
+`next_at`, or park at the cap. No row is claimed, since no transaction stays
+open across a call to another service: each update matches the noted
+`version` and `attempts` and the row still owed, so two failures together
+spend one rung and a failure never writes onto a delivered row. An act that
+raised `version` meanwhile leaves the row due.
 
 ### Inventory: `VaultItemsService`
 
@@ -446,7 +449,7 @@ Each is an `elevatedProcedure` declaring `auditDetails` and `auditSubject`
 | --- | --- | --- | --- | --- |
 | `items.register` | write | category, title, description?, grader?, grade?, cert?, owner (`account` email or `custodian`) | `items` | `ITEM_CERT_TAKEN` (names the item), `OWNER_NOT_FOUND`, field limits |
 | `items.edit` | write | item id, the six facts | `items`, `updated_*` | `ITEM_RETIRED`, `ITEM_CERT_TAKEN` |
-| `items.transfer` | transfer | item id, to (`account` email or `custodian`), reason, title (required from an erased owner), proof keys ≤ 5 | `items`, `item_moves`, `item_move_proofs`; deletes the used uploads | `ITEM_MARKED` (place, reference), `ITEM_RETIRED`, `ITEM_SAME_OWNER`, `TITLE_REQUIRED`, `OWNER_NOT_FOUND`, `PROOF_REFUSED` |
+| `items.transfer` | transfer | item id, to (`account` email or `custodian`), reason, title (required from an erased owner), proof keys ≤ 5; answers the item and its new move | `items`, `item_moves`, `item_move_proofs`; deletes the used uploads | `ITEM_MARKED` (place, reference), `ITEM_RETIRED`, `ITEM_SAME_OWNER`, `TITLE_REQUIRED`, `OWNER_NOT_FOUND`, `PROOF_REFUSED` |
 | `items.retire` | write | item id, reason | `retired_*` | `ITEM_MARKED`, `ITEM_RETIRED` |
 | `items.restore` | write | item id, reason | clears `retired_*`, sets `restored_*` | `ITEM_NOT_RETIRED`, `ITEM_CERT_TAKEN` |
 | `items.closeMark` | write | mark id, reason | `item_marks` closed by staff; on a forfeited case, the vault's move to the lender unless the case has one | `MARK_STILL_HELD`, `PLACE_UNREACHABLE`; a closed mark answers as closed |
@@ -462,7 +465,7 @@ disabled while the owner it resolved is the present one.
 | Read | Grant | Answers |
 | --- | --- | --- |
 | `items.list` | read | `{ tab: marked \| all \| retired, q?, ownerUserId?, cursor? }` → rows of id, title, category, grader, cert, owner (name behind `kyc:read`), open places; keyset on `(created_at, id)`, marked on the newest open mark |
-| `items.get` | read | the facts, owner, `updatedAt`, `updatedBy`, retired, marks with each case's status from `casesOf`, owners disagreeing, the `item_cert_taken` row, moves with proofs (proof ids only for `inventory:transfer`) |
+| `items.get` | read | the facts, owner, `updatedAt`, `updatedBy`, retired, marks with each case's status from `casesOf`, owners disagreeing, the `item_cert_taken` row, moves with proofs (proof ids only for `inventory:transfer`) and the count of proofs an erasure removed |
 | `items.resolveOwner` | read | `{ email }` → `{ userId, name \| null } \| null` |
 
 `q` is read in order: an exact email (`@`), an item id (`itm_`), a listed
@@ -482,13 +485,16 @@ the tab and reads every item, returning `retired` on each row for the badge.
   (vault), each a named entrypoint `implements` its contracts surface
 - **Vault, additive** - `caseItemSchema` gains `registerItemId` and `slab`;
   `admin.detail` gains
-  `register: { state: "pending" | "registered" | "unavailable", ownerId?, ownerMatches?, retired? }`;
+  `register: { state: "pending" | "registered" | "unavailable", owner?, ownerName?, ownerMatches?, retired? }`, the name only for `kyc:read`;
   the collector's case wire gains `factsFromRegister`;
   `admin.startValuation` and `admin.openWalkIn` take an optional
   `slab: { grader, grade, cert }`, all three required together; new
   `admin.lookupSlab` (`vault:operate`);
   new refusals `REGISTER_PENDING`, `REGISTER_UNREACHABLE`,
-  `ITEM_OWNER_DIFFERS`, `ITEM_RETIRED`, `SLAB_MARKED`
+  `ITEM_OWNER_DIFFERS`, `ITEM_RETIRED`, `SLAB_MARKED`,
+  `FACTS_FROM_REGISTER` (a collector's change to a category or title the
+  register holds) and `ITEM_FACTS_OVERRUN` (an item whose facts would run
+  past the paper's signature box, naming the item)
 - **Auth contracts** - `inventory: ["read", "write", "transfer"]`; `staff`
   gains `inventory:transfer`; the description; the regenerated
   `roles-and-permissions.json`
