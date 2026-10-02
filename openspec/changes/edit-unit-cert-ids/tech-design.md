@@ -22,9 +22,12 @@
   `certHistory` filters the first 100 product entries on the client and adds a
   made-up `intake` row at the record's `createdAt`, so an older entry drops out
   unseen on a busy product.
-- **Auction** - `auction_listings.inventory_cert_id` stores the record id and
-  reads its Cert ID through Inventory, so a corrected record shows its new
-  Cert ID wherever a listing names it.
+- **Auction** - `auction_listings.inventory_cert_id` stores the record id, and
+  every listing, draft included, takes an Inventory hold naming it. A record
+  that was ever listed therefore has a reservation row, and Q6 leaves its Cert
+  ID fixed, so no listing shows a changed Cert ID.
+- **Reservations stay** - no path deletes a reservation row except the dev
+  fixture reset; `idx_reservations_inventory_cert_id` indexes the record id.
 - **Overlap** - `cert-scoped-inventory-auction-media` modifies the Cert
   record requirement, `Inventory may own optional Cert ID records and copy facts`;
   this change adds its rules beside it and leaves it untouched.
@@ -34,7 +37,9 @@
 **Goals:**
 
 - **One record per unit** - a correction keeps the record id, so its media
-  tags, its holds' history and Auction's references stay with the unit.
+  tags and earlier history stay with the unit.
+- **Fixed once moved** - a record that any hold has ever named keeps its Cert
+  ID, decided by one indexed lookup under the lock (Q6).
 - **Counts move once** - an assignment moves one unit from regular stock to a
   Cert record in the transaction that writes its history entry.
 - **Paged unit history** - the server filters a unit's history, so nothing
@@ -49,8 +54,8 @@
 ## Decisions
 
 The [catalog delta](specs/grade10-admin/inventory/catalog/spec.md) governs the
-rows, the two writes, their refusals and the history entry; Q1 to Q12 settle
-its scope.
+rows, the two writes, their refusals and the history entry; Q1 to Q17 settle
+its scope, Q10 retired.
 
 ### Writes
 
@@ -65,13 +70,27 @@ its scope.
 - **Lock order** - inventory row, then the Cert row on a correction, the same
   order `reserve` takes, so a hold and a change on one product queue behind
   each other and cannot deadlock. Every guard is read after both locks.
-- **Uniqueness** - the service trims the Cert ID and looks it up under the
-  inventory lock across every record of the inventory, whatever its status,
-  the record being corrected included. The unique index stays the backstop: a
-  `23505` on it maps to `cert-id-taken`, never to a 500.
-  - Rejected: allowing a Cert ID a sold or withdrawn record of the product
-    holds. The index forbids it, and intake already treats it as that unit
-    coming back.
+- **Unmoved test** - a correction requires the locked Cert row's `status` to
+  be `available` and no `inventory.reservations` row, of any status, to carry
+  its `inventory_cert_id` (`EXISTS` on `idx_reservations_inventory_cert_id`).
+  Every way a record moves - reserve, an Auction listing's hold, sale and
+  vault from a hold - starts with a reservation naming it; a pool sale or
+  withdraw never names a record, and Remove physical unit deletes the row. The
+  test is deterministic and needs no history scan. It runs after the inventory
+  lock, which `reserve` also takes first, so a hold racing the correction
+  either commits first and is seen or waits and follows it.
+  - Rejected: scanning `changelogs` for any action other than `intake` and
+    `cert-id-change`. It reads JSON snapshots to find the record, and a missed
+    snapshot shape would unlock a moved record.
+- **Cert ID check** - trim, then compare exactly, case-sensitive (Q13), as the
+  unique index on `(inventory_id, cert_id)` already does. `No Cert ID`
+  compared case-blind after trimming refuses `invalid-cert-id` (Q15). The
+  lookup runs under the inventory lock across every record of the inventory,
+  whatever its status, the record being corrected included (Q16). The refusal
+  `cert-id-taken` carries the holding record's `{ inventoryCertId, certId,
+status }` in the error's data, so the dialog names the unit and its status.
+  The unique index stays the backstop: a `23505` on it maps to
+  `cert-id-taken`, never to a 500.
 - **Correction writes one column** - `cert_id` only. `status`, the copy facts,
   `created_at` and `product_media.inventory_cert_id` are untouched, and no
   inventory counter moves, so the inventory row is locked but not written.
@@ -98,10 +117,15 @@ its scope.
 ### Reads
 
 - **Available regular stock** - `products.get` gains
-  `regularStock: { available }`, computed in the request as
-  `unidentified_stock − sumActiveNoCertRemainingByInventoryId`. It is derived,
-  never stored. The holds come from the `reservations` the answer already
-  carries.
+  `regularStock: { available, hasHistory }`. `available` is
+  `unidentified_stock − sumActiveNoCertRemainingByInventoryId`; `hasHistory`
+  is one `EXISTS` over the regular-stock membership predicate below. Both are
+  derived, never stored. The holds come from the `reservations` the answer
+  already carries.
+- **Unmoved flag** - each record in `products.get`'s `certIds` gains
+  `unmoved: boolean`, the same test the correction runs, so the dialog offers
+  the action only where the server would accept it. The server re-checks
+  under the lock; the flag never authorises.
 - **Unit history on the server** - `changelogs.list` gains optional
   `unit: { kind: "cert", inventoryCertId } | { kind: "regular" }`.
   `listChangelogsByInventoryId` adds one predicate to its keyset query, so the
@@ -121,12 +145,15 @@ its scope.
 ### Dialog
 
 - **Rows** - Cert records in Cert ID order, then the available `No Cert ID`
-  row when `regularStock.available ≥ 1`, then one `No Cert ID` row per active
-  hold with no record, in the order the product page lists holds. A new
-  Quantity column reads `1` on a Cert record.
-- **Actions** - with `mayWrite`, a selected available Cert record offers
-  Change Cert ID and the available `No Cert ID` row offers Assign Cert ID,
-  each a `FormDialog` that sends its procedure and shows a refusal inline.
+  row when `regularStock.hasHistory`, reading `regularStock.available`, 0
+  included (Q14), then one `No Cert ID` row per active hold with no record, in
+  the order the product page lists holds. Columns are Cert ID, Status, Holder
+  and Quantity, with no copy facts (Q17); today's Added column goes. With no
+  row, one line says no unit is on hand.
+- **Actions** - with `mayWrite`, a selected record with `unmoved` offers
+  Change Cert ID, and the available `No Cert ID` row reading at least 1 offers
+  Assign Cert ID, each a `FormDialog` that sends its procedure and shows a
+  refusal inline, naming the holding unit and its status on `cert-id-taken`.
   Any other row, or a reader without the grant, sees the reason in place of
   the action (Q6).
 - **After a write** - the product, its changelogs and its media are
@@ -170,20 +197,22 @@ erDiagram
 | `remarks`                      | optional string, trimmed; empty is null |
 | `actorId`                      | the staff id from the session           |
 
-1. Trim `certId`; empty or over 200 characters refuses `invalid-cert-id`.
+1. Trim `certId`; empty, over 200 characters or `No Cert ID` in any case
+   refuses `invalid-cert-id`.
 2. Lock the inventory by product; none refuses `unknown-product`.
 3. Lock the Cert row; none refuses `unknown-inventory-cert-id`; another
    inventory's refuses `inventory-cert-id-product-mismatch`.
-4. `status` not `available`, or an active hold names the record, refuses
-   `inventory-cert-id-unavailable`.
-5. Any record of the inventory holding the trimmed Cert ID, this one
-   included, refuses `cert-id-taken`.
+4. `status` not `available`, or any reservation ever naming the record,
+   refuses `inventory-cert-id-unavailable`.
+5. Any record of the inventory holding the trimmed Cert ID exactly, this one
+   included, refuses `cert-id-taken` with that record's id, Cert ID and
+   status.
 6. Update `cert_id`; insert the changelog.
 
 Success answers `{ certRecord, inventory }`. A refusal writes nothing.
 
-Example: record `icert_7` reads `PSA-1234` and is available on product
-`prd_a`.
+Example: record `icert_7` reads `PSA-1234`, is available on product `prd_a`,
+and no reservation has ever named it.
 
 ```json
 {
@@ -210,12 +239,14 @@ Example: record `icert_7` reads `PSA-1234` and is available on product
 | `remarks`                           | optional string, trimmed; empty is null |
 | `actorId`                           | the staff id from the session           |
 
-1. `normalizeUnitFacts`; an empty Cert ID refuses `invalid-cert-id`; a blank
+1. `normalizeUnitFacts`; an empty Cert ID or `No Cert ID` in any case refuses
+   `invalid-cert-id`; a blank
    or `RAW` Grade Issuer refuses `invalid-grade-issuer`.
 2. Lock the inventory by product; none refuses `unknown-product`.
 3. `unidentified_stock − sumActiveNoCertRemainingByInventoryId < 1`, or
    available below 1, refuses `insufficient-available`.
-4. Any record of the inventory holding the Cert ID refuses `cert-id-taken`.
+4. Any record of the inventory holding the Cert ID exactly refuses
+   `cert-id-taken` with that record's id, Cert ID and status.
 5. Insert the Cert row; write `unidentified_stock − 1`; insert the changelog.
 
 Example: product `prd_a` has stock 5, `unidentified_stock` 3 and an active
@@ -252,15 +283,15 @@ limit, unit? })`: the keyset query unchanged, plus the membership predicate on
 
 ## API Contracts
 
-| Surface                   | Change                                                 |
-| ------------------------- | ------------------------------------------------------ |
-| `inventory.correctCertId` | New mutation; `inventory:write`; refusals from Correct |
-| `inventory.assignCertId`  | New mutation; `inventory:write`; refusals from Assign  |
-| `changelogs.list`         | Optional `unit` input; additive                        |
-| `products.get`            | Answer gains `regularStock: { available: number }`     |
-| `CHANGELOG_ACTIONS`       | Gains `cert-id-change`                                 |
-| `changelogSnapshotSchema` | Gains optional `certRecord: InventoryCertId`           |
-| `InventoryFailureCode`    | Gains `cert-id-taken` and `invalid-grade-issuer`       |
+| Surface                   | Change                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| `inventory.correctCertId` | New mutation; `inventory:write`; refusals from Correct                                      |
+| `inventory.assignCertId`  | New mutation; `inventory:write`; refusals from Assign                                       |
+| `changelogs.list`         | Optional `unit` input; additive                                                             |
+| `products.get`            | Answer gains `regularStock: { available, hasHistory }`; each `certIds` item gains `unmoved` |
+| `CHANGELOG_ACTIONS`       | Gains `cert-id-change`                                                                      |
+| `changelogSnapshotSchema` | Gains optional `certRecord: InventoryCertId`                                                |
+| `InventoryFailureCode`    | Gains `cert-id-taken`, carrying the holding record, and `invalid-grade-issuer`              |
 
 ## Risks / Trade-offs
 
@@ -275,6 +306,9 @@ limit, unit? })`: the keyset query unchanged, plus the membership predicate on
 - [A worker writes `cert-id-change` before the migration] → the check refuses
   the insert, the transaction rolls back and the procedure fails loudly; the
   migration ships before the procedures.
+- [A record whose only hold was a dev fixture reset] → the fixture deletes its
+  reservations, so the record reads unmoved again; it exists only in local and
+  staging data.
 - [A JSON predicate on a large history] → it runs inside the
   `(inventory_id, occurred_at)` index range of one product.
 

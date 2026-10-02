@@ -265,7 +265,7 @@ audit.
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads which number a unit carried before
 
-- **GIVEN** an available Cert record with Cert ID `PSA-1234`
+- **GIVEN** an unmoved Cert record with Cert ID `PSA-1234`
 - **WHEN** an authorized inventory admin changes it to `PSA-1243` with remarks
   `Typo at intake`
 - **THEN** one `cert-id-change` change records quantity one, the operator and
@@ -355,24 +355,26 @@ and holder reference SHALL be unchanged.
 ### Requirement: Cert ID details lists every unit the product holds
 
 Cert ID details, opened from View Cert IDs on the product page, SHALL list
-each Cert record of the product and the regular stock on hand.
+each Cert record of the product and the regular stock on hand. It SHALL show
+each unit's Cert ID, status, holder and quantity, and no copy facts.
 
 **Regular stock** - the units in stock that have no Cert record. **Available
 regular stock** is regular stock minus the remaining of every active hold that
-names no Cert record. An **available unit** is a Cert record whose status is
-Available and that no active hold names, or one unit of available regular
-stock.
+names no Cert record. The **regular stock history** is defined in `Cert ID
+details shows each unit's history`.
 
-| Row                                        | Cert ID      | Status                                          | Holder                                                                                                    | Quantity                |
-| ------------------------------------------ | ------------ | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
-| Each Cert record                           | Its Cert ID  | Available, Reserved, Sold, Withdrawn or Vaulted | The holder kind and holder label, else holder reference, of the active hold naming it; `—` when none does | 1                       |
-| Available regular stock                    | `No Cert ID` | Available                                       | `—`                                                                                                       | Available regular stock |
-| Each active hold that names no Cert record | `No Cert ID` | Reserved                                        | The hold's holder kind and holder label, else holder reference                                            | The hold's remaining    |
+| Row                                        | Cert ID      | Status                                          | Holder                                                                                                    | Quantity                            |
+| ------------------------------------------ | ------------ | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Each Cert record                           | Its Cert ID  | Available, Reserved, Sold, Withdrawn or Vaulted | The holder kind and holder label, else holder reference, of the active hold naming it; `—` when none does | 1                                   |
+| Available regular stock                    | `No Cert ID` | Available                                       | `—`                                                                                                       | Available regular stock, 0 included |
+| Each active hold that names no Cert record | `No Cert ID` | Reserved                                        | The hold's holder kind and holder label, else holder reference                                            | The hold's remaining                |
 
 The rows SHALL read in that order: Cert records by Cert ID, then the
-available row, then the hold rows. The available row SHALL show only while
-available regular stock is at least 1. Sold, withdrawn and vaulted regular
-stock SHALL NOT be listed, since no unit of it is tracked.
+available row, then the hold rows. The available row SHALL show whenever the
+regular stock history holds any entry, reading 0 when no unit is free, and
+SHALL NOT show when it holds none. Sold, withdrawn and vaulted regular stock
+SHALL NOT be listed, since no unit of it is tracked. A product with no row
+SHALL show one line saying no unit is on hand.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-147 - Regular stock is listed beside the Cert records
 
@@ -388,16 +390,17 @@ stock SHALL NOT be listed, since no unit of it is tracked.
   Reserved Vault `vault-7` 1; `No Cert ID` Reserved Admin with its reference
   and 2
 - **AND** the quantities add up to the product's stock of six
+- **AND** no row shows a Grade Issuer, Grade, Autograph Grade or Serial
 
-#### Scenario: grade10-admin-inventory-catalog-SC-148 - Held regular stock shows no available row
+#### Scenario: grade10-admin-inventory-catalog-SC-148 - Held regular stock reads Available 0
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin sees regular stock that is all held
 
 - **GIVEN** a created product with no Cert record, three units of regular
   stock sold, one withdrawn, and two on hand held by one Auction hold
 - **WHEN** an authorized inventory admin opens Cert ID details
-- **THEN** the only row is `No Cert ID` Reserved with the Auction hold's
-  holder and quantity 2
+- **THEN** the rows read `No Cert ID` Available `—` 0, then `No Cert ID`
+  Reserved with the Auction hold's holder and 2
 - **AND** no row lists the sold or withdrawn units
 
 #### Scenario: grade10-admin-inventory-catalog-SC-149 - A released hold returns its units to the available row
@@ -410,6 +413,16 @@ stock SHALL NOT be listed, since no unit of it is tracked.
   the product page and opens Cert ID details again
 - **THEN** `No Cert ID` Available reads 3
 - **AND** the Admin hold's row is gone
+
+#### Scenario: grade10-admin-inventory-catalog-SC-170 - A product with no regular stock history lists no No Cert ID row
+
+**Serves:** grade10-admin-inventory-catalog-US-14 - the admin sees only the units the product has had
+
+- **GIVEN** one product that intook one unit with Cert record `PSA-1` and no
+  regular stock, and another created product that never intook stock
+- **WHEN** an authorized inventory admin opens Cert ID details on each
+- **THEN** the first lists `PSA-1` alone, with no `No Cert ID` row
+- **AND** the second lists no row and shows one line saying no unit is on hand
 
 ### Requirement: Cert ID details shows each unit's history
 
@@ -434,11 +447,11 @@ unit SHALL be reachable however old it is.
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin follows one unit across a Cert ID change
 
-- **GIVEN** Cert record `PSA-1234` was intaken, held by an Admin hold, released,
-  and then changed to `PSA-1243`
+- **GIVEN** Cert record `PSA-1234` was intaken, changed to `PSA-1243`, and
+  then held by an Admin hold
 - **WHEN** an authorized inventory admin selects `PSA-1243` in Cert ID details
-- **THEN** its history reads, newest first, the Cert ID change
-  `PSA-1234 → PSA-1243`, the release, the reserve and the intake
+- **THEN** its history reads, newest first, the reserve, the Cert ID change
+  `PSA-1234 → PSA-1243` and the intake
 
 #### Scenario: grade10-admin-inventory-catalog-SC-151 - An assigned record's history starts at its assignment
 
@@ -472,12 +485,17 @@ unit SHALL be reachable however old it is.
   to the end
 - **THEN** the history reaches its intake entry
 
-### Requirement: An available Cert record's Cert ID can be corrected
+### Requirement: An unmoved Cert record's Cert ID can be corrected
 
-An inventory admin SHALL correct the Cert ID of an available Cert record from
+A Cert record is **unmoved** while its status is Available and no hold,
+active or closed, has ever named it: its history holds only its intake and
+Cert ID changes. A record that was ever reserved, listed by Auction, sold,
+withdrawn or vaulted is not unmoved, even when it is Available again.
+
+An inventory admin SHALL correct the Cert ID of an unmoved Cert record from
 Cert ID details:
 
-1. The admin selects an available Cert record and chooses Change Cert ID.
+1. The admin selects an unmoved Cert record and chooses Change Cert ID.
 2. They enter the new Cert ID and optional remarks, and save.
 3. Grade10 trims the Cert ID, changes it on the same record, and appends one
    `cert-id-change` entry.
@@ -486,40 +504,45 @@ The record SHALL keep its status, Grade Issuer, Grade, Autograph Grade,
 Serial, tagged media and earlier history. Stock, reserved, available, sold,
 withdrawn and vaulted SHALL NOT change. A Cert ID SHALL NOT be cleared.
 
-| Refused when                                                                                        | Result                                   |
-| --------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| The record is not an available unit                                                                 | Nothing changes and no entry is appended |
-| The new Cert ID is empty after trimming                                                             | Nothing changes and no entry is appended |
-| A Cert record of the product holds the new Cert ID, whatever its status, the record itself included | Nothing changes and no entry is appended |
-| The record does not exist, or belongs to another product                                            | Nothing changes and no entry is appended |
+**Cert ID check** - Cert IDs SHALL be compared exactly after trimming, so
+letter case counts: `psa-1243` and `PSA-1243` are different Cert IDs. The
+text `No Cert ID`, in any letter case after trimming, SHALL NOT be a Cert ID.
 
-Cert ID details SHALL offer Change Cert ID only on an available Cert record,
-and SHALL show on any other Cert record that only an available unit can take a
-new Cert ID.
+| Refused when                                                                                        | Result                                                                                        |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| The record is not unmoved                                                                           | Nothing changes and no entry is appended                                                      |
+| The new Cert ID is empty after trimming, or reads `No Cert ID`                                      | Nothing changes and no entry is appended                                                      |
+| A Cert record of the product holds the new Cert ID, whatever its status, the record itself included | Nothing changes, no entry is appended, and the refusal names that record's Cert ID and status |
+| The record does not exist, or belongs to another product                                            | Nothing changes and no entry is appended                                                      |
+
+Cert ID details SHALL offer Change Cert ID only on an unmoved Cert record, and
+SHALL show on any other Cert record that its Cert ID is fixed because the unit
+has been held or has moved.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-154 - Admin corrects a wrong Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin makes the record match the slab
 
-- **GIVEN** an available Cert record `PSA-1234` with Grade Issuer `PSA`,
-  Grade `10` and one image tagged to it, on a product with stock three and
-  reserved one
+- **GIVEN** an unmoved Cert record `PSA-1234` with Grade Issuer `PSA`, Grade
+  `10` and one image tagged to it, on a product with stock three and reserved
+  one
 - **WHEN** an authorized inventory admin changes its Cert ID to `PSA-1243`
   with remarks `Typo at intake`
-- **THEN** the same record reads `PSA-1243`, Available, `PSA` and `10`, and
-  the image is still tagged to it
+- **THEN** Cert ID details lists the same record as `PSA-1243`, Available
+- **AND** the `cert-id-change` entry's after snapshot carries that record with
+  Grade Issuer `PSA` and Grade `10`, and the image is still tagged to it
 - **AND** stock reads three and reserved one
-- **AND** one `cert-id-change` entry is appended
 
 #### Scenario: grade10-admin-inventory-catalog-SC-155 - A Cert ID already used on the product is refused
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot give two units one number
 
-- **GIVEN** a product with available Cert record `PSA-1` and sold Cert record
+- **GIVEN** a product with unmoved Cert record `PSA-1` and sold Cert record
   `PSA-2`
 - **WHEN** an authorized inventory admin changes `PSA-1` to `PSA-2`, and then
   to `PSA-1`
-- **THEN** Grade10 refuses both
+- **THEN** Grade10 refuses both; the first refusal names `PSA-2` and Sold, the
+  second `PSA-1` and Available
 - **AND** the record still reads `PSA-1` and no entry is appended
 
 #### Scenario: grade10-admin-inventory-catalog-SC-156 - A held or sold record keeps its Cert ID
@@ -529,8 +552,8 @@ new Cert ID.
 - **GIVEN** Cert record `PSA-1` held by an Auction listing and Cert record
   `PSA-2` sold
 - **WHEN** an authorized inventory admin selects each in Cert ID details
-- **THEN** neither offers Change Cert ID, and each shows that only an
-  available unit can take a new Cert ID
+- **THEN** neither offers Change Cert ID, and each shows that its Cert ID is
+  fixed because the unit has been held or has moved
 - **WHEN** a change to either is sent anyway
 - **THEN** Grade10 refuses it, and no record, count or entry changes
 
@@ -538,20 +561,43 @@ new Cert ID.
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot clear a Cert ID
 
-- **GIVEN** an available Cert record `PSA-1`
+- **GIVEN** an unmoved Cert record `PSA-1`
 - **WHEN** an authorized inventory admin changes its Cert ID to three spaces
 - **THEN** Grade10 refuses it
 - **AND** the record still reads `PSA-1` and no entry is appended
 
-#### Scenario: grade10-admin-inventory-catalog-SC-158 - An Unsold listing shows the corrected Cert ID
+#### Scenario: grade10-admin-inventory-catalog-SC-167 - A released record cannot be corrected
 
-**Serves:** Auction presentation - a listing reads its unit's current Cert ID through Inventory
+**Serves:** grade10-admin-inventory-catalog-US-15 - a unit once held keeps the number it was held under
 
-- **GIVEN** an Auction listing selected Cert record `PSA-1234`, closed with no
-  winner, and its hold was released
-- **WHEN** an authorized inventory admin changes the record to `PSA-1243` and
-  the listing is read
-- **THEN** the listing names Cert ID `PSA-1243`
+- **GIVEN** Cert record `PSA-1` was held by an Auction listing that closed
+  with no winner, and its hold was released, so it reads Available
+- **WHEN** an authorized inventory admin selects it in Cert ID details
+- **THEN** it offers no Change Cert ID and shows that its Cert ID is fixed
+- **WHEN** a change to `PSA-11` is sent anyway
+- **THEN** Grade10 refuses it, and the record still reads `PSA-1` with no
+  entry appended
+
+#### Scenario: grade10-admin-inventory-catalog-SC-168 - No Cert ID is not a Cert ID
+
+**Serves:** grade10-admin-inventory-catalog-US-15 - a numbered unit never reads as regular stock
+
+- **GIVEN** an unmoved Cert record `PSA-1` and available regular stock on the
+  same product
+- **WHEN** an authorized inventory admin changes `PSA-1` to `no cert id`,
+  and assigns `NO CERT ID` with Grade Issuer `PSA` to a unit of regular stock
+- **THEN** Grade10 refuses both
+- **AND** no record changes or is created and no entry is appended
+
+#### Scenario: grade10-admin-inventory-catalog-SC-169 - Letter case makes a different Cert ID
+
+**Serves:** grade10-admin-inventory-catalog-US-15 - the admin enters the number exactly as printed
+
+- **GIVEN** a product with sold Cert record `PSA-1243` and unmoved Cert record
+  `PSA-1234`
+- **WHEN** an authorized inventory admin changes `PSA-1234` to `psa-1243`
+- **THEN** the record reads `psa-1243`
+- **AND** one `cert-id-change` entry is appended
 
 ### Requirement: An available unit of regular stock can be given a Cert ID
 
@@ -563,27 +609,30 @@ from the available `No Cert ID` row of Cert ID details:
 3. Grade10 creates one Available Cert record with those facts, takes the unit
    out of regular stock, and appends one `cert-id-change` entry.
 
-| Field           | Rules                                                                              |
-| --------------- | ---------------------------------------------------------------------------------- |
-| Cert ID         | Required; trimmed; not held by any Cert record of the product, whatever its status |
-| Grade Issuer    | Required; trimmed; names a grading issuer, never `RAW`                             |
-| Grade           | Optional text; blank or `-` is absent                                              |
-| Autograph Grade | Optional text; blank or `-` is absent                                              |
-| Serial          | Optional text; blank or `-` is absent                                              |
-| Remarks         | Optional; trimmed                                                                  |
+| Field           | Rules                                                                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Cert ID         | Required; trimmed; never `No Cert ID`; not held by any Cert record of the product, whatever its status, compared as for a correction |
+| Grade Issuer    | Required; trimmed; names a grading issuer, never `RAW`                                                                               |
+| Grade           | Optional text; blank or `-` is absent                                                                                                |
+| Autograph Grade | Optional text; blank or `-` is absent                                                                                                |
+| Serial          | Optional text; blank or `-` is absent                                                                                                |
+| Remarks         | Optional; trimmed                                                                                                                    |
 
 Available regular stock SHALL fall by one. Stock, reserved, available, sold,
-withdrawn and vaulted SHALL NOT change. The new record SHALL have no tagged
-media.
+withdrawn and vaulted SHALL NOT change. The new record SHALL be unmoved and
+have no tagged media.
 
-| Refused when                                                                  | Result                                   |
-| ----------------------------------------------------------------------------- | ---------------------------------------- |
-| Available regular stock is 0                                                  | Nothing changes and no entry is appended |
-| The Cert ID is empty after trimming, or a Cert record of the product holds it | Nothing changes and no entry is appended |
-| The Grade Issuer is empty after trimming, or is `RAW`                         | Nothing changes and no entry is appended |
+| Refused when                                               | Result                                                                                        |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Available regular stock is 0                               | Nothing changes and no entry is appended                                                      |
+| The Cert ID is empty after trimming, or reads `No Cert ID` | Nothing changes and no entry is appended                                                      |
+| A Cert record of the product holds the Cert ID             | Nothing changes, no entry is appended, and the refusal names that record's Cert ID and status |
+| The Grade Issuer is empty after trimming, or is `RAW`      | Nothing changes and no entry is appended                                                      |
 
 Cert ID details SHALL offer Assign Cert ID only on the available `No Cert ID`
-row, and SHALL show on a hold's row that a held unit cannot take a Cert ID.
+row while it reads at least 1, and SHALL show on a hold's row, and on an
+available row reading 0, that no free unit of regular stock can take a Cert
+ID.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-159 - Admin gives a unit of regular stock its Cert ID
 
@@ -594,11 +643,11 @@ row, and SHALL show on a hold's row that a held unit cannot take a Cert ID.
   Available reads 2
 - **WHEN** an authorized inventory admin assigns Cert ID `BGS-88`, Grade
   Issuer `BGS`, Grade `9.5`, Autograph Grade `-` and no Serial
-- **THEN** a Cert record `BGS-88` reads Available with Grade Issuer `BGS`,
-  Grade `9.5`, and no Autograph Grade or Serial
+- **THEN** Cert ID details lists a Cert record `BGS-88`, Available
+- **AND** the `cert-id-change` entry's after snapshot carries that record with
+  Grade Issuer `BGS`, Grade `9.5`, and no Autograph Grade or Serial
 - **AND** `No Cert ID` Available reads 1 and the Admin hold's row still reads 1
 - **AND** stock reads five, reserved one and available four
-- **AND** one `cert-id-change` entry is appended
 
 #### Scenario: grade10-admin-inventory-catalog-SC-160 - Held regular stock cannot be given a Cert ID
 
@@ -607,8 +656,8 @@ row, and SHALL show on a hold's row that a held unit cannot take a Cert ID.
 - **GIVEN** a product whose two units of regular stock are both in one Auction
   hold
 - **WHEN** an authorized inventory admin opens Cert ID details
-- **THEN** no row offers Assign Cert ID, and the hold's row shows that a held
-  unit cannot take a Cert ID
+- **THEN** `No Cert ID` Available reads 0, no row offers Assign Cert ID, and
+  the rows show that no free unit of regular stock can take a Cert ID
 - **WHEN** an assignment is sent anyway
 - **THEN** Grade10 refuses it, and no record, count or entry changes
 
@@ -630,7 +679,7 @@ row, and SHALL show on a hold's row that a held unit cannot take a Cert ID.
   `PSA-2`
 - **WHEN** an authorized inventory admin assigns `PSA-2` with Grade Issuer
   `PSA`, and then a blank Cert ID
-- **THEN** Grade10 refuses both
+- **THEN** Grade10 refuses both, the first naming `PSA-2` and Sold
 - **AND** no Cert record is created and no entry is appended
 
 #### Scenario: grade10-admin-inventory-catalog-SC-163 - An assigned unit can be held by its Cert ID
@@ -653,7 +702,7 @@ Cert ID details, with no Change Cert ID or Assign Cert ID.
 **Serves:** grade10-admin-inventory-catalog-US-14 - a reader accounts for units without changing them
 
 - **GIVEN** an inventory admin who may read inventory but not write it, and a
-  product with an available Cert record and available regular stock
+  product with an unmoved Cert record and available regular stock
 - **WHEN** they open Cert ID details
 - **THEN** they see every row and each unit's history, and no row offers
   Change Cert ID or Assign Cert ID
@@ -671,8 +720,8 @@ not at all.
 
 **Serves:** Cert ID details - a hold and a correction on one unit never both land against the old state
 
-- **GIVEN** Cert record `PSA-1` is available and an inventory admin has
-  Change Cert ID open on it
+- **GIVEN** Cert record `PSA-1` is unmoved and an inventory admin has Change
+  Cert ID open on it
 - **WHEN** Auction reserves `PSA-1`, and then the admin saves `PSA-11`
 - **THEN** Grade10 refuses the correction
 - **AND** the hold names `PSA-1` and no `cert-id-change` entry is appended
