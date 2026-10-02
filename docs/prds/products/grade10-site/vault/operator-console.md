@@ -75,7 +75,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   handle until the customer names themselves
 - **An address signed in to before** — a walk-in is refused when the
   address belongs to an account someone has signed in to
-- 🚧 **An address that is not an email address** — refused beside the
+- **An address that is not an email address** — refused beside the
   address field before anything is sent, so staff check it with the customer
 - **The statement first** — the counter shows the collection statement
   before staff type the address, and the open keeps the version shown; in
