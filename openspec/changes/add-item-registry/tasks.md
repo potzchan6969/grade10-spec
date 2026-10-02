@@ -102,7 +102,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 11.5 `CollectorItemsSection` on the collector page, and inventory's `holds` lines on the erasure checklist (`grade10-admin-console-collector-page-SC-23`, `grade10-admin-console-collector-page-SC-24`, `grade10-admin-console-collector-page-SC-25`)
 - [ ] 11.6 Verify: `pnpm run test:frontend`, `pnpm run typecheck`, `pnpm run lint`
 
-## 12. The collector's wizard (grade10)
+## 12. The collector's wizard (grade10) (owner: @ecchochan)
 
 - [ ] 12.1 Tests first, in their own commit: the wizard's first step and the linked draft's read-only facts (`grade10-site-vault-case-intake-SC-40`)
 - [ ] 12.2 The ten categories on the wizard's first step, read from `vault.category`, and the category and title read-only on a draft holding a known slab (`grade10-site-vault-case-intake-SC-40`)
