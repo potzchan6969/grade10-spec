@@ -7,9 +7,9 @@
 
 ## 2. Walk-in form (grade10) (owner: @ecchochan)
 
-- [ ] 2.1 Tests in `packages/vault/admin-frontend/src/features/custody/cases/presentation/views/WalkInDialog.test.tsx`, in their own commit: a malformed address refused beside the field once it is left, Open case held and nothing sent, the rest of the form kept; no refusal while an address is typed, whether the field was left empty or left holding an address; the refusal cleared as soon as the retyped address meets the rule; the ten-photograph test asserts the input is disabled at ten and keeps its batch that runs past ten (`grade10-admin-vault-operator-queue-SC-95`, `grade10-admin-vault-operator-queue-SC-75`)
-- [ ] 2.2 Check the address in `WalkInDialog.tsx` with the walk-in contract's own address rule, refuse it beside the field when the field is left holding a malformed address, clear the refusal once the address meets the rule, and hold Open case while the address is malformed (`grade10-admin-vault-operator-queue-SC-95`)
-- [ ] 2.3 Verify: `pnpm run typecheck` and `pnpm run test` for `packages/vault/admin-frontend`, and the root `pnpm run lint` in grade10.
+- [x] 2.1 Tests in `packages/vault/admin-frontend/src/features/custody/cases/presentation/views/WalkInDialog.test.tsx`, in their own commit: a malformed address refused beside the field once it is left, Open case held and nothing sent, the rest of the form kept; no refusal while an address is typed, whether the field was left empty or left holding an address; the refusal cleared as soon as the retyped address meets the rule; the ten-photograph test asserts the input is disabled at ten and keeps its batch that runs past ten (`grade10-admin-vault-operator-queue-SC-95`, `grade10-admin-vault-operator-queue-SC-75`)
+- [x] 2.2 Check the address in `WalkInDialog.tsx` with the walk-in contract's own address rule, refuse it beside the field when the field is left holding a malformed address, clear the refusal once the address meets the rule, and hold Open case while the address is malformed (`grade10-admin-vault-operator-queue-SC-95`)
+- [x] 2.3 Verify: `pnpm run typecheck` and `pnpm run test` for `packages/vault/admin-frontend`, and the root `pnpm run lint` in grade10.
 
 ## 3. The walk (grade10) (owner: @ecchochan)
 
