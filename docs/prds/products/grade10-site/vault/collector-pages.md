@@ -21,8 +21,12 @@ hold, a wizard to open another, and each case's own page.
 
 ## Case list
 
-- **One card per case** — the item's name, status, when it opened, the lane,
-  the amount asked
+- 🚧 **One card per case** — the item's name, which opens the case; its
+  status and whose move it is; when it opened, the lane, the amount asked
+  and the reference; the next step; the booked visit or the day the item
+  went in; on an ended case, the reason staff gave
+- 🚧 **Your cases** — a heading with how many, and the several-items note
+  under the cards
 - **Start a request** — opens the wizard; **3** unsent drafts at most per
   account
 - **A draft** — reopens on its photo step from the list

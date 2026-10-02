@@ -1,0 +1,20 @@
+schema: grade10-planning
+created: 2026-10-02
+hands:
+  pm: "@ecchochan"
+  design: "@ecchochan"
+  tech: "@ecchochan"
+  qa: "@ecchochan"
+  dev: "@ecchochan"
+awaiting:
+  specs: "2026-10-02, the requirements land with the acceptance of the reconciled
+    plan - @ecchochan"
+landed_by:
+  proposal: ecchochan
+reviewed:
+  user-journeys: 6034ecfb
+  ui-design: 440a03ac
+  tech-design: 440a03ac
+  specs: aa4b3da3
+  test-cases: aa4b3da3
+  tasks: 6fadc183
