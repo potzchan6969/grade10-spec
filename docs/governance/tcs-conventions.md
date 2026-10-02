@@ -56,6 +56,8 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **Before** — step `1. The user is able to open the store front door successfully.`, result `The front door renders successfully, with the marketing hero visible immediately, and both buttons work.`
 - **After** — steps `1. Navigate to <grade10 store url>.` `2. Click the shop button in the hero.` `3. Click the auction button in the hero.`, results `Front door renders, hero visible.` `Both buttons open their destinations without JavaScript.`
 - 2026-09-25, grade10-site/auction/auction/feature-tcs.md: When the case layer is `api` and the spec names a read as a contract, the step says `Read the API response`, not the spec's contract name.
+- 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: A step that enters a payment card names a **Test data** placeholder holding the provider's test value, never "a card".
+- 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: A step that changes a value on file enters a value different from the one on file, so the change is observable.
 
 ### Placeholders
 
@@ -69,6 +71,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
 - 2026-09-25, grade10-site/auction/domain-tcs.md: A value that is not a boundary states an assumption and the range the requirement accepts, for example `HKD 800.00 or JPY 8000 or USD 8.00 (any price > 500 minor units)`. A boundary keeps its exact number and adds a readable reading. An exact reading has no tilde: `1800s (30mins)`. Use `~` only when that reading has a remainder: `1024b (1KiB or ~1KB)`. The exact number stays, so the reading never moves the bound.
 - 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `grade10-site-auction-auction-US2-TC12-1` does. The expected result states the formula that equals it. A step does not state the outcome.
+- 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
 
 ### Actors
 
@@ -150,4 +153,5 @@ Lines scoped narrower than the store, one `###` per scope, by its path (`grade10
 
 Patterns a review offered and the reviewer refused, with why; never offered again.
 
-None yet.
+- 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: A state the actor's qualifier names is not restated as a pre-condition saying how it was reached. Refused: too specific to the cases it came from to be a convention.
+- 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: A case uses the term the product's PRD decides as its sole term, even where the spec still uses an older one. Refused: too specific to the cases it came from to be a convention.
