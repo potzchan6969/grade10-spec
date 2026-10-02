@@ -48,7 +48,7 @@ export const Cancelled: Story = {
       "Order cancelled. The lot returned to available stock.",
     );
     expect(alert).toBeVisible();
-    expect(lot!.compareDocumentPosition(alert)).toBe(
+    expect(lot?.compareDocumentPosition(alert)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
   },
