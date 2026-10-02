@@ -13,49 +13,53 @@ is [Booking Blocks](/p/shared/ui/appointment-booking).
 
 ## The Blocks
 
-- 🚧 **`GradingFeeSheet`** — one sheet per grader: each level's ceiling,
+❓ **Whether the redesigned pages keep these blocks** — the collector's
+grading pages are designed again from the backend, and each block below
+stands or goes with them — Design — [Grading](/p/grade10-site/grading)
+
+- ❓ **`GradingFeeSheet`** — one sheet per grader: each level's ceiling,
   cards a submission, fee a card, cover rate where the level carries one and
   weeks; a tab per grader when there is more than one; a level nobody has
   priced listed with no figure where its price would be
-- 🚧 **`GradingCardList`** — the list a collector edits before hand-in: a
+- ❓ **`GradingCardList`** — the list a collector edits before hand-in: a
   card matched in the reference or kept as typed, its declared value, its
   reference sales with the note that they are a reference, not a valuation,
   and a minimum grade; the cap, the count that closes a
   level, a card with no value and a card above a ceiling, each named on the
   list; a value is kept in its field until the field is left, and reopened
   from Edit to change it
-- 🚧 **`GradingCardRecord`** — the list after hand-in, read only: intake
+- ❓ **`GradingCardRecord`** — the list after hand-in, read only: intake
   id, the photograph pair, and the card's outcome as a badge with its line
   in the collector's words — refused, withdrawn, graded, moved up, ungraded,
   minimum grade not met, held, not returned, damaged, collected, vaulted
-- 🚧 **`GradingPasteSheet`** — one card a line, and what the paste made of
+- ❓ **`GradingPasteSheet`** — one card a line, and what the paste made of
   it: matched, kept as typed, without a value, above the ceiling, skipped;
   the Bulk line past 20 cards
-- 🚧 **`GradingLevelPicker`** — the grader, then the levels: open with the
+- ❓ **`GradingLevelPicker`** — the grader, then the levels: open with the
   ceiling, the fee and the weeks, or closed naming the card or the count that
   closes it; the estimate with its cover line, what it includes and when it
   is paid
-- 🚧 **`GradingReview`** — the schedule, the totals, the upcharge warning
+- ❓ **`GradingReview`** — the schedule, the totals, the upcharge warning
   per card with both prices, the five good-to-know lines and the consent tick
   before booking; a refusal read in the collector's words, with the act it
   refused withdrawn
-- 🚧 **`GradingStatusRail`** — Planned to Home in seven steps, the stage
+- ❓ **`GradingStatusRail`** — Planned to Home in seven steps, the stage
   marked; an ended submission stays where it ended
-- 🚧 **`GradingOwnershipChip`** — the status word and whose move it is, as
+- ❓ **`GradingOwnershipChip`** — the status word and whose move it is, as
   one pair; the grader gets its own chip, so waiting on it never reads as
   waiting on the shop
-- 🚧 **`GradingPickupCard`** — the code, the items, where and when, what is
+- ❓ **`GradingPickupCard`** — the code, the items, where and when, what is
   due, and whether to bring an ID: for the collector, for the named person
   too, or not at all
-- 🚧 **`GradingNamedCollector`** — nobody named, or one person with the day
+- ❓ **`GradingNamedCollector`** — nobody named, or one person with the day
   they were named; change or remove
-- 🚧 **`GradingGradeCards`** — one card per card: the grade in the grader's
+- ❓ **`GradingGradeCards`** — one card per card: the grade in the grader's
   words, the cert, moved up a level, or ungraded with the grader's code and
   note
-- 🚧 **`GradingMoneyBlock`** — the fee, the cover, what was paid and how,
+- ❓ **`GradingMoneyBlock`** — the fee, the cover, what was paid and how,
   what moved up, what was waived, refunded or paid out, storage, what is due
   before collection
-- 🚧 **`GradingUncollectedLadder`** — the reminder days, the storage day
+- ❓ **`GradingUncollectedLadder`** — the reminder days, the storage day
   and the notice day, each dated; a passed rung marked
 
 Every state is reachable from a story with props alone; the surface each
