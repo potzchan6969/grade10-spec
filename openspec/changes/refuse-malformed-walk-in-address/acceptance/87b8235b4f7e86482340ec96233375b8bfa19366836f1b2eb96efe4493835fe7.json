@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "change": "refuse-malformed-walk-in-address",
+  "baseline": "edd3a59a12399bfdcf539f950bca9c1a07e8f3137d833ff3dcd47331670673f6",
+  "fingerprint": "87b8235b4f7e86482340ec96233375b8bfa19366836f1b2eb96efe4493835fe7",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-02T04:56:45.010Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#queue",
+      "sha256": "0f55c4175357f6776964249044f656c5ac10155fff210a95727b38c148144321",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/refuse-malformed-walk-in-address/decisions.md",
+      "sha256": "b409506c216c31a0db78f60386c4a8e567eafdcdd56705265025618f5382690d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-malformed-walk-in-address/proposal.md",
+      "sha256": "970cd1adbb1d2919a25f1ed3278db030e6932b6bc8bf605a09608600f7ddd538",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-malformed-walk-in-address/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "db893d8d03cb211e50204ccb674ba30a7c1dccb9c97cdcbef785bb7faa594afa",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-malformed-walk-in-address/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "c76ad78a90613cbc3aa39d1077beec4abba9be4cb0421c0f28b5122b51c7306e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-malformed-walk-in-address/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "717a46a06dcae09fb106e3c554591a89ffcd19f467eae46f892a8891abc256ea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refuse-malformed-walk-in-address/tech-design.md",
+      "sha256": "82b1063bd5263dbf0cabc5220a2697cbf62eb05668cf3a08596bb9fd54a571c7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "afaf1ab376630c9fc1bf413fd5ba3cf595b4c80da0580348fbbf04fb968518a0",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "c23c5330123a50c6a7db5a9fef344be8705b7860808bb12b21204b468cee4a50",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "dfeccf346d0c8ea976e7f4eabea24e1d1d36e026ed5a813d69a4e3602e973048",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Staff open a draft for a customer at the counter"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
