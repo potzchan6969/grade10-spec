@@ -52,7 +52,10 @@ function VaultItemDetailPage() {
               </Badge>
             </div>
           </div>
-          <div className="flex gap-2" role="group" aria-label="Scan face">
+          <fieldset
+            className="m-0 flex min-w-0 gap-2 border-0 p-0"
+            aria-label="Scan face"
+          >
             <Button
               size="sm"
               type="button"
@@ -71,7 +74,7 @@ function VaultItemDetailPage() {
             >
               Back
             </Button>
-          </div>
+          </fieldset>
           <Text size="xs" tone="secondary">
             HD scan · Deep-zoom / 360 Proposed (ops TBC)
           </Text>
