@@ -937,11 +937,21 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Search the exports for `VaultCases`, `VaultCasesEmpty` and `VaultAcceptOfferDialog`.
-2. Search the exports for `VaultCasesCard`, `VaultCasesEmptyStep`, and any `Props` or `Copy` type of the three.
-3. Find `BookingConfirmation` and `BookingManageCard`.
+2. Search the exports for `VaultAcceptOfferDialogProps`, `VaultAcceptOfferDialogCopy`, `VaultCasesProps`, `VaultCasesCopy`, `VaultCasesCard`, `VaultCasesChip`, `VaultCasesTone`, `VaultCasesIcon`, `VaultCasesEmptyProps`, `VaultCasesEmptyCopy` and `VaultCasesEmptyStep`.
+3. Search the exports for any vault-named confirmation or visit card.
+4. List the blocks under `packages/ui/src/blocks`.
 
 **Expected Results:**
 
 * Step 1 finds none of the three.
-* Step 2 finds none of those types.
-* Step 3 finds both booking cards exported from the package entry.
+* Step 2 finds none of the eleven types.
+* Step 3 finds none.
+* Step 4 lists no vault collector block.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `packages/ui/src/index.ts`. It is a statement, not proof.
+
+- **Corrected** - `shared-ui-vault-case-US1-TC37-1` lists the eleven types, finds no vault-named confirmation or visit card (`shared-ui-vault-case-SC-02`) and no vault block under `packages/ui/src/blocks` (`shared-ui-vault-case-SC-03`), dropping the booking cards no requirement names
+- **Contradicted** - none
+- **Uncovered anchors** - none

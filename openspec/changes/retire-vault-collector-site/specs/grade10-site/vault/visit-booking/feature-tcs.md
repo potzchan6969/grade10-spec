@@ -2,6 +2,7 @@
 
 **Status:** in-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
+**Out of suite:** `grade10-site-vault-visit-booking-SC-23` — the owner guard on the visit's calendar file, walked in the vault backend's own route test; a case here traces a journey, and nobody walks a stranger's fetch.
 
 ## grade10-site-vault-visit-booking-US1: Collector books the visit they hand the item over at
 
@@ -182,8 +183,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 offers slots within 14 days, in each shop's own zone, none already past.
-* Step 2 is accepted.
+* Step 1 offers slots in each shop's own zone, none already past.
+* Step 2 is accepted, and its answer names `<shop_1>` and `<slot_1>`.
 * Step 3 reads a visit at `<shop_1>`, in `<slot_1>`.
 * Step 4 holds a letter naming `<shop_1>` and `<slot_1>`.
 
@@ -267,6 +268,101 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-vault-visit-booking-US1-TC6-1: A slot just past its own start is refused at the limit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is at a live status with no live booking.
+* `<slot_1>`, read free at `<shop_1>`, has just reached its own start time on the shop's clock.
+
+**Steps:**
+
+1. Book `<slot_1>` at `<shop_1>` for `<case_1>`.
+2. Ask for the shops and free slots `<case_1>` may book.
+
+**Expected Results:**
+
+* Step 1 is refused as past.
+* Step 2 answers the free slots again, without `<slot_1>`.
+
+---
+
+### grade10-site-vault-visit-booking-US1-TC14-1: A window with no free slot is answered with none
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is at a live status with no live booking.
+* `<shop_1>`'s window holds no free slot.
+
+**Steps:**
+
+1. Ask for `<shop_1>`'s free slots in that window for `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 answers no slot.
+
+---
+
+### grade10-site-vault-visit-booking-US1-TC15-1: A case holding no visit reads beside its lead's
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` holds a live visit at `<shop_1>` in `<slot_1>`; `<case_2>`, the collector's other live case, holds none.
+
+**Steps:**
+
+1. Ask for the collector's own cases.
+
+**Expected Results:**
+
+* Step 1 carries `<case_1>` with its visit at `<shop_1>` in `<slot_1>`.
+* Step 1 carries `<case_2>` with no visit of its own.
+
+---
+
 ## grade10-site-vault-visit-booking-US3: Collector moves a visit they cannot make
 
 **As a** collector,
@@ -310,6 +406,40 @@ whether I moved it or the shop did,
 * Step 3 is accepted.
 * Step 4 reads the visit at `<shop_2>`, in `<slot_2>`.
 * Step 5 holds a letter naming the moved visit.
+
+---
+
+### grade10-site-vault-visit-booking-US3-TC2-1: Calling the visit off leaves the case where it stood
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-03
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is at `offer_made` on the financed lane, with a visit at `<shop_1>` in `<slot_1>`.
+
+**Steps:**
+
+1. Cancel `<case_1>`'s visit as an act on the collector's own case.
+2. Ask for the collector's own read of `<case_1>`.
+3. Book `<slot_2>` at `<shop_1>` for `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads `<case_1>` at `offer_made`, with its offer and item as before and no live visit.
+* Step 3 is accepted.
 
 ---
 
@@ -493,7 +623,7 @@ the visit added to my phone's calendar,
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-visit-booking-US-04
 
 **Pre-conditions:**
@@ -503,25 +633,27 @@ the visit added to my phone's calendar,
 
 **Steps:**
 
-1. Ask for the calendar file of `<case_1>`'s visit.
-2. Open the file in a phone's calendar.
+1. Ask for the collector's own read of `<case_1>`.
+2. Ask for the calendar file of `<case_1>`'s visit.
+3. Open the file in a phone's calendar.
 
 **Expected Results:**
 
-* Step 1 serves one calendar file.
-* Step 2 shows one entry at `<shop_1>`, in `<slot_1>`.
+* Step 1 carries the booking, `<shop_1>` and `<slot_1>`.
+* Step 2 serves one calendar file naming `<shop_1>`, its address and `<slot_1>`.
+* Step 3 shows one entry at `<shop_1>`, in `<slot_1>`.
 
 ---
 
-### grade10-site-vault-visit-booking-US4-TC15-1: Another collector is not served the calendar file
+### grade10-site-vault-visit-booking-US4-TC8-1: A stale cached visit is repaired against the diary
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** integration
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
@@ -530,14 +662,144 @@ the visit added to my phone's calendar,
 
 **Pre-conditions:**
 
-* customer A holds `<case_1>`, with a visit at `<shop_1>` in `<slot_1>`.
-* customer B holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The diary's own record of `<case_1>`'s visit disagrees with the case's cached copy.
 
 **Steps:**
 
-1. As customer B, ask for the calendar file of `<case_1>`'s visit.
+1. Ask for the collector's own read of `<case_1>`.
 
 **Expected Results:**
 
-* Step 1 is refused; no file is served.
-* The response names neither `<shop_1>` nor `<slot_1>`.
+* Step 1 reads the diary's own slot.
+* The case's cached copy is repaired to match it.
+* No action is taken on the stale value.
+
+---
+
+### grade10-site-vault-visit-booking-US4-TC10-1: An ended case's visit reads cancelled or a no-show
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` has a live booking.
+
+**Test data:**
+
+| Case ending | Visit state before ending | Outcome |
+| --- | --- | --- |
+| Cancelled | Still ahead | Visit reads cancelled |
+| Forfeited | Already past | Visit reads a no-show |
+
+**Steps:**
+
+1. End `<case_1>` as <case ending>, its visit <visit state before ending>.
+2. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* The visit reads as the row's outcome.
+* The case keeps the visit's record; nothing is cleared.
+
+---
+
+### grade10-site-vault-visit-booking-US4-TC16-1: A booked case reads its lane and where the identity stands
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is on the row's lane, with a visit at `<shop_1>` in `<slot_1>`, and the collector's identity stands as the row says.
+
+**Test data:**
+
+| Lane | Identity | Step 1 reads |
+| --- | --- | --- |
+| Financed | Verified | The visit, the amount asked for, identity verified |
+| Storage | Not verified | The visit, no amount asked for, identity not verified |
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 reads as the row says.
+
+---
+
+### grade10-site-vault-visit-booking-US4-TC17-1: A case the diary never booked is refused the calendar file
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-04
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's case, and no visit was ever booked on it.
+
+**Steps:**
+
+1. Ask for the calendar file of `<case_1>`'s visit.
+
+**Expected Results:**
+
+* Step 1 is refused by name as not found, and no file is served.
+
+## Settled
+
+- **A case with no visit, or a cancelled one** - the calendar file is refused by name as not found for a case the diary never booked, and served as a cancellation for a called-off visit (Q23)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`book`, `slots`, `detail`, `mine`) and `routes/visit.ts` with its test. It is a statement, not proof.
+
+- **Raised, folded into spec** - a case the diary never booked is refused the file, as `grade10-site-vault-visit-booking-SC-32` under the calendar requirement, cited in task 2.6
+- **Raised, escalated** - the file's answer with no visit, landed as Q23
+- **Rejected** - `grade10-site-vault-visit-booking-US4-TC15-1`, a stranger's fetch of the file: `grade10-site-vault-visit-booking-SC-23` is out of suite in the durable header, decided by the route test, and stays so
+- **Revised** - `grade10-site-vault-visit-booking-US1-TC6-1`, `grade10-site-vault-visit-booking-US4-TC8-1`, `grade10-site-vault-visit-booking-US4-TC10-1` read and book through the API, keeping `<v>`
+- **Joined** - `grade10-site-vault-visit-booking-SC-15` into `grade10-site-vault-visit-booking-US1-TC11-1`; `grade10-site-vault-visit-booking-SC-29` into `grade10-site-vault-visit-booking-US1-TC12-1`; `grade10-site-vault-visit-booking-SC-27`, `-SC-31` into `grade10-site-vault-visit-booking-US3-TC1-1`; `grade10-site-vault-visit-booking-SC-20`, `-SC-22` into `grade10-site-vault-visit-booking-US4-TC14-1`
+- **Corrected** - `grade10-site-vault-visit-booking-US1-TC11-1` reads the shop and slot on the booking's answer and drops the 14-day window no requirement states; `grade10-site-vault-visit-booking-US4-TC14-1` reads the booking back and the shop's address on the file, and plans manual beside automation for the phone
+- **Added by QA2** - `grade10-site-vault-visit-booking-US1-TC14-1` for `grade10-site-vault-visit-booking-SC-28`; `grade10-site-vault-visit-booking-US1-TC15-1` for `grade10-site-vault-visit-booking-SC-30`; `grade10-site-vault-visit-booking-US3-TC2-1` for `grade10-site-vault-visit-booking-SC-21`; `grade10-site-vault-visit-booking-US4-TC16-1` for `grade10-site-vault-visit-booking-SC-16` to `-SC-19`; `grade10-site-vault-visit-booking-US4-TC17-1` for `grade10-site-vault-visit-booking-SC-32`
+- **Contradicted** - none
+- **Uncovered anchors** - none
+- **Still walking a removed screen** - automated `grade10-site-vault-visit-booking-US1-TC2-1`, `-US1-TC3-1`, `-US1-TC4-1`, `-US1-TC8-1`, `-US1-TC9-1`, `-US4-TC2-1`, `-US4-TC6-1`, `-US4-TC7-1`, `-US4-TC12-1`, `-US4-TC13-1`

@@ -49,6 +49,8 @@ page of their cases Your data answers for.
   a read of that document, and the download SHALL write one entry on the
   service's audit trail naming who took it, when, and how many documents it
   held.
+- **Signed in** - the download SHALL be refused to a request carrying no
+  session, and no document SHALL be served.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-26 - The download carries every case's sealed documents
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector takes their own signed papers without opening each case in turn
@@ -81,3 +83,10 @@ page of their cases Your data answers for.
 - **WHEN** they take the download
 - **THEN** each of the three is recorded as a read, and one entry on the audit
   trail names who took it, when, and that it held three documents
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-38 - The download is refused to a request with no session
+**Serves:** grade10-site-vault-documents-and-signing-US-05 - nobody takes a collector's signed papers without being that collector
+
+- **GIVEN** collectors holding sealed documents in the vault
+- **WHEN** a request carrying no session asks for the download
+- **THEN** it is refused and no document is served

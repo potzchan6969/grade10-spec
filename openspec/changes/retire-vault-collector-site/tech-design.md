@@ -45,7 +45,7 @@ page drew.
   stories that import it
 - **The negative contract** - one test in `packages/ui/src/index.test.ts`
   reads the public entry and finds none of the three components or eleven
-  types (`grade10-shared-ui-vault-case-SC-01`, `-SC-02`, `-SC-03`). It lands
+  types (`shared-ui-vault-case-SC-01`, `-SC-02`, `-SC-03`). It lands
   first in its own commit and fails until the block goes
 - **Catalog keys removed** - from `messages/shared/{en,ko,zh-Hans,zh-Hant}/vault.json`:
   `title`, `intro`, `packetStatus`, `event`, `list`, `lane`, `request`,
@@ -72,8 +72,8 @@ and the PDFs name template ids, so no key behind a mail or a document moves.
 - **Pages and routes** - `CasePage`, `VaultPage`, `VaultSurface`,
   `VerifyPage`, `YourDataPage` and the routes `vault`, `vault-new`,
   `vault-case`, `vault-verify`, `your-data`. `surfaces.ts` keeps only the
-  ceremony in the vault's set (`grade10-site-site-carried-surfaces-SC-19`,
-  `-SC-24`, `-SC-28`)
+  ceremony in the vault's set (`grade10-site-site-carried-surfaces-SC-22`,
+  `-SC-26`, `-SC-40`)
 - **The slice** - `packages/vault/frontend` goes whole. `FixtureVaultState`
   and `paths.ts`, which the console also reads, move to
   `packages/vault/admin-frontend/src/core/api`

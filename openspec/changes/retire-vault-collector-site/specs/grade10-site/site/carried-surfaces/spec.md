@@ -226,6 +226,14 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** the other is carried too
 - **AND** where one is withheld the other is withheld with it
 
+#### Scenario: grade10-site-site-carried-surfaces-SC-40 - The collector's vault screens answer not-found on every lane
+**Serves:** grade10-site-site-carried-surfaces-US-06 - the collector who opens an old vault link finds nothing rather than a screen nobody designed
+
+- **GIVEN** a build made for any lane, the vault's set carried or not
+- **WHEN** a collector opens the vault's case list, its request, a case's page, the identity check or Your data
+- **THEN** each is not found
+- **AND** where the vault's set is carried, the signing ceremony still answers
+
 ### Requirement: Where a product is carried it behaves as it is specified to
 
 Carrying decides whether a product is there, never how it behaves.

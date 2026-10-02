@@ -72,7 +72,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the three waiting products' surfaces.
+* The site under test is a build that carries none of the five waiting products' surfaces.
 
 **Test data:**
 
@@ -205,7 +205,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries all three waiting products' surfaces.
+* The site under test is <grade10 staging site url>, a build that carries all five waiting products' surfaces.
 * customer(signed in, holding a vault case waiting for a signature and a booked visit) is on <grade10 staging site url>.
 
 **Test data:**
@@ -277,7 +277,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries all three waiting products' surfaces.
+* The site under test is <grade10 staging site url>, a build that carries all five waiting products' surfaces.
 * customer(signed in) is on <grade10 staging site url>.
 
 **Steps:**
@@ -288,7 +288,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The header names the store and booking a visit, carries a cart control, and holds no vault item.
-* The footer carries a shop column, and the front door carries a button and a card for the store and for booking.
+* The footer carries a shop column, and the front door carries a button and a card for the store, and none for booking or the vault.
 * Nothing in the header, the footer or the front door opens a vault address.
 * Step 2 renders booking a visit.
 
@@ -311,7 +311,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the three waiting products' surfaces.
+* The site under test is a build that carries none of the five waiting products' surfaces.
 * A vault case waiting for a signature holds a live signing token for that lane.
 
 **Steps:**
@@ -319,12 +319,12 @@ Runs once per row of **Test data**.
 1. Add that build's lane to the stated list of lanes that carry the vault.
 2. Rebuild and deploy the site to that lane with no other edit.
 3. Open <the vault signing url> with that case's token on that lane.
-4. Fetch <grade10 vault url>, <grade10 store url> and <grade10 booking url> on the same lane.
+4. Fetch <grade10 store url>, <grade10 booking url>, <grade10 profile url> and <grade10 membership url> on the same lane.
 
 **Expected Results:**
 
 * Step 3 renders the signing ceremony.
-* Step 4 returns status 404 for all three.
+* Step 4 returns status 404 for all four.
 * No surface outside the vault's set changed.
 
 ---
@@ -371,3 +371,20 @@ Runs once per row of **Test data**.
 
 * Step 1 returns the row's status.
 * Step 2 renders what the row names.
+
+## Settled
+
+- **The front door on a lane carrying the vault** - no vault button or card on any lane; the ceremony is reached by the link staff hand over (Q20)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `apps/frontend/grade10/src/surfaces.ts` and `MarketingPage.tsx`. It is a statement, not proof.
+
+- **Raised, folded into spec** - the collector's vault screens not found on every lane, from `grade10-site-site-carried-surfaces-US6-TC14-1` and `grade10-site-site-carried-surfaces-US8-TC9-1`, as `grade10-site-site-carried-surfaces-SC-40`; tasks 3.1, 3.2 and the tech design now cite `grade10-site-site-carried-surfaces-SC-22`, `-SC-26` and `-SC-40` in place of the store's and booking's scenarios
+- **Raised, escalated** - the front door's vault card, landed as Q20
+- **Raised, rejected** - none
+- **Joined** - `grade10-site-site-carried-surfaces-SC-28` into `grade10-site-site-carried-surfaces-US6-TC1-2`; `grade10-site-site-carried-surfaces-SC-25` into `grade10-site-site-carried-surfaces-US8-TC3-2`
+- **Corrected** - `grade10-site-site-carried-surfaces-US8-TC5-2` finds a button and card for the store alone on the front door; `grade10-site-site-carried-surfaces-US8-TC6-2` fetches the store, booking, the profile and membership, the four sets `grade10-site-site-carried-surfaces-SC-27` keeps shut, and no vault address; both count five waiting products
+- **Added by QA2** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none

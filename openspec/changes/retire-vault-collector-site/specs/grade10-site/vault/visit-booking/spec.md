@@ -112,6 +112,9 @@ off the calendar.
 **The messages** - the message telling the collector a visit was booked, moved
 or called off SHALL carry that visit's file with it.
 
+**No visit** - a case the diary holds no visit for SHALL be refused the file
+by name, as not found, and no file SHALL be served.
+
 #### Scenario: grade10-site-vault-visit-booking-SC-22 - Add to calendar serves the visit
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector takes the visit into the calendar they keep their days in
 
@@ -147,6 +150,13 @@ or called off SHALL carry that visit's file with it.
 
 - **WHEN** the collector is told their visit was booked, moved or called off
 - **THEN** that message carries the visit's calendar file
+
+#### Scenario: grade10-site-vault-visit-booking-SC-32 - A case never booked is refused the file
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector who asks for a visit that was never booked is told there is none rather than handed an empty day
+
+- **GIVEN** a case the diary never booked a visit for
+- **WHEN** its owner asks for the visit's calendar file
+- **THEN** it is refused by name as not found and no file is served
 
 ### Requirement: A move takes from the shops and slots a first booking takes from
 

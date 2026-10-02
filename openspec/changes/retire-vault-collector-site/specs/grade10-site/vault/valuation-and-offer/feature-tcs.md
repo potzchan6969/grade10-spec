@@ -251,25 +251,26 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>`.
+* `<case_1>` is the collector's financed case, valued at `<valuation>`, holding `<offer_1>`, with `<visit_1>` booked on it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
+| `<valuation>` | 2,500,000 HKD minor units |
 | `<offer_1>` | A live offer of 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term, open 7 days from when it was made |
 
 **Steps:**
 
 1. Ask for the collector's own read of `<case_1>`.
-2. Accept `<offer_1>` as an act on the collector's own case.
+2. Accept `<offer_1>` as an act on the collector's own case, naming it and the instant of step 1.
 3. Ask for the collector's own read of `<case_1>` again.
 
 **Expected Results:**
 
-* Step 1 reads the principal, the interest for the whole term, the term in days, the total to repay, what a late day costs and the expiry, and no due date.
-* Step 2 is accepted.
-* Step 3 reads `<offer_1>` accepted, the papers still to sign, and nothing owed.
+* Step 1 reads the principal, the interest for the whole term, the term in days, the total to repay, what a late day costs, the day to answer by and `<valuation>`, and no due date.
+* Step 2 is accepted, and its answer carries `<case_1>` as `accepted`.
+* Step 3 reads `<case_1>` `accepted`, `<offer_1>` accepted, `<visit_1>` as it was, no other visit booked, and nothing owed.
 
 ---
 
@@ -291,7 +292,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>`.
+* `<case_1>` is the collector's financed case, holding `<offer_1>`, with `<visit_1>` booked on it.
 
 **Test data:**
 
@@ -307,8 +308,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 is accepted.
-* Step 2 reads `<offer_1>` closed as declined.
-* Step 2 reads `<case_1>` open, at the status it held before step 1.
+* Step 2 reads `<offer_1>` closed as declined by the collector.
+* Step 2 reads `<case_1>` `under_valuation`, with `<visit_1>` still booked.
 
 ---
 
@@ -434,6 +435,72 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-vault-valuation-and-offer-US2-TC17-1: The same accept sent twice lands once
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's financed case, holding `<offer_1>`, read at `<read instant>`.
+
+**Steps:**
+
+1. Accept `<offer_1>`, naming `<read instant>`.
+2. Send the same accept again.
+3. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is accepted, and its answer carries `<case_1>` as `accepted`.
+* Step 2 is refused by name.
+* Step 3 reads `<case_1>` `accepted` once, with one accepted `<offer_1>` and nothing else changed by step 2.
+
+---
+
+### grade10-site-vault-valuation-and-offer-US2-TC18-1: The day to answer by reads on own cases only while the offer is open
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's financed case, holding `<offer_1>`, which expires at `<expiry>`.
+
+**Steps:**
+
+1. With the clock 1 day before `<expiry>`, ask for the collector's own cases.
+2. With the clock 1 minute after `<expiry>`, ask for the collector's own cases again.
+
+**Expected Results:**
+
+* Step 1 carries `<case_1>` with `<expiry>` as its day to answer by.
+* Step 2 carries `<case_1>` with no day to answer by.
+
+---
+
 ## grade10-site-vault-valuation-and-offer-US5: Collector reads and answers an offer that replaced the last
 
 **As a** collector whose offer was replaced by a new one,
@@ -548,6 +615,7 @@ withdrawn.
 
 * Step 2 reads `<offer_1>` closed, replaced by a new offer.
 * Step 2 reads `<offer_2>`'s terms as the live offer.
+* Step 2 reads the case's history carrying the day `<offer_1>` closed.
 
 ---
 
@@ -582,3 +650,22 @@ withdrawn.
 * Step 1 is refused by name.
 * Step 2 is accepted.
 * Step 3 reads `<offer_2>` accepted and `<offer_1>` still closed.
+
+## Settled
+
+- **A decline after the offer ran out** - refused by name as an offer that ran out, as an accept is (Q22)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`accept`, `decline`, `detail`, `mine`). It is a statement, not proof.
+
+- **Raised, folded into spec** - none
+- **Raised, escalated** - a decline after expiry, landed as Q22; `grade10-site-vault-valuation-and-offer-US2-TC14-1`'s decline row already reads it
+- **Raised, rejected** - none
+- **Revised** - none: every durable case walking the case page is automated
+- **Joined** - `grade10-site-vault-valuation-and-offer-SC-21`, `-SC-22` into `grade10-site-vault-valuation-and-offer-US2-TC12-1`; `grade10-site-vault-valuation-and-offer-SC-23` into `grade10-site-vault-valuation-and-offer-US2-TC13-1`; `grade10-site-vault-valuation-and-offer-SC-28` into `grade10-site-vault-valuation-and-offer-US2-TC14-1`; `grade10-site-vault-valuation-and-offer-SC-29` into `grade10-site-vault-valuation-and-offer-US2-TC15-1`; `grade10-site-vault-valuation-and-offer-SC-26` into `grade10-site-vault-valuation-and-offer-US5-TC5-1`; `grade10-site-vault-valuation-and-offer-SC-27` into `grade10-site-vault-valuation-and-offer-US5-TC6-1`
+- **Corrected** - `grade10-site-vault-valuation-and-offer-US2-TC12-1` reads the valuation and the day to answer by, keeps a booked visit as it was, and reads `accepted`, dropping the papers still to sign; `grade10-site-vault-valuation-and-offer-US2-TC13-1` reads `under_valuation` with the visit standing, where it read the status before; `grade10-site-vault-valuation-and-offer-US5-TC5-1` reads the day the replaced offer closed
+- **Added by QA2** - `grade10-site-vault-valuation-and-offer-US2-TC17-1` for `grade10-site-vault-valuation-and-offer-SC-24`; `grade10-site-vault-valuation-and-offer-US2-TC18-1` for `grade10-site-vault-valuation-and-offer-SC-25`
+- **Contradicted** - none
+- **Uncovered anchors** - none
+- **Still walking a removed screen** - automated `grade10-site-vault-valuation-and-offer-US2-TC1-1`, `-US2-TC2-1`, `-US2-TC4-1`, `-US2-TC5-1`, `-US2-TC6-1`, `-US5-TC2-1`, `-US5-TC3-1`

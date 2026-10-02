@@ -2,6 +2,7 @@
 
 **Status:** in-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
+**Out of suite:** grade10-site-vault-case-lifecycle-SC-53 - the vault's transition tests, which see no due row raised by a corrected advance (task 7.1); grade10-site-vault-case-lifecycle-SC-57 - the prepare-documents tests over a fake register answering absent; the console reaches this only while a word is parked (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-59 - the prepare-documents tests over a fake register, where a case with no item id is registered inline; the console reaches this only on a case valued before the vault's deploy (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-61 - the prepare-release tests over a fake register answering retired and unreachable; the console reaches a retired item at release only through a retire between Prepare documents and vaulting (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-30; grade10-site-vault-case-lifecycle-SC-31; grade10-site-vault-case-lifecycle-SC-32; grade10-site-vault-case-lifecycle-SC-33; grade10-site-vault-case-lifecycle-SC-34; grade10-site-vault-case-lifecycle-SC-35; grade10-site-vault-case-lifecycle-SC-36; grade10-site-vault-case-lifecycle-SC-38 - the contracts' standing fold in `packages/vault/contracts/test/standing.test.ts` (task 2.3); the collector's read carries the status and day, and no surface draws the fold
 
 ## grade10-site-vault-case-lifecycle-US1: Collector calls off a request before the item is in the vault
 
@@ -61,20 +62,17 @@ it.
 
 * customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
 * `<case_1>` is the collector's request before the item is in the vault, holding a live offer and a booked visit.
-* `<collector email>` is the collector's mailbox, which the tester reads.
 
 **Steps:**
 
-1. Call off `<case_1>` as an act on the collector's own case.
+1. Call off `<case_1>` as an act on the collector's own case, naming the instant it was last read at.
 2. Ask for the collector's own read of `<case_1>`.
-3. Read `<collector email>`'s inbox.
 
 **Expected Results:**
 
-* Step 1 is accepted.
-* Step 2 reads `<case_1>` cancelled, called off by the collector.
+* Step 1 is accepted, and its answer names the offer it closed and the visit it cancelled.
+* Step 2 reads `<case_1>` cancelled, ended, called off by the collector.
 * Step 2 reads the offer closed and the visit cancelled.
-* Step 3 holds a letter saying the request was called off.
 
 ---
 
@@ -151,6 +149,37 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-vault-case-lifecycle-US1-TC8-1: Calling off a request with nothing open names nothing closed
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the collector's submitted request, with no offer made and no visit booked.
+
+**Steps:**
+
+1. Call off `<case_1>` as an act on the collector's own case.
+
+**Expected Results:**
+
+* Step 1 is accepted, reading `<case_1>` cancelled by the collector.
+* Its answer names no closed offer and no cancelled visit.
+
+---
+
 ## grade10-site-vault-case-lifecycle-US2: Collector who stops answering is not left with an open case
 
 **As a** collector,
@@ -189,6 +218,200 @@ expected at a counter.
 
 * The page prompts booking a visit.
 * The page names the 30-day window before the case ends.
+
+---
+
+### grade10-site-vault-case-lifecycle-US2-TC2-1: A submitted request nobody books a visit for ends on its own
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* <case_6>: the request was submitted and no visit has ever been booked
+  on it.
+
+**Test data:**
+
+| Days since submitted, no visit booked | Case reads |
+| --- | --- |
+| 29 | Still submitted, open |
+| 30 | Expired |
+
+**Steps:**
+
+1. Ask for the collector's own read of <case_6> at the row's day count.
+
+**Expected Results:**
+
+* The case reads the status from the row.
+* At 30 days, the read carries the case as ended by its own clock, with no visit ahead of it.
+
+---
+
+### grade10-site-vault-case-lifecycle-US2-TC3-1: A case waiting to sign with no visit booked ends on its own
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The case in the row has no visit booked since it moved into that
+  state.
+
+**Test data:**
+
+| Case | Days since the move | Case reads |
+| --- | --- | --- |
+| <case_5> terms agreed, no visit | 29 | Still open |
+| <case_5> terms agreed, no visit | 30 | Cancelled |
+| <case_7> ready to sign, nothing executed, no visit | 29 | Still open |
+| <case_7> ready to sign, nothing executed, no visit | 30 | Cancelled |
+
+**Steps:**
+
+1. Ask for the collector's own read of the row's case at the row's day count.
+
+**Expected Results:**
+
+* The case reads the status from the row.
+
+---
+
+### grade10-site-vault-case-lifecycle-US2-TC4-1: A missed visit ends a request that never reached custody
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* <case_8>: a submitted request, one visit was booked, and nobody was
+  at the counter for its slot.
+
+**Test data:**
+
+| Hours since the missed slot | Case reads |
+| --- | --- |
+| under 24 | Still submitted, open, inviting another visit |
+| 24 or more | Expired |
+
+**Steps:**
+
+1. Ask for the collector's own read of <case_8> at the row's elapsed time.
+
+**Expected Results:**
+
+* The case reads the status from the row.
+
+---
+
+### grade10-site-vault-case-lifecycle-US2-TC5-1: A missed visit on a case already in the vault does not end it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* <case_9>: the item is already in the vault, a visit was booked, and
+  nobody was at the counter for its slot, 24 or more hours ago.
+
+**Steps:**
+
+1. Ask for the collector's own read of <case_9>.
+
+**Expected Results:**
+
+* The case reads exactly as it did before the missed slot; nothing
+  reads ended.
+* Only the visit reads missed; <case_9> takes another booking.
+
+---
+
+### grade10-site-vault-case-lifecycle-US2-TC6-1: A case with terms agreed and no visit ahead reads the day its clock calls it off
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_5>`'s terms were agreed on `<agreed day>`, with no visit ahead of it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<agreed day>` | 2 October, Asia/Hong_Kong |
+| `<call-off day>` | 1 November, Asia/Hong_Kong: 30 days after `<agreed day>` |
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_5>`.
+
+**Expected Results:**
+
+* Step 1 reads `<case_5>` as waiting on the collector.
+* Step 1 carries what `<call-off day>` is worked out from: the case's own 30-day clock from `<agreed day>`.
 
 ---
 
@@ -376,9 +599,10 @@ Runs once per row of **Test data**.
 | Ending | How it ended | The read carries |
 | --- | --- | --- |
 | Declined | Staff declined it under valuation, giving `<staff reason>` | `<staff reason>`, word for word |
-| Cancelled | Staff called it off before the item was in the vault | That staff called it off, and when |
-| Expired | No visit was booked before its clock ran out | Which clock ran out |
-| Forfeited | Staff forfeited it after a notice's date to pay by passed | The figure the item settled, the day the notice was written and its date to pay by |
+| Cancelled | Staff called it off before the item was in the vault, while it held a live offer and a booked visit | That staff called it off, the offer that closed and the visit cancelled with it |
+| Expired | No visit was booked before its clock ran out | The clock with no visit ahead of it |
+| Expired | Its booked visit was missed, before the item was in the vault | The clock of the missed visit |
+| Forfeited | Staff forfeited it after a notice's date to pay by passed | The figure the item settled, the day the notice was written and its date to pay by; its signed agreements still readable |
 
 **Steps:**
 
@@ -387,7 +611,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 reads `<case_1>` ended as the row's ending.
+* Step 2 reads `<case_1>` ended as the row's ending, with the day it closed.
 * Step 2 carries what the row's read carries.
 
 ---
@@ -765,13 +989,15 @@ Runs once per row of **Test data**.
 2. Ask for the collector's own read of `<case_1>`.
 3. Ask for the item back on `<case_1>` again.
 4. Ask for the collector's own read of `<case_1>` again.
+5. Book `<slot_1>` at `<shop_1>`, a free slot, for `<case_1>`'s pickup.
 
 **Expected Results:**
 
 * Step 1 is accepted.
-* Step 2 reads that the item was asked back, with the one thing to do next.
-* Step 2 still reads the item in the vault.
-* Step 4 reads one ask, not two.
+* Step 2 reads the ask, with the day it was recorded; the item is still in the vault.
+* Step 3 answers with `<case_1>`, and records nothing.
+* Step 4 reads one ask, with the same day as step 2.
+* Step 5 is accepted.
 
 ---
 
@@ -840,12 +1066,12 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Fact | How `<case_1>` meets it |
-| --- | --- |
-| The offer ran out | Its live offer passed its own expiry with no answer |
-| The offer was declined | The collector declined its live offer |
-| The offer was replaced | Staff wrote a counter-offer over its live offer |
-| The visit was missed | Its item is in the vault, and its visit was closed as missed |
+| Fact | How `<case_1>` meets it | The read carries | Status |
+| --- | --- | --- | --- |
+| The offer ran out | Its live offer passed its own expiry yesterday with no answer, and no sweep has closed it | The offer that closed, its amount and the day it ran out | `offer_made` |
+| The offer was declined | The collector declined its live offer, with a visit booked | The figure declined and the day; the booked visit still standing | `under_valuation` |
+| The offer was replaced | Staff wrote a counter-offer over its live offer | The offer that closed and its day, beside the live offer | `offer_made` |
+| The visit was missed | Its item is in the vault, and its visit was closed as missed | The slot that was missed | `vaulted` |
 
 **Steps:**
 
@@ -854,8 +1080,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 names the row's fact, with the one thing to do next.
-* Step 2 reads `<case_1>` at the status it held before the fact.
+* Step 2 names the row's fact and carries what the row's read carries.
+* Step 2 reads `<case_1>` at the row's status.
 * Step 2 does not read `<case_1>` as ended.
 
 ---
@@ -890,3 +1116,196 @@ Runs once per row of **Test data**.
 
 * Step 1 is refused, and the response carries none of `<case_1>`'s facts.
 * Step 1's refusal matches step 2's; nothing tells the two apart.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC9-2: Asking for the item back is refused once the case has already moved on
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector read `<case_4>` at `<read instant>`: the item is in the vault, storage lane, no loan.
+* Since `<read instant>`, staff moved `<case_4>` on.
+
+**Steps:**
+
+1. Ask for the item back on `<case_4>`, naming `<read instant>`.
+2. Ask for the collector's own read of `<case_4>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name, as a case that moved.
+* Step 2 reads `<case_4>` where staff moved it, with no ask for the item back.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC11-1: Asking for the item back is recorded once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* The collector is signed in and on <grade10 vault case page> for
+  <case_4>: the item is in the vault, storage lane, no loan, no ask
+  standing.
+
+**Steps:**
+
+1. Click Ask for it back.
+2. Read the confirmation.
+3. Click the confirming action.
+
+**Expected Results:**
+
+* The confirmation reads that the item leaves on a pickup visit against
+  a signed release.
+* The ask reads on the case with the day it was recorded.
+* Ask for it back is no longer offered; Book a pickup visit is.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC13-1: Reading a derived fact writes nothing on the case
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* <case_18>: the offer's own expiry has passed, unanswered, and no
+  sweep has closed it.
+
+**Steps:**
+
+1. Ask for the collector's own read of <case_18>.
+2. Ask for it again.
+3. Read the case's history in the second answer.
+
+**Expected Results:**
+
+* Both reads say the offer ran out and leave the case open for another
+  offer.
+* Both reads carry the same status, `offer_made`.
+* The history carries no entry for either read.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC14-1: A case meeting two facts reads the later one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* <case_20>: the offer ran out on Monday and the booked visit was
+  closed as missed on Wednesday.
+
+**Steps:**
+
+1. Ask for the collector's own read of <case_20>.
+2. Book a free slot for <case_20>.
+
+**Expected Results:**
+
+* Step 1 reads the missed visit, the later of the two, as the fact.
+* Step 1's history carries the offer that ran out, not as the fact.
+* Step 2 is accepted.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC19-1: A call-off read before the counter moved the case is refused as moved
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The collector read `<case_1>` at `<read instant>`, holding a live offer.
+* Since `<read instant>`, staff accepted the offer at the counter.
+
+**Steps:**
+
+1. Call off `<case_1>`, naming `<read instant>`.
+2. Ask for the collector's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 is refused by name, as a case that moved.
+* Step 2 reads `<case_1>` accepted, as staff left it, not cancelled.
+
+## Settled
+
+- **A second ask for the item back** - answered with the case as the first ask left it, recording nothing (Q21)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`cancel`, `requestRelease`, `detail`, `mine`), the contracts' standing fold and the ended reasons. It is a statement, not proof.
+
+- **Raised, folded into spec** - none
+- **Raised, escalated** - a second ask for the item back, landed as Q21, answered as the first
+- **Raised, rejected** - none
+- **Revised** - `grade10-site-vault-case-lifecycle-US2-TC2-1`, `grade10-site-vault-case-lifecycle-US2-TC3-1`, `grade10-site-vault-case-lifecycle-US2-TC4-1`, `grade10-site-vault-case-lifecycle-US2-TC5-1`, `grade10-site-vault-case-lifecycle-US5-TC13-1`, `grade10-site-vault-case-lifecycle-US5-TC14-1` read the collector's own case through the API, keeping `<v>`; `grade10-site-vault-case-lifecycle-US5-TC13-1` traces `grade10-site-vault-case-lifecycle-US-05`, since the delta's Feature set carries no `Derived at the read` group; `grade10-site-vault-case-lifecycle-US5-TC9-2` drops the withheld button and is refused by name as moved
+- **Deprecated as duplicates** - `grade10-site-vault-case-lifecycle-US5-TC11-1`; `grade10-site-vault-case-lifecycle-US5-TC15-1` holds its purpose
+- **Joined** - `grade10-site-vault-case-lifecycle-SC-16`, `-SC-17` into `grade10-site-vault-case-lifecycle-US1-TC5-1`; `grade10-site-vault-case-lifecycle-SC-39` into `grade10-site-vault-case-lifecycle-US1-TC7-1` and `grade10-site-vault-case-lifecycle-US5-TC18-1`; `grade10-site-vault-case-lifecycle-SC-20` to `-SC-26` into `grade10-site-vault-case-lifecycle-US4-TC6-1`; `grade10-site-vault-case-lifecycle-SC-18`, `-SC-27` into `grade10-site-vault-case-lifecycle-US5-TC15-1`; `grade10-site-vault-case-lifecycle-SC-40` into `grade10-site-vault-case-lifecycle-US5-TC17-1`
+- **Corrected** - `grade10-site-vault-case-lifecycle-US1-TC5-1` names the read instant and drops the letter; `grade10-site-vault-case-lifecycle-US4-TC6-1` adds a cancel with an offer and a visit, both clocks, a forfeit with its agreements, and the day each closed; `grade10-site-vault-case-lifecycle-US5-TC15-1` replays the ask, recording nothing, and books the pickup; `grade10-site-vault-case-lifecycle-US5-TC17-1` carries each row's status
+- **Added by QA2** - `grade10-site-vault-case-lifecycle-US1-TC8-1` for `grade10-site-vault-case-lifecycle-SC-37`; `grade10-site-vault-case-lifecycle-US2-TC6-1` for `grade10-site-vault-case-lifecycle-SC-28`; `grade10-site-vault-case-lifecycle-US5-TC19-1` for `grade10-site-vault-case-lifecycle-SC-19`
+- **Out of suite** - `grade10-site-vault-case-lifecycle-SC-30` to `-SC-36` and `-SC-38`, the contracts' standing fold (task 2.3), named in the header
+- **Contradicted** - none
+- **Uncovered anchors** - none
+- **Still walking a removed screen** - automated `grade10-site-vault-case-lifecycle-US1-TC1-1`, `-US1-TC3-1`; actual `-US1-TC4-1`, `-US6-TC1-1`, `-US6-TC2-1`, `-US6-TC4-1`, `-US6-TC5-1`

@@ -83,6 +83,118 @@ money I have already returned.
 
 ---
 
+### grade10-site-vault-loan-and-settlement-US2-TC9-1: Total interest owed never passes the brand's accrual ceiling of the principal
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The case is `active`, its payout of 10,000,000 (HKD) at 3% for 30 days
+  recorded, advanced 1 September, due 1 October, with no repayment made and
+  a very large number of days now overdue
+
+**Steps:**
+
+1. Ask for the borrower's own read of the case, long past the point where
+   the term's and overdue interest together would otherwise exceed the
+   principal.
+
+**Expected Results:**
+
+* The amount owed reads at most 20,000,000 (HKD) — the term's interest and
+  the overdue interest together never passing 100% of the principal
+
+---
+
+## grade10-site-vault-loan-and-settlement-US4: Operator takes the collateral only after warning the borrower
+
+**As a** member of shop staff,
+**I want** to have to warn the borrower in writing and wait out the date I
+gave them,
+**so that** nobody's property is taken without notice and a chance to pay.
+
+### grade10-site-vault-loan-and-settlement-US4-TC2-2: A forfeiture notice fixes the cure date and states nothing can be taken before it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-loan-and-settlement-US-04
+
+**Pre-conditions:**
+
+* The case is `active`, past its due date, with no notice sent yet
+* admin(shop staff) is on the Custody tab of the case
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+
+**Steps:**
+
+1. Send a forfeiture notice.
+2. As the borrower, ask for their own read of the case.
+
+**Expected Results:**
+
+* The notice names the day it was written, a date to pay by at least 14
+  days off, and that nothing can be taken before that date
+* The borrower's read carries the same day written and the same date to pay
+  by
+
+---
+
+### grade10-site-vault-loan-and-settlement-US4-TC7-1: A brand that shortens its notice period does not move the date the borrower was given
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-04
+
+**Pre-conditions:**
+
+* The case is `active`, past its due date, with a forfeiture notice sent on
+  1 November naming 15 November as the date to pay by
+* The brand's notice period is shortened to 7 days after that notice was
+  sent
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+
+**Steps:**
+
+1. Ask for the borrower's own read of the case.
+
+**Expected Results:**
+
+* The read carries 15 November as the date to pay by, the date the notice
+  itself named
+* No date recomputed from the brand's shortened period is carried
+
+---
+
 ## grade10-site-vault-loan-and-settlement-US5: Borrower knows where to send the money
 
 **As a** borrower with a loan running,
@@ -229,6 +341,156 @@ Runs once per row of **Test data**.
 
 * No how-to-pay block shows
 * No account, FPS id or transfer reference is named anywhere on the page
+
+---
+
+### grade10-site-vault-loan-and-settlement-US5-TC2-1: The same how-to-pay block appears in every money email on the case
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The case is `active`, its six-character reference issued, the brand's FPS
+  id and bank account set
+* An event of the row's kind fires on the case
+
+**Test data:**
+
+| Kind |
+| --- |
+| payout_recorded |
+| repayment_due_soon |
+| repayment_overdue |
+| repayment_recorded |
+| payout_reversed |
+| repayment_reversed |
+| loan_repaid |
+| forfeited |
+
+**Steps:**
+
+1. Ask for the borrower's own read of the case.
+2. Send the row's message.
+3. Open the message the borrower received.
+
+**Expected Results:**
+
+* The message names the same FPS id, bank account and case reference as
+  step 1's how-to-pay block
+
+---
+
+### grade10-site-vault-loan-and-settlement-US5-TC6-1: The borrower's read of a live loan carries the how-to-pay block and how long the figure holds
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan, reference `<case reference>`, on a brand whose FPS id and bank account are set; due at `<due instant>`.
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 carries the lender's registered name as payee, its FPS id, its bank account and `<case reference>` as the transfer reference.
+* Step 1 carries `<due instant>`, the instant the read was made at, and what each further started day adds.
+
+---
+
+### grade10-site-vault-loan-and-settlement-US5-TC7-1: A stored item with no live loan carries no how-to-pay block
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_2>` is the collector's storage case, its item in the vault, with no loan.
+
+**Steps:**
+
+1. Ask for the collector's own read of `<case_2>`.
+
+**Expected Results:**
+
+* Step 1 carries no block naming a payee, an account or a reference.
+
+---
+
+### grade10-site-vault-loan-and-settlement-US5-TC8-1: An unset FPS id reads as a placeholder off production and as no block on it
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Pre-conditions:**
+
+* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* `<case_1>` is the borrower's live loan, advanced while the FPS id and bank account were set; the FPS id is since cleared on the row's environment.
+
+**Test data:**
+
+| Environment | Step 1 carries |
+| --- | --- |
+| Staging | The block, a marked placeholder in place of the FPS id |
+| Production | No block: no payee, no FPS id, no bank account and no transfer reference |
+
+**Steps:**
+
+1. Ask for the borrower's own read of `<case_1>`.
+
+**Expected Results:**
+
+* Step 1 carries what the row says.
 
 ---
 
@@ -573,8 +835,8 @@ Runs once per row of **Test data**.
 | Repayments recorded | The read lists |
 | --- | --- |
 | None | No repayment; 10,300,000 outstanding |
-| 3,000,000 by FPS, value-dated 10 September | That repayment, 10 September, FPS, balance after 7,300,000 |
-| 3,000,000 by FPS, value-dated 10 September; 2,000,000 in cash at the counter, value-dated 20 September | Both: 10 September, FPS, 7,300,000; then 20 September, cash, 5,300,000 |
+| 3,000,000 by FPS, value-dated 10 September, recorded 11 September | That repayment: 3,000,000, FPS, value date 10 September, recorded 11 September, balance after 7,300,000 |
+| 2,000,000 in cash at the counter, value-dated and recorded 20 September; then 3,000,000 by FPS, value-dated 10 September, recorded 21 September | Both: 3,000,000, FPS, 10 September, recorded 21 September, 7,300,000; then 2,000,000, cash, 20 September, recorded 20 September, 5,300,000 |
 
 **Steps:**
 
@@ -583,7 +845,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 lists what the row's read lists, in value-date order.
+* Step 2 lists what the row's read lists, in value-date order, whatever order they were recorded in.
 * Each balance after equals 10,300,000 less every repayment value-dated on or before it.
 
 ---
@@ -652,7 +914,7 @@ Runs once per row of **Test data**.
 | Day of the read | The read carries |
 | --- | --- |
 | 20 September | Reminders to come on 24 September and 30 September |
-| 10 October | Reminders sent 24 September, 30 September and 8 October; the next on 15 October; a written notice may follow |
+| 10 October | Reminders sent 24 September, 30 September and 8 October; the next on 15 October; no notice and no date to pay by |
 
 **Steps:**
 
@@ -697,5 +959,24 @@ Runs once per row of **Test data**.
 
 * Step 2 reads the notice written on 10 October.
 * Step 2 reads the date to pay by: 24 October, the notice day plus 14 days.
-* Step 2 reads that nothing can be taken before 24 October.
 * Step 2 carries no reminder to come.
+
+## Settled
+
+- **How to pay on the borrower's read** - a live loan's read carries the block, the same values the money messages carry; no other case carries it, and in production an unset value carries none (Q19)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`detail`), `cases/wire.ts` and `howToPay`. It is a statement, not proof.
+
+- **Raised, folded into spec** - none
+- **Raised, escalated** - the block on the borrower's read, landed as Q19
+- **Raised, rejected** - none
+- **Revised** - `grade10-site-vault-loan-and-settlement-US2-TC9-1`, `grade10-site-vault-loan-and-settlement-US4-TC7-1`, `grade10-site-vault-loan-and-settlement-US5-TC2-1` read through the API, keeping `<v>`; `grade10-site-vault-loan-and-settlement-US4-TC2-2` drops the page's nothing-can-be-taken line, the borrower's read carrying the same day and date
+- **Joined** - `grade10-site-vault-loan-and-settlement-SC-27` to `-SC-29` into `grade10-site-vault-loan-and-settlement-US6-TC10-1` and `grade10-site-vault-loan-and-settlement-US6-TC11-1`; `grade10-site-vault-loan-and-settlement-SC-30`, `-SC-48`, `-SC-34` into `grade10-site-vault-loan-and-settlement-US6-TC12-1`; `grade10-site-vault-loan-and-settlement-SC-31`, `-SC-32` into `grade10-site-vault-loan-and-settlement-US6-TC13-1`; `grade10-site-vault-loan-and-settlement-SC-33` into `grade10-site-vault-loan-and-settlement-US4-TC7-1`; `grade10-site-vault-loan-and-settlement-SC-36` into `grade10-site-vault-loan-and-settlement-US5-TC2-1`
+- **Corrected** - `grade10-site-vault-loan-and-settlement-US6-TC10-1` reads the day each repayment was recorded and orders by value date against the order recorded; `grade10-site-vault-loan-and-settlement-US6-TC12-1` drops the notice that may follow and reads none past due; `grade10-site-vault-loan-and-settlement-US6-TC13-1` drops the nothing-can-be-taken read, which the letter states
+- **Added by QA2** - `grade10-site-vault-loan-and-settlement-US5-TC6-1` for `grade10-site-vault-loan-and-settlement-SC-35`; `grade10-site-vault-loan-and-settlement-US5-TC7-1` for `grade10-site-vault-loan-and-settlement-SC-37`; `grade10-site-vault-loan-and-settlement-US5-TC8-1` for `grade10-site-vault-loan-and-settlement-SC-38` and `-SC-47`
+- **Out of suite** - `grade10-site-vault-loan-and-settlement-SC-52`, the counter's refusal, walked by the durable `grade10-site-vault-loan-and-settlement-US2-TC10-1`
+- **Contradicted** - none
+- **Uncovered anchors** - none
+- **Still walking a removed screen** - automated `grade10-site-vault-loan-and-settlement-US1-TC1-1`

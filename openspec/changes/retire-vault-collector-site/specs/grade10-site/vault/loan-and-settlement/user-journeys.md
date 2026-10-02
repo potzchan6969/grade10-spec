@@ -8,6 +8,13 @@ to cut what my arrears run on,
 **so that** I can pay some now and the rest later without being charged for
 money I have already returned.
 
+### grade10-site-vault-loan-and-settlement-US-04: Operator takes the collateral only after warning the borrower
+
+**As a** member of shop staff,
+**I want** to have to warn the borrower in writing and wait out the date I
+gave them,
+**so that** nobody's property is taken without notice and a chance to pay.
+
 ### grade10-site-vault-loan-and-settlement-US-05: Borrower knows where to send the money
 
 **As a** borrower with a loan running,

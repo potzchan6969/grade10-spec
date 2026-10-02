@@ -39,7 +39,9 @@ states, and carry it through three acts on the worker:
 
 An unsent request SHALL take the collector's edits and photographs until it
 is sent, and SHALL be listed among the collector's own cases as unsent. It
-SHALL carry photographs only while it is unsent.
+SHALL carry photographs only while it is unsent. An edit to the facts of a
+request already sent SHALL be refused by name, and the request SHALL keep
+what it was sent with.
 
 <!-- trace:scenario id=g10.vault-case-intake.SC-gfr rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-01 - A request is opened and reopened
@@ -56,6 +58,13 @@ SHALL carry photographs only while it is unsent.
 - **GIVEN** a request the collector has sent in
 - **WHEN** a further photograph is offered for it
 - **THEN** it is refused by name and nothing is stored
+
+#### Scenario: grade10-site-vault-case-intake-SC-43 - A sent request takes no edit to its facts
+**Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back and changes the request only until it goes
+
+- **GIVEN** a request the collector has sent in, titled as they sent it
+- **WHEN** an edit to its title is sent
+- **THEN** it is refused by name and the request keeps the title it was sent with
 
 ### Requirement: A request states one item, in the brand's own currency
 
