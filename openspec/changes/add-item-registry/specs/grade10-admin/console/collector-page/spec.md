@@ -30,7 +30,7 @@ marked, each opening its item, paged on a cursor. The item register is
 
 - **GIVEN** a collector owning one marked item, one item no place marks and one retired item
 - **WHEN** staff open their collector page
-- **THEN** the Items section lists the first two, each saying whether it is marked and opening its item
+- **THEN** the Items section lists the first two, each saying whether it is marked and opening its item, a page at a time
 - **AND** the retired item is not listed, and its own page keeps its history
 
 #### Scenario: grade10-admin-console-collector-page-SC-24 - A collector who owns nothing reads as owning nothing

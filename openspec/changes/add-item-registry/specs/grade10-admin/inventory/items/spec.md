@@ -676,11 +676,11 @@ back to it from one item's page.
 - **THEN** it lists the three, each with its title, category, grader, cert, owner and the place marking it
 - **AND** a row opens its item, whose page leads back to Items
 
-#### Scenario: grade10-admin-inventory-items-SC-51 - Every item and the retired ones are a tab away
+#### Scenario: grade10-admin-inventory-items-SC-51 - Every live item and the retired ones are a tab away
 **Serves:** grade10-admin-inventory-items-US-01 - staff look past what is marked
 
 - **GIVEN** three marked items, two that no place marks and one retired as lost
-- **WHEN** staff switch to every item, then to retired items
+- **WHEN** staff switch to every live item, then to retired items
 - **THEN** the first lists the five live items marked or not, and not the retired one
 - **AND** the second lists only the retired item, with lost as why it was retired
 

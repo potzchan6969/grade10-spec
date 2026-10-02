@@ -88,7 +88,8 @@ mark the vault no longer has.
 - 🚧 **After retiring** - the item reads only, keeps its history and leaves
   the default list, and its grader and cert may name a new item; staff
   restore a retired item with a reason, refused while its cert names a live
-  item
+  item; a vault case's papers are refused while its item is retired -
+  [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#item-record)
 
 ## Finding an Item
 

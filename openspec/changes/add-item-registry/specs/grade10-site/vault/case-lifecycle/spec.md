@@ -129,9 +129,9 @@ otherwise.
 - **THEN** it is refused, saying the item is still being registered, and nothing is rendered
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-59 - A prepare registers an item nothing has registered yet
-**Serves:** grade10-site-vault-case-lifecycle-US-03 - staff prepare the papers of a case valued before the register opened
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - staff prepare the papers of a case valued before the vault's deploy
 
-- **GIVEN** an accepted case valued before the register opened, with no item registered
+- **GIVEN** an accepted case valued before the vault's deploy, with no item registered
 - **WHEN** staff prepare the documents
 - **THEN** the item is registered under the case's collector and the custody agreement prints its facts
 
@@ -143,3 +143,10 @@ otherwise.
 - **THEN** it is refused, naming and linking the item, and nothing is rendered
 - **WHEN** staff restore the item and prepare the documents again
 - **THEN** the packet is prepared
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-61 - A release receipt the register refuses is refused by name
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - staff are told why the hand-back paper could not be printed
+
+- **GIVEN** a vaulted case owing nothing, whose item the register reads as retired, or the register not answering
+- **WHEN** staff prepare its release receipt
+- **THEN** it is refused, naming and linking the retired item, or saying the register cannot be read now, and nothing is rendered

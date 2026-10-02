@@ -32,7 +32,7 @@ zero; ownership moves recorded with who, why and when
   vault no longer has
 - **The vault registers what it takes in** - an item is registered when staff
   start its valuation and is marked from vaulting until release, unwind or
-  forfeit; no vault case exists yet, so nothing is filled, and staff retire
+  forfeit; no vault case exists yet, so the register starts empty, and staff retire
   a second record of one object when they find it
 - **Grader, grade and cert reach the vault** - on the case's valuation; the
   Case tab and the custody agreement show the register's facts, and the

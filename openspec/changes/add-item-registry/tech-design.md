@@ -256,7 +256,7 @@ do (Q17, Q34, Q38).
 
 Staging and production hold no vault case, so nothing is filled (Q10, Q52). A
 case valued before the vault's deploy carries no `register_item_id`; its
-Prepare documents mints one and registers it inline, step 1 below.
+Prepare documents mints one and registers it inline, step 1 of Prepare documents above.
 
 ### Every act declares its audit entry by ids
 
@@ -497,6 +497,9 @@ the tab and reads every item, returning `retired` on each row for the badge.
   refuses `PLACE_UNREACHABLE`
 - [Inventory down at Prepare documents] → `REGISTER_UNREACHABLE`, named on
   the Documents tab; every other case act still commits
+- [Inventory down at a hand-back] → the release receipt is refused
+  `REGISTER_UNREACHABLE` too (Q57), so the counter waits for inventory before
+  papering a release; the release itself never waits on it
 - [Names leak through the audit-free email search] → the read declares an
   audit entry for every search and every page that resolved names
 - [Proof objects outliving their rows] → the area's `referenced` check is the

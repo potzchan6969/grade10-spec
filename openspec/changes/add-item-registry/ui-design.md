@@ -124,7 +124,7 @@ One cell, used by Items, one item and each move's from and to.
 | --- | --- | --- |
 | Marked | the default tab: marked items, with title, category, grader and cert, the owner cell and the place marking it, each row opening its item | `grade10-admin-inventory-items-SC-50` |
 | Last edited | no column on the list; one item's page shows who edited it last and when, as Q42 reads | `grade10-admin-inventory-items-SC-12` |
-| All | every item, marked or not | `grade10-admin-inventory-items-SC-51` |
+| All | every live item, marked or not; retired items are under Retired | `grade10-admin-inventory-items-SC-51` |
 | Retired | retired items and why each was retired | `grade10-admin-inventory-items-SC-51` |
 | Search | one `Search` field reading the owner's exact email, an item id, a grader and cert, else a title or description | `grade10-admin-inventory-items-SC-54` |
 | Search past the tab | a search lists every item whatever tab is open; a retired match carries a retired `Badge` | `grade10-admin-inventory-items-SC-71` |
