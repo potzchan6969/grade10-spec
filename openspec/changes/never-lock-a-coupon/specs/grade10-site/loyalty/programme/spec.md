@@ -6,8 +6,8 @@
   - Claiming a coupon: a coupon is held by nothing and is spent only by a paid
     order; claiming it on any sale releases the claim that stood before, and
     the order that carried it loses the cut and has its code deactivated
-  - Reversal: an operator's reversal is refused while an order is claiming the
-    coupon, and names that order
+  - Reversal of a claimed coupon: an operator's reversal is refused while an
+    order is claiming the coupon, and names that order
 - Member surface
   - Coupon wallet: every coupon the member holds reads as spendable until a
     paid order takes it, and no surface names the sale claiming one
