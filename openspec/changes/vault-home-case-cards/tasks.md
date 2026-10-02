@@ -11,7 +11,7 @@
 - [ ] 2.2 One commit: the submodule bump; `visitAhead` exported from `standing.ts`; `chipView.ts` with `OwnershipChip` reading it; `CaseList` rendering `VaultCases` from `caseCardOf`, its `CaseCard`, the Open button and the No visit booked line deleted; `node scripts/checks/check-store-blocks.mjs` (`grade10-site-vault-valuation-and-offer-SC-25`, `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-intake-SC-01`, `grade10-site-vault-case-intake-SC-32`, `grade10-site-vault-case-intake-SC-23`)
 - [ ] 2.3 Verify: `pnpm --filter @grade10/vault-frontend test`, the vault frontend's typecheck and lint; the vault E2E specs in CI
 
-## 3. The Walk (grade10)
+## 3. The Walk (grade10) (owner: @ecchochan)
 
 Uses `feature-tcs.md` reviewed with `/tcs-review vault-home-case-cards` as its input, after deployment; `/tcs-run-sheet` executes the cases that stay manual.
 
