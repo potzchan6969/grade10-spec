@@ -243,9 +243,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05, grade10-site-auction-auction-US-02, grade10-site-auction-bid-payment-method-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -287,9 +289,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-14, grade10-site-auction-bidding-history-US-01, grade10-site-auction-account-record-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -310,7 +314,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Enter <bid amount> in the bid field and select **Place Bid**.
+1. Enter <bid amount> in the bid field.
 2. Read the bid form.
 3. Reload <listing_4> and read Highest bid, the bid count and Recent Bids.
 4. Navigate to <grade10 bids url> and look for <listing_4>.
@@ -318,7 +322,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 reads Minimum bid is, naming <current bid> plus <increment>, and no provider message appears.
+* Step 2 reads Min, naming <current bid> plus <increment>, and **Place Bid** is disabled, so nothing is sent.
 * Step 3 reads Highest bid <current bid>, bid count <bid count>, and no row of the user's in Recent Bids.
 * Step 4 shows no entry for <listing_4>.
 * Step 5 shows no row for <listing_4>.
@@ -390,9 +394,11 @@ from my card until I win.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -435,9 +441,11 @@ from my card until I win.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01, grade10-site-auction-auto-bidding-US-02, grade10-site-auction-auction-US-14, grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -457,14 +465,14 @@ from my card until I win.
 
 1. Navigate to <grade10 bids url>, expand <listing_6> and count its history lines.
 2. Navigate back to <listing_6>.
-3. Select **Raise**, enter <lower maximum> and confirm.
+3. Select **Raise** and enter <lower maximum>.
 4. Read the bid form, Your maximum, Highest bid and the leader.
 5. Navigate to <grade10 bids url> and expand <listing_6>.
 6. Navigate to <my auctions url> and read <listing_6>'s row.
 
 **Expected Results:**
 
-* Step 4 reads "Your new maximum must be higher than your current one." on the bid form.
+* Step 4 reads Min, naming the smallest maximum above <user A maximum>, and **Place Bid** is disabled, so nothing is sent.
 * Step 4 reads Your maximum <user A maximum>, Highest bid <leader price>, and user A Leading.
 * Step 5 shows the same history lines as step 1, with no line for the refused attempt.
 * Step 6's row reads Leading, with Current bid <leader price>.
@@ -488,9 +496,11 @@ from my card until I win.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auto-bidding-US-02, grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -769,9 +779,11 @@ it.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02, grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1244,7 +1256,6 @@ withdrawn.
 - No domain case reads a card hold, a card authorization, a payment confirmation or a bid-time hold switch; the cases that did are rewritten or deprecated (decisions Q1, Q5). A case that reads the card reads that nothing is held or charged on it.
 - A refused attempt is not a bid: it shows on the bid form that made it and nowhere in the bidder's history, My Auctions or the lot's public record (decisions Q6).
 - A losing row on My Auctions reads "Your card was not charged." (decision Q2).
-- The rewritten cases that were automated now read manual: each owes its test updated to the new revision, and the flip back with its Decided by line.
 - HKD increments follow the Bidding page's schedule: HK$80 from HK$4,000 and HK$200 from HK$8,000.
 
 ## Reconciliation
