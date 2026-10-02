@@ -1,7 +1,7 @@
 # grade10-site/auction/auto-bidding Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-auction-auto-bidding-US1: Collector commits a maximum on an open listing
 
@@ -321,7 +321,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * `<listing_1>` starts at 0 `HKD`, and customer A's maximum `<user A maximum>` stands alone at `<opening price>`.
 * customer B(card linked) is signed in on a separate session, on the lot page for `<listing_1>`.
 
@@ -769,10 +768,8 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 ## grade10-site-auction-auto-bidding-US5: Collector's auto-bid counts as a bid
 
 **As a** collector,
-**I want** the hold to cover my maximum and every bid Grade10 places for me to
-count as a bid,
-**so that** I am authorized once, and my auto-bids keep a lot open during
-extended bidding as a manual bid would.
+**I want** every bid Grade10 places for me to count as a bid,
+**so that** my auto-bids keep a lot open during extended bidding as a manual bid would.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-dhr rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC1-1: The hold is the maximum, not the current bid
@@ -783,7 +780,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -822,7 +819,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -862,7 +859,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -951,8 +948,8 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Grade10 places no further bid on either bidder's behalf.
 * The current bid is unchanged.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-s4f rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC7-1: A maximum works without a bid-time authorization
+<!-- trace:case id=g10.auction-auto-bidding.TC-s4f rev=2 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+### grade10-site-auction-auto-bidding-US5-TC7-2: Committing, auto-bidding and raising take nothing from the card
 
 **Classification:**
 
@@ -969,18 +966,33 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 
 **Pre-conditions:**
 
-* Bid-time authorization holds are disabled.
-* A listing has an accepted maximum for one bidder.
+* customer A(card linked) leads `<listing_3>` with a committed maximum of `<user A maximum>`, at `<leader price>`.
+* customer B(card linked, no bid on `<listing_3>`) is signed in on a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_3>` | An open HKD listing taking bids, led by customer A |
+| `<leader price>` | 20000 minor units (HKD 200.00), the starting price |
+| `<user A maximum>` | 50000 minor units (HKD 500.00) |
+| `<user B maximum>` | 30000 minor units (HKD 300.00), below `<user A maximum>` |
+| `<increment>` | 1000 minor units (HKD 10.00), the HK$0 tier at `<user B maximum>` |
+| `<user A raise>` | 80000 minor units (HKD 800.00) |
 
 **Steps:**
 
-1. Commit a higher valid maximum for a challenger.
-2. Read the resolved bids and the listing's bid-time authorizations.
+1. As customer B, commit `<user B maximum>` on `<listing_3>`.
+2. Read the API response and `<listing_3>`'s bids.
+3. As customer A, raise the maximum to `<user A raise>`.
+4. Read the API response.
+5. Read both customers' card activity at the card provider.
 
 **Expected Results:**
 
-* Grade10 resolves the two maxima and records the resulting bid.
-* No bid-time authorization is created or awaited.
+* Step 2: customer A leads at `<user B maximum>` plus `<increment>`, and that bid is recorded as placed on customer A's behalf.
+* Step 4 accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`.
+* Step 5: nothing is held or charged on either card.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC8-1: Auto bid during extended bidding restarts the timer once
@@ -1064,6 +1076,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 ## Settled
 
 - A first maximum on a 0 start must reach 0 plus the currency's lowest increment; a first bid of 0 or of one minor unit is a non-goal, and no case asserts either.
+- Committing or raising a maximum takes nothing from the card, and a bid Grade10 places for a collector takes nothing either; no case reads a card authorization or a hold switch (decisions Q1, Q5).
+- A raise is accepted or refused on the auction's rules alone; a raise refused for a card reason no longer exists, and its case is deprecated.
+- An auto-bid step's price is US3's to assert; with no card check left to tell it apart, the US5 case that read it is deprecated.
 
 ## Reconciliation
 
@@ -1079,3 +1094,13 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 | Unchanged two-maximum scenarios restated by the modified block - `SC-09` to `SC-18` | **Out of suite:** the durable suite's existing `-US-02` and `-US-03` cases; this change only adds the 0-start sentence |
 
 **Uncovered anchors:** none for `grade10-site-auction-auto-bidding-US-01`.
+
+**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
+
+- **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `grade10-site-auction-auto-bidding-US5-TC7-2`
+- **Covered at domain** - `grade10-site-auction-e2e-US04-TC03-2` reads the refusal and the bid form's words of `grade10-site-auction-auto-bidding-SC-32`'s second half, a maximum not raised
+- **Revised** - `grade10-site-auction-auto-bidding-US5-TC7-2` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `grade10-site-auction-auto-bidding-US1-TC8-1` loses the hold switch pre-condition only, `<v>` kept
+- **Deprecated** - `grade10-site-auction-auto-bidding-US5-TC1-1`, `grade10-site-auction-auto-bidding-US5-TC2-1` and `grade10-site-auction-auto-bidding-US5-TC3-1`, with the hold requirement
+- **Raised** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none; the Feature set's No card hold leaf by `grade10-site-auction-auto-bidding-US5-TC7-2`

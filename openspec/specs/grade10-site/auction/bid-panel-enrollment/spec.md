@@ -1,9 +1,10 @@
 # grade10-site/auction/bid-panel-enrollment Specification
 
 ## Purpose
+
 Records what a collector sees on a listing bid panel before they can commit a
 maximum, what opens link-card setup, and when the linked card may change.
-Authorization and holds belong to `grade10-site/auction/bid-payment-method`.
+Bidding on the linked card belongs to `grade10-site/auction/bid-payment-method`.
 
 ## Feature set
 
@@ -14,8 +15,8 @@ Authorization and holds belong to `grade10-site/auction/bid-payment-method`.
   - Card on file: amount controls enabled; prior card carries over to new lots
   - Linked-card slot: empty, linked with change, or linked without change
 - Setup modal
-  - Link only: provider-hosted card entry and age attestation — no hold
-    taken in setup; description discloses that bidding authorizes a hold
+  - Link only: provider-hosted card entry and age attestation; the description
+    says the card is charged only on a win
   - Change card: same modal and copy, with the prior linked card indicated
     in the provider field and attestation pre-checked when already given
   - Dismissal: closing without continue leaves no linked card on file for
@@ -30,7 +31,9 @@ Authorization and holds belong to `grade10-site/auction/bid-payment-method`.
 - Bid commit
   - Optional authorization: hold runs under payment-method when enabled and a
     maximum is submitted; the standard path does not wait for a hold
-  - Setup does not authorize: card-link setup never takes a bid-time hold
+  - Setup does not authorize: card-link setup takes nothing from the card
+  - One answer: committing a maximum shows Leading, Outbid or the refusal, with
+    no authorization state between
 
 ## Requirements
 
@@ -46,17 +49,15 @@ panel SHALL render the posture it is given.
 | `setup-first` | Authenticated; no linked card on this lot; setup closed | `no-linked-card` | Place bid (or equivalent) | Empty link prompt | Closed |
 | `setup-in-progress` | First-link setup is open | `no-linked-card` | Setup is required before bidding | Empty link prompt | Open first-link setup |
 | `setup-editable` | Change-card setup is open for an editable enrollment | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Open change-card setup |
-| `authorization-in-progress` | Provider or enrollment authorization is running | `no-linked-card` or `linked-card-before-bid` | Setup or bid is unavailable while authorization runs | Empty link prompt or prior linked card | Open with controls locked |
-| `authorization-failed` | Provider or enrollment authorization failed; retry remains possible | `no-linked-card` or `linked-card-before-bid` | Setup or bid is unavailable until authorization succeeds | Empty link prompt or prior linked card | Open with failure shown and controls interactive |
-| `authorization-editable` | Enrollment succeeded before the first accepted bid | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Closed |
+| `editable` | A card is linked and no bid on this lot is accepted yet | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Closed |
 | `enrolled` | The first accepted bid locked this lot's enrollment | `linked-card-after-bid` | Place bid (or equivalent) | Linked card without change | Closed |
 | `ready` | Derived shared bid-card signal for authenticated bidding controls; not a separate persistence state | `linked-card-after-bid` | Place bid (or equivalent) | Uses the linked-card presentation of its source state | Closed |
 
 | Visual group | Panel states | Amount controls | Bid action | Linked-card slot | Setup modal |
 | --- | --- | --- | --- | --- | --- |
 | `signed-out` — Signed out | `signed-out` | Hidden | Sign in to bid | Hidden | Closed |
-| `no-linked-card` — Signed in, no linked card | `setup-first`, `setup-in-progress`, `authorization-in-progress` or `authorization-failed` when first-linking | Visible, disabled | Link a card to bid | Empty link prompt, or hidden while setup is open | Closed, or open during link |
-| `linked-card-before-bid` — Signed in, card linked, no bid on this lot | `setup-editable`, `authorization-editable`, `authorization-in-progress` or `authorization-failed` when changing a card | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
+| `no-linked-card` — Signed in, no linked card | `setup-first`, `setup-in-progress` | Visible, disabled | Link a card to bid | Empty link prompt, or hidden while setup is open | Closed, or open during link |
+| `linked-card-before-bid` — Signed in, card linked, no bid on this lot | `setup-editable`, `editable` | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
 | `linked-card-after-bid` — Signed in, card linked, bid placed on this lot | `enrolled`, `ready` | Enabled | Set or raise maximum | Linked card without change | Closed |
 
 Standing badges for highest bid or outbid SHALL appear only when the
@@ -73,12 +74,11 @@ A linked card on file from another lot SHALL carry over to a new lot: the
 panel SHALL show the linked card, enable amount controls, and SHALL NOT open
 setup solely because the collector has not yet bid on that lot. The collector
 MAY change or link another card via Change until their first bid on that lot.
-The linked-card label SHALL expose an info tooltip that discloses a hold is
-authorized for the collector's maximum each time they bid, and that they are
-charged only if they win.
+The linked-card label SHALL expose an info tooltip that says: Your card is
+kept on file for bidding. You're only charged if you win.
 
-Sign-in behavior SHALL follow `shared-auth/session`. Card authorization on
-commit SHALL follow `grade10-site/auction/bid-payment-method`.
+Sign-in behavior SHALL follow `shared-auth/session`. Bidding on the linked
+card SHALL follow `grade10-site/auction/bid-payment-method`.
 
 <!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-sjy rev=1 -->
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-01 - Sign-in is offered instead of place bid
@@ -186,10 +186,9 @@ require the control to remain checked.
 
 The setup modal SHALL use the same title and description for first link and
 change card. The title SHALL be Link a card to bid. The description SHALL be
-Link a card for bidding. When you set a maximum, we authorize a hold for that
-amount. You are only charged if you win. Continue SHALL be
-labeled Link Card. The setup modal SHALL NOT authorize a hold or use authorize
-language on the primary action. While the provider link request is in flight,
+Link a card for bidding. You’re only charged if you win. Continue SHALL be
+labeled Link Card. Setup SHALL take nothing from the card, and SHALL NOT use
+authorize language on the primary action. While the provider link request is in flight,
 continue SHALL use Linking, the provider field and age attestation SHALL NOT be
 interactive, and the collector SHALL NOT dismiss the modal. Card entry SHALL use
 a provider-hosted field; card details SHALL not pass through Grade10.
@@ -250,34 +249,39 @@ selection.
 - **AND** the commitment proceeds under `grade10-site/auction/auto-bidding`
   and `grade10-site/auction/bid-payment-method`
 
-### Requirement: Backend authorization selection preserves bid-panel states
+### Requirement: A bid commit answers in one step
 
-The existing bid-panel states and visual groups SHALL remain unchanged. After
-card-link setup succeeds, the existing pre-bid linked-card state SHALL enable
-the amount controls immediately so the collector is ready to bid; it SHALL NOT
-wait for a bid-time authorization. After the backend accepts the first bid,
-the panel SHALL move directly to the existing `enrolled` state and lock card
-change for that listing.
+After card-link setup succeeds, the panel SHALL be `editable` with the
+amount controls enabled at once, so the collector is ready to bid. Committing
+a maximum SHALL show its answer in one step: Leading or Outbid once the bid is
+accepted, or the refusal under the bid action. There SHALL be no authorizing
+state; the bid action is busy only until the answer arrives. The first accepted bid SHALL move the panel to `enrolled` and
+lock card change for that listing; a refused bid leaves the panel as it was.
 
-The backend SHALL determine whether bid acceptance waits for the optional
-authorization. The panel SHALL keep the existing authorization-in-progress and
-authorization-failed handling when the backend reports an enabled provider
-authorization outcome; no new no-hold panel state is introduced.
-
-<!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-fho rev=1 -->
+<!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-fho rev=2 -->
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-15 - Card linking leaves the collector ready to bid
 **Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector completes card-link setup on an open listing
 - **WHEN** setup closes
-- **THEN** the existing pre-bid linked-card state enables the amount controls immediately
-- **AND** the panel does not wait for a bid-time authorization
+- **THEN** the panel is `editable` with the amount controls enabled
+- **AND** nothing is held or charged on the card
 
-<!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-kcm rev=1 -->
+<!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-kcm rev=2 -->
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-16 - An accepted bid moves directly to enrolled
 **Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a collector has linked a card and submits a valid first bid
-- **WHEN** the backend accepts the bid without requiring a bid-time authorization
-- **THEN** the panel moves directly to the existing `enrolled` state
+- **WHEN** the auction accepts the bid
+- **THEN** the panel moves directly to `enrolled`
 - **AND** Change is no longer offered for that listing
+
+#### Scenario: grade10-site-auction-bid-panel-enrollment-SC-20 - A commit shows its answer with nothing between
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-04 - Collector bids after linking a card
+
+- **GIVEN** a collector with a linked card on an open listing
+- **WHEN** they commit a maximum
+- **THEN** the panel shows Leading or Outbid once the auction accepts it, or
+  the refusal under the bid action once the auction refuses it
+- **AND** no authorizing state shows; the bid action is busy only until the
+  answer arrives

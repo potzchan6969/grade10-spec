@@ -346,7 +346,7 @@ trace those groups.
 - Order Paid carries Member true, Points Earned, Points Spent, and Tier when the programme priced the spend.
 - A refused checkout records no Checkout Started.
 
-### grade10-site-analytics-US1-TC12-2: Auction funnel events
+### grade10-site-analytics-US1-TC12-3: Auction funnel events
 
 **Classification:**
 
@@ -363,20 +363,40 @@ trace those groups.
 
 **Pre-conditions:**
 
-- customer(collector) can open a live lot, link a card, watch, and bid.
+* customer(collector) is signed in, with no card linked.
+* `<lot_1>` is live, with no bid from this collector.
+* customer B(card linked) is signed in on a separate session, ready to bid on `<lot_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A live HKD lot, current bid 480000 minor units, next minimum 488000 minor units |
+| `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
+| `<refused maximum>` | 400000 minor units, below the next minimum |
+| `<accepted maximum>` | 600000 minor units, at or above the next minimum |
+| `<rival maximum>` | 550000 minor units, below `<accepted maximum>` |
 
 **Steps:**
 
-1. Open a lot page.
-2. Watch the lot without bidding.
-3. Link a card and place an accepted maximum.
-4. Let the engine place an auto-bid step under that maximum.
-5. Close the listing with this collector as winner and pay the invoice.
+1. Open the lot page for `<lot_1>`.
+2. Click Watch on the lot page.
+3. Link `<card>` from the bid panel.
+4. Enter `<refused maximum>` in the custom maximum on the bid panel and confirm the bid.
+5. Enter `<accepted maximum>` in the custom maximum and confirm the bid.
+6. As customer B, place `<rival maximum>`, so Grade10 places an auto-bid step under `<accepted maximum>`.
+7. Let `<lot_1>` close with this collector as winner, and pay the invoice.
+8. Read this collector's events for `<lot_1>` in the Mixpanel project.
 
 **Expected Results:**
 
-- Mixpanel records Lot Viewed (not Product Viewed), Lot Watched, Card Linked, Bid Placed once for the accepted maximum, Auction Won, and Invoice Paid.
-- Mixpanel does not record Bid Placed for the auto-bid step, or Lot Watched because a bid was placed.
+* Step 4 is refused on the bid form.
+* Step 8 shows Lot Viewed, not Product Viewed.
+* Step 8 shows Lot Watched once, from step 2 and not from a bid.
+* Step 8 shows Card Linked, Auction Won and Invoice Paid once each.
+* Step 8 shows Bid Placed once, for `<accepted maximum>`, when step 5 is accepted.
+* Step 8 shows no Bid Placed for `<refused maximum>` or for the auto-bid step.
+* Step 8 shows no Bidder Outbid for this collector.
 
 ### grade10-site-analytics-US1-TC13-1: Loyalty facts on Mixpanel
 
@@ -1012,6 +1032,7 @@ Runs once per row of **Test data**.
 - An event with neither a user nor a device is refused and its fact still
   commits; no Delivery rule states it, since Q13 decided it and today's send
   path already runs it.
+- Bid Placed fires when a maximum is accepted; no card hold is taken or captured at bid time, so nothing in the auction funnel records one (decisions Q1).
 
 ## Reconciliation
 
@@ -1051,3 +1072,12 @@ continuity.
 | Invoice Paid never fires on a bid hold capture | **Removed:** a bid takes no card hold, so nothing captures one; `grade10-site-analytics-US1-TC12-1` rewritten as `grade10-site-analytics-US1-TC12-2` without the step |
 
 **Run:** 2026-10-02, from the delta against the durable suite. It is a statement, not proof.
+
+**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
+
+- **Renumbered** - QA1's case was written as `grade10-site-analytics-US1-TC12-1`, below main's `grade10-site-analytics-US1-TC12-2`, which `my-auctions-without-bid-holds` wrote. It adds a refused maximum to the same funnel, so it is `grade10-site-analytics-US1-TC12-3`
+- **Folded in** - `grade10-site-analytics-SC-59` by `grade10-site-analytics-US1-TC12-3`; `grade10-site-analytics-SC-18`, `grade10-site-analytics-SC-19` and `grade10-site-analytics-SC-21` stand by it as by main's revision
+- **Added by QA2** - in `grade10-site-analytics-US1-TC12-3`, that no Bidder Outbid is recorded for this collector, the second half of `grade10-site-analytics-SC-59`
+- **Raised** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none

@@ -3,14 +3,14 @@
 ### grade10-site-auction-bidding-history-US-01: Collector reads their bidding index
 
 **As a** collector,
-**I want** every listing with my retained maximum activity in one private index,
+**I want** every listing I placed a bid on in one private index,
 **so that** I can see my standing without hunting through the catalogue.
 
-### grade10-site-auction-bidding-history-US-02: Collector audits every retained maximum action
+### grade10-site-auction-bidding-history-US-02: Collector audits every maximum Grade10 accepted
 
 **As a** collector,
-**I want** every maximum Grade10 evaluates for me kept as a private event,
-**so that** I can see what was accepted, refused, or placed automatically without exposing my maximum to a rival.
+**I want** every maximum Grade10 accepts for me kept as a private event,
+**so that** I can see what I set or raised, and what was placed automatically, without exposing my maximum to a rival.
 
 ### grade10-site-auction-bidding-history-US-03: Collector reads one listing's combined history
 
@@ -22,7 +22,7 @@
 
 **As a** collector,
 **I want** only my Grade10 account's history,
-**so that** another storefront or an unsigned visitor cannot read my maximums or failed attempts.
+**so that** another storefront or an unsigned visitor cannot read my maximums or my standing.
 
 ### grade10-site-auction-bidding-history-US-05: Collector opens their bids at /bids
 
@@ -43,12 +43,12 @@ opening the full account chronology.
 **As a** signed-in collector,
 **I want** the lot dialog to separate the bids Grade10 placed for me from my
 maximums, open on **Bid placed** by default, and list that tab first,
-**so that** I do not read an auto-bid step as my authorized cap.
+**so that** I do not read an auto-bid step as my maximum.
 
 ### grade10-site-auction-bidding-history-US-08: Collector reads clearer maximum labels on /bids
 
 **As a** signed-in collector,
-**I want** configure, raise, and refusal events on `/bids` named as maximum
-set, raised, or refused,
+**I want** configure and raise events on `/bids` named as maximum set or
+raised,
 **so that** the account chronology matches the lot wording without a new
 account tab.
