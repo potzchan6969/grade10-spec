@@ -51,7 +51,7 @@ Built against the contract's fixtures, not a running backend.
 - [ ] 6.5 Render a `cert-id-change` Action in `ChangeHistoryDialog.tsx` as `Cert ID change · <before> → <after>`, with `No Cert ID` for an assignment (`grade10-admin-inventory-catalog-SC-146`)
 - [ ] 6.6 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test` in grade10.
 
-## 7. The walk (grade10)
+## 7. The walk (grade10) (owner: @mason5991)
 
 Uses draft `feature-tcs.md` as its input, with groups 2 to 6 landed; human QA reviews the cases after deployment (`/tcs-review edit-unit-cert-ids`), and `/tcs-run-sheet` executes the manual ones when needed.
 
