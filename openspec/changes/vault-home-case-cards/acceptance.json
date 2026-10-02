@@ -1,0 +1,94 @@
+{
+  "version": 2,
+  "change": "vault-home-case-cards",
+  "baseline": "ecfeff272d183e3873670d0505165f1daa933f0cef0c74189402e4c312043d12",
+  "fingerprint": "50b74e76a06f7063a422097f1103c331eef3f85063806e598e3ec6cbf236af19",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-02T05:11:14.599Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#case-list",
+      "sha256": "7647994019d5af7bdc0d95eea2052a49806c562f1533ba6c2ed41ec7993a6f41",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/vault-case.md#the-blocks",
+      "sha256": "71f35395982488581e1affed8c915d6518b31341d7b52f50bbe1ba43a47b6f6a",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/decisions.md",
+      "sha256": "550e1c3aa1bea50eb05ed3fe94ac38351c305cd14d85fdd9832a7a9ef3e189d7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/proposal.md",
+      "sha256": "0d91710b27d3423baf09badbbdac14d4c6be1211dfcd419026f59b64c0ce1229",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/specs/shared/ui/vault-case/feature-tcs.md",
+      "sha256": "94383c2200cddab034337597313f083f4bb441d83e0e6abe84672c5b5c2e6af2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/specs/shared/ui/vault-case/spec.md",
+      "sha256": "ccc430aa42c83e52cba2549281d0df4ce10ab92d43cc103eb8046b65b3f4c8d7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/specs/shared/ui/vault-case/user-journeys.md",
+      "sha256": "b30fdd62914133be359dfcc2d429c1de5271f03aeb1e346e207ec03f8bd676ae",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/tech-design.md",
+      "sha256": "4ba909bd40ef879365d1f55159b1f8521085e3e58ad5c2e66185ee89d7263a6e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/vault-home-case-cards/ui-design.md",
+      "sha256": "0e55eb1f71aa766f5a27fdd5edaf634d1841cbf8a9bd8a60e9911fe281a91e79",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/feature-tcs.md",
+      "sha256": "1bb7584d7c592fb7781e2249092e79987f3d5c75927012b44d6327172f71a65f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/spec.md",
+      "sha256": "ea1962d66c4176bdf92145dedb86d498c8ea72106cb2d71a55c354f7dbcaf351",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/user-journeys.md",
+      "sha256": "cacfacb6643083dbca370d3586ccb3787eec3f28d001e7c9365899203c1b0259",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/vault-home-case-cards/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A case card reads the case at a glance",
+        "Requirement: The vault case exports",
+        "Requirement: The vault home reads its cases"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/vault-case/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
