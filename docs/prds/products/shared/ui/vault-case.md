@@ -16,7 +16,7 @@ The vault's cards, lists, rails and loading cards are
   what will be signed, before Accept; a refusal stays beside the terms
 - **`VaultCasesEmpty`** - the vault home with no case yet: the intro,
   Start a request, How it works and the draft cap
-- 🚧 **`VaultCases`** - the vault home with cases: Start a request, Your
+- **`VaultCases`** - the vault home with cases: Start a request, Your
   cases with the count, a card per case, and the several-items note. A card
   reads the item's name, which opens the case; the status and whose move it
   is; when it opened, the lane, the amount asked and the reference; the next
@@ -44,6 +44,6 @@ it holds every other site page. The design record is the change's
 | Shared, not site-owned | Decided | The blocks live in `packages/ui` with a story per state, and the vault's components word and map them; drawing them inside `packages/vault/frontend` was rejected, because Design Override refuses a site page that draws a card, a list, a table, a stepper or a dialog of its own | Design |
 | No existing block moves | Decided | `BookingSteps` and `GradingStatusRail` each fix their stages in their names and types, and both stay as they are; the vault's rail is `StageRail` | Design |
 | No visible change | Decided | The case page, the wizard, the booked visit and Your data read as they do today; the one change is Before you come's dividers, which now fall between two lines on both lanes | Design |
-| 🚧 The home with cases | Decided | The home with cases is a store block, so the site's list is the board's and every card state has a published story; a card takes worded parts and knows no case status | Design |
+| The home with cases | Decided | The home with cases is a store block, so the site's list is the board's and every card state has a published story; a card takes worded parts and knows no case status | Design |
 | Story ids | Decided | `vault-case-<component>--<state>`, the package's `Vault Case/<Component>` title | Design |
 :::
