@@ -83,7 +83,7 @@ Groups 10 to 12 are built in grade10 #667, from `allow-zero-starting-price`; eac
 - [ ] 11.3 Drop `startingPrice > 0` from `isEligibleTestListing` in `services/bidding/testBids.ts`, and take the existing `nonNegativeMinorUnits` for the test-bid listing's `startingPrice` in `contracts/src/admin.ts`
 - [ ] 11.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend` for auction, the `placeBid`, `autoBidding` and `resolveStandingMaxima` specs among them
 
-## 12. The Listing Editor Accepts 0 (grade10)
+## 12. The Listing Editor Accepts 0 (grade10) (owner: @ecchochan)
 
 - [ ] 12.1 Tests beside `ListingEditor.tsx`: an entered 0 shows no error and a formatted zero amount in each currency, and saves and creates as 0; an empty field stays empty and create refuses it; -1 is refused with "Starting price must be a whole amount, 0 or more." - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`
 - [ ] 12.2 `priceError` accepts `amountMinor >= 0` for the starting price, refuses null only where the price is required, and reads "Starting price must be a whole amount, 0 or more." - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`
