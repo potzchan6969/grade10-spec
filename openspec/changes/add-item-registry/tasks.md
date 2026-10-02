@@ -32,7 +32,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 3.3 Repositories `items`, `itemMarks`, `itemMoves`, `itemProofs` and `itemCertTaken` under `packages/inventory/backend/src/repositories/` (`grade10-admin-inventory-items-SC-08`, `grade10-admin-inventory-items-SC-49`)
 - [ ] 3.4 Verify: `pnpm run db:drizzle:generate` (no drift), `pnpm run check:migrations`, `pnpm db:status`, `pnpm run test:backend`
 
-## 4. What the vault tells the register (grade10)
+## 4. What the vault tells the register (grade10) (owner: @ecchochan)
 
 - [ ] 4.1 Tests first, in their own commit: service tests for `tell`, `lookupSlab` and `itemOf` over a fake repository, and a repository test applying each case state twice and out of order (`grade10-admin-inventory-items-SC-20`, `grade10-admin-inventory-items-SC-21`, `grade10-admin-inventory-items-SC-22`, `grade10-admin-inventory-items-SC-23`, `grade10-admin-inventory-items-SC-30`, `grade10-admin-inventory-items-SC-42`, `grade10-admin-inventory-items-SC-43`)
 - [ ] 4.2 `services/items/places.ts`: apply a case's state as a forward-only upsert in one transaction - insert the item if absent, open or open-and-close the case's mark, never reopen a hand close, move a forfeited case's item to the lender once per case - with the `item_cert_taken` record (`grade10-admin-inventory-items-SC-20`, `grade10-admin-inventory-items-SC-21`, `grade10-admin-inventory-items-SC-22`, `grade10-admin-inventory-items-SC-23`, `grade10-admin-inventory-items-SC-30`, `grade10-admin-inventory-items-SC-42`, `grade10-admin-inventory-items-SC-43`)
