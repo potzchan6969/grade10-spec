@@ -15,9 +15,9 @@
 
 Takes the draft `feature-tcs.md` as its input once group 2 has landed; human QA reviews the suite with `/tcs-review refuse-malformed-walk-in-address` after deployment. While the two cases are draft, the walk's titles cite scenarios and carry no bracketed case id.
 
-- [ ] 3.1 Walk `grade10-admin-vault-operator-queue-US10-TC15-1` in `apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`, titled by `grade10-admin-vault-operator-queue-SC-95`: the empty address left with no refusal, the malformed address typed with none, the field left and the refusal read beside it, Open case held and no draft opened, the refusal cleared by the corrected address and the draft opened. Re-title the ten-photograph test for the revised `grade10-admin-vault-operator-queue-US10-TC9-2`, dropping its bracketed `US10-TC9-1` and citing `grade10-admin-vault-operator-queue-SC-75`, attaching ten photographs and reading the add control back at nine (`grade10-admin-vault-operator-queue-US-10`)
-- [ ] 3.2 In grade10-spec, flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts` once the walk lands; name the cases that stay manual in the walk's `rounds.md` row
-- [ ] 3.3 Verify: the walk-in walk green in CI.
+- [x] 3.1 Walk `grade10-admin-vault-operator-queue-US10-TC15-1` in `apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`, titled by `grade10-admin-vault-operator-queue-SC-95`: the empty address left with no refusal, the malformed address typed with none, the field left and the refusal read beside it, Open case held and no draft opened, the refusal cleared by the corrected address and the draft opened. Re-title the ten-photograph test for the revised `grade10-admin-vault-operator-queue-US10-TC9-2`, dropping its bracketed `US10-TC9-1` and citing `grade10-admin-vault-operator-queue-SC-75`, attaching ten photographs and reading the add control back at nine (`grade10-admin-vault-operator-queue-US-10`)
+- [x] 3.2 In grade10-spec, flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts` once the walk lands; name the cases that stay manual in the walk's `rounds.md` row
+- [x] 3.3 Verify: the walk-in walk green in CI.
 
 ## 4. The manual (grade10-spec) (owner: @ecchochan)
 
