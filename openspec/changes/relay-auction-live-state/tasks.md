@@ -29,7 +29,7 @@
 - [ ] 4.4 Extend only on a price-moving bid, equal maxima at a higher price included (`grade10-site-auction-auction-SC-81`, `grade10-site-auction-auction-SC-82`)
 - [ ] 4.5 Verify: auction db and pg lanes, `pnpm run typecheck`, `pnpm run lint`
 
-## 5. Settle and the Change Signal (grade10)
+## 5. Settle and the Change Signal (grade10) (owner: @ecchochan)
 
 - [ ] 5.1 Tests: `settleIfDue` from the alarm, a deferred read and the sweep, two settles racing, a bid refused past the close while the close fails, and every writer signalling after commit (`grade10-site-auction-auction-SC-70`, `grade10-site-auction-auction-SC-71`, `grade10-site-auction-auction-SC-72`, `grade10-site-auction-auction-SC-73`, `grade10-site-auction-auction-SC-74`)
 - [ ] 5.2 Add `settleIfDue`, `settleDepsOf` and the deferred settle, and turn the sweep's close and publish into settle loops counted as repairs (`grade10-site-auction-auction-SC-70`, `grade10-site-auction-auction-SC-71`, `grade10-site-auction-auction-SC-72`, `grade10-site-auction-auction-SC-73`)
