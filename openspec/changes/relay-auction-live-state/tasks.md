@@ -37,7 +37,7 @@
 - [ ] 5.4 Make `withListingLock` the only listing lock, with `events` required on every writer and the signal sent after commit when the version rose; add the `check-listing-lock` script (`grade10-site-auction-auction-SC-75`)
 - [ ] 5.5 Verify: auction db, pg and workers lanes, `close.lag_ms` and repair metrics emitted, `pnpm run typecheck`, `pnpm run lint`
 
-## 6. Rooms and Routes (grade10)
+## 6. Rooms and Routes (grade10) (owner: @ecchochan)
 
 - [ ] 6.1 Tests: the time route, `Origin` and rate refusals, `hello`, `state` and `gone` frames, the alarm settling through `AuctionRoomWork`, and frames carrying only public facts (`grade10-site-auction-auction-SC-75`, `grade10-site-auction-auction-SC-76`, `grade10-site-auction-auction-SC-79`, `grade10-site-auction-auction-SC-80`)
 - [ ] 6.2 Add `GET /auction/api/public/time` (`grade10-site-auction-auction-SC-80`)
