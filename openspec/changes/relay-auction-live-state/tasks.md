@@ -1,4 +1,4 @@
-## 1. Store Clock Blocks and Product Record (grade10-spec)
+## 1. Store Clock Blocks and Product Record (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 Pin the shared clock in Storybook scenario tests: one frame loop drives every countdown block, a countdown rounds up to whole seconds with no tenths, and a block reads its clock from `ClockProvider` (`grade10-site-auction-listing-page-SC-34`, `grade10-site-auction-listing-page-SC-44`)
 - [ ] 1.2 Add `ClockProvider`, `createFrameClockStore`, `useRemainingSeconds` and `remainingSeconds` to `@grade10/ui`, and move the countdown, the Featured banner, bid history and user bid history onto them with their props unchanged, no new copy and whole seconds only (`grade10-site-auction-listing-page-SC-34`, `grade10-site-auction-listing-page-SC-44`)
