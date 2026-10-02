@@ -17,33 +17,23 @@ shows me a lot twice or skips one.
 **I want** the catalogue to show Auction listings with money in minor units,
 **so that** I am not offered Buy Now and a close with bids is absolute.
 
-### grade10-site-auction-auction-US-02: Collector places a card-backed bid inside the window
+### grade10-site-auction-auction-US-02: Collector places a bid inside the window
 
 **As a** bidder,
 **I want** a lot I bid on by its close to stay open until bidding stops,
 **so that** a bid placed at the last second can always be answered, up to the lot's cap.
 
-**Accepted by:**
-
-- `grade10-site-auction-auction-SC-23` — The default bid path creates no authorization hold
-
-### grade10-site-auction-auction-US-03: Collector's card hold is released when they are outbid
-
-**As a** bidder,
-**I want** one authorization per listing, released when I am outbid,
-**so that** a delayed lower hold or a duplicate Stripe event cannot take a second bite.
-
 ### grade10-site-auction-auction-US-04: Collector meets the identity bar on a high-value bid
 
 **As a** collector bidding the bar or more on a lot,
 **I want** to be told at once that a verified identity is needed and where to get one,
-**so that** my card is not held for a bid the auction cannot take, and I can verify and bid again before the lot closes.
+**so that** the auction records nothing for a bid it cannot take, and I can verify and bid again before the lot closes.
 
 ### grade10-site-auction-auction-US-11: Bidder is held to the close with everyone else
 
 **As a** bidder,
-**I want** a lot to stop taking bids at its close for everyone, and a bid to count only once its payment confirms before then,
-**so that** nobody wins with a bid that arrived after the close, and a card hold for a bid that did not count is released.
+**I want** a lot to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
+**so that** nobody wins with a bid that arrived after the close.
 
 ### grade10-site-auction-auction-US-12: Bidder keeps a lot open only by moving its price
 
@@ -92,3 +82,19 @@ way as on the lot page and My Auctions,
 Ends in to follow the recorded close with the same freshness (including when
 extended bidding moves that close), without an Extended label on the banner,
 **so that** the lead band matches the live sale without lot-page chrome.
+
+### grade10-site-auction-auction-US-13: Runner-up takes the lead when the leader's account is erased
+
+**As a** bidder whose maximum is the highest left on a lot,
+**I want** to take the lead at a price set by the maxima still standing when the leader's account is erased,
+**so that** the lot keeps a leader and I never pay more than the price stood at before.
+
+### grade10-site-auction-auction-US-14: Bidder reads why a bid was refused, and nothing else moves
+
+**As a** bidder,
+**I want** a refused bid to say why on the bid form and to leave no trace anywhere else,
+**so that** I never read a bid I did not place as one I did.
+
+## Retired
+
+- `grade10-site-auction-auction-US-03` - Retired by refused-bid-is-not-a-bid.

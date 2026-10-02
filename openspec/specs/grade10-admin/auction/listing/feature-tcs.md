@@ -1920,19 +1920,20 @@ A created listing with a publish at still in the future. An authorized operator.
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A published listing with accepted bids and live authorizations. An authorized operator.
+A published listing with a leading bid, an outbid bid and stock held for it. An authorized operator.
 
 **Steps:**
 
 1. Navigate to <grade10 auction admin listings url>.
 2. Open that listing.
 3. Call it off.
-4. Check authorizations and the public catalogue.
+4. Check both bidders' cards, the listing's stock and the public catalogue.
 
 **Expected Results:**
 
 * Grade10 moves it to `canceled`.
-* It releases every live authorization standing against it.
+* Both bids are called off, and no bidder is charged.
+* The stock held for it is released.
 * It is absent from the public catalogue.
 
 <!-- trace:case id=g10adm.auction-listing.TC-32t rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
@@ -2503,7 +2504,7 @@ Runs once per row of **Test data**.
 | Row | Bids at close | Outcome |
 | --- | --- | --- |
 | No bids | None | Closes Unsold, hold released |
-| Top bid demoted | Only `outbid` bids; the top bid's card hold failed before the close | Closes Unsold, hold released |
+| Top bid demoted | Only `outbid` bids; no bid is `top` at the close | Closes Unsold, hold released |
 
 **Steps:**
 

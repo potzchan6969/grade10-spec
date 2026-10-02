@@ -14,6 +14,8 @@ current bid is the second-highest maximum plus the listing increment.
   - Raise only: a leader may raise their maximum; lowering or withdrawing it is
     refused
   - Validity: a maximum below the listing's minimum next bid is refused
+  - No card hold: committing or raising a maximum takes nothing from the card,
+    and a raise is accepted or refused on the auction's rules alone
 - Own standing
   - Own row: a bidder sees their maximum, the current bid, and whether they lead
     as three distinct facts
@@ -27,12 +29,6 @@ current bid is the second-highest maximum plus the listing increment.
     at the same resolved amount, and does not displace the leader
   - One resolution per commitment: Grade10 does not step through intermediate
     increments
-- Card authorization
-  - Optional authorization: disabled by default; maximum commitments and automatic bids do not wait for or create a bid-time authorization
-  - Hold for the maximum: the authorization covers the committed cap, not the
-    current bid, and stays one active hold per bidder per listing
-  - Failed raise: a raise the card cannot cover leaves the maximum, leader, and
-    price unchanged
 - Auto-bid as a bid
   - Counted and recorded: a bid Grade10 places counts in the bid count and
     history as placed on that bidder's behalf
@@ -48,17 +44,17 @@ A bidder SHALL:
 
 1. Open an open listing.
 2. Enter a **maximum**: the most they authorize Grade10 to bid for them.
-3. Confirm with the primary bid action. Grade10 accepts only after a card
-   authorization for that maximum is recorded. The panel discloses the
-   mechanism in always-on copy.
+3. Confirm with the primary bid action. Grade10 accepts or refuses the
+   maximum in the same answer, and takes nothing from the card. The panel
+   discloses the mechanism in always-on copy.
 4. See their own maximum, distinct from the current bid, and whether they
    lead.
 5. Raise that maximum later, or leave it standing.
 
 A maximum SHALL be valid only when it is at least the minimum next bid
 the listing already requires. Grade10 SHALL apply every window,
-authorization, and validity rule that `grade10-site/auction/auction` already
-governs a bid with to the committing of a maximum.
+card, and validity rule that `grade10-site/auction/auction` already governs a
+bid with to the committing of a maximum.
 
 Grade10 SHALL bid on a committed bidder's behalf only up to their
 maximum. A bidder SHALL be able to raise their maximum on an open listing
@@ -314,52 +310,6 @@ intermediate increments.
 - **WHEN** the listing closes with no other commitment
 - **THEN** that collector wins at 100 minor units
 
-### Requirement: The card authorization covers the committed maximum
-
-Grade10 SHALL hold a card authorization for a bidder's committed maximum,
-not for the current bid. It SHALL keep at most one active authorization
-per bidder per listing, and SHALL mark it for asynchronous release when
-that bidder is outbid or when the listing closes without them winning,
-per `grade10-site/auction/auction`. Because the authorization covers the
-maximum, a bid Grade10 places on a bidder's behalf SHALL NOT require a
-further card check.
-
-| Event | Authorization |
-| --- | --- |
-| Commitment accepted | Hold for the committed maximum |
-| Raise submitted | Hold for the new maximum, recorded before the raise is accepted |
-| Raise authorization fails | Nothing changes |
-| Grade10 places a bid on their behalf | No further card check |
-
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-i9w rev=1 -->
-#### Scenario: grade10-site-auction-auto-bidding-SC-19 - The hold is the maximum, not the price
-**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
-
-- **GIVEN** a listing whose current bid is 22500 minor units
-- **WHEN** a bidder commits a maximum of 50000 minor units and it is accepted
-- **THEN** Grade10 holds an authorization for 50000 minor units
-- **AND** it holds exactly one active authorization for that bidder and listing
-
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-kxu rev=1 -->
-#### Scenario: grade10-site-auction-auto-bidding-SC-20 - A raise that cannot be authorized changes nothing
-**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
-
-- **GIVEN** bidder A leads with a committed maximum of 50000 minor units
-- **WHEN** A raises to 80000 minor units and the card authorization for 80000 fails
-- **THEN** Grade10 refuses the raise
-- **AND** A's committed maximum remains 50000 minor units
-- **AND** the leader and the current bid are unchanged
-
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-32f rev=1 -->
-#### Scenario: grade10-site-auction-auto-bidding-SC-21 - An auto-bid step needs no new card check
-**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
-
-- **GIVEN** bidder A leads with an authorized maximum of 50000 minor units and the current bid is 25000
-- **WHEN** a challenger commits a maximum of 30000 minor units
-- **THEN** Grade10 raises A's bid on their behalf without a further card authorization
-- **AND** the current bid is 32500 minor units
-- **AND** A's authorization remains 50000 minor units
-
 ### Requirement: A bid Grade10 places counts as a bid
 
 Each accepted commitment SHALL cause one resolution. A resolution computes the
@@ -436,16 +386,32 @@ The title is historical: its extension window is now extended bidding.
 - **WHEN** the scheduled close arrives
 - **THEN** the listing enters extended bidding
 
-### Requirement: Maximum commitments and automatic bids work without a bid-time authorization
+### Requirement: Maximum commitments and automatic bids take nothing from the card
 
-When bid-time authorization holds are disabled, Grade10 SHALL accept a valid
-maximum under the auction rules without waiting for or creating a bid-time
-authorization. The enabled hold path and maximum rules remain unchanged.
+Committing or raising a maximum SHALL take nothing from the card: nothing is
+held, authorized or charged, and acceptance SHALL NOT wait on the payment
+provider. A raise SHALL be accepted or refused on the auction's rules alone. A
+bid Grade10 places on a bidder's behalf SHALL need no card step. Only the
+winner pays, under `grade10-site/auction/bid-payment-method`.
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-0yu rev=1 -->
-#### Scenario: grade10-site-auction-auto-bidding-SC-25 - A maximum works without a bid-time authorization
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-0yu rev=2 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-25 - A maximum resolves with nothing held on the card
 **Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
-- **GIVEN** bid-time authorization holds are disabled and a listing has an accepted maximum
+- **GIVEN** a listing with an accepted maximum
 - **WHEN** a challenger commits a higher maximum
-- **THEN** Grade10 resolves the two maxima and records the resulting bid without creating or waiting for an authorization
+- **THEN** Grade10 resolves the two maxima and records the resulting bids in
+  the same answer
+- **AND** nothing is held, authorized or charged on either bidder's card
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-32 - A raise is judged on the auction's rules alone
+**Serves:** grade10-site-auction-auto-bidding-US-01 - a leader raises their maximum
+
+- **GIVEN** bidder A leads an `HKD` listing with a committed maximum of 50000
+  HKD minor units at a current bid of 25000 HKD minor units
+- **WHEN** A raises their maximum to 80000 HKD minor units
+- **THEN** Grade10 accepts the raise in the same answer, with nothing taken
+  from the card
+- **AND** when A then submits 80000 HKD minor units again, Grade10 refuses it
+  and the bid form says: Your new maximum must be higher than your current
+  one.

@@ -37,8 +37,9 @@ Owner-only — nobody but the collector sees their record.
     the detailed index, filters, and listing story come from
     `grade10-site/auction/bidding-history`.
   - Standing while open: says whether the collector still leads, and what the
-    next valid bid must clear when they do not; a refused attempt moves
-    nothing.
+    next valid bid must clear when they do not; a refused attempt adds no row
+    and moves no Status, so a leader stays Leading and an outbid collector
+    stays Outbid.
   - Three groups: separates the listings that still need the collector from
     the ones that are finished.
   - Auction's price: a bidding row shows the auction's current price, or its
@@ -755,9 +756,9 @@ collector has bid SHALL carry exactly one of these values in Status.
 | Outbid | A higher valid bid stands. Carries the minimum next valid bid |
 
 A refused attempt SHALL NOT be a bid. It SHALL add no row to My Auctions and
-SHALL move no row's Status: a leader whose raise is refused stays Leading, and
-an outbid collector whose raise is refused stays Outbid. The refusal SHALL NOT
-appear on My Auctions; the bid panel shows it.
+SHALL change no row's Status or price: a leader whose raise is refused stays
+Leading, and an outbid collector whose raise is refused stays Outbid. The
+refusal SHALL NOT appear on My Auctions; the bid form shows it.
 
 Status SHALL NOT use Ending soon, Scheduled, Live, or Active. Close
 urgency SHALL appear with the listing identity.
@@ -805,6 +806,18 @@ code.
 - **WHEN** their first bid on it is refused
 - **AND** they open My Auctions
 - **THEN** no row for that listing appears in any tab
+
+#### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
+**Serves:** grade10-site-auction-account-record-US-02 - a refused raise leaves the collector reading the standing they had
+
+- **GIVEN** an open `HKD` listing on which the collector is Outbid with a
+  maximum of 25000 HKD minor units, at a current bid of 30000 HKD minor units
+  and a minimum next bid of 31000 HKD minor units
+- **WHEN** they raise their maximum to 30500 HKD minor units, and Grade10
+  refuses it as below the minimum
+- **AND** they open My Auctions
+- **THEN** that listing's Status is Outbid
+- **AND** the row's price is still 30000 HKD minor units
 
 #### Scenario: grade10-site-auction-account-record-SC-64 - An outbid row shows the auction's price
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions

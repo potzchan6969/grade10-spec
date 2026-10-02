@@ -9,149 +9,25 @@ standing without exposing private bidding facts.
 
 - Maximum-only actions
   - **Submission meaning:** treats every accepted bidder submission as an automatic maximum configuration or raise
-  - **Refusal meaning:** keeps a below-minimum maximum attempt private and out of public history
+  - **Refusal meaning:** a refused attempt is not a bid; it leaves no event, no
+    index entry and no standing
 - Ordered public records
   - **Automatic response:** places the existing leader's automatic response after the challenger's accepted action
   - **Tie outcome:** accepts an equal maximum, records the challenger before the earlier leader's automatic response at the same resolved amount, and keeps the earlier leader
   - **Outbid outcome:** records only the bidder who submits the higher maximum when no automatic response is placed for the displaced bidder
+  - **Whole decisions per page:** a history page ends on a whole auction
+    decision, never splitting one
 - Boundary cases
   - **Resolved amounts:** fixes the eight outcomes around the current bid, increment, and leader maximum
 - Lot personal bidding
   - **Maximum history:** accepted configure and raise caps the owner re-reads on the lot
   - **Bid sequence:** automatic bids Grade10 placed for the owner on that lot
-  - **Account labels:** maximum set, raised, and refused wording matches the lot
+  - **Account labels:** maximum set and raised wording matches the lot
 - Privacy boundary
   - **Owner only:** lot lists never expose a rival maximum or identity
   - **Public recent bids:** unchanged public price movements and listing pseudonyms
 
 ## Requirements
-
-### Requirement: A storefront account has one retained bidding index
-
-Grade10 SHALL give a signed-in collector a private index containing every
-listing on which that storefront account has a retained maximum attempt or
-automatic-bid activity. A listing SHALL appear once, ordered by its latest
-bidding activity, with its title, image when available, current or final price,
-currency, latest activity time, and the collector's current standing.
-
-The standing SHALL distinguish pending, leading, outbid, won, lost, canceled,
-and failed-only participation. Failed-only means the account has one or more
-failed maximum attempts on the listing and no accepted automatic maximum or
-automatic bid. Amounts SHALL be integer counts of minor units paired with an
-ISO 4217 currency code.
-
-The index SHALL be cursor-paged without duplicates or omissions. It SHALL offer
-an **Active** filter for listings whose bidding remains open and a **Completed**
-filter for listings whose bidding has ended or been canceled. Retained entries
-SHALL have no account control to delete or hide them.
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-sg5 rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-01 - Repeated activity is grouped under one listing
-**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
-
-- **GIVEN** a collector has configured an automatic maximum and raised that maximum on one listing
-- **WHEN** the collector reads their bidding index
-- **THEN** that listing appears once at the position of its latest activity
-- **AND** its summary carries the collector's current standing rather than one row per action
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-1en rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-02 - A failed-only listing remains explainable
-**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
-
-- **GIVEN** a collector's server-evaluated maximum attempts on a listing all failed
-- **AND** no automatic maximum or automatic bid was accepted for that account
-- **WHEN** the collector reads their bidding index
-- **THEN** the listing appears with failed-only standing
-- **AND** the collector can open its history to read each safe failure reason
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-nt1 rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-03 - Active and completed activity separate cleanly
-**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
-
-- **GIVEN** a signed-in collector has activity on one open listing, one closed listing, and one canceled listing
-- **WHEN** the collector selects **Active**
-- **THEN** only the open listing appears
-- **WHEN** the collector selects **Completed**
-- **THEN** the closed and canceled listings appear
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-70a rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-04 - Paging does not repeat or skip a listing
-**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
-
-- **GIVEN** a collector has more bidding listings than one page holds
-- **WHEN** the collector follows every returned cursor while no newer activity is added
-- **THEN** every matching listing appears exactly once in latest-activity order
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-cpz rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-05 - An account with no bidding activity has an empty index
-**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
-
-- **GIVEN** a signed-in storefront account with no retained maximum attempt or automatic-bid activity
-- **WHEN** the collector reads their bidding index
-- **THEN** Grade10 returns an empty result rather than another account's or another storefront's activity
-
-### Requirement: One listing history combines public movement and private meaning
-
-For a listing on which the signed-in account has activity, Grade10 SHALL return
-one stably ordered, cursor-paged chronology combining every retained accepted
-public history record from the auction log with that account's private events
-and standing transitions. An accepted public history record may represent a
-bidder's accepted maximum-setting action at the amount submitted or a bid
-Grade10 places automatically. Events with the same timestamp SHALL keep a
-stable auction-defined order so that later pages cannot reorder them.
-
-When one accepted maximum-setting action causes an automatic response, the
-challenger's public record SHALL precede the automatic response in the same
-timestamp group. This ordering SHALL also apply when the challenger maximum
-equals the earlier leader's maximum: both records SHALL show the same resolved
-amount, and the earlier leader SHALL remain leading. A public record SHALL show
-the listing pseudonym and resolved public amount, while a private
-maximum-setting event MAY show its owner's maximum only in that owner's
-history. A bidder who is outbid without submitting a new maximum SHALL receive
-the standing transition and any existing outbid notification, but SHALL NOT
-receive a new bid record for the other bidder's action.
-
-The combined history SHALL render the account's auction pseudonym as **You**
-and every rival only by that listing's pseudonym. It SHALL merge two facts from
-one auction decision into one understandable step rather than presenting
-contradictory duplicates.
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-pbt rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-11 - A competing bid visibly causes an outbid state
-**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
-
-- **GIVEN** the collector is leading a listing
-- **WHEN** a rival's accepted public history record displaces the collector
-- **THEN** the combined history shows that rival under its listing pseudonym
-- **AND** the same step marks **You were outbid** at the resulting public price
-- **AND** it reveals neither account's still-hidden private maximum
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-9ii rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-12 - An automatic response is attributed to You
-**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
-
-- **GIVEN** a rival maximum-setting action causes the collector's automatic maximum to advance the public price
-- **WHEN** the collector reads the combined history
-- **THEN** the rival's accepted action appears before the collector's resulting automatic movement when they share a timestamp
-- **AND** the resulting accepted movement is attributed to **You** and marked as automatic
-- **AND** the private automatic event is not rendered as a contradictory second accepted bid
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-opo rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-13 - A failed attempt sits beside the unchanged auction state
-**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
-
-- **GIVEN** a collector's maximum attempt fails while another bidder remains leading
-- **WHEN** the collector reads the combined history
-- **THEN** the failed private event appears at its authoritative time with its safe reason
-- **AND** the auction's accepted price and leading pseudonym remain unchanged
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-k4s rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-14 - Full retained history remains pageable
-**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
-
-- **GIVEN** one listing has more public and private events than one page holds
-- **WHEN** the collector follows every returned cursor while no new event is added
-- **THEN** every retained event visible to that collector appears exactly once in stable order
 
 ### Requirement: Private bidding history follows the storefront identity boundary
 
@@ -162,9 +38,9 @@ account id. A matching account id from another storefront SHALL NOT grant
 access.
 
 Anonymous Auction reads SHALL continue to expose only accepted public price
-movements and listing pseudonyms. They SHALL NOT expose failed attempts,
-automatic maximums, private event kinds, payment facts, or the identity behind
-a pseudonym. Reading history SHALL NOT place a bid or change any auction fact.
+movements and listing pseudonyms. They SHALL NOT expose automatic maximums,
+private event kinds, payment facts, or the identity behind a pseudonym.
+Reading history SHALL NOT place a bid or change any auction fact.
 
 <!-- trace:scenario id=g10.auction-bidding-history.SC-onh rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-15 - A storefront account reads its own history
@@ -200,7 +76,7 @@ a pseudonym. Reading history SHALL NOT place a bid or change any auction fact.
 
 - **GIVEN** any retained bidding history
 - **WHEN** an authorized collector reads or pages it
-- **THEN** no bid, maximum, hold, listing standing, or auction close changes
+- **THEN** no bid, maximum, listing standing, or auction close changes
 
 ### Requirement: Grade10 presents bidding history at the account's bids address
 
@@ -313,84 +189,6 @@ pages without blanking summaries that are already available.
 - **AND** its authenticated backend remains compatible with the shared history
   contract
 
-### Requirement: Every server-evaluated maximum action leaves a private event
-
-Grade10 SHALL retain a timestamped private event when the Auction authority
-receives a signed-in account's automatic maximum configuration or raise,
-refuses that maximum attempt, or places an automatic bid for that account. A
-configured or raised maximum event SHALL carry the account's resulting private
-maximum. An automatic-bid event SHALL distinguish an engine-placed bid from a
-maximum-setting action. Manual bid requests SHALL NOT be accepted or retained
-as bidding-history events.
-
-A refused maximum attempt SHALL retain a stable, collector-safe reason covering
-the applicable category: the bidding window, minimum amount, account
-eligibility, payment authorization, stale competing price, or unavailable
-bidding capability. It SHALL NOT expose a payment-provider message, card data,
-secret, another account's maximum, or another account's identity. Input
-rejected only inside the browser before a request reaches Auction SHALL NOT
-become an Auction history event.
-
-The retained action-log type vocabulary SHALL contain exactly:
-
-- `automatic_max_configured` — the account configured its first automatic maximum for the listing;
-- `automatic_max_raised` — the account raised its existing automatic maximum;
-- `automatic_max_refused` — Auction refused the account's maximum attempt;
-- `automatic_bid_accepted` — the engine placed an accepted bid for the account;
-- `accepted_price` — an accepted public price movement occurred; and
-- `standing_changed` — the account's standing on the listing changed.
-
-The safe failure-code vocabulary SHALL contain exactly:
-
-- `window` — the listing is outside its bidding window;
-- `minimum` — the attempted maximum does not meet the current minimum;
-- `account` — the account is not eligible to bid;
-- `payment` — payment authorization did not succeed;
-- `stale_price` — a competing price made the evaluated request stale; and
-- `unavailable` — bidding could not be evaluated because the capability was unavailable.
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-lgy rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-37 - A manual bid is not accepted
-**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
-
-- **WHEN** a collector submits a manual bid request
-- **THEN** Auction refuses it because bidding accepts automatic maximums only
-- **AND** no manual bid event is retained
-- **AND** the collector is directed to submit an automatic maximum instead
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-spj rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-38 - A server-evaluated maximum fails
-**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
-
-- **WHEN** Auction refuses a collector's maximum attempt after evaluating it
-- **THEN** the collector's history records the attempted amount, failure time, and safe reason category
-- **AND** the failed attempt does not appear in the anonymous auction log or accepted bid count
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-vd5 rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-39 - Browser-only validation creates no Auction event
-**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
-
-- **GIVEN** a collector enters a malformed maximum that the browser refuses to submit
-- **WHEN** the collector later reads the listing's history
-- **THEN** that local validation failure is absent from the Auction history
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-qhu rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-40 - An automatic maximum is configured and raised
-**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
-
-- **WHEN** a collector configures an automatic maximum and later raises it
-- **THEN** the collector's private history records both resulting maximums in order
-- **AND** neither maximum appears in any rival's history or anonymous read while it remains hidden
-
-<!-- trace:scenario id=g10.auction-bidding-history.SC-qvv rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-41 - The engine bids for the collector
-**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
-
-- **GIVEN** a collector has an active automatic maximum
-- **WHEN** the automatic-bidding engine places a bid for that account
-- **THEN** the collector's private history labels the action as automatic
-- **AND** the accepted public price movement remains subject to the auction's existing pseudonym rules
-
 ### Requirement: Maximum-only bidding records resolve the boundary cases
 
 For the scenarios below, the listing is an open auction in `USD`, all amounts
@@ -408,14 +206,14 @@ leads, the public history SHALL show B once at the resolved public amount. A
 notification or standing transition for A SHALL NOT create an A bid record
 unless A submits a new maximum or Grade10 places an automatic bid for A.
 
-<!-- trace:scenario id=g10.auction-bidding-history.SC-dtm rev=1 -->
+<!-- trace:scenario id=g10.auction-bidding-history.SC-dtm rev=2 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-29 - A maximum below the next bid is refused
 **Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 450 minor units
 - **THEN** Auction refuses the submission because it is below the current bid plus one increment, 500 minor units
 - **AND** the public history remains at 400 minor units with A leading
-- **AND** B's private history records the refused maximum with the `minimum` reason
+- **AND** B's history gains no event for the refused maximum
 
 <!-- trace:scenario id=g10.auction-bidding-history.SC-uqt rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-30 - A matching minimum creates challenger and response records
@@ -507,12 +305,12 @@ sticky current-maximum summary; the live private maximum remains on the lot bid
 panel only.
 
 The lot dialog SHALL include only accepted configure and raise maximum events
-and automatic bids for that owner. A refused maximum attempt SHALL remain on
-the account combined chronology only and SHALL NOT appear in the lot dialog.
-Reading either lot list SHALL NOT place a bid or change any auction fact.
-Neither lot list SHALL expose another account's maximum, identity, or payment
-facts. Anonymous and rival reads of the listing SHALL continue to see only the
-existing public recent-bids contract.
+and automatic bids for that owner. A refused attempt SHALL appear in neither
+the lot dialog nor the account combined chronology. Reading either lot list
+SHALL NOT place a bid or change any auction fact. Neither lot list SHALL expose
+another account's maximum, identity, or payment facts. Anonymous and rival
+reads of the listing SHALL continue to see only the existing public
+recent-bids contract.
 
 Amounts SHALL be integer counts of minor units paired with an ISO 4217 currency
 code.
@@ -541,18 +339,18 @@ code.
 - **AND** **Your maximums** still lists every accepted configure or raise for
   that owner on that listing, newest first
 
-<!-- trace:scenario id=g10.auction-bidding-history.SC-roe rev=1 -->
+<!-- trace:scenario id=g10.auction-bidding-history.SC-roe rev=2 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-44 - Raised maximums appear on the lot without refusals
 **Serves:** grade10-site-auction-bidding-history-US-06 - Collector reviews maximum history on the lot
 
 - **GIVEN** a signed-in collector who configured a maximum, later raised it, and
-  also has a retained refused maximum attempt on the same listing
+  had a further raise refused on the same listing
 - **WHEN** they open the lot personal bidding dialog
 - **THEN** **Your maximums** lists only the accepted configure and raise amounts
   with times, newest first
-- **AND** the refused attempt is absent from both lot lists
-- **AND** the refused attempt remains readable in that listing's account
-  combined chronology at `/bids`
+- **AND** the refused raise is absent from both lot lists
+- **AND** the refused raise is absent from that listing's account combined
+  chronology at `/bids`
 
 <!-- trace:scenario id=g10.auction-bidding-history.SC-g01 rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-45 - Lot personal bidding stays private and inert
@@ -563,24 +361,237 @@ code.
 - **WHEN** the collector opens the lot personal bidding dialog
 - **THEN** neither list shows the rival's maximum, identity, or payment facts
 - **AND** the public recent-bids list on the lot is unchanged
-- **AND** no bid, maximum, hold, listing standing, or auction close changes
+- **AND** no bid, maximum, listing standing, or auction close changes
 
-### Requirement: Account bidding chronology labels maximum events as maximums
+### Requirement: A storefront account has one index of the listings it bid on
+
+Grade10 SHALL give a signed-in collector a private index containing every
+listing on which that storefront account placed a bid Grade10 accepted, either
+a maximum the collector set or a bid Grade10 placed for them automatically. A
+refused attempt is not a bid and SHALL add no listing to the index. A listing
+SHALL appear once, ordered by its latest bidding activity, with its title,
+image when available, current or final price, currency, latest activity time,
+and the collector's current standing.
+
+The standing SHALL be exactly one of these.
+
+| Standing | When |
+| --- | --- |
+| Leading | The collector's bid is the highest valid bid |
+| Outbid | A higher valid bid stands, while the listing is open or after it closes |
+| Won | The listing closed with the collector's bid on top |
+| Canceled | The listing was called off |
+
+Only the bids a collector placed SHALL move their standing: a close or a
+call-off SHALL move the standing of each collector who placed a bid on the
+listing, and SHALL add no listing to the index of anyone who did not. Amounts
+SHALL be integer counts of minor units paired with an ISO 4217 currency code.
+
+The index SHALL be cursor-paged without duplicates or omissions. It SHALL offer
+an **Active** filter for listings whose bidding remains open and a **Completed**
+filter for listings whose bidding has ended or been canceled. Retained entries
+SHALL have no account control to delete or hide them.
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-sg5 rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-01 - Repeated activity is grouped under one listing
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
+
+- **GIVEN** a collector has configured an automatic maximum and raised that maximum on one listing
+- **WHEN** the collector reads their bidding index
+- **THEN** that listing appears once at the position of its latest activity
+- **AND** its summary carries the collector's current standing rather than one row per action
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-nt1 rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-03 - Active and completed activity separate cleanly
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
+
+- **GIVEN** a signed-in collector has activity on one open listing, one closed listing, and one canceled listing
+- **WHEN** the collector selects **Active**
+- **THEN** only the open listing appears
+- **WHEN** the collector selects **Completed**
+- **THEN** the closed and canceled listings appear
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-70a rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-04 - Paging does not repeat or skip a listing
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
+
+- **GIVEN** a collector has more bidding listings than one page holds
+- **WHEN** the collector follows every returned cursor while no newer activity is added
+- **THEN** every matching listing appears exactly once in latest-activity order
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-cpz rev=2 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-05 - An account with no bidding activity has an empty index
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
+
+- **GIVEN** a signed-in storefront account that has placed no bid
+- **WHEN** the collector reads their bidding index
+- **THEN** Grade10 returns an empty result rather than another account's or another storefront's activity
+
+#### Scenario: grade10-site-auction-bidding-history-SC-47 - A call-off moves only the collectors who placed a bid
+**Serves:** grade10-site-auction-bidding-history-US-01 - a collector reads a called-off listing on their index only when they bid on it
+
+- **GIVEN** an open listing on which collector A placed a bid and collector B
+  placed none
+- **WHEN** an operator calls the listing off
+- **THEN** A's index lists it under **Completed** with standing Canceled
+- **AND** B's index has no entry for it and B's history gains no event
+
+### Requirement: One listing history combines public movement and private meaning in whole decisions
+
+For a listing on which the signed-in account has activity, Grade10 SHALL return
+one stably ordered, cursor-paged chronology combining every retained accepted
+public history record from the auction log with that account's private events
+and standing transitions. An accepted public history record may represent a
+bidder's accepted maximum-setting action at the amount submitted or a bid
+Grade10 places automatically. Events with the same timestamp SHALL keep a
+stable auction-defined order so that later pages cannot reorder them.
+
+When one accepted maximum-setting action causes an automatic response, the
+challenger's public record SHALL precede the automatic response in the same
+timestamp group. This ordering SHALL also apply when the challenger maximum
+equals the earlier leader's maximum: both records SHALL show the same resolved
+amount, and the earlier leader SHALL remain leading. A public record SHALL show
+the listing pseudonym and resolved public amount, while a private
+maximum-setting event MAY show its owner's maximum only in that owner's
+history. A bidder who is outbid without submitting a new maximum SHALL receive
+the standing transition and any existing outbid notification, but SHALL NOT
+receive a new bid record for the other bidder's action.
+
+The combined history SHALL render the account's auction pseudonym as **You**
+and every rival only by that listing's pseudonym. It SHALL merge two facts from
+one auction decision into one understandable step rather than presenting
+contradictory duplicates. A page SHALL end on a whole auction decision: every
+record one decision wrote SHALL fall on the same page, so a page MAY run past
+the requested size by the rest of its last decision.
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-pbt rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-11 - A competing bid visibly causes an outbid state
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
+
+- **GIVEN** the collector is leading a listing
+- **WHEN** a rival's accepted public history record displaces the collector
+- **THEN** the combined history shows that rival under its listing pseudonym
+- **AND** the same step marks **You were outbid** at the resulting public price
+- **AND** it reveals neither account's still-hidden private maximum
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-9ii rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-12 - An automatic response is attributed to You
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
+
+- **GIVEN** a rival maximum-setting action causes the collector's automatic maximum to advance the public price
+- **WHEN** the collector reads the combined history
+- **THEN** the rival's accepted action appears before the collector's resulting automatic movement when they share a timestamp
+- **AND** the resulting accepted movement is attributed to **You** and marked as automatic
+- **AND** the private automatic event is not rendered as a contradictory second accepted bid
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-k4s rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-14 - Full retained history remains pageable
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
+
+- **GIVEN** one listing has more public and private events than one page holds
+- **WHEN** the collector follows every returned cursor while no new event is added
+- **THEN** every retained event visible to that collector appears exactly once in stable order
+
+#### Scenario: grade10-site-auction-bidding-history-SC-48 - A page never splits one auction decision
+**Serves:** grade10-site-auction-bidding-history-US-03 - a collector paging a listing's history reads each decision as one step
+
+- **GIVEN** a listing whose one auction decision wrote the collector's maximum,
+  their accepted price of 30000 USD minor units, a rival's response at 31000 USD
+  minor units, and the collector's outbid standing, between an older and a
+  newer rival price
+- **WHEN** the collector follows every cursor at a page size of 1
+- **THEN** every record of that decision comes back on one page
+- **AND** the walk reads the same records in the same order as one page of 50
+
+### Requirement: Every accepted maximum action leaves a private event
+
+Grade10 SHALL retain a timestamped private event when the Auction authority
+accepts a signed-in account's automatic maximum configuration or raise, or
+places an automatic bid for that account. A configured or raised maximum event
+SHALL carry the account's resulting private maximum. An automatic-bid event
+SHALL distinguish an engine-placed bid from a maximum-setting action. Every bid
+a collector places SHALL be a maximum; there SHALL be no manual bid request
+and no manual bid event.
+
+A refused attempt SHALL NOT be a bid. It SHALL leave no event, no index entry
+and no standing, and SHALL change no entry's standing or latest activity; the
+bid form shows why it was refused, per `grade10-site/auction/auction`. Input
+rejected only inside the browser before a request reaches Auction SHALL NOT
+become an Auction history event.
+
+The retained action-log type vocabulary SHALL contain exactly:
+
+- `automatic_max_configured` — the account configured its first automatic maximum for the listing;
+- `automatic_max_raised` — the account raised its existing automatic maximum;
+- `automatic_bid_accepted` — the engine placed an accepted bid for the account;
+- `accepted_price` — an accepted public price movement occurred; and
+- `standing_changed` — the account's standing on the listing changed.
+
+#### Scenario: grade10-site-auction-bidding-history-SC-51 - Every bid is a maximum, never a manual bid
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every maximum Grade10 accepted
+
+- **WHEN** a collector places a bid of 50000 USD minor units that Grade10 accepts
+- **THEN** their history records it as an automatic maximum of 50000 USD minor units
+- **AND** no manual bid event is retained
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-vd5 rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-39 - Browser-only validation creates no Auction event
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every maximum Grade10 accepted
+
+- **GIVEN** a collector enters a malformed maximum that the browser refuses to submit
+- **WHEN** the collector later reads the listing's history
+- **THEN** that local validation failure is absent from the Auction history
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-qhu rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-40 - An automatic maximum is configured and raised
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every maximum Grade10 accepted
+
+- **WHEN** a collector configures an automatic maximum and later raises it
+- **THEN** the collector's private history records both resulting maximums in order
+- **AND** neither maximum appears in any rival's history or anonymous read while it remains hidden
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-qvv rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-41 - The engine bids for the collector
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every maximum Grade10 accepted
+
+- **GIVEN** a collector has an active automatic maximum
+- **WHEN** the automatic-bidding engine places a bid for that account
+- **THEN** the collector's private history labels the action as automatic
+- **AND** the accepted public price movement remains subject to the auction's existing pseudonym rules
+
+#### Scenario: grade10-site-auction-bidding-history-SC-49 - A refused first bid leaves no trace in the record
+**Serves:** grade10-site-auction-bidding-history-US-01 - a collector whose only attempt was refused finds no listing in their index
+
+- **GIVEN** an open listing on which the collector has placed no bid
+- **WHEN** Grade10 refuses their bid of 9999 USD minor units twice as below the
+  minimum
+- **THEN** their index has no entry for that listing
+- **AND** no event for that listing is retained in their history or in the
+  public auction log
+
+#### Scenario: grade10-site-auction-bidding-history-SC-50 - A refused raise leaves the entry as it was
+**Serves:** grade10-site-auction-bidding-history-US-02 - a refused raise adds nothing to what the collector audits
+
+- **GIVEN** an open listing on which the collector is Outbid
+- **WHEN** Grade10 refuses their raise as below the minimum
+- **THEN** the listing keeps standing Outbid with the latest activity it had
+  before the refusal
+- **AND** its history gains no event
+
+### Requirement: Account bidding chronology labels the maximums set and raised
 
 On the Grade10 `/bids` combined listing chronology, Grade10 SHALL present
-private automatic maximum configuration, raise, and refusal events with
-collector-facing labels that name them as a maximum set, a maximum raised, or a
-maximum refused. The page SHALL NOT add a new tab, filter, or maximums-only
-route for this distinction. ZZZ SHALL NOT gain a screen from this requirement.
+private automatic maximum configuration and raise events with collector-facing
+labels that name them as a maximum set or a maximum raised. The page SHALL NOT
+add a new tab, filter, or maximums-only route for this distinction. ZZZ SHALL
+NOT gain a screen from this requirement.
 
-<!-- trace:scenario id=g10.auction-bidding-history.SC-9ua rev=1 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-46 - Account chronology names maximum set, raise, and refusal
+<!-- trace:scenario id=g10.auction-bidding-history.SC-9ua rev=2 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-46 - Account chronology names maximum set and raise
 **Serves:** grade10-site-auction-bidding-history-US-08 - Collector reads clearer maximum labels on /bids
 
 - **GIVEN** a signed-in collector whose listing chronology includes an accepted
-  automatic maximum configuration, a later accepted raise, and a retained
-  refused maximum attempt
+  automatic maximum configuration and a later accepted raise
 - **WHEN** they expand that listing on `/bids`
-- **THEN** those events read as a maximum set, a maximum raised, and a maximum
-  refused
+- **THEN** those events read as a maximum set and a maximum raised
 - **AND** no new account tab or maximums-only route is offered

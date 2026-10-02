@@ -98,14 +98,63 @@ per "The delivery address locks when the invoice is sent".
 - **AND** a confirmation carrying the home address and bank transfer is refused
 - **AND** the order holds no delivery address and no method
 
-### Requirement: The bid-time hold is released, never captured
+### Requirement: An unfinished card payment leaves the invoice payable
 
-When a bid-time authorization exists, Grade10 SHALL release it on every bidder
-of a closing lot, winner and losing bidders alike, and SHALL NOT leave a losing
-bidder's authorization to expire on its own.
+Pay Now SHALL start a hosted card payment session for the current invoice. Its
+outcome SHALL read as follows.
 
-Grade10 SHALL NOT capture or increment a bid-time authorization as any part
-of settlement. The winner SHALL pay by the method the invoice was sent for:
+| Session outcome | The winner sees | Order |
+| --- | --- | --- |
+| Completed | **Confirming payment** until Grade10 records the invoice `paid` | Preparing Shipment once paid |
+| Timed out | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Abandoned or cancelled by the winner | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Declined | The refusal, per "The winner pays a sent invoice by the method it was sent for" | Stays Pending Payment |
+
+Pay Now after an unfinished session SHALL start a fresh session. An unfinished
+session SHALL NOT change the invoice, its amount or its deadline. Grade10 SHALL
+NOT show the order as paid before it records the invoice `paid`.
+
+#### Scenario: winner-order-SC-49 - A timed-out payment session stays payable
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a winner whose payment session for a Pending Payment order timed out
+- **WHEN** they return to the order
+- **THEN** the page says payment was not completed
+- **AND** the order is still Pending Payment with Pay Now available
+
+#### Scenario: winner-order-SC-50 - Pay Now after an unfinished session starts fresh
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a Pending Payment order whose last payment session was abandoned
+- **WHEN** the winner selects Pay Now
+- **THEN** a new payment session starts for the same invoice amount
+
+#### Scenario: winner-order-SC-51 - A completed session confirms before reading Preparing Shipment
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** a winner whose hosted card session completed but whose
+  authenticated auction-order read model has not yet recorded invoice status
+  `paid`
+- **WHEN** they return to the order
+- **THEN** the page shows Confirming payment
+- **AND** the order does not yet read Preparing Shipment
+
+#### Scenario: winner-order-SC-52 - A recorded payment reads Preparing Shipment
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
+
+- **GIVEN** an order whose authenticated auction-order read model returns
+  invoice status `paid` and fulfilment status `unfulfilled`
+- **WHEN** the winner opens it
+- **THEN** its status is Preparing Shipment
+
+## RENAMED Requirements
+
+- FROM: `### Requirement: The bid-time hold is released, never captured`
+- TO: `### Requirement: The winner pays a sent invoice by the method it was sent for`
+
+### Requirement: The winner pays a sent invoice by the method it was sent for
+
+The winner SHALL pay by the method the invoice was sent for:
 
 | Invoice method | How the winner pays |
 | --- | --- |
@@ -115,9 +164,6 @@ of settlement. The winner SHALL pay by the method the invoice was sent for:
 Cash and every other method are recorded by an operator alone, per
 `grade10-admin/auction/post-sale`.
 
-Releasing an authorization that has already expired SHALL succeed as a
-no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
-
 A refused or failed card payment SHALL NOT void the invoice. While a card
 invoice's status is `pending`, it SHALL remain payable by card and the winner
 SHALL be able to retry with the same or a different card. The primary pay
@@ -125,32 +171,6 @@ control SHALL read **Pay with Card**. When the invoice status is `expired` or
 `payment_verifying`, Grade10 SHALL NOT offer or start winner card payment; one
 that completes anyway is recorded per "Money that lands is always recorded" in
 `grade10-admin/auction/post-sale`.
-
-#### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** a winner holding an open bid-time authorization on the closing lot
-- **WHEN** the lot closes
-- **THEN** Grade10 releases that authorization at close without capturing it
-- **AND** after an operator later sends a card invoice, the winner's payment is a
-  single new transaction for the order total
-
-#### Scenario: winner-order-SC-13 - An expired hold releases as a no-op
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** a winner whose bid-time authorization expired before the lot closed
-- **WHEN** the lot closes
-- **THEN** Grade10 records the release as successful
-- **AND** creates the auction order as normal
-
-#### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
-**Serves:** winner-order-US-01 - the lot close that opens the winner's order also frees every losing hold
-
-- **GIVEN** a lot closing with one winner and three losing bidders holding
-  open authorizations
-- **WHEN** the lot closes
-- **THEN** Grade10 releases all three losing authorizations
-- **AND** does not wait for them to expire
 
 #### Scenario: winner-order-SC-15 - A declined payment leaves the invoice payable
 **Serves:** winner-order-US-01 - Winner settles a won lot

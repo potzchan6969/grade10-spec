@@ -24,7 +24,7 @@ user id and an anonymous visit by device.
   - Client names: the browser may send only those
   - Server names: a browser cannot submit them
   - Store funnel: page, product, add, cart, checkout, paid order
-  - Auction funnel: lot view, card, bid, watch, outbid, win, invoice paid
+  - Auction funnel: lot view, card, bid accepted, watch, outbid, win, invoice paid
   - Loyalty facts: points on the paid order, reward redeemed, pass added, till identified
   - Vault conversion: submitted, visit booked, offer, payout, identity bound
   - First-touch campaign: UTM on Page Viewed and Lot Viewed when present; Initial Referrer on the first Page Viewed for a device
@@ -620,6 +620,12 @@ Paid SHALL still name that device and SHALL NOT drop it.
 **Serves:** Events - engine auto-bids are not Bid Placed
 - **WHEN** the auction engine places an auto-bid step under a collector's already-accepted maximum
 - **THEN** Mixpanel does not record Bid Placed for that step
+
+#### Scenario: grade10-site-analytics-SC-59 - A refused maximum is not Bid Placed
+
+**Serves:** Events - a bid the auction refuses is not a bid in the funnel
+- **WHEN** the auction refuses a collector's maximum
+- **THEN** Mixpanel records neither Bid Placed nor Bidder Outbid for it
 
 #### Scenario: grade10-site-analytics-SC-21 - Watching a lot is not a bid
 

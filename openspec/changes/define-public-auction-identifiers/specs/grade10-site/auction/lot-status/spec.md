@@ -19,8 +19,7 @@ listing page remains directly accessible by its original address, per
 route. A draft has no public address and remains unavailable.
 
 **Bidder exception** - A collector who bid on a called-off lot SHALL still see
-it in My Auctions. When that bid has a bid-time authorization, the row carries
-the note that its card hold was released, per
+it in My Auctions, where the row says their card was not charged, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
 #### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
@@ -53,7 +52,7 @@ the note that its card hold was released, per
 - **GIVEN** a collector who bid on a lot that an operator then called off
 - **WHEN** they open My Auctions
 - **THEN** the lot is listed
-- **AND** when the bid has a bid-time authorization, the row says that its card hold was released
+- **AND** the row says their card was not charged
 - **AND** a collector who did not bid on the lot does not see it
 
 #### Scenario: grade10-site-auction-lot-status-SC-13 - A called-off lot stays reachable at its canonical address

@@ -41,9 +41,8 @@ A Won listing SHALL NOT carry secondary helper detail lines under its standing
 How to reach Grade10 when the invoice is `expired` SHALL appear on Winner Order
 only.
 
-Didn’t win hold being-released and released copy remains governed by the durable
-hold requirements folded with `redesign-my-auctions-table`; this change does not
-remove them.
+A Didn’t win listing reads "Your card was not charged.", under "A losing bidder
+reads that their card was not charged".
 
 <!-- trace:scenario id=g10.auction-account-record.SC-1lv rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid

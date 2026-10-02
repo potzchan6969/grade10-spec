@@ -1,7 +1,7 @@
 # grade10-site/auction/winner-order Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## winner-order-US1: Winner settles a won lot
 
@@ -162,8 +162,8 @@
 * Both <total before> and <total after> show before payment.
 * No separate charge of <difference> is raised.
 
-<!-- trace:case id=g10.auction-winner-order.TC-0p6 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### winner-order-US1-TC5-1: The winner's bid hold is released and one fresh charge settles
+<!-- trace:case id=g10.auction-winner-order.TC-0p6 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
+### winner-order-US1-TC5-2: The winner's card holds nothing from bidding and one fresh charge settles
 
 **Classification:**
 
@@ -180,25 +180,27 @@
 
 **Pre-conditions:**
 
-* customer A leads <lot_1> with an open bid-time card authorization.
+* customer A(card linked) leads `<lot_1>`, bidding on the card on file.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A lot taking bids, led by customer A, closing within a minute |
+| `<lot_1>` | A lot taking bids, led by customer A, closing within a minute |
+| `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
 
 **Steps:**
 
-1. Wait for <lot_1> to close.
-2. Read customer A's authorization for <lot_1> at the card provider.
-3. Pay the invoice by card.
-4. Read customer A's card transactions for <lot_1>.
+1. Wait for `<lot_1>` to close.
+2. Read customer A's authorizations and charges for `<lot_1>` at the card provider.
+3. Once the invoice for `<lot_1>` is sent, pay it by card through hosted Checkout with `<card>`.
+4. Read customer A's card transactions for `<lot_1>` again.
 
 **Expected Results:**
 
-* Step 2: the authorization is released, never captured.
-* Step 4: one new transaction for the final amount.
+* Step 2 shows no authorization and no charge for `<lot_1>`.
+* Step 3 opens hosted Checkout for the invoice total.
+* Step 4 shows one charge, for the invoice total.
 
 <!-- trace:case id=g10.auction-winner-order.TC-5vo rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
 ### winner-order-US1-TC6-1: A declined card leaves the invoice payable
@@ -1233,8 +1235,6 @@
 * Step 1: <address_work> is archived.
 * Step 2: the order still shows <address_work>.
 
----
-
 ### winner-order-US1-TC36-1: Delivery Add Address offers a complete A–Z country catalogue
 
 **Classification:**
@@ -2108,6 +2108,226 @@ Runs once per row of **Test data**.
 
 ---
 
+## winner-order-US4: Winner pays an invoice by card
+
+**As a** winner
+**I want** to see the full invoice and pay it by card, even if a first attempt does not finish
+**so that** the lot moves to Preparing Shipment without contacting Grade10.
+
+### winner-order-US4-TC1-2: An unpaid order shows invoice, Pay with Card, address and lot
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) holds an order in Pending Payment, with invoice status
+  `pending` or `expired`.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+
+**Expected Results:**
+
+* Every invoice line and Pay with Card are shown in the order summary.
+* The confirmed delivery address and the lot are shown.
+* An expired invoice still reads Pending Payment and offers Contact Us instead
+  of Pay with Card.
+
+### winner-order-US4-TC2-1: Order Information reads Invoice Status, not Paid Status
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) holds an order whose invoice status is paid.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Scroll to Order Information.
+
+**Expected Results:**
+
+* Invoice Status reads Paid.
+* No Paid Status label appears.
+
+### winner-order-US4-TC3-1: A timed-out payment session leaves the invoice payable
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) holds an order in Pending Payment.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Click Pay Now.
+3. Wait until the payment session times out.
+4. Return to <grade10 auction order url>.
+
+**Expected Results:**
+
+* The page says payment was not completed.
+* The order still reads Pending Payment.
+* Pay Now is available.
+
+### winner-order-US4-TC4-1: Pay Now after an abandoned session starts a fresh one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) holds a Pending Payment order whose last payment session was abandoned.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Click Pay Now.
+
+**Expected Results:**
+
+* A new payment session opens.
+* It charges the same invoice amount.
+
+### winner-order-US4-TC5-1: A completed payment shows Confirming payment before Preparing Shipment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) completed a hosted card session, but the authenticated
+  auction-order read model has not yet recorded the invoice as paid.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+
+**Expected Results:**
+
+* The page shows Confirming payment.
+* The order does not read Preparing Shipment.
+
+### winner-order-US4-TC6-1: A recorded payment reads Preparing Shipment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) holds an order whose authenticated auction-order read model
+  returns invoice status `paid` and fulfilment status `unfulfilled`.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+
+**Expected Results:**
+
+* The order status reads Preparing Shipment.
+
+---
+
+<!-- trace:case id=g10.auction-winner-order.TC-td7 rev=1 covers=g10.auction-winner-order.SC-1yn -->
+### winner-order-US4-TC7-1: A suspended winner reads the suspension under the lot
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-04
+
+**Pre-conditions:**
+
+* customer(winner) is suspended from bidding and holds an order whose invoice
+  is `pending`.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Read the alerts under the lot.
+3. Choose Pay what is owed.
+
+**Expected Results:**
+
+* An alert under the lot says bidding is suspended and payment does not lift it.
+* Choosing Pay what is owed brings the order summary's pay control into view.
+
+---
+
 ## winner-order-US5: Winner misses the payment deadline
 
 **As a** winner whose invoice deadline has passed unpaid,
@@ -2186,6 +2406,86 @@ Runs once per row of **Test data**.
 
 ---
 
+## winner-order-US6: Losing bidder gets their hold back when the lot closes
+
+**As a** bidder who did not win,
+**I want** the card hold my bids put there lifted as soon as the lot closes,
+**so that** losing an auction does not leave my money reserved until the
+authorization expires on its own.
+
+### winner-order-US6-TC1-1: A losing bidder's card hold is released at the close
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-06
+
+**Pre-conditions:**
+
+* customer A holds a card authorization for their bid on <lot_1>.
+* customer B leads <lot_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | A lot taking bids, bid on by customer A and led by customer B, about to close |
+
+**Steps:**
+
+1. Let <lot_1> close with customer B winning.
+2. Read the authorization for customer A and <lot_1> at the card provider.
+
+**Expected Results:**
+
+* customer A's authorization is released, not left to expire.
+* No charge is captured on customer A's card.
+
+### winner-order-US6-TC2-1: Every hold a losing bidder's bids placed is released
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-06
+
+**Pre-conditions:**
+
+* customer A bid on <lot_1> more than once, each bid authorized on their card.
+* customer B leads <lot_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | A lot taking bids, with several bids from customer A, led by customer B, about to close |
+
+**Steps:**
+
+1. Let <lot_1> close with customer B winning.
+2. Read every authorization for customer A and <lot_1> at the card provider.
+
+**Expected Results:**
+
+* No authorization for customer A and <lot_1> is left held.
+
+---
+
 ## winner-order-US7: Winner misses the address deadline
 
 **As a** winner who did not confirm a delivery address within 48 hours of lot close,
@@ -2227,86 +2527,6 @@ Runs once per row of **Test data**.
 
 * Step 1: the order reads Setup Overdue, with Contact Us.
 * Step 2: no Confirm and no address editing are offered.
-
----
-
-## winner-order-US6: Losing bidder gets their hold back when the lot closes
-
-**As a** bidder who did not win,
-**I want** the card hold my bids put there lifted as soon as the lot closes,
-**so that** losing an auction does not leave my money reserved until the
-authorization expires on its own.
-
-### winner-order-US6-TC1-1: A losing bidder's card hold is released at the close
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-06
-
-**Pre-conditions:**
-
-* customer A holds a card authorization for their bid on <lot_1>.
-* customer B leads <lot_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | A lot taking bids, bid on by customer A and led by customer B, about to close |
-
-**Steps:**
-
-1. Let <lot_1> close with customer B winning.
-2. Read the authorization for customer A and <lot_1> at the card provider.
-
-**Expected Results:**
-
-* customer A's authorization is released, not left to expire.
-* No charge is captured on customer A's card.
-
-### winner-order-US6-TC2-1: Every hold a losing bidder's bids placed is released
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-06
-
-**Pre-conditions:**
-
-* customer A bid on <lot_1> more than once, each bid authorized on their card.
-* customer B leads <lot_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | A lot taking bids, with several bids from customer A, led by customer B, about to close |
-
-**Steps:**
-
-1. Let <lot_1> close with customer B winning.
-2. Read every authorization for customer A and <lot_1> at the card provider.
-
-**Expected Results:**
-
-* No authorization for customer A and <lot_1> is left held.
 
 ---
 
@@ -2464,637 +2684,6 @@ current currency minimum,
 
 * Step 2: the premium is still HKD 1.00.
 * Step 4: the premium is <new minimum>.
-
----
-
-## winner-order-US12: Winner confirms delivery when five addresses are already saved
-
-**As a** winner with five saved shipping addresses,
-**I want** to confirm a different address for this order without saving a sixth,
-**so that** a full address book does not block settlement before the address deadline.
-
-<!-- trace:case id=g10.auction-winner-order.TC-mv4 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC1-1: Add Address at the five-address cap shows phone and kind
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address.
-
-**Expected Results:**
-
-* The Personal / Company control shows, Personal selected, Company Name hidden.
-* Phone shows a country selector and number input, no country chosen.
-
-<!-- trace:case id=g10.auction-winner-order.TC-yzv rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC2-1: At the cap a one-time personal address confirms without saving
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| First name | Jordan |
-| Last name | Lee |
-| Phone country | United States |
-| Phone digits | 2125550147 |
-| Country or region | United States |
-| Town or city | New York |
-| Address line 1 | 350 5th Ave |
-| Postal code | 10118 |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address.
-3. Fill the fields from **Test data**, Save this address for future orders unticked.
-4. Confirm the address for this order.
-5. Open the account address book.
-
-**Expected Results:**
-
-* Step 4: the order's delivery address is the entered address, with phone.
-* Step 5: the book still holds five addresses.
-
-<!-- trace:case id=g10.auction-winner-order.TC-jfw rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC3-1: At the cap a company address without Company Name or phone is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on delivery Add new address for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| Kind | Company |
-| Company Name | (empty) |
-| First name | Jordan |
-| Last name | Lee |
-| Phone country | (not chosen) |
-| Phone digits | (empty) |
-| Country or region | United States |
-| Town or city | New York |
-| Address line 1 | 350 5th Ave |
-| Postal code | 10118 |
-
-**Steps:**
-
-1. Click Company.
-2. Fill the fields from **Test data**, Save this address for future orders unticked.
-3. Click confirm.
-
-**Expected Results:**
-
-* The confirm is refused, with messages beside Company Name and Phone.
-* The order's delivery address is unchanged.
-* The book still holds five addresses.
-
-<!-- trace:case id=g10.auction-winner-order.TC-8e5 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC4-1: At the cap, Add new address still opens
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address.
-
-**Expected Results:**
-
-* The address form opens; no message blocks it.
-
-<!-- trace:case id=g10.auction-winner-order.TC-0hi rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC5-1: At the cap a one-time address sets the order's delivery and saves nothing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_new> | A complete personal shipping address not in the book |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address.
-3. Enter <address_new>, Save this address for future orders unticked.
-4. Confirm the address for this order.
-5. Open the account address book.
-
-**Expected Results:**
-
-* Step 4: the order's delivery address is <address_new>.
-* Step 5: the book still holds five addresses.
-
-<!-- trace:case id=g10.auction-winner-order.TC-nbn rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC6-1: A one-time address sits as a draft at the top of the picker
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_new> | A complete personal shipping address not in the book |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address and enter <address_new>.
-3. Click Use this address.
-
-**Expected Results:**
-
-* <address_new> shows as a draft entry at the top of the picker.
-* The five saved addresses list below it.
-
-<!-- trace:case id=g10.auction-winner-order.TC-j6u rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC7-1: At the cap, saving a new address is refused with a reason
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_new> | A complete personal shipping address not in the book |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address and enter <address_new>.
-3. Click Save this address for future orders.
-4. Hover the info icon beside it.
-
-**Expected Results:**
-
-* Step 3: the checkbox is disabled and stays unticked.
-* Step 4: a short reason says the book is full.
-
-<!-- trace:case id=g10.auction-winner-order.TC-go0 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC8-1: Below the cap, a new address can be saved
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, four saved shipping addresses) is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_new> | A complete personal shipping address not in the book |
-
-**Steps:**
-
-1. Open the delivery address picker.
-2. Click Add new address and enter <address_new>.
-3. Tick Save this address for future orders.
-4. Confirm the address for this order.
-5. Open the account address book.
-
-**Expected Results:**
-
-* Step 3: the checkbox is enabled and ticks.
-* Step 5: the book holds five, including <address_new>.
-
-<!-- trace:case id=g10.auction-winner-order.TC-tz6 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC9-1: Removing a saved address frees a slot for saving
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses including <address_home>) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <address_home> | A saved address named Home, used by no unpaid order |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_new> | A complete personal shipping address not in the book |
-
-**Steps:**
-
-1. Remove <address_home> from the address book.
-2. Navigate to <winner order url> for <order_setup>.
-3. Click Add new address in the delivery picker and enter <address_new>.
-4. Click Save this address for future orders.
-
-**Expected Results:**
-
-* Step 1: the book holds four addresses.
-* Step 4: the checkbox is enabled and ticks.
-
-<!-- trace:case id=g10.auction-winner-order.TC-s5g rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC10-1: Editing a saved address at the cap takes no extra slot
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner, five saved shipping addresses including <address_home>) is on the account address book.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <address_home> | A saved address named Home |
-| <new street> | A different address line 1 |
-
-**Steps:**
-
-1. Open <address_home> for editing.
-2. Change address line 1 to <new street>.
-3. Save.
-
-**Expected Results:**
-
-* The book still holds five addresses.
-* <address_home> shows once, with <new street>.
-
-<!-- trace:case id=g10.auction-winner-order.TC-yru rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### winner-order-US12-TC11-1: A book already over the cap keeps every address and still refuses saves
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-12
-
-**Pre-conditions:**
-
-* customer(winner) holds six saved shipping addresses, seeded from before the cap.
-* customer is on <winner order url> for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_new> | A complete personal shipping address not in the book |
-
-**Steps:**
-
-1. Open the account address book in a new tab.
-2. On the order, click Add new address in the delivery picker and enter <address_new>.
-3. Click Save this address for future orders.
-
-**Expected Results:**
-
-* Step 1: all six addresses are listed.
-* Step 3: the checkbox is disabled and stays unticked.
-
----
-
-## winner-order-US11: Winner bills a won lot to a different address
-
-**As a** winner who pays from a different address than the one the lot ships to,
-**I want** to give that billing address when I confirm where to ship,
-**so that** my invoice and receipt show who is billed as well as where the lot goes.
-
-<!-- trace:case id=g10.auction-winner-order.TC-qlk rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### winner-order-US11-TC1-1: Billing Add Address has phone and Personal or Company
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** winner-order-US-11
-
-**Pre-conditions:**
-
-* customer(winner) is on Complete Order Setup for <order_setup>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-
-**Steps:**
-
-1. Untick Same as delivery address.
-2. Open Add Address for billing.
-
-**Expected Results:**
-
-* The Personal / Company control shows above the fields, Personal selected.
-* Phone shows a country selector, starting empty with a globe only.
-* Company Name is hidden.
-
-<!-- trace:case id=g10.auction-winner-order.TC-9ch rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### winner-order-US11-TC2-1: A billing address with no phone digits is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-11
-
-**Pre-conditions:**
-
-* customer(winner) is on billing Add Address for <order_setup>, Personal selected.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| First name | Alex |
-| Last name | Chen |
-| Phone country | Canada |
-| Phone digits | (empty) |
-| Country or region | Canada |
-| Town or city | Toronto |
-| Address line 1 | 1 Front St |
-| Postal code | M5E 1B2 |
-
-**Steps:**
-
-1. Fill the fields from **Test data**.
-2. Click confirm.
-
-**Expected Results:**
-
-* The confirm is refused, with a message beside Phone.
-* The order's billing address is unchanged.
-
-<!-- trace:case id=g10.auction-winner-order.TC-dno rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### winner-order-US11-TC3-1: A company billing address without Company Name is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-11
-
-**Pre-conditions:**
-
-* customer(winner) is on billing Add Address for <order_setup>, Company selected.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| Company Name | (empty) |
-| First name | Alex |
-| Last name | Chen |
-| Phone country | Canada |
-| Phone digits | 4165550100 |
-| Country or region | Canada |
-| Town or city | Toronto |
-| Address line 1 | 1 Front St |
-| Postal code | M5E 1B2 |
-
-**Steps:**
-
-1. Fill the fields from **Test data**.
-2. Click confirm.
-
-**Expected Results:**
-
-* The confirm is refused, with a message beside Company Name.
-* The order's billing address is unchanged.
-
-<!-- trace:case id=g10.auction-winner-order.TC-7ax rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### winner-order-US11-TC4-1: A company billing address applies apart from delivery
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-11
-
-**Pre-conditions:**
-
-* customer(winner) is on Complete Order Setup for <order_setup>, delivery confirmed to <address_sf>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_setup> | An order inside its setup window, setup incomplete |
-| <address_sf> | A personal address for Alex Chen, 100 Market St, San Francisco |
-| Kind | Company |
-| Company Name | Northwind Billing Ltd |
-| First name | Alex |
-| Last name | Chen |
-| Phone country | Canada |
-| Phone digits | 4165550199 |
-| Country or region | Canada |
-| Town or city | Toronto |
-| Address line 1 | 1 Front St |
-| Postal code | M5E 1B2 |
-
-**Steps:**
-
-1. Untick Same as delivery address.
-2. Open billing Add Address.
-3. Fill the billing fields from **Test data**.
-4. Confirm billing.
-
-**Expected Results:**
-
-* Delivery still reads <address_sf>.
-* Billing reads Northwind Billing Ltd, Toronto, with the phone.
 
 ---
 
@@ -4168,6 +3757,733 @@ Runs once per row of **Test data**.
 
 ---
 
+## winner-order-US11: Winner bills a won lot to a different address
+
+**As a** winner who pays from a different address than the one the lot ships to,
+**I want** to give that billing address when I confirm where to ship,
+**so that** my invoice and receipt show who is billed as well as where the lot goes.
+
+<!-- trace:case id=g10.auction-winner-order.TC-qlk rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
+### winner-order-US11-TC1-1: Billing Add Address has phone and Personal or Company
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on Complete Order Setup for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+
+**Steps:**
+
+1. Untick Same as delivery address.
+2. Open Add Address for billing.
+
+**Expected Results:**
+
+* The Personal / Company control shows above the fields, Personal selected.
+* Phone shows a country selector, starting empty with a globe only.
+* Company Name is hidden.
+
+<!-- trace:case id=g10.auction-winner-order.TC-9ch rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
+### winner-order-US11-TC2-1: A billing address with no phone digits is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on billing Add Address for <order_setup>, Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | Canada |
+| Phone digits | (empty) |
+| Country or region | Canada |
+| Town or city | Toronto |
+| Address line 1 | 1 Front St |
+| Postal code | M5E 1B2 |
+
+**Steps:**
+
+1. Fill the fields from **Test data**.
+2. Click confirm.
+
+**Expected Results:**
+
+* The confirm is refused, with a message beside Phone.
+* The order's billing address is unchanged.
+
+<!-- trace:case id=g10.auction-winner-order.TC-dno rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
+### winner-order-US11-TC3-1: A company billing address without Company Name is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on billing Add Address for <order_setup>, Company selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| Company Name | (empty) |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | Canada |
+| Phone digits | 4165550100 |
+| Country or region | Canada |
+| Town or city | Toronto |
+| Address line 1 | 1 Front St |
+| Postal code | M5E 1B2 |
+
+**Steps:**
+
+1. Fill the fields from **Test data**.
+2. Click confirm.
+
+**Expected Results:**
+
+* The confirm is refused, with a message beside Company Name.
+* The order's billing address is unchanged.
+
+<!-- trace:case id=g10.auction-winner-order.TC-7ax rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
+### winner-order-US11-TC4-1: A company billing address applies apart from delivery
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on Complete Order Setup for <order_setup>, delivery confirmed to <address_sf>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_sf> | A personal address for Alex Chen, 100 Market St, San Francisco |
+| Kind | Company |
+| Company Name | Northwind Billing Ltd |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | Canada |
+| Phone digits | 4165550199 |
+| Country or region | Canada |
+| Town or city | Toronto |
+| Address line 1 | 1 Front St |
+| Postal code | M5E 1B2 |
+
+**Steps:**
+
+1. Untick Same as delivery address.
+2. Open billing Add Address.
+3. Fill the billing fields from **Test data**.
+4. Confirm billing.
+
+**Expected Results:**
+
+* Delivery still reads <address_sf>.
+* Billing reads Northwind Billing Ltd, Toronto, with the phone.
+
+---
+
+## winner-order-US12: Winner confirms delivery when five addresses are already saved
+
+**As a** winner with five saved shipping addresses,
+**I want** to confirm a different address for this order without saving a sixth,
+**so that** a full address book does not block settlement before the address deadline.
+
+<!-- trace:case id=g10.auction-winner-order.TC-mv4 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC1-1: Add Address at the five-address cap shows phone and kind
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address.
+
+**Expected Results:**
+
+* The Personal / Company control shows, Personal selected, Company Name hidden.
+* Phone shows a country selector and number input, no country chosen.
+
+<!-- trace:case id=g10.auction-winner-order.TC-yzv rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC2-1: At the cap a one-time personal address confirms without saving
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| First name | Jordan |
+| Last name | Lee |
+| Phone country | United States |
+| Phone digits | 2125550147 |
+| Country or region | United States |
+| Town or city | New York |
+| Address line 1 | 350 5th Ave |
+| Postal code | 10118 |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address.
+3. Fill the fields from **Test data**, Save this address for future orders unticked.
+4. Confirm the address for this order.
+5. Open the account address book.
+
+**Expected Results:**
+
+* Step 4: the order's delivery address is the entered address, with phone.
+* Step 5: the book still holds five addresses.
+
+<!-- trace:case id=g10.auction-winner-order.TC-jfw rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC3-1: At the cap a company address without Company Name or phone is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on delivery Add new address for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| Kind | Company |
+| Company Name | (empty) |
+| First name | Jordan |
+| Last name | Lee |
+| Phone country | (not chosen) |
+| Phone digits | (empty) |
+| Country or region | United States |
+| Town or city | New York |
+| Address line 1 | 350 5th Ave |
+| Postal code | 10118 |
+
+**Steps:**
+
+1. Click Company.
+2. Fill the fields from **Test data**, Save this address for future orders unticked.
+3. Click confirm.
+
+**Expected Results:**
+
+* The confirm is refused, with messages beside Company Name and Phone.
+* The order's delivery address is unchanged.
+* The book still holds five addresses.
+
+<!-- trace:case id=g10.auction-winner-order.TC-8e5 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC4-1: At the cap, Add new address still opens
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address.
+
+**Expected Results:**
+
+* The address form opens; no message blocks it.
+
+<!-- trace:case id=g10.auction-winner-order.TC-0hi rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC5-1: At the cap a one-time address sets the order's delivery and saves nothing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_new> | A complete personal shipping address not in the book |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address.
+3. Enter <address_new>, Save this address for future orders unticked.
+4. Confirm the address for this order.
+5. Open the account address book.
+
+**Expected Results:**
+
+* Step 4: the order's delivery address is <address_new>.
+* Step 5: the book still holds five addresses.
+
+<!-- trace:case id=g10.auction-winner-order.TC-nbn rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC6-1: A one-time address sits as a draft at the top of the picker
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_new> | A complete personal shipping address not in the book |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address and enter <address_new>.
+3. Click Use this address.
+
+**Expected Results:**
+
+* <address_new> shows as a draft entry at the top of the picker.
+* The five saved addresses list below it.
+
+<!-- trace:case id=g10.auction-winner-order.TC-j6u rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC7-1: At the cap, saving a new address is refused with a reason
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_new> | A complete personal shipping address not in the book |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address and enter <address_new>.
+3. Click Save this address for future orders.
+4. Hover the info icon beside it.
+
+**Expected Results:**
+
+* Step 3: the checkbox is disabled and stays unticked.
+* Step 4: a short reason says the book is full.
+
+<!-- trace:case id=g10.auction-winner-order.TC-go0 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC8-1: Below the cap, a new address can be saved
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, four saved shipping addresses) is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_new> | A complete personal shipping address not in the book |
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Click Add new address and enter <address_new>.
+3. Tick Save this address for future orders.
+4. Confirm the address for this order.
+5. Open the account address book.
+
+**Expected Results:**
+
+* Step 3: the checkbox is enabled and ticks.
+* Step 5: the book holds five, including <address_new>.
+
+<!-- trace:case id=g10.auction-winner-order.TC-tz6 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC9-1: Removing a saved address frees a slot for saving
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses including <address_home>) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <address_home> | A saved address named Home, used by no unpaid order |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_new> | A complete personal shipping address not in the book |
+
+**Steps:**
+
+1. Remove <address_home> from the address book.
+2. Navigate to <winner order url> for <order_setup>.
+3. Click Add new address in the delivery picker and enter <address_new>.
+4. Click Save this address for future orders.
+
+**Expected Results:**
+
+* Step 1: the book holds four addresses.
+* Step 4: the checkbox is enabled and ticks.
+
+<!-- trace:case id=g10.auction-winner-order.TC-s5g rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC10-1: Editing a saved address at the cap takes no extra slot
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner, five saved shipping addresses including <address_home>) is on the account address book.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <address_home> | A saved address named Home |
+| <new street> | A different address line 1 |
+
+**Steps:**
+
+1. Open <address_home> for editing.
+2. Change address line 1 to <new street>.
+3. Save.
+
+**Expected Results:**
+
+* The book still holds five addresses.
+* <address_home> shows once, with <new street>.
+
+<!-- trace:case id=g10.auction-winner-order.TC-yru rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
+### winner-order-US12-TC11-1: A book already over the cap keeps every address and still refuses saves
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner) holds six saved shipping addresses, seeded from before the cap.
+* customer is on <winner order url> for <order_setup>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_setup> | An order inside its setup window, setup incomplete |
+| <address_new> | A complete personal shipping address not in the book |
+
+**Steps:**
+
+1. Open the account address book in a new tab.
+2. On the order, click Add new address in the delivery picker and enter <address_new>.
+3. Click Save this address for future orders.
+
+**Expected Results:**
+
+* Step 1: all six addresses are listed.
+* Step 3: the checkbox is disabled and stays unticked.
+
+---
+
+## winner-order-US14: Winner sees a refunded order as Refunded
+
+**As a** winner whose order Grade10 refunded because they were not happy with the item,
+**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or masked destination with the bank name under it for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
+**so that** I know the order is closed and still hold the record of what I paid.
+
+<!-- trace:case id=g10.auction-winner-order.TC-xfb rev=1 covers=g10.auction-winner-order.SC-zfp,g10.auction-winner-order.SC-yhv -->
+### winner-order-US14-TC1-1: A card-refunded order reads Refunded and keeps its records
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-14
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_refunded>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_refunded> | A paid order refunded to the card, with an operator note |
+| <refund amount> | The amount returned |
+
+**Steps:**
+
+1. Read the status, actions and receipt links.
+2. Read below Order Total.
+3. Open the refund details from the inline alert.
+
+**Expected Results:**
+
+* Step 1: the order reads Refunded; no stepper, Pay, address or shipment action.
+* Step 1: the invoice and every receipt still download.
+* Step 2: <refund amount> shows below Order Total.
+* Step 3: Amount, Transfer to, Reason, then Note, in that order.
+* Step 3: Transfer to shows the card brand and last four only; no Reference.
+
+---
+
+## winner-order-US15: Winner sees an overpayment returned
+
+**As a** winner who paid more than the order,
+**I want** only the difference returned below the invoice total, while the lot, the shipping and the amount I should have paid stay, with a way to see why,
+**so that** I know the sale still stands.
+
+<!-- trace:case id=g10.auction-winner-order.TC-pca rev=1 covers=g10.auction-winner-order.SC-7m4 -->
+### winner-order-US15-TC1-1: A returned overpayment leaves the order and invoice standing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-15
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_overpaid>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_overpaid> | A paid order where the difference over the total was returned |
+| <difference> | The amount returned |
+
+**Steps:**
+
+1. Read the status and invoice lines.
+2. Read below Order Total.
+3. Open the refund details.
+
+**Expected Results:**
+
+* Step 1: status and invoice lines are unchanged; it does not read Refunded.
+* Step 2: only <difference> shows as returned.
+* Step 3: the details open, showing no proof and no provider reference.
+
+---
+
 ## winner-order-US16: Winner emails Grade10 from a locked order
 
 **As a** winner whose payment access has closed,
@@ -4664,102 +4980,6 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US14: Winner sees a refunded order as Refunded
-
-**As a** winner whose order Grade10 refunded because they were not happy with the item,
-**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or masked destination with the bank name under it for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
-**so that** I know the order is closed and still hold the record of what I paid.
-
-<!-- trace:case id=g10.auction-winner-order.TC-xfb rev=1 covers=g10.auction-winner-order.SC-zfp,g10.auction-winner-order.SC-yhv -->
-### winner-order-US14-TC1-1: A card-refunded order reads Refunded and keeps its records
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-14
-
-**Pre-conditions:**
-
-* customer(winner) is on <winner order url> for <order_refunded>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_refunded> | A paid order refunded to the card, with an operator note |
-| <refund amount> | The amount returned |
-
-**Steps:**
-
-1. Read the status, actions and receipt links.
-2. Read below Order Total.
-3. Open the refund details from the inline alert.
-
-**Expected Results:**
-
-* Step 1: the order reads Refunded; no stepper, Pay, address or shipment action.
-* Step 1: the invoice and every receipt still download.
-* Step 2: <refund amount> shows below Order Total.
-* Step 3: Amount, Transfer to, Reason, then Note, in that order.
-* Step 3: Transfer to shows the card brand and last four only; no Reference.
-
----
-
-## winner-order-US15: Winner sees an overpayment returned
-
-**As a** winner who paid more than the order,
-**I want** only the difference returned below the invoice total, while the lot, the shipping and the amount I should have paid stay, with a way to see why,
-**so that** I know the sale still stands.
-
-<!-- trace:case id=g10.auction-winner-order.TC-pca rev=1 covers=g10.auction-winner-order.SC-7m4 -->
-### winner-order-US15-TC1-1: A returned overpayment leaves the order and invoice standing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-15
-
-**Pre-conditions:**
-
-* customer(winner) is on <winner order url> for <order_overpaid>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <order_overpaid> | A paid order where the difference over the total was returned |
-| <difference> | The amount returned |
-
-**Steps:**
-
-1. Read the status and invoice lines.
-2. Read below Order Total.
-3. Open the refund details.
-
-**Expected Results:**
-
-* Step 1: status and invoice lines are unchanged; it does not read Refunded.
-* Step 2: only <difference> shows as returned.
-* Step 3: the details open, showing no proof and no provider reference.
-
----
-
 ## winner-order-US17: Winner matches a bank refund against their own statement
 
 **As a** winner whose refund was sent by bank transfer,
@@ -4805,224 +5025,6 @@ Runs once per row of **Test data**.
 * No proof and no full account number show.
 
 ---
-
-## winner-order-US4: Winner pays an invoice by card
-
-**As a** winner
-**I want** to see the full invoice and pay it by card, even if a first attempt does not finish
-**so that** the lot moves to Preparing Shipment without contacting Grade10.
-
-### winner-order-US4-TC1-2: An unpaid order shows invoice, Pay with Card, address and lot
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) holds an order in Pending Payment, with invoice status
-  `pending` or `expired`.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-
-**Expected Results:**
-
-* Every invoice line and Pay with Card are shown in the order summary.
-* The confirmed delivery address and the lot are shown.
-* An expired invoice still reads Pending Payment and offers Contact Us instead
-  of Pay with Card.
-
-### winner-order-US4-TC2-1: Order Information reads Invoice Status, not Paid Status
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) holds an order whose invoice status is paid.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Scroll to Order Information.
-
-**Expected Results:**
-
-* Invoice Status reads Paid.
-* No Paid Status label appears.
-
-### winner-order-US4-TC3-1: A timed-out payment session leaves the invoice payable
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) holds an order in Pending Payment.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Click Pay Now.
-3. Wait until the payment session times out.
-4. Return to <grade10 auction order url>.
-
-**Expected Results:**
-
-* The page says payment was not completed.
-* The order still reads Pending Payment.
-* Pay Now is available.
-
-### winner-order-US4-TC4-1: Pay Now after an abandoned session starts a fresh one
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) holds a Pending Payment order whose last payment session was abandoned.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Click Pay Now.
-
-**Expected Results:**
-
-* A new payment session opens.
-* It charges the same invoice amount.
-
-### winner-order-US4-TC5-1: A completed payment shows Confirming payment before Preparing Shipment
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) completed a hosted card session, but the authenticated
-  auction-order read model has not yet recorded the invoice as paid.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-
-**Expected Results:**
-
-* The page shows Confirming payment.
-* The order does not read Preparing Shipment.
-
-### winner-order-US4-TC6-1: A recorded payment reads Preparing Shipment
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) holds an order whose authenticated auction-order read model
-  returns invoice status `paid` and fulfilment status `unfulfilled`.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-
-**Expected Results:**
-
-* The order status reads Preparing Shipment.
-
----
-
-<!-- trace:case id=g10.auction-winner-order.TC-td7 rev=1 covers=g10.auction-winner-order.SC-1yn -->
-### winner-order-US4-TC7-1: A suspended winner reads the suspension under the lot
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-04
-
-**Pre-conditions:**
-
-* customer(winner) is suspended from bidding and holds an order whose invoice
-  is `pending`.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Read the alerts under the lot.
-3. Choose Pay what is owed.
-
-**Expected Results:**
-
-* An alert under the lot says bidding is suspended and payment does not lift it.
-* Choosing Pay what is owed brings the order summary's pay control into view.
 
 ## winner-order-US19: Winner confirms where a won lot ships
 
@@ -5201,7 +5203,6 @@ Runs once per row of **Test data**.
 - `winner-order-US3-TC4` is held by `winner-order-US8-TC4`: the same premium claim, under the policy-premium journey.
 - `configure-auction-buyer-charges` archived its premium cases as `winner-order-US7-TC2`, `winner-order-US7-TC3` and `winner-order-US7-TC4`; `winner-order-US8-TC2` to `winner-order-US8-TC4` hold them, and `winner-order-US7` is the address-deadline journey.
 - `winner-order-US10-TC1` is held by `winner-order-US10-TC8`, and `winner-order-US10-TC7` by `winner-order-US10-TC9`.
-
 - `winner-order-US9-TC1` is `winner-order-US12-TC4`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
 - `winner-order-US9-TC2` is `winner-order-US12-TC5`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
 - `winner-order-US9-TC3` is `winner-order-US12-TC6`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
@@ -5211,17 +5212,12 @@ Runs once per row of **Test data**.
 - `winner-order-US9-TC7` is `winner-order-US12-TC10`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
 - `winner-order-US9-TC8` is `winner-order-US12-TC11`: an address-cap case filed under US9 before the journeys were renumbered, moved to US12, the journey it traces.
 - The premium amount is calculated at invoice creation; the bid panel shows the rate only.
-
 - Non-parseable phone still applies with the entered value; E.164 only when parseable
 - Missing phone country or digits share one refusal beside Phone
 - Switching back to Personal drops the Company Name requirement
 - Billing country or region list parity stays the open PRD question, outside this change
-
 - Partial-payment letter Contact Us is in scope with the same ready mailto
-
 - Subject uses the order's current invoice id after a reissue
-
-
 - Expired ends self-service card pay (author @tangconst, 2026-09-15).
 - Progress is presentation only; status names stay derived from order facts,
   including Payment Overdue and Setup Overdue.
@@ -5239,7 +5235,6 @@ Runs once per row of **Test data**.
   `Remaining Balance Due = 0`.
 - Refunds and reversals preserve issued receipts; this suite does not define
   what a later payment may do.
-
 - Closed Country/Region field state belongs to design-system Autocomplete, not a Winner Order case
 - Long-list scrollport is presentation on ui-design; catalogue completeness is the Country/Region requirement
 - Early and late alphabet filter partitions are redundant with the catalogue and search requirements
@@ -5248,9 +5243,20 @@ Runs once per row of **Test data**.
 - Letter typeahead on Select is superseded by searchable Autocomplete on Country/Region
 - Catalogue display locale stays the open PRD question
 - Shippable destinations only stays the open PRD question
+- A bid holds nothing on the card, so the close releases and captures nothing: the winner pays the invoice on their order, and a losing bidder reads on My Auctions that their card was not charged (decisions Q1, Q2).
 
 ## Reconciliation
 
 **Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
 
 - **Uncovered anchors:** none.
+
+**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
+
+- **Folded in** - `winner-order-SC-15` and `winner-order-SC-35` by `winner-order-US1-TC5-2`: nothing was held from bidding, and one charge pays the invoice through hosted Checkout; `winner-order-SC-26` and `winner-order-SC-27` lose the hold release only, and their coverage is as on main
+- **Revised** - `winner-order-US1-TC5-2`: QA1 kept the id, but the case no longer reads a hold released, so it moves up a revision; its marker drops winner-order-SC-12, winner-order-SC-13 and winner-order-SC-14
+- **Deprecated** - `winner-order-US6-TC1-1` and `winner-order-US6-TC2-1`, with winner-order-US-06; a losing bidder reads that their card was not charged on My Auctions, `grade10-site-auction-account-record-US4-TC1-2`
+- **Raised** - none
+- **Retired elsewhere** - winner-order-SC-12, winner-order-SC-13 and winner-order-SC-14, the hold released at the close, retire with `complete-auction-post-sale`, which renames their requirement and keeps none of them
+- **Contradicted** - none
+- **Uncovered anchors** - none

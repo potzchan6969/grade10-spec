@@ -232,16 +232,16 @@ Runs once per row of **Test data**.
 
 **As a** bidder,
 **I want** a called-off lot I bid on to stay in My Auctions,
-**so that** I can see my card hold was released.
+**so that** I can see my card was not charged.
 
-<!-- trace:case id=g10.auction-lot-status.TC-byf rev=1 covers=g10.auction-lot-status.SC-yoe -->
-### grade10-site-auction-lot-status-US3-TC1-1: Only the bidder still sees a called-off lot
+<!-- trace:case id=g10.auction-lot-status.TC-byf rev=2 covers=g10.auction-lot-status.SC-yoe -->
+### grade10-site-auction-lot-status-US3-TC1-2: Only the bidder still sees a called-off lot
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -253,7 +253,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer A and customer B are signed in on separate sessions.
-* customer A bid on <lot_4>, and that bid holds a bid-time authorization.
+* customer A bid on <lot_4>.
 * customer B watched <lot_4> and did not bid.
 * <lot_4> was called off.
 
@@ -270,5 +270,6 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 lists <lot_4>, and the row says the card hold was released.
+* Step 1 lists <lot_4>, and the row says Your card was not charged.
+* Step 1's row names no card hold, release or authorization.
 * Step 2 does not list <lot_4>.

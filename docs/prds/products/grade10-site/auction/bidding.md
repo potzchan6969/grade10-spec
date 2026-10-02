@@ -21,7 +21,7 @@ highest accepted bid at the close wins it.
 | Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
 | Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 150,000,000,000**, the same on every lot |
 | Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
-| Bid-time hold | **Off** by default; when on, one card authorization per bidder per listing covers the maximum |
+| Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
 
 ### Extended Bidding
@@ -52,10 +52,8 @@ when the timer runs out with no new bid.
   Equal maxima at a higher price move it: at 1,000, with A's maximum at 2,000,
   B's maximum of 2,000 makes the price 2,000, A keeps the lead as the earlier,
   and the lot extends. A leader raising their own maximum does not
-- ❓ **A bid counts when its payment confirms** — judged at that moment; a
-  confirmation after the close loses with no grace and its hold is released,
-  and a lone first bid still confirming at the scheduled close leaves the lot
-  unsold. With bid-time holds off, a bid counts when placed. Product restates it now that a bid takes no card hold
+- **A bid counts when it is accepted** — judged under the lot's lock at that
+  moment, and answered at once; nothing waits on the card
 - **No bid after the close** — however late the close is recorded, no bid
   counts at or after the effective close. Until extended bidding is recorded,
   that is the scheduled close plus the extension duration or the cap,
@@ -95,20 +93,15 @@ increment is 100:
 - **Own standing** — a bidder reads their maximum, the current bid and whether
   they lead; never another bidder's maximum, identity or card
 - **A bid Grade10 places is a bid** — it counts in the bid count and the
-  history, restarts the extended-bidding timer as a manual bid would, and
-  needs no fresh card check; two standing maxima never keep extending the
-  close on their own
-- **A raise the card cannot cover** — nothing moves: the maximum, the leader
-  and the price stay as they were
-- **One authorization** — when holds are on, a raise increases the existing
-  manual-capture authorization and keeps its provider reference; Grade10 does
-  not cancel and recreate it
-- **Provider window** — a new hold requests incremental and extended
-  authorization when the payment method supports them, and the provider's
-  returned capture deadline controls expiry and reauthorization; a shorter
-  window is not a 14-day guarantee
-- **Close and settlement** — bid-time holds release at close; the winner is
-  charged through the invoice flow, not by capturing the bid-time hold
+  history, and restarts the extended-bidding timer as a manual bid would; two
+  standing maxima never keep extending the close on their own
+- **An erased leader** — when the leader's account is erased, their maxima
+  are withdrawn and the highest maximum left takes the lead, priced at the next
+  maximum plus one increment, capped at the new leader's maximum and never
+  above the price before; with one maximum left, it stands at the opening
+  price; with none left, the lot has no leader
+- **Close and settlement** — nothing is held on any card; the winner pays the
+  invoice — [Post-Bidding](/p/grade10-site/auction/post-bidding#the-close)
 
 ### Bid Increments
 
@@ -142,14 +135,30 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 
 ### Refusals
 
-| Refused when | What the bidder sees |
+A refused bid is not a bid. The bid form says why, and nothing else moves: no
+row on My Auctions or Bidding History, no change to the price, the leader or
+any maximum.
+
+| Refused when | What the bid form says |
 | --- | --- |
-| Below the next minimum | Refused, naming the minimum |
-| Before the start, or after the recorded close | Refused |
-| ❓ A card authorization that confirms after the close | **Your bid did not go through**, and the hold is released; Product restates it now that a bid takes no card hold |
-| Above the currency's ceiling | Refused, naming the ceiling; the price, the leader and every maximum stay as they were |
-| At or above the bar without a verified identity | Held at the storefront, with where to verify; nothing is recorded |
-| No linked card, or a declined hold when holds are on | Refused before the bid stands — [Auction Panel](/p/grade10-site/auction/bidding#auction-panel) |
+| Below the next minimum | **Minimum bid is** the minimum |
+| Above the currency's ceiling | **Maximum bid is** the ceiling |
+| Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
+| At or above the bar without a verified identity | Where to verify; the auction hears nothing of the bid |
+| No linked card | **Link a card to bid.** |
+| Another card after the first accepted bid on the lot | **This listing's card is locked after the first accepted bid.** |
+| Bidding suspended on the account | **Bidding is suspended on this account. Contact Us to resolve it.** |
+| Account banned from bidding | **This account cannot bid.** |
+| A typed amount that is not valid, caught before the bid is sent | **Enter a valid amount.** |
+| Before the start, after the close, or any other refusal | **Your bid did not go through.** |
+
+- **Kept for operators** — each refusal is one operational log line naming the
+  lot and the reason; the bidder's record never shows it
+- 🚧 **Bidder and amount** — the log line also names the bidder, the amount sent,
+  and the floor or ceiling the refusal names
+- **An answer lost on the way** — when a bid's answer never arrives, the bid
+  reads as placed if the bidder's standing holds it, and the bid form says
+  **Could not place this bid.** if it does not
 
 ## Auction Panel
 
@@ -163,7 +172,6 @@ Blocks](/p/shared/ui/auction-listing).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999**; a typed decimal mark is refused |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
-| Hold window | The provider's returned capture deadline, where it offers extended authorization |
 
 :::flow{title="From sign-in to a standing bid"}
 ## *Collector* — **Opens a live lot**
@@ -171,22 +179,20 @@ Signed out, the bid action offers sign-in; the recent public bids stay
 visible.
 ## *Collector* — **Links a card, once**
 In a provider-hosted field, with an age attestation once per account. Card
-details never pass through Grade10, no hold is taken, and the card carries to
-every later lot.
+details never pass through Grade10, nothing is charged, and the card carries
+to every later lot.
 ## *Collector* — **Names a maximum**
 A quick bid or a typed amount, at or above the next minimum. The panel says
 Grade10 bids only as needed up to it, and that it can be raised, never
 lowered.
-## *Grade10* — **Authorizes the card, when holds are on**
-One authorization for the whole maximum, in the background; the bid stands
-only once it is confirmed, and a refusal shows on the bid action with the
-prior maximum still in place.
+## *Grade10* — **Accepts or refuses at once**
+The maximum stands as Leading or Outbid in the same answer, or the bid form
+says why it was refused and the prior maximum stays in place.
 ## *Grade10* — **Bids for them**
 As far as needed to lead, and tells them once when they lose the lead —
 [Notifications](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications).
 ## *Collector* — **Raises**
-On the same card, locked by the first accepted bid; a raise updates the one
-authorization rather than adding a second.
+On the same card, locked by the first accepted bid.
 :::
 
 ### Display
@@ -196,8 +202,6 @@ authorization rather than adding a second.
 | **Signed out** | The bid action offers sign-in; no standing, no fee line |
 | **No linked card** | Amount controls visible but disabled; the bid action and the empty card slot open setup |
 | **Card on file** | Amount controls enabled, with Change until the first accepted bid on this lot |
-| **Authorization running** | Setup and the bid action wait |
-| **Authorization failed** | **Your card could not be authorized. Try another card.** on the bid action, and the controls stay usable |
 | **Leading** | Their maximum, the current bid and Leading |
 | **Outbid** | Outbid, and the next valid bid |
 | **Lost** | Did not win; My Auctions says the card was not charged |
@@ -228,15 +232,12 @@ authorization rather than adding a second.
   setup
 - **Setup is link only** — Continue enables with a card entered and the
   attestation checked, reads Linking while the provider works, and closing
-  before it is done leaves no card on file; no hold is taken in setup
+  before it is done leaves no card on file; nothing is charged in setup
 - **The card carries across lots** — a card linked on an earlier lot needs no
   setup; Change stays until the first accepted bid on this lot, and later
   raises keep that card
 - **Enrolled** — an accepted first bid completes enrolment, bookmarks the lot
   on My Auctions and turns its email alerts on
-- **A raise keeps its reference** — a supported raise updates the existing
-  authorization; a refused raise settles at once with the card message, and
-  the prior maximum stands
 
 ::story{id="auction-listing-bid-panel-dialogs--setup-modal" title="Setup modal"}
 
@@ -247,30 +248,18 @@ authorization rather than adding a second.
 The account keeps one retained record of everything bidding did, at the
 account's bids address; signed out, sign-in runs first.
 
-- **One row per listing** — every listing the account submitted a maximum on,
-  by latest activity, with its current or final price and the collector's
-  standing: pending, leading, outbid, won, lost, canceled, or failed-only when
-  every attempt was refused
+- **One row per listing** — every listing the account placed a bid on, by
+  latest activity, with its current or final price and the collector's
+  standing: Leading, Outbid, Won or Canceled
 - **Active and Completed** — two filters; it opens on Active, and a row
   expands its story in place
-- **One listing's story** — every maximum set, raised, accepted or refused
-  with its reason, interleaved with the public movements that changed the
+- **One listing's story** — every maximum set or raised, interleaved with the public movements that changed the
   collector's standing; they read as You and every rival by the lot's
   pseudonym, and no rival's maximum ever appears
 - **Your bidding, on the lot** — two tabs, Bid placed, the bids Grade10 placed
-  for them, then Your maximums; amount and time only, owner only, and
-  refusals stay on the account record
+  for them, then Your maximums; amount and time only, owner only
 - **Never edited** — nothing deletes or hides an entry, because the record is
   the audit
-
-| Refusal reason | Meaning |
-| --- | --- |
-| Window | The listing was outside its bidding window |
-| Minimum | The maximum did not meet the next minimum |
-| Account | The account may not bid |
-| Payment | The card authorization did not succeed |
-| Stale price | A competing price arrived first |
-| Unavailable | Bidding could not be evaluated at that moment |
 
 ## My Auctions, Watchlist and Notifications
 
@@ -305,9 +294,6 @@ the same facts sit in the five-column table.
   lots
 - **After the close** — Your Standing reads Won or Didn't win once the
   result is recorded, never from the page's own clock
-- ❓ **An unsold lot's row** — a bidder whose lone first bid did not confirm
-  before the close reads Didn't win, and Current bid reads as on any unsold
-  lot's row. Product restates it now that a bid takes no card hold
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
@@ -394,7 +380,7 @@ the account's registered address, and the letters about a won lot are
   recipient, lot and when it was sent, never the body
 - **Log retention** — **90 days**; troubleshooting only. Resend keeps the
   durable trail
-- **No card line on the non-winner letter** - the letter does not mention the
+- **No card line on the non-winner letter** — the letter does not mention the
   card; My Auctions says it was not charged
 
 :::detail{title="Code map" for="engineer"}
@@ -465,22 +451,24 @@ surface.
 | --- | --- | --- | --- |
 | Absolute sale | Decided | No reserve and no buy-now price; the highest accepted bid at the close wins. | Product |
 | Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product |
-| A bid counts when its payment confirms | ❓ Open | A confirmation after the close loses with no grace and its hold is released; a lone first bid still confirming at the scheduled close leaves the lot unsold. A grace was ruled out: the payment event would not arrive before the close anyway, and the moment payment succeeded is the decision. A bid now takes no card hold, so Product restates when it counts. | Product |
+| A bid counts when accepted | Decided | A bid stands when it is judged under the lot's lock, and nothing waits on the card. Replaces "a bid counts when its payment confirms", which kept a pending bid and an Authorizing… state. | Product |
 | My Auctions price | Decided | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; equal-max non-leaders show an Info tip in the amount tone (when maximums match, the earlier one leads). Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
-| Card limits against the ceiling | ❓ Open | With bid-time holds on, a maximum near the ceiling exceeds what the provider can authorize on some cards: American Express takes at most 999,999,999 minor units (USD 9,999,999.99, HKD 9,999,999.99, JPY 999,999,999), and JCB, Diners Club and Discover on a Japanese provider account take 8 digits. Undecided: refuse those cards when linked, hold them to a lower ceiling, or let the hold fail at commit. Once settled, the auction domain suite owes a case that links such a card in setup and commits a maximum above its limit, across bid-panel-enrollment and bid-payment-method. | Product and finance |
-| Bid-time hold | Decided | Off by default; when on, one manual-capture authorization per bidder per listing covers the maximum, taken when the maximum is committed and never in setup, and a raise updates it. | Product and finance |
-| Hold window | Decided | The provider's returned capture deadline controls expiry and reauthorization where the payment method supports extended authorization; a raise increments the same authorization. | Product and finance |
+| Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
+| If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
+| A refused bid is not a bid | Decided | The bid form says why; no My Auctions row, no Bidding History entry and no standing moves. Replaces "refusals stay on the account chronology". | Product |
+| Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the ceiling; never in the bidder's record. | Product and engineering |
+| An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
 | Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
-| Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. When you set a maximum, we authorize a hold for that amount. You are only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
-| Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only; with holds on, that the hold matches the maximum. | Product |
+| Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
+| Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only. | Product |
 | Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment — from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1; whole major units only, capped at 9,999,999,999, and an over-limit entry restores the previous draft. | Product |
 | Buyer fee on the panel | Decided | The 20% rate is disclosed under the bid action, never behind a tooltip; the amount first appears on the invoice. | Product |
-| Your bidding | Decided | The lot's personal dialog: two tabs, Bid placed then Your maximums, amount and time only, owner only; the live maximum stays on the panel; refusals stay on the account chronology. | Product |
+| Your bidding | Decided | The lot's personal dialog: two tabs, Bid placed then Your maximums, amount and time only, owner only; the live maximum stays on the panel. | Product |
 | Watch ≠ email alerts | Decided | Watch is list membership; email alerts are a per-lot preference, on by default when watched, off on unwatch; mute is not unwatch. An account-wide Auction email alerts switch covers every lot without clearing lists. | Product |
 | Privacy of a watch | Decided | Visible only to its owner; no public count. Operators see a Watchers column on the admin Listings table. | Product and design |
 | One table | 🚧 In flight | My Auctions is one bookmark table with bid rows first, Your Standing separating commitment from watch-only (`--`), close urgency beside the listing identity, and no Bidding or Watching sections; a lot both watched and bid on appears once, and Unwatch is offered only without a bid. | Product and design |
