@@ -68,7 +68,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 7.5 The `InventoryVaultService` named entrypoint answering `casesOf` (`grade10-admin-inventory-items-SC-28`)
 - [ ] 7.6 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run test:backend`, `pnpm run check:libs`
 
-## 8. Naming a known slab (grade10)
+## 8. Naming a known slab (grade10) (owner: @ecchochan)
 
 - [ ] 8.1 Tests first, in their own commit: service tests for the lookup at the walk-in open and at Start valuation, the fill only for the customer's own slab, and the linked draft's edit refusal (`grade10-admin-vault-operator-queue-SC-87`, `grade10-admin-vault-operator-queue-SC-88`, `grade10-admin-vault-operator-queue-SC-89`, `grade10-admin-vault-operator-queue-SC-90`, `grade10-admin-vault-operator-queue-SC-91`, `grade10-admin-vault-operator-queue-SC-92`, `grade10-admin-vault-operator-queue-SC-93`, `grade10-site-vault-case-intake-SC-39`, `grade10-site-vault-case-intake-SC-41`)
 - [ ] 8.2 `admin.lookupSlab`, and the optional slab of grader, grade and cert on the walk-in open and on Start valuation, the cert trimmed and in capitals: link a live item by `register_item_id` alone, leaving `case_items` as the request; refuse `SLAB_MARKED`; keep an unknown or retired slab in `slab_grader`, `slab_grade`, `slab_cert` for the registration; name another owner behind `kyc:read`, else by short id (`grade10-admin-vault-operator-queue-SC-87`, `grade10-admin-vault-operator-queue-SC-88`, `grade10-admin-vault-operator-queue-SC-89`, `grade10-admin-vault-operator-queue-SC-90`, `grade10-admin-vault-operator-queue-SC-91`, `grade10-admin-vault-operator-queue-SC-92`, `grade10-admin-vault-operator-queue-SC-93`)
