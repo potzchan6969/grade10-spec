@@ -57,5 +57,32 @@
         "inventory-service"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@mason5991",
+    "reviewedAt": "2026-10-02T15:51:26.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Later accepts and suite refolds (9f1d2f9e7, 7e59d449f, 642506b64) rewrote this file after the claim baseline; no Unsold stock case this change wrote changed its assert"
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": ["Feature set"],
+        "classification": "semantic",
+        "reason": "Feature set gained Starting price of 0 from allow-zero-starting-price, accepted after this claim; Unsold stock requirements this change named are unchanged",
+        "evidence": [
+          "9gag/grade10-spec@9f1d2f9e758e1984a61abffdd5ab6c80028d8212 adds SC-124–SC-129 for a starting price of 0"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Blank lines only in Reconciliation after the claim baseline; case bodies unchanged"
+      }
+    ]
+  }
 }
