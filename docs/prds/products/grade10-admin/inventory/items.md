@@ -80,6 +80,9 @@ mark the vault no longer has.
   transfer never names the lender
 - 🚧 **Proof** - opened only by those who may transfer, and each opening is
   on the audit log
+- ❓ Product — **A refused proof** - a file the picker refuses is named
+  under it and never listed, and Transfer stays offered, since proof is
+  optional; the owner keeps it so for now, 2026-10-02
 
 ## Retiring an Item
 
