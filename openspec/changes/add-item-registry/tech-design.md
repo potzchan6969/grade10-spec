@@ -214,7 +214,11 @@ before its locked commit. It adds:
 
 `prepareReleaseDocument` reads the register through the same steps 2 and 3,
 one function both call, and prints the release receipt's item from the same
-facts (Q57); its case was valued after the deploy, or registered by its own
+facts (Q57). It refuses a retired item and an unreachable register
+(`grade10-site-vault-case-lifecycle-SC-61`), never another owner: a release
+hands back what the vault took in from its collector, and the register
+refuses a transfer while the vault marks the item, so refusing another owner
+would leave the item held with no act to free it; its case was valued after the deploy, or registered by its own
 Prepare documents, so it always has an item id.
 
 The console's case read (`admin.detail`, and not the collector's own read or
