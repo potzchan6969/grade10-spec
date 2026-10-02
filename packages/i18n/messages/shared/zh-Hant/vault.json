@@ -77,12 +77,11 @@
     "loading": "正在載入你的個案…",
     "empty": "你還未交任何物品給我們保管。",
     "start": "開始申請",
+    "yourCases": "我的個案",
     "opened": "{day} 開立",
     "openedAtCounter": "職員已在櫃檯為你開立 — 請檢查後再送出。",
     "askedFor": "申請 {amount}",
     "visitBooked": "已預約 {when} 到店",
-    "noVisit": "尚未預約到店",
-    "open": "開啟",
     "heroIntro": "查看每一件交給我們保管的物品，隨時可以再開新申請。",
     "howItWorks": {
       "title": "運作方式",
