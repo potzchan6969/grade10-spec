@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "87b8235b4f7e86482340ec96233375b8bfa19366836f1b2eb96efe4493835fe7"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ae103218b72d7234b5e0a54dfae46bd84641d753",
+    "capturedAt": "2026-10-02T05:05:36.121Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Staff open a draft for a customer at the counter"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
