@@ -43,7 +43,6 @@
   "biddingState": {
     "leading": "Leading",
     "outbid": "Outbid",
-    "bid_not_accepted": "Bid not accepted",
     "awaiting_payment": "Awaiting payment",
     "payment_problem": "Payment problem",
     "paid": "Paid",

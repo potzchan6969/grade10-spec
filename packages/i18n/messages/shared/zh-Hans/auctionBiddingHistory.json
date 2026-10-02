@@ -26,28 +26,14 @@
   "manual": "手动",
   "automatic": "自动",
   "youWereOutbid": "你已被超越",
-  "bidRequested": "已提交最高价：{amount}",
-  "bidRefused": "最高价已拒绝：{amount}",
   "acceptedPrice": "{actor} 出价 {amount}",
   "automaticMaximumConfigured": "最高价已设置为 {amount}",
   "automaticMaximumRaised": "最高价已提高至 {amount}",
   "standingChanged": "状态已变更为{standing}",
   "standing": {
-    "pending": "待处理",
     "leading": "领先",
     "outbid": "已被超越",
     "won": "中拍",
-    "lost": "未中拍",
-    "canceled": "已取消",
-    "failed_only": "仅有失败出价"
-  },
-  "failure": {
-    "window": "出价时段已结束。",
-    "minimum": "出价未达到最低金额。",
-    "account": "此账户不符合出价资格。",
-    "payment": "无法使用已绑定的信用卡完成这次出价。",
-    "stale_price": "其他出价使此金额已过时。",
-    "unavailable": "目前无法评估出价。",
-    "ceiling": "出价超过了该货币的上限。"
+    "canceled": "已取消"
   }
 }

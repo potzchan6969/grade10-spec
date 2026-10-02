@@ -26,28 +26,14 @@
   "manual": "수동",
   "automatic": "자동",
   "youWereOutbid": "상위 입찰이 발생했습니다",
-  "bidRequested": "최고가 제출: {amount}",
-  "bidRefused": "최고가 거절됨: {amount}",
   "acceptedPrice": "{actor}이(가) {amount}에 입찰했습니다",
   "automaticMaximumConfigured": "최고가 설정: {amount}",
   "automaticMaximumRaised": "최고가 상향: {amount}",
   "standingChanged": "상태가 {standing}(으)로 변경되었습니다",
   "standing": {
-    "pending": "대기 중",
     "leading": "최고 입찰",
     "outbid": "상위 입찰 발생",
     "won": "낙찰",
-    "lost": "낙찰되지 않음",
-    "canceled": "취소됨",
-    "failed_only": "실패한 입찰만 있음"
-  },
-  "failure": {
-    "window": "입찰 시간이 종료되었습니다.",
-    "minimum": "입찰 금액이 최소 금액에 미치지 못했습니다.",
-    "account": "이 계정은 입찰할 수 없습니다.",
-    "payment": "등록된 카드로 이 입찰을 진행할 수 없었습니다.",
-    "stale_price": "다른 입찰로 이 금액은 더 이상 유효하지 않습니다.",
-    "unavailable": "지금은 입찰을 평가할 수 없습니다.",
-    "ceiling": "입찰가가 통화 상한을 초과했습니다."
+    "canceled": "취소됨"
   }
 }
