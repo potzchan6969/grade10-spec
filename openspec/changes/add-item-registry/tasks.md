@@ -108,7 +108,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 12.2 The ten categories on the wizard's first step, read from `vault.category`, and the category and title read-only on a draft holding a known slab (`grade10-site-vault-case-intake-SC-40`)
 - [ ] 12.3 Verify: `pnpm run test:frontend`, `pnpm run typecheck`
 
-## 13. The walk (grade10)
+## 13. The walk (grade10) (owner: @ecchochan)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-item-registry`) as its input; `/tcs-run-sheet` executes manual cases when needed. Runs once groups 2 to 12 have landed.
 
