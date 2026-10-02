@@ -63,6 +63,7 @@ import {
   PROPERTIES,
   parseSuite,
   productPrefix,
+  prop,
   readDomainIds,
   readPlatformIds,
   readProductIds,
@@ -369,9 +370,17 @@ function checkSuite(root, filePath, rulesRev) {
     if (seenJourneys.has(j.num))
       err(j.line, `journey ${j.num} appears more than once`);
     seenJourneys.add(j.num);
-    if (
+    const retired =
+      spec?.retired?.has(canonical) || spec?.retired?.has(alternate);
+    if (retired && statusCounts(j.cases).deprecated !== j.cases.length)
+      err(
+        j.line,
+        `journey \`${canonical}\` is retired, so every case under it is deprecated`,
+      );
+    else if (
       level === "feature" &&
       spec &&
+      !retired &&
       !spec.unwalked &&
       spec.journeys.size > 0 &&
       !spec.journeys.has(canonical) &&
@@ -559,6 +568,11 @@ function checkSuite(root, filePath, rulesRev) {
         for (const id of ids) {
           if (spec.journeys.has(id)) continue;
           if (spec.groups?.has(id)) continue;
+          if (
+            spec.retired?.has(id) &&
+            prop(tc, "Status").toLowerCase() === "deprecated"
+          )
+            continue;
           if (spec.scenarios.has(id)) {
             warn(
               at,
