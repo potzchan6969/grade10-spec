@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "a7ed268b8aac4e50223ac416e57a0ccdf0f179c295642562a47bf8a5ce4d13e4"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "b83d243ccfa5585282096b35725f5c971b50733e",
+    "capturedAt": "2026-10-02T16:55:36.287Z",
+    "targets": [
+      {
+        "path": "openspec/changes/cert-scoped-inventory-auction-media/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Cert-scoped source-media selection"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Inventory may own optional Cert ID records and copy facts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/product-tcs.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
