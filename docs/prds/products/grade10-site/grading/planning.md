@@ -89,6 +89,11 @@ to book later.
 - 🚧 **Level availability** — a level closes with its reason: a named card
   declared above its ceiling, or Bulk with fewer than 20 cards; more than 20
   cards leaves Bulk the only level open
+- ❓ **A card above Bulk's ceiling** — SC-22 keeps the list open and moves
+  the card to a second submission on the same drop-off; Q65 closes every
+  level a card exceeds, so a 21-card list with one such card leaves no level
+  open until the card is taken off. Which one the collector's pages follow,
+  and how the card moves — Design
 - 🚧 **The estimate** — cards × the fee a card, the cover line per card at
   Express and Super Express, the level, and the return date counted from the
   day the batch leaves
