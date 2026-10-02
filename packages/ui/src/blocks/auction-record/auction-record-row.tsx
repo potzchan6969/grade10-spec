@@ -44,7 +44,6 @@ const STATE_VARIANT: Record<
   ended: "outline",
   leading: "success",
   outbid: "warning",
-  bid_not_accepted: "error",
   awaiting_payment: "warning",
   awaiting_address: "warning",
   awaiting_address_expired: "error",
