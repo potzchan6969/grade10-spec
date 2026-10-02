@@ -378,25 +378,25 @@ Needs `feature-tcs.md` reviewed (`/tcs-review vault-walk-ins-and-owners`) as
 its input, and groups 3 to 10 landed; `/tcs-run-sheet` executes the manual
 cases after deployment.
 
-- [ ] 11.1 Walk the counter in `apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`:
+- [x] 11.1 Walk the counter in `apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`:
       `grade10-admin-vault-operator-queue-US-10` from the console's walk-in to
       the draft's page, then `grade10-site-vault-case-intake-US-06` from the
       collector's own sign-in to the send, asserting on the dev outbox that
       nothing was mailed before the send
-- [ ] 11.2 Walk the typo in the same file:
+- [x] 11.2 Walk the typo in the same file:
       `grade10-site-vault-case-lifecycle-US-06`, the cancel, the account at
       the wrong address finding nothing and receiving nothing, the Closed view
       listing it as erased, and the draft opened again under the right
       address
-- [ ] 11.3 Walk the names in `vault/collectors.spec.ts`:
+- [x] 11.3 Walk the names in `vault/collectors.spec.ts`:
       `grade10-admin-vault-operator-queue-US-11`,
       `grade10-admin-vault-operator-queue-US-12`,
       `grade10-admin-console-collector-page-US-01` and, signed in as a
       treasurer, `grade10-admin-console-collector-page-US-02`
-- [ ] 11.4 Flip the cases the walks decide with
+- [x] 11.4 Flip the cases the walks decide with
       `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
       own commit, and name the ones that stay manual in their suite and in
       this change's `rounds.md` row
-- [ ] 11.5 Verify: `pnpm run test:e2e` on the isolated stack,
+- [x] 11.5 Verify: `pnpm run test:e2e` on the isolated stack,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
