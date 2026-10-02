@@ -128,5 +128,84 @@
       }
     ]
   },
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@ecchochan",
+    "reviewedAt": "2026-10-02T13:38:53.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Store 7e59d449f and 642506b64 refold the suites this change's acceptance wrote: revised cases replace their first revision, trace markers return, an empty placeholder goes. No case changes what it asserts"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Store 7e59d449f and 642506b64 refold the suites this change's acceptance wrote: revised cases replace their first revision, trace markers return, an empty placeholder goes. No case changes what it asserts; US11-TC2's row names SC-45 for the words, as SC-39 is dropped"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": ["Requirement: Catalogue cards follow each lot live"],
+        "classification": "semantic",
+        "reason": "The bid count shows on the catalogue card only; the Featured slide shows none, as the owner decided on 2026-10-02",
+        "evidence": [
+          "9gag/grade10@70a391e50ad4cbd95e37e085c4ee26d87798c139:packages/grade10-auction/frontend/src/features/campaigns/presentation/components/ListingCatalogueCard.test.tsx",
+          "9gag/grade10@70a391e50ad4cbd95e37e085c4ee26d87798c139:packages/grade10-auction/frontend/src/features/campaigns/presentation/views/CatalogueView.test.tsx"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Store 7e59d449f and 642506b64 refold the suites this change's acceptance wrote: revised cases replace their first revision, trace markers return, an empty placeholder goes. No case changes what it asserts"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
+        "anchors": ["Requirement: Two-maximum rule"],
+        "classification": "semantic",
+        "reason": "SC-16 reads 51000, not 54000: below HK$800 the HKD step is 1000 minor units, so A's maximum of 50000 plus one step is 51000",
+        "evidence": [
+          "9gag/grade10@70a391e50ad4cbd95e37e085c4ee26d87798c139:packages/grade10-auction/contracts/test/bidIncrements.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Store 7e59d449f and 642506b64 refold the suites this change's acceptance wrote: revised cases replace their first revision, trace markers return, an empty placeholder goes. No case changes what it asserts"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Store 7e59d449f and 642506b64 refold the suites this change's acceptance wrote: revised cases replace their first revision, trace markers return, an empty placeholder goes. No case changes what it asserts"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "US14-TC4-1 sets up SC-45 as written: the page keeps its bid controls enabled past the close, so the refusal's words can show. US14-TC3's row records SC-39 withdrawn"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Requirement: A lot shows its result only once the close is recorded"
+        ],
+        "classification": "semantic",
+        "reason": "SC-39 is dropped: a bid is accepted on the card on file and only the winner is charged, so no bid confirms after the close",
+        "evidence": [
+          "9gag/grade10#773 (c5193901bc3c8eece27c241ba48b2553e72d9c3d) removes the bid-time hold and its confirm path",
+          "9gag/grade10@c5193901bc3c8eece27c241ba48b2553e72d9c3d:apps/backend/grade10/auction/test/db/bidding/placeBid.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Store 7e59d449f and 642506b64 refold the suites this change's acceptance wrote: revised cases replace their first revision, trace markers return, an empty placeholder goes. No case changes what it asserts"
+      }
+    ]
+  },
   "repositories": []
 }

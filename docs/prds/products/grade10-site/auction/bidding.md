@@ -41,22 +41,22 @@ when the timer runs out with no new bid.
 - **A bid at the scheduled close** — counts as accepted by it, so the listing
   extends; a bid that would move the close past the cap is accepted without
   moving it
-- 🚧 **Extension off** — a bid at exactly the scheduled close still counts,
+- **Extension off** — a bid at exactly the scheduled close still counts,
   and the listing closes with it
 - **Each listing on its own** — every listing runs its own timer, whatever
   campaign it belongs to
 - **Accepted once** — a bid advances the highest bid atomically, so a delayed
   lower bid never displaces a higher one however the network reorders them
-- 🚧 **A price move restarts the timer** — an accepted bid that moves the
+- **A price move restarts the timer** — an accepted bid that moves the
   price, from anyone, sets the close to the full extension duration after it.
   Equal maxima at a higher price move it: at 1,000, with A's maximum at 2,000,
   B's maximum of 2,000 makes the price 2,000, A keeps the lead as the earlier,
   and the lot extends. A leader raising their own maximum does not
-- 🚧 **A bid counts when its payment confirms** — judged at that moment; a
+- ❓ **A bid counts when its payment confirms** — judged at that moment; a
   confirmation after the close loses with no grace and its hold is released,
   and a lone first bid still confirming at the scheduled close leaves the lot
-  unsold. With bid-time holds off, a bid counts when placed
-- 🚧 **No bid after the close** — however late the close is recorded, no bid
+  unsold. With bid-time holds off, a bid counts when placed. Product restates it now that a bid takes no card hold
+- **No bid after the close** — however late the close is recorded, no bid
   counts at or after the effective close. Until extended bidding is recorded,
   that is the scheduled close plus the extension duration or the cap,
   whichever is shorter; once it is, it is the recorded close. A cap of **0**
@@ -126,17 +126,17 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 
 | Lot | Amount being beaten | Next minimum | Outcome |
 | --- | ---: | ---: | --- |
-| HKD lot opening at HK$200 | HK$200 | 🚧 HK$200 | 🚧 The first bid may stand on the starting price; HK$210 from the second |
-| 🚧 HKD lot opening at HK$0 | HK$0 | HK$10 | 🚧 The first bid must reach the lowest increment; a lone bidder stands at HK$10, never HK$0 |
+| HKD lot opening at HK$200 | HK$200 | HK$200 | The first bid may stand on the starting price; HK$210 from the second |
+| HKD lot opening at HK$0 | HK$0 | HK$10 | The first bid must reach the lowest increment; a lone bidder stands at HK$10, never HK$0 |
 | USD lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
 | USD lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
-- **A first maximum** — must reach the starting price plus one increment; the
-  public price it creates is the starting price itself
-- 🚧 **Opening price** — the first bid must reach the starting price, or the
+- **A first maximum** — must reach the opening price, and the public price it
+  creates is the opening price itself
+- **Opening price** — the first bid must reach the starting price, or the
   lowest increment when the lot starts at 0, and a lone bidder stands there;
   one increment above the current bid applies from the second bid
 
@@ -146,7 +146,7 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 | --- | --- |
 | Below the next minimum | Refused, naming the minimum |
 | Before the start, or after the recorded close | Refused |
-| 🚧 A card authorization that confirms after the close | **Your bid did not go through**, and the hold is released |
+| ❓ A card authorization that confirms after the close | **Your bid did not go through**, and the hold is released; Product restates it now that a bid takes no card hold |
 | Above the currency's ceiling | Refused, naming the ceiling; the price, the leader and every maximum stay as they were |
 | At or above the bar without a verified identity | Held at the storefront, with where to verify; nothing is recorded |
 | No linked card, or a declined hold when holds are on | Refused before the bid stands — [Auction Panel](/p/grade10-site/auction/bidding#auction-panel) |
@@ -296,7 +296,7 @@ the same facts sit in the five-column table.
 | Column | What it shows |
 | --- | --- |
 | Lot | The key image, the title and the close |
-| Current bid | 🚧 The auction's current price, or its final price once it closes — never the collector's own bid |
+| Current bid | The auction's current price, or its final price once it closes — never the collector's own bid |
 | 🚧 **Your Standing** | Leading · Outbid, with the next valid bid · Bid submitted · Bid not accepted, and why · Won, reading the order's status (Awaiting Setup, Setup Overdue, Preparing Invoice, Pending Payment, Payment Overdue, Payment Verifying, Partially Paid, …) · Didn't win, with whether the card hold is being released or released · `--` for a watch-only lot |
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
@@ -304,11 +304,11 @@ the same facts sit in the five-column table.
 - **Tabs** — Active, Upcoming and Ended by bidding window, opening on
   Active; the title count stays the total, and an empty tab says it has no
   lots
-- 🚧 **After the close** — Your Standing reads Won or Didn't win once the
+- **After the close** — Your Standing reads Won or Didn't win once the
   result is recorded, never from the page's own clock
-- 🚧 **An unsold lot's row** — a bidder whose lone first bid did not confirm
+- ❓ **An unsold lot's row** — a bidder whose lone first bid did not confirm
   before the close reads Didn't win, and Current bid reads as on any unsold
-  lot's row
+  lot's row. Product restates it now that a bid takes no card hold
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
@@ -467,9 +467,9 @@ surface.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Absolute sale | Decided | No reserve and no buy-now price; the highest accepted bid at the close wins. | Product |
-| Extended bidding | 🚧 In flight | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product (`relay-auction-live-state`) |
-| A bid counts when its payment confirms | 🚧 In flight | A confirmation after the close loses with no grace and its hold is released; a lone first bid still confirming at the scheduled close leaves the lot unsold. A grace was ruled out: the payment event would not arrive before the close anyway, and the moment payment succeeded is the decision. | Product (`relay-auction-live-state`) |
-| My Auctions price | 🚧 In flight | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product (`relay-auction-live-state`) |
+| Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product |
+| A bid counts when its payment confirms | ❓ Open | A confirmation after the close loses with no grace and its hold is released; a lone first bid still confirming at the scheduled close leaves the lot unsold. A grace was ruled out: the payment event would not arrive before the close anyway, and the moment payment succeeded is the decision. A bid now takes no card hold, so Product restates when it counts. | Product |
+| My Auctions price | Decided | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; equal-max non-leaders show an Info tip in the amount tone (when maximums match, the earlier one leads). Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |

@@ -33,7 +33,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 | --- | --- | --- |
 | RPC `Grade10AuctionService` and `ZzzAuctionService` | that storefront's backend | service binding to a named entrypoint; storefront pinned server-side |
 | tRPC `public.listing`, `public.listings`, `public.auctions`, `public.auction`, `public.categories` and `featured.publicList` - a lot by slug, the keyset-paged browse, sales and one sale's lots, visible taxonomies, Featured | storefront frontends | none; answered `private, no-store`, never edge-cached |
-| 🚧 WebSocket `/api/public/live/lot/:id` and `/api/public/live/catalogue` - the lot and catalogue rooms under [Live lots](#live-lots) | storefront frontends | none; `Origin` checked against the storefronts |
+| WebSocket `/api/public/live/lot/:id` and `/api/public/live/catalogue` - the lot and catalogue rooms under [Live lots](#live-lots) | storefront frontends | none; `Origin` checked against the storefronts |
 | `GET /api/public/listing-media/:size/*` — named sizes `card`, `detail`, `thumb`, `zoom` (Images transform when the scan exceeds that size's ceiling) | browsers | none; immutable, never purged |
 | tRPC `/api/trpc` and the byte routes under `/api/admin/*` | the grade10 admin panel's auction section | own `AUTH_SERVICE` → grade10-auth |
 | `POST /webhooks/stripe/<storefront>` | Stripe, live and test | signature per storefront × mode |
@@ -58,7 +58,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - Every money transition — bid insert, promote, re-auth swap, close, cancel — runs in one Postgres transaction holding `SELECT … FOR UPDATE` on the listing row
 - A hold row changes state only inside one of those transactions, never ahead of the lock
 - No Durable Object holds auction state: state that must be consistent lives in one store with one lock, not two
-- 🚧 The lot rooms under [Live lots](#live-lots) relay committed state and keep time; they never decide
+- The lot rooms under [Live lots](#live-lots) relay committed state and keep time; they never decide
 
 ### At most one live hold per listing — the current top bid's
 
@@ -94,7 +94,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - A bid confirmed at exactly `scheduled_ends_at` is accepted on every listing, so the lot's first deadline is one millisecond after it
 - Listing state carries the extension policy (`extension_seconds`, optional `extension_cap_seconds`) and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - Only the extension moves a live listing's clock; an admin can reschedule a `draft` and nothing else
-- 🚧 Until the first extension is written, the late window ends at `scheduled_ends_at` plus the reach; after it, at `ends_at`. A cap of zero leaves none, so a confirm after the effective close is refused however far the sweep lags
+- Until the first extension is written, the late window ends at `scheduled_ends_at` plus the reach; after it, at `ends_at`. A cap of zero leaves none, so a bid after the effective close is refused however far the sweep lags
 
 ## Public reads and cache
 
@@ -102,7 +102,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 - Every browse read is a `public.*` tRPC query behind the service's session tier, which answers `private, no-store`, so nothing on this surface is edge-cached and every read reaches Postgres
 - A page that polls pays one database read per viewer per poll
-- 🚧 [Live lots](#live-lots) replaces polling: a page reads once and the rooms carry each change
+- [Live lots](#live-lots) replaces polling: a page reads once and the rooms carry each change
 - Listing state carries the extension policy and the latest the listing could possibly close, so a countdown can say why it moved rather than jumping unexplained
 - It publishes less than the rows hold: a `draft` or `canceled` listing reads as not found, `lost_hold` publishes as an ordinary `lost`, and `unsold` folds to `closed` unless the listing chose to expose its reserve state
 - A listing publishes on its own clock, so it can be live under a sale still in `draft`. It lists, and reads with no sale at all — naming the sale is what the draft status is keeping back. The taxonomy `public` flag reads the same way on every anonymous surface: an internal one is absent from the listing payload and is not a browse filter, not merely missing from the taxonomy list
@@ -116,18 +116,18 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 ### Only listing media is cached
 
 - Listing media is the one cached response: its key is the hash of the bytes and it is served `immutable` for a year, so a cached copy can never be wrong and nothing purges it
-- The purge calls still in the code (admin mutations, a bid, the webhook, a sweep pass that moved rows) reach no cached read and change nothing a reader sees
-- 🚧 They go when the change signal under [Live lots](#live-lots) lands, which is what keeps an open page fresh
+- The purge calls admin mutations still send reach no cached read and change nothing a reader sees
+- A bid, the webhook and the sweep send none: the change signal under [Live lots](#live-lots) keeps an open page fresh
 
 ## Live lots
 
-🚧 A lot's clock, price and result reach every open page within a second of the commit that decides them. Postgres still decides everything; a Durable Object per lot only relays what was committed and wakes the worker at the next deadline. The engineering plan is `docs/temp/auction-realtime-plan.md` in the application repository.
+A lot's clock, price and result reach every open page within a second of the commit that decides them. Postgres still decides everything; a Durable Object per lot only relays what was committed and wakes the worker at the next deadline. The design record is [Auction · Live rooms](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md#live-rooms) in the application repository.
 
 ::image{src="assets/diagrams/auction-live-lot.svg" alt="How a lot page stays live, in three parts. A page joins: the page sends 3 time probes to the auction worker at the nearest edge and the fastest sets its clock, opens a socket to the lot room, the room reads the lot through the worker once for every page joining at once, and answers hello with the lot. A bid lands: the bidder places a bid through the storefront, the auction worker commits it under the listing lock and the version rises, the storefront answers the bidder, the worker tells the room the listing changed, the room reads the committed lot, sends every page the whole lot at its new version and sets its alarm to the lot's next deadline. The deadline passes: the room's alarm asks the worker to settle the lot, the worker extends or closes it under the lock and returns the lot, and the room sends Ended or Extended bidding and re-arms"}
 
 ### The room relays; it never decides
 
-- 🚧 One room per public lot and one for the catalogue: each holds WebSockets, one alarm, and in memory the last state it sent
+- One room per public lot and one for the catalogue: each holds WebSockets, one alarm, and in memory the last state it sent
 - The room writes nothing and keeps no storage beyond its alarm: every read and every settle it asks for runs in the auction worker against Postgres, so losing a room loses nothing
 - The worker signals the room after each commit that raised a lot's `version`; the signal is best effort, because the next change, a reconnect, a late touch and the cron all heal a lost one
 - The room reads the committed lot back rather than being handed it, so no writer can send a wrong or out-of-order state
@@ -139,7 +139,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ### One rule places a lot on its clock
 
-- 🚧 The bid guards, the close, every read and the browser all work out the phase from one function in `@grade10/auction-contracts`, and the catalogue's ordering uses one SQL fragment built beside it
+- The bid guards, the close, every read and the browser all work out the phase from one function in `@grade10/auction-contracts`, and the catalogue's ordering uses one SQL fragment built beside it
 
 | Lot | Phase | Countdown to | Takes a bid |
 | --- | --- | --- | --- |
@@ -156,7 +156,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ### Whoever reaches a due lot first settles it
 
-- 🚧 Settling is one idempotent function in its own transaction under the lock: it publishes, writes the first extension, or closes, whichever is due, and settling twice is a no-op
+- Settling is one idempotent function in its own transaction under the lock: it publishes, writes the first extension, or closes, whichever is due, and settling twice is a no-op
 - The room's alarm calls it at the lot's next deadline; the alarm is a copy of that deadline, set again from every read the room makes, so a bid that extends the lot or an edit that moves it re-arms the room
 - A read that finds a lot still closing two seconds past its deadline settles it after answering, skipping a lot another transaction holds, so a crowd queues nothing
 - No bid or confirm settles inside its own transaction: it refuses a closing lot, because a close that fails must not fail the bid or the payment webhook that found it
@@ -165,7 +165,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 
 ### The page clock follows the server
 
-- 🚧 Countdowns read the server's time, not the device's: 3 probes to a stateless time route at the nearest edge set an offset on the browser's monotonic clock, accurate to half the fastest round trip
+- Countdowns read the server's time, not the device's: 3 probes to a stateless time route at the nearest edge set an offset on the browser's monotonic clock, accurate to half the fastest round trip
 - The page probes again after sleep, a reconnect or a return to the tab, and a correction under a second never makes a countdown jump up
 - One animation-frame loop drives every countdown on the page while it is visible and redraws a countdown only when its displayed value changes; nothing counts timer ticks, so nothing drifts
 - A countdown rounds up, so it reads 0 only once the deadline has passed
@@ -312,7 +312,7 @@ fulfillment: created → paid → shipped → received  (canceled)
 - A top bid under the reserve: the listing closes `unsold`, the bid → `lost`, its holds are released, and nobody owes anything
 - No top bid at all: the listing closes as a no-sale
 - A captured settlement then moves the listing to `settled`
-- 🚧 The sweep becomes the net: the lot room's alarm and a late read settle a lot first, as [Live lots](#live-lots) describes
+- The sweep is the net: the lot room's alarm and a late read settle a lot first, as [Live lots](#live-lots) describes
 
 ### Capture asks fresh every attempt
 

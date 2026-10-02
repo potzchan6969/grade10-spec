@@ -577,8 +577,9 @@ resting order and is settled on the lot record the same way.
 ### Requirement: Catalogue cards follow each lot live
 
 Every catalogue card and Featured slide SHALL show each committed bid,
-extension and close on its lot without a reload: the current bid, the bid
-count, the recorded close and the countdown. Its countdown SHALL run on the
+extension and close on its lot without a reload: the current bid, the
+recorded close and the countdown, and on a catalogue card the bid count. A
+Featured slide SHALL show no bid count. Its countdown SHALL run on the
 auction service's clock and round up, as the lot page's does under
 `grade10-site/auction/listing-page`. A card SHALL show no result until the
 close is recorded.

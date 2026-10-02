@@ -1223,10 +1223,9 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * customer B leads `<listing_9>` at `<leader price>`, its close under a minute away.
 * customer A(card linked) is signed in and on the lot page for `<listing_9>`.
-* customer A's bid requests are delayed so they reach the auction 10 seconds after they are sent.
+* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and lot reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
 
 **Test data:**
 
@@ -1238,15 +1237,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Place `<bid amount>` 3 seconds before the close.
-2. Wait until the close is recorded.
-3. Read the bid panel and the lot's state.
+1. Wait until 5 seconds after the close, by the auction's clock.
+2. Place `<bid amount>`.
+3. Read the bid panel.
+4. Unblock the auction, reload the lot page and wait until the close is recorded.
 
 **Expected Results:**
 
-* The bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
-* No new label or wording appears for the late bid.
-* Highest bid reads `<leader price>`, and the lot reads Did not win for customer A.
+* At step 3 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
+* No new label or wording appears for the refused bid.
+* After step 4 Highest bid reads `<leader price>`.
 
 ### grade10-site-auction-listing-page-US14-TC5-1: A lone first bid still confirming at the close leaves the lot Ended with No bids
 
@@ -1351,7 +1351,7 @@ Runs once per row of **Test data**.
 | US13-TC4: a sub-second correction never raises the countdown | **Folded in:** `grade10-site-auction-listing-page-SC-36` |
 | US14-TC1: Closed with no result until recorded, then Won, Did not win, or Ended with No bids | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-38`, `grade10-site-auction-listing-page-SC-40`; the no-bid row is the requirement's No winner row |
 | US14-TC2: a close held to the sweep keeps Closed through a reload and never guesses | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-40` |
-| US14-TC3: a hold confirming after the close reads "Your bid did not go through." alone, then Did not win | **Folded in:** `grade10-site-auction-listing-page-SC-39` (Q13) |
+| US14-TC3: a hold confirming after the close reads "Your bid did not go through." alone, then Did not win | **Withdrawn:** `grade10-site-auction-listing-page-SC-39` is dropped, because a bid takes no card hold and none confirms after the close |
 | US14-TC4: a bid reaching the auction after the close reads the same words alone | **Folded in:** `grade10-site-auction-listing-page-SC-45` (Q13) |
 | `grade10-site-auction-listing-page-SC-46`: a lone first bid confirming at the scheduled close; no blind case walked the pending bid | **Added:** `grade10-site-auction-listing-page-US14-TC5-1`. It also answers QA1's third raised question on the lot page: Ended with No bids, neither Won nor Did not win (Q1) |
 | `grade10-site-auction-listing-page-SC-42`: a later recorded close returns a Closed page to Extended bidding; no blind case reached it | **Added:** `grade10-site-auction-listing-page-US14-TC6-1` |
