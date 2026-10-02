@@ -189,7 +189,12 @@ function VaultAssetCard({
       {(onOpen || proposedListAction) && (
         <CardFooter className="flex flex-wrap gap-2 border-t border-border bg-background p-4">
           {onOpen ? (
-            <Button size="sm" type="button" variant="secondary" onClick={onOpen}>
+            <Button
+              size="sm"
+              type="button"
+              variant="secondary"
+              onClick={onOpen}
+            >
               View details
             </Button>
           ) : null}
@@ -254,7 +259,15 @@ function VaultEmptyState({
   );
 }
 
-function FactRow({ label, value, hint }: { label: string; value: ReactNode; hint?: ReactNode }) {
+function FactRow({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-1 border-b border-border py-3 last:border-b-0">
       <Text size="sm" tone="secondary">

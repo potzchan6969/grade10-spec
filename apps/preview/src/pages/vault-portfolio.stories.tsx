@@ -124,8 +124,8 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
       />
 
       <ProposalBanner title="Day-one scope">
-        List for Auction is Proposed. Live market feed is Proposed — values
-        show Declared or Intake estimate today.
+        List for Auction is Proposed. Live market feed is Proposed — values show
+        Declared or Intake estimate today.
       </ProposalBanner>
 
       <PortfolioSummary
@@ -147,9 +147,8 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
         />
       ) : (
         <>
-          <div
-            className="flex flex-wrap gap-2"
-            role="group"
+          <fieldset
+            className="m-0 flex min-w-0 flex-wrap gap-2 border-0 p-0"
             aria-label="Filter holdings"
           >
             {FILTERS.map((f) => (
@@ -163,7 +162,7 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
                 {f.label}
               </FilterChip>
             ))}
-          </div>
+          </fieldset>
 
           <div className="flex flex-col gap-10">
             <AssetSection heading="Incoming" assets={groups.incoming} />
