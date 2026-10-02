@@ -181,7 +181,9 @@ overwriting an address they chose.
 
 An operator authorized to call a listing off SHALL cancel a listing that is
 `draft`, `created`, or `published`. Cancel SHALL move the listing to
-`canceled` and SHALL release every live authorization standing against it.
+`canceled` and SHALL call off every bid standing on it. No bidder SHALL be
+charged, and the listing's stock SHALL be released per "Listing cancel
+releases inventory hold".
 
 Cancel SHALL be refused when the listing is `closed`, `settled`, or already
 `canceled`. A closed or settled listing's outcome is absolute and SHALL NOT
@@ -225,10 +227,12 @@ be refused, and the listing and slug SHALL be unchanged.
 #### Scenario: grade10-admin-auction-listing-SC-38 - Operator calls off a published listing that has bids
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
-- **GIVEN** a published listing with accepted bids and live authorizations
+- **GIVEN** a published listing with a leading bid, an outbid bid and stock
+  held for it
 - **WHEN** an authorized operator calls it off
 - **THEN** Grade10 moves it to `canceled`
-- **AND** it releases every live authorization standing against it
+- **AND** both bids are called off, and no bidder is charged
+- **AND** the stock held for it is released
 - **AND** it is absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-39 - Closed listing cannot be called off
