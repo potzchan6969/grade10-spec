@@ -4,6 +4,6 @@ hands:
   pm: "@ecchochan"
   dev: "@ecchochan"
 reviewed:
-  tasks: e2511f35
+  tasks: b74d21b4
 landed_by:
   test-cases: ecchochan
