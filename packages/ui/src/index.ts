@@ -726,6 +726,15 @@ export {
   type VaultAcceptOfferDialogProps,
 } from "./blocks/vault-case/vault-accept-offer-dialog";
 export {
+  VaultCases,
+  type VaultCasesCard,
+  type VaultCasesChip,
+  type VaultCasesCopy,
+  type VaultCasesIcon,
+  type VaultCasesProps,
+  type VaultCasesTone,
+} from "./blocks/vault-case/vault-cases";
+export {
   VaultCasesEmpty,
   type VaultCasesEmptyCopy,
   type VaultCasesEmptyProps,
