@@ -21,7 +21,7 @@ Takes the draft `feature-tcs.md` as its input once group 2 has landed; human QA 
 - [ ] 3.2 In grade10-spec, flip the cases each test decides with `pnpm run tcs:automated <case…> --decided-by <path>` once they land: the walk-in cases by `walk-in.spec.ts`, the wizard's by `request.spec.ts`, the intake's refusal by `collectorRouter.test.ts`; name the cases that stay manual in the walk's `rounds.md` row
 - [ ] 3.3 Verify: the walk-in and request walks green in CI.
 
-## 4. The manual (grade10-spec)
+## 4. The manual (grade10-spec) (owner: @ecchochan)
 
 - [ ] 4.1 Take 🚧 off the loan line in `docs/prds/products/grade10-site/vault/operator-console.md` once implementation is verified, before the change archives
 - [ ] 4.2 Verify: `pnpm check:manual` in grade10-spec.
