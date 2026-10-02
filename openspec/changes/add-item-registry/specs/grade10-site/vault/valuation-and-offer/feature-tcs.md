@@ -61,9 +61,11 @@ from memory.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts`
 
 **Pre-conditions:**
 
@@ -93,9 +95,11 @@ from memory.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts`
 
 **Pre-conditions:**
 
@@ -123,9 +127,11 @@ from memory.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts`
 
 **Pre-conditions:**
 
