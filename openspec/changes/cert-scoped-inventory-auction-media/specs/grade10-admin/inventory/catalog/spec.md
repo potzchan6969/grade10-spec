@@ -71,6 +71,7 @@ decrement stock by one, increment withdrawn by one, remove the Cert record,
 and delete source media tagged to that record. Untagged product media and
 media tagged to other Cert records SHALL remain unchanged.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fq8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -80,6 +81,7 @@ media tagged to other Cert records SHALL remain unchanged.
 - **THEN** the inventory has zero Cert ID records
 - **AND** the product remains valid for ordinary unnumbered stock
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-irv rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-96 - Intake records a Cert ID under its product
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -88,6 +90,7 @@ media tagged to other Cert records SHALL remain unchanged.
 - **THEN** the inventory owns one record whose displayed identifier is `PSA-123`
 - **AND** that record belongs to the intaken product and no other product
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-a57 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-97 - Duplicate Cert ID is refused
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
