@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "change": "add-shopify-checkout-integration",
+  "baseline": "2ee3c055deb315b04c0c18217529d50cd8d5641013ce9718830ae382fae568aa",
+  "fingerprint": "137f9cec66da45e8975e44b4be5c14c272ad34df5ee7e37dca1b8061eb5e0d8c",
+  "reviewedBy": "@kinisworking",
+  "acceptedAt": "2026-10-02T08:10:46.888Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/checkout.md#integration-readiness",
+      "sha256": "0fe782e634eab6c313d5dc540c9190a90a3c7c9007cf066752e5506297067e91",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/decisions.md",
+      "sha256": "1a95d1f9104efafee7d18873a1a7dc5e52dc7abb8d843e1d42935a4a601f25af",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/proposal.md",
+      "sha256": "7dd6170a5a6db90025fd24513f2bbc1aeb5c3a14bc17ee1d76577c3b21bd992e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/specs/grade10-site/store/checkout/feature-tcs.md",
+      "sha256": "b0d3fac326a9b6344cf02d185a80e786db100ce4aefe3ad375188166f6d5406b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/specs/grade10-site/store/checkout/spec.md",
+      "sha256": "f83b7cd9a07fc62bebc347f3694c7efc5c68a7b542d9baa44441a8c06402691f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/specs/grade10-site/store/checkout/user-journeys.md",
+      "sha256": "2dda7e630d09648f66b40a04f00873015c1f0024a96549013ee33b567ce06a02",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/tech-design.md",
+      "sha256": "518c329bd30d029de5f633356f1f4677cc03a1109804f59b11d041e73c0b7344",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/ui-design.md",
+      "sha256": "980756cac528c7e80ce3f73abd13e09218acb83f1a9ea254a2e4f412f3c6347d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
+      "sha256": "b0d3fac326a9b6344cf02d185a80e786db100ce4aefe3ad375188166f6d5406b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+      "sha256": "f61ef5e91bedad2a964b95c4a3509133b6bc3abb320245fb05fd36bb9edc1e62",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/checkout/user-journeys.md",
+      "sha256": "1d33327fde22eb3385c485ccbb6823ff0308b075a22752c75538c48a5bb090bf",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-shopify-checkout-integration/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A checkout intent is safe to repeat",
+        "Requirement: A signed-in member receives one Shopify hosted checkout",
+        "Requirement: Checkout reviews the current member basket before payment",
+        "Requirement: Shopify payment settles one Grade10 order",
+        "Requirement: Shopify uses the store's carrier rule"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/checkout/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

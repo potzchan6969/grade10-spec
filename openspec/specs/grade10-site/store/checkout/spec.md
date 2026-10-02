@@ -29,7 +29,7 @@ payment lifecycle.
   - Shopify asks a token-gated stateless carrier rule for served destinations
   - The callback and store preview use the same configured rate
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Checkout reviews the current member basket before payment
 
