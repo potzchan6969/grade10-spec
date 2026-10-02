@@ -77,6 +77,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   address belongs to an account someone has signed in to
 - **An address that is not an email address** — refused beside the
   address field before anything is sent, so staff check it with the customer
+- 🚧 **A loan of zero** — refused beside the loan field before anything is
+  sent; a loan asks for more than zero, or the case is storage only
 - **The statement first** — the counter shows the collection statement
   before staff type the address, and the open keeps the version shown; in
   production the open is refused while the statement is unwritten, so the
