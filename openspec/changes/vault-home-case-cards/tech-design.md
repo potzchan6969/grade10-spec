@@ -63,22 +63,24 @@ type VaultCasesProps = {
   `VaultCasesCopy`, `VaultCasesCard`, `VaultCasesChip`, `VaultCasesTone` and
   `VaultCasesIcon`, so the site types its maps by name
 - **The card is one control** - the title is a `button` inside the card's
-  `h3`, stretched over the card with an `after:` inset, so the card opens
-  from anywhere; the card is `relative`, and the focus ring is drawn on the
-  `after:` inset with `after:rounded-[inherit]`, so the card's
-  `overflow-hidden` cannot clip it; the control is named by the item and
-  described by the reference, so two untitled cards stay apart; the caret is
-  decorative. The card keeps the design system `Card`'s `data-slot="card"`,
-  which the site's E2E finds a card by
+  `h4`, stretched over the card with an `after:` inset raised to `z-1`, so
+  the card opens from anywhere, toned chips included; the card is
+  `relative isolate`, so the raised inset stays inside it, and the focus
+  ring is drawn on the inset with the card's own radius token, so the
+  card's `overflow-hidden` cannot clip it; the control is named by the item
+  and described by the reference, so two untitled cards stay apart; the
+  caret is decorative. The card keeps the design system `Card`'s
+  `data-slot="card"`, which the site's E2E finds a card by
 - **The facts line** - each fact a span, `·` drawn between them
   `aria-hidden`, the reference last in `font-mono` as its own text, so a
   reader finds the card by it
 - **The next step** - a row in `bg-primary-muted text-primary-muted-foreground`
   or `bg-muted text-foreground`, an arrow before the words
 - **The home** - Start a request as the full-width primary `Button` with a
-  plus; Your cases as an `h3` with the count beside it, under the site's
-  `h2`, as `VaultCasesEmpty`'s How it works is; each card's title an `h4`; the cards; the
-  several-items note as a `default` `Alert` with an info icon
+  plus; Your cases as an `h3` with the count inside it, under the site's
+  `h2`, as `VaultCasesEmpty`'s How it works is; each card's title an `h4`;
+  the cards; the several-items note as a `default` `Alert` with an info
+  icon and `role="note"`, since it announces nothing
 
 ### The site
 

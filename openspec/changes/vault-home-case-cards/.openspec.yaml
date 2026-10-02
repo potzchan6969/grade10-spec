@@ -10,6 +10,7 @@ landed_by:
   proposal: ecchochan
   decisions: ecchochan
   user-journeys: ecchochan
+  tech-design: ecchochan
 reviewed:
   user-journeys: 28d47070
   ui-design: 7dd90f83
