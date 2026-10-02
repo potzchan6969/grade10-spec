@@ -534,13 +534,15 @@ backend does not require.
 * The tooltip authorizes the card for bidding.
 * The tooltip does not promise a bid-time hold.
 
-### grade10-site-auction-bid-panel-enrollment-US2-TC12-1: A refused card link keeps setup open for retry
+### grade10-site-auction-bid-panel-enrollment-US2-TC12-1: A refused card link keeps setup open and links nothing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -558,7 +560,64 @@ backend does not require.
 | Field | Value |
 | --- | --- |
 | <listing_2> | An open listing taking bids; this collector has no linked card |
+| Expiry, CVC, postal code | Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+
+| `<the refused card>` | Card number | Provider answer |
+| --- | --- | --- |
+| Generic decline | 4000 0000 0000 0002 | Declined by the issuer |
+| Expired card | 4000 0000 0000 0069 | Refused as expired |
+| Incorrect CVC | 4000 0000 0000 0127 | Refused for the CVC |
+| Processing error | 4000 0000 0000 0119 | Provider fails to process |
+
+**Steps:**
+
+1. Click the primary bid action.
+2. Enter <the refused card> in the provider-hosted field.
+3. Check age attestation.
+4. Click Link Card.
+5. Read the setup modal.
+6. Click into the provider-hosted field.
+7. Uncheck age attestation.
+8. Close the setup modal.
+9. Read the linked-card slot.
+10. Read the quick-bid presets and the custom maximum.
+11. Read the primary bid action.
+
+**Expected Results:**
+
+* Step 5: the setup modal stays open, and a failure is shown.
+* Step 6: the provider field accepts focus.
+* Step 7: age attestation unchecks.
+* Step 9: the empty link prompt is shown.
+* Step 10: presets and the custom maximum are visible and disabled.
+* Step 11: the primary bid action reads "Link a card to bid".
+
+### grade10-site-auction-bid-panel-enrollment-US2-TC13-1: A retry after a refused link links the card
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
 | <the declining Visa> | 4000 0000 0000 0002, the provider's generic-decline test card. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 
 **Steps:**
 
@@ -566,19 +625,67 @@ backend does not require.
 2. Enter <the declining Visa> in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
-5. Read the setup modal.
-6. Click into the provider-hosted field, then toggle age attestation.
-7. Close the setup modal.
-8. Read the linked-card slot, the amount controls and the primary bid action.
+5. Replace the card with <the successful Visa>.
+6. Click Link Card.
+7. Read the linked-card slot.
+8. Read the quick-bid presets and the custom maximum.
 
 **Expected Results:**
 
-* Step 5: the setup modal stays open, and a failure is shown.
-* Step 6: the provider field and age attestation still respond.
-* Step 8: the linked-card slot shows the empty link prompt.
-* Quick-bid presets and the custom maximum are visible and disabled.
-* The primary bid action still reads Link a card to bid.
+* Step 4: a failure is shown, the setup modal stays open.
+* Step 6: the setup modal closes.
+* Step 7: the linked card is shown, with Change available.
+* Step 8: presets and the custom maximum are enabled.
 
+
+### grade10-site-auction-bid-panel-enrollment-US2-TC14-1: Card brands beyond Visa link through setup
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** exploratory
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
+| Expiry, CVC, postal code | Any future expiry, such as 12/34, any CVC of the brand's length (4 digits for American Express, 3 otherwise), and any postal code |
+
+| `<the brand card>` | Card number |
+| --- | --- |
+| Mastercard | 5555 5555 5555 4444 |
+| American Express | 3782 822463 10005 |
+| JCB | 3566 0020 2036 0505 |
+| UnionPay | 6200 0000 0000 0005 |
+
+**Steps:**
+
+1. Click the primary bid action.
+2. Enter <the brand card> in the provider-hosted field.
+3. Check age attestation.
+4. Click Link Card.
+5. Read the setup modal and the linked-card slot.
+
+**Expected Results:**
+
+* Step 4: the link completes, or a failure is shown; note which per brand.
+* Step 5: a linked brand shows in the linked-card slot.
+* Any refused brand is reported to the spec's author, not failed.
 ---
 
 ## grade10-site-auction-bid-panel-enrollment-US3: Collector changes the linked card before their first bid
