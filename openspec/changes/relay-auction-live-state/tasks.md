@@ -55,7 +55,7 @@
 - [ ] 7.6 Show `auctionListing.bidDidNotGoThrough` alone for a `NOT_BIDDABLE` refusal and for a confirming bid the standing re-read finds lost past the close; a card that failed to authorize keeps `authorizationProviderFailure` (`grade10-site-auction-listing-page-SC-39`, `grade10-site-auction-listing-page-SC-45`)
 - [ ] 7.7 Verify: auction-frontend and grade10 frontend tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`
 
-## 8. Catalogue and Featured (grade10)
+## 8. Catalogue and Featured (grade10) (owner: @ecchochan)
 
 - [ ] 8.1 Tests: the catalogue live hook applying frames by version, card countdowns on the server clock, a card past its close showing no result until it is recorded, and the polling fallback (`grade10-site-auction-auction-SC-65`, `grade10-site-auction-auction-SC-66`, `grade10-site-auction-auction-SC-77`, `grade10-site-auction-auction-SC-88`)
 - [ ] 8.2 Move catalogue cards and Featured onto the catalogue room and the shared clock, showing the existing closed state with no result until the close is recorded (`grade10-site-auction-auction-SC-65`, `grade10-site-auction-auction-SC-66`, `grade10-site-auction-auction-SC-77`, `grade10-site-auction-auction-SC-88`)
