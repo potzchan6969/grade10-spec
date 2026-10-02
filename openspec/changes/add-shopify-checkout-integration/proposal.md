@@ -60,3 +60,7 @@ cleanup is unchanged.
 - **Restart** - The earlier QA1, Dev and QA2 readings are superseded because the feature anchors changed. Fresh independent readings use the frontend scope.
 - **Cleanup** - The incorrect standalone reference is deleted. Backend intent/recovery specifications and delivery tasks are removed from this amendment.
 - **History** - Historical acceptance and implementation records remain intact; this amendment supersedes the contract through the supported acceptance command.
+
+## References
+
+- [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
