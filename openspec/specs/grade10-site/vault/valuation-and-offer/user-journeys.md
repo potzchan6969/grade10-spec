@@ -36,3 +36,11 @@ declined or cancelled for want of a lender.
 with Accept and Decline on it,
 **so that** I answer the offer that stands and never the one that was
 withdrawn.
+
+### grade10-site-vault-valuation-and-offer-US-06: Operator values a slab by its grader, grade and cert
+
+**As a** member of shop staff valuing a graded item,
+**I want** the item's grader, grade and cert beside the valuation, read from
+the item register and corrected there when the slab in my hand says otherwise,
+**so that** the figure I record is for the slab in front of me, not one typed
+from memory.

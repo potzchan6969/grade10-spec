@@ -34,3 +34,10 @@ re-derived from what is stored,
 **I want** every sealed document from every case in one download, each with
 its fingerprint,
 **so that** I hold my own record without opening each case in turn.
+
+### grade10-site-vault-documents-and-signing-US-06: Collector signs a custody agreement that names their slab
+
+**As a** collector leaving a graded item in the vault,
+**I want** the custody agreement to print its grader, grade and cert as they
+stood when the papers were prepared,
+**so that** the paper I sign names the exact slab the shop keeps.
