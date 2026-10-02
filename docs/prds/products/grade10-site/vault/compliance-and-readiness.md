@@ -105,8 +105,10 @@ Every item is a value or an act outside the code, with who closes it;
    lender's an offer, the licence the loan agreement and every money email
 2. *Legal* — **Confirm the postures** — the regime and any particular it
    prescribes, the e-sign ceremony's adequacy, an upload as a verification
-   method, whether an AML duty applies, the retention windows, and whether
-   the hash chain with a witnessed head is evidence enough
+   method, whether an AML duty applies, the retention windows, whether
+   the hash chain with a witnessed head is evidence enough, which entity a
+   bought or gifted item names, and whether erasure keeps an item's
+   category, grader, grade and cert
 3. *Legal* — **Counsel's wording** — the e-sign disclosure, the per-document
    consent text, the collection statement, the forfeiture notice's operative
    text, a notices clause making email to the case's address good service, any
@@ -189,6 +191,8 @@ the code holds until they do.
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
 | Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
+| Owner of a bought or gifted item | TBC Legal | Posture: the custodian; the lender comes to own an item only through a forfeit, so stock stays apart from collateral - [Items](/p/grade10-admin/inventory/items#owners) | Legal |
+| An erased owner's item | TBC Legal | Posture: the category, grader, grade and cert stay once the owner is erased, since they describe the object and a cleared cert lets one slab register twice; the owner, the title, the description and the person's side of each move go - [Items](/p/grade10-admin/inventory/items#erasure) | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
 | The collection statement | TBC Legal | One personal information collection statement per brand, for every product, versioned; each send and each walk-in keeps the version it showed. In production the send and a walk-in's open are refused while it is unwritten; outside production it reads “Being prepared”. A draft for counsel is written; changed at landing, superseding the round's answer | Legal |
 | One rule for the complaints contact | Decided | The paper refuses an unset contact in production too, so the field keeps one rule | Product |

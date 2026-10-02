@@ -36,8 +36,10 @@ vendor is involved.
 | Release of custody | case, customer, item, settled (an amount or "nothing was owed"), released, complaints | handed back in the condition inspected; nothing outstanding; the custody agreement ends |
 
 - 🚧 **The register's item** — the custody agreement names the item by the
-  register's category, title and description, with its grader, grade and
-  cert beside it, as the register held them when the packet was prepared
+  register's category, title and description, and the loan agreement's
+  collateral and the release receipt's item by its category and title, each
+  with its grader, grade and cert beside it, as the register held them when
+  its packet was prepared
 - **Two counterparties** — the custodian signs the custody agreement and the
   release, the lender signs the loan agreement, and the licence prints on the
   lender's paper alone. One function answers what a document may print, so
