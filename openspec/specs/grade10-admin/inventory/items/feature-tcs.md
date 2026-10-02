@@ -1035,7 +1035,7 @@ Runs once per row of **Test data**.
 | Files picked | Outcome |
 | --- | --- |
 | 5 files: 2 PDF, 2 PNG, 1 JPG, each exactly 10 MB | accepted; the move lists 5 proofs |
-| 6 PDF files of 1 MB | refused under the picker |
+| 6 PDF files of 1 MB | at five the picker offers no way to add a sixth; five stay listed |
 | 1 PDF of 10 MB and 1 byte | refused under the picker |
 | 1 GIF of 1 MB | refused under the picker |
 
@@ -1047,7 +1047,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * An accepted row moves the item with every file as its proof.
-* A refused row reads up to 5 PDF, PNG or JPG files, each at most 10 MB, and the item does not move.
+* The six-file row offers no way to pick a sixth file; five stay listed.
+* A refused row names its file under the picker and does not list it; Transfer stays offered.
 
 ### grade10-admin-inventory-items-US3-TC5-1: A proof removed before the move is not kept
 
