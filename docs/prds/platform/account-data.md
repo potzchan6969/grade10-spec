@@ -123,17 +123,17 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 | Appointment | never | Nulls `bookings.user_id` in the named lane; the seat stays as the shop's record of its own day |
 | Auction | uncaptured settlement, unit in transit, or a live payment hold | Bidder name and email, watches, fulfillment address and proof documents, and the Stripe customer. `user_id` stays as an opaque key on bids and settlements |
 | Store | never | Profile and push subscriptions deleted; checkout address, vendor customer ref and an operator's claim notes cleared off the person's own rows; pairing marked deleted, which drops the phone it last pushed. Order, event, claim, code and handle ids stay |
-| Inventory | 🚧 a place marks an item the person owns | 🚧 Owner removed, title reading as erased, description cleared, the person's side of each move and its reason cleared; a transfer proof kept while the other party is the custodian, the lender or a live account |
+| Inventory | a place marks an item the person owns | Owner removed, title reading as erased, description cleared, the person's side of each move and its reason cleared; a transfer proof kept while the other party is the custodian, the lender or a live account |
 | Vault | a case still in custody or otherwise unerasable | Every case that named the person — phone, email, decline reason, item titles, photos, notes, signer details — and the identity binding released over the kyc port |
 
 - Loyalty is a named exemption with its column inventory pinned: every id there is an opaque FK that still balances once the auth user is gone
-- 🚧 A transfer proof inventory keeps is a named exemption: it is the remaining owner's record of how they got the item, and it is never counted as remaining
+- A transfer proof inventory keeps is a named exemption: it is the remaining owner's record of how they got the item, and it is never counted as remaining
 
 ### Retention classes
 
 - Profiles purge
 - Orders, ledgers, and bids anonymize
-- 🚧 A kept transfer proof is flagged for review at the brand's agreements window, **2,555** days for Grade10, and never deleted by the clock
+- A kept transfer proof is flagged for review at the brand's agreements window, **2,555** days for Grade10, and never deleted by the clock
 - A verified identity is released rather than swept: it lives in another service's database, so the owning product drops its case binding and the store purges the record and its capture once no binding is left. The capture delete is queued in the purge's own transaction and the release fails until the bytes are gone, so a retried erasure finishes rather than reporting done over a leftover photograph
 
 ### Open

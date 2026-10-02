@@ -84,7 +84,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   production the open is refused while the statement is unwritten, so the
   walk-in is dark in production until Legal's statement lands —
   [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
-- 🚧 **A slab the register knows** - at a walk-in, staff type the grader and
+- **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register knows, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
 
@@ -125,7 +125,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   beside what the collector was told
 - **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
-- 🚧 **The item's facts** — the Case tab shows and edits the register's
+- **The item's facts** — the Case tab shows and edits the register's
   category, title, description, grader, grade and cert once it has the item,
   which it gets when the valuation starts, and says registration is pending
   until then; the collector's request stays as they sent it; editing needs
@@ -167,7 +167,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   free text; a move between lockers writes a movement
 - **Movements** — `in` at vaulting, `moved` on a move, `out` at release,
   unwind and forfeiture
-- 🚧 **Valuation** — an amount and a note, read beside the item's grader,
+- **Valuation** — an amount and a note, read beside the item's grader,
   grade and cert; no condition, market reference or second valuer
 - **Not modelled** — a locker registry per shop, capacity, transfer between
   shops, a condition report, damage or loss, a stock-take against the shelf;

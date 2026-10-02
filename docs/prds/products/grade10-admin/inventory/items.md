@@ -24,29 +24,29 @@ company owns. Stock counts units of a product; an item is one object.
 
 ## Owners
 
-- 🚧 **One owner** - an item belongs to one account, or to the custodian or
+- **One owner** - an item belongs to one account, or to the custodian or
   the lender under their registered names, or to no one once the owner is
   erased -
   [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
-- 🚧 **Owner by name** - staff and admins, behind `kyc:read`, read the
+- **Owner by name** - staff and admins, behind `kyc:read`, read the
   owner's name here; each read is on the audit chain; where the name cannot
   be read the page shows the short id and "name unavailable" and still opens
-- 🚧 **A collector's items** -
+- **A collector's items** -
   [Collector Page](/p/grade10-admin/console/collector-page#sections)
-- 🚧 **Owner of a bought or gifted item** - the custodian; the lender only
+- **Owner of a bought or gifted item** - the custodian; the lender only
   through a forfeit
 
 ## Facts
 
-- 🚧 **What an item says** - category, title, description, grader, grade
+- **What an item says** - category, title, description, grader, grade
   and cert; any other fact goes in the description
-- 🚧 **Graded or not** - an item with no grader carries no grade and no
+- **Graded or not** - an item with no grader carries no grade and no
   cert; a slab from a grader not listed has no grader, and its grader, grade
   and cert go in the description
-- 🚧 **One slab, one item** - a grader and cert name one item until it is
+- **One slab, one item** - a grader and cert name one item until it is
   retired; typing a known grader and cert finds that item rather than adding
   a second
-- 🚧 **Register and edit** - staff add an item and edit its facts on the
+- **Register and edit** - staff add an item and edit its facts on the
   console; the item shows who changed it last and when
 
 ## Marks
@@ -55,30 +55,30 @@ A place keeping an item puts its mark on the item: in this release the vault
 is the only place. Marked or not is read from the places; staff only close a
 mark the vault no longer has.
 
-- 🚧 **The vault registers** - an item gets its record when staff start the
+- **The vault registers** - an item gets its record when staff start the
   vault valuation, and carries the vault's mark from the day it is vaulted
   until it is released, unwound or forfeited -
   [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#exits)
-- 🚧 **The place decides** - the register never refuses what the vault has
+- **The place decides** - the register never refuses what the vault has
   already done; where the vault and the register disagree on the owner, the
   item's page shows staff both owners
-- 🚧 **A mark left open** - staff close a mark the vault no longer has, with
+- **A mark left open** - staff close a mark the vault no longer has, with
   a reason; a later word from the vault does not reopen it; offered only
   while the vault reads the item as no longer held
 
 ## Moving an Item
 
-- 🚧 **Transfer** - a staff member or an admin moves an item no place marks
+- **Transfer** - a staff member or an admin moves an item no place marks
   to any account, named by its exact email, or to the custodian, with a
   reason and, where there is one, a proof document; an item whose owner was
   erased moves the same way; the item shows each move, who made it and when,
   and the audit log records it
-- 🚧 **Refused while marked** - a transfer is refused while a place marks
+- **Refused while marked** - a transfer is refused while a place marks
   the item, naming the place
-- 🚧 **Forfeit** - a forfeited vault item belongs to the lender from the
+- **Forfeit** - a forfeited vault item belongs to the lender from the
   moment the vault closes its mark; nobody transfers it by hand, and a
   transfer never names the lender
-- 🚧 **Proof** - opened only by those who may transfer, and each opening is
+- **Proof** - opened only by those who may transfer, and each opening is
   on the audit log
 - ❓ Product — **A refused proof** - a file the picker refuses is named
   under it and never listed, and Transfer stays offered, since proof is
@@ -86,9 +86,9 @@ mark the vault no longer has.
 
 ## Retiring an Item
 
-- 🚧 **Retire** - staff retire an item as a duplicate, lost, destroyed or
+- **Retire** - staff retire an item as a duplicate, lost, destroyed or
   left the platform; refused while a place marks it
-- 🚧 **After retiring** - the item reads only, keeps its history and leaves
+- **After retiring** - the item reads only, keeps its history and leaves
   the default list, and its grader and cert may name a new item; staff
   restore a retired item with a reason, refused while its cert names a live
   item; a vault case's papers are refused while its item is retired -
@@ -96,22 +96,22 @@ mark the vault no longer has.
 
 ## Finding an Item
 
-- 🚧 **Default list** - marked items; staff switch to every live item,
+- **Default list** - marked items; staff switch to every live item,
   marked or not, or to retired ones
-- 🚧 **Search** - by title or description, by grader and cert, by item id,
+- **Search** - by title or description, by grader and cert, by item id,
   or by the owner's exact email; never by an owner's name - a click on a name opens the
   collector page
 
 ## Erasure
 
-- 🚧 **Refused while marked** - the ask to be forgotten is refused while a
+- **Refused while marked** - the ask to be forgotten is refused while a
   place marks an item the person owns -
   [Account Data](/platform/account-data#erasure)
-- 🚧 **Items they own** - the owner is removed, the title reads as erased,
+- **Items they own** - the owner is removed, the title reads as erased,
   and the description goes
-- 🚧 **The object's facts** - category, grader, grade and cert stay once the
+- **The object's facts** - category, grader, grade and cert stay once the
   owner is erased; they describe the object
-- 🚧 **Moves they were part of** - their side and the reason go; a proof
+- **Moves they were part of** - their side and the reason go; a proof
   stays while the other party is the custodian, the lender or a live
   account, and is flagged for review at the brand's agreements window,
   **2,555** days for Grade10, never deleted by the clock
@@ -125,7 +125,7 @@ mark the vault no longer has.
 | `inventory:write` | staff, admin | add an item, edit its facts, retire or restore it, close a mark left open |
 | `inventory:transfer` | staff, admin | move an item, open a proof |
 
-- 🚧 **The new grant** - `inventory:transfer`, held by staff and admin
+- **The new grant** - `inventory:transfer`, held by staff and admin
 - **The treasurer** - holds none of the four above
 
 :::detail{title="Code map" for="engineer"}

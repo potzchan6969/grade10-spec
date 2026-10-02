@@ -162,15 +162,15 @@ released`, guarded on nothing outstanding and no packet open.
 
 ## Item Record
 
-- 🚧 **Registered at valuation** - starting the valuation gives the item its
+- **Registered at valuation** - starting the valuation gives the item its
   record in the register, under the case's collector -
   [Items](/p/grade10-admin/inventory/items#marks)
-- 🚧 **Marked while vaulted** - the vault's mark on the item runs from
+- **Marked while vaulted** - the vault's mark on the item runs from
   vaulting until release, unwind or forfeit; a forfeit moves the item to the
   lender
-- 🚧 **Another owner** - preparing documents is refused while the register
+- **Another owner** - preparing documents is refused while the register
   names someone other than the case's collector
-- 🚧 **A retired item** - preparing documents, or the release receipt, is
+- **A retired item** - preparing documents, or the release receipt, is
   refused while the register reads the item as retired, until staff restore
   it - [Items](/p/grade10-admin/inventory/items#retiring-an-item)
 
