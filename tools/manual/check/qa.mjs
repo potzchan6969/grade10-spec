@@ -197,9 +197,11 @@ function checkSuite(ctx, spec, dir) {
  * behaviour it proves. One that names no journey, feature set group or scenario
  * of the spec's own is a case standing behind nothing. */
 function checkTraces(ctx, file, spec, suite, issued, accepted) {
+  const retired = new Set(spec.retiredJourneys ?? []);
   for (const test of suite.cases) {
     for (const trace of test.traces) {
       if (issued.has(trace) || accepted.has(trace)) continue;
+      if (retired.has(trace) && test.status === "deprecated") continue;
       ctx.add(
         "trace",
         file,
