@@ -1,7 +1,7 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** in-review
-**Reviewed:** 2026-09-29, tcs-rules r4
+**Status:** reopened
+**Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-01, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
@@ -638,51 +638,6 @@ hold is being let go.
 * The history shows the accepted bid beside an unchanged close.
 
 <!-- archive fold: grade10-site-auction-e2e-US07-TC01 (2026-09-17-revise-auction-extended-bidding) replaced by US07-TC03-1 -->
-
-### grade10-site-auction-e2e-US07-TC03-1: Auto-bid during extended bidding restarts the timer on the live page
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05
-
-**Pre-conditions:**
-
-* customer A leads <listing_8> with maximum <user A maximum> and is on its lot page.
-* customer B is signed in with a linked card, on a separate session, on the same lot page.
-* <listing_8> is in extended bidding, and the recorded close is <time left before bid> away.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <listing_8> | A listing in extended bidding, led by customer A, current bid <leader price> |
-| <extension duration> | 1800 seconds |
-| <time left before bid> | 5 minutes |
-| <leader price> | 530000 HKD minor units |
-| <user A maximum> | 800000 HKD minor units |
-| <user B maximum> | 555000 HKD minor units, below <user A maximum> |
-
-**Steps:**
-
-1. As customer A, read Time left on the lot page.
-2. As customer B, enter <user B maximum> in the custom maximum on the bid panel and confirm the bid.
-3. As customer A, read Time left on the open lot page.
-4. Wait <extension duration> with no further bid.
-
-**Expected Results:**
-
-* Highest bid is above <leader price>, and customer A still leads.
-* Time left shows <extension duration>.
-* The lot closes, and no further bid is placed.
 
 ### grade10-site-auction-e2e-US07-TC03-2: Price-moving auto-bid in extended bidding restarts the timer on the open page
 
