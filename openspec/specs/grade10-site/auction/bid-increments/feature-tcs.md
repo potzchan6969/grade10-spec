@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** in-review
-**Reviewed:** 2026-09-22, tcs-rules r3.0
+**Status:** reopened
+**Reviewed:** 2026-09-22, tcs-rules r3.0, lapsed 2026-10-02
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-bid-increments-US1: Collector places a bid across a price tier
@@ -10,191 +10,7 @@
 **I want** the minimum next bid to scale with the lot's price,
 **so that** I can enter an affordable opening bid and a sensible later bid.
 
-### grade10-site-auction-bid-increments-US1-TC1-1: First bid clears the starting-price tier
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-An open HKD listing has starting price <starting price> and no accepted bid.
-
-**Test data:**
-
-| starting price | increment | minimum next amount |
-| --- | ---: | ---: |
-| 20000 HKD minor units | 1000 | 21000 |
-
-**Steps:**
-
-1. Open the listing bid panel.
-2. Read the minimum next amount.
-
-**Expected Results:**
-
-* The minimum next amount is <minimum next amount>.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-0lh rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-
-### grade10-site-auction-bid-increments-US1-TC2-1: Boundary price takes the higher tier
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-An open USD listing has current public price <current public price>.
-The collector is enrolled and can bid.
-
-**Test data:**
-
-| current public price | increment | minimum next amount |
-| --- | ---: | ---: |
-| 10000 USD minor units | 500 | 10500 |
-| 9999 USD minor units | 100 | 10099 |
-| 50000 USD minor units | 1000 | 51000 |
-
-**Steps:**
-
-1. Open the listing bid panel.
-2. Place a bid of <current public price> plus <increment>.
-
-**Expected Results:**
-
-* The new public price is <minimum next amount>.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-qui rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-
-### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
-
-**Test data:**
-
-| minimum | bid amount |
-| --- | ---: |
-| 10500 USD minor units | 12000 |
-
-**Steps:**
-
-1. Open the listing bid panel.
-2. Enter <bid amount> as the bid amount.
-3. Confirm the bid.
-
-**Expected Results:**
-
-* The bid is accepted.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-5ez rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-
-### grade10-site-auction-bid-increments-US1-TC4-1: Amount below the minimum is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
-
-**Test data:**
-
-| minimum | bid amount |
-| --- | ---: |
-| 10500 USD minor units | 10499 |
-
-**Steps:**
-
-1. Open the listing bid panel.
-2. Enter <bid amount> as the bid amount.
-3. Confirm the bid.
-
-**Expected Results:**
-
-* The bid is refused.
-* The refusal names <minimum> as the minimum.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-
-### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-An open listing is available in <listing currency>.
-
-**Test data:**
-
-| listing currency |
-| --- |
-| USD |
-| HKD |
-| JPY |
-
-**Steps:**
-
-1. Open the listing.
-2. Read the minimum next amount.
-
-**Expected Results:**
-
-* The minimum next amount is shown in <listing currency>.
-
-**Out of suite:**
-
-- `grade10-site-auction-bid-increments-SC-06` — API and operator-form currency refusal is covered by the backend and admin verification lanes.
-- `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane.
-
+<!-- trace:case id=g10.auction-bid-increments.TC-8e2 rev=2 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC1-2: Minimum before any bid is the opening price
 
 Runs once per row of **Test data**.
@@ -239,6 +55,155 @@ Runs once per row of **Test data**.
 * On a positive start it is the starting price, not the starting price plus its increment.
 * On a HKD 500 start it is not raised to the lowest increment.
 * On a zero start it is the currency's lowest increment, never 0.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-0lh rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
+### grade10-site-auction-bid-increments-US1-TC2-1: Boundary price takes the higher tier
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+An open USD listing has current public price <current public price>.
+The collector is enrolled and can bid.
+
+**Test data:**
+
+| current public price | increment | minimum next amount |
+| --- | ---: | ---: |
+| 10000 USD minor units | 500 | 10500 |
+| 9999 USD minor units | 100 | 10099 |
+| 50000 USD minor units | 1000 | 51000 |
+
+**Steps:**
+
+1. Open the listing bid panel.
+2. Place a bid of <current public price> plus <increment>.
+
+**Expected Results:**
+
+* The new public price is <minimum next amount>.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-qui rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
+### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
+
+**Test data:**
+
+| minimum | bid amount |
+| --- | ---: |
+| 10500 USD minor units | 12000 |
+
+**Steps:**
+
+1. Open the listing bid panel.
+2. Enter <bid amount> as the bid amount.
+3. Confirm the bid.
+
+**Expected Results:**
+
+* The bid is accepted.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-5ez rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
+### grade10-site-auction-bid-increments-US1-TC4-1: Amount below the minimum is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
+
+**Test data:**
+
+| minimum | bid amount |
+| --- | ---: |
+| 10500 USD minor units | 10499 |
+
+**Steps:**
+
+1. Open the listing bid panel.
+2. Enter <bid amount> as the bid amount.
+3. Confirm the bid.
+
+**Expected Results:**
+
+* The bid is refused.
+* The refusal names <minimum> as the minimum.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
+### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+An open listing is available in <listing currency>.
+
+**Test data:**
+
+| listing currency |
+| --- |
+| USD |
+| HKD |
+| JPY |
+
+**Steps:**
+
+1. Open the listing.
+2. Read the minimum next amount.
+
+**Expected Results:**
+
+* The minimum next amount is shown in <listing currency>.
+
+**Out of suite:**
+
+- `grade10-site-auction-bid-increments-SC-06` — API and operator-form currency refusal is covered by the backend and admin verification lanes.
+- `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane.
 
 ### grade10-site-auction-bid-increments-US1-TC6-1: First bid at the opening price is accepted, then one increment applies
 
