@@ -15,7 +15,7 @@ grade10-spec, takes the manual's marks off once the walk is green.
 - [ ] 1.2 Answer the four words in `packages/i18n/messages/shared/<locale>/vault.json` for `en`, `ko`, `zh-Hans` and `zh-Hant`
 - [ ] 1.3 Verify: `pnpm --filter @grade10/i18n run test`, `pnpm run typecheck`, `pnpm run lint`
 
-## 2. Contracts and grants (grade10)
+## 2. Contracts and grants (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Tests first, in their own commit: the role matrix and vocabulary tests, the `ADMIN_PERMISSIONS` ↔ router pin for `items.*`, and the category list shared by inventory and vault (`shared-auth-roles-SC-23`, `shared-auth-roles-SC-24`, `grade10-admin-inventory-items-SC-68`)
 - [ ] 2.2 `packages/grade10-auth/contracts`: `inventory: ["read", "write", "transfer"]`, `staff` holding `inventory:transfer`, its description, and the regenerated `roles-and-permissions.json` (`shared-auth-roles-SC-23`, `shared-auth-roles-SC-24`)
