@@ -40,7 +40,7 @@ Needs group 2's contracts landed.
 - [ ] 5.3 Answer `regularStock.available` on `products.get` as `unidentified_stock` minus the active remaining of holds naming no Cert record, `regularStock.hasHistory` as one `EXISTS` over the regular-stock predicate, and `unmoved` on each Cert record as the correction's own test (`grade10-admin-inventory-catalog-SC-147`, `grade10-admin-inventory-catalog-SC-148`, `grade10-admin-inventory-catalog-SC-156`, `grade10-admin-inventory-catalog-SC-167`, `grade10-admin-inventory-catalog-SC-170`)
 - [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 6. Cert ID details and the product history (grade10)
+## 6. Cert ID details and the product history (grade10) (owner: @mason5991)
 
 Built against the contract's fixtures, not a running backend.
 
