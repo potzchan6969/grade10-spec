@@ -11,6 +11,7 @@ awaiting:
     plan - @ecchochan"
 landed_by:
   proposal: ecchochan
+  decisions: ecchochan
 reviewed:
   user-journeys: 6034ecfb
   ui-design: 440a03ac
