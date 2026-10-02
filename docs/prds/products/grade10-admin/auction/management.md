@@ -95,7 +95,7 @@ the card is in the winner's hands. The collector's half is
   A picked direct-upload file is previewed and stored only on confirm; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
-- 🚧 **Cert-aware inventory media** - a listing for one Cert ID starts with
+- **Cert-aware inventory media** - a listing for one Cert ID starts with
   untagged product media and media tagged to that Cert. Media tagged to another
   Cert stays in a separately labelled drawer until the operator deliberately
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
@@ -503,6 +503,7 @@ settings.
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
+| Cert-aware inventory media | Decided | A Cert listing's main selector offers untagged product media and media tagged to that Cert; other Cert media sits in a labelled drawer and joins only through an explicit Add that names the source Cert ID. A No Cert ID listing starts with untagged media only. Existing listing-edit authority covers the drawer; selected sources are copied into the gallery snapshot. | Product |
 | Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
