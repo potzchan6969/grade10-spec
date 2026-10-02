@@ -15,7 +15,7 @@
 - [ ] 2.3 Map `published` to Upcoming or Active by `starts_at` alone, so no public read reports Ended before the close is recorded (`grade10-site-auction-auction-SC-71`)
 - [ ] 2.4 Verify: contracts unit tests, `pnpm run typecheck`, `pnpm run lint`
 
-## 3. Listing Version (grade10)
+## 3. Listing Version (grade10) (owner: @ecchochan)
 
 - [ ] 3.1 Tests: a listing update, a bid insert and a bid state, amount or maximum change each raise the listing's version, and a no-op update does not (`grade10-site-auction-auction-SC-75`)
 - [ ] 3.2 Migration `0013_listing_version`: the `version` column and its triggers armed `ENABLE ALWAYS`, through the counter-trigger helper in `@grade10/postgres` (`grade10-site-auction-auction-SC-75`)
