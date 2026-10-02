@@ -28,7 +28,8 @@ const ACCOUNT_EMAIL = "collector@example.com";
 
 /** Storybook ids for vault proposal pages (workbench deep links). */
 const VAULT_SUBMIT_STORY_ID = "pages-vault-submit--default";
-const VAULT_CONFIRMATION_STORY_ID = "pages-vault-submission-confirmation--default";
+const VAULT_CONFIRMATION_STORY_ID =
+  "pages-vault-submission-confirmation--default";
 const VAULT_TRACKER_STORY_ID = "pages-vault-intake-tracker--in-transit";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
@@ -284,6 +285,7 @@ function statusBadgeVariant(
   }
 }
 
+export type { ValuationSource, VaultAsset, VaultAssetStatus };
 export {
   formatHkd,
   MANIFEST_FIXTURE,
@@ -306,4 +308,3 @@ export {
   VAULT_TRACKER_HREF,
   VAULT_TRACKER_STORY_ID,
 };
-export type { ValuationSource, VaultAsset, VaultAssetStatus };

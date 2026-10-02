@@ -1,9 +1,9 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
-import { Alert } from "@grade10/design-system/components/display/alert";
 import { Step } from "@grade10/design-system/components/display/step";
 import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { Text } from "@grade10/design-system/components/display/text";
@@ -121,7 +121,10 @@ function VaultIntakeTrackerPage({ phase }: { phase: TrackerPhase }) {
         </h2>
         <ul className="flex flex-col divide-y divide-border">
           {MANIFEST_FIXTURE.items.map((item) => (
-            <li key={item.cert} className="flex flex-col gap-0.5 py-3 first:pt-0 last:pb-0">
+            <li
+              key={item.cert}
+              className="flex flex-col gap-0.5 py-3 first:pt-0 last:pb-0"
+            >
               <Text weight="medium">{item.name}</Text>
               <Text size="sm" tone="secondary">
                 {item.grade} · Cert {item.cert}

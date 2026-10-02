@@ -1,9 +1,9 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -91,9 +91,7 @@ function VaultItemDetailPage() {
             />
             <FactRow
               label="Vault Storage ID"
-              value={
-                <span className="font-mono text-sm">{asset.vaultId}</span>
-              }
+              value={<span className="font-mono text-sm">{asset.vaultId}</span>}
               hint="Climate-controlled slot at Crown Fine Art"
             />
             <FactRow label="Grade" value={asset.grade} />

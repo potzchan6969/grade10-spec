@@ -124,8 +124,8 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
       />
 
       <ProposalBanner title="Day-one scope">
-        List for Auction is Proposed. Live market feed is Proposed — values
-        show Declared or Intake estimate today.
+        List for Auction is Proposed. Live market feed is Proposed — values show
+        Declared or Intake estimate today.
       </ProposalBanner>
 
       <PortfolioSummary
