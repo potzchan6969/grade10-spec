@@ -1,4 +1,4 @@
-## 1. The Blocks (grade10-spec)
+## 1. The Blocks (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 `VaultCases` stories with play functions: the board's three cases, then one card each for an offer waiting, a booked visit, terms agreed with a visit, the item in the vault, a loan running, past due, repaid, back with you, a draft, a walk-in draft, an ended case and an untitled item; `public-exports.test.ts` names the three blocks and their types, with the card fixtures in `fixtures.ts`, in their own commit before the block (`shared-ui-vault-case-SC-01`, `shared-ui-vault-case-SC-24`, `shared-ui-vault-case-SC-25`, `shared-ui-vault-case-SC-26`, `shared-ui-vault-case-SC-27`, `shared-ui-vault-case-SC-28`)
 - [ ] 1.2 `vault-cases.tsx` and its unexported `vault-case-card.tsx` in `packages/ui/src/blocks/vault-case/`, `VaultCases` exported from `src/index.ts` under `shared/ui/vault-case` (`shared-ui-vault-case-SC-01`, `shared-ui-vault-case-SC-24` to `shared-ui-vault-case-SC-28`)
