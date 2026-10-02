@@ -531,7 +531,8 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Withdrawn card | the card's Withdrawn badge with the refund line; the estimate dropped | `grade10-site-grading-submission-lifecycle-SC-15` |
 | Batch closed | `WithdrawCard` gone once the batch closed | `grade10-site-grading-submission-lifecycle-SC-16` |
 | With the grader (`G09`) | With the grader · With PSA; the lead; `GraderStagesCard`; Nothing to do; the cards with intake ids; History | `grade10-site-grading-submission-lifecycle-SC-07` |
-| Running late | chip Running late · with PSA; the new date with the stage; the emailed-the-day-we-set-it line | `grade10-site-grading-submission-lifecycle-SC-09` |
+| Running late | chip Running late · with PSA; the stage; no new date yet | `grade10-site-grading-submission-lifecycle-SC-09` |
+| New date | With the grader · With PSA; the new date with the stage; the emailed-the-day-we-set-it line; no Running late, the estimate being ahead again | `grade10-site-grading-submission-lifecycle-SC-10` |
 | Grades in (`G10`) | Grades are in · On their way back; the headline; `GradingGradeCards`, an ungraded card with its code and the grader's note, or the no-reason line where the grader gave none; `GradingMoneyBlock` with the settle lead; About the grades; the cards, the ungraded card's line on its record; History | `grade10-site-grading-submission-lifecycle-SC-12` |
 | Back, being checked | Back at the shop, being checked · With us; the arrived line; nothing to do | `grade10-site-grading-submission-lifecycle-SC-53` |
 | Ready (`G11`) | Ready to collect · Waiting on you; `GradingPickupCard`; `GradingNamedCollector`; `VaultItCard`; the cards; `GradingMoneyBlock`; `GradingUncollectedLadder`; History | `grade10-site-grading-submission-lifecycle-SC-25` |
