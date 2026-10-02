@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
 import { handleOf, isHandle } from "../../../../scripts/openspec/lib/team.mjs";
+import { AUTHOR_LINE } from "../api/author-line.ts";
 import { askedIdsOf } from "../api/rounds.ts";
 import { ASKED_OF, ladderOf } from "../api/stages.ts";
 import type {
@@ -66,8 +67,6 @@ const REQUIREMENT_HEADING = /^Requirement:\s*(.+?)\s*$/i;
 const FROM_LINE = /^\s*-?\s*FROM:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
 const TO_LINE = /^\s*-?\s*TO:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
 const RENAMED_FROM = new RegExp(FROM_LINE.source, "gm");
-const AUTHOR =
-  /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
 function acceptedRecord(
@@ -304,7 +303,7 @@ function readChange(
         new StoreFileError(1, "proposal has no `## Why`"),
       );
     }
-    const author = AUTHOR.exec(proposal);
+    const author = AUTHOR_LINE.exec(proposal);
     if (author?.[1]) entry.author = author[1];
     if (entry.created === "") entry.created = author?.[2] ?? "";
     const cites = readCitations(body);
