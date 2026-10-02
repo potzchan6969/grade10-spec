@@ -67,7 +67,7 @@
 - [ ] 9.2 Carry `topAmountMinor` on bidding rows and read each row's phase from the clock rule (`grade10-site-auction-account-record-SC-64`, `grade10-site-auction-account-record-SC-65`, `grade10-site-auction-account-record-SC-66`, `grade10-site-auction-account-record-SC-67`)
 - [ ] 9.3 Verify: auction db lane, account-record frontend tests, `pnpm run typecheck`, `pnpm run lint`
 
-## 10. Listing Writes Accept 0 (grade10)
+## 10. Listing Writes Accept 0 (grade10) (owner: @ecchochan)
 
 Groups 10 to 12 are built in grade10 #667, from `allow-zero-starting-price`; each is ticked once its tests are verified against this change.
 
