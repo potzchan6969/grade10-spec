@@ -146,4 +146,9 @@ second gallery.
 - **Release input** — `ReleaseInput` in `packages/inventory/contracts`
 - **Reservations** — `ReservationGroup.tsx`
 - **Change history** — `ChangeHistoryDialog.tsx`
+- **Cert ID correction and assignment** — `correctCertId` and `assignCertId`
+  in `services/inventoryMutations.ts`
+- **Copy facts** — `normalizeUnitFacts` in `services/unitFacts.ts`
+- **Unit history** — the `unit` filter in `repositories/changelogs.ts`
+- **Cert ID details** — `CertIdDetailDialog.tsx`
 :::
