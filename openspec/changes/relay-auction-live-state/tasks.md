@@ -61,7 +61,7 @@
 - [ ] 8.2 Move catalogue cards and Featured onto the catalogue room and the shared clock, showing the existing closed state with no result until the close is recorded (`grade10-site-auction-auction-SC-65`, `grade10-site-auction-auction-SC-66`, `grade10-site-auction-auction-SC-77`, `grade10-site-auction-auction-SC-88`)
 - [ ] 8.3 Verify: auction-frontend tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`
 
-## 9. My Auctions (grade10)
+## 9. My Auctions (grade10) (owner: @ecchochan)
 
 - [ ] 9.1 Tests: a bidding row's auction price, a lot past its close keeping its standing in Active, and Won or Didn't win only from the recorded close (`grade10-site-auction-account-record-SC-64`, `grade10-site-auction-account-record-SC-65`, `grade10-site-auction-account-record-SC-66`, `grade10-site-auction-account-record-SC-67`)
 - [ ] 9.2 Carry `topAmountMinor` on bidding rows and read each row's phase from the clock rule (`grade10-site-auction-account-record-SC-64`, `grade10-site-auction-account-record-SC-65`, `grade10-site-auction-account-record-SC-66`, `grade10-site-auction-account-record-SC-67`)
