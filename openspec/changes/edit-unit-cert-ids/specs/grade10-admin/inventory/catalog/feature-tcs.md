@@ -3,6 +3,11 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
+**Out of suite:**
+
+- `grade10-admin-inventory-catalog-SC-153` — the inventory repository and router tests in grade10 (task 5.1): a unit's history paged past 150 entries to its intake.
+- `grade10-admin-inventory-catalog-SC-166` — the inventory concurrency tests in grade10 (task 4.1): two assignments racing for the last unit of regular stock, which no person can send at one moment.
+
 ## grade10-admin-inventory-catalog-US4: Reconstruct stock changes
 
 **As an** inventory admin,
@@ -54,8 +59,9 @@
 
 * Step 6: every figure reads as in step 1.
 * Step 7: two new `Cert ID change` entries, quantity one each.
-* Step 7: one reads `<cert_a>` before, `<cert_b>` after.
-* Step 7: one reads `No Cert ID` before, `<cert_c>` after.
+* Step 7: one Action reads `Cert ID change · <cert_a> → <cert_b>`.
+* Step 7: the other Action reads `Cert ID change · No Cert ID → <cert_c>`.
+* Step 7: each of the two reads Holder `—` and Remarks `—`.
 * Step 7: no intake or withdrawal entry was added.
 
 ---
@@ -161,6 +167,7 @@ Runs once per row of **Test data**.
 1. Click View Cert IDs.
 2. Read the Cert record rows.
 3. Read the `No Cert ID` rows.
+4. Read the order of the rows.
 
 **Expected Results:**
 
@@ -168,9 +175,10 @@ Runs once per row of **Test data**.
 * Step 2: one row each for `<cert_avail>`, `<cert_held>` and `<cert_sold>`, each with its state.
 * Step 2: `<cert_held>`'s row names `<listing_1>` as its holder.
 * Step 3: one available `No Cert ID` row reads `<regular available>`.
-* Step 3: one row for `<admin hold>`, its holder and 2 remaining.
-* Step 3: one row for `<auction hold>`, `<listing_2>` as holder, 2 remaining.
+* Step 3: one Reserved row for `<admin hold>`: Admin, its reference and 2.
+* Step 3: one Reserved row for `<auction hold>`: Auction, `<listing_2>` and 2.
 * Step 3: no row for `<released hold>`, `<regular sold>` or `<regular withdrawn>`.
+* Step 4: the Cert record rows come first, by Cert ID, then the available `No Cert ID` row, then the hold rows.
 
 ### grade10-admin-inventory-catalog-US14-TC2-1: A product without Cert records lists its regular stock
 
@@ -231,7 +239,8 @@ Runs once per row of **Test data**.
 
 * admin(holds Inventory write authority) is on <inventory product url> of `<product_5>`.
 * `<product_5>`'s regular stock was intaken by `<regular intake>`, and `<admin hold>` reserved part of it.
-* `<product_5>` holds `<cert_a>`, whose Cert ID was corrected from `<cert_x>`.
+* `<product_5>` holds `<cert_a>`, whose Cert ID was corrected from `<cert_x>`, and `<cert hold>` now holds it.
+* One unit of `<product_5>`'s regular stock was given `<cert_g>`.
 
 **Test data:**
 
@@ -241,10 +250,12 @@ Runs once per row of **Test data**.
 | `<admin hold>` | An admin hold of 2 units of regular stock, active |
 | `<cert_x>` | `PSA-50000001` |
 | `<cert_a>` | `PSA-50000002` |
+| `<cert hold>` | An admin hold of `<cert_a>`, active |
+| `<cert_g>` | `PSA-50000003`, given with Grade Issuer `PSA` |
 
 | Row | `No Cert ID` row selected |
 | --- | --- |
-| Available | The available row, 3 units |
+| Available | The available row, 2 units |
 | Held | The row for `<admin hold>`, 2 remaining |
 
 **Steps:**
@@ -257,7 +268,94 @@ Runs once per row of **Test data**.
 
 * Step 3: the entry for `<regular intake>` shows.
 * Step 3: the reserve entry for `<admin hold>` shows.
+* Step 3: the `Cert ID change` from `No Cert ID` to `<cert_g>` shows.
 * Step 3: the `Cert ID change` from `<cert_x>` to `<cert_a>` does not show.
+* Step 3: the reserve entry for `<cert hold>` does not show.
+
+### grade10-admin-inventory-catalog-US14-TC4-1: Regular stock that is all held shows only its hold's row
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-14
+
+**Pre-conditions:**
+
+* admin(holds Inventory write authority) is on <inventory product url> of `<product_14>`.
+* `<product_14>` has no Cert record.
+* `<product_14>` has `<regular sold>` and `<regular withdrawn>`, and `<auction hold>` holds every unit on hand.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<regular sold>` | 3 units of regular stock sold outside any hold |
+| `<regular withdrawn>` | 1 unit of regular stock withdrawn |
+| `<listing_14>` | An Auction listing of `<product_14>`, code `<code_14>`, title `<title_14>` |
+| `<auction hold>` | `<listing_14>`'s hold on regular stock, 2 units, active |
+
+**Steps:**
+
+1. Click View Cert IDs.
+2. Read the rows.
+
+**Expected Results:**
+
+* Step 2: one row only: `No Cert ID`, Reserved, Auction, `<code_14> · <title_14>` and 2.
+* Step 2: no available `No Cert ID` row is listed.
+* Step 2: no row lists `<regular sold>` or `<regular withdrawn>`.
+
+### grade10-admin-inventory-catalog-US14-TC5-1: A released hold's units return to the available row
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-14
+
+**Pre-conditions:**
+
+* admin(holds Inventory write authority) is on <inventory product url> of `<product_15>`.
+* `<product_15>` holds `<regular available>` units of available regular stock outside every hold.
+* `<admin hold>` holds regular stock of `<product_15>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<regular available>` | 1 unit |
+| `<admin hold>` | An admin hold of 2 units of regular stock, active |
+| `<count after>` | 3 units: `<regular available>` plus `<admin hold>`'s 2 |
+
+**Steps:**
+
+1. Click View Cert IDs.
+2. Read the `No Cert ID` rows.
+3. Close Cert ID details.
+4. Release `<admin hold>` whole from the product page.
+5. Click View Cert IDs.
+6. Read the `No Cert ID` rows.
+
+**Expected Results:**
+
+* Step 2: the available row reads `<regular available>`; the row for `<admin hold>` reads 2.
+* Step 6: the available row reads `<count after>`.
+* Step 6: no row for `<admin hold>` is listed.
 
 ---
 
@@ -321,7 +419,7 @@ Runs once per row of **Test data**.
 * Step 5: the row reads the new Cert ID; no row reads `<cert_a>`.
 * Step 5: it is still available, with `<copy facts>`.
 * Step 5: `<tagged image>` is still tagged to it.
-* Step 7: the `<cert_a>` intake entry still shows.
+* Step 7: the `<cert_a>` intake entry still shows, below the `Cert ID change`.
 * Step 7: a `Cert ID change` entry, quantity one, `<cert_a>` before, the new Cert ID after.
 * Step 7: it shows `<change time>`, the admin as actor and the row's remarks read.
 * Step 8: the same entry shows in the product history.
@@ -362,6 +460,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- | --- |
 | Every fact | `CGC` | `9.8` | `10` | `12/50` |
 | Required only | `CGC` | none | none | none |
+| Dashes | `CGC` | `-` | `-` | `-` |
 
 **Steps:**
 
@@ -377,7 +476,7 @@ Runs once per row of **Test data**.
 
 * Step 5: the available `No Cert ID` row reads `<count after>`.
 * Step 5: a new available row reads `<new cert>` with the row's facts.
-* Step 5: facts the row leaves out read empty.
+* Step 5: facts the row leaves out or gives as `-` read empty.
 * Step 7: one entry only: `Cert ID change`, quantity one.
 * Step 7: it reads `No Cert ID` before and `<new cert>` after.
 * Step 7: it shows `<change time>` and the admin as actor.
@@ -417,6 +516,7 @@ Runs once per row of **Test data**.
 | Spaces only | three spaces |
 | Used on the product | `PSA-80000002` |
 | Used on the product, padded | ` PSA-80000002 `, a space either side |
+| Its own Cert ID | `PSA-80000001` |
 
 **Steps:**
 
@@ -613,7 +713,8 @@ Runs once per row of **Test data**.
 3. Click `<cert_a>`'s row.
 4. Read its history.
 5. Send a Cert ID change of `<cert_a>` to `<new cert>` under this admin's session, outside the page.
-6. Read Cert ID details again.
+6. Send an assignment of `<new cert>` with Grade Issuer `PSA` under this admin's session, outside the page.
+7. Read Cert ID details again.
 
 **Expected Results:**
 
@@ -621,7 +722,9 @@ Runs once per row of **Test data**.
 * Step 2: no correct or assign action is offered.
 * Step 4: the history shows.
 * Step 5: the request is refused.
-* Step 6: `<cert_a>` is unchanged; no row reads `<new cert>`.
+* Step 6: the request is refused.
+* Step 7: `<cert_a>` is unchanged; no row reads `<new cert>`.
+* Step 7: the available `No Cert ID` row reads as in step 2.
 
 ### grade10-admin-inventory-catalog-US15-TC8-1: An ended Unsold listing shows the corrected Cert ID
 
@@ -664,3 +767,71 @@ Runs once per row of **Test data**.
 
 * Step 2: the change is saved.
 * Step 4: the listing reads `<cert_b>`, not `<cert_a>`.
+
+### grade10-admin-inventory-catalog-US15-TC9-1: An assigned unit can be held by its new Cert ID
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-15
+
+**Pre-conditions:**
+
+* admin(holds Inventory write authority) is on <inventory product url> of `<product_16>`.
+* `<product_16>` holds `<regular available>` units of available regular stock outside every hold.
+* A unit of `<product_16>`'s regular stock was given `<new cert>`, which reads available with no active hold.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<regular available>` | 2 units (any count of at least 1) |
+| `<new cert>` | `BGS-16000001`, given with Grade Issuer `BGS` |
+
+**Steps:**
+
+1. Click View Cert IDs.
+2. Read the available `No Cert ID` row.
+3. Close Cert ID details.
+4. Reserve quantity one under an admin hold, choosing `<new cert>`.
+5. Click View Cert IDs.
+6. Read the rows.
+
+**Expected Results:**
+
+* Step 4: the hold is saved with quantity one, naming `<new cert>`.
+* Step 6: `<new cert>`'s row reads Reserved, with Admin and the hold's reference.
+* Step 6: the available `No Cert ID` row reads as in step 2.
+
+## Settled
+
+- **A corrected-away Cert ID** — once a record is corrected, no record holds its old Cert ID, so the product may give it again; uniqueness reads the Cert IDs records hold now
+- **The record's own Cert ID** — refused like any Cert ID a record of the product holds; the record itself counts
+- **Vaulted regular stock** — not listed, with sold and withdrawn; a vaulted Cert record is listed as Vaulted
+- **One regular stock history** — every `No Cert ID` row, available or held, shows the same regular stock history; the Cert ID change that numbered a unit shows there and opens the new record's own history
+- **Holder on a hold row** — Auction, Vault or Admin, then the hold's label, else its reference, as the product page reads them
+- **A corrected or assigned Cert ID** — the intake rules: required, trimmed and unique on the product, with no pattern; an assignment's Grade Issuer is never `RAW`
+- **A unit's history** — the columns of the product's history: When, Action, Quantity, Actor, Holder and Remarks
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table empty, the Products and Stock page, the store context and the durable suite with its `## Settled` and without its `## Reconciliation`; it was denied every `## Requirements` section, `openspec/specs/` beyond those, `openspec/changes/archive/`, `tech-design.md` and `tasks.md`. Inventory has no domain suite. QA2 read both readings, `tech-design.md`, `tasks.md`, the durable spec and the Products and Stock page. It is a statement, not proof.
+
+- **Agreed** - `grade10-admin-inventory-catalog-US4-TC1-1` with `grade10-admin-inventory-catalog-SC-144`, `grade10-admin-inventory-catalog-SC-145` and `grade10-admin-inventory-catalog-SC-146`; `grade10-admin-inventory-catalog-US69-TC3-1` with the durable refusal of a Cert ID the product already owns at intake, `grade10-admin-inventory-catalog-SC-97`, guarding that intake reads the Cert ID a change wrote; `grade10-admin-inventory-catalog-US14-TC1-1` with `grade10-admin-inventory-catalog-SC-147` and the unlisted sold and withdrawn units of `grade10-admin-inventory-catalog-SC-148`; `grade10-admin-inventory-catalog-US14-TC2-1` with the requirement's row table, a product with no Cert record; `grade10-admin-inventory-catalog-US14-TC3-1` with `grade10-admin-inventory-catalog-SC-152`; `grade10-admin-inventory-catalog-US15-TC1-1` with `grade10-admin-inventory-catalog-SC-154`, `grade10-admin-inventory-catalog-SC-150`, `grade10-admin-inventory-catalog-SC-144` and `grade10-admin-inventory-catalog-SC-146`; `grade10-admin-inventory-catalog-US15-TC2-1` with `grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-151` and `grade10-admin-inventory-catalog-SC-145`; `grade10-admin-inventory-catalog-US15-TC3-1` with `grade10-admin-inventory-catalog-SC-155` and `grade10-admin-inventory-catalog-SC-157`; `grade10-admin-inventory-catalog-US15-TC4-1` with `grade10-admin-inventory-catalog-SC-161` and `grade10-admin-inventory-catalog-SC-162`; `grade10-admin-inventory-catalog-US15-TC5-1` with the Cert ID details halves of `grade10-admin-inventory-catalog-SC-156` and `grade10-admin-inventory-catalog-SC-160`; `grade10-admin-inventory-catalog-US15-TC6-1` with `grade10-admin-inventory-catalog-SC-165`, its assignment row with the refusal at 0 available regular stock under the lands-whole requirement; `grade10-admin-inventory-catalog-US15-TC7-1` with `grade10-admin-inventory-catalog-SC-164`; `grade10-admin-inventory-catalog-US15-TC8-1` with `grade10-admin-inventory-catalog-SC-158`
+- **Joined, by QA2** - into `grade10-admin-inventory-catalog-US4-TC1-1`, the Action text, Holder and Remarks of `grade10-admin-inventory-catalog-SC-146`; into `grade10-admin-inventory-catalog-US14-TC1-1`, the row order and the Reserved holder cells of `grade10-admin-inventory-catalog-SC-147`; into `grade10-admin-inventory-catalog-US14-TC3-1`, the assignment shown and the hold on a Cert record left out, from `grade10-admin-inventory-catalog-SC-152`; into `grade10-admin-inventory-catalog-US15-TC1-1`, newest first, from `grade10-admin-inventory-catalog-SC-150`; into `grade10-admin-inventory-catalog-US15-TC2-1`, a Dashes row, from the assignment's `-`-as-absent rule; into `grade10-admin-inventory-catalog-US15-TC3-1`, an Its own Cert ID row, from `grade10-admin-inventory-catalog-SC-155`; into `grade10-admin-inventory-catalog-US15-TC7-1`, an assignment sent outside the page, from `grade10-admin-inventory-catalog-SC-164`. Every case keeps `<v>` 1
+- **Added, by QA2** - `grade10-admin-inventory-catalog-US14-TC4-1` for `grade10-admin-inventory-catalog-SC-148`; `grade10-admin-inventory-catalog-US14-TC5-1` for `grade10-admin-inventory-catalog-SC-149`; `grade10-admin-inventory-catalog-US15-TC9-1` for `grade10-admin-inventory-catalog-SC-163`, the hold taken as an admin hold where the scenario names Auction, since both take one unit by explicit choice
+- **Raised, folded into spec** - none: every case reads behaviour a scenario or a requirement table already states
+- **Raised, rejected** - none
+- **Raised, escalated** - five rows in `decisions.md`'s `## Raised`, each awaiting the product manager: whether Cert ID uniqueness ignores letter case; the available `No Cert ID` row at 0 and Cert ID details for a product with nothing on hand; the literal `No Cert ID` entered as a Cert ID; a Cert ID a sold, withdrawn or vaulted record holds, refused here while intake revives that record; where Cert ID details shows a unit's copy facts, which `grade10-admin-inventory-catalog-US15-TC1-1` and `grade10-admin-inventory-catalog-US15-TC2-1` read at step 5 and no column carries
+- **Settled by the artifacts, not raised** - the seven lines in `## Settled`
+- **Partly out of suite** - the request sent anyway in `grade10-admin-inventory-catalog-SC-156` and `grade10-admin-inventory-catalog-SC-160`, for a sold or held unit: decided by the inventory service tests in grade10 (tasks 3.1 and 4.1); a reader's refusal sent outside the page is walked by `grade10-admin-inventory-catalog-US15-TC7-1`. The before and after snapshots of `grade10-admin-inventory-catalog-SC-144` and `grade10-admin-inventory-catalog-SC-145`: decided by the same tests, and seen by a person as the Action text
+- **Contradicted** - none
+- **Uncovered anchors** - none: `grade10-admin-inventory-catalog-US-04` has one case, `grade10-admin-inventory-catalog-US-69` one, `grade10-admin-inventory-catalog-US-14` five and `grade10-admin-inventory-catalog-US-15` nine; the groups `Auction presentation` and `Cert ID details` are walked by `grade10-admin-inventory-catalog-US15-TC8-1` and `grade10-admin-inventory-catalog-US15-TC6-1`
