@@ -89,7 +89,7 @@ Groups 10 to 12 are built in grade10 #667, from `allow-zero-starting-price`; eac
 - [ ] 12.2 `priceError` accepts `amountMinor >= 0` for the starting price, refuses null only where the price is required, and reads "Starting price must be a whole amount, 0 or more." - `grade10-admin-auction-listing-SC-03`, `grade10-admin-auction-listing-SC-124`, `grade10-admin-auction-listing-SC-125`
 - [ ] 12.3 Verify: `pnpm run typecheck`, `pnpm run lint`, and the admin-frontend listings tests
 
-## 13. The Walk (grade10)
+## 13. The Walk (grade10) (owner: @ecchochan)
 
 Uses the `feature-tcs.md` suites as its input, reviewed with `/tcs-review relay-auction-live-state`; `/tcs-run-sheet` executes manual cases when needed. Groups 2 to 12 have landed.
 
