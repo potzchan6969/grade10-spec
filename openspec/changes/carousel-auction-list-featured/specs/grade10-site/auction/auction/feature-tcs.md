@@ -591,7 +591,7 @@ to open that lot's details page,
 **I want** All auctions to lead with the lots I can bid on, soonest to close first, and to keep that order as I read on — below Featured when Featured is present, with no category section —,
 **so that** what I can still bid on is in front of me and reading further never shows me a lot twice or skips one.
 
-### grade10-site-auction-auction-US5-TC01-1: Empty Featured leaves All auctions only
+### grade10-site-auction-auction-US5-TC5-1: Empty Featured leaves All auctions only
 
 **Classification:**
 
@@ -622,7 +622,7 @@ to open that lot's details page,
 * No Featured band is present.
 * All auctions is shown with lots in the catalogue resting order.
 
-### grade10-site-auction-auction-US5-TC02-1: Catalogue shows no category chrome
+### grade10-site-auction-auction-US5-TC6-1: Catalogue shows no category chrome
 
 **Classification:**
 
@@ -651,7 +651,7 @@ to open that lot's details page,
 * There is no Categories heading, no category tiles, and no busy filter chrome.
 * The only sections are Featured when set, then All auctions.
 
-### grade10-site-auction-auction-US5-TC03-1: Empty All auctions still shows Featured when slots are set
+### grade10-site-auction-auction-US5-TC7-1: Empty All auctions still shows Featured when slots are set
 
 **Classification:**
 
@@ -682,7 +682,7 @@ to open that lot's details page,
 * Featured still shows the curated slide or slides.
 * All auctions shows a message that there are no auctions.
 
-### grade10-site-auction-auction-US5-TC04-1: Featured lots also appear in All auctions resting order
+### grade10-site-auction-auction-US5-TC8-1: Featured lots also appear in All auctions resting order
 
 **Classification:**
 
@@ -719,7 +719,7 @@ to open that lot's details page,
 * `<featured lot>` appears in Featured and again in All auctions.
 * All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible lot.
 
-### grade10-site-auction-auction-US5-TC05-1: Catalogue address stays indexable at /auction without category query
+### grade10-site-auction-auction-US5-TC9-1: Catalogue address stays indexable at /auction without category query
 
 **Classification:**
 
@@ -747,7 +747,7 @@ to open that lot's details page,
 
 * Canonical and share address are `/auction` with no category query.
 
-### grade10-site-auction-auction-US5-TC06-1: More All auctions lots load on scroll
+### grade10-site-auction-auction-US5-TC10-1: More All auctions lots load on scroll
 
 **Classification:**
 
@@ -781,7 +781,7 @@ to open that lot's details page,
 * The combined list stays in the catalogue resting order.
 * No pagination controls appear.
 
-### grade10-site-auction-auction-US5-TC07-1: An Upcoming All auctions card shows no money
+### grade10-site-auction-auction-US5-TC11-1: An Upcoming All auctions card shows no money
 
 **Classification:**
 

@@ -18,3 +18,4 @@ Written by the landing, in the landing's own commit.
 | 11 | 2 | simpler, verifier | Manage Featured sub-page | - | - |
 | 12 | 3 | simpler, verifier | Featured banner block | - | - |
 | 13 | 4 | simpler, verifier | Quiet catalogue on /auction | - | - |
+| 14 | 5 | simpler, verifier | Product record close-out: Featured unmarked, cases named | - | - |

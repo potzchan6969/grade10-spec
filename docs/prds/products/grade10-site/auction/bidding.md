@@ -279,7 +279,6 @@ the letters that follow those lots.
 
 | Rule | Value |
 | --- | --- |
-| Watch limit | ❓ A maximum number of watches per collector, bids counted; Design sets the value |
 | Opening warning | **24 hours** before the scheduled start |
 | Closing warning | **24 hours** before the scheduled close, which extended bidding never moves; no one-hour reminder |
 | Copies | One per lot per collector per letter; a temporary failure retries, and an operator re-queues a given-up letter |
@@ -319,9 +318,7 @@ the same facts sit in the five-column table.
   once the setup deadline passes incomplete, and Payment Overdue once the
   payment deadline passes unpaid — not Awaiting Setup or Pending Payment
   after the miss
-- 🚧 **A bid bookmarks the lot** — with no separate Watch, and counts toward
-  the watch limit
-- **At the limit** — a further watch is refused and says the limit is reached
+- 🚧 **A bid bookmarks the lot** — with no separate Watch
 - **Removed with the listing** — unpublishing or removing a listing takes it
   off My Auctions
 - **Honest reads** — nothing bookmarked offers the catalogue; a failed read
@@ -494,7 +491,6 @@ surface.
 | Letter audiences | Decided | Start letters reach watchers; close-in-24h and extended-bidding reach a bidder who unwatched while alerts stay on; new-bid letters coalesce to the current leading bid; bid beats watch and a win beats both, so nobody gets two letters for one event. | Product |
 | No-bids close copy | Decided | Watch-only get the watched-ended letter (Ended only — never unsold, no sale or Highest bid); sold closes use watched-sold with Sold for. No bidder letter when nobody bid. | Product |
 | Unsubscribe | Decided | Stop means mute for this auction: Manage alerts opens My Auctions, sign-in first when signed out; not unwatch, not the account master. Every outbound link carries `utm_source=email`, `utm_medium=auction_notification`, the letter kind as `utm_campaign` and the control as `utm_content`. | Product |
-| Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
 | Card line on the non-winner letter | Decided | The letter omits it; My Auctions says the card was not charged. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |

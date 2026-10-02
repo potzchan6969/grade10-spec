@@ -149,19 +149,21 @@ Operator-curated slides on the collector catalogue's Featured band —
 | --- | --- |
 | Slots | At most **3**, in operator order |
 | Each slot | One published Active or Upcoming listing, and one **front page image** uploaded for that slot |
-| Front page canvas | 🚧 **2400 × 1500** (landscape 8:5). Keep the subject in the centre; the stage crops from the edges as the viewport changes |
-| Front page file | 🚧 JPEG or WebP; aim at most **400 KB** after encode |
+| Front page canvas | **2400 × 1500** (landscape 8:5). Keep the subject in the centre; the stage crops from the edges as the viewport changes |
+| Front page file | JPEG or WebP; aim at most **400 KB** after encode |
 
-- 🚧 **Manage Featured** — from the Listings tab, beside Create listing; opens
+- **Manage Featured** — from the Listings tab, beside Create listing; opens
   a sub-page of the ordered slots. An authorized operator fills, orders,
   replaces and clears slots there. A slot without both a listing and its front
   page image is not shown on `/auction`. Ended listings cannot fill a slot
-- 🚧 **Front page image** — one image per slot, uploaded for the carousel; not
+- **Front page image** — one image per slot, uploaded for the carousel; not
   picked from the listing gallery and not the campaign cover. It is the banner
   background and the slab on that slide. The upload brief is the canvas and
   file rows above. If it fails to load on the site, the slide uses the lot’s
   first gallery image, or the stage’s default background colour if that is
   missing too — no broken-image chrome
+
+::spec{id="grade10-admin/auction/featured"}
 
 ## Orders
 
@@ -465,6 +467,8 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 
 ::cases{id="grade10-admin/auction/campaign"}
 
+::cases{id="grade10-admin/auction/featured"}
+
 ::cases{id="grade10-admin/auction/post-sale"}
 
 ::cases{id="grade10-admin/auction/payment-settings"}
@@ -493,7 +497,7 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Catalogue Featured | 🚧 In flight | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
+| Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |

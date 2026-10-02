@@ -1,3 +1,5 @@
+# grade10-site/auction/auction Specification
+
 ## Feature set
 
 - Featured catalogue band
@@ -263,6 +265,7 @@ resting order and is settled on the lot record the same way.
 Featured, in that resting order. When Featured is present, All auctions SHALL
 sit below it.
 
+<!-- trace:scenario id=g10.auction-auction.SC-5vk rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-25 - Open lots lead the catalogue
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -272,6 +275,7 @@ sit below it.
 - **THEN** every Active lot is listed before every Upcoming lot
 - **AND** every Upcoming lot is listed before every Ended lot
 
+<!-- trace:scenario id=g10.auction-auction.SC-c4r rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-26 - Each status has its own order
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -282,6 +286,7 @@ sit below it.
 - **AND** the Upcoming lots are listed soonest start first
 - **AND** the Ended lots are listed most recent close first
 
+<!-- trace:scenario id=g10.auction-auction.SC-icd rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-27 - A tie is settled the same way every read
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -289,6 +294,7 @@ sit below it.
 - **WHEN** the catalogue is read twice
 - **THEN** the two lots are in the same order both times
 
+<!-- trace:scenario id=g10.auction-auction.SC-zvy rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-28 - Paging does not change the order
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 

@@ -32,5 +32,5 @@ Depends on Groups 1 and 3 (public Featured read + banner export).
 
 ## 5. Product Record Close-Out (grade10-spec)
 
-- [ ] 5.1 Keep Catalogue and Featured 🚧 marks until Groups 2–4 acceptance; after deploy, archive removes them. At fold, add `::cases{id="grade10-admin/auction/featured"}` under Featured and in the management page QA cases block — cannot land while the capability is delta-only.
-- [ ] 5.2 Verify: `pnpm run validate:changes carousel-auction-list-featured`, `pnpm run tcs:validate`, `pnpm check:manual`.
+- [x] 5.1 Keep Catalogue and Featured 🚧 marks until Groups 2–4 acceptance; after deploy, archive removes them. At fold, add `::cases{id="grade10-admin/auction/featured"}` under Featured and in the management page QA cases block — cannot land while the capability is delta-only.
+- [x] 5.2 Verify: `pnpm run validate:changes carousel-auction-list-featured`, `pnpm run tcs:validate`, `pnpm check:manual`.

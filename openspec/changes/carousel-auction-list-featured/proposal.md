@@ -81,4 +81,3 @@ See [Non-Goals](decisions.md#non-goals).
 
 - [Auction Display · Catalogue](../../../docs/prds/products/grade10-site/auction/display.md#catalogue)
 - [Auction Management · Featured](../../../docs/prds/products/grade10-admin/auction/management.md#featured)
-- [Watchlist](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)

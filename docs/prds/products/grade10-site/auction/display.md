@@ -65,7 +65,7 @@ the one a search engine keeps.
 | Featured | At most **3** operator-curated slides. Absent when none are set. Active and Upcoming lots only |
 | Live | Active and Upcoming. Ended lots stay in All auctions and fill no Featured slot |
 
-- 🚧 **Featured** — a full-width carousel when at least one slide is set. Each
+- **Featured** — a full-width carousel when at least one slide is set. Each
   slide is an operator-picked listing with one **front page image** uploaded
   for that slot (banner and slab as that single asset; not a gallery pick for
   upload). The site loads Featured from its own public read, separate from All
@@ -248,7 +248,7 @@ Active and Completed filters in bidding history.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The catalogue page | 🚧 In flight | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
+| The catalogue page | Decided | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Between the close and the result | Decided | Three statuses stay. Past the close and before the result is recorded, pages show the existing Closed state with no result, and Won or Unsold when the close commits. A fourth status, Closing, with its own copy was ruled out: a new state in four languages for a gap normally under a second. | Product |
 | Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |

@@ -21,7 +21,7 @@ that slot.
 - Access
   - Catalogue operators: the same grants that may publish auction listings may curate Featured
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Featured holds at most three ordered slots
 
