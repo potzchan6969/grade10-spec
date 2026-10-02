@@ -77,12 +77,11 @@
     "loading": "Loading your cases…",
     "empty": "You have not asked us to hold anything yet.",
     "start": "Start a request",
+    "yourCases": "Your cases",
     "opened": "Opened {day}",
     "openedAtCounter": "Opened for you at the counter — check it and send it when you are ready.",
     "askedFor": "Asked for {amount}",
     "visitBooked": "Visit booked for {when}",
-    "noVisit": "No visit booked",
-    "open": "Open",
     "heroIntro": "See every item you have asked us to hold, and start another whenever you like.",
     "howItWorks": {
       "title": "How it works",
