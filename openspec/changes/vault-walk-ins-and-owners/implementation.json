@@ -134,5 +134,77 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "ecchochan",
+    "reviewedAt": "2026-10-02T03:12:45.000Z",
+    "changes": [
+      {
+        "path": "openspec/changes/vault-walk-ins-and-owners/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "grade10-spec#800, owner-questions 12: names the Vault canvas boards A14, A15 and C24 drawn from the build and words the state rows as built; no state, anchor or requirement changed"
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/collector-page/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the suites' review on the owner's word (grade10-spec#799, owner-questions 11): cases marked actual or left draft, test data and steps filled so a tester runs them without asking, rows no console role can walk dropped, and the cases the walks decide flipped to automated; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the suites' review on the owner's word (grade10-spec#799, owner-questions 11): cases marked actual or left draft, test data and steps filled so a tester runs them without asking, rows no console role can walk dropped, and the cases the walks decide flipped to automated; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the suites' review on the owner's word (grade10-spec#799, owner-questions 11): cases marked actual or left draft, test data and steps filled so a tester runs them without asking, rows no console role can walk dropped, and the cases the walks decide flipped to automated; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the suites' review on the owner's word (grade10-spec#799, owner-questions 11): cases marked actual or left draft, test data and steps filled so a tester runs them without asking, rows no console role can walk dropped, and the cases the walks decide flipped to automated; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/collector-notifications/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the suites' review on the owner's word (grade10-spec#799, owner-questions 11): cases marked actual or left draft, test data and steps filled so a tester runs them without asking, rows no console role can walk dropped, and the cases the walks decide flipped to automated; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "the suites' review on the owner's word (grade10-spec#799, owner-questions 11): cases marked actual or left draft, test data and steps filled so a tester runs them without asking, rows no console role can walk dropped, and the cases the walks decide flipped to automated; no requirement or scenario changed",
+        "evidence": [
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts",
+          "9gag/grade10@cc85d13400b5bf22451dc27f8c06f4ebcb490998:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts"
+        ]
+      }
+    ]
+  }
 }
