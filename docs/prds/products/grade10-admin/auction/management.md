@@ -67,8 +67,8 @@ the card is in the winner's hands. The collector's half is
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
-- **Call off** — any time before the close, bids or not; live holds and the
-  stock are released, the listing leaves browse and search, and its canonical
+- **Call off** — any time before the close, bids or not; the stock is
+  released, the listing leaves browse and search, and its canonical
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
@@ -355,8 +355,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
-- **The hold** — released at the close, never captured; every failed payment
-  attempt stays in the invoice log
+- **Failed payments** - every failed payment attempt stays in the invoice log
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -500,7 +499,7 @@ settings.
 | Unsold stock | 🚧 In flight | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
-| Payment source | Decided | The order tells a card payment through Stripe from money an operator records, and neither captures the bid-time hold, which is released at the close. | Product and Finance |
+| Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
