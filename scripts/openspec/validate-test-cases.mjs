@@ -27,7 +27,6 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import { spawnSync } from "node:child_process";
 import {
   existsSync,
   readdirSync,
@@ -35,16 +34,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import {
-  basename,
-  dirname,
-  isAbsolute,
-  join,
-  normalize,
-  relative,
-  resolve,
-  sep,
-} from "node:path";
+import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import {
   everySection,
   outline,
@@ -52,6 +42,7 @@ import {
 } from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
+import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
   activeChangeSpecRoots,
   CASE_STATUSES,
@@ -497,7 +488,7 @@ function checkSuite(root, filePath, rulesRev) {
       // One rule, three verdicts: an automated case of an in-flight change
       // names what decides it, in its place, once. Nothing else may.
       const automated = isAutomated(tc);
-      if (automated && tc.decidedBy.length === 0 && decidedByOwed)
+      if (automated && tc.decidedByLines.length === 0 && decidedByOwed)
         err(
           at,
           `case \`${tc.id}\` is \`**Automation status:** automated\` but carries no \`**Decided by:**\` line — name the test that decided it`,
@@ -507,6 +498,7 @@ function checkSuite(root, filePath, rulesRev) {
         bullet,
         misplaced,
         empty,
+        blank,
         repeated,
       } of tc.decidedByLines) {
         if (repeated)
@@ -519,7 +511,12 @@ function checkSuite(root, filePath, rulesRev) {
             line,
             `case \`${tc.id}\`'s \`**Decided by:**\` line sits at line ${line}, not directly after the classification block — a scanning reader does not look anywhere else`,
           );
-        if (empty)
+        if (blank)
+          err(
+            line,
+            `case \`${tc.id}\`'s \`**Decided by:**\` line at line ${line} names no path — name the test that decided it`,
+          );
+        else if (empty)
           err(
             line,
             `case \`${tc.id}\`'s \`**Decided by:**\` line at line ${line} has an empty path — a doubled or trailing comma`,
@@ -531,60 +528,13 @@ function checkSuite(root, filePath, rulesRev) {
           );
       }
       // Resolved against the store this run reads, so a fixture is checked
-      // against itself. A path that climbs out of the store names a file no
-      // clone of it has, and a directory decides nothing. A `grade10:<path>`
-      // resolves in the application clone this run reaches, and is held to
-      // its form alone where it reaches none (Q111).
+      // against itself; the grammar is the one `tcs:automated` writes by.
       for (const { path, line } of tc.decidedBy) {
-        const named = `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\``;
-        const tagged = /^([a-z][a-z0-9-]*):(.*)$/.exec(path);
-        if (tagged) {
-          const [, repo, within] = tagged;
-          if (!APPLICATION_TAGS.has(repo)) {
-            err(
-              line,
-              `${named}, whose tag \`${repo}\` is no application repository — name a store path, or \`grade10:<path>\``,
-            );
-          } else if (within === "") {
-            err(line, `${named}, which names no path after its tag`);
-          } else if (
-            isAbsolute(within) ||
-            normalize(within).split(sep)[0] === ".."
-          ) {
-            err(
-              line,
-              `${named}, which resolves outside the application repository — write it relative to that repository's root`,
-            );
-          } else if (APP_ROOT !== null) {
-            const full = join(APP_ROOT, within);
-            if (!existsSync(full) || !statSync(full).isFile())
-              errApp(
-                line,
-                `${named}, which the application clone at ${APP_ROOT} does not hold as a file`,
-              );
-          }
-          continue;
-        }
-        const full = resolve(root, path);
-        if (full !== root && !full.startsWith(root + sep)) {
-          err(
-            line,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which resolves outside the store — write it relative to the repository root`,
-          );
-          continue;
-        }
-        if (!existsSync(full)) {
-          err(
-            line,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which does not exist in this checkout`,
-          );
-          continue;
-        }
-        if (!statSync(full).isFile())
-          err(
-            line,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which is not a file — name the test, not the directory holding it`,
-          );
+        const problem = decidedByProblem(path, { root, appRoot: APP_ROOT });
+        if (problem === null) continue;
+        const message = `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, ${problem.message}`;
+        if (problem.app) errApp(line, message);
+        else err(line, message);
       }
       if (tc.decidedBy.length > 0 && !automated)
         warn(
@@ -671,29 +621,6 @@ function checkSuite(root, filePath, rulesRev) {
   checkManualRows(root, text, cases, err);
 
   return { rel, suite, counts, derived, cases: cases.length };
-}
-
-/** Repositories a `**Decided by:**` path may name by tag, `<tag>:<path>`. */
-const APPLICATION_TAGS = new Set(["grade10"]);
-
-/** `--app-root` when given, else the clone `root` is a submodule of, else
- *  `null`. A given directory that is not there is a mistake, not an absence. */
-function applicationRoot(given, root) {
-  if (given !== undefined) {
-    const tree = resolve(given);
-    if (existsSync(tree) && statSync(tree).isDirectory()) return tree;
-    console.error(
-      `--app-root ${given} is not a directory — pass the directory that holds the application repository`,
-    );
-    process.exit(1);
-  }
-  const git = spawnSync(
-    "git",
-    ["-C", root, "rev-parse", "--show-superproject-working-tree"],
-    { encoding: "utf8" },
-  );
-  const tree = git.status === 0 ? git.stdout.trim() : "";
-  return tree === "" ? null : tree;
 }
 
 // ---------------------------------------------------------------------------

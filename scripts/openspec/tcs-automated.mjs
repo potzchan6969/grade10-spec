@@ -30,18 +30,29 @@
  * the same tree `findSuites` reads for every suite check, since an archived
  * suite is not this store's to edit any more.
  *
+ * Every `--decided-by` path is held to the grammar `tcs:validate` reads the
+ * line by (`lib/decided-by.mjs`): a walk in the application repository is
+ * `grade10:<path>`, resolved where `--app-root` or the superproject reaches
+ * that clone.
+ *
  * `--root` reads a store other than this one, which is how the tests read a
  * fixture.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
+import {
+  applicationRoot,
+  DECIDED_BY,
+  decidedByLine,
+  decidedByProblem,
+} from "./lib/decided-by.mjs";
 import { caseIndex, commaList, findSuites, PROPERTIES } from "./lib/suites.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
-  "usage: pnpm run tcs:automated <case-id…> [--decided-by <path>[,<path>]] [--root <dir>]";
+  "usage: pnpm run tcs:automated <case-id…> [--decided-by <path>[,<path>]] [--app-root <dir>] [--root <dir>]";
 
 const AUTOMATION_LINE = /^([-*]\s+\*\*Automation status:\*\*\s*)(\S.*?)\s*$/;
 const HEADING = /^#{2,3}\s/;
@@ -49,22 +60,31 @@ const HEADING = /^#{2,3}\s/;
  *  and an `* **Expected result:** …` bullet further down is not one of them. */
 const PROP_BULLET = /^[-*]\s+\*\*([\w ]+?):\*\*/;
 const PROP_NAMES = new Set([...PROPERTIES.map(([name]) => name), "Behavior"]);
-const DECIDED_LINE = /^\*\*Decided by:\*\*/;
 /** A case of a change still in flight: the tree whose automated cases owe the
  *  line (Q69). A durable suite's do not, so a flip there names nothing. */
 const IN_FLIGHT = /^openspec[/\\]changes[/\\]/;
 
 const { positional: ids, flags } = parseArgs(process.argv.slice(2), {
-  keys: ["decided-by", "root"],
+  keys: ["app-root", "decided-by", "root"],
   usage: USAGE,
 });
-const root = flags.root ?? join(HERE, "..", "..");
+const root = resolve(flags.root ?? join(HERE, "..", ".."));
 if (ids.length === 0) fail(USAGE);
 
 const asked = flags["decided-by"] !== undefined;
 const { values: decidedBy, empty } = commaList(flags["decided-by"]);
 if (asked && (decidedBy.length === 0 || empty > 0))
   fail("--decided-by names an empty path — a doubled or trailing comma");
+
+const appRoot = applicationRoot(flags["app-root"], root);
+const refused = decidedBy.flatMap((path) => {
+  const problem = decidedByProblem(path, { root, appRoot });
+  return problem ? [`  \`${path}\`, ${problem.message}`] : [];
+});
+if (refused.length > 0)
+  fail(
+    `--decided-by names a path tcs:validate refuses:\n${refused.join("\n")}`,
+  );
 
 // One reading of "which case is where", shared with the rest of the store
 // rather than a second scan over the same headings: `caseIndex` already
@@ -118,7 +138,7 @@ for (const id of ids) {
     }
     const bullet = PROP_BULLET.exec(lines[at]);
     if (bullet && PROP_NAMES.has(bullet[1])) prop = at;
-    if (decided === -1 && DECIDED_LINE.test(lines[at])) decided = at;
+    if (decided === -1 && DECIDED_BY.test(lines[at])) decided = at;
   }
 
   if (line === -1) {
@@ -131,6 +151,10 @@ for (const id of ids) {
     line,
     prop,
     decided,
+    // A line that names nothing names no decider.
+    named:
+      decided !== -1 &&
+      commaList(DECIDED_BY.exec(lines[decided])[1]).values.length > 0,
     inFlight: IN_FLIGHT.test(found.rel),
     already: match[2].trim().toLowerCase() === "automated",
   });
@@ -149,9 +173,7 @@ if (noAutomationLine.length > 0) {
 // happen. One line, because the answer is the same for every id on it.
 const unnamed = ids.filter((id) => {
   const hit = hits.get(id);
-  return (
-    hit.inFlight && !hit.already && decidedBy.length === 0 && hit.decided === -1
-  );
+  return hit.inFlight && !hit.already && decidedBy.length === 0 && !hit.named;
 });
 if (unnamed.length > 0)
   fail(
@@ -162,9 +184,7 @@ if (unnamed.length > 0)
 // files were already flipped would leave the suite half-migrated with nothing
 // saying so. Inside a file the cases are written bottom up, because writing
 // the line inserts two lines and every case above it keeps its numbers.
-const written = `**Decided by:** ${decidedBy
-  .map((one) => `\`${one}\``)
-  .join(", ")}`;
+const written = decidedByLine(decidedBy);
 const touched = new Map();
 const order = ids
   .filter((id) => !hits.get(id).already || decidedBy.length > 0)
