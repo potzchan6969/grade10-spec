@@ -19,10 +19,14 @@
   },
   "category": {
     "trading_card": "Trading card",
+    "comic": "Comic",
     "coin": "Coin",
+    "banknote": "Banknote",
+    "stamp": "Stamp",
     "bullion": "Bullion",
     "watch": "Watch",
     "jewellery": "Jewellery",
+    "memorabilia": "Memorabilia",
     "other": "Something else"
   },
   "packetStatus": {

@@ -19,10 +19,14 @@
   },
   "category": {
     "trading_card": "트레이딩 카드",
+    "comic": "만화책",
     "coin": "주화",
+    "banknote": "지폐",
+    "stamp": "우표",
     "bullion": "금괴·은괴",
     "watch": "시계",
     "jewellery": "귀금속",
+    "memorabilia": "기념품",
     "other": "기타 물품"
   },
   "packetStatus": {

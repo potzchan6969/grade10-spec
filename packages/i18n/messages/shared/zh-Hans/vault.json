@@ -19,10 +19,14 @@
   },
   "category": {
     "trading_card": "交易卡",
+    "comic": "漫画",
     "coin": "钱币",
+    "banknote": "纸币",
+    "stamp": "邮票",
     "bullion": "金银条块",
     "watch": "手表",
     "jewellery": "珠宝首饰",
+    "memorabilia": "纪念品",
     "other": "其他物品"
   },
   "packetStatus": {
