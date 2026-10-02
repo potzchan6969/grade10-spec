@@ -6,9 +6,6 @@ hands:
   tech: "@ecchochan"
   qa: "@ecchochan"
   dev: "@ecchochan"
-awaiting:
-  specs: "2026-10-02, the requirements land with the acceptance of the reconciled
-    plan - @ecchochan"
 landed_by:
   proposal: ecchochan
   decisions: ecchochan
