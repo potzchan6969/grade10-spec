@@ -71,6 +71,10 @@ reload and terminal replay before catalog/KYC changes
 - [ ] 3.5 Keep the carrier callback token-gated and stateless, make it use the
   configured preview rule, return no rate for an unsupported destination, and
   add diagnostics for the staging correlation/return path.
+- [ ] 3.6 Verify the backend with focused service/provider suites, `pnpm run
+  test:backend`, `pnpm run typecheck`, `pnpm run lint`, and the relevant
+  backend-quality checks, including the appended tasks; frontend integration
+  independently uses contract fixtures.
 - [ ] 3.7 Add failing then passing coverage for Pay recheck, conflict/replay
   ordering, every Shopify creation path and canonical read boundaries:
   `grade10-site-store-checkout-SC-22`, `grade10-site-store-checkout-SC-24`,
@@ -85,9 +89,6 @@ reload and terminal replay before catalog/KYC changes
   recovery needed by `grade10-site-store-checkout-SC-21`; verify the configured
   provider's unique draft/payment or confirmed cancellation before clearing the
   member blockade. Reuse an adequate existing operation; do not require database edits.
-- [ ] 3.6 Verify the backend with focused service/provider suites, `pnpm run
-  test:backend`, `pnpm run typecheck`, `pnpm run lint`, and the relevant
-  backend-quality checks; frontend integration independently uses contract fixtures.
 
 ## 4. Storefront checkout and order surfaces (grade10) (owner: @kinisworking)
 
@@ -117,6 +118,9 @@ Depends on Group 2 contracts, not a running backend; build against fixtures.
   Shopify integration package; render the static Grade10 Your Orders link from
   `ui-design.md` without adding a new `@grade10/ui` export or a
   purchase-specific resolver.
+- [ ] 4.6 Verify the affected frontend with focused checkout/order tests,
+  `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`,
+  and the relevant Playwright smoke coverage, including the appended task.
 - [ ] 4.7 Add failing then passing drawer/session coverage for reload, member
   scope, changed-intent conflict and gross-goods verification against fixtures:
   `grade10-site-store-checkout-SC-22`, `grade10-site-store-checkout-SC-23`,
@@ -124,9 +128,6 @@ Depends on Group 2 contracts, not a running backend; build against fixtures.
   `grade10-site-store-checkout-SC-28`, `grade10-site-store-checkout-SC-32`.
   Preserve optional-intent older-bundle compatibility and gate production until
   older public creation bundles drain; test elevated typed-email bench adapters.
-- [ ] 4.6 Verify the affected frontend with focused checkout/order tests,
-  `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`,
-  and the relevant Playwright smoke coverage.
 
 ## 5. Staging shop readiness and release walk (grade10) (owner: @kinisworking)
 
