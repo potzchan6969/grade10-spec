@@ -1,13 +1,17 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
+  cpSync,
   existsSync,
   mkdirSync,
+  mkdtempSync,
   readdirSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
 import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
@@ -22,6 +26,7 @@ import {
   deltaSections,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
@@ -522,7 +527,7 @@ function mergeList(currentText, deltaText) {
   const items = [
     ...new Set([...listItems(currentText), ...listItems(deltaText)]),
   ];
-  const real = items.filter((item) => !/^\*None yet\b/.test(item));
+  const real = items.filter((item) => !/^(\*None yet\b|None\.$)/.test(item));
   const kept = real.length ? real : items.slice(0, 1);
   const isItem = (item) => /^[-*] /.test(item);
   if (kept.length === 0) return "";
@@ -585,18 +590,100 @@ function suiteHeader(currentHeader, deltaHeader) {
   return lines.join("\n");
 }
 
-function withDerivedStatus(text) {
+/** The header a fold leaves: a file that was approved and now holds a draft
+ *  lapses its `**Reviewed:**` line on the fold's date, so it reads `reopened`. */
+function withDerivedStatus(text, foldedOn) {
   const suite = parseSuite(text);
   const cases = suite.journeys.flatMap((journey) => journey.cases);
+  const counts = statusCounts(cases);
+  const lapses =
+    suite.reviewed &&
+    !suite.reviewedLapsed &&
+    deriveStatus(counts, cases.length) !== "approved";
   const status = deriveStatus(
-    statusCounts(cases),
+    counts,
     cases.length,
-    Boolean(suite.reviewedLapsed),
+    Boolean(suite.reviewedLapsed) || lapses,
   );
-  return text.replace(/^\*\*Status:\*\* .*$/m, `**Status:** ${status}`);
+  const reviewed = lapses
+    ? text.replace(/^(\*\*Reviewed:\*\* .*?)[ \t]*$/m, `$1, lapsed ${foldedOn}`)
+    : text;
+  return reviewed.replace(/^\*\*Status:\*\* .*$/m, `**Status:** ${status}`);
 }
 
-function mergeSuite(currentText, deltaText, capability) {
+const CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
+
+const CASE_MARKER = /\n*(<!-- trace:case [^\n]*-->)$/;
+
+/** A journey's cases, each with the `trace:case` marker on the line above
+ *  its heading. The outline files that marker at the end of whatever comes
+ *  before the case, so it is handed to the case it belongs to and travels
+ *  with it. */
+function markedCases(group, capability) {
+  const sections = group.children;
+  for (const section of sections)
+    if (!CASE_HEADING.test(section.heading))
+      throw new Error(
+        `${capability}: \`### ${section.heading}\` under \`## ${group.heading}\` is not a test case the fold can place; fold it by hand into the change's suite`,
+      );
+  const split = (text, more) => {
+    const found = more && CASE_MARKER.exec(text);
+    return found ? [text.slice(0, found.index), found[1]] : [text, null];
+  };
+  let [body, marker] = split(group.body, sections.length > 0);
+  const cases = sections.map((section, index) => {
+    const [raw, next] = split(section.raw, index < sections.length - 1);
+    const one = { section: { ...section, raw }, marker };
+    marker = next;
+    return one;
+  });
+  return { body, cases };
+}
+
+/** A delta case replaces the durable case of the same `TC<m>`: the same
+ *  revision restyled, or a higher one the change rewrote, whose marker moves
+ *  to the new revision. An older revision means the change was written
+ *  against a suite that has since moved on. */
+function mergeCases(existing, incoming, capability) {
+  const revisionOf = (one) => Number(CASE_HEADING.exec(one.section.heading)[2]);
+  const cases = new Map(existing.map((one) => [caseNumber(one.section), one]));
+  for (const one of incoming) {
+    const number = caseNumber(one.section);
+    const prior = cases.get(number);
+    const rev = revisionOf(one);
+    if (prior && rev < revisionOf(prior))
+      throw new Error(
+        `${capability}: ${number}-${rev} is an older revision than the durable suite's ${number}-${revisionOf(prior)}; write the change's case against it`,
+      );
+    const inherited =
+      prior?.marker && rev > revisionOf(prior)
+        ? prior.marker.replace(/ rev=\d+ /, ` rev=${rev} `)
+        : prior?.marker;
+    cases.set(number, { ...one, marker: one.marker ?? inherited ?? null });
+  }
+  return [...cases.values()];
+}
+
+function caseNumber(section) {
+  return CASE_HEADING.exec(section.heading)[1];
+}
+
+/** Each `TC<m>` once in a suite, whatever its revision: the rule
+ *  `tcs:validate` holds the store to. */
+function refuseRepeatedCases(text, capability, where, remedy) {
+  const seen = new Set();
+  for (const [, number] of text.matchAll(/^###\s+(\S+-TC\d+)-\d+\b/gim)) {
+    if (seen.has(number))
+      throw new Error(
+        `${capability}: test case ${number} appears more than once in ${where}; ${remedy}`,
+      );
+    seen.add(number);
+  }
+}
+
+function mergeSuite(currentText, deltaText, capability, foldedOn) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(foldedOn ?? ""))
+    throw new Error(`${capability}: a suite fold needs its date, YYYY-MM-DD`);
   if (currentText === null || currentText === undefined) return deltaText;
   const texts = [currentText, deltaText].map((text) =>
     text.replace(/\r\n/g, "\n"),
@@ -631,25 +718,35 @@ function mergeSuite(currentText, deltaText, capability) {
       (section) => section.level === 2 && JOURNEY_GROUP.test(section.heading),
     );
   const groupId = (section) => JOURNEY_GROUP.exec(section.heading)[1];
-  const caseId = (section) => /(\S+-TC\d+-\d+)\b/i.exec(section.heading)?.[1];
-  const isCase = (section) => Boolean(caseId(section));
+  const ruled = /\n+---$/;
+  refuseRepeatedCases(
+    texts[0],
+    capability,
+    "the durable suite",
+    "repair the durable suite first",
+  );
+  refuseRepeatedCases(
+    texts[1],
+    capability,
+    "the change's suite",
+    "give the new case the next unused TC number",
+  );
   const currentGroups = new Map(
     groupsOf(current).map((section) => [groupId(section), section]),
   );
   for (const incoming of groupsOf(delta)) {
     const existing = currentGroups.get(groupId(incoming));
-    const cases = new Map(
-      (existing?.children ?? [])
-        .filter(isCase)
-        .map((one) => [caseId(one), one]),
+    const { body, cases: added } = markedCases(incoming, capability);
+    const cases = mergeCases(
+      existing ? markedCases(existing, capability).cases : [],
+      added,
+      capability,
     );
-    for (const testCase of incoming.children.filter(isCase))
-      cases.set(caseId(testCase), testCase);
-    const rendered = [`## ${incoming.heading}`, incoming.body.trim()].filter(
-      Boolean,
-    );
-    for (const testCase of cases.values())
-      rendered.push(renderSection(testCase));
+    const rendered = [`## ${incoming.heading}`, body.trim()].filter(Boolean);
+    for (const { section, marker } of cases)
+      rendered.push(
+        `${marker ? `${marker}\n` : ""}${renderSection(section).replace(ruled, "")}`,
+      );
     currentGroups.set(groupId(incoming), {
       heading: incoming.heading,
       render: rendered.join("\n\n"),
@@ -666,11 +763,12 @@ function mergeSuite(currentText, deltaText, capability) {
     const [, , number, letter] = JOURNEY_GROUP.exec(section.heading);
     return Number(number) + (letter ? letter.charCodeAt(0) / 1000 : 0);
   };
-  const ruled = /\n+---$/;
   const groups = [...currentGroups.values()]
     .sort((a, b) => usOrder(a) - usOrder(b))
     .map((section) => section.render ?? renderSection(section));
-  const separator = groups.some((one) => ruled.test(one))
+  const separator = [current, delta].some((doc) =>
+    groupsOf(doc).some((section) => ruled.test(section.raw)),
+  )
     ? "\n\n---\n\n"
     : "\n\n";
   const parts = [suiteHeader(current.header, delta.header)];
@@ -699,15 +797,13 @@ function mergeSuite(currentText, deltaText, capability) {
     named(delta, "Out of suite"),
   );
   if (outOfSuite) parts.push(`## Out of suite\n\n${outOfSuite}`);
-  const merged = withDerivedStatus(`${parts.join("\n\n")}\n`);
-  const caseIds = new Set();
-  for (const [, id] of merged.matchAll(/^###\s+(\S+-TC\d+-\d+)\b/gim)) {
-    if (caseIds.has(id))
-      throw new Error(
-        `${capability}: test case ${id} appears more than once in the merged suite; renumber it`,
-      );
-    caseIds.add(id);
-  }
+  const merged = withDerivedStatus(`${parts.join("\n\n")}\n`, foldedOn);
+  refuseRepeatedCases(
+    merged,
+    capability,
+    "the merged suite",
+    "give the new case the next unused TC number",
+  );
   return merged;
 }
 
@@ -919,7 +1015,7 @@ function previousDurableSnapshots(root, changeId) {
   }
 }
 
-function contractOutputs(root, changeId) {
+function contractOutputs(root, changeId, foldedOn) {
   const dir = join(root, "openspec", "changes", changeId);
   const deltas = walkFiles(root, join(dir, "specs"))
     .filter((path) => path.endsWith("/spec.md"))
@@ -962,7 +1058,7 @@ function contractOutputs(root, changeId) {
               relativeCapability,
               prior.get(targetKey),
             )
-          : mergeSuite(currentText, sourceText, dir);
+          : mergeSuite(currentText, sourceText, dir, foldedOn);
       outputs.set(targetKey, merged);
     }
   }
@@ -1299,13 +1395,17 @@ function fingerprintArtifacts(root, changeId, outputs) {
   };
 }
 
-export function prepareAcceptance(root, changeId) {
+export function prepareAcceptance(
+  root,
+  changeId,
+  { foldedOn = new Date().toISOString().slice(0, 10) } = {},
+) {
   const readiness = acceptanceReadiness(root, changeId);
   if (readiness.length > 0)
     throw new Error(
       `Acceptance is blocked:\n${readiness.map((line) => `- ${line}`).join("\n")}`,
     );
-  const outputs = contractOutputs(root, changeId);
+  const outputs = contractOutputs(root, changeId, foldedOn);
   const { artifacts, snapshots } = fingerprintArtifacts(
     root,
     changeId,
@@ -1329,6 +1429,61 @@ export function prepareAcceptance(root, changeId) {
     contractTargets: targets,
     fingerprint: HASH(json(identity)),
   };
+}
+
+/** The checks a folded store must pass, run before anything is written in a
+ *  copy of `openspec/` that holds the fold, beside links to the rest of the
+ *  store that the checks read: `tcs:validate` as the
+ *  `suites` CI job runs it, and that every trace marker in a file the fold
+ *  writes sits directly above its heading. The rest of `trace validate` is
+ *  not asked: a change's markers repeat in the durable files it folds into
+ *  until it archives. `command(args, cwd)` runs `pnpm` with `args`. */
+export function validateFoldedSuites(prepared, command) {
+  const tree = mkdtempSync(join(tmpdir(), "folded-store-"));
+  try {
+    for (const entry of readdirSync(prepared.root))
+      if (entry === "openspec")
+        cpSync(join(prepared.root, entry), join(tree, entry), {
+          recursive: true,
+        });
+      else symlinkSync(join(prepared.root, entry), join(tree, entry));
+    for (const [path, content] of prepared.outputs) {
+      mkdirSync(dirname(join(tree, path)), { recursive: true });
+      writeFileSync(join(tree, path), content);
+    }
+    const result = command(
+      ["run", "tcs:validate", "--root", tree, "--require-suites"],
+      prepared.root,
+    );
+    if (result.status !== 0)
+      throw new Error(
+        `tcs:validate refused the folded store:\n${result.stdout ?? ""}${result.stderr ?? ""}`,
+      );
+    const markers = parseTraceGraph({ storeRoot: tree }).issues.filter(
+      (issue) =>
+        issue.code === "marker-adjacency" &&
+        prepared.outputs.has(relative(tree, issue.file)),
+    );
+    if (markers.length > 0)
+      throw new Error(
+        `trace markers in the folded files sit away from their headings:\n${markers
+          .map(
+            (issue) =>
+              `- ${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
+          )
+          .join("\n")}`,
+      );
+  } finally {
+    rmSync(tree, { recursive: true, force: true });
+  }
+}
+
+export function runPnpm(args, cwd) {
+  return spawnSync("pnpm", args, {
+    cwd,
+    encoding: "utf8",
+    maxBuffer: Infinity,
+  });
 }
 
 function acceptedChangeDir(root, changeId) {
@@ -1714,14 +1869,7 @@ export function acceptChange(
     if (!backups.has(path))
       backups.set(path, existsSync(path) ? readFileSync(path) : null);
   };
-  const command = (args) =>
-    runCommand
-      ? runCommand(args, root)
-      : spawnSync("pnpm", args, {
-          cwd: root,
-          encoding: "utf8",
-          maxBuffer: Infinity,
-        });
+  const command = (args) => (runCommand ?? runPnpm)(args, root);
   const validate = (args, label) => {
     const result = command(args);
     if (result.status !== 0)
@@ -1734,6 +1882,7 @@ export function acceptChange(
       ["run", "validate:changes", changeId],
       "validate:changes before fold",
     );
+    validateFoldedSuites(prepared, command);
     for (const [path, content] of prepared.outputs) {
       const target = join(root, path);
       preserve(target);

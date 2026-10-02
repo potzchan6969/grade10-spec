@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { prepareAcceptance } from "./lib/acceptance.mjs";
+import {
+  prepareAcceptance,
+  runPnpm,
+  validateFoldedSuites,
+} from "./lib/acceptance.mjs";
 
 const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const args = process.argv.slice(2);
@@ -18,15 +21,12 @@ if (!changeId || args.length !== 1) {
 }
 try {
   const prepared = prepareAcceptance(root, changeId);
-  const validation = spawnSync("pnpm", ["run", "validate:changes", changeId], {
-    cwd: root,
-    encoding: "utf8",
-    maxBuffer: Infinity,
-  });
+  const validation = runPnpm(["run", "validate:changes", changeId], root);
   if (validation.status !== 0)
     throw new Error(
       `validate:changes refused acceptance:\n${validation.stdout ?? ""}${validation.stderr ?? ""}`,
     );
+  validateFoldedSuites(prepared, runPnpm);
   console.log(`${changeId} is ready to fold and accept.`);
   console.log(`Fingerprint: ${prepared.fingerprint}`);
   console.log(`Baseline: ${prepared.baselineFingerprint}`);
