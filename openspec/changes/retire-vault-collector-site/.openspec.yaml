@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-10-02
+hands:
+  pm: "@ecchochan"
+  dev: "@ecchochan"
+  design: "@tangconst"
+ui_waived: removes the collector's vault screens from the site and draws none; @tangconst designs them again from the backend as it stands

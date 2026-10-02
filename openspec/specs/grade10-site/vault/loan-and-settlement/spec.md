@@ -29,9 +29,10 @@ is `grade10-site/vault/collector-notifications`.
   - One rounding: the total is principal plus interest exactly
   - The annualised rate: the term's interest read as a simple yearly rate, the
     figure the loan agreement prints
-  - Each repayment, on the case: its value date, its method and what the
-    balance was after it, so a borrower reads the month without adding it up
-  - What is coming: the dates the reminders go, until a notice stops them
+  - Each repayment, on the case: the borrower's read of their live loan carries
+    its value date, its method and what the balance was after it
+  - What is coming: the borrower's read carries the dates the reminders go,
+    until a notice stops them
 - Recording money
   - Value date and provenance: what the arithmetic follows, and who wrote it
     down when
@@ -50,8 +51,8 @@ is `grade10-site/vault/collector-notifications`.
   - Forfeiture: past due, a written notice, its cure period elapsed, and a
     person's decision
   - Release: refused while anything is outstanding
-  - The notice, on the case: the day it was written, the date to pay by, and
-    that nothing can be taken before that date
+  - The notice, on the case: the borrower's read carries the day it was
+    written, the date to pay by, and that nothing can be taken before that date
 - How to pay
   - One block, wherever money is named: the same set on the live loan and in
     every money message
@@ -447,21 +448,20 @@ into the case's history or its audit trail, and SHALL be shown to staff only.
 
 ### Requirement: A live loan lists each repayment and what it left owing
 
-The borrower reads the money already returned on their own case, without
-adding a month of messages up.
+The borrower's read of their own live loan carries the money already
+returned, without a month of messages to add up.
 
-- **Each repayment** — every repayment the case still counts SHALL be listed
-  with its amount, its method, the day the money reached us, the day it was
-  recorded, and what the loan owed after it.
-- **The balance after** — SHALL be what the loan owed at that repayment's own
-  value date, from the same derivation every other surface answers from.
-- **Order** — value-date order, earliest first, whatever order the recordings
+- **Each repayment** - the read SHALL carry every repayment the case still
+  counts, with its amount, its method, the day the money reached us, the day
+  it was recorded, and what the loan owed after it.
+- **The balance after** - SHALL be what the loan owed at that repayment's own
+  value date, from the same derivation every other read answers from.
+- **Order** - value-date order, earliest first, whatever order the recordings
   were written in.
-- **A record taken back** — a repayment a correction has taken back SHALL NOT
-  be listed, and the balances beside the repayments still counted SHALL read
+- **A record taken back** - a repayment a correction has taken back SHALL NOT
+  be carried, and the balances beside the repayments still counted SHALL read
   as if it had never been recorded.
-- **None yet** — a live loan carrying no repayment SHALL say that each one
-  will appear there with the day it arrived and the balance after it.
+- **None yet** - a live loan carrying no repayment SHALL carry an empty list.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-27 - A repayment reads with the day it arrived and what was left
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower opens the case to see what a payment did
@@ -470,7 +470,7 @@ adding a month of messages up.
   basis points over a 30-day term, with 9,000,000 HKD minor units repaid by
   bank transfer on day 10
 - **WHEN** the borrower reads the case
-- **THEN** the repayment is listed as 9,000,000 HKD minor units by bank
+- **THEN** the read carries the repayment as 9,000,000 HKD minor units by bank
   transfer, naming day 10 as the day it reached us and the day it was
   recorded, and 1,300,000 HKD minor units as what was owed after it
 
@@ -479,8 +479,7 @@ adding a month of messages up.
 
 - **GIVEN** a live loan with no repayment recorded
 - **WHEN** the borrower reads the case
-- **THEN** it says each repayment will appear with the day it arrived and the
-  balance after it, and lists none
+- **THEN** the read carries no repayment
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-29 - A repayment taken back leaves the list
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower reads the case after the bank sent a payment back
@@ -488,44 +487,39 @@ adding a month of messages up.
 - **GIVEN** a live loan carrying two repayments, the earlier of which a
   correction has taken back
 - **WHEN** the borrower reads the case
-- **THEN** only the later repayment is listed, and the balance beside it is
-  what would have been owed had the earlier one never been recorded
+- **THEN** the read carries only the later repayment, and the balance beside
+  it is what would have been owed had the earlier one never been recorded
 
 ### Requirement: A live loan names the reminders still to come
 
-The borrower reads which reminders are still ahead of them, and what ends
-them.
+The borrower's read carries which reminders they have had, which are still
+ahead of them, and what ends them.
 
-- **The dates ahead** — a live loan SHALL name the day each remaining
-  reminder goes, derived at the read from the due date and the schedule
-  `grade10-site/vault/collector-notifications` sets.
-- **Only ahead** — a reminder already sent SHALL NOT be named as coming.
-- **A notice ends them** — once a forfeiture notice stands on the case, no
-  reminder date SHALL be named and the case SHALL say no further reminder
-  will be sent.
-- **Past due** — while a loan is past due and no notice stands, the case
-  SHALL name the reminders already sent with their days and the next weekly
-  one by its date, and SHALL say a written notice naming a date to pay by may
-  follow, promising no day for it.
-- **A reminder costs nothing** — the case SHALL say a reminder adds nothing
-  to what is owed.
+- **The dates ahead** - the read of a live loan SHALL carry the day each
+  remaining reminder goes, derived at the read from the due date and the
+  schedule `grade10-site/vault/collector-notifications` sets.
+- **Sent and ahead** - a reminder already sent SHALL be carried with the day
+  it was sent, and SHALL NOT be carried as still to come.
+- **A notice ends them** - once a forfeiture notice stands on the case, no
+  reminder SHALL be carried as still to come.
+- **Past due** - while a loan is past due and no notice stands, the read SHALL
+  carry the reminders already sent with their days and the next weekly one
+  by its date.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-30 - Only the reminders still ahead are named
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower plans when to pay from what is still coming
 
 - **GIVEN** a live loan whose first reminder has already been sent
 - **WHEN** the borrower reads the case
-- **THEN** the reminder already sent is not named as coming, the remaining
-  reminders are named by their dates, and the case says a reminder adds
-  nothing to what is owed
+- **THEN** the reminder already sent is carried with the day it was sent and
+  not as coming, and the remaining reminders are carried by their dates
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-31 - A notice ends the reminder dates
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower who has had the final notice stops being promised more mail
 
 - **GIVEN** a past-due loan carrying a forfeiture notice
 - **WHEN** the borrower reads the case
-- **THEN** no reminder date is named and the case says no further reminder
-  will be sent
+- **THEN** no reminder is carried as still to come
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-48 - Past due, the case names what comes next
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower past due reads what comes next
@@ -533,22 +527,22 @@ them.
 - **GIVEN** a past-due loan with two weekly reminders sent and no notice
   standing
 - **WHEN** the borrower reads the case
-- **THEN** both reminders sent are named with their days, the next weekly
-  reminder is named by its date, and the case says a written notice naming a
-  date to pay by may follow, naming no day for it
+- **THEN** both reminders sent are carried with their days, and the next
+  weekly reminder is carried by its date
 
 ### Requirement: The forfeiture notice reads on the borrower's case
 
-A borrower who has been sent the final notice reads it where they read the
-loan, not only in their mail.
+A borrower who has been sent the final notice reads it on their own case, not
+only in their mail.
 
-- **What it shows** — the day the notice was written, the date to pay by it
-  named, that nothing can be taken before that date, and the reminders
-  already sent.
-- **The date shown** — SHALL be the date the notice named, never one
+- **What the read carries** - the day the notice was written and the date to
+  pay by it named, beside the reminders already sent. Nothing can be taken
+  before that date, as "Forfeiture needs a written notice whose cure period
+  has passed" states.
+- **The date carried** - SHALL be the date the notice named, never one
   recomputed from the brand's notice period as it now stands.
-- **No notice** — a loan past its due date with no notice standing SHALL show
-  none, and SHALL say nothing about a date to pay by.
+- **No notice** - a loan past its due date with no notice standing SHALL carry
+  none, and no date to pay by.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-32 - The notice reads with its date to pay by
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower reads how long is left to pay
@@ -556,8 +550,8 @@ loan, not only in their mail.
 - **GIVEN** a past-due loan sent a notice on 1 November naming 15 November as
   the date to pay by
 - **WHEN** the borrower reads the case
-- **THEN** it names 1 November as the day the notice was written, 15 November
-  as the date to pay by, and says nothing can be taken before that date
+- **THEN** the read carries 1 November as the day the notice was written and
+  15 November as the date to pay by
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-33 - A shortened notice period does not move the date shown
 **Serves:** grade10-site-vault-loan-and-settlement-US-04 - the borrower is held to the date staff gave them, not a later rule
@@ -565,19 +559,19 @@ loan, not only in their mail.
 - **GIVEN** a notice naming a date to pay by, and a brand that afterwards
   shortens its notice period
 - **WHEN** the borrower reads the case
-- **THEN** the date shown is the one the notice named
+- **THEN** the date carried is the one the notice named
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-34 - A past-due loan with no notice shows none
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower running late has had no notice yet
 
 - **GIVEN** a loan past its due date with no notice on the record
 - **WHEN** the borrower reads the case
-- **THEN** no notice and no date to pay by is shown
+- **THEN** no notice and no date to pay by is carried
 
 ### Requirement: How to pay is one block wherever an amount owed is named
 
-A borrower is told where to send the money in the same words on the page and
-in every message about money.
+A borrower is told where to send the money in the same values on their read
+of a live loan and in every message about money.
 
 | Field | Value |
 | --- | --- |
@@ -587,25 +581,25 @@ in every message about money.
 | Transfer reference | the case reference, so a treasurer matches an arrived transfer to its case by what the borrower typed |
 | At the counter | card or cash |
 
-- **Where it appears** — under what is owed on a live loan, and in every
-  message that names an amount owed or an amount received. A case with no
-  live loan SHALL show no such block.
-- **One set** — the page and every message SHALL name the same values, so no
+- **Where it appears** - on the borrower's read of a live loan, and in every
+  message that names an amount owed or an amount received. The read of a
+  case with no live loan SHALL carry no such block.
+- **One set** - the read and every message SHALL carry the same values, so no
   two can disagree.
-- **The figure holds** — the block SHALL say until when the amount owed holds
-  — the due instant before it, the end of the day started after it — and what
-  each further started day adds. The late-day figure SHALL be the rounded
-  total a day past the reading less the rounded total at it, so it never
-  disagrees with what the page will owe.
-- **A value nobody has set** — outside production the block SHALL print a
+- **The figure holds** - the read SHALL carry the due instant, the instant the
+  read was made at and what each further started day adds, so until when the
+  amount owed holds - the due instant before it, the end of the day started
+  after it - is read from it. The late-day figure SHALL be the rounded total a
+  day past the reading less the rounded total at it, so it never disagrees
+  with what the loan will owe.
+- **A value nobody has set** - outside production the block SHALL carry a
   marked placeholder in place of the unset value. In production an unset
-  payee name, FPS id or bank account SHALL NOT be printed: the block SHALL NOT
-  be shown, and in its place the live loan SHALL show the counter line alone —
-  pay by card or cash at the counter. Until the value is set again, the
-  counter SHALL record only a repayment that settles the loan; one leaving
-  anything owed SHALL be refused by name, since its message would carry how
-  to pay. The act that would send a
-  message carrying an unset value is refused by
+  payee name, FPS id or bank account SHALL NOT be carried: the read SHALL
+  carry no block, and the borrower pays by card or cash at the counter. Until
+  the value is set again, the counter SHALL record only a repayment that
+  settles the loan; one leaving anything owed SHALL be refused by name, since
+  its message would carry how to pay. The act that would send a message
+  carrying an unset value is refused by
   `grade10-site/vault/collector-notifications`, which states that rule.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-35 - The block names the account and the case reference
@@ -613,11 +607,10 @@ in every message about money.
 
 - **GIVEN** a live loan on a brand whose FPS id and bank account are set
 - **WHEN** the borrower reads the case
-- **THEN** the block names the lender's registered name as payee, its FPS id,
-  its bank account, the case reference as the transfer reference, and card or
-  cash at the counter
-- **AND** it says until when the amount owed holds and what each further
-  started day adds
+- **THEN** the block carries the lender's registered name as payee, its FPS
+  id, its bank account and the case reference as the transfer reference
+- **AND** the read carries the due instant, the instant it was made at and
+  what each further started day adds
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-36 - A money message carries the same block
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower pays from the message without opening the site
@@ -631,7 +624,7 @@ in every message about money.
 
 - **GIVEN** a storage case in the vault
 - **WHEN** the collector reads the case
-- **THEN** no block naming an account or a reference is shown
+- **THEN** the read carries no block naming an account or a reference
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-38 - An unset value prints bracketed outside production
 **Serves:** How to pay - the shop reads a staging case before Finance has answered
@@ -646,9 +639,8 @@ in every message about money.
 - **GIVEN** a production brand whose live loan was advanced while its FPS id
   and bank account were set, its FPS id since cleared
 - **WHEN** the borrower reads that live loan
-- **THEN** no payee, no FPS id, no bank account and no transfer reference is
-  shown, and the case shows the counter line alone — pay by card or cash at
-  the counter
+- **THEN** the read carries no payee, no FPS id, no bank account and no
+  transfer reference
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-52 - A part payment at the counter is refused while nowhere to pay is set
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - the borrower is never sent a balance with no way to pay it

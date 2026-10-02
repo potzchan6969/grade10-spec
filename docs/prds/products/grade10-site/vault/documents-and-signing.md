@@ -20,7 +20,7 @@ vendor is involved.
   against the digest taken at preparation, a certificate page appended to
   each PDF, one entry anchored in the hash-chained audit log
 - **Copies** — a download while the seal's short grant lives, an email with
-  the PDFs attached, and the case page itself; every case belongs to an
+  the PDFs attached, and the case's own read; every case belongs to an
   account, so every signer has a durable copy path
 - **Verification** — anyone holding a PDF's SHA-256 can check it at
   `api.grade10.com/vault/api/documents/verify/<sha256>`; an operator re-checks
@@ -57,10 +57,10 @@ vendor is involved.
   packet opens, and records the one fact: explained, with the recording
   reference where there is one
 - **Every document, in one download** — the collector takes every signed
-  document from every case, each with its fingerprint, from
+  document from every case of their own, each with its fingerprint —
   [Your data](/p/grade10-site/vault/compliance-and-readiness#retention-and-erasure);
-  the download is bounded to the cases the page lists and written on the
-  audit chain like a search — who, when, how many
+  the download is written on the audit chain like a search — who, when, how
+  many
 - **Signature** — the customer's alone; no staff countersignature or witness
   line, and the loan agreement states that the lender executes it on the
   advance
@@ -145,7 +145,7 @@ The requirements are its; this page holds the decision behind them.
 | Cooling-off | Decided | None: no cooling-off is recalled for a secured loan, and early repayment is open any day | Legal |
 | Staff countersignature | Deferred | The borrower signs; the agreement states that the lender executes it on the advance, the certificate names the verifying staff member, and the payout row evidences execution. Reopens if counsel asks, or if the owner's "both sign" means countersign | Legal |
 | The terms are explained before the paper | Decided | A recorded event at the counter, an optional recording reference, a refusal to prepare the loan packet without it, and a line the borrower signs; telephony and its storage are a vendor's | Owner |
-| Every signer has a copy | Decided | Every case belongs to an account, so the sealed set reaches an address, the case page and the download alike | Engineering |
+| Every signer has a copy | Decided | Every case belongs to an account, so the sealed set reaches an address, the case's own read and the download alike | Engineering |
 | Digital signature and timestamp | Decided | The hash chain and the witnessed head stand; RFC 3161 on the head export is the first upgrade if counsel asks | Legal |
 | Chinese versions | TBC Legal | Bilingual templates and consent copy, and which language governs; English governs until then | Legal |
 | E-sign adequacy | TBC Legal | In person on the iPad, staff present, identity verified, the disclosure and consent printed in full on the certificate | Legal |

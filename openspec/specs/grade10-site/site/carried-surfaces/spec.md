@@ -16,8 +16,8 @@ rather than hidden.
   - Store surfaces: the store, its collections, a card's page, the shop's two
     handed-out addresses, the cart, the checkout, and a collector's order
     history and order detail
-  - Vault surfaces: the vault, a case's page, the signing ceremony and the
-    identity check
+  - Vault surfaces: the signing ceremony alone; the collector's own vault
+    screens are carried by no build until they are designed again
   - Booking surfaces: booking a visit, the private link from a booking's
     mail, and a collector's own visits
   - Profile surface: the account page on its own. Order history and order
@@ -136,11 +136,10 @@ refused in that language.
 
 <!-- trace:scenario id=g10.site-carried-surfaces.SC-34s rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-28 - A withheld product's address on the public site is not found
-**Serves:** grade10-site-site-carried-surfaces-US-06 - the collector following a vault or booking link the public build has no page for
+**Serves:** grade10-site-site-carried-surfaces-US-06 - the collector following a booking link the public build has no page for
 
 - **GIVEN** a build made for production
-- **WHEN** a collector opens a vault case, the identity check, booking a
-  visit or their visits
+- **WHEN** a collector opens booking a visit or their visits
 - **THEN** the response has status 404 and the not-found surface renders,
   naming the address that failed
 
@@ -296,10 +295,7 @@ for it. The auction is not one of them: it is carried on every lane already.
 | Store | Checkout | Where a collector pays |
 | Store | Order history | A collector's own orders |
 | Store | Order detail | One of a collector's orders |
-| Vault | Vault | The vault's own address, and a collector's cases beneath it |
-| Vault | Case page | One case's own page |
 | Vault | Signing ceremony | Where a case is signed on the shop's iPad |
-| Vault | Identity check | The identity check a case asks for |
 | Booking | Booking | Booking a visit |
 | Booking | Booking link | The private link a booking's mail carries |
 | Booking | Visits | A collector's own visits |
@@ -314,6 +310,10 @@ profile SHALL still answer both wherever the store's set is carried.
 
 **All or none** - A build SHALL carry every surface of a product's set or none
 of it.
+
+**The vault's set** - The signing ceremony alone. The collector's own vault
+screens are carried by no build until they are designed again, and their
+addresses answer as addresses no surface holds.
 
 **One set at a time** - Each product's set SHALL be decided on its own, and
 carrying one SHALL NOT carry another.
@@ -414,6 +414,14 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** the other is carried too
 - **AND** where one is withheld the other is withheld with it
 
+#### Scenario: grade10-site-site-carried-surfaces-SC-40 - The collector's vault screens answer not-found on every lane
+**Serves:** grade10-site-site-carried-surfaces-US-06 - the collector who opens an old vault link finds nothing rather than a screen nobody designed
+
+- **GIVEN** a build made for any lane, the vault's set carried or not
+- **WHEN** a collector opens the vault's case list, its request, a case's page, the identity check or Your data
+- **THEN** each is not found
+- **AND** where the vault's set is carried, the signing ceremony still answers
+
 ### Requirement: Where a product is carried it behaves as it is specified to
 
 Carrying decides whether a product is there, never how it behaves.
@@ -431,11 +439,11 @@ lanes already stated for them.
 
 <!-- trace:scenario id=g10.site-carried-surfaces.SC-hz5 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-25 - Staging works as it did before
-**Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who buys a card, opens a case and books a visit in one sitting
+**Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who buys a card, signs a case's papers at the counter and books a visit in one sitting
 
 - **GIVEN** a build made for staging
-- **WHEN** a collector buys through the store, opens a vault case and books a
-  visit
+- **WHEN** a collector buys through the store, signs a vault case's packet on
+  the signing ceremony and books a visit
 - **THEN** each surface behaves as its own capability requires, with nothing
   altered by the lanes that do not carry it
 

@@ -16,9 +16,13 @@ made.
 - **Two entities** — the custodian holds the item and the lender lends
   against it; each prints on its own paper, and only the lender's carries a
   licence
-- **Where** — `grade10.com/vault` for collectors, `admin.grade10.com/vault`
-  for the shop, `grade10.com/vault/sign#<token>` for the iPad; one host and
-  a path per surface, and a vanity domain redirects to it
+- 🚧 **Where** — `admin.grade10.com/vault` for the shop and
+  `grade10.com/vault/sign#<token>` for the iPad; one host and a path per
+  surface, and a vanity domain redirects to it
+- **The collector's address** — mailed links keep `grade10.com/vault/cases/<id>`
+  and `grade10.com/vault/verify#<secret>`, which land on the not-found surface
+  until the collector's screens ship —
+  [Collector Pages](/p/grade10-site/vault/collector-pages#messages)
 - **Money** — the brand's currency in whole cents, recorded by a person
   after the bank moved it and against the date it moved; a payout takes two
   people, and a correction takes a second holder of the money grant
@@ -33,7 +37,7 @@ made.
 
 | Page | What it holds |
 | --- | --- |
-| [Collector Pages](/p/grade10-site/vault/collector-pages) | The list, the wizard, the case page, booking, what the collector hears |
+| [Collector Pages](/p/grade10-site/vault/collector-pages) | What a collector does on their own case, and what they hear |
 | [Case Lifecycle](/p/grade10-site/vault/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
 | [Loan and Money](/p/grade10-site/vault/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
 | [Documents and Signing](/p/grade10-site/vault/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
@@ -42,8 +46,9 @@ made.
 
 ## Where It Is Open
 
-**Not open to the public yet** — the vault's pages are carried in
-development and staging, and on no lane the public reaches —
+🚧 **Not open to the public yet** — the vault's one site page, the signing
+ceremony, is carried in development and staging, and on no lane the public
+reaches —
 [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Users
@@ -68,9 +73,9 @@ development and staging, and on no lane the public reaches —
   — vault, doc-sign and auth together
 - [Account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
   — who owns the verified identity the case only references
-- **Code** — `packages/vault/{contracts,backend,frontend,admin-frontend}` with
+- **Code** — `packages/vault/{contracts,backend,admin-frontend}` with
   `packages/appointment`, `packages/doc-sign` and `packages/e-kyc` beside it;
-  the collector's pages in the grade10 SPA, the console pages in the grade10
+  the signing page in the grade10 SPA, the console pages in the grade10
   admin panel; deployed as `grade10-vault-service`
 - **Platform pages** — [Vault Custody](/platform/vault-custody),
   [Admin Access Control](/platform/admin-access),

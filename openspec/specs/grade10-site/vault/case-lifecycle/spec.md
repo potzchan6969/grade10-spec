@@ -30,9 +30,9 @@ run is stated by the capability that owns the move — the visit
     history, in the move's own transaction
   - Actor on the record: each entry names who acted — the collector, a member
     of staff, or a sweep
-  - Taken from the collector's own page: the moves that are theirs — calling
-    the request off, and asking for the item back — run from the case, each
-    behind a confirmation naming what it closes
+  - Taken from the collector's own page: the moves that are theirs - calling
+    the request off, and asking for the item back - are acts on their own case,
+    answered to them alone, whichever screen offers them
   - The register told: starting the valuation registers the item, vaulting
     marks it, and release, unwind and forfeit close the mark, a forfeit
     naming the lender
@@ -54,9 +54,9 @@ run is stated by the capability that owns the move — the visit
     repayment and forfeiture
   - Two moves back: a corrected advance and a corrected repayment each put the
     case where the money leaves it
-  - Read in the collector's words: an ended case says the reason staff gave,
-    who called it off, which clock ran out, or the figure the item settled
-    and the dates of the notice behind it
+  - Read in the collector's words: an ended case is read with the reason staff
+    gave, who called it off, which clock ran out, or the figure the item
+    settled and the dates of the notice behind it
   - A walk-in typed wrong: staff cancel the unsent draft they opened, and the
     account at the wrong address keeps nothing of it
 - Derived at the read
@@ -304,158 +304,93 @@ read as a cancellation nobody made.
 - **WHEN** the case is read afterwards
 - **THEN** it still names the visit the item went home on
 
-### Requirement: The collector's own moves run from their case page
-
-Two moves belong to the collector, and both run from the case they are about.
-
-| Move | Offered while | The confirmation names | What confirming does |
-| --- | --- | --- | --- |
-| Call the request off | the item is not yet in the vault — `draft`, `submitted`, `under_valuation`, `offer_made`, `accepted` or `signing` | whichever stands open — the live offer it closes, the visit it cancels, or both | ends the case as `cancelled` |
-| Ask for the item back | the item is held and nothing stands against it — a case in the vault owing nothing, or a settled loan — and no ask stands already | that the item leaves on a pickup visit against a signed release | records the ask against the case |
-
-**Confirmation first** — each move SHALL ask for confirmation before it runs,
-and the case SHALL be unchanged while that confirmation stands.
-
-**Only what stands open** — a confirmation SHALL name the live offer and the
-booked visit the move closes, and SHALL name neither where neither stands.
-
-**One ask** — an ask for the item back SHALL be recorded once, and the move
-SHALL NOT be offered again while that ask stands.
-
-**Refused in the open** — a move the case refuses SHALL leave the confirmation
-open carrying the refusal by name, and the case SHALL be read again.
-
-**Read back** — a case called off from its page SHALL read as an ended case on
-the next read.
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-16 - Calling a request off names what it closes
-**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector ends a request they opened rather than asking staff to
-
-- **GIVEN** a case holding a live offer and a booked visit
-- **WHEN** its owner asks to call the request off
-- **THEN** a confirmation names the offer it closes and the visit it cancels
-- **AND** the case is unchanged until they confirm
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-17 - A confirmed call-off ends the case and reads back
-**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector sees their request closed where they closed it
-
-- **GIVEN** a collector reading the call-off confirmation on their own case
-- **WHEN** they confirm it
-- **THEN** the case is `cancelled`, the offer is closed and the visit is cancelled
-- **AND** the case reads as an ended case naming who called it off
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-37 - A confirmation names only what stands open
-**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector is not told the request closes something it never held
-
-- **GIVEN** a submitted request with no offer made and no visit booked
-- **WHEN** its owner asks to call the request off
-- **THEN** the confirmation names the request alone
-- **AND** it names no offer and no visit
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-18 - Asking for the item back is recorded once
-**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector asks for their item and reads that the ask stands
-
-- **GIVEN** a case whose item is in the vault with nothing outstanding
-- **WHEN** its owner asks for the item back and confirms
-- **THEN** the ask is recorded against the case
-- **AND** the move is no longer offered while that ask stands
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-19 - A refused move leaves the confirmation open
-**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is told why the act they asked for did not run
-
-- **GIVEN** a collector confirming a move on a case that has moved under them
-- **WHEN** the move is refused
-- **THEN** the confirmation stays open carrying the refusal by name
-- **AND** the case is read again
-
 ### Requirement: An ended case reads in the collector's words
 
-A case that ended without a release says what happened to it, in the words the
-collector would use.
+A case that ended without a release carries, on its owner's read, what
+happened to it.
 
-| Ending | What the case names |
+| Ending | What the read carries |
 | --- | --- |
-| `declined` | the reason staff gave, verbatim; that the item stayed with the collector and any visit was cancelled |
-| `cancelled` | who called it off — the collector, staff, or a clock — and the day; the offer that closed and the visit cancelled with it |
-| `expired` | one wording whichever clock ran out, with the clock on the timeline; that nothing was signed and the item never left |
+| `declined` | the reason staff gave, verbatim, and the day it closed |
+| `cancelled` | who called it off - the collector, staff, or a clock - and the day; the offer that closed and the visit cancelled with it |
+| `expired` | the clock that ran out and the day |
 | `forfeited` | the figure the item settled, the day the notice was written and the date it gave to pay by |
 
-**One ending per case** — an ended case SHALL name the ending it took and the
-day it closed.
+**One ending per case** - an ended case SHALL carry the ending it took and
+the day it closed.
 
-**One expired wording** — an expired case SHALL read the same wording whichever
-clock ran out, and the clock that ran out SHALL be named on the case's
-timeline.
+**The clock** - an expired case SHALL carry which clock ran out: the unsent
+request untouched, no visit ahead of it, or a missed visit.
 
-**The paper stays** — a case that signed a custody or loan agreement SHALL keep
-those documents readable after it ends.
+**The paper stays** - a case that signed a custody or loan agreement SHALL
+keep those documents readable to its owner after it ends.
 
-**Nothing left to do** — an ended case SHALL offer no move on itself, and SHALL
-offer starting another request instead.
+**Nothing left to do** - an ended case SHALL take no move, as every terminal
+status.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-20 - A declined case reads the reason staff gave
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector learns why the shop would not take the item
 
 - **GIVEN** a case staff declined with a reason
 - **WHEN** its owner reads it
-- **THEN** it names the ending, the day it closed and the reason verbatim
-- **AND** it offers starting another request
+- **THEN** it carries the ending, the day it closed and the reason verbatim
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-21 - A cancelled case names who called it off
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector sees whether they or the shop closed the case
 
 - **GIVEN** a case cancelled by staff while it held a live offer and a booked visit
 - **WHEN** its owner reads it
-- **THEN** it names that staff called it off and the day
-- **AND** it names the offer that closed and the visit cancelled with it
+- **THEN** it carries that staff called it off and the day
+- **AND** it carries the offer that closed and the visit cancelled with it
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-22 - An expired case reads one wording and names its clock on the timeline
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector who stopped answering reads what ended the case
 
 - **GIVEN** two expired cases, one that never booked a visit and one whose booked visit was missed
 - **WHEN** their owners read them
-- **THEN** both read the same expired wording, and each timeline names the clock that ran out
-- **AND** each says nothing was signed and the item never left
+- **THEN** both carry the expired ending, and each carries the clock that ran out
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-23 - A forfeited case names the figure and the notice
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the borrower reads what the item settled and the notice behind it
 
 - **GIVEN** a case forfeited after a written notice
 - **WHEN** its owner reads it
-- **THEN** it names the figure the item settled, the day the notice was written and the date it gave to pay by
+- **THEN** it carries the figure the item settled, the day the notice was written and the date it gave to pay by
 - **AND** the signed agreements are still readable
 
 ### Requirement: A case is read as meeting one fact
 
 Some of what a collector must answer is not a status but a fact read off the
-case, its offer and its visit.
+case, its offer and its visit. The owner's read of a case, on their own cases
+and on the case alone, SHALL carry what each fact is worked out from, and the
+fact SHALL be worked out by these rules at the instant of that read.
 
-| Fact | Read when | What the collector reads | The one thing to do next |
-| --- | --- | --- | --- |
-| The offer ran out | the offer's expiry has passed and the case is still `offer_made` | the offer that closed, its amount and the day it ran out | wait for another offer; the request is still open |
-| The offer was declined | the collector declined the offer and the case is back in `under_valuation` | the figure they declined and the day | wait for another offer, or call the request off |
-| A new offer replaced the last | a later offer stands and the one before it closed | the offer that closed and its day, beside the offer on the table | answer the offer that stands |
-| The visit was closed as missed | the booked slot passed, the visit was closed as missed and the case stands where it was | the slot that was missed | book another visit |
-| The item was asked back | an ask for the item back stands | the day the ask was recorded | book a pickup visit |
+| Fact | Read when | What the read gives |
+| --- | --- | --- |
+| The offer ran out | the offer's expiry has passed and the case is still `offer_made` | the offer that closed, its amount and the day it ran out |
+| The offer was declined | the collector declined the offer and the case is back in `under_valuation` | the figure they declined and the day |
+| A new offer replaced the last | a later offer stands and the one before it closed | the offer that closed and its day, beside the offer on the table |
+| The visit was closed as missed | the booked slot passed, the visit was closed as missed and the case stands where it was | the slot that was missed |
+| The item was asked back | an ask for the item back stands | the day the ask was recorded |
 
-**Read, never written** — each fact SHALL be worked out at every read; none
+**Read, never written** - each fact SHALL be worked out at every read; none
 SHALL be stored on the case, and none SHALL be a status.
 
-**A lapsed offer** — the offer's own expiry SHALL decide that the offer ran
+**A lapsed offer** - the offer's own expiry SHALL decide that the offer ran
 out, whether or not a sweep has closed it yet; the case SHALL stay in the
-status it held, open for another offer, and SHALL offer no answer to the offer
-that ran out.
+status it held, open for another offer, and an answer to the offer that ran
+out SHALL be refused by name.
 
-**A missed visit is the visit's ending** — a case reading a missed visit SHALL
-stand where it stood and SHALL offer another visit.
+**A missed visit is the visit's ending** - a case reading a missed visit SHALL
+stand where it stood and SHALL take another booking.
 
-**Two facts at once** — where a case meets more than one fact, the fact of the
+**Two facts at once** - where a case meets more than one fact, the fact of the
 most recent event SHALL be the one read, and the other SHALL stay on the
-case's timeline.
+case's history.
 
-**Nothing ahead** — a case waiting on nobody but its own clock — terms agreed
-or a packet out, with no visit ahead of it — SHALL ask for a visit and name the
-30-day clock that would call it off.
+**Nothing ahead** - a case waiting on nobody but its own clock - terms agreed
+or a packet out, with no visit ahead of it - SHALL read as waiting on the
+collector, with the day the 30-day clock would call it off.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-24 - An offer that ran out reads as run out
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is not left answering an offer nobody can honour
@@ -463,7 +398,7 @@ or a packet out, with no visit ahead of it — SHALL ask for a visit and name th
 - **GIVEN** a case whose offer expired yesterday and which no sweep has closed yet
 - **WHEN** its owner reads it
 - **THEN** it reads that the offer ran out, naming its amount and the day
-- **AND** the case is still `offer_made`, open for another offer, and offers no answer to the closed offer
+- **AND** the case is still `offer_made`, open for another offer, and an answer to the closed offer is refused by name
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-25 - A declined offer leaves the request open
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who said no reads that the shop may still offer again
@@ -471,7 +406,7 @@ or a packet out, with no visit ahead of it — SHALL ask for a visit and name th
 - **GIVEN** a case whose offer its owner declined
 - **WHEN** they read it
 - **THEN** it reads that they declined, naming the figure and the day
-- **AND** the case is being valued, the booked visit stands, and calling the request off is still offered
+- **AND** the case is being valued, the booked visit stands, and the collector may still call the request off
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-26 - A missed visit reads on the case
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who missed a slot reads that the case is still theirs to book
@@ -479,7 +414,7 @@ or a packet out, with no visit ahead of it — SHALL ask for a visit and name th
 - **GIVEN** a case in the vault whose booked visit was closed as missed
 - **WHEN** its owner reads it
 - **THEN** it reads that the visit was missed, naming the slot
-- **AND** the case stands where it stood and offers another visit
+- **AND** the case stands where it stood and takes another booking
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-27 - An ask for the item back reads on the case
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who asked for their item reads what happens next
@@ -487,23 +422,23 @@ or a packet out, with no visit ahead of it — SHALL ask for a visit and name th
 - **GIVEN** a case whose item is held and whose owner has asked for it back
 - **WHEN** they read it
 - **THEN** it reads the ask and the day it was recorded
-- **AND** it offers a pickup visit and does not offer the ask again
+- **AND** the case takes a pickup booking, and the same ask sent again records nothing
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-28 - A case with no visit ahead asks for one
 **Serves:** grade10-site-vault-case-lifecycle-US-02 - the collector is told what will end the case before it ends
 
 - **GIVEN** a case whose terms were agreed with no visit ahead of it
 - **WHEN** its owner reads it
-- **THEN** it asks them to book a visit
-- **AND** it names the 30-day clock that would call the case off
+- **THEN** it reads as waiting on them
+- **AND** it names the day the 30-day clock would call the case off
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-40 - A case meeting two facts reads the later one
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is given one thing to do next, not two
 
 - **GIVEN** a case whose offer ran out on Monday and whose booked visit was closed as missed on Wednesday
 - **WHEN** its owner reads it
-- **THEN** it reads the missed visit, the later of the two, and offers another visit
-- **AND** the offer that ran out stays on the case's timeline
+- **THEN** it reads the missed visit, the later of the two, and the case takes another booking
+- **AND** the offer that ran out stays on the case's history
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-29 - Nothing derived is written down
 **Serves:** Derived at the read - a fact nobody stored can never disagree with the case it came from
@@ -514,8 +449,8 @@ or a packet out, with no visit ahead of it — SHALL ask for a visit and name th
 
 ### Requirement: A case reads the stage it has reached and whose the item is
 
-Every case says how far along its lane it is and who holds the item now, both
-worked out from the status at the read.
+Every case reads how far along its lane it is and who holds the item now,
+both worked out from the owner's read of the case at the instant of that read.
 
 | Stage | The statuses it covers |
 | --- | --- |
@@ -544,24 +479,25 @@ worked out from the status at the read.
 **The financed lane walks eight stages** and the storage lane the same list
 without Offer and Loan, so a storage case walks six.
 
-**Where the case is** — the stage the status covers SHALL read as the one in
+**Where the case is** - the stage the status covers SHALL read as the one in
 progress, every earlier stage as done and every later one as still to come.
 
-**An ended case stops where it ended** — the stage it ended at SHALL stay the
-one in progress, with the ending named beside it.
+**An ended case stops where it ended** - the read SHALL carry the stage it
+ended at, which SHALL stay the one in progress, with the ending beside it.
 
-**The fact decides, else the status** — where the case reads a fact, that
+**The fact decides, else the status** - where the case reads a fact, that
 fact's row SHALL decide whose the item is; where it reads none, the status
 SHALL.
 
-**One clock** — a day, a deadline and a count of days SHALL be read on the
-brand's own zone, which `shared/dates-and-times` states, from one instant per
-read.
+**One clock** - a day, a deadline and a count of days SHALL be read on the
+brand's own zone, which `shared/dates-and-times` states, from the one instant
+the worker's read names.
 
-**The list reads the same** — the case list SHALL read each case's stage and
-whose the item is by these same rules.
+**The list reads the same** - each case on the collector's own cases SHALL
+carry what its stage and whose the item is are worked out from, so the list
+and the case read the same answer.
 
-**Read, never written** — neither the stage nor whose the item is SHALL be
+**Read, never written** - neither the stage nor whose the item is SHALL be
 stored on the case.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-30 - A financed case walks eight stages
@@ -569,7 +505,7 @@ stored on the case.
 
 - **GIVEN** a financed case whose item is in the vault
 - **WHEN** its owner reads it
-- **THEN** it shows eight stages from Request to Home, with Vault in progress
+- **THEN** it reads eight stages from Request to Home, with Vault in progress
 - **AND** every earlier stage reads as done and every later one as still to come
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-31 - A storage case walks six
@@ -577,7 +513,7 @@ stored on the case.
 
 - **GIVEN** a storage case being valued
 - **WHEN** its owner reads it
-- **THEN** it shows six stages, with no Offer and no Loan stage
+- **THEN** it reads six stages, with no Offer and no Loan stage
 - **AND** Valued reads as the stage in progress
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-32 - An ended case stops at the stage it ended on
@@ -586,7 +522,7 @@ stored on the case.
 - **GIVEN** a case cancelled while its terms were agreed
 - **WHEN** its owner reads it
 - **THEN** Agreed reads as the stage in progress
-- **AND** the ending is named beside it
+- **AND** the ending is carried beside it
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-33 - A case waiting on the collector says so
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector can tell at a glance which cases need them
@@ -599,7 +535,7 @@ stored on the case.
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector reads one answer for where the item is, wherever they look
 
 - **GIVEN** a storage case whose item is in the vault
-- **WHEN** its owner reads the case list and then the case
+- **WHEN** its owner reads their own cases and then the case
 - **THEN** both read that the item is with us, naming the day it has been held since
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-38 - A vaulted case reads With us on either lane
@@ -623,50 +559,32 @@ stored on the case.
 - **WHEN** its owner reads it
 - **THEN** it reads that the case is closed, naming the day
 
-### Requirement: A case page answers only to the collector whose case it is
-
-A case belongs to one collector, and the page tells nobody else that it exists.
-
-**One page for both** — an id that answers to no case and a case belonging to
-another collector SHALL both read the same not-found page.
-
-**No distinction** — the not-found page SHALL carry nothing that tells the two
-apart.
-
-#### Scenario: grade10-site-vault-case-lifecycle-SC-39 - Another collector's case reads as not found
-**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who opens a case that is not theirs learns nothing about it
-
-- **GIVEN** a signed-in collector and a case belonging to somebody else
-- **WHEN** they open it by its id
-- **THEN** they read the same not-found page an id nobody was issued reads
-- **AND** nothing on it says which of the two they met
-
 ### Requirement: A draft staff opened ends silently and leaves nothing on the account
 
 A draft staff opened at the counter ends the way any unsent request does, and
 its address was typed rather than proven, so its endings tell nobody and the
 account keeps nothing of it.
 
-- **The clock** — it SHALL end as `expired` on the unsent request's own clock,
+- **The clock** - it SHALL end as `expired` on the unsent request's own clock,
   7 days from its last touch, an edit by the collector being a touch.
-- **The cancel** — staff SHALL be able to cancel it while it is unsent, and so
+- **The cancel** - staff SHALL be able to cancel it while it is unsent, and so
   SHALL the collector.
-- **Silent** — neither ending SHALL tell anybody, as
+- **Silent** - neither ending SHALL tell anybody, as
   `grade10-site/vault/collector-notifications` states.
-- **Removed** — when staff cancel it, or its clock ends it, whoever has signed
+- **Removed** - when staff cancel it, or its clock ends it, whoever has signed
   in to the account since, the draft and every photograph on it SHALL be
-  removed from the account in the same step: the
-  account's list SHALL NOT show it, its address SHALL read as not found to the
-  account, the account's own data SHALL NOT hold it, and no photograph of it
-  SHALL be served. The account SHALL stay as it was, and the case's reference
-  SHALL stay spent. The case SHALL stay in staff's Closed view under its
-  reference, its item reading as erased and naming no collector.
-- **The collector's own cancel** — a draft staff opened that the collector
-  cancels SHALL end as any cancelled draft and stay on their list.
-- **Opened again** — staff SHALL be able to open another walk-in for the right address once
-  the draft typed wrong is cancelled.
-- **Once sent** — a draft staff opened that the collector has sent SHALL be
-  cancelled, told and kept as any case, and a cancel sent from a page read
+  removed from the account in the same step: the account's own cases SHALL
+  NOT list it, a read of it by its id SHALL answer not found to the account,
+  the account's own data SHALL NOT hold it, and no photograph of it SHALL be
+  served. The account SHALL stay as it was, and the case's reference SHALL
+  stay spent. The case SHALL stay in staff's Closed view under its reference,
+  its item reading as erased and naming no collector.
+- **The collector's own cancel** - a draft staff opened that the collector
+  cancels SHALL end as any cancelled draft and stay on their own cases.
+- **Opened again** - staff SHALL be able to open another walk-in for the right
+  address once the draft typed wrong is cancelled.
+- **Once sent** - a draft staff opened that the collector has sent SHALL be
+  cancelled, told and kept as any case, and a cancel sent against a read made
   while it was unsent SHALL be refused by name as a case that moved.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-41 - A walk-in typed wrong is cancelled and leaves nothing
@@ -675,7 +593,7 @@ account keeps nothing of it.
 - **GIVEN** a draft staff opened under a mistyped address, carrying two photographs
 - **WHEN** staff cancel it
 - **THEN** the case is `cancelled`
-- **AND** the account at that address lists nothing of it, its address reads as not found to that account, and neither photograph is served
+- **AND** the account at that address lists nothing of it among its own cases, a read of it by its id answers not found to that account, and neither photograph is served
 - **AND** staff's Closed view lists it under its reference, its item reading as erased and no collector named
 - **AND** nobody is emailed
 
@@ -691,14 +609,14 @@ account keeps nothing of it.
 
 - **GIVEN** a draft staff opened and untouched for 8 days
 - **WHEN** the clocks are read
-- **THEN** the case is `expired`, the account lists nothing of it, and nobody is told
+- **THEN** the case is `expired`, the account lists nothing of it among its own cases, and nobody is told
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-44 - The collector's own cancel keeps the draft on their list
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector calls off a request staff opened for them
 
 - **GIVEN** a draft staff opened under the collector's account
 - **WHEN** the collector cancels it
-- **THEN** the case is `cancelled` and stays on their list as a cancelled request
+- **THEN** the case is `cancelled` and stays on their own cases as a cancelled request
 - **AND** nobody is emailed
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-45 - A walk-in the collector sent is cancelled as any case
@@ -706,7 +624,7 @@ account keeps nothing of it.
 
 - **GIVEN** a draft staff opened that the collector has sent
 - **WHEN** staff cancel it
-- **THEN** the case is `cancelled` and stays on the collector's list with its photographs
+- **THEN** the case is `cancelled` and stays on the collector's own cases with its photographs
 - **AND** the collector is told, as on any case
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-46 - A cancel read before the collector sent is refused
@@ -715,7 +633,7 @@ account keeps nothing of it.
 - **GIVEN** a draft staff opened, read by an operator while it was unsent
 - **WHEN** the collector sends it, and the operator then cancels it from the page they read
 - **THEN** the cancel is refused by name as a case that moved
-- **AND** the case stays submitted, on the collector's list, with its photographs
+- **AND** the case stays submitted, on the collector's own cases, with its photographs
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-47 - The collector's edit restarts the draft's clock
 **Serves:** Clocks - a walk-in the collector is still working on
@@ -869,3 +787,87 @@ otherwise.
 - **GIVEN** a vaulted case owing nothing, whose item the register reads as retired, or the register not answering
 - **WHEN** staff prepare its release receipt
 - **THEN** it is refused, naming and linking the retired item, or saying the register cannot be read now, and nothing is rendered
+
+### Requirement: The collector's own moves are acts on their own case
+
+Two moves belong to the collector, and each is an act on the case it is
+about, answered to the case's owner alone.
+
+| Move | Taken while | What the act does |
+| --- | --- | --- |
+| Call the request off | the item is not yet in the vault - `draft`, `submitted`, `under_valuation`, `offer_made`, `accepted` or `signing` | ends the case as `cancelled`, closing the live offer and cancelling the booked visit where either stands |
+| Ask for the item back | the item is held and nothing stands against it - a case in the vault owing nothing, or a settled loan | records the ask against the case |
+
+**What it closed** - the answer to a call-off SHALL be the case as ended,
+naming the live offer it closed and the visit it cancelled, and naming
+neither where neither stood.
+
+**One ask** - an ask for the item back SHALL be recorded once; the same ask
+sent again while it stands SHALL answer with the case and record no second
+ask.
+
+**Refused by name** - each act SHALL carry the instant the case was read at,
+and an act on a case that has moved since, or that stands outside the
+statuses the act is taken from, SHALL be refused by name with the case
+unchanged.
+
+**Read back** - a case called off SHALL read as an ended case on the next
+read, naming the collector as who called it off.
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-16 - Calling a request off names what it closes
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector ends a request they opened rather than asking staff to
+
+- **GIVEN** a case holding a live offer and a booked visit
+- **WHEN** its owner calls the request off
+- **THEN** the answer names the offer it closed and the visit it cancelled
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-17 - A confirmed call-off ends the case and reads back
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector sees their request closed where they closed it
+
+- **GIVEN** a case holding a live offer and a booked visit
+- **WHEN** its owner calls the request off
+- **THEN** the case is `cancelled`, the offer is closed and the visit is cancelled
+- **AND** the next read of the case reads it as ended, naming the collector as who called it off
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-37 - A confirmation names only what stands open
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector is not told the request closes something it never held
+
+- **GIVEN** a submitted request with no offer made and no visit booked
+- **WHEN** its owner calls the request off
+- **THEN** the answer names no closed offer and no cancelled visit
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-18 - Asking for the item back is recorded once
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector asks for their item and reads that the ask stands
+
+- **GIVEN** a case whose item is in the vault with nothing outstanding
+- **WHEN** its owner asks for the item back, and the same ask is sent again
+- **THEN** the ask is recorded against the case once
+- **AND** the second answers with the case and records nothing
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-19 - A refused move leaves the confirmation open
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is told why the act they asked for did not run
+
+- **GIVEN** a collector who read their case before the counter moved it
+- **WHEN** they call the request off naming the instant they read it at
+- **THEN** the act is refused by name as a case that moved
+- **AND** the case is unchanged
+
+### Requirement: A case answers only to the collector whose case it is
+
+A case belongs to one collector, and the worker tells nobody else that it
+exists.
+
+**One answer for both** - a read of, or an act on, an id that answers to no
+case and a case belonging to another collector SHALL both be refused as the
+same case not found.
+
+**No distinction** - the refusal SHALL carry nothing that tells the two
+apart.
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-39 - Another collector's case reads as not found
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who opens a case that is not theirs learns nothing about it
+
+- **GIVEN** a signed-in collector and a case belonging to somebody else
+- **WHEN** they read it or answer its offer by its id
+- **THEN** they are refused with the same not found an id nobody was issued answers
+- **AND** nothing in the refusal says which of the two they met

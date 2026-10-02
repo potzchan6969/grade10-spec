@@ -69,10 +69,11 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   collector page do; a list that names nobody writes none
 - **Walk-ins** — staff open a draft for a customer at the counter under
   the customer's own account; nothing about the case is emailed; the customer
-  asks for their own sign-in link on their phone at `grade10.com/vault`,
-  finds the draft on their list and sends it with the wizard's third step;
-  staff type no name, and an account the walk-in creates reads by its email
-  handle until the customer names themselves
+  sends it from their own account, keeping the version of the collection
+  statement they were shown, once the collector's screens ship, and until
+  then the draft waits and ends silently on its own clock; staff type no name, and an account the walk-in
+  creates reads by its email handle until the customer names themselves —
+  [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
 - **An address signed in to before** — a walk-in is refused when the
   address belongs to an account someone has signed in to
 - **An address that is not an email address** — refused beside the
@@ -223,7 +224,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Collector by name | Decided | Queue and held-item rows show the collector's account name to staff and admins under the identity grant; a treasurer and the arrears row keep what they read today | Owner |
 | No search by name | Decided | A collector is found by an exact contact, the case reference or a click on their name; a name search would let staff walk the customer list | Owner |
 | The identity panel reads the record's six states | Decided | Verified, Out, Stalled, Refused, Lapsed and None, as [Identity Check](/p/grade10-site/vault/identity-check#identity-states) defines them; the provider's finer states fold into them, because an operator arranging a visit needs the difference between out and none, not the provider's stage | Product |
-| Counter intake | Decided | Staff open a draft for a customer at the counter, under the customer's own account, with staff's photos, and no email is sent; the customer sends it from their own phone with the wizard's third step, ticking the collection statement, before it is valued or any email is sent. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
+| Counter intake | Decided | Staff open a draft for a customer at the counter, under the customer's own account, with staff's photos, and no email is sent; the customer sends it from their own account, keeping the version of the collection statement they were shown, before it is valued or any email is sent; until the collector's screens ship, the draft waits and ends silently on its own clock. A mistyped address is cancelled and opened again. No identity is keyed to a case | Owner |
 | Signed-in customers at the counter | Decided | Refused: a typed address does not prove the account is theirs, so that customer sends the request from their own phone with staff beside them | Owner |
 | Walk-ins open under `vault:operate`, names read under `kyc:read` | Decided | Opening a case at the counter is an operate act; collector names sit behind the identity grant, and every read that names a person — the names on a page, one collector's cases, a collector's page — is on the audit chain | Product |
 | When a walk-in reads the collection statement | Decided | The counter shows the collection statement before staff type the address, and the open keeps the version shown; the tick on the customer's phone is their record. In production the open refuses while the statement is unwritten | Legal |

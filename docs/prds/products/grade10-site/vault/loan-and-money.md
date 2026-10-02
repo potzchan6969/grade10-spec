@@ -121,7 +121,7 @@ every bound unset and writes no offer in production.
   a second currency is refused by name rather than summed
 - **The arrears** — every live loan past its due date, longest overdue first,
   judged on the payout's own due date and paged on a keyset cursor over it
-- **What the collector sees** — the offer and what is owed, as the
+- **What the collector reads** — the offer and what is owed, as the
   [Case page](/p/grade10-site/vault/collector-pages#case-page) lists them; no
   annualised rate and no payoff quote with a validity: the balance is the quote
 - **How to pay** — one block: the lender's FPS id, its bank account under the

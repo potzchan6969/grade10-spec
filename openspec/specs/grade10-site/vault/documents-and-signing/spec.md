@@ -45,15 +45,15 @@ No e-signature vendor is involved. What the loan agreement's figures mean is
 - The seal and the copies
   - One transaction: bytes re-checked, a certificate appended, one anchored
     entry
-  - Three ways to a copy: the download, the mail with the PDFs, and the case
-    page
+  - Three ways to a copy: the download, the mail with the PDFs, and the
+    collector's own read of the case
   - Verification: anyone holding a document's digest can ask whether it is one
     of ours
   - Durability: sealed bytes are copied to an archive that cannot delete, and
     re-hashed on a schedule
   - Every document at once: every sealed document its owner holds, in one
-    download, bounded to what the page lists and to 52,428,800 bytes, and
-    recorded like a search
+    download, bounded to what their own read lists and to 52,428,800 bytes,
+    and recorded like a search
 
 ## Requirements
 
@@ -339,8 +339,8 @@ the disclosure and consent wording in full above their digests.
 
 After the seal, the signer SHALL be able to download each sealed document on a
 grant minted with the seal and lasting 15 minutes, SHALL be sent the sealed
-documents to the case's own address, and SHALL find them on the case page for
-as long as the case is kept.
+documents to the case's own address, and SHALL find them on their own read of
+the case, each with its digest, for as long as the case is kept.
 
 Every case belongs to an account, so every signer SHALL have a durable copy
 path.
@@ -350,7 +350,7 @@ path.
 **Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
 - **WHEN** a packet is sealed
-- **THEN** the signer can download each document there and then, the sealed set is mailed to the case's address, and the case page lists each document with its digest
+- **THEN** the signer can download each document there and then, the sealed set is mailed to the case's address, and the owner's read of the case carries each document with its digest
 
 ### Requirement: A document can be verified by anyone holding its digest
 
@@ -465,17 +465,18 @@ borrower signs.
 
 ### Requirement: Every sealed document a collector holds is taken in one download
 
-A collector takes every document they have ever signed as one file, from the
-page that lists them.
+A collector takes every document they have signed as one file, bounded to the
+page of their cases Your data answers for.
 
 - **What it holds** - the download SHALL hold every sealed document of a
   completed packet on a case the collector owns, each carrying the digest the
-  case page shows for it.
-- **The bound** - the download SHALL hold exactly the documents the page that
-  offered it lists, and SHALL take no list of cases from whoever asks for it.
-- **The count** - the page SHALL name how many documents the download holds
-  before it is taken, and SHALL offer no download to a collector holding
-  none.
+  owner's read of the case carries for it.
+- **The bound** - the download SHALL hold exactly the documents Your data
+  carries for the same page of cases, named by the same cursor and no wider,
+  and SHALL take no list of cases from whoever asks for it.
+- **The count** - Your data SHALL carry the documents the download for that
+  page holds, so their number is known before it is taken; a collector
+  holding none is carried none, and a download taken anyway holds none.
 - **Past the ceiling** - the download SHALL be refused by name, before any
   document is read, where what it would hold is past 52,428,800 bytes, and
   nothing SHALL be sent.
@@ -483,6 +484,8 @@ page that lists them.
   a read of that document, and the download SHALL write one entry on the
   service's audit trail naming who took it, when, and how many documents it
   held.
+- **Signed in** - the download SHALL be refused to a request carrying no
+  session, and no document SHALL be served.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-26 - The download carries every case's sealed documents
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector takes their own signed papers without opening each case in turn
@@ -491,14 +494,14 @@ page that lists them.
 - **WHEN** they take the download
 - **THEN** it holds every sealed document of both cases, each with its digest,
   and holds nothing from a case they do not own
-- **AND** the page named that same number of documents before it was taken
+- **AND** Your data carried that same set of documents before it was taken
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-27 - A collector who has signed nothing is offered no download
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector looks for their signed papers and has none yet
 
 - **GIVEN** a collector whose cases hold no sealed document
-- **WHEN** they read the page that lists them
-- **THEN** no download is offered
+- **WHEN** they read Your data
+- **THEN** it carries no signed document
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-28 - A download past the ceiling is refused before anything is read
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector asks for more signed papers than one file can carry
@@ -515,3 +518,10 @@ page that lists them.
 - **WHEN** they take the download
 - **THEN** each of the three is recorded as a read, and one entry on the audit
   trail names who took it, when, and that it held three documents
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-38 - The download is refused to a request with no session
+**Serves:** grade10-site-vault-documents-and-signing-US-05 - nobody takes a collector's signed papers without being that collector
+
+- **GIVEN** collectors holding sealed documents in the vault
+- **WHEN** a request carrying no session asks for the download
+- **THEN** it is refused and no document is served
