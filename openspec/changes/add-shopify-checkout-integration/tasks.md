@@ -35,7 +35,7 @@
   store contract/repository tests, `pnpm run typecheck`, `pnpm run
   check:migrations`, and `pnpm run check:submodules`.
 
-## 3. Backend checkout and Shopify lifecycle (grade10)
+## 3. Backend checkout and Shopify lifecycle (grade10) (owner: @kinisworking)
 
 - [ ] 3.1 Add failing service/router/provider coverage for live review,
   hosted handoff, signed-in access, line refusal, one-intent repetition,
