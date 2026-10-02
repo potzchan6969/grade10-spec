@@ -73,7 +73,7 @@ written here.
 | Opening | Open case pending; the form held | **Out of suite:** the dialog's pending state, drawn by the `WalkInDialog` story in `packages/vault/admin-frontend` and checked in its review |
 | Opened | the new draft opens on its own page | `grade10-admin-vault-operator-queue-SC-55` |
 | Signed-in address | a `Notice` in the dialog's footer naming the refusal: that customer sends the request from their own phone; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-57` |
-| Refused otherwise | the worker's refusal in words in the dialog's footer, beside Cancel and Open case; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-76` |
+| Refused otherwise | a title or description past its limit refused in words beside that field, Open case held; a refusal only the worker gives reads in the dialog's footer, beside Cancel and Open case; the form keeps what was typed | `grade10-admin-vault-operator-queue-SC-76` |
 
 Grader and cert arrive with `add-item-registry`. The form is built without
 waiting on counsel's statement text (Q24).
