@@ -43,8 +43,8 @@ is the application repository's unless it says `grade10-spec`.
   test citing a retired id moves to the id that replaced it
 - **The missing proofs are written** - the scenarios no test proves today
   get one: a lone maximum left after an erasure stands at the opening price,
-  a losing bidder is never charged, a refused maximum records no Bid Placed,
-  and a called-off lot's row says the card was not charged
+  a losing bidder is never charged, and a refused maximum records no Bid
+  Placed
 
 ## Risks
 
@@ -52,6 +52,7 @@ is the application repository's unless it says `grade10-spec`.
   name; erasure does not reach logs, which age out under the log retention
 - **Changes in flight** - `complete-auction-post-sale`,
   `define-public-auction-identifiers`, `close-overdue-address-confirmation`,
+  `clarify-auction-shipping-progress-copy`,
   `add-winner-partial-payment`, `carousel-auction-list-featured`,
   `add-winner-order-tax-line` and `refine-auction-order-cancellation` touch
   capabilities this change folds. Each reconciles at its own acceptance,

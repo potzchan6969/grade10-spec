@@ -595,3 +595,12 @@ finds it.
 - A losing row on My Auctions reads "Your card was not charged." (decision Q2).
 - The rewritten cases that were automated now read manual: each owes its test updated to the new revision, and the flip back with its Decided by line.
 - HKD increments follow the Bidding page's schedule: HK$80 from HK$4,000 and HK$200 from HK$8,000.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-03. Joined the domain cases, composed from the journeys of auction, auto-bidding, bid-payment-method, bidding-history, account-record and listing-page, with this change's delta scenarios. It is a statement, not proof.
+
+- **Revised** - `grade10-site-auction-e2e-US03-TC01-2`, `grade10-site-auction-e2e-US03-TC02-2`, `grade10-site-auction-e2e-US04-TC02-2`, `grade10-site-auction-e2e-US04-TC03-2`, `grade10-site-auction-e2e-US05-TC01-2`, `grade10-site-auction-e2e-US08-TC01-2`, `grade10-site-auction-e2e-US08-TC03-2` and `grade10-site-auction-e2e-US10-TC02-2`: each read a card hold, an authorization or a refused attempt kept in the record, so each moves up a revision and returns to draft. The six that were automated owe their test the new id and the flip back with a Decided by line
+- **Deprecated** - `grade10-site-auction-e2e-US09-TC02-1`, a bid failing on an unavailable card capability, and `grade10-site-auction-e2e-US09-TC03-1`, a repeated card authorization event: no bid asks the card
+- **Trace changed** - `grade10-site-auction-e2e-US04-TC01-1` traces `grade10-site-auction-auction-US-02` in place of the retired `grade10-site-auction-auction-US-03`; its steps, results and status are unchanged
+- **Contradicted** - none

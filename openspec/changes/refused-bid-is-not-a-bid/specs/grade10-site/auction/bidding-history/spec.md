@@ -189,8 +189,7 @@ The retained action-log type vocabulary SHALL contain exactly:
 - `accepted_price` — an accepted public price movement occurred; and
 - `standing_changed` — the account's standing on the listing changed.
 
-<!-- trace:scenario id=g10.auction-bidding-history.SC-lgy rev=2 -->
-#### Scenario: grade10-site-auction-bidding-history-SC-37 - Every bid is a maximum, never a manual bid
+#### Scenario: grade10-site-auction-bidding-history-SC-51 - Every bid is a maximum, never a manual bid
 **Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every maximum Grade10 accepted
 
 - **WHEN** a collector places a bid of 50000 USD minor units that Grade10 accepts

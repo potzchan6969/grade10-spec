@@ -21,7 +21,7 @@ highest accepted bid at the close wins it.
 | Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
 | Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 150,000,000,000**, the same on every lot |
 | Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
-| Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, through hosted Checkout |
+| Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
 
 ### Extended Bidding
@@ -52,7 +52,7 @@ when the timer runs out with no new bid.
   Equal maxima at a higher price move it: at 1,000, with A's maximum at 2,000,
   B's maximum of 2,000 makes the price 2,000, A keeps the lead as the earlier,
   and the lot extends. A leader raising their own maximum does not
-- **A bid counts when it is accepted** - judged under the lot's lock at that
+- **A bid counts when it is accepted** — judged under the lot's lock at that
   moment, and answered at once; nothing waits on the card
 - **No bid after the close** — however late the close is recorded, no bid
   counts at or after the effective close. Until extended bidding is recorded,
@@ -95,12 +95,13 @@ increment is 100:
 - **A bid Grade10 places is a bid** — it counts in the bid count and the
   history, and restarts the extended-bidding timer as a manual bid would; two
   standing maxima never keep extending the close on their own
-- **An erased leader** - when the leader's account is erased, their maxima
+- **An erased leader** — when the leader's account is erased, their maxima
   are withdrawn and the highest maximum left takes the lead, priced at the next
-  maximum plus one increment, never above the price before; with no maximum
-  left, the lot has no leader
-- **Close and settlement** - nothing is held on any card; the winner pays the
-  invoice - [Post-Bidding](/p/grade10-site/auction/post-bidding#the-close)
+  maximum plus one increment, capped at the new leader's maximum and never
+  above the price before; with one maximum left, it stands at the opening
+  price; with none left, the lot has no leader
+- **Close and settlement** — nothing is held on any card; the winner pays the
+  invoice — [Post-Bidding](/p/grade10-site/auction/post-bidding#the-close)
 
 ### Bid Increments
 
@@ -148,12 +149,14 @@ any maximum.
 | Another card after the first accepted bid on the lot | **This listing's card is locked after the first accepted bid.** |
 | Bidding suspended on the account | **Bidding is suspended on this account. Contact Us to resolve it.** |
 | Account banned from bidding | **This account cannot bid.** |
+| A typed amount that is not valid, caught before the bid is sent | **Enter a valid amount.** |
 | Before the start, after the close, or any other refusal | **Your bid did not go through.** |
 
-- **Kept for operators** - each refusal is one operational log line naming the
-  bidder, the lot, the reason, the amount and the floor; the bidder's record
-  never shows it
-- **An answer lost on the way** - when a bid's answer never arrives, the bid
+- **Kept for operators** — each refusal is one operational log line naming the
+  lot and the reason; the bidder's record never shows it
+- 🚧 **Bidder and amount** — the log line also names the bidder, the amount sent,
+  and the floor or ceiling the refusal names
+- **An answer lost on the way** — when a bid's answer never arrives, the bid
   reads as placed if the bidder's standing holds it, and the bid form says
   **Could not place this bid.** if it does not
 
@@ -182,7 +185,7 @@ to every later lot.
 A quick bid or a typed amount, at or above the next minimum. The panel says
 Grade10 bids only as needed up to it, and that it can be raised, never
 lowered.
-## *Grade10* - **Accepts or refuses at once**
+## *Grade10* — **Accepts or refuses at once**
 The maximum stands as Leading or Outbid in the same answer, or the bid form
 says why it was refused and the prior maximum stays in place.
 ## *Grade10* — **Bids for them**
@@ -245,12 +248,12 @@ On the same card, locked by the first accepted bid.
 The account keeps one retained record of everything bidding did, at the
 account's bids address; signed out, sign-in runs first.
 
-- **One row per listing** - every listing the account placed a bid on, by
+- **One row per listing** — every listing the account placed a bid on, by
   latest activity, with its current or final price and the collector's
   standing: Leading, Outbid, Won or Canceled
 - **Active and Completed** — two filters; it opens on Active, and a row
   expands its story in place
-- **One listing's story** - every maximum set or raised, interleaved with the public movements that changed the
+- **One listing's story** — every maximum set or raised, interleaved with the public movements that changed the
   collector's standing; they read as You and every rival by the lot's
   pseudonym, and no rival's maximum ever appears
 - **Your bidding, on the lot** — two tabs, Bid placed, the bids Grade10 placed
@@ -377,7 +380,7 @@ the account's registered address, and the letters about a won lot are
   recipient, lot and when it was sent, never the body
 - **Log retention** — **90 days**; troubleshooting only. Resend keeps the
   durable trail
-- **No card line on the non-winner letter** - the letter does not mention the
+- **No card line on the non-winner letter** — the letter does not mention the
   card; My Auctions says it was not charged
 
 :::detail{title="Code map" for="engineer"}
@@ -455,10 +458,10 @@ surface.
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
-| Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, through hosted Checkout. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
+| Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
 | A refused bid is not a bid | Decided | The bid form says why; no My Auctions row, no Bidding History entry and no standing moves. Replaces "refusals stay on the account chronology". | Product |
-| Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount and the floor; never in the bidder's record. | Product and engineering |
+| Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the ceiling; never in the bidder's record. | Product and engineering |
 | An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
 | Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |

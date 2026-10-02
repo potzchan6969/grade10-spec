@@ -131,7 +131,7 @@ authorization expires on its own.
 
 ## Settled
 
-- A bid holds nothing on the card, so the close releases and captures nothing: the winner pays the invoice through hosted Checkout, and a losing bidder reads on My Auctions that their card was not charged (decisions Q1, Q2).
+- A bid holds nothing on the card, so the close releases and captures nothing: the winner pays the invoice on their order, and a losing bidder reads on My Auctions that their card was not charged (decisions Q1, Q2).
 
 ## Reconciliation
 
@@ -141,5 +141,6 @@ authorization expires on its own.
 - **Revised** - `winner-order-US1-TC5-2`: QA1 kept the id, but the case no longer reads a hold released, so it moves up a revision; its marker drops `winner-order-SC-12`, `winner-order-SC-13` and `winner-order-SC-14`
 - **Deprecated** - `winner-order-US6-TC1-1` and `winner-order-US6-TC2-1`, with `winner-order-US-06`; a losing bidder reads that their card was not charged on My Auctions, `grade10-site-auction-account-record-US4-TC1-2`
 - **Raised** - none
+- **Retired elsewhere** - `winner-order-SC-12`, `winner-order-SC-13` and `winner-order-SC-14`, the hold released at the close, retire with `complete-auction-post-sale`, which renames their requirement and keeps none of them
 - **Contradicted** - none
 - **Uncovered anchors** - none

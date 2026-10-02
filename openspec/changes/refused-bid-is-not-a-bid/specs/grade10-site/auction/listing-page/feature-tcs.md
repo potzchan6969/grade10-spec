@@ -243,5 +243,6 @@
 - **Revised** - `grade10-site-auction-listing-page-US14-TC4-2` adds that a bidder whose only bid was refused past the close reads neither Won nor Did not win; `grade10-site-auction-listing-page-US14-TC5-2` replaces a bid still confirming at the close with a bid refused past it. QA1 kept their ids; both move up a revision. `grade10-site-auction-listing-page-US12-TC5-1` and `grade10-site-auction-listing-page-US14-TC6-1` lose the hold switch pre-condition only, `<v>` kept
 - **Deprecated** - `grade10-site-auction-listing-page-US14-TC3-1`, a bid still confirming at the close
 - **Raised** - none
+- **Retired** - `grade10-site-auction-listing-page-SC-46`, a lone first bid still confirming at the close, leaves the result words with the payment confirmation (Q3). No retired id is reissued
 - **Contradicted** - none
 - **Uncovered anchors** - none

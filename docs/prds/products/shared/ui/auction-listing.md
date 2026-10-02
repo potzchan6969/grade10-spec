@@ -112,7 +112,7 @@ cancelled.
 
 ## Lost Standing
 
-- **No banner on the lot card** - when the viewer lost, the bid card shows
+- **No banner on the lot card** — when the viewer lost, the bid card shows
   Did not win and nothing more; My Auctions says the card was not charged
 
 ## Extended Bidding Copy

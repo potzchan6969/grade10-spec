@@ -10,7 +10,7 @@ Auctions. The record still describes two things grade10 no longer does:
   released when the bidder is outbid or loses, an "Authorizing…" state, and a
   losing row that says the hold is being released. grade10#773 and its repair
   #783 removed every hold: a bid stands on the card on file the moment it is
-  accepted, and only the winner pays, through hosted Checkout.
+  accepted, and only the winner pays, by the invoice on their winner order.
 - **A refused attempt reads as a bid** - the specs keep every refused maximum
   in the bidder's history with its reason, list a listing whose every attempt
   was refused as failed-only, and show Bid submitted and Bid not accepted on My
@@ -23,13 +23,16 @@ each history page on a whole auction decision.
 
 **Metric** - requirements, journeys and draft cases that name a bid-time card
 hold, a payment-confirmed bid, a refused attempt in the bidder's record, or a
-Bid submitted or Bid not accepted standing: from about 120 to none.
+Bid submitted or Bid not accepted standing: from about 120 to none. This change
+removes most of them; `complete-auction-post-sale`,
+`define-public-auction-identifiers` and `clarify-auction-shipping-progress-copy`
+carry the rest in their own deltas.
 
 ## What Changes
 
 - **No bid-time card hold** - a bid stands on the card on file when it is
   accepted, and nothing is held or charged on the card at bid time. Only the
-  winner pays, through hosted Checkout. `bid-payment-method` keeps card
+  winner pays, by the invoice on their winner order. `bid-payment-method` keeps card
   linking, the card a lot locks to, and the premium disclosure.
 - **Not charged, said plainly** - a losing row and a called-off row on My
   Auctions read "Your card was not charged."
@@ -39,8 +42,8 @@ Bid submitted or Bid not accepted standing: from about 120 to none.
   accepted, failed-only and the refusal-reason vocabulary go.
 - **Refusals stay operator-side** - each refusal is one structured operational
   log at the auction service's boundary, naming the bidder, the lot, the code,
-  the amount and the floor. grade10 adds the bidder, the amount and the floor
-  to the line it writes today.
+  the amount sent, and the floor or ceiling the refusal names. grade10 adds the
+  bidder, the amount and the floor or ceiling to the line it writes today.
 - **A lost answer** - a bid whose answer is lost on the way back still reads as
   placed when the bidder's standing holds it.
 - **Erasing the leader** - the runner-up takes the lead, re-priced from the
@@ -90,16 +93,21 @@ None.
 
 - **Pages** - Bidding, Post-Bidding, Display, Account, Auction Management,
   Auction Record and Listing Page blocks, Account Data and Auction Service
-  state what runs, unmarked, since grade10 already shows every outcome
-  (`page_waived`).
-- **grade10** - one small change: the refusal log line names the bidder, the
-  amount and the floor; the new tests cite their scenario ids;
+  state what runs, unmarked. Auction Service and Bidding mark with 🚧 the
+  refusal log's bidder, amount and floor or ceiling, which grade10 does not log
+  yet.
+- **grade10** - nothing a collector sees changes. The refusal log line names
+  the bidder, the amount and the floor or ceiling; an auction migration deletes
+  the refusal rows staging wrote and tightens `bid_action_logs`; new tests prove
+  a lone maximum left after an erasure, a losing bidder never charged and a
+  refused maximum recording no Bid Placed; every test cites its scenario or case
+  id, and six domain tests move to their revised case ids;
   `docs/architecture/auction.md` drops the refused maximum from bid history and
   links the archived relay change. Consumer app: the grade10 site
   (`apps/frontend/grade10`) and the auction service.
 - **Changes in flight** - `complete-auction-post-sale`,
-  `define-public-auction-identifiers` and `close-overdue-address-confirmation`
-  carry text this change rewrites; each reconciles at its own acceptance,
+  `define-public-auction-identifiers`, `close-overdue-address-confirmation` and
+  `clarify-auction-shipping-progress-copy` carry text this change rewrites; each reconciles at its own acceptance,
   which refuses a requirement that moved since it began.
 - **Component exports** - none move.
 
@@ -109,7 +117,14 @@ None.
   outcome: the bid form sends one key per confirmed attempt, the auction
   replays the first answer for that key, and refuses the key reused with
   another maximum. The retry replaces the read of the bidder's standing after
-  a lost answer, and closes the race where that read runs before the commit
+  a lost answer, and closes the race where that read runs before the commit.
+- **Refusing a call-off past the close** - an operator cannot call off a lot
+  past its effective close whose close is not yet recorded, as grade10 runs;
+  the listing requirement states it (Q17).
+- **A letter to a new leader after an erasure** - only if wanted: grade10
+  writes no letter when an erasure hands a lot to the runner-up (Q16).
+- **A Lost standing on `/bids`** - only if wanted: `/bids` reads a lot lost at
+  the close as Outbid, and My Auctions reads Didn't win (Q14).
 
 ## Open questions
 
@@ -120,3 +135,4 @@ None.
 - [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
 - [Bidding · Auction Panel](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-panel)
 - [Post-Bidding · The Close](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-close)
+- [Auction Service · Bid lifecycle](../../../docs/prds/platform/auction-service.md#bid-lifecycle)

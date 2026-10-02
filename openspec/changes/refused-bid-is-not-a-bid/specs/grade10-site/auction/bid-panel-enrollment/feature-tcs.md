@@ -274,7 +274,7 @@ Runs once per row of **Test data**.
 - Setup links a card and takes nothing from it, and a committed maximum answers Leading, Outbid or the refusal with no authorization state between; the cases that read a hold switch, a hold state or hold copy are rewritten or were already deprecated (decisions Q1, Q5).
 - The setup description and the Change modal say the card is charged only on a win, in the words the Bidding page decides.
 - What the bid form says for a refused bid is `grade10-site/auction/auction`'s US14 and `grade10-site/auction/bid-payment-method`'s card refusals, not this suite's.
-- The panel after card linking is `linked-editable`, and the linked-card tooltip scenario keeps its title (decisions Q18).
+- The panel after card linking is `editable`, the code's name, and the linked-card tooltip scenario keeps its title (decisions Q18).
 
 ## Reconciliation
 
@@ -282,6 +282,6 @@ Runs once per row of **Test data**.
 
 - **Folded in** - `grade10-site-auction-bid-panel-enrollment-SC-15` by `grade10-site-auction-bid-panel-enrollment-US2-TC5-3`; `grade10-site-auction-bid-panel-enrollment-SC-16` by `grade10-site-auction-bid-panel-enrollment-US2-TC8-2`; `grade10-site-auction-bid-panel-enrollment-SC-20`'s Leading and Outbid by `grade10-site-auction-bid-panel-enrollment-US2-TC16-1`, and its refusal under the bid action by `grade10-site-auction-auction-US14-TC1-1`; the Setup modal leaf by `grade10-site-auction-bid-panel-enrollment-US2-TC15-1` and `grade10-site-auction-bid-panel-enrollment-US3-TC2-2`
 - **Corrected** - `grade10-site-auction-bid-panel-enrollment-US2-TC16-1` traced the Feature set group Bid commit; it traces its section's journey, `grade10-site-auction-bid-panel-enrollment-US-02`
-- **Raised, answered** - Q18: the panel state `linked-editable` replaces `authorization-editable`, and `shared-ui-auction-listing-SC-30` keeps its title, recommended; answer in `## Settled`
+- **Raised, answered** - Q18: the panel state `editable`, the code's name, replaces `authorization-editable`, and `shared-ui-auction-listing-SC-30` keeps its title, since its steps never named a hold; answer in `## Settled`
 - **Contradicted** - none
 - **Uncovered anchors** - none

@@ -21,15 +21,15 @@ card.
   - Said on the bid form: the refusal shows on the bid form, in words that
     name what the bidder can do
   - Operator-side record: each refusal is one structured operational log
-    naming the bidder, the lot, the code, the amount and the floor
+    naming the bidder, the lot, the code, the amount and the floor or ceiling
   - Lost answer: a bid whose answer is lost on the way back reads as placed
     when the bidder's standing holds it
 - Erased leader
   - Runner-up takes the lead: the highest maximum left leads, priced from the
     maxima left and never above the price before the erasure
 - Closing a due lot
-  - Bids never settle: a bid refuses a lot past its effective close and never
-    closes it
+  - Bids never settle: a bid refuses a lot past its effective close; its
+    answer never waits on or depends on the close
 
 ## MODIFIED Requirements
 
@@ -353,12 +353,14 @@ settles it:
 1. The listing's own timer, at the deadline
 2. Any read that finds the listing past its effective close, after it answers
    and without delaying the answer
-3. The five-minute sweep, for a listing nothing else reached
+3. A bid refused because the listing is past its effective close, after the
+   refusal is answered and without delaying it
+4. The five-minute sweep, for a listing nothing else reached
 
 Settling a listing twice SHALL change nothing the first did not. A bid that
-finds a listing past its effective close SHALL be refused and SHALL NOT close the listing; its answer SHALL NOT depend on
-whether a close succeeds. Until the close is recorded, a public read SHALL NOT
-report the listing Ended or name a result.
+finds a listing past its effective close SHALL be refused, and its answer SHALL
+NOT wait on or depend on the close. Until the close is recorded, a public read
+SHALL NOT report the listing Ended or name a result.
 
 #### Scenario: grade10-site-auction-auction-SC-70 - A lot closes at its close with nobody watching
 **Serves:** `Closing a due lot` - the listing's own timer settles it
@@ -460,8 +462,8 @@ each against the state the one before it left.
 ### Requirement: Card-backed bids have one releasable authorization per bidder and listing
 
 **Reason:** No bid takes a card authorization. A bid stands on the card on file
-when it is accepted, and only the winner pays, through hosted Checkout, so
-being outbid or losing has nothing to release.
+when it is accepted, and only the winner pays, by the invoice on their winner
+order, so being outbid or losing has nothing to release.
 
 **Migration:** `grade10-site-auction-auction-SC-10` moves to "A bid counts
 when it is accepted", serving `grade10-site-auction-auction-US-02` since
@@ -494,15 +496,17 @@ it is accepted".
 A bid Grade10 refuses SHALL place nothing. It SHALL write no bid, no standing,
 no bidding-history entry and no My Auctions row, and SHALL move nothing: not
 the price, the leader, the close, the bid count, any bidder's maximum or row,
-nor the listing's version, so no open page is sent an update. The bidder's
-record SHALL never show a refused attempt.
+nor the listing's version, so no open page is sent an update. A bid refused
+past the effective close starts the close after it is answered, under "A due
+lot is settled at its close"; that close moves the version, and the refusal
+does not. The bidder's record SHALL never show a refused attempt.
 
 The bid form SHALL say why under the bid action, in the words below, and
 nowhere else: never in a toast, and never in the words the server sent.
 
 | Refused when | Code | The bid form says |
 | --- | --- | --- |
-| The amount is not a valid count of minor units | `INVALID_AMOUNT` | Enter a valid amount. |
+| The amount is not a whole count of minor units above zero, checked by the bid form before it sends | None: the request is never sent | Enter a valid amount. |
 | At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. |
 | Below the minimum next bid | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
 | Above the currency's ceiling | `AMOUNT_TOO_HIGH` | Maximum bid is {amount}. with the ceiling |
@@ -513,8 +517,10 @@ nowhere else: never in a toast, and never in the words the server sent.
 | The account is banned from bidding | `BANNED` | This account cannot bid. |
 | Before the start or at or after the effective close, an unknown listing, another currency, an erased bidder, or a refusal with no row above | `NOT_BIDDABLE`, `LISTING_NOT_FOUND`, `CURRENCY_MISMATCH`, `BIDDER_DELETED` | Your bid did not go through. |
 
-Where several refusals apply, the first in this order answers: invalid amount,
-unknown listing, not biddable, not registered, suspended, banned, erased
+The auction's request schema refuses an amount that is not a whole count of
+minor units above zero before `INVALID_AMOUNT` can be answered, so the bid form
+never shows that code. Where several refusals apply, the first in this order
+answers: unknown listing, not biddable, not registered, suspended, banned, erased
 bidder, another currency, above the ceiling, maximum not raised, below the
 minimum, no card, another card. The storefront answers the identity bar before
 the auction hears of the bid.
@@ -584,6 +590,13 @@ bidder's own standing on that listing before it says anything:
 | --- | --- |
 | Holds the maximum just sent | Reads the bid as placed: no error, and the panel, standing and history read again |
 | Holds another maximum or none, or the read fails | Says Could not place this bid. under the bid action, and logs the cause |
+
+A first bid read as placed this way still bookmarks the listing with email
+alerts on, since the auction wrote the watch when it accepted the bid. It is
+the one exception to the announcement under
+`grade10-site/auction/account-record`: the announcement SHALL NOT show, because
+the auction recorded it as made when it accepted the bid and the standing read
+does not carry it.
 
 #### Scenario: grade10-site-auction-auction-SC-94 - A committed bid behind a lost answer reads as placed
 **Serves:** grade10-site-auction-auction-US-02 - a collector's bid commits but its answer is lost on the way back

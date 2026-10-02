@@ -83,9 +83,11 @@ code.
 #### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
 **Serves:** grade10-site-auction-account-record-US-02 - a refused raise leaves the collector reading the standing they had
 
-- **GIVEN** an open listing on which the collector is Outbid at a current bid
-  of 30000 HKD minor units
-- **WHEN** Grade10 refuses their raise to 20000 HKD minor units
+- **GIVEN** an open `HKD` listing on which the collector is Outbid with a
+  maximum of 25000 HKD minor units, at a current bid of 30000 HKD minor units
+  and a minimum next bid of 31000 HKD minor units
+- **WHEN** they raise their maximum to 30500 HKD minor units, and Grade10
+  refuses it as below the minimum
 - **AND** they open My Auctions
 - **THEN** that listing's Status is Outbid
 - **AND** the row's price is still 30000 HKD minor units

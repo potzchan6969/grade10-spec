@@ -30,7 +30,7 @@ panel SHALL render the posture it is given.
 | `setup-first` | Authenticated; no linked card on this lot; setup closed | `no-linked-card` | Place bid (or equivalent) | Empty link prompt | Closed |
 | `setup-in-progress` | First-link setup is open | `no-linked-card` | Setup is required before bidding | Empty link prompt | Open first-link setup |
 | `setup-editable` | Change-card setup is open for an editable enrollment | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Open change-card setup |
-| `linked-editable` | A card is linked and no bid on this lot is accepted yet | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Closed |
+| `editable` | A card is linked and no bid on this lot is accepted yet | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Closed |
 | `enrolled` | The first accepted bid locked this lot's enrollment | `linked-card-after-bid` | Place bid (or equivalent) | Linked card without change | Closed |
 | `ready` | Derived shared bid-card signal for authenticated bidding controls; not a separate persistence state | `linked-card-after-bid` | Place bid (or equivalent) | Uses the linked-card presentation of its source state | Closed |
 
@@ -38,7 +38,7 @@ panel SHALL render the posture it is given.
 | --- | --- | --- | --- | --- | --- |
 | `signed-out` — Signed out | `signed-out` | Hidden | Sign in to bid | Hidden | Closed |
 | `no-linked-card` — Signed in, no linked card | `setup-first`, `setup-in-progress` | Visible, disabled | Link a card to bid | Empty link prompt, or hidden while setup is open | Closed, or open during link |
-| `linked-card-before-bid` — Signed in, card linked, no bid on this lot | `setup-editable`, `linked-editable` | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
+| `linked-card-before-bid` — Signed in, card linked, no bid on this lot | `setup-editable`, `editable` | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
 | `linked-card-after-bid` — Signed in, card linked, bid placed on this lot | `enrolled`, `ready` | Enabled | Set or raise maximum | Linked card without change | Closed |
 
 Standing badges for highest bid or outbid SHALL appear only when the
@@ -209,11 +209,11 @@ a provider-hosted field; card details SHALL not pass through Grade10.
 
 ### Requirement: A bid commit answers in one step
 
-After card-link setup succeeds, the panel SHALL be `linked-editable` with the
+After card-link setup succeeds, the panel SHALL be `editable` with the
 amount controls enabled at once, so the collector is ready to bid. Committing
 a maximum SHALL show its answer in one step: Leading or Outbid once the bid is
-accepted, or the refusal under the bid action, with no authorizing or pending
-state between. The first accepted bid SHALL move the panel to `enrolled` and
+accepted, or the refusal under the bid action. There SHALL be no authorizing
+state; the bid action is busy only until the answer arrives. The first accepted bid SHALL move the panel to `enrolled` and
 lock card change for that listing; a refused bid leaves the panel as it was.
 
 <!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-fho rev=2 -->
@@ -222,7 +222,7 @@ lock card change for that listing; a refused bid leaves the panel as it was.
 
 - **GIVEN** a signed-in collector completes card-link setup on an open listing
 - **WHEN** setup closes
-- **THEN** the panel is `linked-editable` with the amount controls enabled
+- **THEN** the panel is `editable` with the amount controls enabled
 - **AND** nothing is held or charged on the card
 
 <!-- trace:scenario id=g10.auction-bid-panel-enrollment.SC-kcm rev=2 -->
@@ -241,4 +241,5 @@ lock card change for that listing; a refused bid leaves the panel as it was.
 - **WHEN** they commit a maximum
 - **THEN** the panel shows Leading or Outbid once the auction accepts it, or
   the refusal under the bid action once the auction refuses it
-- **AND** no authorizing or pending state shows before the answer
+- **AND** no authorizing state shows; the bid action is busy only until the
+  answer arrives

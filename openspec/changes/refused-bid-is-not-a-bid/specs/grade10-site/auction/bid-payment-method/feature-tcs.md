@@ -48,7 +48,7 @@
 * Step 2 opens card-link setup, not a bid.
 * Step 4: Highest bid and the bid count are unchanged, and no bid of this collector's is on <listing_1>.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-tm1 rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo -->
+<!-- trace:case id=g10.auction-bid-payment-method.TC-tm1 rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC2-2: Committing a maximum stands at once, with nothing taken from the card
 
 **Classification:**
@@ -432,7 +432,7 @@ Runs once per row of **Test data**.
 **I want** a higher bid to use the card I already committed to that listing,
 **so that** I can raise my maximum without selecting a card again.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-x5g rev=2 covers=g10.auction-bid-payment-method.SC-7z5,g10.auction-bid-payment-method.SC-mlo -->
+<!-- trace:case id=g10.auction-bid-payment-method.TC-x5g rev=2 covers=g10.auction-bid-payment-method.SC-7z5 -->
 ### grade10-site-auction-bid-payment-method-US2-TC1-2: A higher maximum is accepted on the same card, with nothing taken from it
 
 **Classification:**
@@ -567,7 +567,7 @@ Runs once per row of **Test data**.
 
 - Committing or raising a maximum takes nothing from the card and waits on no payment provider, so no case reads an authorization, a provider challenge, a pending state, a declined card at bid time or a provider failure; those cases are deprecated (decisions Q1, Q5).
 - Being outbid has nothing to release; US3 is retired with its case (decisions Q13).
-- Only the winner pays, through hosted Checkout on the winner order; what the winner order shows after Checkout is `grade10-site/auction/winner-order`'s.
+- Only the winner pays, by the invoice on their winner order; what the winner order shows after payment is `grade10-site/auction/winner-order`'s.
 - The durable line on incremental and extended authorization no longer applies: no authorization is taken at bid time.
 
 ## Reconciliation
@@ -580,5 +580,6 @@ Runs once per row of **Test data**.
 - **Deprecated** - `grade10-site-auction-bid-payment-method-US1-TC3-1`, `grade10-site-auction-bid-payment-method-US1-TC4-1`, `grade10-site-auction-bid-payment-method-US1-TC5-1`, `grade10-site-auction-bid-payment-method-US2-TC2-1` and `grade10-site-auction-bid-payment-method-US3-TC1-1`, with the authorization requirements and `grade10-site-auction-bid-payment-method-US-03`
 - **Settled by the artifacts** - a raise from a stale page that still names the locked card is accepted; only a bid naming another card is refused as locked (the requirement)
 - **Raised** - none
+- **Retired** - `grade10-site-auction-bid-payment-method-SC-02`, `grade10-site-auction-bid-payment-method-SC-03`, `grade10-site-auction-bid-payment-method-SC-04` and `grade10-site-auction-bid-payment-method-SC-09`, the card authorization on commit, leave the renamed requirement on the linked card; the scenarios of the removed requirements retire as their migrations name. No retired id is reissued
 - **Contradicted** - none
 - **Uncovered anchors** - none

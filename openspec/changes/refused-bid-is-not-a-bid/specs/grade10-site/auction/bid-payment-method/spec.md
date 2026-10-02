@@ -5,7 +5,7 @@
 Lets a collector bid on the card linked to their account: the card carries to
 every lot, can change until their first accepted bid on a lot, and is then
 locked to that lot. Nothing is held or charged on the card when they bid; only
-the winner pays, through hosted Checkout on the winner order. The bid panel
+the winner pays, by the invoice on their winner order. The bid panel
 discloses the buyer-premium rate without turning the bidding surface into an
 invoice preview.
 
@@ -46,8 +46,8 @@ Change is hidden, and a bid naming another card is refused.
 
 Committing or raising a maximum SHALL take nothing from the card: nothing is
 held, authorized or charged, and acceptance SHALL NOT wait on the payment
-provider. Only the winner pays, through hosted Checkout on the winner order
-under `grade10-site/auction/winner-order`; a bidder who does not win is never
+provider. Only the winner pays, by the invoice on their winner order under
+`grade10-site/auction/winner-order`; a bidder who does not win is never
 charged for the listing.
 
 | Refused when | The bid form says |
@@ -90,7 +90,6 @@ Every other refusal, and the order refusals answer in, is
 - **AND** it does not ask for a card again solely because the listing is
   different
 
-<!-- trace:scenario id=g10.auction-bid-payment-method.SC-mlo rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-18 - Bidding takes nothing from the card
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector bids on the card already linked
 
@@ -106,7 +105,7 @@ Every other refusal, and the order refusals answer in, is
 - **GIVEN** collectors A and B with accepted bids on a listing
 - **WHEN** the listing closes with A winning
 - **THEN** nothing is charged on B's card for the listing
-- **AND** A pays through hosted Checkout on the winner order
+- **AND** only A pays, by the invoice on A's winner order
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-20 - Another card after the first accepted bid is refused
 **Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
