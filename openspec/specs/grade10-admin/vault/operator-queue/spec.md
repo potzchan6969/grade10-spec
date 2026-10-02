@@ -91,6 +91,9 @@ buttons follow is `grade10-site/vault/case-lifecycle`; one collector's page is
   - Nothing emailed: the open sends nothing, and the draft waits for the
     customer to send it
   - One draft cap: a walk-in counts against the account's unsent drafts
+  - A malformed address: refused beside its field before anything is sent,
+    by the worker's own rule for an address
+  - Ten photographs at most: at ten the form offers no way to add another
 
 ## Requirements
 
@@ -778,6 +781,7 @@ SHALL sit in the Drafts view until the customer sends it.
 | Statement unwritten | in production, while no collection statement wording is set for the brand; outside production the open SHALL NOT be refused for it |
 | Statement not in force | the version the form showed is not the one in force |
 | A fact | any fact `grade10-site/vault/case-intake` refuses |
+| Not an email address | the address does not meet the worker's rule for an email address; the form SHALL refuse it beside the address field when staff leave the field holding it, and not before; once shown, the refusal SHALL clear as soon as the address meets the rule or is emptied, and SHALL NOT show again until staff next leave the field; the walk-in SHALL NOT open while the address is malformed; an empty address is not refused, Open case waiting for one |
 
 A refused open SHALL write no case, and the form SHALL keep what was typed.
 Every case SHALL be opened under an account, and every identity SHALL stay
@@ -865,8 +869,8 @@ draft staff opened.
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator photographs the item under the collector's own limits
 
 - **GIVEN** a walk-in form holding ten photographs
-- **WHEN** the operator adds another
-- **THEN** it is refused by name, and the form still holds ten
+- **WHEN** the operator looks to add another
+- **THEN** the form offers no way to add one, and still holds ten
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-76 - A fact the intake refuses is refused at the counter
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator corrects a field before the draft opens
@@ -875,6 +879,14 @@ draft staff opened.
 - **WHEN** the operator opens it
 - **THEN** it is refused by name beside the title
 - **AND** no case is opened, and the form keeps what was typed
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-95 - An address that is not an email address is refused beside its field
+**Serves:** grade10-admin-vault-operator-queue-US-10 - the operator checks the address with the customer before the draft opens
+
+- **GIVEN** a walk-in form holding a category and a title, and the address `mei.chan@example`
+- **WHEN** the operator leaves the address field
+- **THEN** it is refused by name beside the address, and the walk-in cannot be opened
+- **AND** nothing is sent, and the form keeps what was typed
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-79 - A walk-in opens with no photograph
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator opens the draft before the item is photographed
