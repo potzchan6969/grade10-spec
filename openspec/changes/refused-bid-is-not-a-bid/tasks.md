@@ -1,6 +1,6 @@
 # Tasks: A refused bid is not a bid, and no bid holds the card
 
-## 1. The manual (grade10-spec)
+## 1. The manual (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 State on Bidding, Post-Bidding, Display, Account, Auction Management, Auction Record, Listing Page blocks, Account Data and Auction Service that a bid stands on the card on file when accepted, a refused attempt places nothing and is logged for operators, a losing or called-off row reads "Your card was not charged.", and an erased leader hands the lot to the runner-up - unmarked, since grade10 shows it; the refusal log's bidder, amount and floor or ceiling as a 🚧 line on Bidding and Auction Service
 - [ ] 1.2 With the fold, drop from the durable specs what the fold cannot: the Feature set leaves and groups that name a bid-time authorization (auction "Card authorization" and "Stripe failures"; bid-payment-method "Bid authorization", "Raised authorization", "Refusal resolution", "Bid-CTA outcomes" and "Authorization lifecycle"; auto-bidding "Card authorization"; bid-panel-enrollment "Optional authorization"; winner-order "Hold release"), and the Settled lines the delta suites supersede
