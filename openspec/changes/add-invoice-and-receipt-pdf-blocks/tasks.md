@@ -64,7 +64,9 @@ Needs groups 3-4 landed on `main` and the submodule bumped first.
 - [x] 5.7 Amendment: needs 1.12 landed and the submodule re-bumped. Pass `bankRails` at `invoicePdf.ts`'s call site on a bank-transfer invoice, sourced from Grade10's own SWIFT/FPS/HK local transfer details and the order's bank reference; omit it entirely on a card invoice (`decisions.md` Q22) — landed via `bankRailsFor`, backed by the new shared `GRADE10_BANK_RAIL_DETAILS` constant; `PdfLabPage`'s lab now previews both a card and a bank-transfer invoice sample
 - [x] 5.8 Amendment: needs 1.13 landed and the submodule re-bumped. Remove `footer` from `INVOICE_COPY`/`RECEIPT_COPY` at `invoicePdf.ts`'s and `receiptPdf.ts`'s call sites, and from the `PdfLabPage` demo's sample copy (`decisions.md` Q23) — confirmed no `footer` field remains in either call site's copy or the demo's sample copy
 
-## 6. Walk Winner Order's Invoice and Receipt PDFs (grade10)
+## 6. The walk - Winner Order's invoice and receipt PDFs (grade10)
+
+Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-invoice-and-receipt-pdf-blocks`), and `/tcs-run-sheet` executes manual cases when needed.
 
 - [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, and a cancelled order (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`) — note `winner-order-SC-98`'s "names its replacement" claim and `winner-order-SC-109` are stale against both `decisions.md` Q16 (which already dropped `replacedBy`) and this change's own Q19 (which never rebuilt it against the pdf-lib renderer); confirm which side has landed by the time this walk runs
 - [ ] 6.2 Walk `winner-order-US-02` opening the receipt PDF once paid and before payment (`winner-order-SC-67`, `winner-order-SC-68`) — `winner-order-SC-18`/`SC-19`'s manually-settled distinction is not a claim this contract makes any more (`decisions.md` Q19); walk it against whatever `winner-order/spec.md` still requires there, not against a mark this renderer does not draw

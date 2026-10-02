@@ -1,4 +1,4 @@
-**Author** - @htonyl, 2026-09-21
+**Author:** @htonyl - 2026-09-21
 
 ## Why
 

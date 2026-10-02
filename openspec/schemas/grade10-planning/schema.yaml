@@ -1037,15 +1037,18 @@ artifacts:
       those same ids: its tests land in their own commit before the group's
       code, and its box is ticked last. The walk is its own test task.
 
-      - The last group is the walk: it uses the draft suite
-      (`feature-tcs.md`) as its planning input, walks every journey of every
-      capability the change specifies, end to end through the interface each
-      actor uses, leaves the walks as the change's end-to-end suite, and its
-      commit flips each case the walks decide to automated with `pnpm run
-      tcs:automated <case…> --decided-by <walk path>`, a walk in grade10
-      named `grade10:<path>`; the cases that stay
-      manual remain draft for human QA after deployment makes implementation available and
-      are named in the walk's `rounds.md` row.
+      - The last group is the walk, titled `The walk`, or `The walk - <what
+      it walks>` where the walk is split or a second walk follows work added
+      after a claimed one; a change owes it when it specifies a capability
+      somebody walks. It uses the draft suite (`feature-tcs.md`) as its
+      planning input, walks every journey of every capability the change
+      specifies, end to end through the interface each actor uses, leaves the
+      walks as the change's end-to-end suite, and its commit flips each case
+      the walks decide to automated with `pnpm run tcs:automated <case…>
+      --decided-by <walk path>`, a walk in grade10 named `grade10:<path>`;
+      the cases that stay manual remain draft for human QA after deployment
+      makes implementation available and are named in the walk's `rounds.md`
+      row. Its preamble names that review (`/tcs-review <change>`).
 
       - An `automated` case this change joined a result to - its `<v>` bumped,
       back to `draft` - owes a task in the group that builds the behaviour:
@@ -1058,9 +1061,10 @@ artifacts:
 
       - A change whose deltas touch a capability carries a task to update that
       capability's PRD under docs/prds/, in a grade10-spec group; `pnpm
-      check:manual` verifies it. Component work `ui-design.md` flagged - a
-      variant, a token, a compound component that does not exist yet - is a
-      grade10-spec group too.
+      check:manual` verifies it. Taking the 🚧 off once the work is verified
+      is the archive's step, not a group after the walk. Component work
+      `ui-design.md` flagged - a variant, a token, a compound component that
+      does not exist yet - is a grade10-spec group too.
 
       - Write groups without owner tags - engineers claim them at pickup - and
       never renumber a group or task that is claimed or has checkmarks.

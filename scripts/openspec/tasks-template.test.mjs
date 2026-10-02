@@ -121,6 +121,13 @@ test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases durin
   assert.match(walkText, /Uses draft `feature-tcs\.md` as its input/i);
   assert.match(walkText, /human QA reviews cases after deployment/i);
   assert.match(walkText, /`\/tcs-run-sheet` executes manual cases/i);
+  // `check:manual`'s `walk` rule refuses a walk group that names no
+  // `/tcs-review` of its change, so the template names the placeholder for it.
+  assert.match(walkText, /`\/tcs-review <change>`/);
+  assert.match(
+    instruction,
+    /preamble names that review \(`\/tcs-review <change>`\)/,
+  );
   assert.match(instruction, /draft suite.*as its planning input/i);
   assert.match(instruction, /human QA after deployment/i);
   assert.doesNotMatch(walkText, /Needs `feature-tcs\.md` reviewed/);
@@ -130,6 +137,11 @@ test("shared-planning-agent-rounds-SC-59 - the tasks template's last group is th
   assert.ok(
     isWalkGroup(taskGroupHeading(walk.heading)?.title ?? ""),
     "the template's last group heading does not name the walk",
+  );
+  // `check:manual`'s `walk_last` rule finds the walk by this title alone.
+  assert.match(
+    instruction,
+    /The last group is the walk, titled `The walk`, or `The walk - <what it walks>`/,
   );
   assert.match(walk.tasks[0], /journey/i, "the walk group names no journey");
   // The flip as the store refuses it otherwise: a case of an in-flight change

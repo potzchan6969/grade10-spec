@@ -12,7 +12,7 @@
 
 ## 3. The walk (<!-- grade10-spec or grade10 -->)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment, and `/tcs-run-sheet` executes manual cases when needed<!-- , and the groups it walks landed -->.
+Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review <change>`), and `/tcs-run-sheet` executes manual cases when needed<!-- , and the groups it walks landed -->.
 
 - [ ] 3.1 <!-- One walk per journey of every capability this change specifies, end to end through the interface its actor uses, kept as the change's end-to-end suite (`<capability>-US-01`) -->
 - [ ] 3.2 <!-- Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, a walk in grade10 named `grade10:<path>`, in the walks' own commit; the ones that stay manual are named in the suite and named in the walk's `rounds.md` row -->

@@ -18,7 +18,9 @@
       `isWinner` when sold.
 - [x] 2.3 Verify — `pnpm run typecheck` as needed.
 
-## 3. Walk (grade10-spec) (owner: @tangconst)
+## 3. The walk (grade10-spec) (owner: @tangconst)
+
+Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review bid-history-winner-priority`), and `/tcs-run-sheet` executes manual cases when needed.
 
 - [x] 3.1 Walk ClosedSoldEqualMax and Default: Winner after close, tip on
       equal-max non-leader, no Winner on live Default.

@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
+import { WALK_LAST_SINCE } from "../check/planned.mjs";
 import { demoSchema } from "./demo-schema";
 import { findingsOf, recordStoreFiles } from "./record-store";
 
-/** The plan's last group is the walk, and it names the suite's review as its
- * input: QA is asked on the landing of the requirements, and the walk says
- * it waits on what they sign (`shared-planning-agent-rounds-SC-90`). */
+/** The plan's last group is the walk, and it names the suite's review, which
+ * human QA runs after deployment (`shared-planning-agent-rounds-SC-90`). */
 
 const SCHEMA = demoSchema(["proposal", "specs", "tasks"]);
 const CHANGE = "walk-probe";
 
 const REVIEWED =
-  "Needs `feature-tcs.md` reviewed (`/tcs-review walk-probe`) as its input.";
+  "Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review walk-probe`).";
 
 const group = (num: number, title: string, prose: string) => [
   `## ${num}. ${title} (grade10-spec)`,
@@ -113,5 +113,123 @@ describe("the walk group names the suite's review", () => {
       "",
     ]);
     expect(await findingsOf(files, "walk")).toHaveLength(1);
+  });
+});
+
+/** A change opened the day the title became a rule, specifying `alpha` with
+ * the journeys file given; a durable `alpha` is the caller's to add. */
+const owing = (
+  groups: string[],
+  journeys: string | undefined,
+  created = WALK_LAST_SINCE,
+  extra: Record<string, string> = {},
+) =>
+  recordStoreFiles({
+    change: CHANGE,
+    schema: SCHEMA,
+    record: "",
+    title: "Walk probe",
+    files: {
+      [`openspec/changes/${CHANGE}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${created}\n`,
+      [`openspec/changes/${CHANGE}/tasks.md`]: groups.join("\n"),
+      ...(journeys === undefined
+        ? {}
+        : {
+            [`openspec/changes/${CHANGE}/specs/demo-product/alpha/user-journeys.md`]:
+              journeys,
+          }),
+      ...extra,
+    },
+  });
+
+const STORIES = [
+  "## User journeys",
+  "",
+  "### demo-product-alpha-US-01: Someone does the thing",
+  "",
+  "They open alpha and do the thing.",
+  "",
+].join("\n");
+
+const NOBODY =
+  "## User journeys\n\n**Walked by:** nobody on their own - a policy nobody reaches\n";
+
+const BUILD = group(1, "Build it", "Builds it.");
+
+/** A plan ending on no walk, over a durable `alpha` that somebody walks and
+ * the change's own journeys file given. */
+const beside = (own: string | undefined) =>
+  owing([...BUILD, ...group(2, "Verify", "Checks it.")], own, WALK_LAST_SINCE, {
+    [`openspec/changes/${CHANGE}/specs/demo-product/alpha/spec.md`]:
+      "## ADDED Requirements\n",
+    "openspec/specs/demo-product/alpha/spec.md":
+      "# Alpha\n\n## Purpose\n\nSo a durable alpha exists.\n\n## Requirements\n",
+    "openspec/specs/demo-product/alpha/user-journeys.md": STORIES,
+  });
+
+describe("a change with walks ends its plan on the walk", () => {
+  it("refuses a walked change whose last group is not titled the walk", async () => {
+    const found = await findingsOf(
+      owing([...BUILD, ...group(2, "Walk", REVIEWED)], STORIES),
+      "walk_last",
+    );
+    expect(found).toHaveLength(1);
+    expect(found[0].level).toBe("fail");
+    expect(found[0].path).toBe(`openspec/changes/${CHANGE}/tasks.md`);
+    expect(found[0].reason).toContain("`2. Walk`");
+  });
+
+  it("refuses a walk that work was added after", async () => {
+    const found = await findingsOf(
+      owing(
+        [
+          ...group(1, "The walk", REVIEWED),
+          ...group(2, "The manual", "Writes the page."),
+        ],
+        STORIES,
+      ),
+      "walk_last",
+    );
+    expect(found).toHaveLength(1);
+  });
+
+  it("takes the walk, split or not, behind its tags", async () => {
+    for (const title of ["The walk", "The walk - the hand-back", "The Walk"]) {
+      const files = owing(
+        [...BUILD, `## 2. ${title} (grade10) (owner: @tester)`, "", REVIEWED],
+        STORIES,
+      );
+      expect(await findingsOf(files, "walk_last")).toEqual([]);
+    }
+  });
+
+  it("reads a capability with no journeys of its own by its durable ones", async () => {
+    expect(await findingsOf(beside(undefined), "walk_last")).toHaveLength(1);
+  });
+
+  it("owes no walk where the change says nobody walks the capability", async () => {
+    expect(await findingsOf(beside(NOBODY), "walk_last")).toEqual([]);
+  });
+
+  it("reads the durable journeys behind an own file that holds none", async () => {
+    for (const own of [
+      "## User journeys\n",
+      "## REMOVED User journeys\n\n### demo-product-alpha-US-02: Gone\n",
+    ]) {
+      expect(await findingsOf(beside(own), "walk_last")).toHaveLength(1);
+    }
+  });
+
+  it("owes nothing before the plan holds a group", async () => {
+    expect(await findingsOf(owing([], STORIES), "walk_last")).toEqual([]);
+  });
+
+  it("holds no plan opened before the rule", async () => {
+    const files = owing(
+      [...BUILD, ...group(2, "Walk", REVIEWED)],
+      STORIES,
+      "2026-10-02",
+    );
+    expect(await findingsOf(files, "walk_last")).toEqual([]);
   });
 });

@@ -24,7 +24,9 @@
 - [x] 2.4 Verify — `pnpm --dir packages/ui test` for listing-bid-money and
       related bid-card coverage; `pnpm run typecheck` as needed.
 
-## 3. Walk (grade10-spec) (owner: @mason5991)
+## 3. The walk (grade10-spec) (owner: @mason5991)
+
+Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review cap-custom-maximum-entry`), and `/tcs-run-sheet` executes manual cases when needed.
 
 - [x] 3.1 Walk the Custom maximum ceiling cases on Storybook
       CustomMaximumCeiling and Leading (raise): at-ceiling accept, typed

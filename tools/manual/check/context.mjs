@@ -155,6 +155,11 @@ export const RULES = [
     title: "Walk groups naming no review of the suite",
   },
   {
+    key: "walk_last",
+    level: "fail",
+    title: "Plans of a walked change that do not end on the walk",
+  },
+  {
     key: "hands",
     level: "fail",
     title: "Hands naming an unknown role or handle",

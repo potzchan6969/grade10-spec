@@ -1,4 +1,4 @@
-**Author** - @ecchochan, 2026-10-02
+**Author:** @ecchochan - 2026-10-02
 
 Product context: [Collector Pages · Case List](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-list), built from [Vault Blocks](../../../docs/prds/products/shared/ui/vault-case.md).
 

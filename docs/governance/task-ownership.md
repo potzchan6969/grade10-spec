@@ -27,6 +27,7 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 | Element | Form | Notes |
 | --- | --- | --- |
 | Group heading | `## <n>. <title>` | `<n>` is one integer. `##` exactly — `###` is not a group. |
+| Walk group | `## <n>. The walk (<repository>)`, or `The walk - <what it walks>` | Matched by title, in any case. A change opened from 2026-10-03 that specifies a capability somebody walks ends its plan on one, and every one names `/tcs-review <change>`; `pnpm check:manual` holds both. |
 | Owner tag | `(owner: @<handle>)` | Optional, and **last on the line**. The `@` is optional; handles may hold letters, digits, `.`, `-`, `_`, and match case-insensitively. |
 | No owner | Omit the tag, or write `(owner: unassigned)` | The two are equivalent everywhere. |
 | Task | `- [ ] <id> <text>` | `- [x]` or `- [X]` when done. `<id>` is the first whitespace-delimited token; `<text>` is required. |
@@ -69,6 +70,7 @@ These are silent — the line is skipped or misread, and nothing reports an erro
 | `## 1. Build it (owner: @alice) — WIP` | Owner is read, but the tag is only stripped from the end, so the title keeps it |
 | `## 1. Vault (grade10-site)` | Read as a repository named `grade10-site`; the manual's `design` rule demands a `tech-design.md` |
 | `## 3. Admin` | No repository; read as work outside this store, the same demand |
+| `## 4. Walk (grade10)` | Not the walk; `pnpm check:manual` never holds it to the review, and on a change opened from 2026-10-03 that somebody walks it refuses a plan ending on it |
 | `## 1.2 Build it` | Group number is `1`; the title becomes `2 Build it` |
 | `### 1. Build it` | Not a group at all; its tasks attach to the previous group |
 | `- [ ] 1.1` | Not a task — the text after the id is required, so the task is invisible to every count |
