@@ -154,7 +154,7 @@ any maximum.
 
 - **Kept for operators** — each refusal is one operational log line naming the
   lot and the reason; the bidder's record never shows it
-- 🚧 **Bidder and amount** — the log line also names the bidder, the amount sent,
+- **Bidder and amount** — the log line also names the bidder, the amount sent,
   and the floor or ceiling the refusal names
 - **An answer lost on the way** — when a bid's answer never arrives, the bid
   reads as placed if the bidder's standing holds it, and the bid form says
