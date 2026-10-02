@@ -55,7 +55,7 @@ beside each delta own who walks it.
 `Badge`, `Notice`, `Link`, `Button`, `Text`, `FormDialog`, `PromptDialog`,
 `Select`, `TextField`, `NotesField`, `ChoiceList`, `Choice`, `FilePicker`.
 `FormDialog` carries `destructive`; `PromptDialog` carries a required
-reason; `Notice` carries a retry `Button` in its `actions`. `ProofFilesField`
+reason; `Notice` carries a `Link` in its `actions`. `ProofFilesField`
 moves into `@grade10/frontend-console` from the auction's order dialogs, which
 then import it from there, unchanged; it composes `FilePicker`. No store
 block, primitive or token is new or changed.
@@ -103,7 +103,7 @@ block, primitive or token is new or changed.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Loading | `Status` pending | `grade10-admin-inventory-items-SC-59` |
-| Failed | a `Notice` with the error and retry; a section that fails alone leaves the rest standing | `grade10-admin-inventory-items-SC-59` |
+| Failed | `Status` with the error and a Try again `Button`, as the console's other panels read a failed read; a section that fails alone leaves the rest standing | `grade10-admin-inventory-items-SC-59` |
 | Saving | `FormDialog` pending, its fields locked, the error in its footer | `grade10-admin-inventory-items-SC-15` |
 | Narrow | `Table` scrolls in its wrapper, `SectionHeader` actions wrap, `FormDialog` scrolls its fields | **Out of suite:** the console blocks own it - `Table`, `SectionHeader` and `FormDialog` at phone width, stated in their `@grade10/frontend-console` stories, and walked by the console's narrow-width smoke |
 
@@ -160,7 +160,7 @@ One cell, used by Items, one item and each move's from and to.
 | Still held | no Close mark on the place row while the vault holds the item | `grade10-admin-inventory-items-SC-29` |
 | Closed by hand | the place row names who closed it, when and why | `grade10-admin-inventory-items-SC-28` |
 | Retired | reads only, with the reason and when; no Edit, Transfer or Retire | `grade10-admin-inventory-items-SC-46` |
-| Restore offered | Restore on a retired item, for `inventory:write` only, on `PromptDialog` with a required reason | `grade10-admin-inventory-items-SC-48` |
+| Restore offered | Restore on a retired item, for `inventory:write` only, on `FormDialog` with a required reason, since its refusal carries a `Notice` with a `Link` that `PromptDialog` has no slot for | `grade10-admin-inventory-items-SC-48` |
 | Restored | the item reads live with its facts and history | `grade10-admin-inventory-items-SC-48` |
 | Restore refused | an error `Notice` in the dialog naming the live item that holds the grader and cert, `Link` in its `actions` | `grade10-admin-inventory-items-SC-49` |
 | Erased owner | the owner cell reads as erased and the title reads as erased; Transfer still offered | `grade10-admin-inventory-items-SC-64` |
@@ -305,14 +305,15 @@ Used by Register and Transfer, never by Edit.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Ten categories | the register's ten on the first step, each in the collector's language | `grade10-site-vault-case-intake-SC-39` |
+| Registered draft | category and title read only, as the register holds them: the same `RadioList` and `TextInput`, read only; photos and description stay editable | `grade10-site-vault-case-intake-SC-40` |
 
 ## Flags
 
 - Q60 **Every board is missing** - the designer's: Items, one item, register
   and edit, transfer, retire and close-a-mark, the Case tab's facts, the
   valuation's slab line, the walk-in's and Start valuation's slab fields, Prepare documents
-  blocked, the collector page's Items section and the erasure checklist's
-  lines; built on the console's existing blocks now, each replaced when its
+  blocked, the collector page's Items section, the erasure checklist's
+  lines and the wizard's registered draft; built on the console's existing blocks now, each replaced when its
   board lands
 - Q41 **Where Items sits in the nav** - a detail page of Inventory, reached
   from its header; the designer may still draw a nav entry of its own
