@@ -60,11 +60,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/collectors.spec.ts`
 
 **Pre-conditions:**
 
@@ -592,3 +590,4 @@ shown a name my role does not hold.
 | `grade10-admin-console-collector-page-US1-TC10-1` | Deferred at review: a case whose account was erased has no route by hand, and no test decides it yet |
 | `grade10-admin-console-collector-page-US1-TC12-1` | Deferred at review: no route erases one case of a collector by hand, and no test decides it yet |
 | `grade10-admin-console-collector-page-US2-TC2-1` | Layer api: the vault worker's test refuses the header's read without kyc:read |
+| `grade10-admin-console-collector-page-US1-TC2-1` | The walk takes four routes; a person takes the search by phone number, which the seed cannot give a case |

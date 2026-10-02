@@ -546,7 +546,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The message matches the row.
-* An unsent draft's cancel leaves no message owed or parked.
 
 ### grade10-site-vault-collector-notifications-US2-TC15-1: A draft staff opened expires with no untouched email
 
@@ -1114,5 +1113,5 @@ reconciliation folded one more,
 | `US5-TC8-1` | The walk proves the offer's six rows; a person confirms the prose around them repeats none of them |
 | `US6-TC1-1` | The isolated stack configures no hosted verification provider, so e-kyc raises no check and the invitation is never sent |
 | `US6-TC2-1` | As above |
-| `grade10-site-vault-collector-notifications-US2-TC14-1` | A person cancels both rows and reads the mailbox; the worker's test decides nothing is owed for the unsent one |
-| `grade10-site-vault-collector-notifications-US2-TC15-1` | The draft clock is eight days; a person moves the clock or waits, and reads the mailbox |
+| `grade10-site-vault-collector-notifications-US2-TC14-1` | A person cancels both rows and reads the mailbox; the vault worker's walk-ins test decides nothing is owed for the unsent one |
+| `grade10-site-vault-collector-notifications-US2-TC15-1` | The draft runs out seven days from its last touch; a person moves the clock or waits, and reads the mailbox |

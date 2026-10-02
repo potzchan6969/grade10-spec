@@ -1954,11 +1954,9 @@ and the draft waits for them to send it.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -2100,7 +2098,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Attach ten photographs.
-2. Attach the eleventh.
+2. Look for a way to attach an eleventh.
 3. Remove one photograph.
 
 **Expected Results:**
@@ -2117,7 +2115,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2135,7 +2133,6 @@ Runs once per row of **Test data**.
 
 | Field | Value | Refused beside |
 | --- | --- | --- |
-| Email | `not-an-address` | Email |
 | Title | 201 characters | Title |
 | Description | 2,001 characters | Description |
 
@@ -2928,10 +2925,10 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US9-TC6-1` | The boundary moves when the identity check reads the submitted check as stalled; a person waits that period out in the sandbox, or moves the clock, and reads the panel on both sides of it |
 | `grade10-admin-vault-operator-queue-US10-TC3-1` | Deferred at review: the open keeps the statement's version where the page does not show it; a person reads the draft's history once the case says where |
 | `grade10-admin-vault-operator-queue-US10-TC4-1` | A person reads that the form asks for no name and no contact number; the walk-in walk opens a draft without them, it does not read the form's fields |
-| `grade10-admin-vault-operator-queue-US10-TC10-1` | Deferred at review: the console shows a refused fact in the dialog's footer, where the scenario says beside the field (owner-questions 14) |
+| `grade10-admin-vault-operator-queue-US10-TC10-1` | A person types a title and a description past their limits; no walk takes them |
 | `grade10-admin-vault-operator-queue-US10-TC12-1` | Layer api: the worker's own test refuses the open without vault:operate; the treasurer's console offers no walk-in to press |
 | `grade10-admin-vault-operator-queue-US10-TC14-1` | A person edits a sent walk-in and a draft the collector opened to see both refused; the walk-in walk edits only an unsent draft staff opened |
 | `grade10-admin-vault-operator-queue-US11-TC5-1` | Layer api: the vault worker's test refuses the names read without kyc:read |
-| `grade10-admin-vault-operator-queue-US11-TC6-1` | A person reads the Overdue view for a name; the money book's walk reads its rows, not the absence of a collector |
-| `grade10-admin-vault-operator-queue-US12-TC7-1` | A person reads Overdue and a search with a collector in the address; the collectors walk narrows Needs staff and Held items alone |
-| `grade10-admin-vault-operator-queue-US2-TC7-1` | Deferred at review: its last result states a rule no run can see |
+| `grade10-admin-vault-operator-queue-US11-TC6-1` | No walk reaches an overdue row; a person reads the Overdue view with a loan past due and finds no name |
+| `grade10-admin-vault-operator-queue-US12-TC7-1` | A person reads Overdue and a search with a collector in the address; the collectors walk narrows the cuts and Held items, never Overdue or a search |
+| `grade10-admin-vault-operator-queue-US10-TC6-1` | The walk proves the refusal for an address retyped in capitals and spaces, and nothing mailed; a person checks no second account was made for the address |

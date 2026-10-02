@@ -1459,11 +1459,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -1566,3 +1564,4 @@ requirements, and neither pass saw the other's file before this join.
 | `US5-TC1-1` | The reference is read aloud from the Sent step and the card — legibility is the point of the alphabet |
 | `US5-TC6-1` | Start another request is walked to see the case just sent left where it was |
 | `grade10-site-vault-case-intake-US6-TC2-1` | A person changes staff's facts and photographs before the send; the walk-in walk sends them as staff typed them |
+| `grade10-site-vault-case-intake-US6-TC7-1` | The walk proves the removal and that a sent request keeps its photographs; a person reads the refusal's words |

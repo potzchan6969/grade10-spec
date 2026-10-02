@@ -250,11 +250,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/walk-in.spec.ts`
 
 **Pre-conditions:**
 
@@ -296,3 +294,4 @@ Runs once per row of **Test data**.
 | Manual | Why |
 | --- | --- |
 | `grade10-site-vault-case-intake-US6-TC2-1` | A person changes staff's facts and photographs before the send; the walk-in walk sends them as staff typed them |
+| `grade10-site-vault-case-intake-US6-TC7-1` | The walk proves the removal and that a sent request keeps its photographs; a person reads the refusal's words |
