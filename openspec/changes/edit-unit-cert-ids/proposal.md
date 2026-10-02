@@ -19,8 +19,10 @@ day, the workaround for a wrong Cert ID today, which should fall to none.
   and one row for each active hold on regular stock with its holder and
   remaining count. Selecting a `No Cert ID` row shows the history of regular
   stock.
-- **A wrong Cert ID can be corrected.** An available Cert record's Cert ID can
-  be changed to another one not used on the same product. The record, its
+- **A wrong Cert ID can be corrected.** A Cert record that has only been
+  intaken can have its Cert ID changed to another one no record of the product
+  holds. A record that was ever reserved, sold, withdrawn, vaulted or listed
+  keeps its Cert ID. The record, its
   copy facts and its tagged media stay with the unit.
 - **Regular stock can be numbered.** An available unit of regular stock can be
   given a Cert ID with its Grade Issuer, and Grade, Autograph Grade and Serial
@@ -56,8 +58,8 @@ None.
 - **Inventory service** - a Cert ID change on an available Cert record, an
   assignment that turns one available unit of regular stock into a Cert record,
   and the history entry for both, in one transaction each.
-- **Auction** - none to build. A listing reads its unit's Cert record, so an
-  ended listing whose unit was released shows the corrected Cert ID.
+- **Auction** - none to build. A record that was ever held or listed keeps
+  its Cert ID, so no listing shows a changed one.
 - **Site** - none; a live listing holds its unit, and a held unit cannot be
   changed.
 - **Suites above** - no domain impact: Inventory has no domain suite and the
