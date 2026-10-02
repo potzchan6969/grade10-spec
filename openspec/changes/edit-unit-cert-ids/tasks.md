@@ -12,7 +12,7 @@
 - [ ] 2.3 Add `cert-id-change` to `CHANGELOG_ACTIONS`, optional `certRecord` to `changelogSnapshotSchema`, `cert-id-taken` and `invalid-grade-issuer` to the failure codes, optional `unit` to the `changelogs.list` input and `regularStock: { available }` to the `products.get` answer
 - [ ] 2.4 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 3. Correct a Cert ID (grade10)
+## 3. Correct a Cert ID (grade10) (owner: @mason5991)
 
 Needs group 2's migration and contracts landed.
 
