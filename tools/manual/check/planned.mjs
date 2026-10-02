@@ -33,7 +33,12 @@ import {
   SCENARIO_ID,
   tableRows,
 } from "../src/store/markdown.mts";
-import { DECISION_ROW, decisionRows } from "../src/store/read-changes.mts";
+import {
+  DECISION_ROW,
+  decisionRows,
+  isWalkGroup,
+  taskGroupHeading,
+} from "../src/store/read-changes.mts";
 
 /** The mark a deferral wears, on the PRD and in a landing that names one. */
 const DEFERRED = "❓";
@@ -55,24 +60,25 @@ export function checkWalkGroup(ctx, changes) {
     const file = `${change.dir}/tasks.md`;
     const text = readTextIfExists(join(ctx.roots.store, file));
     if (text === undefined) continue;
-    const walk = walkGroupOf(outline(text));
-    if (!walk || walk.raw.includes(`/tcs-review ${change.id}`)) continue;
-    ctx.add(
-      "walk",
-      file,
-      `the walk group names no review of the suite — it needs \`feature-tcs.md\` reviewed (\`/tcs-review ${change.id}\`) as its input`,
-    );
+    for (const walk of walkGroupsOf(outline(text))) {
+      if (walk.raw.includes(`/tcs-review ${change.id}`)) continue;
+      ctx.add(
+        "walk",
+        file,
+        `group \`${walk.heading}\` names no review of the suite — it needs \`feature-tcs.md\` reviewed (\`/tcs-review ${change.id}\`) as its input`,
+      );
+    }
   }
 }
 
-/** The group headed `<n>. The walk`, wherever the outline nests it. */
-function walkGroupOf(sections) {
-  for (const one of sections) {
-    if (/^\d+\.\s*The walk\b/i.test(one.heading)) return one;
-    const found = walkGroupOf(one.children);
-    if (found) return found;
-  }
-  return undefined;
+/** Every walk group, wherever the outline nests it: a plan may split the walk. */
+function walkGroupsOf(sections) {
+  return sections.flatMap((one) => {
+    const group = taskGroupHeading(one.heading);
+    return group && isWalkGroup(group.title)
+      ? [one]
+      : walkGroupsOf(one.children);
+  });
 }
 
 export function checkPlanned(ctx, changes) {

@@ -13,6 +13,10 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
+import {
+  isWalkGroup,
+  taskGroupHeading,
+} from "../../tools/manual/src/store/read-changes.mts";
 
 const ROOT = join(dirname(dirname(fileURLToPath(import.meta.url))), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -123,9 +127,8 @@ test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases durin
 });
 
 test("shared-planning-agent-rounds-SC-59 - the tasks template's last group is the walk, and flips the cases it decides", () => {
-  assert.match(
-    walk.heading,
-    /^\d+\. The walk\b/,
+  assert.ok(
+    isWalkGroup(taskGroupHeading(walk.heading)?.title ?? ""),
     "the template's last group heading does not name the walk",
   );
   assert.match(walk.tasks[0], /journey/i, "the walk group names no journey");

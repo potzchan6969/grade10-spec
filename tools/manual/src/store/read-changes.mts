@@ -860,6 +860,29 @@ function readFollowOns(sections: Section[]): string[] {
   return items;
 }
 
+/** A task group's `<n>. <title> (<repo>) (owner: @handle)` heading, or
+ * nothing where the heading is no group's. */
+export function taskGroupHeading(
+  heading: string,
+): Pick<TaskGroup, "num" | "title" | "repo" | "owner"> | undefined {
+  const match = GROUP_HEADING.exec(heading);
+  if (!match) return undefined;
+  const owner = taggedOwner(match[2]);
+  const title = match[2].replace(OWNER, "").trimEnd();
+  const repo = REPO_TAG.exec(title);
+  return {
+    num: match[1],
+    title: repo ? title.slice(0, repo.index).trimEnd() : title,
+    repo: repo ? repo[1].trim() : "",
+    ...(owner ? { owner } : {}),
+  };
+}
+
+/** The walk: a group titled `The walk`, or `The walk — <what it walks>` where
+ * a plan splits it, the dash spaced. `The walk-in form` is another group. */
+export const isWalkGroup = (title: string): boolean =>
+  /^the walk(?:\s+[—–-]\s+\S.*)?$/i.test(title);
+
 /** `detailed` carries the checkbox lines themselves, so "5 of 6" can say which
  * one is open. In-flight only: the archive shares this type and its board
  * payload has no reader for the lines. */
@@ -871,22 +894,15 @@ function readTaskGroups(
   const groups: TaskGroup[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
-      const match = GROUP_HEADING.exec(section.heading);
-      if (!match) {
+      const heading = taskGroupHeading(section.heading);
+      if (!heading) {
         visit(section.children);
         continue;
       }
-      const num = match[1];
-      const owner = taggedOwner(match[2]);
-      const title = match[2].replace(OWNER, "").trimEnd();
-      const repo = REPO_TAG.exec(title);
       const tasks = readTaskLines(section.raw);
-      const claim = idle.get(num);
+      const claim = idle.get(heading.num);
       groups.push({
-        num,
-        title: repo ? title.slice(0, repo.index).trimEnd() : title,
-        repo: repo ? repo[1].trim() : "",
-        ...(owner ? { owner } : {}),
+        ...heading,
         done: tasks.filter((task) => task.done).length,
         total: tasks.length,
         ...(detailed ? { tasks } : {}),
