@@ -2,8 +2,8 @@
 
 ## 1. The manual (grade10-spec) (owner: @ecchochan)
 
-- [ ] 1.1 State on `docs/prds/products/grade10-site/vault/collector-pages.md`'s Request Wizard that a loan asks for more than zero, and add the 🚧 line for the loan refusal to `docs/prds/products/grade10-site/vault/operator-console.md`, in the Queue section after the address refusal
-- [ ] 1.2 Verify: `pnpm check:manual` and `pnpm run validate:changes refuse-zero-walk-in-loan` in grade10-spec.
+- [x] 1.1 State on `docs/prds/products/grade10-site/vault/collector-pages.md`'s Request Wizard that a loan asks for more than zero, and add the 🚧 line for the loan refusal to `docs/prds/products/grade10-site/vault/operator-console.md`, in the Queue section after the address refusal
+- [x] 1.2 Verify: `pnpm check:manual` and `pnpm run validate:changes refuse-zero-walk-in-loan` in grade10-spec.
 
 ## 2. Walk-in form (grade10) (owner: @ecchochan)
 
