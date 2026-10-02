@@ -73,15 +73,15 @@ and the store carries no `VaultAcceptOfferDialog`.
 
 **Migration:** None. What answering the offer does is
 `grade10-site/vault/valuation-and-offer`'s; the screen is designed again from
-the worker. `shared-ui-vault-case-SC-18` to `shared-ui-vault-case-SC-22` retire
-with it.
+the worker. Its scenarios
+retire with it.
 
 ### Requirement: The empty vault home reads the way in
 
 **Reason:** The vault home leaves the site, and the store carries no
 `VaultCasesEmpty`.
 
-**Migration:** None. `shared-ui-vault-case-SC-23` retires with it.
+**Migration:** None. Its scenario retires with it.
 
 ### Requirement: The vault home reads its cases
 
@@ -89,8 +89,8 @@ with it.
 `VaultCases`.
 
 **Migration:** None. The collector's own cases are the worker's read in
-`grade10-site/vault/case-lifecycle`. `shared-ui-vault-case-SC-24` and
-`shared-ui-vault-case-SC-25` retire with it.
+`grade10-site/vault/case-lifecycle`. Its scenarios
+retire with it.
 
 ### Requirement: A case card reads the case at a glance
 
@@ -98,4 +98,4 @@ with it.
 
 **Migration:** None. What a case reads - its stage, whose the item is and the
 fact it meets - is `grade10-site/vault/case-lifecycle`'s.
-`shared-ui-vault-case-SC-26` to `shared-ui-vault-case-SC-28` retire with it.
+Its scenarios retire with it.

@@ -1,6 +1,6 @@
 # shared/ui/vault-case Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## Background
@@ -24,7 +24,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -57,7 +57,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -87,7 +87,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -117,7 +117,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -156,7 +156,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -193,7 +193,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -223,7 +223,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -258,7 +258,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -286,7 +286,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -322,7 +322,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -362,7 +362,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -401,7 +401,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -439,7 +439,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -478,7 +478,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -521,7 +521,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -556,7 +556,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -592,7 +592,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -622,7 +622,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -657,7 +657,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -694,7 +694,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -729,7 +729,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
@@ -768,7 +768,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -807,7 +807,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -842,7 +842,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -873,6 +873,39 @@ Runs once per row of **Test data**.
 
 * The card reads <title>, the two chips, the facts ending in <reference>, the next step, the calendar line, then <note>, in that order.
 * The control is named <title> and described by <reference>.
+
+### shared-ui-vault-case-US1-TC37-1: The package entry exports no vault collector block
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The export contract
+
+**Pre-conditions:**
+
+* The store's `packages/ui/src/index.ts` is open.
+
+**Steps:**
+
+1. Search the exports for `VaultCases`, `VaultCasesEmpty` and `VaultAcceptOfferDialog`.
+2. Search the exports for `VaultAcceptOfferDialogProps`, `VaultAcceptOfferDialogCopy`, `VaultCasesProps`, `VaultCasesCopy`, `VaultCasesCard`, `VaultCasesChip`, `VaultCasesTone`, `VaultCasesIcon`, `VaultCasesEmptyProps`, `VaultCasesEmptyCopy` and `VaultCasesEmptyStep`.
+3. Search the exports for any vault-named confirmation or visit card.
+4. List the blocks under `packages/ui/src/blocks`.
+
+**Expected Results:**
+
+* Step 1 finds none of the three.
+* Step 2 finds none of the eleven types.
+* Step 3 finds none.
+* Step 4 lists no vault collector block.
 
 ## Settled
 
@@ -921,3 +954,9 @@ Runs once per row of **Test data**.
 | `shared-ui-vault-case-SC-02`, `shared-ui-vault-case-SC-03` | Covered, unchanged | The durable `shared-ui-vault-case-US1-TC2-1` and `shared-ui-vault-case-US1-TC3-1`, not repeated here; `TC3-1` reads every block source in the folder, so it reaches `VaultCases` and its card |
 | `shared-ui-vault-case-SC-18` to `shared-ui-vault-case-SC-23` | Covered, unchanged | The durable `shared-ui-vault-case-US1-TC16-1` to `shared-ui-vault-case-US1-TC21-1`, not repeated here |
 | `shared-ui-vault-case-SC-24`, `shared-ui-vault-case-SC-25`, `shared-ui-vault-case-SC-26`, `shared-ui-vault-case-SC-28` | Deferred to Dev | Each serves another capability's journey only, and a feature case traces one anchor, `The vault home's cases`; once folded, `pnpm check:manual` reads them as untraced. Their **Serves:** lines owe `The vault home's cases` beside the journey, as `shared-ui-vault-case-SC-27` and the accept-offer scenarios serve their groups |
+
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `packages/ui/src/index.ts`. It is a statement, not proof.
+
+- **Corrected** - `shared-ui-vault-case-US1-TC37-1` lists the eleven types, finds no vault-named confirmation or visit card (`shared-ui-vault-case-SC-02`) and no vault block under `packages/ui/src/blocks` (`shared-ui-vault-case-SC-03`), dropping the booking cards no requirement names
+- **Contradicted** - none
+- **Uncovered anchors** - none

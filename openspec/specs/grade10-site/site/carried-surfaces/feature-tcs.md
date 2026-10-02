@@ -1,7 +1,7 @@
 # grade10-site/site/carried-surfaces Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-17, tcs-rules r3.0
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-site-carried-surfaces-US1: Collector reads a site whose shop has not opened
 
@@ -755,6 +755,8 @@ opening for the vault and shows the other two waiting products stay shut.
 * Step 4's sitemap names the store addresses.
 * No surface outside the store's set changed.
 
+---
+
 ## grade10-site-site-carried-surfaces-US5: Collector reads a site whose products have not opened
 
 **As a** collector,
@@ -1051,6 +1053,38 @@ ready to honour.
   booking surface.
 * Every chrome item under each <lang> opens a surface the build carries.
 
+### grade10-site-site-carried-surfaces-US5-TC11-1: No lane links a collector vault screen
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-carried-surfaces-US-05
+
+**Pre-conditions:**
+
+* The sites under test are <grade10 staging site url> and <grade10 development site url>, builds that carry the vault's set.
+* customer(signed in, holding an open vault case) is on the lane under test.
+
+**Steps:**
+
+1. Navigate to the front door, then to the account page.
+2. Collect every rendered link on each surface the build carries.
+3. Read the address each collected link names.
+
+**Expected Results:**
+
+* No collected link names the case list, the request, a case's page, the identity check or Your data.
+* The account page offers no Your data button.
+* Every collected link opens a surface the build carries.
+
 ---
 
 ## grade10-site-site-carried-surfaces-US6: Collector opens a withheld product's address on the public site
@@ -1061,8 +1095,8 @@ public site to tell me the site does not hold it,
 **so that** I learn the page is not there instead of waiting on one that will
 never render.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-tvu rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
-### grade10-site-site-carried-surfaces-US6-TC1-1: Every withheld product address answers not-found with a 404
+<!-- trace:case id=g10.site-carried-surfaces.TC-tvu rev=2 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
+### grade10-site-site-carried-surfaces-US6-TC1-2: Every withheld product address answers not-found with a 404
 
 Runs once per row of **Test data**.
 
@@ -1081,17 +1115,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the three waiting
-  products' surfaces.
+* The site under test is a build that carries none of the five waiting products' surfaces.
 
 **Test data:**
 
 | `<product>` | `<withheld address>` |
 | --- | --- |
-| Vault | The vault |
-| Vault | A case's own page |
 | Vault | The signing ceremony |
-| Vault | The identity check |
+| Vault | The case list, `/vault` |
+| Vault | The request, `/vault/new` |
+| Vault | A case's page, `/vault/cases/<case id>` |
+| Vault | The identity check, `/vault/verify` |
+| Vault | Your data, `/profile/data` |
 | Booking | Booking a visit |
 | Booking | The private link from a booking's mail |
 | Booking | A collector's own visits |
@@ -1550,8 +1585,8 @@ Runs once per row of **Test data**.
 * No item names a case or a visit.
 * No count or badge in the header names one either.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-2nb rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
-### grade10-site-site-carried-surfaces-US7-TC4-1: Account menu names the case and visit items on a carrying lane
+<!-- trace:case id=g10.site-carried-surfaces.TC-2nb rev=2 covers=g10.site-carried-surfaces.SC-zcr -->
+### grade10-site-site-carried-surfaces-US7-TC4-2: Account menu names the visits item and no vault case item on a carrying lane
 
 **Classification:**
 
@@ -1568,21 +1603,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries the
-  vault and booking surfaces.
-* customer(signed in, holding an open vault case and a booked visit) is on
-  <grade10 staging site url>.
+* The site under test is <grade10 staging site url>, a build that carries the vault and booking surfaces.
+* customer(signed in, holding an open vault case and a booked visit) is on <grade10 staging site url>.
 
 **Steps:**
 
 1. Open the account menu in the header.
-2. Open the item for the collector's vault case.
+2. Read every item it holds.
 3. Open the item for the collector's visits.
 
 **Expected Results:**
 
-* The menu names both items.
-* Steps 2 and 3 each render their own surface, not the not-found surface.
+* Step 2 names the collector's visits, and no item names a vault case.
+* Step 3 renders the collector's own visits, not the not-found surface.
 
 <!-- trace:case id=g10.site-carried-surfaces.TC-xs2 rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
 ### grade10-site-site-carried-surfaces-US7-TC5-1: Account menu on the preview host names no withheld product
@@ -1624,8 +1657,8 @@ product is open,
 **so that** hiding a product on the public site costs nothing to the lanes it
 is still used on.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-n0x rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
-### grade10-site-site-carried-surfaces-US8-TC1-1: Every withheld product address answers on a carrying lane
+<!-- trace:case id=g10.site-carried-surfaces.TC-n0x rev=2 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
+### grade10-site-site-carried-surfaces-US8-TC1-2: Every withheld product address answers on a carrying lane
 
 Runs once per row of **Test data**.
 
@@ -1644,19 +1677,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries all
-  three waiting products' surfaces.
-* customer(signed in, holding an open vault case and a booked visit) is on
-  <grade10 staging site url>.
+* The site under test is <grade10 staging site url>, a build that carries all five waiting products' surfaces.
+* customer(signed in, holding a vault case waiting for a signature and a booked visit) is on <grade10 staging site url>.
 
 **Test data:**
 
 | `<product>` | `<carried address>` |
 | --- | --- |
-| Vault | The vault |
-| Vault | A case's own page |
-| Vault | The signing ceremony |
-| Vault | The identity check |
+| Vault | The signing ceremony, with that case's token |
 | Booking | Booking a visit |
 | Booking | The private link from a booking's mail |
 | Booking | A collector's own visits |
@@ -1671,8 +1699,8 @@ Runs once per row of **Test data**.
 * Step 1 returns status 200.
 * Step 2 renders that `<product>` surface, not the not-found surface.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-4e6 rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
-### grade10-site-site-carried-surfaces-US8-TC3-1: Collector opens a vault case and signs unchanged
+<!-- trace:case id=g10.site-carried-surfaces.TC-4e6 rev=2 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
+### grade10-site-site-carried-surfaces-US8-TC3-2: Collector opens the signing ceremony and signs unchanged
 
 **Classification:**
 
@@ -1689,22 +1717,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries the
-  vault surfaces.
-* customer(signed in, holding one vault case waiting for a signature) is on
-  <grade10 staging site url>.
+* The site under test is <grade10 staging site url>, a build that carries the vault surfaces.
+* customer(holding one vault case waiting for a signature) is at the shop's iPad on <grade10 staging site url>.
 
 **Steps:**
 
-1. Open <grade10 vault url>.
-2. Open the case from the list.
-3. Open <the vault signing url> with that case's token.
+1. Open <the vault signing url> with that case's token.
 
 **Expected Results:**
 
-* Each surface renders, and none is the not-found surface.
-* The case page names the case.
-* The signing ceremony offers the documents to sign.
+* The signing ceremony renders, not the not-found surface.
+* It offers the case's documents to sign.
 
 <!-- trace:case id=g10.site-carried-surfaces.TC-jor rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC4-1: Collector books a visit and opens the private link unchanged
@@ -1740,8 +1763,8 @@ Runs once per row of **Test data**.
 * Step 3 renders the visit, not the not-found surface.
 * The private link offers to move or cancel the visit.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-81l rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
-### grade10-site-site-carried-surfaces-US8-TC5-1: Chrome and front door name every product on a carrying lane
+<!-- trace:case id=g10.site-carried-surfaces.TC-81l rev=2 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
+### grade10-site-site-carried-surfaces-US8-TC5-2: Chrome and front door name every carried product on a carrying lane
 
 **Classification:**
 
@@ -1758,26 +1781,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries all
-  three waiting products' surfaces.
+* The site under test is <grade10 staging site url>, a build that carries all five waiting products' surfaces.
 * customer(signed in) is on <grade10 staging site url>.
 
 **Steps:**
 
 1. Read the header, the footer and the front door.
-2. Open the account menu in the header.
-3. Open the vault from the header's navigation item.
+2. Open booking a visit from the header's navigation item.
 
 **Expected Results:**
 
-* The header names the store, the vault and booking a visit, and carries a
-  cart control.
-* The footer carries a shop column, and the front door carries a button and a
-  card for each of the three.
-* Step 3 renders the vault.
+* The header names the store and booking a visit, carries a cart control, and holds no vault item.
+* The footer carries a shop column, and the front door carries a button and a card for the store, and none for booking or the vault.
+* Nothing in the header, the footer or the front door opens a vault address.
+* Step 2 renders booking a visit.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-o4j rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
-### grade10-site-site-carried-surfaces-US8-TC6-1: Opening one product leaves the other two shut
+<!-- trace:case id=g10.site-carried-surfaces.TC-o4j rev=2 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
+### grade10-site-site-carried-surfaces-US8-TC6-2: Opening one product leaves the other two shut
 
 **Classification:**
 
@@ -1794,21 +1814,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the three waiting
-  products' surfaces.
+* The site under test is a build that carries none of the five waiting products' surfaces.
+* A vault case waiting for a signature holds a live signing token for that lane.
 
 **Steps:**
 
 1. Add that build's lane to the stated list of lanes that carry the vault.
 2. Rebuild and deploy the site to that lane with no other edit.
-3. Open <grade10 vault url> on that lane.
-4. Fetch <grade10 store url> and <grade10 booking url> on the same lane.
+3. Open <the vault signing url> with that case's token on that lane.
+4. Fetch <grade10 store url>, <grade10 booking url>, <grade10 profile url> and <grade10 membership url> on the same lane.
 
 **Expected Results:**
 
-* Step 3 renders the vault, and the header, the footer and the front door
-  name it.
-* Step 4 returns status 404 for both.
+* Step 3 renders the signing ceremony.
+* Step 4 returns status 404 for all four.
 * No surface outside the vault's set changed.
 
 <!-- trace:case id=g10.site-carried-surfaces.TC-2wv rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
@@ -1845,7 +1864,94 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-site-carried-surfaces-US8-TC9-1: On a lane that carries the vault, only the signing ceremony answers
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-carried-surfaces-US-08
+
+**Pre-conditions:**
+
+* The sites under test are <grade10 staging site url> and <grade10 development site url>, builds that carry the vault's set.
+* customer(signed in, holding a vault case waiting for a signature) is on the lane under test.
+
+**Test data:**
+
+| `<vault address>` | Status | Renders |
+| --- | --- | --- |
+| The signing ceremony, `/vault/sign` with that case's token | 200 | The signing ceremony |
+| The case list, `/vault` | 404 | The not-found surface |
+| The request, `/vault/new` | 404 | The not-found surface |
+| The collector's case page, `/vault/cases/<case id>` | 404 | The not-found surface |
+| The identity check, `/vault/verify` | 404 | The not-found surface |
+| Your data, `/profile/data` | 404 | The not-found surface |
+
+**Steps:**
+
+1. Fetch `<vault address>` on the lane under test.
+2. Open the same address in the browser.
+
+**Expected Results:**
+
+* Step 1 returns the row's status.
+* Step 2 renders what the row names.
+
 ---
+
+## Settled
+
+* The rule that nothing names an absent surface reaches everything a build
+  renders — a page's own head and a link in a carried surface's body as much
+  as the chrome, the front door and the crawler files.
+* The two addresses the shop hands out for a product and a collection are this
+  site's to answer, so a build that does not carry the store refuses them.
+* A lane that carries no store takes no order, so no mail sent from it names a
+  store address.
+* What a build holds for an uncarried surface is its address and its page, and
+  those alone. The code behind it may still ride in the bundle: the storefront
+  publishes the shop's features and the account's as one list, and the
+  account's serve surfaces every lane carries. Asked and settled — do not
+  raise it again as a gap in the requirement.
+* The front door's card row renders empty rather than being removed from the
+  page when none of the three waiting products is carried; the header's
+  navigation, the footer and the account menu always keep a non-product item
+  and never reach that case.
+* Booking's set, including the private link from its mail, waits whole; a
+  booking already taken on a public lane is a follow-on change's problem, not
+  this one's.
+* The account menu's per-item gate is a site-level outcome this capability
+  states; no `@grade10/ui` contract is held to it.
+* The vault's vanity domain keeps redirecting to the vault's address while the
+  vault is withheld, landing on the not-found surface like any other route
+  into it.
+* The auction is not gated by this capability: it carries on every lane, and
+  no store, vault or booking surface depends on it or on each other.
+* The labs are carried on development and staging, not on preview or
+  production — widened from development alone (Q27).
+* A return address a sign-in flow lands a collector on is refused the same way
+  any other route into an uncarried surface is — the refusal does not depend
+  on how the address was reached.
+* Whether `/membership` and `/join` are ever named in a sitemap, robots.txt,
+  the header, the footer or the front door is answered no, independent of any
+  gate: both are `session`-kind surfaces, which are never part of
+  `PUBLIC_SURFACES` to begin with. The same holds for the profile and every
+  other session-kind surface this capability withholds.
+* Whether a withheld product's own inner content (a member's balance, a vault
+  case's detail) is this capability's to test is answered no: carried
+  surfaces owns only whether an address exists and answers, never what a
+  product shows once carried — that is each product's own capability.
+- **The front door on a lane carrying the vault** - no vault button or card on any lane; the ceremony is reached by the link staff hand over (Q20)
 
 ## Reconciliation
 
@@ -2009,45 +2115,15 @@ is noted.
     instead, the two lanes that still refuse the labs; `US8-TC7-1` in this
     change's own suite proves the positive case on development and staging.
 
-## Settled
+**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `apps/frontend/grade10/src/surfaces.ts` and `MarketingPage.tsx`. It is a statement, not proof.
 
-* The rule that nothing names an absent surface reaches everything a build
-  renders — a page's own head and a link in a carried surface's body as much
-  as the chrome, the front door and the crawler files.
-* The two addresses the shop hands out for a product and a collection are this
-  site's to answer, so a build that does not carry the store refuses them.
-* A lane that carries no store takes no order, so no mail sent from it names a
-  store address.
-* What a build holds for an uncarried surface is its address and its page, and
-  those alone. The code behind it may still ride in the bundle: the storefront
-  publishes the shop's features and the account's as one list, and the
-  account's serve surfaces every lane carries. Asked and settled — do not
-  raise it again as a gap in the requirement.
-* The front door's card row renders empty rather than being removed from the
-  page when none of the three waiting products is carried; the header's
-  navigation, the footer and the account menu always keep a non-product item
-  and never reach that case.
-* Booking's set, including the private link from its mail, waits whole; a
-  booking already taken on a public lane is a follow-on change's problem, not
-  this one's.
-* The account menu's per-item gate is a site-level outcome this capability
-  states; no `@grade10/ui` contract is held to it.
-* The vault's vanity domain keeps redirecting to the vault's address while the
-  vault is withheld, landing on the not-found surface like any other route
-  into it.
-* The auction is not gated by this capability: it carries on every lane, and
-  no store, vault or booking surface depends on it or on each other.
-* The labs are carried on development and staging, not on preview or
-  production — widened from development alone (Q27).
-* A return address a sign-in flow lands a collector on is refused the same way
-  any other route into an uncarried surface is — the refusal does not depend
-  on how the address was reached.
-* Whether `/membership` and `/join` are ever named in a sitemap, robots.txt,
-  the header, the footer or the front door is answered no, independent of any
-  gate: both are `session`-kind surfaces, which are never part of
-  `PUBLIC_SURFACES` to begin with. The same holds for the profile and every
-  other session-kind surface this capability withholds.
-* Whether a withheld product's own inner content (a member's balance, a vault
-  case's detail) is this capability's to test is answered no: carried
-  surfaces owns only whether an address exists and answers, never what a
-  product shows once carried — that is each product's own capability.
+- **Raised, folded into spec** - the collector's vault screens not found on every lane, from `US6-TC14-1` and `grade10-site-site-carried-surfaces-US8-TC9-1`, as `grade10-site-site-carried-surfaces-SC-40`; tasks 3.1, 3.2 and the tech design now cite `grade10-site-site-carried-surfaces-SC-22`, `-SC-26` and `-SC-40` in place of the store's and booking's scenarios
+- **Raised, escalated** - the front door's vault card, landed as Q20
+- **Raised, rejected** - none
+- **Carried into a bump** - `US6-TC14-1`, the collector's vault screens on the public lanes, leaves the delta: its five addresses are rows of `grade10-site-site-carried-surfaces-US6-TC1-2`, and `grade10-site-site-carried-surfaces-US8-TC9-1` holds them on the lanes that carry the vault
+- **New ids kept** - `grade10-site-site-carried-surfaces-US5-TC11-1`, no link to a collector vault screen on a carrying lane; `grade10-site-site-carried-surfaces-US8-TC9-1`, the ceremony alone answering there
+- **Joined** - `grade10-site-site-carried-surfaces-SC-28` and `-SC-40` into `grade10-site-site-carried-surfaces-US6-TC1-2`; `grade10-site-site-carried-surfaces-SC-25` into `grade10-site-site-carried-surfaces-US8-TC3-2`
+- **Corrected** - `grade10-site-site-carried-surfaces-US8-TC5-2` finds a button and card for the store alone on the front door; `grade10-site-site-carried-surfaces-US8-TC6-2` fetches the store, booking, the profile and membership, the four sets `grade10-site-site-carried-surfaces-SC-27` keeps shut, and no vault address; both count five waiting products
+- **Added by QA2** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none
