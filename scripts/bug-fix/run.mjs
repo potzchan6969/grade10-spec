@@ -461,7 +461,11 @@ function shell(command) {
 }
 
 function git(...args) {
-  return execFileSync("git", args, { cwd: repo, encoding: "utf8" });
+  return execFileSync("git", args, {
+    cwd: repo,
+    encoding: "utf8",
+    maxBuffer: Infinity,
+  });
 }
 
 function section(title, body) {

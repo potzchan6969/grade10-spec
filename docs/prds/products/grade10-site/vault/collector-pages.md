@@ -103,7 +103,7 @@ hold, a wizard to open another, and each case's own page.
   bring the item, sign at the counter
 - **Cancel this request** — ends the case at any status before the item is in
   the vault; any visit is cancelled with it and the item stays with the collector
-- 🚧 **A draft staff opened** — on the collector's list as a draft opened at
+- **A draft staff opened** — on the collector's list as a draft opened at
   the counter; they check it and send it, and nothing is valued or emailed
   before they send it
 - **History** — every event the collector may see, actor kind only, never a

@@ -113,7 +113,8 @@ Every item is a value or an act outside the code, with who closes it;
    summary or warning the regime prescribes beside the loan agreement, the
    complaints escalation line, and the Chinese versions of each; a drafted
    wording prints until counsel replaces it; only a text with no draft refuses
-   its act in production — today the collection statement's send alone — and
+   its act in production — today the collection statement's send and a
+   walk-in's open — and
    brackets print outside production only
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
@@ -189,7 +190,7 @@ the code holds until they do.
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
 | Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
-| The collection statement | TBC Legal | One personal information collection statement per brand, for every product, versioned; each send keeps the version it showed. In production the send is refused while it is unwritten; outside production it reads “Being prepared”. A draft for counsel is written; changed at landing, superseding the round's answer | Legal |
+| The collection statement | TBC Legal | One personal information collection statement per brand, for every product, versioned; each send and each walk-in keeps the version it showed. In production the send and a walk-in's open are refused while it is unwritten; outside production it reads “Being prepared”. A draft for counsel is written; changed at landing, superseding the round's answer | Legal |
 | One rule for the complaints contact | Decided | The paper refuses an unset contact in production too, so the field keeps one rule | Product |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
 | Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |

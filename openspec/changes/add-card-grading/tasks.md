@@ -1526,16 +1526,20 @@ the slow lane of 21.8; walk 34 decides them.
       one, its test red first: `lastVisitEndedAt` over `dropoff_missed`,
       `dropoff_cancelled` and `dropoff_detached` replaces `lastMissedVisitAt`
       at every call site, and `planClockAt` takes `visitEndedAt`; `planNudges`
-      reads the same clock and nudges once per clock start (Q144); then run
+      reads the same clock and nudges once per clock start, `plan_nudged`
+      leaving `ONCE_PER_SUBMISSION_KINDS` for a partial unique index on the
+      clock start its details carry (Q144); then run
       21.10's checks (`grade10-site-grading-dropoff-booking-SC-31`,
       `grade10-site-grading-dropoff-booking-SC-28`,
       `grade10-site-grading-submission-plan-SC-64`)
 - [ ] 21.12 Send the list-saved message once from the daily sweep for a plan kept
-      with no drop-off booked as the `planLinks` list, `plan_saved` joining
+      with no drop-off booked as the `planLinks` list, `plan_link_sent` joining
       `ONCE_PER_SUBMISSION_KINDS`, never on the collector leaving the page, the
       plan read as it stands when the sweep runs (Q145); a plan already mailed
       under the old immediate send is not mailed again, its existing
-      `plan_saved` row holding the once-only index; move Finish later and Save for
+      `plan_link_sent` row holding the once-only index; its link minted into a
+      new `plan_link_hash` beside the page's, which `submissionAccess` reads
+      and every re-mint nulls; move Finish later and Save for
       later off their immediate send, and update `plan.spec.ts`'s
       `US6-TC1-1` walk to read the letter after the sweep (Q134,
       `grade10-site-grading-submission-plan-SC-38`,

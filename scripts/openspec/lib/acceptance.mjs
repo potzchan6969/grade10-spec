@@ -22,6 +22,7 @@ import {
   deltaSections,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import { git, textAt } from "../store-main.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
 const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
@@ -839,11 +840,6 @@ function foldOne(
   return durable;
 }
 
-function gitText(root, ...args) {
-  const result = spawnSync("git", args, { cwd: root, encoding: "utf8" });
-  return result.status === 0 ? result.stdout : null;
-}
-
 /** The durable spec as it stood when the delta's Purpose last changed ("" if
  * it did not exist yet), so a first acceptance cannot replace a Purpose
  * another change wrote since. A rebase rewrites that commit onto newer main,
@@ -853,28 +849,27 @@ function durableWhenPurposeWritten(root, deltaPath, durablePath) {
     console.warn(`${deltaPath}: Purpose drift not checked - ${why}`);
     return null;
   };
-  const log = gitText(root, "log", "--format=%H", "--", deltaPath)
+  const log = git(root, ["log", "--format=%H", "--", deltaPath])
     ?.split("\n")
     .filter(Boolean);
   if (!log?.length) return skip("the delta has no git history");
   const current = purposeOf(readFileSync(join(root, deltaPath), "utf8"));
   let written = null;
   for (const commit of log) {
-    const text = gitText(root, "show", `${commit}:${deltaPath}`);
+    const text = textAt(root, commit, deltaPath);
     if (text === null || purposeOf(text) !== current) break;
     written = commit;
   }
   if (!written) return skip("its Purpose has uncommitted edits");
   if (written === log.at(-1)) {
-    const shallow = gitText(root, "rev-parse", "--is-shallow-repository");
-    const followed = gitText(
-      root,
+    const shallow = git(root, ["rev-parse", "--is-shallow-repository"]);
+    const followed = git(root, [
       "log",
       "--follow",
       "--format=%H",
       "--",
       deltaPath,
-    );
+    ]);
     if (shallow?.trim() === "true")
       console.warn(
         `${deltaPath}: Purpose drift checked only from ${written}, the shallow history's edge`,
@@ -887,7 +882,7 @@ function durableWhenPurposeWritten(root, deltaPath, durablePath) {
         `${deltaPath}: Purpose drift checked only from ${written}, where the delta was renamed`,
       );
   }
-  return gitText(root, "show", `${written}:${durablePath}`) ?? "";
+  return textAt(root, written, durablePath) ?? "";
 }
 
 function previousDurableSnapshots(root, changeId) {
@@ -1722,7 +1717,11 @@ export function acceptChange(
   const command = (args) =>
     runCommand
       ? runCommand(args, root)
-      : spawnSync("pnpm", args, { cwd: root, encoding: "utf8" });
+      : spawnSync("pnpm", args, {
+          cwd: root,
+          encoding: "utf8",
+          maxBuffer: Infinity,
+        });
   const validate = (args, label) => {
     const result = command(args);
     if (result.status !== 0)

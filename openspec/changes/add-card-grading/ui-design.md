@@ -377,7 +377,7 @@ Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-s
 | More than 20 | the notice reads Bulk is the only level open at the next step | `shared-ui-grading-submission-SC-62` |
 | Over the cap | the 101st card refused with the second-submission-another-day line | `shared-ui-grading-submission-SC-16` |
 | Continue | the count on the button | **Out of suite:** the view's colocated test |
-| Finish later | the plan kept; the emailed-link line | `grade10-site-grading-submission-plan-SC-38` |
+| Finish later | the plan kept; the line naming when the link is emailed | `grade10-site-grading-submission-plan-SC-38` |
 | Finish later, no email | the email asked for before the plan is kept | `grade10-site-grading-submission-plan-SC-40` |
 | Cards, paste open | the paste sheet open over the cards step, read against the list it adds to | `shared-ui-grading-submission-SC-20` |
 

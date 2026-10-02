@@ -454,10 +454,13 @@ test("a file a revision does not hold reads as nothing, and a revision git refus
     await showAt(root, head, "openspec/changes/probe/proposal.md"),
     undefined,
   );
-  await assert.rejects(
-    showAt(root, "no-such-ref", "openspec/changes/probe/.openspec.yaml"),
-    /no-such-ref.*openspec\/changes\/probe\/\.openspec\.yaml|openspec\/changes\/probe\/\.openspec\.yaml.*no-such-ref/s,
-  );
+  for (const ref of ["no-such-ref", "0".repeat(40)])
+    await assert.rejects(
+      showAt(root, ref, "openspec/changes/probe/.openspec.yaml"),
+      new RegExp(
+        `git show ${ref}:openspec/changes/probe/\\.openspec\\.yaml refused`,
+      ),
+    );
 });
 
 /** The script over a fixture store, its payloads printed and nothing sent. */

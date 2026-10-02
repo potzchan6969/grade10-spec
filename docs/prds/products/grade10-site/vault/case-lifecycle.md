@@ -127,7 +127,7 @@ released`, guarded on nothing outstanding and no packet open.
 | Signing link | **30 minutes**, one device | the link |
 | Sweeps | every **15 minutes** and hourly | liveness only; every deadline is also enforced where it is read |
 
-- 🚧 **A draft staff opened** — ends on the **7-day** draft clock and on a
+- **A draft staff opened** — ends on the **7-day** draft clock and on a
   cancel with no email
 - **A lapsed offer reads as one** — the offer's own expiry is read at the
   read, and the case stays `offer_made`, open for another —
@@ -146,10 +146,13 @@ released`, guarded on nothing outstanding and no packet open.
   before the cure date of a written notice has passed; the item settles the
   debt, the figure reaches the audit chain, and the collector is told; a
   visit ahead is cancelled and one past is a no-show, never completed
-- 🚧 **An address typed wrong** — staff cancel the unsent draft and open
+- **An address typed wrong** — staff cancel the unsent draft and open
   another under the right address; the account at the wrong address is not
   emailed and keeps nothing: the draft and staff's photos are removed from
   it rather than listed as cancelled
+- **The collector's own cancel** — a draft staff opened that the
+  collector cancels stays on their list as any cancelled draft; only staff's
+  cancel and the clock remove it
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - **Every ending reads on the case** — in the collector's words: the

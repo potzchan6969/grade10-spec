@@ -7,15 +7,21 @@
 
 import { execFileSync } from "node:child_process";
 
-/** Git's answer, trimmed, or null where git refused. */
+const run = (root, args) =>
+  execFileSync("git", args, {
+    cwd: root,
+    encoding: "utf8",
+    maxBuffer: Infinity,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+/** Git's answer, trimmed, or null where git refused; a git that never ran
+ * throws. */
 export function git(root, args) {
   try {
-    return execFileSync("git", args, {
-      cwd: root,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-  } catch {
+    return run(root, args).trim();
+  } catch (error) {
+    if (typeof error.status !== "number") throw error;
     return null;
   }
 }
@@ -56,6 +62,24 @@ export function storeMain(root, { fetch = true } = {}) {
   return commit ? { ref, commit } : null;
 }
 
-/** A store file as it stands at a commit, or null where that commit has none. */
-export const textAt = (root, commit, path) =>
-  git(root, ["show", `${commit}:${path}`]);
+/** A store file as it stands at a commit, or null where that commit has none
+ * — and null for that reason alone: any other refusal throws with git's
+ * words, since a file read as absent fails a check that should pass. */
+/** Whether git's refusal to show a path at a commit means the commit holds no
+ * such path; git names an unknown full sha the same way, hence the probe. */
+export const absentAt = (root, commit, stderr) =>
+  /does not exist in|exists on disk, but not in/.test(stderr) &&
+  git(root, ["cat-file", "-e", `${commit}^{commit}`]) !== null;
+
+export function textAt(root, commit, path) {
+  try {
+    return run(root, ["show", `${commit}:${path}`]);
+  } catch (error) {
+    const said = String(error.stderr ?? "");
+    if (absentAt(root, commit, said)) return null;
+    throw new Error(
+      `git show ${commit}:${path} refused in ${root}: ${(said || error.message).trim()}`,
+      { cause: error },
+    );
+  }
+}

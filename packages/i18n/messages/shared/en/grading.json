@@ -68,7 +68,7 @@
       "email": "Email",
       "phone": "Phone",
       "signedInLine": "Filled from your account when you are signed in; change them for this submission here.",
-      "emailLine": "The moment you leave, we email the link to this submission to this address, so you can finish on any device — no account needed."
+      "emailLine": "We email the link to this submission to this address by tomorrow, so you can finish on any device — no account needed."
     },
     "card": {
       "matched": "{set} · {number} · matched in the catalogue",
@@ -205,7 +205,7 @@
       "body": "Add a card by its name, or paste a list of them."
     },
     "withoutValue": "{count, plural, one {One card is} other {# cards are}} still without a declared value.",
-    "kept": "Your list is kept. We emailed its link to {email}, so you can finish on any device.",
+    "kept": "Your list is kept. We email its link to {email} by tomorrow, so you can finish on any device.",
     "keepFailed": "We could not keep your list just now. Try again in a moment.",
     "backToSubmission": "Back to the submission"
   },

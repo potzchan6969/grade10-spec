@@ -57,13 +57,16 @@ See [Non-Goals](decisions.md#non-goals).
   items; the collector filter; the grants table, where the identity read
   covers collector names and the operate grant opens a walk-in
 - `grade10-site/vault/case-intake`: a draft staff opened under the
-  collector's account, sent by the collector with the wizard's third step
+  collector's account, sent by the collector with the wizard's third step; a
+  photograph removed from any unsent draft of the collector's own
 - `grade10-site/vault/case-lifecycle`: a draft staff opened ends on the
   **7-day** draft clock or a cancel, silently; a mistyped walk-in is cancelled
   and opened again, and the account at the wrong address keeps nothing of
   it
 - `grade10-site/vault/collector-notifications`: no email on a staff-opened
   draft's expiry or cancel
+- `grade10-site/vault/retention-and-erasure`: a removed walk-in purged as an
+  unsigned case, the collector's own actor ids rewritten as an erasure's
 
 ## Impact
 
@@ -72,9 +75,12 @@ See [Non-Goals](decisions.md#non-goals).
   `accountsByUserIds` answers the collector names, at most 100 ids a call
 - **Vault worker** - `packages/vault/backend`: the walk-in act opening a
   draft, the silent expiry of a draft staff opened, and its cancel, which
-  removes the draft and staff's photos from the account; collector names
-  by case ids under the identity grant, the collector filter, and one
-  collector's cases
+  removes the draft and every photograph on it from the account; collector
+  names by case ids under the identity grant, the collector filter, one
+  collector's cases, each read that names a collector on the audit chain,
+  and a collector's removal of a photograph from their unsent draft
+- **Worker ladder** - `packages/worker`: `auditWhen`, so a read records its
+  chain row only when it names or narrows to a collector
 - **Console** - `packages/vault/admin-frontend`: the walk-in form, the
   collector column and filter on the queue and held items; the collector page
   in `apps/admin/grade10`
@@ -93,12 +99,20 @@ See [Non-Goals](decisions.md#non-goals).
 - A customer who has signed in before served at the counter without their
   phone
 
+No domain impact: `grade10-site/vault` has no `domain-tcs.md`, and the one
+path across its capabilities this change adds - a draft staff opened, sent or
+cancelled - starts at the console's walk-in, so the change's walk carries it
+end to end. No product impact: `grade10-admin/product-tcs.md` traces no vault
+or console journey this change touches. No platform impact: no
+`platform-tcs.md` exists.
+
 ## Open questions
 
 - **Legal** - the collection statement's text, which the walk-in open and
   the send both wait on in production; the form is built without waiting
 - **Design** - the counter's form, the collector column and filter, and the
-  collector page have no board yet; `ui-design.md` waits on them
+  collector page have no board yet - [Q27](decisions.md#decisions)
+- **Legal** - until that text lands, the walk-in is dark in production
 
 ## References
 
@@ -106,3 +120,6 @@ See [Non-Goals](decisions.md#non-goals).
 - [Collector Pages · Case page](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-page)
 - [Case Lifecycle · Exits](../../../docs/prds/products/grade10-site/vault/case-lifecycle.md#exits)
 - [Collector Page · Sections](../../../docs/prds/products/grade10-admin/console/collector-page.md#sections)
+- [Operator Console · Permissions](../../../docs/prds/products/grade10-site/vault/operator-console.md#permissions)
+- [Case Lifecycle · Timers](../../../docs/prds/products/grade10-site/vault/case-lifecycle.md#timers)
+- [Compliance and Readiness · Before the First Production Case](../../../docs/prds/products/grade10-site/vault/compliance-and-readiness.md#before-the-first-production-case)

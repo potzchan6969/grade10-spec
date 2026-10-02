@@ -61,3 +61,26 @@ before the cure date, the notice sent on which day,
 or None,
 **so that** I know whether to send the check again, wait, or do it at the
 counter.
+
+### grade10-admin-vault-operator-queue-US-10: Operator opens a case for a customer at the counter
+
+**As a** member of shop staff with a customer and their item in front of me,
+**I want** to open the case myself from their email, the item and my own
+photos,
+**so that** a customer with no request on their phone is served on the spot,
+and the draft waits for them to send it.
+
+### grade10-admin-vault-operator-queue-US-11: Operator reads whose case it is by name
+
+**As a** member of shop staff,
+**I want** the queue and the held items to name each case's collector,
+**so that** I can greet the customer and tell two customers' cases apart
+without opening each one.
+
+### grade10-admin-vault-operator-queue-US-12: Operator narrows the queue to one collector's cases
+
+**As a** member of shop staff,
+**I want** a collector's name to narrow the queue and the held items to that
+collector,
+**so that** I can see everything one customer has with us without being able
+to search the customer list by name.

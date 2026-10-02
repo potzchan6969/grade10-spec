@@ -196,7 +196,7 @@ export function main(root, strict, only) {
       "--json",
       ...(strict ? ["--strict"] : []),
     ],
-    { cwd: root, encoding: "utf8" },
+    { cwd: root, encoding: "utf8", maxBuffer: Infinity },
   );
   if (run.error) throw new Error(`could not run the CLI: ${run.error.message}`);
 
