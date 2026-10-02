@@ -110,7 +110,7 @@ export function projectAvailability(
   for (const change of changes) {
     const environments: EnvironmentAvailability[] = [];
     for (const [environment, rows] of history) {
-      const latest = rows.at(-1)!;
+      const latest = rows[rows.length - 1];
       const previous = rows.at(-2);
       const listed = latest.changes.find((one) => one.change === change.id);
       const wasListed =
@@ -182,7 +182,7 @@ export function projectAvailability(
     if (environments.length > 0) change.availability = environments;
   }
   return [...history].map(([environment, rows]) => {
-    const latest = rows.at(-1)!;
+    const latest = rows[rows.length - 1];
     return {
       environment,
       resolvedRef: latest.resolvedRef,

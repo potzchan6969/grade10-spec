@@ -234,7 +234,7 @@ function nextSequence(storeRoot, app, product, capability, kind, target) {
     const lines = readFileSync(file, "utf8").split(/\r?\n/);
     for (const line of lines) {
       const comment = traceComment(line);
-      if (!comment || comment.syntax !== "html") continue;
+      if (comment?.syntax !== "html") continue;
       const marker = /^([a-z]+)(?:\s+([\s\S]*))?$/.exec(comment.body);
       if (!marker || !["scenario", "case"].includes(marker[1])) continue;
       const id = /(?:^|\s)id=([^\s]+)/.exec(marker[2] ?? "")?.[1];
@@ -517,7 +517,7 @@ export function parseTraceGraph({
     tests,
     issues,
     unlinked,
-    links: validLinkCount(scenarios, cases, tests, byScenario, byCase),
+    links: validLinkCount(cases, tests, byScenario, byCase),
   };
 }
 
@@ -812,7 +812,7 @@ function duplicateIssues(grouped, type, issues) {
   }
 }
 
-function validLinkCount(scenarios, cases, tests, byScenario, byCase) {
+function validLinkCount(cases, tests, byScenario, byCase) {
   let count = 0;
   for (const record of cases) {
     for (const id of record.covers) if (byScenario.has(id)) count += 1;

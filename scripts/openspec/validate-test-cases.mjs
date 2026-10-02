@@ -45,7 +45,6 @@ import { citesId } from "./lib/cites.mjs";
 import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
   activeChangeSpecRoots,
-  CASE_STATUSES,
   caseIndex,
   changeOf,
   commaList,
@@ -757,7 +756,7 @@ const index = caseIndex(ROOT, suites);
 if (args.captureBaseline) {
   const out = {};
   for (const [id, v] of index) out[id] = { traces: v.traces, status: v.status };
-  writeFileSync(args.captureBaseline, JSON.stringify(out, null, 2) + "\n");
+  writeFileSync(args.captureBaseline, `${JSON.stringify(out, null, 2)}\n`);
   console.log(
     `${green("✓")} baseline captured: ${index.size} cases across ${suites.length} suites ` +
       `${dim(`→ ${args.captureBaseline}`)}`,
@@ -922,7 +921,7 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   }
 
   const levelsByJourney = new Map();
-  for (const [id, v] of index)
+  for (const v of index.values())
     for (const t of v.traces) {
       if (!levelsByJourney.has(t)) levelsByJourney.set(t, new Map());
       const m = levelsByJourney.get(t);
@@ -1008,24 +1007,22 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
 // times what the case verifies has changed. Two counters for one fact drift -
 // the migration stamped `rev=1` over cases already at `-2` - so where a case
 // carries a marker, the two agree.
-{
-  for (const p of suites) {
-    const lines = readFileSync(p, "utf8").split("\n");
-    const rel = relative(ROOT, p);
-    for (let i = 0; i < lines.length; i++) {
-      const marker = /^<!--\s*trace:case\b.*?\brev=(\d+)/.exec(lines[i]);
-      if (!marker) continue;
-      let j = i + 1;
-      while (j < lines.length && lines[j].trim() === "") j++;
-      const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
-      if (!heading || heading[2] === marker[1]) continue;
-      record(
-        "error",
-        rel,
-        j + 1,
-        `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
-      );
-    }
+for (const p of suites) {
+  const lines = readFileSync(p, "utf8").split("\n");
+  const rel = relative(ROOT, p);
+  for (let i = 0; i < lines.length; i++) {
+    const marker = /^<!--\s*trace:case\b.*?\brev=(\d+)/.exec(lines[i]);
+    if (!marker) continue;
+    let j = i + 1;
+    while (j < lines.length && lines[j].trim() === "") j++;
+    const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+    if (!heading || heading[2] === marker[1]) continue;
+    record(
+      "error",
+      rel,
+      j + 1,
+      `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+    );
   }
 }
 
