@@ -201,6 +201,21 @@
       }
     ]
   },
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "ecchochan",
+    "reviewedAt": "2026-10-02T18:42:17.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "grade10-spec#857: six of this change's cases move to automated, naming the domain walk that decides them, and US03-TC02-2 and US04-TC03-2 read what the walk proves, that the bid form shows Min and disables Place Bid so nothing is sent; no requirement or scenario changed and every case stays draft",
+        "evidence": [
+          "9gag/grade10@eeb809201435f5c047420534282b7f37759156e7:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts"
+        ]
+      }
+    ]
+  },
   "repositories": [
     {
       "repository": "9gag/grade10",
