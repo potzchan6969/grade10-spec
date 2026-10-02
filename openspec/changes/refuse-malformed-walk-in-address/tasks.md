@@ -11,7 +11,7 @@
 - [ ] 2.2 Check the address in `WalkInDialog.tsx` with the walk-in contract's own address rule, refuse it beside the field when the field is left holding a malformed address, clear the refusal once the address meets the rule, and hold Open case while the address is malformed (`grade10-admin-vault-operator-queue-SC-95`)
 - [ ] 2.3 Verify: `pnpm run typecheck` and `pnpm run test` for `packages/vault/admin-frontend`, and the root `pnpm run lint` in grade10.
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @ecchochan)
 
 Takes the draft `feature-tcs.md` as its input once group 2 has landed; human QA reviews the suite with `/tcs-review refuse-malformed-walk-in-address` after deployment. While the two cases are draft, the walk's titles cite scenarios and carry no bracketed case id.
 
