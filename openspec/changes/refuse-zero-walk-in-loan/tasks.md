@@ -23,5 +23,5 @@ Takes the draft `feature-tcs.md` as its input once group 2 has landed; human QA 
 
 ## 4. The manual (grade10-spec) (owner: @ecchochan)
 
-- [ ] 4.1 Take 🚧 off the loan line in `docs/prds/products/grade10-site/vault/operator-console.md` once implementation is verified, before the change archives
-- [ ] 4.2 Verify: `pnpm check:manual` in grade10-spec.
+- [x] 4.1 Take 🚧 off the loan line in `docs/prds/products/grade10-site/vault/operator-console.md` once implementation is verified, before the change archives
+- [x] 4.2 Verify: `pnpm check:manual` in grade10-spec.
