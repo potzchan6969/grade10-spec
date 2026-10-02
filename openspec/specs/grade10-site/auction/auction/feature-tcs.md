@@ -669,7 +669,7 @@ Runs once per row of **Test data**.
 **I want** one authorization per listing, released when I am outbid,
 **so that** a delayed lower hold or a duplicate Stripe event cannot take a second bite.
 
-<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC1-1: Outbid authorization is marked for release
 
 **Classification:**
@@ -709,7 +709,7 @@ Runs once per row of **Test data**.
 * Customer A no longer holds an eligible top authorization for `<listing_1>`.
 * Grade10 records the Stripe release outcome when it arrives.
 
-<!-- trace:case id=g10.auction-auction.TC-g81 rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-g81 rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC2-1: Concurrent bids keep the highest valid outcome
 
 **Classification:**
@@ -747,7 +747,7 @@ Runs once per row of **Test data**.
 * The current bid is the highest valid accepted amount.
 * No lower bid overwrites that current bid.
 
-<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC3-1: Delayed lower authorization cannot land
 
 **Classification:**
@@ -779,7 +779,7 @@ Runs once per row of **Test data**.
 * It does not record that lower bid as accepted.
 * The current bid is unchanged.
 
-<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC4-1: Invalid or duplicate Stripe event changes nothing twice
 
 **Classification:**
@@ -818,7 +818,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * No bid, hold, release, capture, invoice or order state is duplicated.
 
-<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC5-1: Incomplete Stripe configuration fails the operation explicitly
 
 **Classification:**
@@ -848,7 +848,7 @@ Runs once per row of **Test data**.
 * Grade10 fails the operation, naming the unavailable capability.
 * No bid or fixture-backed outcome is created.
 
-<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
+<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=g10.auction-auction.SC-uha -->
 ### grade10-site-auction-auction-US3-TC6-1: Missed authorization webhook is repaired once
 
 **Classification:**
@@ -2877,7 +2877,6 @@ Runs once per row of **Test data**.
 ## Settled
 
 - The identity bar is enforced by the storefront before the auction receives a bid.
-- A refused high-value bid creates neither an auction bid nor a card hold.
 - A brand without an identity store has no identity bar.
 - The first-bid minimum on a listing with no accepted bid is its opening price: the starting price, or the lowest increment on a 0 start; one increment above the current bid applies from the second bid (decisions Q19, Q27).
 - A first bid of 0, or of one minor unit, on a 0 start is a non-goal; no case asserts either.

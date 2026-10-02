@@ -88,7 +88,7 @@
 * Step 3: the bid panel reads Leading with Your maximum <maximum>, in the one answer, with no Authorizing state before it.
 * Step 4: nothing is held or charged on the linked card.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-heq rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
+<!-- trace:case id=g10.auction-bid-payment-method.TC-heq rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC3-1: A pending or challenged authorization stays on the bid surface
 
 Runs once per row of **Test data**.
@@ -134,7 +134,7 @@ Runs once per row of **Test data**.
 * The card-linking setup does not open.
 * The bid does not show as accepted.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-h30 rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
+<!-- trace:case id=g10.auction-bid-payment-method.TC-h30 rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC4-1: A declined or unusable card is refused near the bid action
 
 Runs once per row of **Test data**.
@@ -181,7 +181,7 @@ Runs once per row of **Test data**.
 * Step 2: no bid is accepted and no authorization stands.
 * Step 3: the card can be changed, as no bid is on <listing_1> yet.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-b9p rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
+<!-- trace:case id=g10.auction-bid-payment-method.TC-b9p rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC5-1: A provider failure has its own copy and leaves nothing held
 
 Runs once per row of **Test data**.
@@ -476,7 +476,7 @@ Runs once per row of **Test data**.
 * Step 3 reads Your maximum <higher maximum> at once, with no Authorizing state before it.
 * Step 4: nothing is held or charged on the card for <listing_3>.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-hk4 rev=1 covers=g10.auction-bid-payment-method.SC-7z5,g10.auction-bid-payment-method.SC-khw,g10.auction-bid-payment-method.SC-oa0,g10.auction-bid-payment-method.SC-1ff -->
+<!-- trace:case id=g10.auction-bid-payment-method.TC-hk4 rev=1 covers=g10.auction-bid-payment-method.SC-7z5 -->
 ### grade10-site-auction-bid-payment-method-US2-TC2-1: A refused raise keeps the prior maximum and blocks nothing after
 
 **Classification:**
@@ -526,7 +526,6 @@ Runs once per row of **Test data**.
 **I want** the hold on my card cancelled,
 **so that** money is not held for a listing I cannot win.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-qo3 rev=1 covers=g10.auction-bid-payment-method.SC-lao,g10.auction-bid-payment-method.SC-33r -->
 ### grade10-site-auction-bid-payment-method-US3-TC1-1: Being outbid cancels the hold once, capturing nothing
 
 **Classification:**
@@ -656,11 +655,9 @@ Runs once per row of **Test data**.
 - The bid panel shows the fixed 20% rate only; the calculated premium amount is invoice-only.
 - `grade10-site-auction-bid-payment-method-US-04-TC1` is `grade10-site-auction-bid-payment-method-US4-TC1`: renamed to the compact id form while still draft.
 - `grade10-site-auction-bid-payment-method-US-04-TC2` is `grade10-site-auction-bid-payment-method-US4-TC2`: renamed to the compact id form while still draft.
-- Incremental and extended authorization are provider eligibility requests; the provider's returned capture deadline is authoritative for the authorization lifecycle.
 - Committing or raising a maximum takes nothing from the card and waits on no payment provider, so no case reads an authorization, a provider challenge, a pending state, a declined card at bid time or a provider failure; those cases are deprecated (decisions Q1, Q5).
 - Being outbid has nothing to release; US3 is retired with its case (decisions Q13).
 - Only the winner pays, by the invoice on their winner order; what the winner order shows after payment is `grade10-site/auction/winner-order`'s.
-- The durable line on incremental and extended authorization no longer applies: no authorization is taken at bid time.
 
 ## Reconciliation
 

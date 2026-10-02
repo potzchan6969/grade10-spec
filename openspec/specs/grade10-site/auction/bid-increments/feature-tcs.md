@@ -311,7 +311,6 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Bid-time holds are off.
 * `<listing_1>` is open in the row's currency, starting price the row's `<ceiling>`, with no accepted bid.
 * customer A and customer B are signed in with cards linked, on separate sessions.
 

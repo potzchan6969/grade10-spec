@@ -29,12 +29,6 @@ current bid is the second-highest maximum plus the listing increment.
     at the same resolved amount, and does not displace the leader
   - One resolution per commitment: Grade10 does not step through intermediate
     increments
-- Card authorization
-  - Optional authorization: disabled by default; maximum commitments and automatic bids do not wait for or create a bid-time authorization
-  - Hold for the maximum: the authorization covers the committed cap, not the
-    current bid, and stays one active hold per bidder per listing
-  - Failed raise: a raise the card cannot cover leaves the maximum, leader, and
-    price unchanged
 - Auto-bid as a bid
   - Counted and recorded: a bid Grade10 places counts in the bid count and
     history as placed on that bidder's behalf

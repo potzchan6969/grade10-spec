@@ -771,7 +771,7 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 **I want** every bid Grade10 places for me to count as a bid,
 **so that** my auto-bids keep a lot open during extended bidding as a manual bid would.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-dhr rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-dhr rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC1-1: The hold is the maximum, not the current bid
 
 Runs once per row of **Test data**.
@@ -810,7 +810,7 @@ An open listing whose current bid matches the row.
 * Grade10 holds an authorization for the row's maximum.
 * Exactly one active authorization exists for that bidder and listing.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-5xp rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-5xp rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC2-1: A raise that cannot be authorized changes nothing
 
 Runs once per row of **Test data**.
@@ -850,7 +850,7 @@ customer A(leads with a committed maximum matching the row). The card authorizat
 * Customer A's committed maximum remains the row's committed maximum.
 * The leader and the current bid are unchanged.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-hqr rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-hqr rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC3-1: An auto-bid step needs no new card check
 
 Runs once per row of **Test data**.
@@ -890,7 +890,7 @@ customer A(leads with an authorized maximum matching the row) while the current 
 * The current bid is the row's resolved current bid.
 * Customer A's authorization remains the row's maximum.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-rmo rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-rmo rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC5-1: An auto bid is counted and recorded on the bidder's behalf
 
 **Classification:**
@@ -919,7 +919,7 @@ Grade10 has raised a bidder's bid on their behalf.
 * The bid count includes that bid.
 * The history shows it as placed on that bidder's behalf, not as a manual bid.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-zjt rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-zjt rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC6-1: Standing maxima do not keep bidding on their own
 
 **Classification:**
@@ -994,7 +994,7 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Step 4 accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`.
 * Step 5: nothing is held or charged on either card.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC8-1: Auto bid during extended bidding restarts the timer once
 
 **Classification:**
@@ -1037,7 +1037,7 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`.
 * No further bid is placed on either maximum before the close.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-wqa rev=1 covers=g10.auction-auto-bidding.SC-i9w,g10.auction-auto-bidding.SC-kxu,g10.auction-auto-bidding.SC-32f,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
+<!-- trace:case id=g10.auction-auto-bidding.TC-wqa rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
 ### grade10-site-auction-auto-bidding-US5-TC9-1: Maximum committed before the close starts extended bidding
 
 **Classification:**

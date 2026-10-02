@@ -72,7 +72,6 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
 - Settlement
-  - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
   - Single fresh charge: one transaction for the final amount, retryable on failure
 - Payment deadline
   - Seven days from close: a fixed end to the winner's obligation, unmoved by anything they do to the invoice

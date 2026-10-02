@@ -32,7 +32,7 @@ belong to.
 | [`auction/auction`](auction/auction/spec.md) | The auction itself: the listings catalogue, the scheduled and extendable bidding window, bids on the card on file, and refused attempts that place nothing. |
 | [`auction/listing-page`](auction/listing-page/spec.md) | What one lot's address serves, what a shared link unfurls as, and the refusal when no such lot exists. |
 | [`auction/auto-bidding`](auction/auto-bidding/spec.md) | A collector commits a maximum, and Grade10 bids for them only as far as needed to lead. |
-| [`auction/bidding-history`](auction/bidding-history/spec.md) | A collector's private index of every retained bidding interaction on their own account. |
+| [`auction/bidding-history`](auction/bidding-history/spec.md) | A collector's private index of every bid they placed on their own account. |
 | [`auction/listing-media`](auction/listing-media/spec.md) | Alt text and named public sizes for a listing's gallery images, and how the catalogue consumes them. |
 
 ## `loyalty`

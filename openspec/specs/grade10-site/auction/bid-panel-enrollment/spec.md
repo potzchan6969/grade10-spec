@@ -29,8 +29,6 @@ Bidding on the linked card belongs to `grade10-site/auction/bid-payment-method`.
     first bid on this lot
   - Locked after first bid: the linked card stays visible without change
 - Bid commit
-  - Optional authorization: hold runs under payment-method when enabled and a
-    maximum is submitted; the standard path does not wait for a hold
   - Setup does not authorize: card-link setup takes nothing from the card
   - One answer: committing a maximum shows Leading, Outbid or the refusal, with
     no authorization state between
