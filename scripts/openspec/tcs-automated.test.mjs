@@ -74,9 +74,16 @@ const CHANGE_PATH =
   "openspec/changes/demo-change/specs/demo/thing/widget/feature-tcs.md";
 const DECIDER = "scripts/openspec/demo.test.mjs";
 
+/** A second store test a line may name beside `DECIDER`. */
+const SECOND_DECIDER = "tools/manual/test/demo.test.ts";
+
 function sandbox(files) {
   const root = mkdtempSync(join(tmpdir(), "tcs-automated-"));
-  for (const [path, text] of Object.entries(files)) {
+  const deciders = {
+    [DECIDER]: "// decides the case\n",
+    [SECOND_DECIDER]: "// decides the case\n",
+  };
+  for (const [path, text] of Object.entries({ ...deciders, ...files })) {
     const file = join(root, path);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, text);
@@ -88,6 +95,16 @@ const run = (root, ids, ...args) =>
   spawnSync(process.execPath, [SCRIPT, ...ids, "--root", root, ...args], {
     encoding: "utf8",
   });
+
+/** A throwaway application clone for `--app-root`, holding `path` or nothing. */
+function applicationClone(path) {
+  const root = mkdtempSync(join(tmpdir(), "tcs-automated-app-"));
+  if (path !== null) {
+    mkdirSync(dirname(join(root, path)), { recursive: true });
+    writeFileSync(join(root, path), "// the walk that decides the case\n");
+  }
+  return root;
+}
 
 test("shared-planning-agent-rounds-SC-59 - flips a case's Automation status to `automated`, in place", () => {
   const root = sandbox({
@@ -335,7 +352,7 @@ test("shared-planning-agent-rounds-SC-78 - names the deciding paths on every cas
       "demo-thing-second-US1-TC1-1",
     ],
     "--decided-by",
-    `${DECIDER},tools/manual/test/demo.test.ts`,
+    `${DECIDER},${SECOND_DECIDER}`,
   );
 
   assert.equal(result.status, 0, result.stderr);
@@ -367,4 +384,142 @@ test("shared-planning-agent-rounds-SC-78 - refuses `--decided-by` with an empty 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /--decided-by names an empty path/);
   assert.equal(readFileSync(join(root, CHANGE_PATH), "utf8"), before);
+});
+
+test("refuses an application path written without its `grade10:` tag, writing nothing", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const before = readFileSync(join(root, CHANGE_PATH), "utf8");
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    "apps/frontend/grade10/e2e/tests/demo.spec.ts",
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(
+    result.stderr,
+    /`apps\/frontend\/grade10\/e2e\/tests\/demo\.spec\.ts`, which does not exist in this checkout — a test in the application repository is named `grade10:<path>`/,
+  );
+  assert.equal(readFileSync(join(root, CHANGE_PATH), "utf8"), before);
+});
+
+test("refuses a tag no application repository answers to", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    "acme:apps/demo.spec.ts",
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /whose tag `acme` is no application repository/);
+});
+
+test("refuses a grade10 path the application clone at --app-root does not hold", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const app = applicationClone(null);
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    "grade10:apps/frontend/grade10/e2e/tests/demo.spec.ts",
+    "--app-root",
+    app,
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(
+    result.stderr,
+    /which the application clone at .+ does not hold/,
+  );
+});
+
+test("writes a grade10 path the application clone at --app-root holds", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const walk = "apps/frontend/grade10/e2e/tests/demo.spec.ts";
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    `grade10:${walk}`,
+    "--app-root",
+    applicationClone(walk),
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(
+    readFileSync(join(root, CHANGE_PATH), "utf8").includes(
+      `**Decided by:** \`grade10:${walk}\``,
+    ),
+  );
+});
+
+test("reads a store path against a relative --root", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+
+  const result = spawnSync(
+    process.execPath,
+    [
+      SCRIPT,
+      "demo-thing-widget-US1-TC1-1",
+      "--root",
+      ".",
+      "--decided-by",
+      DECIDER,
+    ],
+    { cwd: root, encoding: "utf8" },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test("replaces a Decided by line that names nothing rather than adding a second", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")).replace(
+      "**Pre-conditions:**",
+      "**Decided by:**\n\n**Pre-conditions:**",
+    ),
+  });
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    DECIDER,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  const written = readFileSync(join(root, CHANGE_PATH), "utf8");
+  assert.equal(written.match(/\*\*Decided by:\*\*/g)?.length, 1);
+  assert.ok(written.includes(`**Decided by:** \`${DECIDER}\``));
+});
+
+test("refuses a flip whose existing Decided by line names nothing, given no path", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")).replace(
+      "**Pre-conditions:**",
+      "**Decided by:**\n\n**Pre-conditions:**",
+    ),
+  });
+
+  const result = run(root, ["demo-thing-widget-US1-TC1-1"]);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /owes `--decided-by <path>`/);
 });

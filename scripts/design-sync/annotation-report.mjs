@@ -2,6 +2,8 @@
 
 import { readdir, readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
+import { AUTHOR_LINE } from "../../tools/manual/src/api/author-line.ts";
+import { taskGroupHeading } from "../../tools/manual/src/store/read-changes.mts";
 
 export const REPORT_SCHEMA_VERSION = 1;
 
@@ -52,20 +54,21 @@ function exactReferencesForFinding(finding) {
 }
 
 function proposalAuthor(proposal) {
-  return normalizeHandle(/\*\*Author:\*\*\s*@?([\w.-]+)/i.exec(proposal)?.[1]);
+  return normalizeHandle(AUTHOR_LINE.exec(proposal)?.[1]);
 }
 
 function parseTaskGroups(tasks) {
   if (typeof tasks !== "string") return [];
   const groups = [];
   for (const line of tasks.split("\n")) {
-    const match =
-      /^##\s+(\d+)\.\s*(.+?)(?:\s+\(owner:\s*@?([\w.-]+)\))?\s*$/i.exec(line);
-    if (!match) continue;
+    const heading = line.startsWith("## ")
+      ? taskGroupHeading(line.slice(3).trim())
+      : undefined;
+    if (!heading) continue;
     groups.push({
-      number: match[1],
-      title: match[2].trim(),
-      owner: normalizeHandle(match[3]),
+      number: heading.num,
+      title: heading.title,
+      owner: normalizeHandle(heading.owner),
     });
   }
   return groups;

@@ -20,6 +20,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
+import { DECIDED_BY } from "./decided-by.mjs";
 
 /** A scenario's heading, and a scenario listed on its own bullet. */
 const SCENARIO_HEADING = new RegExp(
@@ -435,6 +436,7 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
     bullet,
     misplaced,
     empty: empty > 0,
+    blank: values.length === 0,
     repeated: !first,
   });
   for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
@@ -641,7 +643,7 @@ export function parseSuite(text) {
       // against a file rather than a memory. One or more repository-relative
       // paths, comma-separated; backticks are stripped where a path is quoted
       // like the rest of the store's prose.
-      const decidedBy = line.match(/^\*\*Decided by:\*\*\s*(.+?)\s*$/);
+      const decidedBy = DECIDED_BY.exec(line);
       if (decidedBy) {
         readDecidedBy(tc, decidedBy[1], i, { lines });
         continue;

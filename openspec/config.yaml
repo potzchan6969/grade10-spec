@@ -45,7 +45,7 @@ context: |
 # Per-artifact rules (optional)
 rules:
   proposal:
-    - "Start with `**Author** - @handle, YYYY-MM-DD` above `## Why`. Ask for the handle; it never changes and differs from task owners."
+    - "Start with `**Author:** @handle - YYYY-MM-DD` above `## Why`. Ask for the handle; it never changes and differs from task owners."
     - "Keep standard proposal sections. Use `**Term** - detail`; retain material decisions, boundaries and metrics, omitting repetition and implementation detail owned by specs or tech design."
     - "Interview with `grilling` as `planning-pm` directs: research facts, bring decisions, challenge answers, then draft when settled. Put a deferred question in the proposal with its owner."
     - "Include a metric that would move if this change works."

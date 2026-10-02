@@ -1042,7 +1042,8 @@ artifacts:
       capability the change specifies, end to end through the interface each
       actor uses, leaves the walks as the change's end-to-end suite, and its
       commit flips each case the walks decide to automated with `pnpm run
-      tcs:automated <case…> --decided-by <walk path>`; the cases that stay
+      tcs:automated <case…> --decided-by <walk path>`, a walk in grade10
+      named `grade10:<path>`; the cases that stay
       manual remain draft for human QA after deployment makes implementation available and
       are named in the walk's `rounds.md` row.
 

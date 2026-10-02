@@ -1,3 +1,4 @@
+import { AUTHOR_LINE, authorLine } from "../api/author-line.ts";
 import type { SpecEntry } from "../api/types.ts";
 
 /**
@@ -28,8 +29,6 @@ const HANDLE = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
  * pointing at something this store cannot check. */
 const FIGMA_HOST = /^(?:[a-z0-9-]+\.)*figma\.com$/i;
 const HEADING = /^#{1,6}\s/m;
-const AUTHOR_LINE =
-  /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const SLUG_LIMIT = 64;
 
 export type ProposalFile = { path: string; content: string };
@@ -211,7 +210,7 @@ export function draftProposal(draft: ProposalDraft): ProposalFile[] {
   const body = [
     `# ${draft.title.trim()}`,
     "",
-    `**Author:** @${draft.author} - ${draft.date}`,
+    authorLine(draft.author, draft.date),
     "",
     "## Why",
     "",

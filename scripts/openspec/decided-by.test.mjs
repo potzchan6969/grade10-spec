@@ -128,6 +128,7 @@ test("shared-planning-agent-rounds-SC-78 - the line reaches `decidedBy` with its
       bullet: false,
       misplaced: false,
       empty: false,
+      blank: false,
       repeated: false,
     },
   ]);
@@ -240,6 +241,24 @@ test("shared-planning-agent-rounds-SC-78 - an empty path is refused", () => {
   assert.match(
     result.stdout,
     /has an empty path — a doubled or trailing comma/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - a line that names nothing is refused", () => {
+  const result = inChange({ decidedBy: "" });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /line at line \d+ names no path/);
+  assert.doesNotMatch(result.stdout, /carries no `\*\*Decided by:\*\*` line/);
+  assert.doesNotMatch(result.stdout, /doubled or trailing comma/);
+});
+
+test("names the grade10 tag only for a path outside every store directory", () => {
+  const typo = inChange({ decidedBy: "scripts/openspec/typo.test.mjs" });
+  assert.doesNotMatch(typo.stdout, /grade10:<path>/);
+  const bare = inChange({ decidedBy: "apps/frontend/demo.spec.ts" });
+  assert.match(
+    bare.stdout,
+    /which does not exist in this checkout — a test in the application repository is named `grade10:<path>`/,
   );
 });
 

@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
 import { handleOf, isHandle } from "../../../../scripts/openspec/lib/team.mjs";
+import { AUTHOR_LINE } from "../api/author-line.ts";
 import { askedIdsOf } from "../api/rounds.ts";
 import { ASKED_OF, ladderOf } from "../api/stages.ts";
 import type {
@@ -66,8 +67,6 @@ const REQUIREMENT_HEADING = /^Requirement:\s*(.+?)\s*$/i;
 const FROM_LINE = /^\s*-?\s*FROM:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
 const TO_LINE = /^\s*-?\s*TO:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
 const RENAMED_FROM = new RegExp(FROM_LINE.source, "gm");
-const AUTHOR =
-  /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
 function acceptedRecord(
@@ -304,7 +303,7 @@ function readChange(
         new StoreFileError(1, "proposal has no `## Why`"),
       );
     }
-    const author = AUTHOR.exec(proposal);
+    const author = AUTHOR_LINE.exec(proposal);
     if (author?.[1]) entry.author = author[1];
     if (entry.created === "") entry.created = author?.[2] ?? "";
     const cites = readCitations(body);
@@ -860,6 +859,29 @@ function readFollowOns(sections: Section[]): string[] {
   return items;
 }
 
+/** A task group's `<n>. <title> (<repo>) (owner: @handle)` heading, or
+ * nothing where the heading is no group's. */
+export function taskGroupHeading(
+  heading: string,
+): Pick<TaskGroup, "num" | "title" | "repo" | "owner"> | undefined {
+  const match = GROUP_HEADING.exec(heading);
+  if (!match) return undefined;
+  const owner = taggedOwner(match[2]);
+  const title = match[2].replace(OWNER, "").trimEnd();
+  const repo = REPO_TAG.exec(title);
+  return {
+    num: match[1],
+    title: repo ? title.slice(0, repo.index).trimEnd() : title,
+    repo: repo ? repo[1].trim() : "",
+    ...(owner ? { owner } : {}),
+  };
+}
+
+/** The walk: a group titled `The walk`, or `The walk — <what it walks>` where
+ * a plan splits it, the dash spaced. `The walk-in form` is another group. */
+export const isWalkGroup = (title: string): boolean =>
+  /^the walk(?:\s+[—–-]\s+\S.*)?$/i.test(title);
+
 /** `detailed` carries the checkbox lines themselves, so "5 of 6" can say which
  * one is open. In-flight only: the archive shares this type and its board
  * payload has no reader for the lines. */
@@ -871,22 +893,15 @@ function readTaskGroups(
   const groups: TaskGroup[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
-      const match = GROUP_HEADING.exec(section.heading);
-      if (!match) {
+      const heading = taskGroupHeading(section.heading);
+      if (!heading) {
         visit(section.children);
         continue;
       }
-      const num = match[1];
-      const owner = taggedOwner(match[2]);
-      const title = match[2].replace(OWNER, "").trimEnd();
-      const repo = REPO_TAG.exec(title);
       const tasks = readTaskLines(section.raw);
-      const claim = idle.get(num);
+      const claim = idle.get(heading.num);
       groups.push({
-        num,
-        title: repo ? title.slice(0, repo.index).trimEnd() : title,
-        repo: repo ? repo[1].trim() : "",
-        ...(owner ? { owner } : {}),
+        ...heading,
         done: tasks.filter((task) => task.done).length,
         total: tasks.length,
         ...(detailed ? { tasks } : {}),
