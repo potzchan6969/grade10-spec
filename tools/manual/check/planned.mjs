@@ -39,6 +39,7 @@ import {
   isWalkGroup,
   taskGroupHeading,
 } from "../src/store/read-changes.mts";
+import { readJourneys, walkedByNobody } from "../src/store/read-specs.mts";
 
 /** The mark a deferral wears, on the PRD and in a landing that names one. */
 const DEFERRED = "❓";
@@ -47,12 +48,12 @@ const SCENARIO = new RegExp(`\`${SCENARIO_ID.source}\``);
 const OUT_OF_SUITE = "**Out of suite:**";
 
 /**
- * RULE `walk`: the plan's walk group names the suite's review as its input.
- * QA is asked on the landing of the requirements, and the walk needs the suite
- * reviewed as its input, so a walk group that names no `/tcs-review` is
- * refused (`shared-planning-agent-rounds-SC-90`). A plan with no walk group
- * yet owes nothing here: the template's shape is the schema's own test. The
- * groups are read through `outline`, so a `##` quoted in a fence is no group.
+ * RULE `walk`: the plan's walk group names the suite's review. The walk takes
+ * the draft suite as its input and human QA reviews it after deployment, so a
+ * walk group that names no `/tcs-review` of this change is refused
+ * (`shared-planning-agent-rounds-SC-90`). Whether a plan owes a walk group is
+ * `walk_last`'s. The groups are read through `outline`, so a `##` quoted in a
+ * fence is no group.
  */
 export function checkWalkGroup(ctx, changes) {
   for (const change of changes) {
@@ -65,7 +66,7 @@ export function checkWalkGroup(ctx, changes) {
       ctx.add(
         "walk",
         file,
-        `group \`${walk.heading}\` names no review of the suite — it needs \`feature-tcs.md\` reviewed (\`/tcs-review ${change.id}\`) as its input`,
+        `group \`${walk.heading}\` names no review of the suite - name the one human QA runs after deployment (\`/tcs-review ${change.id}\`)`,
       );
     }
   }
@@ -79,6 +80,55 @@ function walkGroupsOf(sections) {
       ? [one]
       : walkGroupsOf(one.children);
   });
+}
+
+/** The day after the walk's title became a rule. A plan opened before it was
+ * written when nothing read the title, and a register of plans that could not
+ * have complied is a check people learn to read past. */
+export const WALK_LAST_SINCE = "2026-10-03";
+
+/**
+ * RULE `walk_last`: a change with walks ends its plan on the walk, titled so
+ * the store finds it. A change with walks specifies a capability somebody
+ * walks - its own `user-journeys.md` holds a story or, carrying none, the
+ * durable capability's does - because the walk walks every journey of every
+ * capability the change specifies; `**Walked by:** nobody` owes none. Work
+ * added after a claimed walk cannot renumber it, so it owes a walk after it.
+ */
+export function checkWalkLast(ctx, changes) {
+  for (const change of changes) {
+    if (change.status !== "in-flight") continue;
+    if (!change.created || change.created < WALK_LAST_SINCE) continue;
+    const last = change.taskGroups.at(-1);
+    if (!last || isWalkGroup(last.title)) continue;
+    if (!ctx.capabilitiesIn(change).some((one) => isWalked(ctx, one))) continue;
+    ctx.add(
+      "walk_last",
+      `${change.dir}/tasks.md`,
+      `ends on \`${last.num}. ${last.title}\` - a change that specifies a capability somebody walks ends its plan on \`The walk\`, or \`The walk - <what it walks>\``,
+    );
+  }
+}
+
+/** A change's own journeys file decides, unless it holds no story and does
+ * not say nobody walks it - a file of removals leaves the durable journeys
+ * standing. A file the reader refuses holds no story here; the `store` rule
+ * names it. */
+function isWalked(ctx, capability) {
+  const durable = () =>
+    (ctx.specs.get(capability.spec)?.journeys?.length ?? 0) > 0;
+  const text = capability.files.has("user-journeys.md")
+    ? readTextIfExists(
+        join(ctx.roots.store, capability.dir, "user-journeys.md"),
+      )
+    : undefined;
+  if (text === undefined) return durable();
+  try {
+    if (readJourneys(text).length > 0) return true;
+  } catch {
+    return false;
+  }
+  return !walkedByNobody(text) && durable();
 }
 
 export function checkPlanned(ctx, changes) {
