@@ -1,0 +1,8 @@
+schema: grade10-planning
+created: 2026-10-02
+hands:
+  pm: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: "nothing a reader sees moves: the record writes down the My Auctions rows the build already shows"
+design_waived: "no application code changes: grade10#773 and grade10#785 already build the contract, and the grade10 group only names and retags the tests that hold it"
+page_waived: "the build already shows every outcome (grade10#773, grade10#785), so the pages state it unmarked and no 🚧 line waits on this change"

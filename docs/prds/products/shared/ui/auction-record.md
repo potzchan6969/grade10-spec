@@ -24,7 +24,7 @@ capability is the component contract underneath it.
 
 ::changes{spec="shared/ui/auction-record"}
 
-- **Status** — Leading, Outbid, Bid submitted or Bid not accepted while open;
+- **Status** — Leading or Outbid while open;
   the order's status once won; Won, Didn't win or `--` for a watch-only row;
   close urgency stays with the listing identity
 - **Empty state** — one, for a collector who bookmarks nothing
@@ -39,8 +39,8 @@ capability is the component contract underneath it.
 
 ## Ownership
 
-- **No product state** — what lot, what standing, what was paid and what was
-  released arrive as props the application resolved
+- **No product state** — what lot, what standing and what was paid arrive as
+  props the application resolved
 - **Every string through props** — the copy group carries the fact labels and
   the wording of an email-alerts confirmation
 - **Reports, never acts** — a press is reported through its callback, so

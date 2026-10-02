@@ -322,11 +322,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -364,11 +362,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -402,11 +398,9 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -445,11 +439,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -484,11 +476,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -526,11 +516,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -631,11 +619,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -697,11 +683,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -743,11 +727,9 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -820,11 +802,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -1024,11 +1004,9 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 

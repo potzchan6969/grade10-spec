@@ -39,7 +39,7 @@ the card is in the winner's hands. The collector's half is
   again at the API, so a script cannot slip past what the form refuses
 - **Prices read back** — each price shows as a formatted decimal amount
   before saving, so its decimal placement can be checked
-- 🚧 **Starting price of 0** — a listing in USD, HKD or JPY can start at
+- **Starting price of 0** — a listing in USD, HKD or JPY can start at
   **0**; its first bid must still reach the currency's lowest increment
 - **Sandbox** — set only while draft: the listing runs on test-mode payment
   credentials, so the house can rehearse a sale
@@ -67,19 +67,19 @@ the card is in the winner's hands. The collector's half is
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
-- **Call off** — any time before the close, bids or not; live holds and the
-  stock are released, the listing leaves browse and search, and its canonical
+- **Call off** — any time before the close, bids or not; the stock is
+  released, the listing leaves browse and search, and its canonical
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
-- 🚧 **Unsold close** — a listing that closes with no winner releases its
+- **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
   Stock · Intake](/p/grade10-admin/inventory/catalog#intake)
-- 🚧 **Stock already held** — a listing that closed Unsold before this ships
-  still holds its stock. One release frees every such hold, and each shows in
-  the inventory history as released by that clean-up
-- 🚧 **Relist** — an Unsold listing offers Relist, which opens a new draft
+- **Stock already held** — a listing that closed Unsold before the release
+  rule shipped still holds its stock. One release frees every such hold, and
+  each shows in the inventory history as released by that clean-up
+- **Relist** — an Unsold listing offers Relist, which opens a new draft
   with the same product, quantity, Cert ID choice, title, copy, price, currency
   and gallery. The draft takes its own stock hold on Save, gets its own slug
   and listing code, sets its own window, and carries no bids or history from
@@ -108,12 +108,20 @@ the card is in the winner's hands. The collector's half is
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
 - **Refused** — a currency outside the three, or a starting price that is not
-  a positive whole amount; a slug of the wrong shape, or one another listing
+  a whole amount of 0 or more; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
   campaign; a close not after the start, or a close or Publish at not after
   now at create; a ninth media item, an unsupported or empty file, or
   removing the last item once created; prices, window, slug or sandbox on a
   published listing, and every write on a closed, settled or canceled one
+
+:::detail{title="Listings code map" for="engineer"}
+- **Close** — `sweeps/close.ts`
+- **Stock release** — `sweeps/stockRelease.ts`
+- **Relist save** — `services/listings/draft.ts`
+- **Architecture** —
+  [auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md)
+:::
 
 ## Campaigns
 
@@ -347,8 +355,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
-- **The hold** — released at the close, never captured; every failed payment
-  attempt stays in the invoice log
+- **Failed payments** - every failed payment attempt stays in the invoice log
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -489,10 +496,10 @@ settings.
 | Catalogue Featured | 🚧 In flight | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
-| Unsold stock | 🚧 In flight | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
+| Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
-| Payment source | Decided | The order tells a card payment through Stripe from money an operator records, and neither captures the bid-time hold, which is released at the close. | Product and Finance |
+| Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |

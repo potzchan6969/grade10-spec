@@ -499,17 +499,6 @@ The page SHALL use only existing words for the moments around the close:
 - **WHEN** the close is recorded with another winner
 - **THEN** the page shows Did not win, without a reload
 
-#### Scenario: grade10-site-auction-listing-page-SC-39 - A bid confirmed after the close did not go through
-**Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
-
-- **GIVEN** a bidder whose bid shows Authorizing… as the lot's effective close
-  passes, on a lot another bidder leads
-- **WHEN** its payment confirms after the close
-- **THEN** the page shows Your bid did not go through, and not that the card
-  was not authorized
-- **AND** once the close is recorded the page shows Did not win, with the
-  current bid as it stood without that bid
-
 #### Scenario: grade10-site-auction-listing-page-SC-40 - No new state appears between the close and the result
 **Serves:** `Close and result` - the page between the effective close and the recorded close
 

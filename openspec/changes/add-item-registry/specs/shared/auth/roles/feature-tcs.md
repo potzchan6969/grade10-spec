@@ -23,9 +23,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts`
 
 **Pre-conditions:**
 
@@ -61,9 +63,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts`
 
 **Pre-conditions:**
 

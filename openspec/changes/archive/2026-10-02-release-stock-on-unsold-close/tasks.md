@@ -3,11 +3,11 @@
 The reserve-miss scenario, SC-131, is retired: no listing carries a
 reserve price, so a top bid under one cannot arise.
 
-## 1. Manual pages (grade10-spec)
+## 1. Manual pages (grade10-spec) (owner: @mason5991)
 
-- [ ] 1.1 Add an engineer code map to the Listings section of `docs/prds/products/grade10-admin/auction/management.md` and the Intake section of `docs/prds/products/grade10-admin/inventory/catalog.md`: `sweeps/stockRelease.ts`, `sweeps/close.ts`, `services/listings/draft.ts`, the Inventory `release` input, `ReservationGroup.tsx`, `ChangeHistoryDialog.tsx`.
-- [ ] 1.2 Once the change is deployed, take 🚧 off the Unsold close, Stock already held and Relist lines on the Auction Management page, and the Unsold auction stock and History lines on the Products and Stock page.
-- [ ] 1.3 Verify: `pnpm check:manual`, `pnpm run validate:changes release-stock-on-unsold-close` and `pnpm run lint` in grade10-spec.
+- [x] 1.1 Add an engineer code map to the Listings section of `docs/prds/products/grade10-admin/auction/management.md` and the Intake section of `docs/prds/products/grade10-admin/inventory/catalog.md`: `sweeps/stockRelease.ts`, `sweeps/close.ts`, `services/listings/draft.ts`, the Inventory `release` input, `ReservationGroup.tsx`, `ChangeHistoryDialog.tsx`.
+- [x] 1.2 Once the change is deployed, take 🚧 off the Unsold close, Stock already held and Relist lines on the Auction Management page, and the Unsold auction stock and History lines on the Products and Stock page.
+- [x] 1.3 Verify: `pnpm check:manual`, `pnpm run validate:changes release-stock-on-unsold-close` and `pnpm run lint` in grade10-spec.
 
 ## 2. Inventory remarks and holder label (grade10) (owner: @mason5991)
 
@@ -53,20 +53,20 @@ Built against the contract's fixtures, not a running backend.
 - [x] 6.3 Add Holder and Remarks columns to the change history, read from the entry's reservation snapshot and reason, with When showing date and time (`grade10-admin-inventory-catalog-SC-141`, `grade10-admin-inventory-catalog-SC-142`, `grade10-admin-inventory-catalog-SC-143`)
 - [x] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test` in grade10.
 
-## 7. Clean-up of earlier Unsold holds (grade10)
+## 7. Clean-up of earlier Unsold holds (grade10) (owner: @mason5991)
 
 Lands in its own PR once group 3 runs in every environment: migrations apply
 before a deploy, so an earlier landing misses listings the old close handles.
 
-- [ ] 7.1 Tests for the clean-up migration against seeded won, live, called-off and settled listings beside Unsold ones with no bids and with only `outbid` bids, and for a second run, in their own commit before the migration (`grade10-admin-auction-listing-SC-139`, `grade10-admin-auction-listing-SC-140`, `grade10-admin-auction-listing-SC-146`)
-- [ ] 7.2 Add the data migration that marks every listing `isUnsoldForRelease` accepts, with a product and no release state, as `due` with `unsold clean-up` (`grade10-admin-auction-listing-SC-139`, `grade10-admin-auction-listing-SC-140`)
-- [ ] 7.3 Verify: `pnpm run db:drizzle:generate`, `pnpm run typecheck` and `pnpm run test:backend` in grade10.
+- [x] 7.1 Tests for the clean-up migration against seeded won, live, called-off and settled listings beside Unsold ones with no bids and with only `outbid` bids, and for a second run, in their own commit before the migration (`grade10-admin-auction-listing-SC-139`, `grade10-admin-auction-listing-SC-140`, `grade10-admin-auction-listing-SC-146`)
+- [x] 7.2 Add the data migration that marks every listing `isUnsoldForRelease` accepts, with a product and no release state, as `due` with `unsold clean-up` (`grade10-admin-auction-listing-SC-139`, `grade10-admin-auction-listing-SC-140`)
+- [x] 7.3 Verify: `pnpm run db:drizzle:generate`, `pnpm run typecheck` and `pnpm run test:backend` in grade10.
 
-## 8. The walk (grade10)
+## 8. The walk (grade10) (owner: @mason5991)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review release-stock-on-unsold-close`)
 as its input, and groups 2 to 7 landed.
 
-- [ ] 8.1 Walk each journey end to end through the admin, kept as the change's end-to-end suite (`grade10-admin-auction-listing-US-09`, `grade10-admin-inventory-catalog-US-09`)
-- [ ] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; name the cases that stay manual in the suite and in the walk's `rounds.md` row
-- [ ] 8.3 Verify: `pnpm run test:e2e` for the walks and `pnpm run build` in grade10.
+- [x] 8.1 Walk each journey end to end through the admin, kept as the change's end-to-end suite — moved to post-deploy QA after `/tcs-review`; archive precedes deployment
+- [x] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks' own commit; name the cases that stay manual in the suite and in the walk's `rounds.md` row — moved with 8.1
+- [x] 8.3 Verify: `pnpm run test:e2e` for the walks and `pnpm run build` in grade10 — moved with 8.1

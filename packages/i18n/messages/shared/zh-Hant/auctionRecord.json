@@ -43,7 +43,6 @@
   "biddingState": {
     "leading": "領先",
     "outbid": "已被超越",
-    "bid_not_accepted": "出價未獲接受",
     "awaiting_payment": "等待付款",
     "payment_problem": "付款有問題",
     "paid": "已付款",

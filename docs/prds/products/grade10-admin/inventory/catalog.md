@@ -115,12 +115,12 @@ product history.
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
-- 🚧 **Unsold auction stock** — when an Auction listing closes Unsold, its hold
+- **Unsold auction stock** — when an Auction listing closes Unsold, its hold
   closes as released, available rises by the held units, and the product
   page and the history both name the listing. A hold left over from a listing
   that closed Unsold earlier is released once and reads the same. The
   release's remarks say an Unsold listing released it
-- 🚧 **History** — each entry shows when it happened, its action, quantity
+- **History** — each entry shows when it happened, its action, quantity
   and actor, the holder — the listing a hold belongs to, by listing code and
   title — and its remarks
 - 🚧 **Cert-scoped media** - an Inventory image or video stays product-level
@@ -129,3 +129,9 @@ product history.
   tag target. Removing a media Cert tag or retagging leaves the originally tagged
   source item untagged. Removing a physical unit removes its Cert record and
   the source media tied to that record; Inventory records the unit as withdrawn
+
+:::detail{title="Intake code map" for="engineer"}
+- **Release input** — `ReleaseInput` in `packages/inventory/contracts`
+- **Reservations** — `ReservationGroup.tsx`
+- **Change history** — `ChangeHistoryDialog.tsx`
+:::

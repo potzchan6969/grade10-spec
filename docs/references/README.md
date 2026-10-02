@@ -23,6 +23,10 @@ with tables and worked examples. Both:
   config, so a number changing does not rot the document.
 - Prefer a table for structured data and a worked example for arithmetic.
 
+[`grade10-vault-digital-twin.md`](grade10-vault-digital-twin.md) is the
+proposal for send-in storage, CFA digitization, and a collector portfolio
+(Storybook `Pages/Vault *` + flow canvas); no change carries it yet.
+
 The `shopify-*` set is the working notes behind the
 `add-shopify-membership-pos` change: the umbrella plan, the checkout identity
 flow, the POS extension, and the resilience test plan. Application code and

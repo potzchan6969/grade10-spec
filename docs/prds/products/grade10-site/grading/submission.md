@@ -11,6 +11,10 @@ card carries its own outcome, so an ungraded card leaves the rest ready.
 under the booking email and to whoever holds the emailed link; anybody else
 reads not found.
 
+❓ **The submission page** — how the collector's page shows the status, the
+cards, the money, the uncollected ladder, the pickup and the named person is
+designed again from the backend — Design — [Grading](/p/grade10-site/grading)
+
 ## Statuses
 
 🚧 **Ten statuses** — the word is the badge, the chip says whose move it is,

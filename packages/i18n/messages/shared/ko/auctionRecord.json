@@ -43,7 +43,6 @@
   "biddingState": {
     "leading": "최고 입찰",
     "outbid": "상위 입찰 발생",
-    "bid_not_accepted": "입찰이 승인되지 않음",
     "awaiting_payment": "결제 대기",
     "payment_problem": "결제 문제",
     "paid": "결제됨",

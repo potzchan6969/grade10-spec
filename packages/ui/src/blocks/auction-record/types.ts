@@ -7,7 +7,6 @@ export type AuctionRecordRowState =
   | "ended"
   | "leading"
   | "outbid"
-  | "bid_not_accepted"
   | "awaiting_payment"
   | "awaiting_address"
   | "awaiting_address_expired"

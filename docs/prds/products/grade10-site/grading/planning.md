@@ -44,6 +44,10 @@ Both are paid at the counter once the cards are checked.
 
 ## The Wizard
 
+❓ **The wizard's pages** — the steps below are what a plan holds; how the
+collector's site lays them out is designed again from the backend — Design —
+[Grading](/p/grade10-site/grading)
+
 :::flow{title="Planning a submission"}
 ## *Collector* — **The cards**
 Name, email and phone, filled from the account when signed in; then one block
@@ -85,6 +89,11 @@ to book later.
 - 🚧 **Level availability** — a level closes with its reason: a named card
   declared above its ceiling, or Bulk with fewer than 20 cards; more than 20
   cards leaves Bulk the only level open
+- ❓ **A card above Bulk's ceiling** — SC-22 keeps the list open and moves
+  the card to a second submission on the same drop-off; Q65 closes every
+  level a card exceeds, so a 21-card list with one such card leaves no level
+  open until the card is taken off. Which one the collector's pages follow,
+  and how the card moves — Design
 - 🚧 **The estimate** — cards × the fee a card, the cover line per card at
   Express and Super Express, the level, and the return date counted from the
   day the batch leaves
@@ -116,18 +125,15 @@ to book later.
 - 🚧 **Finish later** — the plan is kept under the email given and its link
   is emailed once by the daily sweep while it stays unbooked; it opens on any
   device with no account
-- 🚧 **Changing a kept list** — Edit the list opens the wizard on the kept
-  plan and saves the same submission, never a second one; the wizard never
-  books, the submission page does. Once a drop-off is booked the cards and the
-  level still change, the level on the sheet the plan was booked on; the
-  grader and the email stay, and a list that passes 20 cards takes the Bulk
-  drop-off at the same day and time
-- 🚧 **Signed in** — the home lists every submission under the email, open
-  and closed, each opening its page; signing in is the same email and no
-  password
-- 🚧 **Signed out** — the first visit shows what grading is, the four steps
-  and the price sheet, and starts a submission or books a drop-off without a
-  list
+- 🚧 **Changing a kept list** — saves the same submission, never a second
+  one, and never books. Once a drop-off is booked the cards and the level
+  still change, the level on the sheet the plan was booked on; the grader and
+  the email stay, and a list that passes 20 cards takes the Bulk drop-off at
+  the same day and time
+- 🚧 **Signed in** — every submission under the email, open and closed, is
+  the collector's; signing in is the same email and no password
+- ❓ **The home** — what a signed-out first visit shows, and how a signed-in
+  collector's submissions are listed — Design
 
 <!-- story: the three wizard steps, the paste sheet's four results, the estimate card -->
 
@@ -144,8 +150,6 @@ Express for the card now would be $1,200; Regular is $600, plus $600 only on a
 :::
 
 :::detail{title="Code map" for="engineer"}
-- **Slices** — `packages/grading/frontend/src/features/plan`; the pages in
-  the grade10 SPA under `pages/grading`
 - **Contracts** — the fee sheet, the caps and the clocks in
   `packages/grading/contracts`, read from the settings the console holds
 - **Reference** — the card price reference over

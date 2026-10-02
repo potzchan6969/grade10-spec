@@ -1410,7 +1410,8 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-36`,
       `grade10-site-grading-submission-lifecycle-SC-37`,
       `grade10-site-grading-collector-notifications-SC-13`)
-- [ ] 20.7 Rewrite the four notice walks of `uncollected.spec.ts` to the 90
+- [ ] 20.7 Rewrite the four notice walks of
+      `apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts` to the 90
       days pinned and move their acceptance links to
       `grade10-site-grading-submission-lifecycle-US8-TC3-2`,
       `grade10-site-grading-submission-lifecycle-US8-TC4-2`,
@@ -1540,7 +1541,8 @@ the slow lane of 21.8; walk 34 decides them.
       `plan_link_sent` row holding the once-only index; its link minted into a
       new `plan_link_hash` beside the page's, which `submissionAccess` reads
       and every re-mint nulls; move Finish later and Save for
-      later off their immediate send, and update `plan.spec.ts`'s
+      later off their immediate send, and update
+      `apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`'s
       `US6-TC1-1` walk to read the letter after the sweep (Q134,
       `grade10-site-grading-submission-plan-SC-38`,
       `grade10-site-grading-collector-notifications-SC-26`,
@@ -2476,14 +2478,16 @@ and `ready_at` that stand in for waiting. Stage (b).
       `grade10-site-grading-submission-plan-US-06`,
       `grade10-site-grading-submission-plan-US-07`,
       `grade10-site-grading-submission-plan-US-08`)
-- [ ] 33.2 Walk the drop-off in `grading/dropoff.spec.ts`
+- [ ] 33.2 Walk the drop-off in
+      `apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
       (`grade10-site-grading-dropoff-booking-US-01`,
       `grade10-site-grading-dropoff-booking-US-02`,
       `grade10-site-grading-dropoff-booking-US-03`,
       `grade10-site-grading-dropoff-booking-US-04`,
       `grade10-site-grading-dropoff-booking-US-05`,
       `grade10-site-grading-dropoff-booking-US-06`)
-- [ ] 33.3 Walk the counter's hand-in in `grading/handin.spec.ts`
+- [ ] 33.3 Walk the counter's hand-in in
+      `apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
       (`grade10-admin-grading-counter-US-01`,
       `grade10-admin-grading-counter-US-02`,
       `grade10-admin-grading-counter-US-03`,
@@ -2520,7 +2524,8 @@ the dev-sealed agreement packet for a submission seeded past `checked_in`, the
 batch row with its manifest lines, and the past `created_at`, `appointment_at`
 and `ready_at` that stand in for waiting. Stage (c).
 
-- [ ] 34.1 Walk the batch from ship to received in `grading/batch.spec.ts`
+- [ ] 34.1 Walk the batch from ship to received in
+      `apps/frontend/grade10/e2e/tests/grading/batch.spec.ts`
       (`grade10-admin-grading-batches-US-01`,
       `grade10-admin-grading-batches-US-02`,
       `grade10-admin-grading-batches-US-03`,
@@ -2528,7 +2533,8 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-site-grading-submission-lifecycle-US-03`,
       `grade10-site-grading-submission-lifecycle-US-04`,
       `grade10-site-grading-submission-lifecycle-US-05`)
-- [ ] 34.2 Walk the hand-back in `grading/handback.spec.ts`
+- [ ] 34.2 Walk the hand-back in
+      `apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
       (`grade10-admin-grading-counter-US-04`,
       `grade10-admin-grading-counter-US-05`,
       `grade10-admin-grading-counter-US-06`,
@@ -2544,7 +2550,8 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-site-grading-submission-lifecycle-US-06`,
       `grade10-site-grading-submission-lifecycle-US-07`,
       `grade10-site-grading-submission-lifecycle-US-09`)
-- [ ] 34.3 Walk what is left behind in `grading/uncollected.spec.ts`, an
+- [ ] 34.3 Walk what is left behind in
+      `apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`, an
       admin's erasure refused while a submission is live and taken once it is
       collected (`grade10-admin-grading-counter-US-08`,
       `grade10-admin-grading-counter-US-12`,

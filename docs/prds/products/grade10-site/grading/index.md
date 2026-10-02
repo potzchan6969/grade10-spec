@@ -9,19 +9,17 @@ in a batch and hands the slabs back in person. A submission is one grader and
 one level, and every card in it carries its own outcome.
 
 - 🚧 **Where** — one host and a path per surface
-  1. `grade10.com/grading` — the price sheet and the collector's own
-     submissions; public and indexed, as `/book` is
-  2. `grade10.com/grading/new` — the wizard
-  3. `grade10.com/grading/submissions/<id>` — one submission, the address every
-     email links to, where its drop-off is booked; no account needed
-  4. `grade10.com/grading/submissions/<id>/edit` — the wizard on a kept plan
-  5. `grade10.com/grading/sign#<token>` — the submission agreement and the
+  1. `grade10.com/grading/sign#<token>` — the submission agreement and the
      hand-back receipt on the shop iPad, opened from the QR code or link staff
      hand over
-  6. `grade10.com/book` — a walk-in's drop-off with no list; the cards are
+  2. `grade10.com/book` — a walk-in's drop-off with no list; the cards are
      listed at the counter
-  7. `admin.grade10.com/grading` — the queue, the batches and one submission;
+  3. `admin.grade10.com/grading` — the queue, the batches and one submission;
      `admin.grade10.com/grading/walk-in` for a list written at the desk
+- ❓ **The collector's pages** — the price sheet, the wizard, the drop-off
+  booking and the submission page are designed again from the backend, and
+  the earlier pages were withdrawn on 2026-10-02; these pages state what
+  grading does, not how a page shows it — Design
 - 🚧 **Money** — HKD, taken at the till against one POS line per card, and a
   cover line per card at Express and Super Express, written back to the
   submission; nothing is paid before every card is checked and the agreement
@@ -109,9 +107,11 @@ Every item is a value or an act outside the code, with who closes it.
 
 :::detail{title="Code map" for="engineer"}
 - **Code** — `packages/grading/{contracts,backend,frontend,admin-frontend}`
-  with `packages/appointment` and `packages/doc-sign` beside it; the
-  collector's pages in the grade10 SPA, the console pages in the grade10 admin
-  panel; deployed as `grade10-grading-service`
+  with `packages/appointment` and `packages/doc-sign` beside it; the signing
+  page in the grade10 SPA, the console pages in the grade10 admin panel;
+  deployed as `grade10-grading-service`
+- **Submission address** — `GRADING_SUBMISSION_PATH` in
+  `packages/grading/contracts/src/documents.ts`
 - **Architecture** —
   [grading.md](https://github.com/9gag/grade10/blob/main/docs/architecture/grading.md),
   to be written with the change

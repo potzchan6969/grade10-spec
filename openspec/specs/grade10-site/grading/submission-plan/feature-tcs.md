@@ -29,11 +29,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -63,11 +61,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -126,11 +122,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -156,11 +150,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -186,11 +178,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -264,11 +254,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -325,11 +313,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -364,11 +350,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -434,11 +418,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1141,11 +1123,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1179,11 +1159,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1217,11 +1195,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1247,11 +1223,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1286,11 +1260,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1347,11 +1319,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1380,11 +1350,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1421,11 +1389,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1469,11 +1435,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1508,11 +1472,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1548,11 +1510,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1583,11 +1543,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1625,11 +1583,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1760,11 +1716,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1847,11 +1801,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1949,11 +1901,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -2046,11 +1996,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -2120,11 +2068,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -2198,11 +2144,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -2234,11 +2178,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 
@@ -2298,11 +2240,9 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/plan.spec.ts`
 
 **Pre-conditions:**
 

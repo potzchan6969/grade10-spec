@@ -1,7 +1,7 @@
 # grade10-site/analytics Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-18, tcs-rules r3.0
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 **Out of suite:** none — every Feature set root group this change introduces
 carries cases below. The capability is walked by nobody on their own; cases
@@ -346,7 +346,7 @@ trace those groups.
 - Order Paid carries Member true, Points Earned, Points Spent, and Tier when the programme priced the spend.
 - A refused checkout records no Checkout Started.
 
-### grade10-site-analytics-US1-TC12-1: Auction funnel events
+### grade10-site-analytics-US1-TC12-2: Auction funnel events
 
 **Classification:**
 
@@ -371,13 +371,12 @@ trace those groups.
 2. Watch the lot without bidding.
 3. Link a card and place an accepted maximum.
 4. Let the engine place an auto-bid step under that maximum.
-5. Capture a bid hold.
-6. Close the listing with this collector as winner and pay the invoice.
+5. Close the listing with this collector as winner and pay the invoice.
 
 **Expected Results:**
 
 - Mixpanel records Lot Viewed (not Product Viewed), Lot Watched, Card Linked, Bid Placed once for the accepted maximum, Auction Won, and Invoice Paid.
-- Mixpanel does not record Bid Placed for the auto-bid step, Invoice Paid for the hold capture, or Lot Watched because a bid was placed.
+- Mixpanel does not record Bid Placed for the auto-bid step, or Lot Watched because a bid was placed.
 
 ### grade10-site-analytics-US1-TC13-1: Loyalty facts on Mixpanel
 
@@ -1046,3 +1045,9 @@ continuity.
 - **Raised** — none new; Consent, Mixpanel erasure, and Contact fields
   already sit on the proposal's open questions and the Mixpanel Events
   decisions table.
+
+| Finding | Disposition |
+| --- | --- |
+| Invoice Paid never fires on a bid hold capture | **Removed:** a bid takes no card hold, so nothing captures one; `grade10-site-analytics-US1-TC12-1` rewritten as `grade10-site-analytics-US1-TC12-2` without the step |
+
+**Run:** 2026-10-02, from the delta against the durable suite. It is a statement, not proof.

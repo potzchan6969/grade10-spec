@@ -29,9 +29,11 @@ a place marks it,
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -74,9 +76,11 @@ a place marks it,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -114,9 +118,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -156,9 +162,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -196,9 +204,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -237,9 +247,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -267,9 +279,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts`
 
 **Pre-conditions:**
 
@@ -303,9 +317,11 @@ Runs once per row of **Test data**.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -340,9 +356,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -376,9 +394,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -437,9 +457,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/items-case.spec.ts`
 
 **Pre-conditions:**
 
@@ -471,9 +493,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/item-lifecycle.spec.ts`
 
 **Pre-conditions:**
 
@@ -514,9 +538,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -554,9 +580,11 @@ grade and cert, and to correct a fact later,
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -604,9 +632,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -647,9 +677,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -682,9 +714,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -720,9 +754,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -762,9 +798,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -798,9 +836,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -832,9 +872,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -905,9 +947,11 @@ one,
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -950,9 +994,11 @@ one,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -984,9 +1030,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1022,9 +1070,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1035,7 +1085,7 @@ Runs once per row of **Test data**.
 | Files picked | Outcome |
 | --- | --- |
 | 5 files: 2 PDF, 2 PNG, 1 JPG, each exactly 10 MB | accepted; the move lists 5 proofs |
-| 6 PDF files of 1 MB | refused under the picker |
+| 6 PDF files of 1 MB | at five the picker offers no way to add a sixth; five stay listed |
 | 1 PDF of 10 MB and 1 byte | refused under the picker |
 | 1 GIF of 1 MB | refused under the picker |
 
@@ -1047,7 +1097,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * An accepted row moves the item with every file as its proof.
-* A refused row reads up to 5 PDF, PNG or JPG files, each at most 10 MB, and the item does not move.
+* The six-file row offers no way to pick a sixth file; five stay listed.
+* A refused row names its file under the picker and does not list it; Transfer stays offered.
 
 ### grade10-admin-inventory-items-US3-TC5-1: A proof removed before the move is not kept
 
@@ -1060,9 +1111,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1090,9 +1143,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1125,9 +1180,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1155,9 +1212,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1216,9 +1275,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1255,9 +1316,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1286,9 +1349,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1329,9 +1394,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1372,9 +1439,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1403,9 +1472,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1435,9 +1506,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1466,9 +1539,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1507,9 +1582,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1551,9 +1628,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1590,9 +1669,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1619,9 +1700,11 @@ Runs once per row of **Test data**.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1665,9 +1748,11 @@ their record.
 * **Type:** security
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1701,9 +1786,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1740,9 +1827,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 
@@ -1782,9 +1871,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/items.spec.ts`
 
 **Pre-conditions:**
 

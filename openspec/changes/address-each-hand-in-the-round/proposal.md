@@ -58,8 +58,9 @@ spends per read, from 20 to 30 in the walkthrough to under 10.
   other however each is headed; a suite's Manual table is refused where it is
   written when it sits outside the reconciliation.
 - **The walk's ids are checked at the tick** — in the application repository,
-  a walk's bracketed case id whose case is not yet actual is refused by the
-  tick, in the pass that already looks for a task's scenario ids.
+  a walk's bracketed case id of the ticking change whose case is not yet
+  actual is refused by the tick, in the pass that already looks for a task's
+  scenario ids; another change's id is that change's to sign.
 
 ## Non-Goals
 

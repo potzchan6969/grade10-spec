@@ -52,12 +52,13 @@ hold, a wizard to open another, and each case's own page.
 - **One number however typed** — full-width digits and `852` before a
   local number store as the same number; a number from elsewhere with no
   country code is asked for one
-- 🚧 **Ten categories** — the register's —
+- ❓ Designer — **Ten categories** — the register's; the backend takes all
+  ten, and the designer draws the step from it —
   [Items](/p/grade10-admin/inventory/items#values)
-- 🚧 **A slab staff found** — on a draft staff opened with a slab the register
-  knows, the collector changes only the photos and the description; the
-  category, grader, grade and cert are the register's —
-  [Items](/p/grade10-admin/inventory/items#facts)
+- ❓ Designer — **A slab staff found** — on a draft staff opened with a slab
+  the register knows, the backend refuses a change to the category and title
+  and the case reads `factsFromRegister`; how the step shows it is the
+  designer's — [Items](/p/grade10-admin/inventory/items#facts)
 - **Currency** — the brand's (HKD for Grade10); another currency is refused
 - **One item per case** — a binder of twelve cards is twelve requests, in
   batches of three; book one visit on the first and bring them all together

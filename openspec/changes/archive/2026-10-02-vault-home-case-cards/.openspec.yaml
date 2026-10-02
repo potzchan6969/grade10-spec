@@ -10,10 +10,12 @@ landed_by:
   proposal: ecchochan
   decisions: ecchochan
   user-journeys: ecchochan
+  tech-design: ecchochan
 reviewed:
-  user-journeys: 6034ecfb
-  ui-design: 440a03ac
-  tech-design: 440a03ac
-  specs: aa4b3da3
-  test-cases: aa4b3da3
-  tasks: 4bccb9ce
+  user-journeys: 28d47070
+  ui-design: 7dd90f83
+  tech-design: 7dd90f83
+  specs: 97acf7fc
+  test-cases: 97acf7fc
+  tasks: 31d71ab1
+  decisions: 44629bf8
