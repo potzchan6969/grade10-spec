@@ -20,6 +20,8 @@ role is data; what a role grants is not.
   - Split by cost: in the vault, running a case, setting what it costs and moving its money are separate actions; staff and treasurer share no vault money grant
   - Identity documents: reached by a grant of their own, never by running a flow
   - Two people on an approval: one person may hold staff and treasurer, and nobody approves an act they recorded
+  - Moving an item: a grant of its own beside reading and writing stock,
+    held by staff and admin, and the treasurer holds no inventory grant
 
 ## Requirements
 
@@ -101,7 +103,7 @@ The mapping from role to permissions SHALL be:
 | Role | Grants |
 | --- | --- |
 | `user` | none |
-| `staff` | `store:read`, `store:write`, `loyalty:read`, `auction:read`, `auction:write`, `auction:operate`, `auction:shipment`, `auction:refund`, `vault:read`, `vault:operate`, `vault:approve`, `grading:read`, `grading:operate`, `grading:approve`, `kyc:read`, `appointment:read`, `appointment:manage`, `inventory:read`, `inventory:write` |
+| `staff` | `store:read`, `store:write`, `loyalty:read`, `auction:read`, `auction:write`, `auction:operate`, `auction:shipment`, `auction:refund`, `vault:read`, `vault:operate`, `vault:approve`, `grading:read`, `grading:operate`, `grading:approve`, `kyc:read`, `appointment:read`, `appointment:manage`, `inventory:read`, `inventory:write`, `inventory:transfer` |
 | `support` | `user:list`, `user:ban`, `session:list`, `session:revoke` |
 | `finance` | `auction:read`, `auction:payment` |
 | `treasurer` | `auction:read`, `auction:payment`, `vault:read`, `vault:payout` |
@@ -112,7 +114,8 @@ The mapping from role to permissions SHALL be:
 `staff` runs a vault case and sets what it costs, and only `treasurer`
 records the vault money that moves. `treasurer` SHALL NOT hold `kyc:read`,
 because reading a case to record its money is no reason to see the person's
-identity document.
+identity document. `treasurer` SHALL hold no `inventory` grant: reading a
+case's money is no reason to read who owns which item.
 
 A person who holds several operator roles SHALL receive the union of those
 roles' grants. A person holding `staff` and `treasurer` therefore holds both
@@ -206,6 +209,13 @@ change who holds a role, and SHALL NOT change what a role grants.
   person raised, change a booking, and change inventory stock
 - **THEN** each action is allowed
 
+#### Scenario: shared-auth-roles-SC-23 - Staff move items and the treasurer holds no inventory grant
+**Serves:** shared-auth-roles-US-02 - the operator's grants follow the closed vocabulary
+
+- **WHEN** the role matrix is read for `staff`, `admin` and `treasurer`
+- **THEN** `staff` and `admin` each hold `inventory:read`, `inventory:write` and `inventory:transfer`
+- **AND** `treasurer` holds none of the three
+
 ### Requirement: Refund permission follows the closed role vocabulary
 
 The permission vocabulary SHALL include `auction:refund`. `staff` and
@@ -247,7 +257,7 @@ written `resource:action`, drawn from this list and no other.
 | `kyc` | `read` |
 | `grading` | `read`, `operate`, `approve` |
 | `appointment` | `read`, `manage` |
-| `inventory` | `read`, `write` |
+| `inventory` | `read`, `write`, `transfer` |
 | `audit` | `read` |
 
 Lending is the vault's financed lane, so its cases and money sit under
@@ -261,6 +271,10 @@ this way:
 | `operate` | `approve` - recording a valuation, offer terms, decline, forfeiture | `payout` - payout, repayment, reversal, the money book and the finance position |
 
 `payout` SHALL be the only `vault` action that moves money.
+
+**Moving an item** - `inventory:transfer` SHALL be the only grant that moves
+an item to a new owner or opens the proof of a move; `inventory:write` SHALL
+NOT reach either.
 
 **Identity documents** - `kyc:read` SHALL be a resource of its own rather than
 an action on the product that collected the document. The identity capture
@@ -285,6 +299,14 @@ stays with the flow that needs it.
 - **THEN** it holds exactly the eleven resources and their actions in the
   table, in that order
 - **AND** it holds no `finance` resource and no `kyc:write`
+
+#### Scenario: shared-auth-roles-SC-24 - Writing the register is not moving an item
+**Serves:** shared-auth-roles-US-02 - the operator's grants follow the closed vocabulary
+
+- **GIVEN** a person holding `inventory:read` and `inventory:write` and not `inventory:transfer`
+- **WHEN** they edit an item, then try to move it and to open a move's proof
+- **THEN** the edit is allowed
+- **AND** the move and the proof are refused
 
 ### Requirement: Nobody approves an act they recorded
 

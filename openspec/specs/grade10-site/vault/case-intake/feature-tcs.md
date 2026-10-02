@@ -1,7 +1,7 @@
 # grade10-site/vault/case-intake Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-10-01, tcs-rules r4
+**Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## Background
 
@@ -58,8 +58,6 @@ borrow against it,
 * The request moves from draft to submitted, in the financed lane.
 * The case page offers to book a visit.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC2-1: Leaving the amount blank opens the storage lane
 
 **Classification:**
@@ -100,8 +98,6 @@ borrow against it,
 
 * The request opens in the storage lane, with no financing offer to answer.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC3-1: Title and description at their character caps are accepted
 
 **Classification:**
@@ -137,8 +133,6 @@ borrow against it,
 **Expected Results:**
 
 * Continue succeeds; the Photograph step opens.
-
----
 
 ### grade10-site-vault-case-intake-US1-TC4-1: Title or description over its character cap refuses Continue
 
@@ -178,8 +172,6 @@ Runs once per row of **Test data**.
 
 * Continue is refused with the row's message; the Describe step stays open.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC5-1: Ten photographs at the size cap all attach
 
 **Classification:**
@@ -213,8 +205,6 @@ Runs once per row of **Test data**.
 
 * All ten attach to the draft.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC6-1: An eleventh photograph is refused at the limit
 
 **Classification:**
@@ -243,8 +233,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The eleventh photograph is refused with the limit message; the count stays at ten.
-
----
 
 ### grade10-site-vault-case-intake-US1-TC7-1: An oversized photograph is refused
 
@@ -281,8 +269,6 @@ Runs once per row of **Test data**.
 
 * The photograph is refused by name; nothing attaches.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC8-1: A non-raster file is refused
 
 **Classification:**
@@ -317,8 +303,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The file is refused with the type message; nothing attaches.
-
----
 
 ### grade10-site-vault-case-intake-US1-TC9-1: An empty file is refused
 
@@ -355,8 +339,6 @@ Runs once per row of **Test data**.
 
 * The file is refused with the empty message; nothing attaches.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC10-1: Sending in with no photograph is refused
 
 **Classification:**
@@ -385,8 +367,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Continue is refused with the at-least-one-photo message; the case stays a draft.
-
----
 
 ### grade10-site-vault-case-intake-US1-TC11-1: Location metadata is stripped from an uploaded photograph
 
@@ -421,8 +401,6 @@ Runs once per row of **Test data**.
 
 * The stored photograph carries no location metadata, before and after the upload.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC12-1: A photograph is refused to a collector who does not own the case
 
 **Classification:**
@@ -451,8 +429,6 @@ Runs once per row of **Test data**.
 
 * The request is refused; the photograph is not returned.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC13-1: Viewing a photograph is recorded on the read trail
 
 **Classification:**
@@ -479,8 +455,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * A read of the photograph is recorded, naming who read it and when.
-
----
 
 ### grade10-site-vault-case-intake-US1-TC14-1: A fourth draft is refused at the draft cap
 
@@ -511,8 +485,6 @@ Runs once per row of **Test data**.
 
 * Start a request is refused with the draft-limit message; no new draft opens.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC15-1: Reopening a draft resumes it on the Photograph step
 
 **Classification:**
@@ -542,8 +514,6 @@ Runs once per row of **Test data**.
 
 * The wizard opens on the Photograph step, showing two of ten attached.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC16-1: Sending a draft already moved on is refused
 
 **Classification:**
@@ -572,8 +542,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Send it in is refused with a case-moved-on message; no second case is created.
-
----
 
 ### grade10-site-vault-case-intake-US1-TC17-1: A WhatsApp number typed differently stores one canonical value
 
@@ -612,8 +580,6 @@ Runs once per row of **Test data**.
 
 * Every row stores the same canonical E.164 number against the case.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC18-1: An invalid WhatsApp number is refused
 
 **Classification:**
@@ -649,8 +615,6 @@ Runs once per row of **Test data**.
 
 * Continue is refused with an invalid-number message; the Describe step stays open.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC19-1: Leaving the WhatsApp number blank is accepted
 
 **Classification:**
@@ -680,8 +644,6 @@ Runs once per row of **Test data**.
 
 * Continue succeeds; the Photograph step opens.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC20-1: A case always opens in the brand's own currency
 
 **Classification:**
@@ -709,8 +671,6 @@ Runs once per row of **Test data**.
 
 * The request is refused; the case is never opened in the other currency.
 
----
-
 ### grade10-site-vault-case-intake-US1-TC21-1: A photograph offered after the request is sent is refused
 
 **Classification:**
@@ -737,6 +697,115 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The photograph is refused by name; the case still carries one photograph and nothing is stored.
+
+### grade10-site-vault-case-intake-US1-TC22-1: The wizard offers the register's ten categories in each language
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** compatibility
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) is signed in on <grade10 vault url> in the language of the row, with no unsent draft.
+
+**Test data:**
+
+| Language |
+| --- |
+| English |
+| Traditional Chinese |
+| Simplified Chinese |
+| Korean |
+
+**Steps:**
+
+1. Start a new request.
+2. Open the category choice on the Describe step.
+3. Choose comic and fill in a title and a description.
+4. Click Continue.
+
+**Expected Results:**
+
+* Step 2 offers ten categories: trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia and other.
+* Every category reads in the row's language, none as a raw key.
+* Step 4 moves to the Photograph step with comic kept as the category.
+
+### grade10-site-vault-case-intake-US1-TC23-1: A draft staff opened with a known slab takes only photo and description edits
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) is signed in on <grade10 vault url>.
+* Staff opened `<draft_1>` for the collector at the counter with `<item_1>`, a slab the register holds under this collector: trading card, PSA, grade 10, `AB12345`.
+
+**Steps:**
+
+1. Open `<draft_1>` from the case list.
+2. Go back to the Describe step.
+3. Try to change the category and the title.
+4. Change the description and continue.
+5. Add one photograph on the Photograph step.
+6. Tick the statement and send it in.
+
+**Expected Results:**
+
+* Step 3 changes neither; both read as the register's, with no field.
+* The request is submitted carrying the new description and the added photograph.
+* `<item_1>` still reads trading card, PSA, grade 10 and `AB12345` in the register, its description unchanged.
+
+### grade10-site-vault-case-intake-US1-TC24-1: An edit to a linked draft's category or title is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) is signed in.
+* Staff opened `<draft_1>` for the collector at the counter with `<item_1>`, a slab the register holds under this collector: trading card titled `<title_1>`.
+
+**Steps:**
+
+1. Send an edit of `<draft_1>` changing its category to comic, straight to the vault worker.
+2. Send an edit of `<draft_1>` changing its title, straight to the vault worker.
+3. Read `<draft_1>`.
+
+**Expected Results:**
+
+* Steps 1 and 2 are each refused by name.
+* `<draft_1>` still reads trading card and `<title_1>`.
 
 ---
 
@@ -1551,6 +1620,18 @@ requirements, and neither pass saw the other's file before this join.
 | `grade10-site-vault-case-intake-SC-35` | Case added | `grade10-site-vault-case-intake-US6-TC6-1` |
 | `grade10-site-vault-case-intake-SC-37` | Case added | `grade10-site-vault-case-intake-US6-TC7-1`, Q19 and Q53: removal on any unsent draft of the collector's own |
 | `grade10-site-vault-case-intake-SC-38` | Case added | `grade10-site-vault-case-intake-US6-TC7-1`'s fourth step |
+
+**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journey, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Collector Pages and Items PRD pages, and the durable case-intake suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md` and the operator-queue delta. It is a statement, not proof.
+
+- **Folded** - `grade10-site-vault-case-intake-US1-TC22-1` into `grade10-site-vault-case-intake-SC-39`; `grade10-site-vault-case-intake-US1-TC23-1` into `grade10-site-vault-case-intake-SC-40`, gaining the register's description left unchanged as Q47
+- **Patched, not re-run** - `grade10-site-vault-case-intake-US1-TC23-1` tried the grader, grade and cert on the collector's Describe step, which carries no such field; it now tries the category and the title, the two `grade10-site-vault-case-intake-SC-40` reads from the register
+- **Added by QA2** - `grade10-site-vault-case-intake-US1-TC24-1` for `grade10-site-vault-case-intake-SC-41`, the worker's refusal, which the blind case reached only through the interface
+- **Raised, answered by the round** - the customer's description edit on a linked draft changes the request alone (Q47, `grade10-site-vault-case-intake-SC-40`)
+- **Raised, escalated** - none
+- **Round 4** - `grade10-site-vault-case-intake-SC-40` and `grade10-site-vault-case-intake-SC-41` hold only for a slab the register holds under the customer at the counter, the one the walk-in form fills; `grade10-site-vault-case-intake-US1-TC23-1` and `grade10-site-vault-case-intake-US1-TC24-1` now say so
+- **Rejected** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none: US-01 has a case for each of the three scenarios; the modified requirement's other scenarios keep their durable cases
 
 ### Manual
 

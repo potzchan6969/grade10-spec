@@ -23,11 +23,15 @@ counter's form is `grade10-admin/vault/operator-queue`.
   - Brand currency: the case is opened in the brand's own currency and in no
     other
 - Describing the item
-  - Item facts: category, title, description and an optional contact number
+  - Item facts: one of the register's ten categories, a title, a description
+    and an optional contact number
   - The lane question: a financing amount makes the financed lane and its
     absence makes storage
   - Canonical number: a number is stored one way however it was typed, so one
     person is found once
+  - A known slab on a draft: on a draft staff opened with a slab the register
+    holds under that collector, the collector changes only the photos and the
+    description
 - Photographs
   - Photo limits: one to ten raster photographs, each within the size cap
   - Metadata stripped: a photograph reaches the bucket carrying no location
@@ -105,7 +109,7 @@ one item only:
 
 | Fact | Rule |
 | --- | --- |
-| Category | one of: trading card, coin, bullion, watch, jewellery, other |
+| Category | one of the item register's ten: trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia, other, each read in the collector's language |
 | Title | required, at most 200 characters |
 | Description | optional, at most 2,000 characters |
 | Contact number | optional, stored canonical to the brand's numbering plan however it was typed, and never verified |
@@ -159,6 +163,14 @@ A collector with several items SHALL open one request for each.
 - **WHEN** they open a request for another item
 - **THEN** a new request is opened with a reference of its own
 - **AND** the request already sent keeps its reference and its status
+
+#### Scenario: grade10-site-vault-case-intake-SC-39 - The wizard offers the register's ten categories
+**Serves:** grade10-site-vault-case-intake-US-01 - the collector says what the item is in their own language
+
+- **GIVEN** a collector reading the site in Korean
+- **WHEN** they open the request's first step
+- **THEN** it offers trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia and other, each in Korean
+- **AND** a request sent as a comic is opened as a comic
 
 ### Requirement: The financing amount decides the lane
 
@@ -483,3 +495,28 @@ like any other draft.
 - **GIVEN** a draft staff opened that the collector has not sent
 - **WHEN** staff read its case and the collector reads its list
 - **THEN** no valuation is offered, no visit can be booked, and no email has been sent about it
+
+### Requirement: A draft holding a slab the register knows changes only its photos and description
+
+On a draft staff opened with a slab the item register already holds under the
+customer at the counter, the category, title, grader, grade and cert SHALL be
+read from the register, and
+the collector's edits SHALL change only the photographs and the request's
+description, never the register's.
+An edit to any other fact of that draft SHALL be refused by name.
+
+#### Scenario: grade10-site-vault-case-intake-SC-40 - The collector edits the photos and the description of a linked draft
+**Serves:** grade10-site-vault-case-intake-US-01 - the collector checks a draft staff opened with their slab
+
+- **GIVEN** a draft staff opened with a slab the register holds under this collector as a trading card titled "Charizard 1999 Base Set", PSA `10`
+- **WHEN** the collector opens it on their phone
+- **THEN** the category and title read as the register holds them and offer no field
+- **AND** adding a photograph and changing the description are both kept
+- **AND** the register's description is unchanged, since the edit changes the request alone
+
+#### Scenario: grade10-site-vault-case-intake-SC-41 - An edit to the register's facts is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - the case and the register never tell two stories of one slab
+
+- **GIVEN** a draft staff opened with a slab the register holds under this collector
+- **WHEN** an edit to its category or title is sent
+- **THEN** it is refused by name and the draft keeps the register's facts

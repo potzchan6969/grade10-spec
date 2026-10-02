@@ -13,3 +13,10 @@ every vault case they hold,
 **I want** the collector page to show the cases they hold,
 **so that** I can follow a borrower's money across their cases without being
 shown a name my role does not hold.
+
+### grade10-admin-console-collector-page-US-03: Operator reads a collector's items on their page
+
+**As a** member of shop staff with a collector at the counter,
+**I want** their page to list every item they own but a retired one, marked
+or not,
+**so that** I can see everything they have with us in one place.

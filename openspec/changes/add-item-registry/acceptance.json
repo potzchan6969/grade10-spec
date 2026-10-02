@@ -1,0 +1,507 @@
+{
+  "version": 2,
+  "change": "add-item-registry",
+  "baseline": "2ab78a9bc380183bd97a8bf5d94f9ea0024afa7e9b7e6743c601e4359c930a8f",
+  "fingerprint": "97ea3aab88ebf9d93282223d4396766bc10832342f320aa0cbd378675593f2a5",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-02T03:28:24.242Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/platform/account-data.md#erasure",
+      "sha256": "975d06511b5d5b35dd9cf1130490668bf1b650b0b35aec778f0b40242900cc29",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/collector-page.md#sections",
+      "sha256": "c48a0e8248b619ab5096db7a8e7f5b65671b28624b3df20be0fbfe3360d878bc",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/index.md#items",
+      "sha256": "f82829f2072a598f5d8ad6b8a0ce1c532faf8ac0343e6fddaef84e5039073f77",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#erasure",
+      "sha256": "7248f104aa48eee7ac1c06134c61b4228bef0f395aee594b3ba6528dd8692b64",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#facts",
+      "sha256": "81fa649f3e74d49089256749726fd284db7f67d00a6328faad5bb479614072bf",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#finding-an-item",
+      "sha256": "017ac92931c6220352b2ea8e89d26dafe381d87eecf876afb338ba95e1da7e55",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#marks",
+      "sha256": "30b0814347113ea54bff5728d2a4def4b2f4ea92ee08cb2c48dccb9ad284bebd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#moving-an-item",
+      "sha256": "acc12faaa44470a3131b718087fbe0b10875b3fcc102a8b6ce93257bff3a31f2",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#owners",
+      "sha256": "b429fa961cc25b7bd9b3f69d2b87de595cc9cfabfac34512cbb02e4deddf318a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#permissions",
+      "sha256": "67c74a0e19befe5f019870511bbc87ca7ef545b8d688632236962093767bc3f8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/items.md#retiring-an-item",
+      "sha256": "aa6cd10bdaa0fa7e4afca528e2fc5180379060d7cc3b69c9cfb60c5a2cf3bc32",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/grading/submission.md#the-record-after-collection",
+      "sha256": "b7fd5d315bd037d01eb3b9d45db89bca822085642922202d2c1b6d7cbf22075c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/case-lifecycle.md#item-record",
+      "sha256": "757da47a82160bb23b80478d78325da351a97bc2e2a58f450d8c8a2e897e9322",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#request-wizard",
+      "sha256": "dea404c36d66120902a4a010213540d23075b191f094cf03473c9be4d497a26b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/documents-and-signing.md#document-terms",
+      "sha256": "f43ae0a096e8955bcf67669c267f921a59db19ce36833448288d202657cac67a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#one-case",
+      "sha256": "968c99374e9a2ce193dc51c83fa6bf8990734e74166a95197d1ea69244747def",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#physical-vault",
+      "sha256": "80d00a25daedf6c099b0e29dbd7e2f26b44931edbe0777d6a6a158f7903f4783",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#queue",
+      "sha256": "2a08c2201b2ea94a5e527980ea7a74f8aa9a142212959fac528ac6296918c11a",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/decisions.md",
+      "sha256": "e350653479ec82d77c4095cf86428f79204e8be58f8376e3dcd8466cd5fadbae",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/proposal.md",
+      "sha256": "7817bbbed5c51b3a3dfe43c2aff5ba7e69453f375756581649da27c794157b67",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/console/collector-page/feature-tcs.md",
+      "sha256": "857d2468208840cd2d2d8ec9c00ea884bd2b40b4b00866949f3d0555e5a31269",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/console/collector-page/spec.md",
+      "sha256": "d430c5e4c687f86224bab0090708f266c331fda9eda567d948f1e67b428db216",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/console/collector-page/user-journeys.md",
+      "sha256": "afca58a0b8221a2bf701198da7c4518cafb0543d2f4bc62ba3a1107227df69b4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/inventory/items/feature-tcs.md",
+      "sha256": "61e3ab6b21008aa9b4b2466fb30246bd53ee5a3ed874bf8962129c487b3f738e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/inventory/items/spec.md",
+      "sha256": "908eb047b3b9512eb863e2ca29c3bbea6423fe2259d6cb5dd665bd9d1c35575e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/inventory/items/user-journeys.md",
+      "sha256": "8a48e7ac3761526084ca1daee2215b4f76692861f04b0e6a7b9a4c41870ca6c2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "9528ffbe62c8402925e4efa59872a064013f112ee1f8758cd278d21f1b38e4ac",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "1ab9787c1629833d256052ff2b9ba7df2341e708b6997498774bcd38167927fd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "fd463b184e10d26c0f59031ff27160c07e8efeb923d37f32a5e74c67598fd74f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "a29970eb645e575475fe5e414889dc14f8894bba956577109d079069ba2fa384",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "9b7aeef5f4aa85a4c1ab1d4b9524e57c5cda2b34708592f89a46f5608979654e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "29765245c07bfab2509b82ae2658ee8ec7828f7302156e0e588ee38cd3b0dd01",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+      "sha256": "aa1aec9b6f94153f7be29fb077064487e632be573304293636d2ced9b0588bab",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/case-lifecycle/spec.md",
+      "sha256": "e9ef2fcd6c45dd8e11d638db40e53015215fe6b78c38b92e9a2fbd8cf6b44c3d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+      "sha256": "a9a4242066efd8ee87eb5f823709fc60c0b6c9ed35d6cd975251ddcfa4db5ae9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "sha256": "8490b2898ba576e28dc064c869f3262c51f104bf6e536c76452dd4ee1f61f696",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "sha256": "0191296e98145bc663ac501ad5ee51cd73d8a6b1768b695da1d6ebaa84efc390",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "sha256": "11fb0bcda45e023cb7c297b8f7c4cd80b421a13f7cf39ce6b1d76ea5777c482b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+      "sha256": "dbb2a07705e522ecfbc5183e424dbac91add70ebc6fdd066a204a9abaaf6bbf9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/valuation-and-offer/spec.md",
+      "sha256": "7133bc3cd8bd77f3314f12aa53722b59fa635f328911e2ac23904eeedf5c839a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+      "sha256": "49cc3a5ddd7d500c271891bcea3d7f474781ae8b85a9bfdd976c7826fd9c4481",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/shared/auth/roles/feature-tcs.md",
+      "sha256": "f0b33e596eaa633f7273493b45cfe3331f185dfb2846dd44976be7ad37a44de8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/shared/auth/roles/spec.md",
+      "sha256": "6cd097ddfe07478cfa1809bf1a079466d793bdcfda6aa699ee84bd63bb853d5f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/specs/shared/auth/roles/user-journeys.md",
+      "sha256": "1b1c693ccf468e5174d7427956de26eeac0992da02b8bf2949035d9184c7060b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/tech-design.md",
+      "sha256": "51c5f55dce959f145774cc902bb7fb1a71fd45a6de803a4bfc9bf8a9a2719243",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-item-registry/ui-design.md",
+      "sha256": "04c9514bcfd4e8a66db0cbe2ff69d0ed0aaa28fd5f5ee44d56fc15cce93473fc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/collector-page/feature-tcs.md",
+      "sha256": "8b450ded58a430bdcd4b4fdf26c581071f5c4a2da6ec484366e14c2a4c17ae92",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/collector-page/spec.md",
+      "sha256": "47513a5c776f66fd5f311098af43de66b27f5ff82c46543d0a8c20782500bc12",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/collector-page/user-journeys.md",
+      "sha256": "3c4606c312539be8fb0134edc7622806863ef267e2b3d809644a43f32d802a5e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/items/feature-tcs.md",
+      "sha256": "61e3ab6b21008aa9b4b2466fb30246bd53ee5a3ed874bf8962129c487b3f738e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/items/spec.md",
+      "sha256": "51524efbb06a36cf7a0bc5ee07473f2f78c16a05cd7b0989e31a1b5f010e86a7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/items/user-journeys.md",
+      "sha256": "5e94c9475c075a5170d7b53918bdff417e6d5a9d433286964e280c8195ce9a2d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "f831f55819a5ee22c74c1ac944371dc1e036d09f722489877b157b655fb6fbb3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "29b843acc628312be8bb5febc091f09f625ec201f2a12cbd2f93fa9023735f4b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "dfeccf346d0c8ea976e7f4eabea24e1d1d36e026ed5a813d69a4e3602e973048",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "5fe7102678fd978d380e95a70495ababa52c13c50510f4e6def6f4a7d57880d1",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "cab37717390b77d08ab55f433e97d9383e9ff8b37292ea62ec1657629372e495",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "34cf9bd88f57fb03b7e6cc7f75a0b585cbf61d85aac7ef16e7aa6b03bd343e14",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+      "sha256": "c582acc111ca0e936b1dd152ea8656ac380513dd721ac92a4bf97ce766c2cdf9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+      "sha256": "43783cc82a97602ebe7204834deef4623c4daa04afa0ad8a01f409d83e90b477",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+      "sha256": "e759c8c2b1ec0ec7cee78c9a5da6c880d35428b4bf866dcce11235506f839bfe",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "sha256": "da7c1f00b3e798a3b7c99b4174c4bb72c06de3e62a9dc2fa70d182e4ff814652",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "sha256": "c450dfa838279d67dfac8f455ef3db13a5095111edf3cb46afd8a2d7e3fb9e02",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "sha256": "8ed32ae4cb49d1374f891cf3838ac9db6dd0bf1facb76cd60433f7fdc093cfaa",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+      "sha256": "5d29d82718a47125146e9909f8440ef9e04a361b2d62278b94edde0cad7470c4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+      "sha256": "12d8228b2360171eb4e970cd849ced9590ce581ae747f7946f9cd9d560ce8033",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+      "sha256": "ffbe078375b3d2c39fc90079ac24a1fccd51a819c9320eddea54c46a14e70503",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/feature-tcs.md",
+      "sha256": "97099a19067e0890b48aee8f7006d4558d74d865273fb8a5e4e1a194e4a30c74",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/spec.md",
+      "sha256": "41d63a8042f7ce7d5756bb8ab1cef08f2bd635bb1320a4ddae22c43379098d7a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/user-journeys.md",
+      "sha256": "819ba578a20b43975769c288ccbcec82b590e8ca44deede1d47a3239e135915f",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-item-registry/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/collector-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/collector-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The Items section lists every live item the collector owns"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/collector-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/items/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/items/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A forfeit moves the item to the lender",
+        "Requirement: A move is refused while a place marks the item",
+        "Requirement: A place's word is mirrored and never refused",
+        "Requirement: A proof opens only for those who may move an item",
+        "Requirement: An erasure reaches the register",
+        "Requirement: An item has one owner, read by name",
+        "Requirement: An item is one object, and says what it is in fixed facts",
+        "Requirement: An item the company buys or is given belongs to the custodian",
+        "Requirement: Every act on the register is on the audit log by its ids",
+        "Requirement: Four grants open the register",
+        "Requirement: One item's page says which place marks it and whether the owners agree",
+        "Requirement: One slab is one live item",
+        "Requirement: Staff close a mark the vault no longer has",
+        "Requirement: Staff find an item in three lists and one search",
+        "Requirement: Staff move an item no place marks to its new owner",
+        "Requirement: Staff register an item and correct its facts",
+        "Requirement: Staff retire an item and restore it"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/items/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A slab the register knows is taken rather than typed again",
+        "Requirement: The Case tab reads the item's facts from the register"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A draft holding a slab the register knows changes only its photos and description",
+        "Requirement: A request states one item, in the brand's own currency"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Preparing documents waits on the register's owner",
+        "Requirement: The item register is told what the case does with the item"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A case is papered by three documents, each printing its own facts"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A valuation is read beside the item's grader, grade and cert"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Each role grants a fixed set of permissions",
+        "Requirement: The permission vocabulary is a closed set of resources and actions"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/roles/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
