@@ -5,7 +5,7 @@
 - [ ] 1.1 State on `docs/prds/products/grade10-site/vault/collector-pages.md`'s Request Wizard that a loan asks for more than zero, and add the 🚧 line for the loan refusal to `docs/prds/products/grade10-site/vault/operator-console.md`, in the Queue section after the address refusal
 - [ ] 1.2 Verify: `pnpm check:manual` and `pnpm run validate:changes refuse-zero-walk-in-loan` in grade10-spec.
 
-## 2. Walk-in form (grade10)
+## 2. Walk-in form (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Tests, in their own commit: in `packages/vault/admin-frontend/src/features/custody/cases/presentation/views/WalkInDialog.test.tsx`, a loan of zero refused beside the loan field once it is left, Open case held and nothing sent, the rest of the form kept; no refusal while the amount is typed or when the empty field is left; the refusal cleared as soon as the amount is more than zero or emptied, and kept while the text is one `MoneyField` refuses; Storage only lifting it and a loan bringing back the amount with no refusal until the field is left; the field's own words for `-1` and `0.004` instead of it. In `packages/frontend-console/src/MoneyField.test.tsx`, leaving the field calls `onBlur` (`grade10-admin-vault-operator-queue-SC-96`)
 - [ ] 2.2 A test in `packages/vault/backend/test/trpc/collectorRouter.test.ts`, in its own commit: `create` refuses a financing amount of `0` and `-1` by name and opens no case, and opens one minor unit on the financed lane (`grade10-site-vault-case-intake-SC-42`)
