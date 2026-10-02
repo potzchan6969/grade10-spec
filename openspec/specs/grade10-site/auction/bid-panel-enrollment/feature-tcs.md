@@ -534,6 +534,51 @@ backend does not require.
 * The tooltip authorizes the card for bidding.
 * The tooltip does not promise a bid-time hold.
 
+### grade10-site-auction-bid-panel-enrollment-US2-TC12-1: A refused card link keeps setup open for retry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* customer(signed in, no linked card) is on <listing_2 url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_2> | An open listing taking bids; this collector has no linked card |
+| <the declining Visa> | 4000 0000 0000 0002, the provider's generic-decline test card. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+
+**Steps:**
+
+1. Click the primary bid action.
+2. Enter <the declining Visa> in the provider-hosted field.
+3. Check age attestation.
+4. Click Link Card.
+5. Read the setup modal.
+6. Click into the provider-hosted field, then toggle age attestation.
+7. Close the setup modal.
+8. Read the linked-card slot, the amount controls and the primary bid action.
+
+**Expected Results:**
+
+* Step 5: the setup modal stays open, and a failure is shown.
+* Step 6: the provider field and age attestation still respond.
+* Step 8: the linked-card slot shows the empty link prompt.
+* Quick-bid presets and the custom maximum are visible and disabled.
+* The primary bid action still reads Link a card to bid.
+
 ---
 
 ## grade10-site-auction-bid-panel-enrollment-US3: Collector changes the linked card before their first bid
