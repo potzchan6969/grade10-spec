@@ -31,6 +31,7 @@ Runs once per row of **Test data**.
 
 * `<case_1>` is a walk-in staff opened for `<walk-in email>`, a mailbox the tester reads, in the row's state.
 * admin(staff, holds vault:operate) is on `<case_1>`'s page.
+* `<mail delivery window>` is 5 minutes (assumed; any wait past the first send attempt).
 
 **Test data:**
 
@@ -43,7 +44,7 @@ Runs once per row of **Test data**.
 
 1. Cancel `<case_1>` and confirm.
 2. Wait <mail delivery window>.
-3. Read `<walk-in email>`'s inbox and the case's Custody tab for what the collector was told.
+3. Read `<walk-in email>`'s inbox.
 
 **Expected Results:**
 
@@ -69,7 +70,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's draft has gone untouched for 7 days, and its address is a mailbox the tester reads.
+* The row's draft has gone untouched for 8 days, and its address is a mailbox the tester reads.
+* `<mail delivery window>` is 5 minutes (assumed; any wait past the first send attempt).
 
 **Test data:**
 

@@ -145,6 +145,12 @@ Runs once per row of **Test data**.
 * Staff opened walk-in draft `<case_1>` for `<walk-in email>`, a mailbox the tester reads, with two of staff's photographs.
 * customer(collector) holding `<walk-in email>` is signed in at `grade10.com/vault`.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<mail delivery window>` | 5 minutes (assumed; any wait past the first send attempt) |
+
 **Steps:**
 
 1. Open `<case_1>` from the case list.
@@ -1114,6 +1120,7 @@ is never emailed and keeps nothing of it.
 
 * admin(staff, holds vault:operate and kyc:read) is on the page of walk-in draft `<case_1>`, opened for `<wrong email>` with two of staff's photographs; nobody has signed in to that account.
 * Neither `<wrong email>` nor `<right email>` has received any message.
+* `<right email>` is a mailbox the tester reads.
 
 **Test data:**
 
@@ -1130,10 +1137,10 @@ is never emailed and keeps nothing of it.
 
 **Expected Results:**
 
-* Step 1 ends `<case_1>`.
+* Step 1 ends `<case_1>`, and `<case_1>`'s page reads cancelled.
 * Step 2 opens a new draft, `<case_2>`, with a reference of its own, under `<right email>`'s account.
 * Step 3 lists `<case_2>` as a draft staff opened at the counter, and does not list `<case_1>`.
-* Nothing is emailed to `<wrong email>` or `<right email>`.
+* Nothing about `<case_1>` or `<case_2>` is emailed to `<wrong email>` or `<right email>`; `<right email>` receives only its sign-in link.
 
 ### grade10-site-vault-case-lifecycle-US6-TC2-1: The account at the wrong address keeps nothing of a cancelled walk-in
 
@@ -1155,6 +1162,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Staff opened walk-in draft `<case_1>` for `<wrong email>`, with two of staff's photographs whose addresses the tester has noted; for the second row, someone has since signed in to that account without sending it.
+* The tester noted `<wrong email>`'s collector page address and one of `<case_1>`'s photograph addresses before the cancel.
 * admin(staff, holds vault:operate and kyc:read) has cancelled `<case_1>` from the console.
 
 **Test data:**
@@ -1166,19 +1174,19 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. As admin(staff), open the collector page of `<wrong email>`'s account.
-2. Open the noted address of one of `<case_1>`'s photographs.
-3. As customer(collector) holding `<wrong email>`, sign in at `grade10.com/vault` and read the case list.
-4. Click Start a request three times, finishing each draft later.
+1. As admin(staff), open the noted collector page address.
+2. As customer(collector) holding `<wrong email>`, sign in at `grade10.com/vault` and read the case list.
+3. As that customer, open the noted photograph address.
+4. Start three new requests, leaving each as a draft.
 
 **Expected Results:**
 
 * Step 1 lists no vault case for the account.
-* Step 2 is refused; the photograph is not served.
-* Step 3 lists nothing: no draft and no cancelled case.
+* Step 1's page answers for the account, never that nobody answers to that id.
+* Step 2 lists nothing: no draft and no cancelled case.
+* Step 3 is refused; the photograph is not served.
 * Step 4 opens three drafts; the cancelled walk-in takes none of the account's three.
 * `<wrong email>`'s mailbox holds no message about `<case_1>`.
-* The account itself still exists.
 * The queue's Closed view lists `<case_1>` under its reference, its item reading as erased and no collector named.
 
 ### grade10-site-vault-case-lifecycle-US6-TC3-1: A walk-in nobody sends ends on the seven-day draft clock and leaves nothing on the account
@@ -1240,7 +1248,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector) sent walk-in `<case_1>` from their own phone; it reads submitted.
+* customer(collector) sent walk-in `<case_1>`, carrying two photographs, from their own phone; it reads submitted.
 * admin(staff, holds vault:operate) is on `<case_1>`'s page.
 
 **Steps:**

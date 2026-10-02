@@ -376,20 +376,20 @@ exists.
 
 **Pre-conditions:**
 
-* `<case_1>` is a draft staff opened for `<walk-in email>`; the customer signed in and changed its title, and staff attached two photographs.
+* `<case_1>` is a draft staff opened for `<walk-in email>`; the customer signed in, viewed both photographs and changed its title; staff attached the two photographs.
 * admin(staff, holds vault:operate) is signed in to the console.
 
 **Steps:**
 
 1. Cancel `<case_1>` from the console.
-2. Read `<case_1>`'s history and photograph-read trail.
-3. Erase `<walk-in email>`'s account.
+2. Read the API response for `<case_1>`'s history and photograph-read trail.
+3. Run the vault's own erasure for `<walk-in email>`'s account.
 
 **Expected Results:**
 
 * Step 2 shows every entry still present: the collector's own entries name no collector, and staff's entries name staff.
-* Neither photograph nor the item's words remain.
-* Step 3 finds nothing of `<case_1>` left to rewrite.
+* Step 2 reads no photograph and none of the item's words.
+* After step 3, `<case_1>`'s history reads as step 2 read it.
 
 ---
 
