@@ -1,6 +1,6 @@
 # Tasks: Edit unit Cert IDs
 
-## 1. Manual page (grade10-spec)
+## 1. Manual page (grade10-spec) (owner: @mason5991)
 
 - [ ] 1.1 Add an engineer code map to the Intake section of `docs/prds/products/grade10-admin/inventory/catalog.md`: `services/inventoryMutations.ts` (`correctCertId`, `assignCertId`), `services/unitFacts.ts`, `repositories/changelogs.ts`, `CertIdDetailDialog.tsx`, `ChangeHistoryDialog.tsx`.
 - [ ] 1.2 Verify: `pnpm check:manual`, `pnpm run validate:changes edit-unit-cert-ids` and `pnpm run lint` in grade10-spec.
