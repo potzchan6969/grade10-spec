@@ -29,9 +29,7 @@
     {
       "repository": "9gag/grade10",
       "commit": "555573249c9f67c7e653a9d0f9a3b26e1828ce34",
-      "components": [
-        "admin"
-      ]
+      "components": ["admin"]
     }
   ]
 }
