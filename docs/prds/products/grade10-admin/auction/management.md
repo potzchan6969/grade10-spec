@@ -39,7 +39,7 @@ the card is in the winner's hands. The collector's half is
   again at the API, so a script cannot slip past what the form refuses
 - **Prices read back** — each price shows as a formatted decimal amount
   before saving, so its decimal placement can be checked
-- 🚧 **Starting price of 0** — a listing in USD, HKD or JPY can start at
+- **Starting price of 0** — a listing in USD, HKD or JPY can start at
   **0**; its first bid must still reach the currency's lowest increment
 - **Sandbox** — set only while draft: the listing runs on test-mode payment
   credentials, so the house can rehearse a sale
@@ -108,7 +108,7 @@ the card is in the winner's hands. The collector's half is
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
 - **Refused** — a currency outside the three, or a starting price that is not
-  a positive whole amount; a slug of the wrong shape, or one another listing
+  a whole amount of 0 or more; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
   campaign; a close not after the start, or a close or Publish at not after
   now at create; a ninth media item, an unsupported or empty file, or
