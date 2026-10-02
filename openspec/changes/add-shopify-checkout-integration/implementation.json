@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "137f9cec66da45e8975e44b4be5c14c272ad34df5ee7e37dca1b8061eb5e0d8c"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "38f99cd53de977af164d9d164c4f277369be6835",
+    "capturedAt": "2026-10-02T08:23:03.388Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-shopify-checkout-integration/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A checkout intent is safe to repeat",
+          "Requirement: A signed-in member receives one Shopify hosted checkout",
+          "Requirement: Checkout reviews the current member basket before payment",
+          "Requirement: Shopify payment settles one Grade10 order",
+          "Requirement: Shopify uses the store's carrier rule"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/checkout/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

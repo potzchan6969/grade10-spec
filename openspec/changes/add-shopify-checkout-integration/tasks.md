@@ -12,7 +12,7 @@
   checkout test-case validator, and `openspec validate
   add-shopify-checkout-integration --strict`.
 
-## 2. Shared contract and order persistence (grade10)
+## 2. Shared contract and order persistence (grade10) (owner: @kinisworking)
 
 - [ ] 2.1 Add failing contract, repository and migration coverage for one
   active intent, changed-intent rejection, terminal replay, provider-response
