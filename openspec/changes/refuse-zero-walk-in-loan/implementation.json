@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "804091c045fd5700f13a5dfe5400b0886b0eac3b3f30774769d8754a71fa0b24"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "7814b6890fd4ab8f6510419e114a81abc37b148e",
+    "capturedAt": "2026-10-02T07:02:31.671Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Staff open a draft for a customer at the counter"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The financing amount decides the lane"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
