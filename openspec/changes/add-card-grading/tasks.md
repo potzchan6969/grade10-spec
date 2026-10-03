@@ -2009,9 +2009,8 @@ worker. Stage (b).
 
 Waived at archive: the collector's home, wizard and submission page are
 @tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
-cite is proven at the worker. 27.10, the sign page, stands done; 27.14 stands
-for the worker's part, finding the case at the submission's read, and its link
-is the redesigned page's.
+cite is proven at the worker. 27.10, the sign page, stands done. 27.14 is
+waived with them; the vault's `cases.byReference` proves SC-63.
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
@@ -2399,7 +2398,7 @@ lands. Stage (c).
 Waived at archive: the collector's home, wizard and submission page are
 @tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
 cite is proven at the worker. 31.6 and 31.8, the nav item and the prerendered
-home, are waived with them.
+home, are waived with them; 31.1 to 31.5 stand done, and 31.7 stands.
 
 Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 (b).

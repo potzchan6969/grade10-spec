@@ -2,11 +2,11 @@
 
 ## Purpose
 
-The grading collector's own blocks, which the store no longer carries: the
-collector's grading screens are designed again by @tangconst from the
-backend, and this capability holds the store to exporting none of the blocks
-they used. The drop-off booking and signing views are grading's own, and
-compose `shared/ui/appointment-booking` and `shared/ui/page-blocks`.
+Blocks drawn only for grading's collector screens. @tangconst designs those
+screens from the backend, and this capability holds the store to exporting
+none of those blocks. Grading's drop-off booking views compose
+`shared/ui/appointment-booking` and `shared/ui/page-blocks`; its signing page
+composes doc-sign's `CeremonyFlow`.
 
 ## Feature set
 

@@ -45,7 +45,7 @@ the pages carry is the product; this file carries the surface.
 | Screen | Board | Route | Composes |
 | --- | --- | --- | --- |
 | Book the drop-off | `G05` | a view the collector's page opens wherever the submission holds no visit and Book is offered | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `BatchLine`, `CheckboxListInput` for the statement tick, `Skeleton`, `Text`, `Button` |
-| Drop-off booked | `G06` | a view the collector's page shows after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `NoteList`, `Alert` for the vault line and the detached notice, `Skeleton`, `Link`, `Button`, `Text` |
+| Drop-off booked | `G06` | a view the collector's page shows after a booking | `DropoffBooked` → `DropoffBooking` to move the visit, `BookingConfirmation`, `BookingManageCard`, `NoteList`, `Alert` for the vault line and the detached notice, `Skeleton`, `Link`, `Button`, `Text` |
 | Walk-in booking | none; `G00-Main` names it | `grade10.com/book` | the site's own booking flow, unchanged: the Grading visit is a listed service, and the visit it books is the diary's own, which grading never reads |
 | Submission agreement | `G14` | `/grading/sign#<token>` | `CeremonyFlow` → `PdfPageCanvas`, `SignatureField`, `RefusalNotice`; the template in `packages/grading/backend` |
 | Hand-back receipt | `G15`, `G18` | `/grading/sign#<token>` | the same ceremony with the receipt template |
