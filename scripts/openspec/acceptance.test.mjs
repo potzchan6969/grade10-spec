@@ -1612,3 +1612,47 @@ test("feature set fold reads only a colon followed by a space as a label", () =>
     /- Links\n {2}- See https:\/\/a\.example\n {2}- Create with `user:create`\n {2}- \*\*Opens:\*\* 10:00 daily\n {2}- See https:\/\/b\.example\n {2}- Create with `user:delete`\n/,
   );
 });
+
+test("feature set fold removes an explicitly retired root group", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Current basket\n  - Review: live\n- Safe repetition and recovery\n  - Reuse: one invoice\n",
+    ),
+    `# Roles
+
+## Feature set
+
+- Current basket
+  - Review: live
+- Payment attempts
+  - Fresh: creation
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.match(merged, /- Current basket/);
+  assert.match(merged, /- Payment attempts/);
+  assert.doesNotMatch(merged, /Safe repetition and recovery|Reuse: one invoice/);
+});
+
+test("feature set fold permits a removal-only delta", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Current basket\n  - Review: live\n- Safe repetition and recovery\n  - Reuse: one invoice\n",
+    ),
+    `# Roles
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.match(merged, /- Current basket/);
+  assert.doesNotMatch(merged, /Safe repetition and recovery|Reuse: one invoice/);
+});

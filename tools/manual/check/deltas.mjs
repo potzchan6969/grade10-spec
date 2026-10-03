@@ -44,10 +44,14 @@ import {
 } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
- * the two a spec's own head carries. `User journeys` is not among them — the
- * journeys are their own file beside the delta, and one written here is read
- * by nothing. */
-const CARRIED = new Set(["Purpose", "Feature set"]);
+ * the two a spec's own head carries and the feature-set removal directive.
+ * `User journeys` is not among them — the journeys are their own file beside
+ * the delta, and one written here is read by nothing. */
+const CARRIED = new Set([
+  "Purpose",
+  "Feature set",
+  "REMOVED Feature set",
+]);
 const ISSUED_ID = new RegExp(
   `${SCENARIO_ID.source}|[a-z0-9][a-z0-9-]*-(?:US|TC)-\\d+`,
   "g",
