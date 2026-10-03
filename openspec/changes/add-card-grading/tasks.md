@@ -1881,7 +1881,7 @@ read this group's stories. Stage (b).
       `grade10-site-grading-submission-plan-SC-35`,
       `grade10-site-grading-submission-plan-SC-58`,
       `grade10-site-grading-submission-plan-SC-60`)
-- [ ] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
+- [x] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
       lifting the raw token out of the address's `#t=` fragment and sending it
       as a header, so groups 25 to 30 test on the worker in-process and their
       stories replay its recordings
@@ -1976,7 +1976,7 @@ read this group's stories. Stage (b).
 page does. Needs group 10's exports and 25.2's `GradingApi` and recorded
 worker. Stage (b).
 
-- [ ] 26.1 Cover the picker and the booked view: the four Before you come
+- [x] 26.1 Cover the picker and the booked view: the four Before you come
       items, the Bulk duration, the vault line, the acts withdrawn once the
       visit has started, and the view that reads booked until the diary answers
       (`grade10-site-grading-dropoff-booking-SC-12`,
@@ -1984,24 +1984,24 @@ worker. Stage (b).
       `grade10-site-grading-dropoff-booking-SC-14`,
       `grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.2 Compose the picker from `BookingLocationPicker` and
+- [x] 26.2 Compose the picker from `BookingLocationPicker` and
       `BookingSlotPicker` for a first booking and for a move alike, with
       `BatchLine` beside the picked day carrying the cut-off, the ship day and
       the day back
-- [ ] 26.3 Build the booked view over `BookingConfirmation` and
+- [x] 26.3 Build the booked view over `BookingConfirmation` and
       `BookingManageCard`: the visit, the four items to bring, the calendar
       file at `visit.ics`, the Bulk visit's about-45-minutes line, and the line
       saying a card that is not being graded can be vaulted on the same visit
       (`grade10-site-grading-dropoff-booking-SC-12`,
       `grade10-site-grading-dropoff-booking-SC-13`,
       `grade10-site-grading-dropoff-booking-SC-14`)
-- [ ] 26.4 Offer neither move nor cancel once the visit has started, and read
+- [x] 26.4 Offer neither move nor cancel once the visit has started, and read
       the visit as booked until the diary answers it missed
       (`grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
+- [x] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
       `Grading/Dropoff/Dropoff Booked`, each with `surface: site`
-- [ ] 26.6 Verify: `pnpm run test`,
+- [x] 26.6 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
