@@ -551,13 +551,34 @@ function splitManual(raw) {
   };
 }
 
+const RUN_LINE = /^(\*\*Run\b|Run:)/;
+
+/** A run is its `Run` paragraph and what follows until the next one; text
+ *  before the first is a run with no heading. A delta run whose heading the
+ *  durable suite already holds, or the delta's own headless run, is that run
+ *  grown since its last fold and replaces it; any other run is added. */
+function mergeRuns(currentRuns, deltaRuns) {
+  if (!deltaRuns || currentRuns.includes(deltaRuns)) return currentRuns;
+  const runsOf = (text) =>
+    paragraphs(text).reduce((runs, one) => {
+      if (runs.length === 0 || RUN_LINE.test(one)) runs.push([one]);
+      else runs.at(-1).push(one);
+      return runs;
+    }, []);
+  const keyOf = (run) => (RUN_LINE.test(run[0]) ? run[0] : "");
+  const merged = runsOf(currentRuns);
+  for (const run of runsOf(deltaRuns)) {
+    const at = merged.findIndex((one) => keyOf(one) === keyOf(run));
+    if (at < 0) merged.push(run);
+    else merged[at] = run;
+  }
+  return merged.map((run) => run.join("\n\n")).join("\n\n");
+}
+
 function mergeReconciliation(currentRaw, deltaRaw) {
   const current = splitManual(currentRaw);
   const delta = splitManual(deltaRaw);
-  const runs =
-    delta.runs && !current.runs.includes(delta.runs)
-      ? [current.runs, delta.runs].filter(Boolean).join("\n\n")
-      : current.runs;
+  const runs = mergeRuns(current.runs, delta.runs);
   const tables = [current.manual, delta.manual].map((lines) =>
     lines.filter((line) => line.startsWith("|")),
   );
