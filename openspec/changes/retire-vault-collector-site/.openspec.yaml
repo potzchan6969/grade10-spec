@@ -3,6 +3,7 @@ created: 2026-10-02
 hands:
   pm: "@ecchochan"
   dev: "@ecchochan"
+  tech: "@ecchochan"
   design: "@tangconst"
 ui_waived: removes the collector's vault screens from the site and draws none;
   @tangconst designs them again from the backend as it stands
@@ -12,3 +13,4 @@ landed_by:
 reviewed:
   tech-design: 549c0b12
   tasks: 399cc960
+  user-journeys: 4905974e
