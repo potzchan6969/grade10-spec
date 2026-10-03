@@ -2341,7 +2341,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 | `grade10-site-grading-submission-plan-SC-63` a plan kept with no level asks for one | **Case added:** `US6-TC10-1` | written after the blind pass: a plan kept before a level was picked was offered a drop-off its booking could only refuse, so its page now asks for the level through the list's edit, and a booking or a join sent for it is refused before the diary is asked |
 | `grade10-site-grading-submission-plan-SC-64` | Case added at the acceptance review | `grade10-site-grading-submission-plan-US8-TC5-1`: the clock restarts on a cancelled or missed visit and nudges again, decided by the product owner, 2026-10-01 |
 | `US4-TC4-1` | **Corrected against `grade10-site-grading-submission-plan-SC-22`**, at the walk | the declared value is read where the build names it, on the card's own row in Your list; the paste row names the card alone |
-| `US8-TC3-1` | **Corrected against `grade10-site-grading-submission-plan-SC-45` and `shared-ui-grading-submission-SC-79`**, at the walk | the scenario offers starting again without saying how, and the review stays; the block's Plan expired meanwhile story words it in the refusal, where `ui-design.md:438` names Start again, the designer's to settle |
+| `US8-TC3-1` | **Corrected against `grade10-site-grading-submission-plan-SC-45` and shared-ui-grading-submission-SC-79**, at the walk | the scenario offers starting again without saying how, and the review stays; how a page offers it is the designer's to settle |
 
 ### Manual
 

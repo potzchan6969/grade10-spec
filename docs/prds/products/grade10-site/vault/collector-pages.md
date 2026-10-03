@@ -11,8 +11,9 @@ again.
 - 🚧 **On the site** — no vault page but the signing ceremony at
   `grade10.com/vault/sign#<token>`, opened from the QR code or link staff
   hand over at the counter; no account needed
-- ❓ **The collector's screens** — the case list, the request, one case and
-  booking a visit; @tangconst designs them from the backend as it stands —
+- ❓ **The collector's screens** — the case list, the request, one case,
+  booking a visit and Your data; @tangconst designs them from the backend as
+  it stands —
   [Grade10 Vault Digital Twin](/references/grade10-vault-digital-twin)
 - **Sign-in** — magic link, Google where enabled; no phone number and no SMS
 - **Language** — the ceremony's chrome in English and both Chinese scripts;

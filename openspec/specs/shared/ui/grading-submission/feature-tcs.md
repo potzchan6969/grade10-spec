@@ -1,6 +1,6 @@
 # shared/ui/grading-submission Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## Background
@@ -24,16 +24,14 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The export contract
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`
 
 **Pre-conditions:**
 
@@ -57,16 +55,14 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The export contract
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`
 
 **Pre-conditions:**
 
@@ -89,7 +85,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -117,16 +113,14 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The export contract
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`, `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`, `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -151,7 +145,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -180,16 +174,14 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-fee-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -211,7 +203,7 @@
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -244,16 +236,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -284,16 +274,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -316,7 +304,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -343,16 +331,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -374,7 +360,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -407,16 +393,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -437,16 +421,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -468,16 +450,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -498,16 +478,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -535,16 +513,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -566,16 +542,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -596,16 +570,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -627,7 +599,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -657,7 +629,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -685,16 +657,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -715,16 +685,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -752,16 +720,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -782,16 +748,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -815,16 +779,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Where the submission stands
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-status-rail.stories.tsx`
 
 **Pre-conditions:**
 
@@ -847,16 +809,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Where the submission stands
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-status-rail.stories.tsx`
 
 **Pre-conditions:**
 
@@ -880,16 +840,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Where the submission stands
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-ownership-chip.stories.tsx`
 
 **Pre-conditions:**
 
@@ -921,16 +879,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Where the submission stands
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-ownership-chip.stories.tsx`
 
 **Pre-conditions:**
 
@@ -950,16 +906,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The cards after hand-in
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-record.stories.tsx`
 
 **Pre-conditions:**
 
@@ -987,16 +941,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The cards after hand-in
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-record.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1036,16 +988,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The cards after hand-in
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-grade-cards.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1066,7 +1016,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1096,7 +1046,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1124,16 +1074,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Collecting the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-pickup-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1154,16 +1102,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Collecting the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-pickup-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1184,16 +1130,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Collecting the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-pickup-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1216,16 +1160,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Collecting the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-named-collector.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1254,7 +1196,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -1286,7 +1228,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1325,16 +1267,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** What is paid and due
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1356,16 +1296,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** What is paid and due
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1386,16 +1324,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** If nobody collects
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-uncollected-ladder.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1420,7 +1356,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1455,16 +1391,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** If nobody collects
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-uncollected-ladder.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1485,16 +1419,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** If nobody collects
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-uncollected-ladder.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1515,16 +1447,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Content through props
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1552,16 +1482,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Content through props
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/public-exports.test.ts`
 
 **Pre-conditions:**
 
@@ -1583,7 +1511,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1621,7 +1549,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
@@ -1651,7 +1579,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** low
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1680,7 +1608,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1710,16 +1638,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1740,16 +1666,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1771,16 +1695,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1804,16 +1726,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1842,16 +1762,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1873,16 +1791,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1904,16 +1820,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -1936,7 +1850,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1965,7 +1879,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1994,16 +1908,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** The cards after hand-in
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-record.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2027,7 +1939,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2067,7 +1979,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2096,16 +2008,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Collecting the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-named-collector.stories.tsx`
 
 
 **Pre-conditions:**
@@ -2129,16 +2039,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** What is paid and due
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2168,16 +2076,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** What is paid and due
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2205,16 +2111,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** What is paid and due
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-money-block.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2244,16 +2148,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2275,7 +2177,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2308,7 +2210,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2337,7 +2239,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2371,16 +2273,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2403,16 +2303,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2438,16 +2336,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-fee-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2471,7 +2367,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2500,7 +2396,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2532,16 +2428,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2564,16 +2458,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2597,7 +2489,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2627,7 +2519,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2674,7 +2566,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2702,16 +2594,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2741,16 +2631,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-card-list.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2779,16 +2667,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Listing the cards
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-paste-sheet.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2812,16 +2698,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reading what it costs
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-level-picker.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2843,16 +2727,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Reviewing before booking
-
-**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 
@@ -2872,56 +2754,95 @@ Runs once per row of **Test data**.
 * Step 3: Save changes is disabled, and nothing logs under `onSaveForLater`.
 * Step 5: Book the drop-off is disabled; Save and book later is enabled.
 
+### shared-ui-grading-submission-US1-TC88-1: The package entry exports no grading collector block
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The export contract
+
+**Pre-conditions:**
+
+* The store's `packages/ui/src/index.ts` is open.
+
+**Steps:**
+
+1. Search the exports for `GradingCardList`, `GradingCardRecord`, `GradingFeeSheet`, `GradingGradeCards`, `GradingLevelPicker`, `GradingMoneyBlock`, `GradingNamedCollector`, `GradingOwnershipChip`, `GradingPasteSheet`, `GradingPickupCard`, `GradingReview`, `GradingStatusRail` and `GradingUncollectedLadder`.
+2. Search the exports for `GradingCardAddition`, `GradingCardListCap`, `GradingCardListCopy`, `GradingCardListProps`, `GradingCardMatch`, `GradingCardOutcome`, `GradingCardRecordCopy`, `GradingCardRecordProps`, `GradingEstimate`, `GradingFeeLevel`, `GradingFeeSheetCopy`, `GradingFeeSheetProps`, `GradingFeeSheetRecord`, `GradingGradeCard`, `GradingGradeCardsCopy`, `GradingGradeCardsProps`, `GradingGrader`, `GradingLadderRung`, `GradingLevelPickerCopy`, `GradingLevelPickerProps`, `GradingListedCard`, `GradingLocaleProps`, `GradingMoney`, `GradingMoneyBlockCopy`, `GradingMoneyBlockProps`, `GradingMoneyLine`, `GradingMoneyLines`, `GradingNamedCollectorCopy`, `GradingNamedCollectorProps`, `GradingOwnershipChipCopy`, `GradingOwnershipChipProps`, `GradingPasteOutcome`, `GradingPasteResult`, `GradingPasteSheetCopy`, `GradingPasteSheetProps`, `GradingPasteState`, `GradingPhoto`, `GradingPickerLevel`, `GradingPickupCardCopy`, `GradingPickupCardProps`, `GradingRecordCard`, `GradingReferenceSale`, `GradingReviewCard`, `GradingReviewCopy`, `GradingReviewProps`, `GradingStage`, `GradingStatusRailCopy`, `GradingStatusRailProps`, `GradingTone`, `GradingUncollectedLadderCopy`, `GradingUncollectedLadderProps`, `GradingUpchargeWarning` and `GradingVaultCase`.
+3. Search the exports for any grading-named shop picker, day and time picker, details form, confirmation or manage card.
+4. List the blocks under `packages/ui/src/blocks`.
+
+**Expected Results:**
+
+* Step 1 finds none of the thirteen.
+* Step 2 finds none of the fifty-three types.
+* Step 3 finds none.
+* Step 4 lists no grading collector block.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `shared-ui-grading-submission-US1-TC30-1` — a badge tone per outcome | Raised, settled | The block reads the tone from the outcome through one map of its own and takes none from the consumer. Decisions Q69; folded as `shared-ui-grading-submission-SC-64`, and the record requirement's outcome rule rewritten to say so |
-| `shared-ui-grading-submission-US1-TC30-1` — the outcome set | Raised, settled | "Minimum grade not met" is the thirteenth outcome of the record's table, which already carries it. Decisions Q70; the word added to the `GradingCardRecord` bullet on `docs/prds/products/shared/ui/grading-submission.md`, and the row added to the case's test data, dressed as Ungraded is — the card comes back raw and the fee stands. Reached by `shared-ui-grading-submission-SC-35` |
-| `shared-ui-grading-submission-US1-TC8-1` — the estimate matching the fee sheet | Raised, settled | Neither block checks the other: each renders the `feeSheet` it is given. Decisions Q71; folded as `shared-ui-grading-submission-SC-59`, and the case's cross-sheet clause dropped from its pre-condition and its expected result |
+| `shared-ui-grading-submission-US1-TC30-1` — a badge tone per outcome | Raised, settled | The block reads the tone from the outcome through one map of its own and takes none from the consumer. Decisions Q69; folded as shared-ui-grading-submission-SC-64, and the record requirement's outcome rule rewritten to say so |
+| `shared-ui-grading-submission-US1-TC30-1` — the outcome set | Raised, settled | "Minimum grade not met" is the thirteenth outcome of the record's table, which already carries it. Decisions Q70; the word added to the `GradingCardRecord` bullet on `docs/prds/products/shared/ui/grading-submission.md`, and the row added to the case's test data, dressed as Ungraded is — the card comes back raw and the fee stands. Reached by shared-ui-grading-submission-SC-35 |
+| `shared-ui-grading-submission-US1-TC8-1` — the estimate matching the fee sheet | Raised, settled | Neither block checks the other: each renders the `feeSheet` it is given. Decisions Q71; folded as shared-ui-grading-submission-SC-59, and the case's cross-sheet clause dropped from its pre-condition and its expected result |
 | The two blocks agreeing on one record | **Out of suite:** the page's colocated test in `packages/grading/frontend` | Passing one record to both is the composing page's, so no block-level case can reach it |
-| `shared-ui-grading-submission-US1-TC58-1` — the paste result reaching the list | Raised, settled | `onApply(cards)` carries the cards the paste made, and the page feeds them to `GradingCardList`'s `cards`. Decisions Q72; the paste sheet's `Acts` rule names the callback, folded as `shared-ui-grading-submission-SC-63`, and the case added |
-| `shared-ui-grading-submission-US1-TC15-1` | Folded | Editing, removing, declaring a value and setting a minimum grade each report through a callback of their own, which no scenario stated: `shared-ui-grading-submission-SC-61` |
-| `shared-ui-grading-submission-US1-TC55-1` — the cap notice | Folded | The cap and the level the count closes read on the list, which no scenario stated: `shared-ui-grading-submission-SC-62`. The case covers it with `shared-ui-grading-submission-SC-16` |
-| `shared-ui-grading-submission-US1-TC54-1` — the picker's graders | Folded | The picker renders the graders, reports a pick and shows the highest declared value, which no scenario stated: `shared-ui-grading-submission-SC-60` |
-| `shared-ui-grading-submission-SC-09` | Case added | `shared-ui-grading-submission-US1-TC51-1` — every level closed shows the counter line |
-| `shared-ui-grading-submission-SC-11` | Case added | `shared-ui-grading-submission-US1-TC52-1` — the upcharge notice on the picker |
-| `shared-ui-grading-submission-SC-12` | Case added | `shared-ui-grading-submission-US1-TC53-1` — a grader priced with example figures |
-| `shared-ui-grading-submission-SC-16` | Case added | `shared-ui-grading-submission-US1-TC55-1` — the card past the cap refused |
-| `shared-ui-grading-submission-SC-17` | Case added | `shared-ui-grading-submission-US1-TC56-1` — the reference out of reach |
-| `shared-ui-grading-submission-SC-23` | Case added | `shared-ui-grading-submission-US1-TC57-1` — a pasted line above the ceiling |
-| `shared-ui-grading-submission-SC-31` | Case added | `shared-ui-grading-submission-US1-TC60-1` — the running-late chip |
-| `shared-ui-grading-submission-SC-36` | Case added | `shared-ui-grading-submission-US1-TC61-1` — the certificate against its lookup address |
-| `shared-ui-grading-submission-SC-39` | Case added | `shared-ui-grading-submission-US1-TC62-1` — a card the grader issued no grade for, one run per outcome |
-| `shared-ui-grading-submission-SC-42` | Case added | `shared-ui-grading-submission-US1-TC63-1` — nothing due on the pickup card; the figure itself stays on `shared-ui-grading-submission-US1-TC34-1` |
-| `shared-ui-grading-submission-SC-45` | Case added | `shared-ui-grading-submission-US1-TC64-1` — a refused naming |
-| `shared-ui-grading-submission-SC-46` | Case added | `shared-ui-grading-submission-US1-TC65-1` — the estimate reading as unpaid |
-| `shared-ui-grading-submission-SC-48` | Case added | `shared-ui-grading-submission-US1-TC66-1` — the payout and the refunded fee |
-| `shared-ui-grading-submission-SC-50` | Case added | `shared-ui-grading-submission-US1-TC67-1` — the paid line's method, instant and till reference |
-| `shared-ui-grading-submission-SC-57` | Case added | `shared-ui-grading-submission-US1-TC59-1` — a paste error that is not an empty list |
-| `shared-ui-grading-submission-SC-65` | Case added | `shared-ui-grading-submission-US1-TC68-1` — a matched card with no set or number |
-| `shared-ui-grading-submission-SC-70` | Case added | `shared-ui-grading-submission-US1-TC69-1` — the hand-back photograph beside a collected slab |
-| `shared-ui-grading-submission-SC-72` | Case added | `shared-ui-grading-submission-US1-TC71-1` — no Open row where the shop names no hours |
-| `shared-ui-grading-submission-SC-73` | Case added | `shared-ui-grading-submission-US1-TC72-1` — a card's payout or reversal line on the collected page |
-| `shared-ui-grading-submission-US1-TC15-1` — the edit step | Fixed | The case's step and expected result named `onEdit` for the value it now carries; the value field's blur-or-Enter commit and its own reopen-with-the-kept-figure rule (added by the block change that split editing from declaring) named no scenario. Folded as `shared-ui-grading-submission-SC-66`; the case's step, pre-condition and expected result rewritten to name `onEdit` and `onDeclare` separately |
-| A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67`; case added at review, `shared-ui-grading-submission-US1-TC78-1` |
-| A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68`; case added at review, `shared-ui-grading-submission-US1-TC76-1` |
-| The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as `shared-ui-grading-submission-SC-69`; case added at review, `shared-ui-grading-submission-US1-TC77-1` |
-| `shared-ui-grading-submission-SC-06` | Case added at review | `shared-ui-grading-submission-US1-TC74-2` — an open level carrying cover, picked by id; no case had asserted the pick. Its no-estimate clause is left to `shared-ui-grading-submission-US1-TC9-1` |
-| `shared-ui-grading-submission-SC-20` | Case added at review | `shared-ui-grading-submission-US1-TC79-1` — nothing read, nothing added; `shared-ui-grading-submission-US1-TC18-1` holds only the loading clause |
-| `shared-ui-grading-submission-SC-59` | Case added at review | `shared-ui-grading-submission-US1-TC75-1` — each block draws the one record it was given; the page passing one record to both stays out of suite, above |
+| `shared-ui-grading-submission-US1-TC58-1` — the paste result reaching the list | Raised, settled | `onApply(cards)` carries the cards the paste made, and the page feeds them to `GradingCardList`'s `cards`. Decisions Q72; the paste sheet's `Acts` rule names the callback, folded as shared-ui-grading-submission-SC-63, and the case added |
+| `shared-ui-grading-submission-US1-TC15-1` | Folded | Editing, removing, declaring a value and setting a minimum grade each report through a callback of their own, which no scenario stated: shared-ui-grading-submission-SC-61 |
+| `shared-ui-grading-submission-US1-TC55-1` — the cap notice | Folded | The cap and the level the count closes read on the list, which no scenario stated: shared-ui-grading-submission-SC-62. The case covers it with shared-ui-grading-submission-SC-16 |
+| `shared-ui-grading-submission-US1-TC54-1` — the picker's graders | Folded | The picker renders the graders, reports a pick and shows the highest declared value, which no scenario stated: shared-ui-grading-submission-SC-60 |
+| shared-ui-grading-submission-SC-09 | Case added | `shared-ui-grading-submission-US1-TC51-1` — every level closed shows the counter line |
+| shared-ui-grading-submission-SC-11 | Case added | `shared-ui-grading-submission-US1-TC52-1` — the upcharge notice on the picker |
+| shared-ui-grading-submission-SC-12 | Case added | `shared-ui-grading-submission-US1-TC53-1` — a grader priced with example figures |
+| shared-ui-grading-submission-SC-16 | Case added | `shared-ui-grading-submission-US1-TC55-1` — the card past the cap refused |
+| shared-ui-grading-submission-SC-17 | Case added | `shared-ui-grading-submission-US1-TC56-1` — the reference out of reach |
+| shared-ui-grading-submission-SC-23 | Case added | `shared-ui-grading-submission-US1-TC57-1` — a pasted line above the ceiling |
+| shared-ui-grading-submission-SC-31 | Case added | `shared-ui-grading-submission-US1-TC60-1` — the running-late chip |
+| shared-ui-grading-submission-SC-36 | Case added | `shared-ui-grading-submission-US1-TC61-1` — the certificate against its lookup address |
+| shared-ui-grading-submission-SC-39 | Case added | `shared-ui-grading-submission-US1-TC62-1` — a card the grader issued no grade for, one run per outcome |
+| shared-ui-grading-submission-SC-42 | Case added | `shared-ui-grading-submission-US1-TC63-1` — nothing due on the pickup card; the figure itself stays on `shared-ui-grading-submission-US1-TC34-1` |
+| shared-ui-grading-submission-SC-45 | Case added | `shared-ui-grading-submission-US1-TC64-1` — a refused naming |
+| shared-ui-grading-submission-SC-46 | Case added | `shared-ui-grading-submission-US1-TC65-1` — the estimate reading as unpaid |
+| shared-ui-grading-submission-SC-48 | Case added | `shared-ui-grading-submission-US1-TC66-1` — the payout and the refunded fee |
+| shared-ui-grading-submission-SC-50 | Case added | `shared-ui-grading-submission-US1-TC67-1` — the paid line's method, instant and till reference |
+| shared-ui-grading-submission-SC-57 | Case added | `shared-ui-grading-submission-US1-TC59-1` — a paste error that is not an empty list |
+| shared-ui-grading-submission-SC-65 | Case added | `shared-ui-grading-submission-US1-TC68-1` — a matched card with no set or number |
+| shared-ui-grading-submission-SC-70 | Case added | `shared-ui-grading-submission-US1-TC69-1` — the hand-back photograph beside a collected slab |
+| shared-ui-grading-submission-SC-72 | Case added | `shared-ui-grading-submission-US1-TC71-1` — no Open row where the shop names no hours |
+| shared-ui-grading-submission-SC-73 | Case added | `shared-ui-grading-submission-US1-TC72-1` — a card's payout or reversal line on the collected page |
+| `shared-ui-grading-submission-US1-TC15-1` — the edit step | Fixed | The case's step and expected result named `onEdit` for the value it now carries; the value field's blur-or-Enter commit and its own reopen-with-the-kept-figure rule (added by the block change that split editing from declaring) named no scenario. Folded as shared-ui-grading-submission-SC-66; the case's step, pre-condition and expected result rewritten to name `onEdit` and `onDeclare` separately |
+| A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as shared-ui-grading-submission-SC-67; case added at review, `shared-ui-grading-submission-US1-TC78-1` |
+| A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as shared-ui-grading-submission-SC-68; case added at review, `shared-ui-grading-submission-US1-TC76-1` |
+| The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as shared-ui-grading-submission-SC-69; case added at review, `shared-ui-grading-submission-US1-TC77-1` |
+| shared-ui-grading-submission-SC-06 | Case added at review | `shared-ui-grading-submission-US1-TC74-2` — an open level carrying cover, picked by id; no case had asserted the pick. Its no-estimate clause is left to `shared-ui-grading-submission-US1-TC9-1` |
+| shared-ui-grading-submission-SC-20 | Case added at review | `shared-ui-grading-submission-US1-TC79-1` — nothing read, nothing added; `shared-ui-grading-submission-US1-TC18-1` holds only the loading clause |
+| shared-ui-grading-submission-SC-59 | Case added at review | `shared-ui-grading-submission-US1-TC75-1` — each block draws the one record it was given; the page passing one record to both stays out of suite, above |
 | `shared-ui-grading-submission-US1-TC15-1` — one case over three stories | Split at review | Adding a card is `shared-ui-grading-submission-US1-TC80-1`; the value field, with its commit-once clauses, is `shared-ui-grading-submission-US1-TC81-1` |
 | `shared-ui-grading-submission-US1-TC55-1` — two starting states | Split at review | The cap and the level the count closes are `shared-ui-grading-submission-US1-TC82-1`; the story's cap stands for the cap the list is given |
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
-| `shared-ui-grading-submission-SC-74` | Case added, added after the run | `shared-ui-grading-submission-US1-TC73-1`: decided outside the blind pass; the editor keeps the review for its totals and warning, so the booking and the tick are left out together and the save reads the consumer's words |
-| `shared-ui-grading-submission-SC-75` | Case added, added after the run | `shared-ui-grading-submission-US1-TC83-1`: decided outside the blind pass; the estimate carries the includes line and the paid-at-the-counter footnote inside its card, the way the money block carries them |
-| `shared-ui-grading-submission-SC-76` | Case added, added after the run | `shared-ui-grading-submission-US1-TC84-1`: decided outside the blind pass; the reference note the design names under a matched card's sales reads through a word of the list's own |
-| `shared-ui-grading-submission-SC-77` | Case added, added after the run | `shared-ui-grading-submission-US1-TC85-1`: decided outside the blind pass; the counter reads the matching word while the paste is matched. `shared-ui-grading-submission-US1-TC18-1` keeps the disabled add |
-| `shared-ui-grading-submission-SC-78` | Case added, added after the run | `shared-ui-grading-submission-US1-TC86-1`: decided outside the blind pass; an open level reads its ceiling and its fee inside the open line it is given, the fee once |
-| `shared-ui-grading-submission-SC-79` | Case added, added after the run | `shared-ui-grading-submission-US1-TC87-1`: decided outside the blind pass; a refusal withdraws the act it refused, Save changes on the editor's review, and leaves saving for later offered beside a withdrawn booking |
+| shared-ui-grading-submission-SC-74 | Case added, added after the run | `shared-ui-grading-submission-US1-TC73-1`: decided outside the blind pass; the editor keeps the review for its totals and warning, so the booking and the tick are left out together and the save reads the consumer's words |
+| shared-ui-grading-submission-SC-75 | Case added, added after the run | `shared-ui-grading-submission-US1-TC83-1`: decided outside the blind pass; the estimate carries the includes line and the paid-at-the-counter footnote inside its card, the way the money block carries them |
+| shared-ui-grading-submission-SC-76 | Case added, added after the run | `shared-ui-grading-submission-US1-TC84-1`: decided outside the blind pass; the reference note the design names under a matched card's sales reads through a word of the list's own |
+| shared-ui-grading-submission-SC-77 | Case added, added after the run | `shared-ui-grading-submission-US1-TC85-1`: decided outside the blind pass; the counter reads the matching word while the paste is matched. `shared-ui-grading-submission-US1-TC18-1` keeps the disabled add |
+| shared-ui-grading-submission-SC-78 | Case added, added after the run | `shared-ui-grading-submission-US1-TC86-1`: decided outside the blind pass; an open level reads its ceiling and its fee inside the open line it is given, the fee once |
+| shared-ui-grading-submission-SC-79 | Case added, added after the run | `shared-ui-grading-submission-US1-TC87-1`: decided outside the blind pass; a refusal withdraws the act it refused, Save changes on the editor's review, and leaves saving for later offered beside a withdrawn booking |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
+
+**Run:** QA2, 2026-10-03, for the amendment that retires the blocks. It read this suite, the delta, `decisions.md` through Q151, `tasks.md` and the worker they name: `packages/ui/src/index.ts`. Every case whose subject was a block is deprecated, copied whole; their **Decided by** lines go with the tests that decided them. It is a statement, not proof.
+
+- **Added** - `shared-ui-grading-submission-US1-TC88-1` finds none of the thirteen blocks and none of the fifty-three types in the public entry (`shared-ui-grading-submission-SC-01`), no grading-named booking block (`shared-ui-grading-submission-SC-02`) and no grading block under `packages/ui/src/blocks` (`shared-ui-grading-submission-SC-71`)
+- **Contradicted** - none
+- **Uncovered anchors** - none
 
 ### Manual
 

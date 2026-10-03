@@ -6,8 +6,8 @@ order: 15
 
 The parts a site page composes rather than drawing its own: a titled card of
 facts and its loading cards, short lines one under the other, a rail of
-stages, and an empty panel. Grading's collector pages use them; each page
-supplies the words, the figures and the callbacks.
+stages, and an empty panel. Each page supplies the words, the figures and
+the callbacks.
 
 ## The Blocks
 
@@ -43,6 +43,6 @@ blocks every site page can compose.
 | --- | --- | --- | --- |
 | One set for every site page | Decided | First drawn for the vault as vault-named blocks, then named for any page when grading's collector pages met the same rule; a second, grading-named set was rejected as two copies of one shape | Design |
 | Found by slot | Decided | Each block takes the `data-slot` a page's tests and walks find it by, keeping the design system's own when given none, so no page reaches for a `className` on a store block | Design |
-| No existing block moves | Decided | `BookingSteps` and `GradingStatusRail` keep their stage unions; `StageRail` is the rail a page draws its own stages with | Design |
+| No existing block moves | Decided | `BookingSteps` keeps its stage union; `StageRail` is the rail a page draws its own stages with | Design |
 | Story ids | Decided | `page-blocks-<component>--<state>`, the package's `Page Blocks/<Component>` title | Design |
 :::
