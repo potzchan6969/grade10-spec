@@ -1256,6 +1256,62 @@ test("suite fold keeps each reconciliation run whole under one Manual table", ()
   );
 });
 
+const runOf = (heading, ...rows) =>
+  [
+    heading,
+    `| Case | Disposition |\n| --- | --- |\n${rows.map((row) => `| ${row} | Covered |`).join("\n")}`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+const foldRuns = (current, delta) => {
+  const merged = merge(
+    suiteOf(
+      group(1, caseBlock("site-search-US1-TC1-1")),
+      `## Reconciliation\n\n${current.join("\n\n")}`,
+    ),
+    suiteOf(
+      group(1, caseBlock("site-search-US1-TC1-1")),
+      `## Reconciliation\n\n${delta.join("\n\n")}`,
+    ),
+  );
+  return merged.slice(merged.indexOf("## Reconciliation"));
+};
+
+for (const heading of [
+  "**Run:** first.",
+  "Run: first.",
+  "**Run** — first.",
+  "",
+]) {
+  test(`suite fold takes a reconciliation run the change grew, rather than repeating it (${heading || "no heading"})`, () => {
+    assert.equal(
+      foldRuns(
+        [runOf(heading, "`site-search-US1-TC1-1`")],
+        [
+          runOf(
+            heading,
+            "`site-search-US1-TC1-1`, corrected",
+            "`site-search-US1-TC2-1`",
+          ),
+        ],
+      ),
+      `## Reconciliation\n\n${runOf(heading, "`site-search-US1-TC1-1`, corrected", "`site-search-US1-TC2-1`")}\n`,
+    );
+  });
+}
+
+test("suite fold takes a grown reconciliation run in place and adds a new one after it", () => {
+  const first = (...rows) => runOf("**Run:** first.", ...rows);
+  const second = runOf("**Run:** second.", "`site-search-US1-TC2-1`");
+  assert.equal(
+    foldRuns(
+      [first("`site-search-US1-TC1-1`")],
+      [first("`site-search-US1-TC1-1`, corrected"), second],
+    ),
+    `## Reconciliation\n\n${first("`site-search-US1-TC1-1`, corrected")}\n\n${second}\n`,
+  );
+});
+
 test("suite fold is idempotent over its own output", () => {
   const delta = readFileSync(
     new URL("./fixtures/fold-suite/delta.md", import.meta.url),
