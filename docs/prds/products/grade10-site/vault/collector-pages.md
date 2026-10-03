@@ -118,7 +118,7 @@ again.
   missed — [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#timers)
 - **The visit completes** on the first counter act after its slot
 - ❓ **Booking on screen** — the shop and slot picker and the booked visit;
-  @tangconst
+  which screen holds them is @tangconst's
 
 ## Messages
 
@@ -159,6 +159,8 @@ again.
 :::detail{title="Code map" for="engineer"}
 - **Pages** — `apps/frontend/grade10/src/pages/vault/SignPage.tsx`; the
   address table is `surfaces.ts`
+- **Booking views** — `packages/vault/frontend/src/features/custody/booking`,
+  kept as views a screen composes and mounted by no route
 - **Links** — `CASE_PATH` and `VERIFY_PATH` in
   `packages/vault/contracts/src/paths.ts`, which the emails fill
 - **Customer router** — `packages/vault/backend/src/trpc/routers/cases.ts`:

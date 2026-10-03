@@ -4,4 +4,10 @@ hands:
   pm: "@ecchochan"
   dev: "@ecchochan"
   design: "@tangconst"
-ui_waived: removes the collector's vault screens from the site and draws none; @tangconst designs them again from the backend as it stands
+ui_waived: removes the collector's vault screens from the site and draws none;
+  @tangconst designs them again from the backend as it stands
+landed_by:
+  proposal: ecchochan
+reviewed:
+  tech-design: 549c0b12
+  tasks: 399cc960

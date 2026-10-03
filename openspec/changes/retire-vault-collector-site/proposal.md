@@ -7,7 +7,8 @@ design: the case list, the request wizard, one case's page, the identity
 check, Your data and the Vault item in the header. The owner has decided to
 take them off the site and have @tangconst design them again from the backend
 as it stands (decided 2026-10-02). The worker, the console, the emails, the
-PDFs and the signing ceremony on the shop's iPad stay as they are.
+PDFs, the signing ceremony on the shop's iPad and the visit booking views stay
+as they are.
 
 **Metric:** the collector's vault addresses answer the not-found surface on
 every lane, and every vault behaviour a kept case proves is walked against
@@ -19,10 +20,14 @@ the worker's API rather than a site page.
   `/vault/verify` and `/profile/data` stop answering, the profile page loses
   its Your data button, and the header loses Vault. `/vault/sign`, the signing
   ceremony, stays.
+- **Kept as views** - the visit booking views stay with engineering as
+  reusable parts of the flow, mounted by no route until a screen of
+  @tangconst's places them.
 - **Off the store** - the `VaultCases`, `VaultCasesEmpty` and
   `VaultAcceptOfferDialog` blocks, their stories, fixtures and exports, and
-  the catalog keys only those screens read. `vault.status`, `vault.category`
-  and `vault.ceremony` stay, with every email's and PDF's words.
+  the catalog keys only those screens read. `vault.status`, `vault.category`,
+  `vault.ceremony` and `vault.visit` stay, and so do every email's and PDF's
+  words.
 - **The requirements keep the behaviour** - what the collector reads and does
   on their own case stays a contract of the worker, stated without a screen.
   A requirement that is only a screen's layout, words or controls is removed.
@@ -78,10 +83,10 @@ Goals and non-goals are in [`decisions.md`](decisions.md).
 - **grade10-spec** - `packages/ui/src/blocks/vault-case` goes with its stories,
   fixtures, exports and public-export test entries; `@grade10/i18n` drops the
   keys only the removed screens read.
-- **grade10** - the site's vault pages, slices and routes go with
-  `/profile/data`, the Your data button and the Vault item; the vault's e2e
-  walks call the worker's API instead of the site; `/vault/sign` and the
-  console are unchanged.
+- **grade10** - the vault pages and routes but `/vault/sign`, the request,
+  cases and retention slices, `/profile/data`, the Your data button and the
+  Vault item go; the booking slice, `/vault/sign` and the console stay; the
+  vault's e2e walks call the worker's API instead of the site.
 - **In-flight changes** - `vault-home-case-cards`, now archived, drew cards
   this change removes. `add-item-registry`
   group 12 builds the wizard's first step, which no longer exists.
