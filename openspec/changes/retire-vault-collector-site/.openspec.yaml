@@ -11,6 +11,7 @@ landed_by:
   proposal: ecchochan
   decisions: ecchochan
   tech-design: ecchochan
+  tasks: ecchochan
 reviewed:
   tech-design: 549c0b12
   tasks: 399cc960
