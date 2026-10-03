@@ -389,7 +389,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
