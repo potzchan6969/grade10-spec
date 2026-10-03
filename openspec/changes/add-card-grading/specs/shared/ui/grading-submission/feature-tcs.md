@@ -1493,7 +1493,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Every grading block's source in the store's `packages/ui` is open.
+* Every block's source under the store's `packages/ui/src/blocks/grading-submission/` is open.
 
 **Steps:**
 

@@ -17,11 +17,10 @@ one level, and every card in it carries its own outcome.
   3. `admin.grade10.com/grading` — the queue, the batches and one submission;
      `admin.grade10.com/grading/walk-in` for a list written at the desk
 - ❓ **The collector's pages** — the price sheet, the wizard and the
-  submission page are designed again from the backend, and the earlier pages
-  were withdrawn on 2026-10-02; these pages state what grading does, not how
-  a page shows it — Design
-- 🚧 **Grading's own views** — the drop-off booking and the signing ceremony
-  stay grading's, as views the collector's pages compose
+  submission page are designed again from the backend; these pages state
+  what grading does, not how a page shows it — Design
+- 🚧 **Grading's own views** — the drop-off booking, which the collector's
+  pages open, and the signing ceremony at `grade10.com/grading/sign`
 - 🚧 **Money** — HKD, taken at the till against one POS line per card, and a
   cover line per card at Express and Super Express, written back to the
   submission; nothing is paid before every card is checked and the agreement

@@ -72,7 +72,7 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 
 Composes the design-system primitives group 2 widens. Every export takes
 `copy`, `locale` and `className`, and renders with no application behind it.
-What this group built is deleted by 37.1 (`decisions.md` Q148).
+What this group built is deleted by 37.2 (`decisions.md` Q148).
 
 - [x] 3.1 Write the stories and the tests for the five planning blocks in
       `packages/ui/src/blocks/grading-submission/`, one story per state and
@@ -163,7 +163,7 @@ What this group built is deleted by 37.1 (`decisions.md` Q148).
 
 ## 4. The submission blocks and the barrel (grade10-spec) (owner: @ecchochan)
 
-What this group built is deleted by 37.1, its `::story` cards already taken
+What this group built is deleted by 37.2, its `::story` cards already taken
 off the manual (`decisions.md` Q148).
 
 - [x] 4.1 Write the stories and the tests for the eight submission blocks and
@@ -1832,6 +1832,11 @@ Stage (b).
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10) (owner: @ecchochan)
 
+Waived at archive: the collector's home, wizard and submission page are
+@tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
+cite is proven at the worker. 25.2 stands: `core/api/GradingApi.ts` is restored
+for the drop-off views.
+
 Needs group 10's exports and the worker of groups 11 and 24: the tests run
 25.2's transport on the real router in-process, and the stories replay
 recordings of those runs. `packages/storybook` arrives with
@@ -1964,14 +1969,16 @@ read this group's stories. Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-59`,
       `grade10-site-grading-submission-plan-SC-32`)
 
-## 26. The collector's drop-off screens (grade10) (owner: @ecchochan)
+## 26. The drop-off booking views (grade10) (owner: @ecchochan)
 
-Needs group 10's exports and group 25's `GradingApi` and recorded worker.
-Stage (b).
+`DropoffBooking`, `DropoffBooked` and `useDropoffSubmission`, exported from
+`@grade10/grading-frontend/dropoff`; no route mounts them until a collector's
+page does. Needs group 10's exports and 25.2's `GradingApi` and recorded
+worker. Stage (b).
 
-- [ ] 26.1 Cover the picker and the booked page: the four Before you come
+- [ ] 26.1 Cover the picker and the booked view: the four Before you come
       items, the Bulk duration, the vault line, the acts withdrawn once the
-      visit has started, and the page that reads booked until the diary answers
+      visit has started, and the view that reads booked until the diary answers
       (`grade10-site-grading-dropoff-booking-SC-12`,
       `grade10-site-grading-dropoff-booking-SC-13`,
       `grade10-site-grading-dropoff-booking-SC-14`,
@@ -1981,7 +1988,7 @@ Stage (b).
       `BookingSlotPicker` for a first booking and for a move alike, with
       `BatchLine` beside the picked day carrying the cut-off, the ship day and
       the day back
-- [ ] 26.3 Build the booked page over `BookingConfirmation` and
+- [ ] 26.3 Build the booked view over `BookingConfirmation` and
       `BookingManageCard`: the visit, the four items to bring, the calendar
       file at `visit.ics`, the Bulk visit's about-45-minutes line, and the line
       saying a card that is not being graded can be vaulted on the same visit
@@ -1999,6 +2006,12 @@ Stage (b).
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
 ## 27. The collector's submission page (grade10) (owner: @ecchochan)
+
+Waived at archive: the collector's home, wizard and submission page are
+@tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
+cite is proven at the worker. 27.10, the sign page, stands done; 27.14 stands
+for the worker's part, finding the case at the submission's read, and its link
+is the redesigned page's.
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
@@ -2383,6 +2396,11 @@ lands. Stage (c).
 
 ## 31. The application wiring (grade10) (owner: @ecchochan)
 
+Waived at archive: the collector's home, wizard and submission page are
+@tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
+cite is proven at the worker. 31.6 and 31.8, the nav item and the prerendered
+home, are waived with them.
+
 Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 (b).
 
@@ -2733,14 +2751,23 @@ Lands as the owner's store commit once the amendment that retires
 `GradingStatusRail` on `StageRail` this group first held, which has no block
 left to restyle (`decisions.md` Q148).
 
-- [ ] 37.1 Delete `packages/ui/src/blocks/grading-submission/**` — the
+- [ ] 37.1 A test in its own commit, red first: extend
+      `packages/ui/src/index.test.ts` so it reads the public entry and finds
+      none of the thirteen grading blocks and the fifty-three types the
+      requirement names, and no `packages/ui/src/blocks/grading-submission`
+      directory (`shared-ui-grading-submission-SC-01`,
+      `shared-ui-grading-submission-SC-02`,
+      `shared-ui-grading-submission-SC-71`)
+- [ ] 37.2 Delete `packages/ui/src/blocks/grading-submission/**` — the
       thirteen blocks, `grading-copy.ts`, `types.ts`, `fixtures.ts`, their
       stories and their tests, `public-exports.test.ts` among them — and the
       `// shared/ui/grading-submission` exports in `packages/ui/src/index.ts`;
-      no story, fixture or index entry names the set afterwards
-      (`shared-ui-grading-submission-SC-01`,
+      no story, fixture or index entry names the set afterwards, and 37.1
+      passes (`shared-ui-grading-submission-SC-01`,
       `shared-ui-grading-submission-SC-02`,
       `shared-ui-grading-submission-SC-71`)
-- [ ] 37.2 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
+- [ ] 37.3 Flip the case 37.1 decides:
+      `pnpm run tcs:automated shared-ui-grading-submission-US1-TC88-1 --decided-by packages/ui/src/index.test.ts`
+- [ ] 37.4 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm check:manual`,
       `pnpm run tcs:validate`

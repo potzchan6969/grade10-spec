@@ -657,12 +657,13 @@ answering the question it was for.
 ### Frontends: the vault's slices, the console's blocks
 
 - `packages/grading/frontend/src/features/{dropoff,sign}` behind
-  `gradingModules.ts`, the drop-off booking and signing views the
-  collector's pages compose (`decisions.md` Q147); `core/api/GradingApi.ts`
-  over the site's `gradingTrpcClient`, through a transport whose answers are
-  typed off the pinned router as the console's are, never `unknown`; the
-  views compose `@grade10/ui`'s `appointment-booking` exports and
-  `NoteList`, every word from the `grading` namespace
+  `gradingModules.ts` (`decisions.md` Q147): the drop-off booking views,
+  which the collector's pages open, compose `@grade10/ui`'s
+  `appointment-booking` exports and `NoteList`; the signing ceremony is its
+  own page at `/grading/sign`, composing doc-sign's `CeremonyFlow`.
+  `core/api/GradingApi.ts` runs over the site's `gradingTrpcClient`, through
+  a transport whose answers are typed off the pinned router as the console's
+  are, never `unknown`; every word comes from the `grading` namespace
 - **The emailed link is doc-sign's token, one size down.** `newBearerSecret(32)`
   from `@grade10/utils/crypto` is minted at `savePlan`, `sha256Hex(token)`
   stored in `submissions.access_hash`, and the raw value travels only in the
@@ -745,8 +746,9 @@ answering the question it was for.
 - **Which events a collector sees** is derived at the read, never stored:
   `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent` in
   `packages/grading/contracts`, as the vault's `vocabulary.ts` holds them
-- Stories: the views' in `packages/storybook`, whose glob over
-  `packages/*/admin-frontend/src/**` the sibling change already writes
+- Stories: beside the collector's views in `packages/grading/frontend/src/**`
+  and the console's in `packages/grading/admin-frontend/src/**`, which
+  `packages/storybook`'s globs already read
 - RBAC: `grading: ["read", "operate", "approve"]` in
   `packages/grade10-auth/contracts/src/schemas.ts`, `staff` and `admin`
   holding all three; `generate:rbac-docs` rerun. `contracts/src/permissions.ts`

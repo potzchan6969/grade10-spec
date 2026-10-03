@@ -74,10 +74,11 @@ submission.
   and the seal refuses a placeholder in production.
 - **The collector's screens are designed again; the drop-off and the
   signing stay grading's.** The home, the wizard, the submission page and the
-  screens around them were withdrawn from the site, and @tangconst designs
-  them again from the backend. The drop-off booking and the signing ceremony
-  stay grading's own, as views in `packages/grading/frontend` those screens
-  compose, over the package's appointment-booking exports and `NoteList`.
+  screens around them are @tangconst's to design again from the backend. The
+  drop-off booking views, which those screens open, compose the package's
+  appointment-booking exports and `NoteList`; the signing ceremony is its own
+  page at `/grading/sign` over doc-sign's `CeremonyFlow`. Both are grading's
+  own, in `packages/grading/frontend`.
   The store carries no grading block: the set first built for the pages is
   deleted, and `shared/ui/grading-submission` says the package exports none
   (`decisions.md` Q147, Q148).
@@ -129,8 +130,9 @@ See [Non-Goals](decisions.md#non-goals).
 - `shared/ui/grading-submission`: the store carries no grading collector
   block; its one requirement says the package's public entry exports none of
   the thirteen blocks or their types, until @tangconst names the blocks the
-  redesigned screens need. The drop-off views reuse the package's
-  `appointment-booking` exports unchanged.
+  redesigned screens need. The drop-off booking views reuse the package's
+  `appointment-booking` exports unchanged; the signing page composes
+  doc-sign's `CeremonyFlow`, not this package.
 
 ### Modified Capabilities
 
@@ -155,8 +157,9 @@ first submission owns (`decisions.md` Q18, Q19).
 - **Packages** — `packages/grading/{contracts,backend,frontend,admin-frontend}`
   laid out as the vault's are; `packages/ui` carries no grading block, and
   the set built under groups 3 and 4 is deleted with its stories and
-  exports (task 37.1); `packages/i18n` gains a `grading` namespace in every
-  shared catalog and head entries for the collector's surfaces. Each app
+  exports (task 37.2); `packages/i18n` gains a `grading` namespace in every
+  shared catalog, whose collector families stay for the redesigned screens
+  (`decisions.md` Q152). Each app
   fills its words through its own catalog, so a collector's view and the
   console's WhatsApp templates hold to the same "never a literal
   placeholder" rule.

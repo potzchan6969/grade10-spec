@@ -8,26 +8,29 @@ journeys beside each delta own the behaviour, and `tech-design.md` owns the
 data and the mechanism. The [inventory](../../../docs/prds/products/grade10-site/grading/index.md)
 the pages carry is the product; this file carries the surface.
 
-- **The collector's site screens** — the home, the wizard and the
-  submission page are @tangconst's to draw again from the backend, and their
-  boards are not carried here; the drop-off booking and the signing boards
-  stay, drawn as grading's own views (`decisions.md` Q147, Q148)
+- **The collector's site screens** — the home (`G16`, `G01`), the wizard
+  with its paste sheet (`G02`–`G04`, `G17`) and the submission page
+  (`G07`–`G13`) are @tangconst's to draw again from the backend, and their
+  boards are not carried here; the drop-off booking (`G05`, `G06`) and the
+  signing (`G14`, `G15`, `G18`) boards stay, drawn as grading's own views
+  (`decisions.md` Q147, Q151)
 - **Where the views live** — the drop-off booking and signing views in
   `packages/grading/frontend`, the console's views in
   `packages/grading/admin-frontend` composing `@grade10/frontend-console`;
   the store carries no grading block
-- **Stories** — every view gets a colocated `<View>.stories.tsx` in
-  `packages/storybook`, the one monorepo
-  Storybook the vault change stands up, titled `Grading/<Feature>/<View>` and
-  `Grading Admin/<Feature>/<View>`, so an id reads
-  `grading-<feature>-<view>--<state>` for the collector's pages and
+- **Stories** — every view gets a `<View>.stories.tsx` beside it in
+  `packages/grading/frontend/src/**` or `packages/grading/admin-frontend/src/**`,
+  which `packages/storybook`, the one monorepo Storybook, reads, titled
+  `Grading/<Feature>/<View>` and `Grading Admin/<Feature>/<View>`, so an id
+  reads `grading-<feature>-<view>--<state>` for the collector's views and
   `grading-admin-<feature>-<view>--<state>` for the console's
 - **An id is composed, never listed** — each `### ` under `## States` opens
   with its story prefix, and `<state>` is that row's name in kebab-case:
   lowercased, an apostrophe dropped, every other run of other characters a
   hyphen, and a board id in brackets left out. `Bulk lead` is
   `grading-dropoff-dropoff-booking--bulk-lead`. A row names an id only where
-  it departs — a range, or a story it shares
+  it departs — a range, or a story it shares — and a row whose Shows opens
+  **No story** has none
 - **The iPad** — the two documents ride `packages/doc-sign`'s `CeremonyFlow`
   unchanged, with grading's `RefusalWords` and templates; the board is the
   document, the ceremony's chrome is the vault's
@@ -41,8 +44,8 @@ the pages carry is the product; this file carries the surface.
 
 | Screen | Board | Route | Composes |
 | --- | --- | --- | --- |
-| Book the drop-off | `G05` | a view the collector's page opens wherever the submission holds no visit and Book is offered | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `NoteList`, `Alert` for the batch line, `Text`, `Button` |
-| Drop-off booked | `G06` | a view the collector's page shows after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `NoteList`, `Alert`, `Link`, `Button` |
+| Book the drop-off | `G05` | a view the collector's page opens wherever the submission holds no visit and Book is offered | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `BatchLine`, `CheckboxListInput` for the statement tick, `Skeleton`, `Text`, `Button` |
+| Drop-off booked | `G06` | a view the collector's page shows after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `NoteList`, `Alert` for the vault line and the detached notice, `Skeleton`, `Link`, `Button`, `Text` |
 | Walk-in booking | none; `G00-Main` names it | `grade10.com/book` | the site's own booking flow, unchanged: the Grading visit is a listed service, and the visit it books is the diary's own, which grading never reads |
 | Submission agreement | `G14` | `/grading/sign#<token>` | `CeremonyFlow` → `PdfPageCanvas`, `SignatureField`, `RefusalNotice`; the template in `packages/grading/backend` |
 | Hand-back receipt | `G15`, `G18` | `/grading/sign#<token>` | the same ceremony with the receipt template |
@@ -61,9 +64,9 @@ the pages carry is the product; this file carries the surface.
 
 ### `@grade10/design-system` — existing, and three rungs this change asks for
 
-`Alert` (`status`, `layout=inline`) for the batch line, `Button`, `Link`,
-`List`, `Skeleton` and `Text`; the rest of a collector's view is the booking
-blocks'.
+`Alert` for the booked view's vault line and detached notice, `Button`,
+`CheckboxListInput` for the statement tick, `Link`, `Skeleton`, `Text` and
+`VStack`; the rest of a collector's view is the booking blocks'.
 
 - **Three rungs on `Text`, work in `packages/design-system`** — a `display`
   size above `xl`, a `mono` face axis on the existing `--font-mono` token,
@@ -84,8 +87,8 @@ is the submission address) and `BookingManageCard` from
 - **`DropoffBooking`**, **`DropoffBooked`** — the drop-off views a
   collector's page composes; the cancel-visit confirm is
   `BookingManageCard`'s own
-- **`BatchLine`** — an `Alert` beside the picked day: the cut-off, the ship
-  day, the next batch's dates, the estimate-runs-from line
+- **`BatchLine`** — `Text` in a `VStack` beside the picked day: the cut-off,
+  the ship day, the next batch's dates, the estimate-runs-from line
 
 ### Console blocks — existing, `@grade10/frontend-console`
 
@@ -164,7 +167,9 @@ The same five components and twenty-five preview letters land under
 ### Words — work in `packages/i18n`
 
 Every key below is answered in `shared/` for every language it speaks, in
-the new `grading` namespace; the words are not written here.
+the new `grading` namespace; the words are not written here. The `home`,
+`plan` and `submission` families stay for @tangconst's screens
+(`decisions.md` Q152), and `DropoffBooked` reads `grading.submission.visit.*`.
 
 - **`grading.home.*`** — the lead, howItWorks (four), priceSheet (lead,
   aboveTop, bulkLine, table), start, bookWithoutList, signIn,
@@ -226,12 +231,16 @@ Stories `grading-dropoff-dropoff-booking--`.
 | Times | the day's times in the shop's zone; Book <day, time> | `grade10-site-grading-dropoff-booking-SC-04` |
 | Nothing free | `dropoff.nothingFree`; no times | `grade10-site-grading-dropoff-booking-SC-07` |
 | The diary refuses | the refusal in the diary's words — the slot is not offered, the slot is full, the resource is not available, the day is already booked — and a move offered; the times read again | `grade10-site-grading-dropoff-booking-SC-06` |
-| Loading | the shop and the days as `Skeleton` | **Out of suite:** the view's colocated test |
-| Error | the diary's failure in the error tone; no day reads as free | `grade10-site-grading-dropoff-booking-SC-08` |
-| Move or cancel line (`G05`) | the notice: any time before it starts; a missed visit closes the visit, not the list | `grade10-site-grading-dropoff-booking-SC-15`, `grade10-site-grading-dropoff-booking-SC-17` |
+| Loading | **No story** — the shop and the days as `Skeleton` | **Out of suite:** the view's colocated test |
+| Error | **No story** — the diary's failure in the error tone; no day reads as free | `grade10-site-grading-dropoff-booking-SC-08` |
+| Move or cancel line (`G05`) | **No story** — the notice: any time before it starts; a missed visit closes the visit, not the list | `grade10-site-grading-dropoff-booking-SC-15`, `grade10-site-grading-dropoff-booking-SC-17` |
 | Joins a visit | a drop-off already booked under the email: the second submission listed under its day and time; no picker | `grade10-site-grading-dropoff-booking-SC-20` |
 | Slot resized | two lists passing 20 together: the longer service named, and the visit moved once in the diary | `grade10-site-grading-dropoff-booking-SC-21` |
-| Walk-in | `/book`: the Grading visit listed; `BookingDetailsForm` with name and email; no list, and the diary's own visit, which the submission never reads | `grade10-site-grading-dropoff-booking-SC-23` |
+
+The walk-in booking at `/book` is the site's own flow, unchanged: the Grading
+visit listed, `BookingDetailsForm` with name and email, no list, and the
+diary's own visit, which the submission never reads
+(`grade10-site-grading-dropoff-booking-SC-23`). Grading draws nothing for it.
 
 ### Drop-off booked
 
@@ -592,8 +601,7 @@ Stories `grading-admin-settings-settings-panel--`.
 - **Legal words** — the receipt's first clause when a named person collects
   prints as drawn until Legal confirms it (`decisions.md` Q48); the row
   prefills the name
-- **Drawn, not carried** — `G00-Main`'s disposal step and `G13`'s exception
-  lines, the twelfth's disposal line among them (`decisions.md` Q44), `GA3`'s WhatsApp
+- **Drawn, not carried** — `G00-Main`'s disposal step, `GA3`'s WhatsApp
   templates' words, `G06`'s vault cross-sell copy beyond one line, `GA6`'s
   ten-to-fifteen-minutes line, and the console's 2FA strip; the first
   release stops at the notice, and the console's chrome is the console's
