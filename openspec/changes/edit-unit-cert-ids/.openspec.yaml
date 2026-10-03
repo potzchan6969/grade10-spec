@@ -4,3 +4,5 @@ depends_on: release-stock-on-unsold-close
 hands:
   pm: "@mason5991"
   dev: "@mason5991"
+reviewed:
+  user-journeys: 9a92f6b9
