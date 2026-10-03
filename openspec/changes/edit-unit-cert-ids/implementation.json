@@ -41,5 +41,60 @@
         "inventory-service"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "mason5991",
+    "reviewedAt": "2026-10-03T23:15:00.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "#866 narrows the Assign a Cert ID leaf to the Cert ID alone (Q18); cert-scoped-inventory-auction-media adds its own Cert-scoped source media group, which this change does not touch",
+        "evidence": [
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:packages/inventory/backend/test/cert-id-assignment.test.ts (SC-159, SC-171)",
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:apps/frontend/grade10/e2e/tests/inventory/unit-cert-ids.spec.ts (US15-TC2-2, US15-TC10-1)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+        "anchors": [
+          "Requirement: An available unit of regular stock can be given a Cert ID"
+        ],
+        "classification": "semantic",
+        "reason": "#866 asks for the Cert ID and remarks alone, creates the record with no copy facts, ignores copy facts sent anyway and retires the Grade Issuer refusal (SC-161) (Q18 to Q20); the build was narrowed to match before the merge",
+        "evidence": [
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:packages/inventory/backend/test/cert-id-assignment.test.ts (SC-159, SC-160, SC-162, SC-163, SC-166, SC-168, SC-171)",
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:packages/inventory/admin-frontend/src/features/catalog/products/presentation/views/dialog/CertIdUnits.test.tsx (SC-159, SC-162, SC-168)",
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:apps/frontend/grade10/e2e/tests/inventory/unit-cert-ids.spec.ts (US15-TC2-2, US15-TC10-1, US4-TC1-2)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+        "anchors": [
+          "Requirement: An unmoved Cert record's Cert ID can be corrected"
+        ],
+        "classification": "editorial",
+        "reason": "#866 drops the Grade Issuer from SC-168's assignment step; the refusal of No Cert ID on a correction and an assignment is unchanged"
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "#866 revises the assignment cases to the Cert ID alone (US4-TC1-2, US14-TC3-2, US15-TC2-2, US15-TC4-2, US15-TC10-1) and replaces the Settled lines that named the Grade Issuer; cert-scoped-inventory-auction-media adds its own media cases",
+        "evidence": [
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:apps/frontend/grade10/e2e/tests/inventory/unit-cert-ids.spec.ts (US4-TC1-2, US14-TC3-2, US15-TC2-2, US15-TC10-1)",
+          "9gag/grade10@062a8f0590b12f856ee5812594c4a68cc84e1da9:packages/inventory/backend/test/cert-id-assignment.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "cert-scoped-inventory-auction-media adds US-12 and US-13 for Cert-scoped media; US-04, US-14 and US-15, which this change walks, are unchanged"
+      }
+    ]
+  }
 }
