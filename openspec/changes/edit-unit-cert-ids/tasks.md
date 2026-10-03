@@ -56,15 +56,15 @@ Built against the contract's fixtures, not a running backend.
 Uses draft `feature-tcs.md` as its input, with groups 2 to 6 landed; human QA reviews the cases after deployment (`/tcs-review edit-unit-cert-ids`), and `/tcs-run-sheet` executes the manual ones when needed.
 
 - [x] 7.1 Walk each journey end to end through the admin, kept as the change's end-to-end suite: Cert ID details accounting for every unit, a correction and an assignment, and their history (`grade10-admin-inventory-catalog-US-14`, `grade10-admin-inventory-catalog-US-15`, `grade10-admin-inventory-catalog-US-04`)
-- [ ] 7.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:<walk path>` in the walks' own commit; name the cases that stay manual in the suite and in the walk's `rounds.md` row
+- [x] 7.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:<walk path>` in the walks' own commit; name the cases that stay manual in the suite and in the walk's `rounds.md` row
 - [x] 7.3 Verify: `pnpm run test:e2e` for the walks and `pnpm run build` in grade10.
 
 ## 8. Assign with the Cert ID alone (grade10) (owner: @mason5991)
 
 Narrows group 4 and group 6's assignment to the Cert ID and remarks (Q18 to Q21); group 7's walk is updated with it.
 
-- [ ] 8.1 Tests for the narrowed assignment: the record created with no copy facts, the copy facts sent anyway ignored, no Grade Issuer refusal, the form with Cert ID and Remarks alone, and the walk's assignment helper with no Grade Issuer, in their own commit before the code (`grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-162`, `grade10-admin-inventory-catalog-SC-163`, `grade10-admin-inventory-catalog-SC-168`, `grade10-admin-inventory-catalog-SC-171`)
-- [ ] 8.2 Narrow `adminInventoryAssignCertIdInputSchema` to `productId`, `certId` and `remarks`; insert the Cert row with every copy fact null in `assignCertId`; drop `invalid-grade-issuer` from the failure codes, the error map and the admin's refusal text; regenerate `packages/api-docs` (`grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-162`, `grade10-admin-inventory-catalog-SC-171`)
-- [ ] 8.3 Keep only Cert ID and Remarks in `AssignCertIdForm` and the fixture transport (`grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-168`)
-- [ ] 8.4 Point the walk's `decides` calls at `grade10-admin-inventory-catalog-US4-TC1-2` and `grade10-admin-inventory-catalog-US14-TC3-2`, and flip them with `pnpm run tcs:automated` as 7.2 says
-- [ ] 8.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend` and `pnpm run test:e2e` for the walks in grade10.
+- [x] 8.1 Tests for the narrowed assignment: the record created with no copy facts, the copy facts sent anyway ignored, no Grade Issuer refusal, the form with Cert ID and Remarks alone, and the walk's assignment helper with no Grade Issuer, in their own commit before the code (`grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-162`, `grade10-admin-inventory-catalog-SC-163`, `grade10-admin-inventory-catalog-SC-168`, `grade10-admin-inventory-catalog-SC-171`)
+- [x] 8.2 Narrow `adminInventoryAssignCertIdInputSchema` to `productId`, `certId` and `remarks`; insert the Cert row with every copy fact null in `assignCertId`; drop `invalid-grade-issuer` from the failure codes, the error map and the admin's refusal text; regenerate `packages/api-docs` (`grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-162`, `grade10-admin-inventory-catalog-SC-171`)
+- [x] 8.3 Keep only Cert ID and Remarks in `AssignCertIdForm` and the fixture transport (`grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-168`)
+- [x] 8.4 Point the walk's `decides` calls at `grade10-admin-inventory-catalog-US4-TC1-2` and `grade10-admin-inventory-catalog-US14-TC3-2`, and flip them with `pnpm run tcs:automated` as 7.2 says
+- [x] 8.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend` and `pnpm run test:e2e` for the walks in grade10.
