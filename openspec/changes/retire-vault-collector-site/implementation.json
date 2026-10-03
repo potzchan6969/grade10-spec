@@ -1,0 +1,202 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "1670882b35adda25f46a428d2c341d8732afd36dfa8ad17208ab1d4a7e6e2d40"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "22cabfc9d293ace6d0a9f76b477f582d218f4967",
+    "capturedAt": "2026-10-03T03:39:28.375Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/site/carried-surfaces/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/carried-surfaces/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An address of an uncarried surface is not found",
+          "Requirement: Each waiting product waits for its own launch",
+          "Requirement: Where a product is carried it behaves as it is specified to"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/carried-surfaces/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/navigation/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/navigation/spec.md",
+        "anchors": [
+          "Requirement: A surface that asks for sign-in asks before it is entered",
+          "Requirement: Arriving without a session is answered on the surface",
+          "Requirement: Every session-shaped surface says what it does without a session"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/navigation/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A case carries a six-character reference",
+          "Requirement: A collector opens a request for one item",
+          "Requirement: A draft staff opened is the collector's to change and send",
+          "Requirement: A send answers for the collection statement in force",
+          "Requirement: The last step reads the request back before it sends"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A case answers only to the collector whose case it is",
+          "Requirement: A case is read as meeting one fact",
+          "Requirement: A case page answers only to the collector whose case it is",
+          "Requirement: A case reads the stage it has reached and whose the item is",
+          "Requirement: A draft staff opened ends silently and leaves nothing on the account",
+          "Requirement: An ended case reads in the collector's words",
+          "Requirement: The collector's own moves are acts on their own case",
+          "Requirement: The collector's own moves run from their case page"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-lifecycle/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Every sealed document a collector holds is taken in one download",
+          "Requirement: Every signer keeps a copy, three ways"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/loan-and-settlement/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/loan-and-settlement/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A live loan lists each repayment and what it left owing",
+          "Requirement: A live loan names the reminders still to come",
+          "Requirement: How to pay is one block wherever an amount owed is named",
+          "Requirement: The forfeiture notice reads on the borrower's case"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/loan-and-settlement/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: The collector files the ask to be forgotten from Your data and cancels it inside the window",
+          "Requirement: The collector reads what the vault holds about them on one page",
+          "Requirement: The collector reads what the vault holds about them under their own account",
+          "Requirement: Your data names each class the vault keeps and the window it is kept for",
+          "Requirement: Your data shows where the identity stands and never the identity itself"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/retention-and-erasure/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A collector answers the live offer from the case page",
+          "Requirement: A collector answers the live offer on their own case",
+          "Requirement: A refused answer is named to whoever gave it",
+          "Requirement: A refused answer is named where the answer was given",
+          "Requirement: Only the offer that stands takes an answer"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/valuation-and-offer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/visit-booking/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/visit-booking/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A booked visit is confirmed with the shop, the slot and what to do before the day",
+          "Requirement: A booked visit is read back with its shop and slot",
+          "Requirement: A move takes from the shops and slots a first booking takes from",
+          "Requirement: A sibling case reads the visit its lead holds",
+          "Requirement: A sibling case reads the visit its lead holds and offers no picker of its own",
+          "Requirement: The picker offers the same shops and slots to a first booking and to a move",
+          "Requirement: The visit is one calendar entry the collector's own calendar opens"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/visit-booking/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/vault-case/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/vault-case/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A case card reads the case at a glance",
+          "Requirement: The accept confirmation reads the terms before the answer",
+          "Requirement: The empty vault home reads the way in",
+          "Requirement: The vault case exports",
+          "Requirement: The vault home reads its cases"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/vault-case/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
