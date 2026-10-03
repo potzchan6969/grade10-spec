@@ -25,8 +25,9 @@ day, the workaround for a wrong Cert ID today, which should fall to none.
   keeps its Cert ID. The record, its
   copy facts and its tagged media stay with the unit.
 - **Regular stock can be numbered.** An available unit of regular stock can be
-  given a Cert ID with its Grade Issuer, and Grade, Autograph Grade and Serial
-  where known. It becomes a Cert record with its own history, and the
+  given a Cert ID alone, the one field the intake dialog asks for. It becomes
+  a Cert record with no Grade Issuer, Grade, Autograph Grade or Serial and its
+  own history, and the
   `No Cert ID` count falls by one. Total stock does not move.
 - **History records each change.** One entry per change carries its time,
   actor, the Cert ID before and after, and optional remarks. It shows in the

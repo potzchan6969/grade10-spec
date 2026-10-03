@@ -59,7 +59,7 @@
 - Cert ID details
   - Every unit listed: each Cert record, plus a `No Cert ID` row for available regular stock and one for each active hold on regular stock
   - Correct a Cert ID: an available Cert record takes another Cert ID unused on its product
-  - Assign a Cert ID: one available unit of regular stock becomes a Cert record with its copy facts
+  - Assign a Cert ID: one available unit of regular stock becomes a Cert record with its Cert ID alone
   - Cert ID history: each change is one history entry naming the Cert ID before and after
 
 ## MODIFIED Requirements
@@ -574,7 +574,7 @@ has been held or has moved.
 - **GIVEN** an unmoved Cert record `PSA-1` and available regular stock on the
   same product
 - **WHEN** an authorized inventory admin changes `PSA-1` to `no cert id`,
-  and assigns `NO CERT ID` with Grade Issuer `PSA` to a unit of regular stock
+  and assigns `NO CERT ID` to a unit of regular stock
 - **THEN** Grade10 refuses both
 - **AND** no record changes or is created and no entry is appended
 
@@ -594,18 +594,19 @@ An inventory admin SHALL give one unit of available regular stock a Cert ID
 from the available `No Cert ID` row of Cert ID details:
 
 1. The admin selects the available `No Cert ID` row and chooses Assign Cert ID.
-2. They enter the unit's facts and optional remarks, and save.
-3. Grade10 creates one Available Cert record with those facts, takes the unit
+2. They enter the Cert ID and optional remarks, and save.
+3. Grade10 creates one Available Cert record with that Cert ID, takes the unit
    out of regular stock, and appends one `cert-id-change` entry.
 
-| Field           | Rules                                                                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Cert ID         | Required; trimmed; never `No Cert ID`; not held by any Cert record of the product, whatever its status, compared as for a correction |
-| Grade Issuer    | Required; trimmed; names a grading issuer, never `RAW`                                                                               |
-| Grade           | Optional text; blank or `-` is absent                                                                                                |
-| Autograph Grade | Optional text; blank or `-` is absent                                                                                                |
-| Serial          | Optional text; blank or `-` is absent                                                                                                |
-| Remarks         | Optional; trimmed                                                                                                                    |
+| Field   | Rules                                                                                                                                |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Cert ID | Required; trimmed; never `No Cert ID`; not held by any Cert record of the product, whatever its status, compared as for a correction |
+| Remarks | Optional; trimmed                                                                                                                    |
+
+The new record SHALL carry no Grade Issuer, Grade, Autograph Grade or Serial.
+A Grade Issuer, Grade, Autograph Grade or Serial sent with an assignment SHALL
+be ignored: the record is created without it, and the assignment is neither
+refused nor changed by it.
 
 Available regular stock SHALL fall by one. Stock, reserved, available, sold,
 withdrawn and vaulted SHALL NOT change. The new record SHALL be unmoved and
@@ -616,25 +617,27 @@ have no tagged media.
 | Available regular stock is 0                               | Nothing changes and no entry is appended                                                      |
 | The Cert ID is empty after trimming, or reads `No Cert ID` | Nothing changes and no entry is appended                                                      |
 | A Cert record of the product holds the Cert ID             | Nothing changes, no entry is appended, and the refusal names that record's Cert ID and status |
-| The Grade Issuer is empty after trimming, or is `RAW`      | Nothing changes and no entry is appended                                                      |
 
 Cert ID details SHALL offer Assign Cert ID only on the available `No Cert ID`
 row while it reads at least 1, and SHALL show on a hold's row, and on an
 available row reading 0, that no free unit of regular stock can take a Cert
 ID.
 
-#### Scenario: grade10-admin-inventory-catalog-SC-159 - Admin gives a unit of regular stock its Cert ID
+#### Scenario: grade10-admin-inventory-catalog-SC-159 - Admin gives a unit of regular stock its Cert ID alone
 
-**Serves:** grade10-admin-inventory-catalog-US-15 - the admin numbers a unit without intaking it again
+**Serves:** grade10-admin-inventory-catalog-US-15 - the admin numbers a unit with the one field intake asks for
 
 - **GIVEN** a created product with stock five and reserved one, three units of
   regular stock, and an Admin hold of one on regular stock, so `No Cert ID`
   Available reads 2
-- **WHEN** an authorized inventory admin assigns Cert ID `BGS-88`, Grade
-  Issuer `BGS`, Grade `9.5`, Autograph Grade `-` and no Serial
+- **WHEN** an authorized inventory admin chooses Assign Cert ID on the
+  available `No Cert ID` row
+- **THEN** the form asks for the Cert ID and remarks, and for no Grade Issuer,
+  Grade, Autograph Grade or Serial
+- **WHEN** they enter Cert ID `BGS-88` and save
 - **THEN** Cert ID details lists a Cert record `BGS-88`, Available
 - **AND** the `cert-id-change` entry's after snapshot carries that record with
-  Grade Issuer `BGS`, Grade `9.5`, and no Autograph Grade or Serial
+  no Grade Issuer, Grade, Autograph Grade or Serial
 - **AND** `No Cert ID` Available reads 1 and the Admin hold's row still reads 1
 - **AND** stock reads five, reserved one and available four
 
@@ -650,24 +653,14 @@ ID.
 - **WHEN** an assignment is sent anyway
 - **THEN** Grade10 refuses it, and no record, count or entry changes
 
-#### Scenario: grade10-admin-inventory-catalog-SC-161 - RAW or a missing Grade Issuer is refused
-
-**Serves:** grade10-admin-inventory-catalog-US-15 - every numbered unit names its issuer
-
-- **GIVEN** a product with available regular stock
-- **WHEN** an authorized inventory admin assigns Cert ID `BGS-88` with Grade
-  Issuer `RAW`, and then with no Grade Issuer
-- **THEN** Grade10 refuses both
-- **AND** no Cert record is created and available regular stock is unchanged
-
 #### Scenario: grade10-admin-inventory-catalog-SC-162 - A taken or blank Cert ID is refused on assignment
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot give two units one number
 
 - **GIVEN** a product with available regular stock and a sold Cert record
   `PSA-2`
-- **WHEN** an authorized inventory admin assigns `PSA-2` with Grade Issuer
-  `PSA`, and then a blank Cert ID
+- **WHEN** an authorized inventory admin assigns `PSA-2`, and then a blank
+  Cert ID
 - **THEN** Grade10 refuses both, the first naming `PSA-2` and Sold
 - **AND** no Cert record is created and no entry is appended
 
@@ -675,10 +668,24 @@ ID.
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the numbered unit can go to a listing
 
-- **GIVEN** a unit of regular stock was given Cert ID `BGS-88`
+- **GIVEN** a unit of regular stock was given Cert ID `BGS-88` and carries no
+  other copy fact
 - **WHEN** Auction reserves `BGS-88`
 - **THEN** the hold has quantity one and names that record
 - **AND** available regular stock is unchanged
+
+#### Scenario: grade10-admin-inventory-catalog-SC-171 - Copy facts sent with an assignment are ignored
+
+**Serves:** grade10-admin-inventory-catalog-US-15 - an assignment sent from outside the page records what the page would
+
+- **GIVEN** a product with available regular stock
+- **WHEN** an assignment of Cert ID `BGS-89` is sent from outside Cert ID
+  details with Grade Issuer `RAW`, Grade `10`, Autograph Grade `9` and Serial
+  `1/1`
+- **THEN** Grade10 creates Cert record `BGS-89`, Available, with no Grade
+  Issuer, Grade, Autograph Grade or Serial
+- **AND** available regular stock falls by one and one `cert-id-change` entry
+  is appended
 
 ### Requirement: Only an inventory admin who may write inventory changes a Cert ID
 
