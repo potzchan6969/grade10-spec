@@ -2,22 +2,22 @@
 
 No Figma frame exists. The design canvas is the frame:
 [Grading canvas](https://claude.ai/artifact/GtDo31jHhqGuhirojtEeJZ), one
-board per screen, named below by its id (`G11`, `GA5`, `M10`). A board is the
+board per screen, named below by its id (`G05`, `GA5`, `M10`). A board is the
 layout's source of truth; [decisions.md](decisions.md) owns the scope, the
 journeys beside each delta own the behaviour, and `tech-design.md` owns the
 data and the mechanism. The [inventory](../../../docs/prds/products/grade10-site/grading/index.md)
 the pages carry is the product; this file carries the surface.
 
-- **Where the views live** — the collector-facing blocks in
-  `packages/ui/src/blocks/grading-submission/` as `shared/ui/grading-submission`,
-  the pages that compose them in `packages/grading/frontend`, the console's
-  views in `packages/grading/admin-frontend` composing
-  `@grade10/frontend-console`; nothing console-shaped enters `packages/ui`
-- **Stories** — every block gets a colocated `<block>.stories.tsx` in the
-  workbench, titled `Grading Submission/<Component>` as every other block in
-  `packages/ui` is titled, so an id reads
-  `grading-submission-<component>--<state>`; every page and console view gets
-  a colocated `<View>.stories.tsx` in `packages/storybook`, the one monorepo
+- **The collector's site screens** — the home, the wizard and the
+  submission page are @tangconst's to draw again from the backend, and their
+  boards are not carried here; the drop-off booking and the signing boards
+  stay, drawn as grading's own views (`decisions.md` Q147, Q148)
+- **Where the views live** — the drop-off booking and signing views in
+  `packages/grading/frontend`, the console's views in
+  `packages/grading/admin-frontend` composing `@grade10/frontend-console`;
+  the store carries no grading block
+- **Stories** — every view gets a colocated `<View>.stories.tsx` in
+  `packages/storybook`, the one monorepo
   Storybook the vault change stands up, titled `Grading/<Feature>/<View>` and
   `Grading Admin/<Feature>/<View>`, so an id reads
   `grading-<feature>-<view>--<state>` for the collector's pages and
@@ -25,11 +25,9 @@ the pages carry is the product; this file carries the surface.
 - **An id is composed, never listed** — each `### ` under `## States` opens
   with its story prefix, and `<state>` is that row's name in kebab-case:
   lowercased, an apostrophe dropped, every other run of other characters a
-  hyphen, a board id in brackets left out, and the block's own name where
-  the row leads with it — `Card, `, `Fee sheet, `, `Grade card, `,
-  `Chip: `, `Rail, `, `Pickup, `, `Ladder, `. `Card, no value` is
-  `grading-submission-gradingcardlist--no-value`. A row names an id only
-  where it departs — a range, or a story it shares
+  hyphen, and a board id in brackets left out. `Bulk lead` is
+  `grading-dropoff-dropoff-booking--bulk-lead`. A row names an id only where
+  it departs — a range, or a story it shares
 - **The iPad** — the two documents ride `packages/doc-sign`'s `CeremonyFlow`
   unchanged, with grading's `RefusalWords` and templates; the board is the
   document, the ceremony's chrome is the vault's
@@ -43,12 +41,8 @@ the pages carry is the product; this file carries the surface.
 
 | Screen | Board | Route | Composes |
 | --- | --- | --- | --- |
-| Grading home | `G16`, `G01` | `grade10.com/grading` | `GradingHome` → `GradingFeeSheet`, `GradingOwnershipChip`, `Card`, `List`, `EmptyState`, `Button`, `Link`, `Text` |
-| Plan wizard | `G02`, `G03`, `G04` | `/grading/new`; a kept plan at `/grading/submissions/:submissionId/edit`, saved in place with Save changes; the editor never books | `PlanWizard` → `Stepper`, `Step`, `TextInput`, `GradingCardList`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `Alert`, `Button` |
-| Paste a list | `G17` | a sheet over the cards step | `GradingPasteSheet` → `Drawer`, `Textarea`, `List`, `Alert`, `Button` |
-| Book the drop-off | `G05` | in place on the submission page, open wherever the submission holds no visit and Book is offered; the review's Book, Save for later and the emailed link land on it | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Alert` for the batch line, `Text`, `Button` |
-| Drop-off booked | `G06` | on the submission page, after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `List`, `Alert`, `Link`, `Button` |
-| Submission page | `G07`–`G12`, `G13`, `G18` | `/grading/submissions/:submissionId` | `SubmissionPage` → `GradingStatusRail`, `GradingOwnershipChip`, `BookingManageCard`, `GradingCardRecord`, `GradingGradeCards`, `GradingPickupCard`, `GradingNamedCollector`, `GradingMoneyBlock`, `GradingUncollectedLadder`, `Card`, `Alert`, `Dialog`, `List`, `Link`, `Button`, `Text` |
+| Book the drop-off | `G05` | a view the collector's page opens wherever the submission holds no visit and Book is offered | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `NoteList`, `Alert` for the batch line, `Text`, `Button` |
+| Drop-off booked | `G06` | a view the collector's page shows after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `NoteList`, `Alert`, `Link`, `Button` |
 | Walk-in booking | none; `G00-Main` names it | `grade10.com/book` | the site's own booking flow, unchanged: the Grading visit is a listed service, and the visit it books is the diary's own, which grading never reads |
 | Submission agreement | `G14` | `/grading/sign#<token>` | `CeremonyFlow` → `PdfPageCanvas`, `SignatureField`, `RefusalNotice`; the template in `packages/grading/backend` |
 | Hand-back receipt | `G15`, `G18` | `/grading/sign#<token>` | the same ceremony with the receipt template |
@@ -67,152 +61,31 @@ the pages carry is the product; this file carries the surface.
 
 ### `@grade10/design-system` — existing, and three rungs this change asks for
 
-`Alert` (`status`, `layout=inline`), `Autocomplete` for the card search,
-`Avatar`, `Badge` (`default`, `success`, `error`, `warning`, `info`, `brand`,
-`outline`), `Button`, `Card` and its parts, `CheckboxListInput` for the
-consent tick, `Dialog` and its parts, `Divider`, `Drawer` for the paste
-sheet, `EmptyState`, `IconButton`, `Link`, `List`, `NumberInput` for a
-declared value, `RadioCard` for a level, `RadioList` and `RadioListItem`,
-`SegmentedControl` and `SegmentedControlItem` for the grader, `Skeleton`,
-`Step` (`completed`, `progress`, `upcoming`), `Stepper`, `Table` and its
-parts, `Tabs`, `Text`, `TextInput`, `Textarea`, `HStack`, `VStack`.
+`Alert` (`status`, `layout=inline`) for the batch line, `Button`, `Link`,
+`List`, `Skeleton` and `Text`; the rest of a collector's view is the booking
+blocks'.
 
-- **The status word and the chip** are two `Badge`s: the word in the tone
-  the status table names (`default`, `info`, `brand`, `success`), the chip
-  `outline` while it is the collector's move, `info` while the cards are with
-  us or the grader, `warning` past the estimate. `Chip` is a dismissible
-  control and does not fit
-- **A card's outcome** is a `Badge` on the card line: `outline` Listed and
-  Handed in, `success` a grade, `error` Refused at the counter, Ungraded,
-  Not returned and Damaged, `warning` Moved up a level, Held by the grader
-  and Minimum grade not met, `default` Withdrawn, Collected and Vaulted
-- **The pickup code** is `Text` in the mono face at display size on a dark
-  `Card`; **the grade** is `Text` at display size with the label word under
-  it, the ungraded card the same card in the `error` tone
 - **Three rungs on `Text`, work in `packages/design-system`** — a `display`
   size above `xl`, a `mono` face axis on the existing `--font-mono` token,
-  and a `warning` tone on the existing `--warning-foreground` token for the
-  due row; `Badge` already carries `warning`. `Text` has no `text.figma.ts`
-  and `RadioCard` no published set, so the rungs and the level card are code
-  ahead of design, recorded here as
-  [`design-code-sync.md`](../../../docs/governance/design-code-sync.md) asks
-- **No `h1` rung on `Text`** — `TextElement` offers `span`, `p`, `div`,
-  `h2` and `h3`, so the grading home's title is an `h2` with its sections
-  `h3` under it, as vault's surface is; an `h1` rung is the design system's
-  to add, not this change's
-
-### `@grade10/ui` — new, work in this repository
-
-Every export below has a story per state, with `packages/ui/src/index.ts`
-re-exporting it under a `shared/ui/grading-submission` comment, and takes
-`copy` (its words as one typed group), `locale` and `className`; money is
-minor units and an ISO 4217 code through the package's `formatMoney`, a day
-or an instant through `formatLocalTime` in the `timeZone` the consumer gives,
-required on every block that prints one and never defaulted.
-
-- **Words carrying a value** - `levelOpen`, `matched` and `minimumGrade` are
-  `(values) => string`, answered from the consumer's own ICU translator,
-  and the package exports no filler. Chosen over filled strings as the
-  smaller change: three copy members change type, no level or card record
-  gains a line, and the block still formats the money it hands over
-
-- **`GradingFeeSheet`** — `graders` (each with its name and its levels:
-  name, ceiling, cards a submission, fee, cover rate or none, weeks),
-  `selectedGraderId`, `aboveTopLine`, `onSelectGrader`; a `Table` per
-  grader under a `SegmentedControl` when there is more than one. It and
-  `GradingLevelPicker` stay two drawings of one fee sheet, both reading the
-  one settings record, so a sheet change cannot make them disagree
-- **`GradingCardList`** — the editable planning list: `cards` (id, name,
-  set line, matched or kept as typed, declared value or none, reference
-  sales or none, minimum grade or none), the reference note under a matched
-  card's sales, `cap` (the count and the level it closes), `search` as
-  `AsyncState` of matches, `onSearch`, `onAdd`,
-  `onEdit`, `onRemove`, `onDeclare`, `onMinimumGrade`, `onPaste`; `Card` per
-  card with `Autocomplete`, `NumberInput`, `CheckboxListInput` and `Text`
-- **`GradingCardRecord`** — the read-only list after hand-in: `cards` (id,
-  intake id or none, name, set line, declared value, minimum grade, outcome
-  badge, the outcome's line in the collector's words, cert or none, the
-  photograph pair or none, the slab photograph or none), `lookupHref` per
-  cert; `List` of `Card`s
-- **`GradingPasteSheet`** — `open`, `result` as `AsyncState` of the four
-  counts with their lines (matched, kept as typed, without a value, above the
-  ceiling) and the skipped count, `bulkNotice` or none, `onChange`, `onAdd`,
-  `onClose`; a `Drawer` with a `Textarea`, the line counter reading the
-  matching word while the result loads, and a `List` of result rows
-- **`GradingLevelPicker`** — `graders`, `selectedGraderId`, `levels` (each
-  open with its ceiling and its fee a card, read through `levelOpen`, or
-  closed with the card or the count that closes it), `selectedLevelId`,
-  `highestDeclared`, `estimate` (cards × fee, the cover line or none, the
-  total, the weeks, the includes line or none, the footnote or none) or
-  none, `onSelectGrader`, `onSelectLevel`; a `SegmentedControl`, a
-  `RadioCard` per level, the dark estimate `Card` holding both lines, the
-  upcharge `Alert`
-- **`GradingReview`** — `summary` (cards, grader, level, weeks), `schedule`
-  (name, set line, minimum grade, declared value, cover or none), `totals`
-  (declared, fee, cover or none), `warnings` (per card: the reference above
-  the ceiling, the level, the difference, the higher level's fee now) or
-  none, `goodToKnow` (five), `consented`, `pending`, `error`, `onEdit`,
-  `onConsent`, `onBook`, `onSaveForLater`; `consented`, `onConsent` and
-  `onBook` are given together or not at all, and left out the review offers neither the tick nor
-  Book, its save act reading the caller's words, as the editor's Save changes;
-  `error` withdraws the act it refused, Book where the review books and the
-  save where it only saves
-- **`GradingStatusRail`** — `stage` (one of Planned, Booked, Handed in,
-  Sent, Graded, Back, Home), `ended` — the word that says the ending — or
-  none; the store's `StageRail` with the seven stages, the stage reached,
-  earlier ones done, later ones to come
-- **`GradingOwnershipChip`** — `status` (the word and its tone) and `chip`
-  (the word and its tone, or none on a closed submission); the two `Badge`s
-  the status table pairs, drawn as one pair on every board
-- **`GradingPickupCard`** — `code`, `items` (slabs, raw cards), `where`
-  (shop, address), `open`, `due` (the total and the clause that dresses it,
-  or nothing), `bring` (an ID line naming the collector, the collector or
-  the named person, or nothing). One figure here; the lines behind it are
-  `GradingMoneyBlock`'s
-- **`GradingNamedCollector`** — `named` (name, named at) or none, `name` and
-  `onNameChange` for the field the consumer holds, `pending`, `error`,
-  `onSave`, `onChange`, `onRemove`, `timeZone`; the field, Save, or the
-  Named card with Change and Remove
-- **`GradingGradeCards`** — `cards` (grade or none, label word, grader, name,
-  cert or none, outcome badge or none, the ungraded code and note or none);
-  one `Card` per card, the ungraded in the `error` tone
-- **`GradingMoneyBlock`** — the one place the lines live: `lines` in order
-  (fee as n × fee = total, cover, paid with method · instant · reference,
-  moved up a level, waived, storage, refunded, paid out with its route,
-  settled, due at the counter), `lead` (the settle lead when something is
-  due, or none), `includes`, `footnote`; a `Card` of `Text` rows, the due
-  row in the `warning` tone
-- **`GradingUncollectedLadder`** — `rungs` (the reminder days, the storage
-  day with the fee a card a month, the notice day with the posting date once
-  posted, the days left of the 30 and the day they end), `readyOn`,
-  `cardsHeld`, `vaultLine`, `timeZone`; a `List` of three rungs, a passed
-  rung marked
+  and a `warning` tone on the existing `--warning-foreground` token. `Text`
+  has no `text.figma.ts`, so the rungs are code ahead of design, recorded
+  here as [`design-code-sync.md`](../../../docs/governance/design-code-sync.md)
+  asks
 
 ### `@grade10/ui` — existing, reused unchanged
 
 `BookingLocationPicker`, `BookingSlotPicker`, `BookingDetailsForm`,
 `BookingConfirmation` (`calendarHref` serves the calendar file, `manageHref`
 is the submission address) and `BookingManageCard` from
-`shared/ui/appointment-booking`. `BookingSteps` is not reused: it is pinned
-to the diary's five steps, and the wizard's rail is three `Step`s.
+`shared/ui/appointment-booking`, and `NoteList` from `shared/ui/page-blocks`.
 
 ### Composed in `packages/grading/frontend` — work in grade10
 
-- **`WizardRail`** — three `Step`s The cards · The service · Book
+- **`DropoffBooking`**, **`DropoffBooked`** — the drop-off views a
+  collector's page composes; the cancel-visit confirm is
+  `BookingManageCard`'s own
 - **`BatchLine`** — an `Alert` beside the picked day: the cut-off, the ship
   day, the next batch's dates, the estimate-runs-from line
-- **`SubmissionList`** — the home's Your submissions, one `Card` per
-  submission with `GradingOwnershipChip`
-- **`SubmissionHistory`** — the History `List`: instant, event, by whom
-- **`DocumentsList`** — the three documents with signed or issued instant,
-  fingerprint, download
-- **`VaultItCard`**, **`WhatNextCard`**, **`YourDataLine`** — the ready
-  page's vault offer, the collected page's next steps and its retention line
-- **`WithdrawCard`** — the changed-your-mind `Card` with the WhatsApp link
-- **`CancelSubmissionDialog`**, the cancel-visit confirm is
-  `BookingManageCard`'s own
-- **`GraderStagesCard`** — the order, the stages in the grader's words with
-  dates, the next stage, the running-late line
 
 ### Console blocks — existing, `@grade10/frontend-console`
 
@@ -235,8 +108,7 @@ photograph pair is two `MediaFrame`s. Nothing the console package lacks.
   Condition, the photograph pair, the level check and Refuse per row, Add a
   card, the fee `Panel`, the sign `Panel`, the check-in `Panel`. The
   console has no paste: a walk-in's list is written card by card with the
-  collector at the desk, and `GradingPasteSheet` stays the collector's
-  surface alone; the runbook always takes a `submissionId`, and `recordHref` is the
+  collector at the desk, and the paste stays the collector's alone; the runbook always takes a `submissionId`, and `recordHref` is the
   one press to the record
 - **`WalkInForm`** — the Walk-in desk's own form: the collector's email,
   name and phone, the grader, the level, the shop and the first card with
@@ -338,124 +210,6 @@ the new `grading` namespace; the words are not written here.
 
 ## States
 
-### Grading home
-
-Stories `grading-plan-grading-home--`, the Fee sheet rows `grading-submission-gradingfeesheet--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Loading | `home.loading`; no list | `grade10-site-grading-submission-plan-SC-02` |
-| Prerendered | the lead and How it works as static HTML; the fee sheet and Your submissions in their loading state until the page reads them, since staff change the sheet without a deploy | **Out of suite:** the anonymous smoke of task 31.8 |
-| Signed out (`G16`) | the lead, the four-step How it works, `GradingFeeSheet`, Start a submission, Book a drop-off without a list, Sign in in the header | `grade10-site-grading-submission-plan-SC-01` |
-| Signed in (`G01`) | the account line; Your submissions as one `Card` per submission with the summary, the status word, the chip and the id; What it costs below | `grade10-site-grading-submission-plan-SC-41` |
-| Signed in, none | `EmptyState` under Your submissions; Start a submission | `grade10-site-grading-submission-plan-SC-46` |
-| Sign in, link sent | the same-email, no-password line after the address is given | `grade10-site-grading-submission-plan-SC-41` |
-| Fee sheet, one grader | the level rows: ceiling, cards a submission, fee, weeks; the example-fees lead; the above-the-top and Bulk lines | `shared-ui-grading-submission-SC-03` |
-| Fee sheet, cover column | Express and Super Express rows carry the cover rate | `shared-ui-grading-submission-SC-04` |
-| Fee sheet, three graders | a `SegmentedControl` per grader over its own sheet | `shared-ui-grading-submission-SC-05` |
-| One record, two drawings | the fee sheet and the level picker each drawn from the one sheet they are given, neither reaching for the other | `shared-ui-grading-submission-SC-59` |
-| Error | the message in the error tone; no list | `grade10-site-grading-submission-plan-SC-03` |
-
-### Plan wizard — the cards
-
-Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-submission-gradingcardlist--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Rail, the cards | `WizardRail`: The cards `progress`, The service and Book `upcoming` | `grade10-site-grading-submission-plan-SC-08` |
-| About you, signed in (`G02`) | name, email, phone prefilled; the change-for-this-submission line | `grade10-site-grading-submission-plan-SC-09` |
-| About you, signed out | empty fields; the emailed-link line under the email | `grade10-site-grading-submission-plan-SC-09` |
-| Empty list | no card: the empty line naming both ways to start, the card search and Paste a list; Continue disabled | `shared-ui-grading-submission-SC-18` |
-| Card search | `Autocomplete` over the reference as the name is typed; a miss keeps the name | `shared-ui-grading-submission-SC-14` |
-| Card, matched (`G02`) | the set · number · matched line; Edit and remove; the declared value; the three reference sales with the reference note | `shared-ui-grading-submission-SC-13`, `shared-ui-grading-submission-SC-76` |
-| Card, kept as typed | the name as typed; no reference row | `shared-ui-grading-submission-SC-14` |
-| Card, no value | the declared value asked for on the card; Continue disabled naming the count | `shared-ui-grading-submission-SC-15` |
-| Card, minimum grade | the caption: only encapsulate at PSA 9 or above, the fee applies either way | `shared-ui-grading-submission-SC-13` |
-| Card, above Bulk's ceiling | more than 20 cards and the card above Bulk's ceiling: the line naming a second submission on the same drop-off | `shared-ui-grading-submission-SC-19` |
-| Reference unavailable | the catalogue could not be asked: every card kept as typed with that line, not the kept-as-typed one, and the value still asked for | `shared-ui-grading-submission-SC-17` |
-| Cap notice (`G02`) | one grader at one level; 20 from Value to Super Express, 100 at Bulk; the second-submission line | `shared-ui-grading-submission-SC-62` |
-| More than 20 | the notice reads Bulk is the only level open at the next step | `shared-ui-grading-submission-SC-62` |
-| Over the cap | the 101st card refused with the second-submission-another-day line | `shared-ui-grading-submission-SC-16` |
-| Continue | the count on the button | **Out of suite:** the view's colocated test |
-| Finish later | the plan kept; the line naming when the link is emailed | `grade10-site-grading-submission-plan-SC-38` |
-| Finish later, no email | the email asked for before the plan is kept | `grade10-site-grading-submission-plan-SC-40` |
-| Cards, paste open | the paste sheet open over the cards step, read against the list it adds to | `shared-ui-grading-submission-SC-20` |
-
-### Paste a list
-
-Stories `grading-submission-gradingpastesheet--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Open (`G17`) | `Drawer`: the lead, Your list `Textarea`, the lines-read counter; Add n cards, Go back | `shared-ui-grading-submission-SC-20` |
-| Nothing read | the empty `Textarea`; Add disabled | `shared-ui-grading-submission-SC-20` |
-| Matching | the counter reads matching; Add disabled | `shared-ui-grading-submission-SC-20`, `shared-ui-grading-submission-SC-77` |
-| Matched | the row with the count and the references-show line | `shared-ui-grading-submission-SC-21` |
-| Kept as typed | the row naming each line kept | `shared-ui-grading-submission-SC-21` |
-| Without a value | the row naming each line; the list asks for it before Continue | `shared-ui-grading-submission-SC-21` |
-| Above the ceiling | the row naming the card and its value, and the second-submission line | `shared-ui-grading-submission-SC-23` |
-| Skipped | a line naming a listed card: the skipped count | `shared-ui-grading-submission-SC-21` |
-| Bulk notice | more than 20 lines: Bulk the only level, its fee, ceiling, weeks, the longer drop-off, up to 100 | `shared-ui-grading-submission-SC-22` |
-| Reference unavailable | the catalogue could not be asked: every line carries that line rather than kept as typed, and Add stays enabled | `shared-ui-grading-submission-SC-57` |
-
-### Plan wizard — the service
-
-Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish-later rows `grading-plan-plan-wizard--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Grader (`G03`) | `SegmentedControl` PSA · CGC · BGS; the highest-declared line | `shared-ui-grading-submission-SC-60` |
-| Level open | `RadioCard`: the name; value up to and fee a card on the open line; back in about | `shared-ui-grading-submission-SC-06`, `shared-ui-grading-submission-SC-78` |
-| Level open, cover | the cover line on Express and Super Express | `shared-ui-grading-submission-SC-06` |
-| Level closed by a value | greyed: Not available, the card declared above the ceiling | `shared-ui-grading-submission-SC-07` |
-| Level closed by a count | Bulk greyed: Not available, Bulk starts at 20 and you have n | `shared-ui-grading-submission-SC-08` |
-| Bulk only | more than 20 cards: every other level closed by the count, Bulk open | `shared-ui-grading-submission-SC-08` |
-| Every level closed | a card above the top ceiling: the ask-at-the-counter line; Continue disabled | `shared-ui-grading-submission-SC-09` |
-| No level picked | no estimate; Continue disabled | `shared-ui-grading-submission-SC-06` |
-| Estimate | the dark `Card`: the total, n × fee · level · weeks, then inside the card under them the includes line and the paid-at-the-counter footnote | `shared-ui-grading-submission-SC-10`, `shared-ui-grading-submission-SC-75` |
-| Estimate with cover | the cover line per card under the fee and the total with it | `shared-ui-grading-submission-SC-10` |
-| Upcharge notice (`G03`) | the `Alert`: moved up a level, the difference passed on, told before collection | `shared-ui-grading-submission-SC-11` |
-| Grader with example figures | CGC or BGS: the levels as data with the example-fees line | `shared-ui-grading-submission-SC-12` |
-| Finish later at the service | the plan kept with the grader and the level picked; the emailed-link line | `grade10-site-grading-submission-plan-SC-38` |
-| Rail, the service | The cards `completed`, The service `progress` | `grade10-site-grading-submission-plan-SC-08` |
-
-### Plan wizard — book
-
-Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows `grading-plan-plan-wizard--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Review (`G04`) | the header `Card` n cards to grader · level, back in about, Edit; the schedule; the totals; Good to know; the consent tick; Book the drop-off, Save and book later | `shared-ui-grading-submission-SC-24` |
-| Review, Traditional Chinese | every word the consumer's `copy` in Traditional Chinese; none of the block's own | `shared-ui-grading-submission-SC-54` |
-| Totals with cover | the cover line under the fee, per card and in total | `shared-ui-grading-submission-SC-24` |
-| Minimum grade on the schedule | the min line beside the card | `shared-ui-grading-submission-SC-24` |
-| Upcharge warning | per card: the PSA 10 reference above the ceiling, the level the grader moves it to, the difference due before collection, the higher level's fee now | `shared-ui-grading-submission-SC-25` |
-| No warning | no card above the ceiling: the block absent | `shared-ui-grading-submission-SC-26` |
-| Good to know | the five lines in order | `shared-ui-grading-submission-SC-24` |
-| Consent unticked | Book the drop-off disabled until the statement is ticked | `shared-ui-grading-submission-SC-27` |
-| Booking | Book pending; both buttons disabled | `shared-ui-grading-submission-SC-27` |
-| Saved for later | the plan kept; its page opens at Planned, on the picker, asking for the statement first where the plan was kept unticked | `grade10-site-grading-submission-plan-SC-58` |
-| Plan expired meanwhile | the refusal by name; Start again | `shared-ui-grading-submission-SC-28` |
-| Refused by name | the refusal in the collector's words beside the act; Book withdrawn, Save and book later still offered | `shared-ui-grading-submission-SC-79` |
-| Kept plan editor | the editor's review: the schedule, the totals and any warning; no statement and no Book; Save changes | `shared-ui-grading-submission-SC-74` |
-| Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-SC-08` |
-
-### Plan wizard — a kept plan
-
-Stories `grading-plan-plan-wizard--`, the Kept rows.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Kept, loading | the wizard's frame; the steps wait on the kept plan's read | **Out of suite:** the view's colocated test |
-| Kept, error | the read's failure in the error tone; Back to the submission | **Out of suite:** the view's colocated test |
-| Kept, not found | the site's not-found copy, as the submission page reads it | `grade10-site-grading-submission-lifecycle-SC-52` |
-| Kept, planned | the three steps on the kept list, grader and level, the rail's last step and the service step's continue both Review, never Book; the review with its totals and any warning, no tick and no Book; Save changes | `grade10-site-grading-submission-lifecycle-SC-62` |
-| Kept, booked | the same, the grader fixed and a level required on the booked sheet; the email fixed | `grade10-site-grading-dropoff-booking-SC-30` |
-| Kept, warning kept | a card above the ceiling still warned, its reference asked again | `grade10-site-grading-submission-plan-SC-32` |
-| Saved | the same submission page opens; no second plan | `grade10-site-grading-submission-lifecycle-SC-62` |
-| At the counter | the save refused by name: the counter has the list; Save changes withdrawn | `grade10-site-grading-submission-lifecycle-SC-59`, `shared-ui-grading-submission-SC-79` |
-| Kept, closed | an edit link opened once the counter has the list, or on a cancelled or expired list: that status's own words and Back to the submission; no step, no wizard | `grade10-site-grading-submission-lifecycle-SC-59`, `grade10-site-grading-submission-lifecycle-SC-50` |
-
 ### Book the drop-off
 
 Stories `grading-dropoff-dropoff-booking--`.
@@ -494,128 +248,6 @@ Stories `grading-dropoff-dropoff-booked--`.
 | Visit detached | the owner cancelled or missed the visit: every joiner loses it, is told by letter, and is asked to book again | `grade10-site-grading-dropoff-booking-SC-22`, `grade10-site-grading-dropoff-booking-SC-27` |
 | Moved | the new day and time; the moved email line | `grade10-site-grading-dropoff-booking-SC-15` |
 
-### Submission page
-
-Stories `grading-submission-submission-page--`, the Rail rows `grading-submission-gradingstatusrail--`, the Chip rows `grading-submission-gradingownershipchip--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Loading | `submission.loading`; nothing else | **Out of suite:** the view's colocated test |
-| Not found | the site's not-found copy; a link naming nothing the same | `grade10-site-grading-submission-lifecycle-SC-52` |
-| Header | n cards to grader · level, Submission id, planned on; `GradingOwnershipChip`; `GradingStatusRail` | `grade10-site-grading-submission-lifecycle-SC-53` |
-| Rail, one per stage | seven `Step`s Planned → Home; the status's stage `progress`, earlier `completed`, later `upcoming` · `grading-submission-gradingstatusrail--planned` through `--home` | `shared-ui-grading-submission-SC-32` |
-| Rail, ended | the stage the submission ended at stays `progress`, and reads the word that says the ending under it | `shared-ui-grading-submission-SC-33` |
-| Chip: Waiting on you | Not handed in yet, Ready to collect | `shared-ui-grading-submission-SC-29` |
-| Chip: Drop-off | Drop-off booked with the visit's day | **Out of suite:** `grade10-site/grading/submission-lifecycle` - the word and the chip per status |
-| Chip: With us | Handed in, Back at the shop | `shared-ui-grading-submission-SC-29` |
-| Chip: With the grader | With the grader, the grader named | `shared-ui-grading-submission-SC-29` |
-| Chip: Running late | past the estimate, the grader named | `shared-ui-grading-submission-SC-31` |
-| Chip: On their way back | Grades are in | `shared-ui-grading-submission-SC-29` |
-| Chip: Collected | Back with you and the date | `shared-ui-grading-submission-SC-29` |
-| Chip: none | Cancelled, Expired: the word alone | `shared-ui-grading-submission-SC-30` |
-| Planned | Not handed in yet · Waiting on you; the estimate; `DropoffBooking` open in place where Book is offered, or Join where a visit under the email waits; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-SC-42` |
-| Planned, no level | a plan kept before a level was picked: the level line beside Edit the list; no estimate, no picker and no Join; a booking or a join sent with no level refused in the drop-off's words | `grade10-site-grading-submission-plan-SC-63`, `grade10-site-grading-submission-plan-SC-38`, `grade10-site-grading-submission-plan-SC-27` |
-| Nudged | the kept-until line reads the expiry day | `grade10-site-grading-submission-plan-SC-43` |
-| Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-SC-44` |
-| Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
-| Booked, joined | the visit card names the submission that owns it | `grade10-site-grading-dropoff-booking-SC-20` |
-| Visit detached | the owner cancelled or missed the visit: the joiner's page holds no visit and reads that the visit closed, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22`, `grade10-site-grading-dropoff-booking-SC-27` |
-| Move | the picker on the page; the batch line reads again | `grade10-site-grading-dropoff-booking-SC-15` |
-| Cancel visit | `BookingManageCard`'s confirm: the visit closes, the list stays | `grade10-site-grading-dropoff-booking-SC-16` |
-| Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-SC-19` |
-| Cancel this submission | the button with its line; `CancelSubmissionDialog` naming the drop-off it cancels; Yes, cancel and Go back | `grade10-site-grading-submission-lifecycle-SC-47` |
-| Cancelled | Cancelled; the rail ended; the cards never left, nothing paid; Start a submission | `grade10-site-grading-submission-lifecycle-SC-47` |
-| Cancel withheld | the visit started, or the counter checked or refused a card: no Cancel this submission | `grade10-site-grading-submission-lifecycle-SC-61` |
-| Handed in (`G08`) | Handed in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-SC-53` |
-| Refused card | the card's Refused at the counter badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-SC-06` |
-| Withdrawn card | the card's Withdrawn badge with the refund line; the estimate dropped | `grade10-site-grading-submission-lifecycle-SC-15` |
-| Batch closed | `WithdrawCard` gone once the batch closed | `grade10-site-grading-submission-lifecycle-SC-16` |
-| With the grader (`G09`) | With the grader · With PSA; the lead; `GraderStagesCard`; Nothing to do; the cards with intake ids; History | `grade10-site-grading-submission-lifecycle-SC-07` |
-| Running late | chip Running late · with PSA; the stage; no new date yet | `grade10-site-grading-submission-lifecycle-SC-09` |
-| New date | With the grader · With PSA; the new date with the stage; the emailed-the-day-we-set-it line; no Running late, the estimate being ahead again | `grade10-site-grading-submission-lifecycle-SC-10` |
-| Grades in (`G10`) | Grades are in · On their way back; the headline; `GradingGradeCards`, an ungraded card with its code and the grader's note, or the no-reason line where the grader gave none; `GradingMoneyBlock` with the settle lead; About the grades; the cards, the ungraded card's line on its record; History | `grade10-site-grading-submission-lifecycle-SC-12` |
-| Back, being checked | Back at the shop, being checked · With us; the arrived line; nothing to do | `grade10-site-grading-submission-lifecycle-SC-53` |
-| Ready (`G11`) | Ready to collect · Waiting on you; `GradingPickupCard`; `GradingNamedCollector`; `VaultItCard`; the cards; `GradingMoneyBlock`; `GradingUncollectedLadder`; History | `grade10-site-grading-submission-lifecycle-SC-25` |
-| Ready, one card moved up | that card's Moved up a level line with the money it changes; the other three none | `grade10-site-grading-submission-lifecycle-SC-12` |
-| Ready, one card held | the held card's badge with the grader's date; the receipt-names-it line | `grade10-site-grading-submission-lifecycle-SC-14` |
-| Ready, notice posted | `GradingUncollectedLadder` with the reminder rung passed and the notice rung carrying its posting date, the days left of the 30 and the day they end | `grade10-site-grading-submission-lifecycle-SC-36` |
-| Payout reversed | the card back with the reversal line | `grade10-site-grading-submission-lifecycle-SC-43` |
-| Collected (`G12`) | Back with you · Collected <date>; the lead; the graded record with Look up and the slab photograph per slab; `GradingMoneyBlock` with the settled line; `DocumentsList` with the three; `WhatNextCard`; `YourDataLine` | `grade10-site-grading-submission-lifecycle-SC-44` |
-| Collected, one card still out | the record with the card held and the second-hand-back line | `grade10-site-grading-submission-lifecycle-SC-46` |
-| Acts by status | only the status's acts on the page; nothing from Sent to Back | `grade10-site-grading-submission-lifecycle-SC-50` |
-| Error | the message in the error tone; the page reads again | **Out of suite:** the view's colocated test |
-
-Erasure refused and Grading holds unanswered are group 23's own states, on
-the vault's Your data block rather than this page: they are its rows, under
-"Your data" below.
-
-### Cards on the submission page
-
-Stories `grading-submission-gradingcardrecord--`, the Grade card rows `grading-submission-gradinggradecards--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Listed | number, name, set line, declared value; no intake id | `shared-ui-grading-submission-SC-35` |
-| Handed in (`G08`) | intake id; the photograph pair, front and back | `shared-ui-grading-submission-SC-34` |
-| Minimum grade | the min line on the set line | `shared-ui-grading-submission-SC-34` |
-| Refused at the counter | the badge and the reason as typed; never charged | `shared-ui-grading-submission-SC-35` |
-| Withdrawn | the badge and the refund line | `shared-ui-grading-submission-SC-35` |
-| Graded (`G10`) | the grade badge in the grader's words and the cert | `shared-ui-grading-submission-SC-35` |
-| Moved up a level | the badge and the difference due | `shared-ui-grading-submission-SC-35` |
-| Ungraded | the badge with the code and the note; the fee stands | `shared-ui-grading-submission-SC-35` |
-| Minimum grade not met | the badge; raw; the fee stands | `shared-ui-grading-submission-SC-35` |
-| Held by the grader | the badge with the expected date | `shared-ui-grading-submission-SC-35` |
-| Not returned | the badge with the payout line | `shared-ui-grading-submission-SC-35` |
-| Damaged | the badge with the payout line | `shared-ui-grading-submission-SC-35` |
-| Collected (`G12`) | the record: grade, grader, cert, Look up; the slab photograph | `shared-ui-grading-submission-SC-36` |
-| Vaulted | the badge linking the case | `shared-ui-grading-submission-SC-35` |
-| Grade card, graded (`G10`) | the number, the label word, the grader, the name, the cert | `shared-ui-grading-submission-SC-37` |
-| Grade card, moved up | the Moved up a level badge | `shared-ui-grading-submission-SC-39` |
-| Grade card, ungraded | the `error` card: the code, Returned ungraded, the note | `shared-ui-grading-submission-SC-38` |
-| Grade card, minimum not met | the grade and the badge; raw | `shared-ui-grading-submission-SC-39` |
-| Grade card, held | no grade; the badge and the date | `shared-ui-grading-submission-SC-39` |
-| Grade card, not returned | no grade; the badge | `shared-ui-grading-submission-SC-39` |
-| Grade card, damaged | the same with Damaged | `shared-ui-grading-submission-SC-39` |
-
-### Pickup, the named person and the ladder
-
-Stories `grading-submission-gradingpickupcard--`, the naming rows `grading-submission-gradingnamedcollector--`, the ladder's `grading-submission-gradinguncollectedladder--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Pickup, above the threshold (`G11`) | the code, the items, where, open, no booking needed, to settle as one figure, Bring an ID matching the name | `shared-ui-grading-submission-SC-40` |
-| Pickup, below the threshold | Bring: nothing; the code and the name release the cards | `shared-ui-grading-submission-SC-41` |
-| Pickup, someone named (`G18`) | Bring names an ID, yours or theirs | `shared-ui-grading-submission-SC-40` |
-| Pickup, nothing due | To settle: nothing | `shared-ui-grading-submission-SC-42` |
-| Pickup, storage due | To settle: one figure, the upcharge and the storage to the day together, with its at-the-counter clause; the lines are the money block's | `shared-ui-grading-submission-SC-42` |
-| Nobody named (`G11`) | the lead; Their name with its placeholder; Save | `shared-ui-grading-submission-SC-43` |
-| Name empty | Save disabled | `shared-ui-grading-submission-SC-43` |
-| Saving | Save pending | `shared-ui-grading-submission-SC-43` |
-| Named (`G18`) | the Named badge, `Avatar`, the name, named when, the one-person line; Change, Remove | `shared-ui-grading-submission-SC-44` |
-| Changing | the field prefilled with the person already named | `shared-ui-grading-submission-SC-58` |
-| Refused | the refusal by name under the field: already collected, and what was typed still there | `shared-ui-grading-submission-SC-45` |
-| Ladder, none reached (`G11`) | the three rungs with their dates, none reached; the vault line | `shared-ui-grading-submission-SC-51` |
-| Ladder, reminded | the reminder rung passed | `shared-ui-grading-submission-SC-52` |
-| Ladder, storage | the storage rung reached; the fee accruing per card | `shared-ui-grading-submission-SC-52` |
-| Ladder, notice | the notice rung passed, with the posting date, the days left of the 30 and the day they end; after it | `shared-ui-grading-submission-SC-53` |
-| Ladder, cards excluded | a card withdrawn, paid out or vaulted not counted | `shared-ui-grading-submission-SC-51` |
-
-### Money on the submission page
-
-Stories `grading-submission-gradingmoneyblock--`.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Estimate (`G07`) | Fee n × fee = total; the includes line, the plan's own sentence; the paid-at-the-counter footnote with the ungraded and refused one | `shared-ui-grading-submission-SC-46` |
-| Estimate with cover | the cover line under the fee | `shared-ui-grading-submission-SC-46` |
-| Paid (`G08`) | Paid: method · instant · POS reference | `shared-ui-grading-submission-SC-50` |
-| Refunded | a refunded line, the way it was paid | `shared-ui-grading-submission-SC-48` |
-| Due (`G10`) | the settle lead; Moved up a level and the card; Due at the counter before collection | `shared-ui-grading-submission-SC-47` |
-| Waived | the upcharge waived; due nothing | `shared-ui-grading-submission-SC-49` |
-| Storage | the storage line, per card and per month, accruing | `shared-ui-grading-submission-SC-47` |
-| Paid out | the payout at declared value and its route; the fee refunded beside it | `shared-ui-grading-submission-SC-48` |
-| Settled (`G12`) | settled at collection with the POS reference; nothing due | `shared-ui-grading-submission-SC-49` |
-
 ### The documents on the iPad
 
 Stories `grading-documents-sign-page--`.
@@ -639,15 +271,6 @@ Stories `grading-documents-sign-page--`.
 | Receipt, withdrawn card | one card, its fee refunded | `grade10-site-grading-counter-documents-SC-20` |
 | Receipt, paid out | what was paid out and how | `grade10-site-grading-counter-documents-SC-21` |
 | Placeholders outside production | the brackets, marked | `grade10-site-grading-counter-documents-SC-24` |
-
-### Your data
-
-Stories `vault-retention-your-data-view--`. Group 23's surface in `packages/vault/frontend`: the Your data block reads grading's holds (`erasure.holds`) beside the vault's own.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Erasure refused | Your data: the ask refused by name while the submission is live | `grade10-site-vault-retention-and-erasure-SC-33` |
-| Grading holds unanswered | Your data: the grading block that could not be answered is named, logged by name, and the ask stays held back | `grade10-site-vault-retention-and-erasure-SC-15` |
 
 ### Letters
 
@@ -931,15 +554,10 @@ Stories `grading-admin-settings-settings-panel--`.
 
 ## Flags
 
-- **Frames nobody drew** — the home's empty list and its sign-in-sent line,
-  the wizard at Bulk only, every level closed and the reference unavailable,
-  the review's pending and expired forms, the booking's joined, resized and
-  detached forms and the diary's refusals, the booked page moved, the
-  submission page at Planned, Expired, Cancelled, Back and with a missed
-  visit, a refused, withdrawn, held or damaged card, the chip beyond the
-  boards' five, the ceremony's refusals, the letters for a moved, cancelled,
-  missed or detached drop-off, the day before, damage and the hand-back
-  receipt, the queue's badges, empty and read-only forms, the hand-in
+- **Frames nobody drew** — the booking's joined, resized and detached forms
+  and the diary's refusals, the booked view moved, the ceremony's refusals,
+  the letters for a moved, cancelled, missed or detached drop-off, the day
+  before, damage and the hand-back receipt, the queue's badges, empty and read-only forms, the hand-in
   runbook before the visit starts, on a walk-in, with no paid line and with
   the safe full, the refuse dialog's last card, the batches' empty and
   new-batch forms, receiving's manifest and invoice entry, the hand-back's
@@ -948,17 +566,7 @@ Stories `grading-admin-settings-settings-panel--`.
   from its drawn sibling; the stories are their frame
 - **What the design system still owes** — three rungs on `Text` and
   nothing else: every other screen composes what `packages/design-system`
-  and `@grade10/frontend-console` already publish, the chip a `Badge` and
-  the paste sheet a `Drawer`
-- **The export set** — the proposal's thirteen, kept: no merge and no
-  split. `GradingOwnershipChip` draws the status word and the chip as the
-  one pair every board shows; `GradingLevelPicker` keeps the estimate card
-  inside it, because the estimate is the pick; `GradingMoneyBlock` carries
-  `G10`'s settle card as its due lead. Three things every submission board
-  draws have no export — History, the documents list and the home's
-  submissions list — and are composed in `packages/grading/frontend`; the
-  proposal may add `GradingHistory`, `GradingDocuments` and
-  `GradingSubmissionList` to the set if a second brand is to draw them once
+  and `@grade10/frontend-console` already publish
 - **Story ids** — the console's ids carry `admin` after `grading`, so a
   collector view and a console view can never share one
 - **The day picker** — `G05` draws a week strip; `BookingSlotPicker` draws
@@ -968,9 +576,8 @@ Stories `grading-admin-settings-settings-panel--`.
   `grade10-site-grading-collector-notifications-US-02`. A card held by the
   grader is walked by staff (`grade10-admin-grading-batches-US-03`) and
   read by the collector under `grade10-site-grading-submission-lifecycle-US-01`.
-  The upcharge waived reaches the collector's money block from
-  `grade10-admin-grading-counter-US-08`. The PM may issue a collector
-  journey for each, or the requirements pass states them out of suite
+  The PM may issue a collector journey for each, or the requirements pass
+  states them out of suite
 - **The last card refused** — the counter cancels the submission and tells
   the collector there; no message sends, nothing was paid and nothing is
   owed (`decisions.md` Q75;
@@ -990,9 +597,8 @@ Stories `grading-admin-settings-settings-panel--`.
   templates' words, `G06`'s vault cross-sell copy beyond one line, `GA6`'s
   ten-to-fifteen-minutes line, and the console's 2FA strip; the first
   release stops at the notice, and the console's chrome is the console's
-- **Copy that rides along** — the home's How it works, the wizard's hints,
-  the review's Good to know and the booked page's Before you come are keys
-  above with no delta of their own; their rows anchor on the journey that
-  reads them
+- **Copy that rides along** — the booked view's Before you come is keys
+  above with no delta of its own; its rows anchor on the journey that reads
+  them
 - **Console words** — the console's badges and status words are the
   status table's; `grading.console.*` carries only the WhatsApp templates

@@ -16,10 +16,12 @@ one level, and every card in it carries its own outcome.
      listed at the counter
   3. `admin.grade10.com/grading` — the queue, the batches and one submission;
      `admin.grade10.com/grading/walk-in` for a list written at the desk
-- ❓ **The collector's pages** — the price sheet, the wizard, the drop-off
-  booking and the submission page are designed again from the backend, and
-  the earlier pages were withdrawn on 2026-10-02; these pages state what
-  grading does, not how a page shows it — Design
+- ❓ **The collector's pages** — the price sheet, the wizard and the
+  submission page are designed again from the backend, and the earlier pages
+  were withdrawn on 2026-10-02; these pages state what grading does, not how
+  a page shows it — Design
+- 🚧 **Grading's own views** — the drop-off booking and the signing ceremony
+  stay grading's, as views the collector's pages compose
 - 🚧 **Money** — HKD, taken at the till against one POS line per card, and a
   cover line per card at Express and Super Express, written back to the
   submission; nothing is paid before every card is checked and the agreement
@@ -107,8 +109,9 @@ Every item is a value or an act outside the code, with who closes it.
 
 :::detail{title="Code map" for="engineer"}
 - **Code** — `packages/grading/{contracts,backend,frontend,admin-frontend}`
-  with `packages/appointment` and `packages/doc-sign` beside it; the signing
-  page in the grade10 SPA, the console pages in the grade10 admin panel;
+  with `packages/appointment` and `packages/doc-sign` beside it; the
+  drop-off booking and signing views in `packages/grading/frontend`, the
+  console pages in the grade10 admin panel;
   deployed as `grade10-grading-service`
 - **Submission address** — `GRADING_SUBMISSION_PATH` in
   `packages/grading/contracts/src/documents.ts`

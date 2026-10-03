@@ -72,13 +72,15 @@ submission.
   reads under a grant, pinned to a submission at booking and at signing; a
   readiness list names what stands between the code and the first submission,
   and the seal refuses a placeholder in production.
-- **A block set for the collector's pages.** The fee sheet, an editable card
-  list for planning and a read-only record for the pages after hand-in, the
-  paste sheet, the level picker, the review, the status rail and ownership
-  chip, the pickup card, the name-a-collector card, the grade cards, the money
-  block and the uncollected ladder are exported from `packages/ui` with
-  stories; the drop-off composes the package's appointment-booking exports
-  and adds only the batch line and the wizard rail.
+- **The collector's screens are designed again; the drop-off and the
+  signing stay grading's.** The home, the wizard, the submission page and the
+  screens around them were withdrawn from the site, and @tangconst designs
+  them again from the backend. The drop-off booking and the signing ceremony
+  stay grading's own, as views in `packages/grading/frontend` those screens
+  compose, over the package's appointment-booking exports and `NoteList`.
+  The store carries no grading block: the set first built for the pages is
+  deleted, and `shared/ui/grading-submission` says the package exports none
+  (`decisions.md` Q147, Q148).
 
 ## Non-Goals
 
@@ -124,20 +126,11 @@ See [Non-Goals](decisions.md#non-goals).
   the invoice entering, receiving against the manifest and its exceptions,
   the upcharge as the sheet's difference; and the cap on declared value in
   the safe.
-- `shared/ui/grading-submission`: the collector-facing block set in
-  `packages/ui/src/blocks/grading-submission/` with colocated stories, none of
-  which exists yet: `GradingFeeSheet`, `GradingCardList` for the editable
-  planning list, `GradingCardRecord` for the read-only list after hand-in with
-  intake ids and photograph pairs, `GradingPasteSheet`, `GradingLevelPicker`,
-  `GradingReview`, `GradingStatusRail`, `GradingOwnershipChip`,
-  `GradingPickupCard`, `GradingNamedCollector`, `GradingGradeCards`,
-  `GradingMoneyBlock` and `GradingUncollectedLadder`, every one fed by props
-  alone. The drop-off reuses the package's `appointment-booking` exports,
-  `BookingLocationPicker`, `BookingSlotPicker`, `BookingDetailsForm`,
-  `BookingConfirmation` and `BookingManageCard`, unchanged; grading adds the
-  batch line and its own wizard rail, since `BookingSteps` is pinned to the
-  diary's five. The capability's own page is the designer's, written with
-  `ui-design.md`.
+- `shared/ui/grading-submission`: the store carries no grading collector
+  block; its one requirement says the package's public entry exports none of
+  the thirteen blocks or their types, until @tangconst names the blocks the
+  redesigned screens need. The drop-off views reuse the package's
+  `appointment-booking` exports unchanged.
 
 ### Modified Capabilities
 
@@ -160,14 +153,13 @@ first submission owns (`decisions.md` Q18, Q19).
 ## Impact
 
 - **Packages** — `packages/grading/{contracts,backend,frontend,admin-frontend}`
-  laid out as the vault's are; `packages/ui` gains the `grading-submission`
-  block set and its stories; `packages/i18n` gains a `grading` namespace in
-  every shared catalog and head entries for the collector's surfaces.
-  The blocks take their formatted lines as functions and fill no
-  placeholder themselves: each app fills its words through its own
-  catalog, so the collector's page and the console's WhatsApp templates
-  hold to the same "never a literal placeholder" rule with one filler
-  apiece.
+  laid out as the vault's are; `packages/ui` carries no grading block, and
+  the set built under groups 3 and 4 is deleted with its stories and
+  exports (task 37.1); `packages/i18n` gains a `grading` namespace in every
+  shared catalog and head entries for the collector's surfaces. Each app
+  fills its words through its own catalog, so a collector's view and the
+  console's WhatsApp templates hold to the same "never a literal
+  placeholder" rule.
 - **Worker** — `apps/backend/grade10/grading`, its own Neon database, one
   writer of the status, sweeps for the plan's clocks, the missed visit, the
   uncollected ladder and the grader's morning read, and a `grading_settings`

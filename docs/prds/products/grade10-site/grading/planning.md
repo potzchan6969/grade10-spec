@@ -8,6 +8,10 @@ A submission is planned on the phone in three steps — the cards, the service,
 the drop-off — and nothing is paid or signed until the cards are checked at
 the counter.
 
+❓ **The wizard's pages** — the steps below are what a plan holds; how the
+collector's site lays them out is designed again from the backend — Design —
+[Grading](/p/grade10-site/grading)
+
 ## Fee Sheet
 
 The fee a card, in HKD, includes the grader's fee and shipping both ways; the
@@ -43,10 +47,6 @@ Both are paid at the counter once the cards are checked.
 | Fee policy | the fee's fate per outcome — [The Submission](/p/grade10-site/grading/submission#the-fee-by-outcome) | Commercial |
 
 ## The Wizard
-
-❓ **The wizard's pages** — the steps below are what a plan holds; how the
-collector's site lays them out is designed again from the backend — Design —
-[Grading](/p/grade10-site/grading)
 
 :::flow{title="Planning a submission"}
 ## *Collector* — **The cards**

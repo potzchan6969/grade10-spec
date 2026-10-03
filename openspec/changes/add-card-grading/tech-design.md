@@ -54,7 +54,7 @@ file for file where it has the concern.
   narrowing per consumer (`getVaultInventoryService`); the token and the cache
   stay in the inventory worker
 - **Console blocks** live in `packages/frontend-console`; the store's
-  `packages/ui` holds collector-facing blocks with stories the manual embeds
+  `packages/ui` holds no grading block (`decisions.md` Q148)
 - **Retention** — `RETENTION_CLASSES = ["agreements", "identity", "photos"]`
   in `packages/app-env/src/retention.ts`, the kinds of personal data a product
   keeps past a case's end; `ERASURE_LANES = [...APPOINTMENT_PRODUCTS, "direct"]`
@@ -654,14 +654,15 @@ answering the question it was for.
   before filing — a product-to-product binding for a courtesy the run
   already enforces
 
-### Frontends: the vault's slices, the store's blocks, the console's blocks
+### Frontends: the vault's slices, the console's blocks
 
-- `packages/grading/frontend/src/features/{home,plan,dropoff,submission,sign}`
-  behind `gradingModules.ts`; `core/api/GradingApi.ts` over the site's
-  `gradingTrpcClient`, through a transport whose answers are typed off the
-  pinned router as the console's are, never `unknown`; the views compose
-  `@grade10/ui`'s `grading-submission` blocks and the `appointment-booking`
-  exports, every word from the `grading` namespace
+- `packages/grading/frontend/src/features/{dropoff,sign}` behind
+  `gradingModules.ts`, the drop-off booking and signing views the
+  collector's pages compose (`decisions.md` Q147); `core/api/GradingApi.ts`
+  over the site's `gradingTrpcClient`, through a transport whose answers are
+  typed off the pinned router as the console's are, never `unknown`; the
+  views compose `@grade10/ui`'s `appointment-booking` exports and
+  `NoteList`, every word from the `grading` namespace
 - **The emailed link is doc-sign's token, one size down.** `newBearerSecret(32)`
   from `@grade10/utils/crypto` is minted at `savePlan`, `sha256Hex(token)`
   stored in `submissions.access_hash`, and the raw value travels only in the
@@ -744,8 +745,7 @@ answering the question it was for.
 - **Which events a collector sees** is derived at the read, never stored:
   `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent` in
   `packages/grading/contracts`, as the vault's `vocabulary.ts` holds them
-- Stories: the blocks' in the store's `packages/ui` workbench; the console
-  views' in `packages/storybook`, whose glob over
+- Stories: the views' in `packages/storybook`, whose glob over
   `packages/*/admin-frontend/src/**` the sibling change already writes
 - RBAC: `grading: ["read", "operate", "approve"]` in
   `packages/grade10-auth/contracts/src/schemas.ts`, `staff` and `admin`
@@ -753,15 +753,8 @@ answering the question it was for.
   maps every admin procedure to its grant, pinned both ways by a test
 - i18n: `messages/shared/{en,zh-Hant,zh-Hans,ko}/grading.json` in the store
   and the nav key in `chrome`; letters are English in the worker
-- **`GradingStatusRail` draws on `StageRail`** — the block keeps its export,
-  its `copy`, `stage` and `ended` props and its stories, and composes the
-  store's `StageRail` with the seven stages in order, `current` the stage
-  and `slot: "grading-status-rail"`; the rail's scroll wrapper carries the
-  slot, which is why it lands as its own group
-  (`complete-vault-collector-flow` Q117)
 - Alternatives rejected: console blocks in the store's `packages/ui` — it
-  carries none, and the seams place them in `packages/frontend-console`; a
-  second stepper kept in `grading-submission`, two blocks for one shape
+  carries none, and the seams place them in `packages/frontend-console`
 
 ### Letters are one exhaustive catalogue on the shared shell
 
@@ -1292,8 +1285,7 @@ change creates are imported from their shared home by both products.
    `alwaysOnSql("sign_signatures", ["sign_signatures_column_guard",
    "sign_signatures_no_truncate"], { schema })` in the generator, so every
    host inherits an armed guard; the vault's committed files do not move
-3. **The store** — `packages/ui` blocks and stories, the `grading` i18n
-   namespace, `apps/emails/emails/grading/`, the retention delta, the
+3. **The store** — the `grading` i18n namespace, `apps/emails/emails/grading/`, the retention delta, the
    one-word `Product` delta in `add-multi-store-appointments`; then
    `pnpm run submodules:update external/grade10-spec`
 4. **The three providers** — `APPOINTMENT_PRODUCTS`, the optional

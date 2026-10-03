@@ -62,8 +62,6 @@ it; no statute here is asserted.
   vault keeps and for how long, per class; the identity standing — verified
   until when, checked how, never the name or document; every signed document
   in one download; and whether a case in flight holds the ask
-- ❓ **Your data on screen** — where the collector reads it and files the ask;
-  @tangconst designs it
 - **Asking while a submission is live** — filing the ask is accepted;
   grading's erasure refuses when an admin runs it
 
