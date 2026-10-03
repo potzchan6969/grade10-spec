@@ -37,7 +37,6 @@ import grade10EnProfile from "../messages/grade10/en/profile.json";
 import grade10EnSignIn from "../messages/grade10/en/signIn.json";
 import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
-import grade10EnVault from "../messages/grade10/en/vault.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
 import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
@@ -51,7 +50,6 @@ import grade10ZhHansProfile from "../messages/grade10/zh-Hans/profile.json";
 import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
 import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
-import grade10ZhHansVault from "../messages/grade10/zh-Hans/vault.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
 import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
@@ -65,7 +63,6 @@ import grade10ZhHantProfile from "../messages/grade10/zh-Hant/profile.json";
 import grade10ZhHantSignIn from "../messages/grade10/zh-Hant/signIn.json";
 import grade10ZhHantStore from "../messages/grade10/zh-Hant/store.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
-import grade10ZhHantVault from "../messages/grade10/zh-Hant/vault.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
@@ -184,7 +181,6 @@ import zzzKoMarketing from "../messages/zzz/ko/marketing.json";
 import zzzKoProfile from "../messages/zzz/ko/profile.json";
 import zzzKoSignIn from "../messages/zzz/ko/signIn.json";
 import zzzKoStoreHome from "../messages/zzz/ko/storeHome.json";
-import zzzKoVault from "../messages/zzz/ko/vault.json";
 
 /** The words no brand claims, one language at a time. */
 export const sharedEn = {
@@ -322,7 +318,6 @@ export const grade10En = {
   signIn: grade10EnSignIn,
   store: grade10EnStore,
   storeHome: grade10EnStoreHome,
-  vault: grade10EnVault,
 };
 
 export const grade10ZhHant = {
@@ -339,7 +334,6 @@ export const grade10ZhHant = {
   signIn: grade10ZhHantSignIn,
   store: grade10ZhHantStore,
   storeHome: grade10ZhHantStoreHome,
-  vault: grade10ZhHantVault,
 };
 
 export const grade10ZhHans = {
@@ -356,7 +350,6 @@ export const grade10ZhHans = {
   signIn: grade10ZhHansSignIn,
   store: grade10ZhHansStore,
   storeHome: grade10ZhHansStoreHome,
-  vault: grade10ZhHansVault,
 };
 
 export const zzzKo = {
@@ -369,7 +362,6 @@ export const zzzKo = {
   profile: zzzKoProfile,
   signIn: zzzKoSignIn,
   storeHome: zzzKoStoreHome,
-  vault: zzzKoVault,
 };
 
 /** The words no brand claims, in every language any brand speaks. */
