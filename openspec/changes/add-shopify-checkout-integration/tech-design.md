@@ -15,7 +15,8 @@ intent, provider or settlement guarantee.
 ## Goals / Non-Goals
 
 - **Goals** - Complete drawer response handling, pending submission gating,
-  inline verification and order return against existing clients and fixtures.
+  existing verification feedback and order return against existing clients and
+  fixtures.
 - **Non-Goals** - Backend, persistence, wire-contract, provider, recovery,
   carrier and settlement changes; old-invoice cancellation; reconciliation of
   cart edits made during payment; new dependencies or shared UI exports.
@@ -58,8 +59,10 @@ existing order surface. Named-line contradictions/refusals refresh the current
 review and show the existing feedback. Transport and contract failures stay
 distinct from resolved business outcomes and restore the ready-basket retry.
 
-Replace the drawer action with the existing inline account-verification state
-when required; use the existing gross-goods threshold and account route.
+Keep the existing drawer-host account-verification feedback when required. It
+shows the gross-goods threshold and account action, then returns the drawer to
+its existing checkout-failure treatment; the identity check still runs on the
+account route. No shared drawer slot or export is added by this integration.
 Sign-out uses the current sign-in action and cannot fall back to typed-email
 checkout. `createCheckoutWithEmail` remains `publicProcedure` on the backend;
 the unchanged operator surface retains its existing access and sandbox gates.
@@ -93,13 +96,12 @@ Unchanged. No columns, indexes, migrations, request fingerprints, dispatch
 states or recovery deadlines are added. Existing order and cart records remain
 authoritative; frontend cached reads are projections.
 
-## Acceptance Hold
+## Acceptance Fold
 
-TBC - The acceptance fold merges feature lists additively. Its preview retains
-the withdrawn Safe repetition and recovery descriptions even though the intent
-requirement is removed. Resolve this workflow limitation before acceptance;
-do not publish those descriptions as part of the frontend contract. Historical
-acceptance snapshots and the implementation claim remain unchanged meanwhile.
+The delta uses an explicit `## REMOVED Feature set` section to retire the
+withdrawn Safe repetition and recovery group. The acceptance fold removes that
+root group before publishing the frontend contract, while preserving the
+historical acceptance snapshot and implementation claim.
 
 ## Service Interfaces
 

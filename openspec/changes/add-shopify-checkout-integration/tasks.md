@@ -72,14 +72,14 @@ These retired addresses are not completed tasks and are never reused.
 
 - [ ] 4.8 Add failing fixture and browser tests for fresh submission after
   resolution/reload, synchronous and rendered pending guards, fixed submitted
-  purchase, unchanged whole-line cleanup, inline verification and response loss;
+  purchase, unchanged whole-line cleanup, existing verification feedback and response loss;
   include delayed response after sign-out/member change and compatible domain
   result mapping without asserting backend replay emission:
   `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
   `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`,
   `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`.
-- [ ] 4.9 Complete current review/accepted-tender submission, inline
-  verification and frontend request gating; capture immutable request/member
+- [ ] 4.9 Complete current review/accepted-tender submission, existing
+  verification feedback and frontend request gating; capture immutable request/member
   scope and ignore stale UI effects; omit intent persistence and invoice reuse:
   `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02`,
   `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`,

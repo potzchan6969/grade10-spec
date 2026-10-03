@@ -34,6 +34,7 @@ Public guest checkout, an embedded card form and a separate checkout page.
 | Q16 | What happens to edits during payment? | The invoice fixes the purchase; edits during payment are ignored and existing cart cleanup is unchanged | Repricing the invoice or preserving added quantity through new backend logic |
 | Q17 | What is the delivery scope? | Frontend integration only. Logic absent from the existing backend is not added now | The previous backend intent/replay/recovery plan |
 | Q18 | What if no matching order is returned? | Keep the existing order list, loading, error/Retry and empty/Shop now states; do not invent an order or add purchase recovery | A new return-specific missing-order flow |
+| Q19 | Does verification add a shared drawer slot? | Reuse the existing drawer-host threshold message and account action; this integration adds no shared UI export or slot | A new inline drawer contract |
 
 ## Raised
 
@@ -47,3 +48,4 @@ Public guest checkout, an embedded card form and a separate checkout page.
 | `grade10-site/store/checkout` | Do edits made during payment change the purchase or cart-release policy? | Q16 |
 | `grade10-site/store/checkout` | Does this change add missing backend logic? | Q17 |
 | `grade10-site/store/checkout` | Which state appears if Your Orders has no matching purchase? | Q18 |
+| `grade10-site/store/checkout` | Does verification add a shared drawer slot? | Q19 |

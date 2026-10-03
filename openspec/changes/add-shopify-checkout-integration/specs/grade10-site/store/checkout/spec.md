@@ -11,7 +11,7 @@ order surface. The invoice fixes the purchase; backend behavior is unchanged.
 - Current basket and tender
   - Review: use the drawer's current line review and accepted tender
   - Estimate: leave final shipping and tax to Shopify
-  - Verification: use the existing inline account-verification gate
+  - Verification: use the existing account-verification feedback and action
 - Hosted Shopify handoff
   - Member checkout: use the existing authenticated creation procedure
   - Redirect: leave for the hosted URL returned by the backend
@@ -24,6 +24,10 @@ order surface. The invoice fixes the purchase; backend behavior is unchanged.
   - Order state: read existing pending and paid outcomes
   - Cart refresh: reflect existing paid-transition cleanup
   - Return: link from Shopify confirmation to Grade10 Your Orders
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
 
 ## MODIFIED Requirements
 
@@ -84,12 +88,14 @@ accepted tender through existing checkout creation.
 - **THEN** held price and availability are not presented as current
 - **AND** Pay is unavailable and the existing retry is offered
 
-#### Scenario: grade10-site-store-checkout-SC-37 - Verification replaces the checkout action
+#### Scenario: grade10-site-store-checkout-SC-37 - Existing verification feedback keeps the account gate
 **Serves:** grade10-site-store-checkout-US-01 - The collector verifies the account before payment
 
 - **GIVEN** the existing gross-goods gate requires account verification
-- **WHEN** the drawer presents the verification outcome
-- **THEN** the existing inline threshold message and account action replace Pay
+- **WHEN** checkout creation returns the verification outcome
+- **THEN** the existing threshold message and account action are shown
+- **AND** the checkout request ends without opening hosted payment
+- **AND** the account action opens the existing account verification route
 - **AND** reducing the estimate with promo or points does not bypass the gross-goods gate
 
 ## ADDED Requirements

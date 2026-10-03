@@ -523,21 +523,21 @@ Runs once per row of **Test data**.
 
 | <gross goods> | <accepted tender> | Expected checkout |
 | --- | --- | --- |
-| HKD 120,000.00, the verification limit | Accepted points reducing the estimate below HKD 120,000 | Inline verification gate |
-| HKD 120,000.01, one minor unit above the limit | Accepted points reducing the estimate below HKD 120,000 | Inline verification gate |
+| HKD 120,000.00, the verification limit | Accepted points reducing the estimate below HKD 120,000 | Existing verification feedback and account action |
+| HKD 120,000.01, one minor unit above the limit | Accepted points reducing the estimate below HKD 120,000 | Existing verification feedback and account action |
 
 **Steps:**
 
 1. Open the cart drawer.
 2. Wait for the current review.
-3. Read the inline verification message.
-4. Click the account verification link.
+3. Read the verification feedback.
+4. Activate the account verification action.
 
 **Expected Results:**
 
-* The verification message replaces the checkout action.
+* The verification message and account action are shown.
 * Gross goods trigger the gate despite the lower estimate.
-* The link opens account verification.
+* The account action opens account verification.
 * The frontend sends no checkout creation request.
 
 ### grade10-site-store-checkout-US1-TC15-1: Carrier requests without permission return no usable rate
@@ -907,7 +907,7 @@ Runs once per row of **Test data**.
 * No checkout action starts an empty purchase.
 * The frontend sends no checkout creation request.
 
-### grade10-site-store-checkout-US1-TC26-1: Checkout verification response keeps the gate in the drawer
+### grade10-site-store-checkout-US1-TC26-1: Checkout verification response shows existing account feedback
 
 **Classification:**
 
@@ -932,14 +932,14 @@ Runs once per row of **Test data**.
 
 1. Open the cart drawer.
 2. Click Proceed to Checkout in the drawer.
-3. Read the inline account-verification state.
-4. Click the account verification link.
+3. Read the account-verification feedback.
+4. Activate the account verification action.
 
 **Expected Results:**
 
-* The existing inline verification state replaces checkout.
+* The existing threshold message and account action are shown.
 * No hosted payment destination opens.
-* The account link opens verification.
+* The account action opens verification.
 
 ---
 
@@ -2103,6 +2103,7 @@ Runs once per row of **Test data**.
 - **Scope** - Q15–Q17 replace invoice reuse/recovery with fresh frontend creation and fixed invoices. Backend, permissions, settlement and carrier behavior are unchanged dependencies. No backend test, engineering task or execution claim is added.
 - **Raised** - QA1's absent matching purchase question lands in Q18. US3 TC11 folds the existing list/loading/error Retry/empty Shop now treatment. Purchase discovery, recovery and a new missing-order message are rejected under Q17–Q18. The answer is retained in Settled without scenario ids.
 - **Added** - QA2 adds frontend boundaries missing from the blind set: pending writes, failed tender retention, settling creation, contradictory/failed quotes, lost/undecodable responses, existing absent-purchase states and late responses after member change. All remain draft/manual. Existing US2 TC2 now explicitly checks availability and retry; this clarifies its existing failed-read run.
+- **Follow-up** - QA2 re-read the review findings against the shipped drawer checkout and acceptance fold. The feature-set removal directive retires the withdrawn recovery group, and Q19 records reuse of the existing verification feedback because the shared drawer has no verification slot. Anchors are unchanged; draft cases remain draft.
 
 ### Active Cases
 
@@ -2120,7 +2121,7 @@ Each row folds a blind case or an added frontend case into the accepted anchors.
 | `grade10-site-store-checkout-US1-TC23-1` | Folded: same basket can create another invoice | SC-33 |
 | `grade10-site-store-checkout-US1-TC24-1` | Folded: reload uses current creation | SC-33 |
 | `grade10-site-store-checkout-US1-TC25-1` | Folded: existing empty drawer prevents checkout | Current basket and tender; SC-01 ready-basket condition |
-| `grade10-site-store-checkout-US1-TC26-1` | Folded: returned verification gate | SC-37; existing verification outcome |
+| `grade10-site-store-checkout-US1-TC26-1` | Folded: existing verification feedback and account action | SC-37; existing verification outcome |
 | `grade10-site-store-checkout-US1-TC27-1` | Added: cart/tender writes block stale Pay | Review requirement; SC-01, SC-02 |
 | `grade10-site-store-checkout-US1-TC28-1` | Added: failed edit can retain ready accepted tender | Review requirement; SC-02 |
 | `grade10-site-store-checkout-US1-TC29-1` | Added: existing settling response navigation | Handoff Outcomes; SC-12 |
@@ -2210,13 +2211,13 @@ No case is credited to an executed test. Fixture walks are to be walked in the a
 | `grade10-site-store-checkout-US1-TC2-1` | Estimate and Shopify address-aware totals are to be walked in authorized staging |
 | `grade10-site-store-checkout-US1-TC5-2` | Current edited basket and ignored invoice are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC12-2` | Below-limit action is to be walked in the mounted fixture integration |
-| `grade10-site-store-checkout-US1-TC13-2` | Gross-limit verification and account link are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC13-2` | Gross-limit verification and account action are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC14-2` | Verified-limit action is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC22-1` | Pending control is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC23-1` | Fresh unchanged-basket creation is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC24-1` | Reload without intent reuse is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC25-1` | Empty drawer action is to be walked in the mounted fixture integration |
-| `grade10-site-store-checkout-US1-TC26-1` | Returned verification state is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC26-1` | Existing verification feedback and account action are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC27-1` | Pending write guards are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC28-1` | Failed edit with retained tender is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC29-1` | Settling navigation is to be walked in the mounted fixture integration |
