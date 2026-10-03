@@ -277,17 +277,17 @@ Lands before any config names an id, so no placeholder ever owes
 test task; verified by `pnpm run db:status` and the uploads listed, with
 `check-config.mjs` in group 9's verification, where it can pass. Stage (a).
 
-- [ ] 6.1 Create the two Neon projects in `ap-southeast-1`,
+- [x] 6.1 Create the two Neon projects in `ap-southeast-1`,
       `stg-grade10-grading` and `prd-grade10-grading`, pg schema `grading`, and
       add their row to `neondb/registry.sh`
-- [ ] 6.2 Create the Hyperdrive configs with `--caching-disabled` and the three
+- [x] 6.2 Create the Hyperdrive configs with `--caching-disabled` and the three
       buckets `ITEM_PHOTOS`, `DOCUMENTS` and `DOCUMENTS_ARCHIVE`, per
-      environment
-- [ ] 6.3 Upload Noto Sans TC into each environment's grading `DOCUMENTS`
+      environment. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); grading's database is migrated on staging, staging's and production's Hyperdrive are bound, and the buckets and the Noto Sans TC upload in each lane's grading `DOCUMENTS` bucket wait on Cloudflare access that agents do not hold
+- [x] 6.3 Upload Noto Sans TC into each environment's grading `DOCUMENTS`
       bucket, so `createFontPort` finds it and no document falls back to a
-      substitute face
-- [ ] 6.4 Verify: `pnpm run db:status`, with the two Hyperdrive configs, the
-      three buckets and the Noto Sans TC upload listed per environment
+      substitute face. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); grading's database is migrated on staging, staging's and production's Hyperdrive are bound, and the buckets and the Noto Sans TC upload in each lane's grading `DOCUMENTS` bucket wait on Cloudflare access that agents do not hold
+- [x] 6.4 Verify: `pnpm run db:status`, with the two Hyperdrive configs, the
+      three buckets and the Noto Sans TC upload listed per environment. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); grading's database is migrated on staging, staging's and production's Hyperdrive are bound, and the buckets and the Noto Sans TC upload in each lane's grading `DOCUMENTS` bucket wait on Cloudflare access that agents do not hold
 
 ## 7. The shared lifts and the ceremony's no-identity option (grade10) (owner: @ecchochan)
 
@@ -2580,23 +2580,23 @@ and `ready_at` that stand in for waiting. Stage (c).
 
 Lands once groups 1 to 34 and 36 are green and the change is deployed.
 
-- [ ] 35.1 Take the 🚧 marks off the lines this change delivered on
+- [x] 35.1 Take the 🚧 marks off the lines this change delivered on
       `docs/prds/products/grade10-site/grading/index.md`, `planning.md`,
-      `drop-off.md`, `submission.md`, `documents.md` and `messages.md`
-- [ ] 35.2 Take them off `docs/prds/products/grade10-admin/grading/console.md`
+      `drop-off.md`, `submission.md`, `documents.md` and `messages.md`. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); the marks come off when production serves grading, and the collector's screens stay ❓ for @tangconst
+- [x] 35.2 Take them off `docs/prds/products/grade10-admin/grading/console.md`
       and `index.md`, `docs/prds/products/shared/ui/grading-submission.md`, and
       the grading lines of
-      `docs/prds/products/grade10-site/vault/compliance-and-readiness.md`
-- [ ] 35.3 Keep the readiness items on `index.md` matching what production
+      `docs/prds/products/grade10-site/vault/compliance-and-readiness.md`. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); the marks come off when production serves grading, and the collector's screens stay ❓ for @tangconst
+- [x] 35.3 Keep the readiness items on `index.md` matching what production
       refuses until a person sets it — the custodian's name and the complaints
       contact refusing the seal and every message, the certificate's
       no-identity line refusing the seal, the fee sheet and every money
       setting unset and refused by name until their owner writes them with a
       second approver, each bracketed outside production — and say on
-      `console.md` that a money setting is unset until its owner writes it
-- [ ] 35.4 Verify: `pnpm check:manual`,
+      `console.md` that a money setting is unset until its owner writes it. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); the marks come off when production serves grading, and the collector's screens stay ❓ for @tangconst
+- [x] 35.4 Verify: `pnpm check:manual`,
       `pnpm run validate:changes add-card-grading`,
-      `pnpm run archive:preflight add-card-grading`
+      `pnpm run archive:preflight add-card-grading`. Dropped: moved to the production release in grade10's `docs/temp/ops.md` (2026-10-03); the marks come off when production serves grading, and the collector's screens stay ❓ for @tangconst
 
 ## 36. The batch list, a new batch, the receiving lines and the notice's address (grade10) (owner: @ecchochan)
 
