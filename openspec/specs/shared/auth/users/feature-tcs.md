@@ -613,7 +613,7 @@ Signed in as an operator who holds `user:ban` and `user:delete`. <a subject user
 
 **Pre-conditions:**
 
-* admin(holds `user:ban`, does not hold `admin`) is on <grade10 admin users url>.
+* operator(holds `user:ban`, does not hold `admin`) is on <grade10 admin users url>.
 * Exactly one account holds `admin`: <only admin user id>, unbanned.
 
 **Test data:**
