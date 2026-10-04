@@ -16,7 +16,9 @@ import { test } from "node:test";
 import {
   acceptanceReadiness,
   acceptChange,
+  contractOutputs,
   contractTargetDiffs,
+  contractTargets,
   mergeFeatureSet,
   mergeSuite,
   prepareAcceptance,
@@ -92,6 +94,127 @@ test("acceptance fingerprint is deterministic and binds the folded durable scope
     },
     { path: "openspec/specs/site/search/user-journeys.md", anchors: [] },
   ]);
+});
+
+test("contract outputs fold a removed feature group and claim the feature set", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Feature set
+
+- Current basket
+  - Review: live
+- Safe repetition and recovery
+  - Reuse: one invoice
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+
+#### Scenario: site-search-SC-01 - Results match
+
+- **WHEN** a reader searches
+- **THEN** matching items appear
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Search
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+
+## MODIFIED Requirements
+
+### Requirement: Search results
+
+The system SHALL return updated matching items.
+
+#### Scenario: site-search-SC-01 - Results match
+
+- **WHEN** a reader searches
+- **THEN** updated matching items appear
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.doesNotMatch(
+    folded,
+    /Safe repetition and recovery|Reuse: one invoice/,
+  );
+  assert.match(folded, /- Current basket/);
+  assert.match(folded, /updated matching items/);
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ),
+    {
+      path: "openspec/specs/site/search/spec.md",
+      anchors: ["Feature set", "Requirement: Search results"],
+    },
+  );
+});
+
+test("contract outputs reject a feature-group removal without a durable feature set", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Search
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+
+## MODIFIED Requirements
+
+### Requirement: Search results
+
+The system SHALL return updated matching items.
+`,
+  );
+
+  assert.throws(
+    () => contractOutputs(root, CHANGE, "2026-10-04"),
+    /cannot remove a Feature set group without a durable Feature set/,
+  );
 });
 
 // A page link resolves on the id the manual renders the heading with, so a

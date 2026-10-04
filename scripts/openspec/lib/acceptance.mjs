@@ -318,6 +318,10 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     rootSections(currentSpec).sections,
     "Feature set",
   );
+  if (!currentFeature && removedGroups.length > 0)
+    throw new Error(
+      `${capability}: cannot remove a Feature set group without a durable Feature set`,
+    );
   if (!currentFeature) {
     return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
   }
@@ -880,7 +884,10 @@ function foldOne(
   const deltaFeatureSet = delta.children.find(
     (section) => section.heading === "Feature set",
   );
-  if (deltaFeatureSet)
+  const deltaRemovedFeatureSet = delta.children.some(
+    (section) => section.heading === "REMOVED Feature set",
+  );
+  if (deltaFeatureSet || deltaRemovedFeatureSet)
     durable = mergeFeatureSet(durable, deltaText, capability, priorText);
   const requirements = new Map(requirementBlocks(durable));
   const priorRequirements =
@@ -1130,7 +1137,13 @@ export function contractTargets(root, changeId) {
     const anchors = new Set();
     if (delta?.children.some((section) => section.heading === "Purpose"))
       anchors.add("Purpose");
-    if (delta?.children.some((section) => section.heading === "Feature set"))
+    if (
+      delta?.children.some(
+        (section) =>
+          section.heading === "Feature set" ||
+          section.heading === "REMOVED Feature set",
+      )
+    )
       anchors.add("Feature set");
     for (const section of deltaSections(deltaText)) {
       const kind = deltaKindOf(section.heading);
