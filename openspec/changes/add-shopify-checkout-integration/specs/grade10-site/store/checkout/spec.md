@@ -8,26 +8,29 @@ order surface. The invoice fixes the purchase; backend behavior is unchanged.
 
 ## Feature set
 
-- Current basket and tender
+- Frontend basket and tender
   - Review: use the drawer's current line review and accepted tender
   - Estimate: leave final shipping and tax to Shopify
   - Verification: use the existing account-verification feedback and action
-- Hosted Shopify handoff
+- Frontend hosted Shopify handoff
   - Member checkout: use the existing authenticated creation procedure
   - Redirect: leave for the hosted URL returned by the backend
   - Refusal: show the existing named-line and failure outcomes
-- Payment attempts
+- Frontend payment attempts
   - Pending request: prevent another frontend submission while awaiting a response
   - Fresh submission: a later Pay uses creation again and ignores older invoices
   - Fixed purchase: later cart edits do not alter the invoice
-- Order settlement and return
+- Frontend order settlement and return
   - Order state: read existing pending and paid outcomes
   - Cart refresh: reflect existing paid-transition cleanup
   - Return: link from Shopify confirmation to Grade10 Your Orders
 
 ## REMOVED Feature set
 
+- Current basket and tender
+- Hosted Shopify handoff
 - Safe repetition and recovery
+- Order settlement and return
 
 ## MODIFIED Requirements
 
