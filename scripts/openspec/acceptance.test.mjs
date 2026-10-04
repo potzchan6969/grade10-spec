@@ -16,7 +16,9 @@ import { test } from "node:test";
 import {
   acceptanceReadiness,
   acceptChange,
+  contractOutputs,
   contractTargetDiffs,
+  contractTargets,
   mergeFeatureSet,
   mergeSuite,
   prepareAcceptance,
@@ -92,6 +94,221 @@ test("acceptance fingerprint is deterministic and binds the folded durable scope
     },
     { path: "openspec/specs/site/search/user-journeys.md", anchors: [] },
   ]);
+});
+
+test("contract outputs fold a removed feature group and claim the feature set", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Feature set
+
+- Current basket
+  - Review: live
+- Safe repetition and recovery
+  - Reuse: one invoice
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+
+#### Scenario: site-search-SC-01 - Results match
+
+- **WHEN** a reader searches
+- **THEN** matching items appear
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Search
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+
+## MODIFIED Requirements
+
+### Requirement: Search results
+
+The system SHALL return updated matching items.
+
+#### Scenario: site-search-SC-01 - Results match
+
+- **WHEN** a reader searches
+- **THEN** updated matching items appear
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.doesNotMatch(
+    folded,
+    /Safe repetition and recovery|Reuse: one invoice/,
+  );
+  assert.match(folded, /- Current basket/);
+  assert.match(folded, /updated matching items/);
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ),
+    {
+      path: "openspec/specs/site/search/spec.md",
+      anchors: ["Feature set", "Requirement: Search results"],
+    },
+  );
+});
+
+test("contract outputs reject a feature-group removal without a durable feature set", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Search
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+
+## MODIFIED Requirements
+
+### Requirement: Search results
+
+The system SHALL return updated matching items.
+`,
+  );
+
+  assert.throws(
+    () => contractOutputs(root, CHANGE, "2026-10-04"),
+    /cannot remove a Feature set group without a durable Feature set/,
+  );
+});
+
+test("checkout frontend fold removes superseded groups and keeps carrier rates", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Checkout
+
+## Purpose
+
+The member pays.
+
+## Feature set
+
+- Current basket and tender
+  - Live line review before Pay and again at the payment decision
+  - Accepted promo and points choices beside a subtotal estimate
+- Hosted Shopify handoff
+  - Signed-in storefront checkout through one Shopify draft-order invoice
+  - Local order and provider references bound before the buyer leaves
+- Safe repetition and recovery
+  - One open checkout intent for repeated Pay actions and lost responses
+- Order settlement and return
+  - Pending orders settle through webhook, reconcile and order reads
+  - Paid orders appear in Your Orders and release the member cart
+- Carrier rates
+  - Shopify asks a token-gated stateless carrier rule for served destinations
+
+## Requirements
+
+### Requirement: Checkout works
+
+The system SHALL let the member pay.
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Checkout
+
+## Feature set
+
+- Frontend basket and tender
+  - Review: use the drawer's current line review and accepted tender
+  - Estimate: leave final shipping and tax to Shopify
+- Frontend hosted Shopify handoff
+  - Member checkout: use the existing authenticated creation procedure
+  - Redirect: leave for the hosted URL returned by the backend
+- Frontend payment attempts
+  - Pending request: prevent another frontend submission while awaiting a response
+  - Fresh submission: a later Pay uses creation again and ignores older invoices
+- Frontend order settlement and return
+  - Order state: read existing pending and paid outcomes
+  - Cart refresh: reflect existing paid-transition cleanup
+
+## REMOVED Feature set
+
+- Current basket and tender
+- Hosted Shopify handoff
+- Safe repetition and recovery
+- Order settlement and return
+
+## MODIFIED Requirements
+
+### Requirement: Checkout works
+
+The system SHALL let the member pay through the frontend.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^- Frontend basket and tender$/m);
+  assert.match(folded, /^- Frontend hosted Shopify handoff$/m);
+  assert.match(folded, /^- Frontend payment attempts$/m);
+  assert.match(folded, /^- Frontend order settlement and return$/m);
+  assert.match(
+    folded,
+    /- Carrier rates\n {2}- Shopify asks a token-gated stateless carrier rule for served destinations/,
+  );
+  assert.doesNotMatch(
+    folded,
+    /^- (Current basket and tender|Hosted Shopify handoff|Safe repetition and recovery|Order settlement and return)$/m,
+  );
+  assert.doesNotMatch(
+    folded,
+    /Live line review before Pay and again at the payment decision|Local order and provider references bound before the buyer leaves|Pending orders settle through webhook, reconcile and order reads/,
+  );
 });
 
 // A page link resolves on the id the manual renders the heading with, so a
@@ -1610,5 +1827,55 @@ test("feature set fold reads only a colon followed by a space as a label", () =>
   assert.match(
     merged,
     /- Links\n {2}- See https:\/\/a\.example\n {2}- Create with `user:create`\n {2}- \*\*Opens:\*\* 10:00 daily\n {2}- See https:\/\/b\.example\n {2}- Create with `user:delete`\n/,
+  );
+});
+
+test("feature set fold removes an explicitly retired root group", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Current basket\n  - Review: live\n- Safe repetition and recovery\n  - Reuse: one invoice\n",
+    ),
+    `# Roles
+
+## Feature set
+
+- Current basket
+  - Review: live
+- Payment attempts
+  - Fresh: creation
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.match(merged, /- Current basket/);
+  assert.match(merged, /- Payment attempts/);
+  assert.doesNotMatch(
+    merged,
+    /Safe repetition and recovery|Reuse: one invoice/,
+  );
+});
+
+test("feature set fold permits a removal-only delta", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Current basket\n  - Review: live\n- Safe repetition and recovery\n  - Reuse: one invoice\n",
+    ),
+    `# Roles
+
+## REMOVED Feature set
+
+- Safe repetition and recovery
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.match(merged, /- Current basket/);
+  assert.doesNotMatch(
+    merged,
+    /Safe repetition and recovery|Reuse: one invoice/,
   );
 });

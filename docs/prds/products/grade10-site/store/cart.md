@@ -48,7 +48,7 @@ read against the cart as it stands and held nowhere.
 - 🚧 **Removed** — Remove puts the code back; a cart edit that makes it
   stop fitting takes it off with a notice
 - 🚧 **Wallet not answered** — the codes the store minted are still listed
-  and a typed code still applies; `/checkout` says the programme's rewards
+  and a typed code still applies; the drawer says the programme's rewards
   could not be read
 - 🚧 **Gift** — a code that gives an item adds it as a line at no charge;
   taking that line out puts the code back
@@ -93,7 +93,7 @@ The refusals are the coupon's own —
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
 
 :::detail{title="Code map" for="engineer"}
-- **The quote** — `checkout.basketQuote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The quote** - `quote.basket`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
 - **The held choice** — `cart.tender` and `cart.setTender`, `packages/grade10-store/backend/src/services/cart/tender.ts`
 - **The wallet read** — `quoteCouponsFor`, `packages/loyalty/backend/src/services/rewards/coupons.ts`
 - **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `cart` and `checkout` slices of `@grade10/store-frontend`
@@ -130,8 +130,8 @@ and tax before the invoice. A second code on one cart.
 | Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
-| One quote | Decided | The drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |
-| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and carried to `/checkout`. | Product |
+| One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
+| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |

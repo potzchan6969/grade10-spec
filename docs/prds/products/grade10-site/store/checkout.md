@@ -47,8 +47,8 @@ In Your Orders.
 
 ## Integration readiness
 
-🚧 **Checkout integration** - The live review, hosted handoff, safe recovery
-and settlement run through staging before production enablement.
+🚧 **Checkout integration** - The drawer uses the existing checkout backend
+for hosted handoff and order return; this change adds frontend integration only.
 
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
@@ -64,7 +64,12 @@ to navigate to.
   before any order is made
 - **The cart** — kept while the collector is at Shopify; cleared once the
   order is paid
-- **A second press** — returns the same checkout, never a second order
+- **Another Pay** - A new submission uses the existing creation flow; earlier
+  invoices are ignored and may remain payable
+
+- **The invoice** - Fixes the purchase; later cart edits do not change it
+- **Cart cleanup** - Existing payment settlement removes whole matching lines
+  and clears tender choices; this integration adds no cart-edit reconciliation
 
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
@@ -79,6 +84,6 @@ to navigate to.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Checkout-open read | Decided | The cart drawer's own continuous live quote, kept current while the drawer is open, stands in for a separate checkout-open read; no second client-side re-read is added before Pay. | Engineering |
-| Verification gate | Decided | Shown inline in the cart drawer — the same threshold-and-account-link message the former checkout page showed, replacing the checkout action rather than sitting disabled beside it. The identity check itself still runs only on the account page. | Product |
+| Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
 :::

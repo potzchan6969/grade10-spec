@@ -14,7 +14,7 @@ None.
 
 ### grade10-site-store-checkout-US-02: Collector repairs a changed cart line
 
-**As a** collector whose cart changed while checkout was opening,
+**As a** collector whose cart changed while the cart drawer was open,
 **I want** the changed line named before I pay,
 **so that** I can fix the basket instead of paying for stale goods.
 

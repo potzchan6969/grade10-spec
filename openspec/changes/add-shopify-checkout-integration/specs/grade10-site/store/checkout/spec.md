@@ -2,329 +2,285 @@
 
 ## Purpose
 
-An authenticated collector's Store checkout is a live decision before a
-Shopify-hosted payment. It carries a current basket and accepted tender into
-one hosted checkout while Grade10 retains the order of record and repairs its
-payment lifecycle.
+The signed-in collector sends the drawer's current basket and accepted tender
+to the existing Shopify hosted checkout, then returns to the existing Grade10
+order surface. The invoice fixes the purchase; backend behavior is unchanged.
 
 ## Feature set
 
-- Current basket and tender
-  - Live line review before Pay and again at the payment decision
-  - Accepted promo and points choices beside a subtotal estimate
-  - Shipping and tax left to Shopify's address-aware checkout
-- Hosted Shopify handoff
-  - Signed-in storefront checkout through one Shopify draft-order invoice
-  - Local order and provider references bound before the buyer leaves
-  - Provider refusal kept distinct from a paid order
-- Safe repetition and recovery
-  - One open checkout intent for repeated Pay actions and lost responses
-  - Provider and store recovery without a second payable invoice
-  - Changed lines named before a stale basket can be paid
-- Order settlement and return
-  - Pending orders settle through webhook, reconcile and order reads
-  - Paid orders appear in Your Orders and release the member cart
-  - Shopify confirmation returns the collector to the Grade10 order
-- Carrier rates
-  - Shopify asks a token-gated stateless carrier rule for served destinations
-  - The callback and store preview use the same configured rate
+- Frontend basket and tender
+  - Review: use the drawer's current line review and accepted tender
+  - Estimate: leave final shipping and tax to Shopify
+  - Verification: use the existing account-verification feedback and action
+- Frontend hosted Shopify handoff
+  - Member checkout: use the existing authenticated creation procedure
+  - Redirect: leave for the hosted URL returned by the backend
+  - Refusal: show the existing named-line and failure outcomes
+- Frontend payment attempts
+  - Pending request: prevent another frontend submission while awaiting a response
+  - Fresh submission: a later Pay uses creation again and ignores older invoices
+  - Fixed purchase: later cart edits do not alter the invoice
+- Frontend order settlement and return
+  - Order state: read existing pending and paid outcomes
+  - Cart refresh: reflect existing paid-transition cleanup
+  - Return: link from Shopify confirmation to Grade10 Your Orders
 
-## ADDED Requirements
+## REMOVED Feature set
+
+- Current basket and tender
+- Hosted Shopify handoff
+- Safe repetition and recovery
+- Order settlement and return
+
+## MODIFIED Requirements
 
 ### Requirement: Checkout reviews the current member basket before payment
 
-Checkout SHALL make a current decision from the member's cart at both checkout
-open and the Pay action. A result from the cart drawer SHALL never stand in for
-the Pay read.
+Checkout SHALL use the drawer's continuous current line review and accepted
+tender quote. The frontend SHALL keep Pay unavailable while review, cart or
+tender writes, or its checkout request are pending, or while the current
+review or quote is failed or contradictory. A failed tender edit MAY retain
+the previous accepted choice and allow Pay once its current quote is ready.
+The existing server validation at Pay remains unchanged.
 
-**Review** - The checkout SHALL read every line from the live shop, name a line
-whose price, availability or quantity changed, and keep Pay unavailable while
-the read is pending, failed or contradictory.
+**Review** - Current titles, quantities, prices and availability SHALL come
+from the existing review. A changed line SHALL be named so the collector can
+repair the basket. Held values SHALL not appear as verified current facts
+after a failed read. No separate checkout page or extra frontend read before
+Pay SHALL be required.
 
-**Tender** - The checkout SHALL show the accepted promo or points choice beside
-the reviewed subtotal. It SHALL state that shipping and tax are calculated by
-Shopify after the buyer supplies an address.
+**Tender** - The drawer SHALL show the accepted promo and points choice with
+the estimated subtotal in the store currency. Shipping and tax SHALL remain
+Shopify's address-aware calculation. Pay SHALL send the reviewed lines and
+accepted tender through existing checkout creation.
 
-**No stale handoff** - A failed or contradictory read SHALL create no Grade10
-order and no Shopify checkout. The collector SHALL be able to retry or fix the
-named line.
-
-<!-- trace:scenario id=g10.store-checkout.SC-a01 rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-a01 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-01 - A member sees a current basket before Pay
-**Serves:** grade10-site-store-checkout-US-01 - The collector reviews the basket before starting hosted payment
+**Serves:** grade10-site-store-checkout-US-01 - The collector reviews the basket before hosted payment
 
-- **GIVEN** a signed-in collector has one member-cart line that the shop still sells
-- **WHEN** the collector opens checkout and waits for the live read
-- **THEN** the line shows the shop's current title, quantity, price and availability
-- **AND** Pay is available only after the read is ready
+- **GIVEN** a signed-in collector has a member-cart line
+- **WHEN** the drawer's live review becomes ready
+- **THEN** the current title, quantity, price and availability are shown
+- **AND** Pay becomes available when review and tender are ready
 
-<!-- trace:scenario id=g10.store-checkout.SC-b02 rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-b02 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-02 - A tender choice is shown as an estimate
-**Serves:** grade10-site-store-checkout-US-01 - The collector checks the accepted tender before leaving for Shopify
+**Serves:** grade10-site-store-checkout-US-01 - The collector checks accepted tender before Shopify
 
-- **GIVEN** a signed-in collector has chosen an accepted promo or points amount
-- **WHEN** checkout quotes the reviewed basket
-- **THEN** the subtotal and accepted tender choice are shown in the store's currency
-- **AND** shipping and tax are described as calculated at Shopify checkout, not as part of the store's final charge
+- **GIVEN** the collector has an accepted promo and points choice
+- **WHEN** the drawer displays the current quote
+- **THEN** the accepted choices and estimated subtotal appear in the store currency
+- **AND** shipping and tax are described as calculated at Shopify checkout
+- **AND** Pay sends those accepted choices with the reviewed lines
 
-<!-- trace:scenario id=g10.store-checkout.SC-c03 rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-c03 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-03 - A moved line blocks a stale payment
-**Serves:** grade10-site-store-checkout-US-02 - The collector repairs a changed line before payment
+**Serves:** grade10-site-store-checkout-US-02 - The collector repairs a changed line
 
-- **GIVEN** a collector's line is sold out, repriced or reduced while the checkout read is running
-- **WHEN** the live read answers
-- **THEN** the changed line is named with the shop's current answer
-- **AND** Pay is unavailable
-- **AND** no Grade10 order or Shopify checkout is created by that read
+- **GIVEN** a cart line becomes sold out, repriced or reduced
+- **WHEN** the existing review or checkout response names the changed line
+- **THEN** the drawer shows the current answer and identifies the line
+- **AND** a contradictory review prevents Pay until the basket is ready
 
-<!-- trace:scenario id=g10.store-checkout.SC-d04 rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-d04 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-04 - A failed read keeps held facts unchecked
-**Serves:** grade10-site-store-checkout-US-02 - The collector retries a checkout whose live read failed
+**Serves:** grade10-site-store-checkout-US-02 - The collector retries a failed review
 
-- **GIVEN** a collector is on checkout and the live shop read fails
-- **WHEN** the checkout summary renders
-- **THEN** the last held price and availability are not presented as current
-- **AND** Pay is unavailable
-- **AND** a retry is offered without creating an order
+- **GIVEN** the current review fails
+- **WHEN** the drawer renders
+- **THEN** held price and availability are not presented as current
+- **AND** Pay is unavailable and the existing retry is offered
+
+#### Scenario: grade10-site-store-checkout-SC-37 - Existing verification feedback keeps the account gate
+**Serves:** grade10-site-store-checkout-US-01 - The collector verifies the account before payment
+
+- **GIVEN** the existing gross-goods gate requires account verification
+- **WHEN** checkout creation returns the verification outcome
+- **THEN** the existing threshold message and account action are shown
+- **AND** the checkout request ends without opening hosted payment
+- **AND** the account action opens the existing account verification route
+- **AND** reducing the estimate with promo or points does not bypass the gross-goods gate
+
+## ADDED Requirements
+
+### Requirement: Frontend hands the current basket to existing Shopify checkout
+
+The public storefront frontend SHALL require a signed-in member and use the
+existing authenticated creation flow. Each new Pay submission SHALL invoke
+creation with the current reviewed basket and accepted tender. It MAY create
+another invoice; earlier invoices SHALL be ignored by this integration.
+
+**Handoff** - The frontend SHALL open the hosted URL returned by the existing
+backend. Shopify owns address, shipping, tax and payment. The frontend SHALL
+not introduce an embedded payment form, an intent key, invoice replay or old
+invoice cancellation.
+
+**Request** - The frontend SHALL prevent another submission while awaiting
+the current response. After it resolves, a later Pay is a fresh creation
+request. The invoice fixes the purchased lines and tender; subsequent cart
+edits SHALL not alter that purchase.
+
+**Outcomes** - The frontend SHALL present the existing named-line refusal,
+verification, settling and failure responses. A transport failure SHALL not
+be presented as proof that no invoice exists. Backend and operator permissions
+remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
+
+<!-- trace:scenario id=g10.store-checkout.SC-e05 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-05 - A member receives one hosted invoice
+**Serves:** grade10-site-store-checkout-US-01 - The collector leaves for the returned Shopify invoice
+
+- **GIVEN** a signed-in member has a ready reviewed basket
+- **WHEN** Pay receives a hosted URL from existing creation
+- **THEN** the frontend opens that URL
+- **AND** it shows no embedded payment form and keeps the member cart
+
+<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer cannot start storefront checkout
+**Serves:** grade10-site-store-checkout-US-04 - The frontend asks the collector to sign in
+
+- **GIVEN** the public storefront has no signed-in session
+- **WHEN** the collector tries to start checkout
+- **THEN** the existing sign-in action is shown
+- **AND** this frontend sends no creation request or typed-email fallback
+
+<!-- trace:scenario id=g10.store-checkout.SC-g07 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-07 - Shopify names a line refused at payment
+**Serves:** grade10-site-store-checkout-US-02 - The collector repairs a refused line
+
+- **GIVEN** existing checkout returns a named-line refusal
+- **WHEN** the frontend handles it
+- **THEN** the line is identified and the basket review is refreshed
+- **AND** no paid outcome is invented
+- **AND** a fresh submission is available after the basket is ready
+
+#### Scenario: grade10-site-store-checkout-SC-33 - A later Pay creates a fresh invoice
+**Serves:** grade10-site-store-checkout-US-01 - The collector starts another payment attempt
+
+- **GIVEN** an earlier Pay resolved and its invoice remains unpaid
+- **WHEN** the collector later presses Pay with a ready basket, including after reload
+- **THEN** the frontend calls existing creation again with the current basket and tender
+- **AND** it neither reuses nor cancels the earlier invoice
+- **AND** it can open a different returned invoice without promising deduplication
+
+#### Scenario: grade10-site-store-checkout-SC-34 - A pending request blocks another frontend submission
+**Serves:** grade10-site-store-checkout-US-01 - The collector waits for the current response
+
+- **GIVEN** Pay has submitted and the response is delayed
+- **WHEN** the collector activates the checkout control again
+- **THEN** the control remains unavailable and no second frontend request is sent
+- **AND** the request's resolution restores the appropriate ready or outcome state
+
+#### Scenario: grade10-site-store-checkout-SC-35 - Later edits leave the invoice purchase fixed
+**Serves:** grade10-site-store-checkout-US-01 - The collector pays the invoice's purchase
+
+- **GIVEN** creation accepted a reviewed basket and tender
+- **WHEN** the collector edits the cart during hosted payment
+- **THEN** this frontend does not update, reprice or reconcile the existing invoice
+- **AND** a later Pay submits the then-current cart as a new purchase
+
+#### Scenario: grade10-site-store-checkout-SC-38 - A lost response offers the existing failure treatment
+**Serves:** grade10-site-store-checkout-US-02 - The collector can act after a request failure
+
+- **GIVEN** the creation response is lost or cannot be decoded
+- **WHEN** the request fails in the frontend
+- **THEN** the existing failure feedback is shown and pending submission ends
+- **AND** a ready-basket retry invokes creation again
+- **AND** the frontend does not claim that the earlier invoice was recovered or never created
+
+### Requirement: Frontend reflects existing payment outcomes
+
+The frontend SHALL read existing order outcomes without changing webhook,
+reconciliation, order-read or settlement behavior. It SHALL display a pending
+order as settling, poll while the existing status can move, and display paid
+facts supplied by the existing backend after payment.
+
+**Cart** - The frontend SHALL keep cart data at redirect and merely returning
+from Shopify. After observing a paid web order it SHALL refresh existing cart
+and tender reads. Existing paid cleanup removes whole matching variant lines
+and clears tender; changes made during payment receive no new reconciliation.
+
+**Return** - The existing Shopify Thank You and Order status extensions SHALL
+offer a static Grade10 Your Orders link. The existing order surface SHALL show
+the matching purchase when returned by the backend. No purchase-specific link,
+native Continue shopping action or Shopify account path is required.
+
+<!-- trace:scenario id=g10.store-checkout.SC-l12 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-12 - A pending order remains visible while payment settles
+**Serves:** grade10-site-store-checkout-US-03 - The collector finds a returned pending purchase
+
+- **GIVEN** the existing order read returns a new pending purchase
+- **WHEN** the collector opens Your Orders
+- **THEN** the purchase appears as settling
+- **AND** existing polling continues while the status can move
+- **AND** merely returning does not clear the cart
+
+<!-- trace:scenario id=g10.store-checkout.SC-m13 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-13 - A paid event settles once and releases the cart
+**Serves:** grade10-site-store-checkout-US-03 - The collector sees the paid purchase and current cart
+
+- **GIVEN** the existing order read reports a paid web order
+- **WHEN** the frontend displays it
+- **THEN** it shows the backend's paid total and refreshes cart and tender reads
+- **AND** it reflects existing cleanup rather than deleting local lines itself
+
+<!-- trace:scenario id=g10.store-checkout.SC-o15 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-15 - Confirmation returns to the Grade10 order
+**Serves:** grade10-site-store-checkout-US-03 - The collector returns from Shopify confirmation
+
+- **GIVEN** the collector is on Shopify Thank You or Order status
+- **WHEN** they activate the Grade10 Your Orders link
+- **THEN** the static Grade10 orders surface opens
+- **AND** it shows the matching purchase when answered by the existing backend
+- **AND** the link does not depend on Continue shopping or a Shopify account page
+
+#### Scenario: grade10-site-store-checkout-SC-36 - Cart refresh reflects unchanged whole-line cleanup
+**Serves:** grade10-site-store-checkout-US-03 - The collector sees existing cleanup after payment
+
+- **GIVEN** the collector increased a matching variant's quantity and changed tender during hosted payment
+- **WHEN** existing paid cleanup removes that whole matching line and clears tender
+- **THEN** the frontend's refreshed cart shows that result
+- **AND** it does not restore the added quantity or tender through new reconciliation
+
+## REMOVED Requirements
 
 ### Requirement: A signed-in member receives one Shopify hosted checkout
 
-The public storefront SHALL require a fresh signed-in member session before it
-creates an order. The server SHALL own all money facts and SHALL hand Shopify a
-reviewed basket without relying on client-supplied amounts.
+**Reason** - The earlier requirement included backend transaction, provider
+binding and backend permission changes beyond the owner's frontend-only scope.
+The new frontend handoff requirement preserves useful collector scenarios and
+their identifiers without requiring backend implementation.
 
-**Storefront boundary** - A signed-out collector SHALL be asked to sign in and
-no public storefront order or Shopify checkout SHALL be created. Typed-email
-checkout MAY exist only on the development and staging operator test surface.
-
-**Order write** - The server SHALL insert the Grade10 order and its lines in
-one transaction, call Shopify outside that transaction, and record the
-provider references before it returns a hosted URL.
-
-**Shopify handoff** - A new checkout SHALL be a Shopify Draft Order carrying
-the reviewed variant ids, quantities, paired member customer where available,
-and accepted automatic discounts. Shopify's invoice page SHALL own address,
-shipping, tax and payment. The storefront SHALL not receive or store an
-embedded payment secret.
-
-<!-- trace:scenario id=g10.store-checkout.SC-e05 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-05 - A member receives one hosted invoice
-**Serves:** grade10-site-store-checkout-US-01 - The collector leaves Grade10 only after one local order is bound to Shopify
-
-- **GIVEN** a signed-in member has a ready reviewed basket
-- **WHEN** the member presses Pay
-- **THEN** one Grade10 pending order and its lines are written
-- **AND** one Shopify hosted invoice opens with the reviewed variants and quantities
-- **AND** the member is not shown an embedded payment form
-
-<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer cannot start storefront checkout
-**Serves:** grade10-site-store-checkout-US-04 - The public storefront requires a proved member identity
-
-- **GIVEN** a collector has no signed-in session on the public checkout
-- **WHEN** they try to continue to payment
-- **THEN** the collector is asked to sign in
-- **AND** no Grade10 order or Shopify checkout is created
-- **AND** a typed email is not treated as proof for the public storefront
-
-<!-- trace:scenario id=g10.store-checkout.SC-g07 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-07 - Shopify names a line refused at payment
-**Serves:** grade10-site-store-checkout-US-02 - The collector gets a named provider refusal instead of a paid stale line
-
-- **GIVEN** a Shopify invoice was created while a line was sellable
-- **WHEN** Shopify refuses that line because it sold out before payment
-- **THEN** Shopify names the unavailable line
-- **AND** the Grade10 order is not marked paid
-- **AND** the collector can return to the same basket and retry after fixing it
-
-<!-- trace:scenario id=g10.store-checkout.SC-h08 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-08 - The provider reference is bound before handoff
-**Serves:** Hosted Shopify handoff - the recovery path can identify the invoice before the buyer leaves
-
-- **GIVEN** Shopify creates a Draft Order for a Grade10 pending order
-- **WHEN** the server prepares the hosted invoice response
-- **THEN** the local order stores the provider checkout reference before the URL is returned
-- **AND** a database transaction never remains open while Shopify is called
-
-### Requirement: A checkout intent is safe to repeat
-
-The storefront SHALL identify one checkout intent across the Pay action and a
-same-session reload. The server SHALL keep one web order row for the intent and
-its canonical reviewed basket and tender fingerprint across the order
-lifecycle, with one open checkout until the order is terminal.
-
-**Reuse** - A repeated request for the same open intent SHALL return its existing
-order and hosted invoice, or its settling state, without creating another
-order or provider invoice.
-
-**Changed intent** - Editing the basket or tender SHALL invalidate the old
-fingerprint and create a new intent. The old open checkout SHALL be retired or
-left for the existing recovery ladder according to the provider's answer.
-
-**Terminal replay** - A request that repeats a settled or closed intent SHALL
-return the existing order's terminal outcome. It SHALL never create another
-Grade10 order or Shopify invoice, and a changed request SHALL use a new intent.
-
-**Response loss** - A lost provider response SHALL leave the local order
-recoverable. A retry SHALL use recorded references or a provider read and
-SHALL never re-mint a second invoice for the same intent. A request marked as
-provider-dispatched SHALL remain recovery-only even when no provider reference
-has been recorded.
-
-<!-- trace:scenario id=g10.store-checkout.SC-i09 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-09 - A repeated Pay uses one checkout
-**Serves:** grade10-site-store-checkout-US-01 - The collector's repeated Pay action does not duplicate a purchase
-
-- **GIVEN** a member's first Pay request for one unchanged intent is delayed
-- **WHEN** the member submits Pay again
-- **THEN** both requests identify one Grade10 order
-- **AND** one Shopify invoice is payable
-- **AND** the second request returns the existing invoice or its settling state
-
-<!-- trace:scenario id=g10.store-checkout.SC-j10 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-10 - A lost response does not mint another invoice
-**Serves:** grade10-site-store-checkout-US-01 - The collector can retry a provider response loss safely
-
-- **GIVEN** Shopify created an invoice but the response was lost after the Grade10 order was written
-- **WHEN** the member retries the same intent
-- **THEN** the existing order is recovered through its recorded reference or a provider read
-- **AND** the retry returns the existing invoice or settling state
-- **AND** no second Shopify invoice is created
-
-<!-- trace:scenario id=g10.store-checkout.SC-s19 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-19 - A terminal intent is replayed without a new order
-**Serves:** grade10-site-store-checkout-US-01 - The collector's completed or closed intent cannot be paid twice
-
-- **GIVEN** a member's intent already has a paid, refunded, failed, canceled or expired Grade10 order
-- **WHEN** the member retries Pay with the same intent and unchanged fingerprint
-- **THEN** the store returns the existing order's terminal outcome
-- **AND** it creates no second Grade10 order or Shopify invoice
-- **AND** a changed basket must use a new intent before another Pay
-
-<!-- trace:scenario id=g10.store-checkout.SC-k11 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-11 - A changed tender starts a new intent
-**Serves:** grade10-site-store-checkout-US-01 - The collector can deliberately change the purchase after an earlier intent
-
-- **GIVEN** a member has an open checkout intent
-- **WHEN** the member changes the basket or tender choice and presses Pay
-- **THEN** the changed request uses a new intent fingerprint
-- **AND** the old open checkout is not returned as the changed purchase
-
-<!-- trace:scenario id=g10.store-checkout.SC-t20 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-20 - A crash before dispatch can retry safely
-**Serves:** grade10-site-store-checkout-US-01 - The collector can recover when the worker stops before Shopify is called
-
-- **GIVEN** the local order is claimed but its provider-dispatch state is still `ready`
-- **WHEN** the worker stops before sending a Shopify request and reconciliation claims the order again
-- **THEN** the next worker may dispatch the same intent once
-- **AND** it does not create a second order or invoice
-
-<!-- trace:scenario id=g10.store-checkout.SC-u21 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-21 - An ambiguous dispatch requires manual recovery
-**Serves:** grade10-site-store-checkout-US-01 - The collector is protected when Shopify's result cannot be identified
-
-- **GIVEN** the provider-dispatch state is `dispatched` but no unique matching draft is found
-- **WHEN** the recovery deadline passes
-- **THEN** the order enters `manual_review` and the checkout returns a recovery-required result
-- **AND** no replacement Shopify invoice is created
-- **AND** the member cannot start a new purchase until an operator binds or cancels the provider draft
+**Migration** - Existing backend creation and permissions remain unchanged.
+The public frontend calls authenticated creation and consumes its answer.
+SC-08 is retired because provider persistence is not frontend delivery work.
 
 ### Requirement: Shopify payment settles one Grade10 order
 
-The store SHALL treat a Shopify hosted invoice as pending until Shopify reports
-payment. A verified webhook SHALL accelerate the same guarded order transition;
-the reconcile pass and the buyer's order read SHALL repair a missed event through
-that transition rather than create another order.
+**Reason** - The earlier requirement specified webhook, reconciliation and
+event validation implementation. This amendment specifies frontend consumption
+of existing order outcomes, cart refresh and confirmation return instead.
 
-**Settlement** - A paid invoice SHALL move its pending order to `paid` once and
-retain the provider's paid total, goods, shipping, tax and order identity when
-Shopify supplies them. Duplicate or cross-shop events SHALL not settle another
-order.
+**Migration** - Existing settlement and cleanup continue unchanged. Retained
+collector scenarios keep their identifiers under the frontend outcome
+requirement. Backend-only SC-14 and SC-16 are retired without altering existing
+backend behavior.
 
-**Visibility** - Your Orders SHALL show a newly placed pending order as
-settling, poll while it can move, and show the paid order and its paid total
-after settlement.
+### Requirement: A checkout intent is safe to repeat
 
-**Cart release** - The member cart SHALL remain while the collector is at
-Shopify and SHALL release the paid lines only after the order is `paid`.
+**Reason** - The owner narrowed delivery to frontend consumption of existing
+creation. Intent persistence, replay, duplicate-invoice prevention, provider
+response recovery and dispatch recovery are withdrawn.
 
-**Return** - A Shopify Thank You and Order status checkout UI extension SHALL
-offer a static link to Grade10 Your Orders, where the matching purchase is
-visible after the member returns. The extension SHALL not promise a
-purchase-specific deep link. The native Continue shopping button and Shopify
-account path SHALL not be the required return destination.
+**Migration** - Stop relying on intent reuse for checkout. Each later Pay calls
+existing creation; an older invoice may remain payable. No database or API
+migration is introduced and historical acceptance records remain intact.
+Scenarios SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 are retired with this
+requirement. Their identifiers are not reused.
 
-<!-- trace:scenario id=g10.store-checkout.SC-l12 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-12 - A pending order remains visible while payment settles
-**Serves:** grade10-site-store-checkout-US-03 - The collector can see that a returned purchase is still settling
-
-- **GIVEN** a member has returned from Shopify with a new pending order
-- **WHEN** they open Your Orders before payment settlement
-- **THEN** the order appears in the active orders section
-- **AND** pending is shown as a settling state, not an empty result or an error
-- **AND** the page polls while the order can still move
-
-<!-- trace:scenario id=g10.store-checkout.SC-m13 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-13 - A paid event settles once and releases the cart
-**Serves:** grade10-site-store-checkout-US-03 - The collector finds the paid order and an empty member cart
-
-- **GIVEN** a member has a pending Shopify invoice and its paid event arrives
-- **WHEN** the event is delivered again
-- **THEN** the Grade10 order moves to `paid` once
-- **AND** the provider's paid total is shown in the order
-- **AND** the member cart releases the paid lines only after the paid transition
-
-<!-- trace:scenario id=g10.store-checkout.SC-n14 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-14 - Reconcile repairs a missed paid event
-**Serves:** grade10-site-store-checkout-US-03 - The collector's paid order is repaired even when the webhook is missing
-
-- **GIVEN** a Shopify invoice was paid but its webhook did not arrive
-- **WHEN** the payment reconciliation pass runs
-- **THEN** it finds the existing provider checkout
-- **AND** the order moves to `paid` once without creating another invoice
-- **AND** the order retains the paid total and any shipping or tax facts Shopify provided
-
-<!-- trace:scenario id=g10.store-checkout.SC-o15 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-15 - Confirmation returns to the Grade10 order
-**Serves:** grade10-site-store-checkout-US-03 - The collector continues from Shopify to the purchase in Grade10
-
-- **GIVEN** a member has completed payment on a Shopify invoice
-- **WHEN** the member activates the Grade10 Your Orders link on the Shopify
-  confirmation page
-- **THEN** the Grade10 orders surface opens and shows the matching purchase
-- **AND** it does not require the native Continue shopping button or send the
-  member to a Shopify account page
-
-<!-- trace:scenario id=g10.store-checkout.SC-p16 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-16 - An invalid payment event does not settle an order
-**Serves:** Order settlement and return - the settlement guard rejects an event it cannot bind to this shop and order
-
-- **GIVEN** a payment event has an unknown provider reference, wrong shop or invalid signature
-- **WHEN** the store receives the event
-- **THEN** no Grade10 order moves to `paid`
-- **AND** the event is recorded for diagnosis without creating a replacement order
-
-### Requirement: Shopify uses the store's carrier rule
-
-The carrier callback SHALL be stateless and token-gated. For a destination and
-cart that the configured carrier rule serves, it SHALL return the same rate
-that the store preview shows. For an unsupported destination it SHALL return no
-rate. The callback SHALL not create an order or change the cart.
-
-<!-- trace:scenario id=g10.store-checkout.SC-q17 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-17 - A served destination receives the configured rate
-**Serves:** grade10-site-store-checkout-US-01 - The collector sees the same served shipping choice in the preview and hosted checkout
-
-- **GIVEN** a reviewed member basket and a destination covered by the configured carrier rule
-- **WHEN** the store preview and Shopify carrier callback calculate shipping
-- **THEN** both return the same configured rate and currency
-- **AND** the callback does not create an order or mutate the cart
-
-<!-- trace:scenario id=g10.store-checkout.SC-r18 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-18 - An unsupported destination receives no rate
-**Serves:** grade10-site-store-checkout-US-01 - The collector cannot select a carrier rate outside the served destination rule
-
-- **GIVEN** a reviewed member basket and a destination outside the configured carrier rule
-- **WHEN** Shopify calls the carrier callback
-- **THEN** the callback returns no carrier rate
-- **AND** it does not create an order or mutate the cart
+**Retired scenarios** - The removed requirements retire backend-only
+SC-08, SC-14 and SC-16 without
+changing their existing implementation. The previous draft's SC-22 through
+SC-32 are withdrawn with the backend intent/recovery plan; current review,
+verification and compatibility behavior is covered by the retained and new
+frontend scenarios. These identifiers are not reused. SC-17 and SC-18 and the
+durable carrier requirement are unchanged and are not delta work.
