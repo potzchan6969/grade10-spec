@@ -46,7 +46,7 @@ Consumes existing canonical clients and fixtures; depends on no new backend
 or Group 2 implementation. Tests land before their corresponding code and the
 test checkbox is ticked last.
 
-- [ ] 4.1 Add failing frontend fixture and mounted browser coverage for current
+- [x] 4.1 Add failing frontend fixture and mounted browser coverage for current
   review/tender, changed-line repair, hosted handoff, signed-out gating and
   pending/paid return: `grade10-site-store-checkout-SC-01`,
   `grade10-site-store-checkout-SC-02`, `grade10-site-store-checkout-SC-03`,
