@@ -1236,7 +1236,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Steps:**
 
-1. Send a create with <elevated name>, <elevated email> and <elevated role>.
+1. Send the users create call, as <grade10 admin api docs url> lists it, with <elevated name>, <elevated email> and <elevated role>.
 2. Search <grade10 admin users url> for <elevated email>.
 
 **Expected Results:**
@@ -1316,15 +1316,16 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 1. Click Create.
 2. Enter <silent name> and <silent email>, and select <silent role>.
-3. Submit the form, then click Confirm.
-4. Open the inbox for <silent email>.
-5. Search the loyalty Members page for <silent email>.
+3. Submit the form.
+4. Click Confirm.
+5. Open the inbox for <silent email>.
+6. Search the loyalty Members page for <silent email>.
 
 **Expected Results:**
 
-* Step 3 creates the account.
-* Step 4 holds no invite or sign-in mail from the create.
-* Step 5 finds no member and no opening points.
+* Step 4 creates the account.
+* Step 5 holds no invite or sign-in mail from the create.
+* Step 6 finds no member and no opening points.
 
 ### shared-auth-users-US5-TC7-1: Empty roles at create leave a user
 
@@ -1355,8 +1356,8 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Steps:**
 
-1. Send a create with <empty-roles name>, <empty-roles email> and an empty role list.
-2. Open <grade10 admin users url>?user=<the new user id>.
+1. Send the users create call, as <grade10 admin api docs url> lists it, with <empty-roles name>, <empty-roles email> and an empty role list.
+2. Search <grade10 admin users url> for <empty-roles email> and open the account.
 
 **Expected Results:**
 
@@ -1671,7 +1672,7 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 **Steps:**
 
-1. Send the cancel for that same request again.
+1. Send the erasure cancel call, as <grade10 admin api docs url> lists it, as <subject user id>.
 2. Read the request.
 3. Read <subject user id>'s standing.
 
