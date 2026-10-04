@@ -73,8 +73,8 @@ These retired addresses are not completed tasks and are never reused.
 - [x] 4.8 Add failing fixture and browser tests for fresh submission after
   resolution/reload, synchronous and rendered pending guards, fixed submitted
   purchase, unchanged whole-line cleanup, existing verification feedback and response loss;
-  include delayed response after sign-out/member change and compatible domain
-  result mapping without asserting backend replay emission:
+  include delayed response after sign-out/member change and current domain
+  result mapping without adding backend replay emission:
   `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
   `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`,
   `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`.

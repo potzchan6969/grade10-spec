@@ -7,10 +7,10 @@ PR #653 separates creation from canonical quote, coupon and order clients.
 the injected `StoreProcedureClient`. Customer order surfaces already poll open
 orders and refresh cart projections after observing a paid web order.
 
-The existing optional intent field and frontend result variants do not prove
-backend replay support. The current router accepts `intentId` but does not
-pass it to creation. This plan consumes existing behavior and adds no backend
-intent, provider or settlement guarantee.
+The existing checkout result union covers created, contradicted, rejected,
+failed and identity-required outcomes. A created result without a hosted URL
+means the order is settling. This plan consumes those existing outcomes and
+adds no backend intent, provider or settlement guarantee.
 
 ## Goals / Non-Goals
 
@@ -67,11 +67,9 @@ Sign-out uses the current sign-in action and cannot fall back to typed-email
 checkout. `createCheckoutWithEmail` remains `publicProcedure` on the backend;
 the unchanged operator surface retains its existing access and sandbox gates.
 
-The published union also contains settled, terminal, intent-conflict and
-recovery-required outcomes. Preserve exhaustive handling and safe existing
-order/support navigation if one is received. Fixture coverage can exercise
-that compatibility vocabulary without claiming the current backend emits it,
-or adding intent/recovery behavior to make it do so.
+Handle the existing checkout outcomes exhaustively. Do not add intent or
+recovery variants to make the frontend plan fit a backend contract that does
+not exist.
 
 ### Reflect Existing Paid Cleanup
 
@@ -111,7 +109,7 @@ Existing interfaces are consumed without modification.
 | --- | --- | --- |
 | Creation use case and repository | Reviewed product handle, variant id, quantity, optional seen unit price; accepted points/coupon choices; optional device id | Existing checkout outcome or transport/contract error |
 | Creation data service | Existing `CreateCheckoutPayload` through injected `StoreProcedureClient` | Decoded `checkoutResultSchema` in the Effect success channel; `ApiError` in failure channel |
-| Domain resolution | Existing `CheckoutOutcome` | Redirect, settling, verification, cart amendment, retry/support, or existing compatibility outcome |
+| Domain resolution | Existing `CheckoutOutcome` | Redirect, settling, verification, cart amendment, retry or support |
 | Order reads | Existing order id or list limit | Existing order/list response; polling follows existing open statuses |
 
 Capture immutable mutation variables and originating member scope before
