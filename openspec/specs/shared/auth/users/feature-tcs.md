@@ -2,7 +2,7 @@
 
 **Status:** reopened
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-09-29
-**Drafts styled:** 2026-09-29, tcs-rules r3.0
+**Drafts styled:** 2026-10-04, tcs-rules r4
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 
@@ -1143,29 +1143,33 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account holds <elevated email>.
+
+* admin(holds `user:create` and `user:list`, not `user:set-role`) is signed in to the console.
+* No account holds <elevated email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <elevated email> | almost.admin@example.com |
-| <roles> | `admin` |
+| `<elevated name>` | Almost Admin |
+| `<elevated email>` | almost.admin@example.com, any address no account holds |
+| `<elevated role>` | `admin`, any role other than `user` |
 
 **Steps:**
 
-1. Try to create an Auth account with a name, <elevated email>, and <roles>.
+1. Send a create with <elevated name>, <elevated email> and <elevated role>.
+2. Search <grade10 admin users url> for <elevated email>.
 
 **Expected Results:**
 
-* The system refuses the create.
-* No Auth account holds <elevated email>.
+* Step 1 is refused.
+* Step 2 finds no account.
 
 ### shared-auth-users-US5-TC5-1: Duplicate email is refused
 
@@ -1183,23 +1187,29 @@ Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:create` and `user:set-role`). Auth already holds <existing email> on <existing account>.
+
+* admin(holds `user:create`, `user:set-role` and `user:list`) is on <grade10 admin users url>.
+* <existing account> holds <existing email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <existing email> | taken@example.com |
+| `<existing account>` | An account that has signed in at least once |
+| `<existing email>` | That account's email |
+| `<new name>` | Second Taker, any name other than the existing account's |
 
 **Steps:**
 
-1. Try to create an Auth account with a new name, <existing email>, and role `user`.
-2. Count Auth accounts whose email is <existing email>.
+1. Click Create.
+2. Enter <new name> and <existing email>, and select `user`.
+3. Submit the form.
+4. Search the directory for <existing email>.
 
 **Expected Results:**
 
-* Step 1 is refused.
-* Step 2 still counts exactly one account for <existing email>.
+* Step 3 is refused.
+* Step 4 lists exactly one account for <existing email>.
 
 ### shared-auth-users-US5-TC6-1: Create does not enroll loyalty or send invite mail
 
@@ -1217,27 +1227,31 @@ Signed in as operator(holds `user:create` and `user:set-role`). Auth already hol
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:create` and `user:set-role`). No Auth account holds <silent email>. No outbound mail is queued for <silent email>.
+
+* admin(holds `user:create`, `user:set-role` and `loyalty:read`) is on <grade10 admin users url>.
+* No account holds <silent email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <silent name> | Silent Create |
-| <silent email> | silent.create@example.com |
-| <roles> | `staff` |
+| `<silent name>` | Silent Create |
+| `<silent email>` | An inbox the tester reads, held by no account |
+| `<silent role>` | `staff`, any role from the closed set |
 
 **Steps:**
 
-1. Create an Auth account with <silent name>, <silent email>, and <roles>.
-2. Check loyalty enrollment for that account.
-3. Check outbound mail for <silent email>.
+1. Click Create.
+2. Enter <silent name> and <silent email>, and select <silent role>.
+3. Submit the form, then click Confirm.
+4. Open the inbox for <silent email>.
+5. Search the loyalty Members page for <silent email>.
 
 **Expected Results:**
 
-* Step 1 succeeds.
-* Step 2 shows no loyalty enroll and no opening points from create.
-* Step 3 shows no invite or magic-link mail from create.
+* Step 3 creates the account.
+* Step 4 holds no invite or sign-in mail from the create.
+* Step 5 finds no member and no opening points.
 
 ### shared-auth-users-US5-TC7-1: Empty roles at create leave a user
 
@@ -1249,30 +1263,32 @@ Signed in as operator(holds `user:create` and `user:set-role`). No Auth account 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:create`). No Auth account holds <empty-roles email>.
+
+* admin(holds `user:create` and `user:list`) is signed in to the console.
+* No account holds <empty-roles email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <empty-roles name> | No Role Pick |
-| <empty-roles email> | no.role@example.com |
+| `<empty-roles name>` | No Role Pick |
+| `<empty-roles email>` | no.role@example.com, any address no account holds |
 
 **Steps:**
 
-1. Create an Auth account with <empty-roles name>, <empty-roles email>, and no role selected.
-2. Open the account named by <empty-roles email>.
+1. Send a create with <empty-roles name>, <empty-roles email> and an empty role list.
+2. Open <grade10 admin users url>?user=<the new user id>.
 
 **Expected Results:**
 
-* Step 1 succeeds.
-* Step 2 opens that account with roles `user` only.
+* Step 1 creates the account.
+* Step 2 shows roles `user` only.
 
 ---
 
@@ -1474,16 +1490,26 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 * **Trace:** shared-auth-users-US-06
 
 **Pre-conditions:**
-Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed their own erasure request seven days ago on the brand's own zone, so today is the day an erasure may run.
+
+* customer is signed in as <subject user id> and on <grade10 your data url>.
+* <subject user id> filed their own erasure request seven days ago, on the brand's zone, so today an erasure may run.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<subject user id>` | An account holding `user` only, with that request open |
 
 **Steps:**
 
-1. Try to cancel the request.
+1. Read the erasure request on the page.
+2. Look for a cancel control.
 
 **Expected Results:**
 
-* The page reads the request as filed, with the window passed, and offers no cancel.
-* The request stays open for each product's own erasure to run.
+* Step 1 reads the request as filed, the window passed.
+* Step 2 finds no cancel offered.
+* The request stays open.
 
 ### shared-auth-users-US6-TC8-1: An operator's filing bans and takes over the request
 
@@ -1556,19 +1582,30 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** `Erasure requests`
+* **Trace:** shared-auth-users-US-06
 
 **Pre-conditions:**
-<a subject user id> filed their own erasure request and cancelled it inside the window.
+
+* customer is signed in as <subject user id>.
+* <subject user id> filed their own erasure request and cancelled it inside the window, on <first cancel day>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<subject user id>` | An unbanned account holding `user` only |
+| `<first cancel day>` | The day of the first cancel |
 
 **Steps:**
 
-1. Send the cancel for that same request a second time.
+1. Send the cancel for that same request again.
+2. Read the request.
+3. Read <subject user id>'s standing.
 
 **Expected Results:**
 
-* The request stays cancelled, closed on the day it was first cancelled.
-* Nothing about the person changes: no ban is applied or lifted.
+* Step 2 reads the request cancelled, closed on <first cancel day>.
+* Step 3 reads unbanned, as before.
 
 ## Settled
 
