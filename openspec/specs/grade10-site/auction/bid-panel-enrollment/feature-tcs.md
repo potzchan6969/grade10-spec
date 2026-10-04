@@ -102,7 +102,7 @@ enrolled after my first accepted bid,
 * **Type:** functional
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
@@ -223,7 +223,7 @@ enrolled after my first accepted bid,
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
@@ -779,7 +779,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
 
@@ -901,7 +901,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04
 
