@@ -54,10 +54,10 @@ test checkbox is ticked last.
   `grade10-site-store-checkout-SC-06`, `grade10-site-store-checkout-SC-07`,
   `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-13`,
   `grade10-site-store-checkout-SC-15`.
-- [ ] 4.4 Preserve the existing operator checkout-test frontend and its
+- [x] 4.4 Preserve the existing operator checkout-test frontend and its
   signed-in/typed-email adapters while the public frontend uses member checkout:
   `grade10-site-store-checkout-SC-06`.
-- [ ] 4.5 Verify and complete the existing Shopify Thank You and Order status
+- [x] 4.5 Verify and complete the existing Shopify Thank You and Order status
   extension link and localized labels without a new shared export or resolver:
   `grade10-site-store-checkout-SC-15`.
 
@@ -78,19 +78,19 @@ These retired addresses are not completed tasks and are never reused.
   `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
   `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`,
   `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`.
-- [ ] 4.9 Complete current review/accepted-tender submission, existing
+- [x] 4.9 Complete current review/accepted-tender submission, existing
   verification feedback and frontend request gating; capture immutable request/member
   scope and ignore stale UI effects; omit intent persistence and invoice reuse:
   `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02`,
   `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`,
   `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
   `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-37`.
-- [ ] 4.10 Complete existing outcome navigation/feedback, pending order reads
+- [x] 4.10 Complete existing outcome navigation/feedback, pending order reads
   and paid cart refresh without local deletion or new reconciliation:
   `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-07`,
   `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-13`,
   `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-38`.
-- [ ] 4.11 Verify focused frontend/extension tests and the mounted Playwright
+- [x] 4.11 Verify focused frontend/extension tests and the mounted Playwright
   integration flows, then run the affected package checks defined by
   `docs/conventions/validation.md`; record commands and results without backend
   migrations, provider writes or production enablement.
@@ -110,7 +110,7 @@ this planning or implementation phase.
 
 These retired addresses are not completed tasks and are never reused.
 
-- [ ] 5.5 Prepare frontend staging observations for current drawer handoff,
+- [x] 5.5 Prepare frontend staging observations for current drawer handoff,
   later fresh submission, fixed invoice, sign-in/verification, pending/paid
   order display, unchanged cart refresh and both Shopify return surfaces.
 - [ ] 5.6 After explicit staging authorization, verify deployed frontend and
