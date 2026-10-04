@@ -596,6 +596,42 @@ Signed in as an operator who holds `user:ban` and `user:delete`. <a subject user
 * The account's standing is unchanged.
 * The erasure request is still open.
 
+### shared-auth-users-US2-TC13-1: The last admin cannot be banned
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:ban`, does not hold `admin`) is on <grade10 admin users url>.
+* Exactly one account holds `admin`: <only admin user id>, unbanned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<only admin user id>` | The one account holding `admin` |
+
+**Steps:**
+
+1. Paste <only admin user id> into the search.
+2. Try to ban <only admin user id>.
+
+**Expected Results:**
+
+* Step 2 is refused.
+* <only admin user id> stays unbanned.
+
 ---
 
 ## shared-auth-users-US3: Operator changes roles
@@ -1014,6 +1050,43 @@ without reading every account.
 
 * Every listed account holds no elevated role.
 * An account that holds `admin` is not listed.
+
+### shared-auth-users-US4-TC5-1: Directory narrows to elevated accounts
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-04
+
+**Pre-conditions:**
+
+* admin(holds `user:list`) is on <grade10 admin users url>.
+* The directory holds <elevated account> and <plain account>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<elevated account>` | An account holding `staff`, any elevated role |
+| `<plain account>` | An account holding `user` only |
+
+**Steps:**
+
+1. Set Type to Elevated.
+2. Read the listed accounts.
+
+**Expected Results:**
+
+* Every listed account holds at least one elevated role.
+* <plain account> is not listed.
 
 ---
 
