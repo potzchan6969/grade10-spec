@@ -23,6 +23,8 @@ covers image delivery and alt.
     confirms before any bytes leave for the auction service
   - Card-size review with zoom: the admin media manager shows stored images at
     card size and reveals a large zoom preview on hover or focus
+  - Upload on drop or choose: a supported file stores as soon as it is dropped
+    or chosen, without a preview, confirm or discard step
 - Image lifecycle
   - Replace and remove: image mutations follow admin-listing's writable states
     and its refusal to remove the last item after create
@@ -115,46 +117,6 @@ requirement covers image items and their alt.
 - **WHEN** an operator uploads an image larger than 104857600 bytes
 - **THEN** the system refuses the upload
 - **AND** the gallery is unchanged
-
-### Requirement: An operator confirms an image before it is stored
-
-The system SHALL NOT send listing-media bytes to the auction service until
-the operator confirms after seeing a preview of the selected file in the
-admin media manager. Choosing a file alone SHALL show that preview for the
-gallery slot being filled or replaced and SHALL leave the stored item for
-that slot unchanged. Discarding the preview SHALL clear the preview, leave
-the gallery unchanged, and SHALL NOT upload. Confirm applies to both adding
-an item and replacing a draft item.
-
-<!-- trace:scenario id=g10.auction-listing-media.SC-6ya rev=1 -->
-#### Scenario: grade10-site-auction-listing-media-SC-06 - Choosing a file shows a preview without uploading
-**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
-
-- **GIVEN** a draft listing with an empty gallery slot the operator is filling
-- **WHEN** an operator selects a JPEG under the media size bound
-- **THEN** the admin media manager shows a preview of that file
-- **AND** the listing still has no new stored image for that slot
-
-<!-- trace:scenario id=g10.auction-listing-media.SC-giq rev=1 -->
-#### Scenario: grade10-site-auction-listing-media-SC-07 - Confirming the preview stores the image
-**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
-
-- **GIVEN** an operator has selected a JPEG for a draft listing gallery slot
-  and sees its preview
-- **WHEN** they confirm the upload
-- **THEN** that slot holds the image
-- **AND** the preview is cleared
-
-<!-- trace:scenario id=g10.auction-listing-media.SC-gop rev=1 -->
-#### Scenario: grade10-site-auction-listing-media-SC-08 - Discarding the preview leaves the gallery unchanged
-**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
-
-- **GIVEN** an operator has selected an image for a draft listing gallery
-  slot and sees its preview
-- **WHEN** they discard the preview without confirming
-- **THEN** the gallery is unchanged
-- **AND** the preview is cleared
-- **AND** no upload was sent
 
 ### Requirement: The admin media manager reviews images at card size with hover zoom
 
@@ -398,3 +360,67 @@ sized image slots passed into the shared gallery.
 - **WHEN** a collector opens that listing
 - **THEN** the page shows the listing's title and bid panel
 - **AND** the gallery has no image
+
+### Requirement: An operator stores a chosen image without confirmation
+
+The system SHALL store a supported JPEG, PNG, WebP or AVIF when an operator
+drops or chooses it in the admin media manager. It SHALL not require a preview,
+confirm or discard step before storing the file. A replacement SHALL take the
+same immediate path as an added file.
+
+When one drop or file selection contains several files, the system SHALL
+process them one after another in selection order, starting after the last
+item in the current gallery. A file refused for type, size or the eight-item
+cap SHALL remain unstored and SHALL be named with the reason; accepted files
+from the same selection SHALL remain stored.
+
+For direct-upload items, a new gallery order SHALL hold when the operator
+drops the reordered item. While inventory assets are staged, their order SHALL
+continue to wait for the listing's Save.
+
+#### Scenario: grade10-site-auction-listing-media-SC-31 - Choosing a supported file stores it immediately
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with fewer than eight media items
+- **WHEN** an operator chooses a JPEG under the media size bound
+- **THEN** the image is stored in the gallery immediately
+- **AND** no preview, confirm or discard step is required
+
+#### Scenario: grade10-site-auction-listing-media-SC-32 - Several chosen files append in selection order
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing whose gallery already has one item
+- **WHEN** an operator drops three supported images in a known selection order
+- **THEN** the system stores them one after another after the existing item
+- **AND** the gallery keeps the selection order
+
+#### Scenario: grade10-site-auction-listing-media-SC-33 - Replacing a file stores immediately
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with a stored image at one gallery position
+- **WHEN** an operator chooses a supported replacement image for that position
+- **THEN** the replacement is stored immediately at that position
+- **AND** the other gallery items are unchanged
+
+#### Scenario: grade10-site-auction-listing-media-SC-34 - A mixed selection names each refused file
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with room for two more media items
+- **WHEN** an operator chooses two supported images, a PDF, an oversized image and a file past the eight-item cap
+- **THEN** the supported images are stored
+- **AND** each refused file remains unstored and is named with its refusal reason
+
+#### Scenario: grade10-site-auction-listing-media-SC-35 - Direct-upload reorder holds on drop
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with three direct-upload images in gallery order A, B, C
+- **WHEN** an operator drags C before A and drops it
+- **THEN** the gallery order becomes C, A, B without a separate Save action
+
+#### Scenario: grade10-site-auction-listing-media-SC-36 - Staged inventory order waits for Save
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with inventory assets staged but not saved
+- **WHEN** an operator changes their order and leaves the listing without saving
+- **THEN** the stored listing keeps its prior inventory order
+- **AND** the new order applies only after the listing is saved

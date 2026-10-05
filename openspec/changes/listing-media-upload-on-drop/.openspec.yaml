@@ -1,4 +1,10 @@
 schema: grade10-planning
 created: 2026-09-27
-awaiting:
-  specs: "2026-09-28, the outline, the blind suite and the requirement replacing confirm-before-store - /planning-qa"
+promoted_by: "@htonyl"
+hands:
+  pm: "@htonyl"
+  design: "@htonyl"
+  tech: "@htonyl"
+  qa: "@htonyl"
+  dev: "@htonyl"
+  release: "@htonyl"
