@@ -3,12 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
-## shared-ui-auction-listing-US1: The bid panel's rendering contract
+## shared-ui-auction-listing-US1: The listing page blocks' rendering contract
 
-**As an** application composing the shared bid panel,
-**I want** every standing and every disclosure to render exactly as the
-contract states,
-**so that** each storefront embedding the panel shows collectors the same thing.
+**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
+
+**As a** customer,
+**I want** the lot page's blocks to show the gallery, my bidding and its disclosures as the contract states,
+**so that** every storefront composing them shows me the same thing.
 
 ### shared-ui-auction-listing-US1-TC19-1: Draft at the ceiling is accepted
 

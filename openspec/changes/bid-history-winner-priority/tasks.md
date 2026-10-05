@@ -30,8 +30,9 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       equal-max non-leader, no Winner on live Default.
       `shared-ui-auction-listing-US1-TC27-1`,
       `shared-ui-auction-listing-US1-TC28-1`
-- [x] 3.2 Verify — leave the walk as the change's end-to-end evidence;
-      story play decides the automated cases.
+- [x] 3.2 Verify — leave the walk as the change's end-to-end evidence; every
+      case stays manual until task 2.4's plays assert the crown's place and
+      colour and the tip's tone, then flip them with `pnpm run tcs:automated`.
 
 ## 4. Lot page flags (grade10) (owner: @tangconst)
 
