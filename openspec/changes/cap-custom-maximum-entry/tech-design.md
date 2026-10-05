@@ -3,8 +3,9 @@
 The custom maximum field already sanitizes through
 `sanitizeMoneyDraft` (whole major units) inside
 `ListingQuickMaximumBidActions` in `@grade10/ui`. This change adds a
-ceiling on that same draft path. Auction-service lot ceilings stay out of
-scope.
+ceiling on that same draft path, and lowers the JPY bid ceiling the auction
+service refuses above (Q6), so no maximum the service accepts sits above
+what the field takes.
 
 ## Goals / Non-Goals
 
@@ -14,11 +15,14 @@ scope.
   and raise.
 - Restore the previous valid draft when an edit would exceed it.
 - Keep the refuse silent at the field.
+- JPY bid ceiling at `10_000_000_000` minor units, the one constant every
+  ceiling reader shares.
 
 **Non-Goals:**
 
 - Changing `NumberInput` globally or `shared/money-amounts`.
-- Server refuse of the same ceiling (follow-on).
+- A second, field-sized refusal in auction-service; its currency ceiling
+  already refuses (Q4).
 - New error copy or design-system variants.
 
 ## Decisions
@@ -52,19 +56,36 @@ scope.
      own rules; over-ceiling restore adds no status and no copy.
    - Alternatives rejected: a dedicated `tooLarge` status (non-goal).
 
+5. **The JPY ceiling is one constant in `@grade10/auction-contracts`**
+   - `AUCTION_BID_CEILINGS.JPY` in
+     `packages/grade10-auction/contracts/src/bidIncrements.ts` moves from
+     `150_000_000_000` to `10_000_000_000`. `bidCeiling` reads it for every
+     consumer: auction-service's refusal in `placeBid.ts`, the lot page's
+     quick bids in `quickBidAmounts.ts`, the bid-enable check in
+     `listingUi.ts` and the fixture client. No migration: nothing is
+     launched, and no stored row holds a ceiling.
+   - Every JPY ceiling sits within the field: JPY's exponent is 0, so
+     10,000,000,000 minor units is 10,000,000,000 whole yen, one above the
+     field's 9,999,999,999. A collector reaches the ceiling itself from a
+     quick bid chip, which the field's restore does not touch.
+   - Alternatives rejected: a field ceiling per currency (Q6 keeps one);
+     a second ceiling table in the frontend (two numbers that drift).
+
 ## Risks / Trade-offs
 
 - [Risk] Digit-by-digit typing past the ceiling restores one keystroke at a
   time, not the seed → Mitigation: Storybook `CustomMaximumCeiling` documents
   paste-to-restore; unit tests cover both typed and pasted overshoot.
-- [Risk] Auction-service still accepts a committed maximum above the UI
-  ceiling if a client bypasses the field → Mitigation: accepted follow-on;
-  this change is the UI contract only.
+- [Risk] A client that bypasses the field sends a maximum above it →
+  Mitigation: auction-service refuses above the currency's ceiling, and with
+  Q6 no ceiling sits above the field.
+- [Risk] A test or fixture still holds a JPY amount between 10,000,000,000
+  and 150,000,000,000 → Mitigation: task 4.1 rewrites each one the old
+  ceiling named; the contracts test pins the new value.
 - [Risk] Future callers of `sanitizeMoneyDraft` assume no ceiling →
   Mitigation: ceiling lives only on `sanitizeCustomMaximumDraft`;
   `sanitizeMoneyDraft` stays whole-major cleaning alone.
 
 ## Open Questions
 
-None. Server refuse timing is a follow-on change, not an open question on
-this delivery.
+None.

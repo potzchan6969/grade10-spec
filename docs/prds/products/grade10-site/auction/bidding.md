@@ -19,7 +19,7 @@ highest accepted bid at the close wins it.
 | Extension duration | **30 minutes** by default, set per listing; **0** turns extended bidding off |
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
 | Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
-| Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 150,000,000,000**, the same on every lot |
+| Ceiling | 🚧 **USD 10,000,000**, **HKD 80,000,000**, **JPY 10,000,000,000**, the same on every lot |
 | Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
@@ -457,7 +457,7 @@ surface.
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; equal-max non-leaders show an Info tip in the amount tone (when maximums match, the earlier one leads). Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
-| Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
+| Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 10,000,000,000. JPY came down from 150,000,000,000 so that no maximum the auction accepts sits above what the custom maximum field takes. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
 | A refused bid is not a bid | Decided | The bid form says why; no My Auctions row, no Bidding History entry and no standing moves. Replaces "refusals stay on the account chronology". | Product |

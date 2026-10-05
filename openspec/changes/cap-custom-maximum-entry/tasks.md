@@ -14,7 +14,7 @@
       and fractional-after-clean), and shares the rule on set and raise.
       `shared-ui-auction-listing-SC-38`, `shared-ui-auction-listing-SC-39`,
       `shared-ui-auction-listing-SC-40`, `shared-ui-auction-listing-SC-41`,
-      `shared-ui-auction-listing-SC-42`, `shared-ui-auction-listing-SC-43`
+      `shared-ui-auction-listing-SC-42`, `shared-ui-auction-listing-SC-43`, `shared-ui-auction-listing-SC-53`
 - [x] 2.2 Wire `sanitizeCustomMaximumDraft` and
       `CUSTOM_MAXIMUM_MAJOR_CEILING` through the custom maximum field on
       `ListingQuickMaximumBidActions` for set and raise, with silent restore
@@ -31,14 +31,36 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 - [x] 3.1 Walk the Custom maximum ceiling cases on Storybook
       CustomMaximumCeiling and Leading (raise): at-ceiling accept, typed
       restore, paste from empty, paste restore, fractional paste, silent
-      refuse. `shared-ui-auction-listing-US1-TC3-1`,
-      `shared-ui-auction-listing-US1-TC4-1`,
-      `shared-ui-auction-listing-US1-TC5-1`,
-      `shared-ui-auction-listing-US1-TC6-1`,
-      `shared-ui-auction-listing-US1-TC7-1`,
-      `shared-ui-auction-listing-US1-TC8-1`,
-      `shared-ui-auction-listing-US1-TC9-1`
+      refuse. `shared-ui-auction-listing-US1-TC19-1`,
+      `shared-ui-auction-listing-US1-TC20-1`,
+      `shared-ui-auction-listing-US1-TC21-1`,
+      `shared-ui-auction-listing-US1-TC22-1`,
+      `shared-ui-auction-listing-US1-TC23-1`,
+      `shared-ui-auction-listing-US1-TC24-1`,
+      `shared-ui-auction-listing-US1-TC25-1`
 - [x] 3.2 Verify — leave the walk as the change's end-to-end evidence; flip
       automated only the cases unit tests already decide with
       `pnpm run tcs:automated`, and name any that stay manual in the round
       row.
+
+## 4. JPY bid ceiling (grade10) (owner: @mason5991)
+
+- [ ] 4.1 Tests first, in their own commit: `bidIncrements.test.ts` pins
+      `bidCeiling("JPY")` at `10_000_000_000`; `placeBid.spec.ts` refuses a
+      JPY maximum of `10_000_000_001` naming `10_000_000_000`; every test
+      and fixture amount the old ceiling named moves under the new one,
+      `quickBidAmounts.test.ts` included.
+      `grade10-site-auction-bid-increments-SC-08`,
+      `grade10-site-auction-bid-increments-SC-10`
+- [ ] 4.2 Set `AUCTION_BID_CEILINGS.JPY` to `10_000_000_000` in
+      `packages/grade10-auction/contracts/src/bidIncrements.ts`.
+- [ ] 4.3 Verify - `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+      and the auction backend lane.
+
+## 5. Bid ceiling walk (grade10) (owner: @mason5991)
+
+- [ ] 5.1 Walk the JPY rows against the deployed service: a lot starting at
+      JPY 10,000,000,000 takes one first bid there, and a maximum of
+      10,000,000,001 sent to the service is refused naming the ceiling.
+      `grade10-site-auction-bid-increments-US1-TC8-2`,
+      `grade10-site-auction-bid-increments-US2-TC3-2`

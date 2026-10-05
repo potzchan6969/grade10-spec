@@ -36,5 +36,6 @@ belongs to the auction-listing delta; this file only maps surfaces and states.
 | Paste beyond ceiling from empty stays empty | `shared-ui-auction-listing-SC-40` | Clear field, paste `10000000000` |
 | Paste beyond ceiling restores prior draft | `shared-ui-auction-listing-SC-41` | Seeded `500`, paste oversize |
 | Fractional paste exceeds after whole-major cleaning | `shared-ui-auction-listing-SC-42` | Seeded `500`, paste `10000000000.99` |
+| Fractional paste at the ceiling after cleaning is accepted | `shared-ui-auction-listing-SC-53` | Seeded `500`, paste `9999999999.99` |
 | Raise path restores on overshoot | `shared-ui-auction-listing-SC-43` | [Leading](?path=/story/auction-listing-listingauctionbidcard--leading) — same field |
 | Over-ceiling refuse has no dedicated error | `shared-ui-auction-listing-SC-40` | No new error status; floor / invalidAmount only for existing floor and parse failures |
