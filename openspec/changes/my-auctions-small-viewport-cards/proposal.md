@@ -42,10 +42,10 @@ See [Non-Goals](decisions.md#non-goals).
   Pages / My Auctions Page
 - Figma `AcutionRecordCard` (`7005:1676`)
 - `docs/prds/products/shared/ui/auction-record.md`
-- `docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications`
+- `docs/prds/products/grade10-site/auction/bidding.md#my-auctions`
 
 ## References
 
 - [Auction Record Blocks](../../../docs/prds/products/shared/ui/auction-record.md)
-- [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
+- [Bidding · My Auctions](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions)
 - [AcutionRecordCard](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7005-1676)

@@ -72,6 +72,9 @@ The debit follows what the shop applied, not what was promised.
 
 ## At the Till
 
+- 🚧 **Discount label** — when every reader accepts both titles, the points
+  discount is written as "Deduction from Points"; historical unpaid and paid
+  orders named "Points" remain readable as the same discount
 - **Rung up** — the shopkeeper rings the products up in Shopify POS
 - **Identified** — the shopkeeper opens the Grade10 extension and scans the
   member card's QR, from the site or a wallet pass, or types the 8-letter
