@@ -615,6 +615,9 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **WHEN** the admin chooses `Remove physical unit` on `PSA-2`
 - **THEN** a confirmation names `PSA-2` and asks for a reason, and Confirm
   stays unavailable until one is entered
+- **WHEN** the admin cancels it
+- **THEN** `PSA-2` is still listed, Available, and stock, withdrawn, its media
+  and the history are unchanged
 - **WHEN** a physical removal of `PSA-1` is sent anyway
 - **THEN** Grade10 refuses it, and stock, withdrawn, the record, its media and
   the history are unchanged
