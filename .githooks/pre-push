@@ -1,3 +1,7 @@
 #!/bin/sh
-# Design Override: check again every commit this push sends.
-exec node "$(git rev-parse --show-toplevel)/scripts/design-override/check.mjs" --push "$1"
+# Design Override: check again every commit this push sends. Then the fast
+# gate on what it sends to main.
+root="$(git rev-parse --show-toplevel)"
+refs="$(cat)"
+printf '%s\n' "$refs" | node "$root/scripts/design-override/check.mjs" --push "$1" || exit $?
+printf '%s\n' "$refs" | exec node "$root/scripts/push-main/hook.mjs"
