@@ -63,7 +63,7 @@ jobs:
               echo "plan=true" >> "$GITHUB_OUTPUT"
             fi
           else
-            echo "::warning title=Test filter::Could not diff against ${base:-the push's parent}, so every job runs."
+            echo "::warning title=Test filter::Could not diff against ${base:-its base}, so every job runs."
             echo "code=true" >> "$GITHUB_OUTPUT"
             echo "plan=false" >> "$GITHUB_OUTPUT"
           fi

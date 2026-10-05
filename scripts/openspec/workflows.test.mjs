@@ -19,6 +19,7 @@
  */
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: a workflow's `${{ … }}` is GitHub's own expression, quoted here exactly as the file writes it.
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -363,6 +364,11 @@ test("Test's jobs skip only what they do not read", () => {
     "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
   );
   assert.match(step.run, /git diff --no-renames --name-only/);
+  const parsed = spawnSync("bash", ["-n"], {
+    input: step.run,
+    encoding: "utf8",
+  });
+  assert.equal(parsed.status, 0, parsed.stderr);
   assert.equal(test.on.push["paths-ignore"], undefined);
   assert.equal(test.on.pull_request, null);
 });
