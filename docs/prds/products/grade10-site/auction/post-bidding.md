@@ -308,10 +308,11 @@ doing, under Edge Cases.
   pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
   settled
-- 🚧 **Receipt ID** — `RC-LK42301P1`: the paid invoice's ID plus the
-  payment's sequence number within it
-- ❓ **Which receipt ID is real** — this page's form and the one Grade10
-  issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
+- 🚧 **Receipt ID** — new receipts use `RC-LK42301P1`: the listing code,
+  invoice sequence and the finalized payment's unpadded sequence within that
+  invoice. Historical receipt IDs stay unchanged
+- 🚧 **When it is issued** — a finalized full or partial payment receives one;
+  a refund, reversal or void receives none
 - 🚧 **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first
 - **What every receipt shows** — Original Invoice Total, Previous Payments,
@@ -501,7 +502,7 @@ a second payment provider, and changes to the bid-time rules.
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Proof submit feedback | 🚧 In flight | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
 | Tracking link on Winner Order | 🚧 In flight | While fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as the external carrier link with an arrow. No separate Track shipment button and no carrier name in that chrome. Chosen over carrier name plus a Track shipment CTA. | Product and design (@tangconst) |
-| Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation at listing creation, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. Receipt identifier format remains unresolved on the Receipt ID row below. | Product and Finance |
+| Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation at listing creation, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. New receipt IDs use the listing code, invoice sequence and an unpadded per-invoice payment sequence. Historical receipt IDs remain unchanged. | Product and Finance |
 | Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
 | Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |
 | Cached listing preview | Decided | Previously cached preview content may persist; no purge or regeneration is guaranteed. The current page and fresh metadata omit the code and private data. | Product |
@@ -534,7 +535,7 @@ a second payment provider, and changes to the bid-time rules.
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
-| Receipt ID format | ❓ Open | This page reads `RC-LK42301P1`; Grade10 issues `REC-202609-LK7P2Q-01-P1`. Whether the shorter form replaces the one already issuing, and what happens to receipts already sent, is not settled and no change carries it. | Product (@jeffffej0909) |
+| Receipt ID format | 🚧 In flight | New receipts issued for finalized full or partial payments use `RC-{listing code}{invoice sequence}P{receipt sequence}`, such as `RC-LK42301P1`. The receipt sequence starts at 1 for each invoice and is unpadded. Historical `REC-...` receipts remain unchanged; refunds, reversals and voids issue no receipt. Formal tax-receipt content stays open. | Product (@jeffffej0909) |
 | Receipt breakdown | Decided | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment closes the invoice, including a tolerance close or confirmed overpayment. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
 | A balance belongs on a receipt, not on a page | Decided | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |

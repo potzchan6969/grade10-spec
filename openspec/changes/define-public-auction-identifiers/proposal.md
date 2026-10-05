@@ -12,7 +12,7 @@
 - **Admin and payment reference** - Show the code to authorized listing operators. After a winner exists, use the same code as the collector-facing payment reference across order, support and payment instructions; it is not a second public order ID
 - **Slug helper** - Prefill the editable title-and-code slug, refresh only an untouched generated value after title edits, and check availability on Slug field exit. Retained completed, expired and unsold addresses still block reuse
 - **Stripe matching** - Store the payment reference in Stripe metadata so reconciliation does not expose provider transaction IDs to collectors
-- **Invoice and receipt IDs** - Build invoice IDs from the code plus issuance sequence and receipt IDs from the invoice payload plus receipt sequence, including reissues and partial payments
+- **Invoice and receipt IDs** - Build invoice IDs from the code plus issuance sequence. New receipts for finalized full or partial payments use the paid invoice payload plus an unpadded receipt sequence; historical receipt IDs remain unchanged
 - **Private identifiers** - Keep database IDs, audit numbers and provider references separate from collector-facing identifiers
 
 ## Examples
@@ -28,7 +28,8 @@
 - **Code format** - The first 2 characters use `ABCDEFGHJKMNPQRSTVWXYZ`; the final 3 use `0123456789ABCDEFGHJKMNPQRSTVWXYZ`. `LK423` and `UY294` are valid
 - **Allocation** - Derive a candidate from the system UUID with a keyed one-way function, for example HMAC-SHA256. Retry the 5-character projection against active and retained reservations because it can collide
 - **Invoice format** - `IN-[CODE][SEQ]`, where `SEQ` starts at `01`, has at least 2 digits and continues after `99`
-- **Receipt format** - `RC-[INVOICE_PAYLOAD][P][n]`, where `INVOICE_PAYLOAD` is the code and invoice sequence, such as `LK42301`
+- **Receipt format** - `RC-[INVOICE_PAYLOAD]P[RECEIPT_SEQ]`, where `INVOICE_PAYLOAD` is the code and invoice sequence, such as `LK42301`; `[RECEIPT_SEQ]` starts at `1` for each invoice and is not padded
+- **Receipt scope** - Only a finalized full or partial payment receives a new receipt ID. Refunds, reversals and voids issue none; historical `REC-...` receipts are retained unchanged; formal tax-receipt content remains separate
 - **Provider reference** - Store Stripe's provider reference separately and use it only in authorized internal records and document filenames
 
 ## Non-Goals

@@ -42,7 +42,7 @@
   - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
-  - Receipt identifier: every receipt carries its existing unique receipt ID; receipt contents remain outside this identifier change
+  - Receipt identifier: a receipt for a finalized payment uses the invoice payload plus its unpadded per-invoice sequence; historic receipt IDs remain unchanged
   - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
 - Settlement
   - Single fresh charge: one transaction for the final amount, retryable on failure
@@ -147,14 +147,14 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **AND** its PDF shows the same invoice ID
 - **AND** the card order's payment reference is shown exactly as the bank transfer order's is
 
-#### Scenario: winner-order-SC-122 - The invoice ID and bank reference take the Hong Kong month
+#### Scenario: winner-order-SC-122 - The invoice ID and bank reference use the payment reference
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** a lot on an order whose payment reference is `LK423`, with no invoice sent yet
 - **WHEN** an operator sends its first invoice
 - **THEN** the invoice ID is `IN-LK42301`
 
-#### Scenario: winner-order-SC-123 - A reissue takes the next number and its own month
+#### Scenario: winner-order-SC-123 - A reissue takes the next invoice number
 **Serves:** Invoice - a reissue takes a new invoice ID while the payment reference stays put
 
 - **GIVEN** an order whose payment reference is `LK423` and whose first invoice `IN-LK42301` was sent
@@ -202,7 +202,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** both show the payment reference
 - **AND** the card invoice requires no separate bank-reference identifier
 
-#### Scenario: winner-order-SC-209 - The payment reference is shown unconditionally, not gated by payment method
+#### Scenario: winner-order-SC-218 - The payment reference is shown unconditionally, not gated by payment method
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** one order whose `pending` invoice was sent for bank transfer, and one whose `pending` invoice was sent for card
@@ -210,7 +210,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** both orders show the payment reference
 - **AND** the bank transfer order's copy control for the payment reference copies exactly the payment reference
 
-#### Scenario: winner-order-SC-210 - Stripe metadata carries the payment reference and never the provider reference to the winner
+#### Scenario: winner-order-SC-219 - Stripe metadata carries the payment reference and never the provider reference to the winner
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** an auction order paid by card
@@ -218,7 +218,53 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** the Stripe payment's metadata carries `payment_reference_code` equal to the order's payment reference
 - **AND** Stripe's own returned provider reference appears on no surface the winner reads
 
-#### Scenario: winner-order-SC-211 - Nothing identifying the lot's order is shown before a winner exists
+### Requirement: A finalized payment carries a receipt ID
+
+Grade10 SHALL issue a receipt ID only when a full or partial payment has
+finalized. The ID SHALL identify the invoice it pays and the receipt's sequence
+within that invoice. This requirement changes only receipts issued after this
+change is delivered; historical receipt IDs remain unchanged.
+
+| Identifier | Format | Example |
+| --- | --- | --- |
+| Receipt ID | `RC-[CODE][INVOICE_SEQ]P[RECEIPT_SEQ]` | `RC-LK42301P1` |
+
+| Part | Rule |
+| --- | --- |
+| `[CODE]` | The order's unchanged payment reference |
+| `[INVOICE_SEQ]` | The sent invoice's sequence, without the `IN-` prefix |
+| `[RECEIPT_SEQ]` | The count of finalized receipt-bearing payments for that invoice, starting at `1` and never padded |
+
+**Allocation** - Grade10 SHALL allocate the next invoice-scoped receipt
+sequence atomically with the finalized receipt. A refund, reversal or void
+SHALL NOT allocate a receipt ID or rewrite one already issued. Formal
+tax-receipt content remains outside this requirement.
+
+#### Scenario: winner-order-SC-221 - A finalized first payment receives the new receipt ID
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
+
+- **GIVEN** invoice `IN-LK42301` for an order whose payment reference is `LK423`
+- **AND** it has no finalized receipt-bearing payment
+- **WHEN** its first full or partial payment finalizes
+- **THEN** its receipt ID is `RC-LK42301P1`
+
+#### Scenario: winner-order-SC-222 - Each finalized payment advances only its invoice's receipt sequence
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
+
+- **GIVEN** invoice `IN-LK42301` has receipts through `RC-LK42301P9`
+- **WHEN** another partial payment for it finalizes
+- **THEN** the receipt ID is `RC-LK42301P10`
+- **AND** a finalized payment on invoice `IN-LK42302` starts at `RC-LK42302P1`
+
+#### Scenario: winner-order-SC-223 - Historical and non-payment events do not receive the new receipt ID
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
+
+- **GIVEN** a historical receipt ID is `REC-202609-LK7P2Q-01-P1`
+- **WHEN** the receipt is read after this change is delivered
+- **THEN** its ID remains unchanged
+- **AND** a refund, reversal or void creates no receipt ID
+
+#### Scenario: winner-order-SC-220 - Nothing identifying the lot's order is shown before a winner exists
 **Serves:** winner-order-US-17 - Winner quotes their order
 
 - **GIVEN** a lot that has not yet closed, and the same lot just after it closes with no winner

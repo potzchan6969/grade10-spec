@@ -33,12 +33,12 @@
 
 1. Open `<a published lot's address>`.
 2. View the page's response source before any script runs.
-3. Search the source for the lot's listing code.
+3. Identify each occurrence of the lot's listing code and inspect its context.
 
 **Expected Results:**
 
 * The source names the lot by its title.
-* The listing code is not found anywhere in the source.
+* The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
 ### grade10-site-auction-listing-page-US10-TC2-1: Listing code absent from the page once scripts finish running
 
@@ -64,12 +64,12 @@
 
 1. Open `<a published lot's address>` and let the page finish loading its scripts.
 2. View the rendered page and its current source.
-3. Search both for the lot's listing code.
+3. Identify each occurrence of the lot's listing code in both.
 
 **Expected Results:**
 
-* The listing code is not found in the rendered page.
-* The listing code is not found in the page's source after scripts have run.
+* The rendered page has no labelled listing-code or payment-reference field.
+* Every code occurrence in the source is the lower-case suffix of the canonical address.
 
 ### grade10-site-auction-listing-page-US10-TC3-1: Listing code absent from the shared-link preview
 
@@ -98,8 +98,8 @@
 
 **Expected Results:**
 
-* The preview's title names the lot and its url is the lot's own address.
-* None of the share-preview fields contain the listing code.
+* The preview's title and description have no labelled listing-code or payment-reference field.
+* Its URL is the canonical address ending in the lower-case listing-code suffix.
 
 Previously cached preview content may persist; the test does not require a
 purge or regeneration. A fresh preview fetch must satisfy the absence above.
@@ -191,7 +191,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Expected Results:**
 
-* None of the page's own network responses contain the listing code.
+* No page response contains a separate listing-code or payment-reference field.
 
 ### grade10-site-auction-listing-page-US10-TC7-1: Listing code does not resolve as a lot address
 
@@ -248,7 +248,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Expected Results:**
 
-* The listing code appears in neither view.
+* Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
 * The title and address shown are identical in both views.
 
 ### grade10-site-auction-listing-page-US10-TC9-1: Listing code stays absent once an order exists on the lot
@@ -274,12 +274,12 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 1. Open the lot's own address on the public listing page.
 2. View the page, its source, and its share-preview metadata.
-3. Search all three for the lot's listing code, which is now also the order's payment reference.
+3. Inspect every occurrence of the lower-case listing-code suffix, which is now also the order's payment reference.
 
 **Expected Results:**
 
-* None of the three surfaces contain the code.
-* The lot is still identified only by its title and its address.
+* The page and preview contain no labelled listing-code or payment-reference field.
+* The code appears only as the lower-case suffix of the canonical address.
 
 ### grade10-site-auction-listing-page-US10-TC10-1: An address naming no lot carries no listing code
 
@@ -343,7 +343,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Browse and search do not return the listing.
 * `<listing_url>` still returns its public listing page.
 * The page and fresh preview identify the listing by its public title and canonical URL.
-* `<listing_code>` is absent from the page, source, embedded data, network responses and fresh preview metadata.
+* Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
 * Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
 
 ### grade10-site-auction-listing-page-US10-TC12-1: A cached preview may persist after browse/search removal without private data
@@ -375,7 +375,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **Expected Results:**
 
 * The cached preview may continue to show previously cached public listing metadata and `<listing_url>`.
-* It contains no listing code, payment reference, internal/provider reference, winner data or admin-only data.
+* It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data.
 * A persistent preview does not make the listing discoverable through browse or search.
 
 
@@ -408,11 +408,11 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **Steps:**
 
 1. Open `<a published lot's address>`.
-2. Search the visible page and its source for the lot's listing code.
+2. Inspect the visible page and its source for a labelled listing-code or payment-reference field.
 
 **Expected Results:**
 
-* The listing code does not appear anywhere on the page or in its source for the collector to copy.
+* The page has no labelled listing-code or payment-reference field for the collector to copy; its canonical address may end in the lower-case code suffix.
 
 ### grade10-site-auction-listing-page-US11-TC2-1: A listing code known from elsewhere gives no working link
 
@@ -468,8 +468,8 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Expected Results:**
 
-* The title and address are the same a collector would have quoted before the order existed.
-* The listing code does not appear on the page.
+* The title and canonical address are unchanged by the order.
+* The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
 
 ### grade10-site-auction-listing-page-US11-TC4-1: Called-off listing remains directly accessible
 
@@ -521,7 +521,7 @@ did not read `feature-tcs.md` or the suite draft.
 | --- | --- |
 | Suite carried a case for the listing code staying absent once scripts finish running (US10-TC2); no scenario stated it — the scenario draft's "Server-rendered response" bullet only covered the pre-script HTML | Real: the requirement's after-scripts behaviour is undecided by any prior requirement, and the durable "served lot becomes live without blanking" requirement is silent on the listing code. Folded in as `grade10-site-auction-listing-page-SC-25` |
 | Suite carried a case for the listing code not resolving as a lot address (US10-TC7, US11-TC2); no scenario stated it | Real: whether the code could double as an alternate lookup key was never proposed or ruled out. Folded in as `grade10-site-auction-listing-page-SC-26` |
-| Suite carried a case for the listing code staying absent once an order exists on the lot (US10-TC9, US11-TC3); no scenario stated it | Real, and already settled by decisions.md Q10 ("no auction ID ... is displayed anywhere on grade10-site's public listing pages") and the proposal ("It does not appear on grade10-site's public listing pages"), both unconditional on order state. Folded in as `grade10-site-auction-listing-page-SC-27` |
+| Suite carried a case for a separate listing-code field staying absent once an order exists on the lot (US10-TC9, US11-TC3); no scenario stated it | Real, and already settled by decisions.md Q18 and the proposal: the lower-case code is the canonical-address suffix, never a labelled public field, regardless of whether an order exists. Folded in as `grade10-site-auction-listing-page-SC-27` |
 | Suite carried a case for the listing code staying absent regardless of signed-in state (US10-TC8) | Already covered: `SC-20`'s GIVEN/WHEN never conditions on an actor or auth state, so the rule is already unconditional across signed-in and signed-out visitors. No new scenario; case kept as a boundary check against that existing scenario |
 | Suite carried two positive cases on US10 (title/address present in the served response; shared-link preview names the lot by title/address) | Misreading of scope: both duplicate durable `grade10-site-auction-listing-page-SC-01` and `-SC-03`, which already prove a lot's title, description and preview render correctly. Not new behaviour from this change. Dropped |
 | Suite carried two positive cases on US11 (title/address together identify exactly one lot; the address a collector quotes reopens the same lot) | Misreading of scope: both duplicate durable `SC-01`/`SC-02`/`SC-05` (two lots answer as two pages; a published lot's address answers). Not new behaviour from this change. Dropped |

@@ -55,15 +55,20 @@
 
 - [ ] 5.1 Carry the stored listing code into the winner order as its payment
   reference, derive invoice IDs with a two-digit sequence that reaches `100`,
-  preserve old-invoice lookup, and keep receipt format unchanged.
-  - Covers: winner-order-SC-97-SC-98, SC-114, and SC-122-SC-128,
-    SC-209, and SC-211.
+  and preserve old-invoice lookup.
+  - Covers: winner-order-SC-97-SC-98, SC-114, SC-122-SC-128, and
+    SC-218, SC-220.
   - Verification: winner-invoice and contract tests, then `pnpm run test:backend`.
 
 - [ ] 5.2 Write the payment reference to Stripe metadata under
   `payment_reference_code` while keeping provider references internal.
-  - Covers: winner-order-SC-210.
+  - Covers: winner-order-SC-219.
   - Verification: Stripe adapter tests and `pnpm run test:backend`.
 
-Receipt identifier and receipt-breakdown behavior remains owned by the
-receipt/payment changes and is not added here.
+- [ ] 5.3 Issue the new receipt identifier only for finalized full or partial
+  payments. Allocate the unpadded per-invoice receipt sequence atomically,
+  keep historical receipt IDs unchanged, and issue none for refunds,
+  reversals or voids.
+  - Covers: winner-order-SC-221-SC-223.
+  - Verification: receipt identifier and payment-finalization tests, then
+    `pnpm run test:backend`.

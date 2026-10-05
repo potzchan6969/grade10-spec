@@ -152,7 +152,7 @@
 
 **Expected Results:**
 
-* The payment reference is absent from every public representation.
+* The payment reference has no labelled public field and appears only as the lower-case suffix of the canonical address.
 
 ## winner-order-US18: Winner reviews invoice and payment details
 
@@ -189,7 +189,7 @@
 * Each lookup finds the same order.
 * The replacement invoice names the replaced invoice and keeps `LK423`.
 
-### winner-order-US18-TC2-1: The receipt keeps its existing identifier
+### winner-order-US18-TC2-1: A finalized payment receives the new receipt identifier
 
 **Classification:**
 
@@ -206,7 +206,8 @@
 
 **Pre-conditions:**
 
-* A bank-transfer invoice is `IN-LK42302` and has an existing receipt ID `<receipt_id>`.
+* An invoice is `IN-LK42302` for payment reference `LK423`.
+* A full or partial payment for that invoice has finalized.
 
 **Steps:**
 
@@ -215,11 +216,40 @@
 
 **Expected Results:**
 
-* The receipt retains the same `<receipt_id>`.
-* The existing receipt ID includes payment reference `LK423` and identifies the paid invoice.
-* No receipt ID format, breakdown or amount is changed by this suite.
+* The first receipt ID is `RC-LK42302P1`.
+* A later finalized payment for that invoice receives `P2`, then `P10` without padding.
+* A receipt for another invoice starts at `P1` for that invoice.
 
-### winner-order-US18-TC3-1: Provider references stay internal
+### winner-order-US18-TC3-1: Historical receipt identifiers stay unchanged
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-18
+
+**Pre-conditions:**
+
+* A historical receipt ID is `REC-202609-LK7P2Q-01-P1`.
+
+**Steps:**
+
+1. Open the historical receipt after the new identifier ships.
+2. Record a refund, reversal or void.
+
+**Expected Results:**
+
+* The historical receipt ID remains `REC-202609-LK7P2Q-01-P1`.
+* No receipt ID is created for the refund, reversal or void.
+
+### winner-order-US18-TC4-1: Provider references stay internal
 
 **Classification:**
 
