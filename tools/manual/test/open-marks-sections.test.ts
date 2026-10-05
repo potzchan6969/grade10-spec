@@ -68,12 +68,16 @@ describe("the text one section is drawn from", () => {
   it("binds a nested delivery mark to its focused section", () => {
     const nested = {
       ...page,
-      ast: parsePage("---\ntitle: Payment\n---\n\n## Payment\n\n### Bank details\n\n- 🚧 **Instructions** - Shown on the invoice\n"),
+      ast: parsePage(
+        "---\ntitle: Payment\n---\n\n## Payment\n\n### Bank details\n\n- 🚧 **Instructions** - Shown on the invoice\n",
+      ),
     };
 
-    expect(marksBySection(nested, DELIVERED).get("bank-details")?.map((one) => one.text)).toEqual([
-      "🚧 **Instructions** - Shown on the invoice",
-    ]);
+    expect(
+      marksBySection(nested, DELIVERED)
+        .get("bank-details")
+        ?.map((one) => one.text),
+    ).toEqual(["🚧 **Instructions** - Shown on the invoice"]);
   });
 
   it("leaves a titled block's rows to the page", () => {
