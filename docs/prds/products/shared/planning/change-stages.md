@@ -18,7 +18,7 @@ A change is in exactly one planning or delivery stage, proven by a file on
 | --- | --- | --- | --- | --- |
 | 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted and whether to do it now |
 | 2 | Designed | `ui-design.md` or `ui_waived` | Drafts the UI design from the page and the journeys | Designer: tweak and land the UI design, or record `ui_waived` |
-| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; `tech-design.md` or `design_waived`; every Raised row landed | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; `tech-design.md` or `design_waived` | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
 | 4 | Planned | `tasks.md` | Dev writes the dependency-ordered plan after QA2 reconciliation | Engineer: read the plan |
 | 5 | Accepted | `acceptance.json`, with a content fingerprint of the resolved plan | Reviews the page, designs and deltas against each other, then records the human's acceptance and publishes the contract to `openspec/specs/`; no product question remains open | Product manager or named owner: accept the plan |
 | 6 | Building | A ticked task; the first claim recorded the store's `main` commit and the accepted targets in `implementation.json` | Builds each group test first, audited and verified | Engineer: read each landing |
@@ -105,9 +105,9 @@ keeps its availability visible with both active and archived changes.
 
 One handle per role on each change.
 
-- 🚧 **Five roles** — the tech PIC is retired: the human who accepts the plan
-  reviews the tech design and whether the requirements and the suite are
-  whole, and `tech-design.md` is the engineer's
+- 🚧 **Five roles** — the tech PIC is retired: the engineer who will build the
+  change challenges the tech design before acceptance, the human who accepts
+  the plan judges it whole, and `tech-design.md` is the engineer's
 
 | Role | Key | Takes the change at |
 | --- | --- | --- |
@@ -209,7 +209,8 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
 | Tech design order | Decided | Written by Dev in the planning run, after the blind cases and before the scenarios; proves Specified; owed when the work lands outside this store. | Product, Engineering |
-| Tech PIC | Decided | Retired: the accepting human reviews the tech design and the fullness of the requirements and the suite. | Product |
+| Tech PIC | Decided | Retired: the engineer who will build the change challenges the tech design, and the accepting human judges the requirements and the suite whole. | Product |
+| Raised rows | Decided | An open Raised row holds acceptance, never Specified; the product manager's turn at Specified is to resolve it. | Product |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
