@@ -74,7 +74,9 @@ grid). Unmeasured today; first delivery sets the baseline.
 - **ZZZ** — unchanged unless it adopts the same props
 - **Manual** —
   [`Product Listing · Search`](../../../docs/prds/products/grade10-site/store/product-listing.md#search)
-  marks the outcomes
+  and
+  [`Product Listing Blocks · Search`](../../../docs/prds/products/shared/ui/store-product-listing.md#search)
+  mark the outcomes
 
 No domain impact: the jump from a suggestion to a product page is stated
 end to end by this capability's own spec, so it is a feature case rather
@@ -91,3 +93,4 @@ than a composed one, and no `grade10-site/store` domain journey moves.
 ## References
 
 - [Product Listing · Search](../../../docs/prds/products/grade10-site/store/product-listing.md#search)
+- [Product Listing Blocks · Search](../../../docs/prds/products/shared/ui/store-product-listing.md#search)
