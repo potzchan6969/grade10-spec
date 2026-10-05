@@ -10,13 +10,13 @@
 **so that** I bid in one step and pay only if I win.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-x2e rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC1-2: No linked card means no bid, and the bid action opens setup
+### grade10-site-auction-bid-payment-method-US1-TC1-2: No linked card means no bid, setup opens, and no bid is recorded
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -41,12 +41,14 @@
 2. Click the bid action.
 3. Close the setup modal without linking a card.
 4. Reload <listing_1 url> and read Highest bid and the bid count.
+5. Navigate to <my auctions url> and look for <listing_1>.
 
 **Expected Results:**
 
 * Step 1: the quick bids and the custom maximum show, disabled.
-* Step 2 opens card-link setup, not a bid.
+* Step 2 opens card-link setup, the bid form asks for a card, and no bid is placed.
 * Step 4: Highest bid and the bid count are unchanged, and no bid of this collector's is on <listing_1>.
+* Step 5 shows no row for <listing_1>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-tm1 rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC2-2: Committing a maximum stands at once, with nothing taken from the card
@@ -55,7 +57,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -235,7 +237,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -275,7 +277,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -315,7 +317,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -356,7 +358,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -397,7 +399,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -414,8 +416,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_11> | An open HKD listing, current bid 120000 minor units (HKD 1,200.00), minimum next bid 124000 minor units (HKD 1,240.00) |
-| <low maximum> | 122000 minor units (HKD 1,220.00), below the minimum next bid |
+| <listing_11> | An open HKD listing, current bid 20000 minor units (HKD 200.00), minimum next bid 21000 minor units (HKD 210.00) |
+| <low maximum> | 20500 minor units (HKD 205.00), below the minimum next bid |
 
 **Steps:**
 
@@ -426,7 +428,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3: the bid form names the minimum next bid, 124000 minor units (HKD 1,240.00), and Change is still offered on the linked card.
+* Step 3: the bid form names the minimum next bid, 21000 minor units (HKD 210.00), and Change is still offered on the linked card.
 * Step 4 opens card-link setup.
 
 ---
@@ -661,6 +663,7 @@ Runs once per row of **Test data**.
 - Committing or raising a maximum takes nothing from the card and waits on no payment provider, so no case reads an authorization, a provider challenge, a pending state, a declined card at bid time or a provider failure; those cases are deprecated (decisions Q1, Q5).
 - Being outbid has nothing to release; US3 is retired with its case (decisions Q13).
 - Only the winner pays, by the invoice on their winner order; what the winner order shows after payment is `grade10-site/auction/winner-order`'s.
+- `grade10-site-auction-bid-payment-method-US1-TC8-1` joins `grade10-site-auction-bid-payment-method-US1-TC1-2`: one walk with no card, setup still available, and no bid recorded. `US1-TC8-1` is deprecated.
 
 ## Reconciliation
 
@@ -670,7 +673,7 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-bid-payment-method-SC-01` by `grade10-site-auction-bid-payment-method-US1-TC1-2` and `grade10-site-auction-bid-payment-method-US1-TC8-1`; `grade10-site-auction-bid-payment-method-SC-05` by `grade10-site-auction-bid-payment-method-US2-TC1-2`; `grade10-site-auction-bid-payment-method-SC-10` by `grade10-site-auction-bid-payment-method-US1-TC6-2`; `grade10-site-auction-bid-payment-method-SC-18` by `grade10-site-auction-bid-payment-method-US1-TC2-2` and `grade10-site-auction-bid-payment-method-US2-TC1-2`; `grade10-site-auction-bid-payment-method-SC-19` by `grade10-site-auction-bid-payment-method-US1-TC7-1`; `grade10-site-auction-bid-payment-method-SC-20` by `grade10-site-auction-bid-payment-method-US1-TC9-1`
+- **Folded in** - `grade10-site-auction-bid-payment-method-SC-01` by `grade10-site-auction-bid-payment-method-US1-TC1-2`; `grade10-site-auction-bid-payment-method-SC-05` by `grade10-site-auction-bid-payment-method-US2-TC1-2`; `grade10-site-auction-bid-payment-method-SC-10` by `grade10-site-auction-bid-payment-method-US1-TC6-2`; `grade10-site-auction-bid-payment-method-SC-18` by `grade10-site-auction-bid-payment-method-US1-TC2-2` and `grade10-site-auction-bid-payment-method-US2-TC1-2`; `grade10-site-auction-bid-payment-method-SC-19` by `grade10-site-auction-bid-payment-method-US1-TC7-1`; `grade10-site-auction-bid-payment-method-SC-20` by `grade10-site-auction-bid-payment-method-US1-TC9-1`
 - **Added by QA2** - `grade10-site-auction-bid-payment-method-US1-TC10-1` for `grade10-site-auction-bid-payment-method-SC-21`: a refused first bid locks no card and Change stays offered. No blind case refused a first bid on a linked card
 - **Corrected** - `grade10-site-auction-bid-payment-method-US1-TC8-1` and `grade10-site-auction-bid-payment-method-US1-TC9-1` traced the Feature set group Card refusals; they trace their section's journey, `grade10-site-auction-bid-payment-method-US-01`. The markers of the revised cases drop the retired authorization scenarios, and those reading nothing taken from the card cover `grade10-site-auction-bid-payment-method-SC-18`
 - **Deprecated** - `grade10-site-auction-bid-payment-method-US1-TC3-1`, `grade10-site-auction-bid-payment-method-US1-TC4-1`, `grade10-site-auction-bid-payment-method-US1-TC5-1`, `grade10-site-auction-bid-payment-method-US2-TC2-1` and `grade10-site-auction-bid-payment-method-US3-TC1-1`, with the authorization requirements and grade10-site-auction-bid-payment-method-US-03
