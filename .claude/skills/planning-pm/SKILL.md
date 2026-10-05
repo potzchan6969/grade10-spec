@@ -106,12 +106,8 @@ Everything this run produces is `draft`. Nothing in it claims review.
    Summary and Landing · Interview](../../../docs/governance/round-summary.md#interview)
    shapes it, listing the defaults you applied as decided by the round. Put
    the questions to them as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request):
-   a numbered list, one blocker per item, each asked from what the user sees
-   or can do; lettered options with the recommended one first; why it matters
-   to the user; what it blocks; and the past decision or requirement it turns
-   on, quoted and linked on the manual - the PRD page
-   (`https://spec.grade10-stg.com/p/<product>/<capability>`) and the change
-   (`https://spec.grade10-stg.com/openspec/#/change/<change-id>`).
+   numbered, with options, why it matters to the user, and links to the PRD
+   and the change.
 
    A question the author answers is a row in their own words, whichever way
    the answer arrived - given, taken as offered, or kept against your

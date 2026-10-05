@@ -55,12 +55,8 @@ in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
 4. **Resolve and check.** A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
    [Clarification Request](../../../docs/governance/round-summary.md#clarification-request):
-   a numbered list, one blocker per item, each asked from what the user sees
-   or can do; lettered options with the recommended one first; why it matters
-   to the user; what it blocks; and the past decision or requirement it turns
-   on, quoted and linked on the manual - the PRD page
-   (`https://spec.grade10-stg.com/p/<product>/<capability>`) and the change
-   (`https://spec.grade10-stg.com/openspec/#/change/<change-id>`).
+   numbered, with options, why it matters to the user, and links to the PRD
+   and the change.
    The same human resolves questions that affect behaviour, scope, design,
    architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another

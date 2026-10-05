@@ -75,12 +75,8 @@ One table, blockers first:
 
 Under the table, list every blocker the owning hand cannot fix without a
 human's decision as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request):
-a numbered list, one blocker per item, each asked from what the user sees
-or can do; lettered options with the recommended one first; why it matters
-to the user; what it blocks; and the past decision or requirement it turns
-on, quoted and linked on the manual - the PRD page
-(`https://spec.grade10-stg.com/p/<product>/<capability>`) and the change
-(`https://spec.grade10-stg.com/openspec/#/change/<change-id>`).
+numbered, with options, why it matters to the user, and links to the PRD and
+the change.
 A blocker with one obvious fix stays in the table alone.
 
 End with one verdict line: `Ready to accept`, or `Not ready - <n> blockers`.
