@@ -148,5 +148,14 @@ openspec/changes/archive/.
 | Facts across the PRD lines, Q1 to Q5, `ui-design.md`, `tech-design.md`, the delta and the cases | **Agree:** primary filled crown after the amount and any tip, before You, named only by consumer copy, on a closed sold lot; Info tip in the amount tone on every row the consumer flags, reading when maximums match, the earlier one leads |
 | Raised questions | None - Q1 to Q5 settle what this capability turns on |
 
-**Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them.
+**Run:** QA2 reconciliation 2026-10-05, rerun after Q6, for change `bid-history-winner-priority`. Reread every case against `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54`, the requirement, `decisions.md` (Q1 to Q6), `ui-design.md`, `tech-design.md`, `tasks.md` 2.1 to 2.4, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `types.ts`, the ClosedSoldEqualMax story and its scenario lines. It is a statement, not proof.
 
+| Finding | Disposition |
+| --- | --- |
+| Q6: rows tied on amount list in the order their maximums were set | **Agree:** the order and the flag are the consumer's, walked on the lot page; the list draws whatever row is flagged, so `shared-ui-auction-listing-SC-51` and TC28 hold unchanged |
+| The `samePricePriority` doc comment in `types.ts` says the row matches the leading price, which Q4 widened to any older tie | **Agree:** task 2.4 corrects it; no case reads a doc comment |
+| TC29 still has no render that leaves `winner` unset | **Kept:** task 2.4 owes the story; the case stays `draft` |
+| Case ids `US1-TC27-1` to `US1-TC29-1` | **Checked:** the durable suite ends at `TC18`; `cap-custom-maximum-entry` takes `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`. No collision |
+| Raised questions | None - Q1 to Q6 settle what this capability turns on |
+
+**Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them.

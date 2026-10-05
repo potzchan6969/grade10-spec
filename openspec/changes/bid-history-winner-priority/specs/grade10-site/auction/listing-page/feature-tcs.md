@@ -37,15 +37,15 @@
 
 **Steps:**
 
-1. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it.
-2. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it.
+1. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
+2. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 3. As customer B, read the Recent bids rows at `<maximum>`.
 4. Hover the Info control on customer B's row at `<maximum>`.
 
 **Expected Results:**
 
-* Step 3: customer A's row and customer B's row both read `<maximum>`, customer A's first.
-* Step 3: customer A's row at `<maximum>` carries no Info control.
+* Step 3: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A leads and set `<maximum>` first, whatever time each row shows.
+* Step 3: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
 * Step 4: the tip reads When maximums match, the earlier one leads.
 
 ### grade10-site-auction-listing-page-US12-TC8-1: An older tie lower down keeps the earlier-leads tip
@@ -77,8 +77,8 @@
 
 **Steps:**
 
-1. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it.
-2. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it.
+1. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
+2. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 3. As customer C, enter `<higher maximum>` in the custom maximum on the bid panel and confirm it.
 4. As customer C, read the current price and the Recent bids rows at `<maximum>`.
 5. Hover the Info control on customer B's row at `<maximum>`.
@@ -86,8 +86,8 @@
 **Expected Results:**
 
 * Step 4: the current price is above `<maximum>`, and customer C's row leads Recent bids.
-* Step 4: customer A's row and customer B's row both read `<maximum>`, customer A's first.
-* Step 4: customer A's row at `<maximum>` carries no Info control.
+* Step 4: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A set `<maximum>` first, whatever time each row shows.
+* Step 4: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
 * Step 5: the tip reads When maximums match, the earlier one leads.
 
 ---
@@ -164,6 +164,7 @@
 ## Settled
 
 - A row tied on amount with a row above it carries the earlier-leads tip at any older tie lower down Recent bids, not only at the current price; the row above carries none (decisions Q4).
+- Rows tied on amount are listed in the order their maximums were set - the leading or won row first, then the bidder who set that maximum earlier - never by when each row was stamped, and the tip goes on the row of the later maximum (decisions Q6).
 
 ## Reconciliation
 
@@ -178,7 +179,7 @@
 | A sold lot crowns its won row and no other; a live lot crowns none | **Folded in:** `grade10-site-auction-listing-page-SC-48` / `grade10-site-auction-listing-page-US14-TC7-1` |
 | A tied maximum that came second carries the earlier-leads tip; the leader carries none | **Folded in:** `grade10-site-auction-listing-page-SC-49` / `grade10-site-auction-listing-page-US12-TC7-1` |
 | The tip on an older pair of equal amounts, below the current price | **Folded in:** Q4 settled it and `grade10-site-auction-listing-page-SC-51` states it, so the earlier Out of suite no longer holds; `grade10-site-auction-listing-page-US12-TC8-1` walks it. The mapper test in `grade10`, `listingLotExtras.test.ts`, "keeps the same-price priority tip on older equal-price pairs", stays its unit proof |
-| US12-TC8: an older tie needs a third bidder to move the price past it; customer A's earlier maximum answers customer B's later one, so customer A's row at `<maximum>` is the newer and ranks first, as `listingLotExtras.ts` ranks a tie with no leader | **Kept:** the case reads the rows at `<maximum>` by bidder, not by time, as `grade10-site-auction-listing-page-SC-51` does |
+| US12-TC8: an older tie needs a third bidder to move the price past it; customer A's earlier maximum answers customer B's later one | **Kept:** the case reads the rows at `<maximum>` by bidder, not by time, as `grade10-site-auction-listing-page-SC-51` does. Q6 supersedes the reason first given here, that customer A's row was the newer and ranked first: both rows share one stamp, and customer A's lists first because customer A set `<maximum>` first; see the Q6 run below |
 | No crown on a lot Closed without a result or ended without a winner, stated by the requirement; no scenario carried it at the first QA2 | **Folded in:** reported to Dev, then at the owner's word `grade10-site-auction-listing-page-SC-50` / `grade10-site-auction-listing-page-US14-TC8-1`; `listingLotExtras.test.ts`, "crowns no row until the lot is closed sold", proves the mapper half |
 | US14-TC8 reread, written without a QA2 read: a sale is absolute and a called-off lot is hidden, so a close with no winner is a lot with no bid, and Recent bids holds no row to crown | **Kept:** the second lot stays, since `grade10-site-auction-listing-page-SC-50` names it; step 2 now asserts Ended with No bids and an empty Recent bids, which the durable `Anyone - No winner` row states, rather than a crown with no row to sit on |
 | US14-TC8's first lot was "result not yet recorded" with no way to hold it there | **Folded in:** its pre-condition holds the close back until the next sweep, as the durable US14 delayed-close case does |
@@ -189,5 +190,18 @@
 | `tasks.md` 4.1 cites `grade10-site-auction-listing-page-SC-48` and `-SC-49` only, and 4.3's walk names neither the older tie nor `grade10-site-auction-listing-page-US12-TC8-1` | **Reported:** to Dev; `tasks.md` is not QA's to edit |
 | Facts across the Bidding page line and decision row, Q1 to Q5, `tech-design.md` Decision 4, the delta and the cases | **Agree:** the won row is crowned only once the close is recorded as sold; every row tied on amount with a row above it carries the tip, at the current price and at any older tie; the page supplies the copy in `en`, `ko`, `zh-Hans` and `zh-Hant` |
 | Raised questions | None - Q1 to Q5 settle what this capability turns on |
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after Q6, for change `bid-history-winner-priority`. Reread every case against `grade10-site-auction-listing-page-SC-48` to `grade10-site-auction-listing-page-SC-51`, the requirement's Tied maximum clause as Q6 left it, `user-journeys.md`, `proposal.md`, `decisions.md` (Q1 to Q6), `ui-design.md`, `tech-design.md` Decisions 4 and 5, `tasks.md` 4.1 to 4.4, the Bidding · Auction Panel line and decision row, the durable spec and suite, `define-public-auction-identifiers`'s suite on this capability, and in `grade10` `listingLotExtras.ts`, `listingLotExtras.test.ts` and the public ledger read in `repositories/listings.ts`. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| Q6: rows tied on amount list in the order their maximums were set, leader or won first, never by stamp or random id | **Agree:** `grade10-site-auction-listing-page-SC-49` and `-SC-51` already name the tie by whose maximum came earlier, not by row time; both cases now say who sets `<maximum>` first in steps 1 and 2 and expect the tip on the row of the later maximum |
+| US12-TC7: customer B's challenge and customer A's automatic answer share one stamp, but customer A's row is the leading one | **Kept:** the leader lists first under the build and under Q6 alike, so the case holds before and after task 4.2 |
+| US12-TC8: once customer C leads, neither row at `<maximum>` leads and both share one stamp; the public ledger read orders them by random id and the mapper by pseudonym, so the tip can land on customer A's row | **Kept:** the case expects Q6's order, customer A first; it fails at random until task 4.2 orders the read by when each bidder first set that maximum. The earlier row's reason, that customer A's row was the newer, is struck |
+| A walker cannot see when a maximum was set, only each row's time, which a tie shares | **Folded in:** both cases expect the order by who set `<maximum>` first, whatever time each row shows |
+| `tasks.md` 4.1 cited `grade10-site-auction-listing-page-SC-48` and `-SC-49` only, and the walk named no older tie | **Resolved:** 4.2 cites `grade10-site-auction-listing-page-SC-48` to `-SC-51` and builds the order test first; 4.4 walks the tip at the current price and at an older tie lower down |
+| Case ids `US12-TC7-1`, `US12-TC8-1`, `US14-TC7-1` and `US14-TC8-1` | **Checked:** the durable suite ends at `US12-TC6` and `US14-TC6`; no other active change holds these ids. No collision |
+| Facts across the Bidding page line and decision row, Q1 to Q6, `tech-design.md` Decisions 4 and 5, the delta and the cases | **Agree:** the won row is crowned only once the close is recorded as sold; a tie lists leader or won first, then the earlier maximum; every row with an equal amount listed above it carries the tip, at the current price and at any older tie |
+| Raised questions | None - Q6 settles the order of a same-stamp tie, and Q1 to Q5 the rest |
 
 **Uncovered anchors:** none. Recent bids outcome's two items each have cases - winner after close by `grade10-site-auction-listing-page-US14-TC7-1` and `-US14-TC8-1`, equal-max tip by `-US12-TC7-1` and `-US12-TC8-1` - and each of `grade10-site-auction-listing-page-SC-48` to `-SC-51` is asserted by one of them.
