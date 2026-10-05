@@ -14,8 +14,10 @@
 ## Non-Goals
 
 - Redesigning the winner's page: its layout, stepper and copy, a Next step
-  panel, a setup flow with a review step, and fee wording at the method choice.
-  Only the admin console is redesigned
+  panel, and a setup flow with a review step. Only the admin console is
+  redesigned; the winner's page takes the fee wording, card by card fee rule,
+  the Country/Region list, the kept one-time address and Copy Message's own
+  confirmation, per Q30 to Q36
 - Computing tax. The operator enters it, per `add-winner-order-tax-line`
 - Reading the payment provider's fees, or pricing each card's real fee for an
   international card or a currency conversion
@@ -64,6 +66,13 @@
 | Q27 | What does a returned proof tell the winner? | The reason the operator gives for the winner, never the internal note; the deadline resumes with the time that was left, and the Proof not accepted letter goes out - decided by the round | Returning it with no word, which leaves the winner waiting on a check that has ended |
 | Q28 | Which proof files does Grade10 take? | The winner's upload keeps its limits - 1 to 3 files of 5 MB each and 15 MB in all, PDF, PNG, JPEG, HEIC or HEIF - judged by the file's content, not its name; an operator attaches 1 to 5 JPEG, PNG or PDF files of 10 MB each - decided by the round | Trusting a file's name, which lets any file through as a JPEG |
 | Q29 | What does Grade10 keep of a refund's bank account? | The bank name, the channel (FPS, local or SWIFT) and the account or FPS phone masked to its last four digits, or an FPS email to its first letter and domain; the full number stays with the bank transfer itself - decided by the round | Keeping the full account number, which is personal data Grade10 never needs again once the refund is sent |
+| Q30 | How does an operator reach a winner about a transfer or a proof? | On WhatsApp, at the phone number from the address form, which the order page shows with the winner's name and email - Operations confirmed | Email alone, and email and WhatsApp both |
+| Q31 | What confirms Copy Message? | The button itself reads Copied for a moment, and no toast appears, so the dialog stays the only thing on screen. The To and Subject copy controls are not part of this decision - Product (@tangconst) | Keeping the toast, and no feedback at all |
+| Q32 | Is card offered in a currency with no card fee rule? | No. Card launches without a rule in USD and JPY: until Finance saves one for a currency, a winner in it is not offered card at order setup and reads that card is not yet available there, and no card invoice in it can be sent. This replaces card in every currency - Finance | Holding launch for Finance's rates, and charging no card fee |
+| Q33 | What does the winner read at the method choice? | Card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it - Product (@tangconst) | Showing no figure for either |
+| Q34 | Does billing Add Address use the delivery Country/Region list? | Yes: the same full A-Z list and searchable field, so a winner billed abroad finds their country the same way - Product (@tangconst) | A billing list of its own |
+| Q35 | Which language do Country/Region names read in? | The account's language, as the rest of the site does - Product (@tangconst) | The browser's locale, and fixed English |
+| Q36 | Does an unsaved one-time address survive leaving the order? | Yes. It stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it - Product (@tangconst) | Clearing it on leaving |
 
 ## Raised
 
@@ -85,3 +94,4 @@
 | grade10-admin/auction/payment-settings | What is the upper bound on a rule's percentage? | Q22 |
 | grade10-admin/auction/test-winners | How does a test winner sign in? | Q19 |
 | grade10-admin/auction/test-winners | What does Cancel do to the sandbox lot? | Q18 |
+| grade10-site/auction/winner-order | Where neither method is offered - USD or JPY with no card fee rule, and no bank details - setup cannot be confirmed: what is the winner told to do, and does the setup deadline still run to Setup Overdue and its consequences? |  |

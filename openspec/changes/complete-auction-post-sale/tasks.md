@@ -52,16 +52,28 @@
 - [ ] 7.6 Routes: the `auctionOrder` surface, `routes/auction-order.tsx`, the Orders tab, `queue` removed; the Test tab lazy-loaded behind the build constant with its files in `TEST_ONLY`; `pnpm run check:admin-bundle`, `apps/admin/grade10/src/pages/auction/AuctionPage.test.tsx`
 - [ ] 7.7 Test winners panel with create, list, Email sign-in link and Open order; the winner fixtures panel and `WINNER_FIXTURE_STATUSES` go; `packages/grade10-auction/admin-frontend/src/features/test/winners/presentation/views/TestWinnersPanel.test.tsx`
 - [ ] 7.8 Delete the `post-sale`, `winner-orders`, `settlements` and `fulfillment` slices with their exports, DI modules and the fixture client's emulation; Payment Settings gated on `auction:payment`; Listings offer Open order; `pnpm run typecheck`, `node scripts/test.mjs packages/grade10-auction/admin-frontend`; `isExtended` holds only for a published lot still taking bids and reads Extended; `packages/grade10-auction/admin-frontend/src/features/catalog/listings/domain/models/AdminListing.test.ts`
+- [ ] 7.9 Tests first for post-sale SC-22 and SC-203 in `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx`: the Winner section shows the name, the account email and the phone from the confirmed delivery address; then the section; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
+
+## 8. Winner Setup (grade10)
+
+- [ ] 8.1 Tests first for SC-248, SC-249 and payment-settings SC-12 in `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`: `readWinnerOrder` answers `paymentMethodsOffered` from the card rule and the bank details, and `confirmWinnerAddress` refuses card with no card rule and any method where neither is offered, with `METHOD_UNAVAILABLE`; then `methodsOffered` in `services/orders/setup.ts` behind both, and `paymentMethodsOffered` on `WinnerOrderRead` with `packages/grade10-auction/contracts/test/winnerOrder.test.ts`; `node scripts/test.mjs apps/backend/grade10/auction`
+- [ ] 8.2 Tests first for SC-254, SC-255 and SC-256 in `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts` and `apps/backend/grade10/store/test/db/auctionRouter.spec.ts`: the draft is saved, answered only in Awaiting Setup, refused once confirmed or past the deadline, and cleared by confirm, reopen, record and cancel; then `setup_draft` in the order migration and the Drizzle schema, `saveSetupDraft` behind `saveWinnerSetupDraft` on the winner entrypoint and its allowlist, the store router forwarding it, and `eraseBidder` nulling it; `pnpm run check:migrations`, `packages/grade10-auction/backend/test/repositories/orders.drizzle.test.ts`, `node scripts/test.mjs apps/backend/grade10/store`
+- [ ] 8.3 Tests first for SC-91, SC-248 and SC-249 in `apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx`: the choice renders from `paymentMethodsOffered`, card not offered reads `auctionOrders.setup.cardUnavailable`, and the two fee texts; then the method choice and the catalog keys `auctionOrders.setup.fee.card`, `auctionOrders.setup.fee.bankTransfer` and `auctionOrders.setup.cardUnavailable` in `en`, `zh-Hant`, `zh-Hans` and `ko`; `node scripts/test.mjs apps/frontend/grade10`
+- [ ] 8.4 Tests first for SC-251, SC-252 and SC-253 in `apps/frontend/grade10/src/pages/auctions/countryRegions.test.ts` and `AuctionWinnerOrderPage.test.tsx`: the list per locale, sorted by that locale, searched by its names, and the same on billing Add Address; then `countryRegionItems(locale)` and `countryRegionLabel(code, locale)` read from the site locale, and one `CountryRegionField` on delivery and billing Add Address; `node scripts/test.mjs apps/frontend/grade10`
+- [ ] 8.5 Tests first for SC-254 and SC-255 in `apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx`: applying an unsaved one-time address calls `saveWinnerSetupDraft`, and a reload restores it ahead of the saved addresses for delivery and for billing; then the page wiring; `node scripts/test.mjs apps/frontend/grade10`
+- [ ] 8.6 Tests first for SC-250 in `apps/frontend/grade10/src/pages/auctions/WinnerOrderContactDialog.test.tsx`: Copy Message reads Copied, then Copy Message, and calls no toast; the To and Subject controls are unchanged; then drop `toast.success` from the Copy Message path in `WinnerOrderContactDialog.tsx`; `node scripts/test.mjs apps/frontend/grade10`
 
 ## 9. Letter Template (grade10-spec)
 
 - [ ] 9.2 The Proof not accepted letter under `apps/emails/emails/auction/order/`; `pnpm --dir apps/emails run typecheck`
+- [ ] 9.3 The Contact Us preview `apps/preview/src/pages/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
 
 ## 10. E2E and Docs (grade10)
 
 - [ ] 10.1 `post-sale-journey.spec.ts` with the card, bank and operator journeys, seeded through `testWinners.create` and signed in from `AuthDoor.readOutbox`; `pnpm run test:e2e`
 - [ ] 10.2 The winner-order, partial-payment, refund, account-record and suspension specs and their helpers read `Awaiting Setup`; `pnpm run test:e2e`
 - [ ] 10.3 `docs/architecture/auction.md` takes the derived status, money in, proofs and test winners; `docs/conventions/development.md` takes the QA walk; `pnpm run lint`
+- [ ] 10.4 `post-sale-journey.spec.ts` saves the HKD card rule through Payment Settings before the card journey, and a USD test winner reads card not yet available and cannot confirm setup (SC-249); `pnpm run test:e2e`
 
 ## 11. Archive Gate (grade10-spec)
 

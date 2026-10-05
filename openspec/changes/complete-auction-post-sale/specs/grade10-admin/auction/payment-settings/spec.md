@@ -1,3 +1,5 @@
+# Payment Settings - delta
+
 ## Purpose
 
 Lets an operator with payment processing keep, from the Auction admin section,
@@ -12,6 +14,7 @@ a card invoice's payment processing fee.
   - Safe defaults: USD 0, HKD 0 and JPY 0 until a save
   - Stripe card fee: one card rule per currency, a percentage and a fixed amount, or no rule
   - Live example: each rule shows the fee it suggests on a subtotal of 1,000 in its currency
+  - Card at setup: a winner is offered card only in a currency with a rule; USD and JPY launch with none
   - Payment processing: `auction:payment` is required to read or change either
 
 ## MODIFIED Requirements
@@ -120,7 +123,13 @@ names a currency Grade10 does not support.
 
 **Applies forward** - A saved rule SHALL be where a card invoice's fee on a
 quote or a reissue made after it starts, per `grade10-admin/auction/post-sale`.
-It SHALL NOT change a sent invoice or anything the winner reads.
+It SHALL NOT change a sent invoice.
+
+**Card at setup** - A winner SHALL be offered card at order setup only in a
+currency with a rule, per `grade10-site/auction/winner-order`. Until Finance
+saves a rule for a currency, a winner in it reads that card is not yet
+available there, and no card invoice in it can be sent. USD and JPY launch
+with no rule.
 
 **Access** - Only an operator with payment processing, `auction:payment`,
 SHALL open or save Payment Settings.
@@ -180,3 +189,14 @@ SHALL open or save Payment Settings.
 - **WHEN** they type an HKD rule of `3.4`% and `2.35`
 - **THEN** beside the rule the page shows a fee of 3763 on a subtotal of 100000
   minor units in HKD, read as HKD 37.63 on HKD 1,000.00
+
+#### Scenario: grade10-admin-auction-payment-settings-SC-12 - Saving a card rule offers card in that currency
+**Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
+
+- **GIVEN** Payment Settings holds no USD card rule
+- **AND** an auction order in USD Awaiting Setup, whose winner reads that card
+  is not yet available in USD
+- **WHEN** an operator whose roles are exactly `finance` saves a USD rule of
+  `4.4`% and `0.30`
+- **AND** the winner returns to the payment method choice
+- **THEN** card is offered on that order

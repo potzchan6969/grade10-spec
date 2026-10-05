@@ -1,3 +1,5 @@
+# Post-Sale - delta
+
 ## Purpose
 
 Operators work every won lot's auction order in one Orders workspace: a
@@ -20,6 +22,7 @@ dispatch and delivery recorded, with every change on one timeline.
   - One timeline: the invoice log, the fulfilment log and comments, oldest first
   - Dialogs: each action restates what will happen, and a refusal reads as a sentence
   - Money in major units: an operator types `50.00` for HK$50
+  - Winner contact: the phone number from the confirmed delivery address, where an operator reaches the winner on WhatsApp about a transfer or a proof
 - Quote and send
   - Fee by payment method: a card invoice's fee is computed from the Stripe card rule in Payment Settings; a bank transfer invoice's fee is typed by the operator, zero or more
   - What was seen is sent: a send or reissue carries the total the operator read
@@ -581,6 +584,35 @@ minor units.
 - **WHEN** an operator opens each
 - **THEN** the first shows a Test badge beside its status
 - **AND** the second shows none
+
+### Requirement: Winner contact fields
+
+An order's detail SHALL show the winner with their contact details
+emphasised: the name on the account, the registered account email, and the
+phone number from the delivery address the winner confirmed. Grade10 SHALL
+NOT show a payment-provider customer or payment identifier as the winner's
+contact.
+
+**Transfer and proof contact** - An operator reaches the winner about a bank
+transfer or a payment proof on WhatsApp, at that phone number.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-gw4 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-22 - The winner's email is the contact
+**Serves:** Queue - the winner's email is the contact
+
+- **GIVEN** an auction order with a winner
+- **WHEN** an operator opens it
+- **THEN** the winner's name and registered account email are shown as the
+  contact
+- **AND** no payment-provider identifier is shown in their place
+
+#### Scenario: grade10-admin-auction-post-sale-SC-203 - The order page shows the number to reach the winner on
+**Serves:** post-sale-US-03 - Operator collects payment
+
+- **GIVEN** a Payment Verifying order whose winner confirmed a delivery
+  address with phone `+852 91234567`
+- **WHEN** an operator opens the order
+- **THEN** the page shows `+852 91234567` with the winner's name and email
 
 ### Requirement: Payment and shipment are separate grants
 
