@@ -521,13 +521,13 @@ Runs once per row of **Test data**.
 **so that** I can see how I was outbid without seeing anyone's hidden maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-sow rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### grade10-site-auction-bidding-history-US3-TC1-1: Competing bid shows You were outbid
+### grade10-site-auction-bidding-history-US3-TC1-1: Competing bid shows customer A outbid
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -556,18 +556,18 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The combined history shows that rival under its listing pseudonym.
-* The same step marks **You were outbid** at the resulting public price.
-* The amounts in that step are the public price.
+* Customer B appears under the listing pseudonym.
+* That step shows customer A outbid at the public price.
+* The amounts shown are the public price.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-i8u rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### grade10-site-auction-bidding-history-US3-TC2-1: Automatic response is attributed to You
+### grade10-site-auction-bidding-history-US3-TC2-1: Automatic response is attributed to customer A
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -596,9 +596,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The rival's accepted action appears before the collector's automatic movement when they share a time.
-* That movement is attributed to **You** and marked as automatic.
-* The rival's action and that movement read as one step.
+* Customer B's action comes first when they share a time.
+* Customer A's following movement is marked automatic.
+* Both records read as one step.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-ybl rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
 ### grade10-site-auction-bidding-history-US3-TC3-1: Failed attempt sits beside unchanged auction state
