@@ -99,8 +99,8 @@ At all times, `available + reserved = stock`, and derived
 `ledger = stock + sold + withdrawn + vaulted`. Sold, withdrawn, and vaulted
 SHALL never decrease. Derived ledger SHALL rise only by intake and fall only
 by an intake reversal, which takes out units that never moved
-(`Unmoved regular stock can be reduced`, `An unmoved Cert record can be
-removed as never received`). Stock, reserved, sold, vaulted, and withdrawn SHALL be
+(`Regular stock intaken since its latest move can be reduced`, `An unmoved
+Cert record can be removed as never received`). Stock, reserved, sold, vaulted, and withdrawn SHALL be
 written by the inventory service in the same locked transaction as the
 mutation — not by database triggers that sync counters from reservations.
 Holder-facing available on a **`created`** product is that inventory's
@@ -602,8 +602,8 @@ moved and no active hold names.
 - **GIVEN** a product with unmoved Cert record `PSA-1`, and Cert record
   `PSA-2` that an Admin hold named and released, both Available
 - **WHEN** an authorized inventory admin selects each in Cert ID details
-- **THEN** `PSA-1` offers Reverse intake and no Remove physical unit
-- **AND** `PSA-2` offers Remove physical unit and no Reverse intake
+- **THEN** `PSA-1` offers `Remove` and no `Remove physical unit`
+- **AND** `PSA-2` offers `Remove physical unit` and no `Remove`
 - **WHEN** a physical removal of `PSA-1` is sent anyway
 - **THEN** Grade10 refuses it, and stock, withdrawn, the record, its media and
   the history are unchanged
