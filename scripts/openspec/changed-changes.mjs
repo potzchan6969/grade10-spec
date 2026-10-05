@@ -236,6 +236,30 @@ const SECTIONS = [
   ["archived", ":file_cabinet: *Archived*", () => ""],
 ];
 
+/** Slack refuses a section whose text passes 3,000 characters, and a
+ * message past 50 blocks — `invalid_blocks`, and the whole post with it. */
+const SECTION_LIMIT = 3000;
+const MAX_SECTIONS = 49;
+
+/** One milestone's lines as sections, each under Slack's limit: the heading
+ * opens the first, and the rest carry on under it without repeating it. */
+function packed(heading, lines) {
+  if (lines.length === 0) return [];
+  const sections = [];
+  let text = heading;
+  for (const line of lines) {
+    if (text.length + 1 + line.length > SECTION_LIMIT && text !== heading) {
+      sections.push(text);
+      text = line;
+    } else text = `${text}\n${line}`;
+  }
+  sections.push(text);
+  return sections.map((one) => ({
+    type: "section",
+    text: { type: "mrkdwn", text: one.slice(0, SECTION_LIMIT) },
+  }));
+}
+
 /**
  * The channel post: one section per milestone a change crossed, and nothing
  * for a push that crossed none — `blocks` is empty then, and nothing is sent.
@@ -247,22 +271,29 @@ export function slackPayload({
   manualUrl,
   openspecUrl = "https://spec.grade10-stg.com/openspec/",
 }) {
-  const sections = SECTIONS.map(([milestone, heading, detail]) => {
-    const crossed = milestones.filter((one) => one.milestone === milestone);
-    if (crossed.length === 0) return null;
-    return {
+  const sections = SECTIONS.flatMap(([milestone, heading, detail]) =>
+    packed(
+      heading,
+      milestones
+        .filter((one) => one.milestone === milestone)
+        .map(
+          (one) =>
+            `- ${changeLink(one.id, one.title ?? humanize(one.id), openspecUrl)} (\`${one.id}\`)${detail(one)}`,
+        ),
+    ),
+  );
+  // Slack takes 50 blocks a message, the context line among them: a range
+  // past that names what it dropped rather than being refused whole.
+  if (sections.length > MAX_SECTIONS) {
+    const dropped = sections.length - (MAX_SECTIONS - 1);
+    sections.splice(MAX_SECTIONS - 1, dropped, {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `${heading}\n${crossed
-          .map(
-            (one) =>
-              `- ${changeLink(one.id, one.title ?? humanize(one.id), openspecUrl)} (\`${one.id}\`)${detail(one)}`,
-          )
-          .join("\n")}`,
+        text: `…and ${dropped} more sections — ${slackLink(manualUrl, "the planning board")} has them all`,
       },
-    };
-  }).filter(Boolean);
+    });
+  }
   if (sections.length === 0) return { blocks: [] };
 
   return {
