@@ -99,19 +99,19 @@ Open Questions.
 ## References
 
 - [Post-Bidding · The Invoice](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice)
-- [Post-Bidding · Paying](../../../docs/prds/products/grade10-site/auction/post-bidding.md#paying)
+- [Post-Bidding · Bank Transfer Instructions](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions)
+- [Post-Bidding · Receipt Documents](../../../docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents)
 - [Auction Invoice and Receipt Contents](../../../docs/references/auction-invoice-and-receipt-contents.md)
 
-## Open questions
+## Scope boundaries
 
-- **Tax line shape.** Deliberately unresolved here — the reserved `ReactNode`
-  prop carries no shape of its own until a separate change defines the
-  regime. Product owns it.
-- **Formal tax receipt.** Whether a receipt needs Grade10's company details
-  and a tax ID at all is still open. Finance owns it.
-- **Bank account details.** `InvoicePdf`'s bank-rails props carry whatever
-  value the app has; the SWIFT/FPS/HK local account values themselves are
-  still ❓. Finance owns it.
+- **Tax line shape.** This change exposes no tax-line contract. A future
+  product requirement must define its regime and shape in its own change.
+- **Formal tax receipt.** This change exposes no company-details or tax-ID
+  receipt block. Finance may sponsor a future requirement when one exists.
+- **Bank account details.** `InvoicePdf` receives the immutable payment-
+  instruction snapshot issued by Finance configuration. Live SWIFT, FPS and
+  Hong Kong local values, including the QR asset, are not source-controlled.
 - **Stale "replaced invoice names its replacement" claim on
   `winner-order/spec.md`.** Removing `InvoicePdf`'s `replacedBy` prop
   (`decisions.md` Q16) leaves the "Every invoice carries an invoice ID and a

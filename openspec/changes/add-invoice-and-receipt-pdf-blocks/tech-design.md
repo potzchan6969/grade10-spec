@@ -121,7 +121,7 @@ export type InvoicePdfBankRails = {
   swift: { beneficiary: string; swiftBic: string; account: string };
   fps: { fpsId: string; beneficiary: string };
   hkLocalTransfer: { bankAndCode: string; beneficiary: string; accountNo: string };
-  reference: string;
+  instructionReference: string;
 };
 
 export type InvoicePdfData = {
@@ -161,13 +161,13 @@ export type ReceiptPdfData = {
   receiptNumber: string;
   paidAt: Date;
   invoiceId: string;
-  paymentReferenceCode: string;
+  providerReferenceCode: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly PdfLineItem[];
   paymentBreakdown: ReceiptPaymentBreakdown;
   paymentMethod: string;
-  paymentReference: string | null;
+  providerReference: string | null;
   issuerName: string;
   issuerEmail: string;
   copy: ReceiptPdfCopy;
@@ -251,7 +251,8 @@ then three columns at equal thirds of the content width — SWIFT, FPS, HK
 local transfer, each column its own heading plus its own stack of label/value
 lines, independently sized the way `drawParties`'s Bill To/Ship To columns
 already are — followed by a rule and one wrapped line of
-`copy.bankReferenceNoteLabel` ending in the bold `bankRails.reference`. Called
+`copy.bankReferenceNoteLabel` ending in the bold
+`bankRails.instructionReference`. Called
 only when `data.bankRails` is given; `invoice-pdf.ts` skips the call and the
 vertical space entirely on a card invoice, the same `!== undefined` gate
 `OrderValueSection`'s summary rows already use. Every field arrives as a

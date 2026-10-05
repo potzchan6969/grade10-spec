@@ -48,8 +48,14 @@ winner of three lots has three orders, each with its own deadlines.
   Collection Method, Order Status list or Lots
 - **Progress** — five steps, Address → Invoice → Payment → Shipping →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
+
+### Partially Paid
+
 - 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
   against the Payment step
+
+### Order Progress
+
 - 🚧 **Under Shipping** — Preparing Shipment and Shipped both read against
   the Shipping step as its current (progress) step; while Preparing Shipment,
   Shipping subtext reads Preparing to ship; Shipped and Preparing Shipment
@@ -58,6 +64,9 @@ winner of three lots has three orders, each with its own deadlines.
   Copy Message first on Winner Order, Open Mail App second; overdue,
   cancelled, delivered and partial-payment letters use the same subject and
   body
+
+### Copy Message Policy
+
 - ❓ **Copy Message confirmation** — whether Copy Message shows any success
   chrome beyond the control's own state; Product (@tangconst) confirms
 
@@ -111,6 +120,15 @@ meaning.
 - 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
   the winning bid, and offers Contact Us alone; it gives no reason, and a
   suspension stays until an operator reinstates
+
+### Cancelled Order
+
+- **Cancellation display** — Winner Order keeps the lot, the winning bid and
+  `Cancelled on {date}`, with Contact Us alone. It never shows the operator's
+  reason, category or payment controls
+
+### Refunds
+
 - 🚧 **Suspended winner** — the order remains payable and the page gives
   contact guidance without showing the operator's reason
 - **A refunded order** — reads Refunded as both the order status and the
@@ -165,17 +183,23 @@ hours of the close.
   order show the confirmed snapshot: company name when the address is
   company, recipient name, phone, and the full address including postal code
   (not the lean picker card body)
+
+### Address Deadline
+
+- **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
+  form and only Grade10 reopens it, under Edge Cases
+- 🚧 **Locked on confirming** — the winner changes none of the three
+  afterwards; an operator edits them on request before send and reissues
+  after, and the order shows what changed
+
+### Address Policy Pending
+
 - ❓ **Billing country or region list** — whether billing Add Address uses the
   same full list and searchable field as delivery; Product confirms
 - ❓ **Shippable destinations only** — whether the picker later limits to
   destinations Grade10 ships to; until settled the catalogue is complete
 - ❓ **Catalogue display locale** — whether Country/Region names follow
   browser locale, account language, or fixed English; Product confirms
-- **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
-  form and only Grade10 reopens it, under Edge Cases
-- 🚧 **Locked on confirming** — the winner changes none of the three
-  afterwards; an operator edits them on request before send and reissues
-  after, and the order shows what changed
 - ❓ **Fee range wording** — what each choice says; the bank transfer wording
   names no amount, because the operator sets that fee; Product confirms
 - ❓ **One-time address after a reload** — whether it survives leaving and
@@ -259,6 +283,8 @@ doing, under Edge Cases.
 
 ### By Bank Transfer
 
+#### Bank Transfer Instructions
+
 - 🚧 **Two entry points** — while the invoice is pending, Order summary keeps
   **Submit Payment Proof** as the primary control and places **View Bank
   Details** under it; View Bank Details opens bank rails, Submit Payment
@@ -271,6 +297,9 @@ doing, under Edge Cases.
   name, bank address, SWIFT/BIC, full account or IBAN, then payment
   reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
+
+#### Bank Transfer Proof
+
 - 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
   or transfer reference); **1 to 3** PDF, PNG, JPG, HEIC or HEIF files, **5 MB**
   each and **15 MB** total, uploaded once after paying, behind a confirm
@@ -290,16 +319,23 @@ doing, under Edge Cases.
   Management · Payment](/p/grade10-admin/auction/management#payment)
 - 🚧 **Proof stays private** — the winner never sees a payment proof file or
   its name; the order shows only that proof was sent
-- 🚧 **Bank details by lane** — the Grade10 Finance Limited / HSBC Hong Kong
-  sample outside production; none in production, so card only there until
-  Finance confirms Grade10's account
-- ❓ **The accounts** — Grade10's HKD account for each of the three ways;
-  Finance confirms
+
+#### Bank Instruction Configuration
+
+- 🚧 **Bank details by lane** — Finance-owned configuration supplies approved
+  live instructions and the FPS QR outside source control. Grade10 snapshots
+  them on each issued bank-transfer invoice; preview uses Grade10 Finance
+  Limited and HSBC Hong Kong samples
+
+#### Transfer Contact Policy
+
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
 
 ### Receipts
+
+#### Receipt Documents
 
 - **Receipt** — the itemised amounts and how it was paid: card brand and last
   four, or the method and reference an operator recorded, marked as manually
@@ -328,6 +364,11 @@ doing, under Edge Cases.
 - **A receipt is never reissued** — a refund or a reversal leaves every
   receipt already issued exactly as it was, and moves no later receipt's
   Previous Payments
+
+#### Receipt Policy Pending
+
+- ❓ **Which receipt ID is real** — this page's form and the one Grade10
+  issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
@@ -371,12 +412,24 @@ at expiry, then shipped, delivered, and order cancelled.
 
 ## Edge Cases
 
-| Missed | What the winner sees | What an operator does |
-| --- | --- | --- |
-| The 48-hour address deadline | Confirm hidden, Missed setup deadline with Contact Us; the order reads Setup Overdue | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
-| The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the order reads Payment Overdue | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
+### Missed Address Deadline
+
+- **Winner** — Confirm hides, Missed setup deadline gives Contact Us, and the
+  order reads Setup Overdue
+- **Operator** — reopens the form for a fresh 48 hours, records an address
+  given by phone, or cancels after review
+
+### Missed Payment Deadline
+
+- **Winner** — Pay hides, the overdue alert gives Contact Us, and the order
+  reads Payment Overdue
+- **Operator** — reissues with a fresh 7 days, settles manually, or cancels;
+  the lot returns to stock with no runner-up offer
 
 - **Overdue penalties** — a missed payment deadline suspends the bidder, below
+
+### Overdue Penalty Policy
+
 - ❓ **Other penalties** — what else "penalties or extra charges" in the
   overdue letters means; Product confirms
 
@@ -526,7 +579,7 @@ a second payment provider, and changes to the bid-time rules.
 | Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
-| Awaiting Setup | Decided | Incomplete setup — delivery address, payment method and billing address — reads Awaiting Setup for the winner and the operator alike. | Product (@jeffffej0909) |
+| Awaiting Setup | Decided | Incomplete setup reads Awaiting Setup while its address window is open or reopened. After the 48-hour address deadline with no confirmed address it reads Setup Overdue; a confirmed address reads Preparing Invoice. | Product (@jeffffej0909) |
 | Setup Overdue and Payment Overdue | Decided | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: an incomplete setup reads Setup Overdue after 48 hours from the lot's actual close; Payment Overdue starts only after Grade10 sends the invoice and its 7-day payment deadline passes. Preparing Invoice has no setup-overdue queue mark. | Product and design (@tangconst) |
 | Address window | 🚧 In flight | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
 | My Auctions Status column | Decided | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |

@@ -353,28 +353,29 @@ Ship To for every receipt, each rendering only its own supplied content.
 - **THEN** Bill To shows its own supplied content
 - **AND** Ship To shows its own, distinct, supplied content
 
-### Requirement: ReceiptPdf renders a transfer-reference line only when the payment carries one
+### Requirement: ReceiptPdf renders a recorded provider-reference line only when the payment carries one
 
-A bank-transfer payment carries a reference the winner quoted; a card payment
-does not.
+A bank-transfer payment may carry the provider reference recorded with that
+payment; a card payment does not. This is the recorded payment fact, not the
+invoice's bank-payment instruction reference.
 
-**Given** — ReceiptPdf SHALL render a "Payment" section naming the transfer
-reference when the consumer supplies one. **Withheld** — ReceiptPdf SHALL
-render no such section when no transfer reference is supplied.
+**Given** — ReceiptPdf SHALL render a "Payment" section naming the recorded
+provider reference when the consumer supplies one. **Withheld** — ReceiptPdf
+SHALL render no such section when no provider reference is supplied.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-41 - A bank-transfer receipt names its transfer reference
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-41 - A bank-transfer receipt names its recorded provider reference
 
-**Serves:** ReceiptPdf export - the transfer-reference line renders where the payment carries one
+**Serves:** ReceiptPdf export - the provider-reference line renders where the payment carries one
 
-- **GIVEN** a transfer reference
+- **GIVEN** a recorded provider reference
 - **WHEN** ReceiptPdf renders it
 - **THEN** the Payment section shows the reference given
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-42 - A card-paid receipt shows no transfer-reference line
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-42 - A card-paid receipt shows no provider-reference line
 
-**Serves:** ReceiptPdf export - the transfer-reference line renders where the payment carries one
+**Serves:** ReceiptPdf export - the provider-reference line renders where the payment carries one
 
-- **GIVEN** no transfer reference
+- **GIVEN** no recorded provider reference
 - **WHEN** ReceiptPdf renders it
 - **THEN** no Payment section appears
 - **AND** every other meta row and party block still renders

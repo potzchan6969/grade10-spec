@@ -2,7 +2,7 @@
 
 - [x] 1.1 Update Winner Order, order-status and post-sale PRD pages with the
   persisted address deadline, derived `address_window_open`, 48-hour
-  Awaiting Setup-only Overdue mark, and the payment Overdue timer that starts
+  Setup Overdue status for an unconfirmed elapsed address window, and the payment Overdue timer that starts
   when the invoice is sent and visible to the winner
   (`auction-status-SC-30`, `grade10-admin-auction-post-sale-SC-90`–`SC-91`,
   `winner-order-SC-146`).
@@ -28,11 +28,12 @@
   - Covers: `auction-status-SC-30`–`SC-35` and `winner-order-SC-144`–`SC-151`.
   - Verification: address-boundary and derived-status checks.
 - [x] 3.2 In `services/admin/postSale.ts` plus its repository/router, implement
-  operator-only reopen and phone-address recording with named actor, timestamp
-  and reason; serialize both against address writes and invoice send. Map the
-  48-hour queue mark to Awaiting Setup only; Preparing Invoice has no queue mark,
-  and its payment Overdue timer starts when the invoice is sent and visible to
-  the winner.
+  operator-only reopen of unconfirmed Setup Overdue orders and phone-address
+  recording with named actor, timestamp and reason; serialize both against
+  address writes and invoice send. Map the elapsed unconfirmed 48-hour window
+  to Setup Overdue; reopening restores Awaiting Setup, while Preparing Invoice
+  never derives Setup Overdue. Its payment Overdue timer starts when the invoice
+  is sent and visible to the winner.
   - Covers: `grade10-admin-auction-post-sale-SC-75`–`SC-84`, `SC-90` and
     `SC-91`.
   - Verification: permission, audit and concurrency-boundary checks.

@@ -84,7 +84,7 @@
 
 * The confirmation is refused.
 * The order holds no confirmed delivery address.
-* The order still reads Awaiting Setup.
+* The order still reads Setup Overdue.
 
 ### winner-order-US8-TC3-1: A missed address deadline refuses a change to a confirmed address
 
@@ -135,7 +135,8 @@
 
 **Pre-conditions:**
 
-* `<lot_1>`'s order has no confirmed delivery address and its address deadline passed on 2026-09-05T12:00:00Z.
+* `<lot_1>`'s order has no confirmed delivery address, derives as Setup Overdue,
+  has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
 * An operator reopened the address form at `<the reopen>`.
 * customer(winner of `<lot_1>`) is on <the winner's auction order url>.
 

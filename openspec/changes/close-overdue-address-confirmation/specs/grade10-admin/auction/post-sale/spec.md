@@ -1,15 +1,19 @@
+# grade10-admin/auction/post-sale Specification
+
 ## Feature set
 
 - Queue
-  - Two states before an invoice: Awaiting Setup waits on the winner, Preparing Invoice waits on an operator and needs action
-  - Overdue mark: an Awaiting Setup order is marked when its persisted
-    48-hour address deadline passes; Preparing Invoice has no queue Overdue
-    mark, and its payment Overdue timer starts only after invoice send and
-    winner visibility
+  - Three states before an invoice: Awaiting Setup waits on the winner, Setup
+    Overdue needs operator action after the address deadline, and Preparing
+    Invoice waits on an operator after a confirmed address
+  - Setup Overdue derives when an unconfirmed order's persisted 48-hour address
+    deadline passes. Preparing Invoice has no address-deadline state, and its
+    payment Overdue timer starts only after invoice send and winner visibility
   - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
 - Quote and send
   - Operator quote: Shipping & Handling, and Insurance when added, are priced by a person for the winner's confirmed address
-  - Reopening the address form: an operator gives a winner whose address deadline has passed a fresh 48 hours, with a reason, or records the address themselves
+  - Reopening the address form: an operator gives a winner in Setup Overdue a
+    fresh 48 hours, with a reason, or records the address themselves
   - Send opens the window: sending issues the invoice, locks the address, and starts the 7-day deadline
   - Re-quote on request: an address change after send is re-priced and reissued by an operator, who decides what happens to the deadline
 - Resolving an unpaid order
@@ -24,8 +28,7 @@
 ### Requirement: An operator reopens the address form
 
 An operator holding payment-processing SHALL be able to reopen the address
-form on an auction order in Awaiting Setup or Preparing Invoice whose
-address deadline has passed:
+form on an auction order in Setup Overdue whose address deadline has passed:
 
 1. Open the order and read when its address deadline passed and how many times
    the address form has already been reopened.
@@ -37,17 +40,18 @@ hours from the moment of the reopen, per
 `grade10-site/auction/winner-order`, and SHALL write a reopened entry to the
 invoice log carrying the named operator, the timestamp and the reason.
 
-A reopen SHALL change no status: the order SHALL read Awaiting Setup or
-Preparing Invoice exactly as it did before, its invoice status SHALL stay
-`not_issued`, and no order SHALL be suspended or cancelled by it. Grade10
-SHALL place no limit on how many times one order's address form is reopened.
+A reopen SHALL write no status directly. Its reopened facts SHALL derive
+Awaiting Setup. Its invoice status SHALL stay `not_issued`, and no order SHALL
+be suspended or cancelled by it. Grade10 SHALL place no limit on how many times
+one order's address form is reopened.
 
 Grade10 SHALL refuse a reopen when the reason is missing, when the order's
-address deadline has not passed, when the order's invoice has been sent, since
-the delivery address locks at send, and when the order's invoice status is
-`cancelled`, since cancellation has already returned the lot to available
-stock. An operator without payment-processing SHALL see the reopen control
-visible and disabled, and Grade10 SHALL refuse the same action on the server.
+address deadline has not passed, when the order already has a confirmed address,
+when the order's invoice has been sent, since the delivery address locks at send,
+and when the order's invoice status is `cancelled`, since cancellation has
+already returned the lot to available stock. An operator without
+payment-processing SHALL see the reopen control visible and disabled, and
+Grade10 SHALL refuse the same action on the server.
 
 An operator holding payment-processing SHALL also be able to record a delivery
 address on an order whose address deadline has passed, without reopening the
@@ -59,12 +63,12 @@ the named operator, timestamp and reason.
 #### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
-- **GIVEN** an auction order in Awaiting Setup whose address deadline was
+- **GIVEN** an auction order in Setup Overdue whose address deadline was
   at 2026-09-14T09:00:00Z
 - **AND** an operator holding payment-processing
 - **WHEN** they reopen the address form with a reason at 2026-09-16T14:00:00Z
 - **THEN** the order's address deadline is 2026-09-18T14:00:00Z
-- **AND** the order still derives as Awaiting Setup
+- **AND** the order derives as Awaiting Setup from its reopened window
 - **AND** the winner can confirm a delivery address again
 
 #### Scenario: grade10-admin-auction-post-sale-SC-76 - A reopen without a reason is refused
@@ -118,6 +122,15 @@ the named operator, timestamp and reason.
 - **THEN** Grade10 refuses it
 - **AND** the delivery address stays locked, changeable only by a re-quote
 
+#### Scenario: grade10-admin-auction-post-sale-SC-82 - A confirmed address cannot reopen
+**Serves:** post-sale-US-18 - Operator reopens the address form
+
+- **GIVEN** an auction order in Preparing Invoice with a confirmed address,
+  no sent invoice, and an address deadline that has passed
+- **WHEN** an operator attempts to reopen its address form with a reason
+- **THEN** Grade10 refuses it
+- **AND** the order remains Preparing Invoice
+
 #### Scenario: grade10-admin-auction-post-sale-SC-83 - A cancelled order refuses a reopen
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -131,7 +144,7 @@ the named operator, timestamp and reason.
 #### Scenario: grade10-admin-auction-post-sale-SC-84 - An operator records the address without reopening
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
-- **GIVEN** an auction order in Awaiting Setup whose address deadline was
+- **GIVEN** an auction order in Setup Overdue whose address deadline was
   at 2026-09-14T09:00:00Z
 - **WHEN** an operator holding payment-processing records the delivery address
   the winner gave them by telephone

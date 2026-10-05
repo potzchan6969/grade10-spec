@@ -1,3 +1,5 @@
+# grade10-admin/auction/post-sale Specification
+
 ## Feature set
 
 - Resolving an unpaid order
@@ -10,7 +12,8 @@
 
 ### Requirement: Cancelling an unpaid auction order is explicit and terminal
 
-An operator SHALL choose one cancellation category and enter a note before
+An operator SHALL choose exactly one category from Non-payment, Missed setup,
+Winner asked, Lot issue, and Other, and enter a note before
 confirming an unpaid auction-order cancellation. The confirmation SHALL show
 that the lot returns to stock, no runner-up offer is made, the winner is
 emailed, the suspension is unchanged and the action cannot be undone. After
@@ -34,9 +37,12 @@ SHALL link to the lot while remaining terminal.
 
 ### Requirement: A late payment after cancellation is recorded without revival
 
-If a card payment arrives after cancellation, Grade10 SHALL record it, keep
-the order Cancelled, flag it Paid after cancel, and expose the flag for
-Finance to return the money outside Grade10. Clearing the flag SHALL not
+If a payment commits before cancellation commits, Grade10 SHALL refuse the
+cancellation because recorded money wins. If a card payment arrives after
+cancellation commits, Grade10 SHALL record it append-only, keep the order
+Cancelled, flag it Paid after cancel, and expose the flag for Finance to
+return the money outside Grade10. Only Finance may clear the flag, with the
+refund reference, actor, timestamp and reason. Clearing the flag SHALL not
 revive the order or change the lot's stock outcome.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-152 - A late payment is flagged without reviving the order
@@ -46,3 +52,11 @@ revive the order or change the lot's stock outcome.
 - **WHEN** a card payment arrives after the cancellation
 - **THEN** the payment is recorded and the order remains Cancelled
 - **AND** the order is flagged Paid after cancel for Finance
+
+#### Scenario: grade10-admin-auction-post-sale-SC-153 - Recorded money wins the cancellation race
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** an unpaid order whose card payment commits before an operator's cancellation commits
+- **WHEN** the operator confirms cancellation
+- **THEN** Grade10 refuses cancellation
+- **AND** the order follows its recorded-payment outcome

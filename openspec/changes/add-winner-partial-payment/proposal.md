@@ -96,9 +96,9 @@ landed shape rather than a moving target; see `.openspec.yaml`.
 
 ## References
 
-- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
-- [Post-Bidding · Edge Cases](../../../docs/prds/products/grade10-site/auction/post-bidding.md#edge-cases)
+- [Post-Bidding · Partially Paid](../../../docs/prds/products/grade10-site/auction/post-bidding.md#partially-paid)
+- [Post-Bidding · Partial Payment](../../../docs/prds/products/grade10-site/auction/post-bidding.md#partial-payment)
 - [Auction Management · Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/management.md#post-sale-queue)
-- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
+- [Auction Management · Manual Payment Collection](../../../docs/prds/products/grade10-admin/auction/management.md#manual-payment-collection)
 - [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
 - [Grade10 Invoicing Identifiers](../../../docs/references/grade10-invoicing-identifiers.md)
