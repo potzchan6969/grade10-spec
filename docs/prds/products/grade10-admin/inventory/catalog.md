@@ -103,9 +103,9 @@ product history.
 - **Cert ID change in history** — each change is one history entry with
   its time, actor, the Cert ID before and after (`No Cert ID` before an
   assignment) and optional remarks, and it shows in that unit's history
-- 🚧 **Units entered by mistake** — regular stock intaken since it last moved,
-  or a Cert record that has only been intaken, can be taken out: stock and
-  the ledger fall, withdrawn does not. Remarks default to `Entered by mistake`
+- 🚧 **Units entered by mistake** — regular stock intaken since it last moved, or
+  a Cert record only intaken, leaves as never received; withdrawn does not move
+- 🚧 **Remove physical unit** — offered only on a Cert record that has moved
 - **Explicit reservation unit** — every reservation selects one Cert ID or
   explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Product bulk import** — upload product names and typed schema attributes
@@ -134,8 +134,8 @@ product history.
   when untagged, or is tagged to one same-product Cert record. Every Cert
   record has a Cert ID; regular stock without a Cert ID has no Cert record or
   tag target. Removing a media Cert tag or retagging leaves the originally tagged
-  source item untagged. Removing a physical unit that has moved removes its Cert
-  record and the source media tied to that record; Inventory records the unit as withdrawn
+  source item untagged. Removing a physical unit removes its Cert record and
+  the source media tied to that record; Inventory records the unit as withdrawn
 
 :::detail{title="Product decisions" for="pm"}
 Cert-scoped source media keeps product-level shared images while letting an
@@ -146,8 +146,8 @@ second gallery.
 | --- | --- | --- | --- |
 | Cert media tag identity | Decided | The tag stores the immutable Cert record id. Every Cert record has a printed Cert ID used for display only. | Product |
 | One Cert per source item | Decided | A source item is untagged and shared, or tagged to exactly one same-product Cert record. Regular stock without a Cert ID has no Cert record and cannot be a tag target. | Product |
-| Retag and remove | Decided | An authorized Inventory operator may tag or untag. Retagging leaves the item untagged; assigning another Cert is a separate tag. Physical removal of an available Cert unit that has moved withdraws it, deletes its Cert record and its tagged source media, and leaves other product media and saved Auction snapshots unchanged. | Product |
-| Units entered by mistake | Decided | A unit that has only been intaken can be taken out as if it was never received: stock and the ledger fall, withdrawn does not move. A unit that has moved leaves only by withdrawal, so the ledger keeps every unit that was ever handled. One removal per Cert record: Remove physical unit is not offered on one that has only been intaken, and a card that left before it ever moved is reversed with remarks saying so. | Product |
+| Retag and remove | Decided | An authorized Inventory operator may tag or untag. Retagging leaves the item untagged; assigning another Cert is a separate tag. Physical removal of an available Cert unit withdraws it, deletes its Cert record and its tagged source media, and leaves other product media and saved Auction snapshots unchanged. | Product |
+| Units entered by mistake | Decided | Regular stock intaken since regular stock last moved, or a Cert record that has only been intaken, can be taken out as if it was never received; a Cert record's moves, an assigned record's included, never count against regular stock: stock and the ledger fall, withdrawn does not move. A unit that has moved leaves only by withdrawal, so the ledger keeps every unit that was ever handled. One removal per Cert record: Remove physical unit is not offered on one that has only been intaken, and a card that left before it ever moved is reversed with remarks saying so. | Product |
 :::
 
 :::detail{title="Intake code map" for="engineer"}

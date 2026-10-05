@@ -61,7 +61,7 @@
 ## Decisions
 
 The [catalog delta](specs/grade10-admin/inventory/catalog/spec.md) governs
-the reversal, its refusals, its confirmation and its history entry; Q1 to Q15
+the reversal, its refusals, its confirmation and its history entry; Q1 to Q16
 settle its scope.
 
 ### Writes
@@ -101,11 +101,14 @@ settle its scope.
   Q12):
   1. **Latest move** - the newest `occurred_at` among the inventory's regular
      stock entries whose action is not `intake`, `cert-id-change` or
-     `intake-reversal`, and the inventory's `change-product` entries written
-     under another inventory: `before.oldInventory.id` is the inventory and
-     `before.reservation.inventoryCertId` is null. Every step of a hold of
-     regular stock counts - reserve, adjust, release, sell, vault, product
-     change - and so do a free-pool `sell` or `withdraw` naming no record.
+     `intake-reversal`; its own `change-product` entries whose
+     `after.reservation.inventoryCertId` is null, a hold moved onto its
+     regular stock even from a record elsewhere; and `change-product` entries
+     written under another inventory whose `before.oldInventory.id` is the
+     inventory and `before.reservation.inventoryCertId` is null, a hold of
+     its regular stock moved off. Every step of a hold of regular stock
+     counts - reserve, adjust, release, sell, vault, product change - and so
+     do a free-pool `sell` or `withdraw` naming no record.
   2. **Since then** - over the inventory's regular stock entries after the
      latest move, or all of them where there is none: an `intake` adds
      `quantity − cardinality(after.inventoryCertIds)`, an assignment
@@ -218,7 +221,7 @@ settle its scope.
   invalidated, so the rows, counts and history read again.
 - **Product history** - `changelogActionLabel` renders `intake-reversal` as
   `Intake reversal · No Cert ID`, and `Intake reversal · <Cert ID>` when
-  `before.certRecord` is present.
+  `before.certRecord` is present (Q16).
 
 ## Database Schema
 

@@ -491,8 +491,8 @@ assigning it to another Cert SHALL require a separate explicit tag action.
 Grade10 SHALL refuse a tag write whose target record is missing or belongs to
 a different product, and SHALL preserve the item's current tag and source
 media. Physical removal of a Cert unit, Remove physical unit, SHALL require an
-available record with no active reservation that has moved: one that is not
-unmoved, as `An unmoved Cert record's Cert ID can be corrected` and `An
+available record that has moved and that no active reservation names. A
+record that has moved is one that is not unmoved, as `An unmoved Cert record's Cert ID can be corrected` and `An
 unmoved Cert record can be removed as never received` define it. An unmoved
 record SHALL NOT be physically removed; it leaves by an intake reversal. In
 the same Inventory transaction, Grade10 SHALL
@@ -685,18 +685,24 @@ unit SHALL be reachable however old it is.
 
 ### Requirement: Regular stock intaken since its latest move can be reduced
 
-**Move of regular stock** - an entry of the regular stock history, as `Cert ID
-details shows each unit's history` lists it, other than an intake, a Cert ID
-assignment or an intake reversal: a hold naming no Cert record taken,
-resized, released, sold, vaulted or moved to or from another product, and a
-sale or withdrawal of available stock naming no Cert record. Nothing done to a
-Cert record moves regular stock, a record given its Cert ID from regular stock
-included: after its assignment the record is judged on its own.
+**Move of regular stock** - any of these on the product:
+
+| Move | Moves regular stock when |
+| --- | --- |
+| A hold taken, resized, released, or sold or vaulted from | The hold names no Cert record |
+| A hold moved to another product | It named no Cert record on this product |
+| A hold moved from another product | It names no Cert record on this product |
+| A sale or withdrawal of available stock | It names no Cert record |
+
+An intake, a Cert ID assignment and an intake reversal are not moves. Nothing
+done to a Cert record moves regular stock, a record given its Cert ID from
+regular stock included: after its assignment the record is judged on its
+own.
 
 **Reducible count** - the units of regular stock intaken after the latest
 move, or since the first intake where regular stock never moved, less the
-units given a Cert ID or reduced after that move, and never more than
-available regular stock.
+units given a Cert ID or reduced after that move; never below 0, and never
+more than available regular stock.
 
 | After the latest move                   | Reducible count                   |
 | --------------------------------------- | --------------------------------- |
@@ -705,7 +711,7 @@ available regular stock.
 | A reduction of regular stock            | Falls by its units                |
 | A move of regular stock                 | Starts again from 0               |
 
-Example: a product holds 4 units of regular stock and sells 1 from available
+Example: a product has 4 units of regular stock and sells 1 from available
 stock, then intakes 10 by mistake and gives one unit Cert ID `BGS-88`.
 
 | Step              | Available regular stock | Reducible count |
@@ -802,7 +808,7 @@ intaken before regular stock last moved and cannot be reduced.
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the admin cannot take out more than was intaken since the last move
 
-- **GIVEN** a product that held 3 units of regular stock, sold 1 from
+- **GIVEN** a product with 3 units of regular stock that sold 1 from
   available stock and then intook 2, so `No Cert ID` Available reads 4 and the
   reducible count is 2
 - **WHEN** a reduction of three units, of zero units, and of 1.5 units is sent
