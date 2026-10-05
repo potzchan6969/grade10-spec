@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-20, tcs-rules r3.0
-**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
+**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-25, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
 
 ## shared-planning-agent-rounds-US1: Product manager opens a change from one sentence
 
@@ -670,11 +670,11 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-planning-agent-rounds-US3: Tech PIC challenges a proposed design
+## shared-planning-agent-rounds-US3: Product manager challenges the proposed tech design before accepting
 
-**As a** tech PIC,
-**I want** the proposed system, its data flow and its rejected options in a summary I can challenge in the thread,
-**so that** a wrong mechanism is caught before the requirements are drawn from it.
+**As a** product manager who accepts the plan,
+**I want** the proposed system, its data flow and its rejected options in a summary I can challenge before I accept,
+**so that** a wrong mechanism is caught before anything is built from it.
 
 ### shared-planning-agent-rounds-US3-TC1-1: Summary carries the system, the flow and what was rejected
 
@@ -693,13 +693,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `tech-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
-* admin(tech PIC of <change>) is in <change thread>.
+* The `/planning-dev` run on <change> has drafted `tech-design.md`, `spec.md` and `feature-tcs.md` on <change>'s branch, and the plan is not accepted.
+* The run's summary is posted in <change thread>.
+* admin(product manager of <change>) is in <change thread>.
 
 **Steps:**
 
 1. Open <change thread>.
-2. Read the draft's summary.
+2. Read the plan's summary.
 
 **Expected Results:**
 
@@ -724,8 +725,9 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `tech-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
-* admin(tech PIC of <change>) is in <change thread>.
+* The `/planning-dev` run on <change> has drafted `tech-design.md` on <change>'s branch, and the plan is not accepted.
+* The run's summary is posted in <change thread>.
+* admin(product manager of <change>) is in <change thread>.
 
 **Steps:**
 
@@ -735,8 +737,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `decisions.md` gains a numbered row carrying the challenge and the agent's answer.
 * The reply names the perspectives the challenge re-ran.
+* `decisions.md` gains a numbered row carrying the challenge and the agent's answer.
+* The plan is still not accepted.
 
 ### shared-planning-agent-rounds-US3-TC3-1: The design's readers cite the eight principles
 
@@ -755,27 +758,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A round on `tech-design.md` has run on <change> and its summary is posted in <change thread>.
-* admin(tech PIC of <change>) is in <change thread>.
+* The `/planning-dev` run on <change> has drafted `tech-design.md`, its readers have run, and the summary is posted in <change thread>.
+* admin(product manager of <change>) is in <change thread>.
 
 **Steps:**
 
-1. Read the draft's summary in <change thread>.
-2. Read the round's row in `rounds.md`.
+1. Read the plan's summary in <change thread>.
+2. Read the tech design's row in `rounds.md`.
 
 **Expected Results:**
 
-* Each finding that stood names the principle it holds the draft to.
+* Each tech design finding that stood names the principle it holds the draft to.
 * The row names the perspectives run and what stood.
 
-### shared-planning-agent-rounds-US3-TC4-1: Requirement reaching the design waits on the tech PIC
+### shared-planning-agent-rounds-US3-TC4-1: A question the tech design cannot settle holds acceptance
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
@@ -785,20 +788,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `tech-design.md` is on `main` and the requirements draft needs <a mechanism the tech design does not carry>.
-* admin(tech PIC of <change>) is at a terminal in the store on <change>'s branch.
+* The `/planning-dev` run on <change> needs <a mechanism the tech design cannot settle> for a requirement.
+* admin(product manager of <change>) is in <change thread>.
 
 **Steps:**
 
-1. Read the change's record.
-2. Push the tech PIC's edit carrying <a mechanism the tech design does not carry>.
-3. Read the change's record again.
+1. Read the plan's summary in <change thread>.
+2. Check `decisions.md` and the change's record.
+3. Accept <change>'s plan.
+4. Answer the Raised row.
+5. Accept <change>'s plan again.
 
 **Expected Results:**
 
-* Step 1 shows a dated `awaiting: tech-design:` line for the tech PIC.
-* Step 3 shows the wait cleared.
-* The round records the push as the tech PIC's word for the lines it touched.
+* Step 1 names <a mechanism the tech design cannot settle> as a held question with its recommendation.
+* Step 2 shows a Raised row for it, and no dated `awaiting: tech-design:` line.
+* Step 3 is refused, naming the Raised row; the plan is not accepted.
+* Step 5 accepts the plan.
 
 ---
 
@@ -1215,7 +1221,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * <change> carries a row the round decided, and the draft takes that option.
-* admin(tech PIC of <change>) is in <change thread>.
+* admin(designer of <change>) is in <change thread>.
 
 **Steps:**
 
@@ -1454,18 +1460,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * <change>'s `tasks.md` is behind.
+* A round on <change>'s `ui-design.md` is drafting <a frame nobody drew>, a screen no frame in the designer's ask covers.
 * admin(engineer of <change>) is at a terminal in the application repository.
 
 **Steps:**
 
 1. Tick a task whose tests and code are on `main`.
-2. Write a wait on the tech PIC.
-3. Open <change page url>.
+2. Open <change page url> once the round has pushed its draft.
 
 **Expected Results:**
 
 * The tick is accepted.
-* The wait is written.
+* The change's record carries the round's dated `awaiting: ui-design:` line on the designer, naming <a frame nobody drew>.
 * Neither is refused for the behind artifact.
 
 ### shared-planning-agent-rounds-US5-TC8-1: A landed Raised row puts the requirements and the cases behind
@@ -2685,7 +2691,12 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-None yet - the first blind pass.
+2026-10-05 product revision (`Q112` to `Q114`): the tech PIC is retired; Dev writes the tech design in the planning run, the product manager who accepts the plan challenges it, and a question the tech design cannot settle is a Raised row, never a dated wait. The questions its blind pass asked were already answered:
+
+- The product manager reads and challenges the tech design's summary in the change's thread, where every round's summary and questions arrive and where the agent answers a challenge; a terminal runs the same round - the page's Round, step 5, and the requirement that a remark settles a question asked, with `Q112`.
+- A Raised row lands as a numbered decisions row, answered in the thread like any other, `Q<n>: <answer>` or `Q<n>` alone; acceptance is `pnpm run spec:accept`, refused while a row is open, and that refusal is `shared/planning/change-stages`' own - `Q10`, `Q113`, and `stage-changes-and-notify-hands`' `Q80`.
+- The summary does not state that the requirements and the suite are whole: the product manager judges that by reading them, and the summary carries the perspectives, the findings that stood and each question with its recommendation - `Q112`, `Q9` and the round's one-reply rule.
+- The designer's dated wait for a frame nobody drew is written by the round drafting `ui-design.md`, and a behind artifact holds it no more than a tick - the requirement that a draft waits for what only its hand can give, `Q58` and `Q5`.
 
 ### shared-planning-agent-rounds-US9-TC11-1: The change page mirrors the thread and says what the hands are told
 
@@ -2723,6 +2734,8 @@ None yet - the first blind pass.
 ---
 
 ## Reconciliation
+
+Run: 2026-10-05, revision pass for `Q112` to `Q114`: QA1 revised `US3-TC1-1` to `US3-TC4-1` over the renamed journey, recast `US3-TC4-1` from the tech PIC's dated wait to a Raised row holding acceptance, and moved `US4-TC13-1` and `US5-TC7-1` off the retired role; Dev, without reading them, revised the journey lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25` and `shared-planning-agent-rounds-SC-31`, retired shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) with the requirement that wrote the wait, and wrote `shared-planning-agent-rounds-SC-108` under task group 11. QA2 aligned the US3 heading and its actor to the journey the product manager renamed after QA1, `admin(product manager of <change>)`, a wording alignment rather than a re-reading, and joined the two on anchors; the dispositions are marked 2026-10-05 below.
 
 Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row, and widened its table on the readers' verdicts to the rows `main` holds, the walk on an earlier group, the whole read before the last group and the capability's durable journeys.
 
@@ -2774,9 +2787,20 @@ Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Fe
 * **A round that found nothing still writes its row** - `US9-TC3-1` reads the case the record exists for, and the scenarios said only that there is one row per round. Folded into `shared-planning-agent-rounds-SC-51` and the record's requirement.
 * **Every case automated, and none** - `US8-TC3-1` walks both ends of the run sheet's rule. Kept as a boundary of `shared-planning-agent-rounds-SC-61`, which decides both; no scenario of its own.
 
+2026-10-05, each revised case against the revised scenarios:
+
+* `shared-planning-agent-rounds-US3-TC1-1`, the plan's summary of one screen, each question with its recommendation → `shared-planning-agent-rounds-SC-01`; its first result, the proposed system, its data flow and the options rejected, was the journey's own statement and `Q112`'s with no scenario beside it, and QA2 raised it to Dev, who folded it into `shared-planning-agent-rounds-SC-03` → `shared-planning-agent-rounds-SC-03`. The same pass reworded the Serves and WHEN lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25`, `shared-planning-agent-rounds-SC-31` and `shared-planning-agent-rounds-SC-108` to the product manager who accepts the plan, and the product manager reworded `ui-design.md`'s Challenge recorded row and `proposal.md`, revised the tech PIC out of `decisions.md`'s goals and marked `Q16` superseded by `Q113`; no case moved.
+* `shared-planning-agent-rounds-US3-TC2-1`, the product manager's challenge in the thread settling a numbered row with the agent's answer, the reply naming the readers it re-ran, and the plan still not accepted → `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-12`; a remark accepts nothing because acceptance is `pnpm run spec:accept` alone, as `## Settled` says.
+* `shared-planning-agent-rounds-US3-TC3-1`, each tech design finding that stood naming its principle, and the row naming the perspectives run and what stood → `shared-planning-agent-rounds-SC-31`, `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-51`.
+* `shared-planning-agent-rounds-US3-TC4-1`, a question the tech design cannot settle written as a Raised row, no `awaiting: tech-design:` line, and the summary carrying it with its recommendation → `shared-planning-agent-rounds-SC-108`, `shared-planning-agent-rounds-SC-01`. The acceptance refused naming the row and taken once it lands is `shared-planning-change-stages-SC-87`'s, the refusal the requirement leaves to that capability.
+* `shared-planning-agent-rounds-US4-TC13-1`, a reply overturning a row the round decided, the designer's now rather than the retired tech PIC's → `shared-planning-agent-rounds-SC-21`, its actor alone moved.
+* `shared-planning-agent-rounds-US5-TC7-1`, a tick and the designer's dated wait taken while `tasks.md` is behind → `shared-planning-agent-rounds-SC-38`, `shared-planning-agent-rounds-SC-20`. QA2 recast its second step: the wait is the round's to write as it drafts `ui-design.md`, not the engineer's, as `## Settled` says.
+
 ### Rejected
 
 None. No case read a non-goal as behaviour, and none took the stage, the direct messages or the Behind chip - `shared/planning/change-stages`' - for this capability's.
+
+2026-10-05: `US3-TC1-1`'s result that the summary names the requirements and the cases so their wholeness can be judged - a misreading of `Q112`, under which the product manager judges wholeness by reading the requirements and the suite; the summary's content is the round's one reply. The result was dropped and the case kept.
 
 ### Escalated
 
@@ -2796,6 +2820,13 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 * **Where the product manager's read of the requirements is walked** → `Q27`. In `shared/planning/change-stages`, as the hand's move at Specified; here `shared-planning-agent-rounds-SC-06` states the two readings' exemption alone, and no journey and no case of this capability walks the read.
 * **A remark that touches a page's marked lines** → `Q28`. From the product manager it is applied as written; from any other hand it becomes a ❓ line for the product manager. Folded as `shared-planning-agent-rounds-SC-16`, with `US2-TC7-1` added.
 
+2026-10-05, the revision pass's four questions, each answered by an earlier row and written in `decisions.md`'s `## Raised` as landing there:
+
+* **Where the product manager reads and challenges the tech design's summary** → `Q112`, settled: in the change's thread, where every round's summary arrives; `US3-TC1-1` to `US3-TC4-1` stand.
+* **How a Raised row is answered, and how acceptance is said** → `Q113`, with `Q10` and `stage-changes-and-notify-hands`' `Q80`, settled: a `Q<n>` reply on the numbered row it lands as, and `pnpm run spec:accept`, refused while the row is open; `US3-TC4-1` stands.
+* **Whether the summary states that the requirements and the suite are whole** → `Q112`, settled: the product manager judges it; see Rejected.
+* **Who writes the designer's dated wait in `US5-TC7-1`** → `Q58`, settled: the round drafting `ui-design.md`; the case is recast, see Folded.
+
 ### Out of suite
 
 * `shared-planning-agent-rounds-SC-06` - the two readings and no verifier over them: `pnpm check:manual`'s `blind` rule, which refuses a delta whose moved behaviour no second reading brought back.
@@ -2807,6 +2838,7 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 * `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
 * `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: `scripts/openspec/perspectives.test.mjs`, which gives each challenger the draft and what is before it alone.
 * `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
+* `shared-planning-agent-rounds-SC-25` - a state and a mechanism each written in the design that owns it before the requirements: `scripts/openspec/round-skill.test.mjs`, which reads the round skill's routing of a finding. No case reached it before the revision either, and `US3-TC2-1` reads the challenge to the mechanism, not where a requirements finding lands.
 * `shared-planning-agent-rounds-SC-67` - the wake step holds no session, no write permission and no chat token: `scripts/openspec/reread-workflow.test.mjs`, which reads the step's permissions and its environment. A static reading of a workflow file is no walk through an interface, so the case the blind pass wrote for it is gone.
 
 ### Anchors no case reaches
@@ -2843,10 +2875,10 @@ Slack thread either.
 | `US2-TC4-1` | Which readers a round dispatched, inside the session |
 | `US2-TC5-1` | The dated wait a design round writes, inside the session |
 | `US2-TC7-1` | A remark in the thread on a page's marked lines |
-| `US3-TC1-1` | The draft's summary as the session posts it |
+| `US3-TC1-1` | The plan's summary as the planning run posts it |
 | `US3-TC2-1` | A challenge typed in the thread, and the answer to it |
 | `US3-TC3-1` | The readers' own findings, inside the session |
-| `US3-TC4-1` | The dated wait on the tech PIC, written inside the session |
+| `US3-TC4-1` | The Raised row the planning run writes, and an acceptance refused and then taken, by the product manager |
 | `US4-TC1-1` | The question as the thread carries it |
 | `US4-TC2-1` | An answer typed in the thread |
 | `US4-TC3-1` | A question id typed alone in the thread |

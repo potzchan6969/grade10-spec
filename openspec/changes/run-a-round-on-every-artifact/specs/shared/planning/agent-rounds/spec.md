@@ -107,12 +107,13 @@ other route.
 - **AND** no further step of the round runs
 
 #### Scenario: shared-planning-agent-rounds-SC-03 - A finding that stands changes the draft
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC reads a mechanism the readers have already argued over
+**Serves:** shared-planning-agent-rounds-US-03 - the product manager who accepts the plan reads a mechanism the readers have already argued over
 
 - **GIVEN** a challenger reports that a proposed mechanism holds state a simpler one would not
 - **WHEN** the verifier argues the finding and it stands
 - **THEN** the draft is changed before the summary is written
 - **AND** the summary names the finding as one that stood
+- **AND** a summary of `tech-design.md` names the proposed system, its data flow and its rejected options
 
 ### Requirement: One word lands every artifact of that hand
 
@@ -298,10 +299,10 @@ taken as a remark.
 - **AND** `rounds.md` gains a row naming the remark
 
 #### Scenario: shared-planning-agent-rounds-SC-13 - A remark settles a question that was asked
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC's challenge is answered where the next reader will find it
+**Serves:** shared-planning-agent-rounds-US-03 - the product manager's challenge before accepting is answered where the next reader will find it
 
 - **GIVEN** a numbered decisions row asking which mechanism is taken
-- **WHEN** the tech PIC remarks that the other option is taken
+- **WHEN** the product manager who accepts the plan remarks that the other option is taken
 - **THEN** that row is written with the answer
 - **AND** `rounds.md` gains the round's row naming the remark
 - **AND** the thread carries the agent's answer to the challenge
@@ -510,11 +511,11 @@ the draft that depends on it.
 - **AND** no numbered decisions row is written for it
 
 #### Scenario: shared-planning-agent-rounds-SC-25 - A finding names a state and a mechanism
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC's reading lands in the design it is about, not in the requirement drawn from it
+**Serves:** shared-planning-agent-rounds-US-03 - the product manager who accepts the plan reads the mechanism in the design it is about, not in the requirement drawn from it
 
 - **WHEN** a round on the requirements keeps a finding naming a state a reader sees and one naming a mechanism
 - **THEN** the state is written as a `## States` bullet in `ui-design.md` and the mechanism as a decision in `tech-design.md`
-- **AND** the requirements are drafted only after both have landed
+- **AND** the requirements are drafted from both only once both carry the finding
 
 ### Requirement: Open questions are listed per hand
 
@@ -568,7 +569,7 @@ them from there.
   block, read through the same reader
 - **No reader without a trigger** — a perspective no draft can summon is not an
   entry
-- **One procedure** — `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
+- **One procedure** — `/workflow-plan`, `/workflow-design`, `/workflow-specify`, `/workflow-tasks`,
   `/workflow-build` and `/workflow-land` each name their artifact and call `/workflow-round`, which reads
   this table; none of them carries its own copy of it
 
@@ -611,7 +612,7 @@ it, and SHALL NOT be given any other reader's findings or verdicts.
 - **AND** neither is given a verifier's verdict
 
 #### Scenario: shared-planning-agent-rounds-SC-31 - A design's reader names the principle
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC reads a finding as a claim against a stated principle
+**Serves:** shared-planning-agent-rounds-US-03 - the product manager who accepts the plan reads a finding as a claim against a stated principle
 
 - **WHEN** a reader of `tech-design.md` reports a finding
 - **THEN** the finding names which of the eight principles it rests on
@@ -933,38 +934,33 @@ is before `spec.md` and `feature-tcs.md`, and both SHALL go behind.
 - **THEN** `spec.md` and `feature-tcs.md` are behind
 - **AND** `tasks.md` does not land until both have been read again
 
-### Requirement: A requirement that reaches the tech design writes a dated wait
+### Requirement: A question the tech design cannot settle is a Raised row
 
-The tech design is drawn first, and a requirement it does not carry is asked of
-the tech PIC rather than written over them.
+Dev writes the tech design and the requirements in one planning run, and the
+human who accepts the plan challenges both.
 
-The requirements pass SHALL read `tech-design.md` beside `ui-design.md`, and a
-requirement that needs the proposed mechanism changed SHALL be written as a
-dated wait on the tech PIC.
+The requirements pass SHALL read `tech-design.md` beside `ui-design.md` and
+SHALL NOT write a requirement contradicting either. A question the tech design
+cannot settle SHALL be written as a row in `decisions.md`'s `## Raised`, and
+SHALL NOT be written as an `awaiting: tech-design:` line.
 
-- **The order** — `tech-design.md` is drawn before the requirements, and the
-  requirements are drawn from it
-- **The wait** — an `awaiting: tech-design:` line carrying the date, the
-  requirement and the tech PIC's handle
-- **Cleared by** — the tech PIC's edit to `tech-design.md`, or that artifact's
-  `reviewed:` line
-- **Holds no stage** — the wait is an overlay; it refuses no tick and no claim
+- **One writer** - Dev writes `tech-design.md` after QA1's blind cases and
+  before the scenarios, in the same `/planning-dev` run; a requirement that
+  needs the mechanism changed changes the design in that run
+- **The challenge** - the human who accepts the plan reads the proposed
+  system, its data flow and its rejected options, and whether the requirements
+  and the suite are whole; no hand is told to read the tech design on its own
+- **Holds acceptance** - the open row refuses acceptance, and that refusal is
+  `shared/planning/change-stages`' own
 
-#### Scenario: shared-planning-agent-rounds-SC-49 - The requirements pass reads the design
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC's mechanism is what the requirements are drawn against
+#### Scenario: shared-planning-agent-rounds-SC-108 - A question the tech design cannot settle is raised
+**Serves:** shared-planning-agent-rounds-US-03 - the product manager reads the open question before accepting the plan
 
-- **GIVEN** a change carrying `tech-design.md` and `ui-design.md` on `main`
-- **WHEN** the requirements are drafted
-- **THEN** both are read as what is before them
-- **AND** a requirement contradicting either is not written
-
-#### Scenario: shared-planning-agent-rounds-SC-50 - A requirement reaching the design writes the wait
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC is told which requirement their design does not carry
-
-- **WHEN** a requirement being drafted needs the proposed mechanism changed
-- **THEN** the change's record gains an `awaiting: tech-design:` line with the date, the requirement and the tech PIC's handle
-- **AND** the change's stage is not held by it
-- **AND** the line is cleared by the tech PIC's edit or by `tech-design.md`'s `reviewed:` line
+- **GIVEN** a planning run whose requirements pass needs a mechanism `tech-design.md` does not settle
+- **WHEN** Dev cannot settle it by changing the design
+- **THEN** a row naming the question is written in `decisions.md`'s `## Raised`
+- **AND** the change's record gains no `awaiting: tech-design:` line
+- **AND** no requirement contradicting `tech-design.md` or `ui-design.md` is written
 
 ### Requirement: `rounds.md` holds one row per round
 

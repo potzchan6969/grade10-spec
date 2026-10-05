@@ -49,7 +49,7 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `MyTurnPage`'s questi
 | Press the team map does not name | `<@id> pressed *Confirm <artifact>*` and that nothing lands on it; the button still comes off | `shared-planning-agent-rounds-SC-82` |
 | Question answered by its id | The row written with the recommended option, and the question closed | `shared-planning-agent-rounds-SC-11` |
 | Remark applied | The remark applied as written, and the perspectives that read again named | `shared-planning-agent-rounds-SC-12` |
-| Challenge recorded | The tech PIC's challenge as a decisions row, with the agent's answer | `shared-planning-agent-rounds-SC-13` |
+| Challenge recorded | The accepting product manager's challenge to the tech design as a decisions row, with the agent's answer | `shared-planning-agent-rounds-SC-13` |
 | Landing reply | Every artifact that landed on the word, the handle whose word landed it, the stage the change reached, and the hand it stopped at | `shared-planning-agent-rounds-SC-04` |
 | Landing held by a row | Nothing landed, and the held rows named | `shared-planning-agent-rounds-SC-72` |
 | Re-read, nothing changed | What was read, and that nothing changed | `shared-planning-agent-rounds-SC-39` |

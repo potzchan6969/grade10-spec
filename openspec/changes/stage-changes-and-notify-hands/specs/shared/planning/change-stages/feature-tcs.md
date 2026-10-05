@@ -2086,6 +2086,8 @@ A GitHub Deployment receipt changes one application's status in <environment>. T
 - An in-flight record still naming `tech` is refused by the check as a role outside the five, and the board shows the change in Proposed, named unreadable, with its hands open; the active records lose the line in the same commit as the role, and archived records keep theirs unread - `Q23`, `Q87`.
 - Before the planning run the tech design reads not yet written and the change names the blind cases as what it owes; once the cases and the requirements are in without it, the change names the tech design and stays at Designed - `Q86` and the requirement that the tech design proves Specified.
 - A change with an open Raised row stays below Specified, at Designed, whatever else has landed, and acceptance is refused naming the row - the ladder and `Q80`.
+- Specified is the product manager's turn alone: Dev and QA2 are the planning run's readings, not hands told, and QA's turn comes after implementation - `Q91`, with `Q81`.
+- The retired tech PIC's place in the agent rounds is revised by the round change in its own delta, not here - `Q90`.
 
 ## Reconciliation
 
@@ -2118,7 +2120,7 @@ Five cases went the other way in the earlier pass: the rulings settled behaviour
 2026-10-05, each revised or new case against the revised scenarios:
 
 - `shared-planning-change-stages-US1-TC2-1`, the decisions and the journeys telling the designer alone, neither the engineer nor the product manager → `shared-planning-change-stages-SC-40`, `shared-planning-change-stages-SC-15`
-- `shared-planning-change-stages-US1-TC5-1`, the tech design landing with the requirements and the suite moving its change into Specified in the same push as another change's tasks → `shared-planning-change-stages-SC-47`, `shared-planning-change-stages-SC-86`; the product manager's message rests on the whose-turn table's Specified row, which the open `Q91` may move
+- `shared-planning-change-stages-US1-TC5-1`, the tech design landing with the requirements and the suite moving its change into Specified in the same push as another change's tasks → `shared-planning-change-stages-SC-47`, `shared-planning-change-stages-SC-86`, `shared-planning-change-stages-SC-16`; `Q91` gives Specified to the product manager alone, so the message to <pm handle> and none to the engineer for <change D> is what the scenario now says
 - `shared-planning-change-stages-US1-TC12-1`, the terminal landing's reply naming the designer as the hand whose turn it is → `shared-planning-change-stages-SC-70`, `shared-planning-change-stages-SC-15`
 - `shared-planning-change-stages-US2-TC12-1`, the tech design or `design_waived` completing Specified, the waiver read as not owed with its reason → `shared-planning-change-stages-SC-86`, `shared-planning-change-stages-SC-07`
 - `shared-planning-change-stages-US2-TC13-1`, the requirements and the suite without the tech design held at Designed, naming the tech design as owed → `shared-planning-change-stages-SC-86`
@@ -2158,16 +2160,16 @@ Two scenarios disagreed with what the requirements already settle, and were corr
 - Does the weekly digest reach a handle the team map does not know? → `Q27`
 - Does `landed_by:` hold one handle per artifact, or both? → `Q28`
 
-2026-10-05, the revision pass's questions, QA1's four answered by earlier rows and Dev's four reconciled here:
+2026-10-05, the revision pass's questions, QA1's four answered by earlier rows and Dev's four reconciled here, two of them by the product owner's `Q90` and `Q91`:
 
 - Who holds a change at Designed, and who is told when it lands? → `Q30`, settled: nobody, and the channel post names the stage
 - An `awaiting:` line naming the tech design: shown against the engineer, or refused? → `Q20`, `Q87`, settled: shown against the engineer
 - An in-flight `hands:` still naming `tech`: how do the check and the board read it? → `Q23`, `Q87`, settled: refused, shown in Proposed with its hands open, and removed in the same commit as the role (task 10.6)
 - What does the tech design's row read before Specified? → `Q86`, settled: not yet written, and named as owed only once the cases and the requirements are in
-- Which change revises `run-a-round-on-every-artifact`'s agent-rounds delta, whose journey, leaf and dated-wait requirement still name the tech PIC? → `Q90`, open on the product manager
+- Which change revises `run-a-round-on-every-artifact`'s agent-rounds delta, whose journey, leaf and dated-wait requirement still name the tech PIC? → `Q90`, settled: that change revises its own delta; this change touches only the page's decisions block
 - `add-store-cross-sell` loses its only naming of `@htonyl` when its `tech:` line goes: name them to another role? → `Q87`, settled for this change: the line is deleted, never rewritten to another role (task 10.6); naming them again is that change's product manager's
 - A change with an open Raised row "remains Planned", while the ladder holds it below Specified → the ladder, settled: corrected in the scenario, see Folded
-- Who takes a change at Specified: the scenario names Dev and QA2, the whose-turn and hands tables Dev and the product manager, the page the product manager, and the manual's derivation the product manager and QA? → `Q91`, open on the product manager
+- Who takes a change at Specified: the scenario named Dev and QA2, the whose-turn and hands tables Dev and the product manager, the page the product manager, and the manual's derivation the product manager and QA? → `Q91`, settled: the product manager alone; Dev revised `shared-planning-change-stages-SC-16`, the whose-turn and Hands tables, the page's Hands table and `HANDS_AT` (task 10.12). No case tells Dev or QA at Specified: the cases that name an engineer there move the change to Planned, whose hand the engineer is
 
 `Q26` moved a case: `shared-planning-change-stages-US1-TC3-1` read the key as one per change and now runs a row per entry, the revert and re-landing telling the engineer again.
 

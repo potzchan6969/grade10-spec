@@ -156,4 +156,3 @@ No `grade10` group. `pnpm plan hand` passes the role through to the store's `che
 ## Open Questions
 
 - Whether a direct message to the pusher of a red `main` belongs here or to the land-without-a-pull-request change; the payload is the same either way.
-- Whether `run-a-round-on-every-artifact` revises its own `shared/planning/agent-rounds` delta for the retired role, or this change carries it: its journey `shared-planning-agent-rounds-US-03` (the tech PIC challenges a proposed design), the leaf "Tech design first" and the requirement "A requirement that reaches the tech design writes a dated wait" (`shared-planning-agent-rounds-SC-49`, `shared-planning-agent-rounds-SC-50`) still name the tech PIC. Q89 puts this change's revision in this change, and that delta is the round change's.

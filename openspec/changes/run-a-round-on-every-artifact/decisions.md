@@ -3,9 +3,10 @@
 - Every artifact from the proposal to the code is drafted by the change's
   agent, read by named perspectives, verified, and landed on its hand's word,
   and the change records each round
-- A product manager, a designer and a tech PIC work a change from its thread:
-  a sentence to open it, numbered questions to answer, a draft to tweak or
-  challenge, one word to land
+- A product manager and a designer work a change from its thread: a sentence
+  to open it, numbered questions to answer, a draft to tweak or challenge, one
+  word to land; the product manager challenges the tech design before
+  accepting the plan (Q112)
 - An artifact that goes behind is read again before anything is built on it,
   and a change ends with its journeys walked end to end
 
@@ -40,7 +41,7 @@
 | Q13 | Is the round idempotent? | No, resumable: a run reads the branch, `main` and the thread, computes what is behind and what is asked, and continues; one run per change at a time, a second firing joins the running one; every push is force-with-lease, and a loser says so in the thread and stops | Two runs on one branch, where the loser overwrites the winner or dies silently |
 | Q14 | Where does the walk record what it covers? | On each case's automation status, flipped to automated by the walk's commit; the run sheet leaves automated cases out; the suite runs on every push to `main`, its smoke cases on every staging deploy and cut | A second list of covered cases, which drifts from the suite |
 | Q15 | Does the thread's address live in the record? | Yes: `thread:` in `.openspec.yaml`, written once when the thread opens, so every message and every wake finds it | A search of the app's own messages, which needs a user token; the workflow's cache, which evicts |
-| Q16 | Where does a requirement that reaches the tech design go? | A dated `awaiting: tech-design:` line for the tech PIC, cleared by their edit or a `reviewed:` line; the order stays the owner's, the tech design before the requirements | A tech design after the requirements, which the owner's brief ruled out; a second chain in which the design depends on the spec, which is circular |
+| Q16 | Where does a requirement that reaches the tech design go? | Superseded by Q113. A dated `awaiting: tech-design:` line for the tech PIC, cleared by their edit or a `reviewed:` line; the order stays the owner's, the tech design before the requirements | A tech design after the requirements, which the owner's brief ruled out; a second chain in which the design depends on the spec, which is circular |
 | Q17 | What does a channel message naming an open change do? | It is answered in that change's thread, and the reply names the id; no second change opens | A second change, which doubles the work and splits the thread |
 | Q18 | What if the asker has no entry in the team map? | The change opens with its product manager hand unnamed, and the reply says so and asks for the handle; the map is the fix | Refusing the sentence, which turns the smooth path into a form |
 | Q19 | Who may say land? | The hand of the stage alone; another teammate's word is refused with a reply naming whose word it waits on, and reassigning the hand is the way around | Anybody in the thread, with the record naming them, which makes the hands table decorative |
@@ -149,6 +150,11 @@ moved goal does, and where a remark on the page lands. Each landed as a
 `## Decisions` row above, `Q17` to `Q28`, ; `Q19` and `Q26` also reached
 the page.
 
+The revision on 2026-10-05 settles `Q112` to `Q114`: the tech PIC is retired,
+Dev writes the tech design in the planning run, and the product manager who
+accepts the plan challenges it. Its blind pass raised four questions, each
+answered by an earlier row.
+
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | shared/planning/agent-rounds | A planning-channel message that names an open change: does it route into that change's thread, or open a second change? The feature set states only that a message naming no change opens one. | Q17 |
@@ -164,3 +170,7 @@ the page.
 | shared/planning/agent-rounds | Answering a moved-goal question extend, supersede or split: does each answer do something to the change - a new change, a closed one - or does it only record the product manager's word? | Q26 |
 | shared/planning/agent-rounds | No journey walks the product manager reading the requirements and the cases together at the reconciliation (Q9, the blind readings' stops). Is that the hand of US-05, or a journey not yet written? | Q27 |
 | shared/planning/agent-rounds | A remark that touches a page's marked lines rather than the artifact: is it applied to the page as written, or asked as a ❓ line for the page's owner? | Q28 |
+| shared/planning/agent-rounds | Where does the product manager who accepts the plan read and challenge the tech design's summary: in the change's thread, or in the `/planning-dev` session that wrote it? | Q112 |
+| shared/planning/agent-rounds | How is a Raised row answered, and how is acceptance said: a `Q<n>` reply in the thread, `pnpm run spec:accept`, or both? | Q113 |
+| shared/planning/agent-rounds | Must the plan's summary state that the requirements and the suite are whole, or does the product manager judge that by reading them? | Q112 |
+| shared/planning/agent-rounds | Once the tech PIC's wait is retired, who writes the dated wait on the designer for a frame nobody drew: the round drafting the design, or any hand at a terminal? | Q58 |
