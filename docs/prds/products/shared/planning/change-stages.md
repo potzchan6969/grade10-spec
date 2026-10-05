@@ -17,8 +17,8 @@ A change is in exactly one planning or delivery stage, proven by a file on
 | # | Stage | Proven by | The agent | You |
 | --- | --- | --- | --- | --- |
 | 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted and whether to do it now |
-| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Designer and tech PIC challenge the page and journeys from their own perspectives | Designer and tech PIC: read and land their designs |
-| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
+| 2 | Designed | `ui-design.md` or `ui_waived` | Drafts the UI design from the page and the journeys | Designer: tweak and land the UI design, or record `ui_waived` |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; `tech-design.md` or `design_waived`; every Raised row landed | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
 | 4 | Planned | `tasks.md` | Dev writes the dependency-ordered plan after QA2 reconciliation | Engineer: read the plan |
 | 5 | Accepted | `acceptance.json`, with a content fingerprint of the resolved plan | Reviews the page, designs and deltas against each other, then records the human's acceptance and publishes the contract to `openspec/specs/`; no product question remains open | Product manager or named owner: accept the plan |
 | 6 | Building | A ticked task; the first claim recorded the store's `main` commit and the accepted targets in `implementation.json` | Builds each group test first, audited and verified | Engineer: read each landing |
@@ -44,10 +44,12 @@ A change is in exactly one planning or delivery stage, proven by a file on
   unknown or stale in an environment; a deploy never waits for archive
 - 🚧 **Drafted, then landed on your word** — each planning artifact reaches
   `main` only when its hand lands it, and the landing records whose word it was
-- 🚧 **The tech design before the requirements** — `tech-design.md` is drawn
-  from the page, the decisions and the journeys, beside `ui-design.md`; the
-  requirements read both, and a requirement that reaches the design is a
-  dated wait on the tech PIC, never a hold on the stage
+- 🚧 **The Design stage draws the UI alone** — Designed is proven by
+  `ui-design.md` or `ui_waived` and nothing else; the designer is its one hand
+- 🚧 **The tech design inside planning** — Dev writes `tech-design.md` in the
+  planning run, after QA1 freezes the blind cases and before the scenarios,
+  and it proves Specified beside the requirements and the suite; a question it
+  cannot settle is a Raised row, which holds acceptance
 - **Four lanes today** — proposed, specified, in progress and complete, read
   the same way — [Board](/in-flight)
 
@@ -103,11 +105,14 @@ keeps its availability visible with both active and archived changes.
 
 One handle per role on each change.
 
+- 🚧 **Five roles** — the tech PIC is retired: the human who accepts the plan
+  reviews the tech design and whether the requirements and the suite are
+  whole, and `tech-design.md` is the engineer's
+
 | Role | Key | Takes the change at |
 | --- | --- | --- |
 | Product manager | `pm` | Proposed and Accepted |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
-| Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
 | QA | `qa` | Implementation complete, for the suite's human verdict |
 | Engineer | `dev` | Planned, Accepted and Building |
 | Release hand | `release` | Availability review after archive |
@@ -203,7 +208,8 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Human QA | Decided | QA does not review the planned suite as an execution verdict. Human QA happens after implementation, using a deployed environment when needed. | Product, QA |
 | Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
-| Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |
+| Tech design order | Decided | Written by Dev in the planning run, after the blind cases and before the scenarios; proves Specified; owed when the work lands outside this store. | Product, Engineering |
+| Tech PIC | Decided | Retired: the accepting human reviews the tech design and the fullness of the requirements and the suite. | Product |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |

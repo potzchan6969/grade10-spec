@@ -14,14 +14,15 @@ GitHub Deployment receipts, shown for each application component.
   - One of eight: Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete, Archived, each proven by what is on `main`, never set by a key
   - One projection: the four lanes, the stepper, the pip and every message read the same derivation
   - Proposed whole: the proposal, the decisions and the journeys are one stage, with ❓ on what is still open
-  - Waivers as written: `ui_waived` and `design_waived` stand for the artifact they name, so Designed needs both designs or their line
-  - Tech design first: the tech design is drawn beside the UI design, before the requirements, on every change
+  - Waivers as written: `ui_waived` stands for the UI design and `design_waived` for the tech design, so Designed needs the UI design or its line, and Specified the tech design or its line
+  - Design draws the UI alone: Designed is proven by the UI design or `ui_waived` and nothing else, and the designer is its one hand
+  - Tech design in planning: Dev writes the tech design inside the planning run, after the blind cases and before the scenarios, and it proves Specified beside the requirements and the suite
 - Drafted, landed on a word
   - Agent mark: the six stages from Proposed to Building are drafted by the change's agent and carry the hand's move beside the mark
   - Landed by: `landed_by:` names the hand whose word landed each artifact, written by the landing itself
 - Hands and whose turn
-  - Hands mapping: `hands:` names one handle per role, written by the product manager, the local manual or the application repository's command, refused when the team map does not know it
-  - Whose turn: derived from the stage and the hands, the product manager holding Proposed until the decisions, the journeys and the hands are on `main`
+  - Hands mapping: `hands:` names one handle per role of five - product manager, designer, engineer, QA and release hand - with no tech PIC, written by the product manager, the local manual or the application repository's command, refused when the team map does not know it
+  - Whose turn: derived from the stage and the hands, the product manager holding Proposed until the decisions, the journeys and the designer's hand are on `main`
   - Unnamed hand: a stage whose hand is unnamed shows the hand as open and routes to the role's channel
   - Team map: one entry per handle with its Slack member and roles, and a channel per role
 - Overlays, a closed set
