@@ -57,6 +57,25 @@ describe("the text one section is drawn from", () => {
     expect(text).not.toContain("Three tiers");
   });
 
+  it("reads a focused nested section without including its sibling", () => {
+    const text = sectionTextOf(page, "rounding") ?? "";
+
+    expect(text).toContain("### Rounding");
+    expect(text).toContain("Fractions round down.");
+    expect(text).not.toContain("## Tiers");
+  });
+
+  it("binds a nested delivery mark to its focused section", () => {
+    const nested = {
+      ...page,
+      ast: parsePage("---\ntitle: Payment\n---\n\n## Payment\n\n### Bank details\n\n- 🚧 **Instructions** - Shown on the invoice\n"),
+    };
+
+    expect(marksBySection(nested, DELIVERED).get("bank-details")?.map((one) => one.text)).toEqual([
+      "🚧 **Instructions** - Shown on the invoice",
+    ]);
+  });
+
   it("leaves a titled block's rows to the page", () => {
     const text = sectionTextOf(page, "points") ?? "";
 

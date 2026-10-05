@@ -1321,10 +1321,25 @@ export function acceptanceReadiness(root, changeId) {
             .replace(/<!--[\s\S]*?-->/g, "")
             .trim()
         : "";
+      const tableRows = body
+        .split("\n")
+        .filter(
+          (line) =>
+            /^\s*\|/.test(line) &&
+            !/^\s*\|(?:\s*:?-{3,}:?\s*\|)+\s*$/.test(line),
+        );
+      const incompleteTable =
+        tableRows.length === 1 ||
+        tableRows.slice(1).some((line) =>
+          line
+            .split("|")
+            .slice(1, -1)
+            .some((cell) => cell.trim() === ""),
+        );
       if (
         !reconciliation ||
         body === "" ||
-        /^\s*\|\s*(?:Raised|Disposition|Question)\s*\|/im.test(body) ||
+        incompleteTable ||
         /^\s*\|\s*<!--/m.test(
           suite
             .split("\n")
