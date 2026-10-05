@@ -10,7 +10,7 @@
 **I want** the cart control to carry the supplied active-line count,
 **so that** the header and cart drawer show the same count.
 
-### shared-ui-site-chrome-US1-TC1-1: A cart slot replaces the built-in control
+### shared-ui-site-chrome-US1-TC21-1: A cart slot replaces the built-in control
 
 **Classification:**
 
@@ -39,7 +39,7 @@
 * The slot content appears in the cart control position.
 * The built-in cart icon button is not rendered.
 
-### shared-ui-site-chrome-US1-TC2-1: An empty cart hides the count indicator
+### shared-ui-site-chrome-US1-TC22-1: An empty cart hides the count indicator
 
 **Classification:**
 
@@ -68,7 +68,7 @@
 * The Cart control appears.
 * No count indicator appears on it.
 
-### shared-ui-site-chrome-US1-TC3-1: Active cart counts appear in full
+### shared-ui-site-chrome-US1-TC23-1: Active cart counts appear in full
 
 **Classification:**
 

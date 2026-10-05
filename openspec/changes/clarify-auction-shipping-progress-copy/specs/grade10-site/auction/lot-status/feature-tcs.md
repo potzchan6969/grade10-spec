@@ -9,6 +9,7 @@
 **I want** a closed lot with a Preparing Shipment order to still read Ended,
 **so that** the lot status stays separate from the winner's order status.
 
+<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### grade10-site-auction-lot-status-US1-TC1-1: Preparing Shipment maps to Ended
 
 **Classification:**
