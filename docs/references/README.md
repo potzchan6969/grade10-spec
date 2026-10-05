@@ -59,5 +59,5 @@ footer, the collection statement, grading's clause 6 and the uncollected-cards
 notice, with where each value lives while it is unset.
 
 [`store-process-cost.md`](store-process-cost.md) is what one accepted
-amendment cost in store commands, and seven proposals to cut it, one row each
+amendment cost in store commands, and six proposals to cut it, one row each
 for QA to accept or reject; the accepted rows become one change.
