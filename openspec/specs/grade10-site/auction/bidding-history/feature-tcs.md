@@ -16,7 +16,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -46,7 +46,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -91,7 +91,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -120,7 +120,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -129,7 +129,9 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
-A signed-in collector has more bidding listings than one page holds. No newer activity is added during the pass.
+
+* customer(signed in) has more Active listings than one page holds.
+* No newer activity is added during the pass.
 
 **Steps:**
 
@@ -138,7 +140,7 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 
 **Expected Results:**
 
-* Every matching listing appears exactly once in latest-activity order.
+* Every active listing appears exactly once in latest-activity order.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-ev8 rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
 ### grade10-site-auction-bidding-history-US1-TC5-1: Account with no bidding activity has an empty index
@@ -147,7 +149,7 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -158,6 +160,8 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 **Pre-conditions:**
 
 * customer(signed in) has placed no bid.
+* Another Grade10 account has bidding activity.
+* Another storefront has bidding activity for the same account id.
 
 **Steps:**
 
@@ -166,7 +170,9 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 
 **Expected Results:**
 
-* Grade10 returns an empty result rather than another account's or another storefront's activity.
+* The bidding index is empty.
+* No listing from the other Grade10 account appears.
+* No activity from the other storefront appears.
 
 ### grade10-site-auction-bidding-history-US1-TC6-1: Each listing's standing is Leading, Outbid, Won or Canceled
 
@@ -176,13 +182,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
@@ -196,6 +202,7 @@ Runs once per row of **Test data**.
 | Open, customer A leads | **Active** | Leading |
 | Open, customer B leads | **Active** | Outbid |
 | Closed, customer A won | **Completed** | Won |
+| Closed, customer B won | **Completed** | Outbid |
 | Called off after customer A's bid | **Completed** | Canceled |
 
 **Steps:**
@@ -215,13 +222,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
@@ -263,7 +270,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
