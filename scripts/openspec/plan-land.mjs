@@ -52,7 +52,7 @@
  *              to carry — naming each file and the hand it waits on, because
  *              a group carries the branch whole and `main` never holds a
  *              draft no hand has landed
- *   6 gate     Run the gate - `validate:changes`, `check:manual`,
+ *   6 gate     Run `lib/gate.mjs` - `validate:changes`, `check:manual`,
  *              `tcs:validate` - against `L`'s tree with `PLAN_NO_FETCH=1`; a
  *              refusal leaves the branch and the working tree as they were,
  *              `L` never having touched them
@@ -110,15 +110,12 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  formatReport,
-  runChecks,
-} from "../../tools/manual/check/check-manual.mjs";
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { SCENARIO_ID } from "./lib/cites.mjs";
+import { gate } from "./lib/gate.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
 import { fixPassFloor, isGroup, planningSchema } from "./lib/perspectives.mjs";
@@ -136,7 +133,6 @@ import { handleOfEmail, readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 import { checkTestsCell, parseTestsCell } from "./lib/tests-cell.mjs";
 import { isWritable, writableBy } from "./lib/writable.mjs";
 import { git as storeGit, storeMain } from "./store-main.mjs";
-import { main as validateChanges } from "./validate-changes.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** A scenario a task line cites, the way the store writes a citation: in
@@ -602,11 +598,8 @@ async function attemptLanding(attempt) {
   );
 
   // ── 6 gate, against L's tree ─────────────────────────────────────────────
-  process.env.PLAN_NO_FETCH = "1";
-  const gate = worktreeAt(commit);
-  runValidateChanges(gate);
-  await runCheckManual(gate);
-  runTcsValidate(gate);
+  const refusal = await gate(worktreeAt(commit), change);
+  if (refusal) fail(refusal);
   say("gate", "validate:changes, check:manual, tcs:validate pass");
 
   // A dry run stops here, having cut the commit and judged it: what it
@@ -1175,56 +1168,6 @@ function gitOrDie(args, { env, input } = {}) {
   });
   if (ran.status !== 0) fail(`git ${args[0]} refused:\n${ran.stderr ?? ""}`);
   return ran.stdout.trim();
-}
-
-/** `validate:changes --strict <change>`, in this process against the gate's
- * tree: `main` sets `process.exitCode` rather than throwing on a validation
- * failure, so that is what is read back, and reset either way — this run's
- * own exit code is its own to set. */
-function runValidateChanges(gate) {
-  const before = process.exitCode;
-  process.exitCode = undefined;
-  try {
-    validateChanges(gate, true, change);
-  } catch (cause) {
-    process.exitCode = before;
-    fail(`the gate refuses: validate:changes\n${cause.message}`);
-  }
-  const failed = Boolean(process.exitCode);
-  process.exitCode = before;
-  if (failed) fail("the gate refuses: validate:changes");
-}
-
-/** `check:manual`, in this process: `runChecks` is pure over the root it is
- * given, so this reads the tree the landing carries rather than the branch it
- * was cut from. */
-async function runCheckManual(gate) {
-  let result;
-  try {
-    result = await runChecks(gate);
-  } catch (cause) {
-    fail(`the gate refuses: check:manual\n${cause.message}`);
-  }
-  const { text, failures } = formatReport(gate, result);
-  console.log(text);
-  if (failures > 0) fail("the gate refuses: check:manual");
-}
-
-/** `tcs:validate`, scoped to this change: the script reads the store its own
- * file sits in and calls `process.exit` itself, so the gate's own copy of it
- * is what runs where the tree carries one — and this store's, never a copy,
- * where it does not. Scoped to the change so this gate judges what the change
- * itself owes rather than every suite the whole store holds, the way
- * `validate:changes --strict <change>` already does. */
-function runTcsValidate(gate) {
-  const own = join(gate, "scripts", "openspec", "validate-test-cases.mjs");
-  const file = existsSync(own) ? own : join(HERE, "validate-test-cases.mjs");
-  const ran = spawnSync(
-    process.execPath,
-    [file, `openspec/changes/${change}`],
-    { cwd: gate, stdio: "inherit" },
-  );
-  if (ran.status !== 0) fail("the gate refuses: tcs:validate");
 }
 
 /** One temporary thing this run made, gone: a worktree through git, so the
