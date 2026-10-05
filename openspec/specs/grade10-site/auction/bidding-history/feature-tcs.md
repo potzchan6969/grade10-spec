@@ -79,7 +79,7 @@
 
 **Expected Results:**
 
-* Step 2: the bid form says Minimum bid is <opening price>.
+* Step 2: the bid form refuses <refused bid> as below the minimum.
 * Step 4 lists <listing_a> and not <listing_b>.
 * Step 5 does not list <listing_b>.
 * No listing reads a failed, refused or pending standing.
@@ -249,7 +249,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the bid form says Minimum bid is <next minimum>.
+* Step 2: the bid form refuses <refused bid> as below the minimum.
 * <listing_c> reads Outbid, priced at <current bid>.
 * <listing_c> still sits below <listing_d>.
 * <listing_c>'s latest activity time is its last accepted bid's.
@@ -377,7 +377,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the bid form says Your new maximum must be higher than your current one.
+* Step 2: the bid form refuses <refused raise> as not above the maximum on file.
 * Step 4 shows the noted entries and no other.
 * No entry names the refused amount or a refusal reason.
 * Step 5's bid count is the one noted.
@@ -900,7 +900,9 @@ A signed-in collector with no entries in the selected filter.
 * **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
-A signed-in collector. <the bidding index endpoint> delayed so the selected index page has not answered yet.
+
+* customer(signed in) is opening <grade10 bids url>.
+* The bidding index is delayed, so the selected page has not answered yet.
 
 **Steps:**
 
@@ -928,7 +930,9 @@ A signed-in collector. <the bidding index endpoint> delayed so the selected inde
 * **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
-A signed-in collector. <the bidding index endpoint> mocked to fail for the selected index page.
+
+* customer(signed in) is opening <grade10 bids url>.
+* The bidding index is mocked to fail for the selected page.
 
 **Steps:**
 
@@ -956,7 +960,9 @@ A signed-in collector. <the bidding index endpoint> mocked to fail for the selec
 * **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
-A visible bidding summary. <the combined history endpoint> delayed so it has not answered yet.
+
+* customer(signed in) has a visible bidding summary on <grade10 bids url>.
+* That listing's combined history is delayed, so it has not answered yet.
 
 **Steps:**
 
@@ -1012,7 +1018,9 @@ A visible index or combined history page with a further cursor.
 * **Trace:** grade10-site-auction-bidding-history-US-05
 
 **Pre-conditions:**
-The bidding index is visible. <the combined history endpoint> for one expanded listing is mocked to fail.
+
+* customer(signed in) can see the bidding index on <grade10 bids url>.
+* One listing's combined history is mocked to fail.
 
 **Steps:**
 
@@ -1178,8 +1186,6 @@ bidding** is visible beside public recent bids.
 **I want** the lot dialog to separate the bids Grade10 placed for me from my
 maximums, open on **Bid placed** by default, and list that tab first,
 **so that** I do not read an auto-bid step as my maximum.
-
----
 
 <!-- trace:case id=g10.auction-bidding-history.TC-lx1 rev=1 covers=g10.auction-bidding-history.SC-mx5,g10.auction-bidding-history.SC-u76,g10.auction-bidding-history.SC-g01 -->
 ### grade10-site-auction-bidding-history-US7-TC1-1: Bid placed stays default when both lists have rows
