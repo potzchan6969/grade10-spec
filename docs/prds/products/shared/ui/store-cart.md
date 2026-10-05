@@ -47,6 +47,21 @@ footer shows only the code. When the code is refused, lines stay on the sale
 and the sheet names why. Removing a code that replaced the sale puts the sale
 back on the lines.
 
+🚧 **Held, cannot apply** — a held code that cannot apply on this cart is
+muted with its reason and no Apply.
+
+::story{id="store-cart-cartitem--sale-price" title="A line on the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--refuse" title="A refused promo on the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--stack" title="A promo stacked on the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--replace" title="A promo that replaces the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--fallback-after-remove" title="The store sale back after the promo is removed"}
+
+::story{id="store-cart-promoticket--not-applicable" title="A held code that cannot apply"}
+
 ::story{id="store-cart-cartdrawer--default" title="The drawer with items"}
 
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}

@@ -69,13 +69,14 @@ shapes when the applied quote returns each outcome.
 
 ## Open Questions
 
-| Item | Owner | Note |
-| --- | --- | --- |
-| Exact money basis when a code stacks (cut of post-sale vs list) | Engineering | Display holds either; the quote owns the amounts |
-| Whether product special-sale exclusivity in `add-site-wide-discounts` still forbids stack/replace at pricing time | Product on that change | This change only presents whatever outcome the quote returns |
-| The above is unverified, not just unowned | Product on `add-site-wide-discounts` | `add-site-wide-discounts` has not shipped — `acceptAutomaticDiscounts` is not in the codebase, so no automatic discount has ever reached a draft order and the refuse/stack/replace outcome this change's four presentations assume has never been observed on staging. Re-verify against that change's real staging run (its tasks 2.1–2.3) before this change's follow-on wiring work or a `tasks.md` starts, in case the real combine-rule shape differs from what these designs assume |
+None — money basis, exclusivity, and staging observation are in
+`decisions.md` Q1–Q3.
 
 ## Follow-on changes
 
 - Wire the Grade10 cart drawer to one applied quote that can return these
   outcomes on a live site sale
+
+## References
+
+- [Cart Drawer · Site Sale And Promo Codes](../../../docs/prds/products/shared/ui/store-cart.md#site-sale-and-promo-codes)
