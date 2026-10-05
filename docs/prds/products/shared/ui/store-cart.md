@@ -8,9 +8,6 @@ reviewed: 2026-09-11
 The cart is a drawer that slides in over the page. It lists the items the
 shopper is buying and fades at the edge when there is more to scroll to.
 
-🚧 **Empty** — when the cart holds nothing, the design-system empty state:
-title and description only, no button to leave.
-
 Opening it re-reads current status and price against the catalogue behind
 skeleton placeholders, because a cart is the one place a stale price is
 expensive. Sold-out lines are marked, and the count badge on the header ignores
@@ -24,6 +21,11 @@ It closes three ways — the close control, the dimmed backdrop, and Escape — 
 locks the page behind it while it is open. Pressing checkout puts the button
 into a redirecting state and hands the intent to the application, which is what
 actually creates the checkout session.
+
+## Empty Cart
+
+🚧 **Empty** — when the cart holds nothing, the design-system empty state:
+title and description only, no button to leave.
 
 ## Tender Actions
 

@@ -76,7 +76,7 @@ No new primitive, no new variant, no new token.
 | Filter row applies the facet; field clears; free text not in force | `grade10-site-store-product-listing-SC-34` | [Select Filter Applies Chip](?path=/story/store-product-listing-productbrowse-search--select-filter-applies-chip) |
 | Product row opens the product; field clears | `grade10-site-store-product-listing-SC-33` | Application-side; the preview page stubs the jump |
 | Empty — nothing matched, submit still commits | `shared-ui-store-product-listing-SC-71`, `grade10-site-store-product-listing-SC-36` | [Empty](?path=/story/store-product-listing-productfilter-search--empty) |
-| No groups supplied — panel closed, submit still commits | ❓ no scenario — the requirement states it, the spec names no scenario | [Groups Omitted](?path=/story/store-product-listing-productfilter-search--groups-omitted) |
+| No groups supplied — panel closed, submit still commits | `shared-ui-store-product-listing-SC-94` | [Groups Omitted](?path=/story/store-product-listing-productfilter-search--groups-omitted) |
 | Searching while hits resolve; no row invented | `shared-ui-store-product-listing-SC-74`, `grade10-site-store-product-listing-SC-38` | [`Components/Autocomplete` → Loading](?path=/story/components-autocomplete--loading) only; the listing story waits on the pending prop |
 | Keyboard reaches and activates each row, focus visible | `shared-ui-store-product-listing-SC-72` | [Suggestions](?path=/story/store-product-listing-productfilter-search--suggestions), by keyboard |
 | Chip dismissed — free text out of the address and the narrowings | `grade10-site-store-product-listing-SC-35` | [Applied Filter Is Removed](?path=/story/store-product-listing-productlistheader-actions--applied-filter-is-removed) |
