@@ -1,6 +1,6 @@
 ---
 name: openspec-archive-change
-description: Archive an accepted OpenSpec change after implementation is verified and before deployment.
+description: Archive an accepted OpenSpec change after implementation is verified. Deployment does not wait for it.
 ---
 
 # Archive a Verified Change

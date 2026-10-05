@@ -32,7 +32,7 @@ The PM writes 1 to 3; a designer adds 4 where the change affects a surface.
 Then `/planning-dev <id>` freezes the anchor set, gets QA1's blind draft cases,
 gets Dev's independent technical design, scenarios and tasks, then reconciles
 both in QA2. The same human answers questions and accepts the complete plan
-once. `pnpm accept:preflight <id>` checks readiness and prints the baseline
+once, after `accept-review` reports the page, designs and deltas agree. `pnpm accept:preflight <id>` checks readiness and prints the baseline
 fingerprint; `pnpm spec:accept <id> --baseline <digest> --reviewed-by <human>`
 records that decision and publishes the requirements to `openspec/specs/`
 before implementation. An amended acceptance names its prior fingerprint
@@ -163,8 +163,8 @@ end to end and leaves the end-to-end suite that runs on every push to `main`.
 
 After engineering verification, record the accepted fingerprint, repository
 commits and deploy components with `pnpm plan implementation`. Archive the
-change before deployment; acceptance already published the durable spec, so
-archive makes no second fold. Deployment follows archive. Human QA reviews the
+change; acceptance already published the durable spec, so archive makes no
+second fold. Deployment does not wait for archive. Human QA reviews the
 suite once the application is available; `/tcs-run-sheet` handles manual
 execution. Phase two is its own change,
 `add-store-also-bought`, opened by the next sentence with `depends_on:
@@ -185,9 +185,9 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 | 3 | Accepted | Invoking human, after QA1 · Dev · QA2 | `/planning-dev <id>`, then accept with the preflight fingerprint |
 | 4 | Building | Engineer | `/workflow-build <id> <group>` |
 | 5 | Implementation-complete | Engineer, after verification | `pnpm plan implementation <id> --commit <sha> --component <id>` |
-| 6 | Archived | Nobody | `/openspec-archive-change` before deployment |
+| 6 | Archived | Nobody | `/openspec-archive-change` after verification |
 
-- **What proves each stage** — [Change Stages](/p/shared/planning/change-stages). Deployment availability follows archive and is tracked separately.
+- **What proves each stage** - [Change Stages](/p/shared/planning/change-stages). Deployment availability is tracked separately and does not wait for archive.
 
 [My turn](/my-turn) shows what is on you; [Board](/in-flight) shows every change; ask the agent where a change stands to read this for one.
 
