@@ -10,6 +10,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
 import {
+  assetSubtitle,
   formatHkd,
   statusBadgeVariant,
   VAULT_ASSETS,
@@ -83,7 +84,11 @@ function VaultItemDetailPage() {
         <div className="flex flex-col gap-6">
           <PageHeader
             title={asset.name}
-            description={`${asset.set} · ${asset.grade} · Cert ${asset.cert}`}
+            description={
+              asset.condition === "Graded" && asset.cert
+                ? `${assetSubtitle(asset)} · Cert ${asset.cert}`
+                : assetSubtitle(asset)
+            }
           />
 
           <div className="rounded-(--radius-2xl) border border-border px-5">
@@ -97,8 +102,11 @@ function VaultItemDetailPage() {
               value={<span className="font-mono text-sm">{asset.vaultId}</span>}
               hint="Climate-controlled slot at Crown Fine Art"
             />
+            <FactRow label="Condition" value={asset.condition} />
             <FactRow label="Grade" value={asset.grade} />
-            <FactRow label="Cert number" value={asset.cert} />
+            {asset.cert ? (
+              <FactRow label="Cert number" value={asset.cert} />
+            ) : null}
           </div>
 
           <ProposalBanner title="Auction listing">

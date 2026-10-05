@@ -6,157 +6,115 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { CheckCircle, Printer } from "@phosphor-icons/react";
+import { BookingConfirmation } from "@grade10/ui";
+import { CalendarBlank } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
-  formatHkd,
-  MANIFEST_FIXTURE,
-  VAULT_PORTFOLIO_HREF,
-  VAULT_TRACKER_STORY_ID,
+  VAULT_MANAGE_VISIT_HREF,
+  VAULT_MY_VISITS_STORY_ID,
+  VISIT_CONFIRMATION_COPY,
+  VISIT_FIXTURE,
+  VISIT_RECORD,
 } from "./vault-content";
-import { PageHeader, VaultPageShell } from "./vault-shared";
-import { navigateToStory } from "./workbench-story-nav";
+import {
+  AppointmentPageShell,
+  PageHeader,
+  ProposalBanner,
+} from "./vault-shared";
+import { navigateToStory, STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
-function VaultSubmissionConfirmationPage() {
-  const { submissionId, qrCode, email, phone, items, packingTips } =
-    MANIFEST_FIXTURE;
+function AppointmentConfirmationPage() {
+  const { visitId, email, phone, bringTips } = VISIT_FIXTURE;
 
   return (
-    <VaultPageShell>
+    <AppointmentPageShell>
       <Breadcrumbs>
-        <BreadcrumbItem href={VAULT_PORTFOLIO_HREF}>Vault</BreadcrumbItem>
+        <BreadcrumbItem href={STORE_LOCATOR_HREF}>Appointment</BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem current>Manifest</BreadcrumbItem>
+        <BreadcrumbItem current>Visit booked</BreadcrumbItem>
       </Breadcrumbs>
 
       <Alert
         dismissible={false}
         status="success"
-        title="Submission confirmed"
-        description={`Print the Manifest for ${submissionId}, then pack and send.`}
+        title="Visit booked"
+        description={`${visitId} at ${VISIT_RECORD.location}. This is a diary visit — intake starts when staff register your items at the counter.`}
       />
 
       <PageHeader
-        title="Your Manifest"
-        description="Packing slip goes inside the box. Shipping label goes outside when you ship."
+        title="Visit booked"
+        description={`${email} · ${phone}`}
         actions={
-          <Button type="button" leading={<Printer aria-hidden size={18} />}>
-            Download Manifest PDF
+          <Button
+            type="button"
+            leading={<CalendarBlank aria-hidden size={18} />}
+          >
+            Add to calendar
           </Button>
         }
       />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
+      <Text as="p" size="sm" tone="secondary">
+        Told the desk as a reference — not an intake record.
+      </Text>
+
+      <ProposalBanner title="Walk-in also fine">
+        No booking required. You can go straight to the Hong Kong Grade10 Store
+        in Causeway Bay and ask for vaulting — even without an account yet.
+      </ProposalBanner>
+
+      <div className="grid items-start gap-8 lg:grid-cols-2">
+        <BookingConfirmation
+          copy={VISIT_CONFIRMATION_COPY}
+          record={VISIT_RECORD}
+          manageHref={VAULT_MANAGE_VISIT_HREF}
+          calendarHref="#calendar"
+          timeZoneLabel="Hong Kong time"
+        />
+
         <section
           className="flex flex-col gap-5 rounded-(--radius-2xl) border border-border bg-card p-5"
-          aria-labelledby="packing-slip"
+          aria-labelledby="prep-checklist"
         >
-          <div className="flex flex-col gap-1">
-            <h2 className="font-heading text-xl font-medium" id="packing-slip">
-              Packing slip
-            </h2>
-            <Text size="sm" tone="secondary">
-              {email} · {phone}
-            </Text>
-          </div>
-
-          <ul className="flex flex-col">
-            {items.map((item) => (
+          <h2 className="font-heading text-xl font-medium" id="prep-checklist">
+            What to prepare
+          </h2>
+          <ol className="grid gap-3">
+            {bringTips.map((tip, index) => (
               <li
-                key={item.cert}
-                className="flex flex-col gap-1 border-t border-border py-4 first:border-t-0 first:pt-0"
+                key={tip}
+                className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
               >
-                <Text weight="medium">{item.name}</Text>
-                <Text size="sm" tone="secondary">
-                  {item.grade} · Cert {item.cert}
-                </Text>
-                <Text className="tabular-nums" size="sm" weight="medium">
-                  Declared {formatHkd(item.declaredHkd)}
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
+                  {index + 1}
+                </span>
+                <Text className="self-center" size="sm">
+                  {tip}
                 </Text>
               </li>
             ))}
-          </ul>
-
-          <div className="rounded-(--radius-lg) bg-muted p-4">
-            <Text size="sm" weight="medium">
-              Intake checklist (facility)
-            </Text>
-            <ul className="mt-2 flex flex-col gap-1.5">
-              {[
-                "Cert / serial match",
-                "Physical condition",
-                "Staff sign-off",
-              ].map((line) => (
-                <li key={line}>
-                  <Text size="sm" tone="secondary">
-                    ☐ {line}
-                  </Text>
-                </li>
-              ))}
-            </ul>
-          </div>
+          </ol>
         </section>
-
-        <aside className="flex flex-col items-center gap-3 rounded-(--radius-2xl) border border-border bg-card p-5 text-center lg:sticky lg:top-6 lg:self-start">
-          <div
-            aria-hidden
-            className="flex size-44 items-center justify-center rounded-(--radius-lg) border-2 border-dashed border-border bg-muted font-mono text-xs text-muted-foreground"
-          >
-            QR CODE
-          </div>
-          <Text className="break-all font-mono" size="xs" tone="secondary">
-            {qrCode}
-          </Text>
-          <Text size="sm" weight="medium">
-            Scan at intake
-          </Text>
-        </aside>
       </div>
 
-      <section className="flex flex-col gap-4" aria-labelledby="pack-howto">
-        <h2 className="font-heading text-xl font-medium" id="pack-howto">
-          Packing checklist
-        </h2>
-        <ol className="grid gap-3 sm:grid-cols-2">
-          {packingTips.map((tip, index) => (
-            <li
-              key={tip}
-              className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
-            >
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
-                {index + 1}
-              </span>
-              <Text className="self-center" size="sm">
-                {tip}
-              </Text>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <div className="flex flex-wrap gap-3">
-        <Button
-          type="button"
-          leading={<CheckCircle aria-hidden size={18} />}
-          onClick={() => navigateToStory(VAULT_TRACKER_STORY_ID)}
-        >
-          Track this submission
-        </Button>
-        <Button type="button" variant="secondary">
-          Download Manifest PDF
-        </Button>
-      </div>
-    </VaultPageShell>
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={() => navigateToStory(VAULT_MY_VISITS_STORY_ID)}
+      >
+        Appointments
+      </Button>
+    </AppointmentPageShell>
   );
 }
 
 const meta = {
-  title: "Pages/Vault/Submission Confirmation",
-  component: VaultSubmissionConfirmationPage,
+  title: "Pages/Appointment/Confirmation",
+  component: AppointmentConfirmationPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-} satisfies Meta<typeof VaultSubmissionConfirmationPage>;
+} satisfies Meta<typeof AppointmentConfirmationPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -165,10 +123,13 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Your Manifest" }),
+      canvas.getByRole("heading", { level: 1, name: "Visit booked" }),
     ).toBeVisible();
+    expect(canvas.getByText(/What to prepare/)).toBeVisible();
+    expect(canvas.getByText("Move or cancel this visit")).toBeVisible();
     expect(
-      canvas.getAllByRole("button", { name: "Download Manifest PDF" }).length,
-    ).toBeGreaterThan(0);
+      canvas.getByText("Told the desk as a reference — not an intake record."),
+    ).toBeVisible();
+    expect(canvas.queryByText("Track this visit")).not.toBeInTheDocument();
   },
 };

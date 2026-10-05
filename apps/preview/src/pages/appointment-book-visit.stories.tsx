@@ -1,212 +1,174 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
-import { RadioList } from "@grade10/design-system/components/forms/radio-list";
-import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { Trash } from "@phosphor-icons/react";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  BookingDetailsForm,
+  BookingServicePicker,
+  BookingSlotPicker,
+  BookingSummary,
+} from "@grade10/ui";
+import { MapPin } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
 import {
+  BOOK_VISIT_SERVICES,
+  CAUSEWAY_BAY,
+  DETAILS_FORM_COPY,
+  prepTipsForService,
+  SERVICE_PICKER_COPY,
+  SLOT_PICKER_COPY,
+  SUMMARY_COPY,
   VAULT_CONFIRMATION_STORY_ID,
-  VAULT_PORTFOLIO_HREF,
+  VISIT_DAYS,
+  VISIT_MONTH,
+  VISIT_SLOTS,
+  VISIT_TIME_ZONE,
 } from "./vault-content";
-import { PageHeader, ProposalBanner, VaultPageShell } from "./vault-shared";
-import { navigateToStory } from "./workbench-story-nav";
+import {
+  AppointmentPageShell,
+  PageHeader,
+  ProposalBanner,
+} from "./vault-shared";
+import { navigateToStory, STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
-type SlabDraft = {
-  key: string;
-  name: string;
-  grader: string;
-  cert: string;
-  declared: string;
+const READY_SERVICES = {
+  status: "ready" as const,
+  data: BOOK_VISIT_SERVICES,
 };
 
-function emptySlab(key: string): SlabDraft {
-  return { key, name: "", grader: "PSA", cert: "", declared: "" };
-}
-
-function VaultSubmitPage() {
-  const [sendMethod, setSendMethod] = useState("ship");
-  const [slabs, setSlabs] = useState<SlabDraft[]>([emptySlab("1")]);
+function BookVisitPage() {
+  const [serviceId, setServiceId] = useState(BOOK_VISIT_SERVICES[0]?.id);
+  const [selectedDate, setSelectedDate] = useState<string | undefined>();
+  const [selectedStart, setSelectedStart] = useState<number | undefined>();
+  const [selectedEnd, setSelectedEnd] = useState<number | undefined>();
+  const service =
+    BOOK_VISIT_SERVICES.find((row) => row.id === serviceId) ??
+    BOOK_VISIT_SERVICES[0];
+  const prepTips = prepTipsForService(service?.id ?? "");
 
   return (
-    <VaultPageShell>
+    <AppointmentPageShell>
       <Breadcrumbs>
-        <BreadcrumbItem href={VAULT_PORTFOLIO_HREF}>Vault</BreadcrumbItem>
+        <BreadcrumbItem href={STORE_LOCATOR_HREF}>Appointment</BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem current>Submit to Vault</BreadcrumbItem>
+        <BreadcrumbItem current>Book a visit</BreadcrumbItem>
       </Breadcrumbs>
 
       <PageHeader
-        title="Submit to Vault"
-        description="Declare graded slabs, choose how you send them, then print a Manifest. We vault at Crown Fine Art."
+        title="Book a visit"
+        description="Optional diary at the Hong Kong Grade10 Store. Walk-in is fine. Answers help the desk prepare — they are not an intake record."
       />
 
-      <ProposalBanner title="Eligibility">
-        Graded slabs only on day one. Raw / ungraded is Coming soon. Multi-item
-        manifests are supported; ops may soft-limit to one item at launch.
+      <ProposalBanner title="Notes are for the desk">
+        Name, email, questions and notes are a reference for the counter. Vault
+        drop-off does not open an intake tracker. Incoming items do not block
+        another booking.
       </ProposalBanner>
 
-      <section className="flex flex-col gap-4" aria-labelledby="vault-items">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="font-heading text-xl font-medium" id="vault-items">
-            Collectibles
-          </h2>
-          <Badge variant="info">Graded slab</Badge>
-        </div>
+      <BookingServicePicker
+        copy={SERVICE_PICKER_COPY}
+        services={READY_SERVICES}
+        selectedId={service?.id}
+        onSelect={(id) => setServiceId(id)}
+      />
 
-        {slabs.map((slab, index) => (
-          <div
-            key={slab.key}
-            className="flex flex-col gap-4 rounded-(--radius-2xl) border border-border bg-card p-4 sm:p-5"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <Text weight="medium">Slab {index + 1}</Text>
-              {slabs.length > 1 ? (
-                <IconButton
-                  aria-label={`Remove slab ${index + 1}`}
-                  type="button"
-                  variant="ghost"
-                  onClick={() =>
-                    setSlabs((prev) => prev.filter((s) => s.key !== slab.key))
-                  }
-                >
-                  <Trash aria-hidden size={18} />
-                </IconButton>
-              ) : null}
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <TextInput
-                  label="Card / set name *"
-                  autoComplete="off"
-                  value={slab.name}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setSlabs((prev) =>
-                      prev.map((s) =>
-                        s.key === slab.key ? { ...s, name: value } : s,
-                      ),
-                    );
-                  }}
-                />
-              </div>
-              <TextInput
-                label="Grading company *"
-                autoComplete="off"
-                value={slab.grader}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSlabs((prev) =>
-                    prev.map((s) =>
-                      s.key === slab.key ? { ...s, grader: value } : s,
-                    ),
-                  );
-                }}
-              />
-              <TextInput
-                label="Cert number *"
-                autoComplete="off"
-                value={slab.cert}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSlabs((prev) =>
-                    prev.map((s) =>
-                      s.key === slab.key ? { ...s, cert: value } : s,
-                    ),
-                  );
-                }}
-              />
-              <div className="sm:col-span-2">
-                <TextInput
-                  label="Declared insurance value (HKD) *"
-                  prefix="HK$"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  value={slab.declared}
-                  message="Used for intake insurance until an estimate is set"
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setSlabs((prev) =>
-                      prev.map((s) =>
-                        s.key === slab.key ? { ...s, declared: value } : s,
-                      ),
-                    );
-                  }}
-                />
-              </div>
-            </div>
-            <Text size="sm" tone="secondary">
-              Type locked to Graded slab · Raw — Coming soon
-            </Text>
-          </div>
-        ))}
+      <HStack gap="sm" vAlign="start">
+        <span className="mt-0.5 shrink-0 text-primary">
+          <MapPin aria-hidden size={20} />
+        </span>
+        <VStack gap="none" hAlign="start">
+          <Text as="span" weight="medium">
+            {CAUSEWAY_BAY.name}
+          </Text>
+          <Text as="span" size="sm" tone="secondary">
+            {CAUSEWAY_BAY.address}
+          </Text>
+        </VStack>
+      </HStack>
 
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() =>
-            setSlabs((prev) => [...prev, emptySlab(String(Date.now()))])
-          }
-        >
-          Add another slab
-        </Button>
-      </section>
-
-      <section className="flex flex-col gap-3" aria-labelledby="send-method">
-        <h2 className="font-heading text-xl font-medium" id="send-method">
-          How you will send
-        </h2>
-        <RadioList
-          label="Send method"
-          value={sendMethod}
-          onValueChange={(value) => {
-            if (value) setSendMethod(value);
+      <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <BookingSlotPicker
+          copy={SLOT_PICKER_COPY}
+          month={VISIT_MONTH}
+          minMonth={VISIT_MONTH}
+          maxMonth={VISIT_MONTH}
+          days={{ status: "ready", data: VISIT_DAYS }}
+          selectedDate={selectedDate}
+          slots={{ status: "ready", data: VISIT_SLOTS }}
+          selectedStart={selectedStart}
+          timeZone={VISIT_TIME_ZONE}
+          timeZoneLabel="Hong Kong time"
+          onMonthChange={() => {}}
+          onSelectDay={(date) => {
+            setSelectedDate(date);
+            setSelectedStart(undefined);
+            setSelectedEnd(undefined);
           }}
-        >
-          <RadioCard
-            value="ship"
-            title="Ship to us"
-            description="Print the Manifest: packing slip inside, prepaid insured label outside."
-          />
-          <RadioCard
-            value="store"
-            title="Drop at a Grade10 store"
-            description="Bring the packed box with the packing slip. We move it to Crown Fine Art."
-          />
-        </RadioList>
-      </section>
+          onSelectSlot={(slot) => {
+            setSelectedStart(slot.start);
+            setSelectedEnd(slot.end);
+          }}
+        />
 
-      <div className="sticky bottom-4 z-10 flex flex-wrap gap-3 rounded-(--radius-2xl) border border-border bg-background/95 p-3 backdrop-blur-sm supports-backdrop-filter:bg-background/80">
-        <Button
-          type="button"
-          onClick={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
-        >
-          Continue to Manifest
-        </Button>
-        <Text className="self-center" size="sm" tone="secondary">
-          {slabs.length} {slabs.length === 1 ? "slab" : "slabs"} ·{" "}
-          {sendMethod === "ship" ? "Ship" : "Store drop-off"}
-        </Text>
+        <VStack className="lg:sticky lg:top-8" gap="lg" hAlign="stretch">
+          <BookingSummary
+            copy={SUMMARY_COPY}
+            service={service?.name}
+            location={CAUSEWAY_BAY.name}
+            address={CAUSEWAY_BAY.address}
+            start={selectedStart}
+            end={selectedEnd}
+            timeZone={VISIT_TIME_ZONE}
+            timeZoneLabel="Hong Kong time"
+          />
+          <BookingDetailsForm
+            copy={DETAILS_FORM_COPY}
+            questions={service?.questions ?? []}
+            initialValues={{
+              name: "Alex Chan",
+              email: "collector@example.com",
+            }}
+            onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
+          />
+        </VStack>
       </div>
-    </VaultPageShell>
+
+      <section className="flex flex-col gap-4" aria-labelledby="prep-checklist">
+        <h2 className="font-heading text-xl font-medium" id="prep-checklist">
+          What to prepare
+        </h2>
+        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {prepTips.map((tip, index) => (
+            <li
+              key={tip}
+              className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
+            >
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
+                {index + 1}
+              </span>
+              <Text className="self-center" size="sm">
+                {tip}
+              </Text>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </AppointmentPageShell>
   );
 }
 
 const meta = {
-  title: "Pages/Vault/Submit",
-  component: VaultSubmitPage,
+  title: "Pages/Appointment/Book Visit",
+  component: BookVisitPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-} satisfies Meta<typeof VaultSubmitPage>;
+} satisfies Meta<typeof BookVisitPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -215,11 +177,17 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Submit to Vault" }),
+      canvas.getByRole("heading", { level: 1, name: "Book a visit" }),
     ).toBeVisible();
+    expect(canvas.getAllByText("Card grading").length).toBeGreaterThan(0);
+    expect(canvas.getByText("Vault drop-off")).toBeVisible();
+    expect(canvas.getByText("Collection consultation")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Add another slab" }),
-    ).toBeVisible();
-    expect(canvas.getByText("Ship to us")).toBeVisible();
+      canvas.getAllByText("13 Pak Sha Road, Causeway Bay, Hong Kong").length,
+    ).toBeGreaterThan(0);
+    expect(canvas.getByText(/Told the desk as a reference/)).toBeVisible();
+    expect(
+      canvasElement.querySelector('[data-slot="booking-steps"]'),
+    ).toBeNull();
   },
 };

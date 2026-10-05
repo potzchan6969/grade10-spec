@@ -11,7 +11,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
-  MANIFEST_FIXTURE,
+  INTAKE_FIXTURE,
   VAULT_PORTFOLIO_HREF,
   VAULT_PORTFOLIO_STORY_ID,
 } from "./vault-content";
@@ -19,37 +19,32 @@ import { PageHeader, VaultPageShell } from "./vault-shared";
 import { navigateToStory } from "./workbench-story-nav";
 
 type TrackerPhase =
-  | "submitted"
-  | "in-transit"
-  | "at-store"
-  | "intake"
+  | "registered"
+  | "pre-check"
+  | "signed"
   | "imaging"
   | "vaulted";
 
 const PHASE_ORDER: TrackerPhase[] = [
-  "submitted",
-  "in-transit",
-  "at-store",
-  "intake",
+  "registered",
+  "pre-check",
+  "signed",
   "imaging",
   "vaulted",
 ];
 
 const PHASE_LABELS: Record<TrackerPhase, string> = {
-  submitted: "Submitted",
-  "in-transit": "In transit",
-  "at-store": "At store",
-  intake: "Intake",
+  registered: "Registered",
+  "pre-check": "Pre-check",
+  signed: "Signed",
   imaging: "Imaging",
   vaulted: "Vaulted",
 };
 
 const PHASE_COPY: Record<TrackerPhase, string> = {
-  submitted: "Manifest issued. Pack and send when ready.",
-  "in-transit": "Courier has the package. Waiting for facility receive.",
-  "at-store":
-    "Dropped at a Grade10 store. Awaiting transfer to Crown Fine Art.",
-  intake: "Facility scanned the QR. Cert and condition checklist in progress.",
+  registered: "Staff registered your items at the counter.",
+  "pre-check": "Staff checking condition.",
+  signed: "Custody signed on the counter iPad.",
   imaging: "Professional front and back HD scans in progress.",
   vaulted:
     "Digital twins are live in your portfolio. Vault Storage IDs assigned.",
@@ -66,6 +61,13 @@ function stepState(
   return "upcoming";
 }
 
+function itemLine(item: (typeof INTAKE_FIXTURE.items)[number]): string {
+  if (item.condition === "Graded" && item.cert) {
+    return `${item.grade} · Cert ${item.cert}`;
+  }
+  return "Raw";
+}
+
 function VaultIntakeTrackerPage({ phase }: { phase: TrackerPhase }) {
   const isDone = phase === "vaulted";
 
@@ -79,7 +81,7 @@ function VaultIntakeTrackerPage({ phase }: { phase: TrackerPhase }) {
 
       <PageHeader
         title="Intake tracker"
-        description={`Submission ${MANIFEST_FIXTURE.submissionId} · ${MANIFEST_FIXTURE.items.length} slabs`}
+        description={`Case ${INTAKE_FIXTURE.caseId} · ${INTAKE_FIXTURE.items.length} items · ${INTAKE_FIXTURE.shop}`}
       />
 
       {isDone ? (
@@ -114,20 +116,20 @@ function VaultIntakeTrackerPage({ phase }: { phase: TrackerPhase }) {
 
       <section
         className="flex flex-col gap-3 rounded-(--radius-2xl) border border-border p-5"
-        aria-labelledby="submission-items"
+        aria-labelledby="case-items"
       >
-        <h2 className="font-heading text-lg font-medium" id="submission-items">
-          In this submission
+        <h2 className="font-heading text-lg font-medium" id="case-items">
+          Registered items
         </h2>
         <ul className="flex flex-col divide-y divide-border">
-          {MANIFEST_FIXTURE.items.map((item) => (
+          {INTAKE_FIXTURE.items.map((item) => (
             <li
-              key={item.cert}
+              key={item.name}
               className="flex flex-col gap-0.5 py-3 first:pt-0 last:pb-0"
             >
               <Text weight="medium">{item.name}</Text>
               <Text size="sm" tone="secondary">
-                {item.grade} · Cert {item.cert}
+                {itemLine(item)}
               </Text>
             </li>
           ))}
@@ -151,25 +153,25 @@ const meta = {
   component: VaultIntakeTrackerPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-  args: { phase: "in-transit" as TrackerPhase },
+  args: { phase: "registered" as TrackerPhase },
 } satisfies Meta<typeof VaultIntakeTrackerPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const InTransit: Story = {
-  args: { phase: "in-transit" },
+export const Registered: Story = {
+  args: { phase: "registered" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
       canvas.getByRole("heading", { level: 1, name: "Intake tracker" }),
     ).toBeVisible();
-    expect(canvas.getByText(/Now: In transit/)).toBeVisible();
+    expect(canvas.getByText(/Now: Registered/)).toBeVisible();
   },
 };
 
-export const AtStore: Story = { args: { phase: "at-store" } };
-export const Intake: Story = { args: { phase: "intake" } };
+export const PreCheck: Story = { args: { phase: "pre-check" } };
+export const Signed: Story = { args: { phase: "signed" } };
 export const Imaging: Story = { args: { phase: "imaging" } };
 export const Vaulted: Story = {
   args: { phase: "vaulted" },
