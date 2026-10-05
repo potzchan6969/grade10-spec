@@ -49,7 +49,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       seeded `500`, paste `9999999999.99`, the draft reads `9999999999`.
       `shared-ui-auction-listing-US1-TC26-1`
 
-## 4. JPY bid ceiling (grade10)
+## 4. JPY bid ceiling (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Tests first, in their own commit: `bidIncrements.test.ts` pins
       `bidCeiling("JPY")` at `5_000_000_000`; `placeBid.spec.ts` refuses a
