@@ -70,7 +70,6 @@
 **Expected Results:**
 
 * The draft remains `9999999999`.
-* The field is not clamped to another value.
 
 ### shared-ui-auction-listing-US1-TC21-1: Paste past the ceiling from empty stays empty
 
@@ -101,8 +100,6 @@
 **Expected Results:**
 
 * The draft remains empty.
-* No invalid-amount or too-large message appears solely because of the
-  rejected paste.
 
 ### shared-ui-auction-listing-US1-TC22-1: Paste past the ceiling restores the prior draft
 
@@ -266,7 +263,7 @@
 | --- | --- |
 | Draft at ceiling `9999999999` accepted | **Folded in:** `shared-ui-auction-listing-SC-38` / `shared-ui-auction-listing-US1-TC19-1` |
 | Typed digit past ceiling restores prior draft | **Folded in:** `shared-ui-auction-listing-SC-39` / `shared-ui-auction-listing-US1-TC20-1` |
-| Paste past ceiling from empty stays empty, silent | **Folded in:** `shared-ui-auction-listing-SC-40` / `shared-ui-auction-listing-US1-TC21-1` |
+| Paste past ceiling from empty stays empty, silent | **Folded in:** `shared-ui-auction-listing-SC-40` / `shared-ui-auction-listing-US1-TC21-1` for the empty draft; the silence is `shared-ui-auction-listing-US1-TC25-1`'s since the rerun after the final accept-review fixes |
 | Paste past ceiling restores prior draft | **Folded in:** `shared-ui-auction-listing-SC-41` / `shared-ui-auction-listing-US1-TC22-1` |
 | Fractional paste exceeds after whole-major cleaning restores | **Folded in:** `shared-ui-auction-listing-SC-42` / `shared-ui-auction-listing-US1-TC23-1` |
 | Raise path restores on overshoot | **Folded in:** `shared-ui-auction-listing-SC-43` / `shared-ui-auction-listing-US1-TC24-1` |
@@ -314,6 +311,20 @@
 | Questions for the PM | None - Q1 to Q6 settle the ceiling, the restore, the silence, the service's refusal, the fractional paste and the JPY ceiling |
 
 **Uncovered anchors:** none for `Custom maximum ceiling`; every scenario on the anchor has a case asserting its THEN, and every case stays draft.
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after the final accept-review fixes, for change `cap-custom-maximum-entry`. Reread every case in this suite against the delta's seven scenarios, the requirement's clauses and the `Custom maximum ceiling` anchor, after task 2.2 stopped citing `SC-43`, task 4.1's e2e note named `TC19` to `TC23` and `TC25`, and the PRD's Ceiling line said no message explains the refusal; and closed QA's accept-review finding on `TC21`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the PRD's Custom Maximum section and the bidding page's Ceiling, Custom maximum and Bid ceiling lines, the durable `spec.md` and suite, the `bid-history-winner-priority` and `lot-gallery-strip-by-width` suites and deltas on this capability, `listing-bid-money.ts` and its test, and `listing-quick-maximum-bid-actions.tsx`. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| Accept-review (QA): `TC21` is automated by `listing-bid-money.test.ts`, which returns a draft and renders no panel, so it cannot decide "no invalid-amount or too-large message" | **Folded in:** `shared-ui-auction-listing-US1-TC21-1` asserts the empty draft alone and stays automated; `shared-ui-auction-listing-US1-TC25-1`, manual, reads the panel for any invalid-amount, below-floor or too-large message, so `shared-ui-auction-listing-SC-40`'s AND keeps a case |
+| `TC20` also expected "the field is not clamped to another value", which `shared-ui-auction-listing-SC-39` does not state, and from a seed of `9999999999` a clamp and a restore give the same draft | **Folded in:** dropped from `shared-ui-auction-listing-US1-TC20-1`, which asserts the scenario's THEN alone; `shared-ui-auction-listing-US1-TC22-1` tells restore from clamp, since its seed `500` stays `500` |
+| Each automated case against its Decided-by test - `TC19` with `""` to `9999999999`, `TC20` with `99999999990` over `9999999999`, `TC21` with `10000000000` over `""`, `TC22` with `99999999999` over `500`, `TC23` with `10000000000.99` over `500` | **Joined:** each test call returns the draft the case's one result names, and the change handler sets the field to that draft and resets the input to it on a refusal; the painted field is walked in task 3.1 and driven by task 4.1's e2e |
+| `TC25` is cited by task 4.1's e2e but stays manual | **Joined:** the e2e is not landed; engineering flips it with `pnpm run tcs:automated` once the e2e reads the panel |
+| Each case against its scenario - `TC19` / `SC-38`, `TC20` / `SC-39`, `TC21` / `SC-40`, `TC22` / `SC-41`, `TC23` / `SC-42`, `TC24` / `SC-43`, `TC26` / `SC-53`, and `TC25` against `SC-40`'s AND and the No ceiling error copy clause | **Joined:** the seeds, the typed and pasted values and the drafts match; the PRD's Ceiling line now agrees with `TC25` that no message says why |
+| Case ids against the durable suite (last `TC18`) and the active changes on this capability - `bid-history-winner-priority` `TC27` to `TC29`, `lot-gallery-strip-by-width` `TC10` to `TC12` | **Joined:** `TC19` to `TC26` collide with none; `SC-38` to `SC-43` and `SC-53` collide with neither the durable spec nor `SC-47` to `SC-51` and `SC-54` |
+| Questions for the PM | None - Q1 to Q6 settle every value and outcome the cases read |
+
+**Uncovered anchors:** none for `Custom maximum ceiling`; every scenario on the anchor has a case asserting its THEN, every automated case's results are decided by its test, and every case stays draft.
 
 ### Manual
 

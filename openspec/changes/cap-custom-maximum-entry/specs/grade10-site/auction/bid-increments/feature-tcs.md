@@ -75,26 +75,27 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open JPY listing whose minimum bid is <minimum>.
-The maximum is sent to the auction service directly, so the refusal read is
-the service's own; the bid panel's custom maximum field takes up to
-9,999,999,999 and would carry <maximum> as well.
+
+* The collector is enrolled on an open JPY listing whose minimum bid is `<minimum>`.
+* The maximum is sent to the auction service directly, so the refusal read is
+  the service's own; the bid panel's custom maximum field takes up to
+  9,999,999,999 and would carry `<maximum>` as well.
 
 **Test data:**
 
-| minimum | ceiling | maximum |
+| `<minimum>` | `<ceiling>` | `<maximum>` |
 | --- | ---: | ---: |
 | 150000 JPY minor units | 5000000000 | 5000000001 |
 
 **Steps:**
 
-1. As the collector, commit an auto-bid maximum of <maximum> on the listing
+1. As the collector, commit an auto-bid maximum of `<maximum>` on the listing
    through the auction service's bid procedure.
 2. Read the response and the collector's maximums on the listing.
 
 **Expected Results:**
 
-* The maximum is refused and the refusal names <ceiling> as the ceiling.
+* The maximum is refused and the refusal names `<ceiling>` as the ceiling.
 * No maximum is recorded for the collector.
 
 ## Reconciliation
@@ -136,6 +137,18 @@ the service's own; the bid panel's custom maximum field takes up to
 | Questions for the PM | None - Q4 and Q6 settle the service's refusal and the JPY ceiling |
 
 **Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01` or `grade10-site-auction-bid-increments-US-02`; `SC-08`, `SC-09` and `SC-11` stay out of suite with the durable cases named above as their verifiers, and both cases stay draft.
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after the final accept-review fixes, for change `cap-custom-maximum-entry`. Reread both cases against the delta's ceiling requirement and `grade10-site-auction-bid-increments-SC-08` to `-SC-11`, after task 4.1's e2e note named only the shared-UI cases it drives. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the bidding page's Ceiling, Custom maximum and Bid ceiling lines. No other active change touches this capability. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| `grade10-site-auction-bid-increments-US2-TC3-2` against `grade10-site-auction-bid-increments-SC-10`, and `grade10-site-auction-bid-increments-US1-TC8-2` against the requirement's table | **Joined:** JPY minimum 150000, maximum 5000000001 refused naming 5000000000, no maximum recorded; the table's USD, HKD and JPY rows match `TC8-2`'s |
+| `TC3-2`'s pre-conditions ran as a paragraph and its placeholders were bare | **Folded in:** restyled to one bullet per condition with placeholders in backticks; values and outcomes unchanged |
+| Both cases are manual | **Joined:** no automated case here, so no Decided-by line is owed; task 5.1 walks both |
+| Case ids against the durable suite - `TC8-2` and `TC3-2` bump `TC8-1` and `TC3-1` | **Joined:** no other active change issues ids here |
+| Questions for the PM | None - Q4 and Q6 settle the service's refusal and the JPY ceiling |
+
+**Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01` or `grade10-site-auction-bid-increments-US-02`; `SC-08`, `SC-09` and `SC-11` stay out of suite with the durable `grade10-site-auction-bid-increments-US2-TC1-1`, `grade10-site-auction-bid-increments-US2-TC2-1` and `grade10-site-auction-bid-increments-US2-TC4-1` as their verifiers, and both cases stay draft.
 
 ### Manual
 
