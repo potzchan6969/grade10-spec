@@ -76,6 +76,11 @@ The refusals are the coupon's own —
 - 🚧 **Created from the drawer** — Proceed to Checkout sends the reviewed
   lines, the code and the points straight to Shopify; there is no separate
   checkout page to reopen or re-read them
+- 🚧 **The bar** — goods of **HKD 120,000** or more: an unverified member
+  sees the verify message and the account link where Proceed to Checkout
+  was; no checkout session is created. Under the bar, or already verified,
+  Proceed to Checkout runs —
+  [Checkout](/p/grade10-site/store/checkout#integration-readiness)
 - 🚧 **Sent** — the order is promised with the same code and points the
   drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
@@ -131,12 +136,13 @@ and tax before the invoice. A second code on one cart.
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
-| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. | Product |
+| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
 | Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
+| Verification before a session | Decided | Goods of HKD 120,000 or more replace Proceed to Checkout with the verify message and the account link. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
 | The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::

@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Setup, its lot closed at 2026-09-03T12:00:00Z and its address deadline passed at 2026-09-05T12:00:00Z.
+* `<closed-window order>` derives as Setup Overdue, its lot closed at 2026-09-03T12:00:00Z and its address deadline passed at 2026-09-05T12:00:00Z.
 * admin(holds payment-processing) is on `<closed-window order>` at `<the reopen>`.
 
 **Test data:**
@@ -65,7 +65,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Setup and its address deadline passed two days ago.
+* `<closed-window order>` derives as Setup Overdue and its address deadline passed two days ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -97,7 +97,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Setup and its address deadline passed two days ago.
+* `<closed-window order>` derives as Setup Overdue and its address deadline passed two days ago.
 * admin(holds fulfilment, not payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -111,7 +111,7 @@
 * The reopen is refused.
 * The address deadline is unchanged.
 
-### post-sale-US18-TC4-1: Reopen changes no outcome and clears the Overdue mark
+### post-sale-US18-TC4-1: Reopen derives Awaiting Setup from Setup Overdue
 
 **Classification:**
 
@@ -128,19 +128,19 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Setup, carries the Overdue mark, and its address deadline passed two days ago.
+* `<closed-window order>` derives as Setup Overdue and its address deadline passed two days ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
 
 1. Reopen the address form with a reason.
-2. Read the order's outcome and its marks on the queue.
+2. Read the order's outcome and needs-action treatment on the queue.
 
 **Expected Results:**
 
-* The outcome is still Awaiting Setup.
-* The Overdue mark is gone while the address form is open again.
-* The row's needs-action treatment is unchanged.
+* The reopened facts derive Awaiting Setup.
+* The address form is open again.
+* The row no longer needs action.
 
 ### post-sale-US18-TC5-1: A second reopen starts the 48 hours again
 
@@ -210,6 +210,37 @@
 * No reopen control is offered on a sent invoice.
 * The detail offers a re-quote and reissue instead.
 * The locked address is unchanged.
+
+### post-sale-US18-TC27-1: A confirmed address cannot reopen
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-post-sale-SC-82
+
+**Pre-conditions:**
+
+* `<preparing-invoice order>` has a confirmed address, no sent invoice, and an elapsed address deadline.
+* admin(holds payment-processing) is on `<preparing-invoice order>`.
+
+**Steps:**
+
+1. Attempt to reopen the address form with a reason.
+2. Read the order outcome and address controls.
+
+**Expected Results:**
+
+* The reopen is refused.
+* The order remains Preparing Invoice.
+* The winner receives no reopened address form.
 
 ### post-sale-US18-TC7-1: Reopen is logged with its reason and its new close
 
@@ -318,9 +349,9 @@ Runs once per row of **Test data**.
 * The needs-action treatment matches the row.
 * `<expired-invoice order>` shows its Expired invoice status beside Pending Payment.
 
-### post-sale-US18-TC10-1: Awaiting Setup becomes Overdue at the 48-hour address deadline
+### post-sale-US18-TC10-1: Awaiting Setup becomes Setup Overdue at the 48-hour address deadline
 
-Runs once per row of **Test data**. The Preparing Invoice stage is intentionally not included here because it has no queue Overdue mark before invoice send; TC24 asserts that absence.
+Runs once per row of **Test data**. The Preparing Invoice stage is intentionally not included here because it does not derive Setup Overdue; TC24 asserts that absence.
 
 **Classification:**
 
@@ -342,10 +373,10 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Test data:**
 
-| Order | Read at | Outcome | Overdue mark |
-| --- | --- | --- | --- |
-| `<awaiting-address order>` | 2026-09-05T11:59:00Z | Awaiting Setup | absent |
-| `<awaiting-address order>` | 2026-09-05T12:00:00Z | Awaiting Setup | present |
+| Order | Read at | Outcome |
+| --- | --- | --- |
+| `<awaiting-address order>` | 2026-09-05T11:59:00Z | Awaiting Setup |
+| `<awaiting-address order>` | 2026-09-05T12:00:00Z | Setup Overdue |
 
 **Steps:**
 
@@ -353,11 +384,10 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Expected Results:**
 
-* The Overdue mark is present or absent as the row states.
-* The outcome is the one the row names, marked or not.
-* The order is not expired or closed by the mark.
+* The outcome is the one the row names.
+* The order is not expired or closed by the derived status.
 
-### post-sale-US18-TC24-1: Preparing Invoice has no queue Overdue mark before invoice send
+### post-sale-US18-TC24-1: Preparing Invoice does not derive Setup Overdue before invoice send
 
 **Classification:**
 
@@ -384,8 +414,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Expected Results:**
 
-* The queue has no Overdue mark for `<preparing-invoice order>`.
-* The order remains Preparing Invoice and is not cancelled or expired.
+* The order remains Preparing Invoice rather than Setup Overdue, and is not cancelled or expired.
 * No payment Overdue timer or payment deadline exists before invoice send.
 
 
@@ -406,7 +435,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Pre-conditions:**
 
-* An Awaiting Setup order has an expired address deadline and no confirmed address.
+* A Setup Overdue order has an expired address deadline and no confirmed address.
 * A winner address write and an operator reopen can be submitted concurrently.
 
 **Steps:**
@@ -437,7 +466,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Pre-conditions:**
 
-* An expired Awaiting Setup order has no confirmed address.
+* A Setup Overdue order has no confirmed address.
 * admin(holds payment-processing) has a phone-provided address and a reason.
 
 **Steps:**
@@ -538,7 +567,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Pre-conditions:**
 
-* `<closed-window order>` carries an address confirmed inside the 48 hours, its address deadline passed two hours ago, and it carries the Overdue mark.
+* `<closed-window order>` carries an address confirmed inside the 48 hours and its address deadline passed two hours ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -637,7 +666,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Pre-conditions:**
 
-* `<missed-deadline order>` is in Awaiting Setup with its address deadline passed.
+* `<missed-deadline order>` is in Setup Overdue with its address deadline passed.
 * An operator holds payment-processing.
 
 **Steps:**
@@ -920,7 +949,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | --- | --- |
 | Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US18-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
 | Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US18-TC16-1` |
-| Whether the Overdue mark follows the 48-hour address deadline | **Folded in:** `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` cover the Awaiting Setup mark; `post-sale-US18-TC24-1` asserts no Preparing Invoice queue mark or payment Overdue timer before invoice send. |
+| How the 48-hour address deadline changes the queue | **Folded in:** `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` cover Setup Overdue and reopen to Awaiting Setup; `post-sale-US18-TC24-1` asserts Preparing Invoice does not derive Setup Overdue or start a payment timer before invoice send. |
 | Address write/reopen race and phone-recorded audit entry | **Folded in:** `SC-90`/`SC-91` with `post-sale-US18-TC25-1`/`TC26-1`. |
 | Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US18-TC13-1` reads it that way |
 | An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US18-TC17-1`, `TC19-1` and `TC21-1` |

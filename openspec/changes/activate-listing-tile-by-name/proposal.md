@@ -15,8 +15,10 @@ name control, and drop-off after a name tap that previously did nothing.
 - **Name activates** — when the consumer supplies tile activation and the
   product is not sold out, the product name reports the same activation as
   the photo
-- **Sold out and no handler stay inert** — no name control when sold out, or
-  when no activation callback is supplied
+- **Sold out where the tile sells stays inert** — no name control when sold
+  out and a cart handler is supplied, or when no activation callback is
+  supplied. A sold-out tile that still opens (no cart handler) is
+  `add-store-cross-sell`
 - **No new export** — still `ProductCard` / list `onProductClick`; no new
   public name
 
@@ -26,7 +28,7 @@ name control, and drop-off after a name tap that previously did nothing.
   modal
 - **Always-visible link chrome** — hover / focus underline is the affordance;
   Figma Product Card layout stays the photo + plain name frame
-- **Changing cart, sold-out, or price behaviour**
+- **Changing cart or price behaviour**
 - **Adaptive Filter chrome** — `adapt-listing-filter-drawer`
 
 ## Capabilities
@@ -46,10 +48,13 @@ name control, and drop-off after a name tap that previously did nothing.
   stories supply activation so the name is reachable in Storybook
 - **Grade10 site / ZZZ** — already supply `onProductClick`; no new props
 - **Manual** — Product Listing and Product Listing Blocks Product Tile
+- **Overlap** — `add-store-cross-sell` Q29: this change's sold-out name is
+  inert only where a cart handler is supplied; SC-91 owns a sold-out tile
+  that still opens
 
 ## Open questions
 
-- none
+- none — Q1–Q3 are in `decisions.md`
 
 ## References
 

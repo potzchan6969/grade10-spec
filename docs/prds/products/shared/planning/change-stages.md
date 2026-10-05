@@ -137,7 +137,7 @@ Slack tells one person, once per move, in the change's thread.
 | A change reaches Implementation complete | Its QA hand, by direct message | The change, the accepted implementation identity and the run sheet to walk |
 | 🚧 What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
 | 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
-| A push lands on `main` | The channel | Each change the push moved, and its stage |
+| A change is proposed, accepted, claimed, completed or archived | The channel, once the manual has deployed it | Each change that crossed one, under its milestone |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
 
 - 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
@@ -145,7 +145,12 @@ Slack tells one person, once per move, in the change's thread.
 - 🚧 **One thread per change** — every direct message links the change's
   thread, and the change page until the round opens one; a reply in the
   thread is how a hand answers
-- **The channel post per push** — runs today, listing the changes a push touched
+- **The channel post** — names a change only when it is proposed, accepted,
+  claimed, has every task checked, or is archived; any other push is silent
+  in the channel
+- **After the deploy** — nothing is sent until the manual and the OpenSpec
+  viewer have deployed what the message says; a failed deploy sends nothing,
+  and the next one that succeeds carries it
 - 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
   lines, not messages of their own
 - 🚧 **QA follows implementation** — the QA hand is told when implementation
@@ -200,7 +205,7 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
 | Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
-| Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, the channel post per push kept, a weekly digest; never one per commit. | Product |
+| Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
 | Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |

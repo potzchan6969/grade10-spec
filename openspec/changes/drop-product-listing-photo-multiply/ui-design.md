@@ -16,6 +16,6 @@ Figma:
 
 ## States
 
-| State | Spec scenario |
+| State | Closes |
 | --- | --- |
-| Photo drawn as supplied | `shared-ui-store-product-listing-SC-64` |
+| Photo drawn as supplied, no multiply | `shared-ui-store-product-listing-SC-64` |

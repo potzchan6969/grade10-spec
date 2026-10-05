@@ -539,24 +539,89 @@ test("a test case id already held by another durable journey is refused", () => 
   );
 });
 
-test("a retitled journey group and case replace their durable copies by id", () => {
+const SEARCH_SUITE =
+  "# Search cases\n\n## site-search-US2: Reader uses search\n\n<!-- trace:case id=g.search.TC-a1 rev=1 covers=g.search.SC-a1 -->\n### site-search-US2-TC1-1: Old case title\n\nOld coverage.\n\n### site-search-US2-TC2-1: Kept case\n\nKept coverage.\n\n## Reconciliation\n\nExisting reconciliation.\n";
+
+test("a story or case that hands a durable id to something new is refused", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US2: Reader saves a search\n\n### site-search-US2-TC1-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  const errors = acceptanceReadiness(root, CHANGE).join("\n");
+  assert.match(
+    errors,
+    /story site-search-US2 reuses the durable story's id for "Reader saves a search", where the durable story is "Reader uses search"/,
+  );
+  assert.match(
+    errors,
+    /case site-search-US2-TC1 reuses the durable case's id for "Saved search reopens", where the durable case is "Old case title"; give the new case the next unused TC number/,
+  );
+  assert.throws(() => prepareAcceptance(root, CHANGE), /Acceptance is blocked/);
+});
+
+test("a journey restated under another title is refused", () => {
   const { root } = sandbox();
   writeDurable(
     root,
-    "feature-tcs.md",
-    "# Search cases\n\n## site-search-US2: Reader uses search\n\n### site-search-US2-TC1-1: Old case title\n\nOld coverage.\n\n### site-search-US2-TC2-1: Kept case\n\nKept coverage.\n\n## Reconciliation\n\nExisting reconciliation.\n",
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader uses search\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## User journeys\n\n### site-search-US-02: Reader saves a search\n\nNew journey.\n",
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /journey site-search-US-02 reuses the durable journey's id for "Reader saves a search".*under `## MODIFIED User journeys`/,
+  );
+});
+
+test("a case revised under its durable marker and a story under MODIFIED User journeys replace their durable copies", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader uses search\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## MODIFIED User journeys\n\n### site-search-US-02: Reader searches and saves\n\nRevised journey.\n",
   );
   writeFileSync(
     join(root, SEARCH_DELTA, "feature-tcs.md"),
-    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n### site-search-US2-TC1-1: New case title\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n<!-- trace:case id=g.search.TC-a1 rev=2 covers=g.search.SC-a1 -->\n### site-search-US2-TC1-2: New case title\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
   );
   const suite = prepareAcceptance(root, CHANGE).outputs.get(
     "openspec/specs/site/search/feature-tcs.md",
   );
   assert.match(suite, /## site-search-US2: Reader searches and saves/);
   assert.doesNotMatch(suite, /Reader uses search|Old case title/);
-  assert.match(suite, /site-search-US2-TC1-1: New case title/);
+  assert.match(suite, /site-search-US2-TC1-2: New case title/);
   assert.match(suite, /site-search-US2-TC2-1: Kept case/);
+});
+
+test("a change may retitle a case it added at its previous acceptance", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  const suitePath = join(root, SEARCH_DELTA, "feature-tcs.md");
+  writeFileSync(
+    suitePath,
+    "# Search cases\n\n## site-search-US3: Reader saves a search\n\n### site-search-US3-TC1-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  const first = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, first);
+  writeAcceptance(root, first, { reviewedBy: "@pm" });
+  writeFileSync(
+    suitePath,
+    readFileSync(suitePath, "utf8").replace(
+      "Saved search reopens",
+      "Saved search reopens with its filters",
+    ),
+  );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
 });
 
 test("a first acceptance refuses a Purpose written before the durable Purpose last changed", () => {
@@ -728,6 +793,32 @@ test("acceptance rejects incomplete rename instructions and unresolved visible c
   assert.match(
     acceptanceReadiness(unresolved.root, CHANGE).join("\n"),
     /unresolved TBC/,
+  );
+});
+
+test("acceptance accepts a populated reconciliation table and rejects its empty template", () => {
+  const populated = sandbox();
+  const suitePath = join(
+    populated.root,
+    "openspec/changes/build-alpha/specs/site/search/feature-tcs.md",
+  );
+  writeFileSync(
+    suitePath,
+    "# Search test cases\n\n## Reconciliation\n\n| Raised | Disposition |\n| --- | --- |\n| The blind reading found a gap | Folded into the requirement |\n",
+  );
+  assert.deepEqual(acceptanceReadiness(populated.root, CHANGE), []);
+
+  const empty = sandbox();
+  writeFileSync(
+    join(
+      empty.root,
+      "openspec/changes/build-alpha/specs/site/search/feature-tcs.md",
+    ),
+    "# Search test cases\n\n## Reconciliation\n\n| Raised | Disposition |\n| --- | --- |\n",
+  );
+  assert.match(
+    acceptanceReadiness(empty.root, CHANGE).join("\n"),
+    /needs a completed ## Reconciliation with dispositions/,
   );
 });
 

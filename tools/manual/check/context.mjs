@@ -118,6 +118,14 @@ export const RULES = [
     title: "Restated stories that are not what the store holds",
   },
   {
+    // The fold places stories and cases by id, so one handed to something new
+    // replaces the durable entry. Acceptance refuses it; a `warn` here until
+    // the changes written before that refusal are renumbered.
+    key: "reused",
+    level: "warn",
+    title: "Durable story, case or journey ids a change hands to something new",
+  },
+  {
     key: "outline",
     level: "fail",
     title: "Suites beside a spec whose scenarios never landed",

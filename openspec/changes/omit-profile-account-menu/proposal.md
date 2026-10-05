@@ -48,8 +48,8 @@ None.
   story; Open story remains the SoT.
 - `apps/frontend/grade10`: no new wiring — Grade10 already omits `onProfile`
   for launch; this change stops the specs claiming it will return with a gate.
-- Manual pages: [Page Shell · Account Menu](../../../docs/prds/products/grade10-site/site/page-shell.md#account-menu)
-  and [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry).
+- Manual pages: [Page Shell · No Profile](../../../docs/prds/products/grade10-site/site/page-shell.md#no-profile)
+  and [Site Header and Footer · No Profile](../../../docs/prds/products/shared/ui/site-chrome.md#no-profile).
 
 ## Open questions
 
@@ -58,8 +58,8 @@ None. A Profile page later is unplanned and stays with Account / Profile and
 
 ## References
 
-- [Page Shell · Account Menu](../../../docs/prds/products/grade10-site/site/page-shell.md#account-menu)
-- [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry)
+- [Page Shell · No Profile](../../../docs/prds/products/grade10-site/site/page-shell.md#no-profile)
+- [Site Header and Footer · No Profile](../../../docs/prds/products/shared/ui/site-chrome.md#no-profile)
 
 ## Follow-on changes
 

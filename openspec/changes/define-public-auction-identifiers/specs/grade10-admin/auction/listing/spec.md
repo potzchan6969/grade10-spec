@@ -1,3 +1,5 @@
+# grade10-admin/auction/listing Specification
+
 ## Feature set
 
 - Create and catalogue
@@ -207,6 +209,7 @@ because its sale was canceled.
 Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-pfl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-36 - Operator calls off a draft
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -215,6 +218,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 moves it to `canceled`
 - **AND** it stays absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2px rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-37 - Operator calls off a created listing before publish at
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -224,6 +228,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** when that publish at arrives, Grade10 does not publish it
 - **AND** it stays absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-oc9 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-38 - Operator calls off a published listing that has bids
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -235,6 +240,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the stock held for it is released
 - **AND** it is absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-e1b rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-39 - Closed listing cannot be called off
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -243,6 +249,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains closed
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-f4v rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-40 - Settled listing cannot be called off
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -251,6 +258,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains settled
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-j48 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-41 - Already canceled listing cannot be called off again
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -259,6 +267,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains canceled
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-42 - Cancel rewrites the slug and frees the original
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -271,6 +280,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the slug remains unavailable to every later listing
 - **AND** the listing is absent from browse and search
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-lj7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-43 - Cancel of a draft with no slug does not invent one
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -279,6 +289,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 moves it to `canceled`
 - **AND** the listing still has no slug
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tjj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-44 - Unauthorized cancel is refused
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 

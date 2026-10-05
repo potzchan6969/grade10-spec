@@ -13,6 +13,12 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
+🚧 **Whole photo** — the square well shows the full picture; leftover space is
+the well, not a cropped edge. Available, on sale, sold out and in cart all do
+this.
+
+🚧 **No multiply** — the photo is drawn as supplied, not blended into the well.
+
 🚧 **Name opens the product** — when the tile can open a product, the name
 does too, the same way the photo does; a sold-out tile’s name stays inert
 where the tile sells.
@@ -36,6 +42,20 @@ viewport with a fine pointer it still appears on hover or keyboard focus.
 sort and each facet group; bottom drawers; no listing search. Facet drawers
 draft until Show Results. Wide keeps the sidebar and chip header.
 
+## Search
+
+On a wide viewport the listing search field sits with the filters. Narrow
+chrome has no search. The application decides which hits to show.
+
+- 🚧 **Supplied groups** — while they type, the field shows the product and
+  filter groups it is given; it invents none
+- 🚧 **Searching and empty** — while hits resolve it shows searching and
+  invents no row; when nothing matched it says so; Enter still reports a
+  commit either way
+- 🚧 **Commit and pick** — submitting with no row highlighted reports a
+  search commit; activating a row reports that suggestion; the surface does
+  not navigate or apply filters
+
 The surface holds no state of its own. Which products match, how they are
 ordered, how many there are and what a cart control does are all the
 application's answers; the components render a selection and report a change.
@@ -54,8 +74,10 @@ listing shows the result count and pills for sort and each facet group.
 
 ## The shopper searches
 
-On a wide viewport they type in the listing search field. The surface reports
-the change; the application decides what matches. Narrow chrome has no search.
+On a wide viewport they type in the listing search field. The field shows the
+groups it is given, or that it is searching, or that nothing matched. Submitting
+or picking a row is reported; the application decides what matches. Narrow
+chrome has no search.
 
 ## They open a facet on a narrow viewport
 
@@ -95,6 +117,8 @@ The tile reports the quantity change and the application updates the cart.
 ::story{id="store-product-listing-productbrowse-states--no-match" title="A search that matched nothing"}
 
 ::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
+
+::story{id="store-product-listing-productcardimage--default" title="The full photo in the well"}
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
 

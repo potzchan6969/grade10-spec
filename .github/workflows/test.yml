@@ -1,30 +1,76 @@
 name: Test
 
-# The push that ticks a task group carries a change's plan alone, and nothing
-# here reads one; the template of the same name is code the tests read, so
-# the filter names the changes' tree. `scripts/openspec/workflows.test.mjs`
-# holds it there.
+# No workflow path filter: a required check whose workflow never runs stays
+# pending. Each job skips on its own what it does not read - the Playwright
+# jobs an event that changes only `openspec/changes/**` and `docs/**`, every
+# job a tick's plan - and a skipped job reads green. `scripts/openspec/workflows.test.mjs` holds the filter.
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - "openspec/changes/**/tasks.md"
   pull_request:
-    paths-ignore:
-      - "openspec/changes/**/tasks.md"
 
 permissions:
   contents: read
 
+# Pull requests cancel their own superseded runs; every push to main runs to
+# the end, so a red main names the commit that broke it.
 concurrency:
-  group: ci-test-${{ github.ref }}
+  group: ci-test-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: true
 
 env:
   NODE_VERSION: 24.14.1
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+      plan: ${{ steps.diff.outputs.plan }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # A pull request's merge commit and its base: the diff the pull
+          # request makes.
+          fetch-depth: 2
+
+      # Anything it cannot read counts as code, and so does a failed run of
+      # this job: the jobs below skip on `code=false` or `plan=true` alone.
+      # `--no-renames`, so a file moved into `docs/` still names where it left.
+      - name: Read whether the event reaches code
+        id: diff
+        env:
+          BEFORE: ${{ github.event_name == 'push' && github.event.before || '' }}
+          DOCS_ONLY: ^(openspec/changes|docs)/
+          PLAN_ONLY: ^openspec/changes/.+/tasks\.md$
+        run: |
+          base=HEAD^1
+          if [ -n "$BEFORE" ]; then
+            base=$BEFORE
+            git fetch --quiet --depth=1 origin "$BEFORE" || base=
+          fi
+          if [ -n "$base" ] && changed=$(git diff --no-renames --name-only "$base" HEAD); then
+            if grep -qvE "$DOCS_ONLY" <<< "$changed"; then
+              echo "code=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "code=false" >> "$GITHUB_OUTPUT"
+            fi
+            if grep -qvE "$PLAN_ONLY" <<< "$changed"; then
+              echo "plan=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "plan=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "::warning title=Test filter::Could not diff against ${base:-its base}, so every job runs."
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            echo "plan=false" >> "$GITHUB_OUTPUT"
+          fi
+
   stories:
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -50,6 +96,8 @@ jobs:
         run: pnpm run test:stories
 
   walk:
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +122,11 @@ jobs:
       - name: Run the walk
         run: pnpm run test:walk
 
+  # Skips the push that ticks a task group, which carries a change's plan
+  # alone: nothing here reads one.
   catalogs:
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' }}
     runs-on: ubuntu-latest
 
     steps:

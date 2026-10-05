@@ -9,7 +9,9 @@
 
 ## Non-Goals
 
-- Live bank account values or a production FPS QR asset — Finance TBC.
+- Finance-owned payment-instruction configuration. This change consumes the
+  approved snapshot on each bank-transfer invoice; it does not put live
+  account values or a production FPS QR asset in source control.
 - Publishing a new `@grade10/ui` export for either dialog.
 - Changing proof file limits, HEIC conversion, or the one-upload rule.
 - Cross-linking View Bank Details into Submit Payment Proof (or the reverse).
@@ -38,7 +40,7 @@
 | Q16 | What is the SWIFT address field called? (2026-09-22) | **Beneficiary address** — the beneficiary's address | Business address |
 | Q17 | What bank destination fields does SWIFT show beyond name and account? (2026-09-22) | Bank name and bank address (main branch address, city, country), with beneficiary name and beneficiary address | Beneficiary and business address alone, without the receiving bank's name and address |
 | Q18 | How is the account number shown? (2026-09-22) | The full account number including bank and branch code on HK Local and SWIFT (bank code and branch code still shown separately on HK Local) | Account digits alone, without bank and branch code in the number |
-| Q19 | What values does the preview use while Finance confirms live accounts? (2026-09-22) | Grade10 Finance Limited as beneficiary; HSBC Hong Kong as the sample bank (name, main-branch address, codes, SWIFT). Live account values stay Finance TBC | Leaving every rail value as `{tbc}` in the preview |
+| Q19 | What values does the preview use while Finance owns live payment instructions? (2026-09-22) | Grade10 Finance Limited as beneficiary; HSBC Hong Kong as the sample bank (name, main-branch address, codes, SWIFT). Live instructions and the FPS QR are Finance-owned configuration, snapshotted when a bank-transfer invoice is issued, and are not source-controlled fixtures. | Leaving every rail value as `{tbc}` in the preview |
 | Q20 | How wide is the rail tab list? (2026-09-23) | From `sm` up, full-width shared pill track. Below `sm`, the track hugs each label and scrolls horizontally so FPS / HK Local / International stay readable | Always full-width (labels crush on a narrow dialog); always hug (empty track on a wide dialog) |
 
 ## Raised

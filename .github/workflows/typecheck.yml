@@ -16,8 +16,10 @@ on:
 permissions:
   contents: read
 
+# Pull requests cancel their own superseded runs; every push to main runs to
+# the end, so a red main names the commit that broke it.
 concurrency:
-  group: ci-typecheck-${{ github.ref }}
+  group: ci-typecheck-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: true
 
 env:

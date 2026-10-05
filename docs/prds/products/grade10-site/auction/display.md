@@ -44,16 +44,18 @@ What a listing carries, from the operator's form to the card.
 | Bidding window | A start, a close and the extension rule — [Bidding](/p/grade10-site/auction/bidding#auction-logic) | The close and the time left |
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
-| Address | A slug, unique among every listing: lower-case title words followed by the lower-case listing code when an operator keeps the generated value | `/auction/listings/<slug>` |
-| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters, allocated on the first saved draft and permanently reserved, including after deletion — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Its lower-case form is visible only as the canonical address suffix, never as a labelled page field or a route on its own. Fresh metadata omits the separate code. A cached preview may remain stale without a purge guarantee. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
   [Auction Management](/p/grade10-admin/auction/management#listings)
-- ❓ **Cached shared-link previews** — whether an already cached preview
-  refreshes when the listing changes; until Product confirms, an old preview
-  may remain stale without a purge or regeneration guarantee
+
+### Listing Code
+
+| Fact | Set by the operator | Collectors see |
+| --- | --- | --- |
+| Address | A slug, unique among every listing: lower-case title words followed by the lower-case listing code when an operator keeps the generated value | `/auction/listings/<slug>` |
+| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters, allocated on the first saved draft and permanently reserved, including after deletion — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Its lower-case form is visible only as the canonical address suffix, never as a labelled page field or a route on its own. Fresh metadata omits the separate code. A cached preview may remain stale without a purge guarantee. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 
 ## Catalogue
 

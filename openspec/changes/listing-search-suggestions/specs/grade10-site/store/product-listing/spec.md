@@ -7,7 +7,8 @@ before free text is committed as a narrowing. Suggestions SHALL cover the
 whole catalogue for product hits, even when facet choices are already in
 force. Suggestion groups SHALL include matching products and matching facet
 choices from the catalogue's world and collectible-type groups. Each group
-SHALL be capped at five hits.
+SHALL be capped at five hits. A facet suggestion SHALL name the choice and
+SHALL show whether it is a world or a collectible type as trailing chrome.
 
 Typing alone SHALL NOT put free text in the address and SHALL NOT change
 which cards the listing lists. Committing the typed words — by submitting
@@ -38,6 +39,8 @@ surfaces.
 - **THEN** the field offers that product under a products group and that
   facet choice under a filters group
 - **AND** each group shows at most five hits
+- **AND** the filter hit names the choice and shows whether it is a world
+  or a collectible type
 - **AND** the address and the listed cards are unchanged until they commit
   or select
 

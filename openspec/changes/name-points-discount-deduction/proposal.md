@@ -53,4 +53,4 @@ unpaid do not rise during the rollout.
 ## References
 
 - [Shopify Integration · POS Extension](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#pos-extension)
-- [Paying with Points](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md)
+- [Paying with Points · At the Till](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md#at-the-till)

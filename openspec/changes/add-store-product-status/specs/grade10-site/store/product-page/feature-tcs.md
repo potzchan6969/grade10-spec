@@ -11,6 +11,7 @@ when the catalogue holds no such card,
 **so that** the page I read is the card the address names rather than an empty
 product page.
 
+<!-- trace:case id=g10.store-product-page.TC-dg4 rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC1-1: Product address answers with its named card
 
 **Classification:**
@@ -40,6 +41,7 @@ product page.
 * The address opens <a card>'s product page.
 * The page names the card and shows its description.
 
+<!-- trace:case id=g10.store-product-page.TC-2l8 rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC2-1: Two product addresses answer with their own cards
 
 Runs once per row of **Test data**.
@@ -77,6 +79,7 @@ Runs once per row of **Test data**.
 
 * The address in each row opens that row's card.
 
+<!-- trace:case id=g10.store-product-page.TC-plg rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC3-1: Unknown product address answers not found
 
 **Classification:**
@@ -104,6 +107,7 @@ Runs once per row of **Test data**.
 
 * The address answers 404 with the site's not-found page.
 
+<!-- trace:case id=g10.store-product-page.TC-bng rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC4-1: Product details are present before scripts run
 
 **Classification:**
@@ -141,6 +145,7 @@ Runs once per row of **Test data**.
 **so that** the card I opened is the one I land on, at an address that answers
 on its own.
 
+<!-- trace:case id=g10.store-product-page.TC-3jw rev=1 covers=g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-product-page-US2-TC1-1: Card image opens its product address in place
 
 **Classification:**
@@ -170,7 +175,7 @@ on its own.
 * <A card>'s product page opens without a full page load.
 * The address names <a card>.
 
-### grade10-site-store-product-page-US2-TC2-1: Card name opens the same product address
+### grade10-site-store-product-page-US2-TC3-1: Card name opens the same product address
 
 **Classification:**
 
@@ -207,6 +212,7 @@ on its own.
 **I want** Add to cart to open sign-in instead of building a guest cart,
 **so that** I only hold lines I can take to members-only checkout.
 
+<!-- trace:case id=g10.store-product-page.TC-7e1 rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
 ### grade10-site-store-product-page-US11-TC1-1: Signed-out add opens sign-in
 
 **Classification:**
@@ -235,6 +241,7 @@ on its own.
 * The sign-in dialog opens.
 * No guest cart line is created.
 
+<!-- trace:case id=g10.store-product-page.TC-5er rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
 ### grade10-site-store-product-page-US11-TC2-1: Dismissing sign-in creates no product line
 
 **Classification:**
@@ -263,6 +270,7 @@ on its own.
 
 * No product page item is added to the cart.
 
+<!-- trace:case id=g10.store-product-page.TC-maa rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
 ### grade10-site-store-product-page-US11-TC3-1: Sign-in completes the product page add
 
 **Classification:**
@@ -299,6 +307,7 @@ on its own.
 **I want** the sign-in dialog to say I am signing in to add to cart,
 **so that** I know why the shop stopped the add.
 
+<!-- trace:case id=g10.store-product-page.TC-ir3 rev=1 covers=g10.store-product-page.SC-zl0 -->
 ### grade10-site-store-product-page-US12-TC1-1: Sign-in title names the add
 
 **Classification:**
@@ -336,6 +345,7 @@ whole,
 **so that** whoever receives it sees the card rather than a text-only preview
 or one with its edges cut off.
 
+<!-- trace:case id=g10.store-product-page.TC-kzr rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC1-1: Shared address unfurls with the card's first picture
 
 **Classification:**
@@ -364,6 +374,7 @@ or one with its edges cut off.
 
 * The preview shows <a card>'s first catalogue picture.
 
+<!-- trace:case id=g10.store-product-page.TC-num rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC2-1: Preview fits the card whole on white
 
 **Classification:**
@@ -393,6 +404,7 @@ or one with its edges cut off.
 * The card fits wholly inside the preview box.
 * The box is padded white and no card edge is cropped.
 
+<!-- trace:case id=g10.store-product-page.TC-05a rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC3-1: Preview declares the delivered picture size
 
 **Classification:**
@@ -421,6 +433,7 @@ or one with its edges cut off.
 
 * The declared size matches the delivered picture.
 
+<!-- trace:case id=g10.store-product-page.TC-8oe rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC4-1: Card without a picture has no preview image tag
 
 **Classification:**
@@ -449,6 +462,7 @@ or one with its edges cut off.
 
 * No preview image tag is present.
 
+<!-- trace:case id=g10.store-product-page.TC-vr6 rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC5-1: Card with a picture declares a wide preview
 
 **Classification:**
@@ -477,6 +491,7 @@ or one with its edges cut off.
 
 * The declared shape is wide.
 
+<!-- trace:case id=g10.store-product-page.TC-fpn rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC6-1: Card without a picture declares a small preview
 
 **Classification:**
@@ -505,7 +520,7 @@ or one with its edges cut off.
 
 * The declared shape is small.
 
-### grade10-site-store-product-page-US13-TC7-1: Each shared card address unfurls with its own picture
+### grade10-site-store-product-page-US13-TC10-1: Each shared card address unfurls with its own picture
 
 **Classification:**
 
@@ -535,7 +550,7 @@ or one with its edges cut off.
 * Each preview shows its own card's first picture.
 * Neither preview shows the other card's picture.
 
-### grade10-site-store-product-page-US13-TC8-1: Small original fills the preview box
+### grade10-site-store-product-page-US13-TC11-1: Small original fills the preview box
 
 **Classification:**
 
@@ -564,7 +579,7 @@ or one with its edges cut off.
 * The picture is enlarged to fill the preview box.
 * The card remains whole.
 
-### grade10-site-store-product-page-US13-TC9-1: Preview opens the card it describes
+### grade10-site-store-product-page-US13-TC12-1: Preview opens the card it describes
 
 **Classification:**
 
@@ -601,7 +616,7 @@ or one with its edges cut off.
 its own page,
 **so that** I can buy the quantity I chose without leaving the product page.
 
-### grade10-site-store-product-page-US3-TC1-2: Product page offers one item without a shopper choice
+### grade10-site-store-product-page-US3-TC4-2: Product page offers one item without a shopper choice
 
 **Classification:**
 
@@ -630,7 +645,7 @@ its own page,
 * The page shows the item's price and availability.
 * No size, option, variant choice or variant label is shown.
 
-### grade10-site-store-product-page-US3-TC2-2: Requested quantity above the count reaches cart review
+### grade10-site-store-product-page-US3-TC5-2: Requested quantity above the count reaches cart review
 
 **Classification:**
 
@@ -667,6 +682,7 @@ its own page,
 * The product page accepts the requested quantity without a stock-derived maximum.
 * Cart review receives the requested quantity.
 
+<!-- trace:case id=g10.store-product-page.TC-4xf rev=1 covers=g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5 -->
 ### grade10-site-store-product-page-US3-TC3-1: Adding the same item again keeps one cart line
 
 **Classification:**
@@ -705,6 +721,7 @@ its own page,
 the buying happens, while keeping its price visible,
 **so that** I can tell a sold-out product from a page that failed.
 
+<!-- trace:case id=g10.store-product-page.TC-mgl rev=2 covers=g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
 ### grade10-site-store-product-page-US4-TC1-2: Unavailable item keeps its price and offers no add
 
 **Classification:**
@@ -736,7 +753,7 @@ the buying happens, while keeping its price visible,
 * The page says the item is sold out.
 * No usable add control is offered.
 
-### grade10-site-store-product-page-US4-TC2-2: Page does not offer another Shopify variant as a choice
+### grade10-site-store-product-page-US4-TC3-2: Page does not offer another Shopify variant as a choice
 
 **Classification:**
 
