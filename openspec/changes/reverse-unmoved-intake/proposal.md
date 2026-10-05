@@ -27,6 +27,10 @@ the workaround today, which should fall to none.
   that has moved, and still records a withdrawal there. A card received
   correctly that leaves before it ever moves is reversed, with remarks saying
   so.
+- **Nothing runs without a confirmation.** Choosing either action opens a
+  dialog naming the Cert ID or the number of units, what falls, and for a
+  Cert record that its tagged media go too. It holds the remarks; cancelling
+  changes nothing.
 - **History records each one.** One entry per reduction or removal carries
   its time, actor, quantity, the Cert ID where there was one, and remarks,
   prefilled `Entered by mistake` and editable but never empty, under its own

@@ -26,6 +26,7 @@
 | Q8  | How many units does one reduction take out? | Any whole number from one to the available `No Cert ID` count, in one entry - decided by the round | One unit at a time, which turns an over-intake of fifty into fifty entries |
 | Q9  | Who can reduce or remove? | An inventory admin who may write inventory, the grant intake and Remove physical unit already take; others see the rows and the history only - decided by the round | A new grant, which no team has asked for |
 | Q10 | How is success measured? | Withdrawals whose remarks say the unit was entered by mistake, which should fall to none - decided by the round | Remove physical unit used on a Cert record that has only been intaken, which Q3 now rules out by construction |
+| Q11 | Does a reduction or removal run as soon as the admin chooses it? | No: a confirmation dialog opens first. It names the Cert ID or the number of `No Cert ID` units, says stock and the ledger fall by that number and, for a Cert record, that its tagged media are deleted, and holds the remarks. Nothing changes until the admin confirms; cancelling changes nothing and writes no history - @mason5991, 2026-10-05 | Running on the first click, which is how a misclick takes a unit out of the ledger with no withdrawal to show for it |
 
 ## Raised
 
