@@ -62,9 +62,13 @@ records them and the two places the build differs from the contract.
      `ListingView.tsx`), so a live lot or one Closed without a result
      crowns nothing.
    - `samePricePriority` on a row when another public row with the same
-     amount ranks above it: leading or won first, then newer, then
-     pseudonym, the order the public ledger read also uses. This covers the
-     current price and any older tie.
+     amount ranks above it: leading or won first, then newer, the first two
+     keys of the public ledger read's order. This covers the current price
+     and any older tie.
+   - **Differs from the build:** for two rows equal on both keys, the read
+     breaks the tie by row `id` and the mapper by pseudonym, so the tip can
+     sit on the row listed above. Task 4.2 makes the mapper keep the
+     ledger's order for such rows rather than rank by pseudonym.
    - Copy: `bidHistory.winner` and `bidHistory.samePricePriorityTip` from
      `auctionListing.bidHistoryWinner` and `auctionListing.samePricePriorityTip`,
      answered in `en`, `ko`, `zh-Hans` and `zh-Hant`.

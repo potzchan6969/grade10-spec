@@ -43,7 +43,7 @@ leads.
 #### Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
 **Serves:** Public bid history outcome - closed sold Recent bids show a winner crown
 
-- **GIVEN** a closed sold bid card whose leading public history row has
+- **GIVEN** a closed sold bid card whose winning public history row has
   `isWinner` true, and winner copy `Winner` supplied
 - **WHEN** the Recent bids list renders
 - **THEN** that row shows a primary crown after the amount with accessible

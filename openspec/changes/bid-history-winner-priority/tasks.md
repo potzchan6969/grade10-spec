@@ -50,7 +50,9 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       in `listingLotExtras.test.ts` for the crown and the tip, and the
       backend's `autoBidding.spec.ts` for a tie listing the earlier maximum
       first once both are outbid, which the one-ms answer stamp in
-      `resolveStandingMaxima.ts` keeps. No build change.
+      `resolveStandingMaxima.ts` keeps. For two rows equal on standing and
+      time, the mapper keeps the ledger's order rather than ranking by
+      pseudonym, with a test.
       `grade10-site-auction-listing-page-SC-48`,
       `grade10-site-auction-listing-page-SC-49`,
       `grade10-site-auction-listing-page-SC-50`,
