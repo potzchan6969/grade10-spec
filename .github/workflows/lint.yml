@@ -11,8 +11,10 @@ on:
 permissions:
   contents: write
 
+# Pull requests cancel their own superseded runs; every push to main runs to
+# the end, so a red main names the commit that broke it.
 concurrency:
-  group: ci-lint-${{ github.ref }}
+  group: ci-lint-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: true
 
 env:
@@ -74,6 +76,14 @@ jobs:
             exit 0
           fi
 
+          # Every push to main runs to the end, so a newer run may be racing
+          # this one; it fixes what its own head still holds.
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          if [ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]; then
+            echo "::notice title=Lint fixes not committed::main moved past ${GITHUB_SHA}; the run on its new head applies its own."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
