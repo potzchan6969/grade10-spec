@@ -17,7 +17,9 @@
  * - **verifier** — whether a verifier reads the findings: a round that
  *   summoned one challenger dispatches none, and that reader argues its own
  * - **bundle** — the draft, and what is before it: the artifact's `upstream:`
- *   set as the change wrote it, and the page sections the proposal marks
+ *   set as the change wrote it, and the page sections the proposal marks; a
+ *   task group's journeys, requirements and cases only for the capabilities
+ *   its task lines cite
  *
  * The size is read from the draft. No key of the change's record is read for
  * that, so none can add a reader or remove one; a size somebody believes is

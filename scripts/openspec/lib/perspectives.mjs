@@ -356,7 +356,8 @@ const taskArtifact = (schema, target) =>
  * records it, resolved to the files the change carries, followed by the page
  * sections the change's proposal marks. The pages come last because they are
  * the store's, not the change's: they are what the change is measured
- * against.
+ * against. A task group reads only the capabilities its task lines cite of
+ * the per-capability artifacts, as `groupScope` says.
  */
 export function bundleFor(root, change, target, schema = planningSchema(root)) {
   const dir = posix(join("openspec", "changes", change));
@@ -370,10 +371,17 @@ export function bundleFor(root, change, target, schema = planningSchema(root)) {
     // A task group's draft is the plan it implements; everything the plan was
     // drawn from is before it.
     const tasks = schema.artifacts.find(({ id }) => id === "tasks");
+    const draft = `${dir}/${tasks?.generates ?? "tasks.md"}`;
     return {
-      draft: `${dir}/${tasks?.generates ?? "tasks.md"}`,
+      draft,
       upstream: [
-        ...upstreamOf(root, dir, schema, tasks?.upstream ?? []),
+        ...upstreamOf(
+          root,
+          dir,
+          schema,
+          tasks?.upstream ?? [],
+          groupScope(root, dir, draft, target),
+        ),
         ...pages,
       ],
     };
@@ -394,15 +402,56 @@ const draftOf = (root, dir, generates) => {
   return written;
 };
 
-const upstreamOf = (root, dir, schema, ids) => {
+const upstreamOf = (root, dir, schema, ids, scope = null) => {
   const files = [];
   for (const id of ids) {
     const artifact = schema.artifacts.find((one) => one.id === id);
     if (!artifact) continue;
     for (const file of filesOf(root, dir, artifact.generates))
-      if (!files.includes(file)) files.push(file);
+      if (!files.includes(file) && inScope(scope, dir, artifact, file))
+        files.push(file);
   }
   return files;
+};
+
+/**
+ * What one task group reads of the change's per-capability artifacts: the
+ * capabilities its task lines cite a scenario of, and their cases only where
+ * a line names `feature-tcs.md` (Q112). The plan, the proposal, the decisions
+ * and the designs stay whole. Null - every capability - for a group that cites
+ * none, and for the reading of the whole change.
+ */
+const groupScope = (root, dir, draft, target) => {
+  const number = /^(?:group\s*)?(\d+)/i.exec(String(target).trim())?.[1];
+  if (!number || !existsSync(join(root, draft))) return null;
+  const text = readFileSync(join(root, draft), "utf8")
+    .split(/^(?=## )/m)
+    .find((section) => section.startsWith(`## ${number}. `));
+  if (!text) return null;
+  const capabilities = capabilitiesOf(root, dir).filter((capability) =>
+    text.includes(`\`${capability.split("/").join("-")}-SC-`),
+  );
+  if (capabilities.length === 0) return null;
+  return { capabilities, cases: text.includes("feature-tcs.md") };
+};
+
+/** The capability directories the change specifies, as `<product>/<domain>/<capability>`. */
+const capabilitiesOf = (root, dir) => {
+  const top = `${dir}/specs/`;
+  return [
+    ...new Set(
+      walk(root, `${dir}/specs`)
+        .filter((path) => path.endsWith(".md"))
+        .map((path) => path.slice(top.length, path.lastIndexOf("/"))),
+    ),
+  ];
+};
+
+const inScope = (scope, dir, artifact, file) => {
+  if (!scope || !artifact.generates.startsWith("specs/**")) return true;
+  if (artifact.id === "test-cases" && !scope.cases) return false;
+  const capability = file.slice(`${dir}/specs/`.length, file.lastIndexOf("/"));
+  return scope.capabilities.includes(capability);
 };
 
 /** The files one artifact has in this change. A `generates` with no glob is
