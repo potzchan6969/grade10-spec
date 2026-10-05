@@ -18,7 +18,7 @@ accidental oversize entry painted or was sent.
   including empty. Do not clamp to the ceiling; do not add “too large” copy
   in this change.
 - Record the rule on `shared/ui/auction-listing` for `ListingAuctionBidCard`.
-- Lower the JPY bid ceiling to **10,000,000,000** on
+- Lower the JPY bid ceiling to **5,000,000,000** on
   `grade10-site/auction/bid-increments`, so no maximum the auction accepts
   sits above what the field takes (Q6). USD and HKD stay.
 
@@ -46,7 +46,7 @@ accidental oversize entry painted or was sent.
   drafts above 9,999,999,999 whole major units by restoring the previous
   valid draft.
 - `grade10-site/auction/bid-increments`: the JPY bid ceiling is
-  JPY 10,000,000,000.
+  JPY 5,000,000,000.
 
 ## Impact
 

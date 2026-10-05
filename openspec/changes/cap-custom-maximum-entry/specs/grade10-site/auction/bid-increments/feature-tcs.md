@@ -37,7 +37,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | USD | 1000000000 minor units (USD 10,000,000.00) |
 | HKD | 8000000000 minor units (HKD 80,000,000.00) |
-| JPY | 10000000000 minor units (JPY 10,000,000,000) |
+| JPY | 5000000000 minor units (JPY 5,000,000,000) |
 
 **Steps:**
 
@@ -84,7 +84,7 @@ maximum field refuses any draft above 9,999,999,999, so it cannot carry
 
 | minimum | ceiling | maximum |
 | --- | ---: | ---: |
-| 150000 JPY minor units | 10000000000 | 10000000001 |
+| 150000 JPY minor units | 5000000000 | 5000000001 |
 
 **Steps:**
 

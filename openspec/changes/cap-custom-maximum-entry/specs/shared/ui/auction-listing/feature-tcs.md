@@ -257,7 +257,7 @@
 - Ceiling is 9,999,999,999 whole major units for any listing currency.
 - Overshoot restores the previous valid draft, including empty; never clamps.
 - Refuse is silent; no dedicated too-large copy in this change.
-- Auction-service keeps its own refusal above the currency's bid ceiling; with the JPY ceiling at 10,000,000,000 no ceiling sits above the field (Q4, Q6).
+- Auction-service keeps its own refusal above the currency's bid ceiling; with the JPY ceiling at 5,000,000,000, every currency's ceiling sits below the field (`cap-custom-maximum-entry` Q4, Q6).
 
 ## Reconciliation
 
