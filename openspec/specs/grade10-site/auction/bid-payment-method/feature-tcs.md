@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-payment-method Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-10-05, tcs-rules r4
 
 ## grade10-site-auction-bid-payment-method-US1: Collector bids on the card already linked
 
@@ -586,7 +586,7 @@ does not exist yet.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
@@ -625,7 +625,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -673,12 +673,12 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-bid-payment-method-SC-01` by `grade10-site-auction-bid-payment-method-US1-TC1-2`; `grade10-site-auction-bid-payment-method-SC-05` by `grade10-site-auction-bid-payment-method-US2-TC1-2`; `grade10-site-auction-bid-payment-method-SC-10` by `grade10-site-auction-bid-payment-method-US1-TC6-2`; `grade10-site-auction-bid-payment-method-SC-18` by `grade10-site-auction-bid-payment-method-US1-TC2-2` and `grade10-site-auction-bid-payment-method-US2-TC1-2`; `grade10-site-auction-bid-payment-method-SC-19` by `grade10-site-auction-bid-payment-method-US1-TC7-1`; `grade10-site-auction-bid-payment-method-SC-20` by `grade10-site-auction-bid-payment-method-US1-TC9-1`
-- **Added by QA2** - `grade10-site-auction-bid-payment-method-US1-TC10-1` for `grade10-site-auction-bid-payment-method-SC-21`: a refused first bid locks no card and Change stays offered. No blind case refused a first bid on a linked card
-- **Corrected** - `grade10-site-auction-bid-payment-method-US1-TC8-1` and `grade10-site-auction-bid-payment-method-US1-TC9-1` traced the Feature set group Card refusals; they trace their section's journey, `grade10-site-auction-bid-payment-method-US-01`. The markers of the revised cases drop the retired authorization scenarios, and those reading nothing taken from the card cover `grade10-site-auction-bid-payment-method-SC-18`
-- **Deprecated** - `grade10-site-auction-bid-payment-method-US1-TC3-1`, `grade10-site-auction-bid-payment-method-US1-TC4-1`, `grade10-site-auction-bid-payment-method-US1-TC5-1`, `grade10-site-auction-bid-payment-method-US2-TC2-1` and `grade10-site-auction-bid-payment-method-US3-TC1-1`, with the authorization requirements and grade10-site-auction-bid-payment-method-US-03
+- **Folded in** - a commit with no linked card by `grade10-site-auction-bid-payment-method-US1-TC1-2`; a later bid on the same card by `grade10-site-auction-bid-payment-method-US2-TC1-2`; a linked card on a new listing by `grade10-site-auction-bid-payment-method-US1-TC6-2`; bidding takes nothing from the card by `grade10-site-auction-bid-payment-method-US1-TC2-2` and `grade10-site-auction-bid-payment-method-US2-TC1-2`; a bidder who does not win is never charged by `grade10-site-auction-bid-payment-method-US1-TC7-1`; another card after the first accepted bid by `grade10-site-auction-bid-payment-method-US1-TC9-1`
+- **Added by QA2** - `grade10-site-auction-bid-payment-method-US1-TC10-1`: a refused first bid locks no card and Change stays offered. No blind case refused a first bid on a linked card
+- **Corrected** - `grade10-site-auction-bid-payment-method-US1-TC8-1` and `grade10-site-auction-bid-payment-method-US1-TC9-1` traced the Feature set group Card refusals; they trace their section's journey, `grade10-site-auction-bid-payment-method-US-01`. The markers of the revised cases drop the retired authorization scenarios, and those reading nothing taken from the card cover bidding taking nothing from the card
+- **Deprecated** - `grade10-site-auction-bid-payment-method-US1-TC3-1`, `grade10-site-auction-bid-payment-method-US1-TC4-1`, `grade10-site-auction-bid-payment-method-US1-TC5-1`, `grade10-site-auction-bid-payment-method-US2-TC2-1` and `grade10-site-auction-bid-payment-method-US3-TC1-1`, with the authorization requirements and `grade10-site-auction-bid-payment-method-US-03`
 - **Settled by the artifacts** - a raise from a stale page that still names the locked card is accepted; only a bid naming another card is refused as locked (the requirement)
 - **Raised** - none
-- **Retired** - grade10-site-auction-bid-payment-method-SC-02, grade10-site-auction-bid-payment-method-SC-03, grade10-site-auction-bid-payment-method-SC-04 and grade10-site-auction-bid-payment-method-SC-09, the card authorization on commit, leave the renamed requirement on the linked card; the scenarios of the removed requirements retire as their migrations name. No retired id is reissued
+- **Retired** - the card authorization on commit leaves the renamed requirement on the linked card; the scenarios of the removed requirements retire as their migrations name. No retired id is reissued
 - **Contradicted** - none
 - **Uncovered anchors** - none
