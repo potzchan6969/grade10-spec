@@ -420,6 +420,13 @@ const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
   title: "What are you coming in for?",
 };
 
+const BOOK_VISIT_NAV_COPY = {
+  continue: "Continue",
+  back: "Back",
+  slotTitle: "Select a date and time",
+  prepTitle: "What to prepare",
+};
+
 const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   title: "Your details",
   name: "Name",
@@ -571,6 +578,7 @@ export type {
 export {
   APPOINTMENTS_COPY,
   assetSubtitle,
+  BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,
   CAUSEWAY_BAY,
   COMPLETED_VISIT_RECORD,

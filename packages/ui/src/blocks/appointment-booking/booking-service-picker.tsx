@@ -33,7 +33,7 @@ function BookingServicePicker({
         {(list) => (
           <RadioList
             aria-label={copy.title}
-            className="max-w-xl"
+            className="[&_[data-slot=radio-list-items]]:grid [&_[data-slot=radio-list-items]]:w-full [&_[data-slot=radio-list-items]]:gap-2 lg:[&_[data-slot=radio-list-items]]:grid-cols-3"
             onValueChange={(value) => {
               if (value) {
                 onSelect(value);
