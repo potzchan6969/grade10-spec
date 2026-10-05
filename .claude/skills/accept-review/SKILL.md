@@ -73,6 +73,10 @@ One table, blockers first:
   `decisions.md`, then the delta, then cases and tasks, per
   [PRDs and OpenSpec](../../../docs/governance/prd-and-openspec.md)
 
+Under the table, list every blocker the owning hand cannot fix without a
+human's decision as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
+A blocker with one obvious fix stays in the table alone.
+
 End with one verdict line: `Ready to accept`, or `Not ready - <n> blockers`.
 A fix that moves a frozen anchor restarts QA1 and Dev; any other fix reruns QA2
 and then this review, per `planning-dev`.
