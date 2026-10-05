@@ -114,6 +114,8 @@
 | Q87 | Does the tech PIC keep a hand? | No, the role is retired: the human who accepts the plan reviews the tech design and whether the requirements and the suite are whole, so a separate tech hand would review nothing acceptance does not. `tech-design.md`'s hand is `dev`, who writes it in `/planning-dev`, and `tech` leaves the roles, the team map and every `hands:` line (held) | Keeping `tech` as the tech design's hand with no turn, offered as the smaller change, which leaves a role nobody is ever told about; or a turn at Specified, which doubles acceptance's review |
 | Q88 | Does a requirement that reaches the tech design wait on anybody? | No: the dated wait on the tech PIC is retired with the role. The design and the scenarios are written in one `/planning-dev` run, and a question it cannot settle is a Raised row, which already holds acceptance (recommended) | Keeping the wait and addressing it to the engineer, a second channel for what a Raised row already holds |
 | Q89 | Does this change carry the revision, or a new one? | This change: its delta is the only statement of the ladder, so its requirements are revised in place and the plan is accepted again | A new change depending on this one, offered as leaving the accepted plan untouched, which puts two deltas on one requirement until both archive |
+| Q90 | Which change revises `run-a-round-on-every-artifact`'s `shared/planning/agent-rounds` delta, whose journey `shared-planning-agent-rounds-US-03`, leaf "Tech design first" and requirement that a requirement reaching the tech design writes a dated wait still name the retired tech PIC? | ❓ pm - recommended: that change revises its own delta in place, as Q89 does here, so one requirement never carries two deltas; this change's task 10.8 touches only the page's decisions block | Carrying a second `agent-rounds` delta in this change, which puts two deltas on one requirement until both archive |
+| Q91 | Who takes a change at Specified? The requirement scenario on each later stage's hands names Dev and QA2, the whose-turn and Hands tables Dev and the product manager, the page the product manager alone, and the manual's `HANDS_AT` the product manager and QA | ❓ pm - recommended: the product manager alone, as the page's Stages table and Q80 say; Dev and QA2 are the planning run's readings rather than hands told, QA's turn moved after implementation with Q81, and the engineer's Hands row keeps Planned, Accepted and Building, as the page's Hands table does | Dev and QA2 as hands, which tells an agent reading rather than a person; or keeping QA at Specified, which Q81 moved after implementation |
 
 ## Raised
 
@@ -125,6 +127,8 @@ stage list and suite-review timing in Q2 and Q7-Q8. Earlier answers remain as
 the history of the original eight-stage plan.
 The revision on 2026-10-05 settles Q85 to Q89: the Design stage draws the UI
 design alone, the tech design proves Specified, and the tech PIC is retired.
+Its blind pass raised four questions, each answered by an earlier row; its
+reconciliation raised two, Q90 and Q91, which stay open until the product owner answers.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
@@ -140,3 +144,9 @@ design alone, the tech design proves Specified, and the tech PIC is retired.
 | shared/planning/change-stages | Is "once per move" keyed for the life of the change, or per entry: after a revert and a re-landing of the same artifact, is the hand told again? | Q26 |
 | shared/planning/change-stages | Does the weekly digest reach a handle the team map does not know, or is it skipped? | Q27 |
 | shared/planning/change-stages | Does `landed_by:` hold one handle per artifact: is a second hand's word on the same artifact a replacement, or are both kept? | Q28 |
+| shared/planning/change-stages | Who holds a change at Designed, and who is told when it lands? | Q30 |
+| shared/planning/change-stages | An `awaiting:` line naming `tech-design.md`: is it shown against its hand, the engineer, or refused? | Q87 |
+| shared/planning/change-stages | An in-flight `hands:` still naming `tech` once the role is retired: what do the check and the board show? | Q23 |
+| shared/planning/change-stages | What does the tech design's row read before Specified? | Q86 |
+| shared/planning/change-stages | Which change revises `run-a-round-on-every-artifact`'s `shared/planning/agent-rounds` delta, which still names the retired tech PIC? | Q90 |
+| shared/planning/change-stages | Who takes a change at Specified, when the scenario, the whose-turn and Hands tables, the page and the manual each name different hands? | Q91 |
