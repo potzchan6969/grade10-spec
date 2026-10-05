@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
   cpSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -41,6 +42,136 @@ function copyFoldFixture() {
   cpSync(foldStoreFixture, storeRoot, { recursive: true });
   return { root, storeRoot };
 }
+
+function createSuiteFixture({
+  marker = true,
+  revision = 1,
+  headingRevision = 1,
+} = {}) {
+  const root = mkdtempSync(resolve(tmpdir(), "trace-suite-test-"));
+  const storeRoot = resolve(root, "store");
+  const capability = resolve(
+    storeRoot,
+    "openspec/specs/grade10-site/store/product-listing",
+  );
+  mkdirSync(capability, { recursive: true });
+  writeFileSync(
+    resolve(capability, "spec.md"),
+    [
+      "## Requirements",
+      "",
+      "<!-- trace:scenario id=g10.store-product-listing.SC-001 rev=1 -->",
+      "#### Scenario: A collector opens a listing",
+      "**Serves:** grade10-site-store-product-listing-US-01 - Collector opens a listing",
+      "",
+    ].join("\n"),
+  );
+  const markerLine = marker
+    ? `<!-- trace:case id=g10.store-product-listing.TC-001 rev=${revision} covers=g10.store-product-listing.SC-001 -->\n`
+    : "";
+  writeFileSync(
+    resolve(capability, "feature-tcs.md"),
+    [
+      "# Store Product Listing Test Cases",
+      "",
+      `${markerLine}### grade10-site-store-product-listing-US1-TC1-${headingRevision}: Listing opens`,
+      "",
+      "* **Trace:** grade10-site-store-product-listing-US-01",
+      "",
+    ].join("\n"),
+  );
+  return { root, storeRoot, caseFile: resolve(capability, "feature-tcs.md") };
+}
+
+test("case initialization copies the heading version into the marker revision", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({
+    marker: false,
+    headingRevision: 4,
+  });
+  try {
+    const target =
+      "### grade10-site-store-product-listing-US1-TC1-4: Listing opens";
+    const result = runCli([
+      "init",
+      "case",
+      "--file",
+      caseFile,
+      "--target",
+      target,
+      "--app",
+      "g10",
+      "--product",
+      "store",
+      "--capability",
+      "product-listing",
+      "--covers",
+      "g10.store-product-listing.SC-001",
+      "--store-root",
+      storeRoot,
+      "--dry-run",
+    ]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /trace:case id=.* rev=4 covers=/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate requires a marker on every suite case and reports the inventory", () => {
+  const { root, storeRoot } = createSuiteFixture({ marker: false });
+  try {
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 1 \(unmarked: 1\)/);
+    assert.match(result.stdout, /\[missing-case-marker\]/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate applies the universal marker rule to every suite level", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({ marker: false });
+  try {
+    const contents = readFileSync(caseFile, "utf8");
+    const suites = [
+      resolve(storeRoot, "openspec/specs/grade10-site/store/domain-tcs.md"),
+      resolve(storeRoot, "openspec/specs/grade10-site/product-tcs.md"),
+      resolve(storeRoot, "openspec/specs/platform-tcs.md"),
+    ];
+    for (const suite of suites) {
+      mkdirSync(dirname(suite), { recursive: true });
+      writeFileSync(suite, contents);
+    }
+
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 4 \(unmarked: 4\)/);
+    assert.equal(
+      (result.stdout.match(/\[missing-case-marker\]/g) ?? []).length,
+      4,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate requires the case marker revision to match the heading version", () => {
+  const { root, storeRoot } = createSuiteFixture({
+    revision: 2,
+    headingRevision: 1,
+  });
+  try {
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /\[case-revision-mismatch\]/);
+    assert.match(
+      result.stdout,
+      /marker revision 2 must match heading revision 1/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 
 test("validate and report build a graph from fixtures without a registry", () => {
   const validate = runCli([

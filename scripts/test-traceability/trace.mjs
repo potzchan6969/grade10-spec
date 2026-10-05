@@ -200,6 +200,29 @@ function positiveRevision(value) {
   return /^\d+$/.test(value ?? "") && Number(value) > 0;
 }
 
+function caseHeadingRevision(heading) {
+  const match = /^\s*###\s+.*?TC\d+-(\d+)\s*:\s*\S/.exec(heading);
+  return match && positiveRevision(match[1]) ? match[1] : null;
+}
+
+function isSuiteFile(file) {
+  return [
+    "feature-tcs.md",
+    "domain-tcs.md",
+    "product-tcs.md",
+    "platform-tcs.md",
+  ].includes(file.split(sep).at(-1));
+}
+
+function caseHeadings(lines) {
+  const headings = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const revision = caseHeadingRevision(lines[index]);
+    if (revision) headings.push({ index, revision });
+  }
+  return headings;
+}
+
 function normalizeSlug(value, option) {
   const normalized = value.toLowerCase();
   if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(normalized))
@@ -437,6 +460,44 @@ export function parseTraceGraph({
     }
   }
 
+  const suiteCaseCounts = { total: 0, marked: 0, unmarked: 0 };
+  for (const source of sources) {
+    if (source.kind !== "store" || !isSuiteFile(source.file)) continue;
+    const lines = readFileSync(source.file, "utf8").split(/\r?\n/);
+    for (const heading of caseHeadings(lines)) {
+      suiteCaseCounts.total += 1;
+      const marker = traceComment(lines[heading.index - 1] ?? "");
+      const matchingCase =
+        marker?.syntax === "html" && marker.body.startsWith("case ")
+          ? cases.find(
+              (record) =>
+                record.file === source.file && record.line === heading.index,
+            )
+          : null;
+      const issue = (code, message) =>
+        issues.push({
+          code,
+          message,
+          file: source.file,
+          line: heading.index + 1,
+        });
+      if (!matchingCase) {
+        suiteCaseCounts.unmarked += 1;
+        issue(
+          "missing-case-marker",
+          "every suite case must have an adjacent trace:case marker",
+        );
+        continue;
+      }
+      suiteCaseCounts.marked += 1;
+      if (matchingCase.revision !== heading.revision)
+        issue(
+          "case-revision-mismatch",
+          `case marker revision ${matchingCase.revision} must match heading revision ${heading.revision}`,
+        );
+    }
+  }
+
   const byScenario = groupBy(scenarios, (record) => record.id);
   const byCase = groupBy(cases, (record) => record.id);
   duplicateIssues(byScenario, "scenario", issues);
@@ -515,6 +576,7 @@ export function parseTraceGraph({
     scenarios,
     cases,
     tests,
+    suiteCaseCounts,
     issues,
     unlinked,
     links: validLinkCount(cases, tests, byScenario, byCase),
@@ -838,6 +900,7 @@ function summarize(graph) {
     `Trace validation: ${issues.length ? "FAIL" : "PASS"}`,
     `Scenarios: ${scenarios.length}`,
     `Cases: ${cases.length}`,
+    `Suite cases checked: ${graph.suiteCaseCounts.total} (unmarked: ${graph.suiteCaseCounts.unmarked})`,
     `Test markers: ${tests.length}`,
     `Links: ${graph.links}`,
     `Unlinked scenarios: ${unlinked.scenarios.length}`,
@@ -877,6 +940,9 @@ function reportObject(graph) {
     counts: {
       scenarios: graph.scenarios.length,
       cases: graph.cases.length,
+      suiteCases: graph.suiteCaseCounts.total,
+      markedSuiteCases: graph.suiteCaseCounts.marked,
+      unmarkedSuiteCases: graph.suiteCaseCounts.unmarked,
       tests: graph.tests.length,
       links: graph.links,
       unlinkedScenarios: graph.unlinked.scenarios.length,
@@ -1052,7 +1118,8 @@ function initialize(kind, values) {
     if (new Set(covers).size !== covers.length)
       fail("--covers must be a comma-separated list of distinct SC ids");
     validateReferencesForMutation(storeRoot, "scenario", covers);
-    marker = `trace:case id=${id} rev=1 covers=${covers.join(",")}`;
+    const revision = caseHeadingRevision(target) ?? "1";
+    marker = `trace:case id=${id} rev=${revision} covers=${covers.join(",")}`;
   }
   insertMarker({ file, target, marker, syntax: "html", dryRun: values.dryRun });
 }
