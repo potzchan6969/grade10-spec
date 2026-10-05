@@ -816,7 +816,7 @@ Grade10 and ZZZ each have an account with the same account id. Grade10 holds pri
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Layer:** api
