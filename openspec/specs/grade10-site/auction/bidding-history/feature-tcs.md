@@ -246,6 +246,7 @@ Runs once per row of **Test data**.
 2. Confirm the bid.
 3. Navigate to <grade10 bids url>.
 4. Read the **Active** list.
+5. Expand <listing_c>.
 
 **Expected Results:**
 
@@ -253,6 +254,7 @@ Runs once per row of **Test data**.
 * <listing_c> reads Outbid, priced at <current bid>.
 * <listing_c> still sits below <listing_d>.
 * <listing_c>'s latest activity time is its last accepted bid's.
+* Step 5 gains no event for <refused bid>.
 
 ### grade10-site-auction-bidding-history-US1-TC8-1: A call-off adds no listing for a collector who never bid on it
 
@@ -534,6 +536,7 @@ A rival bid causes the collector's automatic maximum to advance the public price
 
 **Expected Results:**
 
+* The rival's accepted action appears before the collector's automatic movement when they share a time.
 * The resulting accepted movement is attributed to **You** and marked as automatic.
 * The private automatic event is not rendered as a contradictory second accepted bid.
 
@@ -613,30 +616,76 @@ One listing has more public and private events than one page holds. No new event
 
 **Pre-conditions:**
 
-* customer A(signed in) has a combined history on <listing_f> longer than one page.
-* The last decision that fits on the first page is <answered decision>.
+* customer A(signed in) has a combined history on <listing_f>.
+* One decision on that history wrote customer A's maximum, their accepted price of 30000 USD minor units (USD 300.00), customer B's response at 31000 USD minor units (USD 310.00), and customer A's outbid standing, between an older and a newer rival price.
 * No new bid is placed on <listing_f> during the pass.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_f> | An open HKD listing customer A and customer B both bid on |
-| <answered decision> | customer B's maximum answered by customer A's automatic maximum, which keeps the lead |
+| <listing_f> | An open USD listing customer A and customer B both bid on |
+| <split decision> | customer A's accepted price of 30000 USD minor units, customer B's response at 31000 USD minor units, and customer A's outbid standing |
 
 **Steps:**
 
 1. Navigate to <grade10 bids url>.
 2. Expand <listing_f>.
-3. Read the last step on the first page.
-4. Load the next page.
-5. Load every further page.
+3. Follow every cursor at a page size of 1.
+4. Read the same history as one page of 50.
 
 **Expected Results:**
 
-* Step 3: <answered decision> reads as one step, attributed to You and marked automatic.
-* Step 4's first step is the decision after <answered decision>, not its remainder.
-* Across every page, each decision reads once, as one step, in order.
+* Step 3 returns every record of <split decision> on one page.
+* Step 4 reads those records in the same order.
+
+### grade10-site-auction-bidding-history-US3-TC6-1: Boundary maxima write the stated history
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Pre-conditions:**
+
+* Each row starts from the same fixture.
+* customer A(signed in) leads <listing_boundary> with an accepted maximum of 1000 minor units (USD 10.00).
+* The current public bid is 400 minor units (USD 4.00) and the increment is 100 minor units (USD 1.00).
+* customer B(signed in, card linked) has placed no bid on <listing_boundary> and is on <listing_boundary url>.
+
+**Test data:**
+
+| <customer B maximum> | Public history, in order | Leader | B's account history |
+| --- | --- | --- | --- |
+| 500 minor units (USD 5.00) | B at 500, then A's automatic response at 600, same time | A | retains 500 |
+| 700 minor units (USD 7.00) | B at 700, then A's automatic response at 800, same time | A | retains 700 |
+| 950 minor units (USD 9.50) | B at 950, then A's automatic response at 1000; A's response does not exceed 1000 | A | — |
+| 1000 minor units (USD 10.00) | B first at 1000, then A's automatic response at 1000, same time | A | the maximum stays private |
+| 1001 minor units (USD 10.01) | B once at 1001; no new bid record for A | B | retains 1001 |
+| 1100 minor units (USD 11.00) | B once at 1100; no intermediate record; no new bid record for A | B | — |
+| 1120 minor units (USD 11.20) | B once at 1100, one increment above A's maximum; no new bid record for A | B | retains 1120 |
+
+**Steps:**
+
+1. Enter <customer B maximum> in the custom maximum on the bid panel and place the bid.
+2. Read the listing's public recent bids.
+3. Navigate to <grade10 bids url> and expand <listing_boundary>.
+
+**Expected Results:**
+
+* Step 2 matches the row's public history, under listing pseudonyms.
+* The leader matches the row.
+* Where the row names B's account history, step 3 matches it.
 
 ---
 
