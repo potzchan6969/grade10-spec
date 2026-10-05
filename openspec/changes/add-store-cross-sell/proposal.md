@@ -9,7 +9,7 @@ to the listing. The catalogue already holds the cards beside it. The stock
 keeper knows which ones belong together. The page shows none of them.
 
 **Metric:** rail opens and the add-to-cart rate of the sessions that open
-one, as [Measurement](../../../docs/prds/products/grade10-site/store/cross-sell.md#product-decisions)
+one, as [Measurement](../../../docs/prds/products/grade10-site/store/cross-sell.md)
 defines them; unmeasured until instrumented.
 
 ## What Changes

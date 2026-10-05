@@ -39,17 +39,17 @@ store shows other cards the collector may also like.
 ## Picks
 
 🚧 **Chosen in Shopify** — a stock keeper picks the cards shown with a card
-in the Shopify dashboard, on the card itself; a pick the catalogue no longer
-holds is left out
+in the Shopify dashboard, on the card itself; a change reaches the card's page
+within a minute; a pick the catalogue no longer holds is left out
 
 ## Similar Cards
 
 🚧 **Shared facts** — a similar card shares this card's world, its language or
 its collectible type, weighed in that order, newest first among equals; a card
-sharing none of them draws no similar cards
+the catalogue names none of them for draws no similar cards
 
 🚧 **Just taken in** — a card the store has just taken in shows its picks until
-the similar cards follow, within minutes
+the similar cards follow
 
 ## Designs
 
@@ -83,7 +83,7 @@ curating the similar cards by hand. Auction lots.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Rail opens | ❓ Unmeasured. Share of product-page sessions that open a second card from the rail, and the add-to-cart rate of those sessions; the first delivery sets the baseline. | Product |
+| Rail opens | Unmeasured until instrumented. Share of product-page sessions that open a second card from the rail, and the add-to-cart rate of those sessions; the first delivery sets the baseline. | Product |
 
 **Decisions.**
 

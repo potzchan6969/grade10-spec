@@ -32,6 +32,9 @@ a sold-out tile still opens its product, sold-out treatment and all —
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
 [Main Page](/p/grade10-site/store/home)'s row of cards
 
+🚧 **No cart words where it does not sell** — a tile that draws no cart
+control needs no cart word from the surface
+
 **Cart on a small screen** — where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
 viewport with a fine pointer it still appears on hover or keyboard focus.
