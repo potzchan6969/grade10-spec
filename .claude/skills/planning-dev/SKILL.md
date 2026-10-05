@@ -57,7 +57,9 @@ in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
    behaviour, scope, design, architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another
    edit reruns QA2. Confirm artifacts are complete and new cases remain draft.
-5. **Accept and publish.** Run `pnpm accept:preflight <change>`. With its
+5. **Review.** In a fresh context, run `accept-review`. Accept only on its
+   `Ready to accept` verdict; fix each blocker in its source first.
+6. **Accept and publish.** Run `pnpm accept:preflight <change>`. With its
    printed baseline, run `pnpm spec:accept <change> --baseline <digest>
    --reviewed-by <human>`. An amendment names `--supersedes <fingerprint>`.
    Acceptance publishes the durable contract and preserves prior snapshots.
@@ -91,7 +93,7 @@ engineering verification, record repository commits and components with `pnpm
 plan implementation`. Archive compares the claim baseline with current targets:
 every difference needs a compatibility acknowledgement, and semantic changes
 name test or other evidence. Archive preserves history and does not fold again
-or wait for human QA. After deployment, QA reviews with `/tcs-review` and
+or wait for human QA, and deployment does not wait for archive. After deployment, QA reviews with `/tcs-review` and
 executes manual cases with `/tcs-run-sheet` where needed.
 
 ## Related
@@ -99,5 +101,6 @@ executes manual cases with `/tcs-run-sheet` where needed.
 - `planning-pm` - proposal, decisions and journeys.
 - `planning-design` - optional UI design.
 - `spec-to-tcs` - internal QA1 generator.
+- `accept-review` - the page, designs, deltas and durable specs agree before acceptance.
 - `tcs-review` - human QA after implementation.
 - `openspec-apply-change`, `openspec-archive-change` - implementation and archive.

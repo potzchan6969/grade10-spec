@@ -28,6 +28,7 @@ sentence.
 | `/planning-pm` | Proposal, decisions and journeys beside each capability. Where every change starts. Then hand it to `/planning-dev` when any needed UI design is ready. | Same. | "Write the proposal and journeys for watchlist notifications." |
 | `/planning-design` | `ui-design.md`: screens to Figma frames, exports named exactly, states tied to scenarios. | Same. | "Write the UI design for the watchlist drawer." |
 | `/planning-dev` | One run: QA1 blind draft cases, Dev technical design and scenarios, QA2 reconciliation, human clarification, acceptance and publication before implementation. | Same. | "Plan and accept `auction-auto-bidding`; I am implementing it." |
+| `/accept-review` | After QA2, before `pnpm spec:accept`: the PRD pages, designs, deltas and durable specs must agree. Reports a verdict; edits nothing. `/planning-dev` runs it. | Same. | "Is `auction-auto-bidding` ready to accept?" |
 | `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | `/openspec-apply-change`. | "Implement the tasks in `auction-auto-bidding`." |
 | `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. | No equivalent; `/openspec-apply-change`, then review by hand. | `/implement-then-review auction-auto-bidding` |
 | `/tdd` | The red → green loop. `/implement` already runs the work through it; invoke when you want the loop on its own. | Same. | "Build the bid-increment helper test-first." |
@@ -36,7 +37,7 @@ sentence.
 | `/pr-push` | Create a `<type>/<short-description>` branch (`feat/`, `fix/`, `build/`, etc.) when publishable work is on `main`, then push it and ensure an open PR. Commits dirty files that belong on the PR; irrelevant dirty files do not block. Push updated submodules before this repo. Only when invoked. Re-run; rewrite the description only when this session changed code. | Same. | `/commit` then `/pr-push`, one message |
 | `/spec-push` | Land the branch here: rebase onto `main`, settle conflicts by reading the change, merge the PR. A change reaches the application repo only once it is on `main`. | Same. | `/spec-push` |
 | `/review-changes` | Two-axis review (Standards and Spec) since a fixed point. | No equivalent; review by hand. | `/review-changes` since the branch point |
-| `/archive-change` | Implementation is complete and verified. Archive the accepted change before deployment; its contract was published before implementation. | `/openspec-archive-change`. | "The proxy-bidding implementation is verified — archive it before deployment." |
+| `/archive-change` | Implementation is complete and verified. Archive the accepted change; its contract was published at acceptance, and deployment does not wait for archive. | `/openspec-archive-change`. | "The proxy-bidding implementation is verified - archive it." |
 
 ## Design to code
 
