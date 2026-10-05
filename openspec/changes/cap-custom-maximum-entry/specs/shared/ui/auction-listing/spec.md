@@ -1,3 +1,5 @@
+# shared/ui/auction-listing Specification
+
 ## Feature set
 
 - Custom maximum ceiling
@@ -80,3 +82,10 @@ units at or above the existing floor rules.
   custom maximum draft is `9999999999`
 - **WHEN** a collector types `1` into the custom maximum field
 - **THEN** the draft remains `9999999999`
+
+#### Scenario: shared-ui-auction-listing-SC-53 - A fractional paste at the ceiling after cleaning is accepted
+**Serves:** Custom maximum ceiling - a fractional paste at the ceiling after cleaning is accepted
+
+- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector pastes `9999999999.99` into the custom maximum field
+- **THEN** the draft shown is `9999999999`

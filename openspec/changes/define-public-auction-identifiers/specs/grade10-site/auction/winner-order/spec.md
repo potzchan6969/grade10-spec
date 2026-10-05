@@ -59,9 +59,12 @@
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 
-## MODIFIED Requirements
+## RENAMED Requirements
 
-### Requirement: Every invoice carries an invoice ID and a bank reference
+- FROM: `### Requirement: Every invoice carries an invoice ID and a bank reference`
+- TO: `### Requirement: Every invoice carries an invoice ID and the order's payment reference`
+
+### Requirement: Every invoice carries an invoice ID and the order's payment reference
 
 Every sent invoice carries the order's payment reference and an invoice ID
 built from it; a reissue takes the next invoice ID while the payment
@@ -202,7 +205,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** both show the payment reference
 - **AND** the card invoice requires no separate bank-reference identifier
 
-#### Scenario: winner-order-SC-218 - The payment reference is shown unconditionally, not gated by payment method
+#### Scenario: winner-order-SC-244 - The payment reference is shown unconditionally, not gated by payment method
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** one order whose `pending` invoice was sent for bank transfer, and one whose `pending` invoice was sent for card
@@ -210,13 +213,15 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** both orders show the payment reference
 - **AND** the bank transfer order's copy control for the payment reference copies exactly the payment reference
 
-#### Scenario: winner-order-SC-219 - Stripe metadata carries the payment reference and never the provider reference to the winner
+#### Scenario: winner-order-SC-245 - Stripe metadata carries the payment reference and never the provider reference to the winner
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** an auction order paid by card
 - **WHEN** Grade10 creates the Stripe payment for that order
 - **THEN** the Stripe payment's metadata carries `payment_reference_code` equal to the order's payment reference
 - **AND** Stripe's own returned provider reference appears on no surface the winner reads
+
+## ADDED Requirements
 
 ### Requirement: A finalized payment carries a receipt ID
 
@@ -240,7 +245,7 @@ sequence atomically with the finalized receipt. A refund, reversal or void
 SHALL NOT allocate a receipt ID or rewrite one already issued. Formal
 tax-receipt content remains outside this requirement.
 
-#### Scenario: winner-order-SC-221 - A finalized first payment receives the new receipt ID
+#### Scenario: winner-order-SC-247 - A finalized first payment receives the new receipt ID
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** invoice `IN-LK42301` for an order whose payment reference is `LK423`
@@ -264,7 +269,7 @@ tax-receipt content remains outside this requirement.
 - **THEN** its ID remains unchanged
 - **AND** a refund, reversal or void creates no receipt ID
 
-#### Scenario: winner-order-SC-220 - Nothing identifying the lot's order is shown before a winner exists
+#### Scenario: winner-order-SC-246 - Nothing identifying the lot's order is shown before a winner exists
 **Serves:** winner-order-US-17 - Winner quotes their order
 
 - **GIVEN** a lot that has not yet closed, and the same lot just after it closes with no winner

@@ -476,6 +476,9 @@ const CLOSED_EQUAL_MAX_HISTORY: ListingBidHistoryRow[] = [
 /**
  * Closed sold with equal maxima: winning row shows a crown; the same-price
  * non-leader carries the equal-max Info tip.
+ *
+ * Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
+ * Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
  */
 export const ClosedSoldEqualMax: Story = {
   args: {
