@@ -21,9 +21,11 @@ something else.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
@@ -57,9 +59,11 @@ something else.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
@@ -133,9 +137,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
@@ -174,9 +180,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
@@ -211,9 +219,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
@@ -468,9 +478,11 @@ withdrawn.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
@@ -506,9 +518,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
