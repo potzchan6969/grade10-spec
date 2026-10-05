@@ -24,6 +24,7 @@
 | Q3 | How is the winner marked? | Small filled crown in primary color after the amount, before You - carried by `auction-listing.md` Winner after close and the shared requirement's Winner crown clause | Winner text badge |
 | Q4 | Does the tip show only on a tie at the current price, or also on an older tie lower down Recent bids? | Every row tied on amount with a row above it carries the tip, at the current price and at any older tie; the row above carries none - the owner's word, 2026-10-05. Carried by `bidding.md` Recent bids Winner, `auction-listing.md` Equal-max tip, `grade10-site-auction-listing-page-SC-49` and `-SC-51` | The current price only, which leaves an older tie unexplained when it is still on screen |
 | Q5 | Do the tip icon's tone and the crown's place before You need scenarios of their own? | No: the shared requirement states both and the cases walk them; no scenario is added - the owner's word, 2026-10-05 | An AND on `shared-ui-auction-listing-SC-51` and a placement scenario |
+| Q6 | Two rows tied on amount often share one timestamp; which is listed above? | The row whose bidder set that maximum first, after the leading or won row; never the stamp or a random id - the owner's word, 2026-10-05. Carried by the lot page requirement's Tied maximum clause, `grade10-site-auction-listing-page-SC-51` | Ordering by when each row was stamped, which leaves a same-stamp tie in random order |
 
 ## Raised
 
@@ -34,3 +35,4 @@
 | `shared/ui/auction-listing` | Badge vs crown for the winner? | Q3 |
 | `grade10-site/auction/listing-page` | Accept-review: the tip on an older tie lower down had no page line or decision | Q4 |
 | `shared/ui/auction-listing` | QA2: no scenario for the tip icon's tone or the crown's place | Q5 |
+| `grade10-site/auction/listing-page` | Accept-review: a same-stamp tie lists at random, so the tip can land on the earlier maximum | Q6 |

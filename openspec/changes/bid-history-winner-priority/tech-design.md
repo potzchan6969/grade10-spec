@@ -61,10 +61,27 @@ records them and the two places the build differs from the contract.
      its sold panel (`closedSold: screen.panel === "postSold"` in
      `ListingView.tsx`), so a live lot or one Closed without a result
      crowns nothing.
-   - `samePricePriority` on a row when another public row with the same
-     amount ranks above it in the ledger's own order: leading or won first,
-     then newer, then pseudonym. This covers the current price and any older
-     equal pair, and is tested in `listingLotExtras.test.ts`.
+   - `samePricePriority` on a row when an earlier row of the public ledger
+     has the same amount. The mapper reads the ledger's order and ranks
+     nothing itself; it ships today with a rank of its own (leading or won
+     first, then newer, then pseudonym), which task 4.2 replaces.
+
+5. **The public ledger orders a tie by when each maximum was set**
+   - **Differs from the build:** in an equal-maximum tie, the challenger's
+     bid and the leader's automatic answer share one `createdAt` (one `now`
+     per `placeBid`). The public read in
+     `packages/grade10-auction/backend/src/repositories/listings.ts` orders
+     by amount, leader first, then `createdAt` and `id`, a random UUID, so
+     once both rows are outbid their order is random and the mapper's
+     pseudonym tie-break can put the tip on the earlier maximum's row.
+   - The read orders rows of one amount by leader or won first, then by when
+     the row's bidder first set the maximum it carries: the earliest
+     `createdAt` among that bidder's (`pseudonymSeq`) rows with the same
+     `maximum`, then `id`. The maximum stays private: only the order leaves
+     the server.
+   - Alternatives rejected: a sequence column on `bids` (a migration for an
+     order the rows already hold); the server sending the flag (presentation
+     on the wire); ordering by `createdAt` alone (ties share it).
    - Copy: `bidHistory.winner` and `bidHistory.samePricePriorityTip` from
      `auctionListing.bidHistoryWinner` and `auctionListing.samePricePriorityTip`,
      answered in `en`, `ko`, `zh-Hans` and `zh-Hant`.
@@ -92,7 +109,8 @@ No new export, endpoint or stored field.
 | Crown needs `copy.winner` | **No** - falls back to `"Winner"` | Task 2.4 |
 | `isWinner` doc comment | **Stale** - says "Winner badge" | Task 2.4 |
 | Sold lot crowns the won row only | `listingLotExtras.ts` | `listingLotExtras.test.ts`, "crowns only the won bid of a closed sold lot" |
-| Tied row ranked second carries the tip | `listingLotExtras.ts` | `listingLotExtras.test.ts` |
+| Tied row ranked second carries the tip | **No** - a same-stamp tie orders at random | Task 4.2 |
+| `samePricePriority` doc comment | **Stale** - says "matches the leading price" | Task 2.4 |
 | Copy in every language | `packages/i18n/messages/shared/*/auctionListing.json` | `pnpm --dir packages/i18n test` |
 
 ## Risks / Trade-offs

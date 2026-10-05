@@ -11,15 +11,17 @@
 
 - [x] 2.1 Add `isWinner` on `ListingBidHistoryRow`, primary crown and tip
       copy on `ListingBidHistoryList` / bid-card copy, and i18n
-      `bidHistoryWinner` plus earlier-leads `samePricePriorityTip`.
+      `bidHistoryWinner` plus earlier-leads `samePricePriorityTip`; the
+      ClosedSoldEqualMax story names the scenarios its play proves.
       `shared-ui-auction-listing-SC-50`, `shared-ui-auction-listing-SC-51`
 - [x] 2.2 Storybook `ListingAuctionBidCard` → ClosedSoldEqualMax covers
       winner crown and equal-max tip; preview closed history sets
       `isWinner` when sold.
 - [x] 2.3 Verify — `pnpm run typecheck` as needed.
 - [ ] 2.4 Draw the crown only where `copy.winner` is supplied, with no
-      built-in name, and correct the `isWinner` doc comment in `types.ts`
-      from badge to crown; the Default and ClosedSoldEqualMax plays still
+      built-in name, and correct the `isWinner` and `samePricePriority` doc
+      comments in `types.ts` (a crown, not a badge; any tied row listed
+      below another, not only at the leading price); the Default and ClosedSoldEqualMax plays still
       pass, and a story renders ClosedSoldEqualMax with `winner` copy unset
       for the walk. `shared-ui-auction-listing-SC-50`,
       `shared-ui-auction-listing-SC-54`
@@ -39,15 +41,20 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 ## 4. Lot page flags (grade10) (owner: @tangconst)
 
 - [x] 4.1 `listingBidHistory` sets `isWinner` on the won row of a lot in its
-      sold panel and `samePricePriority` on a public row ranked below another
-      of the same amount; `ListingView` threads `bidHistoryWinner` and
-      `samePricePriorityTip`. Built and tested in `listingLotExtras.test.ts`
-      (`684cdc9`), older ties included. `grade10-site-auction-listing-page-SC-48`,
+      sold panel; `ListingView` threads `bidHistoryWinner` and
+      `samePricePriorityTip`. Built in `684cdc9`.
+- [ ] 4.2 Tests first, in their own commit: the public ledger read lists a
+      same-stamp tie by when each bidder set that maximum, and the mapper
+      tips every row with an equal amount listed above it, an older tie
+      included. Then order the read in `repositories/listings.ts` that way
+      and drop the mapper's own rank. Name in the mapper's test titles every
+      scenario they prove, the crown's included.
+      `grade10-site-auction-listing-page-SC-48`,
       `grade10-site-auction-listing-page-SC-49`,
       `grade10-site-auction-listing-page-SC-50`,
       `grade10-site-auction-listing-page-SC-51`
-- [ ] 4.2 Bump `external/grade10-spec` to the commit carrying task 2.4.
-- [ ] 4.3 Walk the lot page on the isolated stack: no crown while live, the
+- [ ] 4.3 Bump `external/grade10-spec` to the commit carrying task 2.4.
+- [ ] 4.4 Walk the lot page on the isolated stack: no crown while live, the
       crown on the won row once the close is recorded, and the tip on a tied
       maximum that came second, at the current price and at an older tie
       lower down; no crown on a lot without a winner.
