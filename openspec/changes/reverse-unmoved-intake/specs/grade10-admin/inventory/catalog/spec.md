@@ -683,43 +683,67 @@ unit SHALL be reachable however old it is.
 
 ## ADDED Requirements
 
-### Requirement: Unmoved regular stock can be reduced
+### Requirement: Regular stock intaken since its latest move can be reduced
 
-**Unmoved regular stock** - regular stock is unmoved while no unit of it has
-ever been held, sold, withdrawn or vaulted: no hold naming no Cert record,
-active or closed, has ever been taken on the product, a hold since moved to
-another product included, and no sale or withdrawal of available stock has
-taken regular stock. Intakes, Cert ID assignments and intake reversals do not
-move it, and nothing done to a Cert record moves it. Once moved, it stays
-moved.
+**Move of regular stock** - an entry of the regular stock history, as `Cert ID
+details shows each unit's history` lists it, other than an intake, a Cert ID
+assignment or an intake reversal: a hold naming no Cert record taken,
+resized, released, sold, vaulted or moved to or from another product, and a
+sale or withdrawal of available stock naming no Cert record. Nothing done to a
+Cert record moves regular stock, a record given its Cert ID from regular stock
+included: after its assignment the record is judged on its own.
 
-An inventory admin SHALL reduce unmoved regular stock from Cert ID details:
+**Reducible count** - the units of regular stock intaken after the latest
+move, or since the first intake where regular stock never moved, less the
+units given a Cert ID or reduced after that move, and never more than
+available regular stock.
 
-1. The admin selects the available `No Cert ID` row and chooses Reverse
-   intake.
+| After the latest move                   | Reducible count                   |
+| --------------------------------------- | --------------------------------- |
+| An intake                               | Rises by its units with no Cert ID |
+| A Cert ID assignment from regular stock | Falls by 1                        |
+| A reduction of regular stock            | Falls by its units                |
+| A move of regular stock                 | Starts again from 0               |
+
+Example: a product holds 4 units of regular stock and sells 1 from available
+stock, then intakes 10 by mistake and gives one unit Cert ID `BGS-88`.
+
+| Step              | Available regular stock | Reducible count |
+| ----------------- | ----------------------- | --------------- |
+| After the sale    | 3                       | 0               |
+| After the intake  | 13                      | 10              |
+| After `BGS-88`    | 12                      | 9               |
+| After reducing 9  | 3                       | 0               |
+
+The 3 units intaken before the sale stay.
+
+An inventory admin SHALL reduce regular stock from Cert ID details:
+
+1. The admin selects the available `No Cert ID` row and chooses `Reduce
+   quantity`.
 2. The confirmation opens; they enter the number of units, keep or edit the
    remarks, and confirm.
 3. Grade10 lowers stock and available regular stock by that number and
    appends one `intake-reversal` entry.
 
-| Field    | Rules                                                     |
-| -------- | --------------------------------------------------------- |
-| Quantity | Required; a whole number from 1 to available regular stock |
-| Remarks  | Required; trimmed; never empty                            |
+| Field    | Rules                                                          |
+| -------- | -------------------------------------------------------------- |
+| Quantity | Required; opens empty; a whole number from 1 to the reducible count |
+| Remarks  | Required; trimmed; never empty                                 |
 
 Available and derived ledger SHALL fall by the quantity. Reserved, sold,
 withdrawn and vaulted, and every Cert record, SHALL NOT change.
 
-| Refused when                                                          | Result                                   |
-| --------------------------------------------------------------------- | ---------------------------------------- |
-| The regular stock is not unmoved                                      | Nothing changes and no entry is appended |
-| The quantity is not a whole number, or is below 1 or above available regular stock | Nothing changes and no entry is appended |
-| The remarks are empty after trimming                                  | Nothing changes and no entry is appended |
+| Refused when                                                                    | Result                                   |
+| ------------------------------------------------------------------------------- | ---------------------------------------- |
+| The quantity is above the reducible count                                       | Nothing changes and no entry is appended |
+| The quantity is not a whole number, or is below 1                               | Nothing changes and no entry is appended |
+| The remarks are empty after trimming                                            | Nothing changes and no entry is appended |
 
-Cert ID details SHALL offer Reverse intake on the available `No Cert ID` row
-only while regular stock is unmoved and the row reads at least 1. While
-regular stock has moved and the row reads at least 1, the row SHALL show that
-its units have been held or have moved and cannot be reversed.
+Cert ID details SHALL offer `Reduce quantity` on the available `No Cert ID`
+row only while the reducible count is at least 1. While the reducible count
+is 0 and the row reads at least 1, the row SHALL show that its units were
+intaken before regular stock last moved and cannot be reduced.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-177 - Admin reduces regular stock intaken by mistake
 
@@ -728,8 +752,8 @@ its units have been held or have moved and cannot be reversed.
 - **GIVEN** a created product that intook five units of regular stock and Cert
   record `PSA-1`, with stock six and derived ledger six, and nothing held,
   sold, withdrawn or vaulted
-- **WHEN** an authorized inventory admin reverses the intake of two units of
-  regular stock with remarks `Entered by mistake`
+- **WHEN** an authorized inventory admin reduces regular stock by two units
+  with remarks `Entered by mistake`
 - **THEN** stock reads four, derived ledger four and withdrawn zero
 - **AND** `No Cert ID` Available reads 3 and `PSA-1` is still listed
   Available
@@ -740,15 +764,15 @@ its units have been held or have moved and cannot be reversed.
 **Serves:** grade10-admin-inventory-catalog-US-16 - numbering one unit does not lock the rest in
 
 - **GIVEN** a product that intook three units of regular stock and gave one
-  Cert ID `BGS-88`, so `No Cert ID` Available reads 2
+  Cert ID `BGS-88`, so `No Cert ID` Available reads 2, and nothing has moved
 - **WHEN** an authorized inventory admin selects the available `No Cert ID`
   row
-- **THEN** it offers Reverse intake
-- **WHEN** they reverse the intake of two units
+- **THEN** it offers `Reduce quantity`
+- **WHEN** they reduce it by two units
 - **THEN** `No Cert ID` Available reads 0, `BGS-88` is still listed
   Available, and stock reads one
 
-#### Scenario: grade10-admin-inventory-catalog-SC-179 - Regular stock that has moved cannot be reduced
+#### Scenario: grade10-admin-inventory-catalog-SC-179 - Regular stock with nothing intaken since it moved cannot be reduced
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - units that were handled stay in the ledger
 
@@ -756,10 +780,10 @@ its units have been held or have moved and cannot be reversed.
   released, so `No Cert ID` Available reads 3; product B, which lost one unit
   of regular stock to a withdrawal of available stock and has 2 left; and
   product C, whose Auction hold on one unit of regular stock was moved to
-  another product, leaving 2
+  another product, leaving 2; none has intaken regular stock since
 - **WHEN** an authorized inventory admin opens Cert ID details on each
-- **THEN** no available `No Cert ID` row offers Reverse intake, and each shows
-  that its units have been held or have moved
+- **THEN** no available `No Cert ID` row offers `Reduce quantity`, and each
+  shows that its units were intaken before regular stock last moved
 - **WHEN** a reduction of one unit is sent anyway on each
 - **THEN** Grade10 refuses all three, and no count or entry changes
 
@@ -767,32 +791,74 @@ its units have been held or have moved and cannot be reversed.
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a sold numbered card does not stop the admin fixing the count
 
-- **GIVEN** a product that intook two units of regular stock and Cert record
-  `PSA-1`, and `PSA-1` was sold through an Auction hold
-- **WHEN** an authorized inventory admin reverses the intake of one unit of
-  regular stock
-- **THEN** stock falls by one and sold is unchanged
-- **AND** `No Cert ID` Available reads 1
+- **GIVEN** a product that intook three units of regular stock and Cert record
+  `PSA-1`, gave one unit of regular stock Cert ID `BGS-88`, then sold `PSA-1`
+  through an Auction hold and took an Admin hold on `BGS-88`
+- **WHEN** an authorized inventory admin reduces regular stock by two units
+- **THEN** Grade10 accepts it: stock falls by two and sold is unchanged
+- **AND** `No Cert ID` Available reads 0 and the hold on `BGS-88` is unchanged
 
-#### Scenario: grade10-admin-inventory-catalog-SC-181 - A quantity outside the free units is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-181 - A quantity outside one to the reducible count is refused
 
-**Serves:** grade10-admin-inventory-catalog-US-16 - the admin cannot take out more than was intaken
+**Serves:** grade10-admin-inventory-catalog-US-16 - the admin cannot take out more than was intaken since the last move
 
-- **GIVEN** a product whose unmoved regular stock reads `No Cert ID`
-  Available 2
+- **GIVEN** a product that held 3 units of regular stock, sold 1 from
+  available stock and then intook 2, so `No Cert ID` Available reads 4 and the
+  reducible count is 2
 - **WHEN** a reduction of three units, of zero units, and of 1.5 units is sent
 - **THEN** Grade10 refuses each
 - **AND** stock reads as before and no entry is appended
+
+#### Scenario: grade10-admin-inventory-catalog-SC-194 - An over-intake after a sale can be reduced by the units intaken since
+
+**Serves:** grade10-admin-inventory-catalog-US-16 - a product with sales can still fix an over-intake
+
+- **GIVEN** a product with 4 units of regular stock that sold 1 from available
+  stock, then intook 10 by mistake, so `No Cert ID` Available reads 13
+- **WHEN** an authorized inventory admin selects the available `No Cert ID`
+  row and chooses `Reduce quantity`
+- **THEN** the confirmation says at most 10 units can be reduced
+- **WHEN** they reduce it by 10 units
+- **THEN** `No Cert ID` Available reads 3, stock falls by 10 and sold is
+  unchanged
+- **AND** the row offers no `Reduce quantity` and shows that its units were
+  intaken before regular stock last moved
+
+#### Scenario: grade10-admin-inventory-catalog-SC-195 - A Cert ID given after the latest move lowers the reducible count
+
+**Serves:** grade10-admin-inventory-catalog-US-16 - a unit numbered from the over-intake is no longer regular stock to take out
+
+- **GIVEN** a product with 4 units of regular stock that sold 1 from available
+  stock, then intook 10, then gave one unit of regular stock Cert ID `BGS-88`,
+  so `No Cert ID` Available reads 12
+- **WHEN** an authorized inventory admin chooses `Reduce quantity` on the
+  available `No Cert ID` row
+- **THEN** the confirmation says at most 9 units can be reduced
+- **WHEN** a reduction of 10 units is sent anyway
+- **THEN** Grade10 refuses it, and no count or entry changes
+
+#### Scenario: grade10-admin-inventory-catalog-SC-196 - A move after an intake ends that intake's reduction
+
+**Serves:** grade10-admin-inventory-catalog-US-16 - units intaken before regular stock was handled stay in the ledger
+
+- **GIVEN** a product that intook 5 units of regular stock, then took an Admin
+  hold of 1 unit of regular stock, so `No Cert ID` Available reads 4
+- **WHEN** an authorized inventory admin opens Cert ID details
+- **THEN** the available `No Cert ID` row offers no `Reduce quantity`
+- **WHEN** the product intakes 2 more units of regular stock
+- **THEN** the row offers `Reduce quantity`, and its confirmation says at most
+  2 units can be reduced
 
 ### Requirement: An unmoved Cert record can be removed as never received
 
 An inventory admin SHALL remove an unmoved Cert record, as `An unmoved Cert
 record's Cert ID can be corrected` defines it, from Cert ID details. A record
 given its Cert ID from regular stock is removed the same way while it has not
-moved since. A hold that named the record counts, though it was later moved
-to another product.
+moved since; its moves are its own and never count against regular stock. A
+hold that named the record counts, though it was later moved to another
+product.
 
-1. The admin selects an unmoved Cert record and chooses Reverse intake.
+1. The admin selects an unmoved Cert record and chooses `Remove`.
 2. The confirmation opens; they keep or edit the remarks and confirm.
 3. Grade10 lowers stock by one, deletes the Cert record and the source media
    tagged to it, and appends one `intake-reversal` entry naming its Cert ID.
@@ -809,7 +875,7 @@ record.
 | The remarks are empty after trimming                     | Nothing changes and no entry is appended |
 | The record does not exist, or belongs to another product | Nothing changes and no entry is appended |
 
-Cert ID details SHALL offer Reverse intake only on an unmoved Cert record.
+Cert ID details SHALL offer `Remove` only on an unmoved Cert record.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-182 - Admin removes a Cert record intaken by mistake
 
@@ -818,8 +884,8 @@ Cert ID details SHALL offer Reverse intake only on an unmoved Cert record.
 - **GIVEN** a product with stock three: unmoved Cert record `PSA-1234` with
   one image tagged to it, Cert record `PSA-5` with one image tagged to it, one
   unit of regular stock, and one untagged product image
-- **WHEN** an authorized inventory admin reverses the intake of `PSA-1234`
-  with remarks `Card never arrived`
+- **WHEN** an authorized inventory admin removes `PSA-1234` with remarks
+  `Card never arrived`
 - **THEN** Cert ID details no longer lists `PSA-1234`
 - **AND** stock reads two, derived ledger falls by one and withdrawn is
   unchanged
@@ -830,7 +896,8 @@ Cert ID details SHALL offer Reverse intake only on an unmoved Cert record.
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the right card can arrive under the same number
 
-- **GIVEN** Cert record `PSA-1234` was reversed on its product
+- **GIVEN** Cert record `PSA-1234` was removed as never received on its
+  product
 - **WHEN** an authorized inventory admin intakes one unit with Cert ID
   `PSA-1234` on that product
 - **THEN** Grade10 accepts the intake
@@ -843,7 +910,7 @@ Cert ID details SHALL offer Reverse intake only on an unmoved Cert record.
 
 - **GIVEN** a product that intook three units of regular stock and gave one
   Cert ID `BGS-88`, and nothing has moved
-- **WHEN** an authorized inventory admin reverses the intake of `BGS-88`
+- **WHEN** an authorized inventory admin removes `BGS-88`
 - **THEN** `BGS-88` is no longer listed and stock reads two
 - **AND** `No Cert ID` Available still reads 2
 
@@ -854,8 +921,8 @@ Cert ID details SHALL offer Reverse intake only on an unmoved Cert record.
 - **GIVEN** Cert record `PSA-1`, whose Auction hold was released so it reads
   Available, and Cert record `PSA-2`, sold
 - **WHEN** an authorized inventory admin selects each in Cert ID details
-- **THEN** neither offers Reverse intake
-- **WHEN** a reversal of either is sent anyway
+- **THEN** neither offers `Remove`
+- **WHEN** a removal of either as never received is sent anyway
 - **THEN** Grade10 refuses it, and no record, count, media or entry changes
 
 #### Scenario: grade10-admin-inventory-catalog-SC-186 - A hold moved to another product still counts
@@ -865,26 +932,35 @@ Cert ID details SHALL offer Reverse intake only on an unmoved Cert record.
 - **GIVEN** an Auction hold named Cert record `PSA-1` and was then moved to
   another product, so `PSA-1` reads Available with no hold naming it
 - **WHEN** an authorized inventory admin selects `PSA-1` in Cert ID details
-- **THEN** it offers neither Change Cert ID nor Reverse intake, and shows that
-  its Cert ID is fixed
-- **AND** it offers Remove physical unit
-- **WHEN** a reversal or a Cert ID change of `PSA-1` is sent anyway
+- **THEN** it offers neither Change Cert ID nor `Remove`, and shows that its
+  Cert ID is fixed
+- **AND** it offers `Remove physical unit`
+- **WHEN** a removal as never received or a Cert ID change of `PSA-1` is sent
+  anyway
 - **THEN** Grade10 refuses both, and no record, count or entry changes
 
 ### Requirement: A reversal is confirmed with remarks first
 
-Choosing Reverse intake SHALL open a confirmation before anything changes.
+Each reversal SHALL be offered under its own name, with a tooltip on hover.
 
-| Part     | On a Cert record                                                   | On the available `No Cert ID` row                           |
-| -------- | ------------------------------------------------------------------ | ----------------------------------------------------------- |
-| Names    | Its Cert ID                                                        | The number of units entered, from 1 to the row's count     |
-| Says     | Stock and the ledger fall by 1, and media tagged to it are deleted | Stock and the ledger fall by the number entered             |
-| Remarks  | Prefilled `Entered by mistake`; editable                           | Prefilled `Entered by mistake`; editable                    |
+| Row                                | Action            | Tooltip                                                                                         |
+| ---------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| The available `No Cert ID` row     | `Reduce quantity` | It takes out units intaken by mistake, as if they were never received; withdrawn does not move |
+| A Cert record that has only been intaken | `Remove`    | It takes out a unit intaken by mistake, as if it was never received; withdrawn does not move   |
 
-Confirm SHALL be unavailable while the remarks are empty after trimming, or
-the number is not a whole number from 1 to the row's count. Cancelling SHALL
-change nothing and append no entry. The entry's reason SHALL be the remarks as
-confirmed, trimmed.
+Choosing either SHALL open a confirmation before anything changes.
+
+| Part     | On a Cert record                                                   | On the available `No Cert ID` row                                       |
+| -------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Names    | Its Cert ID                                                        | The number of units, entered by the admin; the field opens empty        |
+| Limit    | -                                                                  | The reducible count, as the most units that can be reduced             |
+| Says     | Stock and the ledger fall by 1, and media tagged to it are deleted | Stock and the ledger fall by the number entered                         |
+| Remarks  | Prefilled `Entered by mistake`; editable                           | Prefilled `Entered by mistake`; editable                                |
+
+Confirm SHALL be unavailable while the remarks are empty after trimming, or,
+on the `No Cert ID` row, while the number is empty or not a whole number from
+1 to the reducible count. Cancelling SHALL change nothing and append no entry.
+The entry's reason SHALL be the remarks as confirmed, trimmed.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-187 - The confirmation names the Cert record and cancelling changes nothing
 
@@ -892,7 +968,7 @@ confirmed, trimmed.
 
 - **GIVEN** an unmoved Cert record `PSA-1234` with one image tagged to it, on
   a product with stock three
-- **WHEN** an authorized inventory admin chooses Reverse intake on it
+- **WHEN** an authorized inventory admin chooses `Remove` on it
 - **THEN** a confirmation names `PSA-1234`, says stock and the ledger fall by
   1 and its tagged media are deleted, and holds remarks reading
   `Entered by mistake`
@@ -900,17 +976,20 @@ confirmed, trimmed.
 - **THEN** `PSA-1234` is still listed with its image, stock reads three and no
   entry is appended
 
-#### Scenario: grade10-admin-inventory-catalog-SC-188 - Edited remarks are recorded
+#### Scenario: grade10-admin-inventory-catalog-SC-188 - The number opens empty and edited remarks are recorded
 
-**Serves:** grade10-admin-inventory-catalog-US-16 - the admin says why the count was wrong
+**Serves:** grade10-admin-inventory-catalog-US-16 - the admin chooses the number on purpose and says why the count was wrong
 
-- **GIVEN** a product whose unmoved regular stock reads `No Cert ID`
-  Available 5
-- **WHEN** an authorized inventory admin chooses Reverse intake on that row,
-  enters 3, replaces the remarks with `Counted twice at intake` and confirms
-- **THEN** the confirmation said stock and the ledger fall by 3 before they
-  confirmed
-- **AND** the `intake-reversal` entry records quantity three and the reason
+- **GIVEN** a product whose regular stock has never moved and reads
+  `No Cert ID` Available 5
+- **WHEN** an authorized inventory admin chooses `Reduce quantity` on that row
+- **THEN** the number of units is empty, the confirmation says at most 5
+  units can be reduced, and Confirm is unavailable
+- **WHEN** they enter 3 and replace the remarks with `Counted twice at intake`
+- **THEN** the confirmation says stock and the ledger fall by 3, and Confirm
+  is available
+- **WHEN** they confirm
+- **THEN** the `intake-reversal` entry records quantity three and the reason
   `Counted twice at intake`
 
 #### Scenario: grade10-admin-inventory-catalog-SC-189 - Empty remarks cannot be confirmed
@@ -921,34 +1000,46 @@ confirmed, trimmed.
 - **WHEN** an authorized inventory admin clears the remarks, leaving three
   spaces
 - **THEN** Confirm is unavailable
-- **WHEN** a reversal of `PSA-1` with blank remarks is sent anyway
+- **WHEN** a removal of `PSA-1` with blank remarks is sent anyway
 - **THEN** Grade10 refuses it, and `PSA-1` is still listed with no entry
   appended
+
+#### Scenario: grade10-admin-inventory-catalog-SC-197 - Each reversal action explains itself on hover
+
+**Serves:** grade10-admin-inventory-catalog-US-16 - the admin tells a reversal from a withdrawal before choosing it
+
+- **GIVEN** a product whose regular stock has never moved and reads
+  `No Cert ID` Available 2, and unmoved Cert record `PSA-1`
+- **WHEN** an authorized inventory admin hovers over `Reduce quantity` on the
+  available `No Cert ID` row, and over `Remove` on `PSA-1`
+- **THEN** each shows a tooltip saying it takes out units intaken by mistake
+  as if they were never received, and that withdrawn does not move
+- **AND** nothing changes
 
 ### Requirement: Only an inventory admin who may write inventory reverses an intake
 
 Reversing an intake SHALL need the grant that intake needs. An inventory
 admin with read access only SHALL see the rows and the history in Cert ID
-details, with no Reverse intake.
+details, with no `Reduce quantity` and no `Remove`.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-190 - A reader without the write grant cannot reverse an intake
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - a reader accounts for units without taking any out
 
 - **GIVEN** an inventory admin who may read inventory but not write it, and a
-  product with an unmoved Cert record and unmoved regular stock
+  product with an unmoved Cert record and regular stock that has never moved
 - **WHEN** they open Cert ID details
 - **THEN** they see every row and each unit's history, and no row offers
-  Reverse intake
+  `Reduce quantity` or `Remove`
 - **WHEN** they send a reduction or a removal anyway
 - **THEN** Grade10 refuses it, and no record, count, media or entry changes
 
 ### Requirement: A reversal lands whole against holds and other changes
 
-A reduction or a removal SHALL check its unit, whether it has moved, and
-available regular stock in the transaction that writes it, after any hold,
-sale, Cert ID change or reversal on the same product that committed first. It
-SHALL land whole or not at all.
+A reduction or a removal SHALL check its unit, whether it has moved, and the
+reducible count in the transaction that writes it, after any hold, sale,
+intake, Cert ID change or reversal on the same product that committed first.
+It SHALL land whole or not at all.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-191 - A hold taken first refuses the removal
 
@@ -965,18 +1056,19 @@ SHALL land whole or not at all.
 
 **Serves:** Cert ID details - a hold and a reduction on regular stock never both land
 
-- **GIVEN** unmoved regular stock reads `No Cert ID` Available 3 and an
-  inventory admin has the confirmation open for two units
+- **GIVEN** regular stock that has never moved reads `No Cert ID` Available 3
+  and an inventory admin has the confirmation open for two units
 - **WHEN** an Admin hold takes one unit of regular stock, and then the admin
   confirms
-- **THEN** Grade10 refuses the reduction
+- **THEN** Grade10 refuses the reduction, since the hold is a move after every
+  intake and the reducible count is 0
 - **AND** stock is unchanged and no `intake-reversal` entry is appended
 
 #### Scenario: grade10-admin-inventory-catalog-SC-193 - Two reductions at once take only what is there
 
 **Serves:** Cert ID details - two admins fixing one count never take out more than was intaken
 
-- **GIVEN** unmoved regular stock reads `No Cert ID` Available 3
+- **GIVEN** regular stock that has never moved reads `No Cert ID` Available 3
 - **WHEN** two inventory admins each reduce it by two at the same moment
 - **THEN** exactly one reduction lands, `No Cert ID` Available reads 1, and
   one `intake-reversal` entry is appended

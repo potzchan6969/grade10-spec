@@ -24,8 +24,14 @@
   hold named it. The same happens to regular stock: the old product keeps no
   reservation row and no entry of its own.
 - **Regular stock moves** - a hold naming no record leaves a reservation row
-  (until a product change moves it); a free-pool `sell` or `withdraw` leaves
-  only its changelog entry, which names no record.
+  (until a product change moves it) and one changelog entry per step of its
+  life; a free-pool `sell` or `withdraw` leaves only its changelog entry,
+  which names no record.
+- **Regular stock history** - the `unit` predicate already reads an entry as
+  regular stock when it is an `intake` whose `quantity` exceeds the ids in
+  `after.inventoryCertIds`, a `sell` or `withdraw` naming no record, a hold
+  action whose reservation names no record, or a `cert-id-change` with no
+  `before.certRecord` (an assignment).
 - **History** - `ck_changelogs_action` holds twelve actions (migration
   `0006_cert_id_change_action`). The `unit` filter in
   `repositories/changelogs.ts` puts an entry naming no record in the regular
@@ -38,6 +44,8 @@
 - **One unmoved test** - correction, the `unmoved` flag, the reversal and the
   new Remove physical unit guard read the same predicate, so a record never
   reads unmoved to one and moved to another.
+- **One reducible count** - `products.get` and the reduction read the same
+  function, so the dialog's limit and the server's refusal agree.
 - **Counts move once** - each reversal lowers stock and the ledger in the
   transaction that writes its history entry.
 - **No state to keep in step** - unmoved is derived from rows that already
@@ -53,7 +61,7 @@
 ## Decisions
 
 The [catalog delta](specs/grade10-admin/inventory/catalog/spec.md) governs
-the reversal, its refusals, its confirmation and its history entry; Q1 to Q11
+the reversal, its refusals, its confirmation and its history entry; Q1 to Q15
 settle its scope.
 
 ### Writes
@@ -88,18 +96,43 @@ settle its scope.
     unit has to remember to set it.
   - Rejected: scanning the record's whole history. The reservation row is the
     first fact of every move; only a product change carries it elsewhere.
-- **Unmoved regular stock** - `regularStockMoved(db, inventoryId, productId)`
-  is one `EXISTS` over three sources: a reservation of the product naming no
-  record (`idx_reservations_product_status_kind`); a `sell` or `withdraw`
-  entry of the inventory naming no record (the regular stock predicate,
-  inside `idx_changelogs_inventory_id_occurred_at`); a `change-product` entry
-  whose `before.oldInventory.id` is the inventory and whose
-  `before.reservation.inventoryCertId` is null. Intake, `cert-id-change` and
-  `intake-reversal` never count (Q2). A Cert record's moves never count.
+- **Reducible regular stock** - `selectRegularStockReducible(db, inventoryId)`
+  answers one number, in one statement over the inventory's changelogs (Q2,
+  Q12):
+  1. **Latest move** - the newest `occurred_at` among the inventory's regular
+     stock entries whose action is not `intake`, `cert-id-change` or
+     `intake-reversal`, and the inventory's `change-product` entries written
+     under another inventory: `before.oldInventory.id` is the inventory and
+     `before.reservation.inventoryCertId` is null. Every step of a hold of
+     regular stock counts - reserve, adjust, release, sell, vault, product
+     change - and so do a free-pool `sell` or `withdraw` naming no record.
+  2. **Since then** - over the inventory's regular stock entries after the
+     latest move, or all of them where there is none: an `intake` adds
+     `quantity − cardinality(after.inventoryCertIds)`, an assignment
+     subtracts 1, an `intake-reversal` naming no record subtracts its
+     `quantity`. Floored at 0.
+  3. **Cap** - the smaller of that sum and available regular stock,
+     `unidentified_stock − sumActiveNoCertRemainingByInventoryId`.
+
+  An entry naming a Cert record is never in the regular stock history, so a
+  record's moves never touch the count, an assigned record's included (Q13).
+  The assignment is subtracted rather than ignored: an assigned unit leaves
+  regular stock, and without the subtraction a later reduction could take a
+  unit intaken before the move in its place. The first step reads
+  `idx_changelogs_inventory_id_occurred_at` and the new partial index; the
+  second reads the first index from the latest move on.
+  - Rejected: a stored reducible counter on `inventories`. Every path that
+    moves regular stock would have to reset it, and a path that forgets
+    leaves units reducible that moved.
+  - Rejected: judging regular stock as a whole, any move closing reduction
+    for good - the first reading of Q2, which Q12 replaced.
+  - Rejected: a release or a sale from a hold not counting as a move. It is
+    one step more to explain, and "last held" reads plainly as any step of a
+    hold; a release after an over-intake closes the reduction, the safe side.
 - **Reduce** - writes `stock - n`, `unidentified_stock - n` and `updated_at`.
   `reserved`, `sold`, `withdrawn` and `vaulted` are not written, so the ledger
-  falls by `n`. `n` is a whole number from 1 to available regular stock, with
-  no 500 ceiling (Q8): `isValidQuantity` is not used.
+  falls by `n`. `n` is a whole number from 1 to the reducible count, with no
+  500 ceiling (Q8): `isValidQuantity` is not used.
 - **Remove a Cert record** - writes `stock - 1` and `updated_at`;
   `unidentified_stock` is untouched. Then the changelog, then
   `deleteInventoryCertId`, whose cascade deletes the tagged media rows in the
@@ -125,8 +158,8 @@ settle its scope.
 - **Audit** - a removal's subject is `inventory-cert-unit` with the record id,
   as on Remove physical unit; a reduction's is the product.
 - **Refusals** - two new failure codes: `UNIT_MOVED` (`unit-moved`), for a
-  reversal of a record or regular stock that has moved, so the dialog says
-  why; and `INVALID_REASON` (`invalid-reason`) for blank remarks, which the
+  removal of a record that has moved, or a reduction within available regular
+  stock but above the reducible count, so the dialog says why; and `INVALID_REASON` (`invalid-reason`) for blank remarks, which the
   `reason` input schema already refuses at the procedure and the service
   checks again. Every other refusal reuses a code that exists.
 
@@ -137,15 +170,21 @@ settle its scope.
   | Product missing | `unknown-product` |
   | Record missing, or another product's | `unknown-inventory-cert-id`, `inventory-cert-id-product-mismatch` |
   | Record not `available` | `inventory-cert-id-unavailable` |
-  | Record or regular stock has moved | `unit-moved` |
+  | Record has moved | `unit-moved` |
   | `n` above available regular stock | `insufficient-available` |
+  | `n` within available regular stock, above the reducible count | `unit-moved` |
 
 ### Reads
 
-- **Regular stock flag** - `products.get`'s `regularStock` gains
-  `unmoved: boolean`, the reduction's own test. `certIds[].unmoved` keeps its
-  name and reads the widened predicate.
-- **The flag never authorises** - the server re-checks both under the lock.
+- **Reducible count** - `products.get`'s `regularStock` gains
+  `reducible: number`, from `selectRegularStockReducible`. `certIds[].unmoved`
+  keeps its name and reads the widened predicate.
+- **Shown to the admin** - the reduction's confirmation states the reducible
+  count as the most units that can be reduced. It can sit below the row's
+  Available count, and an empty field whose Confirm stays unavailable at an
+  unstated limit gives the admin no way to find it. The tooltip stays the same
+  on every product (Q14).
+- **The read never authorises** - the server re-checks both under the lock.
 
 ### Dialog
 
@@ -153,20 +192,26 @@ settle its scope.
 
   | Selected row | Offers |
   | --- | --- |
-  | Cert record, `unmoved` | Change Cert ID, Reverse intake |
-  | Cert record, Available, moved | Remove physical unit |
+  | Cert record, `unmoved` | Change Cert ID, `Remove` |
+  | Cert record, Available, moved | `Remove physical unit` |
   | Cert record, any other status | Nothing |
-  | Available `No Cert ID`, `regularStock.unmoved`, reading ≥ 1 | Assign Cert ID, Reverse intake |
-  | Available `No Cert ID`, moved, reading ≥ 1 | Assign Cert ID, and the line that its units have moved |
+  | Available `No Cert ID`, `regularStock.reducible` ≥ 1 | Assign Cert ID, `Reduce quantity` |
+  | Available `No Cert ID`, `reducible` 0, reading ≥ 1 | Assign Cert ID, and the line that its units were intaken before regular stock last moved |
   | A hold's `No Cert ID` row, or Available 0 | Nothing, and today's line |
 
-- **Confirmation** - Reverse intake opens a `FormDialog`, `destructive`, with
+- **Tooltip** - `Reduce quantity` and `Remove` each carry a `Tooltip` on
+  hover saying it takes out units intaken by mistake as if never received,
+  and that withdrawn does not move (Q14). The words are i18n keys in the
+  admin's `inventory` namespace.
+
+- **Confirmation** - either action opens a `FormDialog`, `destructive`, with
   `Remarks` prefilled `Entered by mistake`. On a Cert record it names the Cert
   ID and says stock and the ledger fall by 1 and its tagged media are
-  deleted. On the `No Cert ID` row it holds `Quantity`, starting at 1, and
-  says stock and the ledger fall by that number. Confirm is disabled while the
-  remarks are blank or the quantity is not a whole number from 1 to the row's
-  count. Cancel closes it and sends nothing.
+  deleted. On the `No Cert ID` row it holds `Quantity`, empty when it opens
+  (Q15), states `regularStock.reducible` as the most that can be entered, and
+  says stock and the ledger fall by the number entered. Confirm is disabled
+  while the remarks are blank or the quantity is empty or not a whole number
+  from 1 to `regularStock.reducible`. Cancel closes it and sends nothing.
 - **The old reason field goes** - Remove physical unit keeps its own
   confirmation, which now holds its reason, instead of a field under the row.
 - **After a write** - the product, its changelogs and its media are
@@ -218,16 +263,16 @@ erDiagram
 1. Blank remarks refuse `invalid-reason`; a quantity below 1 or not whole
    refuses `invalid-quantity`.
 2. Lock the inventory by product; none refuses `unknown-product`.
-3. `regularStockMoved` refuses `unit-moved`.
-4. `unidentified_stock − sumActiveNoCertRemainingByInventoryId < quantity`,
+3. `unidentified_stock − sumActiveNoCertRemainingByInventoryId < quantity`,
    or available below it, refuses `insufficient-available`.
+4. `selectRegularStockReducible < quantity` refuses `unit-moved`.
 5. Write `stock − quantity` and `unidentified_stock − quantity`; insert the
    changelog.
 
 Success answers `{ inventory }`. A refusal writes nothing.
 
 Example: product `prd_a` intook 5 units of regular stock and Cert record
-`PSA-1`; nothing has moved.
+`PSA-1`; nothing has moved, so the reducible count is 5.
 
 ```json
 { "productId": "prd_a", "quantity": 2, "remarks": "Entered by mistake" }
@@ -289,10 +334,10 @@ its own order: a record not in `selectMovedInventoryCertIds` refuses
 
 | Surface | Change |
 | --- | --- |
-| `inventory.reverseRegularIntake` | New mutation; `inventory:write`; input `{ productId, quantity, remarks }`; refusals from Reduce |
+| `inventory.reverseRegularIntake` | New mutation; `inventory:write`; input `{ productId, quantity, remarks }`; refusals from Reduce, `unit-moved` when `quantity` is above the reducible count |
 | `inventory.reverseCertIntake` | New mutation; `inventory:write`; input `{ productId, inventoryCertId, remarks }`; refusals from Remove |
 | `inventory.removeCertUnit` | Refuses an unmoved record; **breaking** for a caller that removed one |
-| `products.get` | `regularStock` gains `unmoved`; `certIds[].unmoved` reads the widened test |
+| `products.get` | `regularStock` gains `reducible`; `certIds[].unmoved` reads the widened test |
 | `CHANGELOG_ACTIONS` | Gains `intake-reversal` |
 | `INVENTORY_FAILURE_CODES` | Gains `UNIT_MOVED` and `INVALID_REASON` |
 
@@ -305,11 +350,18 @@ its own order: a record not in `selectMovedInventoryCertIds` refuses
 - [Two reductions take the last units] → the guard reads
   `unidentified_stock` under the lock, so the second sees what the first left.
 - [A hold moved to another product before this ships] → the moved predicate
-  reads the `change-product` entries already stored, so a record or regular
+  and the reducible count read the `change-product` entries already stored, so a record or regular
   stock moved that way reads moved from the first deploy.
 - [An old `withdraw` from Remove physical unit with no `inventoryCertIds`]
-  → it reads as a regular stock withdrawal and closes the reduction, the safe
-  side.
+  → it reads as a regular stock withdrawal and starts the reducible count
+  again from 0, the safe side.
+- [A release or a sale from a hold lands after an over-intake] → it is a move,
+  so the over-intake can no longer be reduced; the admin withdraws the units
+  with remarks, as today.
+- [A long history] → the count reads the inventory's entries from the latest
+  move on through `idx_changelogs_inventory_id_occurred_at`; a product that
+  never moved reads its whole history, which only intakes and assignments
+  make long.
 - [A record whose status was set without a hold, by an import or a fixture]
   → `status` must be `available` too; a dev fixture reset that deletes
   reservations reads a record unmoved again, in local and staging data only.
@@ -330,5 +382,5 @@ its own order: a record not in `selectMovedInventoryCertIds` refuses
 
 Rollback: step 1 widens a check and adds an index the previous code ignores.
 Rolling back step 2 restores Remove physical unit on unmoved records; the
-admin app reads `regularStock.unmoved` as absent and offers no reduction, so
+admin app reads `regularStock.reducible` as absent and offers no reduction, so
 steps 2 and 3 roll back independently.

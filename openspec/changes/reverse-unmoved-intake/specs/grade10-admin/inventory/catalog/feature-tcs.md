@@ -48,8 +48,8 @@
 
 1. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
 2. Click View Cert IDs.
-3. Reverse the intake of `<reduce count>` units on the available `No Cert ID` row, keeping the remarks.
-4. Reverse the intake of `<cert_a>`, keeping the remarks.
+3. Reduce the available `No Cert ID` row by `<reduce count>` units with `Reduce quantity`, keeping the remarks.
+4. Remove `<cert_a>` with `Remove`, keeping the remarks.
 5. Close Cert ID details.
 6. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
 7. Open the product history.
@@ -106,8 +106,8 @@
 **Steps:**
 
 1. Click View Cert IDs.
-2. Reverse the intake of `<regular available>` units on the available `No Cert ID` row, keeping the remarks.
-3. Reverse the intake of `<cert_gone>`, keeping the remarks.
+2. Reduce the available `No Cert ID` row by `<regular available>` units with `Reduce quantity`, keeping the remarks.
+3. Remove `<cert_gone>` with `Remove`, keeping the remarks.
 4. Read the rows and the available `No Cert ID` row's actions.
 5. Click the available `No Cert ID` row and read its history.
 6. Close Cert ID details.
@@ -118,7 +118,7 @@
 **Expected Results:**
 
 * Step 4: the available `No Cert ID` row is still listed, reading 0.
-* Step 4: that row offers no reverse action.
+* Step 4: that row offers no `Reduce quantity`.
 * Step 4: no row reads `<cert_gone>`; `<cert_avail>` and `<cert_sold>` read as before.
 * Step 5: newest first, an `Intake reversal` of `<regular available>`, then the intake.
 * Step 5: no entry reads `Intake reversal · <cert_gone>`.
@@ -163,7 +163,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click View Cert IDs.
-2. Reverse the intake of `<cert_a>`, keeping the remarks.
+2. Remove `<cert_a>` with `Remove`, keeping the remarks.
 3. Read the rows.
 
 **Expected Results:**
@@ -212,7 +212,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3: `<cert_a>` and the available `No Cert ID` row are listed.
-* Step 3: no reverse action is offered.
+* Step 3: neither `Reduce quantity` nor `Remove` is offered.
 * Step 4: the history shows.
 * Step 5: the request is refused.
 * Step 6: the request is refused.
@@ -261,7 +261,7 @@ Runs once per row of **Test data**.
 1. Read stock, withdrawn and the ledger.
 2. Click View Cert IDs.
 3. Select `<cert record>` and read its actions.
-4. Click Remove physical unit.
+4. Click `Remove physical unit`.
 5. Enter `<withdrawal reason>`.
 6. Confirm the removal.
 7. Close Cert ID details.
@@ -271,7 +271,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3: Remove physical unit is offered; no reverse action is.
+* Step 3: `Remove physical unit` is offered; `Remove` is not.
 * Step 6: `<cert record>` is no longer listed.
 * Step 8: stock falls by one; withdrawn rises by one.
 * Step 8: the ledger reads as in step 1.
@@ -317,8 +317,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3: Remove physical unit is not offered.
-* Step 3: the reverse action is offered.
+* Step 3: `Remove physical unit` is not offered.
+* Step 3: `Remove` is offered.
 
 ---
 
@@ -328,7 +328,7 @@ Runs once per row of **Test data**.
 **I want** to take out regular stock or a Cert record that was intaken by mistake and has never moved, from Cert ID details,
 **so that** the stock and the ledger count only the units the shop received.
 
-### grade10-admin-inventory-catalog-US16-TC1-1: Reducing unmoved regular stock takes units out of stock and the ledger
+### grade10-admin-inventory-catalog-US16-TC1-1: Reducing regular stock that never moved takes units out of stock and the ledger
 
 Runs once per row of **Test data**.
 
@@ -356,7 +356,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<regular intake>` | An intake of 5 units with no Cert ID |
 | `<assigned cert>` | `PSA-26000001`, given by Assign Cert ID |
-| `<reduce time>` | The date and time step 7 is confirmed |
+| `<reduce time>` | The date and time step 9 is confirmed |
 
 | Row | Assigned since intake | Available before | Reduce by | Remarks entered | Remarks read | Available after |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -368,28 +368,33 @@ Runs once per row of **Test data**.
 
 1. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
 2. Click View Cert IDs.
-3. Open the reverse action on the available `No Cert ID` row.
-4. Enter the row's Reduce by.
+3. Hover over `Reduce quantity` on the available `No Cert ID` row and read its tooltip.
+4. Click `Reduce quantity`.
 5. Read the confirmation.
-6. Enter the row's Remarks entered.
-7. Confirm.
-8. Read the available `No Cert ID` row.
-9. Click the available `No Cert ID` row and read its history.
-10. Close Cert ID details.
-11. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-12. Open the product history.
+6. Enter the row's Reduce by.
+7. Read the confirmation.
+8. Enter the row's Remarks entered.
+9. Confirm.
+10. Read the available `No Cert ID` row.
+11. Click the available `No Cert ID` row and read its history.
+12. Close Cert ID details.
+13. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
+14. Open the product history.
 
 **Expected Results:**
 
-* Step 5: it names the row's Reduce by in `No Cert ID` units.
-* Step 5: it says stock and the ledger fall by that number.
+* Step 3: it says the action takes out units intaken by mistake as if they were never received, and that withdrawn does not move.
+* Step 5: the number of units is empty and Confirm is unavailable.
+* Step 5: it says at most the row's Available before units can be reduced.
 * Step 5: Remarks read `Entered by mistake`.
-* Step 8: it reads the row's Available after.
-* Step 8: where the row assigned one, `<assigned cert>` is still listed Available.
-* Step 9: one new entry, quantity the row's Reduce by, the row's Remarks read.
-* Step 11: stock, available and the ledger each fall by the row's Reduce by.
-* Step 11: reserved, sold, withdrawn and vaulted read as in step 1.
-* Step 12: the same entry reads `Intake reversal`, `<reduce time>`, the admin as actor.
+* Step 7: it names the row's Reduce by in `No Cert ID` units.
+* Step 7: it says stock and the ledger fall by that number.
+* Step 10: it reads the row's Available after.
+* Step 10: where the row assigned one, `<assigned cert>` is still listed Available.
+* Step 11: one new entry, quantity the row's Reduce by, the row's Remarks read.
+* Step 13: stock, available and the ledger each fall by the row's Reduce by.
+* Step 13: reserved, sold, withdrawn and vaulted read as in step 1.
+* Step 14: the same entry reads `Intake reversal`, `<reduce time>`, the admin as actor.
 
 ### grade10-admin-inventory-catalog-US16-TC2-1: Removing an unmoved Cert record deletes it and its tagged media
 
@@ -421,7 +426,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<cert_a>` | `PSA-27000001` |
 | `<cert_b>` | `PSA-27000002`, an available Cert record of `<product_27>` |
-| `<remove time>` | The date and time step 6 is confirmed |
+| `<remove time>` | The date and time step 7 is confirmed |
 
 | Row | How `<cert_a>` came to be | Remarks entered | Remarks read |
 | --- | --- | --- | --- |
@@ -434,26 +439,28 @@ Runs once per row of **Test data**.
 
 1. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
 2. Click View Cert IDs.
-3. Open the reverse action on `<cert_a>`'s row.
-4. Read the confirmation.
-5. Enter the row's Remarks entered.
-6. Confirm.
-7. Read the rows.
-8. Close Cert ID details.
-9. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-10. Open the product history.
-11. Open the product's media.
+3. Hover over `Remove` on `<cert_a>`'s row and read its tooltip.
+4. Click `Remove`.
+5. Read the confirmation.
+6. Enter the row's Remarks entered.
+7. Confirm.
+8. Read the rows.
+9. Close Cert ID details.
+10. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
+11. Open the product history.
+12. Open the product's media.
 
 **Expected Results:**
 
-* Step 4: it names `<cert_a>`, says stock and the ledger fall by one, and says its tagged media are deleted.
-* Step 4: Remarks read `Entered by mistake`.
-* Step 7: no row reads `<cert_a>`; `<cert_b>` and the available `No Cert ID` row (3) read as before.
-* Step 9: stock, available and the ledger each fall by one.
-* Step 9: reserved, sold, withdrawn and vaulted read as in step 1.
-* Step 10: one new entry reads `Intake reversal · <cert_a>`, quantity one, `<remove time>`, the admin as actor, the row's Remarks read.
-* Step 10: its action is neither intake nor withdraw.
-* Step 11: `<tagged media>` is deleted; `<shared media>` and `<other media>` remain with their tags.
+* Step 3: it says the action takes out a unit intaken by mistake as if it was never received, and that withdrawn does not move.
+* Step 5: it names `<cert_a>`, says stock and the ledger fall by one, and says its tagged media are deleted.
+* Step 5: Remarks read `Entered by mistake`.
+* Step 8: no row reads `<cert_a>`; `<cert_b>` and the available `No Cert ID` row (3) read as before.
+* Step 10: stock, available and the ledger each fall by one.
+* Step 10: reserved, sold, withdrawn and vaulted read as in step 1.
+* Step 11: one new entry reads `Intake reversal · <cert_a>`, quantity one, `<remove time>`, the admin as actor, the row's Remarks read.
+* Step 11: its action is neither intake nor withdraw.
+* Step 12: `<tagged media>` is deleted; `<shared media>` and `<other media>` remain with their tags.
 
 ### grade10-admin-inventory-catalog-US16-TC3-1: Cancelling the confirmation changes nothing
 
@@ -488,8 +495,8 @@ Runs once per row of **Test data**.
 
 | Row | Action opened | Entered before cancelling |
 | --- | --- | --- |
-| Reduction | The reverse action on the available `No Cert ID` row | Reduce by 2, remarks `Typed then cancelled` |
-| Removal | The reverse action on `<cert_a>`'s row | Remarks `Typed then cancelled` |
+| Reduction | `Reduce quantity` on the available `No Cert ID` row | Reduce by 2, remarks `Typed then cancelled` |
+| Removal | `Remove` on `<cert_a>`'s row | Remarks `Typed then cancelled` |
 
 **Steps:**
 
@@ -543,10 +550,10 @@ Runs once per row of **Test data**.
 
 | Row | Action opened | Reduce by | Remarks left |
 | --- | --- | --- | --- |
-| Reduction, cleared | The reverse action on the available `No Cert ID` row | 1 | nothing |
-| Reduction, spaces | The reverse action on the available `No Cert ID` row | 1 | three spaces |
-| Removal, cleared | The reverse action on `<cert_a>`'s row | — | nothing |
-| Removal, spaces | The reverse action on `<cert_a>`'s row | — | three spaces |
+| Reduction, cleared | `Reduce quantity` on the available `No Cert ID` row | 1 | nothing |
+| Reduction, spaces | `Reduce quantity` on the available `No Cert ID` row | 1 | three spaces |
+| Removal, cleared | `Remove` on `<cert_a>`'s row | — | nothing |
+| Removal, spaces | `Remove` on `<cert_a>`'s row | — | three spaces |
 
 **Steps:**
 
@@ -563,7 +570,7 @@ Runs once per row of **Test data**.
 * Step 6: `<cert_a>` is listed; the available `No Cert ID` row reads `<regular available>`.
 * Step 6: no entry was added.
 
-### grade10-admin-inventory-catalog-US16-TC5-1: A reduction outside one to the available count is refused
+### grade10-admin-inventory-catalog-US16-TC5-1: A reduction outside one to the reducible count cannot be confirmed
 
 Runs once per row of **Test data**.
 
@@ -603,7 +610,7 @@ Runs once per row of **Test data**.
 
 1. Read stock, available and the ledger.
 2. Click View Cert IDs.
-3. Open the reverse action on the available `No Cert ID` row.
+3. Click `Reduce quantity` on the available `No Cert ID` row.
 4. Enter the row's Reduce by.
 5. Try to confirm.
 6. Read the available `No Cert ID` row.
@@ -616,7 +623,7 @@ Runs once per row of **Test data**.
 * Step 6: it reads `<regular available>`.
 * Step 8: every figure reads as in step 1; no entry was added.
 
-### grade10-admin-inventory-catalog-US16-TC6-1: Units that have ever moved offer no reversal
+### grade10-admin-inventory-catalog-US16-TC6-1: Cert records that have ever moved offer no removal
 
 Runs once per row of **Test data**.
 
@@ -636,7 +643,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds Inventory write authority) is on <inventory product url> of the row's product.
-* The row's product holds the row's unit; its regular stock was intaken before the row's move, and none after it.
+* `<product_31>` holds the row's Cert record.
 
 **Test data:**
 
@@ -649,12 +656,6 @@ Runs once per row of **Test data**.
 | Cert record, withdrawn | `<product_31>` | `PSA-31000005`, withdrawn | its row |
 | Cert record, vaulted | `<product_31>` | `PSA-31000006`, vaulted | its row |
 | Cert record, hold moved | `<product_31>` | `PSA-31000007`, held by an Auction listing whose hold moved to another product, reading Available | its row |
-| Regular stock, held | `<product_32>` | 4 units; an admin hold of 1, active | the available `No Cert ID` row |
-| Regular stock, released | `<product_33>` | 4 units; an admin hold of 1, released, so all 4 read available | the available `No Cert ID` row |
-| Regular stock, sold | `<product_34>` | 4 units; 1 sold | the available `No Cert ID` row |
-| Regular stock, withdrawn | `<product_35>` | 4 units; 1 withdrawn | the available `No Cert ID` row |
-| Regular stock, vaulted | `<product_36>` | 4 units; 1 vaulted from a Vault hold | the available `No Cert ID` row |
-| Regular stock, hold moved | `<product_42>` | 4 units; an Auction hold of 1 moved to another product, leaving 3 | the available `No Cert ID` row |
 
 **Steps:**
 
@@ -664,9 +665,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3: no reverse action is offered.
-* Step 3: a regular stock row says its units have been held or have moved.
-* Step 3: a Cert record reading Available offers Remove physical unit and no Cert ID change.
+* Step 3: `Remove` is not offered.
+* Step 3: a Cert record reading Available offers `Remove physical unit` and no Cert ID change.
 
 ### grade10-admin-inventory-catalog-US16-TC7-1: Regular stock and each Cert record are judged apart
 
@@ -694,18 +694,21 @@ Runs once per row of **Test data**.
 
 | Row | Product | Moved | Never moved | Offered |
 | --- | --- | --- | --- | --- |
-| Cert record moved | `<product_37>` | `PSA-37000001`, sold | 3 units of regular stock, only intaken; `PSA-37000002`, only intaken | the reverse action on the available `No Cert ID` row and on `PSA-37000002` |
-| Regular stock moved | `<product_38>` | 3 units of regular stock, 1 sold | `PSA-38000001`, only intaken | the reverse action on `PSA-38000001` |
+| Cert record moved | `<product_37>` | `PSA-37000001`, sold | 3 units of regular stock, only intaken; `PSA-37000002`, only intaken | `Reduce quantity` on the available `No Cert ID` row, at most 3; `Remove` on `PSA-37000002` |
+| Assigned record moved | `<product_44>` | `PSA-44000001`, given by Assign Cert ID to a unit of regular stock, then held by an active admin hold | the other 2 of 3 units of regular stock, only intaken | `Reduce quantity` on the available `No Cert ID` row, at most 2 |
+| Regular stock moved | `<product_38>` | 3 units of regular stock, 1 sold, nothing intaken since | `PSA-38000001`, only intaken | `Remove` on `PSA-38000001` |
 
 **Steps:**
 
 1. Click View Cert IDs.
 2. Read each row's actions.
+3. Where `Reduce quantity` is offered, click it and read the confirmation; cancel it.
 
 **Expected Results:**
 
 * Step 2: the row's Offered actions are offered.
-* Step 2: no reverse action is offered on what the row's Moved names.
+* Step 2: neither `Reduce quantity` nor `Remove` is offered on what the row's Moved names.
+* Step 3: it says at most the number the row's Offered gives can be reduced.
 
 ### grade10-admin-inventory-catalog-US16-TC8-1: A move landing after the confirmation opens is refused at confirm
 
@@ -741,10 +744,10 @@ Runs once per row of **Test data**.
 
 | Row | Admin A opens and enters | Admin B, before admin A confirms |
 | --- | --- | --- |
-| Cert record held | The reverse action on `<cert_a>`'s row | Reserves `<cert_a>` under an admin hold |
-| Cert record removed | The reverse action on `<cert_a>`'s row | Reverses the intake of `<cert_a>` from Cert ID details |
-| Regular stock held | The reverse action on the available `No Cert ID` row, Reduce by 1 | Reserves 1 unit, `No Cert ID`, under an admin hold |
-| Count fell below | The reverse action on the available `No Cert ID` row, Reduce by 3 | Reduces the available `No Cert ID` row by 1 |
+| Cert record held | `Remove` on `<cert_a>`'s row | Reserves `<cert_a>` under an admin hold |
+| Cert record removed | `Remove` on `<cert_a>`'s row | Removes `<cert_a>` with `Remove` from Cert ID details |
+| Regular stock held | `Reduce quantity` on the available `No Cert ID` row, Reduce by 1 | Reserves 1 unit, `No Cert ID`, under an admin hold |
+| Count fell below | `Reduce quantity` on the available `No Cert ID` row, Reduce by 3 | Reduces the available `No Cert ID` row by 1 |
 
 **Steps:**
 
@@ -790,7 +793,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click View Cert IDs.
-2. Reverse the intake of `<cert_a>`, keeping the remarks.
+2. Remove `<cert_a>` with `Remove`, keeping the remarks.
 3. Close Cert ID details.
 4. Intake quantity one with Cert ID `<cert_a>`.
 5. Click View Cert IDs.
@@ -802,16 +805,78 @@ Runs once per row of **Test data**.
 * Step 5: one row reads `<cert_a>`, Available.
 * Step 6: the history starts at the new intake.
 
+### grade10-admin-inventory-catalog-US16-TC10-1: Regular stock intaken since its last move can be reduced, earlier units cannot
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-16
+
+**Pre-conditions:**
+
+* admin(holds Inventory write authority) is on <inventory product url> of the row's product.
+* The row's product holds no Cert record but one the row's After names; its regular stock was intaken as 4 units, then took the row's Move, then `<later intake>`, then the row's After.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<later intake>` | An intake of 2 units with no Cert ID |
+
+| Row | Product | Move | After | Available | At most |
+| --- | --- | --- | --- | --- | --- |
+| Held | `<product_32>` | an admin hold of 1, active | nothing | 5 | 2 |
+| Released | `<product_33>` | an admin hold of 1, released | nothing | 6 | 2 |
+| Sold | `<product_34>` | 1 sold from available stock | nothing | 5 | 2 |
+| Withdrawn | `<product_35>` | 1 withdrawn from available stock | nothing | 5 | 2 |
+| Vaulted | `<product_36>` | 1 vaulted from a Vault hold | nothing | 5 | 2 |
+| Hold moved | `<product_42>` | an Auction hold of 1 moved to another product | nothing | 5 | 2 |
+| Assigned since | `<product_43>` | 1 sold from available stock | 1 unit given `PSA-43000001` by Assign Cert ID | 4 | 1 |
+| Moved since | `<product_45>` | nothing | an admin hold of 1, active | 5 | 0 |
+
+**Steps:**
+
+1. Click View Cert IDs.
+2. Read the available `No Cert ID` row and its actions.
+3. Where `Reduce quantity` is offered, click it and read the confirmation.
+4. Enter the row's At most plus 1.
+5. Try to confirm.
+6. Enter the row's At most, keep the remarks, and confirm.
+7. Read the available `No Cert ID` row and its actions.
+
+**Expected Results:**
+
+* Step 2: it reads the row's Available.
+* Step 2: where At most is 0, `Reduce quantity` is not offered, and the row says its units were intaken before regular stock last moved; steps 3 to 7 do not apply.
+* Step 2: elsewhere, `Reduce quantity` is offered.
+* Step 3: it says at most the row's At most units can be reduced.
+* Step 5: Confirm is unavailable; nothing is reduced.
+* Step 7: it reads the row's Available minus its At most.
+* Step 7: `Reduce quantity` is not offered, and the row says its units were intaken before regular stock last moved.
+
 ## Settled
 
-- **Regular stock at 0** — the available `No Cert ID` row reading 0 is still listed and offers no reversal: a reduction takes a whole number from 1 to the row's count, and there is none (Q8)
-- **No other ceiling** — a reduction takes any whole number from 1 to the available `No Cert ID` count in one entry, however large (Q8)
+- **Regular stock at 0** — the available `No Cert ID` row reading 0 is still listed and offers no `Reduce quantity`: a reduction takes a whole number from 1 to the reducible count, and there is none (Q8)
+- **No other ceiling** — a reduction takes any whole number from 1 to the reducible count in one entry, however large (Q8)
+- **Regular stock after a move** — the units intaken since regular stock last moved can be reduced, less those given a Cert ID or reduced since, never more than available; units intaken before it cannot. Regular stock that never moved counts from its first intake. Every step of a hold naming no Cert record is a move, its release included, and so is a sale or withdrawal of available regular stock (Q2, Q12)
+- **The action names** — `Reduce quantity` on the available `No Cert ID` row and `Remove` on a Cert record that has only been intaken, each with a tooltip saying it takes out units intaken by mistake as if never received and that withdrawn does not move; `Remove physical unit` stays only on a record that has moved (Q14)
+- **The number of units** — opens empty; Confirm stays unavailable until a whole number from 1 to the reducible count is entered, and the confirmation states that count (Q15)
 - **Remarks of spaces only** — read as empty, since every remarks field is trimmed; Confirm stays unavailable (Q4)
 - **A removed Cert record in the regular stock history** — not shown, a record numbered from regular stock included; a Cert record's removal shows in the product's history (Q7)
 - **The media line** — every Cert record's confirmation says its tagged media are deleted, whether or not any are tagged to it (Q11)
 - **Which Cert records reverse** — the records whose Cert ID can be corrected: available, and never named by a hold, active or closed, a hold since moved to another product included, nor sold, withdrawn or vaulted (Q5)
 - **One removal per Cert record** — Remove physical unit is offered only on an Available record that has moved and no active hold names; a record that has only been intaken offers the reversal instead (Q3)
-- **A Cert record's moves and regular stock** — a sold or held Cert record that was intaken as one leaves regular stock reducible, and moved regular stock leaves an unmoved Cert record removable (Q2, Q5)
+- **A Cert record's moves and regular stock** — a sold or held Cert record leaves regular stock reducible, one given its Cert ID from regular stock included, and moved regular stock leaves an unmoved Cert record removable (Q2, Q5, Q13)
 - **What falls** — stock, available and the ledger fall by the units taken out; reserved, sold, withdrawn and vaulted stay the same (Q1)
 - **A removed Cert ID** — free on the product, so a later intake takes it as a new record whose history starts at that intake (Q6)
 
@@ -822,12 +887,13 @@ Runs once per row of **Test data**.
 - **Agreed** - `grade10-admin-inventory-catalog-US14-TC8-1` with `grade10-admin-inventory-catalog-SC-182` and the durable row table's line for a product with nothing on hand; `grade10-admin-inventory-catalog-US16-TC2-1` with `grade10-admin-inventory-catalog-SC-182`, `grade10-admin-inventory-catalog-SC-184` (its Assigned row), `grade10-admin-inventory-catalog-SC-187`, `grade10-admin-inventory-catalog-SC-173` and `grade10-admin-inventory-catalog-SC-174`, its Imported and Corrected rows with the unmoved rule of the removal requirement; `grade10-admin-inventory-catalog-US16-TC3-1` with `grade10-admin-inventory-catalog-SC-187` and the confirmation requirement's cancel on either row; `grade10-admin-inventory-catalog-US16-TC7-1` with `grade10-admin-inventory-catalog-SC-180` and the reduction requirement's "nothing done to a Cert record moves it"; `grade10-admin-inventory-catalog-US16-TC8-1` with `grade10-admin-inventory-catalog-SC-191`, `grade10-admin-inventory-catalog-SC-192` and the lands-whole requirement, its Cert record removed row with the refusal of a record that does not exist and its Count fell below row with the refusal above available regular stock
 - **Rewritten, by QA2** - `grade10-admin-inventory-catalog-US4-TC2-1` for `grade10-admin-inventory-catalog-SC-172`, `grade10-admin-inventory-catalog-SC-173` and `grade10-admin-inventory-catalog-SC-174`: step 7 reads the Action `Intake reversal` and `Intake reversal · <cert_a>`, Holder `—` and the remarks, where it read one shared action; `grade10-admin-inventory-catalog-US14-TC7-1` for `grade10-admin-inventory-catalog-SC-178` and `grade10-admin-inventory-catalog-SC-176`: its stock read 2 where its data gives 1, a misreading of the arithmetic; it now also reverses an unmoved Cert record, reads the `No Cert ID` history without that removal, and reads no reversal offered at 0 (Q8); `grade10-admin-inventory-catalog-US13-TC1-3` for `grade10-admin-inventory-catalog-SC-134` and the moved half of `grade10-admin-inventory-catalog-SC-175`: reached through Cert ID details, where the record's actions live, and reads no reversal beside Remove physical unit; it replaces the durable `grade10-admin-inventory-catalog-US13-TC1-2`, whose record had never moved; `grade10-admin-inventory-catalog-US13-TC4-1` for the unmoved half of `grade10-admin-inventory-catalog-SC-175`, `grade10-admin-inventory-catalog-SC-135` and `grade10-admin-inventory-catalog-SC-184`: reads both actions in Cert ID details, where it read the product page first; `grade10-admin-inventory-catalog-US16-TC1-1` for `grade10-admin-inventory-catalog-SC-177`, `grade10-admin-inventory-catalog-SC-178`, `grade10-admin-inventory-catalog-SC-188`, `grade10-admin-inventory-catalog-SC-176` and `grade10-admin-inventory-catalog-SC-174`: its After an assignment row edits the remarks, and reads the assigned record still Available; `grade10-admin-inventory-catalog-US16-TC4-1` for `grade10-admin-inventory-catalog-SC-189`: rows of three spaces beside the cleared ones, and Confirm unavailable, where it read the reversal not made; `grade10-admin-inventory-catalog-US16-TC5-1` for `grade10-admin-inventory-catalog-SC-181`: Confirm unavailable, where it read the reduction refused; `grade10-admin-inventory-catalog-US16-TC6-1` for `grade10-admin-inventory-catalog-SC-179`, `grade10-admin-inventory-catalog-SC-185` and `grade10-admin-inventory-catalog-SC-186`: a row each for a Cert record and for regular stock whose hold moved to another product, the line on a moved `No Cert ID` row, and Remove physical unit with no Cert ID change on a moved Available record; across the suite, the reduce action and the remove action are read as the one reverse action the requirements give both rows
 - **Moved, by QA2** - QA1's `grade10-admin-inventory-catalog-US16-TC9-1` is `grade10-admin-inventory-catalog-US14-TC9-1`, for `grade10-admin-inventory-catalog-SC-190`, which serves `grade10-admin-inventory-catalog-US-14`: a reader accounts for units and takes none out; QA1's `grade10-admin-inventory-catalog-US16-TC10-1` takes the freed number, `grade10-admin-inventory-catalog-US16-TC9-1`, for `grade10-admin-inventory-catalog-SC-183`, its result sharpened to a history that starts at the new intake. Neither id was ever published
-- **Added, by QA2** - none
+- **Added, by QA2** - none; Dev added `grade10-admin-inventory-catalog-US16-TC10-1` after the answers, as above
 - **Raised, folded into spec** - none: every case reads behaviour a scenario or a requirement states
 - **Raised, rejected** - none: no case tests a non-goal or misreads the input beyond the arithmetic rewritten above
-- **Raised, escalated** - four rows in `decisions.md`'s `## Raised`, unlanded: regular stock judged as a whole after a later intake, merging QA1's first question and Dev's; whether an assigned record's later move moves regular stock, QA1's second; the action's one label on both rows, Dev's; and the reduction's starting quantity, Dev's. No case is blocked on them: `grade10-admin-inventory-catalog-US16-TC6-1` intakes no regular stock after the move, `grade10-admin-inventory-catalog-US16-TC7-1` moves no assigned record, the suite names the action by what it does, and `grade10-admin-inventory-catalog-US16-TC1-1` enters its number
+- **Raised, escalated** - four rows in `decisions.md`'s `## Raised`, all landed by the author: regular stock judged as a whole after a later intake, merging QA1's first question and Dev's (Q12); whether an assigned record's later move moves regular stock, QA1's second (Q13); the action's label on both rows, Dev's (Q14); and the reduction's starting quantity, Dev's (Q15). Each is in `## Settled`
+- **Amended after the answers, by Dev** - `grade10-admin-inventory-catalog-US16-TC6-1` keeps its Cert record rows; its regular stock rows move to the new `grade10-admin-inventory-catalog-US16-TC10-1`, which intakes after each move and reads the units intaken since reducible and the earlier ones not, for `grade10-admin-inventory-catalog-SC-179`, `grade10-admin-inventory-catalog-SC-181`, `grade10-admin-inventory-catalog-SC-194`, `grade10-admin-inventory-catalog-SC-195` and `grade10-admin-inventory-catalog-SC-196`; `grade10-admin-inventory-catalog-US16-TC7-1` gains an Assigned record moved row and reads the most units the confirmation states, for `grade10-admin-inventory-catalog-SC-180` (Q13); `grade10-admin-inventory-catalog-US16-TC1-1` reads the tooltip, the empty number, the unavailable Confirm and the stated limit on opening, for `grade10-admin-inventory-catalog-SC-188` and `grade10-admin-inventory-catalog-SC-197`; `grade10-admin-inventory-catalog-US16-TC2-1` reads the `Remove` tooltip, for `grade10-admin-inventory-catalog-SC-197`; across the suite the actions are read by their labels, `Reduce quantity`, `Remove` and `Remove physical unit`, where the suite read one reverse action (Q14)
 - **Settled by the artifacts, not raised** - QA1's questions on the action at 0 (Q8), remarks of spaces (Q4, every remarks field trimmed), an assigned record's removal in the `No Cert ID` history (Q7) and the media line on a record with none (Q11); Dev's question on a 500 ceiling (Q8); each is in `## Settled`
-- **Partly out of suite** - the request sent anyway in `grade10-admin-inventory-catalog-SC-135`, `grade10-admin-inventory-catalog-SC-175`, `grade10-admin-inventory-catalog-SC-179`, `grade10-admin-inventory-catalog-SC-181`, `grade10-admin-inventory-catalog-SC-185`, `grade10-admin-inventory-catalog-SC-186` and `grade10-admin-inventory-catalog-SC-189`, for a moved unit, a quantity out of range and blank remarks: decided by the inventory service and router tests in grade10 (tasks 3.1, 4.1 and 5.1); a reader's request sent outside the page is walked by `grade10-admin-inventory-catalog-US14-TC9-1`. The before and after snapshots, changed entity and empty reservation of `grade10-admin-inventory-catalog-SC-172` and `grade10-admin-inventory-catalog-SC-173`: decided by the same tests; a person reads the Action, quantity and remarks. The counts after the reduction in `grade10-admin-inventory-catalog-SC-180`: decided by task 4.1; `grade10-admin-inventory-catalog-US16-TC7-1` walks the offer, and `grade10-admin-inventory-catalog-US16-TC1-1` the counts of a reduction
+- **Partly out of suite** - the request sent anyway in `grade10-admin-inventory-catalog-SC-135`, `grade10-admin-inventory-catalog-SC-175`, `grade10-admin-inventory-catalog-SC-179`, `grade10-admin-inventory-catalog-SC-181`, `grade10-admin-inventory-catalog-SC-185`, `grade10-admin-inventory-catalog-SC-186` and `grade10-admin-inventory-catalog-SC-189`, and in `grade10-admin-inventory-catalog-SC-194` and `grade10-admin-inventory-catalog-SC-195`, for a moved unit, a quantity out of range and blank remarks: decided by the inventory service and router tests in grade10 (tasks 3.1, 4.1 and 5.1); a reader's request sent outside the page is walked by `grade10-admin-inventory-catalog-US14-TC9-1`. The before and after snapshots, changed entity and empty reservation of `grade10-admin-inventory-catalog-SC-172` and `grade10-admin-inventory-catalog-SC-173`: decided by the same tests; a person reads the Action, quantity and remarks. The counts after the reduction in `grade10-admin-inventory-catalog-SC-180`: decided by task 4.1; `grade10-admin-inventory-catalog-US16-TC7-1` walks the offer, and `grade10-admin-inventory-catalog-US16-TC1-1` the counts of a reduction
 - **Out of suite** - `grade10-admin-inventory-catalog-SC-193`, as listed under the title
 - **Contradicted** - none
-- **Uncovered anchors** - none: `grade10-admin-inventory-catalog-US-04` has one case, `grade10-admin-inventory-catalog-US-14` three, `grade10-admin-inventory-catalog-US-13` two and `grade10-admin-inventory-catalog-US-16` nine; every scenario from `grade10-admin-inventory-catalog-SC-172` to `grade10-admin-inventory-catalog-SC-193`, and amended `grade10-admin-inventory-catalog-SC-134` and `grade10-admin-inventory-catalog-SC-135`, is reached by a case or listed out of suite; the durable `grade10-admin-inventory-catalog-US13-TC2-1` and `grade10-admin-inventory-catalog-US13-TC3-1` stand for the rest of `grade10-admin-inventory-catalog-SC-135`, whose reserved and not-available records have moved; the group `Cert ID details` is walked by every `grade10-admin-inventory-catalog-US-16` case
+- **Uncovered anchors** - none: `grade10-admin-inventory-catalog-US-04` has one case, `grade10-admin-inventory-catalog-US-14` three, `grade10-admin-inventory-catalog-US-13` two and `grade10-admin-inventory-catalog-US-16` ten; every scenario from `grade10-admin-inventory-catalog-SC-172` to `grade10-admin-inventory-catalog-SC-197`, and amended `grade10-admin-inventory-catalog-SC-134` and `grade10-admin-inventory-catalog-SC-135`, is reached by a case or listed out of suite; the durable `grade10-admin-inventory-catalog-US13-TC2-1` and `grade10-admin-inventory-catalog-US13-TC3-1` stand for the rest of `grade10-admin-inventory-catalog-SC-135`, whose reserved and not-available records have moved; the group `Cert ID details` is walked by every `grade10-admin-inventory-catalog-US-16` case
