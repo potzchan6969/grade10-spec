@@ -503,7 +503,9 @@ decrement stock by one, increment withdrawn by one, remove the Cert record,
 and delete source media tagged to that record. Untagged product media and
 media tagged to other Cert records SHALL remain unchanged. Cert ID details
 SHALL offer Remove physical unit only on an Available Cert record that has
-moved and no active hold names.
+moved and no active hold names. Remove physical unit SHALL open a confirmation that
+names the Cert ID and holds its required reason; Confirm SHALL stay
+unavailable while the reason is blank, and cancelling SHALL change nothing.
 
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-fq8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
@@ -610,6 +612,9 @@ moved and no active hold names.
 - **WHEN** an authorized inventory admin selects each in Cert ID details
 - **THEN** `PSA-1` offers `Remove` and no `Remove physical unit`
 - **AND** `PSA-2` offers `Remove physical unit` and no `Remove`
+- **WHEN** the admin chooses `Remove physical unit` on `PSA-2`
+- **THEN** a confirmation names `PSA-2` and asks for a reason, and Confirm
+  stays unavailable until one is entered
 - **WHEN** a physical removal of `PSA-1` is sent anyway
 - **THEN** Grade10 refuses it, and stock, withdrawn, the record, its media and
   the history are unchanged
@@ -1075,7 +1080,7 @@ It SHALL land whole or not at all.
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-gbg rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-191 - A hold taken first refuses the removal
 
-**Serves:** Cert ID details - a hold and a removal on one card never both land
+**Serves:** grade10-admin-inventory-catalog-US-16 - a hold and a removal on one card never both land
 
 - **GIVEN** Cert record `PSA-1` is unmoved and an inventory admin has the
   confirmation open on it
@@ -1087,7 +1092,7 @@ It SHALL land whole or not at all.
 <!-- trace:scenario id=g10adm.inventory-catalog.SC-y0i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-192 - A hold on regular stock taken first refuses the reduction
 
-**Serves:** Cert ID details - a hold and a reduction on regular stock never both land
+**Serves:** grade10-admin-inventory-catalog-US-16 - a hold and a reduction on regular stock never both land
 
 - **GIVEN** regular stock that has never moved reads `No Cert ID` Available 3
   and an inventory admin has the confirmation open for two units
@@ -1099,7 +1104,7 @@ It SHALL land whole or not at all.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-193 - Two reductions at once take only what is there
 
-**Serves:** Cert ID details - two admins fixing one count never take out more than was intaken
+**Serves:** grade10-admin-inventory-catalog-US-16 - two admins fixing one count never take out more than was intaken
 
 - **GIVEN** regular stock that has never moved reads `No Cert ID` Available 3
 - **WHEN** two inventory admins each reduce it by two at the same moment

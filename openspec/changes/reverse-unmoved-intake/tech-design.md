@@ -61,7 +61,7 @@
 ## Decisions
 
 The [catalog delta](specs/grade10-admin/inventory/catalog/spec.md) governs
-the reversal, its refusals, its confirmation and its history entry; Q1 to Q16
+the reversal, its refusals, its confirmation and its history entry; Q1 to Q19
 settle its scope.
 
 ### Writes
@@ -216,7 +216,8 @@ settle its scope.
   while the remarks are blank or the quantity is empty or not a whole number
   from 1 to `regularStock.reducible`. Cancel closes it and sends nothing.
 - **The old reason field goes** - Remove physical unit keeps its own
-  confirmation, which now holds its reason, instead of a field under the row.
+  confirmation, which now holds its reason, instead of a field under the row
+  (Q19).
 - **After a write** - the product, its changelogs and its media are
   invalidated, so the rows, counts and history read again.
 - **Product history** - `changelogActionLabel` renders `intake-reversal` as
