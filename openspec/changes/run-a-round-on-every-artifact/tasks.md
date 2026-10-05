@@ -105,3 +105,11 @@ Needs group 9 on this store's `main` and pinned, so the pinned suites can carry 
 - [ ] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-107`
 - [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and `check:libs` runs it on every CI pass - `shared-planning-agent-rounds-SC-107`
 - [ ] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`
+
+## 11. Scope a group's reading to what it cites (grade10-spec)
+
+Raised by the context profile of 2026-10-05: a reader of one `add-card-grading` group is given 1.6 MB of the change; Q112 holds the scope.
+
+- [ ] 11.1 Tests: `bundleFor` on a group gives the plan, the proposal, the decisions and the designs, the journeys and requirements of the cited capabilities alone, the cases only where a task line names `feature-tcs.md`, and every capability to a group citing none - `shared-planning-agent-rounds-SC-108`
+- [ ] 11.2 `bundleFor` reads the group's task lines from `tasks.md` and keeps the per-capability upstream to the capabilities they cite - `shared-planning-agent-rounds-SC-108`
+- [ ] 11.3 Verify: `pnpm run test:openspec`, `pnpm check:manual`, `pnpm run validate:changes run-a-round-on-every-artifact`

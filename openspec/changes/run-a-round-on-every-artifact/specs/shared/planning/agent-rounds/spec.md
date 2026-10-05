@@ -648,6 +648,11 @@ and everything after an artifact SHALL be drawn from it.
   carries one `upstream:` entry and one `reviewed:` line per artifact id, never
   one per capability
 - **A change's own artifact, whole** — every line of it is upstream
+- **A task group's reading, scoped** — a group's readers are given the plan,
+  the proposal, the decisions and the designs whole, and of the journeys and
+  requirements only the capabilities its task lines cite; the cases only where
+  a task line names `feature-tcs.md`. A group that cites no capability is given
+  every one, and freshness still reads the whole set
 - **A page, in sections** — only the sections the change links, because a page
   carries the marks of many changes
 - **The record is never upstream** — a change's own `.openspec.yaml` is in no
@@ -656,6 +661,15 @@ and everything after an artifact SHALL be drawn from it.
   after it waits on it
 - **The code keeps no read record** — no `reviewed:` line is written for the
   code; a behind `tasks.md` refuses the group's landing instead
+
+#### Scenario: shared-planning-agent-rounds-SC-108 - A group's reader is given the capabilities it cites
+**Serves:** Perspectives as data - a group's reading holds what the group builds, not the whole change
+
+- **GIVEN** a change specifying two capabilities, and a group whose tasks cite scenarios of one
+- **WHEN** a reader of that group is dispatched
+- **THEN** it is given the plan, the proposal, the decisions and the designs whole
+- **AND** the journeys and requirements of the cited capability alone
+- **AND** a group whose tasks cite no capability is given every capability's
 
 #### Scenario: shared-planning-agent-rounds-SC-32 - A waived design leaves nothing behind it
 **Serves:** Read again, in order - a change that owes no design still lands its requirements
