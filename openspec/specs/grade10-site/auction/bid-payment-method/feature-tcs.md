@@ -446,7 +446,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
