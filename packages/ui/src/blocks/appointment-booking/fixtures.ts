@@ -177,6 +177,7 @@ const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   email: "Email",
   phone: "Phone",
   notes: "Anything we should know?",
+  notesHint: "For the desk — not an intake record.",
   optional: "optional",
   nameMissing: "Tell us your name.",
   emailMissing: "Tell us where to send the confirmation.",

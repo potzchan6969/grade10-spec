@@ -4,6 +4,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
+import { formatLocalDay } from "../../lib/format-datetime";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
 import type { LocaleProps } from "./booking-copy";
@@ -31,7 +32,7 @@ type BookingListProps = LocaleProps & {
   className?: string;
 };
 
-/** Upcoming visits soonest first, then past or closed ones latest first. */
+/** Upcoming visits soonest first, grouped by day, then past latest first. */
 function BookingList({
   copy,
   records,
@@ -65,6 +66,7 @@ function BookingList({
               {upcoming.length > 0 ? (
                 <Section
                   copy={copy}
+                  groupByDay
                   heading={copy.upcomingHeading}
                   locale={locale}
                   onOpen={onOpen}
@@ -110,6 +112,7 @@ function Section({
   timeZoneLabels,
   slot,
   onOpen,
+  groupByDay = false,
 }: LocaleProps & {
   heading: string;
   records: readonly BookingRecord[];
@@ -117,55 +120,84 @@ function Section({
   timeZoneLabels?: Readonly<Record<string, string>>;
   slot: string;
   onOpen: (bookingId: string) => void;
+  groupByDay?: boolean;
 }) {
+  const groups: { day?: string; records: readonly BookingRecord[] }[] =
+    groupByDay ? groupRecords(records, locale) : [{ records }];
   return (
     <VStack data-slot={slot} gap="sm" hAlign="stretch">
       <Text as="h2" size="lg" weight="medium">
         {heading}
       </Text>
-      {records.map((record) => (
-        <HStack
-          className="w-full rounded-2xl border border-border bg-card p-4"
-          data-slot="booking-list-item"
-          hAlign="space-between"
-          key={record.id}
-          vAlign="center"
-        >
-          <VStack gap="xs" hAlign="start">
-            <HStack gap="sm" vAlign="center">
-              <Text as="span" weight="medium">
-                {record.service}
+      {groups.map((group) => (
+        <VStack gap="sm" hAlign="stretch" key={group.day ?? heading}>
+          {group.day ? (
+            <Text as="h3" size="sm" weight="medium">
+              {group.day}
+            </Text>
+          ) : null}
+          {group.records.map((record) => (
+            <div
+              className="grid w-full grid-cols-1 gap-2 border-b border-border py-4 last:border-b-0 sm:grid-cols-[minmax(12rem,1.2fr)_minmax(10rem,1fr)_minmax(14rem,1.4fr)_auto] sm:items-center sm:gap-6"
+              data-slot="booking-list-item"
+              key={record.id}
+            >
+              <HStack gap="sm" vAlign="center">
+                <Text as="span" weight="medium">
+                  {record.service}
+                </Text>
+                <BookingStateBadge
+                  label={copy.state[record.state]}
+                  state={record.state}
+                />
+              </HStack>
+              <Text as="span" size="sm" tone="secondary">
+                {record.location}
               </Text>
-              <BookingStateBadge
-                label={copy.state[record.state]}
-                state={record.state}
-              />
-            </HStack>
-            <Text as="span" size="sm" tone="secondary">
-              {record.location}
-            </Text>
-            <Text as="span" size="sm">
-              {formatBookingWhen({
-                start: record.start,
-                end: record.end,
-                timeZone: record.timeZone,
-                timeZoneLabel: timeZoneLabels?.[record.timeZone],
-                locale,
-              })}
-            </Text>
-          </VStack>
-          <Button
-            onClick={() => onOpen(record.id)}
-            size="sm"
-            type="button"
-            variant="outline"
-          >
-            {copy.open}
-          </Button>
-        </HStack>
+              <Text as="span" size="sm">
+                {formatBookingWhen({
+                  start: record.start,
+                  end: record.end,
+                  timeZone: record.timeZone,
+                  timeZoneLabel: timeZoneLabels?.[record.timeZone],
+                  locale,
+                })}
+              </Text>
+              <Button
+                className="justify-self-start sm:justify-self-end"
+                onClick={() => onOpen(record.id)}
+                size="sm"
+                type="button"
+                variant="ghost"
+              >
+                {copy.open}
+              </Button>
+            </div>
+          ))}
+        </VStack>
       ))}
     </VStack>
   );
+}
+
+function groupRecords(
+  records: readonly BookingRecord[],
+  locale: LocaleProps["locale"],
+) {
+  const groups: { day: string; records: BookingRecord[] }[] = [];
+  for (const record of records) {
+    const day = formatLocalDay(record.start, {
+      locale,
+      timeZone: record.timeZone,
+    });
+    const last = groups.at(-1);
+    if (last && last.day === day) {
+      last.records.push(record);
+    } else {
+      groups.push({ day, records: [record] });
+    }
+  }
+  return groups;
 }
 
 export type { BookingListCopy, BookingListProps };

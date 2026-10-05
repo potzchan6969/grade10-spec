@@ -17,6 +17,8 @@ type BookingDetailsFormCopy = {
   email: string;
   phone: string;
   notes: string;
+  /** Shown under notes when the answers are for the desk only. */
+  notesHint?: string;
   /** Marks an optional field and an optional question: `Optional`. */
   optional: string;
   nameMissing: string;
@@ -135,12 +137,19 @@ function BookingDetailsForm({
             question={question}
           />
         ))}
-        <TextInput
-          label={`${copy.notes} (${copy.optional})`}
-          name="notes"
-          onChange={(event) => setNotes(event.target.value)}
-          value={notes}
-        />
+        <VStack gap="xs" hAlign="stretch">
+          <TextInput
+            label={`${copy.notes} (${copy.optional})`}
+            name="notes"
+            onChange={(event) => setNotes(event.target.value)}
+            value={notes}
+          />
+          {copy.notesHint ? (
+            <Text as="p" size="sm" tone="muted">
+              {copy.notesHint}
+            </Text>
+          ) : null}
+        </VStack>
         {error ? (
           <Text as="p" data-slot="booking-details-error" size="sm" tone="error">
             {error}

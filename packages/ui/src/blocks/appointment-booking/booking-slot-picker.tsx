@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -53,8 +54,6 @@ type BookingSlotPickerProps = LocaleProps & {
   className?: string;
 };
 
-const CELL_CLASS = "size-10 p-0 text-sm";
-
 /** How far the first day sits from Monday, as grid columns. */
 const LEADING_SPAN = [
   "",
@@ -67,9 +66,8 @@ const LEADING_SPAN = [
 ] as const;
 
 /**
- * A month of the shop's days, marked available or not, and the picked day's
- * times in the shop's zone. Everything shown is what the consumer passed:
- * the picker decides nothing about the diary.
+ * A month calendar beside the picked day's times. Everything shown is what
+ * the consumer passed: the picker decides nothing about the diary.
  */
 function BookingSlotPicker({
   copy,
@@ -98,10 +96,13 @@ function BookingSlotPicker({
 
   return (
     <div
-      className={cn("grid gap-6 md:grid-cols-[auto_1fr]", className)}
+      className={cn(
+        "grid gap-8 lg:grid-cols-[minmax(17rem,20rem)_minmax(12rem,1fr)]",
+        className,
+      )}
       data-slot="booking-slot-picker"
     >
-      <VStack data-slot="booking-day-picker" gap="sm">
+      <VStack data-slot="booking-day-picker" gap="sm" hAlign="stretch">
         <Text as="h2" size="lg" weight="medium">
           {copy.dayTitle}
         </Text>
@@ -138,7 +139,7 @@ function BookingSlotPicker({
           )}
         </AsyncRegion>
       </VStack>
-      <VStack data-slot="booking-time-picker" gap="sm">
+      <VStack data-slot="booking-time-picker" gap="sm" hAlign="stretch">
         <Text as="h2" size="lg" weight="medium">
           {copy.timeTitle}
         </Text>
@@ -157,26 +158,34 @@ function BookingSlotPicker({
                   {copy.noTimes}
                 </Text>
               ) : (
-                <div
-                  className="grid grid-cols-3 gap-2"
-                  data-slot="booking-times"
-                >
-                  {list.map((slot) => (
-                    <Button
-                      aria-pressed={slot.start === selectedStart}
-                      data-slot="booking-time"
-                      key={slot.start}
-                      onClick={() => onSelectSlot(slot)}
-                      size="sm"
-                      type="button"
-                      variant={
-                        slot.start === selectedStart ? "default" : "outline"
-                      }
-                    >
-                      {formatLocalTime(slot.start, { locale, timeZone })}
-                    </Button>
-                  ))}
-                </div>
+                <VStack data-slot="booking-times" gap="sm" hAlign="stretch">
+                  {list.map((slot) => {
+                    const selected = slot.start === selectedStart;
+                    const startLabel = formatLocalTime(slot.start, {
+                      locale,
+                      timeZone,
+                    });
+                    const endLabel = formatLocalTime(slot.end, {
+                      locale,
+                      timeZone,
+                    });
+                    return (
+                      <Button
+                        aria-label={startLabel}
+                        aria-pressed={selected}
+                        className="w-full"
+                        data-slot="booking-time"
+                        key={slot.start}
+                        onClick={() => onSelectSlot(slot)}
+                        size="md"
+                        type="button"
+                        variant={selected ? "default" : "outline"}
+                      >
+                        {startLabel}–{endLabel}
+                      </Button>
+                    );
+                  })}
+                </VStack>
               )
             }
           </AsyncRegion>
@@ -224,20 +233,23 @@ function MonthGrid({
         const selected = date === selectedDate;
         const open = available.has(date);
         return (
-          <Button
+          <button
             aria-pressed={selected}
-            className={CELL_CLASS}
+            className={cn(
+              "size-10 rounded-full text-sm tabular-nums transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
+              selected && "bg-primary text-primary-foreground",
+              !selected && open && "hover:bg-muted",
+              !open && "cursor-not-allowed text-muted-foreground/40",
+            )}
             data-available={open}
             data-slot="booking-day"
             disabled={!open}
             key={date}
             onClick={() => onSelectDay(date)}
-            size="sm"
             type="button"
-            variant={selected ? "default" : open ? "outline" : "ghost"}
           >
-            {dayOf(date)}
-          </Button>
+            <Center className="size-full">{dayOf(date)}</Center>
+          </button>
         );
       })}
     </div>

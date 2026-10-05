@@ -30,7 +30,7 @@ function BookingServicePicker({
       </Text>
       <AsyncRegion slot="booking-services" state={services}>
         {(list) => (
-          <VStack gap="sm" hAlign="stretch">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {list.map((service) => (
               <ChoiceCard
                 description={service.description}
@@ -42,7 +42,7 @@ function BookingServicePicker({
                 title={service.name}
               />
             ))}
-          </VStack>
+          </div>
         )}
       </AsyncRegion>
     </VStack>

@@ -28,6 +28,23 @@ export const Default: Story = {
   },
 };
 
+/** One shop is a fact row, not a radio list. */
+export const OneShop: Story = {
+  args: {
+    locations: { status: "ready", data: [CENTRAL] },
+    selectedId: CENTRAL.id,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("button", { name: /Grade10 Central/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(
+      canvas.getByText("12 Queen’s Road Central, Hong Kong"),
+    ).toBeVisible();
+  },
+};
+
 export const Empty: Story = {
   args: {
     locations: {
