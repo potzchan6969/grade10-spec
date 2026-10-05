@@ -268,6 +268,9 @@ by card, reads:
 The invoice is paid once and in full; paying it in parts is an operator's
 doing, under Edge Cases.
 
+🚧 Bank-transfer proof submit confirms the handoff, leaves the dialog open on
+failure, and locks the form while work is in progress.
+
 ::image{src="assets/diagrams/auction-payment.svg" alt="Paying an auction invoice: the winner pays by card and the provider confirms it, or transfers and uploads proof an operator confirms or returns; an unpaid invoice expires on day 7 and is reissued, settled or cancelled"}
 
 ### By Card

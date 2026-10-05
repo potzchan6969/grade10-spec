@@ -97,14 +97,12 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-lot-status-US2: Collector does not see draft or called-off lots
+## grade10-site-auction-lot-status-US2: Collector does not find draft or called-off lots in browse or search
 
 **As a** collector,
-**I want** lots that were never published or were called off to be hidden from me,
-**so that** I do not spend time on a lot that never went to auction.
+**I want** draft lots and called-off lots absent from browse, search and my watchlist,
+**so that** I can use a called-off lot's original address directly without it appearing as an available auction.
 
-<!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
-<!-- review-note 2026-09-29: keep draft for now. Combine with grade10-site-auction-e2e-US11-TC01-1 after define-public-auction-identifiers folds, keeping only the latest behaviour. -->
 ### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.
@@ -226,6 +224,40 @@ Runs once per row of **Test data**.
 * <lot_3> is not included.
 * <lot_2> is included, external lot status Ended.
 
+<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->
+### grade10-site-auction-lot-status-US2-TC4-1: A called-off lot stays reachable at its canonical address
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-lot-status-US-02
+
+**Pre-conditions:**
+
+* A published listing has canonical address `<listing_url>` and code `<listing_code>`.
+
+**Steps:**
+
+1. Call the listing off.
+2. Search the catalogue and browse for the listing.
+3. Open `<listing_url>` directly.
+4. Try `<listing_code>` as an address.
+
+**Expected Results:**
+
+* Catalogue and search do not return the listing.
+* `<listing_url>` still serves the public listing page.
+* The listing code does not resolve as an address.
+* The canonical URL and code remain reserved.
+
 ---
 
 ## grade10-site-auction-lot-status-US3: Bidder sees what happened to a called-off lot
@@ -273,3 +305,10 @@ Runs once per row of **Test data**.
 * Step 1 lists <lot_4>, and the row says Your card was not charged.
 * Step 1's row names no card hold, release or authorization.
 * Step 2 does not list <lot_4>.
+
+## Reconciliation
+
+| Finding | Disposition |
+| --- | --- |
+| Whether removing a lot from browse/search also disables its original address | Settled in Q16 and the listing-page and lot-status deltas: browse/search omit the called-off lot; the canonical address remains directly accessible and permanently reserved. |
+| Whether the listing code can act as a route | The code remains a non-route; this case checks the public address boundary. |

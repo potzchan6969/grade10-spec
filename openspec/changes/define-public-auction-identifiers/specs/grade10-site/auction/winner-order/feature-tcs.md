@@ -277,35 +277,6 @@
 * Stripe metadata carries the Grade10 payment reference.
 * The provider reference appears on no winner-facing surface.
 
-### winner-order-US22-TC5-1: Bank instructions keep the no-Copy rule
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-22
-
-**Pre-conditions:**
-
-* A pending bank-transfer invoice has payment reference `LK423`.
-
-**Steps:**
-
-1. Open View Bank Details.
-2. Inspect the visible rail fields, amount due, and payment reference.
-
-**Expected Results:**
-
-* The three bank-transfer rails show the payment reference to quote.
-* No Copy control appears for a rail field, amount due, or payment reference.
-
 ## Reconciliation
 
 | Finding | Disposition |
@@ -313,6 +284,6 @@
 | Required identifier scenarios SC-114 and SC-122–SC-128 | Preserved in the winner-order spec; cases cover the changed identifier behavior. |
 | Existing receipt identifier scenario SC-131 | The winner-facing identifier retains the listing payment reference; this change does not change its existing format or receipt breakdown. |
 | UUID/listing-ID projection | A projection may collide; the allocator retries against active codes and retained reservations. |
-| Bank-transfer copy controls | Settled: View Bank Details keeps no Copy controls for rail fields, amount due, and the payment reference. |
+| Bank-transfer presentation | `add-winner-how-to-pay-rails` owns the detail rows, including its no-Copy rule; this change supplies only the payment-reference value. |
 | Admin permission and placement | Settled: existing listing-admin read access shows the code in both the Listings table and detail screen; knowing it cannot grant access or private data. |
 | Cached-preview behavior | Settled in Q15: previously cached content may persist without purge or regeneration; current pages and fresh metadata omit the code and private data. |

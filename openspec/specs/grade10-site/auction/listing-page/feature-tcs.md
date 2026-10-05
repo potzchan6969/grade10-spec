@@ -648,6 +648,507 @@ Runs once per row of **Test data**.
 
 ---
 
+## grade10-site-auction-listing-page-US10: Collector quotes a published lot
+
+**As a** collector browsing a listing,
+**I want** to reference and share a lot by its title and URL,
+**so that** I can discuss it with others and return to it easily.
+
+### grade10-site-auction-listing-page-US10-TC1-1: Listing code absent from the response before scripts run
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. View the page's response source before any script runs.
+3. Identify each occurrence of the lot's listing code and inspect its context.
+
+**Expected Results:**
+
+* The source names the lot by its title.
+* The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
+
+### grade10-site-auction-listing-page-US10-TC2-1: Listing code absent from the page once scripts finish running
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>` and let the page finish loading its scripts.
+2. View the rendered page and its current source.
+3. Identify each occurrence of the lot's listing code in both.
+
+**Expected Results:**
+
+* The rendered page has no labelled listing-code or payment-reference field.
+* Every code occurrence in the source is the lower-case suffix of the canonical address.
+
+### grade10-site-auction-listing-page-US10-TC3-1: Listing code absent from the shared-link preview
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Fetch the share-preview metadata for `<a published lot's address>`.
+2. Search the preview's title, description and url for the lot's listing code.
+
+**Expected Results:**
+
+* The preview's title and description have no labelled listing-code or payment-reference field.
+* Its URL is the canonical address ending in the lower-case listing-code suffix.
+
+Previously cached preview content may persist; the test does not require a
+purge or regeneration. A fresh preview fetch must satisfy the absence above.
+
+### grade10-site-auction-listing-page-US10-TC4-1: Listing code absent from the page title and meta description
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. Read the browser tab title and the page's meta description.
+
+**Expected Results:**
+
+* Neither the tab title nor the meta description contains the listing code.
+
+### grade10-site-auction-listing-page-US10-TC5-1: Listing code absent from the page's embedded data
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. View the page's response source.
+3. Search any data embedded in the document, outside the visible text, for the lot's listing code.
+
+**Expected Results:**
+
+* No field in the embedded data carries the listing code.
+
+### grade10-site-auction-listing-page-US10-TC6-1: Listing code absent from the page's own network responses
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>` and let the page finish loading.
+2. Inspect the responses the page's own client-side requests receive.
+3. Search those responses for the lot's listing code.
+
+**Expected Results:**
+
+* No page response contains a separate listing-code or payment-reference field.
+
+### grade10-site-auction-listing-page-US10-TC7-1: Listing code does not resolve as a lot address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists and its listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open the auction's lot-address path, substituting the lot's listing code for its usual identifier.
+
+**Expected Results:**
+
+* The address does not resolve to that lot's page.
+* The site's not-found surface is shown, the same as for any address naming no published lot.
+
+### grade10-site-auction-listing-page-US10-TC8-1: Listing code stays absent regardless of the collector's signed-in state
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>` as a signed-out visitor and search the page and its source for the lot's listing code.
+2. Open the same address signed in as a registered collector and repeat the search.
+
+**Expected Results:**
+
+* Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
+* The title and address shown are identical in both views.
+
+### grade10-site-auction-listing-page-US10-TC9-1: Listing code stays absent once an order exists on the lot
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A lot's auction has closed with a winning bid, so an order now exists on that lot.
+
+**Steps:**
+
+1. Open the lot's own address on the public listing page.
+2. View the page, its source, and its share-preview metadata.
+3. Inspect every occurrence of the lower-case listing-code suffix, which is now also the order's payment reference.
+
+**Expected Results:**
+
+* The page and preview contain no labelled listing-code or payment-reference field.
+* The code appears only as the lower-case suffix of the canonical address.
+
+### grade10-site-auction-listing-page-US10-TC10-1: An address naming no lot carries no listing code
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* The catalogue publishes no lot for `<a lot address naming no published lot>`.
+
+**Steps:**
+
+1. Fetch `<a lot address naming no published lot>`.
+2. Search the response, including any error detail, for a listing code.
+
+**Expected Results:**
+
+* Response status is 404.
+* No listing code appears anywhere in the response.
+
+### grade10-site-auction-listing-page-US10-TC11-1: A listing removed from browse and search remains available at its original URL
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
+* The listing has been removed from browse and search without being explicitly deleted.
+
+**Steps:**
+
+1. Browse the auction catalogue and search for the listing.
+2. Open `<listing_url>` directly.
+3. Inspect the rendered page, response source and fresh share-preview metadata.
+
+**Expected Results:**
+
+* Browse and search do not return the listing.
+* `<listing_url>` still returns its public listing page.
+* The page and fresh preview identify the listing by its public title and canonical URL.
+* Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
+* Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
+
+### grade10-site-auction-listing-page-US10-TC12-1: A cached preview may persist after browse/search removal without private data
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A preview for `<listing_url>` was cached while the listing was publicly available.
+* The listing is subsequently removed from browse and search, without explicit deletion.
+* An authorized admin or the winner knows `<listing_code>`.
+
+**Steps:**
+
+1. Request the existing cached preview for `<listing_url>`.
+2. Inspect its title, description, URL, image and embedded metadata.
+
+**Expected Results:**
+
+* The cached preview may continue to show previously cached public listing metadata and `<listing_url>`.
+* It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data.
+* A persistent preview does not make the listing discoverable through browse or search.
+
+---
+
+## grade10-site-auction-listing-page-US11: Collector contacts support about a lot
+
+**As a** collector contacting support about a lot,
+**I want** support to quickly identify which lot I'm referring to,
+**so that** my inquiry is resolved faster without having to copy listing URLs or titles.
+
+### grade10-site-auction-listing-page-US11-TC1-1: No listing code available on the page for the collector to send
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. Inspect the visible page and its source for a labelled listing-code or payment-reference field.
+
+**Expected Results:**
+
+* The page has no labelled listing-code or payment-reference field for the collector to copy; its canonical address may end in the lower-case code suffix.
+
+### grade10-site-auction-listing-page-US11-TC2-1: A listing code known from elsewhere gives no working link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A published lot exists and its listing code is known from a leak or from another surface.
+
+**Steps:**
+
+1. Attempt to open the lot's address by substituting its listing code for the lot's usual identifier.
+
+**Expected Results:**
+
+* The listing code does not resolve to the lot.
+* No working link to the lot can be built from the code alone.
+
+### grade10-site-auction-listing-page-US11-TC3-1: Title and address stay the collector's only reference once an order exists
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A lot's auction has closed with a winning bid, so an order now exists on that lot.
+
+**Steps:**
+
+1. Open the lot's own address on the public listing page.
+2. Note its title and address, and search the page for the lot's listing code.
+
+**Expected Results:**
+
+* The title and canonical address are unchanged by the order.
+* The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
+
+### grade10-site-auction-listing-page-US11-TC4-1: Called-off listing remains directly accessible
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A listing has an allocated canonical address and listing code.
+
+**Steps:**
+
+1. Call the listing off before close.
+2. Open its canonical address directly.
+3. Search browse and search results for the listing.
+4. Try the listing code as the address.
+
+**Expected Results:**
+
+* The canonical address still resolves to the called-off listing.
+* The listing is absent from browse and search.
+* The listing code does not resolve as a public route.
+
+---
+
 ## grade10-site-auction-listing-page-US12: Collector sees another bid on the lot without reloading
 
 **As a** collector,
@@ -1573,6 +2074,35 @@ Runs once per row of **Test data**.
 | Questions for the PM | None - Q6 settles the order of a tie and the build keeps it, and Q1 to Q5 the rest |
 
 **Uncovered anchors:** none. Recent bids outcome's two items each have cases - winner after close by `grade10-site-auction-listing-page-US14-TC7-1` and `-US14-TC8-1`, equal-max tip by `-US12-TC7-1` and `-US12-TC8-1` - and each of `grade10-site-auction-listing-page-SC-48` to `-SC-51` is asserted by one of them; every case stays `draft`.
+
+**Run:** the suite pass read the isolated bundle assembled by hand at
+`/private/tmp/.../scratchpad/blind-suite-isolated-input.md` (Purpose, Feature
+set with the new "Public identifier" group, this capability's
+`user-journeys.md` including US-10 and US-11, `decisions.md` with `## Raised`
+included, the two PRD sections, and the existing `feature-tcs.md` for id
+continuity); it was denied `## Requirements`, `openspec/specs/` beyond the
+quoted sections, and `openspec/changes/archive/`. The scenario pass read
+`proposal.md`, `decisions.md`, this capability's `user-journeys.md`, the
+durable `spec.md`'s full `## Requirements`, and the same two PRD sections; it
+did not read `feature-tcs.md` or the suite draft.
+
+| Diff | Disposition |
+| --- | --- |
+| Suite carried a case for the listing code staying absent once scripts finish running (US10-TC2); no scenario stated it — the scenario draft's "Server-rendered response" bullet only covered the pre-script HTML | Real: the requirement's after-scripts behaviour is undecided by any prior requirement, and the durable "served lot becomes live without blanking" requirement is silent on the listing code. Folded in as `grade10-site-auction-listing-page-SC-25` |
+| Suite carried a case for the listing code not resolving as a lot address (US10-TC7, US11-TC2); no scenario stated it | Real: whether the code could double as an alternate lookup key was never proposed or ruled out. Folded in as `grade10-site-auction-listing-page-SC-26` |
+| Suite carried a case for a separate listing-code field staying absent once an order exists on the lot (US10-TC9, US11-TC3); no scenario stated it | Real, and already settled by decisions.md Q18 and the proposal: the lower-case code is the canonical-address suffix, never a labelled public field, regardless of whether an order exists. Folded in as `grade10-site-auction-listing-page-SC-27` |
+| Suite carried a case for the listing code staying absent regardless of signed-in state (US10-TC8) | Already covered: `SC-20`'s GIVEN/WHEN never conditions on an actor or auth state, so the rule is already unconditional across signed-in and signed-out visitors. No new scenario; case kept as a boundary check against that existing scenario |
+| Suite carried two positive cases on US10 (title/address present in the served response; shared-link preview names the lot by title/address) | Misreading of scope: both duplicate durable `grade10-site-auction-listing-page-SC-01` and `-SC-03`, which already prove a lot's title, description and preview render correctly. Not new behaviour from this change. Dropped |
+| Suite carried two positive cases on US11 (title/address together identify exactly one lot; the address a collector quotes reopens the same lot) | Misreading of scope: both duplicate durable `SC-01`/`SC-02`/`SC-05` (two lots answer as two pages; a published lot's address answers). Not new behaviour from this change. Dropped |
+| Suite carried a case on US11 for a closed lot still resolving by title and address | Misreading of scope: tests general lot-status resolution (Ended lots stay published), which is `grade10-site/auction/lot-status`'s durable behaviour, not this change's identifier guard. Dropped |
+| Scenario draft's `SC-24` (not-found response carries no listing code) reached no suite case | Hole: added `grade10-site-auction-listing-page-US10-TC10-1`, tracing `US-10` — an in-flight delta's suite can only trace journeys this same delta defines, and the durable `US-03` journey (whose not-found requirement this scenario extends) is not part of this delta's `user-journeys.md` |
+| Suite's raised question on whether a stale/cached share-preview generated before this change could still surface on a re-share | **Decided in Q15:** old cached content may persist and no purge or regeneration is guaranteed; current pages and fresh metadata still omit the code and private data |
+| Suite's raised question on whether the collector-facing payment reference (Q6) ever appears on the listing page after an order exists | Already settled, not a genuine gap: Q10 and the proposal are unconditional that the listing page never shows the code, in any order state. Resolved directly as `SC-27` rather than raised |
+| Suite's raised question on whether signed-in state matters here | Already settled, not a genuine gap: the requirement's rule is stated with no actor qualifier. No row raised |
+| Suite's raised question on whether a code-shaped-but-wrong guess is handled differently from an ordinary bad address | Already settled by the durable "An address that names no lot is refused" requirement plus this delta's `SC-26`: a listing code is not wired into the address's lookup at all, so it is refused the same as any other unrecognized address. No row raised |
+
+No contradiction between the two readings arose — both independently concluded
+the code must never appear on this capability's public surfaces.
 
 ### Manual
 

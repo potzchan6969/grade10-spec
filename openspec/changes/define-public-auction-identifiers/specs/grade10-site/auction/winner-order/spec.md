@@ -39,7 +39,7 @@
   - Internal audit number: one gapless count across invoices and receipts, never shown to the winner
   - Replaced invoice: an invoice a reissue replaced says so and names its replacement
 - Bank transfer
-  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote and no Copy controls
+  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote; the bank-rail presentation is governed by `add-winner-how-to-pay-rails`
   - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
   - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
@@ -137,13 +137,13 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **AND** the order's current invoice carries its own invoice ID, built from the same unchanged payment reference
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-sjx rev=1 -->
-#### Scenario: winner-order-SC-98 - A replaced invoice names its replacement
+#### Scenario: winner-order-SC-98 - A replacement invoice names the invoice it replaces
 **Serves:** winner-order-US-22 - Winner reviews invoice and payment details
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
-- **WHEN** the winner opens the first invoice's PDF
-- **THEN** it says the invoice was replaced and names the new invoice's invoice ID
-- **AND** the first invoice holds no invoice status and does not read `cancelled`
+- **WHEN** the winner opens the replacement invoice's PDF
+- **THEN** it shows `Replaces invoice` and the first invoice's invoice ID
+- **AND** the first invoice remains retained, holds no invoice status and does not read `cancelled`
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-12a rev=1 -->
 #### Scenario: winner-order-SC-114 - The invoice ID is shown on the order and the PDF
@@ -234,47 +234,6 @@ obtained, and SHALL NOT reach the winner on any surface.
 
 ## MODIFIED Requirements
 
-### Requirement: A bank transfer invoice shows how to pay
-
-A pending bank transfer invoice tells the winner where to send the money and
-what payment reference to quote.
-
-**Three ways to pay** - While an invoice sent for bank transfer is `pending`,
-Winner Order SHALL show these three ways to pay in place of card Pay. Each
-SHALL ask the winner to quote the invoice's payment reference. Submit Payment
-Proof SHALL offer no Copy control for any rail field, amount due, or payment
-reference. Each rail shows the account details in the table below.
-
-| Way to pay | Details shown |
-| --- | --- |
-| SWIFT | Beneficiary name, SWIFT/BIC, account number or IBAN |
-| FPS | FPS ID, beneficiary name |
-| Hong Kong local bank transfer | Bank name and bank code, beneficiary name, account number |
-
-**No card Pay** - Grade10 SHALL offer no card Pay control on a bank transfer
-invoice and SHALL refuse a card payment attempted against one. A winner who
-wants to pay by card asks Grade10, and an operator reissues the invoice.
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-bmm rev=2 -->
-#### Scenario: winner-order-SC-95 - A bank transfer invoice shows three ways and the reference
-**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
-
-- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
-- **WHEN** the winner opens Winner Order
-- **THEN** SWIFT, FPS and Hong Kong local bank transfer details are shown with the fields above
-- **AND** each asks the winner to quote the payment reference
-- **AND** no Copy control appears for a rail field, amount due, or payment reference
-- **AND** no card Pay control is offered
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-dvp rev=1 -->
-#### Scenario: winner-order-SC-96 - A card payment on a bank transfer invoice is refused
-**Serves:** Bank transfer - card Pay is not offered on a bank transfer invoice
-
-- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
-- **WHEN** a card payment is attempted for that invoice
-- **THEN** Grade10 refuses it
-- **AND** the invoice is still `pending`
-
 ### Requirement: Records the winner keeps
 
 Each auction order SHALL carry these records, retrievable by the winner for
@@ -332,12 +291,9 @@ The receipt SHALL name the payment method:
 | Bank transfer, proof confirmed by an operator | Bank transfer |
 | Recorded by an operator | Bank transfer, cash, or the description the operator gave for another method, with the external reference where one was recorded |
 
-A receipt for a confirmed bank transfer SHALL NOT be marked as manually
-settled. A receipt for a manually settled order SHALL be marked as manually settled,
-SHALL be visually distinguishable from a card-settled receipt, and SHALL
-record the amount settled, the payment method, the external reference, and a
-pointer to any invoice it supersedes. No proof file, the winner's or an
-operator's, SHALL appear on the receipt.
+A receipt SHALL record the amount settled, the payment method, and the external
+reference when one was recorded. No proof file, the winner's or an operator's,
+SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-49p rev=1 -->
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
@@ -350,17 +306,15 @@ operator's, SHALL appear on the receipt.
   the subtotal, the payment processing fee, and the order total
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-9qq rev=1 -->
-#### Scenario: winner-order-SC-19 - A manually settled receipt says so
+#### Scenario: winner-order-SC-19 - A manually settled receipt records payment facts
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order an operator settled by bank transfer with an
   external reference, after reissuing and replacing an earlier invoice
 - **WHEN** the winner opens the receipt
-- **THEN** it is marked as manually settled and is distinguishable from a
-  card-settled receipt
-- **AND** it records the amount settled, which includes the payment processing
-  fee, bank transfer as the method, the external reference, and the invoice it
-  supersedes
+- **THEN** it records the amount settled, which includes the payment processing
+  fee, bank transfer as the method, and the external reference
+- **AND** it carries no settlement-origin badge
 - **AND** it shows no proof file
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=1 -->
