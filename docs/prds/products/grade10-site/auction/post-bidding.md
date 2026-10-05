@@ -157,7 +157,7 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| 🚧 Payment method | Card in every currency; bank transfer where Grade10 holds bank details for the order's currency; each choice shows its fee range | Nothing preselected |
+| 🚧 Payment method | Card in a currency with a card fee rule; bank transfer where Grade10 holds bank details for the order's currency; each choice shows its fee range | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -178,6 +178,24 @@ hours of the close.
   order show the confirmed snapshot: company name when the address is
   company, recipient name, phone, and the full address including postal code
   (not the lean picker card body)
+- 🚧 **Billing country or region list** — billing Add Address uses the same
+  full A–Z list and searchable field as delivery
+- **Every destination listed** — the picker lists every country and region,
+  including ones Grade10 does not ship to; limiting it to shippable
+  destinations is later work, not this page's
+- 🚧 **Catalogue display locale** — Country/Region names follow the
+  account's language, as the rest of the site does
+
+- 🚧 **Fee range wording** — card reads `Card fee about 3.4% + a fixed
+  amount`; bank transfer reads `Bank fee set on your invoice` and names no
+  amount, because the operator sets that fee
+- 🚧 **One-time address after a reload** — an unsaved one-time address stays
+  on the order after leaving and returning, until the winner confirms or the
+  setup deadline passes
+- 🚧 **Card where Finance set a rule** — card is offered only in a currency
+  with a card fee rule; in USD and JPY until Finance sets one, the choice
+  reads that card is not yet available, per [Auction Management · Payment
+  Settings](/p/grade10-admin/auction/management#payment-settings)
 
 ### Address Deadline
 
@@ -186,19 +204,6 @@ hours of the close.
 - 🚧 **Locked on confirming** — the winner changes none of the three
   afterwards; an operator edits them on request before send and reissues
   after, and the order shows what changed
-
-### Address Policy Pending
-
-- ❓ **Billing country or region list** — whether billing Add Address uses the
-  same full list and searchable field as delivery; Product confirms
-- ❓ **Shippable destinations only** — whether the picker later limits to
-  destinations Grade10 ships to; until settled the catalogue is complete
-- ❓ **Catalogue display locale** — whether Country/Region names follow
-  browser locale, account language, or fixed English; Product confirms
-- ❓ **Fee range wording** — what each choice says; the bank transfer wording
-  names no amount, because the operator sets that fee; Product confirms
-- ❓ **One-time address after a reload** — whether it survives leaving and
-  returning to the order; Product and Design confirm
 
 ## The Invoice
 
@@ -328,11 +333,9 @@ failure, and locks the form while work is in progress.
   them on each issued bank-transfer invoice; preview uses Grade10 Finance
   Limited and HSBC Hong Kong samples
 
-#### Transfer Contact Policy
-
-- ❓ **Contact channel** — how an operator reaches a winner about a transfer
-  or a proof; WhatsApp is the working assumption, on the number from the
-  address form; Operations confirms
+- **Contact channel** — an operator reaches a winner about a transfer or a
+  proof on WhatsApp, at the phone number from the address form; Operations
+  confirmed it
 
 ### Receipts
 
@@ -576,9 +579,9 @@ a second payment provider, and changes to the bid-time rules.
 | Phone on Add Address | Decided | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
 | Personal or company address | Decided | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. Order summary Delivery and Billing show the full snapshot (company when company, recipient name, phone, full address including postal). First and last name stay required on both. | Product (@tangconst) |
 | Add Address optional locality | Decided | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
-| Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and searchable field as delivery. | Product (@tangconst) |
-| Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
-| Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |
+| Billing country or region list | 🚧 In flight | Billing Add Address uses the same full A–Z list and searchable field as delivery: one control, and a winner billed abroad finds their country the same way. | Product (@tangconst) |
+| Shippable destinations only | Decided | The picker keeps every destination for now; limiting it to where Grade10 ships is later work. Chosen over limiting it now, which needs Operations' destination list first. | Product (@tangconst) |
+| Catalogue display locale | 🚧 In flight | Country/Region names follow the account's language, as the rest of the site does. Chosen over the browser's locale and over fixed English. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
 | Awaiting Setup | Decided | Incomplete setup reads Awaiting Setup while its address window is open or reopened. After the 48-hour address deadline with no confirmed address it reads Setup Overdue; a confirmed address reads Preparing Invoice. | Product (@jeffffej0909) |
@@ -595,6 +598,10 @@ a second payment provider, and changes to the bid-time rules.
 | A balance belongs on a receipt, not on a page | Decided | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
-| One-time address persistence | ❓ Open | Whether an unsaved one-time address survives leaving and returning to the order. | Product (@tangconst) |
+| One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
+| Payment fee wording | 🚧 In flight | Card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. Chosen over showing no figure for either. | Product (@tangconst) |
+| Card in USD and JPY | 🚧 In flight | Card launches without a rule in USD and JPY: until Finance saves one, a winner in that currency is not offered card and reads why. Chosen over holding launch for Finance's rates and over charging no card fee. | Finance |
+| Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
+| Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
 | Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |
 :::

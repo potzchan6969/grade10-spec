@@ -374,12 +374,9 @@ on winner, In transit, Closed and All, opening on Needs action.
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
 - **Failed payments** - every failed payment attempt stays in the invoice log
-
-### Transfer Contact Policy
-
-- ❓ **Contact channel** — how an operator reaches a winner about a transfer
-  or a proof; WhatsApp is the working assumption, on the number from the
-  address form; Operations confirms
+- **Contact channel** — an operator reaches a winner about a transfer or a
+  proof on WhatsApp, at the phone number from the address form; Operations
+  confirmed it
 
 ## Fulfilment
 
@@ -418,8 +415,9 @@ it.
   invoice charges on a subtotal of 1,000 in its currency, grossed up so
   Grade10 keeps the whole subtotal once Stripe takes its fee from the whole
   charge
-- ❓ **USD and JPY** - no card fee until Finance sets one, so a card invoice
-  in them cannot be sent; Finance confirms the rates
+- 🚧 **USD and JPY** - no card rule at launch: until Finance saves one for a
+  currency, a winner in it is not offered card at order setup and reads that
+  card is not yet available there, and no card invoice in it can be sent
 
 | Subtotal | Stripe card fee | Card fee charged | Order total |
 | --- | --- | --- | --- |
