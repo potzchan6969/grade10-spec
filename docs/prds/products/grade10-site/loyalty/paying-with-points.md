@@ -16,7 +16,7 @@ reviewed: 2026-09-15
 | Cap | **Goods total minus coupons and discount codes** — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
-| Discount | **One order-level "Points" discount**, outside the order's one-coupon count, so a coupon and points can be used on the same order — [Discounts](/p/grade10-site/store/discounts) |
+| Discount | 🚧 **One order-level "Deduction from Points" discount**, outside the order's one-coupon count, so a coupon and points can be used on the same order; legacy "Points" discounts remain the same points spend — [Discounts](/p/grade10-site/store/discounts) |
 
 ## Online
 

@@ -82,6 +82,6 @@
 
 ## Reconciliation
 
-- **Covered:** `winner-order-SC-20` ← `US2-TC2-1`; `winner-order-SC-221` ←
+- **Covered:** `winner-order-SC-251` ← `US2-TC2-1`; `winner-order-SC-252` ←
   `US2-TC9-1`.
 - **Raised:** none.

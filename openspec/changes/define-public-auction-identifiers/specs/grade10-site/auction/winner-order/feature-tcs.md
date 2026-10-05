@@ -284,5 +284,6 @@
 | Required identifier scenarios SC-114 and SC-122–SC-128 | Preserved in the winner-order spec; cases cover the changed identifier behavior. |
 | Existing receipt identifier scenario SC-131 | The winner-facing identifier retains the listing payment reference; this change does not change its existing format or receipt breakdown. |
 | UUID/listing-ID projection | A projection may collide; the allocator retries against active codes and retained reservations. |
+| Bank-transfer presentation | `add-winner-how-to-pay-rails` owns the detail rows, including its no-Copy rule; this change supplies only the payment-reference value. |
 | Admin permission and placement | Settled: existing listing-admin read access shows the code in both the Listings table and detail screen; knowing it cannot grant access or private data. |
 | Cached-preview behavior | Settled in Q15: previously cached content may persist without purge or regeneration; current pages and fresh metadata omit the code and private data. |
