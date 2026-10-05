@@ -20,7 +20,9 @@
 - [ ] 2.4 Draw the crown only where `copy.winner` is supplied, with no
       built-in name, and correct the `isWinner` doc comment in `types.ts`
       from badge to crown; the Default and ClosedSoldEqualMax plays still
-      pass. `shared-ui-auction-listing-SC-50`, `shared-ui-auction-listing-SC-54`
+      pass, and a story renders ClosedSoldEqualMax with `winner` copy unset
+      for the walk. `shared-ui-auction-listing-SC-50`,
+      `shared-ui-auction-listing-SC-54`
 
 ## 3. The walk (grade10-spec) (owner: @tangconst)
 
@@ -40,12 +42,16 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       sold panel and `samePricePriority` on a public row ranked below another
       of the same amount; `ListingView` threads `bidHistoryWinner` and
       `samePricePriorityTip`. Built and tested in `listingLotExtras.test.ts`
-      (`684cdc9`). `grade10-site-auction-listing-page-SC-48`,
-      `grade10-site-auction-listing-page-SC-49`
+      (`684cdc9`), older ties included. `grade10-site-auction-listing-page-SC-48`,
+      `grade10-site-auction-listing-page-SC-49`,
+      `grade10-site-auction-listing-page-SC-50`,
+      `grade10-site-auction-listing-page-SC-51`
 - [ ] 4.2 Bump `external/grade10-spec` to the commit carrying task 2.4.
 - [ ] 4.3 Walk the lot page on the isolated stack: no crown while live, the
       crown on the won row once the close is recorded, and the tip on a tied
-      maximum that came second.
+      maximum that came second, at the current price and at an older tie
+      lower down; no crown on a lot without a winner.
       `grade10-site-auction-listing-page-US14-TC7-1`,
       `grade10-site-auction-listing-page-US12-TC7-1`,
-      `grade10-site-auction-listing-page-US14-TC8-1`
+      `grade10-site-auction-listing-page-US14-TC8-1`,
+      `grade10-site-auction-listing-page-US12-TC8-1`

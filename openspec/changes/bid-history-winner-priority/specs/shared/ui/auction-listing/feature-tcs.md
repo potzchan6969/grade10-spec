@@ -28,7 +28,7 @@
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax: a closed sold lot whose first Recent bids row has `isWinner` true, with bid history copy `winner` set to `Winner`.
+* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax: a closed sold lot whose first Recent bids row is the viewer's and has `isWinner` true, with bid history copy `winner` set to `Winner`.
 * Storybook renders `ListingAuctionBidCard` → Default: a live lot whose Recent bids rows carry no `isWinner`, with the same copy.
 
 **Steps:**
@@ -38,7 +38,7 @@
 
 **Expected Results:**
 
-* Step 1: the row shows a crown in the primary colour after the amount, with accessible name Winner.
+* Step 1: the row shows a crown in the primary colour after the amount and before the You badge, with accessible name Winner.
 * Step 2: no row shows a crown.
 
 ### shared-ui-auction-listing-US1-TC28-1: Equal-max non-leader shows earlier-leads tip
@@ -87,7 +87,7 @@
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax with bid history copy that leaves `winner` unset.
+* `ListingAuctionBidCard` renders ClosedSoldEqualMax's args - a closed sold lot whose first Recent bids row has `isWinner` true - with bid history copy that leaves `winner` unset.
 
 **Steps:**
 
@@ -96,7 +96,7 @@
 **Expected Results:**
 
 * No row shows a crown.
-* No element carries the accessible name Winner.
+* No row carries an accessible name the copy does not supply, Winner included.
 
 ## Settled
 
@@ -105,6 +105,8 @@
 - Equal-max non-leaders use the Info tip in the amount tone with
   earlier-leads copy.
 - No new Badge size or footnote under Recent bids.
+- The tip icon's tone and the crown's place before You are requirement
+  clauses the cases walk, with no scenario of their own (decisions Q5).
 
 ## Reconciliation
 
@@ -129,10 +131,22 @@ openspec/changes/archive/.
 | TC27 and TC28 were `automated`, decided by the story plays; the plays assert only that a `Winner` name and the tip's name exist, not the crown's place or colour nor the icon's tone | **Reclassified:** `manual`, Decided-by line dropped; the cases are walked under task 3.1. A play that asserts the rest flips them with `pnpm run tcs:automated` |
 | TC27 and TC28 were `e2e`, both `smoke` | **Reclassified:** `unit`, as every Storybook case in the durable suite; `regression, release`, since a missing crown or tip leaves the journey usable and a journey holds at most one smoke case |
 | TC28 read the accessible name in place of activating the control | **Folded in:** its steps hover the Info control and read the tooltip, `shared-ui-auction-listing-SC-51`'s WHEN |
-| TC28 asserts the Info icon in the amount's tone, decided by Q2 and stated by the requirement, which no scenario's THEN carries | **Kept:** Q2 settles it; reported to Dev to add as an AND on `shared-ui-auction-listing-SC-51` |
-| The requirement draws no crown where `copy.winner` is absent, and places the crown after any Info control and before You; no scenario states either | **Reported:** to Dev for a scenario; task 2.4 builds the first. No case is written for behaviour no scenario states |
+| TC28 asserts the Info icon in the amount's tone, decided by Q2 and stated by the requirement, which no scenario's THEN carries | **Kept:** reported to Dev for an AND on `shared-ui-auction-listing-SC-51`; Q5 declined it, since the requirement's Equal-max tip clause states the tone and TC28 walks it |
+| The requirement draws no crown where `copy.winner` is absent, and places the crown after any Info control and before You; no scenario states either | **Folded in:** the first as `shared-ui-auction-listing-SC-54` / `shared-ui-auction-listing-US1-TC29-1`, below; Q5 declined a scenario for the second, so TC27 now asserts the crown after the amount and before You on ClosedSoldEqualMax's viewer row, as the requirement's Winner crown clause states |
 | The section carried its own journey title and an application as actor, where the durable suite's `US1` names the listing page blocks and a customer | **Folded in:** heading, Walked-by line and statement copied from the durable suite |
 | Facts across the PRD lines, Q1 to Q3, `ui-design.md`, `tech-design.md`, the delta and the cases | **Agree:** primary filled crown after the amount, named by consumer copy, only on a closed sold lot; Info tip in the amount tone, reading when maximums match, the earlier one leads |
 | Accept-review fix round, 2026-10-05, at the owner's word: the crown draws only with `copy.winner`, a rule with no scenario | **Folded in:** `shared-ui-auction-listing-SC-54` / `shared-ui-auction-listing-US1-TC29-1`; task 2.4 builds it |
 
-**Uncovered anchors:** none. Public bid history outcome's three items - winner crown, equal-max tip, live lots - each have a case; both scenarios are asserted.
+**Run:** QA2 reconciliation 2026-10-05, rerun after Q4 and Q5, for change `bid-history-winner-priority`. Reread every case against `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54`, the requirement as Q4 left it, `decisions.md` (Q1 to Q5), `ui-design.md`, `tech-design.md`, `tasks.md`, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `listing-bid-history-list.tsx`, the ClosedSoldEqualMax and Default stories and their meta, and the `en` catalog. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| Q4: the Equal-max flag now covers any older tie lower down | **Agree:** the list draws whatever row the consumer flags, so `shared-ui-auction-listing-SC-51` and TC28 hold unchanged; where the flag is set is the lot page's, walked there |
+| TC29, written without a QA2 read, against `shared-ui-auction-listing-SC-54` | **Folded in:** its result asserts no row carries a name the copy does not supply, the scenario's AND, where it read only Winner |
+| TC29's pre-condition named a Storybook render, but no story leaves `winner` unset and the bid card's `copy` is not a Storybook control | **Reported:** to Dev; task 2.4 owes a story or a play that renders ClosedSoldEqualMax without `winner`. The case stays `draft`, and fails until task 2.4 removes the built-in `"Winner"` |
+| Case ids `US1-TC27-1` to `US1-TC29-1` | **Checked:** the durable suite ends at `TC18`; `cap-custom-maximum-entry` takes `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`. No collision |
+| Facts across the PRD lines, Q1 to Q5, `ui-design.md`, `tech-design.md`, the delta and the cases | **Agree:** primary filled crown after the amount and any tip, before You, named only by consumer copy, on a closed sold lot; Info tip in the amount tone on every row the consumer flags, reading when maximums match, the earlier one leads |
+| Raised questions | None - Q1 to Q5 settle what this capability turns on |
+
+**Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them.
+
