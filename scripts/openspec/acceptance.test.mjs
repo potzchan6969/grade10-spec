@@ -731,6 +731,32 @@ test("acceptance rejects incomplete rename instructions and unresolved visible c
   );
 });
 
+test("acceptance accepts a populated reconciliation table and rejects its empty template", () => {
+  const populated = sandbox();
+  const suitePath = join(
+    populated.root,
+    "openspec/changes/build-alpha/specs/site/search/feature-tcs.md",
+  );
+  writeFileSync(
+    suitePath,
+    "# Search test cases\n\n## Reconciliation\n\n| Raised | Disposition |\n| --- | --- |\n| The blind reading found a gap | Folded into the requirement |\n",
+  );
+  assert.deepEqual(acceptanceReadiness(populated.root, CHANGE), []);
+
+  const empty = sandbox();
+  writeFileSync(
+    join(
+      empty.root,
+      "openspec/changes/build-alpha/specs/site/search/feature-tcs.md",
+    ),
+    "# Search test cases\n\n## Reconciliation\n\n| Raised | Disposition |\n| --- | --- |\n",
+  );
+  assert.match(
+    acceptanceReadiness(empty.root, CHANGE).join("\n"),
+    /needs a completed ## Reconciliation with dispositions/,
+  );
+});
+
 test("a skip_specs change accepts an empty contract target scope", () => {
   const { root } = sandbox();
   rmSync(join(root, `openspec/changes/${CHANGE}/specs`), { recursive: true });

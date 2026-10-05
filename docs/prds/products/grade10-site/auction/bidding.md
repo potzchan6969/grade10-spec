@@ -267,6 +267,9 @@ account's bids address; signed out, sign-in runs first.
 One record of every lot a collector bookmarks, by watching or by bidding, and
 the letters that follow those lots.
 
+🚧 On a small viewport, My Auctions shows the same lots and actions as the
+table without horizontal scrolling; each lot is a stacked card below `md`.
+
 | Rule | Value |
 | --- | --- |
 | Opening warning | **24 hours** before the scheduled start |

@@ -9,6 +9,7 @@
 **I want** draft lots and called-off lots absent from browse, search and my watchlist,
 **so that** I can use a called-off lot's original address directly without it appearing as an available auction.
 
+<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->
 ### grade10-site-auction-lot-status-US2-TC4-1: A called-off lot stays reachable at its canonical address
 
 **Classification:**

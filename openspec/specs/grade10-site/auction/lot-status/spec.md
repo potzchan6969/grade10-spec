@@ -123,24 +123,22 @@ lot status.
 
 ### Requirement: Collectors never see hidden lots
 
-A draft or called-off lot is absent from every collector page, except for a
-collector who bid on it.
+A draft lot is absent from every collector page. A called-off lot is absent
+from browse, search, watchlist and public listing data, but its canonical
+listing page remains directly accessible; a collector who bid on it also sees
+it in My Auctions.
 
 **Hidden lots** - A hidden lot is a lot whose internal lot status is Draft or
 Called off.
 
-**Never shown** - Collectors SHALL NOT see a hidden lot anywhere on the auction
-site:
-
-- **Catalogue** — the lot SHALL NOT be listed, and catalogue search and filters
-  SHALL NOT return it
-- **Lot page** — the lot's address SHALL give the same 404 response as an
-  address with no published lot, per `grade10-site/auction/listing-page`
-- **Watchlist** — the lot SHALL NOT be listed
+**Browse removal** - Collectors SHALL NOT discover a called-off lot through
+catalogue, search, filters, watchlist or public listing data. Its canonical
+listing page remains directly accessible by its original address, per
+`grade10-site/auction/listing-page`; the listing code is not an alternate
+route. A draft has no public address and remains unavailable.
 
 **Bidder exception** - A collector who bid on a called-off lot SHALL still see
-it in My Auctions. When that bid has a bid-time authorization, the row carries
-the note that its card hold was released, per
+it in My Auctions, where the row says their card was not charged, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-me0 rev=1 -->
@@ -177,8 +175,20 @@ the note that its card hold was released, per
 - **GIVEN** a collector who bid on a lot that an operator then called off
 - **WHEN** they open My Auctions
 - **THEN** the lot is listed
-- **AND** when the bid has a bid-time authorization, the row says that its card hold was released
+- **AND** the row says their card was not charged
 - **AND** a collector who did not bid on the lot does not see it
+
+<!-- trace:scenario id=g10.auction-lot-status.SC-w9d rev=1 -->
+#### Scenario: grade10-site-auction-lot-status-SC-13 - A called-off lot stays reachable at its canonical address
+**Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
+
+- **GIVEN** a published lot whose canonical address and listing code are
+  permanently reserved
+- **WHEN** an operator calls the lot off and a collector opens its canonical
+  address directly
+- **THEN** the address serves the lot's public listing page
+- **AND** the lot remains absent from catalogue, search and watchlist
+- **AND** the listing code does not resolve as an alternate address
 
 ### Requirement: Listing data includes the external lot status
 

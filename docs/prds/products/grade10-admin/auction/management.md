@@ -174,7 +174,7 @@ order.
 | Rule | Value |
 | --- | --- |
 | Payment window | **7 calendar days** from send |
-| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen gives a fresh **48 hours**; after confirmation only an operator changes it |
+| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen of unconfirmed Setup Overdue gives a fresh **48 hours**; after confirmation only an operator changes it |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -297,11 +297,14 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 On a paid invoice | Counts above the Order Total | Overpaid |
 | 🚧 On an invoice in any other state, which no card payment can start on | Counts toward nothing | Unexpected status |
 
+### Manual Payment Collection
+
 - 🚧 **Record payment** - one dialog for money received outside the card
   checkout: the amount, starting at the balance; bank transfer, cash or a
   described method; a reference, required for a bank transfer; the date
   received; 1 to 5 private proof files; and a reason. Never on a card invoice,
   which is reissued as bank transfer first
+
 - 🚧 **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
@@ -312,10 +315,15 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
-- 🚧 **Reopening the address form** — after the 48-hour deadline and before
-  send, on request and with a reason, giving a fresh 48 hours; repeatable,
-  changes no status, never on a cancelled order. Or the operator records an
+### Address Confirmation Window
+
+- 🚧 **Reopening the address form** — after the 48-hour deadline passed with no
+  confirmed address and before send, on request and with a reason, giving a
+  fresh 48 hours; repeatable, writes no status directly but its reopened facts
+  derive Awaiting Setup, never on a cancelled order. Or the operator records an
   address the winner gives by phone, leaving the form closed
+
+### Order Cancellation
 
 | Cancelling an order | Value |
 | --- | --- |
@@ -358,6 +366,9 @@ on winner, In transit, Closed and All, opening on Needs action.
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
 - **Failed payments** - every failed payment attempt stays in the invoice log
+
+### Transfer Contact Policy
+
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -507,7 +518,7 @@ settings.
 | Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
-| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
+| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason, reopens only an unconfirmed Setup Overdue order before invoice send; a reopen gives a fresh 48 hours and its reopened window derives Awaiting Setup. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | 🚧 In flight | Under Auction because auction invoices use it; behind payment processing, `auction:payment`, because changing it changes the amount collected. Chosen over the settlement grant, which only `admin` holds, so finance could not keep the settings it owns. | Product and finance |
 | Payment processing fee | 🚧 In flight | The invoice's payment method decides. A card invoice's fee is Grade10's own: the Stripe card rule per currency, grossed up so Grade10 keeps the subtotal whole; with no rule for the currency, the invoice cannot be sent or reissued. A bank transfer invoice's fee is the operator's own; a sent invoice never re-prices, and Finance enters the card rule at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |

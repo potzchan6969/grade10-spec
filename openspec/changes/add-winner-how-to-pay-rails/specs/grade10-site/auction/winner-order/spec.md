@@ -1,3 +1,5 @@
+# grade10-site/auction/winner-order Specification
+
 ## Feature set
 
 - Bank transfer
@@ -26,8 +28,9 @@ and three tabs with FPS selected by default. Each tab SHALL show that rail’s
 fields as labelled detail rows without copy controls, then the invoice's bank
 reference as a labelled detail row without a copy control, and a warning that
 the winner must enter the reference in the bank app's memo or remarks field.
-Live account details remain Finance TBC; the preview uses Grade10 Finance
-Limited and HSBC Hong Kong samples.
+Live account details and the FPS QR come from Finance-owned configuration.
+Grade10 snapshots those approved instructions on the issued bank-transfer
+invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
 
 | Way to pay | Details shown |
 | --- | --- |
@@ -44,6 +47,7 @@ payment proof once".
 invoice and SHALL refuse a card payment attempted against one. A winner who
 wants to pay by card asks Grade10, and an operator reissues the invoice.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bmm rev=1 -->
 #### Scenario: winner-order-SC-95 - A bank transfer invoice shows three ways and the reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -53,6 +57,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **AND** the bank reference is shown at the bottom of the selected tab
 - **AND** no card Pay control is offered
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-dvp rev=1 -->
 #### Scenario: winner-order-SC-96 - A card payment on a bank transfer invoice is refused
 **Serves:** Bank transfer - card Pay is not offered on a bank transfer invoice
 

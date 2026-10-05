@@ -32,9 +32,10 @@ const AGENTS_BUDGET = 2660;
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
 // The round's conduct: the skill's step 5 loads it every round, to lay out the
-// summary, so it costs what the skill costs. 922 is its size once the skill's
-// restatements of it became links.
-const ROUND_SUMMARY_BUDGET = 922;
+// summary, so it costs what the skill costs. 1280 is its size after the
+// clarification-request shape gained its one canonical home; the skills link
+// there rather than restating its fields.
+const ROUND_SUMMARY_BUDGET = 1280;
 // The skills a line command loads: the seven command skills a hand invokes,
 // and the four role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
@@ -55,7 +56,9 @@ const SKILLS_BUDGET = {
   "workflow-land": 366,
   "planning-pm": 2740,
   "planning-qa": 4446,
-  "planning-design": 1868,
+  // 1879 after design questions link to the shared clarification-request
+  // shape instead of defining a competing one.
+  "planning-design": 1879,
   // 1050 after the engineer lane gained its hand-off and archive guidance.
   "planning-dev": 1050,
 };

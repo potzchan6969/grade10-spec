@@ -1181,7 +1181,7 @@ Runs once per row of **Test data**.
 * The Ship To block shows the single line "Not recorded".
 * No blank address lines appear in its place.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC39-1: A bank-transfer receipt names its transfer reference
+### shared-ui-invoice-and-receipt-pdf-US1-TC39-1: A bank-transfer receipt names its recorded provider reference
 
 **Classification:**
 
@@ -1198,7 +1198,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A ReceiptPdf given a transfer reference.
+* A ReceiptPdf given a recorded provider reference.
 
 **Steps:**
 
@@ -1207,9 +1207,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The Payment section shows the transfer reference given.
+* The Payment section shows the recorded provider reference given.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC40-1: A card-paid receipt shows no transfer-reference line
+### shared-ui-invoice-and-receipt-pdf-US1-TC40-1: A card-paid receipt shows no provider-reference line
 
 **Classification:**
 
@@ -1226,7 +1226,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A ReceiptPdf given no transfer reference.
+* A ReceiptPdf given no recorded provider reference.
 
 **Steps:**
 

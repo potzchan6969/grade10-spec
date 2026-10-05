@@ -7,6 +7,9 @@
   draft save. Insert the candidate into a permanent reservation table with a
   unique key; retry a new projection after a conflict. The reservation remains
   after listing deletion.
+- The launch has no production listings to backfill. Grade10 stores no legacy
+  title-only address or redirect; every production code is allocated by the
+  first-draft-save transaction.
 - Generate the initial slug from the normalized title and the lower-case stored
   code. Reserve space for the hyphen and suffix before truncating the title
   portion to 64 characters. Use `lot` when the normalized title is empty.

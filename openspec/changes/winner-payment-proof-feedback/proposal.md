@@ -1,6 +1,6 @@
 **Author:** @tangconst - 2026-09-29
 
-Product context: [Post-Bidding · Paying](../../../docs/prds/products/grade10-site/auction/post-bidding.md#paying).
+Product context: [Post-Bidding · Bank Transfer Proof](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-proof).
 
 ## Why
 
@@ -60,4 +60,4 @@ vehicle.
 
 ## References
 
-- [Post-Bidding · Paying](../../../docs/prds/products/grade10-site/auction/post-bidding.md#paying)
+- [Post-Bidding · Bank Transfer Proof](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-proof)

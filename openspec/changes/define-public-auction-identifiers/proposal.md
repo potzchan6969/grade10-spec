@@ -14,6 +14,7 @@
 - **Stripe matching** - Store the payment reference in Stripe metadata so reconciliation does not expose provider transaction IDs to collectors
 - **Invoice and receipt IDs** - Build invoice IDs from the code plus issuance sequence. New receipts for finalized full or partial payments use the paid invoice payload plus an unpadded receipt sequence; historical receipt IDs remain unchanged
 - **Private identifiers** - Keep database IDs, audit numbers and provider references separate from collector-facing identifiers
+- **Legacy addresses** - This launches before auction listings reach production. Grade10 does not backfill codes, retain title-only legacy addresses, or redirect them; every production listing is first saved under this change
 
 ## Examples
 
@@ -59,11 +60,11 @@ None.
 
 - **Implementation** - Deliver the requirement delta, API projections and shared UI adoption from the approved formats
 
-## Open Questions
+## Constraints
 
 - **Cached previews** - A cached shared-link preview can persist. Grade10 does not guarantee a purge or regeneration; fresh pages and metadata omit private data and any separately labelled code
 
 ## References
 
-- [Auction Listing · Public listing ID](../../../docs/prds/products/grade10-site/auction/display.md#auction-listing)
+- [Auction Listing · Listing Code](../../../docs/prds/products/grade10-site/auction/display.md#listing-code)
 - [Post-Bidding](../../../docs/prds/products/grade10-site/auction/post-bidding.md)

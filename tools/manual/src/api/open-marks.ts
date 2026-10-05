@@ -20,9 +20,9 @@ export type MarkedPage = { path: string; ast: PageAst | null };
  * here reads more of the page than its path. */
 export type OpenMark<P extends MarkedPage = MarkedPage> = {
   page: P;
-  /** The `## ` section or the titled block the line sits under. */
+  /** The product section or titled block the line sits under. */
   where?: { title: string; anchor: string };
-  /** Slug of the `## ` section the line sits under, as a proposal's
+  /** Slug of the product section the line sits under, as a proposal's
    * `## References` link names it. Absent above the page's first heading. */
   section?: string;
   /** The line as written, list marker dropped; a table row as its cells. */
@@ -58,7 +58,7 @@ export const BUILDING = /🚧/;
  * counts one. `MARKED` is not in it — a mark further into a sentence is a
  * page writing about the grammar, and a change delivers no such line. */
 export const DELIVERED = new RegExp(`${BUILDING.source}|${OPEN.source}`);
-const HEADING = /^##\s+(.+?)\s*$/;
+const HEADING = /^(#{2,4})\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;
 const LIST_MARKER = /^\s*(?:[-*]|\d+\.)\s+/;
 const TABLE_ROW = /^\s*\|(.*)\|\s*$/;
@@ -111,8 +111,8 @@ export function marksOfPage<P extends MarkedPage>(
       if (heading) {
         if (where === null) {
           section = {
-            title: plain(heading[1]),
-            anchor: sectionSlug(heading[1]),
+            title: plain(heading[2]),
+            anchor: sectionSlug(heading[2]),
           };
         }
         continue;
