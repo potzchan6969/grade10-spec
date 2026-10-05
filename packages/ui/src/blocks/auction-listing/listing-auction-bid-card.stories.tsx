@@ -210,6 +210,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Live lot: no winner crown, and the equal-max non-leader carries the tip.
+ *
+ * Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
+ * Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
+ */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -513,8 +519,6 @@ export const ClosedSoldEqualMax: Story = {
   },
 };
 
-const { winner: _winner, ...BID_HISTORY_COPY_WITHOUT_WINNER } = COPY.bidHistory;
-
 /**
  * ClosedSoldEqualMax with bid history copy that leaves `winner` unset: the
  * won row is flagged, but no crown draws without its name.
@@ -524,7 +528,7 @@ const { winner: _winner, ...BID_HISTORY_COPY_WITHOUT_WINNER } = COPY.bidHistory;
 export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
   args: {
     ...ClosedSoldEqualMax.args,
-    copy: { ...COPY, bidHistory: BID_HISTORY_COPY_WITHOUT_WINNER },
+    copy: { ...COPY, bidHistory: { ...COPY.bidHistory, winner: undefined } },
   },
   parameters: {
     docs: {
@@ -536,8 +540,9 @@ export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
-    expect(canvas.queryByRole("img", { name: /.+/ })).not.toBeInTheDocument();
+    const heading = canvas.getByText("Recent Bids");
+    const recentBids = within(heading.parentElement as HTMLElement);
+    expect(recentBids.queryByRole("img")).not.toBeInTheDocument();
     expect(canvas.queryByLabelText("Winner")).not.toBeInTheDocument();
     expect(canvas.queryByText("Winner")).not.toBeInTheDocument();
   },
