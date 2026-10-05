@@ -18,9 +18,9 @@ The lot page SHALL set the public Recent bids flags that
   Closed without a result, or ended without a winner.
 - **Tied maximum** - public rows with the same amount are listed in the
   order their maximums were set: the leading or won row first, then the row
-  whose bidder set that maximum earlier, never by when each row was stamped.
-  A row carries `samePricePriority` when another row with its amount is
-  listed above it. This holds at the current price and at any older tie
+  whose bidder set that maximum earlier, and that order holds once both are
+  outbid. A row carries `samePricePriority` when another row with its amount
+  is listed above it. This holds at the current price and at any older tie
   lower down.
 - **Copy** - the page supplies the winner name and the equal-max tip in the
   collector's language.
