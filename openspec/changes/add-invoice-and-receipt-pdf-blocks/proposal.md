@@ -63,6 +63,12 @@ own task, see Impact).
   (which group 2.4 had already pointed at the DOM component). Each calls the
   renderer on sample data and previews the resulting PDF with a small
   `pdfjs-dist`-based canvas viewer (`pdf-preview.tsx`).
+- **Winner-zone source:** Winner Order asks the winner to confirm an IANA time
+  zone, suggested from the browser, with setup. The operator records the
+  winner's stated zone when taking overdue setup by phone. Send requires the
+  stored zone, and each invoice revision keeps its own zone for its PDF and
+  receipts. Earlier revisions without a stored zone use a labelled Hong Kong
+  time fallback when rendered again; archived bytes stay as issued.
 
 ## Non-Goals
 
@@ -81,7 +87,11 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/auction/winner-order`: the invoice relationship is aligned
   with the shared PDF contract and the active identifier change: a new invoice
   names the prior invoice as `Replaces invoice {invoice ID}`. The prior invoice
-  remains retained and the new invoice is the current payable record.
+  remains retained and the new invoice is the current payable record. Winner
+  setup also records the winner's stated IANA zone and uses the issued
+  invoice's zone for the payment deadline.
+- `grade10-admin/auction/post-sale`: phone setup records the winner's stated
+  zone; invoice send requires it and snapshots it per revision for receipts.
 
 ## Impact
 
@@ -92,11 +102,16 @@ See [Non-Goals](decisions.md#non-goals).
 | `@grade10/design-system` | No change before this amendment (composed only); after it, no longer composed at all — the renderer draws directly with pdf-lib, not through design-system primitives. |
 | `@grade10/i18n` | No change — every label still reaches the renderer as a `copy` argument, per the existing component-contract rule (`decisions.md` Q20). |
 | `grade10` (`packages/grade10-auction`) | Already runs an equivalent pdf-lib renderer of its own (`@grade10/auction-contracts`); once it bumps the submodule, it switches its backend service and demo lab to import `InvoicePdf`/`ReceiptPdf` from `@grade10/ui` and can retire its own copy. Named here, built in `grade10`. |
-| `apps/admin/grade10` | None. |
+| `grade10` (Winner Order and auction backend) | Setup stores the winner's stated IANA zone; invoice issue snapshots it per revision; both PDF services pass that revision's zone to the shared renderer. |
+| `apps/admin/grade10` | Phone setup requires the operator to enter the winner's stated zone; the quote and legacy-order action expose a missing zone before send. |
 
 ## References
 
 - [Post-Bidding · The Invoice](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice)
+- [Post-Bidding · Time Zone](../../../docs/prds/products/grade10-site/auction/post-bidding.md#time-zone)
+- [Post-Bidding · Missed Address Deadline](../../../docs/prds/products/grade10-site/auction/post-bidding.md#missed-address-deadline)
+- [Auction Management · Winner Time Zone](../../../docs/prds/products/grade10-admin/auction/management.md#winner-time-zone)
+- [Auction Management · Address Confirmation Window](../../../docs/prds/products/grade10-admin/auction/management.md#address-confirmation-window)
 - [Post-Bidding · Bank Transfer Instructions](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions)
 - [Post-Bidding · Receipt Documents](../../../docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents)
 - [Auction Invoice and Receipt Contents](../../../docs/references/auction-invoice-and-receipt-contents.md)

@@ -27,7 +27,8 @@ starts at no data because free-text reasons cannot be counted.
   hand.
 - **A card payment that lands after the cancel is flagged.** The payment is
   recorded, the order stays Cancelled and carries a Paid after cancel flag;
-  finance returns the money outside Grade10 and the operator clears the flag.
+  Finance returns the money outside Grade10 and any operator with
+  `auction:payment` clears the flag with a reason and any return reference.
 
 No running rule is reversed: cancel stays operator-only, terminal, and
 unable to lift a suspension.

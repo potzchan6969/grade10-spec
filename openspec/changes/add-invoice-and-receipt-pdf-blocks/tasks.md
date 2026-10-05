@@ -32,7 +32,7 @@ Amendment (`decisions.md` Q18-Q20). Needs this change's rewritten `spec.md`/`fea
 
 - [x] 3.1 Move `pdfDocument.ts` from `grade10`'s `packages/grade10-auction/contracts/src` into `pdf-document.ts` here, threading a `copy` argument through every `draw*` call for the labels `tech-design.md` lists, and replacing `SUMMARY_LABELS`'s string match with `PdfLineItem.key` (`shared-ui-invoice-and-receipt-pdf-SC-3`, `SC-4`, `SC-37`, `SC-38`, `SC-43`, `SC-44`, `SC-45`)
 - [x] 3.2 Move `receiptPdf.ts`/`invoicePdf.ts` into `receipt-pdf.ts`/`invoice-pdf.ts`, adding `copy: InvoicePdfCopy`/`copy: ReceiptPdfCopy` to `InvoicePdfData`/`ReceiptPdfData` per `tech-design.md` (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-7`, `SC-8`, `SC-16`, `SC-17`, `SC-19`, `SC-20`, `SC-22`, `SC-27`, `SC-29`, `SC-39`, `SC-40`, `SC-41`, `SC-42`) — the exported names are `InvoicePdf`/`ReceiptPdf` (author's choice), not `renderInvoicePdf`/`renderReceiptPdf`, matching `spec.md`'s prose
-- [x] 3.3 Move `pdfDocument.test.ts`/`invoicePdf.test.ts`/`receiptPdf.test.ts` from `grade10`'s `contracts/test/` into colocated `pdf-document.test.ts`/`invoice-pdf.test.ts`/`receipt-pdf.test.ts`, updating fixtures for the new `copy` argument; add cases for the withheld-address fallback (`shared-ui-invoice-and-receipt-pdf-SC-33`) and the Hong Kong-time date formatting (`SC-43`)
+- [x] 3.3 Move `pdfDocument.test.ts`/`invoicePdf.test.ts`/`receiptPdf.test.ts` from `grade10`'s `contracts/test/` into colocated `pdf-document.test.ts`/`invoice-pdf.test.ts`/`receipt-pdf.test.ts`, updating fixtures for the new `copy` argument; add cases for the withheld-address fallback (`shared-ui-invoice-and-receipt-pdf-SC-33`) and the then-current Hong Kong-time date formatting (`SC-43`, superseded by 7.5)
 - [x] 3.4 Add `public-exports.test.ts` asserting `InvoicePdf`, `ReceiptPdf`, `receiptBreakdown`, and every type `tech-design.md` names export from `../../index` — picked up automatically by `packages/ui/vitest.config.ts`'s `audit` project glob, no config edit needed
 - [x] 3.5 Add `pdf-lib` and `@pdf-lib/fontkit` to `packages/ui/package.json`
 - [x] 3.6 Delete the retired DOM component: `pdf-document.tsx`, `invoice-pdf.tsx`, `receipt-pdf.tsx`, `types.ts`, and their `fixtures.ts`; fix `packages/ui/src/index.ts`'s exports to the new file names — also widened `package.json`'s `"./blocks/*"` export to resolve `.ts` alongside `.tsx`, since these two entry files carry no JSX (`tech-design.md` "Also edits")
@@ -68,7 +68,23 @@ Needs groups 3-4 landed on `main` and the submodule bumped first.
 
 Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-invoice-and-receipt-pdf-blocks`), and `/tcs-run-sheet` executes manual cases when needed.
 
-- [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, and a cancelled order (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`) — note `winner-order-SC-98`'s "names its replacement" claim and `winner-order-SC-109` are stale against both `decisions.md` Q16 (which already dropped `replacedBy`) and this change's own Q19 (which never rebuilt it against the pdf-lib renderer); confirm which side has landed by the time this walk runs
+- [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a replacement invoice (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-98`). Confirm the replacement document names the replaced invoice, as this change's `SC-51` requires.
 - [ ] 6.2 Walk `winner-order-US-02` opening the receipt PDF once paid and before payment (`winner-order-SC-67`, `winner-order-SC-68`) — `winner-order-SC-18`/`SC-19`'s manually-settled distinction is not a claim this contract makes any more (`decisions.md` Q19); walk it against whatever `winner-order/spec.md` still requires there, not against a mark this renderer does not draw
 - [ ] 6.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 3-4's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
 - [ ] 6.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)
+
+## 7. Reconcile invoice rendering with the accepted PDF contract
+
+- [ ] 7.1 Update `InvoicePdfBankRails` and `drawBankRails` so only supplied enabled rails receive columns, and use `bankRails.reference` in the note; cover two enabled rails and an absent third (`SC-49`, `SC-50`).
+- [ ] 7.2 Add optional `replacesInvoice` to `InvoicePdfData`, render the replaced invoice ID in its own row, and cover presence and absence (`SC-51`). Keep the document's own invoice number distinct.
+- [ ] 7.3 Verify the existing `addressLines` renderer and tests show phone when supplied and leave no line when absent for both documents (`SC-31`, `SC-32`).
+- [ ] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.
+- [ ] 7.5 Require `winnerTimeZone` in both PDF data types, render every date in that IANA zone rather than fixed Hong Kong time, and cover a winner zone whose calendar date differs from Hong Kong (`SC-43`).
+
+## 8. Preserve the winner's time zone from setup through the documents (grade10)
+
+- [ ] 8.1 Show the browser's IANA zone for winner confirmation, allow a different IANA zone, validate and persist the confirmed zone on the auction order (`winner-order-SC-300`, `SC-301`).
+- [ ] 8.2 Require the operator to enter the winner's stated IANA zone when recording overdue setup by phone; validate and persist it with the order (`post-sale-SC-300`, `SC-301`).
+- [ ] 8.3 Let a payment-processing operator record the winner's stated zone with a reason on an older order missing one; refuse first send and reissue without an order zone; snapshot it on each new invoice revision and use that snapshot for its invoice PDF, deadline display and receipts (`post-sale-SC-302`, `SC-303`, `SC-304`, `SC-306`).
+- [ ] 8.4 For historical invoice revisions without a zone snapshot, render unarchived document dates in labelled `Asia/Hong_Kong` time; preserve archived PDF bytes; cover travel, reissue, and a date crossing the Hong Kong calendar boundary (`post-sale-SC-305`, `winner-order-SC-302`).
+- [ ] 8.5 Run focused winner setup, operator phone setup, invoice issue/reissue and PDF service tests; walk both setup paths through invoice and receipt download.

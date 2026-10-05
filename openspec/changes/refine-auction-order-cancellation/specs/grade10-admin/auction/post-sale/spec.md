@@ -35,15 +35,24 @@ SHALL link to the lot while remaining terminal.
 - **WHEN** the operator filters by one category
 - **THEN** only matching cancelled orders are returned
 
+#### Scenario: grade10-admin-auction-post-sale-SC-154 - A cancelled order links to its returned lot
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** a cancelled auction order whose lot returned to stock
+- **WHEN** the operator opens the cancelled order
+- **THEN** the order links to that lot for manual relisting
+
 ### Requirement: A late payment after cancellation is recorded without revival
 
-If a payment commits before cancellation commits, Grade10 SHALL refuse the
-cancellation because recorded money wins. If a card payment arrives after
+If a payment that counts toward the balance commits before cancellation
+commits, Grade10 SHALL refuse the cancellation. A payment that counts toward
+nothing SHALL NOT block it. If a card payment arrives after
 cancellation commits, Grade10 SHALL record it append-only, keep the order
 Cancelled, flag it Paid after cancel, and expose the flag for Finance to
-return the money outside Grade10. Only Finance may clear the flag, with the
-refund reference, actor, timestamp and reason. Clearing the flag SHALL not
-revive the order or change the lot's stock outcome.
+return the money outside Grade10. Any operator holding `auction:payment` may
+clear the flag with a required reason and Finance's return reference when
+available. Grade10 SHALL record the actor and timestamp.
+Clearing the flag SHALL not revive the order or change the lot's stock outcome.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-152 - A late payment is flagged without reviving the order
 **Serves:** post-sale-US-14 - Operator returns money paid after a cancel
@@ -51,12 +60,28 @@ revive the order or change the lot's stock outcome.
 - **GIVEN** a cancelled order
 - **WHEN** a card payment arrives after the cancellation
 - **THEN** the payment is recorded and the order remains Cancelled
-- **AND** the order is flagged Paid after cancel for Finance
+- **AND** the order is flagged Paid after cancel for an operator with `auction:payment`
 
-#### Scenario: grade10-admin-auction-post-sale-SC-153 - Recorded money wins the cancellation race
+#### Scenario: grade10-admin-auction-post-sale-SC-155 - Clearing a late-payment flag leaves the cancellation intact
+**Serves:** post-sale-US-14 - Operator returns money paid after a cancel
+
+- **GIVEN** Finance returned a payment flagged Paid after cancel
+- **WHEN** an operator holding `auction:payment` clears the flag with a reason and any available return reference
+- **THEN** Grade10 records the reason, any supplied reference, actor and timestamp
+- **AND** the flag clears while the order stays Cancelled and the lot stays in stock
+
+#### Scenario: grade10-admin-auction-post-sale-SC-153 - Money that counts toward the balance wins the cancellation race
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
-- **GIVEN** an unpaid order whose card payment commits before an operator's cancellation commits
+- **GIVEN** an unpaid order whose card payment counts toward the balance and commits before an operator's cancellation commits
 - **WHEN** the operator confirms cancellation
 - **THEN** Grade10 refuses cancellation
 - **AND** the order follows its recorded-payment outcome
+
+#### Scenario: grade10-admin-auction-post-sale-SC-156 - Money that counts toward nothing does not block cancellation
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** an unpaid order with a recorded payment that counts toward nothing
+- **WHEN** the operator confirms cancellation with a category and note
+- **THEN** Grade10 cancels the order and returns the lot to stock
+- **AND** the recorded payment remains available for Finance to return outside Grade10
