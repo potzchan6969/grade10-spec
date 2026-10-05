@@ -92,7 +92,7 @@ the card is in the winner's hands. The collector's half is
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
   later product-media edits, reordering, or deletion do not change that lot.
-  A picked direct-upload file is previewed and stored only on confirm; an item
+  A direct-upload file joins the gallery when it is dropped or chosen; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
 - 🚧 **Uploading and ordering** - files an operator drops or chooses are stored

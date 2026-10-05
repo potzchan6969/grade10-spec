@@ -58,9 +58,10 @@ See [Non-Goals](decisions.md#non-goals).
   on drop, drag to reorder, and one panel for the selected item's alt text,
   replace and remove. Built on the grade10 branch
   `claude/eloquent-hopper-aezqcs` (9gag/grade10#632).
-- **Suites** - `grade10-site-auction-listing-media-US1-TC3-1` is rewritten as a
-  file storing at once; `US1-TC4-1` and `US1-TC5-1` retire with the confirm
-  step. The E2E walks on that branch already follow.
+- **Suites** - `grade10-site-auction-listing-media-US1-TC3-2` rewrites the
+  versioned file-stores-at-once case; `US1-TC4-1` and `US1-TC5-1` retire with
+  the confirm step, and new draft cases cover batches, refusals, replacement
+  and order persistence. The E2E walks on that branch already follow.
 - **No service change** - the auction service already stores whatever the
   admin sends; the confirm step lived only in the admin panel.
 
