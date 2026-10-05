@@ -12,7 +12,7 @@ change. Wide filter panel layout stays on the existing Filter Panel frame.
 | Count + sort / Worlds / Types pills (secondary, one scrolling row to page edge) | [`ProductBrowse` → Narrow](?path=/story/store-product-listing-productbrowse--narrow) |
 | Sort bottom drawer — apply on choose | [`ProductBrowse` → Narrow Sort Applies On Choose](?path=/story/store-product-listing-productbrowse--narrow-sort-applies-on-choose) |
 | Facet bottom drawer — draft, Clear, Show Results (stacked primary above secondary); list scrolls; sheet max ~80dvh; 16px padding on small viewports | [`ProductBrowse` → Narrow Facet Clear Draft](?path=/story/store-product-listing-productbrowse--narrow-facet-clear-draft) |
-| Whole page, narrow viewport | [`Pages/Product List Page` → Default](?path=/story/pages-product-list-page--default) at mobile viewport |
+| Whole page, narrow viewport | [`Pages/Store/Product List Page` → Default](?path=/story/pages-store-product-list-page--default) at mobile viewport |
 
 ### Wide listing (unchanged)
 

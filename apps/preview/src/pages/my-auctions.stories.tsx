@@ -95,7 +95,7 @@ function MyAuctionsPage({
 }
 
 const meta = {
-  title: "Pages/My Auctions Page",
+  title: "Pages/Auction/My Auctions Page",
   component: MyAuctionsPage,
   tags: ["autodocs"],
   parameters: {

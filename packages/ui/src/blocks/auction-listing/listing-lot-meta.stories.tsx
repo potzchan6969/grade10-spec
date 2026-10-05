@@ -7,7 +7,7 @@ import { ListingLotMeta } from "./listing-lot-meta";
 
 const { auctionListing } = getMessages("grade10", "en");
 
-/** Matches Pages/Auction Lot Details fixture content. */
+/** Matches Pages/Auction/Auction Lot Details fixture content. */
 const LOT_DESCRIPTION =
   "Bandai Carddass checklist and starters slab from the Pocket Monsters set. Printed in 1997 for the early Bandai Carddass series, this PSA 10 example covers the starter trio and checklist art collectors look for when building a first-wave Japanese set. Surfaces stay sharp under the slab; corners and edges grade clean. A strong reference piece for Carddass-era Pokémon in top grade.";
 
@@ -47,7 +47,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "About-this-auction block under the auction bid card. Same content as Pages/Auction Lot Details. While live, market comps sit under About this auction; after sale they are omitted — the hammer price is on the bid card.",
+          "About-this-auction block under the auction bid card. Same content as Pages/Auction/Auction Lot Details. While live, market comps sit under About this auction; after sale they are omitted — the hammer price is on the bid card.",
       },
     },
   },

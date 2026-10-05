@@ -14,6 +14,7 @@ import {
   useFirstPaintReveal,
 } from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
+import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
 import {
   STORE_LOCATOR_COPY,
   STORE_LOCATOR_HOURS,
@@ -211,7 +212,7 @@ export const Default: Story = {
     if (footer === null) return;
     expect(
       within(footer).getByRole("link", { name: "Store Locator" }),
-    ).toHaveAttribute("href", "?path=/story/pages-store-locator-page--default");
+    ).toHaveAttribute("href", STORE_LOCATOR_HREF);
   },
 };
 

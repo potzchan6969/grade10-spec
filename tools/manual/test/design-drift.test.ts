@@ -62,9 +62,9 @@ describe("the set a story card belongs to", () => {
     const generic = report({ Page: "warn", Card: "fail", List: "fail" });
 
     for (const id of [
-      "pages-store-home-page--default",
-      "pages-store-order-history-page--filled",
-      "pages-product-list-page--default",
+      "pages-store-store-home-page--default",
+      "pages-store-store-order-history-page--filled",
+      "pages-store-product-list-page--default",
     ]) {
       expect(classOf(generic, id)).toBeUndefined();
     }
@@ -74,7 +74,7 @@ describe("the set a story card belongs to", () => {
     expect(
       classOf(
         report({ "Home Page": "fail" }),
-        "pages-store-home-page--default",
+        "pages-store-store-home-page--default",
       ),
     ).toBe("fail");
   });

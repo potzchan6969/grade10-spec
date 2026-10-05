@@ -45,7 +45,7 @@ state and every action. The card presents \`view\`, \`history\`, and
 
 Enrollment chrome (linked card, setup sheet, sign-in) sits around the card in
 the preview. The full lot page is
-[Auction Lot Details](?path=/story/pages-auction-lot-details--live-auto-leading).
+[Auction Lot Details](?path=/story/pages-auction-auction-lot-details--live-auto-leading).
 
 ## Enrollment states
 
@@ -82,7 +82,7 @@ maximum; there is no manual vs auto mode toggle.
 | Outbid | [Outbid](?path=/story/auction-listing-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
 | Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. |
 | Interactive enrollment | [Flows / Interactive](?path=/story/auction-listing-bid-panel-flows--interactive) | Walks sign-in → card link → ready on one card. |
-| Closed / won / lost | [Auction Lot Details](?path=/story/pages-auction-lot-details--closed-won-payment-due) | Awaiting address, settled, lost, sold, and unsold on the lot page. |
+| Closed / won / lost | [Auction Lot Details](?path=/story/pages-auction-auction-lot-details--closed-won-payment-due) | Awaiting address, settled, lost, sold, and unsold on the lot page. |
 
 ## Countdown
 

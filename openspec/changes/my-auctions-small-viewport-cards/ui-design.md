@@ -5,7 +5,7 @@ Layout SoT for phone widths: Storybook
 (`AuctionRecordRow` `presentation="card"`, one story per variant). Page
 composition:
 **[Filled — small viewport](?path=/story/my-auctions-my-auctions--filled-small-viewport)**
-and **Pages/My Auctions Page**. Desktop table remains Figma
+and **Pages/Auction/My Auctions Page**. Desktop table remains Figma
 `Auction Watchlist` (`6507:5463`). Figma card component:
 [`AcutionRecordCard`](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7005-1676)
 (`7005:1676`).
@@ -14,7 +14,7 @@ and **Pages/My Auctions Page**. Desktop table remains Figma
 
 ### My Auctions — small viewport
 
-::story{id="pages-my-auctions-page--default" title="My Auctions"}
+::story{id="pages-auction-my-auctions-page--default" title="My Auctions"}
 
 Below `md`: breadcrumbs, title + count badge, then a vertical list of lot
 cards. No sideways scroll of the lot list. From `md`: existing five-column

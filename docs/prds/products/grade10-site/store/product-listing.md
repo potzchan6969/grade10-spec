@@ -155,7 +155,7 @@ A location past 3 seconds asks the mirror for the copy's number, and takes the c
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952" title="Filter panel"}
 
-::story{id="pages-product-list-page--default" title="The listing, whole"}
+::story{id="pages-store-product-list-page--default" title="The listing, whole"}
 
 ::story{id="store-product-listing-productbrowse-states--no-match" title="A narrowing nothing matches"}
 
