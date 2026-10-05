@@ -30,9 +30,8 @@ hand. The group's readers are the schema's `apply` block's.
    landing, `pnpm run plan:land <change> <group> --perspectives <a,b> --stood
    "<what stood>" --tests "<sc>: <files>"`, one `--tests` entry per scenario
    id the group's tasks cite (the landing refuses a group that leaves one out,
-   and names it), before its tasks are ticked through `pnpm plan done`. `pnpm plan done` refuses a tick whose task names a
-   scenario id no test in the group's tree cites, and takes a tick whose task
-   names none
+   and names it), before its tasks are ticked through `pnpm plan done`. `pnpm plan done` refuses a tick of a group whose row
+   has not landed
 
 ## In the Application Repository
 
