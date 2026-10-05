@@ -66,7 +66,7 @@ removed, per the amendment note above each one.
     InvoicePdf export above (`decisions.md` Q22), structured rather than
     restored to its pre-retirement opaque shape
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: InvoicePdf renders its meta rows and party blocks
 

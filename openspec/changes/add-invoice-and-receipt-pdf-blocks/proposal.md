@@ -34,21 +34,21 @@ own task, see Impact).
   returns the document's PDF bytes, not a React component:
   - `InvoicePdf` draws the invoice's title and issuer mark, meta rows
     (invoice number, sent-at and payment-deadline dates), Bill To and Ship
-    To, the lot heading, a Description/Amount table of charges ending in a
+    To, including a phone line when supplied, the lot heading, a Description/Amount table of charges ending in a
     boxed Subtotal/Payment Processing Fee/Order Total summary, and the
     issuer block pinned to the sheet's bottom right.
   - `ReceiptPdf` draws the same title/issuer-mark, meta rows (receipt number,
     the invoice number it pays, date paid, payment method, payment
-    reference), Bill To and Ship To, the same lot/charges/summary table, an
+    reference), Bill To and Ship To, including a phone line when supplied, the same lot/charges/summary table, an
     optional transfer-reference line, the four-line payment breakdown
     (Original Invoice Total, Previous Payments, Current Payment Received,
     Remaining Balance Due), a footer, and the same issuer block.
-  - Every amount and date arrives pre-formatted (a `string`, not a
-    `ReactNode` — there is no JSX to hold one); every label routes through a
+  - Every amount arrives pre-formatted; every date arrives as a `Date` and the
+    winner's IANA time-zone identifier; every label routes through a
     `copy` argument now added for this move (Q20), never hardcoded in the
     package.
-- **Retired as non-goals (`decisions.md` Q19):** the bank rails section, the
-  manually-settled mark, Superseded invoice, and the reserved
+- **Retired as non-goals (`decisions.md` Q19):** receipt status badges and the
+  reserved
   `taxLine`/`issuerTaxDetails` slots. None was ever exercised by a real
   `grade10` consumer; carrying them into the new renderer before any concrete
   requirement calls for them would repeat the speculative work this amendment
@@ -76,14 +76,9 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-None here. Post-landing, the author removed `InvoicePdf`'s `replacedBy` prop
-(`decisions.md` Q16), which leaves `grade10-site/auction/winner-order`'s
-"Every invoice carries an invoice ID and a bank reference" requirement
-stating something this contract can no longer do — that a replaced invoice's
-PDF names its replacement (`SC-98`, and a line of `SC-123`). That requirement
-already carries a MODIFIED delta in the open `define-public-auction-
-identifiers` change, so the reword belongs there, not doubled here — see
-Open Questions.
+None here. The open `define-public-auction-identifiers` change owns the durable
+replacement-to-replaced invoice relationship; this renderer consumes that
+relationship as a conditional `Replaces invoice {invoice ID}` document row.
 
 ## Impact
 
