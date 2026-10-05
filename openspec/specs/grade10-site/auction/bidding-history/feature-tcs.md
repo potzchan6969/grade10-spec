@@ -156,7 +156,8 @@ A signed-in collector has more bidding listings than one page holds. No newer ac
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
 **Pre-conditions:**
-A signed-in storefront account with no retained bid attempt or automatic-bid activity.
+
+* customer(signed in) has placed no bid.
 
 **Steps:**
 
@@ -400,13 +401,21 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
-A signed-in collector is on <an open listing url>.
+
+* customer(signed in, card linked) is on <listing_malformed url> and has placed no bid on it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_malformed> | An open HKD listing |
+| <malformed maximum> | 10.50, a decimal the browser refuses to submit |
 
 **Steps:**
 
-1. Enter a malformed amount that the browser refuses to submit.
+1. Type <malformed maximum> into the custom maximum on the bid panel.
 2. Navigate to <grade10 bids url>.
-3. Open that listing's history.
+3. Look for <listing_malformed>.
 
 **Expected Results:**
 
@@ -428,19 +437,31 @@ A signed-in collector is on <an open listing url>.
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
-A signed-in collector can configure and raise an automatic-bid maximum on <an open listing url>. A rival account also has activity on that listing.
+
+* customer A(signed in, card linked) is on <listing_private_max url> and has placed no bid on it.
+* customer B(signed in) can open the same listing.
+* No one is signed in on a third session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_private_max> | An open HKD listing, opening price 20000 minor units (HK$200) |
+| <first maximum> | 50000 minor units (HK$500) |
+| <raised maximum> | 80000 minor units (HK$800) |
 
 **Steps:**
 
-1. Configure an automatic-bid maximum.
-2. Raise that maximum.
-3. Open the collector's history for that listing.
-4. Open the rival's history and an anonymous read of the listing.
+1. As customer A, enter <first maximum> in the custom maximum and place the bid.
+2. Enter <raised maximum> in the custom maximum and place the bid.
+3. Navigate to <grade10 bids url> and expand <listing_private_max>.
+4. As customer B, navigate to <grade10 bids url> and expand <listing_private_max> if it is listed.
+5. Signed out, open <listing_private_max url> and read public recent bids.
 
 **Expected Results:**
 
-* The collector's private history records both resulting maximums in order.
-* Neither maximum appears in any rival's history or anonymous read.
+* Step 3 records <first maximum> and then <raised maximum>.
+* Neither maximum appears in customer B's history or in the signed-out recent bids.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-shn rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
 ### grade10-site-auction-bidding-history-US2-TC5-1: Engine bid is labeled automatic
@@ -458,19 +479,29 @@ A signed-in collector can configure and raise an automatic-bid maximum on <an op
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
 **Pre-conditions:**
-A collector has an active automatic-bid maximum.
+
+* customer A(signed in) leads <listing_engine> with a maximum of <customer A maximum>.
+* customer B(signed in, card linked) is on <listing_engine url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_engine> | An open HKD listing, current bid 20000 minor units (HK$200) |
+| <customer A maximum> | 80000 minor units (HK$800) |
+| <customer B maximum> | 30000 minor units (HK$300), below <customer A maximum> |
 
 **Steps:**
 
-1. Cause the automatic-bidding engine to place a bid for that account.
-2. Navigate to <grade10 bids url>.
-3. Open that listing's history.
-4. Check the accepted public price movement.
+1. As customer B, enter <customer B maximum> in the custom maximum and place the bid.
+2. As customer A, navigate to <grade10 bids url>.
+3. Expand <listing_engine>.
+4. Signed out, open <listing_engine url> and read the new public price.
 
 **Expected Results:**
 
-* The collector's private history labels the action as automatic.
-* The accepted public price movement remains subject to the auction's existing pseudonym rules.
+* Step 3 labels customer A's answering movement as automatic.
+* Step 4 shows a listing pseudonym, not customer A's name.
 
 ---
 
@@ -497,13 +528,22 @@ A collector has an active automatic-bid maximum.
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
 **Pre-conditions:**
-The collector is leading a listing.
+
+* customer A(signed in) leads <listing_outbid> at its opening price, with a maximum equal to that price.
+* customer B(signed in, card linked) is on <listing_outbid url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_outbid> | An open HKD listing, opening price 20000 minor units (HK$200) |
+| <customer B maximum> | 50000 minor units (HK$500) |
 
 **Steps:**
 
-1. Let a rival's accepted price movement displace the collector.
-2. Navigate to <grade10 bids url>.
-3. Expand that listing's combined history.
+1. As customer B, enter <customer B maximum> in the custom maximum and place the bid.
+2. As customer A, navigate to <grade10 bids url>.
+3. Expand <listing_outbid>.
 
 **Expected Results:**
 
@@ -527,12 +567,23 @@ The collector is leading a listing.
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
 **Pre-conditions:**
-A rival bid causes the collector's automatic maximum to advance the public price.
+
+* customer A(signed in) leads <listing_auto> with a maximum above the current bid.
+* customer B(signed in, card linked) is on <listing_auto url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_auto> | An open HKD listing, current bid 20000 minor units (HK$200) |
+| <customer A maximum> | 80000 minor units (HK$800) |
+| <customer B maximum> | 30000 minor units (HK$300) |
 
 **Steps:**
 
-1. Navigate to <grade10 bids url>.
-2. Open that listing's combined history.
+1. As customer B, enter <customer B maximum> in the custom maximum and place the bid.
+2. As customer A, navigate to <grade10 bids url>.
+3. Expand <listing_auto>.
 
 **Expected Results:**
 
@@ -770,8 +821,8 @@ No storefront session.
 
 **Steps:**
 
-1. Request an account index or combined history without a storefront session.
-2. Fetch an anonymous public auction response.
+1. Read the API response for an account bidding index with no storefront session.
+2. Read the API response for a public listing.
 
 **Expected Results:**
 
@@ -1043,8 +1094,8 @@ A visible index or combined history page with a further cursor.
 
 **Steps:**
 
-1. Request the next page.
-2. Check the entries already shown and the next-page control.
+1. Activate the next-page control.
+2. Activate it again while the next page is still loading.
 
 **Expected Results:**
 
