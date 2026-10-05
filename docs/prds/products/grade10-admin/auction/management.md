@@ -95,6 +95,11 @@ the card is in the winner's hands. The collector's half is
   A picked direct-upload file is previewed and stored only on confirm; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
+- 🚧 **Uploading and ordering** - files an operator drops or chooses are stored
+  at once, several at a time, after the last item, with no preview to confirm;
+  a replacement stores the same way. The operator drags items into order, and
+  the new order holds as soon as it is dropped, except while inventory assets
+  wait for Save. Removing an item still asks first
 - **Cert-aware inventory media** - a listing for one Cert ID starts with
   untagged product media and media tagged to that Cert. Media tagged to another
   Cert stays in a separately labelled drawer until the operator deliberately
