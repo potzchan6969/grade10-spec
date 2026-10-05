@@ -26,6 +26,11 @@ import {
   deltaSections,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import {
+  acceptedSnapshots,
+  describeReuse,
+  reusedInChange,
+} from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
@@ -1027,47 +1032,13 @@ function durableWhenPurposeWritten(root, deltaPath, durablePath) {
   return textAt(root, written, durablePath) ?? "";
 }
 
-function previousDurableSnapshots(root, changeId) {
-  const current = join(
-    root,
-    "openspec",
-    "changes",
-    changeId,
-    "acceptance.json",
-  );
-  if (!existsSync(current)) return new Map();
-  try {
-    const accepted = JSON.parse(readFileSync(current, "utf8"));
-    const file = join(
-      root,
-      "openspec",
-      "changes",
-      changeId,
-      "acceptance",
-      `${accepted.fingerprint}.snapshots.json`,
-    );
-    if (!existsSync(file)) return new Map();
-    const snapshots = JSON.parse(readFileSync(file, "utf8"));
-    return new Map(
-      (snapshots.files ?? [])
-        .filter((entry) => entry.role === "durable-result")
-        .map((entry) => [
-          entry.path,
-          Buffer.from(entry.contentBase64, "base64").toString("utf8"),
-        ]),
-    );
-  } catch {
-    return new Map();
-  }
-}
-
 function contractOutputs(root, changeId, foldedOn) {
   const dir = join(root, "openspec", "changes", changeId);
   const deltas = walkFiles(root, join(dir, "specs"))
     .filter((path) => path.endsWith("/spec.md"))
     .sort();
   const outputs = new Map();
-  const prior = previousDurableSnapshots(root, changeId);
+  const prior = acceptedSnapshots(root, changeId, "durable-result");
   for (const path of deltas) {
     const relativeCapability = path
       .slice(`openspec/changes/${changeId}/specs/`.length)
@@ -1301,6 +1272,8 @@ export function acceptanceReadiness(root, changeId) {
   );
   if (deltas.length === 0 && manifest.skip_specs !== true)
     errors.push("there are no delta specs to accept");
+  for (const { file, reuse } of reusedInChange(root, changeId))
+    errors.push(`${file}: ${describeReuse(reuse)}`);
   for (const path of deltas) {
     const capabilityDir = dirname(join(root, path));
     for (const file of ["user-journeys.md", "feature-tcs.md"]) {
