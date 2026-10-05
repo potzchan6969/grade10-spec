@@ -16,9 +16,10 @@ GitHub Deployment receipts, shown for each application component.
   - Proposed whole: the proposal, the decisions and the journeys are one stage, with ❓ on what is still open
   - Waivers as written: `ui_waived` stands for the UI design and `design_waived` for the tech design, so Designed needs the UI design or its line, and Specified the tech design or its line
   - Design draws the UI alone: Designed is proven by the UI design or `ui_waived` and nothing else, and the designer is its one hand
-  - Tech design in planning: Dev writes the tech design inside the planning run, after the blind cases and before the scenarios, and it proves Specified beside the requirements and the suite
+  - Tech design in planning: Dev writes the tech design inside the planning run, after the blind cases and before the scenarios, and it proves Specified beside the requirements and the suite; the engineer who will build the change challenges it before acceptance
+  - Raised rows hold acceptance: an open Raised row never holds Specified; the product manager's turn at Specified is to resolve it, and acceptance waits until none is open
 - Drafted, landed on a word
-  - Agent mark: the six stages from Proposed to Building are drafted by the change's agent and carry the hand's move beside the mark
+  - Agent mark: the five stages Proposed, Designed, Specified, Planned and Building are drafted by the change's agent and carry the hand's move beside the mark
   - Landed by: `landed_by:` names the hand whose word landed each artifact, written by the landing itself
 - Hands and whose turn
   - Hands mapping: `hands:` names one handle per role of five - product manager, designer, engineer, QA and release hand - with no tech PIC, written by the product manager, the local manual or the application repository's command, refused when the team map does not know it
@@ -36,7 +37,7 @@ GitHub Deployment receipts, shown for each application component.
   - Landed from a terminal: a landing pushed from a terminal posts one reply in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
   - Channel and digest: once the manual deploys a push, the channel post names each change that crossed a milestone - proposed, accepted, implementation claimed, implementation complete, archived; a weekly digest per person lists open questions, idle, behind and waiting
 - Surfaces that show the stage
-  - Board: eight lanes with the agent mark and the hand's move on six, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
+  - Board: eight lanes with the agent mark and the hand's move on five, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
   - Change page: the stepper, the Your turn card with the thread and the command, the hands, each artifact fresh or behind with its questions and who landed it, on the pages every line the change marks, delivery and handoff
   - My turn: the reader's open questions, then the changes on them now, then the ones theirs later
   - Ribbon and pip: a section's in-flight row shows the stage and the hand, and each 🚧 line wears its change's stage
