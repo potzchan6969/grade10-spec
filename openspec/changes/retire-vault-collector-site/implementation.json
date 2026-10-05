@@ -198,5 +198,14 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "158ba9630568640607e5e331b9597c05cf35efea",
+      "components": [
+        "vault-service",
+        "web"
+      ]
+    }
+  ]
 }
