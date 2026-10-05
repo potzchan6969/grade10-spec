@@ -212,14 +212,18 @@ account SHALL NOT shorten the 7 years.
 | --- | --- | --- |
 | Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, Tax when added, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
 | Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
-| Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
+| Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided - handover timestamp, signature, proof-of-delivery image |
 
-Every receipt SHALL carry a receipt ID, unique across all receipts:
-`REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]`, for example
-`REC-202609-LK7P2Q-01-P1`. `[LISTING_ID]` and `[SEQ]` are the paid invoice's.
-`[YYYYMM]` is the year and month the payment was confirmed, in Hong Kong time.
-`[INDEX]` counts the payments on the invoice; an invoice takes one payment, so
-every receipt ends `-P1`.
+Each receipt issued after this change SHALL carry a receipt ID, unique across
+all such receipts: `RC-[CODE][INVOICE_SEQ]P[RECEIPT_SEQ]`, for example
+`RC-LK42301P1`. `[CODE]` is the paid invoice's unchanged payment reference,
+`[INVOICE_SEQ]` is that invoice's sequence without the `IN-` prefix, and
+`[RECEIPT_SEQ]` counts finalized receipt-bearing payments on that invoice,
+starting at `1` without padding. Grade10 SHALL allocate the next sequence
+atomically with the finalized full or partial payment. A refund, reversal or
+void SHALL allocate no receipt ID or rewrite one already issued. Receipt IDs
+issued before this change, including `REC-...` IDs, remain unchanged. Formal
+tax-receipt content remains outside this requirement.
 
 Every receipt SHALL show this breakdown:
 
@@ -253,12 +257,9 @@ The receipt SHALL name the payment method:
 | Bank transfer, proof confirmed by an operator | Bank transfer |
 | Recorded by an operator | Bank transfer, cash, or the description the operator gave for another method, with the external reference where one was recorded |
 
-A receipt for a confirmed bank transfer SHALL NOT be marked as manually
-settled. A receipt for a manually settled order SHALL be marked as manually settled,
-SHALL be visually distinguishable from a card-settled receipt, and SHALL
-record the amount settled, the payment method, the external reference, and a
-pointer to any invoice it supersedes. No proof file, the winner's or an
-operator's, SHALL appear on the receipt.
+A receipt SHALL record the amount settled, the payment method, and the external
+reference when one was recorded. No proof file, the winner's or an operator's,
+SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-49p rev=2 -->
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
@@ -271,17 +272,15 @@ operator's, SHALL appear on the receipt.
   fee, and the order total
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-9qq rev=1 -->
-#### Scenario: winner-order-SC-19 - A manually settled receipt says so
+#### Scenario: winner-order-SC-19 - A manually settled receipt records payment facts
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order an operator settled by bank transfer with an
   external reference, after reissuing and replacing an earlier invoice
 - **WHEN** the winner opens the receipt
-- **THEN** it is marked as manually settled and is distinguishable from a
-  card-settled receipt
-- **AND** it records the amount settled, which includes the payment processing
-  fee, bank transfer as the method, the external reference, and the invoice it
-  supersedes
+- **THEN** it records the amount settled, which includes the payment processing
+  fee, bank transfer as the method, and the external reference
+- **AND** it carries no settlement-origin badge
 - **AND** it shows no proof file
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=1 -->
@@ -312,13 +311,14 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the winner opens the receipt
 - **THEN** the payment method reads as a Visa card ending 4242
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-f2w rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-f2w rev=2 -->
 #### Scenario: winner-order-SC-112 - Every receipt carries a receipt ID
 **Serves:** Records the winner keeps - receipt ID and breakdown
 
-- **GIVEN** one order paid by card, one confirmed from bank transfer proof, and one settled manually
+- **GIVEN** one post-change order paid by card, one confirmed from bank transfer
+  proof, and one settled manually
 - **WHEN** the winner opens each receipt
-- **THEN** each carries a receipt ID ending `-P1`
+- **THEN** each carries a receipt ID in the `RC-[CODE][INVOICE_SEQ]P1` form
 - **AND** each names its invoice ID
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-vxf rev=1 -->
@@ -331,13 +331,14 @@ operator's, SHALL appear on the receipt.
 - **AND** it is not marked as manually settled
 - **AND** it shows no proof file and no file name
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-kiz rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-kiz rev=2 -->
 #### Scenario: winner-order-SC-131 - A receipt ID takes the paid invoice and the payment month
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
-- **GIVEN** an order whose bank transfer invoice `INV-202609-LK7P2Q-02` has an order total of 317000 minor units in HKD
-- **WHEN** an operator confirms its proof at 2026-09-30T16:30:00Z, which is 1 October in Hong Kong, and the winner opens the receipt
-- **THEN** the receipt ID is `REC-202610-LK7P2Q-02-P1`
+- **GIVEN** an order whose bank transfer invoice is `IN-LK7P2Q02` and has an
+  order total of 317000 minor units in HKD
+- **WHEN** an operator confirms its first payment proof and the winner opens the receipt
+- **THEN** the receipt ID is `RC-LK7P2Q02P1`
 - **AND** it shows Original Invoice Total 317000, Previous Payments 0, Current Payment Received 317000 and Remaining Balance Due 0, in minor units of HKD
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-e8v rev=1 -->
@@ -348,13 +349,13 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the winner opens both receipts
 - **THEN** the two receipt IDs differ
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-pvg rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-pvg rev=2 -->
 #### Scenario: winner-order-SC-135 - A repeated confirmation keeps one receipt ID
 **Serves:** Records the winner keeps - receipt ID and breakdown
 
-- **GIVEN** an auction order whose receipt ID is `REC-202609-LK7P2Q-01-P1`
+- **GIVEN** an auction order whose receipt ID is `RC-LK7P2Q01P1`
 - **WHEN** the payment confirmation is delivered again
-- **THEN** the receipt ID is still `REC-202609-LK7P2Q-01-P1`
+- **THEN** the receipt ID is still `RC-LK7P2Q01P1`
 - **AND** no other receipt ID and no other internal audit number is issued
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-xqw rev=1 -->
@@ -364,6 +365,42 @@ operator's, SHALL appear on the receipt.
 - **GIVEN** a paid order with a replaced invoice, its current invoice and a receipt, whose winner deleted their account a year after payment
 - **WHEN** Grade10 retrieves the order's documents 6 years after payment
 - **THEN** the replaced invoice PDF, the current invoice PDF and the receipt PDF are all returned
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-r8w rev=1 -->
+#### Scenario: winner-order-SC-247 - A finalized first payment receives the new receipt ID
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** invoice `IN-LK42301` for an order whose payment reference is `LK423`
+- **AND** it has no finalized receipt-bearing payment
+- **WHEN** its first full or partial payment finalizes
+- **THEN** its receipt ID is `RC-LK42301P1`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-k31 rev=1 -->
+#### Scenario: winner-order-SC-222 - Each finalized payment advances only its invoice's receipt sequence
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** invoice `IN-LK42301` has receipts through `RC-LK42301P9`
+- **WHEN** another partial payment for it finalizes
+- **THEN** the receipt ID is `RC-LK42301P10`
+- **AND** a finalized payment on invoice `IN-LK42302` starts at `RC-LK42302P1`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-4mt rev=1 -->
+#### Scenario: winner-order-SC-223 - Historical and non-payment events do not receive the new receipt ID
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** a historical receipt ID is `REC-202609-LK7P2Q-01-P1`
+- **WHEN** the receipt is read after this change is delivered
+- **THEN** its ID remains unchanged
+- **AND** a refund, reversal or void creates no receipt ID
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-6pw rev=1 -->
+#### Scenario: winner-order-SC-246 - Nothing identifying the lot's order is shown before a winner exists
+**Serves:** winner-order-US-21 - Winner quotes their order
+
+- **GIVEN** a lot that has not yet closed, and the same lot just after it closes with no winner
+- **WHEN** anyone reads the lot outside a winning order
+- **THEN** no payment reference, invoice ID, or receipt ID is shown for it
+- **AND** the lot is identified only by its title
 
 ## ADDED Requirements
 
