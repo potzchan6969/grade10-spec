@@ -15,8 +15,8 @@ Landing is the handoff. The application repository reads this store at its
 `main`, so a change sitting on a branch reaches nobody: `pnpm plan board` there
 flags it and `pnpm plan claim` refuses it.
 
-**Done when:** the commits are on `main`, or a shared surface's pull request is
-open and set to merge once green. **Stop when:** a conflict the change itself
+**Done when:** the commits are on `main`, or their pull request is open and set
+to merge once green. **Stop when:** a conflict the change itself
 cannot decide, or a check that fails for a reason outside the change.
 
 ## Chain
@@ -47,9 +47,9 @@ pnpm push:main
 ```
 
 It fetches, rebases onto `origin/main`, runs the fast checks the paths owe
-(`scripts/push-main/paths.mjs`), and pushes. Planning text lands on `main`; a
-shared surface — packages, apps, scripts, tools, the schema, agent files, root
-config — goes to a pull request that merges itself once its checks pass. `main`
+(`scripts/push-main/paths.mjs`), and pushes. Planning text — `openspec/changes`,
+`openspec/specs` and `docs/` — lands on `main`; anything else goes to a pull
+request that merges itself once its checks pass. `main`
 moving under the push is a rebase and a gate again, three times at most.
 `--dry-run` rebases and gates and pushes nothing; `--pr` sends anything through
 a pull request, when the author wants someone to read it first.

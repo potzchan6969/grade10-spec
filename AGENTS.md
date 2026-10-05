@@ -124,7 +124,7 @@ Run the appropriate checks before handoff:
 
 ## Pushes, Pull Requests and Commits
 
-- Push with `pnpm push:main`, not a pull request: it rebases, runs the checks the paths owe and lands planning text on `main`. A shared surface (packages, apps, scripts, tools, schema, agent files, config) goes through a pull request set to merge once green. Settle a conflict as `/spec-push` says.
+- Push with `pnpm push:main`, not a pull request: it rebases, runs the checks the paths owe and lands planning text (`openspec/changes`, `openspec/specs`, `docs/`) on `main`. Anything else goes through a pull request set to merge once green. Settle a conflict as `/spec-push` says.
 - PR labels: use one of `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
 - Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
 - Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.

@@ -52,6 +52,23 @@ test("a durable spec and a schema land differently", () => {
   assert.equal(classify(["openspec/config.yaml"]).route, "pr");
 });
 
+test("anything outside planning text is shared, a new path included", () => {
+  for (const path of [
+    "README.md",
+    "PRODUCT.md",
+    ".vscode/settings.json",
+    ".gitmodules",
+  ]) {
+    assert.equal(classify([path]).route, "pr", path);
+  }
+});
+
+test("every page, reference and governance doc lands on main and owes the planning checks", () => {
+  const paths = ["docs/references/a.md", "docs/governance/b.md"];
+  assert.equal(classify(paths).route, "main");
+  assert.deepEqual(ids(paths), ["biome", "changes", "test-cases", "manual"]);
+});
+
 test("changesOf names each active change once", () => {
   assert.deepEqual(
     changesOf([

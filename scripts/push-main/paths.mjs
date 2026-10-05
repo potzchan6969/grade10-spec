@@ -1,44 +1,28 @@
 /**
  * Where a set of changed paths lands, and which fast checks they owe.
  *
- * Planning text — a change's folder, a durable spec, a page — lands straight on
- * `main`: each change owns its own folder, so two people rarely meet there.
- * A shared surface — the packages, the preview and email apps, the tooling, the
- * schema, the agent instructions — goes through a pull request that merges
- * itself once CI is green, because every other change builds on it and the
- * pull request is where its full checks run.
+ * Planning text — a change's folder, a durable spec, a page, a reference —
+ * lands straight on `main`: each change owns its own folder, so two people
+ * rarely meet there. Anything else is a shared surface — the packages, the
+ * apps, the tooling, the schema, the agent instructions, root config — and goes
+ * through a pull request that merges itself once CI is green, because every
+ * other change builds on it and the pull request is where its full checks run.
+ * A path nobody listed is shared until someone says otherwise.
  */
 
-const SHARED = [
-  /^packages\//,
-  /^apps\//,
-  /^scripts\//,
-  /^tools\//,
-  /^openspec\/schemas\//,
-  /^openspec\/config\.yaml$/,
-  /^\.github\//,
-  /^\.githooks\//,
-  /^\.claude\//,
-  /^\.codex\//,
-  /^\.cursor\//,
-  /^(AGENTS|AGENT|CLAUDE|GEMINI)\.md$/,
-  /^package\.json$/,
-  /^pnpm-(lock|workspace)\.yaml$/,
-  /^biome\.json$/,
-  /^tsconfig[^/]*\.json$/,
-  /^skills-lock\.json$/,
-];
+/** Planning text: the one set of paths that lands on `main` directly. */
+const TEXT = /^(openspec\/(changes|specs)\/|docs\/)/;
 
 /** Files a planning tool rewrites to record where a change stands. */
 const STATUS =
   /^openspec\/changes\/(?!archive\/)([^/]+)\/(tasks\.md|rounds\.md|implementation\.json|acceptance\.json|\.openspec\.yaml)$/;
 
-const PLANNING = /^(openspec\/|docs\/prds\/)/;
+const PLANNING = /^(openspec\/|docs\/)/;
 const AGENT =
   /^(\.claude\/|\.codex\/|\.cursor\/|(AGENTS|AGENT|CLAUDE|GEMINI)\.md$)/;
 const CHANGE = /^openspec\/changes\/(?!archive\/)([^/]+)\//;
 
-export const isShared = (path) => SHARED.some((pattern) => pattern.test(path));
+export const isShared = (path) => !TEXT.test(path);
 
 /**
  * `{ route, shared, checks }` for the paths a push sends. `route` is `main` or
