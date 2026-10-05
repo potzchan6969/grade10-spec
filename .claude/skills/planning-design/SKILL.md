@@ -27,6 +27,16 @@ lane's to write, in your hands any more than the PM's. `/planning-dev` writes it
 outline from your journeys and your marks, and the design reference is what
 makes those groups name what exists.
 
+A question you put to the human on a design - a state nobody has decided, a
+screen the journeys cannot reach - takes the same shape as the interview's, a
+[Clarification Request](../../../docs/governance/round-summary.md#clarification-request):
+a numbered list, one blocker per item, each asked from what the user sees or
+can do; lettered options with the recommended one first; why it matters to the
+user; what it blocks; and the past decision or requirement it turns on, quoted
+and linked on the manual - the PRD page
+(`https://spec.grade10-stg.com/p/<product>/<capability>`) and the change
+(`https://spec.grade10-stg.com/openspec/#/change/<change-id>`).
+
 What a designer brings that a PM does not is **the design reference**: what
 already exists in Storybook, in `packages/design-system`, in `packages/ui` and
 in `packages/i18n`. The outline's feature set and the requirements drawn from it
