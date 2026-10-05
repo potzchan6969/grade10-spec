@@ -8,3 +8,4 @@ hands:
   qa: "@tangconst"
   dev: "@tangconst"
 decisions_carried: "Q1–Q5 on Post-Bidding Progress stepper, Preparing Shipment naming, current Shipping, and Shipped badge tone"
+design_waived: "its one task group lands in this store: preview, catalogs and fixtures, with no application-repository work beyond a submodule bump"

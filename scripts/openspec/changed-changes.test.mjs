@@ -168,6 +168,41 @@ test("builds one Slack section for each milestone, in the order a change meets t
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
 });
 
+test("splits a milestone too long for one Slack section, and caps the post at 50 blocks", () => {
+  const many = (count, milestone) =>
+    Array.from({ length: count }, (_, index) => ({
+      id: `${milestone}-change-with-a-long-enough-name-${index}`,
+      milestone,
+      title: `A change title long enough to fill a line quickly ${index}`,
+    }));
+  const split = slackPayload({
+    milestones: many(60, "proposed"),
+    commitSha: "1234567890",
+    commitUrl: "",
+    manualUrl: "https://spec.grade10-stg.com/planning",
+  });
+
+  const sections = split.blocks.filter((block) => block.type === "section");
+  assert.ok(sections.length > 1, "60 changes fit one section");
+  for (const block of sections) assert.ok(block.text.text.length <= 3000);
+  // The heading opens the first section alone, and every change is named once.
+  assert.match(sections[0].text.text, /^:new: \*Proposed\*\n/);
+  assert.doesNotMatch(sections[1].text.text, /Proposed/);
+  const named = sections.flatMap((block) =>
+    block.text.text.split("\n").filter((line) => line.startsWith("- ")),
+  );
+  assert.equal(named.length, 60);
+
+  const capped = slackPayload({
+    milestones: many(2000, "archived"),
+    commitSha: "1234567890",
+    commitUrl: "",
+    manualUrl: "https://spec.grade10-stg.com/planning",
+  });
+  assert.equal(capped.blocks.length, 50);
+  assert.match(capped.blocks.at(-2).text.text, /more sections/);
+});
+
 test("builds no post for a push that crossed no milestone", () => {
   const payload = slackPayload({
     milestones: [],

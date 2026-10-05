@@ -53,8 +53,10 @@ in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
    was folded, rejected with reason, raised for the human or remains uncovered.
    Put unresolved product questions in `decisions.md`'s `## Raised` table.
 4. **Resolve and check.** A question the readings cannot settle goes to the
-   same human, as a numbered `Q<n>` row. The same human resolves questions that affect
-   behaviour, scope, design, architecture or tasks. Update the source first,
+   same human, as a numbered `Q<n>` row, and is put to them as a
+   [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
+   The same human resolves questions that affect behaviour, scope, design,
+   architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another
    edit reruns QA2. Confirm artifacts are complete and new cases remain draft.
 5. **Review.** In a fresh context, run `accept-review`. Accept only on its
