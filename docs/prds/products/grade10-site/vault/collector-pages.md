@@ -8,7 +8,7 @@ What a collector does on their own vault case, and what they are told about
 it. The backend answers every read and act below; the screens are being drawn
 again.
 
-- 🚧 **On the site** — no vault page but the signing ceremony at
+- **On the site** — no vault page but the signing ceremony at
   `grade10.com/vault/sign#<token>`, opened from the QR code or link staff
   hand over at the counter; no account needed
 - ❓ **The collector's screens** — the case list, the request, one case,
