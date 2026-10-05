@@ -83,3 +83,4 @@ that field yet.
 | Quote with Tax | Optional Tax amount entered, above zero | `post-sale-SC-155` |
 | Quote without Tax | Tax field empty; send proceeds without a Tax line on the invoice | `post-sale-SC-156` |
 | Tax of zero refused | Entering zero is refused (same shape as Insurance) | `post-sale-SC-157` |
+| Reissue changes Tax | Tax starts from the current invoice; the reissued entry names Tax before and after | `post-sale-SC-158` |

@@ -124,13 +124,14 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds a card invoice whose lines before Tax total 312000 minor units in HKD.
-* The operator adds Tax of 6000 minor units in HKD.
+* admin(operator with payment-processing) is on a card order in Preparing Invoice.
+* The order's lines before Tax total 312000 minor units in HKD.
 
 **Steps:**
 
-1. Send the invoice.
-2. Read its Subtotal and payment processing fee inputs.
+1. Add Tax of 6000 minor units in HKD.
+2. Send the invoice.
+3. Read its Subtotal and payment processing fee inputs.
 
 **Expected Results:**
 

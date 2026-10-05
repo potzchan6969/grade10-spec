@@ -9,10 +9,10 @@ fields table reserved a Tax line and left it empty, "reserved for the separate
 tax change"; nobody opened that change, so the reservation has sat unfilled
 while the rest of the invoice shipped.
 
-The gap is not theoretical. `InvoicePdf` and `ReceiptPdf` already carry a
-`taxLine` slot that no consumer can fill, the receipt requirement already
-itemises "any tax amount", and three feature test cases already name a tax
-amount they cannot exercise. Every layer was built ready for a line that has
+The gap is not theoretical. `InvoicePdf` and `ReceiptPdf` already render any
+charge row passed in `lineItems`, but no consumer has a tax row to pass. The
+receipt requirement already itemises "any tax amount", and three feature test
+cases already name a tax amount they cannot exercise. Every layer was built ready for a line that has
 no source.
 
 Today an operator with a taxable lot has one option: fold the tax into
@@ -42,8 +42,8 @@ watch.
   what a winner in Awaiting Setup actually wonders, since the row reads TBD
   whether or not they will owe anything. The tip rides the line rather than
   appearing in one status and vanishing in the next
-- **The invoice and the receipt state it**, between Insurance and Subtotal,
-  filling the `taxLine` slot the PDF blocks already expose
+- **The invoice and the receipt state it** as an ordinary `lineItems` charge
+  row between Insurance and Subtotal
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
 
@@ -72,7 +72,8 @@ See [Non-Goals](decisions.md#non-goals).
   that contains it
 - **The operator quote and reissue forms** — one optional amount field each
 - **`shared/ui/invoice-and-receipt-pdf`** — no contract change; this change
-  supplies the `taxLine` the block already accepts
+  supplies Tax as an ordinary `lineItems` charge row between Insurance and
+  Subtotal
 - **The audit log** — Tax joins the quoted amounts a reissue records before
   and after
 - **The set of quoted amounts is enumerated in six places** in

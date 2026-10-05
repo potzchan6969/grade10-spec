@@ -1,11 +1,5 @@
 ## Context user journeys
 
-### post-sale-US-11: Operator adds a missing billing address before sending
-
-**As an** operator,
-**I want** to add the billing address to an order that has none before I send its invoice,
-**so that** no invoice goes out without a billing address the winner gave.
-
 ### post-sale-US-07: Operator resolves an unpaid order
 
 **As an** operator,

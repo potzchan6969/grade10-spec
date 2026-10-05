@@ -3,8 +3,8 @@
 The auction invoice already persists the amounts that make one immutable
 quote: Winning Bid, Buyer's Premium, Shipping & Handling, optional Insurance,
 Subtotal, Payment Processing Fee and Order Total. Its PDF projection already
-accepts an ordinary `taxLine`, but the quote writer and the Winner Order read
-model have no tax value to supply.
+renders ordinary charge rows from `lineItems`, but the quote writer and the
+Winner Order read model have no tax value to supply.
 
 Tax has the same storage boundary as Insurance. An operator supplies an
 optional integer count of minor units while preparing an invoice or a
@@ -49,8 +49,8 @@ that Tax consumes.
    Summary inserts it in the existing ordered line projection and supplies
    localized label and tooltip copy. Before send, the page supplies the
    dependency's TBD row; after send, a null amount omits the row. Invoice and
-   receipt generation pass an ordinary Tax charge through the existing
-   `taxLine` or line-items slot between Insurance and Subtotal.
+   receipt generation pass Tax as an ordinary `lineItems` charge row between
+   Insurance and Subtotal.
    - Rejected: add a Tax-specific shared UI export. The summary and PDF blocks
      already accept optional supplied rows; tax policy remains in the auction
      application.
@@ -94,8 +94,8 @@ type OptionalTaxInput = {
   records its prior and next values when changed.
 - **Winner order read** returns the current invoice's optional Tax without
   recomputing it from an address.
-- **PDF generation** maps the same persisted value into the existing Tax line
-  slot. A null value supplies no line.
+- **PDF generation** maps the same persisted value to an ordinary `lineItems`
+  charge row between Insurance and Subtotal. A null value supplies no row.
 
 Validation failures remain tagged command refusals. A zero, negative,
 fractional or unsafe Tax value is refused before pricing or persistence; no
@@ -115,10 +115,6 @@ invalid value is coerced to `null`.
 - **[Risk] A reissue changes Tax without naming it in the audit record.** →
   Keep Tax in the central quoted-amount comparison and test its prior and next
   values. This preserves Observability.
-- **[Risk] The tax line renders twice when the PDF slot and generic line list
-  are both populated.** → Keep one application mapper responsible for the
-  ordered PDF lines and assert the complete line order. This preserves
-  Modularity.
 - **[Trade-off] Tax remains a scalar amount without provenance.** → That is
   the smallest shape that serves the operator-entered decision. A later
   computed-tax change can add provenance without replacing the snapshot
