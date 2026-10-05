@@ -1,12 +1,12 @@
 /** Storybook story id for a closed won Auction Lot Details assembly. */
 const AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID =
-  "pages-auction-lot-details--closed-won-payment-due";
+  "pages-auction-auction-lot-details--closed-won-payment-due";
 
 /** Storybook story id for the filled Order History page assembly. */
-const ORDER_HISTORY_STORY_ID = "pages-store-order-history-page--filled";
+const ORDER_HISTORY_STORY_ID = "pages-store-store-order-history-page--filled";
 
 /** Storybook story id for the filled Order Details page assembly. */
-const ORDER_DETAILS_STORY_ID = "pages-store-order-details-page--filled";
+const ORDER_DETAILS_STORY_ID = "pages-store-store-order-details-page--filled";
 
 /** Storybook story id for the Store Locator page assembly. */
 const STORE_LOCATOR_STORY_ID = "pages-store-locator-page--default";
@@ -17,7 +17,8 @@ const TERMS_OF_SERVICE_STORY_ID = "pages-legal--terms-of-service";
 /** Storybook story id for the Privacy Policy page assembly. */
 const PRIVACY_POLICY_STORY_ID = "pages-legal--privacy-policy";
 /** Storybook story id for the My Auctions page assembly (list → Winner Order). */
-const MY_AUCTIONS_PAGE_STORY_ID = "pages-my-auctions-page--post-auction";
+const MY_AUCTIONS_PAGE_STORY_ID =
+  "pages-auction-my-auctions-page--post-auction";
 
 /** Winner Order story ids — one per derived standing a Won row may open. */
 const WINNER_ORDER_AWAITING_ADDRESS_STORY_ID =

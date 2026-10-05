@@ -6,9 +6,7 @@ reviewed: 2026-09-11
 ---
 
 The cart is a drawer that slides in over the page. It lists the items the
-shopper is buying and fades at the edge when there is more to scroll to. When
-the cart holds nothing, it shows the design-system empty state — title and
-description only, no button to leave.
+shopper is buying and fades at the edge when there is more to scroll to.
 
 Opening it re-reads current status and price against the catalogue behind
 skeleton placeholders, because a cart is the one place a stale price is
@@ -23,6 +21,11 @@ It closes three ways — the close control, the dimmed backdrop, and Escape — 
 locks the page behind it while it is open. Pressing checkout puts the button
 into a redirecting state and hands the intent to the application, which is what
 actually creates the checkout session.
+
+## Empty Cart
+
+🚧 **Empty** — when the cart holds nothing, the design-system empty state:
+title and description only, no button to leave.
 
 ## Tender Actions
 
@@ -45,6 +48,21 @@ Discount. When the code replaces the sale, lines return to list price and the
 footer shows only the code. When the code is refused, lines stay on the sale
 and the sheet names why. Removing a code that replaced the sale puts the sale
 back on the lines.
+
+🚧 **Held, cannot apply** — a held code that cannot apply on this cart is
+muted with its reason and no Apply.
+
+::story{id="store-cart-cartitem--sale-price" title="A line on the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--refuse" title="A refused promo on the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--stack" title="A promo stacked on the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--replace" title="A promo that replaces the store sale"}
+
+::story{id="store-cart-cartdrawer-auto-discount--fallback-after-remove" title="The store sale back after the promo is removed"}
+
+::story{id="store-cart-promoticket--not-applicable" title="A held code that cannot apply"}
 
 ::story{id="store-cart-cartdrawer--default" title="The drawer with items"}
 

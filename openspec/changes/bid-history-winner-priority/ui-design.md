@@ -26,3 +26,4 @@ Phosphor Crown and Info with existing Badge for You only.
 | Closed sold winning row shows crown | `shared-ui-auction-listing-SC-50` | ClosedSoldEqualMax |
 | Equal-max non-leader earlier-leads tip | `shared-ui-auction-listing-SC-51` | ClosedSoldEqualMax / Default |
 | Live lot has no crown without `isWinner` | `shared-ui-auction-listing-SC-50` | Default |
+| No crown without its name | `shared-ui-auction-listing-SC-54` | ClosedSoldEqualMax with `winner` copy unset |

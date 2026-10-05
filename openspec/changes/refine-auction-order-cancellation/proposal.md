@@ -70,9 +70,9 @@ None. Every question the interview raised was settled.
 
 ## References
 
-- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
+- [Auction Management · Order Cancellation](../../../docs/prds/products/grade10-admin/auction/management.md#order-cancellation)
 - [Auction Management · Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/management.md#post-sale-queue)
-- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
+- [Post-Bidding · Cancelled Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#cancelled-order)
 
 ## Follow-on changes
 

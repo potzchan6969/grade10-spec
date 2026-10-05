@@ -14,7 +14,7 @@ import {
 
 /**
  * Quiet All auctions grid (launch layout — no category chrome) with infinite
- * scroll. Assembled with Featured under Pages/Auction List → Default. Lot card
+ * scroll. Assembled with Featured under Pages/Auction/Auction List → Default. Lot card
  * states live under All Auctions/Lot Card. Category button (later) lives under
  * All Auctions/Later.
  */
@@ -82,7 +82,7 @@ function AllAuctionsList({ lots }: { lots: readonly CatalogueLot[] }) {
   );
 }
 
-/** Launch All auctions grid — same band as Pages/Auction List → Default. */
+/** Launch All auctions grid — same band as Pages/Auction/Auction List → Default. */
 export const Default: Story = {
   name: "All auctions",
   render: () => <AllAuctionsList lots={CATALOGUE_PAGE_LOTS} />,

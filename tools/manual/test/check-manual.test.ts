@@ -1494,4 +1494,27 @@ describe("a change carrying journeys and no delta", () => {
       "openspec/changes/handoff/specs/demo-product/alpha/user-journeys.md — the restated `alpha-US-01` is not what `demo-product/alpha` holds — bring the copy back to the durable text, or move the journey under `## MODIFIED User journeys` where it is meant to differ",
     ]);
   });
+
+  it("warns on a durable case id a change's suite hands to something new", async () => {
+    const marker =
+      "<!-- trace:case id=g.alpha.TC-a1 rev=1 covers=g.alpha.SC-a1 -->";
+    const suite = (heading: string) =>
+      `# Alpha cases\n\n## alpha-US1: Collector does something\n\n${heading}\n\nCoverage.\n`;
+    const reused = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": spec(
+        "Alpha",
+        requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      ),
+      "openspec/specs/demo-product/alpha/feature-tcs.md": suite(
+        `${marker}\n### alpha-US1-TC1-1: The thing happens`,
+      ),
+      "openspec/changes/handoff/proposal.md": proposal("Handoff"),
+      "openspec/changes/handoff/specs/demo-product/alpha/feature-tcs.md": suite(
+        "### alpha-US1-TC1-1: Another thing happens",
+      ),
+    });
+    expect(lines(await runChecks(reused, NO_GIT), "reused")).toEqual([
+      'openspec/changes/handoff/specs/demo-product/alpha/feature-tcs.md — case alpha-US1-TC1 reuses the durable case\'s id for "Another thing happens", where the durable case is "The thing happens"; give the new case the next unused TC number, or carry the durable case\'s `trace:case` marker to revise it',
+    ]);
+  });
 });

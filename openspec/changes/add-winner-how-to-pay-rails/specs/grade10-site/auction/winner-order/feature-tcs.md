@@ -9,7 +9,7 @@
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
-### winner-order-US9-TC1-1: Order summary offers Submit Payment Proof and View Bank Details
+### winner-order-US9-TC21-1: Order summary offers Submit Payment Proof and View Bank Details
 
 **Classification:**
 
@@ -48,7 +48,7 @@
 * View Bank Details opens the View Bank Details dialog.
 * Submit Payment Proof opens the Submit Payment Proof dialog.
 
-### winner-order-US9-TC2-1: View Bank Details opens on FPS with QR
+### winner-order-US9-TC23-1: View Bank Details opens on FPS with QR
 
 **Classification:**
 
@@ -84,7 +84,7 @@
 * Amount due is shown without Copy.
 * The bank reference is shown as a detail row without Copy at the bottom of the FPS tab.
 
-### winner-order-US9-TC3-1: HK Local and SWIFT tabs show expanded fields
+### winner-order-US9-TC24-1: HK Local and SWIFT tabs show expanded fields
 
 **Classification:**
 
@@ -113,7 +113,7 @@
 * HK Local shows bank name, bank code, branch code, full account number including bank and branch code, then payment reference.
 * SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference, then the OUR charges note after the reference.
 
-### winner-order-US9-TC4-1: Submit Payment Proof is proof-only
+### winner-order-US9-TC25-1: Submit Payment Proof is proof-only
 
 **Classification:**
 

@@ -310,111 +310,6 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
-// shared/ui/grading-submission
-export type {
-  GradingCardAddition,
-  GradingCardListCap,
-} from "./blocks/grading-submission/grading-card-list";
-export {
-  GradingCardList,
-  type GradingCardListCopy,
-  type GradingCardListProps,
-} from "./blocks/grading-submission/grading-card-list";
-export type { GradingRecordCard } from "./blocks/grading-submission/grading-card-record";
-export {
-  GradingCardRecord,
-  type GradingCardRecordCopy,
-  type GradingCardRecordProps,
-} from "./blocks/grading-submission/grading-card-record";
-export type { GradingLocaleProps } from "./blocks/grading-submission/grading-copy";
-export {
-  GradingFeeSheet,
-  type GradingFeeSheetCopy,
-  type GradingFeeSheetProps,
-} from "./blocks/grading-submission/grading-fee-sheet";
-export type { GradingGradeCard } from "./blocks/grading-submission/grading-grade-cards";
-export {
-  GradingGradeCards,
-  type GradingGradeCardsCopy,
-  type GradingGradeCardsProps,
-} from "./blocks/grading-submission/grading-grade-cards";
-export type {
-  GradingEstimate,
-  GradingPickerLevel,
-} from "./blocks/grading-submission/grading-level-picker";
-export {
-  GradingLevelPicker,
-  type GradingLevelPickerCopy,
-  type GradingLevelPickerProps,
-} from "./blocks/grading-submission/grading-level-picker";
-export type {
-  GradingMoneyLine,
-  GradingMoneyLines,
-} from "./blocks/grading-submission/grading-money-block";
-export {
-  GradingMoneyBlock,
-  type GradingMoneyBlockCopy,
-  type GradingMoneyBlockProps,
-} from "./blocks/grading-submission/grading-money-block";
-export {
-  GradingNamedCollector,
-  type GradingNamedCollectorCopy,
-  type GradingNamedCollectorProps,
-} from "./blocks/grading-submission/grading-named-collector";
-export {
-  GradingOwnershipChip,
-  type GradingOwnershipChipCopy,
-  type GradingOwnershipChipProps,
-} from "./blocks/grading-submission/grading-ownership-chip";
-export type {
-  GradingPasteOutcome,
-  GradingPasteResult,
-  GradingPasteState,
-} from "./blocks/grading-submission/grading-paste-sheet";
-export {
-  GradingPasteSheet,
-  type GradingPasteSheetCopy,
-  type GradingPasteSheetProps,
-} from "./blocks/grading-submission/grading-paste-sheet";
-export {
-  GradingPickupCard,
-  type GradingPickupCardCopy,
-  type GradingPickupCardProps,
-} from "./blocks/grading-submission/grading-pickup-card";
-export type {
-  GradingReviewCard,
-  GradingUpchargeWarning,
-} from "./blocks/grading-submission/grading-review";
-export {
-  GradingReview,
-  type GradingReviewCopy,
-  type GradingReviewProps,
-} from "./blocks/grading-submission/grading-review";
-export type { GradingStage } from "./blocks/grading-submission/grading-status-rail";
-export {
-  GradingStatusRail,
-  type GradingStatusRailCopy,
-  type GradingStatusRailProps,
-} from "./blocks/grading-submission/grading-status-rail";
-export type { GradingLadderRung } from "./blocks/grading-submission/grading-uncollected-ladder";
-export {
-  GradingUncollectedLadder,
-  type GradingUncollectedLadderCopy,
-  type GradingUncollectedLadderProps,
-} from "./blocks/grading-submission/grading-uncollected-ladder";
-export type {
-  GradingCardMatch,
-  GradingCardOutcome,
-  GradingFeeLevel,
-  GradingFeeSheetRecord,
-  GradingGrader,
-  GradingListedCard,
-  GradingMoney,
-  GradingPhoto,
-  GradingReferenceSale,
-  GradingTone,
-  GradingVaultCase,
-} from "./blocks/grading-submission/types";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
@@ -719,27 +614,6 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
-// shared/ui/vault-case
-export {
-  VaultAcceptOfferDialog,
-  type VaultAcceptOfferDialogCopy,
-  type VaultAcceptOfferDialogProps,
-} from "./blocks/vault-case/vault-accept-offer-dialog";
-export {
-  VaultCases,
-  type VaultCasesCard,
-  type VaultCasesChip,
-  type VaultCasesCopy,
-  type VaultCasesIcon,
-  type VaultCasesProps,
-  type VaultCasesTone,
-} from "./blocks/vault-case/vault-cases";
-export {
-  VaultCasesEmpty,
-  type VaultCasesEmptyCopy,
-  type VaultCasesEmptyProps,
-  type VaultCasesEmptyStep,
-} from "./blocks/vault-case/vault-cases-empty";
 export {
   ACTIVITY_RELATIVE_MAX_MS,
   type ActivityTimeCopy,

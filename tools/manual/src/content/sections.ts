@@ -1,12 +1,13 @@
 import { sectionSlug } from "../api/paths.ts";
 import type { Block, PageAst } from "./grammar.ts";
 
-const HEADING = /^##\s+(.+?)\s*$/;
+const HEADING = /^(#{2,4})\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;
 
 /**
- * The text one `## ` section is drawn from: its heading and the page's own
- * lines under it, to the next level-two heading.
+ * The text one product section is drawn from: its heading and the page's own
+ * lines under it, to the next heading at the same or a higher level. PRDs use
+ * `##` capability sections with focused `###` and `####` outcome sections.
  *
  * One boundary, and the same one the questions under a section are counted by.
  * Only the page's own prose carries a heading that ends a section: a `### `
@@ -33,6 +34,7 @@ export function sectionTextOf(
   const lines: string[] = [];
   let inside = false;
   let found = false;
+  let level = 0;
 
   /** The page's own prose: its headings are what open and close a section. */
   const scan = (markdown: string) => {
@@ -47,9 +49,15 @@ export function sectionTextOf(
       if (opened) fence = opened[1];
       const heading = opened ? null : HEADING.exec(line);
       if (heading) {
-        inside = sectionSlug(heading[1]) === slug;
+        const headingLevel = heading[1].length;
+        if (sectionSlug(heading[2]) === slug) {
+          inside = true;
+          found = true;
+          level = headingLevel;
+        } else if (inside && headingLevel <= level) {
+          inside = false;
+        }
         if (!inside) continue;
-        found = true;
       }
       if (inside) lines.push(line);
     }

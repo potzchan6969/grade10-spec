@@ -1,0 +1,101 @@
+{
+  "version": 2,
+  "change": "add-invoice-and-receipt-pdf-blocks",
+  "baseline": "1d9a199522fdfc741524e78864a69d5ef123cd8aafbefcfc2a1f056d6e00e3c1",
+  "fingerprint": "092664677d639dcfed318b1374170828b5ae9bb60cefdc63765911467a3657e8",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-05T16:41:06.117Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions",
+      "sha256": "86b751108033768695f21652543c342718bb865059b6002fbf239aa2e5e93fda",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents",
+      "sha256": "a1ec98ac63149382407952edc02c6e2883fe4d1cc3821c9aa3fd272cb9426dd2",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice",
+      "sha256": "84d7bae84fec9634a691cadb1a47304550a383ad4aadf72c0a232be02fba0248",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-invoice-and-receipt-pdf-blocks/decisions.md",
+      "sha256": "0f54e9b68373c4bfcb875144f7392ad114065d23863342a3dfbbb2152f7fcc56",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-invoice-and-receipt-pdf-blocks/proposal.md",
+      "sha256": "2f10f03d732e51ce9f66cdd775ecb12235dea202835e1bc9a3d7cc845ca7a749",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-invoice-and-receipt-pdf-blocks/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "sha256": "8f8fbd02d2fda99e4352dc268db5e7ab82e63184add70646f85dbec3f1132ad8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-invoice-and-receipt-pdf-blocks/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "sha256": "a8ca30d5011b218a2febc95b2053ebcf7e89a579ed1a2c989d1f14c9dcfe20e9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-invoice-and-receipt-pdf-blocks/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "sha256": "7151f9ffacb3e818197516f58cec1f0b899a9901191daf7db7b30fac6d0f6f01",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-invoice-and-receipt-pdf-blocks/tech-design.md",
+      "sha256": "647eef35c64e2ee0702181dfb4c179a67908f9036e37f44dd9468200fc78f5d0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "sha256": "8f8fbd02d2fda99e4352dc268db5e7ab82e63184add70646f85dbec3f1132ad8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "sha256": "d85840feeb6cb8abae78d398c93353220171e62beaa7637354b12b8bcb54797f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "sha256": "7151f9ffacb3e818197516f58cec1f0b899a9901191daf7db7b30fac6d0f6f01",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Bill To and Ship To render as an address, or \"Not recorded\" when withheld",
+        "Requirement: Dates render in the winner's time zone",
+        "Requirement: Each renderer produces one A4 document",
+        "Requirement: InvoicePdf and ReceiptPdf render only what they are given",
+        "Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned",
+        "Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a boxed summary",
+        "Requirement: InvoicePdf renders a supplied replacement relationship",
+        "Requirement: InvoicePdf renders bank details only on a bank-transfer invoice",
+        "Requirement: InvoicePdf renders its meta rows and party blocks",
+        "Requirement: InvoicePdf's bank details section names every enabled transfer rail and the bank reference",
+        "Requirement: ReceiptPdf renders a recorded provider-reference line only when the payment carries one",
+        "Requirement: ReceiptPdf renders its meta rows and party blocks",
+        "Requirement: ReceiptPdf renders the payment breakdown in a fixed order",
+        "Requirement: The lot and charges carry a Description/Amount header"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -228,6 +228,10 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 
 The loyalty terminal is a Shopify POS UI extension.
 
+🚧 The points discount on the cart and paid order is titled "Deduction from
+Points"; a legacy "Points" discount remains the same points spend while the
+extension rollout completes.
+
 | Surface | Job | Spends |
 | --- | --- | --- |
 | Home tile | Opens the modal; badges only "membership unavailable" | Never |

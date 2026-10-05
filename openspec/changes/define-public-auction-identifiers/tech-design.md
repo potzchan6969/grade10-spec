@@ -7,6 +7,9 @@
   draft save. Insert the candidate into a permanent reservation table with a
   unique key; retry a new projection after a conflict. The reservation remains
   after listing deletion.
+- The launch has no production listings to backfill. Grade10 stores no legacy
+  title-only address or redirect; every production code is allocated by the
+  first-draft-save transaction.
 - Generate the initial slug from the normalized title and the lower-case stored
   code. Reserve space for the hyphen and suffix before truncating the title
   portion to 64 characters. Use `lot` when the normalized title is empty.
@@ -35,9 +38,12 @@
 - Admin listing form and table surfaces show the code under existing listing
   access. The public listing projection and metadata omit the labelled code
   while retaining the canonical slug.
-- Winner-order services consume the stored code for payment references and
-  invoice IDs. Stripe metadata uses `payment_reference_code`; provider IDs
-  remain internal. Receipt format and breakdown remain outside this change.
+- Winner-order services consume the stored code for payment references,
+  invoice IDs and newly issued receipt IDs. Receipt allocation occurs with a
+  finalized full or partial payment: an invoice-scoped sequence starts at `1`,
+  stays unpadded and commits atomically with the receipt. Historical receipt
+  IDs remain unchanged; refunds, reversals and voids allocate none. Stripe
+  metadata uses `payment_reference_code`; provider IDs remain internal.
 
 ## Concurrency and retention
 

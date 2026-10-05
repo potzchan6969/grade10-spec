@@ -1,3 +1,5 @@
+# grade10-site/auction/order-status Specification
+
 ## Feature set
 
 - Writable primitives
@@ -9,8 +11,8 @@
     and current order facts; an operator action never writes a status directly
   - Address window open: a further condition, read from the order's own facts, which gates what the winner may write rather than what the order reads as
 - Derived order status
-  - Awaiting Setup and Preparing Invoice: the two states before an invoice, shared by winner and operator alike
-  - A missed address deadline keeps its status: the order still reads Awaiting Setup or Preparing Invoice
+  - Awaiting Setup, Setup Overdue and Preparing Invoice: the states before an invoice, shared by winner and operator alike
+  - Setup Overdue: names an unconfirmed address whose persisted deadline has passed
   - No Expired order status: an order whose invoice has expired still reads Pending Payment; winner card pay stops; operator reissue, manual settlement, or cancel remain
 - Guards
   - No dispatch and no send out of order: an order with no invoice cannot ship, and no invoice is sent without a confirmed address
@@ -29,18 +31,19 @@ enum.
 | --- | --- |
 | `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, and the current order facts permit a winner write |
 
-`address_window_open` SHALL NOT be an input to the derived order status. It
-gates what the winner may write rather than what the order reads as: while it
-is false Grade10 SHALL refuse a delivery-address write from the winner, per
-`grade10-site/auction/winner-order`, and the order SHALL still derive as
-Awaiting Setup or Preparing Invoice according to `address_confirmed`. There
-SHALL be no order status meaning a passed address deadline.
+`address_window_open` gates what the winner may write. While it is false
+Grade10 SHALL refuse a delivery-address write from the winner, per
+`grade10-site/auction/winner-order`. An unconfirmed `not_issued` order whose
+persisted address deadline has passed SHALL derive as Setup Overdue; a
+confirmed address SHALL still derive as Preparing Invoice.
 
 An operator SHALL be able to record a delivery address on an auction order
 whose `address_window_open` is false. Doing so SHALL set `address_confirmed`
 true, SHALL leave `address_window_open` false, and SHALL NOT let the winner
-write again. An operator reopening the address form SHALL make
-`address_window_open` true again without changing the derived order status.
+write again. An operator reopening an unconfirmed Setup Overdue order with
+invoice status `not_issued` SHALL make `address_window_open` true again. It
+SHALL NOT write a status directly; the derived order status SHALL be
+re-evaluated from the reopened order facts.
 
 `address_window_open` SHALL be read only while the invoice status is
 `not_issued`. Sending the invoice locks the delivery address, per
@@ -57,15 +60,14 @@ afterwards.
 - **THEN** it is true at the first reading and false at the second
 - **AND** no `address_window_open` status enum was written between the two readings
 
-#### Scenario: auction-status-SC-31 - A passed address deadline keeps Awaiting Setup
-**Serves:** Derived order status - a passed address deadline keeps its status
+#### Scenario: auction-status-SC-31 - A passed address deadline derives Setup Overdue
+**Serves:** Derived order status - a passed address deadline derives Setup Overdue
 
 - **GIVEN** an auction order with invoice status `not_issued`, fulfilment
   status `unfulfilled`, `address_confirmed` false and `address_window_open`
   false
 - **WHEN** its order status is read
-- **THEN** it is Awaiting Setup
-- **AND** no order status reads as a passed address deadline
+- **THEN** it is Setup Overdue
 
 #### Scenario: auction-status-SC-32 - A passed address deadline keeps Preparing Invoice
 **Serves:** Derived order status - a passed address deadline keeps its status
@@ -79,7 +81,8 @@ afterwards.
 #### Scenario: auction-status-SC-33 - A passed address deadline refuses the winner's address write
 **Serves:** Guards - no address on a passed address deadline
 
-- **GIVEN** an auction order whose `address_window_open` is false
+- **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
+  `not_issued` whose `address_window_open` is false
 - **WHEN** the winner submits a delivery address for it
 - **THEN** Grade10 refuses the write
 - **AND** the order's `address_confirmed` and delivery address are unchanged
@@ -88,7 +91,8 @@ afterwards.
 #### Scenario: auction-status-SC-34 - A reopened window accepts the write again
 **Serves:** Guards - no address on a passed address deadline
 
-- **GIVEN** an auction order whose `address_window_open` is false
+- **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
+  `not_issued` whose `address_window_open` is false
 - **WHEN** an operator reopens the address form and the winner then
   submits a delivery address
 - **THEN** Grade10 accepts the write

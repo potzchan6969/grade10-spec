@@ -1,7 +1,7 @@
 # grade10-admin/auction/featured Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-25, tcs-rules r4
+**Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-featured-US1: Operator fills a Featured slot
 
@@ -27,17 +27,17 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
 * No Featured slot holds a lot or a front page image.
 
 **Steps:**
 
-1. Read the Featured curation surface.
+1. Read the Featured slots.
 
 **Expected Results:**
 
-* Up to three empty ordered slots are ready to fill.
-* No fourth slot is offered.
+* Step 1 shows up to three empty slots, ready to fill.
+* Step 1 offers no fourth slot.
 
 ### grade10-admin-auction-featured-US1-TC02-1: Fill a slot with an Active lot and front page image
 
@@ -56,9 +56,9 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
 * At least one empty Featured slot is available.
-* `<active lot>` is a published Active lot eligible for Featured.
+* <active lot> is a published Active lot eligible for Featured.
 
 **Test data:**
 
@@ -69,15 +69,16 @@ Active or Upcoming listing and upload one front page image,
 
 **Steps:**
 
-1. Bind `<active lot>` into an empty Featured slot.
-2. Upload `<front page image>` into that slot.
-3. Read the slot on the curation surface.
-4. Open `<grade10 auction catalogue url>` as a collector and read Featured.
+1. Bind <active lot> into an empty Featured slot.
+2. Upload <front page image> into that slot.
+3. Read that slot.
+4. Open <grade10 auction catalogue url> as a collector.
+5. Read the Featured band.
 
 **Expected Results:**
 
-* The slot shows the lot title or id and a front page image preview.
-* `/auction` Featured leads with that slide using `<front page image>` as banner and slab.
+* Step 3 shows the lot title or id and front page image preview.
+* Step 5 leads /auction with that slide, <front page image> as banner and slab.
 
 ### grade10-admin-auction-featured-US1-TC03-1: Fill a slot with an Upcoming lot and front page image
 
@@ -96,9 +97,9 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
 * At least one empty Featured slot is available.
-* `<upcoming lot>` is a published Upcoming lot eligible for Featured.
+* <upcoming lot> is a published Upcoming lot eligible for Featured.
 
 **Test data:**
 
@@ -109,16 +110,18 @@ Active or Upcoming listing and upload one front page image,
 
 **Steps:**
 
-1. Bind `<upcoming lot>` into an empty Featured slot.
-2. Upload `<front page image>` into that slot.
-3. Open `<grade10 auction catalogue url>` as a collector and read Featured.
+1. Bind <upcoming lot> into an empty Featured slot.
+2. Upload <front page image> into that slot.
+3. Read that slot.
+4. Open <grade10 auction catalogue url> as a collector.
+5. Read the Featured band.
 
 **Expected Results:**
 
-* The slot is filled with `<upcoming lot>` and its front page image preview.
-* `/auction` Featured shows that slide.
+* Step 3 shows <upcoming lot> and its front page image preview.
+* Step 5 shows that slide on /auction Featured.
 
-### grade10-admin-auction-featured-US1-TC04-1: Cap of three refuses a fourth slot
+### grade10-admin-auction-featured-US1-TC04-1: A fourth slot is refused at the limit
 
 **Classification:**
 
@@ -135,18 +138,18 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
 * Three Featured slots each hold an eligible lot and a front page image.
 
 **Steps:**
 
-1. Read the Featured curation surface for a way to add another slot.
-2. Attempt to create or fill a fourth Featured slot if any control is offered.
+1. Read the three Featured slots.
+2. Try to add a fourth Featured slot.
 
 **Expected Results:**
 
-* No fourth slot is offered.
-* The three filled slots remain unchanged.
+* Step 2 offers no fourth slot.
+* Step 2 leaves the three filled slots unchanged.
 
 ### grade10-admin-auction-featured-US1-TC05-1: Ended lot is refused for a Featured slot
 
@@ -165,9 +168,9 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
 * At least one empty or replaceable Featured slot is available.
-* `<ended lot>` is an Ended lot.
+* <ended lot> is an Ended lot.
 
 **Test data:**
 
@@ -177,15 +180,15 @@ Active or Upcoming listing and upload one front page image,
 
 **Steps:**
 
-1. Attempt to bind `<ended lot>` into a Featured slot.
-2. Read the slot state and any refusal.
+1. Bind <ended lot> into a Featured slot.
+2. Read that slot.
 
 **Expected Results:**
 
-* Grade10 refuses the Ended lot for the Featured slot.
-* The slot does not hold `<ended lot>` as a complete slide.
+* Step 1 refuses the Ended lot.
+* Step 2 does not hold <ended lot> as a complete slide.
 
-### grade10-admin-auction-featured-US1-TC06-1: Slot with lot but no front page image is not shown on /auction
+### grade10-admin-auction-featured-US1-TC06-1: Lot without a front page image stays off /auction
 
 **Classification:**
 
@@ -202,8 +205,8 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
-* The only Featured work in progress binds `<active lot>` with no front page image uploaded.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
+* The only Featured work in progress binds <active lot> with no front page image uploaded.
 * No other complete Featured slot is set.
 
 **Test data:**
@@ -214,16 +217,15 @@ Active or Upcoming listing and upload one front page image,
 
 **Steps:**
 
-1. Leave the slot with `<active lot>` and no front page image.
-2. Open `<grade10 auction catalogue url>` as a collector.
-3. Read whether a Featured band is present.
+1. Open <grade10 auction catalogue url> as a collector.
+2. Read the page for a Featured band.
 
 **Expected Results:**
 
-* The incomplete slot is not shown on `/auction` Featured.
-* No Featured band appears from that slot alone.
+* Step 2 leaves the incomplete slot off /auction Featured.
+* Step 2 shows no Featured band from that slot alone.
 
-### grade10-admin-auction-featured-US1-TC07-1: Operator without catalogue grants cannot curate Featured
+### grade10-admin-auction-featured-US1-TC07-1: Missing catalogue grants block Featured curation
 
 **Classification:**
 
@@ -240,19 +242,19 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(lacks auction:write or auction:operate) is signed in to Grade10 auction admin.
+* admin(lacks auction:write or auction:operate) is on <grade10 auction admin listings url>.
 * At least one empty Featured slot exists.
 
 **Steps:**
 
-1. Open `<grade10 auction admin featured url>` or the Featured curation controls.
-2. Attempt to bind a lot or upload a front page image into a slot.
+1. Open <grade10 auction admin featured url>.
+2. Bind a published lot into an empty slot.
+3. Upload a front page image into that slot.
 
 **Expected Results:**
 
-* Curation controls stay visible and disabled, or the server refuses the change.
-* No Featured slot is filled or altered.
-
+* Each step leaves controls visible and disabled, or refuses.
+* No step fills or alters a Featured slot.
 
 ### grade10-admin-auction-featured-US1-TC08-1: Manage Featured opens from the Listings toolbar
 
@@ -275,12 +277,12 @@ Active or Upcoming listing and upload one front page image,
 
 **Steps:**
 
-1. Activate **Manage Featured** beside Create listing.
+1. Click "Manage Featured" beside "Create listing".
 
 **Expected Results:**
 
-* The Manage Featured sub-page opens.
-* Ordered Featured slots are shown.
+* Step 1 opens the Manage Featured sub-page.
+* Step 1 shows the ordered Featured slots.
 
 ### grade10-admin-auction-featured-US1-TC09-1: Front page image upload offers no gallery picker
 
@@ -299,18 +301,19 @@ Active or Upcoming listing and upload one front page image,
 
 **Pre-conditions:**
 
-* admin(holds auction:write) is on Manage Featured with an empty or replaceable slot.
+* admin(holds auction:write) is on <grade10 auction admin featured url>.
+* An empty or replaceable Featured slot is available.
 * A published Active listing with a gallery image exists.
 
 **Steps:**
 
-1. Bind the Active listing into the slot.
-2. Set the front page image for that slot.
+1. Bind that Active listing into the slot.
+2. Open the front page image control for that slot.
 
 **Expected Results:**
 
-* The operator uploads a front page image for the slot.
-* The listing gallery is not offered as the front page image.
+* Step 2 offers an upload for the front page image.
+* Step 2 does not offer the listing gallery as that image.
 
 ---
 
@@ -338,8 +341,8 @@ no longer lead,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
-* Two or three complete Featured slots are set in order `<lot A>`, then `<lot B>` (and `<lot C>` when present).
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
+* Two or three complete Featured slots are set in order <lot A>, then <lot B> (and <lot C> when present).
 
 **Test data:**
 
@@ -350,14 +353,15 @@ no longer lead,
 
 **Steps:**
 
-1. Reorder so `<lot B>` precedes `<lot A>`.
-2. Read the slot order on the curation surface.
-3. Open `<grade10 auction catalogue url>` as a collector and read Featured order.
+1. Move <lot B> ahead of <lot A>.
+2. Read the slot order.
+3. Open <grade10 auction catalogue url> as a collector.
+4. Read the Featured order.
 
 **Expected Results:**
 
-* Admin slots show `<lot B>` before `<lot A>`.
-* Site Featured follows that new order.
+* Step 2 shows <lot B> before <lot A>.
+* Step 4 shows Featured in that new order.
 
 ### grade10-admin-auction-featured-US2-TC02-1: Clear a slot removes that slide from /auction Featured
 
@@ -376,8 +380,8 @@ no longer lead,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
-* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
+* Two complete Featured slots are set for <lot A> then <lot B>.
 
 **Test data:**
 
@@ -388,14 +392,15 @@ no longer lead,
 
 **Steps:**
 
-1. Clear the slot holding `<lot A>`.
-2. Read that slot on the curation surface.
-3. Open `<grade10 auction catalogue url>` as a collector and read Featured.
+1. Clear the slot holding <lot A>.
+2. Read that slot.
+3. Open <grade10 auction catalogue url> as a collector.
+4. Read the Featured band.
 
 **Expected Results:**
 
-* The cleared slot is empty.
-* `/auction` Featured no longer shows `<lot A>` and still shows `<lot B>` when that slot remains complete.
+* Step 2 shows the cleared slot empty.
+* Step 4 drops <lot A> and still shows complete <lot B>.
 
 ### grade10-admin-auction-featured-US2-TC03-1: Clearing the last complete slot leaves Featured absent
 
@@ -414,19 +419,20 @@ no longer lead,
 
 **Pre-conditions:**
 
-* admin(holds auction:write and auction:operate) is on `<grade10 auction admin featured url>`.
+* admin(holds auction:write and auction:operate) is on <grade10 auction admin featured url>.
 * Exactly one complete Featured slot is set.
 
 **Steps:**
 
 1. Clear that complete slot.
-2. Open `<grade10 auction catalogue url>` as a collector.
-3. Read whether a Featured band is present.
+2. Read that slot.
+3. Open <grade10 auction catalogue url> as a collector.
+4. Read the page for a Featured band.
 
 **Expected Results:**
 
-* The slot is empty on the curation surface.
-* `/auction` shows no Featured band; All auctions remains.
+* Step 2 shows the slot empty.
+* Step 4 shows no /auction Featured band; All auctions remains.
 
 ## Settled
 

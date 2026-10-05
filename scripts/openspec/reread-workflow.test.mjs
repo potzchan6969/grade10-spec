@@ -67,7 +67,12 @@ test("shared-planning-agent-rounds-SC-66 - a landing wakes the relay once per ch
     wake.env.AGENT_WAKE_TOKEN,
     /^\$\{\{ secrets\.AGENT_WAKE_TOKEN \}\}$/,
   );
-  assert.match(wake.env.HEAD_SHA, /^\$\{\{ github\.sha \}\}$/);
+  // The deployed head the Manual run carried, never `github.sha`: under
+  // `workflow_run` that is whatever `main` holds when the run starts.
+  assert.match(
+    wake.env.HEAD_SHA,
+    /^\$\{\{ github\.event\.workflow_run\.head_sha \}\}$/,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-66 - the matrix entry reaches the wake's body through the environment, never the shell", () => {
@@ -156,12 +161,14 @@ test("shared-planning-agent-rounds-SC-66 - every step of the workflow reads one 
 });
 
 test("shared-planning-agent-rounds-SC-67 - the workflow holds no session, no write permission and no chat token", () => {
-  assert.deepEqual(workflow.permissions, { contents: "read" });
+  // `actions: read` finds the head the last successful deploy carried; it
+  // writes nothing.
+  assert.deepEqual(workflow.permissions, { actions: "read", contents: "read" });
   for (const [name, job] of Object.entries(workflow.jobs)) {
     assert.equal(
       job.permissions,
       undefined,
-      `${name} takes the workflow's own \`contents: read\``,
+      `${name} takes the workflow's own read-only permissions`,
     );
   }
   // No session anywhere in the workflow: the relay is what runs the round now.

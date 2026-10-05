@@ -10,6 +10,8 @@ image once photos letterbox.
 
 - **No multiply on the photo** — the image draws as supplied over the well
   gradient
+- Manual page [Product Listing Blocks](/p/shared/ui/store-product-listing)
+  marks the outcome
 
 ## Non-Goals
 
@@ -35,4 +37,8 @@ image once photos letterbox.
 
 ## Open questions
 
-- none
+- none — Q1 is in `decisions.md`
+
+## References
+
+- [Product Listing Blocks · Product Tile](../../../docs/prds/products/shared/ui/store-product-listing.md#product-tile)

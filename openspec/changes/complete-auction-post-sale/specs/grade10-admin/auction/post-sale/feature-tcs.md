@@ -9,6 +9,7 @@
 **I want** every won lot's order in one worklist, split into segments with counts and searchable by any of its codes or the winner's email,
 **so that** I open what needs me first without scanning orders that are waiting on the winner.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-tb3 rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq -->
 ### post-sale-US1-TC1-1: Segments sort won lots' orders and show their counts
 
 **Classification:**
@@ -260,7 +261,7 @@
 **I want** every payment that reaches an order recorded, and one the invoice did not expect flagged for me,
 **so that** no money a winner sends is dropped, and I know what to check or have finance return.
 
-### post-sale-US3-TC3-1: Payments the invoice did not expect are flagged and cleared one at a time
+### post-sale-US3-TC5-1: Payments the invoice did not expect are flagged and cleared one at a time
 
 **Classification:**
 
@@ -572,6 +573,7 @@
 **I want** the Listings table to mark a lot still taking bids past its scheduled close,
 **so that** I can tell a lot running long from one that closed on time.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-vsq rev=1 covers=g10adm.auction-post-sale.SC-hvd,g10adm.auction-post-sale.SC-jck,g10adm.auction-post-sale.SC-bps -->
 ### post-sale-US6-TC1-1: The Listings table marks only the lot in extended bidding
 
 **Classification:**
@@ -911,6 +913,7 @@ payments that failed,
 **I want** to record the refund I sent in Stripe or by bank transfer on the order, with its amount, reason, reference and proof, and say whether the lot goes back to stock,
 **so that** a closing refund reads Refunded, an overpayment keeps the order's status, and the lot's stock matches where the card is.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-c92 rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs -->
 ### post-sale-US16-TC1-1: A bank refund names where it went, is restated, and closes the order
 
 **Classification:**

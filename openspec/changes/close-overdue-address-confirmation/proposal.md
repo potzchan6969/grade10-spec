@@ -1,7 +1,7 @@
 **Author:** @jeffffej0909 - 2026-09-16
 
-Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order),
-[Auction Order Status](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order),
+Product context: [Address Deadline](../../../docs/prds/products/grade10-site/auction/post-bidding.md#address-deadline),
+[Missed Address Deadline](../../../docs/prds/products/grade10-site/auction/post-bidding.md#missed-address-deadline),
 [Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/management.md#post-sale-queue).
 
 ## Why
@@ -30,22 +30,24 @@ too short.
 ## What Changes
 
 - **A missed address deadline closes the whole address form.** The winner can
-  neither confirm an address nor change one already confirmed, until the invoice
-  is sent.
+  neither confirm an address nor change one already confirmed until an operator
+  reopens the form or records the order address. Invoice send locks the address.
 - **The deadline counts from the actual close**, after any extended bidding. A
   write is judged by when Grade10 receives it.
-- **An operator reopens the address form**, with a mandatory reason, which gives
-  the winner a fresh 48 hours. There is no limit on reopens, and a cancelled
-  order never reopens.
+- **An operator reopens an unconfirmed Setup Overdue address form**, with a
+  mandatory reason, which gives the winner a fresh 48 hours. There is no limit
+  on reopens, and a cancelled order never reopens.
 - **An operator can record an address the winner gives by phone**, without
   reopening the form.
-- **The Awaiting Setup queue Overdue mark follows the 48-hour address
-  deadline.** Preparing Invoice has no queue Overdue mark. Its payment Overdue
+- **An unconfirmed passed address deadline derives Setup Overdue.** Preparing
+  Invoice stays distinct after an address is confirmed. Its payment Overdue
   timer starts only after the invoice is sent and visible to the winner.
 - **The account address book stays open.** Only putting an address on this
   order is refused.
-- **The order status does not move.** A new condition gates the winner's write;
-  the order still reads Awaiting Setup or Preparing Invoice.
+- **A missed address deadline reads Setup Overdue.** The derived status applies
+  while no address is confirmed; a confirmed address still reads Preparing
+  Invoice. `address_window_open` gates the winner's write, and operator actions
+  do not write a status directly.
 - **An expired invoice is paid only in the admin portal.** An operator settles
   it manually; a reissue is the only way back to the winner's card.
 - **A card payment started in time counts.** One Grade10 received before the
@@ -59,8 +61,8 @@ too short.
 
 - **The address deadline's duration and winner-facing copy.** Its 48 hours,
   `Confirm by …`, the `Missed address deadline` alert and Contact Us are
-  inherited durable behavior; this change maps the settled deadline to the
-  Awaiting Setup queue mark and does not duplicate that copy.
+  inherited durable behavior; this change carries the settled Setup Overdue
+  derivation and does not duplicate that copy.
 - **The expired invoice's own rules.** Writing `expired`, hiding card Pay, and
   reissue and cancellation remain existing durable behavior.
 - **Letters.** Address reminders are that change's. A reopen sends no letter;
@@ -80,8 +82,8 @@ None.
 - `grade10-site/auction/winner-order`: a new requirement — a missed address
   deadline closes the whole address form, and only an operator reopens it.
 - `grade10-site/auction/order-status`: a new requirement adding the condition
-  `address_window_open`, which gates the winner's address write and changes no
-  status.
+  `address_window_open`, which gates the winner's address write; an
+  unconfirmed missed deadline derives Setup Overdue.
 - `grade10-admin/auction/post-sale`: two new requirements — an operator reopens
   the address form or records the address, and only an operator settles an
   expired invoice.
@@ -107,10 +109,10 @@ None.
 
 ### Durable contract updates carried by this change
 
-- **Overdue mark** — the Awaiting Setup queue mark appears when the persisted
-  48-hour address deadline passes. Preparing Invoice has no queue Overdue mark;
-  its payment Overdue timer starts only when the invoice is sent and visible to
-  the winner.
+- **Setup Overdue** — an unconfirmed order derives this status when the
+  persisted 48-hour address deadline passes. Preparing Invoice does not derive
+  Setup Overdue; its payment Overdue timer starts only when the invoice is sent
+  and visible to the winner.
 - **Invoice log** — the log types name *address form reopened* and *address
   recorded by an operator*, each with actor, timestamp and reason.
 - **Race behavior** — address writes, operator reopen/record, and invoice send
@@ -132,6 +134,7 @@ None.
 
 ## References
 
-- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
-- [Post-Bidding · Edge Cases](../../../docs/prds/products/grade10-site/auction/post-bidding.md#edge-cases)
-- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
+- [Post-Bidding · Address Deadline](../../../docs/prds/products/grade10-site/auction/post-bidding.md#address-deadline)
+- [Post-Bidding · Missed Address Deadline](../../../docs/prds/products/grade10-site/auction/post-bidding.md#missed-address-deadline)
+- [Auction Management · Address Confirmation Window](../../../docs/prds/products/grade10-admin/auction/management.md#address-confirmation-window)
+- [Auction Management · Manual Payment Collection](../../../docs/prds/products/grade10-admin/auction/management.md#manual-payment-collection)

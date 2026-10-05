@@ -51,7 +51,8 @@ States combine this change's Grade10 scenarios with durable
 | Empty drawer (shared EmptyState) | `shared-ui-store-cart-SC-04` |
 | Unavailable cleanup | `grade10-site-store-cart-drawer-SC-12`; `shared-ui-store-cart-SC-10`, `shared-ui-store-cart-SC-11` |
 | Quantity / remove | `grade10-site-store-cart-drawer-SC-11` |
-| Line → product; Checkout → `/checkout` | `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15`; redirecting `shared-ui-store-cart-SC-09` |
+| Line → product; Proceed to Checkout → hosted invoice | `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15`; redirecting `shared-ui-store-cart-SC-09` |
+| Verification gate replaces Proceed to Checkout | `grade10-site-store-cart-drawer-SC-30`–`grade10-site-store-cart-drawer-SC-33` |
 | Close / backdrop / Escape | `shared-ui-store-cart-SC-06` |
 
 Browse More is out of scope for this host: the shared surface no longer exposes

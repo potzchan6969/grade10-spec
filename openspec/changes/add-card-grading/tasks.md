@@ -2750,14 +2750,14 @@ Lands as the owner's store commit once the amendment that retires
 `GradingStatusRail` on `StageRail` this group first held, which has no block
 left to restyle (`decisions.md` Q148).
 
-- [ ] 37.1 A test in its own commit, red first: extend
+- [x] 37.1 A test in its own commit, red first: extend
       `packages/ui/src/index.test.ts` so it reads the public entry and finds
       none of the thirteen grading blocks and the fifty-three types the
       requirement names, and no `packages/ui/src/blocks/grading-submission`
       directory (`shared-ui-grading-submission-SC-01`,
       `shared-ui-grading-submission-SC-02`,
       `shared-ui-grading-submission-SC-71`)
-- [ ] 37.2 Delete `packages/ui/src/blocks/grading-submission/**` — the
+- [x] 37.2 Delete `packages/ui/src/blocks/grading-submission/**` — the
       thirteen blocks, `grading-copy.ts`, `types.ts`, `fixtures.ts`, their
       stories and their tests, `public-exports.test.ts` among them — and the
       `// shared/ui/grading-submission` exports in `packages/ui/src/index.ts`;
@@ -2765,8 +2765,8 @@ left to restyle (`decisions.md` Q148).
       passes (`shared-ui-grading-submission-SC-01`,
       `shared-ui-grading-submission-SC-02`,
       `shared-ui-grading-submission-SC-71`)
-- [ ] 37.3 Flip the case 37.1 decides:
+- [x] 37.3 Flip the case 37.1 decides:
       `pnpm run tcs:automated shared-ui-grading-submission-US1-TC88-1 --decided-by packages/ui/src/index.test.ts`
-- [ ] 37.4 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
+- [x] 37.4 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm check:manual`,
       `pnpm run tcs:validate`

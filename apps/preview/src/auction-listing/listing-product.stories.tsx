@@ -42,7 +42,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Same block composition as Pages/Auction Lot Details (without site nav/footer). Prefer the page stories for full bidding states with live simulation.",
+          "Same block composition as Pages/Auction/Auction Lot Details (without site nav/footer). Prefer the page stories for full bidding states with live simulation.",
       },
     },
   },

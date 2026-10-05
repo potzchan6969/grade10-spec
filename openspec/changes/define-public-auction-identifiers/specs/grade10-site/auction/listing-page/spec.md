@@ -1,3 +1,5 @@
+# grade10-site/auction/listing-page Specification
+
 ## Feature set
 
 - Public identifier
@@ -138,6 +140,7 @@ once published. A called-off lot's canonical address SHALL continue to serve
 its public listing page after it is removed from browse and search, as
 `grade10-site/auction/lot-status` defines.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-s88 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -146,6 +149,7 @@ its public listing page after it is removed from browse and search, as
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's Page not found screen
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-jj1 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -153,6 +157,7 @@ its public listing page after it is removed from browse and search, as
 - **WHEN** its address is fetched
 - **THEN** the response has status 200 and carries that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-c13 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-19 - A hidden lot's address shows Page not found
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
