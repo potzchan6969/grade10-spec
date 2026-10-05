@@ -377,7 +377,7 @@ Every change history entry on the product page SHALL show:
 | Column   | Shows                                                                                                                                                                                                                                           |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | When     | The date and time the entry occurred                                                                                                                                                                                                            |
-| Action   | The entry's action; a Cert ID change also shows its Cert ID before and after, as `Cert ID change · <before> → <after>`, with `No Cert ID` as the before of an assignment; an intake reversal reads `Intake reversal`, and `Intake reversal · <Cert ID>` when it removed a Cert record |
+| Action   | The entry's action; a Cert ID change also shows its Cert ID before and after, as `Cert ID change · <before> → <after>`, with `No Cert ID` as the before of an assignment; an intake reversal reads `Intake reversal · No Cert ID` when it reduced regular stock, and `Intake reversal · <Cert ID>` when it removed a Cert record |
 | Quantity | The entry's quantity                                                                                                                                                                                                                            |
 | Actor    | The entry's actor                                                                                                                                                                                                                               |
 | Holder   | The holder kind, read as Auction, Vault or Admin, of the reservation the entry moved, followed by its holder label, else its holder reference, as its after snapshot holds them, else its before snapshot; `—` for an entry with no reservation |
@@ -438,7 +438,7 @@ and holder reference SHALL be unchanged.
   remarks `Entered by mistake`, and Cert record `PSA-1234` was reversed with
   remarks `Card never arrived`
 - **WHEN** an authorized inventory admin opens the product's change history
-- **THEN** one entry's Action reads `Intake reversal`, with quantity two, the
+- **THEN** one entry's Action reads `Intake reversal · No Cert ID`, with quantity two, the
   admin as actor, Holder `—` and Remarks `Entered by mistake`
 - **AND** another reads `Intake reversal · PSA-1234`, with quantity one and
   Remarks `Card never arrived`
@@ -677,7 +677,7 @@ unit SHALL be reachable however old it is.
 - **GIVEN** a product that intook four units of regular stock and Cert record
   `PSA-1`, then reversed two units of regular stock and then `PSA-1`
 - **WHEN** an authorized inventory admin selects the `No Cert ID` row
-- **THEN** the history shows, newest first, the `Intake reversal` of two and
+- **THEN** the history shows, newest first, the `Intake reversal · No Cert ID` of two and
   the `intake`
 - **AND** it does not show `Intake reversal · PSA-1`
 

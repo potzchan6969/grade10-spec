@@ -217,7 +217,7 @@ settle its scope.
 - **After a write** - the product, its changelogs and its media are
   invalidated, so the rows, counts and history read again.
 - **Product history** - `changelogActionLabel` renders `intake-reversal` as
-  `Intake reversal`, and `Intake reversal · <Cert ID>` when
+  `Intake reversal · No Cert ID`, and `Intake reversal · <Cert ID>` when
   `before.certRecord` is present.
 
 ## Database Schema
