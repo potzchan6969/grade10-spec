@@ -677,9 +677,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-visit-booking-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 

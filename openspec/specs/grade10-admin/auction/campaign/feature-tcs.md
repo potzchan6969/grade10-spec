@@ -1,7 +1,7 @@
 # grade10-admin/auction/campaign Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-09, tcs-rules r3.0
+**Status:** in-review
+**Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-campaign-US1: Operator finds the catalogue cover called a campaign
 
@@ -28,18 +28,20 @@
 **Pre-conditions:**
 
 * admin(holds the auction catalogue grant) is on <grade10 auction admin url>.
-* `<campaign_1>` exists as a draft.
+* <campaign_1> exists as a draft.
 
 **Steps:**
 
-1. Open the catalogue-cover section that was previously Sales.
-2. Read the tab and page headings.
-3. Open `<campaign_1>` and read the editor chrome.
+1. Open the catalogue-cover section formerly called Sales.
+2. Read the tab label.
+3. Read the page heading.
+4. Open <campaign_1>.
+5. Read the editor heading.
 
 **Expected Results:**
 
-* The tab and page are labeled Campaigns, not Sales.
-* The editor chrome names it a Campaign, not a Sale.
+* Steps 2 and 3 read Campaigns, not Sales.
+* Step 5 names the editor a Campaign, not a Sale.
 
 ---
 
@@ -67,20 +69,22 @@
 
 **Pre-conditions:**
 
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Steps:**
 
 1. Start a new campaign.
-2. Read the title and copy fields, and the actions offered.
+2. Read the title field.
+3. Read the copy field.
+4. Read the actions offered.
 
 **Expected Results:**
 
-* The editor opens with empty title and copy.
-* Create and publish are not offered until the campaign exists as a draft.
+* Steps 2 and 3 show an empty title and empty copy.
+* Create and publish are not offered until a draft exists.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-ppt rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
-### grade10-admin-auction-campaign-US2-TC2-1: Operator opens a draft campaign with a title
+### grade10-admin-auction-campaign-US2-TC2-1: Titled draft stays off the public catalogue
 
 **Classification:**
 
@@ -97,25 +101,29 @@
 
 **Pre-conditions:**
 
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<title>` | September Slabs |
+| `<title>` | September Slabs (any title of 1 to 200 characters) |
 | `<copy>` | (empty) |
 
 **Steps:**
 
-1. Open a campaign with title `<title>` and empty copy.
-2. Read the stored campaign.
-3. Read the public catalogue covers at <grade10 auction url>.
+1. Start a new campaign.
+2. Enter <title> in the title field.
+3. Leave the copy field empty.
+4. Open the campaign.
+5. Read the stored campaign.
+6. Open <grade10 auction url>.
+7. Read the catalogue covers.
 
 **Expected Results:**
 
-* Grade10 persists a draft campaign titled `<title>`.
-* The campaign is absent from the public catalogue covers.
+* Step 5 shows a draft campaign titled <title>.
+* Step 7 omits that campaign from the public covers.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-o3t rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC3-1: Draft campaign editor offers create and cancel, never publish
@@ -135,19 +143,27 @@
 
 **Pre-conditions:**
 
-* `<campaign_1>` is a draft titled `<title>`.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_1> is a draft titled <title>.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<title>` | September Slabs (any title of 1 to 200 characters) |
 
 **Steps:**
 
-1. Open `<campaign_1>`.
-2. Read the title, the copy and the actions offered.
+1. Open <campaign_1>.
+2. Read the title.
+3. Read the copy.
+4. Read the actions offered.
 
 **Expected Results:**
 
-* The editor shows `<campaign_1>`'s title and copy.
-* Create and cancel are offered.
-* Publish is not offered.
+* Steps 2 and 3 show the stored title and copy.
+* Create and cancel are both offered on the editor.
+* Publish is not offered on the editor.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-qn0 rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC4-1: Open without a title is refused
@@ -167,20 +183,22 @@
 
 **Pre-conditions:**
 
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Steps:**
 
-1. Open a campaign with an empty title.
-2. Read the Campaigns list.
+1. Start a new campaign.
+2. Leave the title empty.
+3. Open the campaign.
+4. Read the Campaigns list.
 
 **Expected Results:**
 
-* Grade10 refuses the open.
-* No campaign is persisted.
+* Step 3 refuses the open with an empty title.
+* Step 4 shows that no campaign was stored.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-e8o rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
-### grade10-admin-auction-campaign-US2-TC5-1: Unauthorized open is refused
+### grade10-admin-auction-campaign-US2-TC5-1: Unauthorized campaign open is refused
 
 **Classification:**
 
@@ -197,7 +215,7 @@
 
 **Pre-conditions:**
 
-* admin(signed in, may not catalogue a campaign) is on the Campaigns section.
+* admin(signed in, may not catalogue a campaign) is on the Campaigns page.
 
 **Steps:**
 
@@ -206,8 +224,8 @@
 
 **Expected Results:**
 
-* Grade10 refuses the open.
-* No campaign is persisted.
+* Step 1 refuses the unauthorized open.
+* Step 2 shows that no campaign was stored.
 
 ---
 
@@ -235,18 +253,27 @@
 
 **Pre-conditions:**
 
-* `<campaign_1>` is a draft titled `<title>`.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_1> is a draft titled <title>.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<title>` | September Slabs (any title of 1 to 200 characters) |
 
 **Steps:**
 
-1. Open `<campaign_1>` and create it.
-2. Read its state and the public catalogue covers.
+1. Open <campaign_1>.
+2. Create the campaign.
+3. Read its state.
+4. Open <grade10 auction url>.
+5. Read the catalogue covers.
 
 **Expected Results:**
 
-* Grade10 moves `<campaign_1>` to `created`.
-* It remains absent from the public catalogue covers.
+* Step 3 shows <campaign_1> moved to created.
+* Step 5 omits <campaign_1> from the public covers.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-a8a rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC2-1: Created campaign editor offers publish and cancel, never create
@@ -266,19 +293,27 @@
 
 **Pre-conditions:**
 
-* `<campaign_2>` is created and titled `<title>`.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_2> is created and titled <title>.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<title>` | September Slabs (any title of 1 to 200 characters) |
 
 **Steps:**
 
-1. Open `<campaign_2>`.
-2. Read the title, the copy and the actions offered.
+1. Open <campaign_2>.
+2. Read the title.
+3. Read the copy.
+4. Read the actions offered.
 
 **Expected Results:**
 
-* The editor shows `<campaign_2>`'s title and copy.
-* Publish and cancel are offered.
-* Create is not offered.
+* Steps 2 and 3 show the stored title and copy.
+* Publish and cancel are both offered on the editor.
+* Create is not offered on the editor.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-z1p rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC3-1: Publishing a created campaign covers its unpublished lots
@@ -287,7 +322,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -298,19 +333,23 @@
 
 **Pre-conditions:**
 
-* `<campaign_2>` is created, with `<listing_1>` under it and not published.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_2> is created, with <listing_1> under it and not published.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Steps:**
 
-1. Publish `<campaign_2>`.
-2. Read the public catalogue at <grade10 auction url>.
+1. Open <campaign_2>.
+2. Publish <campaign_2>.
+3. Read <campaign_2>'s state.
+4. Open <grade10 auction url>.
+5. Read the catalogue covers.
+6. Read <listing_1> on the catalogue.
 
 **Expected Results:**
 
-* Grade10 moves `<campaign_2>` to `published`.
-* It appears as a public catalogue cover.
-* `<listing_1>` stays off the catalogue.
+* Step 3 shows <campaign_2> moved to published.
+* Step 5 shows <campaign_2> as a public cover.
+* Step 6 leaves <listing_1> off the catalogue.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-qvp rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC4-1: Create and publish are refused out of state
@@ -330,6 +369,10 @@
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* admin(holds the auction catalogue grant) is on the Campaigns page.
+
 **Test data:**
 
 | `<campaign>` | Action | Grade10 |
@@ -338,19 +381,15 @@ Runs once per row of **Test data**.
 | A draft campaign | publish it | refuses the publish, the campaign remains a draft |
 | A published campaign | publish it | refuses the publish, the campaign remains published |
 
-**Pre-conditions:**
-
-* admin(holds the auction catalogue grant) is on the Campaigns section.
-
 **Steps:**
 
-1. Open `<campaign>`.
+1. Open <campaign>.
 2. Take the row's action.
 3. Read the campaign's state.
 
 **Expected Results:**
 
-* Grade10 answers as the row states.
+* Step 2 is refused, and step 3 still matches the row.
 
 ---
 
@@ -378,24 +417,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<campaign_3>` is published and titled `<title>`.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_3> is published and titled <title>.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<new copy>` | A description that differs from the stored copy |
+| `<title>` | September Slabs (any title of 1 to 200 characters) |
+| `<new copy>` | A revised cover line (any copy up to 4,000 characters, different from the copy on file) |
 
 **Steps:**
 
-1. Open `<campaign_3>` and change its copy to `<new copy>`.
-2. Read the stored campaign.
+1. Open <campaign_3>.
+2. Change the copy to <new copy>.
+3. Save the edit.
+4. Read the stored copy.
+5. Read the stored title.
+6. Read the stored status.
 
 **Expected Results:**
 
-* Grade10 stores `<new copy>`.
-* The title and status are unchanged.
+* Step 4 shows the copy stored as <new copy>.
+* Steps 5 and 6 show the title and status unchanged.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-esv rev=1 covers=g10adm.auction-campaign.SC-1xm,g10adm.auction-campaign.SC-h9c -->
 ### grade10-admin-auction-campaign-US4-TC2-1: Clearing the title is refused
@@ -415,18 +459,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<campaign_1>` is a draft with a title.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_1> is a draft with a title.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Steps:**
 
-1. Open `<campaign_1>` and clear the title.
-2. Read the stored title.
+1. Open <campaign_1>.
+2. Clear the title.
+3. Save the edit.
+4. Read the stored title.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The title is unchanged.
+* Step 3 refuses the write that clears the title.
+* Step 4 shows the stored title unchanged.
 
 ---
 
@@ -443,7 +489,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
@@ -454,18 +500,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<campaign_3>` is published with `<listing_2>` and `<listing_3>` published under it.
-* admin(holds the grant to call a campaign off) is on the Campaigns section.
+* <campaign_3> is published with <listing_2> and <listing_3> published under it.
+* admin(holds the grant to call a campaign off) is on the Campaigns page.
 
 **Steps:**
 
-1. Cancel `<campaign_3>`.
-2. Read the state of `<campaign_3>`, `<listing_2>` and `<listing_3>`.
+1. Open <campaign_3>.
+2. Cancel the campaign.
+3. Read <campaign_3>'s state.
+4. Read <listing_2>'s state.
+5. Read <listing_3>'s state.
 
 **Expected Results:**
 
-* Grade10 moves `<campaign_3>` to `canceled`.
-* `<listing_2>` and `<listing_3>` move to `canceled` under the listing cancel rules.
+* Step 3 shows <campaign_3> moved to canceled.
+* Both listing reads show canceled under the listing cancel rules.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-7ck rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC2-1: A campaign with no listings cancels from draft or created
@@ -485,6 +534,10 @@ Runs once per row of **Test data**.
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* admin(holds the grant to call a campaign off) is on the Campaigns page.
+
 **Test data:**
 
 | `<campaign>` | Starting state |
@@ -492,18 +545,15 @@ Runs once per row of **Test data**.
 | A campaign with no listings | draft |
 | A campaign with no listings | created |
 
-**Pre-conditions:**
-
-* admin(holds the grant to call a campaign off) is on the Campaigns section.
-
 **Steps:**
 
-1. Open `<campaign>` and cancel it.
-2. Read its state.
+1. Open <campaign>.
+2. Cancel the campaign.
+3. Read its state.
 
 **Expected Results:**
 
-* Grade10 moves `<campaign>` to `canceled`.
+* Step 3 shows <campaign> moved to canceled.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-s0x rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC3-1: A canceled campaign refuses a second cancel and a title edit
@@ -523,19 +573,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<campaign_4>` is canceled.
-* admin(holds the grant to call a campaign off) is on the Campaigns section.
+* <campaign_4> is canceled.
+* admin(holds the grant to call a campaign off) is on the Campaigns page.
 
 **Steps:**
 
-1. Open `<campaign_4>` and cancel it.
-2. Change its title.
-3. Read its state and title.
+1. Open <campaign_4>.
+2. Cancel the campaign.
+3. Change its title.
+4. Save the edit.
+5. Read its state.
+6. Read its title.
 
 **Expected Results:**
 
-* Grade10 refuses the cancel and the campaign remains canceled.
-* Grade10 refuses the title write and the title is unchanged.
+* Step 2 refuses the cancel; step 5 still shows canceled.
+* Step 4 refuses the title write; the title stays unchanged.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-52j rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC4-1: A canceled campaign opens read-only
@@ -555,21 +608,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<campaign_4>` is canceled.
-* admin(holds the auction catalogue grant) is on the Campaigns section.
+* <campaign_4> is canceled.
+* admin(holds the auction catalogue grant) is on the Campaigns page.
 
 **Steps:**
 
-1. Open `<campaign_4>`.
-2. Read the title, the copy and the actions offered.
+1. Open <campaign_4>.
+2. Read the title.
+3. Read the copy.
+4. Read the actions offered.
 
 **Expected Results:**
 
-* The editor shows its title and copy.
+* Steps 2 and 3 show the stored title and copy.
 * Create, publish, edit save and cancel are not offered.
 
 <!-- trace:case id=g10adm.auction-campaign.TC-okx rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
-### grade10-admin-auction-campaign-US5-TC5-1: Unauthorized cancel is refused
+### grade10-admin-auction-campaign-US5-TC5-1: Unauthorized campaign cancel is refused
 
 **Classification:**
 
@@ -586,15 +641,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<campaign_1>` is a draft.
-* admin(signed in, may not call a campaign off) is on the Campaigns section.
+* <campaign_1> is a draft.
+* admin(signed in, may not call a campaign off) is on the Campaigns page.
 
 **Steps:**
 
-1. Open `<campaign_1>` and cancel it.
-2. Read its state.
+1. Open <campaign_1>.
+2. Cancel the campaign.
+3. Read its state.
 
 **Expected Results:**
 
-* Grade10 refuses the cancel.
-* The campaign remains a draft.
+* Step 2 refuses the unauthorized cancel.
+* Step 3 still shows the campaign as a draft.
+
+## Reconciliation
+
+- **Covered at domain** — a created campaign publishes as a public cover and its unpublished lots stay off the catalogue, walked by `grade10-admin-auction-e2e-US1-TC1-1`
+- **Covered at domain** — cancelling a published campaign cancels the listings under it, walked by `grade10-admin-auction-e2e-US2-TC1-1`

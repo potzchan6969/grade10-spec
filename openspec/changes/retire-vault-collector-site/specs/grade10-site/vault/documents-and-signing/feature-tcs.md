@@ -21,9 +21,11 @@ sign each document once,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 
@@ -87,9 +89,11 @@ sign each document once,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 

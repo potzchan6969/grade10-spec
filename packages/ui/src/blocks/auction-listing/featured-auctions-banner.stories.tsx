@@ -67,7 +67,7 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
 /**
  * Featured carousel contract stories. The quiet All auctions grid lives under
  * Auction List/All Auctions. Full page chrome (Featured + All auctions) lives
- * under Pages/Auction List → Default. Earlier row/pair explorations live under
+ * under Pages/Auction/Auction List → Default. Earlier row/pair explorations live under
  * Featured Auctions/Archived.
  */
 const meta = {

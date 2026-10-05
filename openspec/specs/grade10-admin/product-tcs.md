@@ -1,7 +1,7 @@
 # grade10-admin Cross-Domain E2E Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-24, tcs-rules r3.0
+**Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-e2e-US1: Operator starts a listing with its Cert's source media
 
@@ -26,23 +26,36 @@
 
 **Pre-conditions:**
 
-* admin(Inventory media-management authority) can manage saved product media for <product>.
-* admin(Auction listing-edit authority) can draft a listing for <product>.
-* <product> has one untagged saved source media item, one Cert record with Cert ID <selected Cert ID>, and one other Cert record with Cert ID <other Cert ID>.
+* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url> for <product>.
+* admin(holds existing Auction listing-edit authority) can draft a listing for <product> and <selected Cert ID>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<product>` | A product with saved source media and two Cert records |
+| `<source media>` | One untagged saved source item on `<product>` |
+| `<selected Cert ID>` | One Cert record on `<product>` |
+| `<other Cert ID>` | Another Cert record on `<product>` |
+| `<alt text>` | An alt text different from the one stored on `<source media>` |
 
 **Steps:**
 
-1. Tag <source media> to <selected Cert ID> in Inventory.
-2. Start a draft listing for <product> and <selected Cert ID> in Auction.
-3. Add <source media> from the main source selector and save the listing gallery.
-4. Change <source media>'s alt text in Inventory.
-5. Reopen the listing gallery.
+1. Tag <source media> to <selected Cert ID>.
+2. Start a draft listing for <product> and <selected Cert ID>.
+3. Open the main source selector.
+4. Add <source media>.
+5. Save the listing gallery.
+6. Change the alt text of <source media> to <alt text> in Inventory.
+7. Reopen the listing gallery.
 
 **Expected Results:**
 
-* The main source selector offers <source media> and excludes media tagged to <other Cert ID>.
-* The listing gallery contains a copy of <source media>'s bytes and its alt text as it was when added.
-* Changing the Inventory source alt text does not change the saved listing copy.
+* Step 3 offers <source media>.
+* Step 3 excludes media tagged to <other Cert ID>.
+* The saved gallery holds a copy of <source media>'s bytes.
+* That copy keeps the alt text from the moment it was added.
+* Step 6 leaves the saved copy's alt text unchanged.
 
 ---
 
@@ -69,25 +82,41 @@
 
 **Pre-conditions:**
 
-* admin(Auction listing-edit authority) can draft a listing for <product> and <selected Cert ID>.
-* admin(Inventory write authority) can manage the product's Cert records and saved media.
-* <product> has available Cert records <selected Cert ID> and <source Cert ID>, each with no active reservation.
-* <source Cert ID> differs from <selected Cert ID> and has <source media> tagged to it; <shared media> is untagged.
+* admin(holds existing Auction listing-edit authority) can draft a listing for <product> and <selected Cert ID>.
+* admin(holds existing Inventory write authority) is on <grade10 admin inventory record url> for <product>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<product>` | A product with two available Cert records and saved media |
+| `<selected Cert ID>` | An available Cert on `<product>`, with no active reservation |
+| `<source Cert ID>` | A different available Cert on `<product>`, with no active reservation |
+| `<source media>` | Saved source media tagged to `<source Cert ID>` |
+| `<shared media>` | Untagged saved media on `<product>` |
+| `<withdrawal reason>` | A non-empty reason |
 
 **Steps:**
 
 1. Start a draft listing for <product> and <selected Cert ID>.
-2. Open the Other Cert media drawer and add <source media> by naming <source Cert ID>.
-3. Save the listing gallery and record the saved copy's bytes and alt text.
-4. Enter a non-empty withdrawal reason, then remove the physical unit for <source Cert ID> in Inventory and confirm.
-5. Reopen the product media, Cert records, and saved listing gallery.
+2. Open the Other Cert media drawer.
+3. Add <source media> by naming <source Cert ID>.
+4. Save the listing gallery.
+5. Note the saved copy's bytes and alt text.
+6. Enter <withdrawal reason>.
+7. Remove the physical unit for <source Cert ID>.
+8. Confirm the removal.
+9. Reopen the product media, the Cert records, and the saved listing gallery.
 
 **Expected Results:**
 
-* The <source Cert ID> record and its tagged <source media> are removed; <shared media> remains untagged.
-* Inventory stock decreases by one and withdrawn increases by one, with the ledger unchanged.
-* The withdrawal changelog records the supplied reason.
-* The saved listing gallery retains its copied bytes and alt text after source deletion.
+* The record for <source Cert ID> is gone.
+* <source media> tagged to that Cert is gone.
+* <shared media> remains, still untagged.
+* Stock is one lower, and withdrawn is one higher.
+* The ledger is unchanged.
+* The withdrawal changelog records <withdrawal reason>.
+* The saved gallery still holds the copied bytes and alt text.
 
 ## Settled
 

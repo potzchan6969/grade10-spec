@@ -35,7 +35,8 @@ import {
 import type { AuctionRecordRowProps } from "./types";
 
 const AUCTION_CARD_STORY = "?path=/story/my-auctions-auction-card--leading";
-const MY_AUCTIONS_PAGE_STORY = "?path=/story/pages-my-auctions-page--default";
+const MY_AUCTIONS_PAGE_STORY =
+  "?path=/story/pages-auction-my-auctions-page--default";
 
 const breadcrumbs = (
   <Breadcrumbs>

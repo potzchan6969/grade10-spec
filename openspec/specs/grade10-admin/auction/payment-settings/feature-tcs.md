@@ -1,7 +1,7 @@
 # grade10-admin/auction/payment-settings Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-16, tcs-rules r1
+**Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-payment-settings-US1: Operator maintains the auction premium minimums
 
@@ -28,11 +28,14 @@ premium for each auction currency,
 
 **Pre-conditions:**
 
-* A settlement-authorized operator opens `/auction` and selects Payment settings.
+* admin(holds the auction settlement permission) is on Payment settings under `/auction`.
+* No minimum has been saved yet.
 
 **Steps:**
 
-1. Read the currency rows.
+1. Read the USD row.
+2. Read the HKD row.
+3. Read the JPY row.
 
 **Expected Results:**
 
@@ -58,17 +61,28 @@ premium for each auction currency,
 
 **Pre-conditions:**
 
-* A settlement-authorized operator can edit the mapping.
+* admin(holds the auction settlement permission) is on Payment settings under `/auction`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<usd>` | 100 minor units (any whole amount of 0 or more) |
+| `<hkd>` | 500 minor units (any whole amount of 0 or more) |
+| `<jpy>` | 100 minor units (any whole amount of 0 or more) |
 
 **Steps:**
 
-1. Save USD 100, HKD 500, and JPY 100 minor units.
-2. Reload the page.
+1. Set USD to <usd>.
+2. Set HKD to <hkd>.
+3. Set JPY to <jpy>.
+4. Save the mapping.
+5. Reload Payment settings.
 
 **Expected Results:**
 
-* All three values are returned as saved.
-* The save identifies the operator and timestamp.
+* Step 5 shows <usd>, <hkd> and <jpy> as saved.
+* The save names this operator and the time it was saved.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
 ### grade10-admin-auction-payment-settings-US1-TC3-1: Invalid save changes nothing
@@ -86,18 +100,29 @@ premium for each auction currency,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-01
 
+Runs once per row of **Test data**.
+
 **Pre-conditions:**
 
-* The current mapping is USD 0, HKD 0, and JPY 0 minor units.
+* admin(holds the auction settlement permission) is on Payment settings under `/auction`.
+* The saved mapping is USD 0, HKD 0, and JPY 0 minor units.
+
+**Test data:**
+
+| `<mapping>` | `<refusal>` |
+| --- | --- |
+| USD −1 minor units, HKD 0, JPY 0 | a negative amount |
+| USD 0, HKD 0, JPY 0, EUR 100 minor units | an unsupported currency |
 
 **Steps:**
 
-1. Submit a mapping with a negative amount or unsupported currency.
+1. Submit <mapping>.
+2. Read the saved mapping.
 
 **Expected Results:**
 
-* The save is refused.
-* The prior mapping remains unchanged.
+* The save is refused because <refusal>.
+* USD, HKD and JPY remain 0 minor units.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-7de rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
 ### grade10-admin-auction-payment-settings-US1-TC4-1: Missing settlement permission refuses access
@@ -117,16 +142,23 @@ premium for each auction currency,
 
 **Pre-conditions:**
 
-* An operator lacks the auction settlement permission.
+* admin(signed in, without the auction settlement permission) is under `/auction`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<usd>` | 100 minor units |
 
 **Steps:**
 
-1. Request Payment settings.
-2. Attempt to save a mapping.
+1. Open Payment settings.
+2. Save USD as <usd>.
 
 **Expected Results:**
 
-* Both operations are refused.
+* Step 1 is refused.
+* Step 2 is refused.
 
 ## Raised
 

@@ -17,7 +17,7 @@ import { AuctionCataloguePage } from "./auction-catalogue-page";
  * Auction List/All Auctions.
  */
 const meta = {
-  title: "Pages/Auction List",
+  title: "Pages/Auction/Auction List",
   component: AuctionCataloguePage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

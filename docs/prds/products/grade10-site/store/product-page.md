@@ -51,7 +51,7 @@ Store and opens Store Locator
 
 ## Designs
 
-::story{id="pages-product-detail-page--docs" title="Product details"}
+::story{id="pages-store-product-detail-page--docs" title="Product details"}
 
 :::detail{title="Implementation map" for="engineer"}
 - [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)

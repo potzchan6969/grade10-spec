@@ -2765,9 +2765,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** The export contract
+
+**Decided by:** `packages/ui/src/index.test.ts`
 
 **Pre-conditions:**
 
