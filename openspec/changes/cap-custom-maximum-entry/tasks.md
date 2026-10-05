@@ -22,7 +22,6 @@
       `ListingQuickMaximumBidActions` for set and raise, with silent restore
       and no dedicated too-large status; the raise path is walked, not
       unit-tested (`shared-ui-auction-listing-US1-TC24-1`).
-      `shared-ui-auction-listing-SC-43`
 - [x] 2.3 Keep Storybook `ListingAuctionBidCard` → CustomMaximumCeiling
       covering paste restore and digit-by-digit restore.
 - [x] 2.4 Verify — `pnpm --dir packages/ui test` for listing-bid-money and
@@ -57,8 +56,8 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       JPY maximum of `5_000_000_001` naming `5_000_000_000`; every test
       and fixture amount the old ceiling named moves under the new one,
       `quickBidAmounts.test.ts` included; the e2e
-      `custom-maximum-ceiling.spec.ts` cites the ceiling cases as `TC19` to
-      `TC25`.
+      `custom-maximum-ceiling.spec.ts` cites the ceiling cases it drives,
+      `TC19` to `TC23` and `TC25`.
       `grade10-site-auction-bid-increments-SC-08`,
       `grade10-site-auction-bid-increments-SC-10`
 - [ ] 4.2 Set `AUCTION_BID_CEILINGS.JPY` to `5_000_000_000` in

@@ -94,7 +94,8 @@ cancelled.
 - 🚧 **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
 - 🚧 **Ceiling** — a maximum above 9,999,999,999 whole major units cannot be
-  typed or pasted; the previous valid draft stays, nothing is clamped
+  typed or pasted; the previous valid draft stays, nothing is clamped, and
+  no message says why
 - 🚧 **Quick bids** — three chips at 1×, 2× and 4× the listing increment:
   from the current bid when the collector does not lead, from their committed
   maximum when they do; before any bid, chip 1× is the opening price itself
