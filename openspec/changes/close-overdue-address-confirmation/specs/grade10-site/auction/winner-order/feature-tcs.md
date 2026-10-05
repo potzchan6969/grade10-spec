@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
-## winner-order-US8: Winner gets the address form back
+## winner-order-US23: Winner gets the address form back
 
 **As a** winner who missed the 48-hour address deadline,
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
 **so that** I can still settle the lot I won once I have told Grade10 where to ship it.
 
-### winner-order-US8-TC1-1: Address confirmed a minute inside the window is accepted
+### winner-order-US23-TC1-1: Address confirmed a minute inside the window is accepted
 
 **Classification:**
 
@@ -48,7 +48,7 @@
 * The order reads Preparing Invoice.
 * No invoice is issued by the confirmation itself.
 
-### winner-order-US8-TC2-1: First confirmation is refused at the 48-hour mark
+### winner-order-US23-TC2-1: First confirmation is refused at the 48-hour mark
 
 **Classification:**
 
@@ -61,7 +61,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-08
+* **Trace:** winner-order-US-23
 
 **Pre-conditions:**
 
@@ -86,7 +86,7 @@
 * The order holds no confirmed delivery address.
 * The order still reads Setup Overdue.
 
-### winner-order-US8-TC3-1: A missed address deadline refuses a change to a confirmed address
+### winner-order-US23-TC3-1: A missed address deadline refuses a change to a confirmed address
 
 **Classification:**
 
@@ -99,7 +99,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-08
+* **Trace:** winner-order-US-23
 
 **Pre-conditions:**
 
@@ -118,7 +118,7 @@
 * The order still shows the address confirmed inside the window.
 * The order still reads Preparing Invoice.
 
-### winner-order-US8-TC4-1: A reopened address form runs a fresh 48 hours from the reopen
+### winner-order-US23-TC4-1: A reopened address form runs a fresh 48 hours from the reopen
 
 **Classification:**
 
@@ -131,7 +131,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-08
+* **Trace:** winner-order-US-23
 
 **Pre-conditions:**
 
@@ -158,7 +158,7 @@
 * The confirmation is accepted.
 * The order reads Preparing Invoice.
 
-### winner-order-US8-TC5-1: Winner has no way to reopen the address form
+### winner-order-US23-TC5-1: Winner has no way to reopen the address form
 
 **Classification:**
 
@@ -171,7 +171,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** winner-order-US-08
+* **Trace:** winner-order-US-23
 
 **Pre-conditions:**
 
@@ -189,7 +189,7 @@
 * The reopen is refused.
 * The address deadline is unchanged.
 
-### winner-order-US8-TC6-1: Three won lots open three orders with their own address deadlines
+### winner-order-US23-TC6-1: Three won lots open three orders with their own address deadlines
 
 **Classification:**
 
@@ -228,7 +228,7 @@
 * The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z.
 * Each order keeps the address confirmed on it and awaits its own invoice.
 
-### winner-order-US8-TC7-1: Sent invoice stops the winner changing the address
+### winner-order-US23-TC7-1: Sent invoice stops the winner changing the address
 
 **Classification:**
 
@@ -259,7 +259,7 @@
 * The order still shows the address the invoice was quoted for.
 * The area points the winner at Grade10 for a change.
 
-### winner-order-US8-TC8-1: Expired invoice does not reopen the address form
+### winner-order-US23-TC8-1: Expired invoice does not reopen the address form
 
 **Classification:**
 
@@ -290,7 +290,7 @@
 * The change is refused.
 * The overdue alert carries Contact Us and no card Pay control is shown.
 
-### winner-order-US8-TC9-1: A missed address deadline leaves the account address book alone
+### winner-order-US23-TC9-1: A missed address deadline leaves the account address book alone
 
 **Classification:**
 
@@ -322,7 +322,7 @@
 * Neither reaches the auction order.
 * The order still has no confirmed delivery address and still offers no address form.
 
-### winner-order-US8-TC10-1: A reopen sends the winner no letter
+### winner-order-US23-TC10-1: A reopen sends the winner no letter
 
 **Classification:**
 
@@ -335,7 +335,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** winner-order-US-08
+* **Trace:** winner-order-US-23
 
 **Pre-conditions:**
 
@@ -362,13 +362,13 @@ What they disagreed about is below.
 | --- | --- |
 | Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-145` and `winner-order-SC-146` are phrased on receipt rather than on submission |
 | What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-144` proves it against a lot whose scheduled and actual closes differ |
-| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-151` and `winner-order-US8-TC9-1` |
+| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-151` and `winner-order-US23-TC9-1` |
 | Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
-| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US8-TC10-1` |
+| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US23-TC10-1` |
 | What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to the durable Winner Order rules. Recorded here so the next blind pass does not raise it again |
-| Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-08`; the journeys those cases walk are durable and reach the suite at archive |
+| Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-23`; the journeys those cases walk are durable and reach the suite at archive |
 | Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here became ADDED after `check:manual` refused a draft that folded requirements the durable Winner Order rules also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
-| Cases the address deadline on `main` now covers | **Dropped** after the durable Winner Order rules took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US8` |
+| Cases the address deadline on `main` now covers | **Dropped** after the durable Winner Order rules took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US23` |
 
 An operator may record a delivery address after the address deadline without
 reopening it. Neither reading proposed it; it came out of the same grilling

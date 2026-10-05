@@ -58,7 +58,7 @@ own page,
 **I want** to open a card from the Store front door and add its sellable item,
 **so that** I can buy it without choosing a size, option, or variant.
 
-### grade10-site-store-e2e-US2-TC1-1: Merchandised card adds its one sellable item
+### grade10-site-store-e2e-US2-TC2-1: Merchandised card adds its one sellable item
 
 **Classification:**
 
@@ -106,7 +106,7 @@ own page,
 when I open it,
 **so that** I can tell an unavailable card from a broken purchase page.
 
-### grade10-site-store-e2e-US3-TC1-1: Sold-out card keeps one price and no choice
+### grade10-site-store-e2e-US3-TC2-1: Sold-out card keeps one price and no choice
 
 **Classification:**
 

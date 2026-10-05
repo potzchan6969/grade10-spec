@@ -85,7 +85,7 @@ locks at send, per "The delivery address locks when the invoice is sent", so
 Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 
 #### Scenario: winner-order-SC-144 - The address deadline counts from the extended close
-**Serves:** winner-order-US-08 - Winner gets the address form back
+**Serves:** winner-order-US-23 - Winner gets the address form back
 
 - **GIVEN** a lot whose scheduled close was 2026-09-12T08:45:00Z and whose
   actual close, after extended bidding, was 2026-09-12T09:00:00Z
@@ -93,7 +93,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **THEN** the address deadline shown is 2026-09-14T09:00:00Z
 
 #### Scenario: winner-order-SC-145 - An address received just inside the deadline is accepted
-**Serves:** winner-order-US-08 - Winner gets the address form back
+**Serves:** winner-order-US-23 - Winner gets the address form back
 
 - **GIVEN** an auction order whose address deadline is 2026-09-14T09:00:00Z
 - **WHEN** Grade10 receives the winner's delivery address at 2026-09-14T08:59:00Z
@@ -101,7 +101,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the order's derived status is Preparing Invoice
 
 #### Scenario: winner-order-SC-146 - An address received after the deadline is refused
-**Serves:** winner-order-US-08 - Winner gets the address form back
+**Serves:** winner-order-US-23 - Winner gets the address form back
 
 - **GIVEN** an auction order in Setup Overdue whose address deadline was
   2026-09-14T09:00:00Z
@@ -111,7 +111,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** its derived status is still Setup Overdue
 
 #### Scenario: winner-order-SC-147 - A confirmed address cannot be changed after the deadline
-**Serves:** winner-order-US-08 - Winner gets the address form back
+**Serves:** winner-order-US-23 - Winner gets the address form back
 
 - **GIVEN** an auction order in Preparing Invoice whose winner confirmed an
   address at 2026-09-13T10:00:00Z and whose address deadline was
@@ -125,7 +125,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the order carries Contact Us and no change control
 
 #### Scenario: winner-order-SC-148 - A reopen gives the winner a fresh 48 hours
-**Serves:** winner-order-US-08 - Winner gets the address form back
+**Serves:** winner-order-US-23 - Winner gets the address form back
 
 - **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
   `not_issued` whose address deadline was 2026-09-14T09:00:00Z
@@ -136,7 +136,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** Grade10 offers the winner no way to reopen it themselves
 
 #### Scenario: winner-order-SC-149 - A reopen sends the winner no letter
-**Serves:** winner-order-US-08 - Winner gets the address form back
+**Serves:** winner-order-US-23 - Winner gets the address form back
 
 - **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
   `not_issued` whose address deadline has passed
