@@ -682,6 +682,127 @@ payments that failed,
 * Steps 1 and 3 show one outcome each.
 * Steps 2 and 4 name the missed deadline and offer the winner Contact Us, not self-service.
 
+## post-sale-US3: Operator collects payment
+
+**As a** payment operator,
+**I want** a wire to release the card hold, a capture to mark Paid via Stripe, and a manual record to mark Paid via Manual,
+**so that** a second paid attempt is refused and staff without the grant cannot collect.
+
+### post-sale-US3-TC1-1: A verified card capture marks the listing Paid via Stripe
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* `<listing_7>` is Awaiting payment, with an open card authorization for the winner.
+* admin(holds payment-processing) is on `<listing_7>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A closed listing with a winner, outcome Awaiting payment, card authorization still open |
+
+**Steps:**
+
+1. Record a verified card capture for `<listing_7>`.
+2. Read the outcome.
+3. Read the trail.
+
+**Expected Results:**
+
+* Step 2 shows Paid via Stripe.
+* Step 3 shows that change from Stripe.
+* Step 3 names no operator on that change.
+
+### post-sale-US3-TC2-1: A second payment record is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* `<listing_8>` is Paid via Stripe.
+* admin(holds payment-processing) is on `<listing_8>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A closed listing with a winner, outcome Paid via Stripe |
+
+**Steps:**
+
+1. Record payment collected on `<listing_8>`.
+2. Read the outcome.
+3. Read the winner.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 still shows Paid via Stripe.
+* Step 3 shows the winner unchanged.
+
+### post-sale-US3-TC3-1: Staff cannot record payment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* admin(role is exactly staff) is on Orders under `/auction`.
+* `<listing_9>` is Awaiting payment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | A closed listing with a winner, outcome Awaiting payment |
+
+**Steps:**
+
+1. Open `<listing_9>`.
+2. Read the payment control.
+3. Submit a payment-collected record.
+4. Read the outcome.
+
+**Expected Results:**
+
+* Step 2 shows the payment control, and it is disabled.
+* Step 3 is refused.
+* Step 4 does not show Paid via Manual.
+
 ## Settled
 
 ## Reconciliation
@@ -689,3 +810,6 @@ payments that failed,
 | Finding | Disposition |
 | --- | --- |
 | Queue labels preserve the operator action context | **Folded in** |
+
+- **Covered at domain** — recording payment collected on an Awaiting payment listing reaches Paid via Manual, then Shipped, then Delivered, walked by `grade10-admin-auction-e2e-US3-TC1-1`
+- **Covered at domain** — a wire request on an Awaiting payment listing reaches Awaiting wire and releases the card hold, walked by `grade10-admin-auction-e2e-US3-TC2-1`
