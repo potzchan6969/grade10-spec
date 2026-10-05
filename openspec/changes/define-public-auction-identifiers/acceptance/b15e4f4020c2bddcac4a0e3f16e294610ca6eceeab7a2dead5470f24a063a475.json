@@ -1,11 +1,11 @@
 {
   "version": 2,
   "change": "define-public-auction-identifiers",
-  "baseline": "1701a1aca98f2327da35310161f6aece6a68f82ad2b072479303c0aa2c4294e1",
-  "fingerprint": "5ec80ee9219661875f43753b51fd37fca4febe87ea49e12a482163b3d83640df",
+  "baseline": "12b46f70a74f4a63d2b97329a4766580113077d675d853d29763ee2a3b84d1ce",
+  "fingerprint": "b15e4f4020c2bddcac4a0e3f16e294610ca6eceeab7a2dead5470f24a063a475",
   "reviewedBy": "@htonyl",
-  "acceptedAt": "2026-10-05T17:53:52.410Z",
-  "supersedes": "b15e4f4020c2bddcac4a0e3f16e294610ca6eceeab7a2dead5470f24a063a475",
+  "acceptedAt": "2026-10-05T17:47:17.308Z",
+  "supersedes": "6ecbfe04309fe9e48a80ed8b13383cf01dbd2e9ac62c59ebb7e2c09fb497341b",
   "artifacts": [
     {
       "path": "docs/prds/products/grade10-site/auction/display.md#listing-code",
@@ -74,7 +74,7 @@
     },
     {
       "path": "openspec/changes/define-public-auction-identifiers/specs/grade10-site/auction/winner-order/spec.md",
-      "sha256": "ea9d37d26198c61a77cfd9994972c2a3abf2b4296cd56c73a329291129719f74",
+      "sha256": "67f9f44e10fd9e6b6c1d07e780354879e38769cffbc9ac0befe8d77090bf5c70",
       "role": "change-input"
     },
     {
@@ -144,7 +144,7 @@
     },
     {
       "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
-      "sha256": "f690a11b2d87810f65351e4439ef2b8b2b23a0a768c1002b0c8bf60c9ed5c03a",
+      "sha256": "e66303e8d755a980acac864accb7bb7de7218deddef8bee2f8556b8b61a20326",
       "role": "durable-result"
     },
     {

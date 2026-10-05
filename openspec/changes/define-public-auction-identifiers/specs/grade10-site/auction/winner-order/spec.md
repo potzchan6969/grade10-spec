@@ -37,7 +37,7 @@
   - Payment reference: the listing's own code, carried forward as the order's one collector-facing reference once a winner exists; there is no separate public order ID, and it never appears on the public listing page — `grade10-admin/auction/listing` allocates the code, this capability only carries it forward
   - Invoice ID: the payment reference plus a 2-digit issuance sequence; a reissue takes the next sequence and an old invoice ID still finds the order
   - Internal audit number: one gapless count across invoices and receipts, never shown to the winner
-  - Replaced invoice: an invoice a reissue replaced says so and names its replacement
+  - Replacement invoice: a reissue's new invoice says `Replaces invoice {id}` and names the prior invoice it replaces
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote; the bank-rail presentation is governed by `add-winner-how-to-pay-rails`
   - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
@@ -60,10 +60,8 @@
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 
-## RENAMED Requirements
 
-- FROM: `### Requirement: Every invoice carries an invoice ID and a bank reference`
-- TO: `### Requirement: Every invoice carries an invoice ID and the order's payment reference`
+## MODIFIED Requirements
 
 ### Requirement: Every invoice carries an invoice ID and the order's payment reference
 
@@ -113,11 +111,11 @@ listing page exposes the lower-case code only through that address, per
 invoice ID, including a replaced invoice's, or the order's payment reference,
 SHALL find the auction order.
 
-**Replaced invoice** - A replaced invoice SHALL hold no invoice status of its
-own and SHALL never read `cancelled`; the order's invoice status is its
-current invoice's, per `grade10-site/auction/order-status`. The PDF of a
-replaced invoice SHALL say it was replaced and SHALL name the invoice ID of
-the invoice that replaced it.
+**Replacement relationship** - A reissue's new invoice SHALL retain the prior
+invoice ID as `replacesInvoice` and its PDF SHALL say `Replaces invoice {id}`.
+The prior invoice remains retained, SHALL hold no invoice status of its own
+and SHALL never read `cancelled`; the order's invoice status is its current
+invoice's, per `grade10-site/auction/order-status`.
 
 **Stripe metadata** - When creating a card payment for the order, Grade10
 SHALL write the order's payment reference to the Stripe payment's metadata
@@ -171,7 +169,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** the new invoice ID is `IN-LK42302`
 - **AND** the order's payment reference is still `LK423`, unchanged by the reissue
 - **AND** looking up `IN-LK42301`, `IN-LK42302`, or `LK423` all find the same order
-- **AND** the first invoice's PDF names `IN-LK42302`
+- **AND** the new invoice's PDF says `Replaces invoice IN-LK42301`
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-qt4 rev=1 -->
 #### Scenario: winner-order-SC-124 - The invoice count grows to three digits after 99

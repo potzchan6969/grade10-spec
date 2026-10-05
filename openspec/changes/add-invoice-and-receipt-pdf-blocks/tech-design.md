@@ -31,8 +31,11 @@ design describes moving it here, not building it fresh.
   already prove, colocated here instead.
 
 **Non-Goals:**
-- Building bank rails, the manually-settled mark, Superseded invoice, or the
-  reserved `taxLine`/`issuerTaxDetails` slots. Retired, `decisions.md` Q19.
+- Computing or validating tax. The optional `taxLine` is a supplied PDF row;
+  tax policy, persistence and operator input belong to
+  `add-winner-order-tax-line`.
+- Building the manually-settled mark, Superseded invoice, or
+  `issuerTaxDetails`. Those remain retired under `decisions.md` Q19.
 - A data model, a service, or a wire contract. Nothing here touches a
   database, a backend service, or an API.
 - Pixel-level layout assertions (position, alignment, rule thickness).
@@ -73,11 +76,14 @@ document originally described, so this directory's `public-exports.test.ts`
 and the moved renderer's own tests are picked up automatically — no config
 edit needed.
 
-**Data shape carries over from `grade10` unchanged, except money and dates.**
-`InvoicePdfData`/`ReceiptPdfData` keep the shape `grade10`'s already-tested
-renderer takes — `PdfLineItem { key?, label, amount }` (see below for `key`),
-`PdfPartyAddress = Record<string, string | null> | null`, plain `string`
-amounts, `Date` for every date. This is a deliberate difference from the
+**Data shape carries over from `grade10` unchanged, except the agreed
+contract additions.** `InvoicePdfData`/`ReceiptPdfData` keep the shape
+`grade10`'s already-tested renderer takes — `PdfLineItem { key?, label,
+amount }` (see below for `key`), `PdfPartyAddress = Record<string, string |
+null> | null`, plain `string` amounts, `Date` for every date, and an explicit
+winner IANA time-zone identifier. This revision adds the optional supplied
+`taxLine` to both documents and `replacesInvoice` to invoices. This is a
+deliberate difference from the
 retired DOM design's `ReactNode` props (`decisions.md` Q6): there is no JSX
 here to hold a `ReactNode`, so every value is the plain type `pdf-lib` can
 draw directly.
@@ -89,6 +95,11 @@ export type PdfLineItem = {
   key?: "subtotal" | "paymentProcessingFee" | "orderTotal";
   label: string;
   amount: string;
+};
+
+export type InvoicePdfReplacement = {
+  invoiceId: string;
+  documentUrl?: string;
 };
 
 export type PdfDocumentCopy = {
@@ -104,6 +115,7 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
   sentAtLabel: string;
   paymentDeadlineLabel: string;
   paymentMethodLabel: string;
+  replacesInvoiceLabel: string;
   bankDetailsHeading: string;
   swiftLabel: string;
   fpsLabel: string;
@@ -118,10 +130,10 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
 };
 
 export type InvoicePdfBankRails = {
-  swift: { beneficiary: string; swiftBic: string; account: string };
-  fps: { fpsId: string; beneficiary: string };
-  hkLocalTransfer: { bankAndCode: string; beneficiary: string; accountNo: string };
-  instructionReference: string;
+  swift?: { beneficiary: string; swiftBic: string; account: string };
+  fps?: { fpsId: string; beneficiary: string };
+  hkLocalTransfer?: { bankAndCode: string; beneficiary: string; accountNo: string };
+  reference: string;
 };
 
 export type InvoicePdfData = {
@@ -129,10 +141,13 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   sentAt: Date;
   paymentDeadline: Date;
+  winnerTimeZone: string;
   paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly PdfLineItem[];
+  taxLine?: PdfLineItem | null;
+  replacesInvoice?: InvoicePdfReplacement | null;
   /** Given only on a bank-transfer invoice (`decisions.md` Q22); `undefined` omits the whole section. */
   bankRails?: InvoicePdfBankRails;
   issuerName: string;
@@ -160,11 +175,13 @@ export type ReceiptPdfData = {
   listingTitle: string;
   receiptNumber: string;
   paidAt: Date;
+  winnerTimeZone: string;
   invoiceId: string;
   providerReferenceCode: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly PdfLineItem[];
+  taxLine?: PdfLineItem | null;
   paymentBreakdown: ReceiptPaymentBreakdown;
   paymentMethod: string;
   providerReference: string | null;
@@ -179,15 +196,13 @@ Q20).** `grade10`'s `drawLineItems` currently sorts a charge into the boxed
 summary by `SUMMARY_LABELS.has(item.label)` — a `Set` of the literal English
 strings `"Subtotal"`, `"Payment Processing Fee"`, `"Order Total"`. That only
 ever worked because `grade10`'s backend happens to hardcode those same
-strings; once a caller's `label` is a translated `copy` value, the match
-silently stops firing and every summary line falls back into the ordinary
-charge list. `key` (above) replaces it: `drawLineItems` groups by
-`item.key !== undefined`, and singles out `key === "orderTotal"` for the
-bold, rule-set-off treatment `ORDER_TOTAL_LABEL` used to identify by string
-equality. This is not part of Q20's literal ask (routing hardcoded labels
-through `copy`) but the same class of bug: a mechanism keyed on English text
-that a translated label would silently break, caught while doing that work
-rather than left for whoever localizes this renderer first.
+strings; once a caller's `label` is a translated value, the match silently
+stops firing and every summary line falls back into the ordinary charge list.
+`key` (above) replaces it: `drawLineItems` groups by `item.key !== undefined`,
+and singles out `key === "orderTotal"` for the bold, rule-set-off treatment
+`ORDER_TOTAL_LABEL` used to identify by string equality. The optional
+`taxLine` is a separate ordinary charge inserted immediately before the
+summary and is never grouped into it.
 
 **Every string `pdf-document.ts`/`invoice-pdf.ts`/`receipt-pdf.ts` currently
 hardcodes moves to a `copy` field (`decisions.md` Q20).** `drawParties`'s
@@ -197,19 +212,18 @@ meta-row label (`"Receipt number"`, `"Invoice number"`, `"Date paid"`,
 `"Payment method"`, `"Payment reference"`, `"Date of issue"`, `"Date due"`),
 `drawPaymentSection`'s `"Payment"`/`"Transfer reference"`,
 `drawPaymentBreakdown`'s `"Payment breakdown"` and `receiptBreakdown`'s four
-row labels, and each footer sentence — all become `copy.*` fields instead of
+row labels, and the replacement label — all become `copy.*` fields instead of
 string literals in `pdf-document.ts`. A line item's own `label` (`"Winning
 Bid"`, `"Subtotal"`, …) already arrives as a caller-supplied string on
 `PdfLineItem` and needed no change; only the section/meta labels the
 renderer itself used to own move.
 
-**Dates stay computed inside the renderer, not routed through `copy` or
-taken as strings.** `formatDateTime` (fixed to `Asia/Hong_Kong`, `spec.md`'s
-Dates requirement) is the one value this renderer computes rather than
-taking preformatted — a deliberate asymmetry with money, since a locale
-choice belongs to the caller but the timezone every document is issued
-under does not vary by caller. This is unchanged from `grade10`'s current
-`pdfDocument.ts` and carries over as-is.
+**Dates stay computed inside the renderer, using the supplied winner zone.**
+`formatDateTime` receives the `Date` and `winnerTimeZone` IANA identifier and
+formats that instant in the winner's zone, including the zone name required
+by `spec.md`. This remains deliberately asymmetric with money: the caller
+chooses the preformatted amount, while the document owns consistent date
+presentation from an explicit zone rather than a machine default.
 
 **The Grade10 wordmark stays a component-owned SVG path, not a prop.**
 `LOGO_PATHS` (`pdf-document.ts`) is unchanged from `grade10`'s version — a
@@ -247,24 +261,22 @@ matching `receipt-pdf.ts`'s own document-specific sections
 (`drawPaymentSection`, `drawPaymentBreakdown`) rather than the shared
 `pdf-document.ts` — no other document draws it. `drawBankRails` draws
 `copy.bankDetailsHeading`
-then three columns at equal thirds of the content width — SWIFT, FPS, HK
-local transfer, each column its own heading plus its own stack of label/value
-lines, independently sized the way `drawParties`'s Bill To/Ship To columns
-already are — followed by a rule and one wrapped line of
-`copy.bankReferenceNoteLabel` ending in the bold
-`bankRails.instructionReference`. Called
-only when `data.bankRails` is given; `invoice-pdf.ts` skips the call and the
-vertical space entirely on a card invoice, the same `!== undefined` gate
-`OrderValueSection`'s summary rows already use. Every field arrives as a
-plain string — no rail-specific formatting, validation or a rail's absence
-within `bankRails` (all three are required once `bankRails` is given at
-all, since a caller with only some of Grade10's rails on file is not a
-shape this contract is asked to represent yet).
+then one column for each enabled rail — SWIFT, FPS, and HK local transfer —
+each with its own heading and stack of label/value lines, followed by a rule
+and one wrapped line of `copy.bankReferenceNoteLabel` ending in the bold
+`bankRails.reference`. Called only when `data.bankRails` is given;
+`invoice-pdf.ts` skips the call and the vertical space entirely on a card
+invoice. Each rail is optional so the snapshot can represent the enabled
+subset; every supplied field remains a plain string with no rail-specific
+formatting or validation.
 
 **`footer`/`drawFooter` removed from both renderers (`decisions.md`
 Q23).** Neither document draws a footer sentence any more; `InvoicePdfCopy`
 and `ReceiptPdfCopy` drop the field, and each `drawFooter` function is
-deleted along with its call site.
+deleted along with its call site. The replacement row is the only
+replacement-specific output, and its label comes from
+`InvoicePdfCopy.replacesInvoiceLabel` while its ID comes from
+`InvoicePdfData.replacesInvoice`.
 
 ## Risks / Trade-offs
 
@@ -313,9 +325,10 @@ deleted along with its call site.
    importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, then removes its
    own now-redundant copy under `packages/grade10-auction/contracts`. Data
    it already builds (`InvoicePdfData`/`ReceiptPdfData`) needs a `copy`
-   argument added at each of the two call sites, sourced from
-   `@grade10/i18n`; no other shape changes. `grade10`'s own task
-   (`tasks.md`), not built here.
+   argument and `winnerTimeZone` at each call site, plus the optional
+   `taxLine` and `replacesInvoice` mappings where the order snapshot has
+   them, sourced from `@grade10/i18n` and the order record. `grade10`'s own
+   task (`tasks.md`), not built here.
 
 Rollback: step 1 only adds and moves files inside this repository — nothing
 consumes them until `grade10` bumps its submodule pin, so it reverts
@@ -324,6 +337,6 @@ independently. Step 3 is an ordinary application-side dependency bump
 
 ## Open Questions
 
-None. `decisions.md` Q18-Q23 settle the approach; the `key` discriminant and
-the `copy` field list above are this document's own implementation choices,
-not product judgments needing a decision row.
+None. `decisions.md` Q18-Q24 settle the approach; the `key` discriminant and
+the `copy` field list above are this document's implementation choices, not
+product judgments needing another decision row.

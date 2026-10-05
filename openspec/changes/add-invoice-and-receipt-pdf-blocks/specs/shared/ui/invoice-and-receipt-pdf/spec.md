@@ -25,8 +25,10 @@ removed, per the amendment note above each one.
   - Meta rows: invoice number, sent-at date, payment deadline, payment method
   - Party blocks: Bill To, Ship To
   - Lot and charges: a Description/Amount table headed by the lot title, the
-    charges given, and a boxed Subtotal/Payment Processing Fee/Order Total
-    summary
+    charges given, an optional supplied Tax line, and a boxed
+    Subtotal/Payment Processing Fee/Order Total summary
+  - Replacement relationship: on a replacement invoice, the supplied prior
+    invoice ID appears as `Replaces invoice {id}`
   - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
     bank reference, a full-width section below the order-value summary, shown
     only on a bank-transfer invoice
@@ -59,12 +61,12 @@ removed, per the amendment note above each one.
   - Every label arrives through a `copy` argument; neither renderer imports
     `@grade10/i18n` or hardcodes a label
 - Reserved extension slots
-  - Retired (`decisions.md` Q19): the manually-settled mark and Superseded
-    invoice under InvoicePdf/ReceiptPdf export above — carried no further
-    until a concrete requirement resurfaces one. Bank rails, also retired
-    under Q19, resurfaced with a concrete requirement and rejoins
-    InvoicePdf export above (`decisions.md` Q22), structured rather than
-    restored to its pre-retirement opaque shape
+  - Retired (`decisions.md` Q19): the manually-settled mark, Superseded
+    invoice, and issuer tax details under InvoicePdf/ReceiptPdf export above
+    — carried no further until a concrete requirement resurfaces one. Bank
+    rails, also retired under Q19, resurfaced with a concrete requirement and
+    rejoins InvoicePdf export above (`decisions.md` Q22), structured rather
+    than restored to its pre-retirement opaque shape
 
 ## ADDED Requirements
 
@@ -237,6 +239,35 @@ rendered more heavily weighted than every other line.
 - **WHEN** InvoicePdf renders them
 - **THEN** no insurance line appears
 - **AND** the remaining charges and the summary keep their given order
+
+### Requirement: InvoicePdf and ReceiptPdf render an optional supplied tax line
+
+`taxLine` is an optional caller-supplied `PdfLineItem` on both data objects.
+When present, the renderer SHALL insert it as a charge immediately before the
+boxed Subtotal/Payment Processing Fee/Order Total summary. When omitted or
+`null`, no Tax row SHALL render. The renderer does not compute, validate or
+reformat the tax amount, and the tax line does not define a tax rate,
+jurisdiction or formal tax receipt.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-52 - A supplied tax line renders on both documents
+
+**Serves:** InvoicePdf export - the optional tax line renders when supplied
+
+- **GIVEN** an invoice and receipt with `taxLine` supplied as a `PdfLineItem`
+  labelled `Tax` and an amount of `HKD 12.00`
+- **WHEN** InvoicePdf and ReceiptPdf render their data
+- **THEN** each document shows the supplied Tax line immediately before the
+  boxed summary
+- **AND** each document shows the amount exactly as supplied
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-53 - An omitted tax line does not render
+
+**Serves:** InvoicePdf export - the optional tax line is omitted when not supplied
+
+- **GIVEN** an invoice and receipt with `taxLine` omitted or set to `null`
+- **WHEN** InvoicePdf and ReceiptPdf render their data
+- **THEN** neither document shows a Tax line
+- **AND** the other charges and boxed summary retain their order
 
 ### Requirement: The lot and charges carry a Description/Amount header
 

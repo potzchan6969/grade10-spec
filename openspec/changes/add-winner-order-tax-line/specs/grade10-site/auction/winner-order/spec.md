@@ -23,8 +23,8 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
-| Invoice ID | Given at send, per "Every invoice carries an invoice ID and a bank reference". Finds the order, including after a reissue |
-| Bank reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
+| Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
+| Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
@@ -32,13 +32,13 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
-| Tax | Optional. Added by an operator for the order, and greater than zero when added. Grade10 defines no rate or regime |
+| Tax | Optional caller-supplied `taxLine`, added by an operator for the order, and greater than zero when added. Grade10 defines no rate, jurisdiction or formal tax receipt |
 | Subtotal | The sum of the components above |
 | Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
 | Order total | The total payable — the subtotal plus the payment processing fee |
 | Sent at | When the operator sent the invoice. Stored in UTC |
 | Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC, displayed in the winner's own zone |
-| Replaced by | On a replaced invoice only: the invoice that replaced it |
+| Replaces invoice | On a replacement invoice only: the prior invoice ID named by `Replaces invoice {id}` |
 | Invoice status | Per `grade10-site/auction/order-status`. A replaced invoice holds none |
 
 The payment processing fee SHALL be priced by the invoice's payment method:

@@ -58,9 +58,9 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Identifier formats: an invoice ID and a bank reference built from the listing code, the month and the invoice count; a reissue takes new ones, and an old one still finds the order
   - Listing code: `L` and five characters, fixed for the listing's life, never on the public listing page
   - Internal audit number: one gapless count across invoices and receipts, never shown to the winner
-  - Replaced invoice: an invoice a reissue replaced says so and names its replacement
   - Payment reference: the listing's own code, carried forward as the order's one collector-facing reference once a winner exists; there is no separate public order ID, and it never appears on the public listing page — `grade10-admin/auction/listing` allocates the code, this capability only carries it forward
   - Invoice ID: the payment reference plus a 2-digit issuance sequence; a reissue takes the next sequence and an old invoice ID still finds the order
+  - Replacement invoice: a reissue's new invoice says `Replaces invoice {id}` and names the prior invoice it replaces
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote; the bank-rail presentation is governed by `add-winner-how-to-pay-rails`
   - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
@@ -87,6 +87,63 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
+<!-- Reference: Invoice fields remain owned by add-winner-order-tax-line
+### Requirement: Invoice fields
+Each invoice SHALL carry these fields. Every amount SHALL be an integer count
+of minor units paired with the lot's ISO 4217 currency code, rendered per
+`shared/money-amounts`. An invoice exists only once an operator sends it.
+| Field | Notes |
+| --- | --- |
+| Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
+| Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
+| Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
+| Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
+| Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
+| Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
+| Winning bid | The accepted bid that won the lot, excluding every other component |
+| Buyer's premium | The applicable fee. This capability fixes no rate |
+| Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
+| Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
+| Tax | An optional caller-supplied `taxLine`; no rate, jurisdiction or formal tax receipt is defined here |
+| Subtotal | The sum of the components above |
+| Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
+| Order total | The total payable - the subtotal plus the payment processing fee |
+| Sent at | When the operator sent the invoice. Stored in UTC |
+| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC, displayed in the winner's own zone |
+| Replaces invoice | On a replacement invoice only: the prior invoice ID named by `Replaces invoice {id}` |
+| Invoice status | Per `grade10-site/auction/order-status`. A replaced invoice holds none |
+The payment processing fee SHALL be priced by the invoice's payment method:
+| Method | Payment processing fee |
+| --- | --- |
+| Card | The amount that leaves the subtotal whole after the payment provider takes a fixed fee and a percentage of the whole charge, computed below |
+| Bank transfer | The amount the operator entered on the quote or the reissue. Zero or more |
+For card, Grade10 SHALL read both provider fees for the invoice's currency at
+the moment the invoice is sent, SHALL compute the order total as the subtotal
+plus the fixed fee divided by one less the percentage, SHALL round that total
+up to the next minor unit, and SHALL take the fee as the difference between
+the order total and the subtotal.
+The fee SHALL be fixed on the invoice once sent. A later change in the
+provider's fees SHALL NOT move it; only a reissue SHALL price it again. No
+settlement SHALL drop or change it.
+Wherever the winner reads the invoice's lines - the order, the receipt, and
+any letter that lists them - Grade10 SHALL show Shipping & Handling of zero as
+**Free**, SHALL show a Payment Processing Fee of zero as **Free**, and SHALL
+leave the Insurance line out when the operator added none. Insurance and
+Payment Processing Fee are separate lines: omitting Insurance does not replace
+it with the fee.
+On Winner Order's order summary, Grade10 SHALL offer brief info tooltips beside
+**Buyer's Premium**, **Shipping & Handling**, **Insurance**, and **Payment
+Processing Fee** when those lines are shown. The Payment Processing Fee
+tooltip SHALL describe the fee for the invoice's method briefly and SHALL NOT
+restate the gross-up formula.
+The on-page Winner Order summary MAY omit a separate Subtotal row and show the
+fee lines that apply plus Order Total; the invoice and receipt itemisation
+SHALL still carry Subtotal.
+No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
+an invoice amount before an operator has sent it.
+<!-- trace:scenario id=g10.auction-winner-order.SC-6nv rev=1 -->
+#### Scenario: winner-order-SC-04 - An estimated total is marked as one
+**Serves:** winner-order-US-01 - Winner settles a won lot
 - Order page
   - Sections: Order Information, Collection Method, Order Status timeline, Lots.
   - By status: address form, invoice with Pay Now, or read-only detail.
@@ -95,6 +152,73 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 - Card payment
   - Unfinished session: says so and leaves the invoice payable.
   - Confirming: a completed session reads Confirming payment until paid.
+- **GIVEN** an operator sent a bank transfer invoice with a winning bid of
+  250000, a buyer's premium of 50000, shipping of 8000, insurance of 4000 and
+  a payment processing fee of 0 minor units in HKD
+- **WHEN** the winner reads the invoice
+- **THEN** the order total is 312000 minor units in HKD
+- **AND** no component is marked as an estimate
+<!-- trace:scenario id=g10.auction-winner-order.SC-33a rev=1 -->
+#### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
+**Serves:** winner-order-US-01 - Winner settles a won lot
+<!-- trace:scenario id=g10.auction-winner-order.SC-awt rev=1 -->
+#### Scenario: winner-order-SC-62 - The fee grosses the subtotal up
+**Serves:** winner-order-US-01 - Winner settles a won lot
+- **GIVEN** an auction order whose winner confirmed a delivery address
+- **AND** an operator sent an invoice with Shipping & Handling quoted for that
+  address, with Insurance when added
+- **THEN** its total is the order total for that address
+- **GIVEN** an operator sent a card invoice whose subtotal is 312000 minor
+  units in HKD
+- **AND** the payment provider's fees for HKD at that moment were 235 minor
+  units and 3.4 per cent
+- **THEN** the payment processing fee is 11225 minor units in HKD
+- **AND** the order total is 323225 minor units in HKD
+<!-- trace:scenario id=g10.auction-winner-order.SC-6if rev=1 -->
+#### Scenario: winner-order-SC-63 - A manually settled order carries no fee
+**Serves:** winner-order-US-01 - Winner settles a won lot
+- **GIVEN** a bank transfer invoice with a subtotal of 312000 and a payment
+  processing fee of 5000 minor units in HKD
+- **WHEN** an operator settles it manually and the winner reads the receipt
+- **THEN** the payment processing fee of 5000 minor units in HKD is shown
+- **AND** the amount settled is the order total of 317000 minor units in HKD
+<!-- trace:scenario id=g10.auction-winner-order.SC-w9w rev=1 -->
+#### Scenario: winner-order-SC-38 - Shipping & Handling of zero reads Free
+**Serves:** winner-order-US-01 - Winner settles a won lot
+- **GIVEN** an operator sent an invoice with Shipping & Handling of 0 minor
+  units in HKD
+- **WHEN** the winner opens the order
+- **THEN** the Shipping & Handling line reads Free
+<!-- trace:scenario id=g10.auction-winner-order.SC-k0e rev=1 -->
+#### Scenario: winner-order-SC-39 - An invoice with no insurance shows no Insurance line
+**Serves:** winner-order-US-01 - Winner settles a won lot
+- **GIVEN** an operator sent an invoice without adding insurance
+- **THEN** no Insurance line is shown
+- **AND** the Payment Processing Fee line is still shown, whatever the method
+- **AND** the order total is the sum of the lines that are shown
+<!-- trace:scenario id=g10.auction-winner-order.SC-4lu rev=1 -->
+#### Scenario: winner-order-SC-69 - Fee lines carry info tooltips
+**Serves:** winner-order-US-01 - Winner settles a won lot
+- **GIVEN** an operator sent an invoice with Buyer's Premium, Shipping &
+  Handling, and Payment Processing Fee
+- **WHEN** the winner opens Winner Order
+- **THEN** each of those three lines offers a brief info tooltip
+- **AND** the Payment Processing Fee tooltip does not describe the gross-up
+  formula
+<!-- trace:scenario id=g10.auction-winner-order.SC-c6t rev=1 -->
+#### Scenario: winner-order-SC-110 - A bank transfer fee is the amount the operator entered
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+- **GIVEN** an operator sent a bank transfer invoice with a subtotal of 312000
+  and a bank transfer fee of 5000 minor units in HKD
+  and a bank transfer fee of 0 minor units in HKD
+- **THEN** the payment processing fee is 5000 minor units in HKD
+- **AND** the order total is 317000 minor units in HKD
+<!-- trace:scenario id=g10.auction-winner-order.SC-16z rev=1 -->
+#### Scenario: winner-order-SC-111 - A bank transfer fee of zero reads Free
+**Serves:** Invoice - Payment Processing Fee priced by method
+- **THEN** the Payment Processing Fee line is shown and reads Free
+- **AND** the order total is 312000 minor units in HKD
+-->
 
 ## Requirements
 
@@ -107,8 +231,8 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
-| Invoice ID | Given at send, per "Every invoice carries an invoice ID and a bank reference". Finds the order, including after a reissue |
-| Bank reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
+| Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
+| Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
@@ -116,13 +240,13 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
-| Tax | An optional line reserved for the separate tax change; no rate or regime is defined here |
+| Tax | An optional caller-supplied `taxLine`; no rate, jurisdiction or formal tax receipt is defined here |
 | Subtotal | The sum of the components above |
 | Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
 | Order total | The total payable — the subtotal plus the payment processing fee |
 | Sent at | When the operator sent the invoice. Stored in UTC |
 | Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC, displayed in the winner's own zone |
-| Replaced by | On a replaced invoice only: the invoice that replaced it |
+| Replaces invoice | On a replacement invoice only: the prior invoice ID named by `Replaces invoice {id}` |
 | Invoice status | Per `grade10-site/auction/order-status`. A replaced invoice holds none |
 
 The payment processing fee SHALL be priced by the invoice's payment method:
@@ -1220,7 +1344,7 @@ sent for.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-qpe rev=1 -->
 #### Scenario: winner-order-SC-109 - A reissued order offers the current invoice
-**Serves:** Invoice - a replaced invoice says so and names its replacement
+**Serves:** Invoice - a replacement invoice names the invoice it replaces
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
 - **WHEN** the winner opens the invoice PDF from Winner Order
@@ -2453,11 +2577,11 @@ listing page exposes the lower-case code only through that address, per
 invoice ID, including a replaced invoice's, or the order's payment reference,
 SHALL find the auction order.
 
-**Replaced invoice** - A replaced invoice SHALL hold no invoice status of its
-own and SHALL never read `cancelled`; the order's invoice status is its
-current invoice's, per `grade10-site/auction/order-status`. The PDF of a
-replaced invoice SHALL say it was replaced and SHALL name the invoice ID of
-the invoice that replaced it.
+**Replacement relationship** - A reissue's new invoice SHALL retain the prior
+invoice ID as `replacesInvoice` and its PDF SHALL say `Replaces invoice {id}`.
+The prior invoice remains retained, SHALL hold no invoice status of its own
+and SHALL never read `cancelled`; the order's invoice status is its current
+invoice's, per `grade10-site/auction/order-status`.
 
 **Stripe metadata** - When creating a card payment for the order, Grade10
 SHALL write the order's payment reference to the Stripe payment's metadata
@@ -2511,7 +2635,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** the new invoice ID is `IN-LK42302`
 - **AND** the order's payment reference is still `LK423`, unchanged by the reissue
 - **AND** looking up `IN-LK42301`, `IN-LK42302`, or `LK423` all find the same order
-- **AND** the first invoice's PDF names `IN-LK42302`
+- **AND** the new invoice's PDF says `Replaces invoice IN-LK42301`
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-qt4 rev=1 -->
 #### Scenario: winner-order-SC-124 - The invoice count grows to three digits after 99
