@@ -6,9 +6,10 @@ reviewed: 2026-09-11
 ---
 
 The cart is a drawer that slides in over the page. It lists the items the
-shopper is buying and fades at the edge when there is more to scroll to. When
-the cart holds nothing, it shows the design-system empty state — title and
-description only, no button to leave.
+shopper is buying and fades at the edge when there is more to scroll to.
+
+🚧 **Empty** — when the cart holds nothing, the design-system empty state:
+title and description only, no button to leave.
 
 Opening it re-reads current status and price against the catalogue behind
 skeleton placeholders, because a cart is the one place a stale price is
