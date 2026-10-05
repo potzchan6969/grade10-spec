@@ -1051,6 +1051,7 @@ without reading every account.
 * Every listed account holds no elevated role.
 * An account that holds `admin` is not listed.
 
+<!-- trace:case id=g10.shared-users.TC-htg rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC5-1: Directory narrows to elevated accounts
 
 **Classification:**
