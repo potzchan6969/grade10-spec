@@ -49,5 +49,5 @@ Takes the draft `feature-tcs.md` as its input once groups 2 and 3 have landed; h
 
 ## 5. The manual (grade10-spec) (owner: @ecchochan)
 
-- [ ] 5.1 Take 🚧 off this change's lines on the pages the proposal names (Collector Pages, Vault, Compliance and Readiness, Documents and Signing, Loan and Money, Operator Console, Case Lifecycle, Vault Case Blocks, Page Blocks, Carried Surfaces, Vault Custody, Account Data) once implementation is verified, before the change archives
-- [ ] 5.2 Verify: `pnpm check:manual` in grade10-spec.
+- [x] 5.1 Take 🚧 off this change's lines on the pages the proposal names (Collector Pages, Vault, Compliance and Readiness, Documents and Signing, Loan and Money, Operator Console, Case Lifecycle, Vault Case Blocks, Page Blocks, Carried Surfaces, Vault Custody, Account Data) once implementation is verified, before the change archives
+- [x] 5.2 Verify: `pnpm check:manual` in grade10-spec.
