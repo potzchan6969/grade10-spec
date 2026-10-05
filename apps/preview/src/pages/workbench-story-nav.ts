@@ -17,7 +17,8 @@ const TERMS_OF_SERVICE_STORY_ID = "pages-legal--terms-of-service";
 /** Storybook story id for the Privacy Policy page assembly. */
 const PRIVACY_POLICY_STORY_ID = "pages-legal--privacy-policy";
 /** Storybook story id for the My Auctions page assembly (list → Winner Order). */
-const MY_AUCTIONS_PAGE_STORY_ID = "pages-auction-my-auctions-page--post-auction";
+const MY_AUCTIONS_PAGE_STORY_ID =
+  "pages-auction-my-auctions-page--post-auction";
 
 /** Winner Order story ids — one per derived standing a Won row may open. */
 const WINNER_ORDER_AWAITING_ADDRESS_STORY_ID =

@@ -14,12 +14,12 @@ import {
   useFirstPaintReveal,
 } from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
-import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
 import {
   STORE_LOCATOR_COPY,
   STORE_LOCATOR_HOURS,
   STORE_LOCATOR_STORE,
 } from "./store-locator-content";
+import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 function RevealSection({
   children,
