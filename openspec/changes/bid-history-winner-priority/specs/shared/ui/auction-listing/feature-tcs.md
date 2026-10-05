@@ -101,12 +101,12 @@
 ## Settled
 
 - Winner is a primary crown after the amount when the consumer sets
-  `isWinner` (closed sold), not a Winner badge.
+  `isWinner` (closed sold), not a Winner badge (`bid-history-winner-priority` Q1, Q3).
 - Equal-max non-leaders use the Info tip in the amount tone with
-  earlier-leads copy.
-- No new Badge size or footnote under Recent bids.
+  earlier-leads copy (`bid-history-winner-priority` Q2).
+- No new Badge size or footnote under Recent bids (`bid-history-winner-priority` non-goals).
 - The tip icon's tone and the crown's place before You are requirement
-  clauses the cases walk, with no scenario of their own (decisions Q5).
+  clauses the cases walk, with no scenario of their own (`bid-history-winner-priority` Q5).
 
 ## Reconciliation
 
@@ -159,3 +159,25 @@ openspec/changes/archive/.
 | Raised questions | None - Q1 to Q6 settle what this capability turns on |
 
 **Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them.
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after the built tie order, for change `bid-history-winner-priority`. Reread every case against `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` and the requirement, `decisions.md` (Q1 to Q6, as Q6 now names the one-ms answer stamp), `tech-design.md` Decisions 1 to 5, `tasks.md` 2.1 to 2.4 and 3.1 to 3.2, `ui-design.md`, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `listing-bid-history-list.tsx`, `types.ts` and the ClosedSoldEqualMax and Default stories. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| Q6 now says the build lists the earlier maximum first by stamping the leader's automatic answer one ms after the challenger | **Agree:** the order is the consumer's; the list draws whatever row is flagged, so `shared-ui-auction-listing-SC-51` and TC28 hold unchanged |
+| Each case against its scenario - TC27 / `shared-ui-auction-listing-SC-50`, TC28 / `-SC-51`, TC29 / `-SC-54` | **Agree:** pre-conditions, copy and expected results match each GIVEN and THEN, the ANDs included |
+| Accept-review: the `## Settled` lines cited `decisions Q4/Q5/Q6` without the change, and fold beside other changes' Settled lines | **Folded in:** each Settled line names `bid-history-winner-priority` and its question |
+| Accept-review: no `### Manual` table for TC27 to TC29 | **Folded in:** `### Manual` below names what a person drives for each |
+| The built crown still falls back to `"Winner"` and no story leaves `winner` unset | **Kept:** task 2.4 owes both; TC29 stays `draft` and fails until then |
+| Case ids `US1-TC27-1` to `US1-TC29-1` | **Checked:** the durable suite ends at `TC18`; `cap-custom-maximum-entry` issues `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`. No collision |
+| Questions for the PM | None - Q1 to Q6 settle what this capability turns on |
+
+**Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them; every case stays `draft`.
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `shared-ui-auction-listing-US1-TC27-1` | A person opens ClosedSoldEqualMax and Default in Storybook and reads where the crown sits, after the amount and before You, and that it is the primary colour, in task 3.1's walk; the two plays prove only that a Winner name shows on ClosedSoldEqualMax and none on Default |
+| `shared-ui-auction-listing-US1-TC28-1` | A person hovers the Info control on ClosedSoldEqualMax's second row and compares its tone with the amount's, in task 3.1's walk; the play proves only that the tip's name exists |
+| `shared-ui-auction-listing-US1-TC29-1` | To be walked in task 2.4's story that renders ClosedSoldEqualMax with `winner` copy unset: a person reads every row for a crown or a name the copy does not supply; no render leaves `winner` unset today |
