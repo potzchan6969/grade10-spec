@@ -9,8 +9,7 @@
 **I want** every won lot's order in one worklist, split into segments with counts and searchable by any of its codes or the winner's email,
 **so that** I open what needs me first without scanning orders that are waiting on the winner.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-tb3 rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq -->
-### post-sale-US1-TC1-1: Segments sort won lots' orders and show their counts
+### post-sale-US1-TC9-1: Segments sort won lots' orders and show their counts
 
 **Classification:**
 
@@ -36,6 +35,7 @@
 1. Open Orders.
 2. Read which segment is open and the count on each segment.
 3. Open each segment in turn.
+4. Open All and filter to Payment Verifying.
 
 **Expected Results:**
 
@@ -44,6 +44,7 @@
 * In transit reads 1 and lists the Shipped order; Closed reads 2 and lists the Delivered and Refunded orders.
 * All reads 9, and the lot 30 minutes from its close is on no segment.
 * Each order's status reads as its winner reads it on their own order.
+* Filtered to Payment Verifying, All lists only the Payment Verifying order.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-ljg rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq,g10adm.auction-post-sale.SC-w38,g10adm.auction-post-sale.SC-whp,g10adm.auction-post-sale.SC-iyb,g10adm.auction-post-sale.SC-kqf,g10adm.auction-post-sale.SC-8wv,g10adm.auction-post-sale.SC-d6e -->
 ### post-sale-US1-TC6-1: Search finds an order by any of its codes or the winner's email
@@ -117,6 +118,153 @@
 * Closed lists the order delivered 1 day ago above the one delivered 3 days ago.
 * The status filter offers Delivered, Cancelled and Refunded only; the category filter appears once Cancelled is chosen, and the list then holds only that category's orders.
 * After the reload, Closed and both filters are still applied.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-tb3 rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq -->
+### post-sale-US1-TC1-1: Other queue outcomes remain available
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* Orders holds orders in the existing outcomes, and one Refunded order.
+* admin(holds refund-processing) is on Orders under `/auction`.
+
+**Steps:**
+
+1. Read the outcome list.
+2. Read the outcome filters.
+
+**Expected Results:**
+
+* Steps 1 and 2 keep existing outcomes and add Refunded.
+
+### post-sale-US1-TC2-1: Filtering by Payment Verifying lists only those orders
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin post-sale url>.
+* <count> orders are Payment Verifying; others are Pending Payment.
+
+**Test data:**
+
+| <count> |
+| --- |
+| 0 |
+| 1 |
+| 3 |
+
+**Steps:**
+
+1. Filter the queue to Payment Verifying.
+
+**Expected Results:**
+
+* Exactly <count> rows show, all Payment Verifying.
+
+### post-sale-US1-TC3-1: The treatment follows the order after the check
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin post-sale url>.
+* <order_1> was Payment Verifying, then an operator <action>.
+
+**Test data:**
+
+| <action> | <outcome> | <flag> |
+| --- | --- | --- |
+| confirmed it | Processing | shown |
+| returned it, deadline not passed | Pending Payment | not shown |
+
+**Steps:**
+
+1. Find the <order_1> row.
+
+**Expected Results:**
+
+* The outcome reads <outcome>.
+* Needs action is <flag>.
+
+### post-sale-US1-TC5-1: The queue search finds an order by any of its identifiers
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin post-sale url>.
+* <order_1> is on listing `LK7P2Q`; its invoice `INV-202609-LK7P2Q-01` was replaced by `INV-202609-LK7P2Q-02`.
+
+**Test data:**
+
+| <term> |
+| --- |
+| `LK7P2Q` |
+| `INV-202609-LK7P2Q-01` |
+| `LK7P2Q01` |
+| `INV-202609-LK7P2Q-02` |
+| `LK7P2Q02` |
+
+**Steps:**
+
+1. Search the queue by <term>.
+
+**Expected Results:**
+
+* <order_1> is found.
+* It shows `INV-202609-LK7P2Q-02` as its current invoice.
 
 ---
 
@@ -240,7 +388,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Queue
+* **Trace:** post-sale-US-02
 
 **Pre-conditions:**
 
@@ -335,6 +483,150 @@
 * The first payment is flagged Paid late; the invoice is `paid` and the order reads Preparing Shipment.
 * The second is flagged Unexpected status; the invoice is still `payment_verifying`, with nothing counted as paid.
 * Each timeline shows a flagged payment entry naming the card.
+
+### post-sale-US3-TC6-1: The order page shows the winner's name, email and phone to reach them on
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* An order in Payment Verifying whose winner confirmed a delivery address with phone `+852 91234567`.
+* admin(operator) opens it.
+
+**Steps:**
+
+1. Read the winner on the order page.
+
+**Expected Results:**
+
+* The page shows the winner's account name and registered account email as the contact, with `+852 91234567`.
+* No payment-provider customer or payment identifier is shown in their place.
+
+### post-sale-US3-TC1-1: A verified card capture marks the listing Paid via Stripe
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* `<listing_7>` is Awaiting payment, with an open card authorization for the winner.
+* admin(holds payment-processing) is on `<listing_7>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A closed listing with a winner, outcome Awaiting payment, card authorization still open |
+
+**Steps:**
+
+1. Record a verified card capture for `<listing_7>`.
+2. Read the outcome.
+3. Read the trail.
+
+**Expected Results:**
+
+* Step 2 shows Paid via Stripe.
+* Step 3 shows that change from Stripe.
+* Step 3 names no operator on that change.
+
+### post-sale-US3-TC2-1: A second payment record is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* `<listing_8>` is Paid via Stripe.
+* admin(holds payment-processing) is on `<listing_8>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A closed listing with a winner, outcome Paid via Stripe |
+
+**Steps:**
+
+1. Record payment collected on `<listing_8>`.
+2. Read the outcome.
+3. Read the winner.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 still shows Paid via Stripe.
+* Step 3 shows the winner unchanged.
+
+### post-sale-US3-TC3-1: Staff cannot record payment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* admin(role is exactly staff) is on Orders under `/auction`.
+* `<listing_9>` is Awaiting payment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | A closed listing with a winner, outcome Awaiting payment |
+
+**Steps:**
+
+1. Open `<listing_9>`.
+2. Read the payment control.
+3. Submit a payment-collected record.
+4. Read the outcome.
+
+**Expected Results:**
+
+* Step 2 shows the payment control, and it is disabled.
+* Step 3 is refused.
+* Step 4 does not show Paid via Manual.
 
 ---
 
@@ -561,7 +853,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Quote and send
+* **Trace:** post-sale-US-05
 
 **Pre-conditions:**
 
@@ -579,6 +871,7 @@
 * The order holds the work address and bank transfer, and still reads Preparing Invoice.
 * The header shows it has waited 72 hours since the winner's confirmation, with no Overdue mark.
 * The timeline shows an order edited before send entry with the operator, the reason, and the address and method before and after.
+* The timeline holds no dispatched entry.
 
 ---
 
@@ -588,8 +881,8 @@
 **I want** the Listings table to mark a lot still taking bids past its scheduled close,
 **so that** I can tell a lot running long from one that closed on time.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-vsq rev=1 covers=g10adm.auction-post-sale.SC-hvd,g10adm.auction-post-sale.SC-jck,g10adm.auction-post-sale.SC-bps -->
-### post-sale-US6-TC1-1: The Listings table marks only the lot in extended bidding
+<!-- trace:case id=g10adm.auction-post-sale.TC-vsq rev=2 covers=g10adm.auction-post-sale.SC-hvd,g10adm.auction-post-sale.SC-jck,g10adm.auction-post-sale.SC-bps -->
+### post-sale-US6-TC1-2: The Listings table marks only the lot in extended bidding
 
 **Classification:**
 
@@ -755,7 +1048,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Resolving an unpaid order
+* **Trace:** post-sale-US-07
 
 Runs once per row of **Test data**.
 
@@ -770,6 +1063,8 @@ Runs once per row of **Test data**.
 | Pending Payment, bank transfer, 312000 minor units in HKD | Records `0.00` with a PDF and a reason | refuses it; the invoice is still `pending` |
 | Payment Verifying | Looks for Record payment, then sends one straight to the server | offers none and refuses it; the invoice is still `payment_verifying` |
 | Pending Payment, sent for card | Looks for Record payment, then sends a bank transfer straight to the server | offers none and refuses it; the invoice is still `pending` |
+| Preparing Invoice, no invoice sent | Looks for Record payment, then sends one straight to the server | offers none and refuses it; the order is still Preparing Invoice |
+| Preparing Shipment, its bank transfer invoice `paid` by a recorded payment | Looks for Record payment, then sends a second one straight to the server | offers none and refuses it; the existing payment record is unchanged |
 
 **Pre-conditions:**
 
@@ -783,7 +1078,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Grade10 answers as the row states.
-* The timeline holds no payment recorded entry.
+* The timeline holds no new payment recorded entry.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-o29 rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
 ### post-sale-US7-TC35-1: Setup Overdue is the only waiting mark, and a flagged order counts from its flag
@@ -834,25 +1129,28 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Grants
+* **Trace:** post-sale-US-07
 
 **Pre-conditions:**
 
 * A Payment Overdue order whose invoice is bank transfer.
 * A Shipped order whose winner's payment proof an operator confirmed.
+* A Preparing Shipment order.
 
 **Steps:**
 
 1. As admin(operator whose roles are exactly `staff`), open the Payment Overdue order and read the header and More.
 2. As admin(operator whose roles are exactly `finance`), open the Shipped order, open the winner's proof file, and read Confirm delivery.
-3. Send each refused action straight to the server: the staff operator's reissue, and the finance operator's delivery with a proof-of-delivery file.
-4. As the finance operator, cancel the Payment Overdue order with a category and a note.
+3. As the finance operator, open the Preparing Shipment order and read Dispatch.
+4. Send each refused action straight to the server: the staff operator's reissue, the finance operator's delivery with a proof-of-delivery file, and the finance operator's dispatch.
+5. As the finance operator, cancel the Payment Overdue order with a category and a note.
 
 **Expected Results:**
 
 * For staff, Reissue stays in the header disabled, and Record payment and Cancel are listed under More disabled, each naming payment processing.
 * For finance, the proof file opens, and Confirm delivery stays disabled, naming shipment processing.
-* The server refuses both actions and stores no file.
+* On the Preparing Shipment order, Dispatch stays in the header disabled, with text beneath it naming shipment processing.
+* The server refuses all three actions and stores no file.
 * The cancel succeeds: the order reads Cancelled, and the timeline names the finance operator.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-h29 rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
@@ -887,6 +1185,406 @@ Runs once per row of **Test data**.
 * The first reads Pending Payment on a new invoice, and the second reads Cancelled.
 * Each flagged payment is still recorded and flagged Amount mismatch.
 * Both orders are still listed under Needs action.
+
+### post-sale-US7-TC9-2: Bank transfer fee values that are refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* Reissue is open on <order_1> with bank transfer chosen.
+
+**Test data:**
+
+| <fee> |
+| --- |
+| -1 |
+| a value finer than the currency's smallest unit |
+| text |
+
+**Steps:**
+
+1. Enter <fee> and a reason.
+2. Reissue.
+
+**Expected Results:**
+
+* The reissue is refused at the fee.
+* The current invoice is unchanged.
+
+### post-sale-US7-TC10-2: Bank transfer fee values that are accepted
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* Reissue is open on <order_1> with bank transfer chosen.
+
+**Test data:**
+
+| <fee> | <fee reads> |
+| --- | --- |
+| blank | Free, as zero |
+| 0 | Free |
+| 1 minor unit | That amount |
+| An amount larger than the Subtotal | That amount, not capped |
+
+**Steps:**
+
+1. Enter <fee> and a reason.
+2. Reissue.
+
+**Expected Results:**
+
+* The new invoice carries Payment Processing Fee <fee reads>.
+
+### post-sale-US7-TC25-2: The first bank transfer quote asks for the fee
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> reads Preparing Invoice with bank transfer chosen by the winner.
+
+**Test data:**
+
+| <fee> | <outcome> |
+| --- | --- |
+| blank | The invoice is sent; its fee reads Free |
+| -100 | The send is refused; no invoice is issued |
+| 0 | The invoice is sent; its fee reads Free |
+| more than the Subtotal | The invoice is sent with that fee, not capped |
+
+**Steps:**
+
+1. Open the quote.
+2. Enter Shipping & Handling and <fee>.
+3. Send the invoice.
+
+**Expected Results:**
+
+* Step 1 names bank transfer and offers the bank transfer fee field empty.
+* <outcome>
+
+### post-sale-US7-TC39-1: A reissue leaves the winner's suspension standing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* customer(winner) is suspended, and their order's invoice is `expired`.
+* admin(operator with payment processing) opens the order.
+
+**Steps:**
+
+1. Reissue the invoice with a new deadline and the reason `Winner asked for more time`.
+2. Read what the reissue dialog offers, then the winner's account on the order.
+
+**Expected Results:**
+
+* The reissue dialog offers no reinstatement.
+* After the reissue the order reads Pending Payment, and the winner's account is still suspended.
+
+### post-sale-US7-TC40-1: Setup Overdue changes nothing however long it waits
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* An order in Setup Overdue, its address deadline passed 30 days ago with no operator action.
+* admin(operator) opens it.
+
+**Steps:**
+
+1. Read the order's status and the winner's account.
+
+**Expected Results:**
+
+* The order still reads Setup Overdue.
+* The winner's account is not suspended.
+
+### post-sale-US7-TC41-1: An order in Setup Overdue is cancelled and its item is back in stock
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* An order in Setup Overdue.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Cancel the order with a cancellation category and the note `Winner never confirmed`.
+2. Read the order, its lot in the Listings table, the item's stock and the winner's account.
+
+**Expected Results:**
+
+* The order reads Cancelled.
+* The lot is still Closed, and its item is back in stock.
+* The winner's account is not suspended.
+
+### post-sale-US7-TC42-1: A pending bank transfer invoice offers Reissue and Record payment, never a proof check
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* An order in Pending Payment whose bank transfer invoice is `pending`, with no proof uploaded.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Read the header and More.
+
+**Expected Results:**
+
+* Reissue and Record payment are offered.
+* Confirm and Return are not offered.
+
+### post-sale-US7-TC11-1: Switching to card prices the fee from the provider
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> has a sent bank transfer invoice.
+
+**Steps:**
+
+1. Open Reissue.
+2. Choose card, add a reason, and reissue.
+
+**Expected Results:**
+
+* The fee is the gross-up read at reissue.
+* No fee is typed by the operator.
+
+### post-sale-US7-TC12-1: A card reissue is refused when provider fees cannot be read
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> has a sent bank transfer invoice.
+* The payment provider's fees cannot be read.
+
+**Steps:**
+
+1. Open Reissue.
+2. Choose card, add a reason, and reissue.
+
+**Expected Results:**
+
+* The reissue is refused and says why.
+* The current invoice is unchanged.
+
+### post-sale-US7-TC15-1: Settlement at an amount other than the Order Total is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> has a bank transfer invoice, `pending`, Order Total <total>.
+
+**Test data:**
+
+| <amount> |
+| --- |
+| <total> minus 1 minor unit |
+| <total> plus 1 minor unit |
+
+**Steps:**
+
+1. Record a settlement of <amount> with one proof file.
+
+**Expected Results:**
+
+* The settlement is refused.
+* The invoice stays `pending`.
+
+### post-sale-US7-TC22-1: An old invoice ID or bank reference still finds the order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin post-sale url>.
+* <order_1> had <invoice_1> replaced by <invoice_2>.
+
+**Steps:**
+
+1. Search the queue by <invoice_1>'s invoice ID.
+2. Search the queue by <invoice_1>'s bank reference.
+
+**Expected Results:**
+
+* Both searches find <order_1>.
+* It shows <invoice_2> as current.
+
+### post-sale-US7-TC31-1: An edit before send does not reset the waiting time
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Quote and send
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* The winner confirmed <order_1>'s address at 2026-09-12T09:00:00Z.
+
+**Steps:**
+
+1. Edit the address with a reason at 2026-09-14T09:00:00Z.
+2. Open <order_1> at 2026-09-15T09:00:00Z.
+
+**Expected Results:**
+
+* The detail shows 72 hours waited since the winner's confirmation.
+* <order_1> carries the Overdue mark.
 
 ---
 
@@ -928,6 +1626,98 @@ payments that failed,
 * The entry names `ops@grade10.com`.
 * Its time is when Grade10 received the reissue.
 
+### post-sale-US8-TC10-1: A reissue's entry names its amount change and each part it changed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* The HKD card rule is 3.4% and HK$2.35.
+* An order in Pending Payment whose card invoice has Shipping & Handling of 8000, a fee of 11225 and an order total of 323225 minor units in HKD.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Reissue it, switching the method to bank transfer with the fee left empty, raising Shipping & Handling to `120.00`, keeping the deadline, with a reason.
+2. Read the reissued entry on the timeline.
+
+**Expected Results:**
+
+* The entry carries the new order total of 316000 minor units in HKD, the delta of -7225 from the prior entry, and the deadline kept.
+* It names payment method, card to bank transfer; payment processing fee, 11225 to 0; and Shipping & Handling, 8000 to 12000, each with its value before and after.
+* It names no other part as changed.
+
+### post-sale-US8-TC11-1: A relisted lot's cancelled order keeps its whole history
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* A cancelled order whose lot has since been relisted and sold to another winner.
+* admin(operator) opens the cancelled order.
+
+**Steps:**
+
+1. Read its timeline from the first entry to the last.
+
+**Expected Results:**
+
+* Every invoice and fulfilment entry it held at its cancellation is still there, unchanged.
+* No entry offers an edit or a delete.
+
+### post-sale-US8-TC12-1: A paid entry names how it was paid
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* An order its winner paid by a Visa card ending 4242.
+* An order an operator settled by cash, with one proof file.
+* admin(operator) opens each.
+
+**Steps:**
+
+1. Read the paid entry on the first order's timeline.
+2. Read the payment recorded entry on the second order's timeline.
+
+**Expected Results:**
+
+* The first names a Visa card ending 4242.
+* The second names cash, with its proof file.
+
 ---
 
 ## post-sale-US16: Operator records a refund a winner asked Customer Service for
@@ -936,8 +1726,8 @@ payments that failed,
 **I want** to record the refund I sent in Stripe or by bank transfer on the order, with its amount, reason, reference and proof, and say whether the lot goes back to stock,
 **so that** a closing refund reads Refunded, an overpayment keeps the order's status, and the lot's stock matches where the card is.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-c92 rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs -->
-### post-sale-US16-TC1-1: A bank refund names where it went, is restated, and closes the order
+<!-- trace:case id=g10adm.auction-post-sale.TC-c92 rev=2 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs -->
+### post-sale-US16-TC1-2: A bank refund names where it went, is restated, and closes the order
 
 **Classification:**
 
@@ -1032,44 +1822,106 @@ payments that failed,
 * The refund record keeps the email as its first letter `c` and its domain `example.com`.
 * Neither the refund record nor the timeline shows `collector@example.com`.
 
+### post-sale-US16-TC5-1: A refund closes a partially paid order
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-16
+
+**Pre-conditions:**
+
+* A Partially Paid order with 40000 minor units in HKD paid.
+* admin(operator with refund processing) opens Refund.
+
+**Steps:**
+
+1. Record a refund of `400.00` by bank, with its reason, reference and a proof file, the lot back to stock.
+2. Read the order and the refund record.
+
+**Expected Results:**
+
+* The order reads Refunded.
+* The refund record carries the amount of 40000 minor units in HKD, the method, the next audit number and the stock choice.
+
 ## Reconciliation
 
 **Run:** 2026-09-29. One agent wrote the cases and the scenarios, so the two readings are not independent. The cases were drafted from the Purpose, the Feature set, the journeys, the proposal, the decisions and the linked pages, then joined to the scenarios on their anchors.
 
-| Spec scenario | Suite coverage |
-| --- | --- |
-| `grade10-admin-auction-post-sale-SC-19`, `SC-20`, `SC-21`, `SC-44`, `SC-116`, `SC-159` | US1-TC1-1 |
-| `grade10-admin-auction-post-sale-SC-131`, `SC-160` | US1-TC6-1 |
-| `grade10-admin-auction-post-sale-SC-180`, `SC-181`, `SC-182` | US1-TC7-1 |
-| `grade10-admin-auction-post-sale-SC-162`, `SC-184`, `SC-185`, `SC-198` | US2-TC5-1 |
-| `grade10-admin-auction-post-sale-SC-163` | US2-TC6-1 |
-| `grade10-admin-auction-post-sale-SC-164`, `SC-165` | US2-TC7-1 |
-| `grade10-admin-auction-post-sale-SC-37`, `SC-43` | US2-TC8-1 |
-| `grade10-admin-auction-post-sale-SC-161`, `SC-178`, `SC-179`, `SC-195`, `SC-196` | US3-TC3-1 |
-| `grade10-admin-auction-post-sale-SC-201`, `SC-202` | US3-TC4-1 |
-| `grade10-admin-auction-post-sale-SC-173`, `SC-174` | US4-TC1-1 |
-| `grade10-admin-auction-post-sale-SC-175`, `SC-176` | US4-TC2-1 |
-| `grade10-admin-auction-post-sale-SC-168`, `SC-169` | US5-TC13-1 |
-| `grade10-admin-auction-post-sale-SC-167` | US5-TC14-1 |
-| `grade10-admin-auction-post-sale-SC-170` | US5-TC15-1 |
-| `grade10-admin-auction-post-sale-SC-193`, `SC-194` | US5-TC16-1 |
-| `grade10-admin-auction-post-sale-SC-135`, `SC-139` | US5-TC17-1 |
-| `grade10-admin-auction-post-sale-SC-197` | US6-TC1-1 |
-| `grade10-admin-auction-post-sale-SC-171`, `SC-172` | US7-TC32-1 |
-| `grade10-admin-auction-post-sale-SC-55`, `SC-189` | US7-TC33-1 |
-| `grade10-admin-auction-post-sale-SC-56`, `SC-57`, `SC-62`, `SC-120`, `SC-121`, `SC-130`, `SC-190` | US7-TC34-1 |
-| `grade10-admin-auction-post-sale-SC-45`, `SC-46`, `SC-188` | US7-TC35-1 |
-| `grade10-admin-auction-post-sale-SC-39`, `SC-40`, `SC-186`, `SC-187` | US7-TC36-1 |
-| `grade10-admin-auction-post-sale-SC-199` | US7-TC37-1 |
-| `grade10-admin-auction-post-sale-SC-166` | US8-TC9-1 |
-| `grade10-admin-auction-post-sale-SC-192` | US16-TC1-1 |
-| `grade10-admin-auction-post-sale-SC-191` | US16-TC3-1 |
-| `grade10-admin-auction-post-sale-SC-200` | US16-TC4-1 |
-| Restated with the requirement they sit in, reached through their anchors and the durable cases: `SC-23`, `SC-24`, `SC-25`, `SC-34`, `SC-35`, `SC-36`, `SC-38`, `SC-41`, `SC-42`, `SC-47`, `SC-54`, `SC-58`, `SC-59`, `SC-60`, `SC-61`, `SC-67`, `SC-122`, `SC-123`, `SC-124`, `SC-127`, `SC-132`, `SC-136`, `SC-137`, `SC-138`, `SC-145`, `SC-146` | the cases tracing their journey or group |
-| Uncovered scenarios | none |
-| Contradicted readings | none |
+**Run:** 2026-10-06, QA2. A fresh reader joined all 91 scenarios and every case in this suite on their anchors, against the durable suite the fold lands on, with the cases its earlier folds left behind restored there as drafts. The earlier run's claim that the restated scenarios were reached through durable cases did not hold for twelve of them; they now have cases.
 
-- **Re-worded** - post-sale-US1-TC1-1 reads the worklist's segments, post-sale-US6-TC1-1 the Listings table, and post-sale-US16-TC1-1 the refund's destination and restatement.
-- **Deprecated** - post-sale-US6-TC2-1: the worklist lists won lots only, so a lot still taking bids has no row to filter.
+| Spec scenario | Disposition |
+| --- | --- |
+| `grade10-admin-auction-post-sale-SC-19`, `SC-20`, `SC-21`, `SC-44`, `SC-159` | Covered by `US1-TC9-1` |
+| `grade10-admin-auction-post-sale-SC-116` | Covered by `US1-TC9-1`, whose filter step and result QA2 joined to it |
+| `grade10-admin-auction-post-sale-SC-131`, `SC-160` | Covered by `US1-TC6-1` |
+| `grade10-admin-auction-post-sale-SC-180`, `SC-181`, `SC-182` | Covered by `US1-TC7-1` |
+| `grade10-admin-auction-post-sale-SC-162`, `SC-184`, `SC-185`, `SC-198` | Covered by `US2-TC5-1` |
+| `grade10-admin-auction-post-sale-SC-163` | Covered by `US2-TC6-1` |
+| `grade10-admin-auction-post-sale-SC-164`, `SC-165` | Covered by `US2-TC7-1` |
+| `grade10-admin-auction-post-sale-SC-37`, `SC-43` | Covered by `US2-TC8-1` |
+| `grade10-admin-auction-post-sale-SC-22`, `SC-203` | Were uncovered; added `US3-TC6-1` |
+| `grade10-admin-auction-post-sale-SC-161`, `SC-178`, `SC-179`, `SC-195`, `SC-196` | Covered by `US3-TC5-1` |
+| `grade10-admin-auction-post-sale-SC-201`, `SC-202` | Covered by `US3-TC4-1` |
+| `grade10-admin-auction-post-sale-SC-173`, `SC-174` | Covered by `US4-TC1-1` |
+| `grade10-admin-auction-post-sale-SC-175`, `SC-176` | Covered by `US4-TC2-1` |
+| `grade10-admin-auction-post-sale-SC-167` | Covered by `US5-TC14-1` |
+| `grade10-admin-auction-post-sale-SC-168`, `SC-169` | Covered by `US5-TC13-1` |
+| `grade10-admin-auction-post-sale-SC-170` | Covered by `US5-TC15-1` |
+| `grade10-admin-auction-post-sale-SC-193`, `SC-194` | Covered by `US5-TC16-1` |
+| `grade10-admin-auction-post-sale-SC-135`, `SC-139` | Covered by `US5-TC17-1`, and `SC-135` also by the durable `post-sale-US7-TC27-1` |
+| `grade10-admin-auction-post-sale-SC-41` | Covered by `US5-TC17-1`, whose no-dispatch result QA2 joined to it |
+| `grade10-admin-auction-post-sale-SC-136`, `SC-137`, `SC-138` | Covered by the durable `post-sale-US7-TC28-1`, `post-sale-US7-TC29-1` and `post-sale-US7-TC30-1` |
+| `grade10-admin-auction-post-sale-SC-197` | Covered by `US6-TC1-2` |
+| `grade10-admin-auction-post-sale-SC-23` | Covered by the durable `post-sale-US7-TC1-1` |
+| `grade10-admin-auction-post-sale-SC-24` | Was uncovered; added `US7-TC39-1` |
+| `grade10-admin-auction-post-sale-SC-25`, `SC-39` | Covered by `US7-TC36-1`, and by the durable `post-sale-US7-TC18-1` |
+| `grade10-admin-auction-post-sale-SC-40` | Covered by `US7-TC36-1`, whose dispatch step and result QA2 joined to it |
+| `grade10-admin-auction-post-sale-SC-186`, `SC-187` | Covered by `US7-TC36-1` |
+| `grade10-admin-auction-post-sale-SC-45`, `SC-46`, `SC-188` | Covered by `US7-TC35-1` |
+| `grade10-admin-auction-post-sale-SC-47` | Was uncovered; added `US7-TC40-1` |
+| `grade10-admin-auction-post-sale-SC-54` | Was uncovered; added `US7-TC41-1` |
+| `grade10-admin-auction-post-sale-SC-122` | Was uncovered; added `US7-TC42-1`. The durable `post-sale-US10-TC6-1` holds the Confirm and Return half |
+| `grade10-admin-auction-post-sale-SC-127` | Covered by the durable `post-sale-US7-TC19-1` |
+| `grade10-admin-auction-post-sale-SC-55`, `SC-189` | Covered by `US7-TC33-1` |
+| `grade10-admin-auction-post-sale-SC-60` | Covered by the durable `post-sale-US7-TC2-1` and `post-sale-US7-TC16-1`, and by `US7-TC33-1` |
+| `grade10-admin-auction-post-sale-SC-67` | Covered by the durable `post-sale-US7-TC17-1` |
+| `grade10-admin-auction-post-sale-SC-56`, `SC-57`, `SC-62`, `SC-120`, `SC-121`, `SC-130`, `SC-190` | Covered by `US7-TC34-1`; `SC-62`'s wrong-type file also by the durable `post-sale-US7-TC24-1` |
+| `grade10-admin-auction-post-sale-SC-58`, `SC-59` | Were uncovered; added as rows of `US7-TC34-1` |
+| `grade10-admin-auction-post-sale-SC-171` | Covered by `US7-TC32-1`, and by the durable `post-sale-US7-TC7-1` |
+| `grade10-admin-auction-post-sale-SC-172` | Covered by the durable `post-sale-US7-TC8-1` |
+| `grade10-admin-auction-post-sale-SC-199` | Covered by `US7-TC37-1` |
+| `grade10-admin-auction-post-sale-SC-34` | Covered by the durable `post-sale-US8-TC1-1` |
+| `grade10-admin-auction-post-sale-SC-35`, `SC-123` | Were uncovered; added `US8-TC10-1` |
+| `grade10-admin-auction-post-sale-SC-36` | Covered by the durable `post-sale-US8-TC2-1` for the snapshot, and on the winner's address book route by `winner-order-US1-TC10-1` |
+| `grade10-admin-auction-post-sale-SC-38` | Covered by the durable `post-sale-US8-TC4-1` |
+| `grade10-admin-auction-post-sale-SC-42` | Was uncovered; added `US8-TC11-1` |
+| `grade10-admin-auction-post-sale-SC-61` | Was uncovered; added `US8-TC12-1` |
+| `grade10-admin-auction-post-sale-SC-124` | Covered by the durable `post-sale-US8-TC6-1` |
+| `grade10-admin-auction-post-sale-SC-132` | Covered by the durable `post-sale-US8-TC8-1` |
+| `grade10-admin-auction-post-sale-SC-166` | Covered by `US8-TC9-1` |
+| `grade10-admin-auction-post-sale-SC-145` | Was uncovered once `US16-TC1` was revised; added `US16-TC5-1` |
+| `grade10-admin-auction-post-sale-SC-146` | Covered by the durable `post-sale-US16-TC2-1` |
+| `grade10-admin-auction-post-sale-SC-191` | Covered by `US16-TC3-1` |
+| `grade10-admin-auction-post-sale-SC-192` | Covered by `US16-TC1-2` |
+| `grade10-admin-auction-post-sale-SC-200` | Covered by `US16-TC4-1` |
+| Contradicted readings | None between a case and a scenario; the durable cases the change contradicts are revised or deprecated below |
+
+- **Renumbered** - `post-sale-US1-TC1-1` became `US1-TC9-1` and `post-sale-US3-TC3-1` became `US3-TC5-1`: each reused a durable id of another meaning, so the fold would have overwritten the durable case. `US1-TC8` is held by `clarify-auction-shipping-progress-copy`.
+- **Revised** - `US6-TC1-2` revises the durable `post-sale-US6-TC1-1`: the same three lots, with Extended read in the Listings table now that the queue is gone. `US16-TC1-2` revises the durable `post-sale-US16-TC1-1` to a bank refund that names where it went and is restated. Each carries the durable trace marker at `rev=2`; `US6-TC2-1` carries its durable marker unchanged.
+- **Revised against the fee by payment method** - the durable `post-sale-US7-TC9-1`, `-TC10-1` and `-TC25-1` read a blank bank transfer fee as refused, and `-TC25-1` read the provider's fees; a blank fee is now zero and no send needs the provider, so they are `US7-TC9-2`, `US7-TC10-2` and `US7-TC25-2`.
+- **Deprecated** - the listing queue and its listing-level payment states are removed, so the durable `post-sale-US1-TC1-1`, `-TC2-1`, `-TC3-1` and `-TC5-1` and `post-sale-US3-TC1-1`, `-TC2-1` and `-TC3-1` are deprecated; the worklist is walked by `US1-TC6-1`, `US1-TC7-1` and `US1-TC9-1`, and payment by `US3-TC4-1`, `US3-TC5-1`, `US7-TC34-1` and `US7-TC36-1`. The provider fee cases `post-sale-US7-TC11-1` and `-TC12-1` give way to `US7-TC32-1` and `US5-TC14-1`; `post-sale-US7-TC15-1`, which refused any amount but the order total, to `US7-TC34-1`; the queue search `post-sale-US7-TC22-1` to `US1-TC6-1`; and `post-sale-US7-TC31-1`, which expected the Overdue mark, to `US5-TC17-1`. `US6-TC2-1`: the worklist lists won lots only, so a lot still taking bids has no row to filter.
+- **Joined** - `US1-TC9-1` gained the Payment Verifying filter (`SC-116`), `US5-TC17-1` the absent dispatch (`SC-41`), `US7-TC34-1` two rows (`SC-58`, `SC-59`), and `US7-TC36-1` finance's disabled Dispatch (`SC-40`); each is a result on a run the case already walks, so no version moved.
+- **Traces** - `US2-TC8-1`, `US5-TC17-1`, `US7-TC34-1` and `US7-TC36-1` traced a feature set group; each now traces the journey of the section it sits in.
+- **Restyle owed** - durable cases the change does not move still name older words: `post-sale-US7-TC1-1` and `post-sale-US8-TC3-1` read Expired for Payment Overdue, `post-sale-US7-TC2-1`, `-TC13-1` and `post-sale-US10-TC1-1` read Processing for Preparing Shipment, and `post-sale-US15-TC1-1`, `-TC2-1` and `post-sale-US17-TC1-1` read the queue for the worklist. `/tcs-review` restyles them.
 - **Proven by another change** - the 90% close choice and the overpayment confirmation in Record payment are proven by `add-winner-partial-payment`'s cases post-sale-US12-TC3-1 and post-sale-US12-TC4-1.
 - **Raised** - where a flagged order sits, where a reissue's fee starts, what replaces the 72-hour mark, and what Grade10 keeps of a refund's bank account landed as decisions Q16, Q14, Q26 and Q29.
+- **Raised for the human** - the domain suite's `grade10-admin-auction-e2e-US3-TC1-1` and `-US3-TC2-1` walk the listing queue's Paid via Manual and Awaiting wire, which this change removes, and the proposal carries no domain edit or `No domain impact` line.

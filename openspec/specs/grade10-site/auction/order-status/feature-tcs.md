@@ -96,6 +96,106 @@
 * Invoice becomes `paid`.
 * Order derives as Processing.
 
+### auction-status-US1-TC13-1: The order status follows the current invoice after a reissue
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Derived order status
+
+**Pre-conditions:**
+
+* <order_1> had <invoice_1> replaced by <invoice_2>, `pending`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <invoice_1> | The replaced invoice |
+| <invoice_2> | The current invoice |
+
+**Steps:**
+
+1. Read the order's invoice status.
+2. Read the stored status of <invoice_1>.
+
+**Expected Results:**
+
+* The order's invoice status is <invoice_2>'s, `pending`.
+* <invoice_1> holds no status and is not `cancelled`.
+* The order reads Pending Payment.
+
+### auction-status-US1-TC14-1: Reissuing is refused while proof is checked
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Writable primitives
+
+**Pre-conditions:**
+
+* <order_1> is `payment_verifying` on <invoice_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <invoice_1> | The invoice under check |
+| <invoice_2> | Its replacement |
+
+**Steps:**
+
+1. Reissue <invoice_1> as <invoice_2>.
+2. Read the order's current invoice and status.
+
+**Expected Results:**
+
+* The reissue is refused; no <invoice_2> exists.
+* <invoice_1> is still current and `payment_verifying`.
+
+### auction-status-US1-TC15-1: An expired invoice cannot enter payment_verifying
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Writable primitives
+
+**Pre-conditions:**
+
+* <order_1> has an invoice, status `expired`.
+
+**Steps:**
+
+1. Record a winner proof upload.
+
+**Expected Results:**
+
+* The write is refused; the status stays `expired`.
+
 ## Raised
 
 - None for this slice.
@@ -244,3 +344,5 @@
 | Finding | Disposition |
 | --- | --- |
 | Overdue names are derived from deadline and invoice facts | **Folded in** |
+
+- **Restored** - `auction-status-US1-TC13-1` to `auction-status-US1-TC15-1`, archived with `2026-09-18-add-winner-bank-transfer` and left behind by its fold, are back as draft, unchanged, for `/tcs-review`.
