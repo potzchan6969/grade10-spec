@@ -10,7 +10,7 @@
 contract states,
 **so that** each storefront embedding the panel shows collectors the same thing.
 
-### shared-ui-auction-listing-US1-TC13-1: Closed sold Recent bids show a winner crown
+### shared-ui-auction-listing-US1-TC27-1: Closed sold Recent bids show a winner crown
 
 **Classification:**
 
@@ -41,7 +41,7 @@ contract states,
 * The winning row shows a crown with accessible name Winner after the amount.
 * A live Default story without `isWinner` shows no winner crown.
 
-### shared-ui-auction-listing-US1-TC14-1: Equal-max non-leader shows earlier-leads tip
+### shared-ui-auction-listing-US1-TC28-1: Equal-max non-leader shows earlier-leads tip
 
 **Classification:**
 
@@ -93,7 +93,8 @@ openspec/changes/archive/.
 
 | Finding | Disposition |
 | --- | --- |
-| Closed sold winning row shows a winner crown | Folded as covered by `shared-ui-auction-listing-SC-50` / `shared-ui-auction-listing-US1-TC13-1` |
-| Equal-max non-leader shows earlier-leads tip | Folded as covered by `shared-ui-auction-listing-SC-51` / `shared-ui-auction-listing-US1-TC14-1` |
+| Closed sold winning row shows a winner crown | Folded as covered by `shared-ui-auction-listing-SC-50` / `shared-ui-auction-listing-US1-TC27-1` |
+| Equal-max non-leader shows earlier-leads tip | Folded as covered by `shared-ui-auction-listing-SC-51` / `shared-ui-auction-listing-US1-TC28-1` |
 | Live lots must not show a winner crown without `isWinner` | Folded into `shared-ui-auction-listing-SC-50` |
 | Raised questions from the blind pass | None — Q1–Q3 already settled closed-only winner mark, tooltip vs footnote, and Badge reuse |
+| Accept-review, 2026-10-05: case ids `TC13` and `TC14` were the durable suite's personal bid history cases, which the fold would have overwritten | **Renumbered:** `shared-ui-auction-listing-US1-TC27-1` and `shared-ui-auction-listing-US1-TC28-1`; `cap-custom-maximum-entry` takes `TC19` to `TC26` |

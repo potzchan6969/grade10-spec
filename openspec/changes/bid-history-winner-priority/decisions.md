@@ -13,7 +13,7 @@
 - A footnote under the Recent bids list — tip stays on the row Info control.
 - Renaming personal Your bidding dialog priority copy in this change.
 - New Badge sizes, variants, or Figma-owned chrome.
-- Application repository wiring beyond the shared contract and preview.
+- Any lot page change beyond setting the two flags and their copy.
 
 ## Decisions
 
