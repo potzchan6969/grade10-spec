@@ -32,3 +32,7 @@
 
 | Capability | Raised | Landed |
 | ---------- | ------ | ------ |
+| `grade10-admin/inventory/catalog` | Is regular stock judged as a whole, so that one hold, sale, withdrawal or vault of any regular stock stops every later reduction, even of units intaken after it? Q2 names regular stock that has never moved and says nothing of units received after a move, so an over-intake of 10 made after one earlier sale can be reduced by none of its units, or by the units intaken since | |
+| `grade10-admin/inventory/catalog` | Does a Cert record numbered from regular stock move regular stock when it is later held, sold or vaulted? Q2 says the assignment is not a move and Q5 judges the record on its own after it, but nothing says whether the record's later moves count against the regular stock it came from | |
+| `grade10-admin/inventory/catalog` | Is the action named `Reverse intake` on both the available `No Cert ID` row and an unmoved Cert record? No decision names it, though one takes a number of units and the other deletes a record and its tagged media, beside Assign Cert ID, Change Cert ID and Remove physical unit | |
+| `grade10-admin/inventory/catalog` | Does a reduction's confirmation open with its number of units set to 1, or empty for the admin to fill? Q11 says it names the number of `No Cert ID` units, and nothing says what it holds before the admin enters one | |
