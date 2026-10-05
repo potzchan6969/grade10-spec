@@ -1,7 +1,7 @@
 # grade10-admin/auction/listing Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-10-05, tcs-rules r4
 
 **Out of suite:** grade10-admin-auction-listing-SC-64, grade10-admin-auction-listing-SC-65, grade10-admin-auction-listing-SC-66, grade10-admin-auction-listing-SC-67
 
@@ -28,18 +28,18 @@
 * **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
-An authorized operator on the Grade10 auction listings section.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Save a new listing with no title, no prices, and no window.
-3. Check the public catalogue.
+1. Save a new listing with title, prices and window empty.
+2. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 persists a draft listing with those fields empty.
-* The listing is absent from the public catalogue.
+* Step 1 saves a draft with those fields empty.
+* Step 2 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-27b rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC2-1: Operator saves a partial draft
@@ -51,24 +51,26 @@ An authorized operator on the Grade10 auction listings section.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
-An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Save a draft with a title and no starting price.
+1. Save a draft with a title and no starting price.
+2. Reopen that draft.
 
 **Expected Results:**
 
-* Grade10 persists the title.
-* The listing remains a draft.
-* Starting price stays empty.
+* Step 1 keeps the title on the draft.
+* Step 2 still shows the listing as a draft.
+* Step 2 shows the starting price empty.
 
 <!-- trace:case id=g10adm.auction-listing.TC-qk8 rev=2 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC3-2: Draft refuses a negative or non-whole starting price
@@ -91,7 +93,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_1>` is a draft in the row's currency with starting price 100000 minor units.
+* <listing_1> is a draft in the row's currency with starting price 100000 minor units.
 
 **Test data:**
 
@@ -105,16 +107,17 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<listing_1>`.
+1. Open <listing_1>.
 2. Enter the row's starting price.
 3. Save the draft.
-4. Reopen `<listing_1>` and read its starting price.
+4. Reopen <listing_1>.
+5. Read its starting price and status.
 
 **Expected Results:**
 
 * Step 3 refuses the save.
-* Step 4 reads 100000 minor units in the row's currency.
-* The listing remains a draft.
+* Step 5 reads 100000 minor units in the row's currency.
+* Step 5 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-09o rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC4-1: Draft rejects a malformed slug
@@ -126,30 +129,33 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
-A draft listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing is saved.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | Charizard PSA 9 |
+| Slug | Charizard PSA 9 (spaces and capitals; a slug is 1 to 64 lower-case hyphenated words) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Set slug to `Charizard PSA 9`.
+1. Open that draft.
+2. Set the slug to the test-data slug.
+3. Read the slug.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The slug is unchanged.
+* Step 2 refuses the slug.
+* Step 3 shows the slug unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-ys7 rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC5-1: Unauthorized draft save is refused
@@ -161,23 +167,24 @@ A draft listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
 **Pre-conditions:**
-A signed-in operator who may not set an auction's prices and window.
+
+* admin(may not set an auction's prices and window) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Save a new draft.
+1. Save a new draft.
 
 **Expected Results:**
 
-* Grade10 refuses the save.
-* It persists no listing.
+* Step 1 refuses the save.
+* Step 1 stores no listing.
 
 ### grade10-admin-auction-listing-US1-TC6-1: Draft keeps a starting price of 0 apart from an empty one
 
@@ -197,30 +204,36 @@ A signed-in operator who may not set an auction's prices and window.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_2>` is a draft in `HKD` with a title and no starting price.
-* `<listing_3>` is a draft in `HKD` with a title and starting price 100000 minor units.
+* <listing_2> is a draft in HKD with a title and no starting price.
+* <listing_3> is a draft in HKD with a title and starting price 100000 minor units.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_2>` | A draft, currency `HKD`, starting price empty |
-| `<listing_3>` | A draft, currency `HKD`, starting price 100000 minor units |
+| <listing_2> | A draft, currency HKD, starting price empty |
+| <listing_3> | A draft, currency HKD, starting price 100000 minor units |
 | Starting price | 0 minor units (HK$0.00) |
 
 **Steps:**
 
-1. Open `<listing_2>`, enter a starting price of 0, and save.
-2. Reopen `<listing_2>` and read its starting price.
-3. Open `<listing_3>`, clear its starting price, and save.
-4. Reopen `<listing_3>` and read its starting price.
+1. Open <listing_2>.
+2. Enter a starting price of 0.
+3. Save the draft.
+4. Reopen <listing_2>.
+5. Read its starting price.
+6. Open <listing_3>.
+7. Clear its starting price.
+8. Save the draft.
+9. Reopen <listing_3>.
+10. Read its starting price.
 
 **Expected Results:**
 
-* Step 1 saves; the listing remains a draft.
-* Step 2 reads 0 minor units `HKD`, not empty.
 * Step 3 saves; the listing remains a draft.
-* Step 4 reads empty, not 0.
+* Step 5 reads 0 minor units HKD, not empty.
+* Step 8 saves; the listing remains a draft.
+* Step 10 reads empty, not 0.
 
 ---
 
@@ -247,17 +260,18 @@ A signed-in operator who may not set an auction's prices and window.
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A draft listing with seven media items. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing already holds seven media items.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Upload an eighth JPEG.
+1. Open that draft.
+2. Upload an eighth JPEG.
 
 **Expected Results:**
 
-* Grade10 stores eight media items in the operator's order.
+* Step 2 stores eight media items in the operator's order.
 
 <!-- trace:case id=g10adm.auction-listing.TC-yrz rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC2-1: Ninth file is refused
@@ -269,24 +283,26 @@ A draft listing with seven media items. An authorized operator.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A draft listing with eight media items.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing already holds eight media items.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Upload a ninth file.
+1. Open that draft.
+2. Upload a ninth file.
 
 **Expected Results:**
 
-* Grade10 refuses the upload.
-* The gallery still has eight items.
+* Step 2 refuses the upload.
+* Step 2 leaves the gallery at eight items.
 
 <!-- trace:case id=g10adm.auction-listing.TC-4p2 rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC3-1: Mixed images and videos are accepted
@@ -298,27 +314,31 @@ A draft listing with eight media items.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A draft listing with no media. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing has no media.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Upload a JPEG, then an MP4, then a WebP.
-4. Publish the listing.
-5. Open it as a collector.
+1. Open that draft.
+2. Upload a JPEG.
+3. Upload an MP4.
+4. Upload a WebP.
+5. Publish the listing.
+6. Open the published listing as a collector.
 
 **Expected Results:**
 
-* Grade10 stores three media items in that order.
-* A collector reading the published listing receives the JPEG, the MP4, and the WebP in that order.
-* The MP4 plays as video from the uploaded bytes.
+* Step 4 stores the JPEG, the MP4 and the WebP in that order.
+* Step 6 shows the collector the JPEG, the MP4 and the WebP in that order.
+* Step 6 plays the MP4 as video from the uploaded bytes.
 
 <!-- trace:case id=g10adm.auction-listing.TC-fsq rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC4-1: Upload is stored without processing
@@ -330,31 +350,33 @@ A draft listing with no media. An authorized operator.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A draft listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing is saved.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| File | a JPEG whose body is 2 mebibytes |
+| File | a JPEG whose body is 2 mebibytes (any JPEG under 100 mebibytes) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Upload a JPEG whose body is 2 mebibytes.
-4. Fetch the stored original.
+1. Open that draft.
+2. Upload the test-data JPEG.
+3. Open the stored original.
 
 **Expected Results:**
 
-* Grade10 stores and serves that same body and type as the item's original.
-* Any named-size paths for the image come from `grade10-site/auction/listing-media`, not from a second stored object written at upload.
+* Step 3 serves that same body and type as the original.
+* Named-size paths come from grade10-site/auction/listing-media, not a second stored object written at upload.
 
 <!-- trace:case id=g10adm.auction-listing.TC-g0p rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC5-1: Unsupported type is refused
@@ -366,24 +388,26 @@ A draft listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A draft listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing is saved.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Upload a file that is not JPEG, PNG, WebP, AVIF, MP4, WebM, or QuickTime.
+1. Open that draft.
+2. Upload a file that is not JPEG, PNG, WebP, AVIF, MP4, WebM or QuickTime.
 
 **Expected Results:**
 
-* Grade10 refuses the upload.
-* The gallery is unchanged.
+* Step 2 refuses the upload.
+* Step 2 leaves the gallery unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-vfa rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC6-1: File over 100 mebibytes is refused
@@ -395,30 +419,32 @@ A draft listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A draft listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing is saved.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| File size | larger than 104857600 bytes |
+| File size | larger than 104857600 bytes (100 mebibytes) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Upload a file larger than 104857600 bytes.
+1. Open that draft.
+2. Upload a file larger than 104857600 bytes.
 
 **Expected Results:**
 
-* Grade10 refuses the upload.
-* The gallery is unchanged.
+* Step 2 refuses the upload.
+* Step 2 leaves the gallery unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-2rk rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC7-1: Operator reorders and removes media
@@ -430,25 +456,29 @@ A draft listing.
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A published listing with three images in order A, B, C.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing has three images in order A, B, C.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Move C first and remove B.
-4. Navigate to <grade10 auction url> and find that listing's card.
+1. Open that listing.
+2. Move C first.
+3. Remove B.
+4. Open <grade10 auction url>.
+5. Find that listing's card.
 
 **Expected Results:**
 
-* The gallery is C, A.
-* A collector's catalogue card is C.
+* Step 3 leaves the gallery as C, then A.
+* Step 5 shows the collector's card as C.
 
 <!-- trace:case id=g10adm.auction-listing.TC-9cs rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC8-1: Last media item cannot be removed after create
@@ -460,24 +490,26 @@ A published listing with three images in order A, B, C.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
-A published listing with one JPEG.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing has one JPEG.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Remove that JPEG.
+1. Open that listing.
+2. Remove that JPEG.
 
 **Expected Results:**
 
-* Grade10 refuses the remove.
-* The gallery still has that JPEG.
+* Step 2 refuses the remove.
+* Step 2 still shows that JPEG.
 
 ---
 
@@ -498,17 +530,22 @@ A published listing with one JPEG.
 
 **Pre-conditions:**
 
-* An admin(auction operator) edits a listing whose selected product has reusable media.
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* The listing's selected product has reusable media.
 
 **Steps:**
 
-1. Select product media, add a direct upload, interleave their order, and save.
-2. Change the source product gallery and reopen the listing.
+1. Select product media for the listing.
+2. Add a direct upload.
+3. Interleave the product media and the upload.
+4. Save the listing.
+5. Change the source product gallery.
+6. Reopen the listing.
 
 **Expected Results:**
 
-* The listing retains one ordered mixed gallery.
-* Later product-gallery changes do not alter the saved listing.
+* Step 4 keeps one ordered gallery of both sources.
+* Step 6 shows the saved gallery unchanged after the product change.
 
 ---
 
@@ -535,28 +572,29 @@ A published listing with one JPEG.
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft listing with a title, slug `charizard-psa-9`, a starting price of 100000 minor units, a minimum increment of 5000 minor units, currency `HKD`, a start in the future, a scheduled close at after that start, and one JPEG.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft has a title, slug charizard-psa-9, starting price 100000 minor units, minimum increment 5000 minor units, currency HKD, a future start, a close after that start, and one JPEG.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | charizard-psa-9 |
-| Starting price | 100000 minor units |
+| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
+| Starting price | 100000 minor units (any whole amount of 0 or more) |
 | Minimum increment | 5000 minor units |
 | Currency | HKD |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Create the listing.
-4. Check the public catalogue.
+1. Open that draft.
+2. Create the listing.
+3. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 moves it to `created`.
-* The listing is still absent from the public catalogue.
+* Step 2 shows the listing as created.
+* Step 3 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-4hw rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC2-1: Create without a title is refused on the form and the API
@@ -568,26 +606,29 @@ A draft listing with a title, slug `charizard-psa-9`, a starting price of 100000
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft listing with no title and every other required field set.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft has every required field set and no title.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Submit create on the admin form.
-4. Send create to the API without a title.
+1. Open that draft.
+2. Submit create on the admin form.
+3. Send create to the API without a title.
+4. Read the listing's status.
 
 **Expected Results:**
 
-* The admin form does not send create and names title as missing.
-* A create sent to the API without a title is refused.
-* The listing remains a draft.
+* Step 2 does not send create and names the title as missing.
+* Step 3 refuses the API create.
+* Step 4 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-yte rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC3-1: Create without a slug is refused
@@ -599,24 +640,27 @@ A draft listing with no title and every other required field set.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft listing with every required field set except slug.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft has every required field set except the slug.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Create the listing.
+1. Open that draft.
+2. Create the listing.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The listing remains a draft.
+* Step 2 refuses the create.
+* Step 3 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xx5 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC4-1: Create without a starting price is refused
@@ -628,24 +672,27 @@ A draft listing with every required field set except slug.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft listing with a title, a window, and no starting price.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft has a title, a window and no starting price.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Create the listing.
+1. Open that draft.
+2. Create the listing.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The listing remains a draft.
+* Step 2 refuses the create.
+* Step 3 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-78a rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC5-1: Create without media is refused
@@ -657,24 +704,27 @@ A draft listing with a title, a window, and no starting price.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft listing with every required field set except media.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft has every required field set and no media.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Create the listing.
+1. Open that draft.
+2. Create the listing.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The listing remains a draft.
+* Step 2 refuses the create.
+* Step 3 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-vtd rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC6-1: Created listing cannot clear a required field
@@ -686,24 +736,27 @@ A draft listing with every required field set except media.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A created listing with a title.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a title.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Clear the title.
+1. Open that listing.
+2. Clear the title.
+3. Read the title.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The title is unchanged.
+* Step 2 refuses the write.
+* Step 3 shows the title unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-hdm rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC7-1: Create of a published listing is refused
@@ -715,24 +768,27 @@ A created listing with a title.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A published listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is published.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Create it.
+1. Open that listing.
+2. Create it.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The listing remains published.
+* Step 2 refuses the create.
+* Step 3 still shows the listing as published.
 
 <!-- trace:case id=g10adm.auction-listing.TC-hr0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC8-1: Two categories from one taxonomy are refused
@@ -744,24 +800,28 @@ A published listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A taxonomy with categories Pokémon and Sport. A listing the operator can write categories on.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* One taxonomy has categories Pokémon and Sport.
+* A listing can take a category write.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Assign both Pokémon and Sport to the same listing.
+1. Open that listing.
+2. Assign Pokémon and Sport to it.
+3. Read its categories.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The listing's categories are unchanged.
+* Step 2 refuses the write.
+* Step 3 shows the categories unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-wcd rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC9-1: Canceled sale cannot receive a listing
@@ -773,24 +833,28 @@ A taxonomy with categories Pokémon and Sport. A listing the operator can write 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A canceled sale. A draft listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A sale is canceled.
+* A draft listing is saved.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Attach the draft listing to the canceled sale.
+1. Open that draft.
+2. Attach it to the canceled sale.
+3. Read the listing's sale.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The listing's sale is unchanged.
+* Step 2 refuses the write.
+* Step 3 shows the listing's sale unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-b59 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC10-1: Duplicate slug is refused
@@ -802,30 +866,34 @@ A canceled sale. A draft listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A listing that is not canceled whose slug is `charizard-psa-9`. A second listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing that is not canceled already uses slug charizard-psa-9.
+* A second listing is saved.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | charizard-psa-9 |
+| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open the second listing.
-3. Set its slug to `charizard-psa-9`.
+1. Open the second listing.
+2. Set its slug to the test-data slug.
+3. Read the second listing's slug.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The second listing's slug is unchanged.
+* Step 2 refuses the write.
+* Step 3 shows the second listing's slug unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-3s0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC11-1: Two drafts cannot share a slug
@@ -837,30 +905,34 @@ A listing that is not canceled whose slug is `charizard-psa-9`. A second listing
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft whose slug is `charizard-psa-9`. A second draft.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft already uses slug charizard-psa-9.
+* A second draft is saved.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | charizard-psa-9 |
+| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open the second draft.
-3. Set its slug to `charizard-psa-9`.
+1. Open the second draft.
+2. Set its slug to the test-data slug.
+3. Read the second draft's slug.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The second draft's slug is unchanged.
+* Step 2 refuses the write.
+* Step 3 shows the second draft's slug unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-ohw rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC12-1: Empty slugs on drafts are not a collision
@@ -872,23 +944,26 @@ A draft whose slug is `charizard-psa-9`. A second draft.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft with no slug. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft is saved with no slug.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Save another draft with no slug.
+1. Save another draft with no slug.
+2. Read both drafts' slugs.
 
 **Expected Results:**
 
-* Grade10 accepts the save.
-* Neither draft occupies a slug.
+* Step 1 accepts the save.
+* Step 2 shows neither draft occupying a slug.
 
 <!-- trace:case id=g10adm.auction-listing.TC-yjr rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
@@ -900,31 +975,34 @@ A draft with no slug. An authorized operator.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A canceled listing that previously used slug `charizard-psa-9`. A draft with every required field set, including slug `charizard-psa-9`.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A canceled listing previously used slug charizard-psa-9.
+* A draft has every required field set, including slug charizard-psa-9.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | charizard-psa-9 |
+| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open the draft.
-3. Create the draft.
-4. Check the canceled listing's slug.
+1. Open the draft.
+2. Create the draft.
+3. Read the canceled listing's slug.
 
 **Expected Results:**
 
-* Grade10 moves the draft to `created`.
-* The canceled listing still does not hold `charizard-psa-9`.
+* Step 2 shows the draft as created.
+* Step 3 shows the canceled listing still without charizard-psa-9.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
@@ -936,13 +1014,17 @@ A canceled listing that previously used slug `charizard-psa-9`. A draft with eve
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A closed listing whose slug is `charizard-psa-9`. A draft with every required field set, including slug `charizard-psa-9`.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A closed listing uses slug charizard-psa-9.
+* A draft has every required field set, including slug charizard-psa-9.
 
 **Test data:**
 
@@ -952,16 +1034,16 @@ A closed listing whose slug is `charizard-psa-9`. A draft with every required fi
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open the draft.
-3. Create the draft.
-4. Navigate to `/auction/listings/charizard-psa-9`.
+1. Open the draft.
+2. Create the draft.
+3. Read the draft's status.
+4. Open /auction/listings/charizard-psa-9.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The draft remains a draft.
-* `/auction/listings/charizard-psa-9` still returns the closed listing.
+* Step 2 refuses the create.
+* Step 3 still shows the draft as a draft.
+* Step 4 still returns the closed listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-8u6 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC15-1: Operator corrects a created listing's starting price
@@ -973,31 +1055,35 @@ A closed listing whose slug is `charizard-psa-9`. A draft with every required fi
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A created listing with starting price 100000 minor units `HKD`.
+
+* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
+* A created listing has starting price 100000 minor units HKD.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Starting price | 150000 minor units |
+| Starting price | 150000 minor units (any whole amount of 0 or more, other than 100000) |
 | Currency | HKD |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Set starting price to 150000 minor units.
+1. Open that listing.
+2. Set the starting price to 150000 minor units.
+3. Save the listing.
+4. Read its starting price and status.
 
 **Expected Results:**
 
-* Grade10 stores 150000 minor units `HKD`.
-* The listing remains created.
+* Step 4 shows 150000 minor units HKD.
+* Step 4 still shows the listing as created.
 
 <!-- trace:case id=g10adm.auction-listing.TC-4sr rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC16-1: Scheduled close at in the past is refused at create
@@ -1009,24 +1095,27 @@ A created listing with starting price 100000 minor units `HKD`.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A draft listing whose scheduled close at is not after now.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft's scheduled close is not after now.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Create the listing.
+1. Open that draft.
+2. Create the listing.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The listing remains a draft.
+* Step 2 refuses the create.
+* Step 3 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-o5r rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC18-1: Sandbox cannot change after create
@@ -1038,24 +1127,27 @@ A draft listing whose scheduled close at is not after now.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
-A created listing that was drafted as sandbox.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing was drafted as sandbox.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Clear sandbox.
+1. Open that listing.
+2. Clear sandbox.
+3. Read the sandbox setting.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The listing remains sandbox.
+* Step 2 refuses the write.
+* Step 3 still shows the listing as sandbox.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xt0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC20-1: Extension values the listing refuses
@@ -1077,24 +1169,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds the grant to set an auction's prices and window) has a created listing, `<listing_1>`.
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* <listing_1> is a created listing.
 
 **Test data:**
 
 | Setting | Value |
 | --- | --- |
-| Extension window | 1800 seconds |
+| Extension window | 1800 seconds (30mins) |
 | Extension duration | -60 seconds |
 
 **Steps:**
 
-1. Write the row's setting at the row's value to `<listing_1>`.
-2. Read `<listing_1>`'s extension settings.
+1. Write the row's setting at the row's value on <listing_1>.
+2. Read the API response for its extension settings.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The extension settings are unchanged.
+* Step 1 refuses the write.
+* Step 2 reads the extension settings unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-o8h rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC19-1: Omitted extension duration defaults to 30 minutes
@@ -1115,24 +1208,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_2>` is a draft with every required field set and no extension duration.
+* <listing_2> is a draft with every required field set and no extension duration.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_2>` | A draft listing with title, slug, prices, window and media set, extension duration empty |
+| <listing_2> | A draft listing with title, slug, prices, window and media set, extension duration empty |
 
 **Steps:**
 
-1. Open `<listing_2>`.
+1. Open <listing_2>.
 2. Create the listing.
 3. Read its extension duration.
 
 **Expected Results:**
 
-* The listing is created.
-* Its extension duration reads 1800 seconds.
+* Step 2 shows the listing as created.
+* Step 3 reads 1800 seconds (30mins).
 
 ### grade10-admin-auction-listing-US3-TC21-1: Create accepts a starting price of 0 in each currency
 
@@ -1154,7 +1247,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_4>` is a draft in the row's currency with a title, a slug, a start, a close after both the start and now, one image, and the stock hold its draft took, and no starting price.
+* <listing_4> is a draft in the row's currency with a title, a slug, a start, a close after both the start and now, one image, and the stock hold its draft took, and no starting price.
 
 **Test data:**
 
@@ -1166,17 +1259,18 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<listing_4>`.
+1. Open <listing_4>.
 2. Enter the row's starting price.
 3. Read the starting price's formatted read-back.
 4. Create the listing.
-5. Reopen `<listing_4>` and read its starting price.
+5. Reopen <listing_4>.
+6. Read its starting price.
 
 **Expected Results:**
 
-* Step 3 shows the row's read-back; no error on the field.
-* Step 4 moves the listing to `created`.
-* Step 5 reads 0 minor units in the row's currency.
+* Step 3 shows the row's read-back, with no error on the field.
+* Step 4 shows the listing as created.
+* Step 6 reads 0 minor units in the row's currency.
 
 ### grade10-admin-auction-listing-US3-TC22-1: API create refuses a negative or non-whole starting price
 
@@ -1198,7 +1292,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_5>` is a draft in the row's currency with every create requirement set and starting price 0 minor units.
+* <listing_5> is a draft in the row's currency with every create requirement set and starting price 0 minor units.
 
 **Test data:**
 
@@ -1212,8 +1306,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Send create for `<listing_5>` to the API with the row's starting price.
-2. Read `<listing_5>` from the API.
+1. Send create for <listing_5> with the row's starting price.
+2. Read the API response for <listing_5>.
 
 **Expected Results:**
 
@@ -1241,7 +1335,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_6>` is a draft in `USD` with every create requirement set except the starting price, which is empty.
+* <listing_6> is a draft in USD with every create requirement set except the starting price, which is empty.
 
 **Test data:**
 
@@ -1253,8 +1347,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Send create for `<listing_6>` to the API with the row's starting price.
-2. Read `<listing_6>` from the API.
+1. Send create for <listing_6> with the row's starting price.
+2. Read the API response for <listing_6>.
 
 **Expected Results:**
 
@@ -1280,26 +1374,28 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_7>` is created and unpublished, currency `JPY`, starting price 1000000 minor units.
+* <listing_7> is created and unpublished, currency JPY, starting price 1000000 minor units.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_7>` | A created, unpublished listing, currency `JPY`, starting price 1000000 minor units (¥1,000,000) |
+| <listing_7> | A created, unpublished listing, currency JPY, starting price 1000000 minor units (¥1,000,000) |
 | Starting price | 0 minor units |
 
 **Steps:**
 
-1. Open `<listing_7>`.
-2. Set the starting price to 0 and save.
-3. Reopen `<listing_7>` and read its starting price and status.
+1. Open <listing_7>.
+2. Set the starting price to 0.
+3. Save the listing.
+4. Reopen <listing_7>.
+5. Read its starting price and status.
 
 **Expected Results:**
 
-* Step 2 saves.
-* Step 3 reads 0 minor units `JPY`.
-* Step 3 reads the listing as `created`.
+* Step 3 saves.
+* Step 5 reads 0 minor units JPY.
+* Step 5 reads the listing as created.
 
 ### grade10-admin-auction-listing-US3-TC25-1: API create with 0 and no currency creates as HKD 0
 
@@ -1319,25 +1415,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_10>` is a draft with every create requirement set except the starting price, and no currency chosen.
+* <listing_10> is a draft with every create requirement set except the starting price, and no currency chosen.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_10>` | A draft, currency not chosen, starting price empty, every other create requirement set |
+| <listing_10> | A draft, currency not chosen, starting price empty, every other create requirement set |
 | Starting price | 0 minor units |
 
 **Steps:**
 
-1. Send create for `<listing_10>` to the API with starting price 0 and no currency.
-2. Read `<listing_10>` from the API.
+1. Send create for <listing_10> with starting price 0 and no currency.
+2. Read the API response for <listing_10>.
 
 **Expected Results:**
 
 * Step 1 is accepted.
-* Step 2 reads the listing as `created`.
-* Step 2 reads starting price 0 minor units `HKD`.
+* Step 2 reads the listing as created.
+* Step 2 reads starting price 0 minor units HKD.
 
 ---
 
@@ -1364,19 +1460,20 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A created listing with no publish at. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has no publish at.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Publish it.
-4. Navigate to <grade10 auction url>.
+1. Open that listing.
+2. Publish it.
+3. Open <grade10 auction url>.
 
 **Expected Results:**
 
-* Grade10 moves it to `published`.
-* A collector can read it on the public catalogue.
+* Step 2 shows the listing as published.
+* Step 3 shows it on the public catalogue.
 
 <!-- trace:case id=g10adm.auction-listing.TC-cp1 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC2-1: Created listing publishes at the scheduled time
@@ -1388,25 +1485,28 @@ A created listing with no publish at. An authorized operator.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A created listing whose publish at is in the future.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a publish at still in the future.
 
 **Steps:**
 
 1. Wait until that publish at arrives.
-2. Check the listing state.
-3. Navigate to <grade10 auction url>.
+2. Read the listing's status.
+3. Open <grade10 auction url>.
 
 **Expected Results:**
 
-* Grade10 moves it to `published`.
-* A collector can read it on the public catalogue.
-* No further operator action was required.
+* Step 2 shows the listing as published.
+* Step 3 shows it on the public catalogue.
+* Step 2 needed no further operator action.
 
 <!-- trace:case id=g10adm.auction-listing.TC-4ju rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC3-1: Collector opens a listing by slug
@@ -1418,13 +1518,15 @@ A created listing whose publish at is in the future.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A published listing whose slug is `charizard-psa-9`.
+
+* A published listing uses slug charizard-psa-9.
 
 **Test data:**
 
@@ -1434,11 +1536,11 @@ A published listing whose slug is `charizard-psa-9`.
 
 **Steps:**
 
-1. Navigate to `/auction/listings/charizard-psa-9`.
+1. Open /auction/listings/charizard-psa-9.
 
 **Expected Results:**
 
-* Grade10 returns that listing.
+* Step 1 returns that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-h6l rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC4-1: Unknown slug is not found
@@ -1450,13 +1552,15 @@ A published listing whose slug is `charizard-psa-9`.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-No published, closed, or settled listing with slug `no-such-lot`.
+
+* No published, closed or settled listing uses slug no-such-lot.
 
 **Test data:**
 
@@ -1466,11 +1570,11 @@ No published, closed, or settled listing with slug `no-such-lot`.
 
 **Steps:**
 
-1. Navigate to `/auction/listings/no-such-lot`.
+1. Open /auction/listings/no-such-lot.
 
 **Expected Results:**
 
-* Grade10 answers as not found.
+* Step 1 answers as not found.
 
 <!-- trace:case id=g10adm.auction-listing.TC-ld9 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC5-1: Operator updates copy on a published listing
@@ -1482,13 +1586,16 @@ No published, closed, or settled listing with slug `no-such-lot`.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A published listing titled "Charizard 1st Edition".
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing is titled Charizard 1st Edition.
 
 **Test data:**
 
@@ -1498,17 +1605,18 @@ A published listing titled "Charizard 1st Edition".
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Change its copy to a new description.
-4. Open the listing as a collector.
-5. Check title, prices, and window.
+1. Open that listing.
+2. Change its copy to a new description.
+3. Open the listing as a collector.
+4. Read the title.
+5. Read the prices.
+6. Read the window.
 
 **Expected Results:**
 
-* Grade10 stores the new copy.
-* A collector reading the listing sees the new copy.
-* The title, prices, and window are unchanged.
+* Step 2 stores the new copy.
+* Step 3 shows the collector the new copy.
+* Steps 4 to 6 show the same title, prices and window.
 
 <!-- trace:case id=g10adm.auction-listing.TC-mj0 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC6-1: Published slug cannot change
@@ -1520,31 +1628,33 @@ A published listing titled "Charizard 1st Edition".
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A published listing whose slug is `charizard-psa-9`.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing uses slug charizard-psa-9.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Attempted slug | charizard-psa-9-copy |
+| Attempted slug | charizard-psa-9-copy (1 to 64 lower-case hyphenated words) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Set slug to `charizard-psa-9-copy`.
-4. Navigate to `/auction/listings/charizard-psa-9`.
+1. Open that listing.
+2. Set the slug to the attempted slug.
+3. Open /auction/listings/charizard-psa-9.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* `/auction/listings/charizard-psa-9` still returns that listing.
+* Step 2 refuses the write.
+* Step 3 still returns that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-ofm rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC7-1: Published listing refuses a price change
@@ -1556,30 +1666,33 @@ A published listing whose slug is `charizard-psa-9`.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A published listing with starting price 100000 minor units.
+
+* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
+* A published listing has starting price 100000 minor units.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Starting price | 150000 minor units |
+| Starting price | 150000 minor units (any whole amount of 0 or more, other than 100000) |
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Set starting price to 150000 minor units.
+1. Open that listing.
+2. Set the starting price to 150000 minor units.
+3. Read the starting price.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The starting price remains 100000 minor units.
+* Step 2 refuses the write.
+* Step 3 still shows 100000 minor units.
 
 <!-- trace:case id=g10adm.auction-listing.TC-8yj rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC8-1: A publish at in the past is refused
@@ -1591,24 +1704,27 @@ A published listing with starting price 100000 minor units.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A created listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is created and unpublished.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Set publish at to a time that is not after now.
+1. Open that listing.
+2. Set publish at to a time that is not after now.
+3. Read its status and publish at.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The listing remains created and unpublished.
+* Step 2 refuses the write.
+* Step 3 still shows the listing created and unpublished.
 
 <!-- trace:case id=g10adm.auction-listing.TC-bjv rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC9-1: Create with a past publish at is refused
@@ -1620,26 +1736,29 @@ A created listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A draft listing with every required field set and publish at in the past.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft has every required field set and a publish at in the past.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Create the listing.
-4. Check the public catalogue.
+1. Open that draft.
+2. Create the listing.
+3. Read the listing's status.
+4. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 refuses the create.
-* The listing remains a draft.
-* It stays absent from the public catalogue.
+* Step 2 refuses the create.
+* Step 3 still shows the listing as a draft.
+* Step 4 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-qpo rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC10-1: Draft is not published when publish at arrives
@@ -1651,25 +1770,27 @@ A draft listing with every required field set and publish at in the past.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A draft listing with a publish at that has arrived and a missing title.
+
+* A draft has a publish at that has arrived and a missing title.
 
 **Steps:**
 
-1. Wait until that time is reached.
-2. Check the listing state.
-3. Check the public catalogue.
+1. Wait until that publish at is reached.
+2. Read the listing's status.
+3. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 does not publish the listing.
-* It remains a draft.
-* It stays absent from the public catalogue.
+* Step 2 does not show the listing as published.
+* Step 2 still shows the listing as a draft.
+* Step 3 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-6j1 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC11-1: Manual publish of a draft is refused
@@ -1681,24 +1802,27 @@ A draft listing with a publish at that has arrived and a missing title.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A draft listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing is saved.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Publish it.
+1. Open that draft.
+2. Publish it.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the publish.
-* The listing remains a draft.
+* Step 2 refuses the publish.
+* Step 3 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-hji rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC12-1: Publish at cannot change after publish
@@ -1710,24 +1834,27 @@ A draft listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A published listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is published.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Set a new publish at.
+1. Open that listing.
+2. Set a new publish at.
+3. Read its status.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The listing remains published.
+* Step 2 refuses the write.
+* Step 3 still shows the listing as published.
 
 <!-- trace:case id=g10adm.auction-listing.TC-i4e rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC13-1: First item is the catalogue card
@@ -1739,23 +1866,25 @@ A published listing.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
 **Pre-conditions:**
-A published listing whose gallery is a video then a JPEG.
+
+* A published listing's gallery is a video, then a JPEG.
 
 **Steps:**
 
-1. Navigate to <grade10 auction url>.
+1. Open <grade10 auction url>.
 2. Find that listing's card.
 
 **Expected Results:**
 
-* That listing's card uses the video as its media.
-* It does not require a named physical side such as `front`.
+* Step 2 uses the video as the card's media.
+* Step 2 does not require a named physical side such as front.
 
 ### grade10-admin-auction-listing-US4-TC14-1: Listing starting at 0 publishes to its public address
 
@@ -1774,26 +1903,26 @@ A published listing whose gallery is a video then a JPEG.
 
 **Pre-conditions:**
 
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
-* `<listing_8>` is created and unpublished, currency `USD`, starting price 0 minor units, slug `<zero start slug>`.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
+* <listing_8> is created and unpublished, currency USD, starting price 0 minor units, slug <zero start slug>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | A created, unpublished listing, currency `USD`, starting price 0 minor units, every create requirement set |
-| `<zero start slug>` | `no-reserve-charizard-psa-9` |
+| <listing_8> | A created, unpublished listing, currency USD, starting price 0 minor units, every create requirement set |
+| <zero start slug> | no-reserve-charizard-psa-9 |
 
 **Steps:**
 
-1. Open `<listing_8>`.
+1. Open <listing_8>.
 2. Publish it now.
-3. Navigate to <grade10 store url>/auction/listings/`<zero start slug>`.
+3. Open <grade10 store url>/auction/listings/<zero start slug>.
 
 **Expected Results:**
 
-* Step 2 moves the listing to `published`, with no starting-price refusal.
-* Step 3 opens `<listing_8>`'s public page.
+* Step 2 shows the listing as published, with no starting-price refusal.
+* Step 3 opens <listing_8>'s public page.
 
 ### grade10-admin-auction-listing-US4-TC15-1: Published listing refuses a change to a starting price of 0
 
@@ -1813,25 +1942,27 @@ A published listing whose gallery is a video then a JPEG.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_9>` is published, currency `HKD`, starting price 100000 minor units.
+* <listing_9> is published, currency HKD, starting price 100000 minor units.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_9>` | A published listing, currency `HKD`, starting price 100000 minor units (HK$1,000.00) |
+| <listing_9> | A published listing, currency HKD, starting price 100000 minor units (HK$1,000.00) |
 | Starting price | 0 minor units |
 
 **Steps:**
 
-1. Open `<listing_9>`.
-2. Set the starting price to 0 and save.
-3. Reopen `<listing_9>` and read its starting price.
+1. Open <listing_9>.
+2. Set the starting price to 0.
+3. Save the listing.
+4. Reopen <listing_9>.
+5. Read its starting price.
 
 **Expected Results:**
 
-* Step 2 is refused.
-* Step 3 reads 100000 minor units `HKD`.
+* Step 3 is refused.
+* Step 5 reads 100000 minor units HKD.
 
 ---
 
@@ -1851,25 +1982,27 @@ A published listing whose gallery is a video then a JPEG.
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A draft listing. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing is saved.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Call it off.
-4. Check the public catalogue.
+1. Open that draft.
+2. Call it off.
+3. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 moves it to `canceled`.
-* It stays absent from the public catalogue.
+* Step 2 shows the listing as canceled.
+* Step 3 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-gw7 rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC2-1: Operator calls off a created listing before publish at
@@ -1881,27 +2014,30 @@ A draft listing. An authorized operator.
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A created listing with a publish at still in the future. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a publish at still in the future.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
-4. Wait until that publish at arrives.
-5. Check the public catalogue.
+1. Open that listing.
+2. Call it off.
+3. Wait until that publish at arrives.
+4. Read the listing's status.
+5. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 moves it to `canceled`.
-* When that publish at arrives, Grade10 does not publish it.
-* It stays absent from the public catalogue.
+* Step 2 shows the listing as canceled.
+* Step 4 does not show it as published.
+* Step 5 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-s7i rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC3-1: Operator calls off a published listing that has bids
@@ -1920,21 +2056,24 @@ A created listing with a publish at still in the future. An authorized operator.
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A published listing with a leading bid, an outbid bid and stock held for it. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing has a leading bid, an outbid bid, and stock held for it.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
-4. Check both bidders' cards, the listing's stock and the public catalogue.
+1. Open that listing.
+2. Call it off.
+3. Read both bidders' cards.
+4. Read the listing's stock.
+5. Open the public catalogue.
 
 **Expected Results:**
 
-* Grade10 moves it to `canceled`.
-* Both bids are called off, and no bidder is charged.
-* The stock held for it is released.
-* It is absent from the public catalogue.
+* Step 2 shows the listing as canceled.
+* Step 3 shows both bids called off, and no bidder charged.
+* Step 4 shows the held stock released.
+* Step 5 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-32t rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC4-1: Closed listing cannot be called off
@@ -1946,24 +2085,27 @@ A published listing with a leading bid, an outbid bid and stock held for it. An 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A closed listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is closed.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
+1. Open that listing.
+2. Call it off.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the cancel.
-* The listing remains closed.
+* Step 2 refuses the cancel.
+* Step 3 still shows the listing as closed.
 
 <!-- trace:case id=g10adm.auction-listing.TC-zkl rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC5-1: Settled listing cannot be called off
@@ -1975,24 +2117,27 @@ A closed listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A settled listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is settled.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
+1. Open that listing.
+2. Call it off.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the cancel.
-* The listing remains settled.
+* Step 2 refuses the cancel.
+* Step 3 still shows the listing as settled.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uba rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC6-1: Already canceled listing cannot be called off again
@@ -2004,24 +2149,27 @@ A settled listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A canceled listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is already canceled.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
+1. Open that listing.
+2. Call it off.
+3. Read the listing's status.
 
 **Expected Results:**
 
-* Grade10 refuses the cancel.
-* The listing remains canceled.
+* Step 2 refuses the cancel.
+* Step 3 still shows the listing as canceled.
 
 <!-- trace:case id=g10adm.auction-listing.TC-z2r rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC7-1: Cancel rewrites the slug and frees the original
@@ -2033,13 +2181,16 @@ A canceled listing.
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is `charizard-psa-9`. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing has id auc_550e8400-e29b-41d4-a716-446655440000 and slug charizard-psa-9.
 
 **Test data:**
 
@@ -2050,16 +2201,16 @@ A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and w
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
-4. Navigate to `/auction/listings/charizard-psa-9`.
+1. Open that listing.
+2. Call it off.
+3. Read the stored slug.
+4. Open /auction/listings/charizard-psa-9.
 
 **Expected Results:**
 
-* Grade10 stores slug `charizard-psa-9-cancelled-0e8400-e29b-41d4-a716-446655440000`.
-* `/auction/listings/charizard-psa-9` does not return that listing.
-* A later listing may be created with slug `charizard-psa-9`.
+* Step 3 shows slug charizard-psa-9-cancelled-0e8400-e29b-41d4-a716-446655440000.
+* Step 4 does not return that listing.
+* A later listing may be created with slug charizard-psa-9.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
@@ -2071,24 +2222,27 @@ A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and w
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A draft listing with no slug. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft listing has no slug.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that draft.
-3. Call it off.
+1. Open that draft.
+2. Call it off.
+3. Read the listing's status and slug.
 
 **Expected Results:**
 
-* Grade10 moves it to `canceled`.
-* The listing still has no slug.
+* Step 3 shows the listing as canceled.
+* Step 3 still shows no slug.
 
 <!-- trace:case id=g10adm.auction-listing.TC-u5z rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC9-1: Unauthorized cancel is refused
@@ -2100,25 +2254,28 @@ A draft listing with no slug. An authorized operator.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A published listing. A signed-in operator who may not call a listing off.
+
+* admin(may not call a listing off) is on <grade10 auction admin listings url>.
+* A listing is published.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Call it off.
+1. Open that listing.
+2. Call it off.
+3. Read its status and slug.
 
 **Expected Results:**
 
-* Grade10 refuses the cancel.
-* The listing remains published.
-* Its slug is unchanged.
+* Step 2 refuses the cancel.
+* Step 3 still shows the listing as published.
+* Step 3 shows its slug unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uu5 rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC10-1: Closed listing rejects a title edit
@@ -2130,24 +2287,27 @@ A published listing. A signed-in operator who may not call a listing off.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A closed listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is closed.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Change its title.
+1. Open that listing.
+2. Change its title.
+3. Read the title.
 
 **Expected Results:**
 
-* Grade10 refuses the write.
-* The title is unchanged.
+* Step 2 refuses the write.
+* Step 3 shows the title unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-72d rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC11-1: Closed listing rejects a media upload
@@ -2159,24 +2319,27 @@ A closed listing.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
 **Pre-conditions:**
-A closed listing.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A listing is closed.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Upload an image.
+1. Open that listing.
+2. Upload an image.
+3. Read the gallery.
 
 **Expected Results:**
 
-* Grade10 refuses the upload.
-* The gallery is unchanged.
+* Step 2 refuses the upload.
+* Step 3 shows the gallery unchanged.
 
 ---
 
@@ -2204,16 +2367,16 @@ campaign,
 * **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
-An authorized operator (holding `auction:operate`) on the Grade10 auction Listings section.
+
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Check the section heading row.
+1. Read the section heading row.
 
 **Expected Results:**
 
-* A Create listing action is present.
+* Step 1 shows a Create listing action.
 
 <!-- trace:case id=g10adm.auction-listing.TC-wnl rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC2-1: Listing editor opens with no campaign
@@ -2225,23 +2388,25 @@ An authorized operator (holding `auction:operate`) on the Grade10 auction Listin
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
-An authorized operator on <grade10 auction admin listings url>.
+
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Activate Create listing.
-2. Check the Campaign control.
+1. Click Create listing.
+2. Read the Campaign control.
 
 **Expected Results:**
 
-* The listing editor opens.
-* No campaign is selected in the Campaign control.
+* Step 1 opens the listing editor.
+* Step 2 shows no campaign selected.
 
 <!-- trace:case id=g10adm.auction-listing.TC-fxz rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC3-1: Full lifecycle with no campaign — draft, create, publish, slug lookup
@@ -2253,19 +2418,22 @@ An authorized operator on <grade10 auction admin listings url>.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
-A new listing opened from <grade10 auction admin listings url> with no campaign, every required create field set, slug `standalone-lot-1`, and no publish at.
+
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
+* A new listing is open with no campaign, every required create field set, slug standalone-lot-1, and no publish at.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | `standalone-lot-1` |
+| Slug | standalone-lot-1 (1 to 64 lower-case hyphenated words) |
 | Campaign | (empty) |
 
 **Steps:**
@@ -2273,13 +2441,13 @@ A new listing opened from <grade10 auction admin listings url> with no campaign,
 1. Save the draft with a title and no campaign.
 2. Create the listing.
 3. Publish the listing.
-4. Navigate to `/auction/listings/standalone-lot-1`.
+4. Open /auction/listings/standalone-lot-1.
 
 **Expected Results:**
 
-* Step 1 persists a draft with no campaign; the listing is absent from the public catalogue.
-* Step 2 moves the listing to `created`; it still has no campaign and is absent from the catalogue.
-* Step 3 moves the listing to `published`; it still has no campaign.
+* Step 1 saves a draft with no campaign, absent from the public catalogue.
+* Step 2 shows it as created, still with no campaign, and absent from the catalogue.
+* Step 3 shows it as published, still with no campaign.
 * Step 4 returns that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-34a rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
@@ -2292,22 +2460,25 @@ A new listing opened from <grade10 auction admin listings url> with no campaign,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
-A listing with no campaign exists. An authorized operator is on <grade10 auction admin listings url>.
+
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
+* A listing with no campaign is saved.
 
 **Steps:**
 
-1. Check the campaign column for that listing's row.
+1. Read the campaign column for that listing's row.
 
 **Expected Results:**
 
-* The column shows "-".
-* A campaign id is not the only label shown for that row.
+* Step 1 shows "-".
+* Step 1 does not show only a campaign id for that row.
 
 <!-- trace:case id=g10adm.auction-listing.TC-duk rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC5-1: Create listing is withheld from an unauthorized operator
@@ -2319,23 +2490,25 @@ A listing with no campaign exists. An authorized operator is on <grade10 auction
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
 **Pre-conditions:**
-A signed-in operator without `auction:operate` on <grade10 auction admin listings url>.
+
+* admin(without auction:operate) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Check the section heading row for a Create listing action.
+1. Read the section heading row.
 2. Send a draft save for a new listing.
 
 **Expected Results:**
 
-* Create listing is not offered.
-* The draft save is refused.
+* Step 1 does not offer Create listing.
+* Step 2 refuses the draft save.
 
 ---
 
@@ -2363,18 +2536,19 @@ surface for the same figure.
 * **Trace:** grade10-admin-auction-listing-US-08
 
 **Pre-conditions:**
-A published listing watched by two collectors on Grade10 and one collector on ZZZ. An authorized operator.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing is watched by two collectors on Grade10 and one collector on ZZZ.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Open Stats for that listing.
-3. Check the watchers figure.
+1. Open Stats for that listing.
+2. Read the watchers figure.
 
 **Expected Results:**
 
-* Stats shows 3 watchers.
-* No watcher is named.
+* Step 2 shows 3 watchers.
+* Step 2 names no watcher.
 
 <!-- trace:case id=g10adm.auction-listing.TC-gl0 rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US8-TC2-1: An unwatched listing shows zero in Stats
@@ -2393,16 +2567,18 @@ A published listing watched by two collectors on Grade10 and one collector on ZZ
 * **Trace:** grade10-admin-auction-listing-US-08
 
 **Pre-conditions:**
-A published listing with no watches. An authorized operator is on <grade10 auction admin listings url>.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A published listing has no watches.
 
 **Steps:**
 
 1. Open Stats for that listing.
-2. Check the watchers figure.
+2. Read the watchers figure.
 
 **Expected Results:**
 
-* Stats shows 0 watchers, not a blank or "-".
+* Step 2 shows 0 watchers, not a blank or "-".
 
 <!-- trace:case id=g10adm.auction-listing.TC-6o9 rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US8-TC3-1: A closed listing keeps its watchers in Stats
@@ -2421,16 +2597,18 @@ A published listing with no watches. An authorized operator is on <grade10 aucti
 * **Trace:** grade10-admin-auction-listing-US-08
 
 **Pre-conditions:**
-A closed listing still watched by two collectors. An authorized operator is on <grade10 auction admin listings url>.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A closed listing is still watched by two collectors.
 
 **Steps:**
 
 1. Open Stats for the closed listing.
-2. Check the watchers figure.
+2. Read the watchers figure.
 
 **Expected Results:**
 
-* Stats shows 2 watchers.
+* Step 2 shows 2 watchers.
 
 <!-- trace:case id=g10adm.auction-listing.TC-otd rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US8-TC4-1: The Listings table has no Watchers column
@@ -2449,15 +2627,16 @@ A closed listing still watched by two collectors. An authorized operator is on <
 * **Trace:** grade10-admin-auction-listing-US-08
 
 **Pre-conditions:**
-An authorized operator on <grade10 auction admin listings url>.
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
 
 **Steps:**
 
-1. Check the Listings table headings.
+1. Read the Listings table headings.
 
 **Expected Results:**
 
-* There is no Watchers column.
+* Step 1 shows no Watchers column.
 
 ---
 
@@ -2488,7 +2667,7 @@ Runs once per row of **Test data**.
 
 * `<listing_1>` is published in no campaign, holding `<held quantity>` units of `<product_1>`, its close a few minutes away.
 * The bids on `<listing_1>` are as the row states.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2544,7 +2723,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_2>` is in no campaign and in the state the row states, holding `<held quantity>` units of `<product_2>`.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2592,7 +2771,7 @@ Runs once per row of **Test data**.
 * `<listing_3>` closed Unsold with no bids, in no campaign, and its hold is released.
 * `<listing_3>` has never been relisted.
 * `<product_3>` shows `<available before>` units available.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2648,7 +2827,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_4>` closed Unsold in no campaign, its hold is released, and it has never been relisted.
-* admin(reads listings, without `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(reads listings, without auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2688,7 +2867,7 @@ Runs once per row of **Test data**.
 * `<listing_7>` closed Unsold after this change shipped, its hold already released at the close.
 * `<listing_8>` closed with a winner, its hold moved to sold.
 * The one-time clean-up has not yet run.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2748,7 +2927,7 @@ Runs once per row of **Test data**.
 
 * `<listing_9>` is published in no campaign with no bids, holding `<held quantity>` units of `<product_9>`, its close a few minutes away.
 * The inventory release is made to fail until the tester lets it through.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2805,7 +2984,7 @@ Runs once per row of **Test data**.
 
 * `<listing_10>` is in the state the row states, and its hold is released.
 * `<listing_10>` has never been relisted.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2848,7 +3027,7 @@ Runs once per row of **Test data**.
 
 * `<listing_11>` closed Unsold in no campaign, its hold is released, and it has never been relisted.
 * `<product_11>` shows `<available before>` units available.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
+* admin(holds auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -2895,7 +3074,7 @@ Runs once per row of **Test data**.
 
 * `<listing_12>` closed Unsold in no campaign, its hold is released, and it has never been relisted.
 * `<product_12>` shows `<available before>` units available.
-* admin(holds `auction:operate`) has <grade10 auction admin listings url> open in two browser tabs.
+* admin(holds auction:operate) has <grade10 auction admin listings url> open in two browser tabs.
 
 **Test data:**
 
@@ -2908,19 +3087,23 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. In the first tab, click Relist on `<listing_12>`'s row.
-2. In the second tab, click Relist on `<listing_12>`'s row.
-3. In the first tab, set a start and a close, and click Save.
-4. In the second tab, set a start and a close, and click Save.
-5. Read the Listings table.
-6. Read `<product_12>`'s available count on its product page.
+1. In the first tab, click Relist on <listing_12>'s row.
+2. In the second tab, click Relist on <listing_12>'s row.
+3. In the first tab, set a start.
+4. In the first tab, set a close.
+5. In the first tab, click Save.
+6. In the second tab, set a start.
+7. In the second tab, set a close.
+8. In the second tab, click Save.
+9. Read the Listings table.
+10. Read <product_12>'s available count on its product page.
 
 **Expected Results:**
 
-* Step 3 saves a new draft.
-* Step 4 is refused as already relisted, and the editor stays open unsaved.
-* Step 5 shows one new draft relisted from `<listing_12>`, and `<listing_12>`'s row offers no Relist.
-* Step 6 reads `<available after>`.
+* Step 5 saves a new draft.
+* Step 8 is refused as already relisted, and the editor stays open unsaved.
+* Step 9 shows one new draft relisted from <listing_12>, and <listing_12>'s row offers no Relist.
+* Step 10 reads <available after>.
 
 ---
 
@@ -2969,8 +3152,8 @@ document the unit I selected.
 
 **Expected Results:**
 
-* The selector offers untagged product media and media tagged to <selected Cert ID>.
-* Media tagged to <other Cert ID> is absent from the main selector.
+* Step 3 offers untagged media and media tagged to <selected Cert ID>.
+* Step 3 leaves media tagged to <other Cert ID> out of the main selector.
 
 ### grade10-admin-auction-listing-US11-TC2-1: A Cert without printed ID gets untagged media
 
@@ -3037,12 +3220,13 @@ document the unit I selected.
 
 **Steps:**
 
-1. Attempt to add <other product source media> to <draft listing>.
+1. Try to add <other product source media> to <draft listing>.
+2. Read the listing gallery.
 
 **Expected Results:**
 
-* Grade10 refuses the selection.
-* The listing gallery remains unchanged.
+* Step 1 refuses the selection.
+* Step 2 shows the listing gallery unchanged.
 
 ---
 
@@ -3092,8 +3276,8 @@ selected unit's normal media.
 
 **Expected Results:**
 
-* The separately labelled drawer groups media tagged to <other Cert ID A> and <other Cert ID B> under their printed Cert IDs.
-* Untagged product media is not in the Other Cert drawer.
+* Step 3 groups media for <other Cert ID A> and <other Cert ID B> under their printed Cert IDs.
+* Step 3 leaves untagged product media out of the Other Cert drawer.
 
 ### grade10-admin-auction-listing-US12-TC2-1: Adding other-Cert media identifies its source Cert
 
@@ -3133,8 +3317,8 @@ selected unit's normal media.
 
 **Expected Results:**
 
-* The listing gallery includes <source media>.
-* The addition identifies <source Cert ID> as the source Cert.
+* Step 3 adds <source media> to the listing gallery.
+* Step 3 names <source Cert ID> as the source Cert.
 
 ### grade10-admin-auction-listing-US12-TC3-1: Source media additions use existing listing authority
 
@@ -3164,8 +3348,8 @@ selected unit's normal media.
 
 **Expected Results:**
 
-* Grade10 refuses the drawer read and addition under existing Auction authorization.
-* The listing gallery remains unchanged.
+* Steps 1 and 2 are refused under existing Auction authorization.
+* Step 2 leaves the listing gallery unchanged.
 
 ---
 
@@ -3213,8 +3397,8 @@ copy's photographs apply.
 
 **Expected Results:**
 
-* The selector offers <untagged media> only.
-* Media tagged to a printed Cert ID is absent from the main selector.
+* Step 3 offers <untagged media> only.
+* Step 3 leaves media tagged to a printed Cert ID out of the main selector.
 
 ---
 
@@ -3264,7 +3448,7 @@ changes later.
 
 **Expected Results:**
 
-* The saved listing gallery contains a copy of <source media>'s bytes and <source alt text>.
+* Step 3 shows a copy of <source media>'s bytes and <source alt text>.
 
 ### grade10-admin-auction-listing-US14-TC2-1: Listing gallery copy supports alt and order edits
 
@@ -3302,8 +3486,8 @@ changes later.
 
 **Expected Results:**
 
-* The saved gallery shows <listing alt text> for <listing media>.
-* <listing media> appears after <other listing media>.
+* Step 3 shows <listing alt text> for <listing media>.
+* Step 3 shows <listing media> after <other listing media>.
 
 ### grade10-admin-auction-listing-US14-TC3-1: Later source edits leave the listing snapshot unchanged
 
@@ -3339,14 +3523,15 @@ changes later.
 
 **Steps:**
 
-1. Edit <source media> to use <replacement bytes> and <replacement alt text>.
-2. Move <source media> after <other source media> in Inventory.
-3. Open <saved listing>'s gallery as the Auction operator.
+1. Edit <source media> to use <replacement bytes>.
+2. Set its alt text to <replacement alt text>.
+3. Move <source media> after <other source media> in Inventory.
+4. Open <saved listing>'s gallery as the Auction operator.
 
 **Expected Results:**
 
-* The listing copy retains its original bytes and <original alt text>.
-* The listing copy remains before <other listing media>.
+* Step 4 keeps the original bytes and <original alt text>.
+* Step 4 still shows the copy before <other listing media>.
 
 ### grade10-admin-auction-listing-US14-TC4-1: Retagging source media preserves the listing snapshot
 
@@ -3386,7 +3571,7 @@ changes later.
 
 **Expected Results:**
 
-* The saved listing copy retains the same bytes and alt text as before the Inventory change.
+* Step 2 keeps the same bytes and alt text as before the retag.
 
 ### grade10-admin-auction-listing-US14-TC5-1: Untagging source media preserves the listing snapshot
 
@@ -3424,7 +3609,7 @@ changes later.
 
 **Expected Results:**
 
-* The saved listing copy retains the same bytes and alt text as before the Inventory change.
+* Step 2 keeps the same bytes and alt text as before the untag.
 
 ### grade10-admin-auction-listing-US14-TC6-1: Physical Cert removal deletes the source and preserves the listing snapshot
 
@@ -3465,8 +3650,8 @@ changes later.
 
 **Expected Results:**
 
-* Inventory deletes the Cert record and its tagged source media as part of physical-unit removal.
-* The saved listing copy retains the same bytes and alt text as before the Inventory change.
+* Step 1 deletes the Cert record and its tagged source media.
+* Step 2 keeps the same bytes and alt text as before that removal.
 
 ### grade10-admin-auction-listing-US14-TC7-1: Source selection accepts an eighth gallery item
 
@@ -3503,7 +3688,7 @@ changes later.
 
 **Expected Results:**
 
-* The saved listing gallery contains eight items, including <source media>.
+* Step 3 shows eight gallery items, including <source media>.
 
 ### grade10-admin-auction-listing-US14-TC8-1: A ninth source item is refused
 
@@ -3540,8 +3725,8 @@ changes later.
 
 **Expected Results:**
 
-* The saved listing gallery still contains eight items.
-* <source media> is absent from the saved listing gallery.
+* Step 3 still shows eight gallery items.
+* Step 3 leaves <source media> out of the saved gallery.
 
 ### grade10-admin-auction-listing-US14-TC9-1: Source media and direct uploads share one ordered gallery
 
@@ -3578,8 +3763,8 @@ changes later.
 
 **Expected Results:**
 
-* The saved gallery contains both items in the chosen order.
-* The saved gallery has no more than eight items.
+* Step 3 shows both items in the chosen order.
+* Step 3 shows no more than eight items.
 
 ### grade10-admin-auction-listing-US14-TC10-1: A missing source media item refuses Save
 
@@ -3607,8 +3792,8 @@ changes later.
 
 **Expected Results:**
 
-* Grade10 refuses Save.
-* The listing gallery remains unchanged.
+* Step 1 refuses Save.
+* Step 1 leaves the listing gallery unchanged.
 
 ## Settled
 
