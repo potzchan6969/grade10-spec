@@ -8,7 +8,7 @@
 ## post-sale-US5: Operator quotes and sends a winner's invoice
 
 **As an** operator,
-**I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
+**I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-u4w rev=1 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
@@ -101,8 +101,14 @@
 * The send is refused.
 * No invoice is issued.
 
+## post-sale-US7: Operator resolves an unpaid order
+
+**As an** operator,
+**I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
+**so that** a lot whose winner has not paid stops being an open-ended obligation.
+
 <!-- trace:case id=g10adm.auction-post-sale.TC-6p7 rev=1 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
-### post-sale-US5-TC12-1: Reissue changes tax and records both values
+### post-sale-US7-TC38-1: Reissue changes tax and records both values
 
 **Classification:**
 
@@ -115,7 +121,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-05
+* **Trace:** post-sale-US-07
 
 **Pre-conditions:**
 
@@ -133,13 +139,35 @@
 * The new invoice carries Tax of 6000 minor units in HKD.
 * The reissued entry names Tax as changed from no amount to 6000 minor units in HKD.
 
+## Settled
+
+- Removing Tax on a reissue is a change from an amount to none, like any other quoted amount; it needs no case of its own.
+
 ## Reconciliation
 
 **Run:** The blind pass read the Purpose, Feature set, `post-sale-US-05`, the proposal, decisions, UI design without scenario dispositions, and the linked PRD. It did not read durable or change requirements.
 
-**Raised:**
+**Run:** 2026-10-06, QA2 rerun after accept-review, not blind: the delta's requirements and scenarios, the durable suite and the cases above. It moved the reissue case to `post-sale-US-07`, the journey its scenario serves, and added the modified `Invoice log history`.
 
-- The blind pass separated empty, zero, positive, and changed Tax. The scenario pass covers all four partitions in `post-sale-SC-155` to `post-sale-SC-158`.
-- The blind pass asked whether removing Tax on reissue is distinct from changing it. The chosen optional-field rule treats removal as a change from an amount to none; the modified reissue requirement covers it without a separate surface case.
+### Folded
+
+- `post-sale-US5-TC9-1`, an invoice sent with Tax whose Subtotal includes it -> `post-sale-SC-155`
+- `post-sale-US5-TC10-1`, an invoice sent with Tax left empty carries no Tax line -> `post-sale-SC-156`
+- `post-sale-US5-TC11-1`, Tax of zero refused -> `post-sale-SC-157`
+- `post-sale-US7-TC38-1`, a reissue adding Tax and the log naming no amount before and 6000 after -> `post-sale-SC-158` and the `Changed parts` cell of `Invoice log history`
+
+### Rejected
+
+- No blind case was dropped.
+
+### Escalated
+
+- Is removing Tax on a reissue a change of its own, distinct from changing its amount? -> `Q8`; answered under `## Settled`
+
+### Carried Unchanged
+
+- **Quote and send** - `grade10-admin-auction-post-sale-SC-48`, `grade10-admin-auction-post-sale-SC-49`, `grade10-admin-auction-post-sale-SC-50`, `grade10-admin-auction-post-sale-SC-63`, `grade10-admin-auction-post-sale-SC-68`, `grade10-admin-auction-post-sale-SC-69`, `grade10-admin-auction-post-sale-SC-70`, `grade10-admin-auction-post-sale-SC-117`, `grade10-admin-auction-post-sale-SC-118`, `grade10-admin-auction-post-sale-SC-119` keep their meaning and their durable coverage
+- **Reissue** - `grade10-admin-auction-post-sale-SC-107` to `-SC-115`, `grade10-admin-auction-post-sale-SC-125`, `grade10-admin-auction-post-sale-SC-126`, `grade10-admin-auction-post-sale-SC-133`, `grade10-admin-auction-post-sale-SC-134` keep their meaning and their durable coverage
+- **Invoice log history** - `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-35`, `grade10-admin-auction-post-sale-SC-61`, `grade10-admin-auction-post-sale-SC-123`, `grade10-admin-auction-post-sale-SC-124`, `grade10-admin-auction-post-sale-SC-132` keep their meaning and their durable coverage; `grade10-admin-auction-post-sale-SC-123` still names no Tax because its reissue changed none
 
 **Out of suite:** none.

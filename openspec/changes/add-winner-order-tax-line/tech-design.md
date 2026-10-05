@@ -126,8 +126,9 @@ invalid value is coerced to `null`.
 
 ## Migration Plan
 
-1. Land `add-shipping-insurance-order-summary-tooltip`, then advance the
-   application submodule to the commit containing both contracts.
+1. `add-shipping-insurance-order-summary-tooltip` landed and archived on
+   2026-09-24. Advance the application submodule to the commit containing
+   both contracts.
 2. Add the nullable invoice Tax field and backfill existing invoices to
    `null`. Deploy readers that tolerate `null` before exposing the operator
    input.

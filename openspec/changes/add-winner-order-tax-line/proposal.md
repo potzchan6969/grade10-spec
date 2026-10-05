@@ -30,9 +30,9 @@ watch.
 - **Tax becomes an amount the operator enters**, on the quote, beside
   Insurance and under the same rules: optional, above zero when added, absent
   when none, and changeable on a reissue with a reason
-- **The Order Summary gains a Tax line**, between Insurance and Subtotal. It
-  reads TBD before send, like the other quoted rows, then shows the amount or
-  disappears
+- **The Order Summary gains a Tax line**, between Insurance and Payment
+  Processing Fee. It reads TBD before send, like the other quoted rows, then
+  shows the amount or disappears
 - **Tax sits inside the Subtotal**, so a card invoice's processing fee is
   grossed up on it and Grade10 keeps the Subtotal whole
 - **The line carries an info tip** reading `Set by Grade10 for where your order
@@ -42,8 +42,8 @@ watch.
   what a winner in Awaiting Setup actually wonders, since the row reads TBD
   whether or not they will owe anything. The tip rides the line rather than
   appearing in one status and vanishing in the next
-- **The invoice and the receipt state it**, filling the `taxLine` slot the
-  PDF blocks already expose
+- **The invoice and the receipt state it**, between Insurance and Subtotal,
+  filling the `taxLine` slot the PDF blocks already expose
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
 
@@ -81,7 +81,10 @@ See [Non-Goals](decisions.md#non-goals).
   refusals, the reissue requirement, and what counts as a change. Adding Tax
   moves all six in step, or names the set once and has the others refer to it.
   The fee rows that carry an info tip are a seventh such set, in the other
-  capability. The requirements round decides both together
+  capability. This change adds Tax to each post-sale set in place and gives
+  the Tax tip its own requirement beside Insurance's. Naming each set once
+  waits for the third line of this shape, per [Q9](decisions.md#decisions)
+
 **No new journey.** Tax is an amount inside `winner-order-US-01` and
 `post-sale-US-05`, not a new walk. The winner-order journeys delta is context
 only, deliberately.
