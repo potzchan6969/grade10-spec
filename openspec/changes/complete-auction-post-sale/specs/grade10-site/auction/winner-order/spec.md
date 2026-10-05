@@ -9,7 +9,8 @@
   - Names in the account's language: Country/Region names read and sort in the language of the account, as the rest of the site does
 - Payment method
   - Offered where Grade10 can take it: card only in a currency with a card fee rule in Payment Settings; bank transfer only in a currency whose bank details Grade10 holds - a sample HKD account outside production, and in production the account Finance confirms
-  - Card not yet available: in a currency with no card fee rule, card reads that it is not yet available there and cannot be chosen; with neither method offered, setup cannot be confirmed
+  - Card not yet available: in a currency with no card fee rule, card reads that it is not yet available there and cannot be chosen
+  - No method in the currency: with neither method offered, the winner reads that payment is not yet available there, with Contact Us, and cannot confirm; the setup deadline keeps running
   - Fee wording at the choice: card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`
 - Bank transfer
   - Proof judged by its content: a file whose bytes are not a type Grade10 takes is refused, whatever its name
@@ -63,9 +64,13 @@ NOT be able to choose it. Once Finance saves a card fee rule for the currency,
 card SHALL be offered on every order in it that the winner has not yet
 confirmed.
 
-**Neither method** - Where neither method is offered, the choice SHALL show
-card as not yet available and no bank transfer, and Grade10 SHALL refuse a
-confirmation as one with no method chosen.
+**Neither method** - Where neither method is offered, Winner Order SHALL say
+that payment is not yet available in the order's currency and offer Contact
+Us, per "Contact Us opens a copy-first ready email", and Grade10 SHALL refuse
+a confirmation as one with no method chosen. The setup deadline SHALL keep
+running: the order reads Setup Overdue once it passes, as any unconfirmed
+order does, and an operator reopens or records setup by hand, per
+`grade10-admin/auction/post-sale`.
 
 **Refused** - Grade10 SHALL refuse a confirmation with no method chosen, and
 SHALL refuse a method where it is not offered. A refused confirmation SHALL
@@ -154,11 +159,22 @@ per "The delivery address locks when the invoice is sent".
 - **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
   holds no USD card fee rule
 - **WHEN** the winner reaches the payment method choice
-- **THEN** card reads that it is not yet available in USD and cannot be chosen
-- **AND** no bank transfer is offered
+- **THEN** the page says payment is not yet available in USD and offers
+  Contact Us
+- **AND** neither card nor bank transfer can be chosen
 - **AND** Grade10 refuses a confirmation of the delivery address
 - **AND** the order is still Awaiting Setup, holding no delivery address and no
   method
+
+#### Scenario: winner-order-SC-257 - The setup deadline runs where no method is offered
+**Serves:** winner-order-US-07 - Winner misses the address deadline
+
+- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
+  holds no USD card fee rule, whose winner has not confirmed setup
+- **WHEN** 48 hours pass from the lot's close
+- **THEN** the order reads Setup Overdue
+- **AND** an operator holding payment processing can reopen or record its
+  setup
 
 ### Requirement: An unfinished card payment leaves the invoice payable
 

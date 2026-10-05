@@ -73,6 +73,7 @@
 | Q34 | Does billing Add Address use the delivery Country/Region list? | Yes: the same full A-Z list and searchable field, so a winner billed abroad finds their country the same way - Product (@tangconst) | A billing list of its own |
 | Q35 | Which language do Country/Region names read in? | The account's language, as the rest of the site does - Product (@tangconst) | The browser's locale, and fixed English |
 | Q36 | Does an unsaved one-time address survive leaving the order? | Yes. It stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it - Product (@tangconst) | Clearing it on leaving |
+| Q37 | What does a winner read where their currency offers neither method, and does the setup deadline run? | They read that payment is not yet available in that currency, with Contact Us, and cannot confirm. The 48-hour setup deadline keeps running, so the order can go Setup Overdue as usual; an operator reopens or records setup by hand - Product (@tangconst) | Pausing the deadline, which is more to build, and holding launch for Finance's USD and JPY rules |
 
 ## Raised
 
@@ -94,4 +95,4 @@
 | grade10-admin/auction/payment-settings | What is the upper bound on a rule's percentage? | Q22 |
 | grade10-admin/auction/test-winners | How does a test winner sign in? | Q19 |
 | grade10-admin/auction/test-winners | What does Cancel do to the sandbox lot? | Q18 |
-| grade10-site/auction/winner-order | Where neither method is offered - USD or JPY with no card fee rule, and no bank details - setup cannot be confirmed: what is the winner told to do, and does the setup deadline still run to Setup Overdue and its consequences? |  |
+| grade10-site/auction/winner-order | Where neither method is offered - USD or JPY with no card fee rule, and no bank details - setup cannot be confirmed: what is the winner told to do, and does the setup deadline still run to Setup Overdue and its consequences? | Q37 |

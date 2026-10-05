@@ -196,6 +196,11 @@ hours of the close.
   with a card fee rule; in USD and JPY until Finance sets one, the choice
   reads that card is not yet available, per [Auction Management · Payment
   Settings](/p/grade10-admin/auction/management#payment-settings)
+- 🚧 **No method in the currency** - with no card fee rule and no bank details
+  for the order's currency, the winner reads that payment is not yet
+  available in that currency, with Contact Us, and cannot confirm; the
+  48-hour setup deadline keeps running, and an operator reopens or records
+  setup by hand
 
 ### Address Deadline
 
@@ -603,5 +608,6 @@ a second payment provider, and changes to the bid-time rules.
 | Card in USD and JPY | 🚧 In flight | Card launches without a rule in USD and JPY: until Finance saves one, a winner in that currency is not offered card and reads why. Chosen over holding launch for Finance's rates and over charging no card fee. | Finance |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
+| No payment method in a currency | 🚧 In flight | A winner whose currency offers neither card nor bank transfer reads that payment is not yet available there, with Contact Us; the setup deadline keeps running, so the order can go Setup Overdue, and an operator reopens or records setup by hand. Chosen over pausing the deadline, which is more to build, and over holding launch for Finance's USD and JPY rules. | Product (@tangconst) |
 | Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |
 :::
