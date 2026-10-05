@@ -513,6 +513,36 @@ export const ClosedSoldEqualMax: Story = {
   },
 };
 
+const { winner: _winner, ...BID_HISTORY_COPY_WITHOUT_WINNER } = COPY.bidHistory;
+
+/**
+ * ClosedSoldEqualMax with bid history copy that leaves `winner` unset: the
+ * won row is flagged, but no crown draws without its name.
+ *
+ * Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
+ */
+export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
+  args: {
+    ...ClosedSoldEqualMax.args,
+    copy: { ...COPY, bidHistory: BID_HISTORY_COPY_WITHOUT_WINNER },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "ClosedSoldEqualMax without `winner` copy. The won row carries `isWinner`, yet no crown shows, because the list draws none without the consumer's name for it.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Recent Bids")).toBeInTheDocument();
+    expect(canvas.queryByRole("img", { name: /.+/ })).not.toBeInTheDocument();
+    expect(canvas.queryByLabelText("Winner")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Winner")).not.toBeInTheDocument();
+  },
+};
+
 export const SuspendedBidderRefusal: Story = {
   name: "Suspended bidder refusal (TBC)",
   args: {
