@@ -25,7 +25,7 @@ already opened and is carried everywhere.
 - **Store** — the store, the collections under it, a card's own page, the two
   addresses the shop hands out for a product and a collection, the cart, the
   checkout, and a collector's order history and order detail
-- 🚧 **Vault** — the signing ceremony alone
+- **Vault** — the signing ceremony alone
 - **Booking** — booking a visit, the private link from a booking's mail, and a
   collector's own visits
 - **Profile** — the account page on its own. Its order history and order
