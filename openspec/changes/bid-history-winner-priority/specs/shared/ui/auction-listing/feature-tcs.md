@@ -70,6 +70,34 @@
 * Step 1: the Info icon shows in the same tone as the row's amount.
 * Step 2: the tooltip reads When maximums match, the earlier one leads.
 
+### shared-ui-auction-listing-US1-TC29-1: No crown without its name
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Public bid history outcome
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax with bid history copy that leaves `winner` unset.
+
+**Steps:**
+
+1. Read every Recent bids row.
+
+**Expected Results:**
+
+* No row shows a crown.
+* No element carries the accessible name Winner.
+
 ## Settled
 
 - Winner is a primary crown after the amount when the consumer sets
@@ -105,5 +133,6 @@ openspec/changes/archive/.
 | The requirement draws no crown where `copy.winner` is absent, and places the crown after any Info control and before You; no scenario states either | **Reported:** to Dev for a scenario; task 2.4 builds the first. No case is written for behaviour no scenario states |
 | The section carried its own journey title and an application as actor, where the durable suite's `US1` names the listing page blocks and a customer | **Folded in:** heading, Walked-by line and statement copied from the durable suite |
 | Facts across the PRD lines, Q1 to Q3, `ui-design.md`, `tech-design.md`, the delta and the cases | **Agree:** primary filled crown after the amount, named by consumer copy, only on a closed sold lot; Info tip in the amount tone, reading when maximums match, the earlier one leads |
+| Accept-review fix round, 2026-10-05, at the owner's word: the crown draws only with `copy.winner`, a rule with no scenario | **Folded in:** `shared-ui-auction-listing-SC-54` / `shared-ui-auction-listing-US1-TC29-1`; task 2.4 builds it |
 
 **Uncovered anchors:** none. Public bid history outcome's three items - winner crown, equal-max tip, live lots - each have a case; both scenarios are asserted.

@@ -20,7 +20,7 @@
 - [ ] 2.4 Draw the crown only where `copy.winner` is supplied, with no
       built-in name, and correct the `isWinner` doc comment in `types.ts`
       from badge to crown; the Default and ClosedSoldEqualMax plays still
-      pass. `shared-ui-auction-listing-SC-50`
+      pass. `shared-ui-auction-listing-SC-50`, `shared-ui-auction-listing-SC-54`
 
 ## 3. The walk (grade10-spec) (owner: @tangconst)
 
@@ -47,4 +47,5 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       crown on the won row once the close is recorded, and the tip on a tied
       maximum that came second.
       `grade10-site-auction-listing-page-US14-TC7-1`,
-      `grade10-site-auction-listing-page-US12-TC7-1`
+      `grade10-site-auction-listing-page-US12-TC7-1`,
+      `grade10-site-auction-listing-page-US14-TC8-1`

@@ -39,3 +39,10 @@ The lot page SHALL set the public Recent bids flags that
 - **WHEN** a collector reads its Recent bids
 - **THEN** customer B's row carries the Info tip saying that when maximums match, the earlier one leads
 - **AND** customer A's leading row carries no tip
+
+#### Scenario: grade10-site-auction-listing-page-SC-50 - A lot without a winner crowns no bid
+**Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
+
+- **GIVEN** a lot past its close whose result is not yet recorded, and a lot whose close is recorded with no winner
+- **WHEN** a collector reads each lot's Recent bids
+- **THEN** no row on either lot shows a crown

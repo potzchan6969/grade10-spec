@@ -58,3 +58,11 @@ leads.
 - **WHEN** the collector activates the Info control on that row
 - **THEN** the tooltip states that when maximums match, the earlier one
   leads
+
+#### Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
+**Serves:** Public bid history outcome - no crown without its name
+
+- **GIVEN** a closed sold bid card whose winning public row has `isWinner` true, and bid history copy with no `winner`
+- **WHEN** the Recent bids list renders
+- **THEN** no row shows a crown
+- **AND** no row carries an accessible name the consumer did not supply
