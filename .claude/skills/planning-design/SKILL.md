@@ -27,9 +27,8 @@ lane's to write, in your hands any more than the PM's. `/planning-dev` writes it
 outline from your journeys and your marks, and the design reference is what
 makes those groups name what exists.
 
-Put each design question to the human as a numbered
-[Clarification Request](../../../docs/governance/round-summary.md#clarification-request),
-with options, why it matters to the user, and links to the PRD and the change.
+Put each design question to the human as a
+[Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
 
 What a designer brings that a PM does not is **the design reference**: what
 already exists in Storybook, in `packages/design-system`, in `packages/ui` and
