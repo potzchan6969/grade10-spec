@@ -1,9 +1,8 @@
-import { existsSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const entry = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
-const exported = (name: string) =>
-  new RegExp(`\\b(?:type\\s+)?${name}\\b`).test(entry);
+const exported = (name: string) => new RegExp(`\\b${name}\\b`).test(entry);
 
 const GRADING_BLOCKS = [
   "GradingCardList",
@@ -88,16 +87,13 @@ describe("the package entry", () => {
     expect([...GRADING_BLOCKS, ...GRADING_TYPES].filter(exported)).toEqual([]);
   });
 
-  it("exports no grading-named booking block (shared-ui-grading-submission-SC-02)", () => {
-    expect(
-      entry.match(/\bGrading\w*(?:Picker|Booking|Slot|Visit)\w*/g) ?? [],
-    ).toEqual([]);
+  it("exports nothing grading-named, booking blocks included (shared-ui-grading-submission-SC-02)", () => {
+    expect(entry.match(/\bGrading[A-Z]\w*/g) ?? []).toEqual([]);
   });
 
   it("lists no grading collector block (shared-ui-grading-submission-SC-71)", () => {
-    expect(
-      existsSync(new URL("./blocks/grading-submission", import.meta.url)),
-    ).toBe(false);
-    expect(entry).not.toContain("blocks/grading-submission");
+    const blocks = readdirSync(new URL("./blocks", import.meta.url));
+    expect(blocks.filter((name) => name.startsWith("grading"))).toEqual([]);
+    expect(entry).not.toMatch(/blocks\/grading/);
   });
 });
