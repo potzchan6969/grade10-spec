@@ -6,6 +6,11 @@ disable-model-invocation: true
 
 # Push and pull request
 
+In this store, `pnpm push:main` (`/spec-push`) is the default: it lands
+planning text on `main` and opens a pull request that merges itself for a
+shared surface. Use this skill only when someone asked for a pull request to
+read before anything lands.
+
 Publish the current branch and make sure an open PR exists. Runs only when
 `/pr-push` is invoked — not because the user said "ship" in passing.
 Re-run any time in the session.

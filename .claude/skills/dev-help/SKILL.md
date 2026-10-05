@@ -34,7 +34,7 @@ sentence.
 | `/reconcile-figma-annotations` | Interactive, evidence-pinned review of spec-owned Figma annotation drift, selective acceptance, verification, and optional local commit. | Same. | "Review spec-owned Figma annotation drift." |
 | `/commit` | Local commits, `type(domain):`. Only when invoked. Chain `/pr-push` in the same message to publish. | Same. | `/commit` |
 | `/pr-push` | Create a `<type>/<short-description>` branch (`feat/`, `fix/`, `build/`, etc.) when publishable work is on `main`, then push it and ensure an open PR. Commits dirty files that belong on the PR; irrelevant dirty files do not block. Push updated submodules before this repo. Only when invoked. Re-run; rewrite the description only when this session changed code. | Same. | `/commit` then `/pr-push`, one message |
-| `/spec-push` | Land the branch here: rebase onto `main`, settle conflicts by reading the change, merge the PR. A change reaches the application repo only once it is on `main`. | Same. | `/spec-push` |
+| `/spec-push` | Land commits here with `pnpm push:main`: rebase onto `main`, settle conflicts by reading the change, run the fast gate, push. A shared surface goes to a pull request that merges itself once green. A change reaches the application repo only once it is on `main`. | Same. | `/spec-push` |
 | `/review-changes` | Two-axis review (Standards and Spec) since a fixed point. | No equivalent; review by hand. | `/review-changes` since the branch point |
 | `/archive-change` | Implementation is complete and verified. Archive the accepted change before deployment; its contract was published before implementation. | `/openspec-archive-change`. | "The proxy-bidding implementation is verified — archive it before deployment." |
 
