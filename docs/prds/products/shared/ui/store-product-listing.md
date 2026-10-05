@@ -13,6 +13,12 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
+🚧 **Whole photo** — the square well shows the full picture; leftover space is
+the well, not a cropped edge. Available, on sale, sold out and in cart all do
+this.
+
+🚧 **No multiply** — the photo is drawn as supplied, not blended into the well.
+
 🚧 **Name opens the product** — when the tile can open a product, the name
 does too, the same way the photo does; a sold-out tile’s name stays inert
 where the tile sells.
@@ -111,6 +117,8 @@ The tile reports the quantity change and the application updates the cart.
 ::story{id="store-product-listing-productbrowse-states--no-match" title="A search that matched nothing"}
 
 ::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
+
+::story{id="store-product-listing-productcardimage--default" title="The full photo in the well"}
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
 
