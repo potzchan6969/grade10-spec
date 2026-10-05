@@ -20,8 +20,13 @@ this.
 🚧 **No multiply** — the photo is drawn as supplied, not blended into the well.
 
 🚧 **Name opens the product** — when the tile can open a product, the name
-does too, the same way the photo does; a sold-out tile’s name stays inert
-where the tile sells.
+does too, the same way the photo does, and shows it by an underline on hover
+and on focus; a sold-out tile’s name stays inert where the tile sells, and a
+name that does not open is plain text.
+
+🚧 **One keyboard stop** — the name is the tile's one stop for the keyboard
+and for a screen reader, which announces each product once; the photo opens
+on a pointer press only.
 
 🚧 **A link** - a tile that opens, given its product's page, is a link to
 it: it can open in a new tab, and its address can be copied -

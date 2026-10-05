@@ -16,9 +16,9 @@ always-underlined link.
 
 | Export | Package | Notes |
 | --- | --- | --- |
-| `ProductCard` | `@grade10/ui` | Name is a control when `onClick` is supplied and the tile opens; sold-out stays inert where a cart handler is supplied; hover / focus underline |
+| `ProductCard` | `@grade10/ui` | Name is a control when `onClick` is supplied, unless the product is sold out on a tile that sells; hover / focus underline; the tile's one keyboard stop, the photo a pointer target only |
 | `ProductList`, `ProductBrowse`, `ProductResultsPanel` | `@grade10/ui` | Pass through `onProductClick`; no new export |
-| `ProductCardImage` | `@grade10/ui` | Photo activation unchanged |
+| `ProductCardImage` | `@grade10/ui` | Photo opens on a pointer press only; no keyboard stop and not announced, so the cart control is the first stop inside it |
 
 ### Work in this repo
 
@@ -30,6 +30,8 @@ always-underlined link.
 | State | Spec scenario | Story |
 | --- | --- | --- |
 | Name activates with photo | `shared-ui-store-product-listing-SC-87` | [Named Once](?path=/story/store-product-listing-productcard--named-once), [ProductBrowse Default](?path=/story/store-product-listing-productbrowse--default) |
-| Sold-out name inert where the tile sells | `shared-ui-store-product-listing-SC-88` | [`ProductCard` → Sold Out](?path=/story/store-product-listing-productcard--sold-out) |
-| Sold-out that still opens | **Out of suite:** a sold-out tile that opens where it does not sell, which this change's tile requirement states | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) |
+| Sold-out tile inert where it sells — name plain text, no underline, no focus | `shared-ui-store-product-listing-SC-88` | [`ProductCard` → Sold Out](?path=/story/store-product-listing-productcard--sold-out) |
 | No callback — name and photo inert | `shared-ui-store-product-listing-SC-89` | Omit `onClick` / `onProductClick` in isolation stories |
+| Sold-out tile opens where it does not sell | `shared-ui-store-product-listing-SC-94` | [`ProductCard` → Sold Out Opens Where Nothing Sells](?path=/story/store-product-listing-productcard--sold-out-opens-where-nothing-sells) |
+| One keyboard stop — Tab reaches the name and the cart, not the photo | `shared-ui-store-product-listing-SC-95` | [`ProductCard` → Named Once](?path=/story/store-product-listing-productcard--named-once) |
+| The name shows that it opens — underline on hover and focus; plain at rest | `shared-ui-store-product-listing-SC-96` | [`ProductCard` → Named Once](?path=/story/store-product-listing-productcard--named-once) |

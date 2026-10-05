@@ -15,10 +15,11 @@ name control, and drop-off after a name tap that previously did nothing.
 - **Name activates** — when the consumer supplies tile activation and the
   product is not sold out, the product name reports the same activation as
   the photo
-- **Sold out where the tile sells stays inert** — no name control when sold
-  out and a cart handler is supplied, or when no activation callback is
-  supplied. A sold-out tile that still opens (no cart handler) is
-  `add-store-cross-sell`
+- **Sold out and no handler stay inert** — no name or photo control when sold
+  out on a tile that sells, or when no activation callback is supplied
+- **A sold-out tile opens where it does not sell** — on a tile given no cart
+  handler, a sold-out product's name and photo open it, sold-out treatment and
+  all
 - **No new export** — still `ProductCard` / list `onProductClick`; no new
   public name
 
@@ -46,15 +47,14 @@ name control, and drop-off after a name tap that previously did nothing.
 
 - **`@grade10/ui`** — `ProductCard` name control; browse / list / results
   stories supply activation so the name is reachable in Storybook
-- **Grade10 site / ZZZ** — already supply `onProductClick`; no new props
+- **Grade10 site** — already supplies `onProductClick`; no new props
 - **Manual** — Product Listing and Product Listing Blocks Product Tile
-- **Overlap** — `add-store-cross-sell` Q29: this change's sold-out name is
-  inert only where a cart handler is supplied; SC-91 owns a sold-out tile
-  that still opens
+- **Overlap** - `add-store-cross-sell` Q29 settled the sold-out rule this
+  change states; that change's SC-91 states it too, on the rail's tile
 
 ## Open questions
 
-- none — Q1–Q3 are in `decisions.md`
+- none - Q1 to Q8 are in `decisions.md`
 
 ## References
 

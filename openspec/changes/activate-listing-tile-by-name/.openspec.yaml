@@ -1,2 +1,9 @@
 schema: grade10-planning
 created: 2026-09-11
+hands:
+  pm: "@tangconst"
+  design: "@ecchochan"
+  tech: "@ecchochan"
+  qa: "@ecchochan"
+  dev: "@ecchochan"
+design_waived: "the code lands wholly in packages/ui of this store - ProductCard already draws the name control, and the one keyboard stop is a tab-order change to the photo; the grade10 site already passes onProductClick, so its one group is the walk, a test with no code"
