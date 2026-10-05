@@ -34,8 +34,8 @@ Storybook: `My Auctions/Winner Order/Payment/View Bank Details`.
 **Delta:** `DialogSubtext` shows **Invoice:** plus the order's invoice ID
 (e.g. `Invoice: IN-LK42301`) instead of the former transfer-method
 instruction. The payment-reference band shows the listing code unchanged
-(e.g. `LK423`). Rails, amount due, tabs and footer stay as how-to-pay
-already ships.
+(e.g. `LK423`), with no Copy controls on it, amount due, or the rail fields.
+Rails, tabs and footer stay as how-to-pay already ships.
 
 ### Winner Order — Email Grade10
 
@@ -79,15 +79,15 @@ No new design-system primitive. No new `@grade10/ui` export.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Open with invoice ID | Subtext `Invoice: {invoice ID}`; payment-reference band is the listing code; rails unchanged | `winner-order-SC-114` |
+| Open with invoice ID | Subtext `Invoice: {invoice ID}`; payment-reference band is the listing code; no Copy controls on bank details | `winner-order-SC-114`, `winner-order-SC-95` |
 
 ### Winner Order — Email Grade10
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Payment overdue | Subject `Auction order {invoice ID}: payment overdue` | **Out of suite:** Email Grade10 copy fixture |
-| Setup overdue | Subject quotes lot title; no invoice ID | **Out of suite:** Email Grade10 copy fixture |
-| Partial payment | Subject quotes invoice ID; receipt ids in body | **Out of suite:** Email Grade10 copy fixture |
+| Payment overdue | Subject `Auction order {invoice ID}: payment overdue` | `winner-order-SC-165` |
+| Setup overdue | Subject quotes lot title; no invoice ID | `winner-order-SC-164` |
+| Partial payment | Subject quotes invoice ID; receipt ids in body | `winner-order-SC-166` |
 
 ### Public listing page
 

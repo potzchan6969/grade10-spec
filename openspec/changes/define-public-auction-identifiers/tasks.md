@@ -55,8 +55,9 @@
 
 - [ ] 5.1 Carry the stored listing code into the winner order as its payment
   reference, derive invoice IDs with a two-digit sequence that reaches `100`,
-  and preserve old-invoice lookup.
-  - Covers: winner-order-SC-97-SC-98, SC-114, SC-122-SC-128, and
+  preserve old-invoice lookup, and keep View Bank Details free of Copy
+  controls for rail fields, amount due, and payment reference.
+  - Covers: winner-order-SC-95-SC-98, SC-114, SC-122-SC-128, and
     SC-244, SC-246.
   - Verification: winner-invoice and contract tests, then `pnpm run test:backend`.
 

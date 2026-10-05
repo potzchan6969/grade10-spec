@@ -9,8 +9,8 @@
 **I want** every lot to show whether it is Upcoming, Active or Ended,
 **so that** I can see at a glance whether I can still bid on it.
 
-<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 <!-- review-note 2026-09-29: keep draft for now. Some of these statuses should be covered in an FE user flow before this case is approved. -->
+<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### grade10-site-auction-lot-status-US1-TC1-1: External lot status matches the lot
 
 Runs once per row of **Test data**.

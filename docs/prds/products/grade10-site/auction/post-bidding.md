@@ -246,10 +246,10 @@ by card, reads:
   transaction metadata under `payment_reference_code`, then keeps Stripe's
   returned provider reference internal. There is no separate order ID —
   [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
-- 🚧 **Bank details** — SWIFT, FPS and HK local transfer rails, printed on
-  the invoice below Order Total when paid by Bank Transfer; each rail ends
-  at the same payment reference code, with a reminder to quote it in the
-  bank app's memo or remarks field
+- 🚧 **Bank details** — every enabled SWIFT, FPS and HK local-transfer rail in
+  the invoice's Finance snapshot, printed below Order Total when paid by Bank
+  Transfer; the payment reference follows the enabled rails, with a reminder
+  to quote it in the bank app's memo or remarks field
 - 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
   sequence with at least 2 digits; it continues as `100` after `99`. A reissue
   increments the sequence, keeps the payment reference and lets the old ID
@@ -289,7 +289,8 @@ doing, under Edge Cases.
   **Submit Payment Proof** as the primary control and places **View Bank
   Details** under it; View Bank Details opens bank rails, Submit Payment
   Proof opens the proof dialog
-- 🚧 **View Bank Details** — amount due and rail fields as detail rows (no
+- 🚧 **View Bank Details** — opens with the FPS tab selected. It shows amount
+  due and rail fields as detail rows (no
   Copy); each rail tab ends with payment reference and a warning to enter it
   in the bank memo, after the rail fields: FPS ID, account name and QR; HK
   local bank name, bank code, branch code and full account number (bank and
@@ -338,12 +339,10 @@ doing, under Edge Cases.
 #### Receipt Documents
 
 - **Receipt** — the itemised amounts and how it was paid: card brand and last
-  four, or the method and reference an operator recorded, marked as manually
-  settled
+  four, or the method and reference an operator recorded
 - 🚧 **Bill To and Ship To** — the same two addresses as the invoice it
   pays; a later edit or reissue never changes a receipt already issued
-- 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
-  settled
+- 🚧 **A confirmed transfer** — its receipt reads Bank Transfer
 - 🚧 **Receipt ID** — new receipts use `RC-LK42301P1`: the listing code,
   invoice sequence and the finalized payment's unpadded sequence within that
   invoice. Historical receipt IDs stay unchanged
@@ -359,16 +358,13 @@ doing, under Edge Cases.
   against, fixed for the life of the collection; no invoice is reissued once
   money has been recorded against it
 - **Remaining Balance Due** — what is still owed, reading 0 the moment the
-  invoice is Paid. A balance an operator closed inside the 10% tolerance reads
-  0, and so does an overpayment; neither shows a shortfall or a credit
+  invoice is Paid or an overpayment is confirmed; neither shows a credit
 - **A receipt is never reissued** — a refund or a reversal leaves every
   receipt already issued exactly as it was, and moves no later receipt's
   Previous Payments
 
 #### Receipt Policy Pending
 
-- ❓ **Which receipt ID is real** — this page's form and the one Grade10
-  issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
@@ -380,7 +376,8 @@ title open it too. The schedule below matches
 `grade10-site/auction/notifications-order` and the archived email-kinds
 timeline: setup at close / +24h / +48h, payment reminder at send then day 3
 and day 6, final notice 24 hours before the payment deadline, payment overdue
-at expiry, then shipped, delivered, and order cancelled.
+at expiry, one partial-payment receipt letter for each recorded partial payment,
+then shipped, delivered, and order cancelled.
 
 ::image{src="assets/diagrams/auction-order-mail.svg" alt="The letters a winner gets, on two clocks. In the 48-hour setup window: auction won at the close, a setup reminder at 24 hours, and setup overdue at 48 hours unless the winner confirms the address, billing and method, which parks them. In the 7-day payment window an operator's invoice opens: the payment reminder at send and again on days 3 and 6, a final notice 24 hours before the deadline, and payment overdue at the deadline unless the winner pays, which cancels every outstanding reminder. Once the money is in: payment received carrying the receipt PDF, then shipped and delivered. Order cancelled reaches the winner whenever an operator cancels an unpaid order, on neither clock"}
 
@@ -394,6 +391,7 @@ at expiry, then shipped, delivered, and order cancelled.
 | 🚧 Payment overdue | The payment deadline, unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
+| 🚧 Partial payment received | An operator records a partial payment | The current invoice ID, Receipt ID and receipt PDF, with Contact Us; no remaining balance |
 | Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
 | Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
 | Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
@@ -406,9 +404,9 @@ at expiry, then shipped, delivered, and order cancelled.
 - 🚧 **Reminders on hold** — none go out while proof is checked, and
   uploading it sends no letter at all; if the proof is returned the sequence
   resumes on the moved clock, skipping and repeating nothing
-- 🚧 **Partial payments** — no letter kind of their own; reminders stop at
-  the first recorded payment, and each receipt is on the order's Receipt PDF
-  row
+- 🚧 **Partial payments** — reminders stop at the first recorded payment; each
+  partial payment sends `payment_received_partial` with its invoice and receipt
+  IDs, its receipt PDF and the same ready Contact Us mailto rules
 
 ## Edge Cases
 
@@ -417,7 +415,8 @@ at expiry, then shipped, delivered, and order cancelled.
 - **Winner** — Confirm hides, Missed setup deadline gives Contact Us, and the
   order reads Setup Overdue
 - **Operator** — reopens the form for a fresh 48 hours, records an address
-  given by phone, or cancels after review
+  given by phone only while the order is unconfirmed Setup Overdue and its
+  invoice is `not_issued`, or cancels after review
 
 ### Missed Payment Deadline
 
@@ -443,13 +442,13 @@ balance. The invoice above, settled in three payments:
 | Payment | Amount | Its receipt shows | The operator |
 | --- | --- | --- | --- |
 | `-P1` | 50,000 | Invoice total 125,571.80 · previous payments 0 · this payment 50,000 · balance due 75,571.80 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
-| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
+| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Records it; the order remains Partially Paid |
 | `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Preparing Shipment |
 
-- 🚧 **The close prompt** — from the payment that brings the total to 90% of
-  the invoice, every payment asks the operator to close as Paid or keep it
-  Partially Paid at the real balance; had the third payment been 10,000, the
-  operator may close, and the balance reads 0 with no write-off line
+- 🚧 **Completing the balance** — every payment below the original invoice
+  total keeps the order Partially Paid at the real balance. An exact cumulative
+  match closes on its own; only an amount above the total asks the operator to
+  confirm the overpayment before the invoice is marked Paid
 - 🚧 **Overpaying** — a payment that would take the total past the invoice is
   accepted after an operator confirmation dialog before the invoice is marked
   Paid; the full payment remains recorded and the excess can be returned
@@ -555,7 +554,7 @@ a second payment provider, and changes to the bid-time rules.
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Proof submit feedback | 🚧 In flight | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
 | Tracking link on Winner Order | 🚧 In flight | While fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as the external carrier link with an arrow. No separate Track shipment button and no carrier name in that chrome. Chosen over carrier name plus a Track shipment CTA. | Product and design (@tangconst) |
-| Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation at listing creation, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. New receipt IDs use the listing code, invoice sequence and an unpadded per-invoice payment sequence. Historical receipt IDs remain unchanged. | Product and Finance |
+| Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation on the first saved draft, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. New receipt IDs use the listing code, invoice sequence and an unpadded per-invoice payment sequence. Historical receipt IDs remain unchanged. | Product and Finance |
 | Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
 | Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |
 | Cached listing preview | Decided | Previously cached preview content may persist; no purge or regeneration is guaranteed. The current page and fresh metadata omit the code and private data. | Product |

@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-23, tcs-rules r3.0
 
-## winner-order-US17: Winner quotes their order
+## winner-order-US21: Winner quotes their order
 
 **As a** winner of an auction lot,
 **I want** my order to have a clear, stable payment reference I can quote,
 **so that** I can reference it when contacting support or making inquiries about my purchase, without a separate order ID to keep track of.
 
-### winner-order-US17-TC1-1: Invoice and payment references appear on both invoice methods
+### winner-order-US21-TC1-1: Invoice and payment references appear on both invoice methods
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-17
+* **Trace:** winner-order-US-21
 
 **Pre-conditions:**
 
@@ -39,7 +39,7 @@
 * The card invoice and bank-transfer invoice use the same reference rules.
 * No receipt breakdown or receipt amount is asserted here.
 
-### winner-order-US17-TC2-1: Invoice numbering continues after 99
+### winner-order-US21-TC2-1: Invoice numbering continues after 99
 
 **Classification:**
 
@@ -52,7 +52,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-17
+* **Trace:** winner-order-US-21
 
 **Pre-conditions:**
 
@@ -68,7 +68,7 @@
 * The new invoice ID is `IN-LK423100`.
 * The payment reference remains `LK423`.
 
-### winner-order-US17-TC3-1: Listing-code allocation retries a projection collision
+### winner-order-US21-TC3-1: Listing-code allocation retries a projection collision
 
 **Classification:**
 
@@ -81,7 +81,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-17
+* **Trace:** winner-order-US-21
 
 **Pre-conditions:**
 
@@ -97,7 +97,7 @@
 * Allocation retries and stores a distinct valid code.
 * The code is not treated as collision-free merely because its source is a UUID or listing ID.
 
-### winner-order-US17-TC4-1: A stored payment reference survives allocator changes
+### winner-order-US21-TC4-1: A stored payment reference survives allocator changes
 
 **Classification:**
 
@@ -110,7 +110,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-17
+* **Trace:** winner-order-US-21
 
 **Pre-conditions:**
 
@@ -126,7 +126,7 @@
 * Both continue to use `LK423`.
 * No new listing receives a retained code.
 
-### winner-order-US17-TC5-1: The public listing page withholds the payment reference
+### winner-order-US21-TC5-1: The public listing page withholds the payment reference
 
 **Classification:**
 
@@ -139,7 +139,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-17
+* **Trace:** winner-order-US-21
 
 **Pre-conditions:**
 
@@ -154,13 +154,13 @@
 
 * The payment reference has no labelled public field and appears only as the lower-case suffix of the canonical address.
 
-## winner-order-US18: Winner reviews invoice and payment details
+## winner-order-US22: Winner reviews invoice and payment details
 
 **As a** winner,
 **I want** my invoice and payment receipts to show stable public references built from my payment reference,
 **so that** I can contact Grade10, make a payment, and reconcile charges without exposing internal system keys.
 
-### winner-order-US18-TC1-1: Reissued invoice IDs still find the order
+### winner-order-US22-TC1-1: Reissued invoice IDs still find the order
 
 **Classification:**
 
@@ -173,7 +173,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-18
+* **Trace:** winner-order-US-22
 
 **Pre-conditions:**
 
@@ -189,7 +189,7 @@
 * Each lookup finds the same order.
 * The replacement invoice names the replaced invoice and keeps `LK423`.
 
-### winner-order-US18-TC2-1: A finalized payment receives the new receipt identifier
+### winner-order-US22-TC2-1: A finalized payment receives the new receipt identifier
 
 **Classification:**
 
@@ -202,7 +202,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-18
+* **Trace:** winner-order-US-22
 
 **Pre-conditions:**
 
@@ -220,7 +220,7 @@
 * A later finalized payment for that invoice receives `P2`, then `P10` without padding.
 * A receipt for another invoice starts at `P1` for that invoice.
 
-### winner-order-US18-TC3-1: Historical receipt identifiers stay unchanged
+### winner-order-US22-TC3-1: Historical receipt identifiers stay unchanged
 
 **Classification:**
 
@@ -233,7 +233,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-18
+* **Trace:** winner-order-US-22
 
 **Pre-conditions:**
 
@@ -249,7 +249,7 @@
 * The historical receipt ID remains `REC-202609-LK7P2Q-01-P1`.
 * No receipt ID is created for the refund, reversal or void.
 
-### winner-order-US18-TC4-1: Provider references stay internal
+### winner-order-US22-TC4-1: Provider references stay internal
 
 **Classification:**
 
@@ -262,7 +262,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-18
+* **Trace:** winner-order-US-22
 
 **Pre-conditions:**
 
@@ -277,6 +277,35 @@
 * Stripe metadata carries the Grade10 payment reference.
 * The provider reference appears on no winner-facing surface.
 
+### winner-order-US22-TC5-1: Bank instructions keep the no-Copy rule
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-22
+
+**Pre-conditions:**
+
+* A pending bank-transfer invoice has payment reference `LK423`.
+
+**Steps:**
+
+1. Open View Bank Details.
+2. Inspect the visible rail fields, amount due, and payment reference.
+
+**Expected Results:**
+
+* The three bank-transfer rails show the payment reference to quote.
+* No Copy control appears for a rail field, amount due, or payment reference.
+
 ## Reconciliation
 
 | Finding | Disposition |
@@ -284,5 +313,6 @@
 | Required identifier scenarios SC-114 and SC-122–SC-128 | Preserved in the winner-order spec; cases cover the changed identifier behavior. |
 | Existing receipt identifier scenario SC-131 | The winner-facing identifier retains the listing payment reference; this change does not change its existing format or receipt breakdown. |
 | UUID/listing-ID projection | A projection may collide; the allocator retries against active codes and retained reservations. |
+| Bank-transfer copy controls | Settled: View Bank Details keeps no Copy controls for rail fields, amount due, and the payment reference. |
 | Admin permission and placement | Settled: existing listing-admin read access shows the code in both the Listings table and detail screen; knowing it cannot grant access or private data. |
 | Cached-preview behavior | Settled in Q15: previously cached content may persist without purge or regeneration; current pages and fresh metadata omit the code and private data. |
