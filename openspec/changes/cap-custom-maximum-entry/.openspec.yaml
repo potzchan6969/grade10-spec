@@ -1,3 +1,10 @@
 schema: grade10-planning
 created: 2026-09-14
 promoted_by: "@mason5991"
+hands:
+  pm: "@htonyl"
+  design: "@htonyl"
+  tech: "@htonyl"
+  qa: "@htonyl"
+  dev: "@htonyl"
+  release: "@htonyl"
