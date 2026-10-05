@@ -1,6 +1,6 @@
 # grade10-admin/auction Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-e2e-US1: Operator announces an event and puts a lot under it
@@ -52,8 +52,8 @@
 
 **Expected Results:**
 
-* Step 2 shows <campaign_1> as published.
-* Step 3 shows the cover for <campaign_1>.
+* Step 2 shows <campaign_1> moved to published.
+* Step 3 shows the cover for <campaign_1> as a public cover.
 * Step 3 leaves <listing_1> off the catalogue.
 * Step 3 leaves <listing_2> off the catalogue.
 * Step 6 shows <listing_1> on the catalogue.
@@ -74,7 +74,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
@@ -108,9 +108,9 @@
 
 **Expected Results:**
 
-* Step 2 shows <campaign_2> as canceled.
-* Step 3 shows <listing_3> as canceled.
-* Step 4 shows <listing_4> as canceled.
+* Step 2 shows <campaign_2> moved to canceled.
+* Step 3 shows <listing_3> as canceled under the listing cancel rules.
+* Step 4 shows <listing_4> as canceled under the listing cancel rules.
 * Step 5 does not return <listing_3>.
 * Step 6 shows neither the cover nor the lots.
 
