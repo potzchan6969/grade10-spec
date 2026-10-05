@@ -123,8 +123,12 @@ jobs:
           fi
 
       # The head the Manual workflow last deployed before this one: the newest
-      # successful run on `main` older than the run that woke this one. A
-      # store whose first deploy this is reads from the head's parent.
+      # successful run on `main` older than the run that woke this one. The
+      # newest 100 runs are read unfiltered and the conclusion is checked
+      # here: the API's own `status=success` filter answered a run two weeks
+      # old while a successful one an hour old sat beside it. A head that is
+      # not an ancestor, or no success among the 100, reads from the head's
+      # parent rather than from somewhere nobody chose.
       - name: Find the last deployed head
         id: range
         env:
@@ -135,12 +139,13 @@ jobs:
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           base="$(gh api \
-            "repos/$REPOSITORY/actions/workflows/$WORKFLOW_ID/runs?branch=main&status=success&per_page=50" \
-            --jq "[.workflow_runs[] | select(.run_number < $RUN_NUMBER)] | sort_by(.run_number) | last | .head_sha // empty")"
-          if [ -z "$base" ]; then
+            "repos/$REPOSITORY/actions/workflows/$WORKFLOW_ID/runs?branch=main&per_page=100" \
+            --jq "[.workflow_runs[] | select(.conclusion == \"success\" and .run_number < $RUN_NUMBER)] | sort_by(.run_number) | last | .head_sha // empty")"
+          if [ -z "$base" ] || ! git merge-base --is-ancestor "$base" "$HEAD_SHA"; then
             base="$(git rev-parse "$HEAD_SHA^")"
-            echo "::notice::No earlier successful deploy; reading from $base."
+            echo "::notice::No earlier successful deploy on this history; reading from $base."
           fi
+          echo "Reading $base..$HEAD_SHA ($(git rev-list --count "$base..$HEAD_SHA") commits)."
           echo "base=$base" >> "$GITHUB_OUTPUT"
 
       # No `restore-keys`: a prefix fallback would drag the previous push's

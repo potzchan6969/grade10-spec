@@ -205,6 +205,15 @@ test("the notifier runs once the manual and the viewer deployed, and only then",
   assert.doesNotMatch(notifyText, /github\.sha\b|github\.event\.before/);
 });
 
+test("the notifier finds the last deployed head by each run's conclusion, never the API's status filter", () => {
+  // `status=success` answered a run two weeks old while one an hour old had
+  // succeeded, and the post that range made was too long for Slack.
+  const step = notify.jobs.notify.steps.find((one) => one.id === "range");
+  assert.doesNotMatch(step.run, /status=success/);
+  assert.match(step.run, /\.conclusion == \\"success\\"/);
+  assert.match(step.run, /git merge-base --is-ancestor "\$base" "\$HEAD_SHA"/);
+});
+
 test("the manual deploys on every push the notifier reads", () => {
   // A page landing can put an artifact behind, and its hand is told; a change
   // moving is a milestone. Each must start a deploy, or the notifier never
