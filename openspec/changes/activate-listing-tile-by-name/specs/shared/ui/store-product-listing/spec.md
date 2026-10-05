@@ -10,8 +10,10 @@ through named callbacks, each identifying the product.
 
 When the consumer supplies a tile-activation callback and the product is not
 sold out, both the product image and the product name SHALL activate that
-callback. When no callback is supplied, or the product is sold out, the image
-and the name SHALL remain inert.
+callback. When no callback is supplied, the image and the name SHALL remain
+inert. When the product is sold out, the image and the name SHALL remain inert
+where the consumer supplies a cart handler, and SHALL still activate where an
+activation handler is supplied and no cart handler is.
 
 A tile SHALL NOT offer a wishlist control.
 
@@ -71,9 +73,10 @@ product is sold out, or hold a cart quantity.
 - **THEN** tile activation is reported once, identifying that product
 
 #### Scenario: shared-ui-store-product-listing-SC-88 - A sold-out name stays inert
-**Serves:** Tile contract - a sold-out name stays inert
+**Serves:** Tile contract - a sold-out name stays inert where the tile sells
 
-- **GIVEN** a product supplied as sold out and a tile-activation callback
+- **GIVEN** a product supplied as sold out, a tile-activation callback, and a
+  cart handler
 - **WHEN** the tile renders
 - **THEN** the product name does not activate
 - **AND** activating the name does not report tile activation

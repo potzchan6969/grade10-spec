@@ -71,7 +71,7 @@ The product listing lets collectors browse the catalogue and open a product.
 
 🚧 **Name opens the product** — the product name on a listing card opens
 Product Details the same way the photo does; a sold-out card’s name stays
-inert.
+inert where the tile sells.
 
 **Signed-out Add to cart** — opens the sign-in dialog titled
 **Sign In to Add to Cart**; no guest cart; after a successful sign-in the

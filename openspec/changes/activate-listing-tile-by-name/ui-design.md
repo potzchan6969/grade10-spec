@@ -16,7 +16,7 @@ always-underlined link.
 
 | Export | Package | Notes |
 | --- | --- | --- |
-| `ProductCard` | `@grade10/ui` | Name is a control when `onClick` is supplied and the product is not sold out; hover / focus underline |
+| `ProductCard` | `@grade10/ui` | Name is a control when `onClick` is supplied and the tile opens; sold-out stays inert where a cart handler is supplied; hover / focus underline |
 | `ProductList`, `ProductBrowse`, `ProductResultsPanel` | `@grade10/ui` | Pass through `onProductClick`; no new export |
 | `ProductCardImage` | `@grade10/ui` | Photo activation unchanged |
 
@@ -30,5 +30,6 @@ always-underlined link.
 | State | Spec scenario | Story |
 | --- | --- | --- |
 | Name activates with photo | `shared-ui-store-product-listing-SC-87` | [Named Once](?path=/story/store-product-listing-productcard--named-once), [ProductBrowse Default](?path=/story/store-product-listing-productbrowse--default) |
-| Sold-out name inert | `shared-ui-store-product-listing-SC-88` | [`ProductCard` → Sold Out](?path=/story/store-product-listing-productcard--sold-out) |
+| Sold-out name inert where the tile sells | `shared-ui-store-product-listing-SC-88` | [`ProductCard` → Sold Out](?path=/story/store-product-listing-productcard--sold-out) |
+| Sold-out that still opens | **Out of suite:** `shared-ui-store-product-listing-SC-91` on `add-store-cross-sell` | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) |
 | No callback — name and photo inert | `shared-ui-store-product-listing-SC-89` | Omit `onClick` / `onProductClick` in isolation stories |
