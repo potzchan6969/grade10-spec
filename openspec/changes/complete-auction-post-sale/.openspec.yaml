@@ -5,3 +5,4 @@ depends_on:
   - define-public-auction-identifiers
 hands:
   pm: "@ecchochan"
+ui_waived: "the designer approved these post-sale surfaces without a ui-design.md"
