@@ -340,6 +340,7 @@ audit.
 - **AND** its before snapshot carries no Cert record and its after snapshot
   carries the new record with `BGS-88`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-68f rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-172 - A regular stock reduction records its units and remarks
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads why stock fell without a withdrawal
@@ -354,6 +355,7 @@ audit.
   Cert record, and before and after show stock falling by two
 - **AND** before and after show the same reserved, sold, withdrawn and vaulted
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-s46 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-173 - A Cert record removal records the Cert ID it removed
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads which numbered unit was taken out
@@ -430,6 +432,7 @@ and holder reference SHALL be unchanged.
 - **AND** another reads `Cert ID change · No Cert ID → BGS-88`, with Remarks
   `—`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-mci rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-174 - The product history shows each intake reversal
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin finds every unit taken out as a mistake beside the other entries
@@ -577,6 +580,7 @@ moved and no active hold names.
 - **THEN** Grade10 refuses the write under existing Inventory authorization
 - **AND** the tag and source media remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-gpb rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-134 - Removing an available Cert unit withdraws the unit and its tagged media
 **Serves:** grade10-admin-inventory-catalog-US-13 - Operator removes an available copy and its source media
 
@@ -587,6 +591,7 @@ moved and no active hold names.
 - **AND** the Cert record and its tagged source media are removed
 - **AND** untagged product media and media tagged to other Cert records remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-k3v rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-135 - A Cert unit that fails a removal guard cannot be removed
 **Serves:** grade10-admin-inventory-catalog-US-13 - Operator removes an available copy and its source media
 
@@ -595,6 +600,7 @@ moved and no active hold names.
 - **THEN** Grade10 refuses the removal
 - **AND** the reservation, stock, withdrawn count, Cert record, and tagged source media remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-lvy rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-175 - Remove physical unit is offered only on a record that has moved
 
 **Serves:** `grade10-admin-inventory-catalog-US-13`, `grade10-admin-inventory-catalog-US-16` - each Cert record offers one way out
@@ -670,6 +676,7 @@ unit SHALL be reachable however old it is.
   to the end
 - **THEN** the history reaches its intake entry
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-oth rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-176 - A No Cert ID row shows a reduction
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin reads why the regular stock count fell
@@ -751,6 +758,7 @@ row only while the reducible count is at least 1. While the reducible count
 is 0 and the row reads at least 1, the row SHALL show that its units were
 intaken before regular stock last moved and cannot be reduced.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-w4o rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-177 - Admin reduces regular stock intaken by mistake
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the admin takes back units counted twice
@@ -765,6 +773,7 @@ intaken before regular stock last moved and cannot be reduced.
   Available
 - **AND** one `intake-reversal` entry with quantity two is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-zoe rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-178 - A Cert ID assignment leaves regular stock reducible
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - numbering one unit does not lock the rest in
@@ -778,6 +787,7 @@ intaken before regular stock last moved and cannot be reduced.
 - **THEN** `No Cert ID` Available reads 0, `BGS-88` is still listed
   Available, and stock reads one
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-nnc rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-179 - Regular stock with nothing intaken since it moved cannot be reduced
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - units that were handled stay in the ledger
@@ -793,6 +803,7 @@ intaken before regular stock last moved and cannot be reduced.
 - **WHEN** a reduction of one unit is sent anyway on each
 - **THEN** Grade10 refuses all three, and no count or entry changes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-srm rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-180 - A Cert record's moves leave regular stock reducible
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a sold numbered card does not stop the admin fixing the count
@@ -804,6 +815,7 @@ intaken before regular stock last moved and cannot be reduced.
 - **THEN** Grade10 accepts it: stock falls by two and sold is unchanged
 - **AND** `No Cert ID` Available reads 0 and the hold on `BGS-88` is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-zu3 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-181 - A quantity outside one to the reducible count is refused
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the admin cannot take out more than was intaken since the last move
@@ -815,6 +827,7 @@ intaken before regular stock last moved and cannot be reduced.
 - **THEN** Grade10 refuses each
 - **AND** stock reads as before and no entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-9lp rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-194 - An over-intake after a sale can be reduced by the units intaken since
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a product with sales can still fix an over-intake
@@ -830,6 +843,7 @@ intaken before regular stock last moved and cannot be reduced.
 - **AND** the row offers no `Reduce quantity` and shows that its units were
   intaken before regular stock last moved
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sm9 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-195 - A Cert ID given after the latest move lowers the reducible count
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a unit numbered from the over-intake is no longer regular stock to take out
@@ -843,6 +857,7 @@ intaken before regular stock last moved and cannot be reduced.
 - **WHEN** a reduction of 10 units is sent anyway
 - **THEN** Grade10 refuses it, and no count or entry changes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-c7i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-196 - A move after an intake ends that intake's reduction
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - units intaken before regular stock was handled stay in the ledger
@@ -883,6 +898,7 @@ record.
 
 Cert ID details SHALL offer `Remove` only on an unmoved Cert record.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-cbm rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-182 - Admin removes a Cert record intaken by mistake
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the admin takes out a card that never arrived
@@ -898,6 +914,7 @@ Cert ID details SHALL offer `Remove` only on an unmoved Cert record.
 - **AND** the image tagged to `PSA-1234` is deleted, and the image tagged to
   `PSA-5` and the untagged image remain
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-i1t rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-183 - A removed Cert ID can be intaken again
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the right card can arrive under the same number
@@ -910,6 +927,7 @@ Cert ID details SHALL offer `Remove` only on an unmoved Cert record.
 - **AND** Cert ID details lists a Cert record `PSA-1234`, Available, whose
   history starts at that intake
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-8rx rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-184 - A record numbered from regular stock can be removed
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a unit numbered and then found never received leaves whole
@@ -920,6 +938,7 @@ Cert ID details SHALL offer `Remove` only on an unmoved Cert record.
 - **THEN** `BGS-88` is no longer listed and stock reads two
 - **AND** `No Cert ID` Available still reads 2
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-8m1 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-185 - A Cert record that has moved is not reversed
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a card once handled stays in the ledger
@@ -931,6 +950,7 @@ Cert ID details SHALL offer `Remove` only on an unmoved Cert record.
 - **WHEN** a removal of either as never received is sent anyway
 - **THEN** Grade10 refuses it, and no record, count, media or entry changes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-x7l rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-186 - A hold moved to another product still counts
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a card a listing once held stays handled after the listing changes product
@@ -968,6 +988,7 @@ on the `No Cert ID` row, while the number is empty or not a whole number from
 1 to the reducible count. Cancelling SHALL change nothing and append no entry.
 The entry's reason SHALL be the remarks as confirmed, trimmed.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-9iv rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-187 - The confirmation names the Cert record and cancelling changes nothing
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - a misclick takes nothing out
@@ -982,6 +1003,7 @@ The entry's reason SHALL be the remarks as confirmed, trimmed.
 - **THEN** `PSA-1234` is still listed with its image, stock reads three and no
   entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-4jy rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-188 - The number opens empty and edited remarks are recorded
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the admin chooses the number on purpose and says why the count was wrong
@@ -998,6 +1020,7 @@ The entry's reason SHALL be the remarks as confirmed, trimmed.
 - **THEN** the `intake-reversal` entry records quantity three and the reason
   `Counted twice at intake`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-7hq rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-189 - Empty remarks cannot be confirmed
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - every unit taken out says why
@@ -1010,6 +1033,7 @@ The entry's reason SHALL be the remarks as confirmed, trimmed.
 - **THEN** Grade10 refuses it, and `PSA-1` is still listed with no entry
   appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-grz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-197 - Each reversal action explains itself on hover
 
 **Serves:** grade10-admin-inventory-catalog-US-16 - the admin tells a reversal from a withdrawal before choosing it
@@ -1028,6 +1052,7 @@ Reversing an intake SHALL need the grant that intake needs. An inventory
 admin with read access only SHALL see the rows and the history in Cert ID
 details, with no `Reduce quantity` and no `Remove`.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-4lh rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-190 - A reader without the write grant cannot reverse an intake
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - a reader accounts for units without taking any out
@@ -1047,6 +1072,7 @@ reducible count in the transaction that writes it, after any hold, sale,
 intake, Cert ID change or reversal on the same product that committed first.
 It SHALL land whole or not at all.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-gbg rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-191 - A hold taken first refuses the removal
 
 **Serves:** Cert ID details - a hold and a removal on one card never both land
@@ -1058,6 +1084,7 @@ It SHALL land whole or not at all.
 - **AND** the hold names `PSA-1`, stock is unchanged and no `intake-reversal`
   entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-y0i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-192 - A hold on regular stock taken first refuses the reduction
 
 **Serves:** Cert ID details - a hold and a reduction on regular stock never both land
