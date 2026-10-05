@@ -13,12 +13,13 @@ the workaround today, which should fall to none.
 
 ## What Changes
 
-- **Regular stock entered by mistake can be reduced.** While regular stock
-  has only been intaken - never held, sold, withdrawn or vaulted - the admin
-  reduces the `No Cert ID` available count in Cert ID details by up to its
-  units. Stock and the ledger fall by that number; withdrawn does not move.
-- **A Cert record entered by mistake can be removed.** A Cert record that has
-  only been intaken - the same records whose Cert ID can be corrected - can be
+- **Regular stock entered by mistake can be reduced.** With `Reduce
+  quantity` on the `No Cert ID` available row in Cert ID details, the admin
+  takes out units intaken since regular stock last moved - was held, sold,
+  withdrawn or vaulted - never more than are available. Stock and the ledger
+  fall by that number; withdrawn does not move.
+- **A Cert record entered by mistake can be removed.** With `Remove`, a Cert
+  record that has only been intaken - the same records whose Cert ID can be corrected - can be
   removed as if it was never received. Its tagged media go with it, as on
   Remove physical unit. Stock and the ledger fall by one; withdrawn does not
   move.

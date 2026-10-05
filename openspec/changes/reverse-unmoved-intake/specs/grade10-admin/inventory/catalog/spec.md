@@ -60,7 +60,7 @@
   - Correct a Cert ID: an available Cert record takes another Cert ID unused on its product
   - Assign a Cert ID: one available unit of regular stock becomes a Cert record with its Cert ID alone
   - Cert ID history: each change is one history entry naming the Cert ID before and after
-  - Reverse a mistaken intake: regular stock never held, sold, withdrawn or vaulted can be reduced by up to its available count, and a Cert record that has only been intaken can be removed with its tagged media; stock and the ledger fall, withdrawn does not
+  - Reverse a mistaken intake: regular stock intaken since regular stock was last held, sold, withdrawn or vaulted can be reduced, never beyond its available count, and a Cert record that has only been intaken can be removed with its tagged media; stock and the ledger fall, withdrawn does not
   - Confirm first: each reversal opens a confirmation naming what leaves, with remarks prefilled `Entered by mistake`, editable and never empty; cancelling changes nothing
   - Reversal history: each reversal is one history entry under its own action, apart from intake and withdraw
 - Cert-scoped source media
