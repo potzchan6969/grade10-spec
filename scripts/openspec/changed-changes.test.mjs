@@ -13,7 +13,6 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
-  classifyCapabilities,
   classifyChanges,
   parseChangedFiles,
   showAt,
@@ -116,101 +115,73 @@ test("does not report untouched changes when the diff is empty", () => {
   });
 });
 
-test("classifies durable capability files by capability and scope", () => {
-  assert.deepEqual(
-    classifyCapabilities([
-      {
-        oldPath: null,
-        path: "openspec/specs/grade10-site/auction/winner-journey/spec.md",
-        status: "A",
-      },
-      {
-        oldPath: null,
-        path: "openspec/specs/grade10-site/auction/winner-journey/user-journeys.md",
-        status: "M",
-      },
-      {
-        oldPath: null,
-        path: "openspec/specs/grade10-site/auction/winner-journey/feature-tcs.md",
-        status: "D",
-      },
-    ]),
-    {
-      new: [
-        {
-          id: "grade10-site/auction/winner-journey",
-          path: "grade10-site/auction/winner-journey",
-          scopes: ["spec"],
-        },
-      ],
-      updated: [
-        {
-          id: "grade10-site/auction/winner-journey",
-          path: "grade10-site/auction/winner-journey",
-          scopes: ["user-journeys"],
-        },
-      ],
-      archived: [],
-      removed: [
-        {
-          id: "grade10-site/auction/winner-journey",
-          path: "grade10-site/auction/winner-journey",
-          scopes: ["test-cases"],
-        },
-      ],
-    },
-  );
-});
-
-test("builds one Slack section for each changed status", () => {
+test("builds one Slack section for each milestone, in the order a change meets them", () => {
   const payload = slackPayload({
-    changes: {
-      new: [
-        { id: "new-change", title: "Add a cart", scopes: ["proposal", "spec"] },
-      ],
-      updated: [
-        {
-          id: "active-change",
-          title: "Update <copy>",
-          scopes: ["tech-design"],
-        },
-      ],
-      archived: [
-        { id: "finished-change", title: "Finish a change", scopes: ["tasks"] },
-      ],
-      removed: [
-        { id: "old-change", title: "Remove a change", scopes: ["proposal"] },
-      ],
-    },
+    milestones: [
+      { id: "new-change", milestone: "proposed", title: "Add a cart" },
+      { id: "signed-off", milestone: "accepted", title: "Sign <it> off" },
+      {
+        id: "picked-up",
+        milestone: "claimed",
+        title: "Pick it up",
+        claims: [
+          { num: "1", owner: "erin" },
+          { num: "3", owner: "dana" },
+        ],
+      },
+      {
+        id: "built",
+        milestone: "completed",
+        title: "Build it",
+        tasks: { done: 4, total: 4 },
+      },
+      { id: "finished-change", milestone: "archived" },
+    ],
     commitSha: "1234567890",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/1234567890",
     manualUrl: "https://spec.grade10-stg.com/planning",
     openspecUrl: "https://spec.grade10-stg.com/openspec/",
   });
 
-  assert.equal(payload.blocks.length, 5);
+  assert.equal(payload.blocks.length, 6);
   assert.equal(
     payload.blocks[0].text.text,
-    ":new: OpenSpec *New*\n- <https://spec.grade10-stg.com/openspec/#/change/new-change|Add a cart> (`new-change`) — `proposal`, `spec`",
+    ":new: *Proposed*\n- <https://spec.grade10-stg.com/openspec/#/change/new-change|Add a cart> (`new-change`)",
   );
   assert.equal(
     payload.blocks[1].text.text,
-    ":pencil2: OpenSpec *Updated*\n- <https://spec.grade10-stg.com/openspec/#/change/active-change|Update &lt;copy&gt;> (`active-change`) — `tech-design`",
+    ":white_check_mark: *Accepted* — requirements published to the specs and the manual\n- <https://spec.grade10-stg.com/openspec/#/change/signed-off|Sign &lt;it&gt; off> (`signed-off`)",
   );
   assert.match(
     payload.blocks[2].text.text,
-    /^:file_cabinet: OpenSpec \*Archived\*\n/,
+    /^:raising_hand: \*Implementation claimed\*\n.*\(`picked-up`\) — group 1 by @erin, group 3 by @dana$/,
   );
   assert.match(
     payload.blocks[3].text.text,
-    /^:wastebasket: OpenSpec \*Removed\*\n/,
+    /^:checkered_flag: \*Implementation complete\*\n.*\(`built`\) — 4\/4 tasks checked$/,
+  );
+  // An archived change with no title read falls back to its id, in words.
+  assert.match(
+    payload.blocks[4].text.text,
+    /^:file_cabinet: \*Archived\*\n.*\|finished change> \(`finished-change`\)$/,
   );
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
 });
 
+test("builds no post for a push that crossed no milestone", () => {
+  const payload = slackPayload({
+    milestones: [],
+    commitSha: "1234567890",
+    commitUrl: "",
+    manualUrl: "https://spec.grade10-stg.com/planning",
+  });
+
+  assert.deepEqual(payload.blocks, []);
+});
+
 test("names the commit sha in plain text when no --commit-url was given", () => {
   const payload = slackPayload({
-    changes: { new: [], updated: [], archived: [], removed: [] },
+    milestones: [{ id: "new-change", milestone: "proposed", title: "Add" }],
     commitSha: "1234567890",
     commitUrl: "",
     manualUrl: "https://spec.grade10-stg.com/planning",
@@ -222,33 +193,6 @@ test("names the commit sha in plain text when no --commit-url was given", () => 
     "<https://spec.grade10-stg.com/planning|Planning> | 1234567",
   );
   assert.doesNotMatch(text, /<\|/);
-});
-
-test("includes durable capability links in the Slack payload", () => {
-  const payload = slackPayload({
-    changes: { new: [], updated: [], archived: [], removed: [] },
-    capabilities: {
-      new: [
-        {
-          id: "grade10-site/auction/winner-journey",
-          path: "grade10-site/auction/winner-journey",
-          scopes: ["spec"],
-        },
-      ],
-      updated: [],
-      archived: [],
-      removed: [],
-    },
-    commitSha: "1234567890",
-    commitUrl: "https://github.com/9gag/grade10-spec/commit/1234567890",
-    manualUrl: "https://spec.grade10-stg.com/planning",
-    openspecUrl: "https://spec.grade10-stg.com/openspec/",
-  });
-
-  assert.equal(
-    payload.blocks[0].text.text,
-    ":new: OpenSpec *New capabilities*\n- <https://spec.grade10-stg.com/openspec/#/spec/grade10-site/auction/winner-journey|grade10-site/auction/winner-journey> — `spec`",
-  );
 });
 
 // ── The stages, the hands and the messages ──────────────────────────────────
@@ -578,7 +522,8 @@ test("--stages names the stage a push moved a change into and tells its hand", (
     messages.map((one) => [one.key, one.channel]),
     [["probe:planned:dev", "U-ERIN"]],
   );
-  assert.match(payload.blocks[0].text.text, /Planned/);
+  // Planned is no milestone: the hand is told, the channel is not.
+  assert.deepEqual(payload.blocks, []);
 });
 
 test("shared-planning-change-stages-SC-47 - --stages tells each hand of its own change when one push moves two", () => {
@@ -604,9 +549,8 @@ test("shared-planning-change-stages-SC-47 - --stages tells each hand of its own 
 
   assert.equal(reached.probe, "planned");
   assert.equal(reached.other, "proposed");
-  const post = payload.blocks.map((block) => block.text?.text ?? "").join("\n");
-  assert.match(post, /probe.*Planned/s);
-  assert.match(post, /other.*Proposed/s);
+  // Neither change crossed a milestone, so the channel hears nothing.
+  assert.deepEqual(payload.blocks, []);
   assert.deepEqual(messages.map((one) => one.key).sort(), [
     "other:proposed:design",
     "other:proposed:tech",
@@ -660,7 +604,7 @@ test("shared-planning-change-stages-SC-38 - --stages tells nobody when a push on
 
   assert.equal(reached[CHANGE], "planned");
   assert.deepEqual(messages, []);
-  assert.match(payload.blocks[0].text.text, /probe.*Planned/s);
+  assert.deepEqual(payload.blocks, []);
 });
 
 test("shared-planning-change-stages-SC-70 - --stages names no change for a push that only writes the record's keys, and the thread still hears what landed", () => {
@@ -830,12 +774,10 @@ test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one
     ["probe:behind:decisions"],
   );
   assert.deepEqual(second.messages, []);
-  // The channel post is keyed by the push's own head, so it is written
-  // alongside the behind message and neither is written again on a re-run.
-  assert.deepEqual(
-    readFileSync(keys, "utf8").trim().split("\n").sort(),
-    [`channel:${head}`, "probe:behind:decisions"].sort(),
-  );
+  // Rewording a proposal crosses no milestone, so no channel post is keyed.
+  assert.deepEqual(readFileSync(keys, "utf8").trim().split("\n"), [
+    "probe:behind:decisions",
+  ]);
 });
 
 test("--stages keeps an unaccepted plan off implementation and QA notifications", () => {
@@ -919,6 +861,160 @@ test("shared-planning-change-stages-SC-42 - --stages posts to the role's channel
     messages.map((one) => [one.key, one.to, one.channel]),
     [["probe:planned:dev", "channel", "C-DEV"]],
   );
+});
+
+// ── The five milestones the channel post reports ────────────────────────────
+
+/** A valid acceptance record for the probe, as `pnpm spec:accept` writes it. */
+const ACCEPTANCE = JSON.stringify({
+  version: 1,
+  change: CHANGE,
+  baseline: "abc1234",
+  fingerprint: "sha256:probe",
+  reviewedBy: "@dana",
+  acceptedAt: "2026-10-01T00:00:00Z",
+  artifacts: [{ path: "proposal.md", sha256: "0".repeat(64) }],
+});
+
+/** A planned probe: every artifact through `tasks.md`, nothing checked. */
+const PLANNED = {
+  ...throughSpecs(),
+  [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+  [`${DIR}/proposal.md`]: proposalOf(),
+  [`${DIR}/tasks.md`]: tasksMd(0),
+};
+
+const milestonesOf = (root, base, head) =>
+  stages(root, ["--base", base, "--head", head])
+    .read()
+    .milestones.map((one) => [one.id, one.milestone]);
+
+test("--stages reports a change the product manager proposed", () => {
+  const { root, write, commit } = sandbox();
+  write({ "openspec/changes/other/proposal.md": proposalOf() });
+  const base = commit("an unrelated change", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const head = commit("propose probe", 1);
+
+  const { milestones, payload } = stages(root, [
+    "--base",
+    base,
+    "--head",
+    head,
+  ]).read();
+
+  assert.deepEqual(
+    milestones.map((one) => [one.id, one.milestone]),
+    [[CHANGE, "proposed"]],
+  );
+  assert.match(payload.blocks[0].text.text, /^:new: \*Proposed\*\n.*Probe/s);
+});
+
+test("--stages reports a change once its plan is accepted", () => {
+  const { root, write, commit } = sandbox();
+  write(PLANNED);
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/acceptance.json`]: ACCEPTANCE });
+  const head = commit("accept probe", 1);
+
+  assert.deepEqual(milestonesOf(root, base, head), [[CHANGE, "accepted"]]);
+});
+
+test("--stages reports the first claim on a change's plan, and not the second", () => {
+  const { root, write, commit } = sandbox();
+  write({ ...PLANNED, [`${DIR}/acceptance.json`]: ACCEPTANCE });
+  const base = commit("accept probe", 3);
+  write({
+    [`${DIR}/tasks.md`]: tasksMd(0).replace(
+      "(grade10-spec)",
+      "(grade10-spec) (owner: @erin)",
+    ),
+  });
+  const claimed = commit("claim probe group 1", 2);
+  write({
+    [`${DIR}/tasks.md`]: [
+      tasksMd(0).replace("(grade10-spec)", "(grade10-spec) (owner: @erin)"),
+      "## 2. Walk it (grade10-spec) (owner: @dana)",
+      "",
+      "- [ ] 2.1 Walk it",
+      "",
+    ].join("\n"),
+  });
+  const again = commit("claim probe group 2", 1);
+
+  const first = stages(root, ["--base", base, "--head", claimed]).read();
+  assert.deepEqual(
+    first.milestones.map((one) => [one.id, one.milestone, one.claims]),
+    [[CHANGE, "claimed", [{ num: "1", owner: "erin" }]]],
+  );
+  assert.match(first.payload.blocks[0].text.text, /group 1 by @erin/);
+  assert.deepEqual(milestonesOf(root, claimed, again), []);
+});
+
+test("--stages reports a change once every task is checked, and not for a tick before that", () => {
+  const { root, write, commit } = sandbox();
+  write({ ...PLANNED, [`${DIR}/acceptance.json`]: ACCEPTANCE });
+  const base = commit("accept probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(1) });
+  const half = commit("build probe 1.1", 2);
+  write({ [`${DIR}/tasks.md`]: tasksMd(2) });
+  const head = commit("build probe 1.2", 1);
+
+  assert.deepEqual(milestonesOf(root, base, half), []);
+  assert.deepEqual(milestonesOf(root, half, head), [[CHANGE, "completed"]]);
+  const { payload } = stages(root, ["--base", half, "--head", head]).read();
+  assert.match(payload.blocks[0].text.text, /2\/2 tasks checked/);
+});
+
+test("--stages reports a change moved into the archive, by its title at the base", () => {
+  const { root, git, write, commit } = sandbox();
+  write({ ...PLANNED, [`${DIR}/acceptance.json`]: ACCEPTANCE });
+  write({ [`${DIR}/tasks.md`]: tasksMd(2) });
+  const base = commit("finish probe", 3);
+  mkdirSync(join(root, "openspec/changes/archive"), { recursive: true });
+  git(["mv", DIR, `openspec/changes/archive/2026-10-02-${CHANGE}`]);
+  const head = commit("archive probe", 1);
+
+  const { milestones, payload } = stages(root, [
+    "--base",
+    base,
+    "--head",
+    head,
+  ]).read();
+
+  assert.deepEqual(
+    milestones.map((one) => [one.id, one.milestone]),
+    [[CHANGE, "archived"]],
+  );
+  assert.match(
+    payload.blocks[0].text.text,
+    /^:file_cabinet: \*Archived\*\n.*\|Probe>/s,
+  );
+});
+
+test("--stages reports every milestone one range crossed, in the order a change meets them", () => {
+  const { root, write, commit } = sandbox();
+  write({ "openspec/changes/other/proposal.md": proposalOf() });
+  const base = commit("an unrelated change", 3);
+  write({
+    ...PLANNED,
+    [`${DIR}/acceptance.json`]: ACCEPTANCE,
+    [`${DIR}/tasks.md`]: tasksMd(2).replace(
+      "(grade10-spec)",
+      "(grade10-spec) (owner: @erin)",
+    ),
+  });
+  const head = commit("the whole of probe at once", 1);
+
+  assert.deepEqual(milestonesOf(root, base, head), [
+    [CHANGE, "proposed"],
+    [CHANGE, "accepted"],
+    [CHANGE, "claimed"],
+    [CHANGE, "completed"],
+  ]);
 });
 
 test("--stages refuses a base the checkout cannot reach, naming the range", () => {
