@@ -101,7 +101,11 @@ QA1 and Dev readings and one human has resolved every raised question.
   accepted again
 - **Acceptance only** — an open Raised row SHALL hold acceptance alone and
   SHALL NOT hold Specified or any rung before it; the product manager's turn
-  at Specified SHALL be to resolve the open rows
+  at Specified SHALL be to resolve the open rows, a row about the tech design
+  among them, with the engineer's challenge informing the answer
+- **No engineer's sign-off** — acceptance SHALL NOT wait for a separate
+  record of the engineer's word on the tech design; the engineer's challenge
+  lands as decisions rows or Raised rows, which already hold acceptance
 
 #### Scenario: shared-planning-change-stages-SC-79 - Acceptance waits for every raised question
 **Serves:** shared-planning-change-stages-US-02 - the product manager accepts only a reconciled plan whose questions are resolved
@@ -301,11 +305,13 @@ requirements and the suite rather than at Designed.
   Designed, and the change SHALL name the tech design as what it owes
 - **Its hand** - the tech design's hand SHALL be the engineer, `dev`: the
   engineer who will build the change SHALL challenge it before acceptance,
-  with no role of its own, and the human who accepts the plan SHALL judge it
-  whole with the requirements and the suite
+  prompted by the Planned turn's move, with no role and no message of its
+  own, and the human who accepts the plan SHALL judge it whole with the
+  requirements and the suite
 - **A question it cannot settle** - SHALL be a Raised row in the change's
   decisions, which holds acceptance and not Specified, and SHALL NOT be a
-  wait on another hand
+  wait on another hand; the product manager SHALL answer it, with the
+  engineer's challenge informing the answer
 
 #### Scenario: shared-planning-change-stages-SC-85 - The UI design alone proves Designed
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a change whose UI design has landed and whose planning run has not started
@@ -353,7 +359,7 @@ human's record, and nobody drafts it.
 | 1 | Proposed | the marks and the three files, from what the hand asks | answer |
 | 2 | Designed | the UI design, from the page and the journeys | the designer's: tweak |
 | 3 | Specified | QA1's blind cases, Dev's independent tech design, requirements and scenarios, then QA2's reconciliation | the product manager's: resolve the open Raised rows |
-| 4 | Planned | the tasks | read |
+| 4 | Planned | the tasks | read the plan and challenge the tech design |
 | 6 | Building | each group, test first | read each landing |
 
 #### Scenario: shared-planning-change-stages-SC-10 - The mark and the move on a lane and a step
@@ -467,7 +473,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads across the lanes to see who each change waits on
 
 **WHEN** a change in Specified, Planned, Accepted, Building and Implementation complete is read in turn
-**THEN** the turns SHALL name the product manager alone while specified, to resolve the open Raised rows, Dev while planned, the accepting human while accepted, Dev while building, and QA for post-implementation verification
+**THEN** the turns SHALL name the product manager alone while specified, to resolve the open Raised rows, Dev while planned, to read the plan and challenge the tech design, the accepting human while accepted, Dev while building, and QA for post-implementation verification
 **AND** a change in Designed or Archived SHALL name nobody
 
 #### Scenario: shared-planning-change-stages-SC-17 - A hand nobody has named
@@ -685,6 +691,10 @@ An open question is a line nobody has answered yet, and it holds no stage.
 - **A role outside the five** — a question naming one SHALL be listed under
   that role and routed to its channel, the way an unnamed hand is
 - **Holds nothing** — an open question SHALL hold no stage
+- **Not a Raised row** — an open Raised row SHALL NOT be an open question: it
+  SHALL stay out of the counts, My turn and the digest, and the product
+  manager SHALL learn of it from the Specified turn and from `spec:accept`'s
+  refusal naming it
 
 #### Scenario: shared-planning-change-stages-SC-32 - A decisions row nobody has settled
 **Serves:** shared-planning-change-stages-US-03 - the teammate the row names reads it on the page listing their work
@@ -711,6 +721,16 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **WHEN** the change page is read
 **THEN** the decisions row SHALL show a count of two
 **AND** the UI design SHALL show the handle that landed it
+
+#### Scenario: shared-planning-change-stages-SC-88 - An open Raised row is not an open question
+**Serves:** shared-planning-change-stages-US-02 - the product manager learns of an open Raised row from the Specified turn and the refusal, not from the question lists
+
+**GIVEN** a change in Specified with one open Raised row and no `❓` decisions row or page line
+**WHEN** the change page, My turn and the digest are read
+**THEN** the decisions SHALL show no open question count
+**AND** neither My turn nor the digest SHALL list the row as an open question
+**AND** the turn SHALL be the product manager's, to resolve the open Raised rows
+**AND** `spec:accept` SHALL refuse and name the row
 
 #### Scenario: shared-planning-change-stages-SC-35 - An open question holds nothing
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a change that moved with a question still open
