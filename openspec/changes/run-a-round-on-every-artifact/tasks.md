@@ -106,10 +106,12 @@ Needs group 9 on this store's `main` and pinned, so the pinned suites can carry 
 - [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and `check:libs` runs it on every CI pass - `shared-planning-agent-rounds-SC-107`
 - [ ] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`
 
-## 11. The accepting human reads the tech design (grade10-spec)
+## 11. The engineer challenges the tech design (grade10-spec)
 
-The revision of 2026-10-05 (`Q112` to `Q114`). It lands in one push with `stage-changes-and-notify-hands`' group 10, which retires `/workflow-tech`, the `tech` role and `planning-dev`'s dated wait; this group holds only what that one does not, and 11.2 is the reason they move together: 10.7's edit to `planning-dev` breaks the `SC-50` test it retires.
+The revision of 2026-10-05 and 2026-10-06 (`Q112` to `Q115`). It lands in one push with `stage-changes-and-notify-hands`' group 10, which retires `/workflow-tech`, the `tech` role and `planning-dev`'s dated wait; this group holds only what that one does not, and 11.2 is the reason they move together: 10.7's edit to `planning-dev` breaks the `SC-50` test it retires.
 
 - [ ] 11.1 Tests, in their own commit before 11.2: one `round-skill.test.mjs` test that `planning-dev`'s requirements pass reads `tech-design.md` beside `ui-design.md`, sends a question the design cannot settle to a Raised row, and names no `awaiting: tech-design:` line - `shared-planning-agent-rounds-SC-108`
 - [ ] 11.2 Retire the tests of shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) from `round-skill.test.mjs`, beside group 10's edit to `planning-dev` step 2 - `shared-planning-agent-rounds-SC-108`
+- [ ] 11.4 Tests, in 11.1's commit: the `SC-71` test in `round-skill.test.mjs` reads that `workflow-round` draws `feature-tcs.md` never from `tech-design.md` or `spec.md`, and that `workflow-plan` drafts the cases, the tech design and the requirements in that order - `shared-planning-agent-rounds-SC-71`
+- [ ] 11.5 `workflow-round`'s Draft ahead and `workflow-plan`'s The Whole Plan in One Wake name that order and the cases drawn blind from the anchors, before the tech design; the cases' `upstream:` without `tech-design` is group 10's 10.14 - `shared-planning-agent-rounds-SC-71`
 - [ ] 11.3 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm check:manual` and `openspec validate run-a-round-on-every-artifact --strict`

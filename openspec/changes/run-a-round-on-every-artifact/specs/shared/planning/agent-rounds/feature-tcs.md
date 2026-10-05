@@ -566,7 +566,7 @@ Runs once per row of **Test data**.
 
 | The hand who remarks | The page gains |
 | --- | --- |
-| admin(designer of <change>) | a ❓ line for the product manager |
+| admin(designer of <change>) | a `❓` line for the product manager |
 | admin(product manager of <change>) | the remark applied as written |
 
 **Steps:**
@@ -670,10 +670,10 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-planning-agent-rounds-US3: Product manager challenges the proposed tech design before accepting
+## shared-planning-agent-rounds-US3: Engineer challenges the proposed tech design before acceptance
 
-**As a** product manager who accepts the plan,
-**I want** the proposed system, its data flow and its rejected options in a summary I can challenge before I accept,
+**As an** engineer who will build the change,
+**I want** the proposed system, its data flow and its rejected options in a summary I can challenge in the thread before the plan is accepted,
 **so that** a wrong mechanism is caught before anything is built from it.
 
 ### shared-planning-agent-rounds-US3-TC1-1: Summary carries the system, the flow and what was rejected
@@ -693,20 +693,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The `/planning-dev` run on <change> has drafted `tech-design.md`, `spec.md` and `feature-tcs.md` on <change>'s branch, and the plan is not accepted.
-* The run's summary is posted in <change thread>.
-* admin(product manager of <change>) is in <change thread>.
+* `tech-design.md` is drafted on <change>'s branch, its summary is posted in <change thread>, and the plan is not accepted.
+* admin(engineer of <change>) is in <change thread>.
 
 **Steps:**
 
 1. Open <change thread>.
-2. Read the plan's summary.
+2. Read the tech design's summary.
 
 **Expected Results:**
 
 * The summary names the proposed system, its data flow and the options rejected.
-* It fits one screen.
-* Each numbered question carries the agent's recommendation.
+* Each numbered question it carries has the agent's recommendation.
 
 ### shared-planning-agent-rounds-US3-TC2-1: Challenge becomes a decisions row with the agent's answer
 
@@ -725,9 +723,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The `/planning-dev` run on <change> has drafted `tech-design.md` on <change>'s branch, and the plan is not accepted.
-* The run's summary is posted in <change thread>.
-* admin(product manager of <change>) is in <change thread>.
+* `tech-design.md` is drafted on <change>'s branch, its summary is posted in <change thread>, and the plan is not accepted.
+* admin(engineer of <change>) is in <change thread>.
 
 **Steps:**
 
@@ -758,12 +755,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The `/planning-dev` run on <change> has drafted `tech-design.md`, its readers have run, and the summary is posted in <change thread>.
-* admin(product manager of <change>) is in <change thread>.
+* `tech-design.md` is drafted on <change>'s branch, its readers have run, and its summary is posted in <change thread>.
+* admin(engineer of <change>) is in <change thread>.
 
 **Steps:**
 
-1. Read the plan's summary in <change thread>.
+1. Read the tech design's summary in <change thread>.
 2. Read the tech design's row in `rounds.md`.
 
 **Expected Results:**
@@ -788,22 +785,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The `/planning-dev` run on <change> needs <a mechanism the tech design cannot settle> for a requirement.
-* admin(product manager of <change>) is in <change thread>.
+* `tech-design.md` is drafted on <change>'s branch, needing <a mechanism the tech design cannot settle> for a requirement, and its summary is posted in <change thread>.
+* admin(engineer of <change>) and admin(product manager of <change>) are in <change thread>.
+* admin(human who accepts <change>'s plan) is at a terminal in the store.
 
 **Steps:**
 
-1. Read the plan's summary in <change thread>.
+1. As the engineer, read the tech design's summary in <change thread>.
 2. Check `decisions.md` and the change's record.
-3. Accept <change>'s plan.
-4. Answer the Raised row.
-5. Accept <change>'s plan again.
+3. As the human who accepts the plan, run `pnpm spec:accept` for <change>.
+4. As the product manager, reply `<the Raised row's id>: <answer>` in <change thread>.
+5. As the human who accepts the plan, run `pnpm spec:accept` for <change> again.
 
 **Expected Results:**
 
 * Step 1 names <a mechanism the tech design cannot settle> as a held question with its recommendation.
 * Step 2 shows a Raised row for it, and no dated `awaiting: tech-design:` line.
-* Step 3 is refused, naming the Raised row; the plan is not accepted.
+* Step 3 is refused, naming the open Raised row; the plan is not accepted.
+* Step 4 writes the answer into the Raised row.
 * Step 5 accepts the plan.
 
 ---
@@ -933,7 +932,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The page carries a ❓ line for <a product detail nobody has confirmed>.
+* The page carries a `❓` line for <a product detail nobody has confirmed>.
 * `decisions.md` holds no numbered row for it.
 
 ### shared-planning-agent-rounds-US4-TC5-1: Question ids are per change and never reused
@@ -2314,6 +2313,39 @@ Runs once per row of **Test data**.
 
 * The preflight ends as the table names.
 * A refusal names what the record lacks and the row that would fill it.
+
+### shared-planning-agent-rounds-US8-TC7-1: A failed run-sheet row reaches the thread only as QA's sentence
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Pre-conditions:**
+
+* <change> is on staging and its run tab holds <a case still manual>.
+* admin(QA of <change>) has the run tab open and is in <change thread>.
+
+**Steps:**
+
+1. Mark <a case still manual> failed on the run tab.
+2. Read <change thread>.
+3. Reply in <change thread> with a sentence naming <a case still manual>'s id and what failed.
+4. Open the run tab again.
+
+**Expected Results:**
+
+* Step 2 shows no message about the failure in <change thread>.
+* Step 3's sentence is in <change thread>, naming the case id.
+* The run tab still holds <a case still manual> marked failed.
 
 ---
 

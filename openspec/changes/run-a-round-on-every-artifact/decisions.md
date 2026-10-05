@@ -152,9 +152,10 @@ moved goal does, and where a remark on the page lands. Each landed as a
 the page.
 
 The revision on 2026-10-05 settles `Q112` to `Q114`: the tech PIC is retired,
-Dev writes the tech design in the planning run, and the product manager who
-accepts the plan challenges it. Its blind pass raised four questions, each
-answered by an earlier row.
+Dev writes the tech design in the planning run, and, revised on 2026-10-06,
+the engineer who will build the change challenges it before acceptance; the
+same day settles `Q115`. Its blind pass raised four questions, each answered
+by an earlier row.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
@@ -170,8 +171,8 @@ answered by an earlier row.
 | shared/planning/agent-rounds | A `reviewed:` line the agent lands on its own (Q1): does it owe a round row, which Q7 refuses a landed artifact without, or is a no-op read not a round? | Q22 |
 | shared/planning/agent-rounds | Answering a moved-goal question extend, supersede or split: does each answer do something to the change - a new change, a closed one - or does it only record the product manager's word? | Q26 |
 | shared/planning/agent-rounds | No journey walks the product manager reading the requirements and the cases together at the reconciliation (Q9, the blind readings' stops). Is that the hand of US-05, or a journey not yet written? | Q27 |
-| shared/planning/agent-rounds | A remark that touches a page's marked lines rather than the artifact: is it applied to the page as written, or asked as a `❓` line for the page's owner? | Q28 |
-| shared/planning/agent-rounds | Where does the product manager who accepts the plan read and challenge the tech design's summary: in the change's thread, or in the `/planning-dev` session that wrote it? | Q112 |
+| shared/planning/agent-rounds | A remark that touches a page's marked lines rather than the artifact: is it applied to the page as written, or asked as an open line for the page's owner? | Q28 |
+| shared/planning/agent-rounds | Where does the engineer read and challenge the tech design's summary: in the change's thread, or in the `/planning-dev` session that wrote it? | Q112 |
 | shared/planning/agent-rounds | How is a Raised row answered, and how is acceptance said: a `Q<n>` reply in the thread, `pnpm run spec:accept`, or both? | Q113 |
 | shared/planning/agent-rounds | Must the plan's summary state that the requirements and the suite are whole, or does the product manager judge that by reading them? | Q112 |
 | shared/planning/agent-rounds | Once the tech PIC's wait is retired, who writes the dated wait on the designer for a frame nobody drew: the round drafting the design, or any hand at a terminal? | Q58 |

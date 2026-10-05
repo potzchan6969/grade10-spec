@@ -193,7 +193,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-admin(product manager) <pm handle> holds <change B> at its current stage, owes two ❓ decisions rows on it, holds <change E> idle 9 days, owes the artifact <change M> waits on, is the hand of one behind artifact, and holds <change F>, which the release of its dependency has just freed.
+admin(product manager) <pm handle> holds <change B> at its current stage, owes two `❓` decisions rows on it, holds <change E> idle 9 days, owes the artifact <change M> waits on, is the hand of one behind artifact, and holds <change F>, which the release of its dependency has just freed.
 
 **Steps:**
 
@@ -424,6 +424,41 @@ Runs once per row of **Test data**.
 * The read stops with a refusal naming the path it could not open.
 * No message goes out for that push.
 
+### shared-planning-change-stages-US1-TC14-1: An open Raised row reaches Specified, tells the product manager and holds acceptance
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-01
+
+**Pre-conditions:**
+<change W> sits at Designed on `ui-design.md` with <pm handle> as its `pm` hand, known to the team map, and a thread. Its `decisions.md` holds one row under `## Raised` whose `Landed` cell is empty.
+
+**Steps:**
+
+1. Land <change W>'s `spec.md`, `feature-tcs.md` and `tech-design.md` in one push to `main`.
+2. Read <change W>'s card at <manual board url>.
+3. Read <pm handle>'s direct messages.
+4. Land <change W>'s `tasks.md` on `main`.
+5. Run `spec:accept` on <change W>.
+6. Write the answering decision into the Raised row's `Landed` cell and push to `main`.
+7. Run `spec:accept` on <change W> again.
+
+**Expected Results:**
+
+* After Step 1 the card sits in the Specified lane and names <pm handle> as the hand, with the open Raised row holding nothing below acceptance.
+* <pm handle> holds one direct message naming <change W>, the stage Specified and its thread.
+* Step 5 refuses and names the open Raised row, and no `acceptance.json` lands for <change W>.
+* Step 7 records the acceptance, and the card moves to the Accepted lane.
+
 ---
 
 ## shared-planning-change-stages-US2: Product manager reads where every change stands
@@ -458,11 +493,11 @@ admin(product manager) has one change in each of the eight stages, each with its
 
 **Expected Results:**
 
-* The lanes read Proposed, Designed, Specified, Planned, Building, On staging, Released, Archived in that order.
+* The lanes read Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete, Archived in that order.
 * Each change appears in one lane only.
 * Each card names its hand, its age and its task bar.
 
-### shared-planning-change-stages-US2-TC2-1: Drafted lanes carry the agent mark and the hand's move
+### shared-planning-change-stages-US2-TC2-2: Exactly five drafted lanes carry the agent mark and the hand's move
 
 **Classification:**
 
@@ -480,18 +515,17 @@ admin(product manager) has one change in each of the eight stages, each with its
 **Decided by:** `tools/manual/test/change-stages.test.ts`, `tools/manual/test/stage-board.test.tsx`, `tools/manual/test/stage-change-page.test.tsx`
 
 **Pre-conditions:**
-One change sits in each of Proposed, Designed, Specified, Planned, Building, On staging, Released and Archived.
+One change sits in each of Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete and Archived.
 
 **Steps:**
 
 1. Navigate to <manual board url>.
-2. Read the headings of Proposed to Building.
-3. Read the headings of On staging to Archived.
+2. Read each lane heading in order.
 
 **Expected Results:**
 
-* Each of the five headings carries the agent mark and the hand's move as text.
-* The three later headings carry neither.
+* Exactly five headings carry the agent mark and the hand's move as text: Proposed, Designed, Specified, Planned and Building.
+* Accepted, Implementation complete and Archived carry neither.
 * A reader tells the agent's draft from the hand's move without colour.
 
 ### shared-planning-change-stages-US2-TC3-1: Idle chip at the day bounds and the shelf at 30
@@ -683,7 +717,7 @@ No change is in flight and the archive holds none the board reads.
 * **Trace:** shared-planning-change-stages-US-02
 
 **Pre-conditions:**
-<change B> is at Specified. Its `decisions.md` carries two ❓ rows, its `proposal.md` is fresh with `landed_by:` naming <pm handle>, and its `ui-design.md` is behind.
+<change B> is at Specified. Its `decisions.md` carries two `❓` rows, its `proposal.md` is fresh with `landed_by:` naming <pm handle>, and its `ui-design.md` is behind.
 
 **Steps:**
 
@@ -746,7 +780,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 
 **Pre-conditions:**
 
-* admin(engineer) is reading <change page> of a change that links two page sections, carrying two 🚧 lines and one ❓ line addressed to Finance between them.
+* admin(engineer) is reading <change page> of a change that links two page sections, carrying two 🚧 lines and one `❓` line addressed to Finance between them.
 
 **Steps:**
 
@@ -755,8 +789,8 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 
 **Expected Results:**
 
-* On the pages lists each linked section under its page's title, with every 🚧 and ❓ line as the page writes it.
-* The ❓ line names Finance as the hand it waits on.
+* On the pages lists each linked section under its page's title, with every 🚧 and `❓` line as the page writes it.
+* The `❓` line names Finance as the hand it waits on.
 * A change that marks no section shows one line saying so, and no empty list.
 
 ### shared-planning-change-stages-US2-TC11-1: Delivery row reads staging with no build beside it
@@ -807,7 +841,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-02
 
 **Pre-conditions:**
-<change V> sits at Designed on `ui-design.md`, with every Raised row in its `decisions.md` landed and no `tech-design.md` or `design_waived:` on `main`.
+<change V> sits at Designed on `ui-design.md`, with no `tech-design.md` or `design_waived:` on `main`.
 
 **Test data:**
 
@@ -844,7 +878,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-02
 
 **Pre-conditions:**
-<change V> sits at Designed on `ui-design.md`, with every Raised row in its `decisions.md` landed and no `tech-design.md` or `design_waived:` on `main`.
+<change V> sits at Designed on `ui-design.md`, with no `tech-design.md` or `design_waived:` on `main`.
 
 **Steps:**
 
@@ -884,7 +918,7 @@ Runs once per row of **Test data**.
 **Decided by:** `tools/manual/test/my-turn-page.test.tsx`
 
 **Pre-conditions:**
-admin(designer) <design handle> is addressed by two ❓ rows, is the hand of <change B> at its current stage, and is named as the `design` hand on <change R>, which is at Building.
+admin(designer) <design handle> is addressed by two `❓` rows, is the hand of <change B> at its current stage, and is named as the `design` hand on <change R>, which is at Building.
 
 **Steps:**
 
@@ -974,7 +1008,7 @@ No handle has been chosen in this browser.
 * **Trace:** shared-planning-change-stages-US-03
 
 **Pre-conditions:**
-<release handle> is in the team map, is on no change now or later, and is addressed by no ❓ row.
+<release handle> is in the team map, is on no change now or later, and is addressed by no `❓` row.
 
 **Steps:**
 
@@ -1591,7 +1625,7 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 **Decided by:** `tools/manual/test/section-pip.test.tsx`
 
 **Pre-conditions:**
-<shared marked line> is linked by <change P> at Specified and by <change Q> at On staging.
+<shared marked line> is linked by <change P> at Specified and by <change Q> at Implementation complete.
 
 **Steps:**
 
@@ -1600,7 +1634,7 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 
 **Expected Results:**
 
-* The pip shows On staging, the further of the two stages.
+* The pip shows Implementation complete, the further of the two stages.
 * The line wears one pip, not two.
 
 ### shared-planning-change-stages-US7-TC4-1: The pip reads without colour
@@ -1928,7 +1962,7 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Trace:** shared-planning-change-stages-US-09
 
 **Pre-conditions:**
-<change T> has every task box ticked, sits at Released, and carries one behind delta.
+<change T> has every task box ticked, sits at Implementation complete, and carries one behind delta.
 
 **Steps:**
 
