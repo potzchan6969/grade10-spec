@@ -1,6 +1,6 @@
 # grade10-admin/auction/campaign Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-campaign-US1: Operator finds the catalogue cover called a campaign
@@ -322,7 +322,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -489,7 +489,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
@@ -654,3 +654,8 @@ Runs once per row of **Test data**.
 
 * Step 2 refuses the unauthorized cancel.
 * Step 3 still shows the campaign as a draft.
+
+## Reconciliation
+
+- **Covered at domain** — a created campaign publishes as a public cover and its unpublished lots stay off the catalogue, walked by `grade10-admin-auction-e2e-US1-TC1-1`
+- **Covered at domain** — cancelling a published campaign cancels the listings under it, walked by `grade10-admin-auction-e2e-US2-TC1-1`
