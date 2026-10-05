@@ -338,7 +338,7 @@ receipt's receipt ID and internal audit number, per
 | Payment deadline at the log entry | The deadline trail across reissues and returned proof |
 | Time left | Proof uploaded and proof returned entries |
 | Deadline choice | Reissues only: kept or restarted |
-| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after |
+| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after, and Tax with no amount where the invoice carried none |
 | Reissue sequence number | Where the log entry is a reissue |
 | Actor | The buyer, the system, or a named operator |
 | Payment method | Paid, payment recorded and flagged payment entries: a card with its brand and last four digits, or bank transfer, cash, or other with its description |
