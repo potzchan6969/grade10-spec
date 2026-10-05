@@ -8,8 +8,8 @@ from the product page at all, and Remove physical unit records a Cert record
 as withdrawn, so the withdrawn count and the ledger keep a unit the shop never
 had.
 
-**Metric:** Remove physical unit used on a Cert record that has only been
-intaken, the workaround today, which should fall to none.
+**Metric:** withdrawals whose remarks say the unit was entered by mistake,
+the workaround today, which should fall to none.
 
 ## What Changes
 
@@ -22,16 +22,21 @@ intaken, the workaround today, which should fall to none.
   removed as if it was never received. Its tagged media go with it, as on
   Remove physical unit. Stock and the ledger fall by one; withdrawn does not
   move.
-- **Remove physical unit stays.** It is still offered beside the new removal
-  and still records a withdrawal, for a card that was received and has left.
+- **BREAKING: one removal per Cert record.** Remove physical unit is no
+  longer offered on a record that has only been intaken; it stays on a record
+  that has moved, and still records a withdrawal there. A card received
+  correctly that leaves before it ever moves is reversed, with remarks saying
+  so.
 - **History records each one.** One entry per reduction or removal carries
-  its time, actor, quantity, the Cert ID where there was one, and required
-  remarks, under its own action apart from intake and withdraw. It shows in
+  its time, actor, quantity, the Cert ID where there was one, and remarks,
+  prefilled `Entered by mistake` and editable but never empty, under its own
+  action apart from intake and withdraw. It shows in
   the product's history, and a regular stock reduction shows in the
   `No Cert ID` history.
 
-No running rule is reversed. Today the ledger only rises, at intake; this
-change adds the one way it falls, and only for units that never moved. Sold,
+One running rule narrows: Remove physical unit leaves records that have
+only been intaken. Today the ledger only rises, at intake; this change adds
+the one way it falls, and only for units that never moved. Sold,
 withdrawn and vaulted still never decrease.
 
 ## Non-Goals
@@ -53,8 +58,9 @@ None.
 ## Impact
 
 - **Admin app** - the reduce action on the `No Cert ID` available row and the
-  remove action on an unmoved Cert record, each with required remarks, in
-  Cert ID details on the inventory product page.
+  remove action on an unmoved Cert record, each confirmed with remarks prefilled
+  `Entered by mistake`, in Cert ID details; Remove physical unit hidden on a
+  record that has only been intaken on the inventory product page.
 - **Inventory service** - a reduction of regular stock and a removal of a
   Cert record that lower stock and the ledger, with their history entry, in
   one transaction each; a new history action.
