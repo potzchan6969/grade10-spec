@@ -1,6 +1,6 @@
 # grade10-site/store/cross-sell Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-28, tcs-rules r4
 **Out of suite:** grade10-site-store-cross-sell-SC-25, grade10-site-store-cross-sell-SC-26, grade10-site-store-cross-sell-SC-34
 
@@ -340,7 +340,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -593,7 +593,7 @@ picks or no picks,
 
 | Field | Value |
 | --- | --- |
-| `<card_8>` | A card for sale with no picks, sharing its world with four cards for sale, gained on different days |
+| `<card_8>` | A card for sale with no picks, sharing its world with four cards for sale, gained on different days, and sharing nothing else with any card for sale |
 
 **Steps:**
 
@@ -949,12 +949,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Sell `<leaving sibling>` out by the recipe "Sell a card out".
-2. Reload `<card_32>`'s page.
+2. Wait until the store listing shows `<leaving sibling>` sold out, then 60 more seconds.
+3. Reload `<card_32>`'s page.
 
 **Expected Results:**
 
 * Before step 1, `<leaving sibling>` shows.
-* After step 2, `<leaving sibling>` is gone and the other card remains.
+* After step 3, `<leaving sibling>` is gone and the other card remains.
 
 <!-- trace:case id=g10.store-cross-sell.TC-adw rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC11-1: Picks that cannot be read leave similar cards and the page whole
@@ -1225,6 +1226,7 @@ None yet.
 - **Contradicted** — none: the two readings stated no opposite outcomes. The one apparent one was the suite's US1-TC9 (no rail when the picks cannot be read) against the tech design (similar cards alone): the `ui-design.md` row "Picks could not be read" had said "as if there were nothing to show" and was corrected to "similar cards alone" (Q21) before the case was rewritten
 - **Uncovered anchors** — `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` (the rail's exports): **Out of suite:** the shared UI package's own tests and stories in this store, `packages/ui/src/blocks/store-product/`; the widenings the rail leans on are `shared/ui/store-home` (`shared-ui-store-home-SC-10`) and `shared/ui/store-product-listing` (`shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`, `shared-ui-store-product-listing-SC-93`), verified in those packages' own tests
 - **Cases added after the reconciliation** — US1-TC12 (`grade10-site-store-cross-sell-SC-05`), US1-TC13 (`grade10-site-store-cross-sell-SC-22`), US2-TC8 (`grade10-site-store-cross-sell-SC-19`), US3-TC5 (`grade10-site-store-cross-sell-SC-12`, on the product manager's remark): written by the run from the scenarios the blind pass left unreached, so they are not blind
+- **Retired at acceptance review** — US1-TC9 claimed what US2-TC11 claims, on the journey `grade10-site-store-cross-sell-SC-28` does not serve; US2-TC11 holds it
 - **Scenarios added after the reconciliation** — `grade10-site-store-cross-sell-SC-33`, a card in the rail is a link to its page (Q52), is asserted by US1-TC5-1's link result, which the blind pass wrote before the scenario existed; the case's block on the listing's round is lifted with it
 
 ### Out of suite
