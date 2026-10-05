@@ -614,27 +614,6 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
-// shared/ui/vault-case
-export {
-  VaultAcceptOfferDialog,
-  type VaultAcceptOfferDialogCopy,
-  type VaultAcceptOfferDialogProps,
-} from "./blocks/vault-case/vault-accept-offer-dialog";
-export {
-  VaultCases,
-  type VaultCasesCard,
-  type VaultCasesChip,
-  type VaultCasesCopy,
-  type VaultCasesIcon,
-  type VaultCasesProps,
-  type VaultCasesTone,
-} from "./blocks/vault-case/vault-cases";
-export {
-  VaultCasesEmpty,
-  type VaultCasesEmptyCopy,
-  type VaultCasesEmptyProps,
-  type VaultCasesEmptyStep,
-} from "./blocks/vault-case/vault-cases-empty";
 export {
   ACTIVITY_RELATIVE_MAX_MS,
   type ActivityTimeCopy,
