@@ -33,7 +33,7 @@ GitHub Deployment receipts, shown for each application component.
   - Your turn: one direct message to the hand a change reaches, keyed by change, stage and role, never sent twice for one move
   - Behind and implementation complete: one message to the hand of an artifact newly behind, and one to QA when implementation is complete
   - Landed from a terminal: a landing pushed from a terminal posts one reply in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
-  - Channel and digest: the post per push names each change's stage; a weekly digest per person lists open questions, idle, behind and waiting
+  - Channel and digest: once the manual deploys a push, the channel post names each change that crossed a milestone - proposed, accepted, implementation claimed, implementation complete, archived; a weekly digest per person lists open questions, idle, behind and waiting
 - Surfaces that show the stage
   - Board: eight lanes with the agent mark and the hand's move on six, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
   - Change page: the stepper, the Your turn card with the thread and the command, the hands, each artifact fresh or behind with its questions and who landed it, on the pages every line the change marks, delivery and handoff
@@ -735,7 +735,7 @@ push sends nothing again.
 **GIVEN** a change in Planned whose engineer is named
 **WHEN** a push ticks its first task and moves it to Building
 **THEN** no Your turn message SHALL be sent
-**AND** the channel post SHALL still name the change and Building
+**AND** no channel post SHALL name the change, Building being no milestone
 
 #### Scenario: shared-planning-change-stages-SC-39 - An artifact goes behind twice
 **Serves:** shared-planning-change-stages-US-09 - the hand is told once and reads the artifact when they get to it
@@ -867,11 +867,20 @@ pushed from a terminal is one reply in it.
 
 ### Requirement: The channel post per push and the weekly digest
 
-The channel reads what a push moved, and each person reads their own week on
-Monday.
+The channel reads which changes crossed a milestone, and each person reads
+their own week on Monday.
 
-- **The post** — the post to the channel on every push to `main` SHALL name
-  each change the push moved and the stage it moved into
+- **The milestones** — a change crosses five: proposed, when it first appears
+  on `main`; accepted, when its acceptance record is valid; implementation
+  claimed, when a task group first names an owner; implementation complete,
+  when every task is checked; archived, when it moves into the archive
+- **The post** — one post to the channel SHALL name each change that crossed a
+  milestone since the last successful deploy, under that milestone, and a
+  range that crossed none SHALL post nothing
+- **After the deploy** — the post and every direct message SHALL be sent only
+  once the manual and the OpenSpec viewer have deployed the head they read; a
+  failed or cancelled deploy SHALL send nothing, and the next successful one
+  SHALL read from the head the last successful one carried
 - **The digest** — one digest per person SHALL be sent Monday 09:00 on the
   Hong Kong clock, listing the changes on them now, their open questions,
   their idle changes, their behind artifacts, their waits and the changes a
@@ -883,9 +892,11 @@ Monday.
 #### Scenario: shared-planning-change-stages-SC-47 - A push moves three changes
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the channel to see what a push moved
 
-**WHEN** a push to `main` moves three changes
-**THEN** one channel post SHALL name each of the three and the stage each moved into
+**WHEN** a push to `main` proposes one change, accepts a second and claims the plan of a third
+**AND** the manual and the viewer deploy it
+**THEN** one channel post SHALL name each of the three under its milestone
 **AND** each hand SHALL be told of its own change alone
+**AND** nothing SHALL be sent before the deploy succeeds
 
 #### Scenario: shared-planning-change-stages-SC-48 - Monday morning
 **Serves:** shared-planning-change-stages-US-01 - the teammate starts the week from one message

@@ -181,17 +181,39 @@ test("both workflows run the node this store runs", () => {
   }
 });
 
-test("a page landing is a push the notifier reads", () => {
-  // A page's own lines are what an artifact is read against, so landing one
-  // can put a fresh artifact behind and its hand is told about it.
-  assert.ok(
-    notify.on.push.paths.includes("docs/prds/**"),
-    "the notifier does not run on a page landing",
+test("the notifier runs once the manual and the viewer deployed, and only then", () => {
+  // The Manual workflow deploys the manual and the OpenSpec viewer in one job,
+  // so its success is both being live; a message sent before it would link a
+  // page that does not yet show what the message says.
+  assert.equal(notify.on.push, undefined, "the notifier still runs on a push");
+  assert.deepEqual(notify.on.workflow_run, {
+    workflows: ["Manual"],
+    types: ["completed"],
+    branches: ["main"],
+  });
+  assert.equal(YAML.parse(read(".github/workflows/manual.yml")).name, "Manual");
+  assert.equal(
+    notify.jobs.notify.if,
+    "github.event.workflow_run.conclusion == 'success'",
   );
-  for (const path of ["openspec/changes/**", "openspec/specs/**"]) {
-    assert.ok(notify.on.push.paths.includes(path), path);
+  // The deployed head, never `github.sha`, which under `workflow_run` is
+  // whatever `main` holds when the run starts.
+  assert.equal(
+    notify.jobs.notify.steps.find((step) => step.name === "Checkout").with.ref,
+    "${{ github.event.workflow_run.head_sha }}",
+  );
+  assert.doesNotMatch(notifyText, /github\.sha\b|github\.event\.before/);
+});
+
+test("the manual deploys on every push the notifier reads", () => {
+  // A page landing can put an artifact behind, and its hand is told; a change
+  // moving is a milestone. Each must start a deploy, or the notifier never
+  // wakes for it.
+  const manual = YAML.parse(read(".github/workflows/manual.yml"));
+  for (const path of ["docs/prds/**", "openspec/**"]) {
+    assert.ok(manual.on.push.paths.includes(path), path);
   }
-  assert.deepEqual(notify.on.push.branches, ["main"]);
+  assert.deepEqual(manual.on.push.branches, ["main"]);
 });
 
 test("the channel post falls back to the store's own channel", () => {
