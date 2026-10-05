@@ -45,8 +45,9 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 - 🚧 **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)
-- 🚧 **Equal-max tip** — a same-price non-leading row shows an Info tip in
-  the amount tone: when maximums match, the earlier one leads
+- 🚧 **Equal-max tip** — a row tied on amount with a row above it shows an
+  Info tip in the amount tone, at the current price or lower down: when
+  maximums match, the earlier one leads
 
 ## Personal Bidding
 
@@ -90,10 +91,11 @@ Under Set your private maximum, an always-on line says that Grade10 bids only
 as needed up to the maximum and that it can be raised but never lowered or
 cancelled.
 
-- 🚧 **Whole units only** — a typed decimal mark is refused, and a pasted
+- **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
 - 🚧 **Ceiling** — a maximum above 9,999,999,999 whole major units cannot be
-  typed or pasted; the previous valid draft stays, nothing is clamped
+  typed or pasted; the previous valid draft stays, nothing is clamped, and
+  no message says why
 - 🚧 **Quick bids** — three chips at 1×, 2× and 4× the listing increment:
   from the current bid when the collector does not lead, from their committed
   maximum when they do; before any bid, chip 1× is the opening price itself

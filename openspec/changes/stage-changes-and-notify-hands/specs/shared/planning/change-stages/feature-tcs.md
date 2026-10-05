@@ -175,7 +175,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Each hand holds one message, for its own change only.
-* One channel post names both changes and the stage each moved into.
+* No channel post is sent: neither change crossed a milestone.
 
 ### shared-planning-change-stages-US1-TC6-1: Weekly digest lists questions, idle, behind and waiting
 
@@ -291,7 +291,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 **Expected Results:**
 
 * No direct message is sent for that push.
-* The channel post names <change A> and the stage Building.
+* No channel post names <change A>: Building is no milestone.
 
 ### shared-planning-change-stages-US1-TC10-1: A change with no thread links its change page
 

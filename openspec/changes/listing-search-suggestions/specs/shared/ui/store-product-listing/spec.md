@@ -164,3 +164,11 @@ copy.
 - **WHEN** the search field is open
 - **THEN** the field shows its searching indication
 - **AND** no suggestion row is invented
+
+#### Scenario: shared-ui-store-product-listing-SC-94 - Omitted groups keep the panel closed
+**Serves:** Listing search suggestions - omitted groups keep the panel closed
+
+- **GIVEN** a draft query and no suggestion groups supplied
+- **WHEN** a shopper focuses the search field and commits it
+- **THEN** no suggestion panel opens
+- **AND** the search commit is reported once with that draft

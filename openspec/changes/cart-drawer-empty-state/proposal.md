@@ -55,7 +55,7 @@ items lists only those items.
 - Active `add-store-cart-drawer-ui` must stop requiring Browse More once it
   consumes this change.
 - **Manual** —
-  [`Cart Drawer · Empty`](../../../docs/prds/products/shared/ui/store-cart.md)
+  [`Cart Drawer · Empty`](../../../docs/prds/products/shared/ui/store-cart.md#empty-cart)
   marks the empty state
 
 ## Open Questions
@@ -66,4 +66,4 @@ historical. Confirmed with the author when splitting this from
 
 ## References
 
-- [Cart Drawer](../../../docs/prds/products/shared/ui/store-cart.md)
+- [Cart Drawer](../../../docs/prds/products/shared/ui/store-cart.md#empty-cart)
