@@ -13,9 +13,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
 import {
+  APPOINTMENTS_COPY,
   COMPLETED_VISIT_RECORD,
   GRADING_VISIT_RECORD,
-  LIST_COPY,
   MANAGE_CARD_COPY,
   SLOT_PICKER_COPY,
   VAULT_BOOK_VISIT_STORY_ID,
@@ -134,15 +134,15 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
 
       {records.length === 0 ? (
         <EmptyState
-          description={LIST_COPY.emptyDescription}
-          title={LIST_COPY.emptyTitle}
+          description={APPOINTMENTS_COPY.emptyDescription}
+          title={APPOINTMENTS_COPY.emptyTitle}
         />
       ) : (
         <>
           {upcoming.length > 0 ? (
             <VStack gap="md" hAlign="stretch">
               <Text as="h2" size="lg" weight="medium">
-                {LIST_COPY.upcomingHeading}
+                {APPOINTMENTS_COPY.upcomingHeading}
               </Text>
               {upcoming.map(renderCard)}
             </VStack>
@@ -150,7 +150,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
           {past.length > 0 ? (
             <VStack gap="md" hAlign="stretch">
               <Text as="h2" size="lg" weight="medium">
-                {LIST_COPY.pastHeading}
+                {APPOINTMENTS_COPY.pastHeading}
               </Text>
               {past.map(renderCard)}
             </VStack>

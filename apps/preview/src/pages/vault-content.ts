@@ -3,9 +3,7 @@ import type {
   BookingConfirmationCopy,
   BookingDay,
   BookingDetailsFormCopy,
-  BookingListCopy,
   BookingLocation,
-  BookingLocationPickerCopy,
   BookingManageCardCopy,
   BookingRecord,
   BookingRecordState,
@@ -13,7 +11,6 @@ import type {
   BookingServicePickerCopy,
   BookingSlot,
   BookingSlotPickerCopy,
-  BookingStepsCopy,
   BookingSummaryCopy,
 } from "@grade10/ui";
 import {
@@ -419,23 +416,8 @@ const BOOKING_STATE_LABELS: Record<BookingRecordState, string> = {
   no_show: "No show",
 };
 
-const BOOKING_STEPS_COPY: BookingStepsCopy = {
-  steps: {
-    service: "Service",
-    location: "Shop",
-    day: "Day",
-    time: "Time",
-    details: "Details",
-  },
-  back: "Back",
-};
-
 const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
   title: "What are you coming in for?",
-};
-
-const LOCATION_PICKER_COPY: BookingLocationPickerCopy = {
-  title: "Which shop?",
 };
 
 const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
@@ -473,13 +455,11 @@ const MANAGE_CARD_COPY: BookingManageCardCopy = {
   cancelKeep: "Keep it",
 };
 
-const LIST_COPY: BookingListCopy = {
+const APPOINTMENTS_COPY = {
   upcomingHeading: "Upcoming",
   pastHeading: "Past",
   emptyTitle: "No appointments yet",
   emptyDescription: "Book a visit and it shows up here.",
-  open: "Open",
-  state: BOOKING_STATE_LABELS,
 };
 
 const VISIT_CONFIRMATION_COPY: BookingConfirmationCopy = {
@@ -589,9 +569,9 @@ export type {
   VaultAssetStatus,
 };
 export {
+  APPOINTMENTS_COPY,
   assetSubtitle,
   BOOK_VISIT_SERVICES,
-  BOOKING_STEPS_COPY,
   CAUSEWAY_BAY,
   COMPLETED_VISIT_RECORD,
   CONSULTATION_VISIT_SERVICE,
@@ -600,8 +580,6 @@ export {
   GRADING_VISIT_RECORD,
   GRADING_VISIT_SERVICE,
   INTAKE_FIXTURE,
-  LIST_COPY,
-  LOCATION_PICKER_COPY,
   MANAGE_CARD_COPY,
   PORTFOLIO_SUMMARY,
   prepTipsForService,

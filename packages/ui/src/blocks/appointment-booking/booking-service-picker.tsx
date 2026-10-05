@@ -1,8 +1,9 @@
 import { Text } from "@grade10/design-system/components/display/text";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
-import { ChoiceCard } from "./choice-card";
 import type { BookingService } from "./types";
 
 type BookingServicePickerCopy = { title: string };
@@ -30,19 +31,31 @@ function BookingServicePicker({
       </Text>
       <AsyncRegion slot="booking-services" state={services}>
         {(list) => (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <RadioList
+            aria-label={copy.title}
+            className="max-w-xl"
+            onValueChange={(value) => {
+              if (value) {
+                onSelect(value);
+              }
+            }}
+            value={selectedId}
+          >
             {list.map((service) => (
-              <ChoiceCard
+              <RadioCard
                 description={service.description}
                 key={service.id}
-                meta={service.durationLabel}
-                onSelect={() => onSelect(service.id)}
-                selected={service.id === selectedId}
-                slot="booking-service"
                 title={service.name}
-              />
+                value={service.id}
+              >
+                {service.durationLabel ? (
+                  <Text as="span" size="xs" tone="muted">
+                    {service.durationLabel}
+                  </Text>
+                ) : null}
+              </RadioCard>
             ))}
-          </div>
+          </RadioList>
         )}
       </AsyncRegion>
     </VStack>

@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
+import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -158,9 +159,23 @@ function BookingSlotPicker({
                   {copy.noTimes}
                 </Text>
               ) : (
-                <VStack data-slot="booking-times" gap="sm" hAlign="stretch">
+                <RadioList
+                  aria-label={copy.timeTitle}
+                  onValueChange={(value) => {
+                    const slot = list.find(
+                      (row) => String(row.start) === value,
+                    );
+                    if (slot) {
+                      onSelectSlot(slot);
+                    }
+                  }}
+                  value={
+                    selectedStart === undefined
+                      ? undefined
+                      : String(selectedStart)
+                  }
+                >
                   {list.map((slot) => {
-                    const selected = slot.start === selectedStart;
                     const startLabel = formatLocalTime(slot.start, {
                       locale,
                       timeZone,
@@ -170,22 +185,16 @@ function BookingSlotPicker({
                       timeZone,
                     });
                     return (
-                      <Button
+                      <RadioListItem
                         aria-label={startLabel}
-                        aria-pressed={selected}
-                        className="w-full"
-                        data-slot="booking-time"
                         key={slot.start}
-                        onClick={() => onSelectSlot(slot)}
-                        size="md"
-                        type="button"
-                        variant={selected ? "default" : "outline"}
+                        value={String(slot.start)}
                       >
                         {startLabel}–{endLabel}
-                      </Button>
+                      </RadioListItem>
                     );
                   })}
-                </VStack>
+                </RadioList>
               )
             }
           </AsyncRegion>

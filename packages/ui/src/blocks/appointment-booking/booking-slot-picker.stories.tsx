@@ -52,8 +52,8 @@ export const Default: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "4" }));
     expect(args.onSelectDay).toHaveBeenCalledWith("2026-09-04");
 
-    expect(canvas.queryByRole("button", { name: "11:00" })).toBeNull();
-    await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
+    expect(canvas.queryByRole("radio", { name: "11:00" })).toBeNull();
+    await userEvent.click(canvas.getByRole("radio", { name: "10:15" }));
     expect(args.onSelectSlot).toHaveBeenCalledWith(SEPTEMBER_3_SLOTS[1]);
   },
 };

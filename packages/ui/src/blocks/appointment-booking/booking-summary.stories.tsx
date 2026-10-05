@@ -12,8 +12,8 @@ const meta = {
   args: {
     copy: SUMMARY_COPY,
     service: "Card grading",
-    location: "Grade10 Central",
-    address: "12 Queen’s Road Central, Hong Kong",
+    location: "Hong Kong Grade10 Store",
+    address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
     start: LIVE_RECORD.start,
     end: LIVE_RECORD.end,
     timeZone: FIXTURE_TIME_ZONE,
