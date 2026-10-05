@@ -12,11 +12,11 @@
 **I want** to read its summary in the thread, remark on what to change, and say land,
 **so that** the design lands as I want it without my writing the file.
 
-### shared-planning-agent-rounds-US-03: Tech PIC challenges a proposed design
+### shared-planning-agent-rounds-US-03: Accepting human challenges the proposed tech design
 
-**As a** tech PIC,
-**I want** the proposed system, its data flow and its rejected options in a summary I can challenge in the thread,
-**so that** a wrong mechanism is caught before the requirements are drawn from it.
+**As the** human who accepts a plan,
+**I want** the proposed system, its data flow and its rejected options in a summary I can challenge before I accept,
+**so that** a wrong mechanism is caught before anything is built from it.
 
 ### shared-planning-agent-rounds-US-04: Hand answers only what only they can
 

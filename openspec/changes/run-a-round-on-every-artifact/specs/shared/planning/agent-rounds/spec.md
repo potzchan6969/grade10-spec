@@ -39,7 +39,7 @@ read again before anything lands after it, with one record row per round.
   - Landing refused: an artifact lands only when everything before it is fresh, the fold at archive refuses a behind delta, and a tick, a claim and a wait are never held
   - Moved goals: a goal or non-goal that moved is a question to the product manager, extend, supersede or split, and nothing is rewritten in place
   - Raised rows: a landed Raised row puts the requirements and the cases behind
-  - Tech design first: a requirement that reaches the tech design writes a dated wait on the tech PIC, cleared by their edit or a read
+  - Tech design in planning: Dev writes the tech design in the planning run, the human who accepts the plan challenges it, and a question it cannot settle is a Raised row, never a dated wait
 - The record
   - Rounds table: `rounds.md` holds one row per round, the artifact or group, the perspectives run, what stood, the question ids raised and the tests per scenario
   - Refused without a row: a landed artifact or a ticked group with no row is refused on a change on the round, and on every change from the day the kept skills go

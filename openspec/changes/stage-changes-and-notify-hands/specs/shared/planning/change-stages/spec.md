@@ -407,9 +407,9 @@ Each change names who takes it at each stage.
 
 | Role | Key | Takes the change at |
 | --- | --- | --- |
-| Product manager | `pm` | Proposed and Accepted; answers each raised question while the change is Specified |
+| Product manager | `pm` | Proposed, Specified and Accepted; resolves every raised question while the change is Specified |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
-| Engineer | `dev` | Specified, where it writes the tech design inside the planning run; Planned, Accepted and Building |
+| Engineer | `dev` | Planned, Accepted and Building |
 | QA | `qa` | Implementation complete, for human verification; suite verdict as an overlay after implementation |
 | Release hand | `release` | Environment availability updates after archive |
 
@@ -437,7 +437,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 | --- | --- | --- |
 | 1 | Proposed | `pm` until `decisions.md` and the journeys file are on `main` and `hands:` names the designer; then `design`. A change carrying `ui_waived` reaches Designed as its decisions and journeys land, and is nobody's turn at Proposed after them |
 | 2 | Designed | nobody: QA1 writes the blind suite next |
-| 3 | Specified | Dev drafts independently, then QA2 reconciles; `pm` answers every raised question |
+| 3 | Specified | `pm`, resolving every raised question |
 | 4 | Planned | `dev` |
 | 5 | Accepted | `pm` or the one named human who accepts the resolved plan |
 | 6 | Building | `dev` |
@@ -458,7 +458,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads across the lanes to see who each change waits on
 
 **WHEN** a change in Specified, Planned, Accepted, Building and Implementation complete is read in turn
-**THEN** the turns SHALL name Dev and QA2 while specified, Dev while planned, the accepting human while accepted, Dev while building, and QA for post-implementation verification
+**THEN** the turns SHALL name the product manager alone while specified, Dev while planned, the accepting human while accepted, Dev while building, and QA for post-implementation verification
 **AND** a change in Designed or Archived SHALL name nobody
 
 #### Scenario: shared-planning-change-stages-SC-17 - A hand nobody has named

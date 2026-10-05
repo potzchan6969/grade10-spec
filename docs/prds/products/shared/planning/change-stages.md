@@ -111,7 +111,7 @@ One handle per role on each change.
 
 | Role | Key | Takes the change at |
 | --- | --- | --- |
-| Product manager | `pm` | Proposed and Accepted |
+| Product manager | `pm` | Proposed, Specified and Accepted |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
 | QA | `qa` | Implementation complete, for the suite's human verdict |
 | Engineer | `dev` | Planned, Accepted and Building |
