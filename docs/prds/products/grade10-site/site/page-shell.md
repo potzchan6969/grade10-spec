@@ -39,15 +39,17 @@ chrome, including on auction-first launch.
 the items: My Auctions and Sign Out on auction launch; My Orders, My Auctions,
 and Membership once Store answers, with Sign Out always last. KYC stays out.
 
-🚧 **No Profile item** — the menu never offers Profile; there is no Profile
-page. Specs and Storybook that still named Profile as joining once carried
-are corrected here
-
 🚧 **My Orders** — ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
 
 **Membership** — ❓ after My Auctions once Store answers; the destination is
 unconfirmed
+
+## No Profile
+
+🚧 **No Profile item** — the menu never offers Profile; there is no Profile
+page. Specs and Storybook that still named Profile as joining once carried
+are corrected here
 
 ## Help
 
