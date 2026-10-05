@@ -34,6 +34,7 @@ import {
   readRetiredJourneys,
   requirementBlocks,
 } from "../src/store/read-specs.mts";
+import { describeReuse, reusedInChange } from "../src/store/reused-ids.mts";
 import {
   anchorRefusal,
   everyBlock,
@@ -62,6 +63,9 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   // state the product manager hands over in — and the restated copies in it
   // are checkable without a `spec.md` anywhere near them.
   checkContext(ctx, journeysOf(ctx, changes));
+  for (const change of changes)
+    for (const { file, reuse } of reusedInChange(ctx.roots.store, change.id))
+      ctx.add("reused", file, describeReuse(reuse));
 
   const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
