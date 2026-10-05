@@ -376,7 +376,7 @@ one field read Country/Region, every country and region in A-Z order, typing
 narrows the list, a query with no match leaves it empty, and an empty
 Country/Region is refused beside the field.
 
-#### Scenario: winner-order-SC-251 - Billing Add Address lists every country and region
+#### Scenario: winner-order-SC-259 - Billing Add Address lists every country and region
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
 - **GIVEN** a winner on billing Add Address after unticking Same as delivery
@@ -385,7 +385,7 @@ Country/Region is refused beside the field.
 - **THEN** the popup lists every country and region in A-Z order, the same
   list as delivery Add Address
 
-#### Scenario: winner-order-SC-252 - Typing filters the billing list to matching names
+#### Scenario: winner-order-SC-260 - Typing filters the billing list to matching names
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
 - **GIVEN** a winner with the Country/Region picker open on billing Add Address

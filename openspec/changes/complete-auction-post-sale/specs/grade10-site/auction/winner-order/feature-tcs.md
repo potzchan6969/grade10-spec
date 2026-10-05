@@ -461,7 +461,7 @@
 | `winner-order-SC-167` | Covered by the durable `winner-order-US16-TC12-1` |
 | `winner-order-SC-15` | Covered by the durable `winner-order-US1-TC6-1` |
 | `winner-order-SC-35` | Covered by the durable `winner-order-US4-TC1-2` and `winner-order-US9-TC11-1` |
-| `winner-order-SC-251`, `SC-252` | Were uncovered; added `US1-TC55-1` |
+| `winner-order-SC-259`, `SC-260` | Were uncovered; added `US1-TC55-1` |
 | `winner-order-SC-253` | Was uncovered; added `US1-TC56-1` |
 | `winner-order-SC-254`, `SC-255` | Were uncovered; added `US1-TC57-1` |
 | `winner-order-SC-256` | Was uncovered; added `US1-TC58-1` |
