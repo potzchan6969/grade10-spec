@@ -378,6 +378,76 @@ test("shared-planning-agent-rounds-SC-30 - a bundle is the draft and what is bef
     );
 });
 
+/** Adds a second capability to the fixture's change, and a plan whose group 1
+ * cites the first capability's scenario and group 2 cites nothing. */
+const twoCapabilities = (root, group1 = "") => {
+  const change = join(root, "openspec", "changes", "demo");
+  const other = join(change, "specs", "shared", "planning", "other");
+  mkdirSync(other, { recursive: true });
+  for (const name of ["user-journeys.md", "spec.md", "feature-tcs.md"])
+    writeFileSync(join(other, name), `# ${name}\n`);
+  writeFileSync(
+    join(change, "tasks.md"),
+    [
+      "# Tasks",
+      "",
+      "## 1. Demo (grade10-spec)",
+      "",
+      `- [ ] 1.1 The demo - \`shared-planning-demo-SC-01\`${group1}`,
+      "",
+      "## 2. Nothing cited (grade10-spec)",
+      "",
+      "- [ ] 2.1 Verify: `pnpm run lint`",
+      "",
+    ].join("\n"),
+  );
+};
+
+test("shared-planning-agent-rounds-SC-108 - a group's reader is given the capabilities it cites", () => {
+  const root = fixture();
+  twoCapabilities(root);
+  const demo = "openspec/changes/demo";
+
+  assert.deepEqual(bundleFor(root, "demo", "1").upstream, [
+    `${demo}/proposal.md`,
+    `${demo}/decisions.md`,
+    `${demo}/specs/shared/planning/demo/user-journeys.md`,
+    `${demo}/ui-design.md`,
+    `${demo}/tech-design.md`,
+    `${demo}/specs/shared/planning/demo/spec.md`,
+    `${PAGE}#the-walk`,
+  ]);
+});
+
+test("shared-planning-agent-rounds-SC-108 - a group that names the cases reads its capabilities' cases", () => {
+  const root = fixture();
+  twoCapabilities(root, ", walked from `feature-tcs.md`");
+  const upstream = bundleFor(root, "demo", "group 1").upstream;
+
+  assert.ok(
+    upstream.includes(
+      "openspec/changes/demo/specs/shared/planning/demo/feature-tcs.md",
+    ),
+  );
+  assert.ok(!upstream.some((one) => one.includes("/planning/other/")));
+});
+
+test("shared-planning-agent-rounds-SC-108 - a group citing no capability, and the whole change, read every one", () => {
+  const root = fixture();
+  twoCapabilities(root);
+  for (const target of ["2", "apply"]) {
+    const upstream = bundleFor(root, "demo", target).upstream;
+    for (const capability of ["demo", "other"])
+      for (const name of ["user-journeys.md", "spec.md", "feature-tcs.md"])
+        assert.ok(
+          upstream.includes(
+            `openspec/changes/demo/specs/shared/planning/${capability}/${name}`,
+          ),
+          `${target} reads ${capability}'s ${name}`,
+        );
+  }
+});
+
 test("shared-planning-agent-rounds-SC-30 - a reference page the proposal cites is before the draft, as a page it marks is", () => {
   const root = fixture();
   writeFileSync(
