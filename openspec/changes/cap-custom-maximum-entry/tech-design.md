@@ -38,10 +38,12 @@ what the field takes.
      (forbidden by the product rule); refuse in `NumberInput` via `max`
      (browser clamping and locale parsing are not the contract).
 
-2. **Export the ceiling constant for Storybook and tests**
-   - Public export `CUSTOM_MAXIMUM_MAJOR_CEILING` beside
-     `sanitizeCustomMaximumDraft` from `@grade10/ui`, so stories and tests
-     share one number with the helper.
+2. **Export the ceiling constant and helper for stories and tests**
+   - `CUSTOM_MAXIMUM_MAJOR_CEILING` and `sanitizeCustomMaximumDraft` are
+     exported from `@grade10/ui` (`packages/ui/src/index.ts`), so stories and
+     tests share one number with the helper. They are helpers, not part of
+     the listing surface's contract: the requirement fixes the ceiling and the
+     restore, and no consumer is held to these names.
    - Alternatives rejected: duplicate the literal in stories; keep the
      constant file-private and hard-code `9999999999` in tests.
 

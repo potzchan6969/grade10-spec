@@ -46,7 +46,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       seeded `500`, paste `9999999999.99`, the draft reads `9999999999`.
       `shared-ui-auction-listing-US1-TC26-1`
 
-## 4. JPY bid ceiling (grade10) (owner: @mason5991)
+## 4. JPY bid ceiling (grade10)
 
 - [ ] 4.1 Tests first, in their own commit: `bidIncrements.test.ts` pins
       `bidCeiling("JPY")` at `10_000_000_000`; `placeBid.spec.ts` refuses a
@@ -60,7 +60,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 - [ ] 4.3 Verify - `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       and the auction backend lane.
 
-## 5. Bid ceiling walk (grade10) (owner: @mason5991)
+## 5. Bid ceiling walk (grade10)
 
 - [ ] 5.1 Walk the JPY rows against the deployed service: a lot starting at
       JPY 10,000,000,000 takes one first bid there, and a maximum of

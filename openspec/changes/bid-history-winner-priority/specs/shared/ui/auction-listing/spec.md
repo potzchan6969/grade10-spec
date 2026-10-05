@@ -4,7 +4,7 @@
 
 - Public bid history outcome
   - Winner crown: closed sold winning row shows a primary crown after the amount
-  - Equal-max tip: same-price non-leading row shows an Info tip in the amount tone
+  - Equal-max tip: a row tied on amount with a row above it shows an Info tip in the amount tone
   - Live lots: no winner crown
 
 ## ADDED Requirements
@@ -20,8 +20,9 @@ Live lots SHALL NOT set `isWinner`.
 
 **Equal-max flag** - `ListingBidHistoryRow` MAY carry
 `samePricePriority?: boolean`. The consumer sets it on a public row whose
-amount matches a row ranked above it, which leads because its maximum came
-first. The list decides nothing about priority.
+amount matches a row ranked above it, at the current price or at any older
+tie lower down, because the earlier maximum stands above it. The list
+decides nothing about priority.
 
 **Winner crown** - When `row.isWinner` is true and `copy.winner` is supplied,
 `ListingBidHistoryList` SHALL render a small filled crown icon in the primary

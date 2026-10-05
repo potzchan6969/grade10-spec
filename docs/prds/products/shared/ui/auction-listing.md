@@ -45,8 +45,9 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 - 🚧 **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)
-- 🚧 **Equal-max tip** — a same-price non-leading row shows an Info tip in
-  the amount tone: when maximums match, the earlier one leads
+- 🚧 **Equal-max tip** — a row tied on amount with a row above it shows an
+  Info tip in the amount tone, at the current price or lower down: when
+  maximums match, the earlier one leads
 
 ## Personal Bidding
 

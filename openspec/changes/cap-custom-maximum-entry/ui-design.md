@@ -23,9 +23,9 @@ belongs to the auction-listing delta; this file only maps surfaces and states.
 
 - Ceiling restore lives on the custom-maximum draft path in `packages/ui`
 - No new design-system primitive, variant, or token
-- No new public export required beyond helpers already on `@grade10/ui` if
-  delivery exposes `CUSTOM_MAXIMUM_MAJOR_CEILING` /
-  `sanitizeCustomMaximumDraft`
+- `CUSTOM_MAXIMUM_MAJOR_CEILING` and `sanitizeCustomMaximumDraft` are
+  exported from `@grade10/ui` as helpers for stories and tests, outside the
+  listing surface's contract
 
 ## States
 

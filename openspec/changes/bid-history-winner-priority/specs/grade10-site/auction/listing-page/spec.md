@@ -46,3 +46,11 @@ The lot page SHALL set the public Recent bids flags that
 - **GIVEN** a lot past its close whose result is not yet recorded, and a lot whose close is recorded with no winner
 - **WHEN** a collector reads each lot's Recent bids
 - **THEN** no row on either lot shows a crown
+
+#### Scenario: grade10-site-auction-listing-page-SC-51 - An older tie lower down keeps its tip
+**Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
+
+- **GIVEN** a live lot whose Recent bids hold two rows tied at an amount below the current price, from customer A's earlier maximum and customer B's later one
+- **WHEN** a collector reads its Recent bids
+- **THEN** customer B's row at that amount carries the Info tip
+- **AND** customer A's row at that amount carries none
