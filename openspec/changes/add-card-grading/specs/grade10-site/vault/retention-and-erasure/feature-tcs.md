@@ -1,6 +1,6 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## Background
@@ -91,7 +91,7 @@ Runs once per row of **Test data**.
 
 * Grade10 reads the window start as the row states.
 
-### grade10-site-vault-retention-and-erasure-US4-TC3-1: Submission cancelled before hand-in is purged with the account
+### grade10-site-vault-retention-and-erasure-US4-TC3-2: Submission cancelled before hand-in is purged with the account
 
 **Classification:**
 
@@ -110,6 +110,7 @@ Runs once per row of **Test data**.
 
 * `<submission_3>` was cancelled while `planned`, before any drop-off: planned by the collector on `<grade10 grading url>` and cancelled from its own page.
 * The account holds no open vault case.
+* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
 
 **Test data:**
 
@@ -120,7 +121,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read `<submission_3>`'s retained data and the window its record stands under.
-2. As the collector, file the ask to be forgotten on `<grade10 vault your data url>`.
+2. As the collector, file the ask to be forgotten under their own account through the vault's API.
 3. Age the request past its 7-day window, uncancelled.
 4. As admin(holds user:delete), open the request's Checklist on `<grade10 admin erasure url>`.
 5. Click Erase beside Grading.
@@ -180,7 +181,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * `<submission_4>` is not touched.
 
-### grade10-site-vault-retention-and-erasure-US4-TC5-1: Live grading submission blocks an otherwise eligible vault erasure
+### grade10-site-vault-retention-and-erasure-US4-TC5-2: Live grading submission blocks an otherwise eligible vault erasure
 
 **Classification:**
 
@@ -190,18 +191,17 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
+* **Layer:** api
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
-
 **Pre-conditions:**
 
-* customer(closed account) is signed in and on `<grade10 vault your data url>`.
-* The account holds `<submission_5>` and `<vault case_1>`.
+* customer(closed account) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
+* The account holds `<submission_5>` and `<vault case_1>`, and has filed no ask.
 * `<submission_5>` is seeded at `sent` through grading's dev seed, under the account's email and user id.
+* admin(holds user:delete) is on `<grade10 admin erasure url>`.
 
 **Test data:**
 
@@ -212,14 +212,19 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. File the erasure ask.
-2. Read the ask's outcome for the account.
+1. File the ask to be forgotten under the account.
+2. Ask for the account's own read under it.
+3. Age the request past its 7-day window, uncancelled.
+4. As admin, open the request's Checklist.
+5. Click Erase beside Grading.
+6. Read Grading's answer on the Checklist.
 
 **Expected Results:**
 
-* Grade10 refuses the whole ask, naming `<submission_5>`.
-* `<vault case_1>`'s data is unchanged.
-* Nothing is erased anywhere on the account.
+* Step 1 files the request; no vault case holds it back.
+* Step 2 reads the request filed, with no hold beside it.
+* Step 6 refuses the erasure, naming `<submission_5>` and cards with the grader.
+* `<submission_5>` and `<vault case_1>`'s data are unchanged.
 
 ### grade10-site-vault-retention-and-erasure-US4-TC6-1: Submission still with the grader is reported under no class
 
@@ -310,7 +315,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -387,7 +392,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -484,8 +489,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: `<submission_12>` is reported under no class, its windows measured from the day the transfer was marked received.
-
----
 
 ### grade10-site-vault-retention-and-erasure-US4-TC13-1: A repayment due on a collected submission refuses the erasure
 

@@ -2386,7 +2386,7 @@ Runs once per row of **Test data**.
 | Nothing left to hand back | Case added at the acceptance review | `US8-TC13-1`: decided by the product owner, 2026-10-01, stated by `grade10-site-grading-submission-lifecycle-SC-65` |
 | Storage months and a held card's storage | Case added at the acceptance review | `US8-TC14-1` and `US8-TC15-1`: the held card's start decided by the product owner, 2026-10-01, stated by `grade10-site-grading-submission-lifecycle-SC-66` and `SC-67` |
 | `US1-TC4-1` | **Corrected against `grade10-site-grading-submission-lifecycle-SC-09` and `-SC-10`**, at the walk | running late is the estimate passed; a new date ahead of today ends it, so the page shows the date with no Running late; the requirement says running late only past the estimate; `ui-design.md` draws the new date with no Running late |
-| `US11-TC2-2` | **Corrected against `grade10-site-grading-submission-lifecycle-SC-59`**, at the walk | the scenario keeps the counter's note and photographs on the record; the collector's page shows a card's photographs from hand-in (`shared-ui-grading-submission-SC-34`), so before it only a refusal reads on the page; the edit is a card added, the editor renaming none |
+| `US11-TC2-2` | **Corrected against `grade10-site-grading-submission-lifecycle-SC-59`**, at the walk | the scenario keeps the counter's note and photographs on the record; the collector's page shows a card's photographs from hand-in (shared-ui-grading-submission-SC-34), so before it only a refusal reads on the page; the edit is a card added, the editor renaming none |
 
 ### Manual
 

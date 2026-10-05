@@ -65,7 +65,7 @@ its scope, Q10 retired.
   `assignCertId` in `services/inventoryMutations.ts`. Both write
   `cert-id-change` (Q8).
   - Rejected: one `setCertId` procedure keyed on an optional record id. The
-    two inputs differ (assignment carries the copy facts), and one schema with
+    two inputs differ (assignment carries remarks and no record id), and one schema with
     optional halves would accept a correction carrying a Grade Issuer.
 - **Lock order** - inventory row, then the Cert row on a correction, the same
   order `reserve` takes, so a hold and a change on one product queue behind
@@ -98,10 +98,12 @@ status }` in the error's data, so the dialog names the unit and its status.
   `created_at` at the change, and writes `unidentified_stock - 1` and
   `updated_at` on the inventory row. `stock`, `reserved`, `sold`, `withdrawn`
   and `vaulted` are not written (Q9).
-- **Copy facts as at intake** - the trimming, `-`-as-absent and issuer
-  canonicalisation inside `intakeStock` move to one `normalizeUnitFacts` in
-  `services/unitFacts.ts`; intake and assignment both call it, so the two
-  cannot drift. Grade Issuer `RAW` or blank refuses `invalid-grade-issuer`.
+- **Cert ID alone** - an assignment takes the Cert ID and remarks, as the
+  intake dialog does (Q18), and inserts the Cert row with every copy fact
+  null. The input is an Effect `Schema.Struct`, whose decode drops unknown
+  keys, so a Grade Issuer, Grade, Autograph Grade or Serial sent anyway never
+  reaches the service (Q20). Intake's trimming, `-`-as-absent and issuer
+  canonicalisation stay in one `normalizeUnitFacts` in `services/unitFacts.ts`.
 - **History entry** - `changedEntity inventory`, `actorKind operator`,
   `quantity 1`, `reservationId null`, `reason` the trimmed remarks or null.
   `before` and `after` gain `certRecord`, the record's wire shape on that side:
@@ -231,17 +233,15 @@ and no reservation has ever named it.
 
 **Assign** - `assignCertId(db, clock, input)`, one transaction.
 
-| Input                               | Type                                    |
-| ----------------------------------- | --------------------------------------- |
-| `productId`                         | id                                      |
-| `certId`, `gradeIssuer`             | string, trimmed, required               |
-| `grade`, `autographGrade`, `serial` | optional string; blank or `-` is absent |
-| `remarks`                           | optional string, trimmed; empty is null |
-| `actorId`                           | the staff id from the session           |
+| Input       | Type                                    |
+| ----------- | --------------------------------------- |
+| `productId` | id                                      |
+| `certId`    | string, trimmed, required               |
+| `remarks`   | optional string, trimmed; empty is null |
+| `actorId`   | the staff id from the session           |
 
-1. `normalizeUnitFacts`; an empty Cert ID or `No Cert ID` in any case refuses
-   `invalid-cert-id`; a blank
-   or `RAW` Grade Issuer refuses `invalid-grade-issuer`.
+1. Trim the Cert ID; an empty Cert ID or `No Cert ID` in any case refuses
+   `invalid-cert-id`.
 2. Lock the inventory by product; none refuses `unknown-product`.
 3. `unidentified_stock − sumActiveNoCertRemainingByInventoryId < 1`, or
    available below 1, refuses `insufficient-available`.
@@ -291,7 +291,7 @@ limit, unit? })`: the keyset query unchanged, plus the membership predicate on
 | `products.get`            | Answer gains `regularStock: { available, hasHistory }`; each `certIds` item gains `unmoved` |
 | `CHANGELOG_ACTIONS`       | Gains `cert-id-change`                                                                      |
 | `changelogSnapshotSchema` | Gains optional `certRecord: InventoryCertId`                                                |
-| `InventoryFailureCode`    | Gains `cert-id-taken`, carrying the holding record, and `invalid-grade-issuer`              |
+| `InventoryFailureCode`    | Gains `cert-id-taken`, carrying the holding record                                          |
 
 ## Risks / Trade-offs
 

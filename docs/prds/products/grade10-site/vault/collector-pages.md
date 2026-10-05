@@ -11,8 +11,9 @@ again.
 - 🚧 **On the site** — no vault page but the signing ceremony at
   `grade10.com/vault/sign#<token>`, opened from the QR code or link staff
   hand over at the counter; no account needed
-- ❓ **The collector's screens** — the case list, the request, one case and
-  booking a visit; @tangconst designs them from the backend as it stands —
+- ❓ **The collector's screens** — the case list, the request, one case,
+  booking a visit and Your data; @tangconst designs them from the backend as
+  it stands —
   [Grade10 Vault Digital Twin](/references/grade10-vault-digital-twin)
 - **Sign-in** — magic link, Google where enabled; no phone number and no SMS
 - **Language** — the ceremony's chrome in English and both Chinese scripts;
@@ -118,7 +119,7 @@ again.
   missed — [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#timers)
 - **The visit completes** on the first counter act after its slot
 - ❓ **Booking on screen** — the shop and slot picker and the booked visit;
-  @tangconst
+  which screen holds them is @tangconst's
 
 ## Messages
 
@@ -159,6 +160,8 @@ again.
 :::detail{title="Code map" for="engineer"}
 - **Pages** — `apps/frontend/grade10/src/pages/vault/SignPage.tsx`; the
   address table is `surfaces.ts`
+- **Booking views** — `packages/vault/frontend/src/features/custody/booking`,
+  kept as views a screen composes and mounted by no route
 - **Links** — `CASE_PATH` and `VERIFY_PATH` in
   `packages/vault/contracts/src/paths.ts`, which the emails fill
 - **Customer router** — `packages/vault/backend/src/trpc/routers/cases.ts`:

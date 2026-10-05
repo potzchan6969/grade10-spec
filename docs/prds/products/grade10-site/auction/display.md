@@ -103,7 +103,7 @@ the one a search engine keeps.
   addresses, images and current bids. A closed lot's offer stays on the lot
   page
 
-::story{id="pages-auction-list--default" title="Auction list"}
+::story{id="pages-auction-auction-list--default" title="Auction list"}
 
 ::story{id="auction-list-featured-auctions--carousel-banner" title="Featured carousel"}
 

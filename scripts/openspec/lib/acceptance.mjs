@@ -306,15 +306,22 @@ function readRetiredIds(sections) {
 }
 
 function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
-  const deltaFeature = sectionByName(
-    rootSections(deltaText).sections,
-    "Feature set",
-  );
-  if (!deltaFeature) return currentSpec;
+  const deltaSections = rootSections(deltaText).sections;
+  const deltaFeature = sectionByName(deltaSections, "Feature set");
+  const removedFeature = sectionByName(deltaSections, "REMOVED Feature set");
+  const removedGroups = (removedFeature?.raw ?? "")
+    .split("\n")
+    .filter((line) => /^-\s+/.test(line))
+    .map((line) => line.trim());
+  if (!deltaFeature && removedGroups.length === 0) return currentSpec;
   const currentFeature = sectionByName(
     rootSections(currentSpec).sections,
     "Feature set",
   );
+  if (!currentFeature && removedGroups.length > 0)
+    throw new Error(
+      `${capability}: cannot remove a Feature set group without a durable Feature set`,
+    );
   if (!currentFeature) {
     return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
   }
@@ -349,8 +356,12 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     return (match?.[1] ?? match?.[2])?.trim() || null;
   };
   const baseGroups = splitGroups(currentFeature?.raw ?? "");
-  const deltaGroups = splitGroups(deltaFeature.raw);
-  if (deltaGroups.size === 0) {
+  const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
+  if (new Set(removedGroups).size !== removedGroups.length)
+    throw new Error(
+      `${capability}: REMOVED Feature set names a root group more than once`,
+    );
+  if (deltaGroups.size === 0 && removedGroups.length === 0) {
     if (deltaFeature.raw.trim() === currentFeature.raw.trim())
       return currentSpec;
     throw new Error(
@@ -379,6 +390,17 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
       else if (!items.some((one) => textOf(one) === textOf(item)))
         items.push(item);
     }
+  }
+  for (const group of removedGroups) {
+    if (!baseGroups.has(group))
+      throw new Error(
+        `${capability}: REMOVED Feature set names a root group that does not exist: ${group.replace(/^-\s+/, "")}`,
+      );
+    if (deltaGroups.has(group))
+      throw new Error(
+        `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
+      );
+    baseGroups.delete(group);
   }
   const body = [...baseGroups]
     .map(([group, items]) => [group, ...items.flat()].join("\n"))
@@ -551,13 +573,34 @@ function splitManual(raw) {
   };
 }
 
+const RUN_LINE = /^(\*\*Run\b|Run:)/;
+
+/** A run is its `Run` paragraph and what follows until the next one; text
+ *  before the first is a run with no heading. A delta run whose heading the
+ *  durable suite already holds, or the delta's own headless run, is that run
+ *  grown since its last fold and replaces it; any other run is added. */
+function mergeRuns(currentRuns, deltaRuns) {
+  if (!deltaRuns || currentRuns.includes(deltaRuns)) return currentRuns;
+  const runsOf = (text) =>
+    paragraphs(text).reduce((runs, one) => {
+      if (runs.length === 0 || RUN_LINE.test(one)) runs.push([one]);
+      else runs.at(-1).push(one);
+      return runs;
+    }, []);
+  const keyOf = (run) => (RUN_LINE.test(run[0]) ? run[0] : "");
+  const merged = runsOf(currentRuns);
+  for (const run of runsOf(deltaRuns)) {
+    const at = merged.findIndex((one) => keyOf(one) === keyOf(run));
+    if (at < 0) merged.push(run);
+    else merged[at] = run;
+  }
+  return merged.map((run) => run.join("\n\n")).join("\n\n");
+}
+
 function mergeReconciliation(currentRaw, deltaRaw) {
   const current = splitManual(currentRaw);
   const delta = splitManual(deltaRaw);
-  const runs =
-    delta.runs && !current.runs.includes(delta.runs)
-      ? [current.runs, delta.runs].filter(Boolean).join("\n\n")
-      : current.runs;
+  const runs = mergeRuns(current.runs, delta.runs);
   const tables = [current.manual, delta.manual].map((lines) =>
     lines.filter((line) => line.startsWith("|")),
   );
@@ -841,7 +884,10 @@ function foldOne(
   const deltaFeatureSet = delta.children.find(
     (section) => section.heading === "Feature set",
   );
-  if (deltaFeatureSet)
+  const deltaRemovedFeatureSet = delta.children.some(
+    (section) => section.heading === "REMOVED Feature set",
+  );
+  if (deltaFeatureSet || deltaRemovedFeatureSet)
     durable = mergeFeatureSet(durable, deltaText, capability, priorText);
   const requirements = new Map(requirementBlocks(durable));
   const priorRequirements =
@@ -1091,7 +1137,13 @@ export function contractTargets(root, changeId) {
     const anchors = new Set();
     if (delta?.children.some((section) => section.heading === "Purpose"))
       anchors.add("Purpose");
-    if (delta?.children.some((section) => section.heading === "Feature set"))
+    if (
+      delta?.children.some(
+        (section) =>
+          section.heading === "Feature set" ||
+          section.heading === "REMOVED Feature set",
+      )
+    )
       anchors.add("Feature set");
     for (const section of deltaSections(deltaText)) {
       const kind = deltaKindOf(section.heading);

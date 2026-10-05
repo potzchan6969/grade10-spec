@@ -72,179 +72,183 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 
 Composes the design-system primitives group 2 widens. Every export takes
 `copy`, `locale` and `className`, and renders with no application behind it.
+What this group built is deleted by 37.2 (`decisions.md` Q148).
 
 - [x] 3.1 Write the stories and the tests for the five planning blocks in
       `packages/ui/src/blocks/grading-submission/`, one story per state and
-      every query by role (`shared-ui-grading-submission-SC-03`,
-      `shared-ui-grading-submission-SC-04`,
-      `shared-ui-grading-submission-SC-05`,
-      `shared-ui-grading-submission-SC-59`,
-      `shared-ui-grading-submission-SC-60`,
-      `shared-ui-grading-submission-SC-06`,
-      `shared-ui-grading-submission-SC-07`,
-      `shared-ui-grading-submission-SC-08`,
-      `shared-ui-grading-submission-SC-09`,
-      `shared-ui-grading-submission-SC-10`,
-      `shared-ui-grading-submission-SC-11`,
-      `shared-ui-grading-submission-SC-12`,
-      `shared-ui-grading-submission-SC-13`,
-      `shared-ui-grading-submission-SC-14`,
-      `shared-ui-grading-submission-SC-15`,
-      `shared-ui-grading-submission-SC-16`,
-      `shared-ui-grading-submission-SC-17`,
-      `shared-ui-grading-submission-SC-18`,
-      `shared-ui-grading-submission-SC-19`,
-      `shared-ui-grading-submission-SC-61`,
-      `shared-ui-grading-submission-SC-62`,
-      `shared-ui-grading-submission-SC-20`,
-      `shared-ui-grading-submission-SC-21`,
-      `shared-ui-grading-submission-SC-22`,
-      `shared-ui-grading-submission-SC-23`,
-      `shared-ui-grading-submission-SC-63`,
-      `shared-ui-grading-submission-SC-24`,
-      `shared-ui-grading-submission-SC-25`,
-      `shared-ui-grading-submission-SC-26`,
-      `shared-ui-grading-submission-SC-27`,
-      `shared-ui-grading-submission-SC-28`)
+      every query by role (shared-ui-grading-submission-SC-03,
+      shared-ui-grading-submission-SC-04,
+      shared-ui-grading-submission-SC-05,
+      shared-ui-grading-submission-SC-59,
+      shared-ui-grading-submission-SC-60,
+      shared-ui-grading-submission-SC-06,
+      shared-ui-grading-submission-SC-07,
+      shared-ui-grading-submission-SC-08,
+      shared-ui-grading-submission-SC-09,
+      shared-ui-grading-submission-SC-10,
+      shared-ui-grading-submission-SC-11,
+      shared-ui-grading-submission-SC-12,
+      shared-ui-grading-submission-SC-13,
+      shared-ui-grading-submission-SC-14,
+      shared-ui-grading-submission-SC-15,
+      shared-ui-grading-submission-SC-16,
+      shared-ui-grading-submission-SC-17,
+      shared-ui-grading-submission-SC-18,
+      shared-ui-grading-submission-SC-19,
+      shared-ui-grading-submission-SC-61,
+      shared-ui-grading-submission-SC-62,
+      shared-ui-grading-submission-SC-20,
+      shared-ui-grading-submission-SC-21,
+      shared-ui-grading-submission-SC-22,
+      shared-ui-grading-submission-SC-23,
+      shared-ui-grading-submission-SC-63,
+      shared-ui-grading-submission-SC-24,
+      shared-ui-grading-submission-SC-25,
+      shared-ui-grading-submission-SC-26,
+      shared-ui-grading-submission-SC-27,
+      shared-ui-grading-submission-SC-28)
 - [x] 3.2 Build `GradingFeeSheet` — a `Table` per grader under a
       `SegmentedControl`, the cover column only where the level carries one,
       the grader picked by id, the sheet drawn as it was given
-      (`shared-ui-grading-submission-SC-03`,
-      `shared-ui-grading-submission-SC-04`,
-      `shared-ui-grading-submission-SC-05`,
-      `shared-ui-grading-submission-SC-59`)
+      (shared-ui-grading-submission-SC-03,
+      shared-ui-grading-submission-SC-04,
+      shared-ui-grading-submission-SC-05,
+      shared-ui-grading-submission-SC-59)
 - [x] 3.3 Build `GradingLevelPicker` — the graders, the highest declared value,
       a `RadioCard` per level open or closed with the card or the count that
       closed it, the dark estimate card and the upcharge `Alert`
-      (`shared-ui-grading-submission-SC-60`,
-      `shared-ui-grading-submission-SC-06`,
-      `shared-ui-grading-submission-SC-07`,
-      `shared-ui-grading-submission-SC-08`,
-      `shared-ui-grading-submission-SC-09`,
-      `shared-ui-grading-submission-SC-10`,
-      `shared-ui-grading-submission-SC-11`,
-      `shared-ui-grading-submission-SC-12`)
+      (shared-ui-grading-submission-SC-60,
+      shared-ui-grading-submission-SC-06,
+      shared-ui-grading-submission-SC-07,
+      shared-ui-grading-submission-SC-08,
+      shared-ui-grading-submission-SC-09,
+      shared-ui-grading-submission-SC-10,
+      shared-ui-grading-submission-SC-11,
+      shared-ui-grading-submission-SC-12)
 - [x] 3.4 Build `GradingCardList` — a `Card` per card with `Autocomplete`,
       `NumberInput` and the minimum grade, the reference sales or the
       kept-as-typed line, the cap that refuses the card past it, the empty
       list's two ways to start, and one callback per act
-      (`shared-ui-grading-submission-SC-13`,
-      `shared-ui-grading-submission-SC-14`,
-      `shared-ui-grading-submission-SC-15`,
-      `shared-ui-grading-submission-SC-16`,
-      `shared-ui-grading-submission-SC-17`,
-      `shared-ui-grading-submission-SC-18`,
-      `shared-ui-grading-submission-SC-19`,
-      `shared-ui-grading-submission-SC-61`,
-      `shared-ui-grading-submission-SC-62`)
+      (shared-ui-grading-submission-SC-13,
+      shared-ui-grading-submission-SC-14,
+      shared-ui-grading-submission-SC-15,
+      shared-ui-grading-submission-SC-16,
+      shared-ui-grading-submission-SC-17,
+      shared-ui-grading-submission-SC-18,
+      shared-ui-grading-submission-SC-19,
+      shared-ui-grading-submission-SC-61,
+      shared-ui-grading-submission-SC-62)
 - [x] 3.5 Build `GradingPasteSheet` — a `Drawer` over a `Textarea`, the line
       counter, the four counts with their lines and the skipped count, the Bulk
       notice, and the cards reported through `onApply`
-      (`shared-ui-grading-submission-SC-20`,
-      `shared-ui-grading-submission-SC-21`,
-      `shared-ui-grading-submission-SC-22`,
-      `shared-ui-grading-submission-SC-23`,
-      `shared-ui-grading-submission-SC-63`)
+      (shared-ui-grading-submission-SC-20,
+      shared-ui-grading-submission-SC-21,
+      shared-ui-grading-submission-SC-22,
+      shared-ui-grading-submission-SC-23,
+      shared-ui-grading-submission-SC-63)
 - [x] 3.6 Build `GradingReview` — the schedule, the three totals, the per-card
       warning with both prices, the five good-to-know lines, the tick nothing
       is booked without, and the refusal it was given
-      (`shared-ui-grading-submission-SC-24`,
-      `shared-ui-grading-submission-SC-25`,
-      `shared-ui-grading-submission-SC-26`,
-      `shared-ui-grading-submission-SC-27`,
-      `shared-ui-grading-submission-SC-28`)
+      (shared-ui-grading-submission-SC-24,
+      shared-ui-grading-submission-SC-25,
+      shared-ui-grading-submission-SC-26,
+      shared-ui-grading-submission-SC-27,
+      shared-ui-grading-submission-SC-28)
 - [x] 3.7 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm run typecheck`, `pnpm run lint`
 - [x] 3.8 Make `GradingReview`'s `onBook`, `onConsent` and `consented`
       optional as one set, its test and a Kept story red first: given neither, no Book and no
       statement, the save act reading the words the caller passes; then run
-      3.7's checks (`shared-ui-grading-submission-SC-74`)
+      3.7's checks (shared-ui-grading-submission-SC-74)
 
 ## 4. The submission blocks and the barrel (grade10-spec) (owner: @ecchochan)
 
+What this group built is deleted by 37.2, its `::story` cards already taken
+off the manual (`decisions.md` Q148).
+
 - [x] 4.1 Write the stories and the tests for the eight submission blocks and
-      the barrel, one story per state (`shared-ui-grading-submission-SC-29`,
-      `shared-ui-grading-submission-SC-30`,
-      `shared-ui-grading-submission-SC-31`,
-      `shared-ui-grading-submission-SC-32`,
-      `shared-ui-grading-submission-SC-33`,
-      `shared-ui-grading-submission-SC-34`,
-      `shared-ui-grading-submission-SC-35`,
-      `shared-ui-grading-submission-SC-64`,
-      `shared-ui-grading-submission-SC-36`,
-      `shared-ui-grading-submission-SC-37`,
-      `shared-ui-grading-submission-SC-38`,
-      `shared-ui-grading-submission-SC-39`,
-      `shared-ui-grading-submission-SC-40`,
-      `shared-ui-grading-submission-SC-41`,
-      `shared-ui-grading-submission-SC-42`,
-      `shared-ui-grading-submission-SC-43`,
-      `shared-ui-grading-submission-SC-44`,
-      `shared-ui-grading-submission-SC-45`,
-      `shared-ui-grading-submission-SC-46`,
-      `shared-ui-grading-submission-SC-47`,
-      `shared-ui-grading-submission-SC-48`,
-      `shared-ui-grading-submission-SC-49`,
-      `shared-ui-grading-submission-SC-50`,
-      `shared-ui-grading-submission-SC-51`,
-      `shared-ui-grading-submission-SC-52`,
-      `shared-ui-grading-submission-SC-53`,
+      the barrel, one story per state (shared-ui-grading-submission-SC-29,
+      shared-ui-grading-submission-SC-30,
+      shared-ui-grading-submission-SC-31,
+      shared-ui-grading-submission-SC-32,
+      shared-ui-grading-submission-SC-33,
+      shared-ui-grading-submission-SC-34,
+      shared-ui-grading-submission-SC-35,
+      shared-ui-grading-submission-SC-64,
+      shared-ui-grading-submission-SC-36,
+      shared-ui-grading-submission-SC-37,
+      shared-ui-grading-submission-SC-38,
+      shared-ui-grading-submission-SC-39,
+      shared-ui-grading-submission-SC-40,
+      shared-ui-grading-submission-SC-41,
+      shared-ui-grading-submission-SC-42,
+      shared-ui-grading-submission-SC-43,
+      shared-ui-grading-submission-SC-44,
+      shared-ui-grading-submission-SC-45,
+      shared-ui-grading-submission-SC-46,
+      shared-ui-grading-submission-SC-47,
+      shared-ui-grading-submission-SC-48,
+      shared-ui-grading-submission-SC-49,
+      shared-ui-grading-submission-SC-50,
+      shared-ui-grading-submission-SC-51,
+      shared-ui-grading-submission-SC-52,
+      shared-ui-grading-submission-SC-53,
       `shared-ui-grading-submission-SC-01`,
       `shared-ui-grading-submission-SC-02`,
-      `shared-ui-grading-submission-SC-54`,
-      `shared-ui-grading-submission-SC-55`,
-      `shared-ui-grading-submission-SC-56`,
-      `shared-ui-grading-submission-SC-57`,
-      `shared-ui-grading-submission-SC-58`)
+      shared-ui-grading-submission-SC-54,
+      shared-ui-grading-submission-SC-55,
+      shared-ui-grading-submission-SC-56,
+      shared-ui-grading-submission-SC-57,
+      shared-ui-grading-submission-SC-58)
 - [x] 4.2 Build `GradingOwnershipChip` as the two `Badge`s the status table
       pairs and `GradingStatusRail` as seven `Step`s, the reached stage
       `progress` and an ended submission staying where it ended
-      (`shared-ui-grading-submission-SC-29`,
-      `shared-ui-grading-submission-SC-30`,
-      `shared-ui-grading-submission-SC-31`,
-      `shared-ui-grading-submission-SC-32`,
-      `shared-ui-grading-submission-SC-33`)
+      (shared-ui-grading-submission-SC-29,
+      shared-ui-grading-submission-SC-30,
+      shared-ui-grading-submission-SC-31,
+      shared-ui-grading-submission-SC-32,
+      shared-ui-grading-submission-SC-33)
 - [x] 4.3 Build `GradingCardRecord` and `GradingGradeCards` — the intake id,
       the photograph pair, the outcome badge in the tone the outcome names, the
       certificate against the address it was given, the grade at display size
       and the ungraded card in the `error` tone with its code and note
-      (`shared-ui-grading-submission-SC-34`,
-      `shared-ui-grading-submission-SC-35`,
-      `shared-ui-grading-submission-SC-64`,
-      `shared-ui-grading-submission-SC-36`,
-      `shared-ui-grading-submission-SC-37`,
-      `shared-ui-grading-submission-SC-38`,
-      `shared-ui-grading-submission-SC-39`)
+      (shared-ui-grading-submission-SC-34,
+      shared-ui-grading-submission-SC-35,
+      shared-ui-grading-submission-SC-64,
+      shared-ui-grading-submission-SC-36,
+      shared-ui-grading-submission-SC-37,
+      shared-ui-grading-submission-SC-38,
+      shared-ui-grading-submission-SC-39)
 - [x] 4.4 Build `GradingPickupCard` — the code in the mono face, the items,
       where and open, the one figure to settle or none, and what to bring above
       and below the threshold — and `GradingNamedCollector`
-      (`shared-ui-grading-submission-SC-40`,
-      `shared-ui-grading-submission-SC-41`,
-      `shared-ui-grading-submission-SC-42`,
-      `shared-ui-grading-submission-SC-43`,
-      `shared-ui-grading-submission-SC-44`,
-      `shared-ui-grading-submission-SC-45`)
+      (shared-ui-grading-submission-SC-40,
+      shared-ui-grading-submission-SC-41,
+      shared-ui-grading-submission-SC-42,
+      shared-ui-grading-submission-SC-43,
+      shared-ui-grading-submission-SC-44,
+      shared-ui-grading-submission-SC-45)
 - [x] 4.5 Build `GradingMoneyBlock` as the one place the lines live, the due
       row in the `warning` tone and the settle lead above it, and
       `GradingUncollectedLadder` with its three dated rungs and the posted
-      notice's day (`shared-ui-grading-submission-SC-46`,
-      `shared-ui-grading-submission-SC-47`,
-      `shared-ui-grading-submission-SC-48`,
-      `shared-ui-grading-submission-SC-49`,
-      `shared-ui-grading-submission-SC-50`,
-      `shared-ui-grading-submission-SC-51`,
-      `shared-ui-grading-submission-SC-52`,
-      `shared-ui-grading-submission-SC-53`)
+      notice's day (shared-ui-grading-submission-SC-46,
+      shared-ui-grading-submission-SC-47,
+      shared-ui-grading-submission-SC-48,
+      shared-ui-grading-submission-SC-49,
+      shared-ui-grading-submission-SC-50,
+      shared-ui-grading-submission-SC-51,
+      shared-ui-grading-submission-SC-52,
+      shared-ui-grading-submission-SC-53)
 - [x] 4.6 Re-export all thirteen blocks from `packages/ui/src/index.ts` under a
       `shared/ui/grading-submission` comment, take every word, figure and act
       through props, and render each state with no application behind it
       (`shared-ui-grading-submission-SC-01`,
       `shared-ui-grading-submission-SC-02`,
-      `shared-ui-grading-submission-SC-54`,
-      `shared-ui-grading-submission-SC-55`,
-      `shared-ui-grading-submission-SC-56`,
-      `shared-ui-grading-submission-SC-57`,
-      `shared-ui-grading-submission-SC-58`)
+      shared-ui-grading-submission-SC-54,
+      shared-ui-grading-submission-SC-55,
+      shared-ui-grading-submission-SC-56,
+      shared-ui-grading-submission-SC-57,
+      shared-ui-grading-submission-SC-58)
 - [x] 4.7 Add the `::story` cards for the thirteen blocks to
       `docs/prds/products/shared/ui/grading-submission.md`, one per block, and
       drop the `::figma` card where a story answers the same drawing
@@ -1828,6 +1832,11 @@ Stage (b).
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10) (owner: @ecchochan)
 
+Waived at archive: the collector's home, wizard and submission page are
+@tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
+cite is proven at the worker. 25.2 stands: `core/api/GradingApi.ts` is restored
+for the drop-off views.
+
 Needs group 10's exports and the worker of groups 11 and 24: the tests run
 25.2's transport on the real router in-process, and the stories replay
 recordings of those runs. `packages/storybook` arrives with
@@ -1872,7 +1881,7 @@ read this group's stories. Stage (b).
       `grade10-site-grading-submission-plan-SC-35`,
       `grade10-site-grading-submission-plan-SC-58`,
       `grade10-site-grading-submission-plan-SC-60`)
-- [ ] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
+- [x] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
       lifting the raw token out of the address's `#t=` fragment and sending it
       as a header, so groups 25 to 30 test on the worker in-process and their
       stories replay its recordings
@@ -1960,41 +1969,48 @@ read this group's stories. Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-59`,
       `grade10-site-grading-submission-plan-SC-32`)
 
-## 26. The collector's drop-off screens (grade10) (owner: @ecchochan)
+## 26. The drop-off booking views (grade10) (owner: @ecchochan)
 
-Needs group 10's exports and group 25's `GradingApi` and recorded worker.
-Stage (b).
+`DropoffBooking`, `DropoffBooked` and `useDropoffSubmission`, exported from
+`@grade10/grading-frontend/dropoff`; no route mounts them until a collector's
+page does. Needs group 10's exports and 25.2's `GradingApi` and recorded
+worker. Stage (b).
 
-- [ ] 26.1 Cover the picker and the booked page: the four Before you come
+- [x] 26.1 Cover the picker and the booked view: the four Before you come
       items, the Bulk duration, the vault line, the acts withdrawn once the
-      visit has started, and the page that reads booked until the diary answers
+      visit has started, and the view that reads booked until the diary answers
       (`grade10-site-grading-dropoff-booking-SC-12`,
       `grade10-site-grading-dropoff-booking-SC-13`,
       `grade10-site-grading-dropoff-booking-SC-14`,
       `grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.2 Compose the picker from `BookingLocationPicker` and
+- [x] 26.2 Compose the picker from `BookingLocationPicker` and
       `BookingSlotPicker` for a first booking and for a move alike, with
       `BatchLine` beside the picked day carrying the cut-off, the ship day and
       the day back
-- [ ] 26.3 Build the booked page over `BookingConfirmation` and
+- [x] 26.3 Build the booked view over `BookingConfirmation` and
       `BookingManageCard`: the visit, the four items to bring, the calendar
       file at `visit.ics`, the Bulk visit's about-45-minutes line, and the line
       saying a card that is not being graded can be vaulted on the same visit
       (`grade10-site-grading-dropoff-booking-SC-12`,
       `grade10-site-grading-dropoff-booking-SC-13`,
       `grade10-site-grading-dropoff-booking-SC-14`)
-- [ ] 26.4 Offer neither move nor cancel once the visit has started, and read
+- [x] 26.4 Offer neither move nor cancel once the visit has started, and read
       the visit as booked until the diary answers it missed
       (`grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
+- [x] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
       `Grading/Dropoff/Dropoff Booked`, each with `surface: site`
-- [ ] 26.6 Verify: `pnpm run test`,
+- [x] 26.6 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
 ## 27. The collector's submission page (grade10) (owner: @ecchochan)
+
+Waived at archive: the collector's home, wizard and submission page are
+@tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
+cite is proven at the worker. 27.10, the sign page, stands done. 27.14 is
+waived with them; the vault's `cases.byReference` proves SC-63.
 
 Needs group 10's exports and group 25's `GradingApi` and recorded worker.
 Stage (b).
@@ -2379,6 +2395,11 @@ lands. Stage (c).
 
 ## 31. The application wiring (grade10) (owner: @ecchochan)
 
+Waived at archive: the collector's home, wizard and submission page are
+@tangconst's to draw again (`decisions.md` Q147); the behaviour these tasks
+cite is proven at the worker. 31.6 and 31.8, the nav item and the prerendered
+home, are waived with them; 31.1 to 31.5 stand done, and 31.7 stands.
+
 Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
 (b).
 
@@ -2722,16 +2743,30 @@ rest lands. Stage (c).
 - [ ] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
-## 37. The status rail on the store's stage rail (grade10-spec) (owner: @ecchochan)
+## 37. Delete the grading blocks (grade10-spec) (owner: @ecchochan)
 
-Appended at landing, as `complete-vault-collector-flow` Q117 decided. Its own
-group because the rail's scroll wrapper changes the DOM the slot sits on.
+Lands as the owner's store commit once the amendment that retires
+`shared/ui/grading-submission` is accepted. It replaces the restyle of
+`GradingStatusRail` on `StageRail` this group first held, which has no block
+left to restyle (`decisions.md` Q148).
 
-- [ ] 37.1 Compose `StageRail` inside `GradingStatusRail`, the block's export,
-      its `copy`, `stage` and `ended` props and its stories kept: the seven
-      stages in order from its copy, `current` the stage, `ended` under it,
-      `slot: "grading-status-rail"` on the rail
-      (`shared-ui-grading-submission-SC-32`,
-      `shared-ui-grading-submission-SC-33`)
-- [ ] 37.2 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
-      `pnpm run typecheck`, `pnpm run lint`
+- [x] 37.1 A test in its own commit, red first: extend
+      `packages/ui/src/index.test.ts` so it reads the public entry and finds
+      none of the thirteen grading blocks and the fifty-three types the
+      requirement names, and no `packages/ui/src/blocks/grading-submission`
+      directory (`shared-ui-grading-submission-SC-01`,
+      `shared-ui-grading-submission-SC-02`,
+      `shared-ui-grading-submission-SC-71`)
+- [x] 37.2 Delete `packages/ui/src/blocks/grading-submission/**` — the
+      thirteen blocks, `grading-copy.ts`, `types.ts`, `fixtures.ts`, their
+      stories and their tests, `public-exports.test.ts` among them — and the
+      `// shared/ui/grading-submission` exports in `packages/ui/src/index.ts`;
+      no story, fixture or index entry names the set afterwards, and 37.1
+      passes (`shared-ui-grading-submission-SC-01`,
+      `shared-ui-grading-submission-SC-02`,
+      `shared-ui-grading-submission-SC-71`)
+- [x] 37.3 Flip the case 37.1 decides:
+      `pnpm run tcs:automated shared-ui-grading-submission-US1-TC88-1 --decided-by packages/ui/src/index.test.ts`
+- [x] 37.4 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
+      `pnpm run typecheck`, `pnpm run lint`, `pnpm check:manual`,
+      `pnpm run tcs:validate`

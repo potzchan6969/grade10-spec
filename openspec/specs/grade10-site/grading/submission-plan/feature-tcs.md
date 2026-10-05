@@ -711,7 +711,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Expected Results:**
 
-* The line reports as above the ceiling, naming the card and its declared value.
+* The line reports as above the ceiling.
 * The collector is told to ask at the counter or on WhatsApp, 4200000 (HKD minor units) being above the top level's 3900000 (HKD minor units) ceiling.
 * No second submission is named for it.
 
@@ -1020,11 +1020,13 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 1. Paste the 22 lines from **Test data** into Your list.
 2. Wait for matching to finish.
 3. Read the rows under the lines-read counter.
+4. Click Add 22 cards, then read Homebrew Grail's row in Your list.
 
 **Expected Results:**
 
-* The line above Bulk's ceiling is named with its declared value, 200000 (HKD minor units, HK$2,000.00), for a second submission on the same drop-off.
-* The other 21 lines are held in this submission at Bulk.
+* Step 3: the line above Bulk's ceiling is named for a second submission on the same drop-off.
+* Step 4: the row shows its declared value, 200000 (HKD minor units, HK$2,000.00), and says it goes in a second submission on the same drop-off.
+* Step 4: the other 21 lines are held in this submission at Bulk.
 
 ### grade10-site-grading-submission-plan-US4-TC5-1: The 101st pasted card is refused at Bulk's cap
 
@@ -2227,7 +2229,8 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **Expected Results:**
 
 * Booking is refused by name, stating the plan has expired.
-* Start again is offered in place of the review.
+* The collector is offered starting a submission again.
+* Book stays withdrawn.
 
 ### grade10-site-grading-submission-plan-US8-TC4-1: A booked plan does not expire at day 30
 
@@ -2259,8 +2262,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * The status still reads Drop-off booked, not Expired.
 * No nudge and no expiry letter is sent.
-
----
 
 ### grade10-site-grading-submission-plan-US8-TC5-1: A cancelled visit restarts the plan's clock and its nudge
 
@@ -2298,6 +2299,10 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 ---
 
+## Settled
+
+Nothing yet; the fold carries what this run refused into the durable suite.
+
 ## Reconciliation
 
 **Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 44 cases over US1 to US8 and four raised questions; the scenario pass wrote `grade10-site-grading-submission-plan-SC-01` to `SC-45` over fourteen ADDED requirements. Nothing verifies the bundle; this line is the run's own word for it.
@@ -2310,7 +2315,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 | `US1-TC5-1` booking without a list | **Joined** to `grade10-site-grading-submission-plan-SC-01` | the walk-in visit itself is `grade10-site/grading/dropoff-booking`'s, US-05 |
 | `US2-TC3-1` an empty list holds Continue | **Folded in:** `grade10-site-grading-submission-plan-SC-52` | the requirement refused a card with no value and said nothing about a list with no card |
 | `US2-TC4-1` removing a card | **Folded in:** `grade10-site-grading-submission-plan-SC-50` | the list is editable on the design and was stated in no requirement |
-| `US3-TC4-1` a line above the ceiling named for a second submission | **Corrected against `grade10-site-grading-submission-plan-SC-07`** | at 4200000 HKD minor units the card is above every level's ceiling, so it goes to the counter; the second-submission line is the chosen level's, `grade10-site-grading-submission-plan-SC-22`. Landed as Q65 |
+| `US3-TC4-1` a line above the ceiling named for a second submission | **Corrected against `grade10-site-grading-submission-plan-SC-07`** | at 4200000 HKD minor units the card is above every level's ceiling, so it goes to the counter; the second-submission line is the chosen level's, `grade10-site-grading-submission-plan-SC-22`. Landed as Q65. Corrected again at the walk against `grade10-site-grading-submission-plan-SC-54`, which states the line reports above the ceiling and goes to the counter, and no declared value |
 | `US3-TC6-1` an empty paste | **Folded in:** `grade10-site-grading-submission-plan-SC-53` | the paste's own guard |
 | `US4-TC2-1` exactly twenty cards leave every level open | **Folded in:** `grade10-site-grading-submission-plan-SC-55`, and the requirement's boundary corrected | "Twenty or more" closed every level at 20, against its own `grade10-site-grading-submission-plan-SC-20`, against the paste's more-than-20 rule and against the sheet's cards-a-submission column of 20. Rewritten as "More than twenty"; the blind pass found it |
 | `US4-TC6-1` the hundredth card at Bulk's cap | **Folded in:** `grade10-site-grading-submission-plan-SC-56` | the accepted edge beside `grade10-site-grading-submission-plan-SC-21`'s refused one |
@@ -2337,6 +2342,8 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 | `grade10-site-grading-submission-plan-SC-61` a plan kept unticked asks for the statement | **Case added:** `US6-TC9-1` | written after the blind pass: a plan saved unticked and booked from its page was asked for nothing, so the plan now holds its tick and a booking or a join for it unticked is refused |
 | `grade10-site-grading-submission-plan-SC-63` a plan kept with no level asks for one | **Case added:** `US6-TC10-1` | written after the blind pass: a plan kept before a level was picked was offered a drop-off its booking could only refuse, so its page now asks for the level through the list's edit, and a booking or a join sent for it is refused before the diary is asked |
 | `grade10-site-grading-submission-plan-SC-64` | Case added at the acceptance review | `grade10-site-grading-submission-plan-US8-TC5-1`: the clock restarts on a cancelled or missed visit and nudges again, decided by the product owner, 2026-10-01 |
+| `US4-TC4-1` | **Corrected against `grade10-site-grading-submission-plan-SC-22`**, at the walk | the declared value is read where the build names it, on the card's own row in Your list; the paste row names the card alone |
+| `US8-TC3-1` | **Corrected against `grade10-site-grading-submission-plan-SC-45` and shared-ui-grading-submission-SC-79**, at the walk | the scenario offers starting again without saying how, and the review stays; how a page offers it is the designer's to settle |
 
 ### Manual
 
@@ -2347,7 +2354,3 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 | `US8-TC2-1` the expiry at day 30 | the same clock, and the words on the expired page |
 | `US6-TC7-1`, `US6-TC8-1` a changed fee sheet | a console settings write sits between the two reads |
 | `US2-TC1-1` the reference sales read as a reference | a judgement of the words beside the card, not an assertion |
-
-## Settled
-
-Nothing yet; the fold carries what this run refused into the durable suite.

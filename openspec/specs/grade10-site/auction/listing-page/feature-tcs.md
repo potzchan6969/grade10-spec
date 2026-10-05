@@ -24,7 +24,7 @@ without waiting for a script to run.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
 
@@ -55,7 +55,7 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-01
 
@@ -93,7 +93,7 @@ catalogue.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-02
 
@@ -131,7 +131,7 @@ answer with the site's not-found surface,
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
 
@@ -161,7 +161,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-03
 
@@ -235,7 +235,7 @@ disagrees with what the document carried.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-04
 
@@ -266,7 +266,7 @@ disagrees with what the document carried.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-04
 
@@ -304,7 +304,7 @@ a bidding countdown is shown on <a published lot>.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-05
 
@@ -368,7 +368,7 @@ None.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-06
 
@@ -451,7 +451,7 @@ None.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-07
 
@@ -488,7 +488,7 @@ None.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-07
 
@@ -533,7 +533,7 @@ None.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-08
 
@@ -572,7 +572,7 @@ None.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-08
 
@@ -617,7 +617,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-09
 

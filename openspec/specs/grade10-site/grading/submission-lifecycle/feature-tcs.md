@@ -127,7 +127,7 @@ Runs once per row of **Test data**.
 
 * The estimate reads <ship day> plus the level's quoted turnaround.
 
-### grade10-site-grading-submission-lifecycle-US1-TC4-1: Running late shows once the estimate passes, with the new date once set
+### grade10-site-grading-submission-lifecycle-US1-TC4-1: Running late shows once the estimate passes, and a new date ends it
 
 **Classification:**
 
@@ -165,7 +165,7 @@ Runs once per row of **Test data**.
 
 * Step 1 shows the chip reading Running late with the grader named, and no new date yet.
 * Step 1: the status word still reads With the grader.
-* Step 3 shows the same chip with the new date.
+* Step 3 shows the new date, and no longer reads Running late, the estimate now being ahead.
 * Step 4: the running-late email names the new date, sent that day.
 
 ### grade10-site-grading-submission-lifecycle-US1-TC5-1: A submission id that does not exist shows the not-found page
@@ -850,8 +850,6 @@ Runs once per row of **Test data**.
 
 * Step 2: the collector is told that day that the card came back damaged, with the payout it owes.
 
----
-
 ### grade10-site-grading-submission-lifecycle-US5-TC5-1: A card that turns up is repaid before it goes home
 
 **Classification:**
@@ -1090,8 +1088,6 @@ Runs once per row of **Test data**.
 * Step 3: the receipt says the card went to the vault.
 * Step 4: that card reads Vaulted and links its case.
 * Step 4: it is not counted for storage on the submission.
-
----
 
 ### grade10-site-grading-submission-lifecycle-US6-TC7-1: A vault reference that matches no case reads as plain text
 
@@ -1726,8 +1722,6 @@ Runs once per row of **Test data**.
 
 * Step 2: no further message is sent about the cards being uncollected.
 
----
-
 ### grade10-site-grading-submission-lifecycle-US8-TC12-1: A rung falls on the shop's day
 
 **Classification:**
@@ -1760,8 +1754,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the first reminder falls on 31 January.
-
----
 
 ### grade10-site-grading-submission-lifecycle-US8-TC13-1: A submission whose every card is paid out climbs no rung
 
@@ -1798,8 +1790,6 @@ Runs once per row of **Test data**.
 * Step 1: the submission reads as ended; no storage reads due and no notice is owed.
 * Step 2: no reminder, storage or notice letter was sent.
 
----
-
 ### grade10-site-grading-submission-lifecycle-US8-TC14-1: Storage months come round on the day storage began
 
 **Classification:**
@@ -1832,8 +1822,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: storage reads 6000 (HKD, minor units), two months started from 1 April.
-
----
 
 ### grade10-site-grading-submission-lifecycle-US8-TC15-1: A card the grader held starts its storage from the day it came back
 
@@ -2290,13 +2278,13 @@ Runs once per row of **Test data**.
 
 | The counter | On the first card |
 | --- | --- |
-| Checked it | the condition note and both intake photographs |
+| Checked it | the condition note and both intake photographs, kept on its record |
 | Refused it | the Refused at the counter badge with the reason as staff typed it |
 
 **Steps:**
 
 1. Load the submission page in the first tab.
-2. In the second tab, change a card's name and save the list.
+2. In the second tab, add a card to the list and save it.
 3. In the second tab, click Cancel this submission and confirm Yes, cancel.
 
 **Expected Results:**
@@ -2304,7 +2292,7 @@ Runs once per row of **Test data**.
 * Step 1: the page offers no edit of the list and no Cancel this submission.
 * Step 2: the save is refused with a message that the list is at the counter.
 * Step 3: the cancel is refused by name, and the submission is not cancelled.
-* After step 3, reloading the page shows both cards as before, and the first card as in the row.
+* After step 3, reloading the page shows both cards as before; where the counter refused the first card, it reads Refused at the counter with the reason as staff typed it.
 
 ### grade10-site-grading-submission-lifecycle-US11-TC3-1: Editing a kept list saves the same submission and books nothing
 
@@ -2385,6 +2373,8 @@ Runs once per row of **Test data**.
 | The ladder on the shop's day | Case added at the acceptance review | `US8-TC12-1`, stated by `grade10-site-grading-submission-lifecycle-SC-64` |
 | Nothing left to hand back | Case added at the acceptance review | `US8-TC13-1`: decided by the product owner, 2026-10-01, stated by `grade10-site-grading-submission-lifecycle-SC-65` |
 | Storage months and a held card's storage | Case added at the acceptance review | `US8-TC14-1` and `US8-TC15-1`: the held card's start decided by the product owner, 2026-10-01, stated by `grade10-site-grading-submission-lifecycle-SC-66` and `SC-67` |
+| `US1-TC4-1` | **Corrected against `grade10-site-grading-submission-lifecycle-SC-09` and `-SC-10`**, at the walk | running late is the estimate passed; a new date ahead of today ends it, so the page shows the date with no Running late; the requirement says running late only past the estimate; `ui-design.md` draws the new date with no Running late |
+| `US11-TC2-2` | **Corrected against `grade10-site-grading-submission-lifecycle-SC-59`**, at the walk | the scenario keeps the counter's note and photographs on the record; the collector's page shows a card's photographs from hand-in (shared-ui-grading-submission-SC-34), so before it only a refusal reads on the page; the edit is a card added, the editor renaming none |
 
 ### Manual
 

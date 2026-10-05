@@ -49,6 +49,7 @@
 | Q21 | Is a second ask for the item back refused? | No: it is answered with the case as the first ask left it, and records nothing (recommended) | Refusing it by name |
 | Q22 | Is a decline sent after the offer ran out refused? | As the worker does now: a decline is judged against no expiry. Before the expiry sweep runs, a decline past the expiry is taken - the offer closes `declined_by_customer` and the case goes back to valuation; after the sweep, it is refused `NO_OPEN_OFFER`. Whether a decline should be refused at the expiry as an accept is, the owner confirms in a later change (recommended) | Refusing it as an offer that ran out, a new guard this change does not add |
 | Q23 | What does the calendar file answer for the collector's own case with no visit, or a cancelled one? | A case the diary never booked is refused by name as not found; a called-off visit is served as a cancellation of the same entry (recommended) | An empty calendar file for both |
+| Q24 | Do the visit booking views leave with the screens? | No: they stay with engineering as reusable parts of the flow. The booking slice in `@grade10/vault-frontend` keeps its views, stories and tests, and its core keeps the whole collector port, which the returning screens compose; no route mounts them until a screen of @tangconst's places them, and neither they nor the ceremony (Q2) composes a `vault-case` part - decided by the owner, 2026-10-03 | Removing the booking slice with the pages, which leaves @tangconst to rebuild a flow the worker and the diary already answer |
 
 ## Raised
 

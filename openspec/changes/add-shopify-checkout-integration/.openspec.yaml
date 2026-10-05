@@ -1,3 +1,5 @@
 schema: grade10-planning
 created: 2026-09-28
 promoted_by: "@kinisworking"
+hands:
+  dev: "@kinisworking"

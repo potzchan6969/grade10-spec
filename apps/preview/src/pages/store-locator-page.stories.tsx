@@ -19,6 +19,7 @@ import {
   STORE_LOCATOR_HOURS,
   STORE_LOCATOR_STORE,
 } from "./store-locator-content";
+import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 function RevealSection({
   children,
@@ -211,7 +212,7 @@ export const Default: Story = {
     if (footer === null) return;
     expect(
       within(footer).getByRole("link", { name: "Store Locator" }),
-    ).toHaveAttribute("href", "?path=/story/pages-store-locator-page--default");
+    ).toHaveAttribute("href", STORE_LOCATOR_HREF);
   },
 };
 

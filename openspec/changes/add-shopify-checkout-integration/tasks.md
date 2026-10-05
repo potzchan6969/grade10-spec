@@ -1,123 +1,141 @@
 ## 1. Contract and acceptance record (grade10-spec)
 
-- [ ] 1.1 Review the checkout feature suite against the four user journeys,
-  settle the manual/automated classifications, and keep the provider refusal,
-  response-loss, terminal-intent replay, dispatch-crash, carrier and signed-in
-  boundary cases explicit.
-- [ ] 1.2 Update the checkout PRD and the linked storefront/commerce
-  architecture records so the Draft Order invoice, checkout-intent recovery,
-  cart-release, provider-dispatch state and Thank You/Order status link rules
-  agree with the approved requirements.
-- [ ] 1.3 Verify the store artifacts with `pnpm check:manual`, the scoped
-  checkout test-case validator, and `openspec validate
-  add-shopify-checkout-integration --strict`.
+- [ ] 1.1 Verify amended frontend requirements and frozen anchors with the
+  scoped artifact checks; preserve trace identities and draft case status.
+- [ ] 1.2 Update the checkout PRD and linked frontend architecture records for
+  current drawer creation, fresh submissions, fixed invoices and unchanged
+  backend cleanup; do not add backend intent or recovery contracts.
+- [ ] 1.3 Verify with `pnpm check:manual` and
+  `pnpm openspec validate add-shopify-checkout-integration --strict`.
 
 ## 2. Shared contract and order persistence (grade10) (owner: @kinisworking)
 
-- [ ] 2.1 Add failing contract, repository and migration coverage for one
-  active intent, changed-intent rejection, terminal replay, provider-response
-  recovery, dispatch-crash recovery and invalid payment-event handling:
-  `grade10-site-store-checkout-SC-09` through
-  `grade10-site-store-checkout-SC-11`, `grade10-site-store-checkout-SC-16`,
-  and `grade10-site-store-checkout-SC-19` through
-  `grade10-site-store-checkout-SC-21`.
-- [ ] 2.2 Extend `packages/grade10-store/contracts` with the authenticated
-  `intentId` input and the wire-level `settling`, `settled`, `terminal`,
-  `intentConflict` and `recoveryRequired` results, preserving the existing
-  created/failed/contradicted/identity-required vocabulary and fixture clients
-  for both storefront brands.
-- [ ] 2.3 Add the nullable checkout-intent id, server request fingerprint,
-  provider-dispatch state and recovery deadline to the Store orders schema,
-  generate the additive migration and all-status per-member intent uniqueness
-  guard, and expose repository reads/claims without changing legacy, POS or
-  external order rows.
-- [ ] 2.4 Verify the shared contract and persistence layer with the focused
-  store contract/repository tests, `pnpm run typecheck`, `pnpm run
-  check:migrations`, and `pnpm run check:submodules`.
+Withdrawn by the frontend-only amendment. No implementation or verification
+work remains in this group. Owner and addresses preserve the existing claim.
+
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 2.1 | Backend contract, repository and migration intent/recovery tests |
+| 2.2 | Wiring intent/replay outcomes into the backend service |
+| 2.3 | Intent columns, dispatch state, deadline and uniqueness migration |
+| 2.4 | Persistence and migration verification |
+
+These retired addresses are not completed tasks and are never reused.
 
 ## 3. Backend checkout and Shopify lifecycle (grade10) (owner: @kinisworking)
 
-- [ ] 3.1 Add failing service/router/provider coverage for live review,
-  hosted handoff, signed-in access, line refusal, one-intent repetition,
-  terminal replay, dispatch-crash and manual recovery, settlement,
-  reconciliation and carrier behavior: `grade10-site-store-checkout-SC-01`
-  through `grade10-site-store-checkout-SC-08`, `grade10-site-store-checkout-SC-10`,
-  `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-14`,
-  `grade10-site-store-checkout-SC-16`, `grade10-site-store-checkout-SC-17`,
-  `grade10-site-store-checkout-SC-18`, and
-  `grade10-site-store-checkout-SC-19` through
-  `grade10-site-store-checkout-SC-21`.
-- [ ] 3.2 Thread the intent key through the authenticated checkout router and
-  service: normalize the reviewed basket/tender, compute the server hash,
-  claim the order, replay terminal outcomes, return the existing
-  invoice/settling result, enforce the provider-dispatch state machine, and
-  keep the public storefront from using typed-email identity. Preserve the
-  elevated/sandbox operator test path.
-- [ ] 3.3 Extend the Shopify draft contract and adapter with a deterministic
-  order correlation tag, searchable draft lookup and exact fingerprint
-  verification; record the Draft Order reference and invoice URL before
-  returning, and refuse to create a second draft after a dispatched request,
-  response loss or ambiguous provider lookup.
-- [ ] 3.4 Route Shopify refusal, webhook, order-read and reconciliation
-  results through the existing guarded order transition; retain provider
-  paid totals and settled facts, ignore duplicate/cross-shop events, and
-  release member cart lines only after `paid`. Mark unresolved dispatched
-  orders for manual recovery after the deadline; reject new intents for that
-  member until the provider draft is bound or canceled.
-- [ ] 3.5 Keep the carrier callback token-gated and stateless, make it use the
-  configured preview rule, return no rate for an unsupported destination, and
-  add diagnostics for the staging correlation/return path.
-- [ ] 3.6 Verify the backend with focused service/provider suites, `pnpm run
-  test:backend`, `pnpm run typecheck`, `pnpm run lint`, and the relevant
-  backend-quality checks before the frontend consumes the new result.
+Withdrawn by the frontend-only amendment. Existing backend behavior remains a
+dependency, without changes or delivery tasks here.
+
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 3.1 | Backend/provider/settlement/carrier regression suite |
+| 3.2 | Intent threading, replay and backend permission changes |
+| 3.3 | Provider correlation, searchable draft lookup and fingerprint checks |
+| 3.4 | Dispatch recovery, manual blockade and settlement changes |
+| 3.5 | Carrier callback and backend diagnostics changes |
+| 3.6 | Backend implementation validation |
+| 3.7 | Backend creation ordering and recovery compatibility work |
+| 3.8 | Operator bind/cancel recovery flow |
+
+These retired addresses are not completed tasks and are never reused.
 
 ## 4. Storefront checkout and order surfaces (grade10) (owner: @kinisworking)
 
-- [ ] 4.1 Add failing frontend coverage for live review gating, changed-line
-  recovery, one hosted invoice, signed-out access, repeated Pay, terminal
-  replay, dispatch-crash and recovery-required outcomes, paid cart release and
-  confirmation return: `grade10-site-store-checkout-SC-01`
-  through `grade10-site-store-checkout-SC-07`, `grade10-site-store-checkout-SC-09`,
-  `grade10-site-store-checkout-SC-11`, `grade10-site-store-checkout-SC-12`,
-  `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-15`,
-  and `grade10-site-store-checkout-SC-19` through
-  `grade10-site-store-checkout-SC-21`.
-- [ ] 4.2 Add same-session intent storage and invalidation to the existing
-  checkout feature; include the intent in Pay requests, keep Pay disabled
-  during pending/failed/contradictory live reads, and render the existing
-  tender estimate without presenting shipping or tax as final.
-- [ ] 4.3 Map the new settling, settled, terminal, intent-conflict and
-  recovery-required outcomes through `resolveCheckout`, keep the pending order
-  visible in Your Orders, refresh order settlement, and clear the member cart
-  only after the paid transition.
-- [ ] 4.4 Preserve the Overrider checkout-test page for signed-in and typed
-  email staging exercises while ensuring the public route requires the member
-  session and the identity/KYC outcome remains actionable.
-- [ ] 4.5 Add the Shopify Thank You and Order status extension in the existing
-  Shopify integration package; render the static Grade10 Your Orders link from
-  `ui-design.md` without adding a new `@grade10/ui` export or a
-  purchase-specific resolver.
-- [ ] 4.6 Verify the affected frontend with focused checkout/order tests,
-  `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`,
-  and the relevant Playwright smoke coverage.
+Consumes existing canonical clients and fixtures; depends on no new backend
+or Group 2 implementation. Tests land before their corresponding code and the
+test checkbox is ticked last.
+
+- [x] 4.1 Add failing frontend fixture and mounted browser coverage for current
+  review/tender, changed-line repair, hosted handoff, signed-out gating and
+  pending/paid return: `grade10-site-store-checkout-SC-01`,
+  `grade10-site-store-checkout-SC-02`, `grade10-site-store-checkout-SC-03`,
+  `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-05`,
+  `grade10-site-store-checkout-SC-06`, `grade10-site-store-checkout-SC-07`,
+  `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-13`,
+  `grade10-site-store-checkout-SC-15`.
+- [x] 4.4 Preserve the existing operator checkout-test frontend and its
+  signed-in/typed-email adapters while the public frontend uses member checkout:
+  `grade10-site-store-checkout-SC-06`.
+- [x] 4.5 Verify and complete the existing Shopify Thank You and Order status
+  extension link and localized labels without a new shared export or resolver:
+  `grade10-site-store-checkout-SC-15`.
+
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 4.2 | Same-session intent storage and invalidation |
+| 4.3 | Frontend replay/recovery workflow and local paid-cart deletion |
+| 4.6 | Verification gate for the superseded backend-dependent frontend plan |
+| 4.7 | Intent reload/conflict compatibility and older-bundle drain gate |
+
+These retired addresses are not completed tasks and are never reused.
+
+- [x] 4.8 Add failing fixture and browser tests for fresh submission after
+  resolution/reload, synchronous and rendered pending guards, fixed submitted
+  purchase, unchanged whole-line cleanup, existing verification feedback and response loss;
+  include delayed response after sign-out/member change and compatible domain
+  result mapping without asserting backend replay emission:
+  `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
+  `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`,
+  `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`.
+- [x] 4.9 Complete current review/accepted-tender submission, existing
+  verification feedback and frontend request gating; capture immutable request/member
+  scope and ignore stale UI effects; omit intent persistence and invoice reuse:
+  `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02`,
+  `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`,
+  `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
+  `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-37`.
+- [x] 4.10 Complete existing outcome navigation/feedback, pending order reads
+  and paid cart refresh without local deletion or new reconciliation:
+  `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-07`,
+  `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-13`,
+  `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-38`.
+- [x] 4.11 Verify focused frontend/extension tests and the mounted Playwright
+  integration flows, then run the affected package checks defined by
+  `docs/conventions/validation.md`; record commands and results without backend
+  migrations, provider writes or production enablement.
 
 ## 5. Staging shop readiness and release walk (grade10) (owner: @kinisworking)
 
-- [ ] 5.1 Prepare the staging evidence cases for one normal payment, repeated
-  Pay, terminal-intent replay, a crash before dispatch, response-loss recovery,
-  ambiguous recovery, changed/sold-out line, missed webhook, served carrier
-  destination, unsupported destination and the Grade10 confirmation link.
-- [ ] 5.2 After explicit staging authorization, configure the real Shopify
-  shop/app scopes, correlation-tag behavior, webhook topics, carrier service,
-  Thank You/Order status checkout UI extension, checkout hostname/return
-  surface and the staging feature gate; do not make production writes.
-- [ ] 5.3 Run one real staging walk for `grade10-site-store-checkout-US-01`,
-  `grade10-site-store-checkout-US-02`,
-  `grade10-site-store-checkout-US-03`, and
-  `grade10-site-store-checkout-US-04`, recording the order id, provider refs,
-  settlement timing, cart release and no-duplicate result. Include the
-  HKD 120,000 verified-buyer path.
-- [ ] 5.4 Verify the release evidence with the reviewed feature suite,
-  `pnpm run test:e2e:smoke`, the relevant backend checks and
-  `pnpm run check:manual`; production deployment, secrets and migrations stay
-  outside this plan until separately authorized.
+Real staging configuration, deployment and payment require later explicit
+authorization. No shop/provider/carrier/backend configuration is delivered by
+this planning or implementation phase.
+
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 5.1 | Real-shop intent/replay/dispatch/recovery/carrier evidence cases |
+| 5.2 | Provider scopes, tags, topics, carrier and backend shop configuration |
+| 5.3 | Backend recovery/no-duplicate/provider settlement release walk |
+| 5.4 | Backend/carrier release verification |
+
+These retired addresses are not completed tasks and are never reused.
+
+- [x] 5.5 Prepare frontend staging observations for current drawer handoff,
+  later fresh submission, fixed invoice, sign-in/verification, pending/paid
+  order display, unchanged cart refresh and both Shopify return surfaces.
+- [ ] 5.6 After explicit staging authorization, verify deployed frontend and
+  existing extension placement against the existing shop; record observed
+  invoice/order references and outcomes without adding recovery, carrier or
+  settlement work or claiming duplicate prevention.
+- [ ] 5.7 Verify the recorded frontend staging observations against the scoped
+  draft suite; record environment, commands, observed results and unrun gates.
+
+## 6. The walk (grade10)
+
+Uses the draft feature suite as input after frontend delivery. Human QA reviews
+deployed implementation with `/tcs-review add-shopify-checkout-integration`;
+manual execution uses `/tcs-run-sheet`. Cases remain draft during planning.
+
+- [ ] 6.1 Keep browser walks for all checkout journeys through drawer review,
+  Pay, refusal repair, sign-in and Shopify/order return, using existing
+  contract fixtures for automation and separately authorized staging for real
+  shop observations: `grade10-site-store-checkout-US-01`,
+  `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`,
+  `grade10-site-store-checkout-US-04`.
+- [ ] 6.2 In the walks' commit, mark only cases actually decided by them with
+  `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`; name cases
+  remaining manual in the suite and the walk's rounds row.
+- [ ] 6.3 Verify the relevant Playwright flows and record fixture versus
+  authorized staging proof separately. No duplicate-invoice, backend recovery
+  or carrier guarantees are part of this walk; production enablement requires
+  separate authorization.

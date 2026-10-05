@@ -80,9 +80,11 @@ product history.
 - **Cert ID per certified copy** - each certified unit enters inventory with
   one Cert ID and creates one Cert record; regular stock without a Cert ID is
   intaken as product quantity and creates no Cert record
-- **Copy-level facts** - each Cert record carries its required Cert ID, issuer,
-  grade, autograph grade, and serial; grade remains source text. A unit without
-  a Cert ID is regular stock rather than a Cert record.
+- **Copy-level facts** - each Cert record carries its required Cert ID. One
+  from the inventory workbook import also carries its issuer, grade, autograph
+  grade and serial, grade as source text; one intaken from the product page
+  carries the Cert ID alone. A unit without a Cert ID is regular stock rather
+  than a Cert record.
 - 🚧 **Every unit in Cert ID details** — View Cert IDs lists each Cert record
   and the regular stock without a Cert ID: one `No Cert ID` row for the
   available units with their count, shown whenever regular stock has any
@@ -91,11 +93,13 @@ product history.
   vaulted regular stock is not listed, because no unit of it is tracked
 - 🚧 **Cert ID correction** — a Cert record that has only been intaken can
   have its Cert ID changed to another one no record of the product holds, in
-  any status. An available unit of regular stock can be given a Cert ID with
-  its Grade Issuer, and Grade, Autograph Grade and Serial where known; it
-  becomes a Cert record and leaves the `No Cert ID` count. A record that has
-  ever been reserved, sold, withdrawn, vaulted or listed keeps its Cert ID, and
-  a Cert ID cannot be cleared or read `No Cert ID`
+  any status. A record that has ever been reserved, sold, withdrawn, vaulted
+  or listed keeps its Cert ID, and a Cert ID cannot be cleared or read
+  `No Cert ID`
+- 🚧 **Cert ID assignment** — an available unit of regular stock can be given
+  a Cert ID alone, the one field the intake dialog asks for; it becomes a Cert
+  record with no Grade Issuer, Grade, Autograph Grade or Serial and leaves the
+  `No Cert ID` count
 - 🚧 **Cert ID change in history** — each change is one history entry with
   its time, actor, the Cert ID before and after (`No Cert ID` before an
   assignment) and optional remarks, and it shows in that unit's history

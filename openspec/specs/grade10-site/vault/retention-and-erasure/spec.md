@@ -509,12 +509,12 @@ card paid out - with nothing due on it SHALL refuse nothing.
 **A submission never booked** - one still planned SHALL refuse nothing, and
 holds nothing for the review to report.
 
-**Withheld in the collector's words** - on the page, where the ask is filed, a
-live submission SHALL withhold it in the collector's words - cards of theirs
-with the grader, money to settle, or cards waiting to be collected - and the
-page SHALL file nothing while one stands. A request filed another way waits
-while the submission refuses it, as a request does when a hold opens after
-filing.
+**Filed, then named** - a live submission SHALL NOT withhold the ask: the
+collector files it as any other, and the request waits while the submission
+refuses its run, as a request does when a hold opens after filing. Grading
+SHALL answer the collector's own holds in their words - cards of theirs with
+the grader, money to settle, or cards waiting to be collected - for a screen to
+name beside the request.
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-31 - A submission with the grader refuses the erasure and leaves the rest alone
 **Serves:** `grade10-site-vault-retention-and-erasure-US-04`, `grade10-site-vault-retention-and-erasure-US-02` - an operator running the ask over a collector who graded cards as well as pawning them
@@ -541,13 +541,13 @@ filing.
 - **WHEN** their erasure is run
 - **THEN** it is refused, naming the money unsettled
 
-#### Scenario: grade10-site-vault-retention-and-erasure-SC-33 - The ask is withheld in the collector's own words while cards are out
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-33 - The ask is filed while cards are out, and the cards are named as its hold
 **Serves:** grade10-site-vault-retention-and-erasure-US-04 - a collector asking to be forgotten while their cards are still being graded
 
-- **GIVEN** a collector whose submission is with the grader
-- **WHEN** they ask to be forgotten on the page
-- **THEN** the ask is withheld, naming that cards of theirs are with the grader
-- **AND** the page files no request
+- **GIVEN** a collector whose submission is with the grader, with nothing in the vault
+- **WHEN** they file the ask to be forgotten
+- **THEN** the request is filed
+- **AND** grading's read of their own holds names that cards of theirs are with the grader
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-34 - Submissions that have all ended hold nothing back
 **Serves:** `grade10-site-vault-retention-and-erasure-US-04`, `grade10-site-vault-retention-and-erasure-US-02` - an operator running the ask once every card is back with its collector

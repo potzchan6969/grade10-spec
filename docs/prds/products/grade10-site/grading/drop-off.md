@@ -23,10 +23,9 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 - 🚧 **The diary service** — a Grading drop-off service bound to the
   submission, as the vault's visit is: the visit carries the list, the diary
   is given no address, and the submission owns every email
-- ❓ **Where it is booked** — the page the collector books the drop-off on,
-  after the plan is kept or for a submission that holds no drop-off and has
-  none to join, is designed again from the backend — Design —
-  [Grading](/p/grade10-site/grading)
+- 🚧 **Where it is booked** — in grading's own booking view, which the
+  collector's page opens after the plan is kept, and for any submission that
+  holds no drop-off and has none to join
 - 🚧 **The Bulk drop-off** — 20 cards or more books the longer service; so
   do two lists on one visit that pass 20 together, and a booked list edited
   past 20
@@ -55,12 +54,12 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   rather than from the day the plan was first kept, for every submission on
   the visit, a joined one too, so a collector whose visit ended weeks into
   their plan is not left with only what was originally left to book again in
-- ❓ **The booked page** — what the collector's page shows of a booked
-  visit — Design
+- 🚧 **The booked view** — the day, the time and the shop, add to calendar,
+  move, cancel, and the day the cards leave with the estimated day back
 
 ## Before You Come
 
-🚧 **Four items** — in the booked email:
+🚧 **Four items** — on the booked view and in the booked email:
 
 1. **The cards, each in a sleeve** — penny sleeves are fine; no toploaders
    taped shut and nothing to keep, because the grader keeps the sleeve
@@ -84,6 +83,10 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 - **Booking** — `packages/grading/backend` books over the per-product
   entrypoint and caches the visit on the submission, as the vault does; a
   sweep after the slot reads the visit's outcome over the binding
+- **Views** — `DropoffBooking` and `DropoffBooked` in
+  `packages/grading/frontend`, over `BookingLocationPicker`,
+  `BookingSlotPicker`, `BookingConfirmation`, `BookingManageCard` and
+  `NoteList` from `@grade10/ui`
 - **Architecture** —
   [grading.md](https://github.com/9gag/grade10/blob/main/docs/architecture/grading.md)
 :::

@@ -49,8 +49,14 @@ page drew.
   first in its own commit and fails until the block goes
 - **Catalog keys removed** - from `messages/shared/{en,ko,zh-Hans,zh-Hant}/vault.json`:
   `title`, `intro`, `packetStatus`, `event`, `list`, `lane`, `request`,
-  `case`, `money`, `visit`, `verify` and `data`. `chrome.nav.vault` in every
-  shared `chrome.json`
+  `case`, `money`, `verify` and `data`, and `visit.what`,
+  `visit.loadingServices`, `visit.noServices`, `visit.loadingTimes` and
+  `visit.shop`, which nothing reads. `case.refused.moved`, the one `case` word
+  the booking views read, moves to `visit.moved`, so each slice reads one
+  namespace. `chrome.nav.vault` in every shared `chrome.json`. The store
+  change lands first; grade10 bumps its submodule past it in the same PR that
+  points the booking views at `vault.visit.moved`, so no grade10 commit reads
+  a key its pinned store lacks
 - **Brand catalogs removed** - `messages/grade10/{en,zh-Hans,zh-Hant}/vault.json`
   and `messages/zzz/ko/vault.json` hold only `verify.consentText` and
   `consentLabel`. Nothing reads them: the profile's identity card reads the
@@ -60,9 +66,10 @@ page drew.
 
 | Key | Read by |
 | --- | --- |
-| `vault.status` | The console, through `messages.vault.status` in `packages/vault/admin-frontend`; the e2e console helpers |
-| `vault.category` | The console, through `messages.vault.category`; the e2e console helpers |
-| `vault.ceremony` | `apps/frontend/grade10/src/pages/vault/SignPage.tsx` (`useTranslations("vault.ceremony")`); the e2e ceremony helpers |
+| `vault.status` | The console, through `messages.vault.status` in `packages/vault/admin-frontend`; `packages/inventory/admin-frontend/src/test/items.ts` |
+| `vault.category` | The console, through `messages.vault.category`; `packages/inventory/admin-frontend/src/test/items.ts`; the e2e helper `inventory-items.ts` |
+| `vault.ceremony` | `apps/frontend/grade10/src/pages/vault/SignPage.tsx` (`useTranslations("vault.ceremony")`); the e2e helpers `vault-ceremony.ts` and `inventory-items.ts` |
+| `vault.visit` | The booking views in `packages/vault/frontend/src/features/custody/booking` (`useTranslations("vault.visit")`, `"vault.visit.booked"`), `moved` among it |
 
 The emails' words are literals in `packages/vault/backend/src/email/messages.ts`
 and the PDFs name template ids, so no key behind a mail or a document moves.
@@ -74,9 +81,17 @@ and the PDFs name template ids, so no key behind a mail or a document moves.
   `vault-case`, `vault-verify`, `your-data`. `surfaces.ts` keeps only the
   ceremony in the vault's set (`grade10-site-site-carried-surfaces-SC-22`,
   `-SC-26`, `-SC-40`)
-- **The slice** - `packages/vault/frontend` goes whole. `FixtureVaultState`
-  and `paths.ts`, which the console also reads, move to
-  `packages/vault/admin-frontend/src/core/api`
+- **The slices** - `request`, `cases` and `retention` leave
+  `packages/vault/frontend` with the grading-holds port only Your data read,
+  and `vaultModules` lists `booking` alone. The core stays whole: `VaultApi`
+  is the worker's collector surface the returning screens compose, and its
+  `FixtureVaultState` and `paths.ts` are the console's fixture world too. No
+  app depends on the package, so `design-override.config.json` stops listing
+  it and `e-kyc-frontend` until a screen places them (Q24)
+- **Why no requirement holds the booking views** - they are presentation a
+  screen composes, and no kept requirement names a screen; their own
+  component tests and stories prove them, and the visit's behaviour is the
+  worker's, walked through its API
 - **The chrome** - the profile page loses Your data, `siteContent.ts`'s
   `NAV_LINKS` loses Vault, and `SignInBeforeNavigating`'s tests ask at
   `ROUTES.bids` (`grade10-site-site-navigation-SC-17` to `-SC-25`)
@@ -101,9 +116,10 @@ and the PDFs name template ids, so no key behind a mail or a document moves.
   drops it from the site's packages, because `check-store-blocks` derives a
   site's packages from the app's dependencies and the site no longer depends
   on it
-- **The rule** - a test asserts the field the worker answers, never a word or
-  a control. A read the worker cannot answer is not tested; the requirement
-  says what the collector's account carries
+- **The rule** - a test deciding a kept scenario asserts the field the worker
+  answers, never a word or a control. A read the worker cannot answer is not
+  tested; the requirement says what the collector's account carries. The
+  booking views' own tests are the slice's and decide no kept scenario
 
 ## Risks / Trade-offs
 

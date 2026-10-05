@@ -21,7 +21,8 @@ const CARD_FACT_LABELS = {
 
 const FILLED_SMALL_VIEWPORT_STORY =
   "?path=/story/my-auctions-my-auctions--filled-small-viewport";
-const MY_AUCTIONS_PAGE_STORY = "?path=/story/pages-my-auctions-page--default";
+const MY_AUCTIONS_PAGE_STORY =
+  "?path=/story/pages-auction-my-auctions-page--default";
 
 function AuctionCard(item: AuctionRecordRowProps) {
   return (

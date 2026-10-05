@@ -38,7 +38,7 @@ See [Non-Goals](decisions.md#non-goals).
 ## Impact
 
 - `packages/ui` `ListingLotGallery` and lot PDP layout
-- Storybook Pages/Auction Lot Details and Auction Listing/ListingLotGallery
+- Storybook Pages/Auction/Auction Lot Details and Auction Listing/ListingLotGallery
 - `docs/prds/products/shared/ui/auction-listing.md#gallery`
 - `docs/prds/products/grade10-site/auction/display.md#auction-details`
 

@@ -34,8 +34,8 @@ owns the `Autocomplete` composition the search field is built from.
 
 | Surface | Storybook (SoT) |
 | --- | --- |
-| Listing, typed through committed | [`Pages/Product List Page` → Default](?path=/story/pages-product-list-page--default) |
-| Listing, narrow viewport | [`Pages/Product List Page` → Narrow](?path=/story/pages-product-list-page--narrow) |
+| Listing, typed through committed | [`Pages/Store/Product List Page` → Default](?path=/story/pages-store-product-list-page--default) |
+| Listing, narrow viewport | [`Pages/Store/Product List Page` → Narrow](?path=/story/pages-store-product-list-page--narrow) |
 
 ## Components
 
@@ -71,7 +71,7 @@ No new primitive, no new variant, no new token.
 | Groups displayed as supplied | `shared-ui-store-product-listing-SC-67`, `grade10-site-store-product-listing-SC-31` | [Suggestions](?path=/story/store-product-listing-productfilter-search--suggestions) |
 | Image and trailing rendered as supplied | `shared-ui-store-product-listing-SC-73` | [Suggestions](?path=/story/store-product-listing-productfilter-search--suggestions) |
 | Draft reported; the field shows the supplied query | `shared-ui-store-product-listing-SC-68` | [`FilterPanel` → Search Change Is Reported](?path=/story/store-product-listing-filterpanel--search-change-is-reported) |
-| Submit with no row highlighted reports a commit | `shared-ui-store-product-listing-SC-69`, `grade10-site-store-product-listing-SC-32` | [Commit](?path=/story/store-product-listing-productfilter-search--commit), [Suggestions And Commit](?path=/story/store-product-listing-productbrowse-search--suggestions-and-commit), [Product List Page](?path=/story/pages-product-list-page--default) |
+| Submit with no row highlighted reports a commit | `shared-ui-store-product-listing-SC-69`, `grade10-site-store-product-listing-SC-32` | [Commit](?path=/story/store-product-listing-productfilter-search--commit), [Suggestions And Commit](?path=/story/store-product-listing-productbrowse-search--suggestions-and-commit), [Product List Page](?path=/story/pages-store-product-list-page--default) |
 | Row activated — reported once, no navigation from the surface | `shared-ui-store-product-listing-SC-70` | [Select Suggestion](?path=/story/store-product-listing-productfilter-search--select-suggestion) |
 | Filter row applies the facet; field clears; free text not in force | `grade10-site-store-product-listing-SC-34` | [Select Filter Applies Chip](?path=/story/store-product-listing-productbrowse-search--select-filter-applies-chip) |
 | Product row opens the product; field clears | `grade10-site-store-product-listing-SC-33` | Application-side; the preview page stubs the jump |
