@@ -1,7 +1,7 @@
 # shared/ui/auction-listing Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-23, tcs-rules r3.0
+**Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## shared-ui-auction-listing-US1: The bid panel's rendering contract
 
@@ -221,7 +221,7 @@ contract states,
 **Expected Results:**
 
 * The previous valid draft is restored.
-* No dedicated too-large or over-ceiling error copy appears.
+* No invalid-amount, below-floor or too-large message appears.
 
 ### shared-ui-auction-listing-US1-TC26-1: Fractional paste at the ceiling after cleaning is accepted
 
@@ -250,7 +250,6 @@ contract states,
 **Expected Results:**
 
 * The draft shown is `9999999999`.
-* No invalid-amount message appears.
 
 ## Settled
 
@@ -261,23 +260,26 @@ contract states,
 
 ## Reconciliation
 
-**Run:** Blind pass read Purpose (durable), Feature set (delta),
-user-journeys.md, proposal.md, decisions.md (goals, non-goals, Q1–Q4, empty
-Raised), ui-design.md with state dispositions stripped to the
-Custom maximum ceiling anchor, PRD Custom Maximum / Auction Panel ceiling
-lines, and durable feature-tcs.md for id continuity with Reconciliation
-stripped. Denied: every Requirements section, openspec/specs/ beyond those
-excerpts, openspec/changes/archive/.
+**Run:** QA2 reconciliation 2026-10-05 for change `cap-custom-maximum-entry`, rereading every case in this suite against the delta's scenarios and the `Custom maximum ceiling` anchor after the accept-review fix round. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the PRD's Custom Maximum section and the bidding page's Ceiling, Custom maximum and Bid ceiling lines, the durable `spec.md` and suite, the `bid-history-winner-priority` and `lot-gallery-strip-by-width` suites on this capability, `listing-bid-money.test.ts` and the `ListingAuctionBidCard` stories. QA1's blind pass had read the Purpose, the Feature set, the journeys, the proposal, Q1 to Q4, the stripped `ui-design.md`, the PRD lines and the durable suite with its Reconciliation stripped, and was denied every Requirements section and the archive.
 
 | Finding | Disposition |
 | --- | --- |
-| Draft at ceiling `9999999999` accepted | Folded as covered by `shared-ui-auction-listing-SC-38` / `shared-ui-auction-listing-US1-TC19-1` |
-| Typed digit past ceiling restores prior draft | Folded as covered by `shared-ui-auction-listing-SC-39` / `shared-ui-auction-listing-US1-TC20-1` |
-| Paste past ceiling from empty stays empty, silent | Folded as covered by `shared-ui-auction-listing-SC-40` / `shared-ui-auction-listing-US1-TC21-1` |
-| Paste past ceiling restores prior draft | Folded as covered by `shared-ui-auction-listing-SC-41` / `shared-ui-auction-listing-US1-TC22-1` |
-| Fractional paste exceeds after whole-major cleaning restores | Folded as covered by `shared-ui-auction-listing-SC-42` / `shared-ui-auction-listing-US1-TC23-1` |
-| Raise path restores on overshoot | Folded as covered by `shared-ui-auction-listing-SC-43` / `shared-ui-auction-listing-US1-TC24-1` |
-| Over-ceiling refuse has no dedicated error | Folded as covered by `shared-ui-auction-listing-SC-40` and `shared-ui-auction-listing-US1-TC25-1` |
-| Raised questions from the blind pass | None — Q1–Q4 already settled the ceiling, restore, silence, and server deferral |
-| Accept-review, 2026-10-05: case ids `TC3`-`TC9` were the durable suite's quick-bid, raise-floor and gallery cases, which the fold would have overwritten | **Renumbered:** `shared-ui-auction-listing-US1-TC19-1` to `shared-ui-auction-listing-US1-TC25-1`, after the durable suite's last, `TC18` |
-| Accept-review, 2026-10-05: Q5 had no scenario - a fractional paste whose whole part equals the ceiling is accepted | **Folded in:** `shared-ui-auction-listing-SC-53` / `shared-ui-auction-listing-US1-TC26-1`. Written in the review's fix round, not a blind reading; QA2 rereads it |
+| Draft at ceiling `9999999999` accepted | **Folded in:** `shared-ui-auction-listing-SC-38` / `shared-ui-auction-listing-US1-TC19-1` |
+| Typed digit past ceiling restores prior draft | **Folded in:** `shared-ui-auction-listing-SC-39` / `shared-ui-auction-listing-US1-TC20-1` |
+| Paste past ceiling from empty stays empty, silent | **Folded in:** `shared-ui-auction-listing-SC-40` / `shared-ui-auction-listing-US1-TC21-1` |
+| Paste past ceiling restores prior draft | **Folded in:** `shared-ui-auction-listing-SC-41` / `shared-ui-auction-listing-US1-TC22-1` |
+| Fractional paste exceeds after whole-major cleaning restores | **Folded in:** `shared-ui-auction-listing-SC-42` / `shared-ui-auction-listing-US1-TC23-1` |
+| Raise path restores on overshoot | **Folded in:** `shared-ui-auction-listing-SC-43` / `shared-ui-auction-listing-US1-TC24-1` |
+| Over-ceiling refuse has no dedicated error | **Folded in:** `shared-ui-auction-listing-SC-40` and the requirement's no-ceiling-error-copy rule / `shared-ui-auction-listing-US1-TC25-1` |
+| Raised questions from the blind pass | None - Q1 to Q4 already settled the ceiling, restore, silence and the service's own refusal |
+| Accept-review, 2026-10-05: case ids `TC3` to `TC9` were the durable suite's quick-bid, raise-floor and gallery cases, which the fold would have overwritten | **Renumbered:** `shared-ui-auction-listing-US1-TC19-1` to `shared-ui-auction-listing-US1-TC25-1`, after the durable suite's last, `TC18`. QA2 found no collision with the durable suite or with `TC27`, `TC28` in `bid-history-winner-priority` |
+| Accept-review, 2026-10-05: Q5 had no scenario - a fractional paste whose whole part equals the ceiling is accepted | **Folded in:** `shared-ui-auction-listing-SC-53` / `shared-ui-auction-listing-US1-TC26-1`. QA2 reread it: seed `500`, paste `9999999999.99` and the draft `9999999999` match the scenario |
+| QA2: `TC25` expected "no dedicated too-large or over-ceiling error copy", but the requirement names the copy that stays away - the invalid-amount and below-floor messages | **Folded in:** `shared-ui-auction-listing-US1-TC25-1` now expects no invalid-amount, below-floor or too-large message |
+| QA2: `TC26` expected no invalid-amount message, which `shared-ui-auction-listing-SC-53` does not state | **Folded in:** dropped from `shared-ui-auction-listing-US1-TC26-1`; the case asserts the scenario's THEN alone |
+| QA2: `TC20` and `TC24` type "one more digit" where `shared-ui-auction-listing-SC-39` types `0` and `shared-ui-auction-listing-SC-43` types `1` | **Rejected:** any digit past `9999999999` overshoots, so the steps cover the scenarios' values; both cases are automated, and an automated case's wording moves only with its behaviour |
+| QA2: `TC24` names `listing-bid-money.test.ts`, which never renders the raise title | **Rejected:** set and raise share one change handler in `listing-quick-maximum-bid-actions.tsx` that calls `sanitizeCustomMaximumDraft`, so the helper's test decides the draft on both |
+| QA2: the cases name Storybook stories, not the scenarios' HKD listing | **Rejected:** `CustomMaximumCeiling` and `Leading` render an HKD listing, so the values match |
+| QA2: `TC26` stays manual though `listing-bid-money.test.ts` pastes `9999999999.99` with an empty seed | **Rejected:** not QA's to flip; engineering flips it with `pnpm run tcs:automated` if that test is taken to decide it |
+| QA2: facts across the artifacts - field ceiling 9,999,999,999 in any currency, restore not clamp, silent refuse, set and raise on one field, JPY bid ceiling 10,000,000,000 | **Rejected:** no artifact states one differently - the proposal, Q1 to Q6, `ui-design.md`, `tech-design.md`, both PRD pages and every case agree |
+
+**Uncovered anchors:** none for `Custom maximum ceiling`.
