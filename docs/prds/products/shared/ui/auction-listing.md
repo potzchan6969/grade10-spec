@@ -91,7 +91,7 @@ Under Set your private maximum, an always-on line says that Grade10 bids only
 as needed up to the maximum and that it can be raised but never lowered or
 cancelled.
 
-- 🚧 **Whole units only** — a typed decimal mark is refused, and a pasted
+- **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
 - 🚧 **Ceiling** — a maximum above 9,999,999,999 whole major units cannot be
   typed or pasted; the previous valid draft stays, nothing is clamped, and

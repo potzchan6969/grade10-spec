@@ -37,6 +37,9 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 - [x] 3.2 Verify — leave the walk as the change's end-to-end evidence; every
       case stays manual until task 2.4's plays assert the crown's place and
       colour and the tip's tone, then flip them with `pnpm run tcs:automated`.
+- [ ] 3.3 Walk the story task 2.4 adds, with `winner` copy unset: no row
+      shows a crown or the name Winner.
+      `shared-ui-auction-listing-US1-TC29-1`
 
 ## 4. Lot page flags (grade10) (owner: @tangconst)
 

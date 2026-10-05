@@ -57,7 +57,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       and fixture amount the old ceiling named moves under the new one,
       `quickBidAmounts.test.ts` included; the e2e
       `custom-maximum-ceiling.spec.ts` cites the ceiling cases it drives,
-      `TC19` to `TC23` and `TC25`.
+      `TC19` to `TC25`.
       `grade10-site-auction-bid-increments-SC-08`,
       `grade10-site-auction-bid-increments-SC-10`
 - [ ] 4.2 Set `AUCTION_BID_CEILINGS.JPY` to `5_000_000_000` in

@@ -57,7 +57,7 @@ accidental oversize entry painted or was sent.
   ceiling decision row
 - Storybook `ListingAuctionBidCard` → `CustomMaximumCeiling`
 - `grade10`: `AUCTION_BID_CEILINGS.JPY` in `@grade10/auction-contracts`,
-  read by auction-service's bid refusal and the lot page's quick bids
+  read by auction-service's bid refusal and the lot page's bid-enable check
 
 ## References
 
