@@ -74,7 +74,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a Cart handler and <empty count>.
+* `SiteHeader` receives a Cart handler, `Basket` as its cart label, and <empty count>.
 
 **Test data:**
 
@@ -92,7 +92,7 @@ Runs once per row of **Test data**.
 
 * The Cart control appears.
 * No count indicator appears on it.
-* The Cart control's accessible name carries no count.
+* The Cart control's accessible name reads `Basket`, with no count.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-1qr rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
 ### shared-ui-site-chrome-US1-TC23-1: Active cart counts appear in full
@@ -114,7 +114,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a Cart handler, `Cart` as its cart label, and <active-line count>.
+* `SiteHeader` receives a Cart handler, `Basket` as its cart label, and <active-line count>.
 * `CartDrawerHeader` receives the same <active-line count>.
 
 **Test data:**
@@ -130,14 +130,17 @@ Runs once per row of **Test data**.
 1. Render the header and the cart drawer header with <active-line count>.
 2. Inspect the count indicator on the cart control.
 3. Inspect the drawer title badge.
+4. Inspect the `cartSlot` `SiteHeader` hands `Nav`, and the props `NavProps` takes.
 
 **Expected Results:**
 
 * A brand count indicator appears on the Cart control.
 * The indicator displays the full <active-line count>.
-* The Cart control's accessible name reads `Cart (<active-line count>)`.
+* The Cart control's accessible name reads `Basket (<active-line count>)`.
 * The indicator itself is hidden from assistive technology.
 * The drawer title badge displays the same <active-line count>.
+* The badged Cart control is the `cartSlot` `Nav` renders, with no built-in cart control beside it.
+* `NavProps` takes no cart count.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-uca rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
 ### shared-ui-site-chrome-US1-TC24-1: A count without a Cart handler adds no Cart control
@@ -231,5 +234,26 @@ Runs once per row of **Test data**.
 | Handler-gated feature-set line | Q11 said that change's line names the cart slot; it names the account slot alone, so it still says Cart needs its handler | Raised: Q11 restated, and the edit is that change's |
 | Story block | Its Walked-by line kept a dash the journeys file no longer carries | Restyled to match the journeys file |
 | `shared-ui-site-chrome-SC-04`, `shared-ui-site-chrome-SC-22` to `shared-ui-site-chrome-SC-26`, `shared-ui-site-chrome-SC-41` | Unchanged since the fourth reading | Folded as recorded above |
+| Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, after the accept review's third round. The review's fixes were joined to TC23 against the Cart Count section, the decisions and `packages/ui/src/blocks/site-chrome/site-header.tsx:207-237`; a fresh QA2 reading follows.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `shared-ui-site-chrome-SC-24` | The requirement passes the badged control through `Nav`'s `cartSlot` and keeps the count off `Nav`; no scenario or case asserted either | Folded: the scenario gains both clauses, and TC23 asserts them on every row |
+| `shared-ui-site-chrome-SC-25` | The requirement builds the name from the supplied `copy.cart`; every case supplied `Cart`, the word `site-header.tsx:216-217` invents when it is omitted, so a fallback passed unseen | Folded: the scenario and TC23 supply `Basket` and assert `Basket (<active-line count>)` |
+| Handler-gated feature-set line | `omit-profile-account-menu` now names both slots, as Q11 asks | No case reads a feature-set line |
+| Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 sixth reading. A fresh reader re-joined the four cases and every `Header controls` scenario this change adds or modifies against the Cart Count section, the decisions, the UI design, `packages/ui/src/blocks/site-chrome/site-header.tsx:207-237`, `packages/design-system/src/components/layout/nav.tsx:60-77` and the Handler-gated line at `omit-profile-account-menu`'s head.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `shared-ui-site-chrome-SC-23` | The requirement names the control by the supplied `copy.cart`; TC22 asserted only that the name carries no count, so the `Cart` fallback passed unseen, as it had on TC23 | Folded: the scenario and TC22 supply `Basket` and assert the name `Basket`, with no count |
+| `shared-ui-site-chrome-SC-24`, `shared-ui-site-chrome-SC-25` | TC23 asserts the `cartSlot` hand-off, the bare `NavProps` and `Basket (<active-line count>)` on every row | Folded: TC23 |
+| `shared-ui-site-chrome-SC-04`, `shared-ui-site-chrome-SC-22`, `shared-ui-site-chrome-SC-26`, `shared-ui-site-chrome-SC-41` | Unchanged since the fifth reading | Folded as recorded above |
+| Handler-gated feature-set line | `omit-profile-account-menu` names both slots, as Q11 records | No case reads a feature-set line |
 | Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
 | Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |

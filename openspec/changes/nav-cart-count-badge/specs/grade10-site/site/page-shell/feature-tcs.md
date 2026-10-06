@@ -726,3 +726,11 @@ Runs once per row of **Test data**.
 | `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-50` to `grade10-site-site-page-shell-SC-55` | Unchanged since the third reading | Folded as recorded above |
 | Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
 | Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 sixth reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD, its opening session rule, the decisions and the tech design.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-55` | Unchanged since the fifth reading; each THEN has a case that asserts it | Folded as recorded above |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
