@@ -1,47 +1,21 @@
 # grade10-site/site/page-shell Specification
 
+## Purpose
+What every page of the grade10 site is wrapped in: the header a collector
+navigates from, the region a surface renders into, and the footer that closes
+the page. One shell for the marketing page, the store, the auction, the
+account page, sign-in, and not-found, so no surface can ship without the site
+around it.
+
 ## Feature set
 
-- Shell around every surface
-  - Header, region, footer: one wrapper the site renders every surface into,
-    not-found included
-  - Landmark structure: exactly one banner, one main, and one contentinfo on
-    the page, with the surface inside main
-  - No opinion on content: the shell adds no heading, copy, or spacing of its
-    own to what a surface renders
-- Session-independent chrome
-  - Chrome before the session: the header and the footer render before the
-    session has resolved
-  - Stable layout: no chrome control appears, disappears, or moves when the
-    session arrives
 - Account control
-  - Session-aware entry: a primary Sign In button when signed out, the
-    account icon when signed in
   - Account menu: signed in, the sign-in email with its initial avatar above
     My Auctions and Sign Out; My Orders joins ahead of My Auctions once Store
-    answers; Sign Out stays last and KYC stays out
+    answers; Sign Out stays last; KYC, My Auction Orders and any item whose
+    page the site withholds stay out
   - Account page sign-out: the account page offers Sign Out wherever it is
     carried
-- Members-only cart
-  - Sign-in before the cart: the Cart control opens sign-in while no session
-    is signed in, and the drawer stays closed
-  - The cart the ask was for: the drawer opens by itself once the session
-    arrives, and nothing is left waiting when the ask is dismissed
-- Links only to real surfaces
-  - Controls with surfaces behind them: search and cart stay absent until the
-    site answers them
-  - Reachable links only: a navigation, utility, footer, or legal link appears
-    only when its destination exists, except primary-nav Help may name the
-    documentation host Product names
-  - Current-surface marking: the navigation item owning the current address is
-    marked, and none is when no item owns it
-- Collector help
-  - Header Help: primary nav lists Help after Store Locator when that item is
-    present, and after Auction on auction-only nav; Help opens the
-    documentation site in a new tab
-- Small-width resilience
-  - No horizontal overflow: the shell reflows at 375 CSS pixels with every
-    control still reachable
 
 ## MODIFIED Requirements
 
@@ -79,6 +53,27 @@ wherever the site carries it.
 - **WHEN** they open the account menu, and then the account page
 - **THEN** the account menu offers Sign Out
 - **AND** the account page offers Sign Out
+
+### Requirement: The header marks the surface being viewed
+
+The site SHALL mark the navigation item matching the current surface, and
+SHALL mark none when the current address belongs to no navigation item.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-q3w rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-13 - A collector is on a listed surface
+**Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
+
+- **GIVEN** a collector on a surface the navigation lists, or on any address beneath it
+- **WHEN** the header renders
+- **THEN** that navigation item is marked as the current page
+
+<!-- trace:scenario id=g10.site-page-shell.SC-xiu rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-14 - A collector is on an unlisted surface
+**Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
+
+- **GIVEN** a collector on the account page, sign-in, or an unrecognized address
+- **WHEN** the header renders
+- **THEN** no navigation item is marked as the current page
 
 ## REMOVED Requirements
 

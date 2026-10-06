@@ -2,32 +2,14 @@
 
 ## Feature set
 
-- Chrome exports
-  - Header and footer: `Nav` and `Footer` from the design-system entry, each usable alone
-  - `SiteHeader`: shared header composition with application-supplied content and session
-  - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
   - Handler-gated: search, account, cart, Profile, My Orders, and Membership
-    render only when their handler is supplied, or, for account, its slot;
-    Membership also needs its copy
-  - No wishlist: the header does not offer a wishlist control
+    render only when their handler is supplied, or, for account and cart,
+    their slot; Membership also needs its copy
   - Account menu: Sign In when signed out; signed in, the sign-in email with
     its initial avatar above the items in one fixed order - Profile, My
     Orders, My Auctions, Membership, Sign Out - each gated item omitted on its
     own; no other item joins, KYC and a second orders item included
-  - Compact menu: left drawer for navigation and utilities, with language in
-    a nested drawer
-  - Wide layout: primary navigation and language stay in the bar
-- External links
-  - New-tab destinations: a `NavLink` marked `external` opens in a new tab with
-    `rel="noopener noreferrer"` in primary nav (wide bar and compact drawer)
-    and in the utility strip / compact utility list
-- Current surface
-  - Marked destination: the chrome can mark which surface is being viewed
-- Footer
-  - Supplied sections: columns and links the application provides; empty sections stay empty
-- No defaulted content
-  - Application-owned copy: nothing visible is invented by the chrome
 
 ## MODIFIED Requirements
 
@@ -90,7 +72,7 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-yiu rev=2 -->
 #### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
-**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - the collector's account menu once the application's Store answers
+**Serves:** Header controls - the account menu's fixed order with every handler supplied
 
 - **GIVEN** `session` is `"signed-in"`, `accountEmail` is supplied, an
   `onProfile` handler is supplied, a My Orders handler is supplied, and
@@ -111,7 +93,7 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-xyv rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-29 - Signed in with no My Orders handler
-**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - the collector's account menu before the application's Store answers
+**Serves:** Header controls - the account menu goes from Profile to My Auctions when My Orders has no handler
 
 - **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied,
   and no My Orders handler is supplied
@@ -148,6 +130,15 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **GIVEN** `session` is `"signed-in"` and an `onProfile` handler is supplied
 - **WHEN** the collector activates Profile in the account menu
 - **THEN** the supplied `onProfile` handler is invoked
+- **AND** no other account-menu handler is invoked
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-xzm rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-43 - Activating My Orders invokes its handler
+**Serves:** Header controls - the account menu's My Orders item invokes the supplied handler
+
+- **GIVEN** `session` is `"signed-in"` and a My Orders handler is supplied
+- **WHEN** the collector activates My Orders in the account menu
+- **THEN** the supplied My Orders handler is invoked
 - **AND** no other account-menu handler is invoked
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-h0z rev=1 -->

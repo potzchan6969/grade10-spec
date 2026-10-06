@@ -3,8 +3,8 @@
 ## Feature set
 
 - **Order list**
-  - Entry points: not the account menu; each Won row on My Auctions opens its
-    own order.
+  - Entry points: not the account menu; a Won row on My Auctions opens its
+    own order, not the list.
 
 ## MODIFIED Requirements
 
