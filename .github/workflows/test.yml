@@ -123,16 +123,11 @@ jobs:
         run: pnpm run test:walk
 
   # Skips the push that ticks a task group, which carries a change's plan
-  # alone: nothing here reads one. The suites run on separate runners because
-  # the manual and OpenSpec tests each take about three minutes.
-  catalogs-tests:
+  # alone: nothing here reads one.
+  manual:
     needs: changes
     if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        suite: [manual, openspec, rest]
 
     steps:
       - name: Checkout
@@ -159,15 +154,58 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: pnpm run test:catalogs:${{ matrix.suite }}
+        run: pnpm run test:manual
 
-  # Keep the required check's name and make it fail if any suite fails.
-  catalogs:
-    needs: [changes, catalogs-tests]
+  openspec:
+    needs: changes
     if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' }}
     runs-on: ubuntu-latest
+
     steps:
-      - name: Require every suite
-        env:
-          SUITES_RESULT: ${{ needs.catalogs-tests.result }}
-        run: test "$SUITES_RESULT" = success
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm run test:openspec
+
+  catalogs:
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm run test:catalogs

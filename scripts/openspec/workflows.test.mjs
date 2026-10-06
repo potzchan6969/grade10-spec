@@ -389,43 +389,25 @@ test("Test's jobs skip only what they do not read", () => {
     "openspec/changes/some-change/proposal.md",
   ])
     assert.equal(planOnly.test(path), false, `${path} skips catalogs`);
-  assert.equal(test.jobs["catalogs-tests"].needs, "changes");
-  assert.equal(
-    test.jobs["catalogs-tests"].if,
-    "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
-  );
-  assert.deepEqual(test.jobs["catalogs-tests"].strategy.matrix.suite, [
-    "manual",
-    "openspec",
-    "rest",
-  ]);
-  assert.equal(test.jobs["catalogs-tests"].strategy["fail-fast"], false);
-  assert.equal(
-    test.jobs["catalogs-tests"].steps.at(-1).run,
-    "pnpm run test:catalogs:${{ matrix.suite }}",
-  );
-  assert.deepEqual(test.jobs.catalogs.needs, ["changes", "catalogs-tests"]);
-  assert.equal(
-    test.jobs.catalogs.if,
-    "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
-  );
-  assert.equal(
-    test.jobs.catalogs.steps[0].env.SUITES_RESULT,
-    "${{ needs.catalogs-tests.result }}",
-  );
-  assert.equal(
-    test.jobs.catalogs.steps[0].run,
-    'test "$SUITES_RESULT" = success',
-  );
+  for (const [name, command] of [
+    ["manual", "pnpm run test:manual"],
+    ["openspec", "pnpm run test:openspec"],
+    ["catalogs", "pnpm run test:catalogs"],
+  ]) {
+    assert.equal(test.jobs[name].needs, "changes", name);
+    assert.equal(
+      test.jobs[name].if,
+      "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
+      name,
+    );
+    assert.equal(test.jobs[name].steps.at(-1).run, command, name);
+  }
+  assert.equal(test.jobs["catalogs-tests"], undefined);
 
   const scripts = JSON.parse(read("package.json")).scripts;
-  assert.equal(scripts["test:catalogs:openspec"], "pnpm run test:openspec");
-  assert.equal(
-    scripts["test:catalogs:manual"],
-    "pnpm --dir tools/manual run test",
-  );
-  assert.match(scripts["test:catalogs:rest"], /--filter '!@grade10\/manual'/);
-  assert.match(scripts.test, /test:catalogs:scripts/);
+  assert.equal(scripts["test:manual"], "pnpm --dir tools/manual run test");
+  assert.match(scripts["test:catalogs"], /--filter '!@grade10\/manual'/);
+  assert.match(scripts.test, /test:scripts/);
   assert.match(scripts.test, /test:openspec/);
   assert.match(step.run, /git diff --no-renames --name-only/);
   const parsed = spawnSync("bash", ["-n"], {
