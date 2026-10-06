@@ -5,7 +5,7 @@
 
 ## shared-ui-site-chrome-US1: Shared chrome contract
 
-**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
+**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
 **As an** application composing the shared chrome,
 **I want** the chrome to expose only the controls I have answered, keep
 off-site destinations safely scoped, and present one truthful, session-aware
