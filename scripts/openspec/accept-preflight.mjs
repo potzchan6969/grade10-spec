@@ -1,12 +1,8 @@
 #!/usr/bin/env node
-import { writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  buildPacket,
-  formatPreflight,
-  preflightChange,
-} from "./lib/preflight.mjs";
+import { changeClusters, formatClusters } from "./lib/clusters.mjs";
+import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
 
 const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const args = process.argv.slice(2);
@@ -17,21 +13,20 @@ const take = (flag) => {
   return value ?? "";
 };
 const root = take("--root") ?? HERE;
-const packet = take("--packet");
+const clusters = args.includes("--clusters");
+if (clusters) args.splice(args.indexOf("--clusters"), 1);
 const listed = take("--changes");
 const changeIds = [
   ...new Set([...(listed ?? "").split(","), ...args].filter(Boolean)),
 ];
-if (changeIds.length === 0 || packet === "" || listed === "") {
+if (clusters) console.log(formatClusters(changeClusters(root)));
+if (clusters && changeIds.length === 0) process.exit(0);
+if (changeIds.length === 0 || listed === "") {
   console.error(
-    "usage: pnpm run accept:preflight <change-id>... [--changes a,b,c] [--packet <out.md>] [--root <store>]",
+    "usage: pnpm run accept:preflight <change-id>... [--changes a,b,c] | --clusters [--root <store>]",
   );
   process.exit(2);
 }
 const results = changeIds.map((id) => preflightChange(root, id));
 console.log(formatPreflight(results));
-if (packet) {
-  writeFileSync(resolve(packet), buildPacket(root, results));
-  console.log(`Review packet: ${resolve(packet)}`);
-}
 process.exitCode = results.some((one) => one.failures.length > 0) ? 1 : 0;

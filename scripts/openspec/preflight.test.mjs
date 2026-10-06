@@ -5,13 +5,9 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { sandbox } from "./fixtures/accept-sandbox.mjs";
 import { prepareAcceptance } from "./lib/acceptance.mjs";
+import { changeClusters, formatClusters } from "./lib/clusters.mjs";
 import { foldChecks } from "./lib/fold-checks.mjs";
-import {
-  buildPacket,
-  formatPreflight,
-  preflightChange,
-  unifiedDiff,
-} from "./lib/preflight.mjs";
+import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
 
 const CHANGE = "build-alpha";
 const ok = { status: 0, stdout: "", stderr: "" };
@@ -127,48 +123,39 @@ test("several changes print one summary row each and keep their own details", ()
   );
 });
 
-test("the packet carries the touched requirements as diffs, marked PRD lines, decisions and the gate", () => {
+test("clusters group changes that fold one requirement or depend on each other", () => {
   const { root } = sandbox();
-  write(
-    root,
-    "openspec/specs/site/search/spec.md",
-    "# Search\n\n## Purpose\n\nReaders find items.\n\n## Requirements\n\n### Requirement: Search results\n\nThe system SHALL return items.\n\n### Requirement: Untouched\n\nThe system SHALL stay as is.\n",
+  const add = (id, manifest, delta) => {
+    write(root, `openspec/changes/${id}/.openspec.yaml`, manifest);
+    if (delta)
+      write(root, `openspec/changes/${id}/specs/site/search/spec.md`, delta);
+  };
+  const delta = (kind) =>
+    `# Search\n\n## ${kind} Requirements\n\n### Requirement: Search results\n\nThe system SHALL return items.\n\n#### Scenario: site-search-SC-01 - Results\n\n- **WHEN** a reader searches\n- **THEN** items appear\n`;
+  add("build-beta", "schema: grade10-planning\n", delta("MODIFIED"));
+  add(
+    "build-gamma",
+    "schema: grade10-planning\ndepends_on:\n  - build-delta\n",
   );
-  write(
-    root,
-    "docs/prds/products/site/alpha.md",
-    "# Alpha\n\n## Product decisions\n\n🚧 Results stay within the capability.\n\nPlain line.\n\n## Measurement\n\n🚧 Elsewhere.\n",
+  add("build-delta", "schema: grade10-planning\n");
+  add("build-alone", "schema: grade10-planning\n");
+  const clusters = changeClusters(root);
+  assert.deepEqual(
+    clusters.map((one) => one.changes),
+    [
+      ["build-alpha", "build-beta"],
+      ["build-delta", "build-gamma"],
+    ],
   );
-  const delta = join(
-    root,
-    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  assert.deepEqual(
+    clusters[0].shared.map((one) => one.requirement),
+    ["Search results"],
   );
-  writeFileSync(
-    delta,
-    readFileSync(delta, "utf8")
-      .replace("## ADDED Requirements", "## MODIFIED Requirements")
-      .replace(
-        "The system SHALL return matching items.",
-        "The system SHALL return matching items by rank.",
-      ),
-  );
-  const result = preflightChange(root, CHANGE, passing);
-  const packet = buildPacket(root, [result]);
-  assert.match(packet, /### Gate\n\nPassed with no findings\./);
-  assert.match(packet, /modified: Search results\n```diff/);
-  assert.match(packet, /\+The system SHALL return matching items by rank\./);
-  assert.doesNotMatch(packet, /Untouched/);
+  assert.deepEqual(clusters[1].dependsOn, [
+    { change: "build-gamma", on: ["build-delta"] },
+  ]);
   assert.match(
-    packet,
-    /docs\/prds\/products\/site\/alpha\.md#product-decisions/,
+    formatClusters(clusters),
+    /Cluster 1: build-alpha -> build-beta\n {2}shared: site\/search \/ Search results \(build-alpha ADDED, build-beta MODIFIED\)/,
   );
-  assert.match(packet, /- 🚧 Results stay within the capability\./);
-  assert.doesNotMatch(packet, /Plain line|Elsewhere/);
-  assert.match(packet, /\| Q1 \| Search stays local to the capability\. \|/);
-});
-
-test("unifiedDiff keeps only changed lines and their neighbours", () => {
-  const before = ["a", "b", "c", "d", "e", "f", "g", "h"].join("\n");
-  const after = before.replace("h", "H");
-  assert.equal(unifiedDiff(before, after, 1), "@@\n g\n-h\n+H");
 });
