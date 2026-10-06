@@ -9,8 +9,8 @@ fields table reserved a Tax line and left it empty, "reserved for the separate
 tax change"; nobody opened that change, so the reservation has sat unfilled
 while the rest of the invoice shipped.
 
-The gap is not theoretical. `InvoicePdf` and `ReceiptPdf` already render any
-charge row passed in `lineItems`, but no consumer has a tax row to pass. The
+The gap is not theoretical. `InvoicePdf` and `ReceiptPdf` already render an optional `taxLine`,
+but no consumer has a tax amount to pass. The
 receipt requirement already itemises "any tax amount", and three feature test
 cases already name a tax amount they cannot exercise. Every layer was built ready for a line that has
 no source.
@@ -42,8 +42,8 @@ watch.
   what a winner in Awaiting Setup actually wonders, since the row reads TBD
   whether or not they will owe anything. The tip rides the line rather than
   appearing in one status and vanishing in the next
-- **The invoice and the receipt state it** as an ordinary `lineItems` charge
-  row between Insurance and Subtotal
+- **The invoice and the receipt state it** as the optional `taxLine` the PDF
+  blocks already accept, before the boxed Subtotal summary
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
 
@@ -72,8 +72,7 @@ See [Non-Goals](decisions.md#non-goals).
   that contains it
 - **The operator quote and reissue forms** — one optional amount field each
 - **`shared/ui/invoice-and-receipt-pdf`** — no contract change; this change
-  supplies Tax as an ordinary `lineItems` charge row between Insurance and
-  Subtotal
+  supplies Tax as the optional `taxLine` its durable contract already defines
 - **The audit log** — Tax joins the quoted amounts a reissue records before
   and after, written by `complete-auction-post-sale`'s `Invoice log history`
   (Q8), not by this change

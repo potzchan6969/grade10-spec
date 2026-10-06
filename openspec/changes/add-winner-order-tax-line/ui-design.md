@@ -24,8 +24,8 @@ Layout SoT: Storybook —
   `my-auctions-winner-order-pdf-receipt--default`,
   `my-auctions-winner-order-pdf-receipt--with-tax`
 
-Tax is an ordinary charge `lineItems` row between Insurance and Subtotal
-when supplied. Absence is omitting the row, not a zero amount. No dedicated
+Tax is the optional `taxLine` on both PDF data objects, placed before the
+boxed Subtotal summary when supplied. Absence is omitting the row, not a zero amount. No dedicated
 without-Tax PDF story; product state still applies when the operator sends
 none.
 
@@ -44,7 +44,7 @@ drawn or converted.
 | `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger` | `@grade10/design-system` | Brief tip beside the Tax row label (`overlays/tooltip`) |
 | `Info` | `@grade10/design-system` (icon) | Tooltip trigger on Tax, same pattern as Insurance |
 | Page-local `SummaryRow` / `OrderSidebar` | `apps/preview` Winner Order assembly | Iterates invoice lines; optional `tooltip` on a line — Tax already wired |
-| `InvoicePdf` / `ReceiptPdf` | `@grade10/ui` | Charge lines via `lineItems`; Tax is an ordinary charge row when present — no new export |
+| `InvoicePdf` / `ReceiptPdf` | `@grade10/ui` | Charge lines via `lineItems`; Tax is the optional `taxLine` when present — no new export |
 
 Nothing missing in this repository for the Order Summary tip pattern, Tax
 preview fixtures, or PDF charge rows. No new `@grade10/ui` export for Order

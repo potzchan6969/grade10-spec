@@ -2,9 +2,9 @@
 
 The auction invoice already persists the amounts that make one immutable
 quote: Winning Bid, Buyer's Premium, Shipping & Handling, optional Insurance,
-Subtotal, Payment Processing Fee and Order Total. Its PDF projection already
-renders ordinary charge rows from `lineItems`, but the quote writer and the
-Winner Order read model have no tax value to supply.
+Subtotal, Payment Processing Fee and Order Total. Its PDF blocks already
+accept an optional `taxLine` (`shared/ui/invoice-and-receipt-pdf`), but the
+quote writer and the Winner Order read model have no tax value to supply.
 
 Tax has the same storage boundary as Insurance. An operator supplies an
 optional integer count of minor units while preparing an invoice or a
@@ -50,8 +50,8 @@ that Tax consumes.
    Summary inserts it in the existing ordered line projection and supplies
    localized label and tooltip copy. Before send, the page supplies the
    dependency's TBD row; after send, a null amount omits the row. Invoice and
-   receipt generation pass Tax as an ordinary `lineItems` charge row between
-   Insurance and Subtotal.
+   receipt generation pass Tax as the PDF blocks' optional `taxLine`, which
+   they place before the boxed Subtotal summary.
    - Rejected: add a Tax-specific shared UI export. The summary and PDF blocks
      already accept optional supplied rows; tax policy remains in the auction
      application.
@@ -95,8 +95,8 @@ type OptionalTaxInput = {
   records its prior and next values when changed.
 - **Winner order read** returns the current invoice's optional Tax without
   recomputing it from an address.
-- **PDF generation** maps the same persisted value to an ordinary `lineItems`
-  charge row between Insurance and Subtotal. A null value supplies no row.
+- **PDF generation** maps the same persisted value to the optional
+  `taxLine` on both PDF data objects. A null value supplies none.
 
 Validation failures remain tagged command refusals. A zero, negative,
 fractional or unsafe Tax value is refused before pricing or persistence; no

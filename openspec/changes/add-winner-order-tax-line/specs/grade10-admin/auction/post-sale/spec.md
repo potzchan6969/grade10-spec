@@ -361,3 +361,15 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **WHEN** an operator reissues it with Tax of 6000 minor units in HKD and a
   reason, changing nothing else
 - **THEN** the new invoice includes Tax of 6000 minor units in HKD
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=1 -->
+#### Scenario: post-sale-SC-210 - A reissue removes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice includes Tax of 6000
+  minor units in HKD
+- **WHEN** an operator reissues it removing Tax and giving a reason, changing
+  nothing else
+- **THEN** Grade10 accepts it as a change
+- **AND** the new invoice has no Tax line
+- **AND** its Subtotal is 6000 minor units lower than the replaced invoice's

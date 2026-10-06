@@ -135,9 +135,41 @@
 
 * The new invoice carries Tax of 6000 minor units in HKD.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-yjb rev=1 covers=g10adm.auction-post-sale.SC-kdq -->
+### post-sale-US7-TC46-1: Reissue removes tax
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(operator with payment-processing) has an order in Pending Payment whose invoice carries Tax of 6000 minor units in HKD.
+
+**Steps:**
+
+1. Open Reissue.
+2. Clear the Tax amount, change nothing else, and give a reason.
+3. Send the new invoice.
+
+**Expected Results:**
+
+* The reissue is accepted as a change.
+* The new invoice has no Tax line.
+* Its Subtotal is 6000 minor units lower than the replaced invoice's.
+
 ## Settled
 
-- Removing Tax on a reissue is a change from an amount to none, like any other quoted amount; it needs no case of its own.
+- Removing Tax on a reissue is a change from an amount to none, like changing its amount; it has its own scenario and case.
 
 ## Reconciliation
 
@@ -151,6 +183,7 @@
 - `post-sale-US5-TC10-1`, an invoice sent with Tax left empty carries no Tax line -> `post-sale-SC-156`
 - `post-sale-US5-TC11-1`, Tax of zero refused -> `post-sale-SC-157`
 - `post-sale-US7-TC38-1`, a reissue adding Tax whose new invoice carries it -> `post-sale-SC-158`
+- `post-sale-US7-TC46-1`, a reissue removing Tax whose new invoice has none -> `post-sale-SC-210`
 
 ### Rejected
 
@@ -158,7 +191,7 @@
 
 ### Escalated
 
-- Is removing Tax on a reissue a change of its own, distinct from changing its amount? -> `Q8`; answered under `## Settled`
+- Is removing Tax on a reissue a change of its own, distinct from changing its amount? -> `Q8`; answered under `## Settled`, and walked by `post-sale-US7-TC46-1` -> `post-sale-SC-210`
 
 ### Carried Unchanged
 
