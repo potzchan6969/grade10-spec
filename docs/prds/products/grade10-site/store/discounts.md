@@ -24,12 +24,11 @@ lands on the order through the same Shopify draft order.
 - **Rewards** — earned with points, on a birthday, or on registering
   ([Rewards](/p/grade10-site/loyalty/rewards)), picked in the cart drawer or
   at `/checkout` from the coupons the member holds, each answered against the
-  cart before it is picked. Both shapes ride as a Shopify Discount too, minted
-  once the basket qualifies and spent once, the same as an order coupon
+  cart before it is picked and spent once
   1. **Product coupon** — a fixed amount, or a percentage with a ceiling, off
-     the lines it applies to
-  2. **Gift** — a 100%-off code scoped to the gift product, added once the
-     goods pass a threshold
+     the lines it applies to, by its own Shopify Discount code
+  2. **Gift** — the gift product at 100% off once the goods pass a threshold;
+     by its own code online, and at the till as its line discounted to nothing
 - **Points** — **HKD 1** per point, paid straight against the bill, on every
   channel ([Paying with Points](/p/grade10-site/loyalty/paying-with-points))
 
@@ -105,7 +104,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 7. **Apply — the store plans the sale** — from the cart's lines (a claim, bounded later by what the shop takes), the coupons chosen and the points asked for: coupons priced against the lines, gifts priced from the catalog, points capped at the goods and the balance, one `orders` row written for the session (origin `pos`, ref `pos-sale:<session>`) and the member's other open promises retired. A re-plan rewrites the same row; twenty plans per session per five minutes
 8. **Apply — the extension edits the cart**, each write confirmed against the cart signal, one deadline for the whole edit:
    1. `grade10_order_id` cart attribute — first, before any money: a sale carrying it and fewer benefits settles only what the shop took, a discount without it is money off nobody can bound
-   2. Gift — a line added under a gift property, then the gift's own Shopify discount code, minted once the cart shows it qualifies; a gift the oversell guard declines is skipped, a gift line left at full price is removed
+   2. Gift — a line added under a gift property and discounted to nothing; a gift carries no code at the till; a gift the oversell guard declines is skipped, a gift line left at full price is removed
    3. Points — one order-level fixed-amount discount titled `Points`; a plan with no points removes the earlier one
    4. Product coupon or order coupon — added as a Shopify discount code the shop evaluates, whichever one the plan carries; a product coupon's code is minted the moment it is taken; taken only when the cart shows one more discount than before
    - A step that did not take is a sentence staff read aloud, never a retry loop
@@ -116,7 +115,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 12. **The paid order arrives** by webhook or sweep, carrying the attribute, and binds to the row only when the row is a till promise with no payment yet, the order came through the POS channel (a cart permalink could write our attribute on a web order), its customer is the member's, and the currency matches. Anything else counts `store.pos.sale.unbound` for an operator's claw-back, never silence
 13. **Settlement** — the shop's own allocations price the sale, line by line
     - **Points** leave the balance at what the shop allocated to the `Points` cut
-    - **A coupon** settles only where the order corroborates it — its own code among the codes the sale carried — and the rest are freed and counted
+    - **A coupon** settles only where the order corroborates it — a product or order coupon by its own code among the codes the sale carried, a gift by its line — and the rest are freed and counted
     - **A discount no instrument accounts for**, a promotion the shop ran itself, is counted and never read as points
     - **Earning** is on the goods, as online
 :::
@@ -129,7 +128,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 | **移除所有折扣** (Remove every discount) | The extension, 此單項目 | Every code, the `Points` discount, a staff discount, and this sale's gift lines | Stays |
 | **全部移除** | POS, 管理折扣 | Every discount | Off for that cart, until 購物車 ⋯ → 自動折扣 puts it back |
 
-- **Before tender** — the extension's 全部移除 takes gift lines off by their property and the `Points` discount by its title, then tells the store what is left. The balance was never touched. A discount code — a product coupon, a gift, or an order coupon — comes off only with every other discount (the platform offers nothing narrower), so staff are told; 移除所有折扣 is the last resort
+- **Before tender** — the extension's 全部移除 takes gift lines off by their property and the `Points` discount by its title, then tells the store what is left. The balance was never touched. A discount code — a product coupon or an order coupon — comes off only with every other discount (the platform offers nothing narrower), so staff are told; 移除所有折扣 is the last resort
 - **A coupon that would not come off** — it stays on the sale and the store is told so: the order id stays, so the landed order still binds, and the coupon's ride stays, so settlement has something to spend. Drop either and the shop goes on honouring the cut against a sale nobody can settle — the member keeps a coupon they used, and the shop pays for it twice
 - **The member taken off the sale** — the promise goes back for everything the sale no longer shows, and what can still be removed is. A cut nobody can remove keeps its ride and the order id with it: no sale binds while the cart names no customer, and the member coming back is what spends it
 - **After tender** — a refund, on the refund's own rule
@@ -228,7 +227,7 @@ today.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Mechanism | Decided | Site discounts are Shopify's own automatic discounts, authored in Shopify Admin; grade10 only accepts them on the draft order. | Product |
-| Reward coupon transport | Decided | A product coupon and a gift ride as a Shopify Discount too, minted once the basket qualifies, the same as an order coupon. | Product |
+| Reward coupon transport | Decided | Online, a product coupon and a gift ride as a Shopify Discount too, minted when the checkout is submitted, the same as an order coupon. At the till a gift is its own line discounted to nothing: a code as well would take the benefit twice and use the order's one code slot. | Product |
 | Coupon precedence | Decided | A checkout eligible for more than one coupon has the collector pick the one to apply — the order's one discount-code slot takes only one. | Product |
 | One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
 | Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |
