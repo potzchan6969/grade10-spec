@@ -315,7 +315,8 @@ on winner, In transit, Closed and All, opening on Needs action.
 
 | Payments so far | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Any | Less than the balance | Recorded; the order reads Partially Paid at the real remaining balance |
+| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
+| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 

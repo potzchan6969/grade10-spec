@@ -17,8 +17,11 @@ Once an invoice is `expired`, the admin portal SHALL be the only place it is
 paid. An operator holding payment-processing SHALL record it manually, per
 "Manual settlement records the method and its proof". A cumulative exact
 payment makes the invoice `paid` and the order derive as Preparing Shipment. A payment
-whose cumulative total remains below the invoice total keeps the invoice Partially Paid with its real balance;
-it starts no new self-service deadline and has no manual-settlement detour.
+whose cumulative total remains below the invoice total keeps the invoice Partially Paid with its real balance,
+and updating it to Paid below 90% of the invoice total is refused, per
+"Closing tolerance is explicit and preserves payments"; from 90% the operator
+may close it as Paid or keep it Partially Paid. A payment starts no new
+self-service deadline and has no manual-settlement detour.
 In either case the winner's order shows no card Pay control.
 
 Grade10 SHALL offer the winner no way to pay an expired invoice. A card payment
@@ -59,7 +62,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **GIVEN** an auction order whose invoice is `expired` with a 100000 minor-unit balance
 - **WHEN** an operator holding payment-processing records a 40000 minor-unit payment
 - **THEN** the invoice is Partially Paid with 60000 minor units remaining
-- **AND** no new self-service deadline is created
+- **AND** no new self-service deadline or close-as-paid choice is created, because 40000 minor units is below the 90% closing tolerance
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-cdi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused

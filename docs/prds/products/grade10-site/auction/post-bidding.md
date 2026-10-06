@@ -460,10 +460,13 @@ balance. The invoice above, settled in three payments:
 | `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,571.80 | Records it; the order remains Partially Paid |
 | `-P3` | 10,571.80 | Previous 115,000 · this payment 10,571.80 · balance due 0 | An exact match closes on its own; the order reads Preparing Shipment |
 
-- 🚧 **Completing the balance** — every payment below the original invoice
-  total keeps the order Partially Paid at the real balance. An exact cumulative
-  match closes on its own; only an amount above the total asks the operator to
-  confirm the overpayment before the invoice is marked Paid
+- 🚧 **Completing the balance** — updating the invoice to Paid is refused
+  until payments reach 90% of the original invoice total, so a 1,000 invoice
+  needs at least 900 first. From 90% each further payment asks the operator to
+  close as Paid or keep it Partially Paid at the real balance, and asks again
+  on every payment while the total is under 100%. An exact cumulative match
+  closes on its own; an amount above the total asks the operator to confirm the
+  overpayment before the invoice is marked Paid
 - 🚧 **Overpaying** — a payment that would take the total past the invoice is
   accepted after an operator confirmation dialog before the invoice is marked
   Paid; the full payment remains recorded and the excess can be returned
@@ -598,12 +601,12 @@ a second payment provider, and changes to the bid-time rules.
 | Address window | 🚧 In flight | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
 | My Auctions Status column | Decided | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
-| Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment: every amount below that total keeps the invoice Partially Paid at the real remaining balance. An exact match closes on its own without a prompt. | Product and finance |
+| Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: updating the invoice to Paid is refused below 90% of the total, and once payments reach 90%, every further payment offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 | Receipt ID format | 🚧 In flight | New receipts issued for finalized full or partial payments use `RC-{listing code}{invoice sequence}P{receipt sequence}`, such as `RC-LK42301P1`. The receipt sequence starts at 1 for each invoice and is unpadded. Historical `REC-...` receipts remain unchanged; refunds, reversals and voids issue no receipt. Formal tax-receipt content stays open. | Product (@jeffffej0909) |
-| Receipt breakdown | Decided | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment reaches or exceeds the invoice total. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
+| Receipt breakdown | Decided | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment closes the invoice, including a tolerance close or confirmed overpayment. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
 | A balance belongs on a receipt, not on a page | Decided | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |

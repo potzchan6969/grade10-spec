@@ -73,7 +73,7 @@
 * The order remains Partially Paid until its invoice is closed.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-uz7 rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
-### post-sale-US12-TC3-1: An incomplete payment stays Partially Paid
+### post-sale-US12-TC3-1: The closing prompt does not discard the payment
 
 **Classification:**
 
@@ -96,12 +96,14 @@
 **Steps:**
 
 1. Record a payment of 5000 minor units.
-2. Record an exact 5000-minor-unit balance payment.
+2. Choose to keep the invoice open.
+3. Record an exact 5000-minor-unit balance payment.
 
 **Expected Results:**
 
-* Step 1 leaves the order Partially Paid with the real 5000-minor-unit balance.
-* Step 2 closes the invoice as Paid without a prompt.
+* Step 1 asks whether to close or keep collecting.
+* Step 2 leaves the order Partially Paid with the real balance.
+* Step 3 closes the invoice as Paid without a second prompt.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-qpm rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC4-1: An overpayment needs confirmation before Paid
@@ -135,10 +137,41 @@
 * The full 15000-minor-unit payment is recorded.
 * The invoice is Paid and the excess is not a separate adjustment line.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-mrv rev=1 covers=g10adm.auction-post-sale.SC-9nm,g10adm.auction-post-sale.SC-k4t -->
+### post-sale-US12-TC5-1: Paid is refused below the closing tolerance
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-12
+
+**Pre-conditions:**
+
+* `<partially-paid invoice>` has cumulative payments of 80000 minor units against an original total of 100000 minor units.
+* admin(holds payment-processing) is recording another payment.
+
+**Steps:**
+
+1. Record a payment of 5000 minor units and try to update the invoice to Paid.
+2. Record a further payment of 5000 minor units.
+
+**Expected Results:**
+
+* Step 1 is refused because 85000 minor units is below 90% of the original total; the payment is recorded and the order reads Partially Paid with the real 15000-minor-unit balance.
+* Step 2 brings the total to 90000 minor units and offers the choice to close as Paid or keep collecting.
+
 ## Settled
 
 ## Reconciliation
 
 | Finding | Disposition |
 | --- | --- |
-| Exact-total closure and confirmed overpayment | **Folded in:** `grade10-admin-auction-post-sale-SC-140` through `SC-143` |
+| Overpayment, close-or-keep boundary and the refusal below the tolerance | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-144` |

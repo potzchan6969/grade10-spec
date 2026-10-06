@@ -50,8 +50,9 @@ too short.
   Invoice. `address_window_open` gates the winner's write, and operator actions
   do not write a status directly.
 - **An expired invoice is paid only in the admin portal.** An operator records
-  it manually; a full payment settles it, while a shortfall stays Partially
-  Paid with no new self-service deadline. A reissue is the only way back to
+  it manually; a full payment settles it, while a shortfall below the 90% closing
+  tolerance stays Partially Paid with no new self-service deadline or
+  close-as-paid choice. A reissue is the only way back to
   the winner's card.
 - **A card payment started in time counts.** One Grade10 received before the
   payment deadline completes even if it confirms after, and the invoice stays

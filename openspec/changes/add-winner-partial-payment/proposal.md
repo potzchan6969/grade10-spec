@@ -27,12 +27,18 @@ zero — no invoice can record a partial payment at all.
   such payment while money is still owed. The 7-day payment deadline stops
   for good — not paused, as Payment Verifying does — because self-service Pay
   is never offered again on that invoice.
-- **Payments remain incomplete until the original invoice total is reached.**
-  Measured cumulatively against that total, every payment below it keeps the
-  invoice Partially Paid at the real remaining balance. An exact match closes
-  on its own. A payment that exceeds the original invoice total is accepted
-  only after a confirmation dialog before the invoice is marked Paid; the full
-  payment remains recorded and the excess is identifiable for a later refund.
+- **Updating the invoice to Paid is refused below 90% of the original invoice
+  total; at 90% or more, every further payment asks the operator to close or
+  keep going.** A $1,000 invoice must collect at least $900 before it can be
+  closed as Paid. Measured against the invoice's original total, cumulative
+  across every payment, not the balance left at that moment. They choose to
+  close the invoice as Paid — no separate write-off entry is recorded — or
+  leave it Partially Paid at the real remaining balance; the prompt returns on
+  the next payment too while the total is still under 100%. An exact match to
+  the full amount closes on its own, no prompt needed. A payment that exceeds
+  the original invoice total is accepted only after a confirmation dialog
+  before the invoice is marked Paid; the full payment remains recorded and the
+  excess is identifiable for a later refund.
 - **Reissue and Cancel are refused once any payment is recorded.** The
   invoice's address, method and total stay fixed once real money has moved
   against them; an operator resolves anything that will not be paid off by
@@ -62,7 +68,7 @@ None.
 ### Modified Capabilities
 
 - `grade10-site/auction/winner-order`: Partially Paid order and invoice
-  status; exact-total closure; Reissue and Cancel refused once a
+  status; the 90% closing tolerance; Reissue and Cancel refused once a
   payment is recorded; per-payment receipts on the existing Receipt PDF row;
   no running balance shown, on the order or in suspension copy.
 - `grade10-site/auction/order-status`: Partially Paid added to both status
@@ -79,7 +85,7 @@ None.
 | --- | --- |
 | `apps/frontend/grade10` | Winner Order reads Partially Paid as a locked state with Contact Us and no balance figure; the Receipt PDF row lists one entry per payment; My Auctions shows Partially Paid. |
 | `apps/admin/grade10` | The manual-settlement form accepts an amount smaller than the balance owed, repeatable; the queue's Partially Paid outcome and filter; Reissue and Cancel disabled once a payment exists. |
-| Auction service | A payment ledger per invoice (amount, method, reference, proof, operator, timestamp); exact-total closure; the Partially Paid state and its refusal of Reissue and Cancel; a receipt generated per payment, numbered `-P1`, `-P2`, … |
+| Auction service | A payment ledger per invoice (amount, method, reference, proof, operator, timestamp); the 90% closing-tolerance check; the Partially Paid state and its refusal of Reissue and Cancel; a receipt generated per payment, numbered `-P1`, `-P2`, … |
 | Notification service | The landed `add-winner-contact-email` change sends an append-only `payment_received_partial` letter for each partial payment with the current invoice and receipt IDs. Payment reminders still stop once the invoice leaves `pending`; the durable notification contract owns the ready-email subject, body and Contact Us mailto. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
 
