@@ -407,6 +407,109 @@ Runs once per row of **Test data**.
 * The reissue is refused with a sentence saying a reason is needed, and the dialog stays open.
 * The timeline holds no reissued entry.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-6yz rev=1 covers=g10adm.auction-post-sale.SC-jy7 -->
+### post-sale-US2-TC9-1: A cancelled order refuses a reopen
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-02
+
+**Pre-conditions:**
+
+* `<cancelled order>` was cancelled before any invoice was sent and its lot returned to available stock.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Attempt to reopen its address form with a reason.
+2. Read the header and the lot's stock status.
+
+**Expected Results:**
+
+* The reopen is refused.
+* The order still derives as Cancelled.
+* The lot stays in available stock.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-62p rev=1 covers=g10adm.auction-post-sale.SC-sxy,g10adm.auction-post-sale.SC-z4g,g10adm.auction-post-sale.SC-7jb,g10adm.auction-post-sale.SC-8fx -->
+### post-sale-US2-TC10-1: Recording setup is refused without a reason, after confirmation, after send and when cancelled
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-02
+
+**Pre-conditions:**
+
+* `<overdue order>` is in Setup Overdue with no confirmed address.
+* `<confirmed order>` is in Preparing Invoice with a confirmed address and no sent invoice.
+* `<sent order>` has a sent invoice.
+* `<cancelled order>` was cancelled before any invoice was sent.
+* admin(operator with payment processing) opens each.
+
+**Steps:**
+
+1. On `<overdue order>`, record a delivery address, billing address and payment method with the reason empty.
+2. On `<confirmed order>`, `<sent order>` and `<cancelled order>`, attempt to record setup with a reason.
+3. Read each order's status.
+
+**Expected Results:**
+
+* Each attempt is refused.
+* `<overdue order>` is still Setup Overdue, holding no recorded address.
+* `<confirmed order>` keeps its confirmed address and `<sent order>` keeps its locked address.
+* `<cancelled order>` still derives as Cancelled.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-0jl rev=1 covers=g10adm.auction-post-sale.SC-zuz,g10adm.auction-post-sale.SC-l05 -->
+### post-sale-US2-TC11-1: Recording setup refuses a method the currency does not offer, and a reopen is still allowed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-02
+
+**Pre-conditions:**
+
+* `<USD order>` is in USD Setup Overdue, where Payment Settings holds no USD card fee rule and Grade10 holds no USD bank details.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Record a delivery address, billing address and card as the method, with a reason.
+2. Record the same with bank transfer as the method.
+3. Reopen the address form with a reason.
+4. Sign in as its winner and open the order.
+
+**Expected Results:**
+
+* Both recordings are refused, and the order holds no recorded address and no method.
+* The reopen is accepted and the order derives as Awaiting Setup.
+* The winner reads that payment is not yet available in USD, with Contact Us, and cannot confirm.
+
 ---
 
 ## post-sale-US3: Operator collects payment

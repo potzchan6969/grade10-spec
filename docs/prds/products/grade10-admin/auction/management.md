@@ -192,7 +192,7 @@ order.
 | 🚧 Payment Overdue | Needs action | Reissue | The payment deadline |
 | 🚧 Payment Verifying | Needs action | Check proof | The winner's latest proof |
 | 🚧 Partially Paid | Waiting on winner | Record payment | The latest payment |
-| 🚧 Processing | Needs action | Dispatch | The payment that paid it |
+| 🚧 Preparing Shipment | Needs action | Dispatch | The payment that paid it |
 | 🚧 Shipped | In transit | Confirm delivery | The dispatch |
 | 🚧 Delivered · Cancelled · Refunded | Closed | None | The delivery, the cancel or the refund |
 
@@ -218,8 +218,8 @@ order.
 | 🚧 Reopen the address form, or record setup | Setup Overdue | Payment processing |
 | 🚧 Change setup | Preparing Invoice | Payment processing |
 | 🚧 Clear flag | Each flagged payment, with a reason | Payment processing |
-| Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
-| 🚧 Dispatch | Processing | Shipment processing |
+| 🚧 Refund | Preparing Shipment, Shipped, Delivered or Partially Paid, once | Refund processing |
+| 🚧 Dispatch | Preparing Shipment | Shipment processing |
 | 🚧 Confirm delivery | Shipped | Shipment processing |
 | 🚧 Comment | Any order the operator can open | Reading |
 
@@ -316,7 +316,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 | Payments so far | The next payment | What happens |
 | --- | --- | --- |
 | 🚧 Any | Less than the balance | Recorded; the order reads Partially Paid at the real remaining balance |
-| 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
+| 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
 ### Address Confirmation Window
@@ -383,7 +383,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 Shipment is its own grant, apart from payment: the person who may settle
 money is not necessarily the person who dispatches cards.
 
-- 🚧 **Dispatch** - from the page of a Processing order: the carrier, the
+- 🚧 **Dispatch** - from the page of a Preparing Shipment order: the carrier, the
   tracking number and the carrier's tracker link when there is one, with the
   address kept as it stood; the order reads Shipped and the winner gets the
   shipped letter. Recording an address never dispatches

@@ -1456,9 +1456,9 @@ carries a flag not yet cleared. The flag itself SHALL change no status. The
 order page SHALL show one notice for each flag not yet cleared, saying in a
 sentence what landed and where, with its own Clear flag.
 
-**Clearing a flag** - An operator holding payment processing SHALL clear one
-payment's flag with a reason, which the invoice log keeps as a flag cleared
-entry. Clearing SHALL change no status.
+**Clearing a flag** - An operator SHALL clear one payment's flag as "A late
+payment after cancellation is recorded without revival" states. The invoice log
+SHALL keep it as a flag cleared entry. Clearing SHALL change no status.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-en4 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-201 - A card payment that lands on an expired invoice pays it late
@@ -1611,6 +1611,14 @@ timestamp and reason. An operator without payment-processing SHALL see the
 record control visible and disabled, and Grade10 SHALL refuse the same action
 on the server.
 
+**A method the currency offers** - Grade10 SHALL refuse to record a payment
+method the order's currency does not offer, per
+`grade10-site/auction/winner-order`: card where Payment Settings holds no card
+fee rule for the currency, and bank transfer where Grade10 holds no bank
+details for it. A reopen in a currency that offers neither method SHALL still
+be allowed, and the winner then reads that payment is not yet available, with
+Contact Us, per `grade10-site/auction/winner-order`.
+
 Reopening and recording setup each need payment-processing, per "Payment and
 shipment are separate grants", and each carries a reason, per "History is
 append-only and retained".
@@ -1736,6 +1744,72 @@ append-only and retained".
 - **WHEN** another operator reads the invoice log
 - **THEN** it contains an address-recorded entry with the named operator,
   timestamp and reason
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-sxy rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-211 - A record without a reason is refused
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in Setup Overdue whose address deadline was
+  at 2026-09-14T09:00:00Z
+- **WHEN** an operator holding payment-processing attempts to record setup
+  without a reason
+- **THEN** Grade10 refuses it
+- **AND** the order is still in Setup Overdue, holding no recorded address
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-z4g rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-212 - Recording setup after the address is confirmed is refused
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in Preparing Invoice with a confirmed address
+  and no sent invoice
+- **WHEN** an operator holding payment-processing attempts to record setup
+  with a reason
+- **THEN** Grade10 refuses it
+- **AND** the confirmed address is unchanged
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7jb rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-213 - Recording setup after the invoice is sent is refused
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order whose invoice an operator has sent
+- **WHEN** an operator holding payment-processing attempts to record setup
+  with a reason
+- **THEN** Grade10 refuses it
+- **AND** the delivery address stays locked, changeable only by a reissue
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-8fx rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-214 - A cancelled order refuses recorded setup
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order an operator cancelled before any invoice was sent
+- **WHEN** an operator holding payment-processing attempts to record setup
+  with a reason
+- **THEN** Grade10 refuses it
+- **AND** the order still derives as Cancelled
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-zuz rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-215 - Recording setup refuses a payment method the currency does not offer
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in USD Setup Overdue, where Payment Settings holds
+  no USD card fee rule
+- **WHEN** an operator holding payment-processing records a delivery
+  address, a billing address and card as the method, with a reason
+- **THEN** Grade10 refuses it
+- **AND** the order holds no recorded address and no method, and is still in
+  Setup Overdue
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-l05 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-216 - A reopen is allowed in a currency that offers no method
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in USD Setup Overdue, where Payment Settings holds
+  no USD card fee rule and Grade10 holds no USD bank details
+- **WHEN** an operator holding payment-processing reopens the address form with a
+  reason
+- **THEN** Grade10 accepts the reopen and the order derives as Awaiting Setup
+- **AND** the winner reads that payment is not yet available in USD, with
+  Contact Us, and cannot confirm
 
 ## REMOVED Requirements
 

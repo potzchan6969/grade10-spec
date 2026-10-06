@@ -233,11 +233,17 @@ NOT show the order as paid before it records the invoice `paid`.
 
 ### Requirement: Contact Us opens a copy-first ready email
 
-When Contact Us is offered on a locked Winner Order, the winner reaches
-Grade10 through a ready email they can copy into any mail app.
+When Contact Us is offered on a locked Winner Order, or on an Awaiting Setup
+order where neither payment method is offered, the winner reaches Grade10
+through a ready email they can copy into any mail app.
 
 **Opens** - Contact Us SHALL open a dialog. It SHALL NOT open a mail client
 as the first action, and SHALL NOT show only a toast that names the address.
+
+**Setup with no method** - On an Awaiting Setup order where neither method is
+offered, the ready subject and body SHALL use the `setup overdue` reason, though
+the status reads Awaiting Setup, since the winner can only ask an operator to
+reopen or record setup.
 
 **Hidden until open** - `support@grade10.com` SHALL NOT appear on the order
 page before Contact Us opens the dialog.
@@ -277,6 +283,17 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** Copy Message is the first footer action
 - **AND** Open Mail App is the second footer action
 - **AND** no mail client opens as the first action
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-i2y rev=1 -->
+#### Scenario: winner-order-SC-262 - Contact Us on an order with no method uses the setup overdue reason
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order in USD Awaiting Setup, where neither card nor bank
+  transfer is offered
+- **WHEN** the winner chooses Contact Us
+- **THEN** the dialog opens with the ready Subject and Message for the
+  `setup overdue` reason
+- **AND** the order status still reads Awaiting Setup
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fu8 rev=1 -->
 #### Scenario: winner-order-SC-161 - The support address stays off the order until Contact Us

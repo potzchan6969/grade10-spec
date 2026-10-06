@@ -359,6 +359,38 @@
 
 * The picker does not offer the one-time address.
 
+<!-- trace:case id=g10.auction-winner-order.TC-nat rev=1 covers=g10.auction-winner-order.SC-i2y -->
+### winner-order-US1-TC59-1: Contact Us on an order with no method asks about setup
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
+* customer(winner) holds an auction order in USD in Awaiting Setup.
+
+**Steps:**
+
+1. Open the order and choose Contact Us.
+2. Read the Subject and the Message.
+3. Read the order status.
+
+**Expected Results:**
+
+* The Subject and Message are those of the `setup overdue` reason.
+* The order status still reads Awaiting Setup.
+
 ---
 
 ## winner-order-US9: Winner pays an invoice by bank transfer
