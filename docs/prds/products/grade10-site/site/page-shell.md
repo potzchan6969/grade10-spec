@@ -63,22 +63,27 @@ drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
 ## Cart
 
-🚧 **Cart count** — members see the same active-line count on the header and
-cart drawer, including while the drawer is closed. Empty or unknown carts and
-signed-out sessions show no count; the cart control stays available.
-The last verified count stays during a same-member refresh and disappears if
-that check fails.
+🚧 **Cart count** - the header shows a member the same active-line count as the
+cart drawer title, with the drawer open or closed
 
-🚧 **What counts** — each distinct line counts once, whatever its quantity;
+🚧 **No count** - an empty or unknown cart and a signed-out session show no
+count; the Cart control stays where it is
+
+🚧 **During a refresh** - the last verified count stays while the same member's
+cart is checked, including after a failed change, and disappears if that check
+fails
+
+🚧 **What counts** - each distinct line counts once, whatever its quantity;
 adjusted lines count, sold-out and unavailable lines do not
 
-🚧 **Member change** — signing out or changing member clears the count at once
+🚧 **Member change** - signing out or changing member clears the count at once
 
-🚧 **Updates** — the count follows a cart change or a cart review, with the
-drawer open or closed; a change made on another device shows after the next
-review, not live
+🚧 **Updates** - the count refreshes when the member's cart loads, when a cart
+change finishes, saved or failed, when the drawer opens, and on Retry, with the
+drawer open or closed; a change made on another device shows after the next of
+these, not live
 
-**Members-only cart** — for a collector with no session, the Cart control
+**Members-only cart** - for a collector with no session, the Cart control
 opens sign-in instead of the drawer; the drawer opens by itself on that
 surface once they sign in, and dismissing the dialog leaves them signed out
 with nothing waiting. A signed-in collector gets the drawer directly. There is
@@ -110,7 +115,8 @@ no cart to show someone signed out.
 | Collector help | ❓ Open | Help sits in the primary nav (wide and compact), after Store Locator when that item is present and after Auction on auction-first. Opens in a new tab. Provisional host is Mintlify at `https://grade10.mintlify.io/`; confirm the host. | Product |
 | Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability, and its activation follows `require-sign-in-from-nav-cart`; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
 | Cart count meaning | Decided | One per distinct active line, whatever its quantity — the same number as the drawer title. Rejected the quantity total, which counts multiples and unavailable lines, and checkout-eligible lines alone, which drop adjusted lines the drawer still shows. The planning round decided it from the drawer-title match on this page. | Product |
-| Cart count updates | Decided | The count follows member cart hydration, a settled cart change and a cart review or retry, with the drawer open or closed. Rejected updating only when the drawer opens, and rejected polling or live updates from another device. The planning round decided it from the closed-drawer count on this page. | Product |
+| Cart count updates | Decided | The count refreshes when the member's cart loads, when a cart change finishes, saved or failed, when the drawer opens, and on Retry, with the drawer open or closed; a change made on another device shows after the next of these. Rejected updating only when the drawer opens, and rejected polling or live updates from another device. The planning round decided it from the closed-drawer count on this page. | Product |
+| Cart count during a refresh | Decided | The last verified count for the same member stays while a refresh checks the cart, including after a failed cart update, and hides if that check fails. A first count still unknown stays hidden. Rejected hiding a verified count on every refresh, and keeping a failed or another member's count. | Product |
 | My Orders label and place | Decided | "My Orders", ahead of My Auctions once Store answers; rejected "Your Orders" (parallels the page title instead of My Auctions naming) and appending after My Auctions, before Sign Out. | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
 | Profile in the menu | Decided | Absent on auction launch and once Store answers alike — there is no Profile page. A later page may reintroduce a menu item through optional `onProfile` on `SiteHeader`; Account and Profile stay future work with no plan today. Sign-out on an account page stays with that future page work. Rejected treating Profile as joining once a `profile` gate opens or once Store answers. | Product |

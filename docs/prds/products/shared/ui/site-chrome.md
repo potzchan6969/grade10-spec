@@ -8,8 +8,9 @@ reviewed: 2026-09-21
 Two components make the chrome: a site header and a site footer. Each is usable
 on its own, and between them they are what every storefront page sits inside.
 
-A header control appears only when the application supplies a handler for it, so
-nothing on screen is dead — no search box that searches nothing, no cart icon
+A header control appears only when the application supplies a handler for it,
+or, for account and cart, a control of its own in that place, so nothing on
+screen is dead — no search box that searches nothing, no cart icon
 over a store with no cart. A region of the header with nothing in it is absent
 rather than empty, and a footer section with no content is dropped the same way.
 
@@ -62,10 +63,11 @@ utility strip / compact utility list.
 
 ## Cart Count
 
-🚧 When the cart control is present and the cart holds active lines, `SiteHeader`
-shows a round count on the cart icon — the same number as the cart drawer title
-badge, in full, never `99+`. An empty, omitted, or unknown count hides it. Signed-out visitors have
-no guest cart, so they receive no count. Design-system `Nav` stays
+🚧 **Cart count** - when the cart control is present and the cart holds active
+lines, `SiteHeader` shows a round count on the cart icon, the same number as
+the cart drawer title badge, in full, never `99+`. An empty, omitted, or
+unknown count hides it. Signed-out visitors have no guest cart, so they
+receive no count. Design-system `Nav` stays
 count-agnostic: a header that shows a count hands `Nav` its own cart control
 through an optional cart slot, as it does for account.
 
