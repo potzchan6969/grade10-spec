@@ -44,35 +44,86 @@ walked away from**.
   No draft and no counter sale locks a coupon the member wants to spend
   somewhere else.
 - **A counter sale keeps its cart and loses its cut.** The shop owns that cart
-  and it can still collect, so the sale is never cancelled; only the coupon
-  leaves it.
-- **The one refusal left is an outage.** A sale that has already taken money, a
-  checkout the provider will not kill, a code the shop will not deactivate —
-  the member is told an earlier code stands, not that their coupon is
-  unavailable.
-- **A sale that collects a code this store killed is reported.** Today nothing
-  looks: a reward's code is the only one that never reaches the mint register,
-  so no reader corroborates it against what the sale carried.
+  and it can still collect, so a newer promise retires the sale and never
+  cancels it; whatever reward it holds leaves it.
+- **The one refusal left is a sale that cannot let go.** An online checkout
+  the provider reports collected, or one the provider will not close. The member
+  is told an earlier sale stands, not that their coupon is unavailable. A code
+  the shop will not deactivate refuses nothing: the deactivation is retried.
+- **A counter sale nobody paid gives the coupon back an hour after its last
+  plan.** An online order that only expires keeps its claim until its code can
+  no longer be collected, and the programme's clock then releases it.
+- **A counter sale a reward was cleared off takes no reward again.** The
+  remedy is a new sale, and points still go on. A counter sale a newer promise
+  retired takes no new plan at all, and the till tells staff to ring the goods
+  on a new sale. So is a fresh scan on a cart that still carries another
+  sale's reward code, since a till session ends long before a sale's hour.
+- **A sale that collects a code this store deactivated is reported, and pays
+  for the coupon once.** It spends the coupon where no other sale claims it.
+  Today nothing looks: a reward's code is the only one that never reaches the
+  mint register, so no reader corroborates it against what the sale carried.
 - **The member is shown no claimed state.** The wallet, the cart drawer and the
   till panel all read every coupon the member holds as spendable.
 - **The stale-claim sweep stops freeing a coupon whose code is still live.** It
   runs on the same clock as the code it is meant to outlast, and the code is
   minted after the claim — so today it manufactures the double discount it
   exists to prevent.
+- **A claim given back frees its retry key.** The same sale asking again gets a
+  new claim; a claim the shop already collected still refuses a second.
 - **An operator's reversal is still refused while a sale claims the coupon**,
-  and stops being refused once that sale's code can no longer be collected.
+  and stops being refused once that sale gives the coupon back.
 
 ## Non-Goals
 
-- **Stopping a counter cart that already carries the code from collecting.**
-  The shop honours what it applied, whatever becomes of the code. What this
-  change owes is to notice and say so with the order on it.
-- **Moving the claim out of `coupon_instances`.** The guarded write on that row
-  is what serialises a claim against a reversal and an erasure. No schema
-  changes.
-- **The POS extension learning it live.** Staff see the cut leave on the sale's
-  next plan, which now names the member's coupon; a live push is its own
-  change.
+See [Non-Goals](decisions.md#non-goals).
+
+## Capabilities
+
+### New Capabilities
+
+None.
+
+### Modified Capabilities
+
+- `grade10-site/loyalty/programme`: a coupon is held by nothing and the newest
+  claim is the only live one; a claim's retry key answers only while the claim
+  stands; a reversal is refused only while a sale claims the coupon, and the
+  programme's own clock never frees a coupon whose code is live.
+- `grade10-site/store/discounts`: at the till a gift reaches the sale as its
+  own line and carries no code; an online order that expires keeps its code
+  and a counter sale that runs out its hour, or that a newer promise retires,
+  loses it; a counter sale a reward was cleared off takes no reward again, and
+  one a newer promise retired takes no new plan, nor a fresh scan on a cart
+  still carrying another sale's reward code; a paid sale carrying a code
+  this store deactivated spends the coupon where no other sale claims it, and
+  is reported.
+
+## Impact
+
+- **Store backend** (`packages/grade10-store/backend`) — the supersede pass,
+  the claim, settlement of a paid sale, the till plan and the reconcile pass
+  that ends a counter sale's hour.
+- **Loyalty backend** (`packages/loyalty/backend`) — `useCoupon`'s key
+  answering only a live claim, `spendCarriedCouponFor` for a coupon a paid
+  sale carried, the reversal's refusal, and the stale-claim sweep's horizon.
+- **Store contracts** (`packages/grade10-store/contracts`) —
+  `PosSalePlanResult` names the member's coupon; `PosSalePlanInput` carries the
+  order id the cart already names; `CouponRefusalCause` gains
+  `held_elsewhere`; the till plan refusal gains `coupon_off_sale` and
+  `coupon_held_elsewhere`.
+- **POS extension** (`integrations/shopify-pos/grade10`) — the till's
+  sentences for both new refusals, `sale_closed`'s sentence naming a new
+  sale, and the cart's order id sent with each plan.
+- **`@grade10/i18n`** (this store) — `checkout.refusal.held_elsewhere` in
+  every locale, and `checkout.refusal.idempotency_conflict` reworded to a
+  coupon already used on another order.
+- **Consumer apps** — the Grade10 site's cart drawer and `/checkout`, the
+  membership wallet, and the POS till.
+
+No domain impact: `grade10-site/store/domain-tcs.md` walks a paid till sale
+settling points and its own product coupon, which this change does not move.
+It moves sales nobody paid, and paid sales carrying a code their order gave
+up. The loyalty domain has one capability and no domain suite.
 
 ## References
 
@@ -80,3 +131,5 @@ walked away from**.
 - [Coupons · Refusals](../../../docs/prds/products/grade10-site/loyalty/coupons.md#refusals)
 - [Coupons · Spending one](../../../docs/prds/products/grade10-site/loyalty/coupons.md#spending-one)
 - [Discounts · Online draft order mechanism](../../../docs/prds/products/grade10-site/store/discounts.md#online-draft-order-mechanism)
+- [Discounts · Undo](../../../docs/prds/products/grade10-site/store/discounts.md#undo)
+- [Rewards · Cancelling a Redemption](../../../docs/prds/products/grade10-site/loyalty/rewards.md#cancelling-a-redemption)
