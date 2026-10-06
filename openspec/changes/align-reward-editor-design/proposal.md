@@ -36,12 +36,8 @@ basket lines by search, Duplicate and Archive on the edit page, and
 
 ## Non-Goals
 
-- No change to what a coupon takes off, or to what saving sends to the backend
-- No new theme for the ZZZ admin: it keeps Stone, and the shared controls take
-  their new shape wherever it renders them
-- No change to how a table cell writes an amount
-- No dark admin: the brand states light only
-- No thumbnails in the picked list: the catalogue search carries no image
+The goals, the non-goals and the decisions behind them are in
+[`decisions.md`](decisions.md).
 
 ## Capabilities
 
@@ -49,10 +45,16 @@ basket lines by search, Duplicate and Archive on the edit page, and
 
 - `grade10-site/loyalty/programme`:
   - "A reward names a kind, a discount and a scope" states the maximum
-    discount as optional, as the console already saves it
+    discount as optional, as the console already saves it, and a scope of
+    named products or a catalog filter as good online only, whatever channels
+    the coupon names: the console and the till's panel already hold it, and
+    the till now refuses such a coupon however it reaches the sale
   - "The console's reward form authors a reward's full definition" offers a
     free item as its own choice, and reopens a stored reward of that shape as
-    one
+    one; it also states what the form already does: it saves nothing with a
+    part missing, and checks a coupon against a basket
+  - The feature set states settlement as a coupon, the till scope and the
+    reward form
 
 ## Impact
 
@@ -66,10 +68,18 @@ basket lines by search, Duplicate and Archive on the edit page, and
   loaded
 - **Reward editor** (`packages/loyalty/admin-frontend`, grade10) — choices,
   the free item draft, the rail, the save bar and the copy
+- **Online only at the till** (`packages/loyalty/contracts`,
+  `packages/grade10-store/backend`, grade10) — the programme's channel guard
+  refuses the till for a scope it cannot match, and the console form and the
+  till panel read the same rule
 - **Call sites** — appointment dialogs, loyalty views and the admin test pages
   move off `horizontal`; the ZZZ admin's shared headings follow
 - **End-to-end suite** — `apps/frontend/grade10/e2e/tests/loyalty/rewards.spec.ts`
   creates and reopens a free item
+- **never-lock-a-coupon** — modifies "A redemption settles as a coupon" in the
+  same capability; whichever change is accepted second rebases on the other,
+  and that requirement's counter paragraph names a coupon the till can match,
+  pointing to "A reward names a kind, a discount and a scope"
 
 ## Success
 
@@ -79,12 +89,15 @@ basket lines by search, Duplicate and Archive on the edit page, and
 ## Open Questions
 
 - ❓ **Currency mark** — the mock shows `HK$`; fields show the ISO code (`HKD`),
-  as console tables do, until @ecchochan decides otherwise
+  as console tables do, until @ecchochan decides otherwise (`decisions.md` Q5)
 
 ## Follow-on Changes
 
-- Form choices are announced as one choice, whatever their appearance
-- The console export list matches what the package exports
+- **Choices announced as one** — a form's choices are announced as one
+  choice, whatever their appearance
+- **Console export list** — "The console package exports" on
+  `shared/console/blocks` names what the package exports, `ChoiceList` and
+  `Disclosure` included, and no longer `Filter`
 - **Reward editor structure** — one catalogue picks object, a rail that takes
   its words and a basket slot, and the editor emitting its own save command
 - **Console words in their own files** — `vocabulary.tsx` split at its seams,
@@ -95,12 +108,15 @@ basket lines by search, Duplicate and Archive on the edit page, and
   draws the same
 - **Admin end-to-end pages on the page fixture** — so every admin spec keeps a
   capture per step
-- **A pinned rail taller than the screen** — its bottom reachable before the
-  form ends
-- **The checkout test bench's gift** — keeps the product handle it was picked
+
+## Bugs Found
+
+Each is a `fix` commit through `/fix-bug`, not a change.
+
+- **A pinned rail taller than the screen** — its bottom cannot be reached
+  before the form ends
+- **The checkout test bench's gift** — loses the product handle it was picked
   with
-- **A cleared per-redemption bound stays cleared** — a backend fix found here,
-  with one coupon fulfilment builder for the loyalty backend tests
 - **The users directory on a phone** — an open account panel runs past the
   screen's edge, because its column keeps a 28rem minimum
 
@@ -111,4 +127,5 @@ basket lines by search, Duplicate and Archive on the edit page, and
 ## References
 
 - [Rewards · Reward Types](../../../docs/prds/products/grade10-site/loyalty/rewards.md#reward-types)
-- [Rewards · Reward Catalog](../../../docs/prds/products/grade10-site/loyalty/rewards.md#reward-catalog)
+- [Operator Console · Authoring a Reward](../../../docs/prds/products/grade10-site/loyalty/operator-console.md#authoring-a-reward)
+- [Coupons · Validity](../../../docs/prds/products/grade10-site/loyalty/coupons.md#validity)
