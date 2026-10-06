@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { formatDateTime, loadFonts } from "./pdf-document";
 
 describe("formatDateTime", () => {
+  // shared-ui-invoice-and-receipt-pdf-SC-43, shared-ui-invoice-and-receipt-pdf-SC-54
   it("renders fixed to Hong Kong time as GMT+8, regardless of the machine's own zone", () => {
     // 2026-09-24T04:30:00.000Z is 2026-09-24T12:30:00 in Asia/Hong_Kong (UTC+8).
     const value = new Date("2026-09-24T04:30:00.000Z");
