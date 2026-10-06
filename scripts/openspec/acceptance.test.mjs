@@ -1950,6 +1950,28 @@ test("feature set fold removes an explicitly retired root group", () => {
   );
 });
 
+test("feature set fold removes a labelled item without retiring its root group", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Operator image upload\n  - Confirm before store: preview then confirm\n  - Upload on drop or choose: store immediately\n",
+    ),
+    `# Roles
+
+## REMOVED Feature set
+
+- Operator image upload
+  - Confirm before store:
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.match(
+    merged,
+    /- Operator image upload\n {2}- Upload on drop or choose: store immediately/,
+  );
+  assert.doesNotMatch(merged, /Confirm before store/);
+});
+
 test("feature set fold permits a removal-only delta", () => {
   const merged = mergeFeatureSet(
     featureSpec(
