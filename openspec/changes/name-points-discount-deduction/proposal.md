@@ -24,10 +24,7 @@ unpaid do not rise during the rollout.
 
 ## Non-Goals
 
-- Labels for the same money on the site — the checkout summary row and the
-  cart drawer footer — stay as they are.
-- The till panel's own row for the points spent keeps its label.
-- Orders already paid keep the title they were paid with.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
@@ -52,5 +49,5 @@ unpaid do not rise during the rollout.
 
 ## References
 
-- [Shopify Integration · POS Extension](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#pos-extension)
-- [Paying with Points · At the Till](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md#at-the-till)
+- [Paying with Points · Rules](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md#rules)
+- [Shopify Integration · Two Channels, One Pipeline](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#two-channels-one-pipeline)
