@@ -208,7 +208,7 @@ when I open it,
 **I want** staff to scan the pass in my phone wallet and take my spend from the right place,
 **so that** I am served from my lock screen and a code anybody could photograph never moves my points.
 
-<!-- trace:case id=g10.store-domain.TC-u39 rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv,g10.store-wallet-member-card.SC-nmv,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
+<!-- trace:case id=g10.store-domain.TC-u39 rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv,g10.store-wallet-member-card.SC-nmv,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uae,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
 ### grade10-site-store-e2e-US5-TC1-1: Google Wallet pass opens a session that spends points
 
 **Classification:**
@@ -249,7 +249,7 @@ when I open it,
 * Step 2 applies the points.
 * The member's balance drops once, by <points>, when the sale is paid.
 
-<!-- trace:case id=g10.store-domain.TC-n78 rev=1 covers=g10.store-wallet-member-card.SC-g3f,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
+<!-- trace:case id=g10.store-domain.TC-n78 rev=1 covers=g10.store-wallet-member-card.SC-g3f,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uae,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
 ### grade10-site-store-e2e-US5-TC2-1: Apple Wallet pass refuses the spend and the card pays it
 
 **Classification:**
