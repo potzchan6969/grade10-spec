@@ -5,7 +5,7 @@
 
 ## shared-ui-store-home-US1: What the store home blocks hold
 
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/store/home`, which composes the blocks
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home` and `grade10-site/store/cross-sell`, which compose the blocks
 **As a** shopper reading a surface that composes the store home blocks,
 **I want** each block to show what its surface supplies and nothing it was not given,
 **so that** every surface built from them reads as one store.
@@ -44,11 +44,12 @@
 
 ## Settled
 
-None yet.
+None.
 
 ## Reconciliation
 
 - **Raised** — nothing: the input settled the widening (`decisions.md` Q17, Q28; `ui-design.md` Components)
 - **Uncovered anchors** — none of this delta's: `shared-ui-store-home-SC-10` is walked by `shared-ui-store-home-US1-TC1-1`
+- **Folded** - US1-TC1's destination with no browse label draws no link, as the durable header requirement says: a link only when an href and its label are both supplied
 
 **Run:** Read only the isolated bundle at `.round/blind-store-home/` — `outline.md` (`## Purpose` and `## Feature set`), `user-journeys.md`, `decisions.md`, `ui-design.md`, `prd-cross-sell.md`, `prd-store-home.md`, `context.md` — plus `docs/governance/specs-to-test-cases.md` and `openspec/specs/grade10-site/auction/auction/feature-tcs.md` for house style; denied the capability's `## Requirements`, every other file under `openspec/`, and `openspec/changes/archive/`.
