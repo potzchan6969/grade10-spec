@@ -1224,7 +1224,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Pre-conditions:**
 
-* admin(holds `user:create` and `user:list`, not `user:set-role`) is signed in to the console.
+* operator(holds `user:create` and `user:list`, not `user:set-role`) is signed in to the console.
 * No account holds <elevated email>.
 
 **Test data:**
@@ -1262,7 +1262,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Pre-conditions:**
 
-* admin(holds `user:create`, `user:set-role` and `user:list`) is on <grade10 admin users url>.
+* operator(holds `user:create`, `user:set-role` and `user:list`) is on <grade10 admin users url>.
 * <existing account> holds <existing email>.
 
 **Test data:**
@@ -1302,7 +1302,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Pre-conditions:**
 
-* admin(holds `user:create`, `user:set-role` and `loyalty:read`) is on <grade10 admin users url>.
+* operator(holds `user:create`, `user:set-role` and `loyalty:read`) is on <grade10 admin users url>.
 * No account holds <silent email>.
 
 **Test data:**
@@ -1345,7 +1345,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Pre-conditions:**
 
-* admin(holds `user:create` and `user:list`) is signed in to the console.
+* operator(holds `user:create` and `user:list`) is signed in to the console.
 * No account holds <empty-roles email>.
 
 **Test data:**
