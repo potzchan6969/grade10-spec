@@ -215,6 +215,23 @@ function journeyIds(text) {
   return new Set((section?.children ?? []).map((one) => usId(one.heading)));
 }
 
+const WALKED_BY = /^\*\*Walked by:\*\*.*(?:\n(?!#).+)*/m;
+
+/** A delta's Walked by line, reason and all, stands where the journeys would,
+ * and may retire the last of them in the same delta; `pnpm check:manual`
+ * refuses a file holding both, so a journey the delta adds or leaves standing
+ * beside it is refused. */
+function refuseBesideWalkedBy(added, standing, capability) {
+  for (const [ids, which] of [
+    [added, "the journeys this delta adds:"],
+    [standing, "the durable journeys"],
+  ])
+    if (ids.length > 0)
+      throw new Error(
+        `${capability}: a Walked by line cannot stand beside ${which} ${ids.join(", ")}`,
+      );
+}
+
 function mergeJourneys(
   currentText,
   deltaText,
@@ -222,7 +239,7 @@ function mergeJourneys(
   capability,
   priorText,
 ) {
-  if (/\*\*Walked by:\*\*/.test(deltaText)) return currentText ?? deltaText;
+  const walkedBy = WALKED_BY.exec(deltaText)?.[0];
   const current = currentText ?? deltaText;
   const currentSections = deltaSections(current);
   const fromDelta = deltaSections(deltaText);
@@ -244,6 +261,7 @@ function mergeJourneys(
     .map((name) => sectionByName(fromDelta, name))
     .filter(Boolean);
   const deltaIds = new Set();
+  const added = [];
   for (const section of deltaHeld) {
     for (const journey of section.children) {
       const id = usId(journey.heading);
@@ -253,6 +271,7 @@ function mergeJourneys(
           `${capability}: journey ${id} appears more than once in its delta`,
         );
       deltaIds.add(id);
+      if (section.heading !== "Context user journeys") added.push(id);
       if (
         section.heading === "ADDED User journeys" &&
         durableIds.has(id) &&
@@ -275,10 +294,12 @@ function mergeJourneys(
     live.delete(id);
     retired.add(id);
   }
+  if (walkedBy) refuseBesideWalkedBy(added, [...live.keys()], capability);
   const rendered = [];
   const title = leadingTitle(outline(current));
   if (title) rendered.push(`# ${title}`);
   rendered.push("## User journeys");
+  if (walkedBy) rendered.push(walkedBy);
   for (const journey of live.values()) rendered.push(renderSection(journey));
   if (retired.size > 0) {
     rendered.push("## Retired");

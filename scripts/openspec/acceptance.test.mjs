@@ -719,6 +719,82 @@ function commitAll(root, message) {
 
 const SEARCH_DELTA = "openspec/changes/build-alpha/specs/site/search";
 
+test("a delta's Walked by line replaces the durable one, reason and all", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n**Walked by:** nobody on their own - the old\nsurfaces compose it.\n\n## Retired\n\n- `site-search-US-01` - Retired by an earlier change.\n",
+  );
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## Retired\n\n- `site-search-US-01` - Retired by an earlier change.\n",
+  );
+});
+
+test("a delta that retires the last journeys may declare Walked by in their place", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## REMOVED User journeys\n\n### site-search-US-01: Reader opens search\n",
+  );
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## Retired\n\n- `site-search-US-01` - Retired by build-alpha.\n",
+  );
+});
+
+test("a Walked by line beside the journeys its own delta adds is refused, durable file or none", () => {
+  for (const durable of [
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the old reason.\n",
+    undefined,
+  ]) {
+    const { root } = sandbox();
+    if (durable) writeDurable(root, "user-journeys.md", durable);
+    writeFileSync(
+      join(root, SEARCH_DELTA, "user-journeys.md"),
+      "# Search journeys\n\n**Walked by:** nobody on their own - the new reason.\n\n## ADDED User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+    );
+    assert.throws(
+      () => contractOutputs(root, CHANGE, "2026-10-04"),
+      /site\/search: a Walked by line cannot stand beside the journeys this delta adds: site-search-US-01/,
+      String(durable),
+    );
+  }
+});
+
+test("a new capability walked by nobody folds to its title and the Walked by line", () => {
+  const { root } = sandbox();
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n",
+  );
+});
+
+test("a Walked by line over durable journeys is refused", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+  );
+  assert.throws(
+    () => contractOutputs(root, CHANGE, "2026-10-04"),
+    /site\/search: a Walked by line cannot stand beside the durable journeys site-search-US-01/,
+  );
+});
+
 test("an added journey that reuses a durable journey id is refused", () => {
   const { root } = sandbox();
   writeDurable(
