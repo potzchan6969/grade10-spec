@@ -18,19 +18,28 @@ Body-only empty: [`Store Cart/CartDrawerBody` → Empty](?path=/story/store-cart
 
 - `EmptyState` from `@grade10/design-system` — empty cart body; title and
   optional description; no `actions`.
+- `ShoppingCart` from `@phosphor-icons/react` — the icon inside `EmptyState`,
+  drawn on every empty cart.
 - `CartDrawer`, `CartDrawerHeader`, `CartDrawerBody`, `CartDrawerFooter`,
   `CartItem` from `@grade10/ui` — compound and parts after `CartItemSlot` is
   removed from the export set.
-- `CartDrawerCopy.emptyTitle` / optional `emptyDescription` — consumer copy.
+- `CartDrawerCopy.emptyTitle` / optional `emptyDescription` — consumer copy;
+  `CartDrawerBodyProps` takes the same two fields.
 
 No new primitive, variant, or token. `EmptyState` already exists.
 
 ## States
 
-| State | Spec scenarios |
-| --- | --- |
-| Items only — no placeholder slots | `shared-ui-store-cart-SC-23` |
-| Overflow scroll | `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-07` |
-| Empty — `EmptyState`, no action, no badge, no footer | `shared-ui-store-cart-SC-25` |
-| Loading — skeletons; empty state hidden | `shared-ui-store-cart-SC-08` |
-| Copy carries `emptyTitle` | `shared-ui-store-cart-SC-22` |
+### Cart drawer
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Items only | The cart's rows; no placeholder rows | `shared-ui-store-cart-SC-23` |
+| Overflow | Every row; the body scrolls with a fade at its edges | `shared-ui-store-cart-SC-24` |
+| Empty | Cart icon, title, description where supplied; no action, no count badge, no footer | `shared-ui-store-cart-SC-25` |
+| Empty, no description | Cart icon and title alone | `shared-ui-store-cart-SC-41` |
+| Loading with lines | Row, count badge and summary skeletons; Checkout disabled; no empty state | `shared-ui-store-cart-SC-08` |
+| Loading, no lines | Blank body; count badge skeleton; no footer; no empty state | `shared-ui-store-cart-SC-40` |
+| Only delisted lines | Empty state; one removal toast | `shared-ui-store-cart-SC-42` |
+| Only sold-out lines | The lines, marked sold out; footer; no count badge; no empty state | `shared-ui-store-cart-SC-45` |
+| Empty copy | `emptyTitle` and optional `emptyDescription` on drawer copy and body props | `shared-ui-store-cart-SC-22` |
