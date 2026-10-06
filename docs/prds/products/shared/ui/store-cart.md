@@ -54,35 +54,45 @@ application saves a choice; accepted figures stay visible until it answers.
 when the application supplies the callback that can perform it. The drawer can
 show current tender context without offering an action that cannot change it.
 
-## Site Sale And Promo Codes
+## Site Sale and Promo Codes
 
 A site sale is a storewide cut the shop applies with no code. The
 application's quote decides whether a promo code stacks on it, is refused, or
 replaces it; the drawer shows that outcome and works out no amount.
 
-🚧 **On sale** — a line on the sale shows the sale price with the list price
-struck through. The summary adds no Store sale row.
+🚧 **On sale** - a line on the sale shows the sale price with the list price
+struck through, even a list price equal to the sale price. The summary adds no
+Store sale row.
 
-🚧 **Subtotal** — the sum of the lines as shown, leaving out a sold-out line
-as the count badge does.
+❓ **The struck price read aloud** - how a screen reader tells the struck list
+price from the price charged. The designer's call.
 
-🚧 **Stacked** — a code that stacks leaves the sale on the lines; the summary
+🚧 **Subtotal** - the sum of each line's price times its quantity, leaving
+out a sold-out line as the count badge does.
+
+🚧 **Stacked** - a code that stacks leaves the sale on the lines; the summary
 shows only the code's discount.
 
-🚧 **Refused** — a refused code leaves the lines and the totals on the sale;
+🚧 **Refused** - a refused code leaves the lines and the totals on the sale;
 the promo sheet says why.
 
-🚧 **Replaced** — a code that replaces the sale puts each line it takes the
+🚧 **Replaced** - a code that replaces the sale puts each line it takes the
 sale from at the list price, with nothing struck through; the summary shows
 only the code's discount.
 
-🚧 **Removed** — removing the code drops its discount. Where the code had
+🚧 **Removed** - removing the code drops its discount. Where the code had
 replaced the sale, the sale returns to the lines while it still runs.
 
-🚧 **Held, cannot apply** — a held code that cannot apply on this cart is
+🚧 **Held, cannot apply** - a held code that cannot apply on this cart is
 listed apart from the ones that can, muted with its reason and no Apply.
 
+❓ **A picked code the quote refuses** - whether its ticket stays among the
+ones that can apply, with its Apply, or moves apart, muted with the refusal as
+its reason. The designer's call.
+
 ::story{id="store-cart-cartitem--sale-price" title="A line on the site sale"}
+
+::story{id="store-cart-cartitem--equal-list-price" title="A list price equal to the price, still struck through"}
 
 ::story{id="store-cart-cartdrawer-auto-discount--on-sale" title="The site sale beside a line off it and a sold-out line"}
 
@@ -122,7 +132,7 @@ application supplies.
 its title and the line under it. An automatic cut off the whole order, such as
 a spend threshold: the drawer shows sales that sit on lines, and the invoice
 prices the rest. Pricing the shop's sale in Grade10's drawer, which leaves it
-to the invoice — [Cart Drawer](/p/grade10-site/store/cart). A code shown on a
+to the invoice - [Cart Drawer](/p/grade10-site/store/cart). A code shown on a
 line: in every outcome here, the code's discount shows in the summary.
 
 **Measurement.**
@@ -130,7 +140,7 @@ line: in every outcome here, the code's discount shows in the summary.
 | Signal | Definition | Owner |
 | --- | --- | --- |
 | Empty cart | The CartDrawer Empty State, Empty State Without Description, Loading No Lines, Only Delisted Lines and Only Sold Out Lines stories and the CartDrawerBody Empty story each show their state, and their play tests pass. | Engineering |
-| Outcome stories | The CartItem Sale Price story and the five Auto Discount stories each show their outcome, and their play tests pass. | Engineering |
+| Outcome stories | The CartItem Sale Price and Equal List Price stories, the five Auto Discount stories and the PromoTicket Not Applicable story each show their outcome, and their play tests pass. | Engineering |
 
 **Decisions.**
 
@@ -139,6 +149,6 @@ line: in every outcome here, the code's discount shows in the summary.
 | Empty cart action | Decided | None. The drawer offers no Browse More, so no host has to build a way into the catalogue that an empty cart cannot complete | Product |
 | Few items | Decided | The drawer lists only what the cart holds and scrolls what does not fit, instead of filling five rows with placeholders | Product |
 | Look | Decided | The block's stories are the agreed look; the Figma cart frames are historical | Design |
-| Combine rules | Decided | The drawer shows the outcome the quote returns. Whether a code stacks, is refused or replaces the sale, including a product sale that refuses every code, is the shop's pricing — [Discounts · One discount at a time](/p/grade10-site/store/discounts#one-discount-at-a-time). Chosen over encoding those rules in the drawer. | Product |
+| Combine rules | Decided | The drawer shows the outcome the quote returns. Whether a code stacks, is refused or replaces the sale, including a product sale that refuses every code, is the shop's pricing - [Discounts · One discount at a time](/p/grade10-site/store/discounts#one-discount-at-a-time). Chosen over encoding those rules in the drawer. | Product |
 | No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no automatic cut. | Product |
 :::

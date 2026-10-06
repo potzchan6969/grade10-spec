@@ -8,8 +8,10 @@ reviewed: 2026-10-06
 A discount is money off the bill. Five kinds reach a collector, and every one
 lands on the order through the same Shopify draft order.
 
-- **Sale price** — set on the product in Shopify; the listing, the card, and
-  the cart show the price and, struck through, the price it was
+- **Sale price** — set on the product in Shopify; the listing and the card
+  show the price and, struck through, the price it was. The cart shows the
+  price and strikes through only the price the member saw before the shop
+  changed it — [Cart Drawer](/p/grade10-site/store/cart)
 - **Site discounts** — admin-scheduled, auto-applied storewide with no code:
   a product special sale, a buy-X-get-Y offer, or a spend threshold off the
   whole order — see [Site discounts](#site-discounts) below
