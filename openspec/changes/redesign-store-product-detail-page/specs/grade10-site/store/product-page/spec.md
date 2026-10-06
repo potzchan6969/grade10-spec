@@ -3,7 +3,7 @@
 - Product detail context
   - Media gallery: lets a collector inspect every supplied product image without a lightbox.
   - Purchase context: keeps current price, compare-at price, and inventory state together.
-  - Item facts: exposes optional product facets and SKU, with static fulfilment guidance.
+  - Item facts: exposes optional product facets and SKU, with fulfilment guidance in which Shipping fee is text and the store name opens Store Locator, per Free pick-up opens Store Locator.
 - Product detail interaction
   - Description disclosure: lets a collector read the full description without losing their place.
   - Quantity purchase: lets a collector choose a quantity and add the product's one sellable item in place.
@@ -127,9 +127,8 @@ unknown, or the product item is sold out.
 - **AND** it omits each optional product fact the catalogue did not supply
 
 The fulfilment copy is locale-catalogue copy in v1, not a field from the
-product contract. The `Shipping fee` and `Hong Kong Grade10 Store` labels are
-visually underlined to match the design, but remain non-interactive until real
-destinations are specified.
+product contract. `Shipping fee` is text; the `Hong Kong Grade10 Store` label
+opens Store Locator, per `Free pick-up opens Store Locator`.
 
 ### Requirement: A product description can be disclosed in place
 

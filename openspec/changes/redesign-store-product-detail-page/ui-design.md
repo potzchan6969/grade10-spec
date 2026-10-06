@@ -15,8 +15,8 @@
 - `Button` — add, loading, and sold-out states.
 - `Text` — static fulfilment copy and the display-only SKU.
 - `Link` — breadcrumb and other destinations where the application has a real
-  target; the v1 fulfilment labels remain non-interactive because their targets
-  are TBC.
+  target; of the fulfilment labels, the store name opens Store Locator and
+  Shipping fee is text, per `add-store-locator`.
 - `HStack`, `VStack` — page and detail-rail composition.
 - `CartDrawer` — opens after a successful add; owned by the cart capability.
 

@@ -83,10 +83,9 @@ catalogue strings and could show a false product facet.
 The `Product` contract does not gain shipping or pickup fields for v1. The
 page renders the same locale-catalogue fulfilment copy for every product:
 shipping is calculated at checkout with a `Shipping fee` label, and pickup is
-available at `Hong Kong Grade10 Store`. The two labels are underlined as in the
-Figma frame but are non-interactive because the annotation leaves both targets
-TBC. A later contract or navigation change can add real destinations without
-changing product metadata semantics.
+available at `Hong Kong Grade10 Store`. The store name opens Store Locator and
+`Shipping fee`, which has no page, is text, per `add-store-locator`. Neither
+destination changes product metadata semantics.
 
 The alternative is to point both labels at the store surface or invent an
 external URL. Rejected: neither target represents the shipping-fee details or
