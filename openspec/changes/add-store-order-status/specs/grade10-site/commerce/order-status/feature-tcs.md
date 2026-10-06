@@ -480,6 +480,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Payment | absent | `fulfilled`, archived, not canceled |
 | Payment | `<a value outside the payment vocabulary>` | `fulfilled`, archived, not canceled |
+| Payment | `<a value outside the payment vocabulary>` | `unfulfilled`, not archived, not canceled |
 | Fulfilment | absent | `paid`, not archived, not canceled |
 | Fulfilment | `<a value outside the fulfilment vocabulary>` | `paid`, not archived, not canceled |
 | Archived | absent | `paid`, `fulfilled`, not canceled |
@@ -490,13 +491,16 @@ Runs once per row of **Test data**.
 
 1. Resolve the order status for the row's facts.
 2. Read the badge.
-3. Resolve the order status with the row's fact set to its default and the other facts unchanged.
-4. Read the badge.
+3. Read the note.
+4. Resolve the order status with the row's fact set to its default and the other facts unchanged.
+5. Read the badge.
+6. Read the note.
 
 **Expected Results:**
 
 * Step 2: the badge is one of Processing, Shipped, Completed, Canceled or Refunded, never blank.
-* Step 2: the badge reads the same as step 4.
+* Step 2: the badge reads the same as step 5.
+* Step 3: the note reads the same as step 6, or neither step shows one.
 
 ---
 
@@ -824,16 +828,16 @@ Runs once per row of **Test data**.
 - A fulfilled, archived order paid only in part reads Shipped: Completed needs it paid in full.
 - An expired payment reads Processing with the `payment-expired` note; only a cancellation or a void reads Canceled.
 - A canceled order refunded in full carries no note; `awaiting-refund` is for money still to come back.
-- A held order carrying a partial refund carries `on-hold-partial-refund`, one note naming both.
-- Your Orders and Order Details derive the badge from one stored row, so they differ only until Your Orders loads again. A payment, refund or cancellation reaches the row within 5 minutes; a fulfilment, archive or return within the hour, for an order placed in the last 90 days.
+- Your Orders and Order Details derive the badge from one stored row, so they differ only until Your Orders loads again. An order paid in full, refunded or canceled reaches the row within 5 minutes; any other change, a payment voided or expired included, within the hour, for an order placed in the last 90 days.
 
 ## Reconciliation
 
-**Run:** QA2 on 2026-10-06, rerun in a fresh context after the accept review. Joined the 18 cases (17 blind, and `US3-TC4-1` the accept review added) and the 30 scenarios on the journeys US-01 to US-03 and the Feature set; read the page, the proposal, `decisions.md`, `tech-design.md` and `tasks.md`, and the grade10 application's interim adapter and fulfilment cron. Every case matches the delta's badge and note rules row by row, and every scenario has a case. Kept every id and version. Two findings: the cron re-read an open order every 60 minutes on a 5-minute tick, so an archive could reach the badge 65 minutes later, past the page's hour, and the tech design now re-reads at 55 minutes; and the hourly read stops once Shopify archives an order, raised as Q24. Added the shop's archiving setting to the seven e2e cases that set up a paid, fulfilled order still open, because Shopify archives such an order on its own by default (`orderStatus.ts:30-33` in the grade10 application).
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the second accept review. Joined the 18 cases (17 blind, and `US3-TC4-1` the accept review added) and the 30 scenarios on the journeys US-01 to US-03 and the Feature set, whose root groups are unchanged and whose leaves now carry Completed as fulfilled, paid and archived, the note, and freshness; read the page, the proposal, `decisions.md`, `tech-design.md` and `tasks.md`, and the grade10 application's interim adapter, fulfilment refresh and webhook topics. Every case matches the delta's badge and note rules row by row, and every scenario has a case. Kept every id and version. Findings: the cron re-read an open order every 60 minutes on a 5-minute tick, so an archive could reach the badge 65 minutes later, and the tech design re-reads at 55 minutes; the hourly read stops once Shopify archives an order, raised as Q24; a void or an expiry arrives on no subscribed webhook, so the page and the Freshness clause give it the hour; the note for a held order carrying a partial refund is reopened as Q22; no case held an unknown value to its default's note, now `US1-TC11-1` does; and a shipment event, not only a payment webhook, reads an order older than 90 days again, now stated in Q23, Q24 and the tech design. Added the shop's archiving setting to the seven e2e cases that set up a paid, fulfilled order still open, because Shopify archives such an order on its own by default (`orderStatus.ts:31-34` in the grade10 application).
 
 | Finding | Disposition |
 | --- | --- |
 | `grade10-site-commerce-order-status-SC-01`, `SC-15` badge | Covered by `US1-TC11-1` |
+| The Defaults clause: an unknown value carries its default's note | **Folded in:** `US1-TC11-1` reads the note beside the badge, and its new unfulfilled row holds an unknown payment to the note `unknown` carries |
 | `grade10-site-commerce-order-status-SC-02`, `SC-03` | Covered by `US1-TC1-1` and `US1-TC2-1` |
 | `grade10-site-commerce-order-status-SC-04` | Covered by `US1-TC3-1` |
 | `grade10-site-commerce-order-status-SC-05`, `SC-23` badge | Covered by `US1-TC4-1` |
@@ -857,8 +861,10 @@ Runs once per row of **Test data**.
 | QA1: partly paid for Completed | **Raised, settled:** Q9 |
 | QA1: expired payment | **Raised, settled:** Q20 |
 | QA1: canceled order whose money went back | **Raised, settled** in full by Q21, folded as the canceled `refunded` row of `US2-TC3-1`; **raised for the human** in part by Q18, and no case asserts it |
-| QA1: held order with a partial refund, which note | **Raised, settled:** Q22 |
+| QA1: held order with a partial refund, which note | **Raised for the human:** Q22; the `on_hold` and `partially_refunded` row of `US2-TC1-1` holds the recommendation, and Q22's answer rewrites that row |
 | QA1: how long the two surfaces may differ | **Raised, settled:** Q23; the page and the delta's Freshness clause hold its bounds, and `US3-TC2-1` and `US3-TC4-1` assert them |
+| QA2: a void or an expiry within 5 minutes | **Fixed in the page and the delta:** no subscribed webhook reports one, so it takes the hourly read, the arm `US3-TC2-1` asserts for an archive; Q23 |
+| QA2: what reads an order older than 90 days again | **Fixed in `decisions.md` and the tech design:** a payment webhook's mark or a shipment event; Q23, Q24. The page promises nothing for such an order, so no case asserts it |
 | `US2-TC2-1` catalog words for every note | **Raised for the human:** Q14 decides whether the catalogs hold note words in this delivery; the case stays draft and **Blocked** |
 | Rejected cases | none |
 | Contradicted readings | none |
