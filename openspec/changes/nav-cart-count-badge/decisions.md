@@ -37,6 +37,7 @@
 | Q8 | Which count reaches the header? | One per distinct active line in the same reviewed basket as the drawer, whatever its quantity; adjusted lines count, sold-out and unavailable lines do not - decided by the round | The quantity total, which counts multiples and unavailable lines; or checkout-eligible lines alone, which drop adjusted lines the drawer still shows. |
 | Q9 | What happens while the current basket cannot be reviewed? | Keep the last verified count for the same member while checking, including after a failed cart update; hide it if the check fails. An unknown first count stays hidden; a member change clears the count at once - decided by the author on 2026-09-21 | Hiding a verified same-member count on every refresh, or keeping a failed or previous-member count. |
 | Q10 | When does the count refresh? | On member cart hydration, a settled cart change, and an explicit cart review or retry, with the drawer open or closed; no polling and no live update from another device - decided by the round | Opening the drawer as the only trigger, or a background polling service. |
+| Q11 | The site-chrome Handler-gated line is restated here in wording `omit-profile-account-menu` changes. Which change carries it? | `omit-profile-account-menu` (its Q12). Feature-set lines fold by label, so a restated line reverts whatever folded before it. This change keeps only the lines it changes - Active-line count, Cart slot and Cart count - and the cart slot's own rule, that a supplied slot shows Cart with no cart handler, moves onto the Cart slot line. Recorded in both changes. | Each change carrying the other's lines - couples both to every later edit of either |
 
 ## Raised
 
@@ -44,3 +45,4 @@
 | --- | --- | --- |
 | shared/ui/site-chrome | What does the header count mean? | Q8 |
 | grade10-site/site/page-shell | Should an already verified same-member count remain while a refresh is pending, and does a failed mutation trigger that refresh? | Q9 |
+| shared/ui/site-chrome | Rebase onto `omit-profile-account-menu`: this delta restates the Handler-gated line that change rewrites. | Q11 |

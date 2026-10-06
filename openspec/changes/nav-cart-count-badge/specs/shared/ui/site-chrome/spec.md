@@ -3,9 +3,8 @@
 ## Feature set
 
 - Header controls
-  - Handler-gated: search, account, cart, and My Orders render only when a
-    handler is supplied, or, for account and cart, that control's slot
-  - Cart slot: `Nav` may take a `cartSlot` that replaces the built-in cart control
+  - Cart slot: a `cartSlot` on `Nav` replaces the built-in cart control and
+    shows even with no cart handler
   - Cart count: `SiteHeader` shows a round brand indicator on the cart icon for the supplied active-line count; hidden when empty or omitted
 
 ## MODIFIED Requirements
