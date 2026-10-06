@@ -27,7 +27,7 @@ collapsible promo code redemption and a checkout CTA.
 The shared UI package SHALL export, from its public entry, exactly these
 components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 `CartDrawerBody`, `CartDrawerFooter`, `CartItem`, `CartPromoSheet`,
-`PromoTicket` — and exactly these types: `CartDrawerProps`, `CartDrawerCopy`,
+`PromoTicket` - and exactly these types: `CartDrawerProps`, `CartDrawerCopy`,
 `CartDrawerHeaderProps`, `CartDrawerHeaderCopy`, `CartDrawerBodyProps`,
 `CartDrawerFooterProps`, `CartDrawerFooterCopy`, `CartItemProps`,
 `CartItemCopy`, `CartItemStatus`, `CartItemSummary`, `CartPromoSheetProps`,
@@ -41,7 +41,7 @@ when unavailable lines are cleared after open loading, and `emptyTitle` (with
 optional `emptyDescription`) for the empty-cart state. `CartDrawerBodyProps`
 SHALL take the same `emptyTitle` and optional `emptyDescription`.
 
-<!-- trace:scenario id=g10.shared-store-cart.SC-fcz rev=1 -->
+<!-- trace:scenario id=g10.shared-store-cart.SC-fcz rev=2 -->
 #### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
 **Serves:** Drawer export contract - an application imports the cart drawer
 
@@ -121,6 +121,16 @@ one, so a consumer that has not yet read the cart's lines SHALL hold `loading`.
 - **AND** the header count badge displays its Boneyard skeleton
 - **AND** the footer is hidden entirely
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-etj rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-48 - A cart nobody has read never shows the empty state
+**Serves:** shared-ui-store-cart-US-03 - Shopper opens the cart on current prices
+
+- **GIVEN** a consumer that has never read the cart's lines, its first read still pending or failed
+- **WHEN** the drawer is open
+- **THEN** the consumer holds `loading`
+- **AND** the empty-cart empty state is not shown
+- **AND** the footer is hidden
+
 ## ADDED Requirements
 
 ### Requirement: The drawer lists items without placeholder slots
@@ -194,7 +204,7 @@ empty state.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-gx1 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-44 - A body composed on its own shows the empty state
-**Serves:** Drawer export contract - an application composes the body without the drawer
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** `CartDrawerBody` with no items, `emptyTitle` and `emptyDescription`
 - **WHEN** it renders while not loading
@@ -234,7 +244,7 @@ hosts to invent a browse handoff the empty cart should not own. Empty carts use
 **Migration:** Replaced by "The drawer lists items without placeholder slots"
 and "An empty cart shows the design-system empty state". Drop `CartItemSlot`
 imports, `onBrowseMore`, and `emptySlotCount`. Supply `emptyTitle` on
-`CartDrawerCopy`. `shared-ui-store-cart-SC-02` to `shared-ui-store-cart-SC-04`
-retire with the requirement; a test citing one cites
+`CartDrawerCopy`. Its scenarios, shared-ui-store-cart-SC-02 to
+shared-ui-store-cart-SC-04, retire with it; a test citing one cites
 `shared-ui-store-cart-SC-23`, `shared-ui-store-cart-SC-24` or
 `shared-ui-store-cart-SC-25` instead.
