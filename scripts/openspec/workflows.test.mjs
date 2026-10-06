@@ -32,11 +32,33 @@ const read = (path) => readFileSync(join(ROOT, path), "utf8");
 const WORKFLOWS = ".github/workflows";
 const NOTIFY = ".github/workflows/proposal-notify.yml";
 const DIGEST = ".github/workflows/digest.yml";
+const AUTO_FIX = ".github/workflows/auto-fix-ci.yml";
 
 const notifyText = read(NOTIFY);
 const digestText = read(DIGEST);
 const notify = YAML.parse(notifyText);
 const digest = YAML.parse(digestText);
+
+test("Auto-fix CI claims one attempt per target commit", () => {
+  const workflow = YAML.parse(read(AUTO_FIX));
+  const target = workflow.jobs.repair.steps.find(
+    (step) => step.name === "Resolve repair target",
+  );
+  const repairSteps = workflow.jobs.repair.steps.filter((step) =>
+    step.name?.startsWith("Run Cursor repair"),
+  );
+
+  assert.match(workflow.concurrency.group, /pull_request\.head\.sha/);
+  assert.match(workflow.concurrency.group, /workflow_run\.head_sha/);
+  assert.doesNotMatch(workflow.concurrency.group, /github\.run_id/);
+  assert.equal(workflow.concurrency["cancel-in-progress"], false);
+  assert.equal(workflow.permissions.statuses, "write");
+  assert.match(target.run, /commits\/\$sha\/status/);
+  assert.match(target.run, /ci\/auto-fix-attempt/);
+  assert.match(target.run, /\[ "\$attempted" -eq 0 \] \|\| skip/);
+  assert.match(target.run, /repos\/\$repo\/statuses\/\$sha/);
+  assert.equal(repairSteps.length, 1);
+});
 
 /** Every `actions/cache` step of one job, restore and save alike. */
 const cacheSteps = (job) =>
