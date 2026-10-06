@@ -9,7 +9,7 @@
 ## 2. Supersede frees the coupon (grade10)
 
 - [x] 2.1 The supersede pass reads the statuses a sale can still be paid from, so a counter sale the member walked away from is seen
-- [x] 2.2 Its counter branch takes the claimed coupon off the sale and enqueues its release; the sale keeps its cart and collects without the cut
+- [x] 2.2 Its counter branch takes the claimed coupon off the sale and enqueues its release; the sale keeps its cart
 - [x] 2.3 It answers which coupon it could not free, and the claim refuses by name rather than letting the programme say the coupon is unavailable
 - [x] 2.4 The till runs the pass inside its own plan, holding the sale it is planning out of its own reach
 - [x] 2.5 A plan survives its own supersede: the row being written is the survivor, not the newest draft
@@ -18,7 +18,7 @@
 
 ## 3. Offer what can be spent (grade10)
 
-- [x] 3.1 One status set names where a claim can be taken back, read by the supersede and the cart drawer alike
+- [x] 3.1 One status set names where a claim can be taken back, read by the supersede pass; the cart drawer's own read of it goes in 9.6
 - [x] 3.2 A claimed coupon that lapses reads lapsed, in every surface at once
 - [x] 3.3 The till panel offers every coupon that is not spent, lapsed or void
 
@@ -36,10 +36,10 @@
 ## 6. Prove it (grade10)
 
 - [x] 6.1 A coupon on an unfinished checkout is claimed by the next one, and the earlier order is cancelled with its code dead
-- [x] 6.2 A counter sale keeps its cart and loses its cut when the member spends the coupon online
+- [x] 6.2 A counter sale keeps its cart and loses its claim when the member spends the coupon online
 - [x] 6.3 A second till takes the coupon from the first
 - [x] 6.4 The reveal succeeds where an online checkout holds the coupon, and does not kill the sale it is revealing into
-- [x] 6.5 A claim is refused by name where the earlier checkout will not die
+- [x] 6.5 A claim is refused by name where the earlier checkout will not close
 - [x] 6.6 A sale that collects a deactivated code spends the coupon once and reports the other; one that carries nothing gives it back
 - [x] 6.7 End to end across both ledgers: redeem, claim, move, settle — the programme's own claim and settlement, not a fake
 
@@ -59,12 +59,14 @@
 
 ## 9. Give back what a retired counter sale holds (grade10)
 
-- [ ] 9.1 Tests first: a counter sale retired by a checkout naming another coupon gives back the coupon it held, deactivates its code and keeps its cart, and its next plan asks for a new sale `grade10-site-loyalty-programme-SC-206`, `grade10-site-store-discounts-SC-24`
+- [ ] 9.1 Tests first: a counter sale retired by a checkout naming another coupon gives back the coupon it held, deactivates its code and keeps its cart, and its next plan asks for a new sale `grade10-site-loyalty-programme-SC-224`, `grade10-site-store-discounts-SC-24`
 - [ ] 9.2 The supersede pass's counter branch gives back whatever reward the sale holds, `giveBackReward(order, null)`, and still answers whether the coupon this checkout names came free
-- [ ] 9.3 Tests first: a coupon whose cancelled order has not yet given it back is claimed at the till rather than refused as unavailable `grade10-site-loyalty-programme-SC-209`
+- [ ] 9.3 Tests first: a coupon whose cancelled order has not yet given it back is claimed at the till rather than refused as unavailable `grade10-site-loyalty-programme-SC-227`
 - [ ] 9.4 A claim the programme answers `not_available` first runs the unsettled releases of this member's dead orders carrying that coupon, then asks once more
-- [ ] 9.5 Tests first: the cart drawer offers a coupon whose cancelled order has not yet given it back, and hides one whose claim names no order row `grade10-site-loyalty-programme-SC-196`
-- [ ] 9.6 The drawer offers a claimed coupon wherever one of the member's own orders holds the claim, whatever its status, reading those orders by the ids the wallet names rather than listing open orders (`services/orders/quote.ts:272-293`)
+- [ ] 9.5 Tests first: the cart drawer offers every coupon the member holds that is not spent, lapsed or void, among them one whose cancelled order has not yet given it back and one whose claim names an order never written, whatever that claim's age `grade10-site-loyalty-programme-SC-196`
+- [ ] 9.6 The drawer offers every reward coupon the wallet quote returns, as the till panel does, and reads no orders to decide it: `spendableRewards` and its read of open orders go (`services/orders/quote.ts:263-293`)
+- [ ] 9.7 Tests first, across both ledgers with the programme's own operation: a claim a checkout left when it stopped before its order was written is released and taken at the till and online once it is five minutes old, and a younger one is refused by name and not released `grade10-site-loyalty-programme-SC-231`, `grade10-site-loyalty-programme-SC-232`
+- [ ] 9.8 The programme's `releaseUnwrittenClaim` releases a coupon's pending claim for an order id only where it is older than five minutes, and answers `too_recent` otherwise; a claim the programme answers `not_available` calls it where the wallet's `reservedForOrderId` names no store row, then asks once more, and refuses by name on `too_recent`, as the supersede pass does for a checkout that will not close; the promise's row write refuses a claim it made more than a minute before
 
 ## 10. Let a sale go on without its reward (grade10)
 
@@ -72,19 +74,20 @@
 - [ ] 10.2 The plan refuses `coupon_off_sale` only when it names a reward, and the till's sentence names a reward rather than this coupon
 - [ ] 10.3 Tests first: a till sale a newer promise retired, and one that was paid, is refused on its next plan with a sentence that tells staff to ring the goods on a new sale, never to scan the card again `grade10-site-store-discounts-SC-24`, `grade10-site-store-discounts-SC-29`
 - [ ] 10.4 `sale_closed`'s till sentence names a new sale rather than a fresh scan, for every closed sale alike (`integrations/shopify-pos/grade10/src/till/sentences.ts:45`)
-- [ ] 10.5 Tests first: a fresh scan on a cart still carrying another sale's reward code — one that ran out its hour, or one still pending — is refused with `sale_closed` and mints no code onto that cart `grade10-site-store-discounts-SC-27`
-- [ ] 10.6 `PosSalePlanInput` gains `cartOrderId`, which the extension reads off the cart before it writes its own; `planTillSale` refuses `sale_closed` when it names a row of this member's that this session did not write and that carries a reward's code
+- [ ] 10.5 Tests first: a fresh scan on a cart whose sale ran out its hour, or was retired, and still carries its reward code is refused with `sale_closed` and mints no code onto that cart `grade10-site-store-discounts-SC-27`
+- [ ] 10.6 `PosSalePlanInput` gains `cartOrderId`, which the extension reads off the cart before it writes its own; `planTillSale` refuses `sale_closed` when it names a row of this member's that this session did not write, that is no longer `pending`, and that carries a reward's code; a `pending` row waits on Raised R1
 
 ## 11. Word the refusals (grade10-spec)
 
-- [ ] 11.1 `checkout.refusal.held_elsewhere` in every locale the store speaks: an earlier order still carries this promo code and could not be closed
+- [ ] 11.1 `checkout.refusal.held_elsewhere` in every locale the store speaks: "An earlier order still carries this promo code.", true of an order that took the money, one that could not be closed and one still being submitted
 - [ ] 11.2 `checkout.refusal.idempotency_conflict` says the promo code was used on another order, not that it is held for another checkout, in every locale
 
 ## 12. Carry the refusal by name (grade10)
 
-- [ ] 12.1 Tests first: a claim against an earlier checkout that will not die, or that the member has paid, reaches the checkout as `held_elsewhere` and never as `not_available` `grade10-site-loyalty-programme-SC-194`, `grade10-site-loyalty-programme-SC-200`
+- [ ] 12.1 Tests first: a claim against an earlier checkout that will not close, or that the provider reports collected, reaches the checkout as `held_elsewhere` and never as `not_available` `grade10-site-loyalty-programme-SC-194`, `grade10-site-loyalty-programme-SC-200`
 - [ ] 12.2 `CouponRefusalCause` gains `held_elsewhere`; `checkoutResult` carries it as its own cause rather than English detail inside `coupon_refused`, and the cart drawer and `/checkout` render its copy; the till plan maps `coupon_held_elsewhere` from that cause rather than from `SALE_HOLDS_IT`'s sentence (`services/pos/sale/sale.ts:659`), and the store's own `idempotency_conflict` sentence (`services/coupons/apply.ts:125`) says the coupon was used on another order
 - [ ] 12.3 Move the spec submodule to the commit carrying group 11's copy
+- [ ] 12.4 The till's `coupon_held_elsewhere` sentence says an earlier order of the member's still carries this coupon, with no advice to try again, since an order that took the money never lets it go (`integrations/shopify-pos/grade10/src/till/sentences.ts:48-49`)
 
 ## 13. Spend a coupon a paid sale carried (grade10)
 
@@ -96,14 +99,15 @@
 
 ## 14. Trace what is built (grade10)
 
-- [ ] 14.1 The tests behind groups 1 to 8 cite the scenarios they prove, and a missing one is written `grade10-site-loyalty-programme-SC-190`, `grade10-site-loyalty-programme-SC-191`, `grade10-site-loyalty-programme-SC-192`, `grade10-site-loyalty-programme-SC-193`, `grade10-site-loyalty-programme-SC-196`, `grade10-site-loyalty-programme-SC-197`, `grade10-site-loyalty-programme-SC-198`, `grade10-site-loyalty-programme-SC-199`, `grade10-site-loyalty-programme-SC-201`, `grade10-site-loyalty-programme-SC-202`, `grade10-site-loyalty-programme-SC-204`, `grade10-site-loyalty-programme-SC-205`, `grade10-site-loyalty-programme-SC-207`, `grade10-site-loyalty-programme-SC-208`, `grade10-site-loyalty-programme-SC-210`, `grade10-site-loyalty-programme-SC-211`, `grade10-site-loyalty-programme-SC-212`, `grade10-site-store-discounts-SC-19`, `grade10-site-store-discounts-SC-26`, `grade10-site-store-discounts-SC-28`
+- [ ] 14.1 The tests behind groups 1 to 8 cite the scenarios they prove, and a missing one is written `grade10-site-loyalty-programme-SC-190`, `grade10-site-loyalty-programme-SC-191`, `grade10-site-loyalty-programme-SC-192`, `grade10-site-loyalty-programme-SC-193`, `grade10-site-loyalty-programme-SC-196`, `grade10-site-loyalty-programme-SC-197`, `grade10-site-loyalty-programme-SC-198`, `grade10-site-loyalty-programme-SC-199`, `grade10-site-loyalty-programme-SC-201`, `grade10-site-loyalty-programme-SC-202`, `grade10-site-loyalty-programme-SC-204`, `grade10-site-loyalty-programme-SC-205`, `grade10-site-loyalty-programme-SC-225`, `grade10-site-loyalty-programme-SC-226`, `grade10-site-loyalty-programme-SC-228`, `grade10-site-loyalty-programme-SC-229`, `grade10-site-loyalty-programme-SC-230`, `grade10-site-store-discounts-SC-19`, `grade10-site-store-discounts-SC-26`, `grade10-site-store-discounts-SC-28`
 - [ ] 14.2 The release outbox's give-up deadline outlasts the programme's sweep, held by the test that reads both clocks
+- [ ] 14.3 The tests behind the forfeit count and the member's coupon list cite the scenarios that now name the coupon rather than its code, and a missing one is written, among them a code that dies with its sale counting no forfeit `grade10-site-loyalty-programme-SC-120`, `grade10-site-loyalty-programme-SC-148`, `grade10-site-loyalty-programme-SC-233`
 
 ## 15. Count what the measures read (grade10)
 
-- [ ] 15.1 Tests first: a refused coupon's metric carries its cause on both channels, the hour's give-back is tagged when it freed a reward, and a coupon used within a day of its claim being released is counted
-- [ ] 15.2 A refused coupon is counted with its cause, online on `store.checkout.outcome` and at the till on `store.pos.sale.refused`, so claims refused as unavailable read on `cause:not_available`
-- [ ] 15.3 The hour's give-back tags `store.pos.sale.expired` with `reward:given_back`, and the programme counts `loyalty.coupon.used_after_release` when it marks used a coupon whose previous claim was released less than 24 hours before
+- [ ] 15.1 Tests first: a refused coupon's metric carries its cause and, for `not_available`, the standing that refused it, on both channels; a counter sale's give-back, at its hour or retired, is tagged when it freed a reward; a coupon spent within a day of a counter sale giving it back is counted, and one spent after an online order gave it back is not
+- [ ] 15.2 The programme's `not_available` answer names the standing that refused it, `claimed`, `spent` or `not_live`; a refused coupon is counted with its cause and that standing, online on `store.checkout.outcome` and at the till on `store.pos.sale.refused`, so claims refused as unavailable for another claim read on `cause:not_available` and `standing:claimed`
+- [ ] 15.3 A counter sale's give-back tags `store.pos.sale.expired` and `store.pos.sale.superseded` with `reward:given_back`; the programme's answer to a capture names the order whose claim on that coupon it released less than 24 hours before, and the store's sink counts `store.coupons.used_after_counter_release` when that order is a counter sale other than the paying one
 
 ## 16. The walk (grade10)
 
