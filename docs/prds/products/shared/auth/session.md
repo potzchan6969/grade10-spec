@@ -13,8 +13,17 @@ another are stored against it; an email is an attribute of the account, never
 the thing it is filed under. That is what makes changing an address a change of
 data rather than a migration.
 
-Signing in covers the brand. Every site of that brand sees the same person, and
-no site of another brand sees them at all.
+Signing in covers the brand's customer site and no site of another brand.
+
+## Two Sessions
+
+🚧 **The console is its own sign-in** - signing in to the admin console does not sign the person in on the site, and signing in on the site does not open the console. A person holds one, the other, or both, and the two can be different accounts.
+
+🚧 **Each session ends on its own** - the site session lasting, expiring or ending says nothing about the console's, and the other way round.
+
+🚧 **Second factor and recent sign-in count on the console** - a sign-in on the site never counts as the recent sign-in an operator action asks for.
+
+🚧 **Release asks operators to sign in once more** - the console stops honouring the site's session at release. Customer sessions are untouched.
 
 Analytics follows the same key: a signed-in event names the person by user id,
 an anonymous one names the device, and signing in links that device to the
@@ -29,8 +38,8 @@ is that product's business.
 
 ## Open Tabs
 
-A session belongs to the browser, not to one tab. Every tab of this brand is
-reading the same one.
+A session belongs to the browser, not to one tab. Every tab of the same
+surface, site or console, is reading the same one.
 
 - **Signed in somewhere else** — a tab left open shows the person signed in,
   so a collector who followed the emailed link in a new tab does not have to

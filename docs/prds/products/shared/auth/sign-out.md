@@ -14,6 +14,8 @@ That is the whole contract, and it exists because the alternative is worse than
 a failure — a tap that appears to do nothing leaves someone believing they are
 signed out when they are not.
 
+🚧 **Sign-out ends the surface's own session only** - signing out of the console leaves the person signed in on the site, and signing out on the site leaves the console signed in.
+
 Where the control sits and what a surface cleans up afterwards belong to the
 surface. On the grade10 site the profile offers sign-out, and the site header
 account menu offers it too when the collector is signed in —

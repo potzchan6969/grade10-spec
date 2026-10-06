@@ -21,9 +21,11 @@ is a different address. A trusted product may also create or enter an account
 from an email it has already verified; that is the seam checkout uses, and a
 later sign-in with the same address is the same person.
 
-Sign-in stays on the brand. A session covers every site of that brand and no
-other, and a redirect target the brand does not trust is ignored rather than
-followed.
+Sign-in stays on the brand. A session covers the brand's customer site and no
+other brand, and a redirect target the brand does not trust is ignored rather
+than followed.
+
+🚧 **A link signs in the surface that asked for it** - a link requested from the admin console signs in the console only; one requested on the site signs in the site only. The person already signed in as someone else is judged on the surface the link belongs to.
 
 ## After the Send
 

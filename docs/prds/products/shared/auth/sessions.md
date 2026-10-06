@@ -15,6 +15,10 @@ An operator holding the revoke grant can end one session or every session that
 account holds. Revoking the session they are using signs them out, which is the
 honest outcome rather than a special case.
 
+🚧 **The list names the surface** - each session reads as a site or a console session, so an operator can tell where a person is signed in.
+
+🚧 **Ending every session ends both** - revoking all of an account's sessions closes its site and console sessions alike, and a ban does the same.
+
 This is the surgical version of a ban. A ban disables the whole account and
 refuses new sign-ins; a revoke ends a session and leaves the person able to sign
 in again, which is what a lost laptop needs. Signing out of the surface you are
