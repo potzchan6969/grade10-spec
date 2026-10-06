@@ -11,7 +11,7 @@ Winner Order surface. No group has an owner until an engineer claims it.
 - [ ] 1.3 Implement the preview-local feedback helper and the ready, converting, submitting and failed state transitions; keep the approved copy in one helper (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
 - [ ] 1.4 Verify the focused standalone stories, preview typecheck and lint, `pnpm check:manual` and `pnpm run validate:changes winner-payment-proof-feedback`
 
-## 2. Winner Order preview integration (grade10-spec)
+## 2. Winner Order preview integration (grade10-spec) (owner: @htonyl)
 
 - [ ] 2.1 Add failing page and story assertions for Payment Verifying, the success toast, the hidden Submit Payment Proof and View Bank Details controls, and the inline irreversible microcopy (`winner-order-SC-218`, `winner-order-SC-220`)
 - [ ] 2.2 Wire the page success callback to the existing Payment Verifying state and use the shared feedback helper from the page and standalone stories (`winner-order-SC-218`)
