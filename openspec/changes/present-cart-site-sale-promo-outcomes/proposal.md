@@ -21,7 +21,7 @@ Applicable story each show their outcome, and their play tests pass.
   - **On sale** - the sale price and the struck list price on each line it
     cuts; no Store sale row in the summary
   - **Subtotal** - the sum of each line's price times its quantity, leaving
-    out a sold-out line, in every outcome
+    out sold-out and unavailable lines, in every outcome
   - **Stacked** - the lines keep the sale; the summary shows only the code's
     discount
   - **Refused** - the lines and totals stay on the sale; the promo sheet names

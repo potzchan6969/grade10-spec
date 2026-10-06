@@ -2,7 +2,7 @@
 
 - Site sale and promo outcomes
   - On sale: a site sale shows on the lines it cuts as the sale price beside the struck list price, never as a summary row
-  - Subtotal: the sum of each line's price times its quantity, leaving out a sold-out line
+  - Subtotal: the sum of each line's price times its quantity, leaving out sold-out and unavailable lines
   - Stacked: the lines keep the sale and the summary shows only the code's discount
   - Refused: the lines and totals stay on the sale and the promo sheet says why
   - Replaced: each line the code takes the sale from shows the list price with nothing struck through, and the summary shows only the code's discount
@@ -21,7 +21,7 @@ price), each the price of one, and never as `PromoState`. Where a promo code
 meets a site sale on one cart, it SHALL supply the code only as `PromoState`,
 and never as a line's `couponCode`. The `subtotal` it supplies SHALL be the
 sum of each line's price times its quantity, over every line but a sold-out
-one, in every outcome.
+or `unavailable` one, in every outcome.
 
 **Drawer renders** - Given such a line, the drawer SHALL render the sale price
 with the list price struck through. It SHALL strike any `originalPrice` it is
@@ -33,16 +33,16 @@ render the price alone. It SHALL render the supplied Subtotal.
 **Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
 
 - **GIVEN** a cart whose quote applies a site sale on some lines, one of them
-  holding more than one, but not on another, with one sold-out line, and no
-  promo code
+  holding more than one, but not on another, with one sold-out line, one
+  `unavailable` line, and no promo code
 - **WHEN** the drawer renders those lines and the summary
 - **THEN** each sale line shows the sale price and the struck list price, the
   line off the sale shows its price alone, the Subtotal matches the sum of
-  each line's price times its quantity and leaves out the sold-out line, and
-  the footer shows no discount row
+  each line's price times its quantity and leaves out the sold-out and the
+  `unavailable` lines, and the footer shows no discount row
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-ahq rev=1 -->
-#### Scenario: shared-ui-store-cart-SC-47 - A list price equal to the price is still struck through
+#### Scenario: shared-ui-store-cart-SC-52 - A list price equal to the price is still struck through
 **Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
 
 - **GIVEN** a line whose supplied list price equals its price
@@ -53,9 +53,9 @@ render the price alone. It SHALL render the supplied Subtotal.
 ### Requirement: A stacked promo keeps the sale lines and adds only the code's discount
 
 Given lines on the site sale and `PromoState` `applied` with the code and its
-discount amount, the drawer SHALL render each line's sale price with its list
-price struck through, and exactly one discount row, for that code, with its
-amount.
+discount amount, the drawer SHALL render each line on the site sale with its
+sale price and its list price struck through, and exactly one discount row, for
+that code, with its amount.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-zxr rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-27 - Stacked code appears only as the footer discount on sale lines
@@ -63,17 +63,19 @@ amount.
 
 - **GIVEN** a cart with a site sale on its lines and a promo code that stacks
 - **WHEN** the drawer shows the applied code
-- **THEN** the lines still show the sale price and the struck list price,
-  the Subtotal matches the sum of each line's price times its quantity, and
-  the footer shows exactly one discount row, for the code, with its amount
+- **THEN** each line on the sale still shows the sale price and the struck
+  list price, a line off the sale shows its price alone, the Subtotal matches
+  the sum of each line's price times its quantity, and the footer shows
+  exactly one discount row, for the code, with its amount
 
 ### Requirement: A refused promo leaves the site sale in place and names the refusal
 
 Given lines on the site sale and a refused code, the consumer SHALL supply
 `PromoState` `expanded` with the refusal as its `error`, and the same line
 prices, `subtotal` and `estimatedTotal` as before the attempt. The drawer
-SHALL keep each line's sale price and struck list price, SHALL render no
-discount row, and the promo sheet SHALL show the refusal message.
+SHALL keep each line on the site sale at its sale price with its list price
+struck through, SHALL render no discount row, and the promo sheet SHALL show
+the refusal message.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-8bx rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows the refusal
@@ -82,9 +84,10 @@ discount row, and the promo sheet SHALL show the refusal message.
 - **GIVEN** a cart with a site sale on its lines
 - **WHEN** the shopper applies a promo code the quote refuses, typed or picked
   from the held codes that can apply
-- **THEN** the lines, the Subtotal and the estimated total stay on the site
-  sale, the footer shows no discount row, and the promo sheet shows the
-  refusal
+- **THEN** each line on the sale still shows the sale price and the struck
+  list price, a line off the sale shows its price alone, the Subtotal and the
+  estimated total do not change, the footer shows no discount row, and the
+  promo sheet shows the refusal
 
 ### Requirement: A held code that cannot apply is muted with its reason
 
@@ -102,7 +105,7 @@ promo sheet, listed apart from the held codes that can apply, with its
   Apply control
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-tp9 rev=1 -->
-#### Scenario: shared-ui-store-cart-SC-46 - Held codes that cannot apply are listed apart from the ones that can
+#### Scenario: shared-ui-store-cart-SC-53 - Held codes that cannot apply are listed apart from the ones that can
 **Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
 - **GIVEN** a cart on the site sale holding one code that can apply and one
@@ -148,6 +151,8 @@ the drawer SHALL render each sale price with its list price struck through.
 - **GIVEN** a cart showing an applied promo that stacked on or replaced a
   site sale, and the site sale still runs
 - **WHEN** the shopper removes that promo
-- **THEN** the lines show the sale price and the struck list price, the
-  Subtotal matches the sum of each line's price times its quantity, and the
-  footer shows no discount row for that code
+- **THEN** each line that was on the sale before the code, including each
+  line the code had taken the sale from, shows the sale price and the struck
+  list price, a line off the sale shows its price alone, the Subtotal matches
+  the sum of each line's price times its quantity, and the footer shows no
+  discount row for that code

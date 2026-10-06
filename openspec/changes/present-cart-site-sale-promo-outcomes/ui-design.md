@@ -35,10 +35,10 @@ summary row whose only job is to name the site sale.
 
 | State | Anchor | Spec scenario |
 | --- | --- | --- |
-| Site sale on lines (sale price, struck list price); a line off the sale at its price alone; Subtotal = each line's price times its quantity, leaving out a sold-out one; no discount row | On sale, Subtotal · `shared-ui-store-cart-US-13` | `shared-ui-store-cart-SC-26`, `shared-ui-store-cart-SC-47` |
+| Site sale on lines (sale price, struck list price); a line off the sale at its price alone; Subtotal = each line's price times its quantity, leaving out sold-out and unavailable lines; no discount row | On sale, Subtotal · `shared-ui-store-cart-US-13` | `shared-ui-store-cart-SC-26`, `shared-ui-store-cart-SC-52` |
 | Stacked code - lines keep the sale; one footer discount row for the code | Stacked · `shared-ui-store-cart-US-14` | `shared-ui-store-cart-SC-27` |
 | Refused code, typed or picked from a held ticket - sale lines unchanged; sheet shows the refusal; no discount row | Refused · `shared-ui-store-cart-US-15` | `shared-ui-store-cart-SC-28` |
-| Inapplicable held promo - muted ticket, reason, no Apply, listed apart from the applicable ones | Held, cannot apply · `shared-ui-store-cart-US-15` | `shared-ui-store-cart-SC-29`, `shared-ui-store-cart-SC-46` |
+| Inapplicable held promo - muted ticket, reason, no Apply, listed apart from the applicable ones | Held, cannot apply · `shared-ui-store-cart-US-15` | `shared-ui-store-cart-SC-29`, `shared-ui-store-cart-SC-53` |
 | Replacing code - each line it takes the sale from at its list price, nothing struck; one footer discount row for the code | Replaced · `shared-ui-store-cart-US-16` | `shared-ui-store-cart-SC-30` |
 | Code removed - its discount row leaves; the sale is on the lines while it still runs | Removed · `shared-ui-store-cart-US-17` | `shared-ui-store-cart-SC-31` |
 
