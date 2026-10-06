@@ -67,8 +67,17 @@
       "lane": "shopify",
       "col": 2,
       "type": "external",
-      "label": "Code re-minted",
-      "sublabel": "the earlier one is discarded",
+      "label": "Its own code minted",
+      "sublabel": "a new string, for this sale",
+      "width": 156
+    },
+    {
+      "id": "newer-applies_deactivate",
+      "lane": "shopify",
+      "col": 3,
+      "type": "external",
+      "label": "Old code deactivated",
+      "sublabel": "the earlier sale's, retried",
       "width": 156
     },
     {
@@ -96,6 +105,15 @@
       "type": "backend",
       "label": "Coupon used",
       "sublabel": "the claim is spent",
+      "width": 156
+    },
+    {
+      "id": "earlier-pays",
+      "lane": "earlier",
+      "col": 4,
+      "type": "external",
+      "label": "Paid with its old code",
+      "sublabel": "spends nothing, reported",
       "width": 156
     }
   ],
@@ -136,6 +154,13 @@
       "toSide": "bottom"
     },
     {
+      "from": "newer-applies_claim",
+      "to": "newer-applies_deactivate",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
       "from": "newer-applies",
       "to": "newer-pays",
       "variant": "emphasis",
@@ -148,6 +173,13 @@
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top"
+    },
+    {
+      "from": "earlier-applies",
+      "to": "earlier-pays",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
     }
   ]
 }

@@ -27,7 +27,7 @@
       "col": 2,
       "type": "external",
       "label": "Discount code",
-      "sublabel": "a new claim discards the last",
+      "sublabel": "a new claim frees the last",
       "tag": "ephemeral",
       "width": 150
     },

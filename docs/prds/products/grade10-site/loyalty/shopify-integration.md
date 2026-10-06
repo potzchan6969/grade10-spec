@@ -59,8 +59,7 @@ Every online checkout is a Shopify draft order and its invoice.
 | --- | --- |
 | Member | The draft's customer, so a customer-scoped code evaluates |
 | Points | One fixed-amount order discount named "Points" |
-| Product and gift coupons | Per-unit line discounts named "Coupon" |
-| Order coupon | The draft's discount code |
+| Coupon | The draft's one discount code — minted for that checkout for a product or gift coupon, the operator's own for an order coupon |
 | Prices | None on the lines — the shop prices at payment |
 | Shipping | None — the invoice page prices it |
 
@@ -85,7 +84,7 @@ Every online checkout is a Shopify draft order and its invoice.
 On the store's own `/checkout` page, before Shopify has seen the basket.
 
 ## *Store* — **Draft order created**
-The member is the draft's customer, the points are one fixed-amount order discount named "Points", each product or gift coupon is a per-unit line discount named "Coupon", and an order code goes on as the draft's own discount code. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
+The member is the draft's customer, the points are one fixed-amount order discount named "Points", and the coupon goes on as its discount code, minted for that checkout where it is a product or gift coupon. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
 
 ```json
 {
@@ -93,18 +92,14 @@ The member is the draft's customer, the points are one fixed-amount order discou
     "lineItems": [
       {
         "variantId": "gid://shopify/ProductVariant/44556677889900",
-        "quantity": 2,
-        "appliedDiscount": {
-          "valueType": "FIXED_AMOUNT", "value": 2.5,
-          "title": "Coupon", "description": "Coupon"
-        }
+        "quantity": 2
       }
     ],
     "appliedDiscount": {
       "valueType": "FIXED_AMOUNT", "value": 12,
       "title": "Points", "description": "Points"
     },
-    "discountCodes": ["G10-WELCOME-20"],
+    "discountCodes": ["RWD-7K2P9QXM"],
     "purchasingEntity": { "customerId": "gid://shopify/Customer/7788990011" },
     "customAttributes": [
       { "key": "grade10_order_id", "value": "0f6c2c1e-6a0a-4c33-9d2a-1e6b0e2f9c11" }
@@ -113,7 +108,7 @@ The member is the draft's customer, the points are one fixed-amount order discou
 }
 ```
 
-A coupon's discount is per unit, so 2.5 on a quantity of 2 is the $5 the line loses; 12 is the whole $12 of points. No points leave the balance and no stock is held; a reward coupon is held against the order and freed if it is never paid — [Coupons](/p/grade10-site/loyalty/coupons)
+The points are the whole $12; the coupon's $5 comes off by its code when the shop prices the order. No points leave the balance, no stock is held, and no coupon is spent until the order is paid — [Coupons](/p/grade10-site/loyalty/coupons)
 
 ## *Shopify* — **Invoice link issued**
 The shop answers with the draft and the link the member pays at. The draft's id is recorded before that link leaves, so no payment can arrive on an order the store cannot bind.
@@ -130,12 +125,11 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
   "name": "#G10-10482",
   "cart_token": null,
   "currency": "HKD",
-  "subtotal_price": "19.50",
-  "current_total_discounts": "20.50",
+  "subtotal_price": "23.00",
+  "current_total_discounts": "17.00",
   "discount_applications": [
     { "title": "Points" },
-    { "title": "Coupon" },
-    { "code": "G10-WELCOME-20" }
+    { "code": "RWD-7K2P9QXM" }
   ],
   "line_items": [
     {
@@ -144,8 +138,7 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
       "price": "20.00",
       "discount_allocations": [
         { "amount": "12.00", "discount_application_index": 0 },
-        { "amount": "5.00", "discount_application_index": 1 },
-        { "amount": "3.50", "discount_application_index": 2 }
+        { "amount": "5.00", "discount_application_index": 1 }
       ]
     }
   ],
@@ -166,7 +159,7 @@ The bytes are verified, the delivery is deduped on Shopify's webhook id, and the
   "kind": "paid",
   "sourceRef": "9c1e4a70-6f83-4d02-b6a1-0e3f5c9d21ab",
   "userId": "usr_01J8ZQ4X7K",
-  "earningMinor": 1950,
+  "earningMinor": 2300,
   "currency": "HKD",
   "occurredAt": "2026-09-10T04:21:07.113Z"
 }

@@ -73,11 +73,11 @@ svg[data-diagram="coupon-contested-claim"] .c-lane{fill: var(--lane-fill); strok
           <text x="503.1666666666667" y="220" class="t-backend" font-size="9" text-anchor="middle">claim it, keyed on this one</text>
         </g>
         </g>
-        <g data-step="take" data-edge-from="loyalty" data-edge-to="rows" data-edge-label="reserve it, only where still available" data-edge-key="2" data-edge-id="take">
+        <g data-step="take" data-edge-from="loyalty" data-edge-to="rows" data-edge-label="claim it, only where still available" data-edge-key="2" data-edge-id="take">
           <path data-composition-edge-from="loyalty" data-composition-edge-to="rows" data-composition-edge-id="take" data-composition-points="325.83333333333337,290;496.1666666666667,290" d="M 325.83333333333337 290 L 496.1666666666667 290" class="a-security" stroke-width="1.4" marker-end="url(#coupon-contested-claim-arrowhead-security)"/>
         <g data-detail="context">
-          <rect x="306.2" y="270" width="209.6" height="16" rx="3" class="c-mask"/>
-          <text x="411" y="280" class="t-security" font-size="9" text-anchor="middle">reserve it, only where still available</text>
+          <rect x="311.4" y="270" width="199.20000000000002" height="16" rx="3" class="c-mask"/>
+          <text x="411" y="280" class="t-security" font-size="9" text-anchor="middle">claim it, only where still available</text>
         </g>
         </g>
         <g data-step="took" data-edge-from="rows" data-edge-to="loyalty" data-edge-label="one row" data-edge-key="3" data-edge-id="took">
@@ -123,7 +123,7 @@ svg[data-diagram="coupon-contested-claim"] .c-lane{fill: var(--lane-fill); strok
           <rect x="308.8" y="560" width="204.4" height="16" rx="3" class="c-mask"/>
           <text x="411" y="570" class="t-security" font-size="9" text-anchor="middle">retire that sale, give its claim back</text>
         </g>
-        <text data-detail="fine" x="153.5" y="598" class="t-dim" font-size="7">or refuse by name, where that checkout is still live</text>
+        <text data-detail="fine" x="153.5" y="598" class="t-dim" font-size="7">or refuse by name, where that checkout took the money or will not close</text>
         </g>
         <g data-step="again" data-edge-from="newer" data-edge-to="loyalty" data-edge-label="ask again" data-edge-key="9" data-edge-id="again">
           <path data-composition-edge-from="newer" data-composition-edge-to="loyalty" data-composition-edge-id="again" data-composition-points="680.5,650;325.83333333333337,650" d="M 680.5 650 L 325.83333333333337 650" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-contested-claim-arrowhead-emphasis)"/>

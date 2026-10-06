@@ -67,23 +67,23 @@ code and, on top of it, points:
   Shopify's own combine rule
 - **Shipping** ([Shipping](/p/grade10-site/store/shipping)) fee is determined by custom carrier service API, conditionally free
 
-Nothing is held for a draft order: points and a discount code alike stay
+🚧 Nothing is held for a draft order: points and a discount code alike stay
 spendable until a paid order takes them.
 
-- **The newer promise retires the older** — an online checkout, and a sale
-  planned at a counter, each retire the member's earlier sales carrying
-  points or a code, whatever the newer one carries; a retired online order
-  is cancelled, and the member's cart keeps its lines
+- **The newer promise retires the older** — an online checkout, and a sale planned at a counter,
+  each retire the member's earlier sales carrying points, a reward or one of the store's own
+  coupons, whatever the newer one carries; a retired online order is cancelled, and the
+  member's cart keeps its lines
 - **A retired counter sale keeps its cart** — the shop owns that cart and it
   can still collect, so the sale is never cancelled; it takes no new plan
 - 🚧 **A retired counter sale gives back its reward** — whatever reward it
-  holds, the one the newer sale claims or another, and a code minted for it
-  is deactivated — [Coupons](/p/grade10-site/loyalty/coupons)
+  holds, the one the newer sale claims or another; its code is deactivated,
+  and a gift's line stays on the cart — [Coupons](/p/grade10-site/loyalty/coupons)
 
 
 ## On-site mechanism
 
-Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) puts the member's benefits on that cart, and the store records one order per till session. The cart decides what landed, never the plan, and nothing is held until the sale is paid.
+Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) puts the member's benefits on that cart, and the store records one order per till session. The cart decides what landed, never the plan.
 
 ### The sale, step by step
 
@@ -146,11 +146,12 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **Every unhappy answer is a value** — the sale is happening whatever the programme thinks; nothing throws, nothing leaves staff on a spinner
 - **Replay is dead** — a card presentation is consumed by one guarded update, so two tills scanning at once open exactly one session
 - **Throttles** — short-code misses ten per five minutes per shop, email and phone twenty, plans twenty per session
-- 🚧 **A row that closed cannot be rewritten** — a sale that landed, whose own hour ran out, or that a newer promise retired, refuses the next plan and asks staff to ring the goods on a new sale rather than reopening itself: a fresh scan would leave a deactivated code on the same cart. A till session lives ten minutes and the hour outlasts it, so a fresh scan on a cart still carrying another sale's reward code is refused the same way
+- 🚧 **A row that closed cannot be rewritten** — a sale that landed, whose own hour ran out, or that a newer promise retired, refuses the next plan and asks staff to ring the goods on a new sale rather than reopening itself: a fresh scan would leave a deactivated code on the same cart
+- ❓ **A fresh scan on a cart that carries a reward's code** — a till session lives ten minutes and a sale's hour outlasts it, so staff reach the cart again through a fresh scan. Whether that scan continues the member's own open sale and its code, or is refused and asks for a new sale, is the product manager's to confirm
 - **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
 :::
 
-❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at its face value. A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part.
+❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at its face value. A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part, for engineering to confirm with Shopify POS.
 
 ### Switches
 
@@ -234,7 +235,7 @@ today.
 | One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
 | Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |
 | Combine setting | Decided | Each coupon's definition states what it stacks with — a reward's definition, or the operator's mint of a store coupon — with a store default where none is stated. | Product |
-| Nothing is held | Decided | Points and coupons alike stay spendable until a paid order takes them. A claim takes the instrument off every earlier sale first, so a member is never locked out of their own coupon by a draft or a sale they walked away from. The one refusal left is a sale the store could not close, which can still collect and is still carrying the cut. | Product |
+| Nothing is held | Decided | Points and coupons alike stay spendable until a paid order takes them. A claim takes the instrument off every earlier sale first, so a member is never locked out of their own coupon by a draft or a sale they walked away from. The one refusal left is a sale that cannot let go: an online checkout the provider reports collected or will not close, which can still collect and still carries the cut, or a sale still being submitted with the coupon. | Product |
 | A retired counter sale | Decided | The shop owns that cart and it can still collect, so a newer promise retires the sale and never cancels it. Whatever reward it holds comes off and its code is deactivated, so no coupon is ever locked to a counter. The shop goes on honouring a code a cart already carries, so what keeps that honest is the settlement: a sale is spent against what it actually carried. A cut it gave for a coupon the order had given up spends the coupon where no other sale claims it, and is reported either way rather than taken twice. | Product |
 | Price preview | Decided | The cart drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — that holds nothing; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
 | A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |

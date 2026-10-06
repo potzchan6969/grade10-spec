@@ -7,9 +7,9 @@ reviewed: 2026-10-06
 
 A coupon is Grade10's own instrument: what a redemption leaves the member
 holding, and what an order carries to spend it. Grade10 prices it against
-the order's lines; a Shopify discount — a custom discount on the draft order,
-a line discount, or a code — is only how that price reaches the order and
-how the checkout shows it, never what decides it.
+the order's lines; a Shopify discount — a code, or at the till a gift's line
+discounted to nothing — is only how that price reaches the order and how the
+checkout shows it, never what decides it.
 
 ::image{src="assets/diagrams/coupon-life.svg" alt="A coupon from redeemed or granted, to available, to claimed by a sale, to used when that order is paid, with the Shopify discount code a claim mints above it"}
 
@@ -51,10 +51,12 @@ so redefining the reward never rewrites a coupon a member already holds —
 - 🚧 **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
 - 🚧 **A sale that ends gives it back** — a counter sale nobody paid releases
-  its coupon when a newer sale retires it, or an hour after its last plan,
+  its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
-- 🚧 **An online checkout that took the money keeps it** — and a coupon on a
-  checkout the shop will not close is refused rather than taken
+- 🚧 **An online checkout that took the money keeps it** — and so does one the shop will not close,
+  or a sale still being submitted, for its first five minutes; the claim is refused
+- 🚧 **A sale that gave it back can take it again** — a till sale carries it
+  on the plan after a refused one; a sale the shop collected never does
 - **A sale that beats it** — where the two cannot stack the shop keeps the
   larger cut and the coupon goes back to the wallet —
   [Discounts](/p/grade10-site/store/discounts)
@@ -65,16 +67,19 @@ so redefining the reward never rewrites a coupon a member already holds —
 :::detail{title="One coupon, two sales" for="engineer"}
 - **One conditional write decides it** — the claim lands only where the coupon
   is still available, and one live claim per coupon is a database rule
-- **The sale that loses asks again** — it retires the earlier sale first, and
-  is refused by name where that checkout is still live
+- 🚧 **The sale that loses asks again** — it retires the earlier sale first,
+  and is refused by name where that checkout took the money, will not close,
+  or is still being submitted
 
-::image{src="assets/diagrams/coupon-contested-claim.svg" alt="Two sales claiming one coupon: the reservation write settles it, and the sale that loses retires the earlier one and asks again"}
+::image{src="assets/diagrams/coupon-contested-claim.svg" alt="Two sales claiming one coupon: one conditional claim settles it, and the sale that loses retires the earlier one and asks again"}
 :::
 
 :::detail{title="Giving a claim back" for="engineer"}
 - **Before the commit** — the request's own guard, on every exit
 - **After it** — a release attempt as the write lands, then the outbox,
   retried until an hour past the programme's sweep
+- 🚧 **A claim whose order was never written** — released by the next claim on
+  that coupon once the claim is five minutes old
 - **Under both** — the programme releases any claim still standing 25 hours
   after it was made: an expired online order's once its code is dead, or one
   a checkout left when it stopped before its order was written
@@ -106,12 +111,12 @@ The shop owns that cart, so the sale is never cancelled.
 An hour after its last plan, not a day.
 
 ## *Store* — **The coupon comes off**
-The cut and the code go. A sale paid anyway is settled as [Spending one](#spending-one) says.
+Its code is deactivated, or a gift's line stays on the cart, and the coupon is back in the wallet. A sale paid anyway is settled as [Spending one](#spending-one) says.
 :::
 
 :::flow{title="At the till" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
 ## *Shopkeeper* — **Applies it on a sale**
-A code is minted the moment it is chosen.
+A product coupon's code is minted the moment it is chosen.
 
 ## *Shopkeeper* — **A second sale claims it first**
 Frees the earlier sale's claim and code, and claims it there instead.
@@ -148,7 +153,7 @@ quietly lost a coupon.
 | Expired | Its own validity passed |
 | Wrong channel | The definition does not name the channel it is being spent in |
 | Not eligible | The definition's eligibility is not met |
-| 🚧 An earlier sale stands | A sale carrying this coupon that could not be closed, so its cut still stands |
+| 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
 
 ### Basket
 
@@ -220,7 +225,7 @@ are on [Discounts](/p/grade10-site/store/discounts).
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Deactivating a code | Decided | It never refuses a claim. The shop honours a code a cart already carries, so settlement guards the money and the deactivation is retried. | Product |
-| What the member is shown | Decided | No claimed state, and no sale named. Every coupon the member holds reads as spendable. | Product |
+| What the member is shown | Decided | A coupon a sale claims reads as it would unclaimed: no claimed state, no sale named, and nothing said when a claim moves. A till spend they were told had landed is still corrected if its sale is abandoned unpaid. | Product |
 | An online order that expires | Decided | It keeps its claim until its code can no longer be collected, and the programme's clock then releases it. A counter sale gives its coupon back at its hour. | Engineering |
-| A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Engineering |
+| A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Product |
 :::

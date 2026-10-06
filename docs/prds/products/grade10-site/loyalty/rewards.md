@@ -89,8 +89,9 @@ carrying the definition it was bought under.
   lines
 - **Applied at the counter** — inside the till session, staff apply the
   coupon from the member's panel, or the member opens it on their own phone
-  and the till scans it; either way its code is minted the moment it is
-  chosen, for that sale alone, and never shown as the coupon itself
+  and the till scans it. A product coupon's code is minted the moment it is
+  chosen, for that sale alone, and never shown as the coupon itself; a gift
+  goes on as its own line, discounted to nothing, with no code
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
 - **One discount at a time** — an order carries one discount at a time,
