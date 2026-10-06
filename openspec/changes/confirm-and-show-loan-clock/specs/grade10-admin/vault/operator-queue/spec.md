@@ -9,3 +9,210 @@
   - Asked before the collector is emailed: cancelling the visit and sending
     the forfeiture notice each ask first, naming the slot, or the address and
     the date to pay by
+
+## ADDED Requirements
+
+### Requirement: A late loan's clock reads beside the case's status
+
+The case header SHALL read a live loan's clock beside the status, from the
+case's own read, on the brand's own zone as `shared/dates-and-times` states
+it.
+
+| The case | The header reads |
+| --- | --- |
+| A live loan, `active` with an advance recorded, on or before its due date | no clock |
+| A live loan past its due date, with no forfeiture notice standing | `N days past due`, or `1 day past due` |
+| A live loan with a forfeiture notice standing | `pay by <date>`, and no count |
+| A storage case, a repaid loan, or a case that has ended | no clock |
+
+- **The count** - N SHALL be the calendar days on the brand's calendar from
+  the due date to the day of the read: 1 on the day after the due date. It
+  SHALL be the count the collector's Past due stage reads in
+  `grade10-site/vault/case-lifecycle`, and SHALL NOT be reduced by the brand's
+  grace days.
+- **The date** - the date to pay by SHALL be the one the newest notice named,
+  never one recomputed from the brand's notice period, and SHALL stay after
+  that date has passed.
+- **A clock, not a wait** - the clock SHALL NOT be one of the reasons a case
+  is waiting on staff, and SHALL NOT change the status the case holds.
+- **Who reads it** - an operator holding the vault read grant SHALL read it;
+  it SHALL need no money grant.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-97 - A loan past its due date reads its days past due
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator opens a late loan and reads how late it is
+
+- **GIVEN** a live loan due on 30 November with no forfeiture notice, read on 3 December on the shop's calendar
+- **WHEN** an operator opens the case
+- **THEN** the header reads `3 days past due` beside the status
+- **AND** no badge says the case is waiting on staff for being late
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-98 - The first day after the due date reads one day on the shop's calendar
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the shop's day, not the server's
+
+- **GIVEN** a live loan due on 30 November, read at 00:30 on 1 December in Hong Kong, while it is still 30 November in Coordinated Universal Time
+- **WHEN** an operator opens the case
+- **THEN** the header reads `1 day past due`
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-99 - A loan inside its term reads no clock
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator is shown no clock on a loan that is not late
+
+- **GIVEN** a live loan due on 30 November, read at 23:00 on 30 November on the shop's calendar
+- **WHEN** an operator opens the case
+- **THEN** the header reads no clock beside the status
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-100 - A standing notice names the date to pay by instead of the count
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the date to pay by once a notice stands
+
+- **GIVEN** a live loan due on 30 November, sent a forfeiture notice on 1 December naming 15 December as the date to pay by, read on 5 December
+- **WHEN** an operator opens the case
+- **THEN** the header reads `pay by 15 Dec 2026` beside the status, and no count of days
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-101 - The date to pay by stays once it has passed
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the same date the borrower was given after it passes
+
+- **GIVEN** a live loan whose forfeiture notice named 15 December, read on 16 December
+- **WHEN** an operator opens the case
+- **THEN** the header reads `pay by 15 Dec 2026`
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-102 - A case that owes no running loan reads no clock
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator is shown a clock only on a loan that runs
+
+- **GIVEN** a storage case in the vault, a repaid loan whose due date has passed, and a forfeited case
+- **WHEN** an operator opens each case
+- **THEN** none of the three headers reads a clock
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-103 - The count does not take off the brand's grace
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads how late the loan is, not when late interest starts
+
+- **GIVEN** a brand with 3 grace days and a live loan due on 30 November, read on 2 December
+- **WHEN** an operator opens the case
+- **THEN** the header reads `2 days past due`
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-104 - Staff without the money grant read the clock
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the clock without the money grant
+
+- **GIVEN** an operator holding the staff grants and not the vault payout grant, and a live loan 3 days past its due date
+- **WHEN** they open the case
+- **THEN** the header reads `3 days past due`, and no Payouts tab is offered
+
+### Requirement: Cancelling a visit asks first, naming the slot
+
+Cancelling a case's visit from the console SHALL run in these steps:
+
+1. The operator presses Cancel visit.
+2. The console asks, from the case as it stands when the confirm opens, in
+   the default tone, naming the visit's day and time on the shop's clock, the
+   case's email address the collector is emailed at, and that the case keeps
+   its status. A case with no email address SHALL say that nobody is emailed.
+3. Dismissing reads `Keep visit`. It SHALL send nothing, and the visit SHALL
+   stay as it was.
+4. Confirming reads `Cancel visit`. The visit SHALL be cancelled, and the
+   collector told, as `grade10-site/vault/visit-booking` states.
+5. A refusal SHALL be shown in the open confirm, which stays open.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-105 - The confirm names the slot, the address and the status kept
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the slot before the collector is told
+
+- **GIVEN** a case at `vaulted` holding a visit on 15 June 2026 at 10:00 Hong Kong time, 02:00 Coordinated Universal Time, and the address `collector@example.com`
+- **WHEN** an operator presses Cancel visit
+- **THEN** a confirm in the default tone names 15 June 2026 at 10:00, says the collector is emailed at `collector@example.com`, and says the case keeps its status
+- **AND** its two choices read `Keep visit` and `Cancel visit`
+- **AND** nothing has been sent
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-106 - Keeping the visit sends nothing
+**Serves:** grade10-admin-vault-operator-queue-US-22 - a misplaced press tells the customer nothing
+
+- **GIVEN** the Cancel visit confirm open on a case holding a visit
+- **WHEN** the operator presses `Keep visit`
+- **THEN** the confirm closes, the case still holds the visit, and no message is sent to the collector
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-107 - Confirming cancels the visit and the collector is told
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator cancels the visit knowing the collector hears
+
+- **GIVEN** the Cancel visit confirm open on a case holding a visit and an address
+- **WHEN** the operator presses `Cancel visit`
+- **THEN** the confirm closes, the case holds no visit and keeps its status, and the collector is told the visit was cancelled
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-108 - A case with no address says nobody is emailed
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator learns nobody will hear before cancelling
+
+- **GIVEN** a case holding a visit and no email address
+- **WHEN** an operator presses Cancel visit
+- **THEN** the confirm says that nobody is emailed, and names no address
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-109 - A refused cancel stays in the confirm
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator reads why the cancel did not go where they pressed it
+
+- **GIVEN** the Cancel visit confirm open on a case that has ended since it opened
+- **WHEN** the operator presses `Cancel visit`
+- **THEN** the worker's refusal is shown in the confirm, which stays open
+
+### Requirement: Sending the forfeiture notice asks first, naming the address and the date to pay by
+
+Sending the forfeiture notice from the custody tab SHALL run in these steps:
+
+1. The operator presses Send forfeiture notice.
+2. The console asks, from the case and the brand's notice period as they
+   stand when the confirm opens, in the destructive tone, naming the case's
+   email address the notice goes to and the date to pay by the notice would
+   name if sent as the confirm opens.
+3. Dismissing SHALL send nothing and record nothing.
+4. Confirming SHALL send the notice as `grade10-site/vault/loan-and-settlement`
+   states.
+5. A refusal SHALL be shown in the open confirm, which stays open.
+
+| What the confirm reads | When |
+| --- | --- |
+| The address and the date to pay by | the case holds an email address and the brand has set a notice period |
+| That nobody is emailed, and the date to pay by | the case holds no email address |
+| That no date to pay by can be named without a notice period | the brand has set no notice period |
+
+- **The date** - the date to pay by SHALL be the brand's notice period counted
+  from the instant the confirm opens, on the brand's calendar. Where the
+  shop's day turns before the send, the notice SHALL name the date the worker
+  reaches, one day later, and nothing SHALL ask again.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-110 - The confirm names the address and the date to pay by
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the operator checks who will read the notice and the deadline it starts
+
+- **GIVEN** a brand with a 14-day notice period, and a live loan past its due date with no notice, holding the address `collector@example.com`
+- **WHEN** an operator presses Send forfeiture notice at 10:00 on 1 December on the shop's clock
+- **THEN** a confirm in the destructive tone names `collector@example.com` and 15 December 2026 as the date to pay by
+- **AND** nothing has been sent
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-111 - Dismissing the notice sends nothing
+**Serves:** grade10-admin-vault-operator-queue-US-23 - a misplaced press starts no deadline
+
+- **GIVEN** the Send forfeiture notice confirm open
+- **WHEN** the operator dismisses it
+- **THEN** no notice is recorded on the case, no message is sent, and the custody tab still offers the notice beside the reason no written notice has been sent
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-112 - Confirming sends the notice naming the date shown
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the operator sends the notice they checked
+
+- **GIVEN** the Send forfeiture notice confirm open at 10:00 on 1 December, naming 15 December 2026
+- **WHEN** the operator confirms it
+- **THEN** the confirm closes, the case carries a notice naming 15 December 2026 as the date to pay by, and the collector is sent the notice
+- **AND** the header reads `pay by 15 Dec 2026`
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-113 - A day that turns before the send names the later date
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the borrower is never given less time than the operator read
+
+- **GIVEN** a brand with a 14-day notice period, and the Send forfeiture notice confirm opened at 23:59 on 1 December on the shop's clock, naming 15 December 2026
+- **WHEN** the operator confirms it at 00:01 on 2 December
+- **THEN** the notice names 16 December 2026 as the date to pay by, and no second confirm is asked
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-114 - A case with no address says nobody is emailed
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the operator learns nobody will read the notice before it goes
+
+- **GIVEN** a live loan past its due date with no notice and no email address
+- **WHEN** an operator presses Send forfeiture notice
+- **THEN** the confirm says that nobody is emailed, names no address, and names the date to pay by
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-115 - With no notice period the confirm says so, and the refusal shows in it
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the operator reads in words why the notice cannot go
+
+- **GIVEN** a brand with no notice period, and a live loan past its due date with no notice
+- **WHEN** an operator presses Send forfeiture notice, and confirms
+- **THEN** the confirm says that no date to pay by can be named without a notice period
+- **AND** on confirming, the worker's refusal is shown in the confirm, which stays open, and no notice is recorded

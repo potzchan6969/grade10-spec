@@ -1,0 +1,145 @@
+## 1. The One Case page (grade10-spec)
+
+- [ ] 1.1 Read the three 🚧 lines under One case in
+      `docs/prds/products/grade10-site/vault/operator-console.md` against the
+      accepted requirements, and reword any line they now say otherwise -
+      **A loan's clock** says the count is the Overdue view's, which holds
+      only while the brand's grace is zero; then run `pnpm check:manual`.
+- [ ] 1.2 Verify: `openspec validate confirm-and-show-loan-clock --strict` and
+      `pnpm check:manual`.
+
+## 2. The cure date as one function (grade10)
+
+Moves the worker's cure-date arithmetic into `@grade10/vault-contracts` with
+no change in what the worker writes. No scenario turns on it alone; groups 4
+and 5 cite the ones it serves.
+
+- [ ] 2.1 Add the tests first, in their own commit: `noticePayBy` names the
+      brand-zone day 14 days on at 10:00 and at 23:59 Hong Kong time, and a
+      `sentAt` two minutes later across the shop's midnight names the next
+      day, never an earlier one.
+- [ ] 2.2 Add `noticePayBy(sentAt, noticeDays, timeZone)` beside
+      `forfeitHold` in `packages/vault/contracts/src`, and have
+      `sendForfeitureNotice` in `packages/vault/backend/src/custody/forfeit.ts`
+      call it, keeping its `LENDING_POLICY_UNSET` refusal.
+- [ ] 2.3 Verify: the contracts unit tests, `pnpm run test:backend` for the
+      vault worker's notice and forfeiture suites, and the typecheck.
+
+## 3. The loan's clock in the case header (grade10)
+
+- [ ] 3.1 Add the tests first, in their own commit: `loanClock` and
+      `loanClockWords` for each row of the requirement's table, the count
+      folded beside `caseStanding` at 23:00 on the due date, 00:30 the day
+      after and three days on, a 3-day grace that does not reduce the count,
+      and a notice date kept after it passes; then `CaseDetailPanel` drawing
+      the clock beside the status for an operator without the payout grant,
+      at instants whose UTC day differs from the shop's
+      (`grade10-admin-vault-operator-queue-SC-97`,
+      `grade10-admin-vault-operator-queue-SC-98`,
+      `grade10-admin-vault-operator-queue-SC-99`,
+      `grade10-admin-vault-operator-queue-SC-100`,
+      `grade10-admin-vault-operator-queue-SC-101`,
+      `grade10-admin-vault-operator-queue-SC-102`,
+      `grade10-admin-vault-operator-queue-SC-103`,
+      `grade10-admin-vault-operator-queue-SC-104`).
+- [ ] 3.2 Add `cases/domain/loanClock.ts`, and draw its words as an `info`
+      `Badge` beside the status badge in `CaseDetailPanel.tsx`, formatted on
+      the panel's `timeZone`, covering
+      `grade10-admin-vault-operator-queue-SC-97`,
+      `grade10-admin-vault-operator-queue-SC-98`,
+      `grade10-admin-vault-operator-queue-SC-99`,
+      `grade10-admin-vault-operator-queue-SC-100`,
+      `grade10-admin-vault-operator-queue-SC-101`,
+      `grade10-admin-vault-operator-queue-SC-102`,
+      `grade10-admin-vault-operator-queue-SC-103` and
+      `grade10-admin-vault-operator-queue-SC-104`.
+- [ ] 3.3 Add `CaseDetailPanel` stories for a loan past its due date and for
+      one with a notice standing.
+- [ ] 3.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck,
+      `pnpm run lint` and the Storybook lane for the two stories.
+
+## 4. Cancel visit asks first (grade10)
+
+Starts from the console zone fix's commit where that fix has landed, and takes
+its `timeZone` prop on `BookingRow` rather than adding a second.
+
+- [ ] 4.1 Add the tests first, in their own commit: `cancelVisitConfirm` for a
+      case with and without an address at 10:00 Hong Kong time on 15 June 2026;
+      then `BookingRow` under `ConfirmProvider` and `ConfirmDialog`, asking in
+      the default tone with `Keep visit` and `Cancel visit`, sending nothing
+      on `Keep visit`, cancelling on confirm, and keeping a refusal in the
+      open confirm
+      (`grade10-admin-vault-operator-queue-SC-105`,
+      `grade10-admin-vault-operator-queue-SC-106`,
+      `grade10-admin-vault-operator-queue-SC-107`,
+      `grade10-admin-vault-operator-queue-SC-108`,
+      `grade10-admin-vault-operator-queue-SC-109`).
+- [ ] 4.2 Add `useFreshCase` to the cases slice, reading the case's detail key
+      with `staleTime: 0` and showing a failed read beside the button that
+      asked for it.
+- [ ] 4.3 Add `cases/domain/confirmWords.ts` with `cancelVisitConfirm`, and
+      route Cancel visit through `useConfirm` on its own `useVisitMoves()`
+      instance after a fresh read, covering
+      `grade10-admin-vault-operator-queue-SC-105`,
+      `grade10-admin-vault-operator-queue-SC-106`,
+      `grade10-admin-vault-operator-queue-SC-107`,
+      `grade10-admin-vault-operator-queue-SC-108` and
+      `grade10-admin-vault-operator-queue-SC-109`.
+- [ ] 4.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
+      and `pnpm run lint`.
+
+## 5. Send forfeiture notice asks first (grade10)
+
+Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
+`confirmWords.ts`.
+
+- [ ] 5.1 Add the tests first, in their own commit:
+      `forfeitureNoticeConfirm` for each row of the requirement's table; then
+      `CustodyPanel` under `ConfirmProvider` and `ConfirmDialog`, asking in
+      the destructive tone with the address and 15 December 2026 for a
+      14-day period read at 10:00 on 1 December, recording nothing on
+      dismiss, sending on confirm, and keeping the worker's
+      `LENDING_POLICY_UNSET` refusal in the open confirm
+      (`grade10-admin-vault-operator-queue-SC-110`,
+      `grade10-admin-vault-operator-queue-SC-111`,
+      `grade10-admin-vault-operator-queue-SC-112`,
+      `grade10-admin-vault-operator-queue-SC-113`,
+      `grade10-admin-vault-operator-queue-SC-114`,
+      `grade10-admin-vault-operator-queue-SC-115`).
+- [ ] 5.2 Add `forfeitureNoticeConfirm`, and route Send forfeiture notice
+      through `useConfirm` after a fresh read of the case and of
+      `admin.policy`, naming `noticePayBy` from the fresh `asOf`; drop the
+      panel's inline notice refusal line, covering
+      `grade10-admin-vault-operator-queue-SC-110`,
+      `grade10-admin-vault-operator-queue-SC-111`,
+      `grade10-admin-vault-operator-queue-SC-112`,
+      `grade10-admin-vault-operator-queue-SC-113`,
+      `grade10-admin-vault-operator-queue-SC-114` and
+      `grade10-admin-vault-operator-queue-SC-115`.
+- [ ] 5.3 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
+      and `pnpm run lint`.
+
+## 6. The walk (grade10)
+
+Uses draft `feature-tcs.md` as its input; human QA reviews cases after
+deployment (`/tcs-review confirm-and-show-loan-clock`), and `/tcs-run-sheet`
+executes manual cases when needed. Groups 2 to 5 landed first.
+
+- [ ] 6.1 Walk the three journeys through the console in
+      `apps/frontend/grade10/e2e/tests/vault/console.spec.ts`, with a payout
+      seeded days back so the loan is past due: cancel a visit, keep it, then
+      cancel it and read the collector's message
+      (`grade10-admin-vault-operator-queue-US-22`); send a forfeiture notice,
+      dismiss it, then confirm it and read the date it names
+      (`grade10-admin-vault-operator-queue-US-23`); and read the header's
+      count before the notice and its date after, as a staff operator
+      (`grade10-admin-vault-operator-queue-US-24`). Keep the walks as the
+      change's end-to-end suite.
+- [ ] 6.2 Flip the cases the walks decide with
+      `pnpm run tcs:automated <case...> --decided-by grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`,
+      in the walks' own commit; the cases that stay manual remain draft and
+      are named in the walk's `rounds.md` row.
+- [ ] 6.3 Walk the same three journeys in the staging console once the work
+      is deployed there.
+- [ ] 6.4 Verify: the walks pass on the local stack and on staging, and
+      `pnpm run tcs:validate` is clean in the store.
