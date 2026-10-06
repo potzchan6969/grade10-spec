@@ -3,3 +3,5 @@ created: 2026-09-14
 promoted_by: "@ecchochan"
 hands:
   pm: "@ecchochan"
+depends_on:
+  - never-lock-a-coupon
