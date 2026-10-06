@@ -8,12 +8,12 @@ reviewed: 2026-09-11
 The cart is a drawer that slides in over the page. It lists the items the
 shopper is buying and fades at the edge when there is more to scroll to.
 
-Opening it re-reads current status and price against the catalogue behind
-skeleton placeholders, because a cart is the one place a stale price is
-expensive. Sold-out lines are marked, and the count badge on the header ignores
-them, so the number a shopper sees is the number they can buy. A line's stepper
-stops at a maximum the application supplies, beside a remaining count the
-application words; the drawer derives neither. A line already carrying the
+Opening it re-reads current status and price against the catalogue, because a
+cart is the one place a stale price is expensive; a cart with lines waits
+behind skeleton placeholders. Sold-out lines are marked, and the count badge on
+the header ignores them, so the number a shopper sees is the number they can
+buy. A line's stepper stops at a maximum the application supplies, beside a
+remaining count the application words; the drawer derives neither. A line already carrying the
 low-stock warning shows both — one says what was already changed, the other
 says what is left.
 
@@ -24,8 +24,20 @@ actually creates the checkout session.
 
 ## Empty Cart
 
-🚧 **Empty** — when the cart holds nothing, the design-system empty state:
-title and description only, no button to leave.
+🚧 **Empty** — when the cart holds nothing, the design-system empty state: a
+cart icon, a title, and a line under it where the application supplies one. It
+offers no action of its own.
+
+🚧 **Not read yet** — a cart with no lines shows a blank body, a skeleton for
+the count badge and no footer until its read answers. An application that has
+not read the cart keeps the drawer loading, so the drawer never shows the empty
+state for a cart nobody has checked.
+
+🚧 **Only delisted lines** — the drawer removes them with its one toast, then
+shows the empty state.
+
+🚧 **Only sold-out lines** — not empty: the lines show marked sold out, with the
+footer and no count badge.
 
 ## Tender Actions
 
@@ -71,3 +83,29 @@ muted with its reason and no Apply.
 ::story{id="store-cart-cartdrawer--fetching-on-open" title="The skeleton state while the drawer re-reads prices"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Historical Figma — superseded by Storybook"}
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="shared/ui/store-cart"}
+:::
+
+:::detail{title="Product decisions" for="pm"}
+A shopper who opens the cart needs to see what they are buying, or that there
+is nothing to buy yet. Rows that stand in for missing items read as actions the
+shopper cannot take, and make an empty cart look unfinished.
+
+**Not in scope.** A cart page of its own. Brand words for the empty cart beyond
+its title and the line under it.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| Empty cart | ❓ Product manager to confirm: no metric, since the change corrects how a shared block looks and the host's cart analytics own any measure; or the share of empty-cart opens followed by a product view in the same session, measured in the Grade10 host. Recommended: no metric | Product |
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Empty cart action | Decided | None. The drawer offers no Browse More, so no host has to build a way into the catalogue that an empty cart cannot complete | Product |
+| Few items | Decided | The drawer lists only what the cart holds and scrolls what does not fit, instead of filling five rows with placeholders | Product |
+| Look | Decided | The block's stories are the agreed look; the Figma cart frames are historical | Design |
+| Figma cart frames | Open | ❓ Designer to confirm: retire `Cart Item Slot` and redraw the empty frames to match the empty-cart story, or label the frames historical in Figma. Recommended: redraw | Design |
+:::

@@ -1,13 +1,14 @@
 ## Goals
 
-- An empty cart shows the design-system empty state: consumer title, optional
-  description, no action button, no item slots.
+- An empty cart shows the design-system empty state: a cart icon, the
+  consumer's title, an optional line under it, and no action.
 - A cart with items lists only those items. The drawer does not fill empty
   rows with placeholders.
 
 ## Non-Goals
 
-- Grade10 Store host wiring, route-gated Cart chrome, or live cart review.
+- Grade10 Store host wiring, route-gated Cart chrome, or live cart review,
+  beyond holding `loading` until the basket is read (Q9).
 - Wiring promo apply, held codes, or points tender.
 - Changing Figma files or design-sync mappings for Cart Item Slot.
 - A dedicated `/cart` route or checkout creation from the drawer.
@@ -17,12 +18,21 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | What does an empty cart show? | Design-system EmptyState with consumer title and optional description, no action button - decided by the round | Placeholder CartItemSlot rows and a Browse More handoff |
-| Q2 | What keeps the drawer shape when the cart has few items? | Nothing — list the items only; overflow scrolls - decided by the round | A five-row baseline of slots |
-| Q3 | Where is layout source of truth? | Colocated Storybook stories. Existing Figma cart frames stay historical - decided by the round | Updating Figma Cart Item Slot or design-sync mappings in this change |
-| Q4 | Does this change wire the Grade10 host? | No — host, Cart chrome and live review stay on `add-store-cart-drawer-ui` - decided by the round | Expanding this change into the Store host |
+| Q1 | What does an empty cart show? | Design-system EmptyState with consumer title and optional description, no action button - the proposal, @tangconst, 2026-09-09 | Placeholder CartItemSlot rows and a Browse More handoff |
+| Q2 | What keeps the drawer shape when the cart has few items? | Nothing — list the items only; overflow scrolls - the proposal, @tangconst, 2026-09-09 | A five-row baseline of slots |
+| Q3 | Where is layout source of truth? | Colocated Storybook stories. Existing Figma cart frames stay historical - the proposal, @tangconst, 2026-09-09 | Updating Figma Cart Item Slot or design-sync mappings in this change |
+| Q4 | Does this change wire the Grade10 host? | No — host, Cart chrome and live review stay on `add-store-cart-drawer-ui` - the proposal, @tangconst, 2026-09-09 | Expanding this change into the Store host |
+| Q5 | What does the empty state draw? | A cart icon, the title, and the description only where the consumer supplies one, as the block renders it (`packages/ui/src/blocks/store-cart/cart-drawer.tsx:526-531`, `types.ts:156-157`) - decided by the round, 2026-10-06 | Title and description only — the block always draws the icon, and the description is optional |
+| Q6 | What does a cart with no lines show while it loads? | A blank body, the header count's skeleton and no footer, as the block renders it (`packages/ui/src/blocks/store-cart/cart-drawer.tsx:464`, `:1474`, `:1520`); the Grade10 host reaches it on the first open of a basket not yet read (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:616-617`) - decided by the round, 2026-10-06 | Item and footer skeletons, with nothing known to load; or the empty state at once, while the cart may still hold lines |
+| Q7 | Do lines the catalogue no longer sells count toward an empty cart? | No. An `unavailable` line is never shown, so a cart holding only such lines shows the empty state while the drawer removes them with its one toast (`packages/ui/src/blocks/store-cart/cart-drawer.tsx:1432-1474`) - decided by the round, 2026-10-06 | Counting them until the consumer drops them — a cart that looks full of nothing it can sell |
+| Q8 | What does a cart of only sold-out lines show? | Its lines, marked sold out, and the footer; no empty state and no count badge, since it holds no active item. A sold-out line stays visible and the badge draws only a positive count (`packages/ui/src/blocks/store-cart/cart-drawer.tsx:416`, `:1468-1474`); whether Checkout is enabled stays the consumer's `checkoutDisabled` - decided by the round, 2026-10-06 | The empty state, which would hide lines the shopper can still remove; or a badge reading 0 |
+| Q9 | What does a cart with no lines show when the first read fails? | The drawer shows only the lines it is given, so it cannot tell a cart nobody has read from an empty one: the consumer holds `loading` until it has read them. The Grade10 host breaks this: a failed review sets `reviewUnchecked` (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:593`), which ends loading even when the basket was never read (`:616-617`), and an unread basket falls back to an empty cart (`packages/grade10-store/frontend/src/features/orders/cart/presentation/hooks/useCart.ts:103`), so a first open whose review fails first shows the empty state. This change fixes the host to hold `loading` until the basket is read; a failed review over a read basket still shows its lines unchecked, with Retry in the host's toast (`CartDrawerHost.tsx:265-284`, `:413-414`) - decided by the round, 2026-10-06 | The empty state after a failed read, telling the shopper the cart is empty when nobody knows |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| shared/ui/store-cart | R1 — Review: what, if anything, measures this change? The proposal's metric counts a slot or browse action the change removes, against a Storybook baseline. Options: (a) no metric, since the change corrects how a shared block looks and the host's cart analytics own any measure; (b) the share of empty-cart opens followed by a product view in the same session, measured in the Grade10 host. Recommended: (a). Owner: product manager | ❓ on `docs/prds/products/shared/ui/store-cart.md` — Measurement, Empty cart |
+| shared/ui/store-cart | R2 — Review: what happens to the Figma cart frames that still draw `Cart Item Slot` (nodes 4674-3831, 4735-6493, 4799-6807, 4799-6810)? Options: (a) retire `Cart Item Slot` and redraw the empty frames to match the empty-cart story; (b) label the frames historical in Figma. Recommended: (a). Owner: designer | ❓ on `docs/prds/products/shared/ui/store-cart.md` — Figma cart frames |
+| shared/ui/store-cart | R3 — QA1: a cart holding only sold-out lines lists them, so it is not empty, yet its count of active items is zero. Does the header badge read 0 or hide as it does on an empty cart, and does the footer still show Checkout? The empty state, the count badge and the footer rules each stop short of this cart. Owner: designer | Q8 |
+| shared/ui/store-cart | R4 — QA1: a cart with no lines opened before its basket is read shows a blank body. If that read fails, does the drawer show the empty state, telling the shopper the cart is empty when nobody knows, or something else? Owner: product manager | Q9 |
