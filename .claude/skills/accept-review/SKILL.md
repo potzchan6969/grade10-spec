@@ -13,6 +13,46 @@ review catches that before `pnpm spec:accept`, not at archive.
 Run it in a fresh context that did not write the plan. It reads and reports;
 the owning hand fixes the source.
 
+## Machine Gates First
+
+Run `pnpm accept:preflight <change>` before reading any content. If it
+refuses, stop and report the refusal as the one blocker; a review of content
+the gates reject is spent twice. Whichever gates preflight covers, `pnpm
+check:manual` stays a gate of this review (check 1).
+
+If preflight can write a packet (`--packet`), read it first: it holds the
+change's lines, deltas and durable files in one place. Open a full file only to
+confirm a finding.
+
+## Ledger and Reruns
+
+The first run writes its report to `openspec/changes/<change>/accept-review.md`
+beside the change. No validator reads it: `check:manual` and
+`validate:changes` open named files only, and acceptance hashes the contract
+files, not the directory. The format is small:
+
+```
+reviewed: <store commit sha>
+verdict: <the verdict line>
+
+| # | Severity | Where | Finding | Owner | Fix in | Status |
+```
+
+`Status` is `open`, or `fixed <sha>` once verified. A rerun is still a fresh
+context, with a smaller input: read the ledger, verify each prior finding
+against its source, then review only `git diff <reviewed>..HEAD` and what that
+diff touches (the pages, deltas and durable files its lines cite). Rewrite the
+ledger with the new sha.
+
+Only a blocker, or a fix that changes requirement text, calls for a rerun.
+`fix` and `note` findings land without one.
+
+## Cluster Mode
+
+When several changes share capabilities, review them as one cluster: read each
+shared durable spec and page once, keep one table with a `Change` column, and
+end with a verdict per change. Each change keeps its own ledger.
+
 ## Inputs
 
 Read the store at its `main`, never the pinned copy:
@@ -31,8 +71,8 @@ Read the store at its `main`, never the pinned copy:
 
 ## Checks
 
-1. **Machine gates** - run `pnpm accept:preflight <change>` and `pnpm
-   check:manual`. A refusal is a blocker; a `spec ... changed meaning` warning
+1. **Machine gates** - `pnpm accept:preflight <change>` has passed (see
+   above) and `pnpm check:manual` is clean. A refusal is a blocker; a `spec ... changed meaning` warning
    on a page in scope is a finding.
 2. **Page to delta** - every 🚧 line the change adds or keeps on a page is
    served by at least one requirement in its delta. Every ADDED or MODIFIED
@@ -79,7 +119,7 @@ A blocker with one obvious fix stays in the table alone.
 
 End with one verdict line: `Ready to accept`, or `Not ready - <n> blockers`.
 A fix that moves a frozen anchor restarts QA1 and Dev; any other fix reruns QA2
-and then this review, per `planning-dev`.
+and then, for a blocker only, this review, per `planning-dev`.
 
 ## Related
 
