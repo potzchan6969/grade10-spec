@@ -37,6 +37,13 @@ import { git, textAt } from "../store-main.mjs";
 import { foldChecks } from "./fold-checks.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
+const TRACE_MARKER_LINE = /^[ \t]*<!--\s*trace:(?:scenario|case)\b[^\n]*-->[ \t]*\n?/gm;
+
+/** Trace markers are stamped onto durable specs by migrations after a
+ * snapshot was taken; a drift check compares wording, so it ignores them. */
+const withoutTraceMarkers = (text) =>
+  (text ?? "").replace(TRACE_MARKER_LINE, "");
+
 const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
 const MARKED_SCENARIO =
   /<!-- trace:scenario id=(\S+)[^\n]*\n#### Scenario: (\S+)/g;
@@ -352,7 +359,10 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
       rootSections(priorText).sections,
       "Feature set",
     );
-    if (currentFeature?.raw !== priorFeature?.raw)
+    if (
+      withoutTraceMarkers(currentFeature?.raw) !==
+      withoutTraceMarkers(priorFeature?.raw)
+    )
       throw new Error(
         `${capability}: accepted Feature set changed since this amendment began; rebase the delta before acceptance`,
       );
@@ -931,7 +941,8 @@ function foldOne(
   const requirements = new Map(requirementBlocks(durable));
   const priorRequirements =
     priorText === null ? new Map() : requirementBlocks(priorText);
-  const sameRequirement = (left, right) => left?.raw === right?.raw;
+  const sameRequirement = (left, right) =>
+    withoutTraceMarkers(left?.raw) === withoutTraceMarkers(right?.raw);
   const sections = deltaSections(deltaText);
   for (const section of sections) {
     const kind = deltaKindOf(section.heading);
