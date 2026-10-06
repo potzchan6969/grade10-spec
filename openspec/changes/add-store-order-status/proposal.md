@@ -39,6 +39,10 @@ their own segment.
   surface shows it in this delivery is open (Q14)
 - **Every surface** — every Store surface that shows order status takes it
   from this rule, which replaces the interim adapter
+- **One stored copy** — Your Orders and Order Details read one stored copy of
+  Shopify's facts: an order paid in full, refunded or canceled reaches it
+  within 5 minutes, and any other change within the hour, for an order placed
+  in the last 90 days
 - **Shared badge** — `OrderHistoryStatus` keeps its six variants and drops the
   meaning it gave each one; Order Status defines what a Store order's badge
   means
@@ -101,6 +105,9 @@ change, unless Q14 adds a note slot to the status badge.
 ## References
 
 - [Order Status · Badges](../../../docs/prds/products/grade10-site/commerce/order-status.md#badges)
+- [Order Status · Updates from Shopify](../../../docs/prds/products/grade10-site/commerce/order-status.md#updates-from-shopify)
 - [Order Status · Secondary Note](../../../docs/prds/products/grade10-site/commerce/order-status.md#secondary-note)
 - [Order Status · Pickup](../../../docs/prds/products/grade10-site/commerce/order-status.md#pickup)
 - [Order History Blocks](../../../docs/prds/products/shared/ui/store-order-history.md)
+- [Refunds](../../../docs/prds/products/grade10-site/store/refunds.md)
+- [Your Orders](../../../docs/prds/products/grade10-site/store/order-history.md)

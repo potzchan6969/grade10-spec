@@ -41,14 +41,15 @@ and nothing else.
 🚧 Both pages read one stored copy of Shopify's facts, so after a reload Your
 Orders shows the same badge as Order Details.
 
-| Change in Shopify | Reaches the badge |
+| Change in Shopify | Reaches both pages |
 | --- | --- |
-| 🚧 Paid, refunded or canceled | Within 5 minutes |
-| 🚧 Fulfilled, archived or returned | Within the hour, for an order placed in the last 90 days |
+| 🚧 Paid in full, refunded or canceled | Within 5 minutes |
+| 🚧 Any other change: fulfilled, archived, returned, or a payment voided or expired | Within the hour, for an order placed in the last 90 days |
 
 - ❓ **Archived orders** — whether a change to an order Shopify already
   archived, such as reopening it, reaches the badge within the hour or only
-  with its next payment change; the product manager confirms
+  when Shopify next reports a payment or a shipment on it; the product manager
+  confirms
 
 ## Secondary Note
 
@@ -100,10 +101,10 @@ a carrier.
 | Till sales | Decided | Read through the same rules as web orders. Where an order was sold is not a fact the badge reads. | Product |
 | No generic note | Decided | An order no confirmed note fits shows its badge alone. A badge from the rule is a correct answer; reassurance nobody confirmed is not. | Product |
 | No notifications | Decided | This rule names no message. The notification centre owns its own rules. | Product |
-| One stored copy | Decided | Both pages read one stored copy of Shopify's facts, kept fresh by Shopify's payment webhooks and an hourly read of open orders placed in the last 90 days. Not a Shopify read on every Your Orders load, one read per order listed. | Product |
+| One stored copy | Decided | Both pages read one stored copy of Shopify's facts. Not a Shopify read on every Your Orders load, one read per order listed. | Product |
 | Orders covered | ❓ Open | Only orders Shopify holds, or also web checkouts Shopify never recorded. | Product |
 | Note on surfaces | ❓ Open | Whether Your Orders and Order Details show the note in this delivery, and where it sits. | Product, Design |
 | Refunded, still shipping | ❓ Open | Past purchases by badge, or by whether Shopify still holds the order open. | Product |
-| Archived orders | ❓ Open | Whether a change to an order Shopify already archived reaches the badge within the hour, or only with its next payment change. | Product |
-| Source rows | ❓ Open | The owner's brief with the confirmed rows behind each note, and whether a canceled order that took no money carries the awaiting-refund note. | @jeffffej0909 |
+| Archived orders | ❓ Open | Whether a change to an order Shopify already archived reaches the badge within the hour, or only when Shopify next reports a payment or a shipment on it. | Product |
+| Source rows | ❓ Open | The owner's brief with the confirmed rows behind each note; whether a canceled order that took no money carries the awaiting-refund note; and which note a held order carrying a partial refund carries. | @jeffffej0909 |
 :::

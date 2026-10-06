@@ -20,6 +20,11 @@ order, or return to the Store when the account is empty.
 completed, canceled or refunded purchases, with the newest order first in each
 group
 
+❓ **Refunded, still shipping** — whether a partly refunded order with items
+still to ship sits with past purchases, as its Refunded badge places it, or
+with the orders needing attention; the product manager confirms, with
+[Order Status](/p/grade10-site/commerce/order-status)
+
 🚧 **Order actions** — a collector opens one order or follows a Store-supplied
 carrier address when it is safe to open
 
