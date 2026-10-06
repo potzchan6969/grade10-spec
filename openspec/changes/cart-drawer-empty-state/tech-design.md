@@ -9,12 +9,13 @@ The Grade10 host supplies both copy fields
 store commit that carries the block.
 
 What is missing is evidence. No story or test cites the scenarios this change
-issues, `CartDrawer.FetchingOnOpen` has no play function, and the Grade10
+issues, nothing proves which lines the header badge leaves out,
+`CartDrawer.FetchingOnOpen` has no play function, and the Grade10
 tests at `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx:920`, `:938`
-and `:955` cite the five-row scenarios, which retire with their requirement. The Grade10 host also breaks the
-unread-cart clause: a failed review ends its `loading` over a basket it never
-read (`CartDrawerHost.tsx:593`, `:616-617`). The work is tests, the re-cited
-host tests, that one host fix and the walk.
+and `:955` cite the five-row scenarios, which retire with their requirement.
+The Grade10 host also breaks the unread-cart clause: a failed review ends its
+`loading` over a basket it never read (`CartDrawerHost.tsx:593`, `:616-617`).
+The work is tests, the re-cited host tests, that one host fix and the walk.
 
 ## Goals / Non-Goals
 
@@ -52,7 +53,7 @@ stores an empty flag.
 | Cart | Loading | Body | Header badge | Footer |
 | --- | --- | --- | --- | --- |
 | Visible lines | Yes | Row skeletons | Skeleton | Summary skeletons, Checkout disabled |
-| Visible lines | No | Rows | Active count, per the badge requirement | Shown |
+| Visible lines | No | Rows | One per line neither sold out nor unavailable, whatever its quantity; hidden at 0 | Shown |
 | No visible lines | Yes | Blank | Skeleton | Hidden |
 | No visible lines | No | `EmptyState`: cart icon, title, description where supplied | Hidden | Hidden |
 
@@ -72,6 +73,8 @@ known to load, so a row skeleton draws lines that may not exist.
 | `shared-ui-store-cart-SC-23`, `shared-ui-store-cart-SC-24` | `CartDrawer` stories `Default` (two lines) and `OverflowItems` |
 | `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-41` | `CartDrawer` stories `EmptyState` and a new `EmptyStateWithoutDescription` |
 | `shared-ui-store-cart-SC-45` | A new `CartDrawer` story `OnlySoldOutLines`, whose every line is `soldOut` |
+| `shared-ui-store-cart-SC-05`, `shared-ui-store-cart-SC-49` | A new `CartDrawer` story `MixedLineStates`: one active, one `soldOut` and one `unavailable` line, each of quantity 1, `loading` false, and an `onRemoveItem` that keeps the lines, so the badge reads `1` with the unavailable line still passed |
+| `shared-ui-store-cart-SC-50` | `CartDrawer` story `Default`, its second line raised to 3 units, so the badge still reads `2` |
 | `shared-ui-store-cart-SC-44` | `CartDrawerBody` story `Empty` |
 | `shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-40` | New `CartDrawer` stories `LoadingWithLines`, with an applied promo so the Discount row has a skeleton, and `LoadingNoLines`, both under a controlled `loading` held in the story's args, so a tester ends the read from the Controls panel |
 | `shared-ui-store-cart-SC-42` | A new `CartDrawer` story `OnlyDelistedLines`, opened by an Open Cart button, whose every line turns `unavailable` after the open read |

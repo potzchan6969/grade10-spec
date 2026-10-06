@@ -32,6 +32,9 @@ slots; a cart with items lists only those items.
   Grade10 host, whose failed review ends loading over a basket it never read.
 - Say that a cart of only sold-out lines is not empty: it lists them with the
   footer and no count badge.
+- Say that the count beside the drawer title is one per line, whatever its
+  quantity, and leaves out unavailable lines as well as sold-out ones, as the
+  block already counts.
 - Rewrite the capability's Purpose and its `Cart contents` feature-set group
   without the five-slot baseline.
 - Treat colocated Storybook stories as the layout source of truth for this
@@ -47,8 +50,8 @@ In `decisions.md`.
 ### Modified Capabilities
 
 - `shared/ui/store-cart` - Purpose, feature set, export set, empty-cart
-  presentation, loading with no lines, the unread cart, the count badge at 0,
-  and item-list baseline (no placeholder slots).
+  presentation, loading with no lines, the unread cart, what the count badge
+  counts and the badge at 0, and item-list baseline (no placeholder slots).
 
 ## Impact
 

@@ -10,12 +10,12 @@ shopper is buying and fades at the edge when there is more to scroll to.
 
 Opening it re-reads current status and price against the catalogue, because a
 cart is the one place a stale price is expensive; a cart with lines waits
-behind skeleton placeholders. Sold-out lines are marked, and the count badge on
-the header ignores them, so the number a shopper sees is the number they can
-buy. A line's stepper stops at a maximum the application supplies, beside a
-remaining count the application words; the drawer derives neither. A line already carrying the
-low-stock warning shows both — one says what was already changed, the other
-says what is left.
+behind skeleton placeholders. Sold-out lines are marked. The drawer title's
+count is one per line, whatever its quantity, and leaves out sold-out and
+unavailable lines. A line's stepper stops at a maximum the application
+supplies, beside a remaining count the application words; the drawer derives
+neither. A line already carrying the low-stock warning shows both - one says
+what was already changed, the other says what is left.
 
 It closes three ways — the close control, the dimmed backdrop, and Escape — and
 locks the page behind it while it is open. Pressing checkout puts the button
@@ -26,10 +26,11 @@ actually creates the checkout session.
 
 🚧 **Empty** - when the cart holds nothing, the design-system empty state: a
 cart icon, a title, and a line under it where the application supplies one,
-with no count badge and no footer. It offers no action of its own.
+with no count on the drawer title and no footer. It offers no action of its
+own.
 
 🚧 **Not read yet** - until the cart is read, the drawer stays loading: a blank
-body, a skeleton for the count badge and no footer. If that read fails, the
+body, a skeleton for the title's count and no footer. If that read fails, the
 application also says the cart could not be checked and offers Retry, naming
 no line, as [Cart Validation](../../grade10-site/store/cart-validation.md) asks
 for a cart whose lines are not loaded. The drawer never shows the empty state
@@ -39,7 +40,7 @@ for a cart nobody has checked.
 with its one toast.
 
 🚧 **Only sold-out lines** - not empty: the lines show marked sold out, with the
-footer and no count badge.
+footer and no count on the drawer title.
 
 ## Tender Actions
 
@@ -103,6 +104,8 @@ its title and the line under it.
 | Signal | Definition | Owner |
 | --- | --- | --- |
 | Empty cart | ❓ Product manager to confirm: no metric, since the change corrects how a shared block looks and the host's cart analytics own any measure; or the share of empty-cart opens followed by a product view in the same session, measured in the Grade10 host. Recommended: no metric | Product |
+
+**Decisions.**
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

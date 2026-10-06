@@ -13,7 +13,7 @@ collapsible promo code redemption and a checkout CTA.
 - Cart contents
   - Items only: the drawer lists what the cart holds and nothing standing in for an item
   - Empty state: an empty cart shows the design-system empty state with no action
-  - Item count badge: tells the shopper how many active items the cart holds
+  - Item count badge: tells the shopper how many active items the cart holds, leaving out sold-out and unavailable lines
   - Scroll-fade on overflow: shows there is more above or below the visible items
 
 ## REMOVED Feature set
@@ -72,9 +72,10 @@ SHALL take the same `emptyTitle` and optional `emptyDescription`.
 
 ### Requirement: Item count badge excludes sold-out items
 
-`CartDrawerHeader` SHALL display the count of active items in the cart and
-SHALL NOT count sold-out items towards the badge total. When the drawer is not
-loading and that count is 0, the header SHALL show no badge.
+`CartDrawerHeader` SHALL display, beside the drawer title, the count of active
+lines, counting each line once whatever its quantity, and SHALL NOT count
+sold-out or unavailable lines towards it. When the drawer is not loading and
+that count is 0, it SHALL show no count.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-9dd rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-05 - Sold out item present
@@ -83,6 +84,23 @@ loading and that count is 0, the header SHALL show no badge.
 - **GIVEN** a cart with 1 active item and 1 sold-out item
 - **WHEN** `CartDrawer` renders
 - **THEN** the header badge displays `1`
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-fy2 rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-49 - Unavailable item present
+**Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
+
+- **GIVEN** a cart with 1 active item and 1 item with status `unavailable` that the consumer has not yet removed
+- **WHEN** `CartDrawer` renders while not loading
+- **THEN** the header badge displays `1`
+- **AND** the unavailable item is not rendered
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-dcr rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-50 - An item counts once whatever its quantity
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
+
+- **GIVEN** a cart with 2 active items, one of quantity 3 and one of quantity 1
+- **WHEN** `CartDrawer` renders while not loading
+- **THEN** the header badge displays `2`
 
 ### Requirement: Fetching status and price info on open with Boneyard skeletons
 
@@ -221,6 +239,7 @@ empty state.
 - **THEN** each item is removed via `onRemoveItem`
 - **AND** exactly one toast appears with the `unavailableItemsRemoved` message
 - **AND** the design-system empty state appears and the footer is hidden
+- **AND** the item count badge in the header is hidden
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-tou rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-45 - A cart of only sold-out lines is not empty
