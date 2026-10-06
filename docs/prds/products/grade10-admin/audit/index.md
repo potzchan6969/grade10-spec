@@ -20,6 +20,11 @@ service with nowhere to record it **does not run**, and a failed write fails the
 request rather than letting the action pass unrecorded. Wiring the sink is part
 of adding a service's first operator action, not a follow-up.
 
+An elevated action refused for want of a permission or a second factor never
+runs, so its service's trail writes nothing. The identity trail is the
+exception: a refused ban, unban, set-role or revoke is recorded
+([Audit Log](/p/shared/auth/audit)).
+
 Prevention and proof are separate mechanisms. Prevention is database triggers
 that reject update, delete and truncate while leaving insert open — appending is
 the table's job — and every guard is armed in the mode that survives a session

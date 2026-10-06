@@ -57,10 +57,12 @@ Apple code identifies and moves nothing.
   holding `store:write` ends one wallet's pass from the member's record, which
   names the wallets the member holds, and confirms the wallet first. It ends
   at once, as the member's own does, and the member is sent no message. The
-  audit trail records who ended which wallet and when, and records an attempt
-  that found no live pass as ending nothing. Without `store:write` the record
-  names no wallet and offers no ending, and the act is refused. A record whose
-  wallets cannot be read says so, never that the member holds none
+  audit trail records who ended which wallet and when. An ending that finds no
+  live pass ends nothing, the record says no pass was held, and the audit
+  trail records the attempt as ending nothing. Without `store:write` the record
+  names no wallet and offers no ending, and a request for either is refused. A
+  record whose wallets cannot be read says so and offers no ending, never that
+  the member holds none
 - **Welcome message** — carries no save action, in either wallet
 - **Erasure** — the row stays, armed and empty; the secret goes, so a device
   fetching the pass sees nobody. Google is told; Apple keeps no copy
@@ -174,11 +176,12 @@ seals both their secrets under the one key. In this order:
 ### Launch Check
 
 - 🚧 *Engineering* — **Run `pnpm run secrets --check`** against the deployed
-  workers, after the last step for each wallet. It fails, naming the secret,
-  where `packages/app-env` records a wallet's issuer for that brand and
-  environment and one of that wallet's secrets is unset, and passes for a
-  brand that issues no pass. `WALLET_APPLE_APNS_KEY` is expected only where
-  the Apple issuer records an APNs key id
+  workers, after the last step for each wallet. It fails, naming each missing
+  secret, where `packages/app-env` records a wallet's issuer for that brand
+  and environment and one of that wallet's secrets is unset. It passes
+  wherever no issuer is recorded: a brand that issues no pass, and Grade10
+  before its issuer is recorded. `WALLET_APPLE_APNS_KEY` is expected only
+  where the Apple issuer records an APNs key id
 
 ### Standing Obligations
 
