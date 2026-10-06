@@ -88,6 +88,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 ### The sale, step by step
 
+:::detail{title="Each step" for="operator"}
 1. **Staff ring the goods** — barcode scanner into Shopify POS's own cart; the extension adds nothing here
 2. **Staff identify the member** — the QR on the member card (profile page), the short code under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
    - A card presentation lives ten minutes and is consumed once; a second till scanning the same screenshot is refused, naming where the first was used
@@ -118,6 +119,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
     - **A coupon** settles only where the order corroborates it — its own code among the codes the sale carried — and the rest are freed and counted
     - **A discount no instrument accounts for**, a promotion the shop ran itself, is counted and never read as points
     - **Earning** is on the goods, as online
+:::
 
 ### Undo
 
@@ -136,6 +138,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 ### What guarantees it
 
+:::detail{title="Each guarantee" for="engineer"}
 - **The cart decides, and goes on deciding** — capture is what the shop allocated to the points, the attribute first means a bare discount can never bind, and the sale is read again on every cart signal for as long as it stands: a promise the cart no longer shows is points nobody may be debited for
 - **A coupon is the member's own** — a code the landed sale carried is adopted onto the row and spent, but only where it belongs to the buyer: a code is a string anybody can carry to a counter
 - **One session, one row; one member, one open promise** — the row is rewritten, never duplicated, and the newer promise retires the older
@@ -144,6 +147,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **Throttles** — short-code misses ten per five minutes per shop, email and phone twenty, plans twenty per session
 - **A row that closed cannot be rewritten** — a sale that landed, or whose own hour ran out, refuses the next plan and asks for a fresh scan rather than reopening itself
 - **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
+:::
 
 ❓ **A sale that names no allocations** — settlement falls back to what settlement read before the shop stated them — the variant alone corroborates a welded coupon, so a cut staff took off still spends it, and the points capture is the applied total less every other instrument, in which an adopted order code counts at its face value. A source that cannot name a cut cannot rule one out either, so refusing there would free every coupon on every sale it reports; whether a POS sale ever reaches us that way is the open part.
 
