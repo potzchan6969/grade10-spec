@@ -389,11 +389,26 @@ test("Test's jobs skip only what they do not read", () => {
     "openspec/changes/some-change/proposal.md",
   ])
     assert.equal(planOnly.test(path), false, `${path} skips catalogs`);
-  assert.equal(test.jobs.catalogs.needs, "changes");
-  assert.equal(
-    test.jobs.catalogs.if,
-    "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
-  );
+  for (const [name, command] of [
+    ["manual", "pnpm run test:manual"],
+    ["openspec", "pnpm run test:openspec"],
+    ["catalogs", "pnpm run test:catalogs"],
+  ]) {
+    assert.equal(test.jobs[name].needs, "changes", name);
+    assert.equal(
+      test.jobs[name].if,
+      "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
+      name,
+    );
+    assert.equal(test.jobs[name].steps.at(-1).run, command, name);
+  }
+  assert.equal(test.jobs["catalogs-tests"], undefined);
+
+  const scripts = JSON.parse(read("package.json")).scripts;
+  assert.equal(scripts["test:manual"], "pnpm --dir tools/manual run test");
+  assert.match(scripts["test:catalogs"], /--filter '!@grade10\/manual'/);
+  assert.match(scripts.test, /test:scripts/);
+  assert.match(scripts.test, /test:openspec/);
   assert.match(step.run, /git diff --no-renames --name-only/);
   const parsed = spawnSync("bash", ["-n"], {
     input: step.run,
