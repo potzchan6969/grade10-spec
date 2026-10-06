@@ -85,9 +85,8 @@ See [Non-Goals](decisions.md#non-goals).
   bank details, card only where Finance set a card fee rule, what the winner
   reads where neither is offered, the fee wording at the method choice, Copy
   Message confirming through its own state, the billing Country/Region list,
-  names in the account's language, the one-time address kept on the order, a
-  proof file judged by its content, and no card payment started on an expired
-  or checked invoice.
+  names in the account's language, the one-time address kept on the order, and
+  no card payment started on an expired or checked invoice.
 - `grade10-admin/auction/post-sale`: the Orders worklist and order page, the
   fee by payment method, what was seen is sent, proofs, dispatch and delivery
   on the order, money that lands, the operator's reopen and record-setup
@@ -99,6 +98,13 @@ See [Non-Goals](decisions.md#non-goals).
   settlement as the grant.
 - `grade10-site/auction/order-status`: an expired or verifying invoice never
   starts a card payment, and one that completes anyway is recorded.
+- `grade10-admin/auction` domain suite (`domain-tcs.md`): the durable
+  `grade10-admin-auction-e2e-US3-TC1-1`, a lot collected through to delivered,
+  is rewritten as `-TC1-2` for the Orders worklist and order page - worklist,
+  Send invoice, Record payment, Dispatch, Confirm delivery - and returns to
+  draft. `-US3-TC2-1`, a wire request that releases the card hold, is
+  deprecated as `-TC2-2`, since the wire request no longer exists. Both keep
+  their trace markers with the revision raised.
 
 ## Impact
 

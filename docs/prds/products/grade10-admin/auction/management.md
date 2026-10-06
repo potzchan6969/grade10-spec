@@ -331,6 +331,10 @@ on winner, In transit, Closed and All, opening on Needs action.
   the form closed. Both
   paths refuse once an address is confirmed, an invoice is sent, or cancellation
   is requested or complete
+- 🚧 **Recording a method** — recording setup refuses a payment method the
+  order's currency does not offer: card where Payment Settings holds no card
+  fee rule for it, bank transfer where Grade10 holds no bank details; a reopen
+  is still allowed when the currency offers neither
 
 ### Order Cancellation
 

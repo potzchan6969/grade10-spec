@@ -12,8 +12,6 @@
   - Card not yet available: in a currency with no card fee rule, card reads that it is not yet available there and cannot be chosen
   - No method in the currency: with neither method offered, the winner reads that payment is not yet available there, with Contact Us, and cannot confirm; the setup deadline keeps running
   - Fee wording at the choice: card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`
-- Bank transfer
-  - Proof judged by its content: a file whose bytes are not a type Grade10 takes is refused, whatever its name
 - Card payment
   - No start once closed: no card payment starts on an expired or checked invoice, and one that completes anyway is recorded
 

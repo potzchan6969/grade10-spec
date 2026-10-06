@@ -2658,6 +2658,13 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 ## Reconciliation
 
+| Finding | Disposition |
+| --- | --- |
+| Queue labels preserve the operator action context | **Folded in** |
+
+- **Covered at domain** — recording a payment on an order, then dispatch and delivery, reaches Preparing Shipment, Shipped and then Delivered, walked by `grade10-admin-auction-e2e-US3-TC1-2`
+- **Restored** - the cases archived with `2026-09-18-add-winner-bank-transfer` and `2026-09-18-add-winner-billing-address` that their folds left behind are back as draft, unchanged, for `/tcs-review`: `post-sale-US1-TC2-1`, `-TC3-1` and `-TC5-1`, `post-sale-US7-TC5-1` to `-TC31-1`, `post-sale-US8-TC6-1` to `-TC8-1`, `post-sale-US10-TC1-1` to `-TC9-1`, `post-sale-US5-TC1-1`, and `post-sale-US11-TC1-1` and `-TC2-1`.
+
 **Run:** 2026-09-29. One agent wrote the cases and the scenarios, so the two readings are not independent. The cases were drafted from the Purpose, the Feature set, the journeys, the proposal, the decisions and the linked pages, then joined to the scenarios on their anchors.
 
 **Run:** 2026-10-06, QA2. A fresh reader joined all 91 scenarios and every case in this suite on their anchors, against the durable suite the fold lands on, with the cases its earlier folds left behind restored there as drafts. The earlier run's claim that the restated scenarios were reached through durable cases did not hold for twelve of them; they now have cases.
@@ -2733,4 +2740,4 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 - **Proven by another change** - the 90% close choice and the overpayment confirmation in Record payment are proven by `add-winner-partial-payment`'s cases post-sale-US12-TC3-1 and post-sale-US12-TC4-1.
 - **Moved in** - `An operator reopens the address form`, with `SC-75` to `SC-84`, `SC-90` and `SC-91` under their existing ids, came from `close-overdue-address-confirmation` (`decisions.md` Q39), and its cases came with them under their existing trace markers: `post-sale-US18-TC1-1` to `TC7-1`, `TC16-2`, `TC25-1`, `TC26-1` and `TC27-1` for the reopen and record scenarios, and `TC8-1` to `TC14-1` and `TC24-1` for the queue outcomes, the send and the cancellation, which read scenarios this change owns. `post-sale-US18-TC15-1`, a cancelled order refuses a reopen, is not carried: `US2-TC9-1` walks the same steps for `SC-83`, so the suite holds one case for it. The moved cases keep the words of the suite they came from: the queue read as the worklist, Expired invoice as Payment Overdue and Processing as Preparing Shipment are owed to `/tcs-review`.
 - **Raised** - where a flagged order sits, where a reissue's fee starts, what replaces the 72-hour mark, and what Grade10 keeps of a refund's bank account landed as decisions Q16, Q14, Q26 and Q29.
-- **Raised for the human** - the domain suite's `grade10-admin-auction-e2e-US3-TC1-1` and `-US3-TC2-1` walk the listing queue's Paid via Manual and Awaiting wire, which this change removes, and the proposal carries no domain edit or `No domain impact` line.
+- **Domain suite** - `grade10-admin-auction-e2e-US3-TC1-1` walked the listing queue's Paid via Manual, which this change removes, so the proposal carries its rewrite for the Orders worklist and order page as `-US3-TC1-2`, back to draft; `-US3-TC2-1` read a wire request that releases the card hold, which no longer exists, so it is deprecated as `-US3-TC2-2`. The feature suite's two **Covered at domain** lines follow: the first names `-TC1-2`, and the second goes with the wire request.

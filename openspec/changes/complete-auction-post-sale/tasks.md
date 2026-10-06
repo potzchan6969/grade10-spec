@@ -80,10 +80,9 @@
 ## 11. Archive Gate (grade10-spec)
 
 - [ ] 11.1 Acceptance order: accept this change only after `add-winner-order-tax-line`, `refine-auction-order-cancellation`, `add-winner-partial-payment` and `clarify-auction-shipping-progress-copy` are accepted and archived, then `close-overdue-address-confirmation` after this one (`decisions.md` Q41)
-- [ ] 11.2 Rebase the deltas onto each dependency's archived durable text before acceptance, then MODIFY what each leaves behind:
-  - after `add-winner-order-tax-line` archives - the fee steps of "An operator quotes and sends the invoice" and "An operator reissues a sent invoice", and winner-order "Invoice fields" (retire the SC-69, SC-70, SC-119 and SC-126 provider-fee text)
+- [ ] 11.2 Archive gate: rebase the deltas onto each dependency's archived durable text before acceptance, then MODIFY what each leaves behind. Do not write these MODIFIED blocks before then: two in-flight changes may not modify one requirement
+  - after `add-winner-order-tax-line` archives - MODIFY "An operator quotes and sends the invoice", "An operator reissues a sent invoice" and winner-order "Invoice fields" to the fee by payment method, retiring the SC-69, SC-70, SC-119 and SC-126 provider-fee text; REMOVE post-sale SC-69 and SC-70, the "needs no provider fees" clause of SC-119 and winner-order SC-62; drop the "in place of" clause from "The payment processing fee follows the invoice's payment method"
   - after `add-winner-partial-payment` archives - the Partially Paid derivation
-  - after `clarify-auction-shipping-progress-copy` archives - Processing becomes Preparing Shipment where this change still reads it
+  - after `clarify-auction-shipping-progress-copy` archives - Processing becomes Preparing Shipment where this change still reads it, and post-sale SC-21, `Expired and Processing are highlighted as needing action`, is retitled with Payment Overdue and Preparing Shipment
   - after `refine-auction-order-cancellation` archives - the cancellation cross-references
-  Do not write these MODIFIED blocks before then: two in-flight changes may not modify one requirement
-- [ ] 11.3 Archive gate: after `add-winner-order-tax-line` archives, MODIFY "An operator quotes and sends the invoice", "An operator reissues a sent invoice" and winner-order "Invoice fields" to the fee by payment method; REMOVE post-sale SC-69 and SC-70, the "needs no provider fees" clause of SC-119 and winner-order SC-62; drop the "in place of" clause from "The payment processing fee follows the invoice's payment method"; ours does not archive before this lands; `pnpm check:manual`
+  This change does not archive before these land; `pnpm check:manual`
