@@ -47,9 +47,9 @@ import {
   caseRow,
   caseRows,
   inReadingOrder,
-  walkBand,
   selectCases,
   surfacePrefill,
+  walkBand,
 } from "./lib/select-cases.mjs";
 import { isAutomated, parseSuite } from "./lib/suites.mjs";
 
@@ -833,7 +833,12 @@ test("a run walks shared, Grade10 site, the store, admin, then ZZZ", () => {
       "openspec/specs/zzz-admin/site/home/feature-tcs.md",
     ],
   );
-  assert.equal(walkBand("openspec/changes/some-change/specs/grade10-site/store/checkout/feature-tcs.md"), 2);
+  assert.equal(
+    walkBand(
+      "openspec/changes/some-change/specs/grade10-site/store/checkout/feature-tcs.md",
+    ),
+    2,
+  );
   assert.equal(walkBand("openspec/specs/demo/thing/widget/feature-tcs.md"), 6);
 });
 

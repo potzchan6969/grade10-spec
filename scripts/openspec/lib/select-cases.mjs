@@ -241,9 +241,7 @@ function runTablesOf(tc) {
 }
 
 function sharedRowsOf(tc) {
-  return (tc.tables ?? [])
-    .filter(isSharedTable)
-    .flatMap((table) => table.rows);
+  return (tc.tables ?? []).filter(isSharedTable).flatMap((table) => table.rows);
 }
 
 /** Replace a run-table `<name>` with `[cell]`. A name from `Field | Value`,
@@ -330,9 +328,7 @@ export function caseRows(one) {
       keys.forEach((key, i) => {
         if (key && !columns.has(key)) columns.set(key, row[i] ?? "");
       });
-      rows.push(
-        caseRow(one, { columns, shared, headers: table.headers, row }),
-      );
+      rows.push(caseRow(one, { columns, shared, headers: table.headers, row }));
     }
   }
   return rows;
