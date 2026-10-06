@@ -88,14 +88,15 @@ None.
 ## Open questions
 
 - **Q1** - Profile wherever the account page is carried, or never. Owed by
-  Product; acceptance waits on it. `add-account-profile` Q13 asks the same
-  and points here.
-- **Q5** - Membership by the same rule. Owed by Product.
+  Product (@tangconst); acceptance waits on it. `add-account-profile` Q13
+  asks the same and points here.
+- **Q5** - Membership by the same rule. Owed by Product (@tangconst).
 - **Q6** - the account label without an avatar when no email is supplied.
   Owed by the designer (@tangconst).
 - **Q7** - which items the Auction & Store account-menu story shows once Q1
   and Q5 are answered. Owed by the designer (@tangconst).
-- **Q13** - whether My Auctions links to My Auction Orders. Owed by Product.
+- **Q13** - whether My Auctions links to My Auction Orders. Owed by Product
+  (@tangconst).
 
 ## References
 
