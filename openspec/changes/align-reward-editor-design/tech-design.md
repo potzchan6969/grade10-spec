@@ -233,14 +233,14 @@ and their tests cite their scenarios the same way.
 | --- | --- |
 | `grade10-site-loyalty-programme-SC-158`, `grade10-site-loyalty-programme-SC-187`, `grade10-site-loyalty-programme-SC-188`, `grade10-site-loyalty-programme-SC-189` | `rewardCouponDraft.test.ts`, each choice saved and each stored shape reopened, as tasks 4.1 records |
 | `grade10-site-loyalty-programme-SC-152` | `packages/coupons/contracts/test/evaluate.test.ts`, a fixed amount online; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a fixed amount scoped to named variants planned at the till |
-| `grade10-site-loyalty-programme-SC-226` | `packages/coupons/contracts/test/evaluate.test.ts`, the uncapped percentage |
-| `grade10-site-loyalty-programme-SC-227` | `packages/loyalty/backend/test/services/rewards/coupons.test.ts`, `decideCoupon` refusing the till for a products and a filter target naming both channels; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a member's own coupon scoped to products, and to a filter, naming both channels, online only on the panel; `integrations/shopify-pos/grade10/src/acts/view.test.ts`, the online-only coupon not offered to staff; `packages/grade10-store/backend/test/services/pos/sale/present.test.ts`, the member presenting one refused |
-| `grade10-site-loyalty-programme-SC-224` | `packages/loyalty/backend/test/services/rewards/menu.test.ts`, a reward scoped to named products and one scoped to a filter, each stored for both channels, offered with online alone |
-| `grade10-site-loyalty-programme-SC-228` | `RewardEditor.test.tsx`, a new reward scoped to products, and to a filter |
-| `grade10-site-loyalty-programme-SC-229` | `RewardEditor.test.tsx`, a stored products reward naming both channels, saved unchanged, then moved to named variants |
-| `grade10-site-loyalty-programme-SC-230` | `rewardGaps.test.ts` and `RewardEditor.test.tsx`, each missing part and the inverted window held in the save bar |
-| `grade10-site-loyalty-programme-SC-231` | `basketVerdict.test.ts`, each verdict from the evaluator's result |
-| `grade10-site-loyalty-programme-SC-225` | `rewardCouponDraft.test.ts`, the stored manual handover and counter collection, edited, duplicated and given Money off; `RewardEditor.test.tsx` and `rewardCopy.test.ts`, the note and the list terms naming a handover |
+| `grade10-site-loyalty-programme-SC-245` | `packages/coupons/contracts/test/evaluate.test.ts`, the uncapped percentage |
+| `grade10-site-loyalty-programme-SC-246` | `packages/loyalty/backend/test/services/rewards/coupons.test.ts`, `decideCoupon` refusing the till for a products and a filter target naming both channels; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a member's own coupon scoped to products, and to a filter, naming both channels, online only on the panel; `integrations/shopify-pos/grade10/src/acts/view.test.ts`, the online-only coupon not offered to staff; `packages/grade10-store/backend/test/services/pos/sale/present.test.ts`, the member presenting one refused |
+| `grade10-site-loyalty-programme-SC-243` | `packages/loyalty/backend/test/services/rewards/menu.test.ts`, a reward scoped to named products and one scoped to a filter, each stored for both channels, offered with online alone |
+| `grade10-site-loyalty-programme-SC-247` | `RewardEditor.test.tsx`, a new reward scoped to products, and to a filter |
+| `grade10-site-loyalty-programme-SC-248` | `RewardEditor.test.tsx`, a stored products reward naming both channels, saved unchanged, then moved to named variants |
+| `grade10-site-loyalty-programme-SC-249` | `rewardGaps.test.ts` and `RewardEditor.test.tsx`, each missing part and the inverted window held in the save bar |
+| `grade10-site-loyalty-programme-SC-250` | `basketVerdict.test.ts`, each verdict from the evaluator's result |
+| `grade10-site-loyalty-programme-SC-244` | `rewardCouponDraft.test.ts`, the stored manual handover and counter collection, edited, duplicated and given Money off; `RewardEditor.test.tsx` and `rewardCopy.test.ts`, the note and the list terms naming a handover |
 
 ## Risks / Trade-offs
 

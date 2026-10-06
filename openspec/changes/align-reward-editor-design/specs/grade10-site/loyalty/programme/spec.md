@@ -63,7 +63,7 @@ SHALL take such a coupon.
   the matching lines are
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-0tt rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-226 - A percentage coupon with no maximum takes its whole rate
+#### Scenario: grade10-site-loyalty-programme-SC-245 - A percentage coupon with no maximum takes its whole rate
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a percentage with no
@@ -101,7 +101,7 @@ SHALL take such a coupon.
 - **THEN** the gift is refused until the basket reaches it
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-227 - The till holds a coupon scoped to named products or a filter to online only
+#### Scenario: grade10-site-loyalty-programme-SC-246 - The till holds a coupon scoped to named products or a filter to online only
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon scoped to named products or to a
@@ -113,7 +113,7 @@ SHALL take such a coupon.
   sale
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-62s rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-224 - The menu states a reward scoped to named products or a filter as online only
+#### Scenario: grade10-site-loyalty-programme-SC-243 - The menu states a reward scoped to named products or a filter as online only
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a reward scoped to named products or to a catalog filter,
@@ -123,7 +123,7 @@ SHALL take such a coupon.
   spent
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-1bu rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-228 - A reward scoped to named products or a filter is saved for online alone
+#### Scenario: grade10-site-loyalty-programme-SC-247 - A reward scoped to named products or a filter is saved for online alone
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator scopes a money-off reward to named products or to a
@@ -134,7 +134,7 @@ SHALL take such a coupon.
   was chosen before
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-rwu rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-229 - A stored reward scoped to named products that names the till is saved online only
+#### Scenario: grade10-site-loyalty-programme-SC-248 - A stored reward scoped to named products that names the till is saved online only
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward stored as a product coupon scoped to named products,
@@ -215,7 +215,7 @@ saving the reward.
 - **THEN** Money off is chosen, with that discount and scope
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ji6 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-225 - A reward stored with a retired handover keeps it until a choice is made
+#### Scenario: grade10-site-loyalty-programme-SC-244 - A reward stored with a retired handover keeps it until a choice is made
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward stored as a manual handover or a counter collection
@@ -227,7 +227,7 @@ saving the reward.
   it as a product coupon
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-h6j rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-230 - A reward missing a part is not saved
+#### Scenario: grade10-site-loyalty-programme-SC-249 - A reward missing a part is not saved
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator saves a reward whose choice lacks a part it needs — a
@@ -238,7 +238,7 @@ saving the reward.
 - **AND** the form names what is missing
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-fut rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-231 - The basket check states what the coupon would take off
+#### Scenario: grade10-site-loyalty-programme-SC-250 - The basket check states what the coupon would take off
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward in the form whose definition is complete
