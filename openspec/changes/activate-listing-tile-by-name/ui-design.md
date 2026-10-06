@@ -31,5 +31,5 @@ always-underlined link.
 | --- | --- | --- |
 | Name activates with photo | `shared-ui-store-product-listing-SC-87` | [Named Once](?path=/story/store-product-listing-productcard--named-once), [ProductBrowse Default](?path=/story/store-product-listing-productbrowse--default) |
 | Sold-out name inert where the tile sells | `shared-ui-store-product-listing-SC-88` | [`ProductCard` → Sold Out](?path=/story/store-product-listing-productcard--sold-out) |
-| Sold-out that still opens | **Out of suite:** `shared-ui-store-product-listing-SC-91` on `add-store-cross-sell` | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) |
+| Sold-out that still opens | **Out of suite:** a sold-out tile that opens where it does not sell, which this change's tile requirement states | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) |
 | No callback — name and photo inert | `shared-ui-store-product-listing-SC-89` | Omit `onClick` / `onProductClick` in isolation stories |

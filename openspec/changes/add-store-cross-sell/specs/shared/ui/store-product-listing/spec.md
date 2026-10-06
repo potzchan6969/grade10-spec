@@ -51,8 +51,7 @@ supplies one, its photo and its name alike, so its address can be copied and a
 press with a modifier key opens it where the browser puts it, a new tab or a
 new window, reporting nothing. A plain press SHALL still report the tile's
 activation where a handler is supplied, in place of the link's own
-navigation. A tile that does not open — a sold-out tile where
-the surface sells — SHALL be no link, address or not.
+navigation. A tile that does not open SHALL be no link, address or not.
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-iye rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-93 - A tile given its address is a link to it
