@@ -88,19 +88,13 @@ export async function loadFonts(
 const DOCUMENT_TIME_ZONE = "Asia/Hong_Kong";
 
 /**
- * `HKT`, not `GMT+8` - `Intl` only resolves the named abbreviation under a
- * Hong Kong locale; the US locale used for the date and time parts falls
- * back to the offset instead.
+ * Asia/Hong_Kong labelled GMT+8, matching emails and terms.
  */
-function timeZoneAbbreviation(value: Date, timeZone: string): string {
-  return (
-    new Intl.DateTimeFormat("en-HK", { timeZone, timeZoneName: "short" })
-      .formatToParts(value)
-      .find((part) => part.type === "timeZoneName")?.value ?? timeZone
-  );
+function documentZoneName(): string {
+  return "GMT+8";
 }
 
-/** `September 24, 2026, 12:30 HKT`. */
+/** `September 24, 2026, 12:30 GMT+8`. */
 export function formatDateTime(value: Date): string {
   const date = new Intl.DateTimeFormat("en-US", {
     timeZone: DOCUMENT_TIME_ZONE,
@@ -114,7 +108,7 @@ export function formatDateTime(value: Date): string {
     minute: "2-digit",
     hourCycle: "h23",
   }).format(value);
-  return `${date}, ${time} ${timeZoneAbbreviation(value, DOCUMENT_TIME_ZONE)}`;
+  return `${date}, ${time} ${documentZoneName()}`;
 }
 
 export function addressLines(address: PdfPartyAddress): string[] {
