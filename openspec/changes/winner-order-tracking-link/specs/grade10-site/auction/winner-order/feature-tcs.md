@@ -85,8 +85,8 @@ is still owed, a tracker, and proof of what was handed over,
 * Order Progress shows no Track shipment button or carrier name.
 * Step 2 opens <carrier tracking URL> in a new tab.
 
-<!-- trace:case id=g10.auction-winner-order.TC-7zy rev=1 covers=g10.auction-winner-order.SC-k4r -->
-### winner-order-US2-TC12-1: Delivered order keeps the carrier tracker
+<!-- trace:case id=g10.auction-winner-order.TC-l0r rev=2 covers=g10.auction-winner-order.SC-k4r -->
+### winner-order-US2-TC12-2: Delivered order keeps the carrier tracker
 
 **Classification:**
 
@@ -132,7 +132,7 @@ is still owed, a tracker, and proof of what was handed over,
 | --- | --- |
 | `US2-TC2-1` is the durable retained-record case with carrier identity | **Preserved:** it keeps the carrier and tracking link for `winner-order-SC-20`; the new chrome case does not rewrite it |
 | `winner-order-SC-251` - fulfilled order shows and opens the tracking-number link | **Covered:** `winner-order-SC-251` ← `US2-TC13-1` |
-| `winner-order-SC-252` - link remains after delivery is confirmed | **Covered:** `winner-order-SC-252` ← `US2-TC12-1` |
+| `winner-order-SC-252` - link remains after delivery is confirmed | **Covered:** `winner-order-SC-252` ← `US2-TC12-2` |
 | The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
 | Root group and journey coverage | **Covered:** both cases trace `winner-order-US-02`; neither case adds behavior outside `Order-progress tracking` |
 | Uncovered scenarios | **None.** Both delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |

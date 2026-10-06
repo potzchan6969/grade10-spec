@@ -135,8 +135,8 @@
 * Step 3: the order reads Pending Payment; the deadline runs; nothing is stored.
 * Step 4: the upload is accepted.
 
-<!-- trace:case id=g10.auction-winner-order.TC-th7 rev=1 covers=g10.auction-winner-order.SC-bb1 -->
-### winner-order-US9-TC30-1: Busy proof form blocks every leave route
+<!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=2 covers=g10.auction-winner-order.SC-bb1 -->
+### winner-order-US9-TC30-2: Busy proof form blocks every leave route
 
 Runs once per row of **Test data**.
 
@@ -190,7 +190,7 @@ that implementation works.
 | `winner-order-US9-TC28-1` | **Folded into:** `winner-order-US9-TC2-2`. The same successful-upload route now verifies the toast, Payment Verifying Alert and hidden payment controls. |
 | `winner-order-US9-TC29-1` | **Folded into:** `winner-order-US9-TC14-2`. The existing interrupted-upload route now verifies the open draft and failure toast before retry. |
 | `winner-order-US9-TC31-1` | **Folded into:** `winner-order-US9-TC7-2`. The existing back-out route now verifies inline irreversible microcopy and no second confirm screen. |
-| `winner-order-US9-TC30-1` | **Covered:** `winner-order-SC-219`. Busy leave blocking is a distinct route with no durable case. |
+| `winner-order-US9-TC30-2` | **Covered:** `winner-order-SC-219`. Busy leave blocking is a distinct route with no durable case. |
 | `winner-order-SC-99`, `winner-order-SC-100`, `winner-order-SC-101`, `winner-order-SC-103`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-121` and `winner-order-SC-239` | **Covered in durable suite:** unchanged Bank transfer scenarios retain their existing cases. |
 | Product questions | **Settled:** none. Decisions Q1-Q16 and the Post-Bidding Payment Verifying alert decide the behavior. |
 | Uncovered scenarios | **None.** SC-218, SC-219 and SC-220 map to revised or distinct cases; SC-119 maps to the revised retry case. |

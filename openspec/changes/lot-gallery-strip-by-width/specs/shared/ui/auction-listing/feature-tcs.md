@@ -13,7 +13,7 @@ is wide enough for that rail beside the main frame,
 **so that** a stacked column keeps a clear stage with previous/next and
 progress instead of a crowded second rail.
 
-<!-- trace:case id=g10.shared-ui-auction-listing.TC-8ch rev=1 covers=g10.shared-ui-auction-listing.SC-xsa -->
+<!-- trace:case id=g10.shared-auction-listing.TC-38a rev=1 covers=g10.shared-auction-listing.SC-nlz -->
 ### shared-ui-auction-listing-US1-TC30-1: Wide ListingLotGallery shows a left rail
 
 **Classification:**
@@ -44,7 +44,7 @@ progress instead of a crowded second rail.
 * A thumbnail exists for each image in a rail beside the main frame.
 * Previous and next remain available.
 
-<!-- trace:case id=g10.shared-ui-auction-listing.TC-1o6 rev=1 covers=g10.shared-ui-auction-listing.SC-mt3 -->
+<!-- trace:case id=g10.shared-auction-listing.TC-5ba rev=1 covers=g10.shared-auction-listing.SC-ed7 -->
 ### shared-ui-auction-listing-US1-TC31-1: Stacked ListingLotGallery hides the rail
 
 **Classification:**
@@ -77,7 +77,7 @@ progress instead of a crowded second rail.
 * Previous and next remain available.
 * Carousel progress remains available.
 
-<!-- trace:case id=g10.shared-ui-auction-listing.TC-u8m rev=1 covers=g10.shared-ui-auction-listing.SC-75i -->
+<!-- trace:case id=g10.shared-auction-listing.TC-j0c rev=1 covers=g10.shared-auction-listing.SC-ln3 -->
 ### shared-ui-auction-listing-US1-TC32-1: One ListingLotGallery image has no rail
 
 **Classification:**
@@ -108,7 +108,7 @@ progress instead of a crowded second rail.
 * No thumbnail rail is shown.
 * Previous and next are not available.
 
-<!-- trace:case id=g10.shared-ui-auction-listing.TC-bas rev=1 covers=g10.shared-ui-auction-listing.SC-vnj -->
+<!-- trace:case id=g10.shared-auction-listing.TC-dmy rev=1 covers=g10.shared-auction-listing.SC-1mh -->
 ### shared-ui-auction-listing-US1-TC33-1: Empty ListingLotGallery has no item or navigation
 
 **Classification:**
@@ -162,7 +162,7 @@ openspec/changes/archive/.
 | Wide ListingLotGallery shows a left rail | Folded as covered by `shared-ui-auction-listing-SC-47` / `shared-ui-auction-listing-US1-TC30-1` |
 | Stacked ListingLotGallery hides the rail, keeps previous/next and progress | Folded as covered by `shared-ui-auction-listing-SC-48` / `shared-ui-auction-listing-US1-TC31-1` |
 | One ListingLotGallery image has no rail | Folded as covered by `shared-ui-auction-listing-SC-49` / `shared-ui-auction-listing-US1-TC32-1` |
-| Empty ListingLotGallery has no item or navigation | Folded as covered by `shared-ui-auction-listing-SC-55` / `shared-ui-auction-listing-US1-TC33-1` |
+| Empty ListingLotGallery has no item or navigation | Folded as covered by `shared-ui-auction-listing-SC-56` / `shared-ui-auction-listing-US1-TC33-1` |
 | Raised questions from the blind pass | None — Q1–Q4 already settled width rule, stacked replacement, ListingGallery carve-out, and unnamed threshold |
 
 **Uncovered anchors:** none after the stated scenario and case patches.
