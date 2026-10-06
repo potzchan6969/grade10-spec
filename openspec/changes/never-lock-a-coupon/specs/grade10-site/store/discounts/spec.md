@@ -18,12 +18,75 @@
   - A sale that collects a deactivated code is settled from what the shop
     says it carried, and reported
 - Two channels
-  - A counter sale a reward was cleared off takes no reward again, and points
+  - A counter sale a reward's code has left takes no reward again, and points
     still go on; one a newer promise retired takes no new plan
 
 ## REMOVED Feature set
 
 - One discount-code slot
+
+## ADDED Requirements
+
+### Requirement: A sale that loses its claim loses its code, and a paid sale is settled against what it carried
+
+An online order that merely expires SHALL keep its claim and its code until
+the code can no longer be collected; the programme's clock then releases the
+claim. A counter sale that runs out its hour, or that a newer promise
+retires, SHALL give its coupon back: its code SHALL be deactivated, and the
+sale SHALL keep its cart. A claim on the coupon from another sale SHALL
+deactivate the code of the sale that held it, unless the claim is refused by
+name — `grade10-site/loyalty/programme`'s own requirement.
+
+The shop goes on honouring a code a cart already carries, so a counter sale
+paid with a reward's code its order had given up — or, for a gift, with the
+gift's line — SHALL be settled against what it carried: it SHALL spend the
+coupon where no other sale claims it and the coupon is still unspent, and
+SHALL spend nothing otherwise. Either way it SHALL be reported to an operator
+with the order on it.
+
+<!-- trace:scenario id=g10.store-discounts.SC-cvt rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-19 - A counter sale that runs out its hour loses its code
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
+
+- **GIVEN** a counter sale carrying a code for the member's coupon, never tendered
+- **WHEN** an hour passes since the sale's last plan
+- **THEN** the code is deactivated and the coupon is spendable again
+- **AND** the sale is not cancelled and keeps its cart
+
+<!-- trace:scenario id=g10.store-discounts.SC-82q rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-26 - An expired online order keeps its code while its checkout can collect
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
+
+- **GIVEN** an online order carrying a coupon's code, never paid, whose checkout the store could not close
+- **WHEN** the order expires
+- **THEN** the order is not cancelled and its code is still live
+- **AND** the order still claims the coupon
+
+<!-- trace:scenario id=g10.store-discounts.SC-evl rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-23 - A sale paid with a code it gave up spends the coupon nobody else claims
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a counter sale that ran out its hour while its cart still carried the reward's code, and no other sale claiming that coupon
+- **WHEN** the sale is paid carrying the code
+- **THEN** the coupon is used by that sale
+- **AND** the sale is reported to an operator with the order on it
+
+<!-- trace:scenario id=g10.store-discounts.SC-it9 rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-21 - A sale that collects a code another sale claims spends nothing
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a counter sale whose coupon the member claimed at another sale, while its cart still carried the old code
+- **WHEN** the first sale is paid carrying that code
+- **THEN** it spends nothing, and the coupon stays with the sale that claims it
+- **AND** the first sale is reported to an operator with the order on it
+
+<!-- trace:scenario id=g10.store-discounts.SC-l2h rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-25 - A gift line a sale gave up is read like its code
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a counter sale whose gift reward ran out its hour while the gift's line stayed on the cart, and no other sale claiming that coupon
+- **WHEN** the sale is paid showing the gift's line
+- **THEN** the coupon is used by that sale, and the sale is reported to an operator
 
 ## MODIFIED Requirements
 
@@ -72,7 +135,7 @@ code that is not scoped to its member is a bearer string anyone may spend.
 
 <!-- trace:scenario id=g10.store-discounts.SC-fc9 rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-28 - A gift at the till is its own line and carries no code
-**Serves:** One discount code or coupon per order - at the till a gift is its own line discounted to nothing
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a member's gift reward whose basket clears its threshold at a till
 - **WHEN** staff apply it and the sale is paid
@@ -98,23 +161,6 @@ A mint the shop refuses SHALL refuse the checkout, naming the coupon, and
 SHALL leave no order behind and the coupon still spendable. A code minted
 against an order that is then canceled or fails SHALL be deactivated, and the
 coupon returned to the member.
-
-An online order that merely expires SHALL keep its claim and its code until
-the code can no longer be collected; the programme's clock then releases the
-claim. A counter sale that runs out its hour, or that a newer promise
-retires, SHALL give its coupon back: its code SHALL be deactivated, and the
-sale SHALL keep its cart. A claim on the coupon from another sale SHALL
-deactivate the code of the sale that held it and take the cut off that sale,
-unless that sale is an online checkout the provider reports collected or will
-not close, where the claim is refused by name —
-`grade10-site/loyalty/programme`'s own requirement.
-
-The shop goes on honouring a code a cart already carries, so a counter sale
-paid with a reward's code its order had given up — or, for a gift, with the
-gift's line — SHALL be settled against what it carried: it SHALL spend the
-coupon where no other sale claims it and the coupon is still unspent, and
-SHALL spend nothing otherwise. Either way it SHALL be reported to an operator
-with the order on it.
 
 <!-- trace:scenario id=g10.store-discounts.SC-gtt rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-05 - Editing the cart does not mint a coupon's code
@@ -149,49 +195,22 @@ with the order on it.
 - **WHEN** that order is canceled or fails
 - **THEN** the code is deactivated and the coupon returns to the member
 
-<!-- trace:scenario id=g10.store-discounts.SC-cvt rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-19 - A counter sale that runs out its hour loses its code
-**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
+### Requirement: A code carries its own coupon's combine setting
 
-- **GIVEN** a counter sale carrying a code for the member's coupon, never tendered
-- **WHEN** an hour passes since the sale's last plan
-- **THEN** the code is deactivated and the coupon is spendable again
-- **AND** the sale is not cancelled and keeps its cart
+Every minted code SHALL carry the combine setting its coupon's definition
+states — whether it combines with the shop's product discounts, order
+discounts and shipping discounts — from a reward's definition or an
+operator's mint of a store coupon. A definition stating none SHALL carry the
+store's default. Grade10 SHALL NOT evaluate the combination itself: the
+shop's own rules decide it from that setting and the site discount's own.
 
-<!-- trace:scenario id=g10.store-discounts.SC-82q rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-26 - An expired online order keeps its code while its checkout can collect
-**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
+<!-- trace:scenario id=g10.store-discounts.SC-w39 rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-16 - A coupon's combine setting is what its code carries
+**Serves:** An ephemeral code, minted once - every code carries its own coupon's combine setting
 
-- **GIVEN** an online order carrying a coupon's code, never paid, whose checkout the store could not close
-- **WHEN** the order expires
-- **THEN** the order is not cancelled and its code is still live
-- **AND** the order still claims the coupon
-
-<!-- trace:scenario id=g10.store-discounts.SC-evl rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-23 - A sale paid with a code it gave up spends the coupon nobody else claims
-**Serves:** An ephemeral code, minted once - a sale that collects a deactivated code is settled from what it carried
-
-- **GIVEN** a counter sale that ran out its hour while its cart still carried the reward's code, and no other sale claiming that coupon
-- **WHEN** the sale is paid carrying the code
-- **THEN** the coupon is used by that sale
-- **AND** the sale is reported to an operator with the order on it
-
-<!-- trace:scenario id=g10.store-discounts.SC-it9 rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-21 - A sale that collects a code another sale claims spends nothing
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
-
-- **GIVEN** a counter sale whose coupon the member claimed at another sale, while its cart still carried the old code
-- **WHEN** the first sale is paid carrying that code
-- **THEN** it spends nothing, and the coupon stays with the sale that claims it
-- **AND** the first sale is reported to an operator with the order on it
-
-<!-- trace:scenario id=g10.store-discounts.SC-l2h rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-25 - A gift line a sale gave up is read like its code
-**Serves:** An ephemeral code, minted once - a sale that collects a deactivated code is settled from what it carried
-
-- **GIVEN** a counter sale whose gift reward ran out its hour while the gift's line stayed on the cart, and no other sale claiming that coupon
-- **WHEN** the sale is paid showing the gift's line
-- **THEN** the coupon is used by that sale, and the sale is reported to an operator
+- **GIVEN** a coupon whose definition allows combining with the shop's product discounts and not its order discounts
+- **WHEN** an order claims the coupon and its code is minted
+- **THEN** the code carries that setting, and the shop prices the basket by its own rules from it
 
 ### Requirement: The same discount-code mechanism applies online and at the POS till
 
@@ -206,10 +225,10 @@ promise, one whose coupon was claimed elsewhere among them — SHALL take no new
 plan, and staff SHALL be told to ring the goods on a new sale rather than to
 scan the member's card again, since a fresh scan would leave the deactivated
 code on the same cart. A till session lives ten minutes and a sale's hour
-outlasts it, so a fresh scan is how staff reach a cart again after the hour:
-a plan from a new session on a cart that still carries another sale's reward
-code SHALL be refused the same way, since that plan would retire the other
-sale and leave its code dead on the cart. Where a reward's code has
+outlasts it, so a closed sale's next plan reaches the store from a fresh scan
+on the same cart: a plan from a new session on a cart whose sale has closed
+and carries a reward's code SHALL be refused the same way, and SHALL mint
+nothing onto that cart. Where a reward's code has
 left a sale that is still open — cleared off it — the sale SHALL take no reward
 again, that coupon or another, and the refusal SHALL name a new sale rather
 than repeat the remedy that took the code off. A re-plan that names no reward
@@ -217,7 +236,7 @@ SHALL go through, so points still go on that sale.
 
 <!-- trace:scenario id=g10.store-discounts.SC-q23 rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-07 - A product coupon at the till settles by its own code
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a member's product coupon taken at the POS till
 - **WHEN** the till sale is tendered
@@ -225,7 +244,7 @@ SHALL go through, so points still go on that sale.
 
 <!-- trace:scenario id=g10.store-discounts.SC-3cr rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-14 - A re-planned sale never carries two codes for one coupon
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a till sale carrying a coupon's minted discount code
 - **WHEN** staff re-plan the sale with the same coupon still on it
@@ -233,7 +252,7 @@ SHALL go through, so points still go on that sale.
 
 <!-- trace:scenario id=g10.store-discounts.SC-elk rev=2 -->
 #### Scenario: grade10-site-store-discounts-SC-17 - A coupon cleared off a sale cannot go back on it
-**Serves:** Two channels - a coupon cleared off a sale cannot go back on it
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a till sale whose coupon's code was cleared by "Remove every
   discount", or by POS's own 管理折扣 → 全部移除
@@ -243,7 +262,7 @@ SHALL go through, so points still go on that sale.
 
 <!-- trace:scenario id=g10.store-discounts.SC-99a rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-22 - A sale a reward's code has left still takes points
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a till sale whose coupon was cleared by "Remove every discount"
 - **WHEN** staff re-plan the sale with points and no reward
@@ -251,7 +270,7 @@ SHALL go through, so points still go on that sale.
 
 <!-- trace:scenario id=g10.store-discounts.SC-0lx rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-24 - A sale whose coupon was claimed elsewhere asks for a new sale
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a till sale carrying a member's coupon, whose member then claimed that coupon at another sale
 - **WHEN** staff plan the first sale again
@@ -259,17 +278,17 @@ SHALL go through, so points still go on that sale.
 - **AND** the coupon stays on the sale that claimed it
 
 <!-- trace:scenario id=g10.store-discounts.SC-9j2 rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-27 - A fresh scan on a sale that ran out its hour asks for a new sale
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
+#### Scenario: grade10-site-store-discounts-SC-27 - A fresh scan on a closed sale's cart asks for a new sale
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
-- **GIVEN** a till sale carrying a member's coupon, left an hour since its last plan, its till session expired
+- **GIVEN** a till sale carrying a member's reward code, an hour since its last plan, its till session expired
 - **WHEN** staff scan the member's card again on that cart and plan it
 - **THEN** they are told the sale has closed and to ring the goods on a new one
 - **AND** no code is minted onto that cart
 
 <!-- trace:scenario id=g10.store-discounts.SC-6co rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-29 - A paid sale asks for a new sale
-**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a till sale that was tendered and whose paid order has reached the store, its till session still open
 - **WHEN** staff plan that session again
@@ -278,7 +297,7 @@ SHALL go through, so points still go on that sale.
 
 <!-- trace:scenario id=g10.store-discounts.SC-ou8 rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-18 - A code the sale never honoured stops standing
-**Serves:** Two channels - a code the sale never honoured stops standing
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
 
 - **GIVEN** a paid sale carrying a minted code the landed order does not name
 - **WHEN** the sale settles
