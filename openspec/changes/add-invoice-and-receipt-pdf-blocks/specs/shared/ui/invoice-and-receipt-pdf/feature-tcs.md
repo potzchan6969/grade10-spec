@@ -1239,7 +1239,7 @@ Runs once per row of **Test data**.
 * No Payment section appears.
 * Every other meta row and party block still renders.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: Invoice and receipt dates use the supplied winner zone
+### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
 
 **Classification:**
 
@@ -1256,9 +1256,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An issue instant, deadline and paid-at instant whose calendar dates differ
-  between `America/New_York` and Hong Kong; `winnerTimeZone` is
-  `America/New_York` and the machine clock is set to Hong Kong time.
+* Issue, deadline and paid-at instants cross the Hong Kong calendar boundary; the machine clock is set to New York time.
 
 **Steps:**
 
@@ -1268,8 +1266,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Each row shows its instant's New York calendar date and clock time.
-* Each row ends in the New York zone name, independent of the machine clock.
+* Each row shows its instant's Hong Kong calendar date and clock time.
+* Each row ends in `GMT+8`, independent of the machine clock.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC42-1: Each renderer returns exactly one A4 page
 
@@ -1607,7 +1605,7 @@ and this suite gained `TC36`-`TC42` for the behaviour that changed or is new:
   allowing one to be withheld entirely.
 - **New** — `TC39`/`TC40` prove the transfer-reference line, a real
   behaviour `grade10`'s renderer already has that the DOM contract never
-  specified. `TC41` proves date formatting in the supplied winner zone — the
+  specified. `TC41` proves date formatting in `Asia/Hong_Kong` as `GMT+8` — the
   one value the renderer computes rather than taking preformatted, a
   deliberate asymmetry with money (`spec.md`'s Presentation-only contract).
   `TC42` proves the one fact every other case assumes: each call returns
@@ -1664,6 +1662,6 @@ No contradiction, no question raised for `decisions.md`'s `## Raised` table.
 contract. The replacement case now asserts `Replaces invoice {id}` on the new
 invoice; `taxLine` remains an optional plain `PdfLineItem` on InvoicePdf and
 ReceiptPdf while `issuerTaxDetails` remains retired; the proposal and
-technical design are updated to carry those decisions and the winner-zone
+technical design are updated to carry those decisions and the fixed GMT+8
 date contract; and this suite's live tax, replacement, bank-rail and date
 cases supersede the deprecated DOM-era readings above.
