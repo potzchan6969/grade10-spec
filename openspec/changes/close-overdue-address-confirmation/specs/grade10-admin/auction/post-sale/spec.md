@@ -6,8 +6,7 @@
   - Settling an expired invoice: the admin portal is the only place an expired invoice is paid; a reissue is the only way back to the winner's card
   - Expired shortfall: a payment short of the balance keeps the invoice Partially Paid with its real balance and no new self-service deadline
   - Winner cannot pay expired: a card payment Grade10 receives at or after the deadline is refused and not charged
-  - Started in time counts: a card payment received before the deadline completes after it, and one that fails writes `expired` when it fails
-  - Settling needs payment-processing: an operator without the grant is offered no settle or reissue control
+  - Started in time counts: a card payment received before the deadline completes after it, and one that fails, times out or is abandoned writes `expired` when its session ends
 
 ## ADDED Requirements
 
@@ -36,13 +35,12 @@ payment before the deadline and its outcome arrives after it:
 | Outcome after the deadline | Behaviour |
 | --- | --- |
 | Succeeds | The invoice becomes `paid`. It is never written `expired` |
-| Fails | Grade10 writes `expired` when the failure arrives, and everything that follows expiry follows from then |
+| Fails, times out or is abandoned | Grade10 writes `expired` when the session ends, and everything that follows expiry follows from then |
 
-While that outcome is awaited, Grade10 SHALL keep the invoice `pending` and
-SHALL NOT write `expired`.
-
-An operator without payment-processing SHALL be offered no settle or reissue
-control on an expired invoice, and Grade10 SHALL refuse both actions from them.
+While the card session is open, Grade10 SHALL keep the invoice `pending`,
+SHALL NOT write `expired`, and SHALL NOT offer the winner Pay Now. A session
+that ends unpaid SHALL count as a failed outcome: the invoice SHALL NOT stay
+`pending` once the session is over, and Pay Now SHALL stay closed.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-b5v rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator fully settles an expired invoice
@@ -95,13 +93,14 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **THEN** the invoice is `pending` until 2026-09-19T09:00:20Z
 - **AND** Grade10 writes `expired` at 2026-09-19T09:00:20Z
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-g73 rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-89 - An operator without the grant cannot settle an expired invoice
-**Serves:** Resolving an unpaid order - settling needs payment-processing
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-gof rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-93 - A card session that ends unpaid after the deadline expires the invoice then
+**Serves:** Resolving an unpaid order - started in time counts
 
-- **GIVEN** an auction order whose invoice is `expired`
-- **AND** an operator who does not hold payment-processing
-- **WHEN** they open the order
-- **THEN** no settle or reissue control is offered
-- **AND** Grade10 refuses either action if it is attempted
-- **AND** the invoice is still `expired`
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+- **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
+- **WHEN** the card session times out at 2026-09-19T09:30:30Z
+- **THEN** the invoice is `pending` with no Pay Now offered until 2026-09-19T09:30:30Z
+- **AND** Grade10 writes `expired` at 2026-09-19T09:30:30Z
+- **AND** the order reads Payment Overdue with Contact Us and Pay Now stays closed
+- **AND** a session the winner abandons at that time reads the same

@@ -16,12 +16,12 @@
 Grade10 SHALL persist the order's `address_deadline_at`. It is the authoritative
 address deadline `address_deadline_passed` is read from, per "Supplementary
 conditions qualify the primitives". Grade10 SHALL also derive one write gate,
-`address_window_open`, from that timestamp, invoice status and the current
+`address_window_open`, from that timestamp, the invoice status and those
 order facts, and SHALL NOT store it as a status enum.
 
 | Condition | Source |
 | --- | --- |
-| `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, and the current order facts permit a winner write |
+| `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, no delivery address is confirmed, and the order is not cancelled and has no cancellation requested |
 
 `address_window_open` gates what the winner may write and SHALL NOT be a
 condition of the order-status derivation, which reads `address_deadline_passed`.

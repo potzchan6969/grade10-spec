@@ -21,15 +21,16 @@
 ## 3. Backend (owner: @htonyl)
 
 - [x] 3.1 In `services/orderStatus.ts`, `rpc/AuctionService.ts` and
-  `services/auctionOrders.ts`, derive `address_window_open` from the stored
+  `services/auctions/auctionOrders.ts`, derive `address_window_open` from the stored
   timestamp and current facts; enforce receipt-time winner writes and account-
   book independence. Operator actions do not write status directly.
   - Covers: `auction-status-SC-30`–`SC-35`, `winner-order-SC-144`–`SC-146` and `SC-148`–`SC-151`.
   - Verification: address-boundary and derived-status checks.
 - [x] 3.2 Let the persisted deadline serve the operator reopen and
   phone-recorded setup owned by `complete-auction-post-sale` (its `reopenSetup`
-  and `recordSetup`): a reopen resets it, and writes serialize against address
-  writes and invoice send. Map the elapsed unconfirmed 48-hour window to Setup
+  and `recordSetup`): a reopen resets it. That change serializes the address
+  write, reopen, record and invoice send under the order boundary (its
+  `SC-90`). Map the elapsed unconfirmed 48-hour window to Setup
   Overdue through `address_deadline_passed`; reopening restores Awaiting Setup,
   while Preparing Invoice never derives Setup Overdue. Its payment Overdue timer
   starts when the invoice is sent and visible to the winner.
@@ -38,10 +39,11 @@
   - Verification: permission, audit and concurrency-boundary checks.
 - [ ] 3.3 Retire the address window at invoice send and keep the existing
   operator-only expired-invoice collection path, including a Partially Paid
-  shortfall. Refusing a card payment received at or after the deadline, and
-  holding the invoice `pending` while a payment received in time is in flight,
-  are new.
-  - Covers: `grade10-admin-auction-post-sale-SC-85` through `SC-89`, and `SC-92`.
+  shortfall. Refusing a card payment received at or after the deadline, holding
+  the invoice `pending` while a card session received in time is open, and
+  writing `expired` when that session fails, times out or is abandoned, are new.
+  - Covers: `grade10-admin-auction-post-sale-SC-85` through `SC-88`, `SC-92`
+    and `SC-93`.
   - Verification: invoice-send race and settlement checks.
 
 ## 4. Frontend (owner: @htonyl)
@@ -50,11 +52,7 @@
   after an operator reopen. A confirmed address locks on confirm.
   - Verification: focused Winner Order checks for `SC-144`–`SC-146` and
     `SC-148`–`SC-151`.
-- [x] 4.2 Reach the operator reopen and record-setup controls, owned by
-  `complete-auction-post-sale`, with reasoned audit display and aligned
-  visible-disabled controls for operators without the grant.
-  - Verification: focused admin checks for `SC-75`–`SC-84` and `SC-89`.
-- [ ] 4.3 Test first, remove any winner control for changing a confirmed
+- [ ] 4.2 Test first, remove any winner control for changing a confirmed
   address that 4.1 built: a failing Winner Order check that no change control
   is offered after confirm, then the removal.
   - Verification: focused Winner Order checks.
@@ -64,5 +62,5 @@
 - [ ] 5.1 After `complete-auction-post-sale` archives, MODIFY Order Status's
   "An auction order carries two writable status fields" and "Permitted
   transitions" so `pending` to `expired` at the deadline carries the in-flight
-  card payment exception.
+  card payment exception, and the write when that session ends unpaid.
   - Verification: `pnpm check:manual` shows no overlap.

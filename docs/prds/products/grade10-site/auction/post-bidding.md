@@ -70,8 +70,7 @@ winner of three lots has three orders, each with its own deadlines.
 Every won lot on one list, opened from the account menu beside My
 Auctions: the lot with View lot, the auction, the winning bid, the status and
 one next action — Complete Order Setup while Awaiting Setup, Pay Invoice
-while Pending Payment, an expired invoice included, and View detail
-otherwise. Orders waiting on the winner come first, then the rest by newest
+while Pending Payment, and View detail otherwise. Orders waiting on the winner come first, then the rest by newest
 close, and an empty list points to My Auctions.
 
 ::changes{spec="grade10-site/auction/auction-orders"}
@@ -90,7 +89,7 @@ meaning.
 | **Awaiting Setup** | Not issued | The lot closes with a winner and setup is incomplete — delivery address, payment method or billing address |
 | 🚧 **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
 | **Preparing Invoice** | Not issued | The winner confirms setup, or an operator records an address after the deadline |
-| **Pending Payment** | Pending or expired | An operator sends or reissues the invoice |
+| **Pending Payment** | Pending | An operator sends or reissues the invoice |
 | 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
@@ -215,6 +214,13 @@ hours of the close.
 - 🚧 **Locked on confirming** — the winner changes none of the three
   afterwards; an operator edits them on request before send and reissues
   after, and the order shows what changed
+- 🚧 **Clock** — the 48 hours count from the lot's actual close, extended
+  bidding included, and a write is judged by when Grade10 receives it, however
+  long the winner spent on it
+- 🚧 **One figure** — the 48 hours is one Grade10-owned figure for every lot; a
+  new figure applies only to lots that close after it is set
+- 🚧 **Retired at send** — sending the invoice ends the address deadline; the
+  order shows no deadline and no missed-deadline alert afterwards
 
 ## The Invoice
 
@@ -294,7 +300,9 @@ failure, and locks the form while work is in progress.
   so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
 - 🚧 **Started in time** — one tried at or after the deadline cannot start, so
-  the card is not charged; one started in time still counts
+  the card is not charged; one started in time still counts, and if its session
+  then fails, times out or is abandoned the invoice expires then and Pay stays
+  closed
 
 ### By Bank Transfer
 

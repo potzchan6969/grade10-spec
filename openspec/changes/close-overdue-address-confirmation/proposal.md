@@ -56,7 +56,10 @@ too short.
   the winner's card.
 - **A card payment started in time counts.** One Grade10 received before the
   payment deadline completes even if it confirms after, and the invoice stays
-  `pending` until then, never written `expired` while it is in flight. One received at or after the deadline is refused and not
+  `pending` while its card session is open, never written `expired` while it is
+  in flight. A session that then fails, times out or is abandoned counts as a
+  failed outcome: the invoice is written `expired` when the session ends, and
+  Pay Now stays closed. One received at or after the deadline is refused and not
   charged.
 - **The Post-Sale Queue page no longer says an expired invoice "stays
   payable"**, which read as if the winner could still pay it.
@@ -69,7 +72,7 @@ too short.
   derivation and does not duplicate that copy.
 - **The expired invoice's own rules.** Hiding card Pay, and reissue and
   cancellation remain existing durable behavior. Writing `expired` is held while
-  a card payment started in time is in flight.
+  a card session started in time is open, and written when it ends unpaid.
 - **Letters.** Address reminders are that change's. A reopen sends no letter;
   the operator tells the winner directly.
 - **Suspension and automatic cancellation.** A missed address deadline does
@@ -87,7 +90,8 @@ None.
 - `grade10-site/auction/winner-order`: a new requirement — a missed address
   deadline closes the address form, and only an operator reopens it. The
   requirement "The payment deadline is fixed when the invoice is sent" is
-  modified so a card payment started in time holds the invoice `pending`.
+  modified so a card payment started in time holds the invoice `pending`, and a
+  session that ends unpaid writes `expired` then.
 - `grade10-site/auction/order-status`: a new requirement adding the condition
   `address_window_open`, which gates the winner's address write; an
   unconfirmed missed deadline derives Setup Overdue.
@@ -102,7 +106,7 @@ None.
 | --- | --- |
 | `apps/frontend/grade10` | After the address deadline, Winner Order refuses an address write and offers no winner change control. |
 | `apps/admin/grade10` | Settle an expired invoice. The reopen and record-setup controls are `complete-auction-post-sale`'s. |
-| Auction service | A deadline a reopen resets, refusal of late address writes, and an invoice held `pending` while a payment started in time confirms. |
+| Auction service | A deadline a reopen resets, refusal of late address writes, an invoice held `pending` while a card session started in time is open, and written `expired` when that session ends unpaid. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. |
 
 ## Ordering and dependencies
@@ -129,8 +133,9 @@ None.
   persisted 48-hour address deadline passes. Preparing Invoice does not derive
   Setup Overdue; its payment Overdue timer starts only when the invoice is sent
   and visible to the winner.
-- **Race behavior** — address writes, operator reopen/record, and invoice send
-  serialize under the order boundary.
+- **Race behavior** — serializing address writes, operator reopen/record and
+  invoice send under the order boundary is `complete-auction-post-sale`'s
+  (its `SC-90`).
 
 ## Assumptions
 

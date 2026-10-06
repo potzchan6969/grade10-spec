@@ -9,7 +9,7 @@
 **I want** an expired invoice settled only in the admin portal, and a card payment started in time to count,
 **so that** a winner who paid just before the deadline is never expired, and one who paid after it is never charged.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-o6m rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-o6m rev=1 covers=g10adm.auction-post-sale.SC-b5v -->
 ### post-sale-US19-TC1-1: Manual settlement pays an expired invoice and ends what is owed
 
 **Classification:**
@@ -82,7 +82,7 @@
 * No new self-service payment deadline or close-as-paid choice appears.
 * Winner Order offers no card Pay control.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-d1w -->
 ### post-sale-US19-TC3-1: A card payment just before the deadline is accepted
 
 **Classification:**
@@ -121,7 +121,7 @@
 * The card payment is accepted.
 * The order derives Preparing Shipment and never showed Expired invoice.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-54p rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-54p rev=1 covers=g10adm.auction-post-sale.SC-cdi -->
 ### post-sale-US19-TC4-1: The winner cannot pay by card after the deadline
 
 **Classification:**
@@ -161,7 +161,7 @@
 * After reload, no card Pay is offered; Contact Us is.
 * The order still reads Pending Payment with Expired invoice.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-o2f rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-o2f rev=1 covers=g10adm.auction-post-sale.SC-d1w -->
 ### post-sale-US19-TC5-1: A card payment started in time completes after the deadline
 
 **Classification:**
@@ -194,7 +194,7 @@
 * After confirmation the invoice is `paid` and the order is Preparing Shipment.
 * The invoice log holds no expired entry.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-xct -->
 ### post-sale-US19-TC6-1: A card payment started in time that fails expires the invoice when it fails
 
 **Classification:**
@@ -227,7 +227,7 @@
 * After the decline the invoice is `expired`, with the expired entry timestamped at the decline.
 * The winner's order shows Contact Us and no card Pay.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-mpo rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-mpo rev=1 covers=g10adm.auction-post-sale.SC-o4m -->
 ### post-sale-US19-TC7-1: Reissuing an expired invoice gives card payment a fresh seven days
 
 **Classification:**
@@ -267,46 +267,47 @@
 * Winner Order offers card Pay again.
 * The card payment is accepted; the order derives Preparing Shipment.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-2qa rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US19-TC8-1: Settling or reissuing an expired invoice needs payment-processing
+<!-- trace:case id=g10adm.auction-post-sale.TC-f9u rev=1 covers=g10adm.auction-post-sale.SC-gof -->
+### post-sale-US19-TC9-1: A card session that ends unpaid after the deadline expires the invoice then
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** Resolving an unpaid order
 
 **Pre-conditions:**
 
-* `<expired-invoice order>` is unpaid past its deadline 2026-09-12T09:00:00Z.
-* admin(holds fulfilment, not payment-processing) is on `<expired-invoice order>`.
+* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
+* Grade10 received the winner's card payment at 2026-09-19T08:59:30Z and its card session is open.
 
 **Test data:**
 
-| Action |
-| --- |
-| Record a manual settlement by bank transfer, with a reference and one proof file |
-| Reissue the invoice |
+| Session ends by | At |
+| --- | --- |
+| Timing out | 2026-09-19T09:30:30Z |
+| The winner abandoning it | 2026-09-19T09:30:30Z |
 
 **Steps:**
 
-1. Look for the row's control on `<expired-invoice order>`.
-2. Submit the row's action.
+1. Read the invoice status and the winner's order at 2026-09-19T09:05:00Z, while the session is open.
+2. End the session the way the row names.
+3. Read the invoice status, its log and the winner's order.
 
 **Expected Results:**
 
-* No control for the action is offered.
-* The action is refused.
-* The order still reads Pending Payment with Expired invoice, deadline unchanged.
+* At 09:05 the invoice is `pending` and Winner Order offers no Pay Now.
+* After the session ends the invoice is `expired`, with the expired entry timestamped when the session ended.
+* The order reads Payment Overdue with Contact Us, and Pay Now stays closed.
 
 ## Reconciliation
 
@@ -315,10 +316,12 @@ of any requirement, and a scenario draft written without sight of this suite.
 
 | Raised | Disposition |
 | --- | --- |
-| An expired invoice can only be paid in the admin portal | **Folded in** - `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US19-TC1-1`, `TC4-1` and `TC8-1` |
+| An expired invoice can only be paid in the admin portal | **Folded in** - `grade10-admin-auction-post-sale-SC-85` and `SC-86`, walked by `post-sale-US19-TC1-1` and `TC4-1` |
+| Whether an operator without payment-processing sees the settle and reissue controls | **Moved** to `complete-auction-post-sale`, which owns the visible-and-disabled rule for every operator control (its `SC-25`). The scenario this change wrote for it and its case `post-sale-US19-TC8-1` retire, and their ids stay issued |
 | An expired invoice with a shortfall stays Partially Paid | **Folded in** - `grade10-admin-auction-post-sale-SC-92`, walked by `post-sale-US19-TC2-1` |
 | A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused - `grade10-admin-auction-post-sale-SC-86` |
 | A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome - `SC-87` and `SC-88`, with `post-sale-US19-TC3-1`, `TC5-1` and `TC6-1` |
+| A card session started in time that times out or is abandoned after the deadline | **Folded in** after the planning owner decided it counts as a failed outcome: the invoice is written `expired` when the session ends, never held `pending` past it, and Pay Now stays closed - `SC-93`, walked by `post-sale-US19-TC9-1` |
 | Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** This change checks only the existing reissue deadline behavior |
 | Whether settling an expired invoice restores bidding | **Already decided** on the Winner Order page: paying does not restore bidding by itself. Suspension belongs to `grade10-site/auction/bidder-suspension` |
 | Whether the winner is told about a reissue | **Out of scope**, with the other letters, in a follow-on change |

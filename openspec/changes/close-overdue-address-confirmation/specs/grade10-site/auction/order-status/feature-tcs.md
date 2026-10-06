@@ -9,7 +9,7 @@
 **I want** to understand that Grade10 must reopen the form,
 **so that** I know why I cannot confirm the address myself.
 
-<!-- trace:case id=g10.auction-order-status.TC-4zb rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
+<!-- trace:case id=g10.auction-order-status.TC-4zb rev=1 covers=g10.auction-order-status.SC-w76 -->
 ### auction-status-US5-TC4-1: No invoice and no address reads Awaiting Setup
 
 **Classification:**
@@ -41,7 +41,7 @@
 * The invoice status is `not_issued`.
 * Both the winner and the operator read the same status.
 
-<!-- trace:case id=g10.auction-order-status.TC-dg1 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
+<!-- trace:case id=g10.auction-order-status.TC-dg1 rev=1 covers=g10.auction-order-status.SC-7zj -->
 ### auction-status-US5-TC5-1: A confirmed address reads Preparing Invoice before send
 
 **Classification:**
@@ -70,7 +70,7 @@
 * The order status is Preparing Invoice.
 * The invoice status is still `not_issued`.
 
-<!-- trace:case id=g10.auction-order-status.TC-d32 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
+<!-- trace:case id=g10.auction-order-status.TC-d32 rev=1 covers=g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin -->
 ### auction-status-US5-TC6-1: A closed address window without an address reads Setup Overdue
 
 Runs once per row of **Test data**.
@@ -109,7 +109,7 @@ Runs once per row of **Test data**.
 * A closed window without an address derives Setup Overdue.
 * The invoice status is still `not_issued`.
 
-<!-- trace:case id=g10.auction-order-status.TC-la5 rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
+<!-- trace:case id=g10.auction-order-status.TC-la5 rev=1 covers=g10.auction-order-status.SC-9bm -->
 ### auction-status-US5-TC7-1: A winner's address write is refused on a closed window
 
 **Classification:**
@@ -148,7 +148,7 @@ Runs once per row of **Test data**.
 **I want** to reopen the address form or record the address the winner gave by phone,
 **so that** the order can continue from Setup Overdue without reopening winner self-service unnecessarily.
 
-<!-- trace:case id=g10.auction-order-status.TC-43a rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
+<!-- trace:case id=g10.auction-order-status.TC-43a rev=1 covers=g10.auction-order-status.SC-sx5 -->
 ### auction-status-US6-TC8-1: An order with no invoice cannot be dispatched
 
 **Classification:**
@@ -180,7 +180,7 @@ Runs once per row of **Test data**.
 * No tracking facts are recorded.
 * The order status is still Preparing Invoice.
 
-<!-- trace:case id=g10.auction-order-status.TC-36u rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
+<!-- trace:case id=g10.auction-order-status.TC-36u rev=1 covers=g10.auction-order-status.SC-j9x -->
 ### auction-status-US6-TC9-1: An invoice is refused a send with no confirmed address
 
 **Classification:**
@@ -212,7 +212,7 @@ Runs once per row of **Test data**.
 * The invoice status is still `not_issued`.
 * No payment deadline is started.
 
-<!-- trace:case id=g10.auction-order-status.TC-uot rev=1 covers=g10.auction-order-status.SC-g4b -->
+<!-- trace:case id=g10.auction-order-status.TC-uot rev=1 covers=g10.auction-order-status.SC-g4b,g10.auction-order-status.SC-soi -->
 ### auction-status-US6-TC10-1: A reopen restores the write through derived status
 
 **Classification:**
@@ -247,7 +247,7 @@ Runs once per row of **Test data**.
 * The write is accepted.
 * Step 3 reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-order-status.TC-3lv rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
+<!-- trace:case id=g10.auction-order-status.TC-3lv rev=1 covers=g10.auction-order-status.SC-kki -->
 ### auction-status-US6-TC12-1: An operator's address write is accepted on a closed window
 
 **Classification:**

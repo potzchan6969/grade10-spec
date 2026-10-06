@@ -146,11 +146,17 @@ window is separate and does not write `expired` on the invoice.
 When the deadline passes with the invoice `pending`, Grade10 SHALL set the
 invoice status to `expired`, per `grade10-site/auction/order-status`, unless a
 card payment Grade10 received before the deadline is still awaiting its
-outcome. While that outcome is awaited the invoice stays `pending` and the
-order reads Pending Payment, per `grade10-admin/auction/post-sale`. Otherwise
-the order reads Payment Overdue. The winner SHALL NOT be offered card payment or
-proof upload while the invoice is `expired`; the order SHALL show Contact Us in
-its overdue alert. An operator SHALL restore self-service payment only by
+outcome. While that outcome is awaited the invoice stays `pending`, the order
+reads Pending Payment and Winner Order offers no Pay Now, per
+`grade10-admin/auction/post-sale`. A card session that ends unpaid after the
+deadline - declined, timed out or abandoned - SHALL count as a failed outcome:
+Grade10 SHALL write `expired` when the session ends, and the invoice SHALL NOT
+stay `pending` past it. That replaces the timed-out and abandoned outcomes of
+"An unfinished card payment leaves the invoice payable", which hold only
+before the deadline. Otherwise the order reads Payment Overdue. The winner
+SHALL NOT be offered card payment or proof upload while the invoice is
+`expired`, and Pay Now stays closed; the order SHALL show Contact Us in its
+overdue alert. An operator SHALL restore self-service payment only by
 reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
 `grade10-admin/auction/post-sale`.
 
