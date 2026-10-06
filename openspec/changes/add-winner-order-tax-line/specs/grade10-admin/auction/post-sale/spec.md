@@ -1,9 +1,5 @@
 # Post-Sale — delta
 
-## Purpose
-
-An operator states the Tax a winner owes when sending or reissuing an invoice.
-
 ## Feature set
 
 - Tax on the quote
@@ -11,6 +7,8 @@ An operator states the Tax a winner owes when sending or reissuing an invoice.
   - Send: Tax becomes an invoice line and part of the Subtotal
   - Reissue: Tax can be added, changed, or removed with the other quoted amounts
   - Audit: a Tax change records its value before and after
+- Resolving an unpaid order
+  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance, tax and deadline, always with a reason and at least one change
 
 ## MODIFIED Requirements
 

@@ -38,7 +38,7 @@ when its timer runs out with no new bid.
 Confirms a delivery address and chooses card or bank transfer within 48 hours
 — [Post-Bidding · Winner Order](/p/grade10-site/auction/post-bidding#winner-order).
 ## *Operator* — **Sends the invoice**
-Prices shipping and insurance for that address and sends the invoice; the
+Prices shipping, insurance and any tax for that address and sends the invoice; the
 7-day payment window starts — [Auction Management · Payment](/p/grade10-admin/auction/management#payment).
 ## *Winner* — **Pays**
 By card, which Grade10 confirms on its own, or by bank transfer quoting the

@@ -3,8 +3,6 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-25, tcs-rules r4
 
-**Out of suite:** none for this change's scenarios. The durable suite keeps the unchanged parts of the journey.
-
 ## post-sale-US5: Operator quotes and sends a winner's invoice
 
 **As an** operator,
@@ -170,4 +168,4 @@
 - **Reissue** - `grade10-admin-auction-post-sale-SC-107` to `-SC-115`, `grade10-admin-auction-post-sale-SC-125`, `grade10-admin-auction-post-sale-SC-126`, `grade10-admin-auction-post-sale-SC-133`, `grade10-admin-auction-post-sale-SC-134` keep their meaning and their durable coverage
 - **Invoice log history** - `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-35`, `grade10-admin-auction-post-sale-SC-61`, `grade10-admin-auction-post-sale-SC-123`, `grade10-admin-auction-post-sale-SC-124`, `grade10-admin-auction-post-sale-SC-132` keep their meaning and their durable coverage; `grade10-admin-auction-post-sale-SC-123` still names no Tax because its reissue changed none
 
-**Out of suite:** none.
+**Out of suite:** none of this change's scenarios.

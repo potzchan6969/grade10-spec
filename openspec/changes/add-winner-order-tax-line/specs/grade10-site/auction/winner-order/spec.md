@@ -1,9 +1,5 @@
 # Winner Order — delta
 
-## Purpose
-
-A winner reads Tax as its own charge from setup through the invoice and receipt.
-
 ## Feature set
 
 - Tax on a winner's order
@@ -64,6 +60,10 @@ any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
 leave the Insurance line out when the operator added none, and SHALL leave the
 Tax line out when the operator added none. Insurance and Payment Processing
 Fee are separate lines: omitting Insurance does not replace it with the fee.
+
+Where the Tax line is shown, Winner Order's Order Summary SHALL place it
+between Insurance and Payment Processing Fee, and the invoice and receipt PDFs
+SHALL place it between Insurance and Subtotal.
 
 On Winner Order's order summary, Grade10 SHALL offer brief info tooltips beside
 **Buyer’s Premium**, **Shipping & Handling**, **Insurance**, and **Payment Processing Fee**
