@@ -22,6 +22,7 @@ the sold-out treatment over that unblended photo.
 - **THEN** the photo is not blended into the well
 - **AND** a white fill in the photo shows white inside the grey well
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ta3 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-64a - A sold-out photo takes the sold-out treatment unblended
 **Serves:** Tile contract - a sold-out tile's photo shows as supplied under its sold-out treatment
 

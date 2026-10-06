@@ -10,6 +10,7 @@
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-d6j rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
 ### shared-ui-store-product-listing-US1-TC15-1: Photo draws as supplied in an available, on-sale or in-cart tile
 
 Runs once per row of **Test data**.
@@ -54,6 +55,7 @@ Runs once per row of **Test data**.
 * Step 4: the photo's colours match the file, with no grey cast.
 * Step 5: the photo's computed blend mode is `normal`.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-ema rev=1 covers=g10.shared-store-product-listing.SC-ta3 -->
 ### shared-ui-store-product-listing-US1-TC16-1: Sold-out photo draws as supplied under the sold-out treatment
 
 Runs once per row of **Test data**.
@@ -94,6 +96,7 @@ Runs once per row of **Test data**.
 * Step 2: the sold-out treatment draws over the photo.
 * Step 3: the photo's computed blend mode is `normal`.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-5u0 rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
 ### shared-ui-store-product-listing-US1-TC17-1: Every store surface drawing the tile shows the photo as supplied
 
 Runs once per row of **Test data**.
