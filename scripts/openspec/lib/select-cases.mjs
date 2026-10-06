@@ -30,6 +30,10 @@ const list = (value) =>
     .map((one) => one.trim().toLowerCase())
     .filter(Boolean);
 
+function durableSuite(one) {
+  return one.read.rel.startsWith("openspec/specs/");
+}
+
 /** Everything the store holds, as one flat list of candidates. */
 export function readCandidates(root, scope = null) {
   const out = [];
@@ -67,8 +71,13 @@ export function selectCases(candidates, options = {}) {
     ids === null ? null : ids.map((one) => one.trim()).filter(Boolean);
 
   const byId = new Map();
-  for (const one of candidates)
-    if (!byId.has(one.tc.id)) byId.set(one.tc.id, one);
+  for (const one of candidates) {
+    const seen = byId.get(one.tc.id);
+    // A change repeats an id while it is open. The sheet walks the durable
+    // suite, which is the case the coverage tree names.
+    if (!seen || (durableSuite(one) && !durableSuite(seen)))
+      byId.set(one.tc.id, one);
+  }
 
   const picked = [];
   const refused = [];
