@@ -27,14 +27,10 @@ the design annotation workflow before this frame is treated as current.
 Use the existing Cart Drawer composition in the PRD's
 `store-cart-cartdrawer--default` and
 `store-cart-cartdrawer--unavailable-items-removed` Storybook stories. Cart
-layout remains owned by the existing cart capability.
-
-### Checkout review
-
-The Grade10 pre-checkout route is assembled by `CheckoutPage`; the Checkout
-PRD has no registered page Storybook story or Figma frame. Keep its existing
-line-summary layout and make the review, refusal and retry states below
-visible before the collector can leave for Shopify.
+layout remains owned by the existing cart capability. Checkout starts from the
+drawer, with no separate checkout page, so the checkout-time review, refusal
+and retry states below show in the drawer before the collector leaves for
+Shopify.
 
 ## Components
 
@@ -42,11 +38,12 @@ visible before the collector can leave for Shopify.
 - **Product details:** `ListingLotGallery`, `StoreProductHeader`,
   `StoreProductDescription`, `StoreProductMetadata`,
   `StoreProductPurchasePanel` from `@grade10/ui`.
-- **Cart drawer:** `CartDrawer` from `@grade10/ui`.
-- **Checkout review:** the existing Grade10 `CheckoutPage` line summary and
-  review notice.
-- **Copy:** reuse the existing availability and sold-out messages. No new
-  variant-choice label, component or token is needed.
+- **Cart drawer:** `CartDrawer` from `@grade10/ui`, with its checkout action
+  and refusal notice.
+- **Copy:** reuse the existing availability and sold-out messages and
+  `checkout.review.blocked`; add `checkout.review.filledShort` (`{title}`,
+  `{count}`) for a line the shop would fill short. No new variant-choice
+  label, component or token is needed.
 
 ## States
 
@@ -54,19 +51,19 @@ visible before the collector can leave for Shopify.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| A tile with an available variant | The existing usable add control communicates availability; no separate status label, count or scarcity cue | `grade10-site-commerce-product-status-SC-10` |
-| Every variant on a tile is unavailable | Sold-out status and no usable add control | `grade10-site-commerce-product-status-SC-13` |
+| A tile with an available variant | The one item's price, and the existing usable add control communicates availability; no separate status label, count or scarcity cue | `grade10-site-commerce-product-status-SC-10`, `grade10-site-commerce-product-status-SC-12` |
+| Every variant on a tile is out of stock | Sold-out status and no usable add control | `grade10-site-commerce-product-status-SC-13` |
 | Available variants have different counts | The same available treatment and controls; no remaining count | `grade10-site-commerce-product-status-SC-10` |
-| A requested add quantity exceeds the browse count | The requested quantity without a stock-derived maximum or remaining-count message | `grade10-site-commerce-product-status-SC-07`, `grade10-site-commerce-product-status-SC-11` |
+| A requested add quantity exceeds the browse count | The requested quantity without a stock-derived maximum or remaining-count message | `grade10-site-commerce-product-status-SC-17` |
 
 ### Product details
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| The product's internal sale item is available | Its price and available purchase control; no variant name or chooser | `grade10-site-store-product-page-SC-08`, `grade10-site-commerce-product-status-SC-12` |
-| The internal sale item is unavailable | Its price remains visible, the product reads sold out, and no add is offered | `grade10-site-store-product-page-SC-11`, `grade10-site-commerce-product-status-SC-15` |
-| No product item can be bought | The listed price remains visible and no product can be added | `grade10-site-store-product-page-SC-11`, `grade10-site-commerce-product-status-SC-13` |
-| A requested quantity exceeds the browse count | The requested quantity without a stock-derived maximum or remaining-count message | `grade10-site-commerce-product-status-SC-07`, `grade10-site-commerce-product-status-SC-11` |
+| The product's internal sale item is available | Its price and available purchase control; no variant name or chooser | `grade10-site-store-product-page-SC-33`, `grade10-site-store-product-page-SC-34`, `grade10-site-commerce-product-status-SC-12` |
+| A listed variant is sold out and a later one is for sale | The item for sale, its price and its purchase control; the sold-out variant is not shown | `grade10-site-store-product-page-SC-12` |
+| The internal sale item is out of stock | Its price remains visible, the product reads sold out, and no add is offered | `grade10-site-store-product-page-SC-11`, `grade10-site-commerce-product-status-SC-15` |
+| A requested quantity exceeds the browse count | The requested quantity without a stock-derived maximum or remaining-count message | `grade10-site-commerce-product-status-SC-17` |
 
 ### Cart drawer
 
@@ -74,18 +71,12 @@ visible before the collector can leave for Shopify.
 | --- | --- | --- |
 | Cart review is pending | Lines are unconfirmed and checkout is unavailable | `grade10-site-store-cart-validation-SC-03` |
 | Only part of a requested quantity can be filled | The corrected quantity and an explanation of the short fill | `grade10-site-store-cart-validation-SC-05` |
-| A line is out of stock | The line remains visible, marked out of stock and removable | `grade10-site-store-cart-validation-SC-06` |
-| A product is withdrawn from the store | The unavailable line is removed after review; a distinct toast names each removed product | `grade10-site-store-cart-validation-SC-09`, `grade10-site-store-cart-validation-SC-10` |
+| A line is out of stock | The line remains visible, marked out of stock and removable; checkout is unavailable until it is removed | `grade10-site-store-cart-validation-SC-06`, `grade10-site-store-cart-validation-SC-26` |
+| A product is withdrawn from the store | The line leaves the cart when it opens; one toast names every removed product | `grade10-site-store-cart-validation-SC-09`, `grade10-site-store-cart-validation-SC-10` |
 | A line's price changes | The current price and a clear price-change message | `grade10-site-store-cart-validation-SC-11`, `grade10-site-store-cart-validation-SC-12` |
 | Cart-open review cannot finish | A persistent error toast names each unchecked line and offers retry; the affected lines' availability, prices and cart total are replaced with unchecked copy; checkout remains unavailable | `grade10-site-store-cart-validation-SC-22` |
-| Initial cart read fails before any lines are known | A drawer-level unchecked message and Retry without line names or a current total; checkout remains unavailable | `grade10-site-store-cart-validation-SC-23` |
-
-### Checkout review
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| The checkout-time review is pending | The affected lines are not presented as confirmed; Pay is unavailable | `grade10-site-store-cart-validation-SC-03` |
-| The checkout-time review confirms every line | The current price is used for the handoff and Pay becomes available | `grade10-site-store-cart-validation-SC-17` |
-| A cart line changes before checkout | Every changed line is named with its out-of-stock, unavailable, adjusted or repriced result; Pay is unavailable until the cart is resolved | `grade10-site-store-cart-validation-SC-15`, `grade10-site-store-cart-validation-SC-16` |
-| The checkout-time review cannot finish | Each held line is named as unchecked, its last availability, price and total are replaced by unchecked copy, and Retry is available | `grade10-site-store-cart-validation-SC-21` |
-| The shop refuses after its review passed | The refused line and any short-fill answer are named from the checkout result; the cart remains available to resolve | `grade10-site-store-cart-validation-SC-19`, `grade10-site-store-cart-validation-SC-20` |
+| Initial cart read fails before any lines are known | ❓ Q9, the designer's: the drawer body keeps its loading treatment, never its empty state, and a persistent notice offers Retry without line names or a current total; checkout remains unavailable | `grade10-site-store-cart-validation-SC-23` |
+| The checkout-time review confirms every line | The checkout action proceeds with the current prices | `grade10-site-store-cart-validation-SC-17` |
+| A cart line changes at checkout | The drawer stays open and names every changed line with its out-of-stock, unavailable, adjusted or repriced result; an unavailable line leaves the cart under the removal toast; checkout is unavailable until the cart is resolved | `grade10-site-store-cart-validation-SC-15`, `grade10-site-store-cart-validation-SC-16`, `grade10-site-store-cart-validation-SC-27` |
+| The checkout-time review cannot finish | Each held line is named as unchecked, its last availability, price and total are replaced by unchecked copy, and Retry is available; checkout stays unavailable | `grade10-site-store-cart-validation-SC-21` |
+| The shop refuses after its review passed | The drawer names the refused line and any short-fill answer from the checkout result; the cart remains available to resolve | `grade10-site-store-cart-validation-SC-19`, `grade10-site-store-cart-validation-SC-20` |
