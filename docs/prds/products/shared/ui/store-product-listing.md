@@ -13,8 +13,9 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
-🚧 **Whole photo** - the square well shows the full picture, centred and as
-large as it fits; leftover space is the well, not a cropped edge. Available, on
+🚧 **Whole photo** - the square well shows the whole photo, centred and as
+large as it fits; leftover space is the well, not a cropped edge. Where a photo
+reaches into the well's rounded corners, it rounds with them. Available, on
 sale, sold out and in cart all do this. A photo that grows on hover may lose its
 edges until the pointer leaves.
 
@@ -132,7 +133,7 @@ The tile reports the quantity change and the application updates the cart.
 
 ::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
 
-::story{id="store-product-listing-productcardimage--default" title="The full photo in the well"}
+::story{id="store-product-listing-productcardimage--default" title="The whole photo in the well"}
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
 

@@ -9,9 +9,10 @@ Metric: ❓ product manager - R1 in `decisions.md`.
 
 ## What Changes
 
-- **Full photo in the well** — every tile status fits the supplied image inside
-  the square well without cropping. Leftover space is the well, not a cut
-  edge. Sold-out stays faded
+- **Whole photo in the well** — every tile status shows the whole supplied
+  photo inside the square well. Leftover space is the well, not a cut edge, and
+  a photo that reaches into the well's rounded corners rounds with them.
+  Sold-out stays faded
 - Manual page [Product Listing Blocks](/p/shared/ui/store-product-listing)
   marks the outcome
 
@@ -42,7 +43,7 @@ Metric: ❓ product manager - R1 in `decisions.md`.
   product page's You May Also Like rail (`ProductRelatedRail.tsx` in
   `packages/grade10-store`), take the change by submodule bump with no code
   change. The fit shipped ahead of acceptance (b632582fe) and is inside the
-  application's pin, c1a6d0286
+  application's pin
 - **Overlap** — `add-store-cross-sell` Q50 owns hover on a sold-out tile.
   `drop-product-listing-photo-multiply` owns the photo drawn without multiply
   (Q3); this change adds no second requirement for it
