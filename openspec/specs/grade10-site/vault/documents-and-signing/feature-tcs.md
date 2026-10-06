@@ -10,6 +10,7 @@
 sign each document once,
 **so that** I know exactly what I signed and leave with a copy of it.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-nv7 rev=2 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC1-2: Storage-lane packet is read and signed in one ceremony
 
 **Classification:**
@@ -43,6 +44,7 @@ sign each document once,
 * The custody agreement prints the case, the verified legal name, the item, the valuation, the named shop and the date, with no other document attached.
 * Step 4 lists the sealed document with its fingerprint.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-3v2 rev=2 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC2-2: Financed packet seals two documents in one ceremony
 
 **Classification:**
@@ -76,6 +78,7 @@ sign each document once,
 * The loan agreement prints the principal, the interest as a percentage for the term in days, the same rate per annum, `Fees: None`, the repayable amount and the borrower's own line that the key terms were explained.
 * Step 4 lists both sealed documents, each with its own fingerprint.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-gjg rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC3-1: Signature is refused until every page has been turned
 
 **Classification:**
@@ -108,6 +111,7 @@ sign each document once,
 * Step 2 refuses the tick; nothing is signed.
 * Step 3 accepts the tick once every page has been turned.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-u80 rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC4-1: A typed name that does not match the verified legal name is refused
 
 **Classification:**
@@ -139,6 +143,7 @@ sign each document once,
 * Signing is refused; nothing seals.
 * The packet stays ready for the verified legal name to sign.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-6wd rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC5-1: A signing link already used is refused on a second open
 
 **Classification:**
@@ -167,6 +172,7 @@ sign each document once,
 * The link is refused by name, and no document is shown.
 * No further signature or seal is taken.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-f9a rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC6-1: A signing link opened after its 30-minute life is refused
 
 **Classification:**
@@ -195,6 +201,7 @@ sign each document once,
 * The link is refused as expired.
 * Nothing seals; the packet is unchanged.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-d5e rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC7-1: A signing link opened on a second device is refused
 
 **Classification:**
@@ -225,6 +232,7 @@ sign each document once,
 * The second device is refused; the link stays bound to the first.
 * Nothing seals from the second device.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-3p4 rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC8-1: Declining withdraws the whole packet and is itself recorded
 
 **Classification:**
@@ -255,6 +263,7 @@ sign each document once,
 * Neither document seals; the whole packet withdraws together.
 * The decline is itself written on the record, on the case's history.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-qg7 rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC9-1: The sealed set reaches the collector by email
 
 **Classification:**
@@ -284,6 +293,7 @@ sign each document once,
 
 * An email has arrived with the sealed PDF attached.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-3zb rev=2 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC10-2: The collector's own read lists every sealed document with its fingerprint
 
 **Classification:**
@@ -316,6 +326,7 @@ sign each document once,
 * Step 2 serves both documents.
 * Each step 3 digest equals the fingerprint step 1 listed for it.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-svw rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC11-1: Anyone holding a document's digest can verify it belongs to the vault
 
 **Classification:**
@@ -346,6 +357,7 @@ sign each document once,
 * It names the template and when the document was completed.
 * It names nobody.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-slm rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
 ### grade10-site-vault-documents-and-signing-US1-TC12-1: A digest nobody issued fails verification
 
 **Classification:**
@@ -384,6 +396,7 @@ sign each document once,
 naming the shop and the person we checked,
 **so that** nothing is handed over to sign that we could not be held to.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-piq rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC1-1: A storage-lane packet is prepared naming the shop, custody agreement only
 
 **Classification:**
@@ -414,6 +427,7 @@ naming the shop and the person we checked,
 * No key-terms dialog opens for the storage lane.
 * The packet carries the custody agreement only, naming the shop.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-v8n rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC2-1: A financed packet is prepared after the key terms are ticked and recorded
 
 **Classification:**
@@ -447,6 +461,7 @@ naming the shop and the person we checked,
 * Prepare documents is offered once the key terms are recorded.
 * The packet carries the custody agreement and the loan agreement, naming the shop.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-mzb rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC3-1: Recording the key terms is refused until every term is ticked
 
 **Classification:**
@@ -479,6 +494,7 @@ naming the shop and the person we checked,
 * Step 2 refuses to record; nothing is stored as explained.
 * Step 3 records the key terms once every term is ticked.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-rud rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC4-1: A loan packet cannot open before the key terms are recorded
 
 **Classification:**
@@ -509,6 +525,7 @@ naming the shop and the person we checked,
 * Preparing the packet is refused; the loan agreement is not included.
 * The key-terms dialog is offered instead.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-je7 rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC5-1: A packet that can name no shop is refused at the counter
 
 **Classification:**
@@ -539,6 +556,7 @@ naming the shop and the person we checked,
 * Preparing the packet is refused, naming that no shop can be held to it.
 * No document is produced.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-0wv rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC6-1: The key terms are recorded with or without a recording reference
 
 Runs once per row of **Test data**.
@@ -578,6 +596,7 @@ Runs once per row of **Test data**.
 
 * The key terms are recorded as explained, when · by, matching the row's outcome.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-scy rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC7-1: A packet outside its preparation window is refused
 
 **Classification:**
@@ -606,6 +625,7 @@ Runs once per row of **Test data**.
 * The packet is refused as outside its window.
 * The packet must be prepared again before it can be signed.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-9m6 rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
 ### grade10-site-vault-documents-and-signing-US3-TC8-1: The worker refuses a packet while the register names another owner
 
 **Classification:**
@@ -645,6 +665,7 @@ Runs once per row of **Test data**.
 its fingerprint,
 **so that** I hold my own record without opening each case in turn.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-hn3 rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC1-2: The one download holds every sealed document the collector's read lists
 
 **Classification:**
@@ -678,6 +699,7 @@ its fingerprint,
 * Step 3 holds every sealed document step 1 lists, each with its fingerprint.
 * Step 3 holds nothing step 1 does not list, and none of customer B's documents.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-vse rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC2-2: A collector who has signed nothing is carried none and downloads an empty file
 
 **Classification:**
@@ -708,6 +730,7 @@ its fingerprint,
 * Step 1 carries no signed document.
 * Step 2 serves an empty archive.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-w1x rev=1 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC3-1: The download shows a pending state while in flight
 
 **Classification:**
@@ -735,6 +758,7 @@ its fingerprint,
 
 * Download all shows pending while the file is being built.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-28a rev=1 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC4-1: A failed download surfaces its error and can be retried
 
 **Classification:**
@@ -763,6 +787,7 @@ its fingerprint,
 * An error line appears under the button; no file downloads.
 * Download all is available again to retry.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-xvr rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC5-2: The bundle is bounded to only the cases the page lists
 
 **Classification:**
@@ -792,6 +817,7 @@ its fingerprint,
 
 * The file carries only documents from cases step 1 lists; no other collector's case is included.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-3ew rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC6-2: The bulk download is recorded on the audit chain like a search
 
 **Classification:**
@@ -820,6 +846,7 @@ its fingerprint,
 
 * The audit chain gains an entry naming who downloaded, when, and how many documents.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-nod rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC7-2: A download past 52,428,800 bytes is refused before anything is read
 
 **Classification:**
@@ -849,6 +876,7 @@ its fingerprint,
 * The download is refused by name, before any document is read.
 * No file is sent, and no document is recorded as read.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-6a7 rev=1 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC9-1: The one download is refused without a session
 
 **Classification:**
@@ -887,6 +915,7 @@ its fingerprint,
 stood when the papers were prepared,
 **so that** the paper I sign names the exact slab the shop keeps.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-c26 rev=1 covers=g10.vault-documents-and-signing.SC-3r0,g10.vault-documents-and-signing.SC-mvh,g10.vault-documents-and-signing.SC-82h,g10.vault-documents-and-signing.SC-cya,g10.vault-documents-and-signing.SC-ahm,g10.vault-documents-and-signing.SC-3g3 -->
 ### grade10-site-vault-documents-and-signing-US6-TC1-1: The custody agreement prints the register's item and slab
 
 **Classification:**
@@ -927,6 +956,7 @@ stood when the papers were prepared,
 * The item reads the register's category, title and description from **Test data**, not `<request title>`.
 * Beside it, grader PSA, grade 10 and certificate number `AB12345`.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-id2 rev=1 covers=g10.vault-documents-and-signing.SC-3r0,g10.vault-documents-and-signing.SC-mvh,g10.vault-documents-and-signing.SC-82h,g10.vault-documents-and-signing.SC-cya,g10.vault-documents-and-signing.SC-ahm,g10.vault-documents-and-signing.SC-3g3 -->
 ### grade10-site-vault-documents-and-signing-US6-TC2-1: A prepared agreement keeps the facts it was prepared with
 
 **Classification:**
@@ -959,6 +989,7 @@ stood when the papers were prepared,
 * Step 2 still reads grade 9.
 * Step 4 reads grade 10.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-o3t rev=1 covers=g10.vault-documents-and-signing.SC-3r0,g10.vault-documents-and-signing.SC-mvh,g10.vault-documents-and-signing.SC-82h,g10.vault-documents-and-signing.SC-cya,g10.vault-documents-and-signing.SC-ahm,g10.vault-documents-and-signing.SC-3g3 -->
 ### grade10-site-vault-documents-and-signing-US6-TC3-1: An item with no grader prints no slab facts
 
 **Classification:**
@@ -989,6 +1020,7 @@ stood when the papers were prepared,
 * The item reads the register's category, title and description.
 * Nothing is printed for grader, grade or certificate number.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-dqk rev=1 covers=g10.vault-documents-and-signing.SC-3r0,g10.vault-documents-and-signing.SC-mvh,g10.vault-documents-and-signing.SC-82h,g10.vault-documents-and-signing.SC-cya,g10.vault-documents-and-signing.SC-ahm,g10.vault-documents-and-signing.SC-3g3 -->
 ### grade10-site-vault-documents-and-signing-US6-TC4-1: The loan agreement's collateral prints the register's item and slab
 
 **Classification:**
@@ -1019,6 +1051,7 @@ stood when the papers were prepared,
 * The collateral reads "Charizard 1999 Base Set", a trading card, with PSA, grade 10 and certificate number `<cert_4>`.
 * "Charizard card" is not printed.
 
+<!-- trace:case id=g10.vault-documents-and-signing.TC-jug rev=1 covers=g10.vault-documents-and-signing.SC-3r0,g10.vault-documents-and-signing.SC-mvh,g10.vault-documents-and-signing.SC-82h,g10.vault-documents-and-signing.SC-cya,g10.vault-documents-and-signing.SC-ahm,g10.vault-documents-and-signing.SC-3g3 -->
 ### grade10-site-vault-documents-and-signing-US6-TC5-1: The release receipt prints the register's item and slab
 
 **Classification:**

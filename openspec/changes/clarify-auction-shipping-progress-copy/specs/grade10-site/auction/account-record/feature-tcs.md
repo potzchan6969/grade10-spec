@@ -9,6 +9,7 @@
 **I want** a paid, undispatched Won row to read Preparing Shipment,
 **so that** My Auctions matches Winner Order without implying the lot shipped.
 
+<!-- trace:case id=g10.auction-account-record.TC-lvl rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
 ### grade10-site-auction-account-record-US3-TC20-1: Paid undispatched Won row reads Preparing Shipment
 
 **Classification:**

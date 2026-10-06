@@ -9,6 +9,7 @@
 **I want** my current cart to open over the page I am on with current facts,
 **so that** I can review what the shop can sell without losing my place.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-5he rev=1 covers=g10.store-cart-drawer.SC-omn,g10.store-cart-drawer.SC-za5,g10.store-cart-drawer.SC-a52,g10.store-cart-drawer.SC-tv2,g10.store-cart-drawer.SC-ti9,g10.store-cart-drawer.SC-0og,g10.store-cart-drawer.SC-lrr,g10.store-cart-drawer.SC-8ln,g10.store-cart-drawer.SC-33u -->
 ### grade10-site-store-cart-drawer-US01-TC01-1: Drawer reviews the signed-in member cart
 
 Runs once per row of **Test data**.
@@ -48,6 +49,7 @@ Runs once per row of **Test data**.
 * The drawer reviews and shows <expected cart>.
 * No line belonging only to <other cart> is shown.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-unv rev=1 covers=g10.store-cart-drawer.SC-omn,g10.store-cart-drawer.SC-za5,g10.store-cart-drawer.SC-a52,g10.store-cart-drawer.SC-tv2,g10.store-cart-drawer.SC-ti9,g10.store-cart-drawer.SC-0og,g10.store-cart-drawer.SC-lrr,g10.store-cart-drawer.SC-8ln,g10.store-cart-drawer.SC-33u -->
 ### grade10-site-store-cart-drawer-US01-TC02-1: Pending read withholds stale facts and a later open reads again
 
 **Classification:**
@@ -89,6 +91,7 @@ Runs once per row of **Test data**.
 * After step 3, <line> and the subtotal use <current price> as a count of minor units paired with HKD.
 * Step 4 starts a second status-and-price read rather than reusing the first answer as current.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-i6a rev=1 covers=g10.store-cart-drawer.SC-omn,g10.store-cart-drawer.SC-za5,g10.store-cart-drawer.SC-a52,g10.store-cart-drawer.SC-tv2,g10.store-cart-drawer.SC-ti9,g10.store-cart-drawer.SC-0og,g10.store-cart-drawer.SC-lrr,g10.store-cart-drawer.SC-8ln,g10.store-cart-drawer.SC-33u -->
 ### grade10-site-store-cart-drawer-US01-TC03-1: Failed read reports once and reopening retries
 
 **Classification:**
@@ -123,6 +126,7 @@ Runs once per row of **Test data**.
 * The recorded price and availability are not presented as current, and Checkout remains unavailable.
 * Step 4 starts a new read and shows reviewed facts when it succeeds.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-v2u rev=1 covers=g10.store-cart-drawer.SC-omn,g10.store-cart-drawer.SC-za5,g10.store-cart-drawer.SC-a52,g10.store-cart-drawer.SC-tv2,g10.store-cart-drawer.SC-ti9,g10.store-cart-drawer.SC-0og,g10.store-cart-drawer.SC-lrr,g10.store-cart-drawer.SC-8ln,g10.store-cart-drawer.SC-33u -->
 ### grade10-site-store-cart-drawer-US01-TC04-1: Summary makes no unsupported price claim
 
 **Classification:**
@@ -165,6 +169,7 @@ Runs once per row of **Test data**.
 * Shipping reads `Calculated at checkout`, no product image or points control appears, and no promotion or discount is applied.
 * Step 3 accepts no code and leaves the summary unchanged.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-gd8 rev=1 covers=g10.store-cart-drawer.SC-omn,g10.store-cart-drawer.SC-za5,g10.store-cart-drawer.SC-a52,g10.store-cart-drawer.SC-tv2,g10.store-cart-drawer.SC-ti9,g10.store-cart-drawer.SC-0og,g10.store-cart-drawer.SC-lrr,g10.store-cart-drawer.SC-8ln,g10.store-cart-drawer.SC-33u -->
 ### grade10-site-store-cart-drawer-US01-TC05-1: Opening and closing preserve the current surface
 
 **Classification:**
@@ -210,6 +215,7 @@ Runs once per row of **Test data**.
 **I want** to change or remove lines after the shop checks them,
 **so that** the cart I continue with contains what I intend to buy.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-qhe rev=1 covers=g10.store-cart-drawer.SC-5bv,g10.store-cart-drawer.SC-7rs -->
 ### grade10-site-store-cart-drawer-US02-TC01-1: Quantity and removal update the opened cart
 
 Runs once per row of **Test data**.
@@ -251,6 +257,7 @@ Runs once per row of **Test data**.
 * <expected result>.
 * No other member cart is changed.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-biv rev=1 covers=g10.store-cart-drawer.SC-5bv,g10.store-cart-drawer.SC-7rs -->
 ### grade10-site-store-cart-drawer-US02-TC02-1: Delisted lines are removed once with one notice
 
 **Classification:**
@@ -291,6 +298,7 @@ Runs once per row of **Test data**.
 **I want** the cart to take me to a product I select from it,
 **so that** I can continue the shopping path I chose.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-hte rev=1 covers=g10.store-cart-drawer.SC-oqn -->
 ### grade10-site-store-cart-drawer-US03-TC01-1: Reviewed line opens its existing product address
 
 **Classification:**
@@ -329,6 +337,7 @@ Runs once per row of **Test data**.
 **I want** to see which promo codes and how many points the reviewed basket can take,
 **so that** I can understand my available benefits before continuing to checkout.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-8h2 rev=1 covers=g10.store-cart-drawer.SC-bim,g10.store-cart-drawer.SC-44a,g10.store-cart-drawer.SC-3yf -->
 ### grade10-site-store-cart-drawer-US04-TC01-1: Coupon answers remain unselected and current
 
 **Classification:**
@@ -362,6 +371,7 @@ Runs once per row of **Test data**.
 * The inapplicable code shows the answer explaining why it cannot be used.
 * No promo discount is shown in the drawer summary.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-4fy rev=1 covers=g10.store-cart-drawer.SC-bim,g10.store-cart-drawer.SC-44a,g10.store-cart-drawer.SC-3yf -->
 ### grade10-site-store-cart-drawer-US04-TC02-1: Points ceiling does not change the reviewed total
 
 **Classification:**
@@ -394,6 +404,7 @@ Runs once per row of **Test data**.
 * Opening the points view applies no points.
 * The subtotal and estimated total remain the reviewed subtotal.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-it0 rev=2 covers=g10.store-cart-drawer.SC-bim,g10.store-cart-drawer.SC-44a,g10.store-cart-drawer.SC-3yf -->
 ### grade10-site-store-cart-drawer-US04-TC03-2: Unresolved reviews receive no tender facts
 
 **Classification:**
@@ -431,6 +442,7 @@ Runs once per row of **Test data**.
 * No member-only tender read is required to render the cart review state.
 * Points actions remain unavailable until a usable quote answers.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-q9l rev=1 covers=g10.store-cart-drawer.SC-bim,g10.store-cart-drawer.SC-44a,g10.store-cart-drawer.SC-3yf -->
 ### grade10-site-store-cart-drawer-US04-TC04-1: Latest basket replaces earlier tender facts
 
 **Classification:**
@@ -476,6 +488,7 @@ Runs once per row of **Test data**.
 **I want** to apply, maximise or remove points against the reviewed cart and keep that choice at checkout,
 **so that** I can see the accepted saving before leaving the page.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-s5l rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC01-1: Apply carries accepted points and the existing code to checkout
 
 **Classification:**
@@ -518,6 +531,7 @@ Runs once per row of **Test data**.
 * Checkout retains the accepted code and points.
 * Checkout reads current figures against the same cart.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-an9 rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC02-1: Use max applies the quoted ceiling after the code
 
 Runs once per row of **Test data**.
@@ -559,6 +573,7 @@ Runs once per row of **Test data**.
 * The ceiling accounts for balance, qualifying goods and existing code.
 * The summary uses the accepted saving and estimated total.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-vix rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC03-1: Apply above the ceiling keeps only accepted points
 
 **Classification:**
@@ -596,6 +611,7 @@ Runs once per row of **Test data**.
 * The summary shows only the accepted saving.
 * Checkout carries the accepted choice.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-gtt rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC04-1: Remove clears points and preserves the existing code
 
 **Classification:**
@@ -629,6 +645,7 @@ Runs once per row of **Test data**.
 * The summary retains the accepted code discount.
 * Estimated total excludes a points saving.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-zyo rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC05-1: Pending changes block duplicate actions and Checkout
 
 Runs once per row of **Test data**.
@@ -674,6 +691,7 @@ Runs once per row of **Test data**.
 * No unaccepted saving replaces the accepted total.
 * The completed summary uses the accepted quote.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-ncq rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC06-1: Failed changes preserve the accepted same-basket choice
 
 Runs once per row of **Test data**.
@@ -719,6 +737,7 @@ Runs once per row of **Test data**.
 * The last accepted same-basket total remains.
 * The existing code remains selected.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-n5t rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC07-1: A changed basket rejects an earlier points result
 
 **Classification:**
@@ -753,6 +772,7 @@ Runs once per row of **Test data**.
 * Checkout stays unavailable until the current basket is resolved.
 * The earlier response cannot replace the current basket summary.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-vxl rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC08-1: Reload and another device recover the accepted choice
 
 Runs once per row of **Test data**.
@@ -794,6 +814,7 @@ Runs once per row of **Test data**.
 * Displayed figures come from a fresh quote.
 * Checkout receives the same accepted choice.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-js3 rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC09-1: Unavailable points cannot be applied
 
 Runs once per row of **Test data**.
@@ -835,6 +856,7 @@ Runs once per row of **Test data**.
 * No enabled points action is available.
 * No unaccepted points saving appears.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-6uw rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC10-1: A code covering all qualifying goods leaves no points to apply
 
 **Classification:**
@@ -867,6 +889,7 @@ Runs once per row of **Test data**.
 * No positive points saving is applied.
 * The accepted code remains selected.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-75a rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC11-1: Invalid amounts do not mutate points
 
 **Classification:**
@@ -894,6 +917,7 @@ Runs once per row of **Test data**.
 
 * No invalid amount is persisted; the accepted choice and total remain.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-lka rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC12-1: Closing or changing member rejects stale results
 
 **Classification:**
@@ -921,6 +945,7 @@ Runs once per row of **Test data**.
 
 * No stale result updates the view or starts a stale write. A write already sent remains scoped to its member; reopening reads current persisted intent.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-t22 rev=1 covers=g10.store-cart-drawer.SC-xhn,g10.store-cart-drawer.SC-k73,g10.store-cart-drawer.SC-tio,g10.store-cart-drawer.SC-qit,g10.store-cart-drawer.SC-cui,g10.store-cart-drawer.SC-puc,g10.store-cart-drawer.SC-pi9,g10.store-cart-drawer.SC-34h,g10.store-cart-drawer.SC-fwv -->
 ### grade10-site-store-cart-drawer-US05-TC13-1: Persistence success followed by refresh failure stays unresolved
 
 **Classification:**
@@ -956,6 +981,7 @@ Runs once per row of **Test data**.
 **I want** to pay for my reviewed cart from the drawer itself,
 **so that** I reach Shopify's hosted invoice without a second page.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-qvw rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC01-1: Proceed to Checkout creates the session from the reviewed basket and reaches Shopify's hosted invoice
 
 **Classification:**
@@ -986,6 +1012,7 @@ Runs once per row of **Test data**.
 * A checkout session is created carrying the reviewed lines and the accepted code and points; no separate checkout-open read happens first.
 * The drawer shows a redirecting state until the collector's browser reaches Shopify's hosted invoice for that session.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-28w rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC02-1: An unverified member's basket at the HKD 120,000 bar blocks Proceed to Checkout
 
 **Classification:**
@@ -1016,6 +1043,7 @@ Runs once per row of **Test data**.
 * No checkout session is created.
 * The link opens the member's account page; the drawer itself performs no verification.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-x28 rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC03-1: A basket under the bar, or a verified member's basket at or above it, proceeds without the gate
 
 Runs once per row of **Test data**.
@@ -1053,6 +1081,7 @@ Runs once per row of **Test data**.
 * No verification message or account-page link is shown.
 * A checkout session is created and the collector reaches Shopify's hosted invoice.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-uvd rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC04-1: The drawer holds a redirecting state until Shopify's hosted invoice is ready before leaving
 
 **Classification:**
@@ -1084,6 +1113,7 @@ Runs once per row of **Test data**.
 * While the response is pending, the drawer shows a redirecting state rather than closing or leaving the page.
 * The collector's browser leaves for Shopify's hosted invoice only once the response arrives successfully.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-kfu rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC05-1: A changed line found at creation is named in the drawer, not on a separate page
 
 **Classification:**
@@ -1115,6 +1145,7 @@ Runs once per row of **Test data**.
 * No checkout session is created for the stale basket.
 * The collector can review the current basket and press Proceed to Checkout again without leaving the drawer.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-kzn rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC06-1: A provider refusal is named in the drawer, not on a separate page
 
 **Classification:**
@@ -1146,6 +1177,7 @@ Runs once per row of **Test data**.
 * No order or checkout session is left behind from the refused attempt.
 * The reviewed basket and accepted tender remain as they were before the press.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-ool rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC07-1: A second press before the first resolves returns the same checkout, not a second one
 
 **Classification:**
@@ -1179,6 +1211,7 @@ Runs once per row of **Test data**.
 
 **Note:** the idempotency guarantee this case exercises is `add-shopify-checkout-integration`'s (a server-side, cross-request fact), not this capability's own; **Covered at `grade10-site/store/checkout`** once that change's server-side requirement lands.
 
+<!-- trace:case id=g10.store-cart-drawer.TC-a94 rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC08-1: The removed /checkout address no longer opens a checkout page
 
 **Classification:**

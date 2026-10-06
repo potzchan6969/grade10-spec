@@ -49,18 +49,21 @@ carried: `VaultAcceptOfferDialogProps`, `VaultAcceptOfferDialogCopy`,
 `VaultCasesTone`, `VaultCasesIcon`, `VaultCasesEmptyProps`,
 `VaultCasesEmptyCopy` and `VaultCasesEmptyStep`.
 
+<!-- trace:scenario id=g10.shared-vault-case.SC-k73 rev=1 -->
 #### Scenario: shared-ui-vault-case-SC-01 - An application imports the vault blocks
 **Serves:** The export contract - the store carries no vault collector block until the screens are designed again
 
 - **WHEN** the shared UI package's public entry is read
 - **THEN** it exports none of the components and types named above
 
+<!-- trace:scenario id=g10.shared-vault-case.SC-abf rev=1 -->
 #### Scenario: shared-ui-vault-case-SC-02 - A booked visit composes the booking cards
 **Serves:** The export contract - the booking set stays the booking blocks' own
 
 - **WHEN** the shared UI package's public entry is read
 - **THEN** it exports no vault-named confirmation or visit card
 
+<!-- trace:scenario id=g10.shared-vault-case.SC-jrc rev=1 -->
 #### Scenario: shared-ui-vault-case-SC-03 - No block reaches past its props
 **Serves:** The export contract - no vault collector block is left to reach past its props
 

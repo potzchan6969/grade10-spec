@@ -101,6 +101,7 @@ worklist's address, so a reload or a shared link opens the same list.
 Scenario `grade10-admin-auction-post-sale-SC-19` keeps its title with its id.
 The title is historical: a lot still taking bids is not in the worklist.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-05a rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-19 - A lot inside its last hour is Ending soon
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -109,6 +110,7 @@ The title is historical: a lot still taking bids is not in the worklist.
 - **WHEN** an operator reads the Orders worklist
 - **THEN** that lot is not listed
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-71a rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -121,6 +123,7 @@ Scenario `grade10-admin-auction-post-sale-SC-21` keeps its title with its id.
 The title is historical: an expired invoice's order reads Payment Overdue and
 sits under Needs action.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-9oe rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -130,6 +133,7 @@ sits under Needs action.
 - **THEN** it lists the Payment Overdue order and the Preparing Shipment order
 - **AND** it lists neither of the other two
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-88b rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-44 - An order ready for a quote needs action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -139,6 +143,7 @@ sits under Needs action.
 - **THEN** Needs action lists the Preparing Invoice order
 - **AND** Waiting on winner lists the Awaiting Setup order
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-cnh rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-116 - Proof waiting for a check needs action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -148,6 +153,7 @@ sits under Needs action.
 - **THEN** only the first order is listed, reading Payment Verifying
 - **AND** it counts under Needs action
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-8dq rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-131 - A search finds the order by any of its identifiers
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -158,6 +164,7 @@ sits under Needs action.
 - **THEN** each search finds that order
 - **AND** the order shows `IN-LK42302` as its current invoice
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-w38 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-159 - Each segment shows its count
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -168,6 +175,7 @@ sits under Needs action.
 - **AND** Needs action reads 2, Waiting on winner 1, In transit 0, Closed 1 and
   All 4
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-whp rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-160 - A search finds the order by the winner's email
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -177,6 +185,7 @@ sits under Needs action.
 - **THEN** the search finds that order
 - **AND** Needs action and All read 1, and every other segment 0
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-iyb rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-161 - A flagged order counts under Needs action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -188,6 +197,7 @@ sits under Needs action.
 - **AND** once an operator clears the flag, it is listed under Waiting on
   winner only
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kqf rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-180 - Work segments list the longest-waiting order first
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -197,6 +207,7 @@ sits under Needs action.
 - **THEN** Needs action lists the order confirmed 30 hours ago first
 - **AND** Closed lists the order delivered 1 day ago first
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-8wv rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-181 - A row offers its status's primary action
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -207,6 +218,7 @@ sits under Needs action.
 - **THEN** the send dialog of that order opens
 - **AND** neither Preparing Shipment row offers an action
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-d6e rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-182 - Filters follow the open segment
 **Serves:** post-sale-US-01 - Operator works the orders worklist by segment
 
@@ -243,6 +255,7 @@ Reissuing an invoice SHALL NOT lift the winner's account suspension, per
 `grade10-site/auction/bidder-suspension`. Reinstatement is a separate,
 explicit action.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xod rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-23 - Reissue returns an expired order to Pending Payment
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -252,6 +265,7 @@ explicit action.
 - **THEN** the invoice status is `pending` with a new 7-day deadline
 - **AND** the derived order status is Pending Payment
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-em2 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -260,6 +274,7 @@ explicit action.
 - **THEN** the account is still suspended
 - **AND** the operator is not offered reinstatement as part of the reissue
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5aa rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -268,6 +283,7 @@ explicit action.
 - **THEN** the reissue, record payment and cancel controls are visible and disabled
 - **AND** Grade10 refuses those actions on the server if they are attempted
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5qg rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-54 - An overdue order waiting on an address can be cancelled
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -278,6 +294,7 @@ explicit action.
   stock hold is released, so the item is back in stock
 - **AND** the winner's account is not suspended
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-j3h rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-122 - A pending invoice offers reissue and settlement
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -287,6 +304,7 @@ explicit action.
 - **THEN** Reissue and Record payment are offered
 - **AND** Confirm and Return are not
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-bb5 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-127 - Only Confirm and Return while proof is checked
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -332,6 +350,7 @@ tried three times with a declining card is a different case from one who never
 engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ua0 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -342,6 +361,7 @@ reinstatement.
 - **AND** the buyer is distinguishable from one whose history holds only the
   issued log entry
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-j3o rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -351,6 +371,7 @@ reinstatement.
 - **THEN** it shows the reissued entry at 316000 minor units in HKD
 - **AND** the delta from the prior entry and the deadline choice
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-hgz rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-61 - A paid entry names how it was paid
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -360,6 +381,7 @@ reinstatement.
 - **THEN** the first paid entry names a Visa card ending 4242
 - **AND** the second names cash, with its proof files
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-k8l rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-123 - A reissue names what it changed
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -371,6 +393,7 @@ reinstatement.
   Shipping & Handling as changed, each with its value before and after
 - **AND** names no other part as changed
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-jce rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-124 - A proof check is on the record
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -379,6 +402,7 @@ reinstatement.
 - **THEN** it shows proof uploaded, proof returned with both reasons and the time left, proof uploaded, and proof confirmed, in that order
 - **AND** each names its actor and timestamp
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-dgt rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-132 - Operators read the internal audit numbers
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -409,6 +433,7 @@ the final amount, the address history and the invoice amount history SHALL be
 independently reconstructable and cross-referenceable, so an amount change can
 be explained afterwards.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-fzw rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-36 - The address at dispatch survives a later edit
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -475,6 +500,7 @@ sentence in that dialog, which stays open with what the operator entered.
 units, `50.00` for HK$50.00, and Grade10 SHALL store the matching count of
 minor units.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-i7j rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-37 - The detail explains the status it derived
 **Serves:** Queue - the detail explains the status it derived
 
@@ -487,6 +513,7 @@ minor units.
   deadline passed two days ago unpaid - rather than the label alone
 - **AND** Reissue is its primary action
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-seg rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-38 - A buyer's reissue history spans all their orders
 **Serves:** Queue - a buyer's reissue history spans all their orders
 
@@ -495,6 +522,7 @@ minor units.
 - **THEN** the detail shows that buyer's reissue history across all three
 - **AND** the reissue count for the order in front of them
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ydn rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-162 - An order opens at its own address
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
@@ -502,6 +530,7 @@ minor units.
 - **WHEN** they reload it, and a colleague opens its link
 - **THEN** both open the same order
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-bcb rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-163 - Comments share the timeline
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
@@ -513,6 +542,7 @@ minor units.
   with that operator and its time, oldest first
 - **AND** the empty comment is refused
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-d8k rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-164 - A refusal keeps the dialog open
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
@@ -524,6 +554,7 @@ minor units.
 - **AND** it says in a sentence that Shipping & Handling is needed
 - **AND** no invoice is sent
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-lc8 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-165 - Money is typed in major units
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
@@ -531,6 +562,7 @@ minor units.
 - **WHEN** an operator types Shipping & Handling as `80.00` and sends
 - **THEN** the invoice carries Shipping & Handling of 8000 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-f7t rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-184 - More holds only what applies now
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
@@ -541,6 +573,7 @@ minor units.
   Refund alone under More
 - **AND** the Cancelled order offers no primary action and no More
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-59i rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-185 - An order on a sandbox lot reads Test
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 
@@ -586,6 +619,7 @@ text beneath it. Grade10 SHALL refuse the same action on the server.
 
 Recording a delivery address SHALL NOT dispatch the lot.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-3p6 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-39 - Staff cannot record payment
 **Serves:** Grants - staff cannot record payment
 
@@ -596,6 +630,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **AND** each names payment processing as the access it needs
 - **AND** Grade10 refuses those actions on the server
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-34a rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-40 - Finance cannot record dispatch
 **Serves:** Grants - finance cannot record dispatch
 
@@ -605,6 +640,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **AND** the text beneath it names shipment processing as the access it needs
 - **AND** Grade10 refuses a dispatch from them on the server
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-lq4 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-41 - Recording an address does not dispatch the lot
 **Serves:** Grants - recording an address does not dispatch the lot
 
@@ -615,6 +651,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **THEN** the order shows that address
 - **AND** it still derives as Preparing Invoice, with no dispatch recorded
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-r1r rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-186 - Finance cancels an unpaid order
 **Serves:** Grants - cancelling an order is payment processing
 
@@ -624,6 +661,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **THEN** the order derives as Cancelled
 - **AND** the timeline names that operator on the cancelled entry
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-vg7 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-187 - Proof files open for any operator and attach under their grant
 **Serves:** Grants - reading every proof file, attaching only under the action's access
 
@@ -650,6 +688,7 @@ recording setup, changing setup before send, clearing a flag and recording a
 refund SHALL also carry a reason, and Grade10 SHALL refuse each without one. A
 system-initiated log entry SHALL record the event that triggered it.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-cbk rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-42 - A relisted lot's cancelled order is retained
 **Serves:** Queue - a relisted lot's cancelled order is retained
 
@@ -659,6 +698,7 @@ system-initiated log entry SHALL record the event that triggered it.
 - **THEN** its full invoice and fulfilment log is still readable
 - **AND** no record has been deleted or edited in place
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-yd7 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-43 - An operator event without a reason is refused
 **Serves:** Queue - an operator event without a reason is refused
 
@@ -667,6 +707,7 @@ system-initiated log entry SHALL record the event that triggered it.
 - **THEN** Grade10 refuses the action
 - **AND** writes no history log entry
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-37a rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-166 - A log entry names the operator signed in
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
@@ -709,6 +750,7 @@ long it waits.
 Grade10 SHALL NOT expire, cancel, or suspend on it; the operator decides
 whether to contact the winner, send the invoice, or cancel the order.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-sjh rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-45 - An order waiting on an address shows time since close
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -721,6 +763,7 @@ Scenario `grade10-admin-auction-post-sale-SC-46` keeps its title with its id.
 The title is historical: an order past its 48-hour address deadline reads
 Setup Overdue, and Preparing Invoice carries no mark however long it waits.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-egc rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-46 - An order idle 72 hours is marked Overdue
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -733,6 +776,7 @@ Setup Overdue, and Preparing Invoice carries no mark however long it waits.
 - **AND** the second reads Preparing Invoice, having waited 80 hours, with no
   mark
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-i16 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-47 - Overdue changes no status
 **Serves:** Queue - overdue changes no status
 
@@ -741,6 +785,7 @@ Setup Overdue, and Preparing Invoice carries no mark however long it waits.
 - **THEN** its derived status is still Setup Overdue
 - **AND** the winner's account is not suspended
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-obc rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-188 - A flagged order counts from its flag
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -798,6 +843,7 @@ They SHALL NOT be shown to the winner. Grade10 SHALL log the operator, the
 timestamp, the amount, the method, the external reference, the proof files and
 the reason.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-8xm rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-55 - A bank transfer with a slip settles the order
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -814,6 +860,7 @@ the reason.
 Scenario `grade10-admin-auction-post-sale-SC-67` keeps its title with its id.
 The title is historical: manual settlement keeps the payment processing fee.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-21a rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-67 - Manual settlement drops the processing fee
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -824,6 +871,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** the invoice is `paid` at 317000 minor units in HKD
 - **AND** the invoice still carries the payment processing fee of 5000 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-fbr rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-56 - Settlement without proof is refused
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -832,6 +880,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-pvd rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-57 - Another method needs a description
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -841,6 +890,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xba rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-58 - No settlement before an invoice is sent
 **Serves:** post-sale-US-07 - settlement waits for the invoice the quote sends
 
@@ -849,6 +899,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** Grade10 refuses it
 - **AND** the order is still Preparing Invoice
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-d5u rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-59 - A settled order refuses a second settlement
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -857,6 +908,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** Grade10 refuses it
 - **AND** the existing payment record is unchanged
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-e68 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-60 - Manual settlement is available before expiry
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -868,6 +920,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **AND** the order derives as Preparing Shipment without having expired first
 - **AND** the order never read Payment Verifying
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-wdr rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-62 - A proof file of the wrong kind is refused
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -877,6 +930,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** Grade10 refuses the commit and stores no file
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-prr rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-120 - No manual settlement while proof is checked
 **Serves:** Resolving an unpaid order - operator settlement
 
@@ -885,6 +939,7 @@ The title is historical: manual settlement keeps the payment processing fee.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `payment_verifying`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-bgy rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-121 - A card invoice cannot be settled manually
 **Serves:** Resolving an unpaid order - card invoice paid by transfer
 
@@ -898,6 +953,7 @@ The title is historical: an amount below or above the balance is recorded, per
 "Operators can record an ordered partial-payment history", and only an amount
 of zero or less is refused.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-gj2 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-130 - A settlement at another amount is refused
 **Serves:** Resolving an unpaid order - operator settlement
 
@@ -906,6 +962,7 @@ of zero or less is refused.
 - **THEN** Grade10 refuses each
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5ky rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-189 - Record payment starts at the balance
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -918,6 +975,7 @@ of zero or less is refused.
 - **AND** at `2000.00` the balance after reads 112000 minor units in HKD, and
   the dialog says the order will read Partially Paid
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5at rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-190 - A payment without a reason is refused
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -964,6 +1022,7 @@ change after send is a reissue, per "An operator reissues a sent invoice".
 see the edit control visible and disabled, and Grade10 SHALL refuse the same
 action on the server.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ys6 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-135 - An edit before send is recorded with its reason
 **Serves:** Quote and send - edit before send
 
@@ -974,6 +1033,7 @@ action on the server.
 - **AND** the order is still Preparing Invoice
 - **AND** the invoice log shows an order edited before send entry naming the operator, the reason, and the address and method before and after
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-13r rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-136 - An edit without a reason is refused
 **Serves:** Quote and send - edit before send
 
@@ -982,6 +1042,7 @@ action on the server.
 - **THEN** Grade10 refuses it
 - **AND** the order keeps the address the winner confirmed
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7b2 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-137 - Staff cannot edit before send
 **Serves:** Quote and send - edit before send
 
@@ -990,6 +1051,7 @@ action on the server.
 - **THEN** the edit control is visible and disabled
 - **AND** Grade10 refuses an edit from them on the server
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-j60 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-138 - A USD order cannot be edited to bank transfer
 **Serves:** Quote and send - edit before send
 
@@ -998,6 +1060,7 @@ action on the server.
 - **THEN** Grade10 refuses it
 - **AND** the order still holds card
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-htz rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-139 - An edit does not reset the waiting time
 **Serves:** Quote and send - edit before send
 
@@ -1040,6 +1103,7 @@ above the order total, which keeps the order's status, per
 `grade10-site/auction/order-status`. It SHALL preserve the shipment record,
 fix the stock choice, and refuse a second refund.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7fc rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-145 - A refund closes a partially paid order
 **Serves:** post-sale-US-16 - recording the external refund on the order
 
@@ -1048,6 +1112,7 @@ fix the stock choice, and refuse a second refund.
 - **THEN** the order reads Refunded
 - **AND** the refund stores the amount, method, audit number and stock choice
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-dzs rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-146 - An over-refund is refused
 **Serves:** post-sale-US-16 - refusing an amount the winner did not pay
 
@@ -1056,6 +1121,7 @@ fix the stock choice, and refuse a second refund.
 - **THEN** Grade10 refuses the record
 - **AND** the order remains in its previous outcome
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-dwy rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-191 - A refund of the overpaid difference keeps the status
 **Serves:** post-sale-US-16 - returning only what was paid above the order total
 
@@ -1066,6 +1132,7 @@ fix the stock choice, and refuse a second refund.
 - **THEN** the order still reads Preparing Shipment
 - **AND** a second refund on it is refused
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-brr rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-192 - A bank refund names where it went and is restated first
 **Serves:** post-sale-US-16 - recording the external refund on the order
 
@@ -1081,6 +1148,7 @@ fix the stock choice, and refuse a second refund.
   FPS ID, 2026-09-25 and the reason, and the order reads Refunded
 - **AND** neither the refund record nor the invoice log holds `12345678`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qno rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-200 - An FPS email is kept to its first letter and domain
 **Serves:** post-sale-US-16 - recording the external refund on the order
 
@@ -1131,6 +1199,7 @@ reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 
 **No provider** - No send or reissue SHALL need the payment provider.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qvj rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-167 - No card rule refuses the send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -1142,6 +1211,7 @@ reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 - **AND** the dialog says the USD card fee is not set and points to Payment
   Settings
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-omk rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-168 - Grade10 computes the card fee
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -1154,6 +1224,7 @@ reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 - **AND** the quote showed the fee read-only with the HKD card rule it came
   from
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-t9u rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-169 - The card fee tracks the subtotal until send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -1164,6 +1235,7 @@ reissue re-prices a card fee or lets the operator retype a bank transfer fee.
   minor units
 - **THEN** the fee reads 11366 and the order total 327366 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-hto rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-171 - A switch to bank transfer starts the fee empty
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -1174,6 +1246,7 @@ reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 - **AND** the operator reads 323225 as the previous and 312000 minor units in
   HKD as the new order total
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ltc rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-172 - A reissue that keeps bank transfer keeps its typed fee
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -1184,6 +1257,7 @@ reissue re-prices a card fee or lets the operator retype a bank transfer fee.
 - **THEN** the payment processing fee still reads 5000, editable by the
   operator
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-tj1 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-193 - A sent invoice keeps its fee when the card rule changes
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -1212,6 +1286,7 @@ new total before they send again.
 minute, the payment deadline the send will set: 7 calendar days from the
 moment of send, or the current deadline on a reissue that keeps it.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-hgh rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-170 - A total that changed since it was read refuses the send
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -1226,6 +1301,7 @@ moment of send, or the current deadline on a reissue that keeps it.
 - **AND** Shipping & Handling and Insurance still read 8000 and 4000
 - **AND** no invoice is issued
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-gks rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-194 - The dialog shows the deadline the send sets
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -1259,6 +1335,7 @@ carrier or a tracking number.
 log history", and send the winner the shipped or delivered letter, per
 `grade10-site/auction/notifications-order`.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-82s rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-173 - Dispatch with a carrier and tracking number ships the order
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
@@ -1270,6 +1347,7 @@ log history", and send the winner the shipped or delivered letter, per
 - **AND** the fulfilment log shows a dispatched entry with that carrier, that
   tracking number, the operator and the delivery address as it stood
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7rg rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-174 - Delivery with proof completes the order
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
@@ -1281,6 +1359,7 @@ log history", and send the winner the shipped or delivered letter, per
 - **AND** the fulfilment log shows a delivery confirmed entry with that date
   and that image
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-b2b rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-175 - Dispatch and delivery cannot skip ahead
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
@@ -1290,6 +1369,7 @@ log history", and send the winner the shipped or delivered letter, per
 - **THEN** Grade10 refuses both
 - **AND** neither order's status moves
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-0ln rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-176 - A dispatch without a tracking number is refused
 **Serves:** post-sale-US-04 - Operator records in-house shipment
 
@@ -1336,6 +1416,7 @@ sentence what landed and where, with its own Clear flag.
 payment's flag with a reason, which the invoice log keeps as a flag cleared
 entry. Clearing SHALL change no status.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-en4 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-201 - A card payment that lands on an expired invoice pays it late
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1346,6 +1427,7 @@ entry. Clearing SHALL change no status.
 - **THEN** Grade10 records it and flags it Paid late
 - **AND** the invoice is `paid`, so the order derives as Preparing Shipment
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-c66 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-202 - A card payment on an invoice in any other state counts toward nothing
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1357,6 +1439,7 @@ entry. Clearing SHALL change no status.
 - **AND** the invoice is still `payment_verifying`, with nothing counted as
   paid
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ccp rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-178 - A card payment on a replaced invoice is recorded and flagged
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1367,6 +1450,7 @@ entry. Clearing SHALL change no status.
   a replaced invoice
 - **AND** the order still derives as Pending Payment on the new invoice
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-btq rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-179 - Clearing a flag changes no status
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1377,6 +1461,7 @@ entry. Clearing SHALL change no status.
 - **AND** the invoice log shows a flag cleared entry with that operator and
   that reason
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-gmi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-195 - A payment at another amount counts nothing toward what is paid
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1386,6 +1471,7 @@ entry. Clearing SHALL change no status.
 - **THEN** Grade10 records it and flags it Amount mismatch
 - **AND** the invoice is still `pending`, with nothing counted as paid
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-amp rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-196 - An order stays flagged until each flag is cleared
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1395,6 +1481,7 @@ entry. Clearing SHALL change no status.
   notice left on its page
 - **AND** once the second is cleared, it is listed under Waiting on winner
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-3fi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-199 - Money that counts toward nothing blocks neither a reissue nor a cancel
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -1419,6 +1506,7 @@ change. A lot not in extended bidding SHALL NOT read Extended.
 **Open order** - The Listings row of a closed lot that has a winner SHALL offer
 Open order, which opens that lot's order page.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-d3j rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-197 - A lot still taking bids reads Extended in the Listings table
 **Serves:** post-sale-US-06 - Operator sees which lots are still in extended bidding
 
@@ -1428,6 +1516,7 @@ Open order, which opens that lot's order page.
 - **THEN** the first reads Extended beside its status, which is unchanged
 - **AND** the second does not read Extended
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-r4l rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-198 - A won lot's Listings row opens its order
 **Serves:** post-sale-US-02 - Operator works one order from its own page
 

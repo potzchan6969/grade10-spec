@@ -13,6 +13,7 @@ is wide enough for that rail beside the main frame,
 **so that** a stacked column keeps a clear stage with previous/next and
 progress instead of a crowded second rail.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-38a rev=1 covers=g10.shared-auction-listing.SC-e6o,g10.shared-auction-listing.SC-96b,g10.shared-auction-listing.SC-1a8,g10.shared-auction-listing.SC-nlz,g10.shared-auction-listing.SC-ed7,g10.shared-auction-listing.SC-ln3 -->
 ### shared-ui-auction-listing-US1-TC30-1: Wide ListingLotGallery shows a left rail
 
 **Classification:**
@@ -43,6 +44,7 @@ progress instead of a crowded second rail.
 * A thumbnail exists for each image in a rail beside the main frame.
 * Previous and next remain available.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-5ba rev=1 covers=g10.shared-auction-listing.SC-e6o,g10.shared-auction-listing.SC-96b,g10.shared-auction-listing.SC-1a8,g10.shared-auction-listing.SC-nlz,g10.shared-auction-listing.SC-ed7,g10.shared-auction-listing.SC-ln3 -->
 ### shared-ui-auction-listing-US1-TC31-1: Stacked ListingLotGallery hides the rail
 
 **Classification:**
@@ -75,6 +77,7 @@ progress instead of a crowded second rail.
 * Previous and next remain available.
 * Carousel progress remains available.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-j0c rev=1 covers=g10.shared-auction-listing.SC-e6o,g10.shared-auction-listing.SC-96b,g10.shared-auction-listing.SC-1a8,g10.shared-auction-listing.SC-nlz,g10.shared-auction-listing.SC-ed7,g10.shared-auction-listing.SC-ln3 -->
 ### shared-ui-auction-listing-US1-TC32-1: One ListingLotGallery image has no rail
 
 **Classification:**

@@ -20,6 +20,7 @@ place of the built-in cart control and SHALL NOT use `onCartClick`.
 **Omitted** - When `cartSlot` is omitted, the built-in cart control SHALL
 continue to follow the handler-gated cart rule.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-6id rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-22 - Cart slot replaces the built-in cart
 **Serves:** Header controls - cart slot replaces the built-in cart
 
@@ -50,6 +51,7 @@ lines. The application SHALL supply the same active-line count the cart drawer
 title badge uses (sold-out and unavailable lines excluded per
 `shared/ui/store-cart`).
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-szi rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-23 - Empty cart hides the count
 **Serves:** Header controls - empty cart hides the count
 
@@ -58,6 +60,7 @@ title badge uses (sold-out and unavailable lines excluded per
 - **THEN** the cart control appears
 - **AND** no count indicator appears on it
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-1ow rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-24 - One active line shows `1`
 **Serves:** Header controls - one active line shows `1`
 
@@ -65,6 +68,7 @@ title badge uses (sold-out and unavailable lines excluded per
 - **WHEN** the header renders
 - **THEN** a brand count indicator on the cart control displays `1`
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-xw7 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-25 - Multi-item count matches the drawer title
 **Serves:** Header controls - multi-item count matches the drawer title
 
@@ -74,6 +78,7 @@ title badge uses (sold-out and unavailable lines excluded per
 - **AND** that value is the same active-line count `CartDrawerHeader` would
   show for the same cart
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-bc3 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-26 - Large count is not truncated
 **Serves:** Header controls - large count is not truncated
 

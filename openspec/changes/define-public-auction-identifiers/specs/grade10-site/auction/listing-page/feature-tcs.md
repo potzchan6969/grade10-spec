@@ -9,6 +9,7 @@
 **I want** to reference and share a lot by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
+<!-- trace:case id=g10.auction-listing-page.TC-nis rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC1-1: Listing code absent from the response before scripts run
 
 **Classification:**
@@ -40,6 +41,7 @@
 * The source names the lot by its title.
 * The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
+<!-- trace:case id=g10.auction-listing-page.TC-87q rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC2-1: Listing code absent from the page once scripts finish running
 
 **Classification:**
@@ -71,6 +73,7 @@
 * The rendered page has no labelled listing-code or payment-reference field.
 * Every code occurrence in the source is the lower-case suffix of the canonical address.
 
+<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC3-1: Listing code absent from the shared-link preview
 
 **Classification:**
@@ -104,6 +107,7 @@
 Previously cached preview content may persist; the test does not require a
 purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
+<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC4-1: Listing code absent from the page title and meta description
 
 **Classification:**
@@ -133,6 +137,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * Neither the tab title nor the meta description contains the listing code.
 
+<!-- trace:case id=g10.auction-listing-page.TC-udy rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC5-1: Listing code absent from the page's embedded data
 
 **Classification:**
@@ -163,6 +168,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No field in the embedded data carries the listing code.
 
+<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC6-1: Listing code absent from the page's own network responses
 
 **Classification:**
@@ -193,6 +199,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No page response contains a separate listing-code or payment-reference field.
 
+<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC7-1: Listing code does not resolve as a lot address
 
 **Classification:**
@@ -221,6 +228,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The address does not resolve to that lot's page.
 * The site's not-found surface is shown, the same as for any address naming no published lot.
 
+<!-- trace:case id=g10.auction-listing-page.TC-udv rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC8-1: Listing code stays absent regardless of the collector's signed-in state
 
 **Classification:**
@@ -251,6 +259,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
 * The title and address shown are identical in both views.
 
+<!-- trace:case id=g10.auction-listing-page.TC-6de rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC9-1: Listing code stays absent once an order exists on the lot
 
 **Classification:**
@@ -281,6 +290,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The page and preview contain no labelled listing-code or payment-reference field.
 * The code appears only as the lower-case suffix of the canonical address.
 
+<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC10-1: An address naming no lot carries no listing code
 
 **Classification:**
@@ -312,6 +322,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 ---
 
+<!-- trace:case id=g10.auction-listing-page.TC-90g rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC11-1: A listing removed from browse and search remains available at its original URL
 
 **Classification:**
@@ -346,6 +357,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
 * Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
 
+<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC12-1: A cached preview may persist after browse/search removal without private data
 
 **Classification:**
@@ -385,6 +397,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
+<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC1-1: No listing code available on the page for the collector to send
 
 **Classification:**
@@ -414,6 +427,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * The page has no labelled listing-code or payment-reference field for the collector to copy; its canonical address may end in the lower-case code suffix.
 
+<!-- trace:case id=g10.auction-listing-page.TC-wxd rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC2-1: A listing code known from elsewhere gives no working link
 
 **Classification:**
@@ -442,6 +456,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The listing code does not resolve to the lot.
 * No working link to the lot can be built from the code alone.
 
+<!-- trace:case id=g10.auction-listing-page.TC-h6y rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC3-1: Title and address stay the collector's only reference once an order exists
 
 **Classification:**
@@ -471,6 +486,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The title and canonical address are unchanged by the order.
 * The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
 
+<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC4-1: Called-off listing remains directly accessible
 
 **Classification:**

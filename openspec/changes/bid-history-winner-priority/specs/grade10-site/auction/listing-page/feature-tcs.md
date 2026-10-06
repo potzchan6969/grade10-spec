@@ -9,6 +9,7 @@
 **I want** a bid placed on another page to show on mine with the new price and close, without a reload,
 **so that** I bid against the price that stands.
 
+<!-- trace:case id=g10.auction-listing-page.TC-0yw rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC7-1: A tied maximum that came second carries the earlier-leads tip
 
 **Classification:**
@@ -48,6 +49,7 @@
 * Step 3: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
 * Step 4: the tip reads When maximums match, the earlier one leads.
 
+<!-- trace:case id=g10.auction-listing-page.TC-7nz rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC8-1: An older tie lower down keeps the earlier-leads tip
 
 **Classification:**
@@ -98,6 +100,7 @@
 **I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
 **so that** I am never shown a result the auction has not decided.
 
+<!-- trace:case id=g10.auction-listing-page.TC-4ba rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC7-1: A sold lot crowns its winning bid and no other
 
 **Classification:**
@@ -130,6 +133,7 @@
 * Step 3: customer A's winning row shows a crown named Winner after the amount.
 * Step 3: no other row, customer B's included, shows a crown.
 
+<!-- trace:case id=g10.auction-listing-page.TC-hqd rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC8-1: A lot without a winner crowns no bid
 
 **Classification:**

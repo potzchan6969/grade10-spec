@@ -173,6 +173,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * The bidding index is empty.
 * The page shows this Grade10 account's index.
 
+<!-- trace:case id=g10.auction-bidding-history.TC-wit rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
 ### grade10-site-auction-bidding-history-US1-TC6-1: Each listing's standing is Leading, Outbid, Won or Canceled
 
 Runs once per row of **Test data**.
@@ -215,6 +216,7 @@ Runs once per row of **Test data**.
 * <listing> shows once, with the row's standing.
 * It shows its current or final price.
 
+<!-- trace:case id=g10.auction-bidding-history.TC-hv4 rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
 ### grade10-site-auction-bidding-history-US1-TC7-1: A refused bid leaves an Outbid listing in its place
 
 **Classification:**
@@ -263,6 +265,7 @@ Runs once per row of **Test data**.
 * <listing_c>'s latest activity time is its last accepted bid's.
 * Step 5's history matches that last accepted bid.
 
+<!-- trace:case id=g10.auction-bidding-history.TC-92c rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
 ### grade10-site-auction-bidding-history-US1-TC8-1: A call-off adds no listing for a collector who never bid on it
 
 **Classification:**
@@ -659,6 +662,7 @@ One listing has more public and private events than one page holds. No new event
 
 * Every retained event visible to that collector appears exactly once in stable order.
 
+<!-- trace:case id=g10.auction-bidding-history.TC-iuc rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
 ### grade10-site-auction-bidding-history-US3-TC5-1: A history page never splits one auction decision
 
 **Classification:**
@@ -699,6 +703,7 @@ One listing has more public and private events than one page holds. No new event
 * Step 3 returns every record of <split decision> on one page.
 * Step 4 reads those records in the same order.
 
+<!-- trace:case id=g10.auction-bidding-history.TC-mq5 rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
 ### grade10-site-auction-bidding-history-US3-TC6-1: Boundary maxima write the stated history
 
 Runs once per row of **Test data**.

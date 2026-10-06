@@ -38,6 +38,7 @@ rule.
 **Committed amounts** - Committed amounts remain an integer count of minor
 units at or above the existing floor rules.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-9e0 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-38 - A draft at the ceiling is accepted
 **Serves:** Custom maximum ceiling - a draft at the ceiling is accepted
 
@@ -45,6 +46,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector enters `9999999999` into the custom maximum field
 - **THEN** the draft shown is `9999999999`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-8ym rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-39 - A typed digit beyond the ceiling restores the previous draft
 **Serves:** Custom maximum ceiling - a typed digit beyond the ceiling restores the previous draft
 
@@ -52,6 +54,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector types `0` into the custom maximum field
 - **THEN** the draft remains `9999999999`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-wdd rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-40 - A paste beyond the ceiling from an empty field stays empty
 **Serves:** Custom maximum ceiling - a paste beyond the ceiling from an empty field stays empty
 
@@ -61,6 +64,7 @@ units at or above the existing floor rules.
 - **AND** no invalid-amount message appears solely because of the rejected
   paste
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-z2x rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-41 - A paste beyond the ceiling restores the prior draft
 **Serves:** Custom maximum ceiling - a paste beyond the ceiling restores the prior draft
 
@@ -68,6 +72,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector pastes `99999999999` into the custom maximum field
 - **THEN** the draft remains `500`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-y2e rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-42 - A fractional paste that exceeds after whole-major cleaning restores the prior draft
 **Serves:** Custom maximum ceiling - a fractional paste that exceeds after whole-major cleaning restores the prior draft
 
@@ -75,6 +80,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector pastes `10000000000.99` into the custom maximum field
 - **THEN** the draft remains `500`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-xxl rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-43 - Raise path restores on overshoot
 **Serves:** Custom maximum ceiling - raise path restores on overshoot
 
@@ -83,6 +89,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector types `1` into the custom maximum field
 - **THEN** the draft remains `9999999999`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-6n7 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-53 - A fractional paste at the ceiling after cleaning is accepted
 **Serves:** Custom maximum ceiling - a fractional paste at the ceiling after cleaning is accepted
 

@@ -107,6 +107,7 @@ QA1 and Dev readings and one human has resolved every raised question.
   record of the engineer's word on the tech design; the engineer's challenge
   lands as decisions rows or Raised rows, which already hold acceptance
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-2go rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-79 - Acceptance waits for every raised question
 **Serves:** shared-planning-change-stages-US-02 - the product manager accepts only a reconciled plan whose questions are resolved
 
@@ -116,6 +117,7 @@ QA1 and Dev readings and one human has resolved every raised question.
 **AND** the stage SHALL stay below Accepted
 **AND** the open row SHALL NOT hold the stage below Specified
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pp7 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-80 - Acceptance preserves a superseded fingerprint
 **Serves:** shared-planning-change-stages-US-02 - the product manager can review which resolved plan implementation follows
 
@@ -150,6 +152,7 @@ which application commit and components complete the change.
 - **Deployment order** — a GitHub Deployment receipt MAY arrive after archive
   and SHALL NOT change the stage or rewrite either immutable record.
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-k99 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-81 - An unacknowledged claimed contract change cannot be archived
 **Serves:** shared-planning-change-stages-US-02 - the engineer acknowledges a durable-spec change that affects the implementation scope
 
@@ -158,6 +161,7 @@ which application commit and components complete the change.
 **THEN** it SHALL refuse the archive and name the changed target and missing acknowledgement
 **AND** the change SHALL remain outside the archive
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-kgm rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-82 - The archive preserves accepted evidence without another fold
 **Serves:** shared-planning-change-stages-US-02 - the engineer archives verified implementation while durable specs remain rolling facts
 
@@ -190,6 +194,7 @@ component and environment, whether the change is active or archived.
 - **Separate status** — a receipt update SHALL NOT advance, reverse or reopen
   the change's stage
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-of7 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-83 - A receipt updates archived component availability
 **Serves:** shared-planning-change-stages-US-12 - the product manager sees which components remain available after the change is archived
 
@@ -213,6 +218,7 @@ component and environment, whether the change is active or archived.
 **THEN** its stage SHALL be Proposed
 **AND** it SHALL NOT be shown as Planned
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ycx rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-03 - A record nothing can read
 **Serves:** shared-planning-change-stages-US-02 - the product manager meets a half-written change on the board instead of missing it
 
@@ -239,6 +245,7 @@ derivation.
 **THEN** the lane SHALL be the one its stage projects to
 **AND** no change SHALL appear in a lane its stage does not project to
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-rq1 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-05 - One change, one stage everywhere
 **Serves:** shared-planning-change-stages-US-02 - the product manager compares the board against the change page and the page's ribbon
 
@@ -274,6 +281,7 @@ A change that owes no design says so in one line.
 - **Shown as not owed** — a waived artifact SHALL be shown as not owed and
   fresh, carrying the reason written on its line
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-kez rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-07 - Either waiver stands for its design
 **Serves:** shared-planning-change-stages-US-05 - the designer says a change draws nothing and the ladder moves
 
@@ -282,6 +290,7 @@ A change that owes no design says so in one line.
 **THEN** its stage SHALL first be Designed and then Specified
 **AND** each waived design SHALL be shown as not owed and fresh, with its reason
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-y2n rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-08 - A design with neither a file nor a line
 **Serves:** shared-planning-change-stages-US-05 - the designer writes no line and the UI design is still owed
 
@@ -313,6 +322,7 @@ requirements and the suite rather than at Designed.
   wait on another hand; the product manager SHALL answer it, with the
   engineer's challenge informing the answer
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-0sk rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-85 - The UI design alone proves Designed
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a change whose UI design has landed and whose planning run has not started
 
@@ -330,6 +340,7 @@ requirements and the suite rather than at Designed.
 **AND** the change SHALL name the tech design as what it owes
 **AND** once `tech-design.md` lands its stage SHALL be Specified
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ds0 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-87 - A question the tech design cannot settle holds acceptance only
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads why a specified change is not accepted
 
@@ -362,6 +373,7 @@ human's record, and nobody drafts it.
 | 4 | Planned | the tasks | read the plan and challenge the tech design |
 | 6 | Building | each group, test first | read each landing |
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-rtp rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-10 - The mark and the move on a lane and a step
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a lane heading and opens the change beneath it
 
@@ -390,6 +402,7 @@ An artifact on `main` is one a hand's word landed, and the record says whose.
   alike: both key a line by an artifact id, and an id the schema issues
   nowhere is read by nothing
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pci rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-11 - Who landed each artifact
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads who approved each artifact of a change
 
@@ -399,6 +412,7 @@ An artifact on `main` is one a hand's word landed, and the record says whose.
 **AND** an artifact with no entry SHALL show no handle
 **AND** a second landing on one artifact SHALL show the later handle alone
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-20s rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-12 - A landing entry the check refuses
 **Serves:** shared-planning-change-stages-US-04 - the product manager writes a handle or an artifact name the store cannot resolve
 
@@ -428,6 +442,7 @@ Each change names who takes it at each stage.
 | QA | `qa` | Implementation complete, for human verification; suite verdict as an overlay after implementation |
 | Release hand | `release` | Environment availability updates after archive |
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-6qg rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-13 - The hands are named at the interview's end
 **Serves:** shared-planning-change-stages-US-04 - the product manager closes the interview by naming who takes each role
 
@@ -435,6 +450,7 @@ Each change names who takes it at each stage.
 **THEN** each role SHALL show that handle on the change page and on the change's card
 **AND** a role the change does not name SHALL show as open
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ff7 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-14 - A hands entry the check refuses
 **Serves:** shared-planning-change-stages-US-04 - the product manager mistypes a role or a handle at the interview's end
 
@@ -459,6 +475,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 | 7 | Implementation complete | `qa` verifies the implementation and records the suite verdict |
 | 8 | Archived | nobody |
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-hyl rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-15 - Proposed changes hands without changing stage
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the Proposed lane before and after the three files land
 
@@ -469,6 +486,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 **AND** the stage SHALL still be Proposed
 **AND** a change carrying `ui_waived:` SHALL be Designed once its decisions and journeys land, with no designer's turn
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-4ju rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-16 - Each later stage names its hands
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads across the lanes to see who each change waits on
 
@@ -476,6 +494,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 **THEN** the turns SHALL name the product manager alone while specified, to resolve the open Raised rows, Dev while planned, to read the plan and challenge the tech design, the accepting human while accepted, Dev while building, and QA for post-implementation verification
 **AND** a change in Designed or Archived SHALL name nobody
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-n1z rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-17 - A hand nobody has named
 **Serves:** shared-planning-change-stages-US-04 - the product manager sees which changes still need a hand named
 
@@ -499,6 +518,7 @@ One map turns a handle into a person and a role into somewhere to post.
   stop the run and SHALL name the file; only an absent map SHALL read as
   nobody known
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-2zk rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-18 - A handle and a role resolve
 **Serves:** shared-planning-change-stages-US-04 - the hand the product manager wrote is shown as a person and messaged as one
 
@@ -507,6 +527,7 @@ One map turns a handle into a person and a role into somewhere to post.
 **AND** it SHALL give one channel for that role
 **AND** a handle with no Slack member SHALL be sent no message
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-bfd rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-78 - A team map nothing can read
 **Serves:** shared-planning-change-stages-US-04 - the hand the product manager wrote is messaged as a person, or nobody is until the map can be read
 
@@ -532,6 +553,7 @@ An overlay is a fact beside the stage, never a stage of its own.
 | Behind | an artifact whose page lines or artifacts before it changed after it was drawn or last read again | the earliest behind artifact and its hand |
 | Suite | `feature-tcs.md` status, `draft` or `approved` | the verdict |
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-9vq rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-19 - The overlays a change wears
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads why a change with every file in place is not moving
 
@@ -541,6 +563,7 @@ An overlay is a fact beside the stage, never a stage of its own.
 **AND** a change whose suite is `approved` SHALL show that verdict instead
 **AND** no stage SHALL differ because of an overlay
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-hds rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-20 - Nothing outside the set
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads every card against one list of chips
 
@@ -548,6 +571,7 @@ An overlay is a fact beside the stage, never a stage of its own.
 **THEN** exactly the five SHALL be shown
 **AND** its stage SHALL be the one its files prove
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-33p rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-21 - A wait, dated or not
 **Serves:** shared-planning-change-stages-US-06 - the teammate who wrote the wait sees it against the hand that owes it
 
@@ -570,6 +594,7 @@ tick, claim or artifact landing on the change.
   change SHALL move to the shelf and off the lanes from the thirtieth, both
   counted in whole calendar days on the Hong Kong date (`Q21`)
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ln5 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-22 - A change that has stopped moving
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads which changes have stopped moving
 
@@ -578,6 +603,7 @@ tick, claim or artifact landing on the change.
 **THEN** it SHALL be shown as idle with the day count
 **AND** a change whose last landing was 6 days ago SHALL NOT be shown as idle
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pfs rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-23 - One commit across the whole store
 **Serves:** shared-planning-change-stages-US-02 - the product manager's board is not reset by one reformat
 
@@ -585,6 +611,7 @@ tick, claim or artifact landing on the change.
 **WHEN** a commit touches every change's directory and ticks no task, claims no group and adds no artifact
 **THEN** the change SHALL still be shown as idle 9 days
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-53e rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-24 - A change idle a month
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a board that is not filled with abandoned work
 
@@ -618,6 +645,7 @@ was drawn or last read again.
   before it where no record line dates the edit, and the card SHALL name the
   earliest behind artifact and its hand
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-jqe rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-25 - A page line changes after an artifact was drawn
 **Serves:** shared-planning-change-stages-US-09 - the hand opens the change and reads what moved under their artifact
 
@@ -626,6 +654,7 @@ was drawn or last read again.
 **THEN** the UI design SHALL be shown as behind
 **AND** its row SHALL name the section that changed, or what is before it where no record line dates the edit
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-e87 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-26 - The card names the earliest behind artifact
 **Serves:** shared-planning-change-stages-US-09 - the hand finds the change from the board rather than from the message
 
@@ -660,6 +689,7 @@ was drawn or last read again.
 **AND** a change to a linked page section SHALL leave the waived design fresh
 **AND** the artifacts after it SHALL be read against that section
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-nos rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-30 - Behind holds no tick, claim or wait
 **Serves:** shared-planning-change-stages-US-09 - the hand keeps working while the artifact waits to be read again
 
@@ -668,6 +698,7 @@ was drawn or last read again.
 **THEN** each SHALL be accepted
 **AND** the change SHALL still be shown as behind
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ncv rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-31 - A behind delta at the archive
 **Serves:** shared-planning-change-stages-US-09 - the fold refuses while the hand has not read their artifact again
 
@@ -696,6 +727,7 @@ An open question is a line nobody has answered yet, and it holds no stage.
   manager SHALL learn of it from the Specified turn and from `spec:accept`'s
   refusal naming it
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-vh6 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-32 - A decisions row nobody has settled
 **Serves:** shared-planning-change-stages-US-03 - the teammate the row names reads it on the page listing their work
 
@@ -705,6 +737,7 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **AND** SHALL be addressed to the handle `hands:` names for that role
 **AND** a row naming a role outside the five SHALL be listed under that role and routed to its channel
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-fhs rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-33 - A question on the page
 **Serves:** shared-planning-change-stages-US-03 - the teammate reads the questions the page still carries against the change
 
@@ -714,6 +747,7 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **AND** SHALL name the section it sits under
 **AND** a `❓` row inside a titled block of that page SHALL NOT be listed
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-nfz rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-34 - Questions counted per artifact
 **Serves:** shared-planning-change-stages-US-02 - the product manager opens the change to see what is unanswered and who answered what
 
@@ -722,6 +756,7 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **THEN** the decisions row SHALL show a count of two
 **AND** the UI design SHALL show the handle that landed it
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pi0 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-88 - An open Raised row is not an open question
 **Serves:** shared-planning-change-stages-US-02 - the product manager learns of an open Raised row from the Specified turn and the refusal, not from the question lists
 
@@ -732,6 +767,7 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **AND** the turn SHALL be the product manager's, to resolve the open Raised rows
 **AND** `spec:accept` SHALL refuse and name the row
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-s89 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-35 - An open question holds nothing
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a change that moved with a question still open
 
@@ -766,6 +802,7 @@ push sends nothing again.
 | Push post | every push to `main` | the planning channel | the push |
 | Digest | Monday 09:00 on the Hong Kong clock | each person with a line to say | the person and the week |
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-zq2 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-36 - One message per key
 **Serves:** shared-planning-change-stages-US-01 - the hand is told when the change reaches them and not again
 
@@ -774,6 +811,7 @@ push sends nothing again.
 **AND** the push workflow is run again for that push
 **THEN** no second Your turn message SHALL be sent
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-v16 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-37 - A stage re-entered after a revert
 **Serves:** shared-planning-change-stages-US-01 - a landing taken back and pushed again is a real move for the hand
 
@@ -781,6 +819,7 @@ push sends nothing again.
 **WHEN** `tasks.md` lands again
 **THEN** one Your turn message SHALL be sent to the engineer
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-j3j rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-38 - A push that moves nobody
 **Serves:** shared-planning-change-stages-US-01 - a build push ticks a box and tells nobody
 
@@ -789,6 +828,7 @@ push sends nothing again.
 **THEN** no Your turn message SHALL be sent
 **AND** no channel post SHALL name the change, Building being no milestone
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-dyb rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-39 - An artifact goes behind twice
 **Serves:** shared-planning-change-stages-US-09 - the hand is told once and reads the artifact when they get to it
 
@@ -796,6 +836,7 @@ push sends nothing again.
 **WHEN** something before it changes again and it has not been read again
 **THEN** no second Behind message SHALL be sent
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-qit rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-77 - A sent-keys file nothing can read
 **Serves:** shared-planning-change-stages-US-01 - the hand is told once, so a run that cannot read what it already sent tells them nothing rather than again
 
@@ -820,6 +861,7 @@ to that hand.
   be a move: the role's channel SHALL be told once and the card SHALL show
   the hand as open
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-kh9 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-40 - A stage lands and its hands are told
 **Serves:** shared-planning-change-stages-US-01 - the hand starts the day the change lands, from the message
 
@@ -829,6 +871,7 @@ to that hand.
 **AND** it SHALL name the change, the stage, the thread and the command
 **AND** no message SHALL be sent to the product manager for that move
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-lql rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-41 - The hand is unnamed
 **Serves:** shared-planning-change-stages-US-04 - the role is told even before the product manager has named a hand
 
@@ -837,6 +880,7 @@ to that hand.
 **THEN** the same body SHALL be posted to that role's channel
 **AND** no direct message SHALL be sent
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-zu5 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-42 - A hand is taken off a change it sits on
 **Serves:** shared-planning-change-stages-US-04 - the product manager takes a hand off a change and the role hears once
 
@@ -845,6 +889,7 @@ to that hand.
 **THEN** the role's channel SHALL be told once
 **AND** the card SHALL show the hand as open
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-2tz rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-43 - The change has no thread yet
 **Serves:** shared-planning-change-stages-US-01 - the hand still reaches the change from the message
 
@@ -866,6 +911,7 @@ Two moves that are not a stage landing still reach a person.
   unknown or stale state with its receipt, resolved ref and testing links;
   rerunning the same receipt SHALL send nothing again
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-d1x rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-44 - An artifact goes behind
 **Serves:** shared-planning-change-stages-US-09 - the hand is told before anything is built on the artifact
 
@@ -873,6 +919,7 @@ Two moves that are not a stage landing still reach a person.
 **THEN** one direct message SHALL be sent to that artifact's hand
 **AND** it SHALL name the artifact and what changed before it
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-jy2 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-45 - A change reaches Implementation complete
 **Serves:** shared-planning-change-stages-US-08 - QA verifies the completed implementation against the run sheet
 
@@ -881,6 +928,7 @@ Two moves that are not a stage landing still reach a person.
 **THEN** one direct message SHALL be sent to its QA hand with the implementation identity and run sheet
 **AND** it SHALL NOT wait for a deployment receipt
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-of7 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-83 - Deployment status stays separate from the stage
 **Serves:** shared-planning-change-stages-US-12 - the product manager reads component availability for an archived change
 
@@ -908,6 +956,7 @@ pushed from a terminal is one reply in it.
 - **No hand at all** — a stage that waits on no role SHALL read `your turn:
   nobody`
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-yj5 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-70 - A terminal landing is told in the thread
 **Serves:** shared-planning-change-stages-US-01 - the next hand reads in the thread what a teammate landed from a terminal
 
@@ -941,6 +990,7 @@ their own week on Monday.
   seventh day it has been behind
 - **Nothing to say** — a digest with nothing to say SHALL NOT be sent
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pkk rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-47 - A push moves three changes
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the channel to see what a push moved
 
@@ -950,6 +1000,7 @@ their own week on Monday.
 **AND** each hand SHALL be told of its own change alone
 **AND** nothing SHALL be sent before the deploy succeeds
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-x0i rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-48 - Monday morning
 **Serves:** shared-planning-change-stages-US-01 - the teammate starts the week from one message
 
@@ -957,6 +1008,7 @@ their own week on Monday.
 **WHEN** the digest is sent
 **THEN** one direct message SHALL list all five
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-tr0 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-49 - A behind artifact in the digest
 **Serves:** shared-planning-change-stages-US-09 - the hand who did not read the first message is told again
 
@@ -965,6 +1017,7 @@ their own week on Monday.
 **THEN** it SHALL be listed
 **AND** an artifact behind for 6 days SHALL NOT be
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-h0f rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-50 - A person with nothing to say
 **Serves:** shared-planning-change-stages-US-01 - a quiet week reaches nobody's inbox
 
@@ -984,6 +1037,7 @@ The board is where every change in flight is read at once.
   shelf reachable from the board
 - **Nothing in flight** — with no change in flight the board SHALL say so
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pg5 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-51 - The lanes and a card
 **Serves:** shared-planning-change-stages-US-02 - the product manager opens the board and reads it top to bottom
 
@@ -991,6 +1045,7 @@ The board is where every change in flight is read at once.
 **THEN** it SHALL show eight lanes in stage order
 **AND** each card SHALL carry its hand, its age, its overlays and its task bar
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-irv rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-52 - A lane with nothing in it
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a long board without scrolling past empty stages
 
@@ -998,6 +1053,7 @@ The board is where every change in flight is read at once.
 **THEN** it SHALL show its heading with a count of none
 **AND** SHALL name the roles open in that stage
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-71a rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-53 - Nothing in flight
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the board on a store with every change archived
 
@@ -1005,6 +1061,7 @@ The board is where every change in flight is read at once.
 **THEN** it SHALL say there is nothing in flight
 **AND** SHALL show no lane as an error
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-nbi rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-54 - The filters narrow the board
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads only what is stuck
 
@@ -1013,6 +1070,7 @@ The board is where every change in flight is read at once.
 **THEN** the board SHALL show only the changes that overlay marks
 **AND** Mine SHALL show only the changes the chosen handle is a hand of
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-e80 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-55 - Mine with no handle chosen
 **Serves:** shared-planning-change-stages-US-03 - the teammate filters the board before telling it who they are
 
@@ -1020,6 +1078,7 @@ The board is where every change in flight is read at once.
 **THEN** the board SHALL ask for a handle
 **AND** SHALL narrow nothing until one is chosen
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-m1h rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-56 - The shelf
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads what was set aside
 
@@ -1051,6 +1110,7 @@ The change page SHALL show, in this order down the reading column:
 9. the thread as `main` records it, which `shared/planning/agent-rounds`
    states beside the message the hands are being told
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-3s4 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-57 - The stepper marks the stage
 **Serves:** shared-planning-change-stages-US-02 - the product manager opens one change to see how far it has come
 
@@ -1058,6 +1118,7 @@ The change page SHALL show, in this order down the reading column:
 **THEN** the stepper SHALL show all eight stages
 **AND** SHALL mark Building as the one the change is in
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-hvz rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-58 - The Your turn card
 **Serves:** shared-planning-change-stages-US-01 - the hand opens the change from the message and sees what to run
 
@@ -1065,6 +1126,7 @@ The change page SHALL show, in this order down the reading column:
 **THEN** the Your turn card SHALL name that hand
 **AND** SHALL carry the thread's link and the command as text
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ncu rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-59 - Where the implementation is and where the days went
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the implementation identity and where its days went
 
@@ -1073,6 +1135,7 @@ The change page SHALL show, in this order down the reading column:
 **THEN** implementation SHALL name the historical accepted fingerprint, claimed durable-spec baseline, repository commit and both component ids
 **AND** the handoff SHALL show 3 days against Proposed
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-0ph rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-71 - The change page lists the lines it marks
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the change's effect on the manual on one screen
 
@@ -1081,6 +1144,7 @@ The change page SHALL show, in this order down the reading column:
 **THEN** On the pages SHALL list each section under its page's title
 **AND** SHALL show every 🚧 and `❓` line of those sections as the page writes them, the `❓` line with its hand
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ifm rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-76 - A stale deployment receipt is labelled
 **Serves:** shared-planning-change-stages-US-12 - the product manager can tell when availability evidence predates the environment
 
@@ -1102,6 +1166,7 @@ them for a later stage.
 - **A handle nobody knows** — a handle the team map does not know SHALL be
   reported as unknown and SHALL list nothing
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-w7n rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-60 - The order of the page
 **Serves:** shared-planning-change-stages-US-03 - the teammate reads the page from the top and starts on the first thing
 
@@ -1110,12 +1175,14 @@ them for a later stage.
 **THEN** the open question SHALL be listed first with its change and its number
 **AND** the change on them now SHALL be listed above the one theirs later
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-66a rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-61 - Nothing on the reader
 **Serves:** shared-planning-change-stages-US-03 - the teammate reads the page on a clear afternoon
 
 **WHEN** My turn is read for a handle with no open question and no change
 **THEN** it SHALL say nothing is on the reader
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-d51 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-62 - Before a handle is chosen
 **Serves:** shared-planning-change-stages-US-03 - the teammate opens the page for the first time
 
@@ -1123,6 +1190,7 @@ them for a later stage.
 **THEN** it SHALL ask for a handle
 **AND** SHALL list nothing
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-mb5 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-63 - The handle is remembered
 **Serves:** shared-planning-change-stages-US-03 - the teammate returns to the page the next morning
 
@@ -1131,6 +1199,7 @@ them for a later stage.
 **THEN** each SHALL use that handle without asking again
 **AND** another browser SHALL ask for a handle
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pyk rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-64 - A handle the team map does not know
 **Serves:** shared-planning-change-stages-US-03 - the teammate mistypes their handle or has not been added
 
@@ -1149,6 +1218,7 @@ A page says how far the change behind each promised line has come.
 - **Archived** — a line whose change has archived SHALL carry no pip
 - **Two changes** — a line two changes deliver SHALL carry the further stage
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-nhp rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-65 - The in-flight row and the pip
 **Serves:** shared-planning-change-stages-US-07 - the reader of the page sees who is on the change and how far it has come without leaving it
 
@@ -1157,12 +1227,14 @@ A page says how far the change behind each promised line has come.
 **AND** the section's 🚧 line SHALL carry the pip for Planned
 **AND** the pip SHALL bear the stage number
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-v4m rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-66 - The change has archived
 **Serves:** shared-planning-change-stages-US-07 - the reader meets a line whose change shipped before the marks came off
 
 **WHEN** a 🚧 line's change is archived
 **THEN** the line SHALL carry no pip
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-w1f rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-67 - Two changes deliver one line
 **Serves:** shared-planning-change-stages-US-07 - the reader meets a line a second change extended
 
@@ -1183,6 +1255,7 @@ has a sign-in.
 - **Hosted** — the hosted manual SHALL show the hands and Assign as
   read-only, and SHALL write nothing
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-c9w rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-68 - Assign names a hand
 **Serves:** shared-planning-change-stages-US-04 - the product manager names a hand from the change page instead of editing the record
 
@@ -1191,6 +1264,7 @@ has a sign-in.
 **AND** the change page SHALL show the handle
 **AND** the picker SHALL have offered every handle the team map names, the chosen role's own first
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-o0l rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-69 - The hosted manual
 **Serves:** shared-planning-change-stages-US-01 - the hand opens the change from the message on the hosted manual
 

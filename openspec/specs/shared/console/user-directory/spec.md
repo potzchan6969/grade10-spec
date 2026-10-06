@@ -516,6 +516,7 @@ the create handler. A well-formed email whose host is on the list, with no
 chosen locked role, SHALL still show the confirmation when the email is free;
 confirming that review SHALL then call the create handler.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-3w0 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-33 - Create appears only with a create handler
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -523,6 +524,7 @@ confirming that review SHALL then call the create handler.
 - **THEN** Create is not offered
 - **AND THEN** a console that supplies a create handler is offered Create
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-uox rev=1 -->
 #### Scenario: shared-console-user-directory-SC-34 - The create dialog collects console vocabulary
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -532,6 +534,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** the dialog offers no password field
 - **AND THEN** Confirm stays disabled until name, email, and at least one role are present
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-bm5 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-35 - Create success reports the account
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -540,6 +543,7 @@ confirming that review SHALL then call the create handler.
 - **THEN** the dialog reports the created account's identifier
 - **AND THEN** the dialog decides nothing about what is shown next
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-d4y rev=1 -->
 #### Scenario: shared-console-user-directory-SC-36 - Taken email refuses on the form before review
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -551,6 +555,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** choosing open-existing calls `onOpenExisting` with that identifier
 - **AND THEN** the create handler has not run
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-8ij rev=1 -->
 #### Scenario: shared-console-user-directory-SC-37 - Review notes when the email is malformed or off the console list
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -561,6 +566,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** confirming the review calls the create handler
 - **AND THEN** Back from the confirmation returns to the create form and creates nothing
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-iqr rev=1 -->
 #### Scenario: shared-console-user-directory-SC-38 - Review notes when a locked role is selected
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -571,6 +577,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** confirming the review calls the create handler
 - **AND THEN** when the email also needs a note, email and locked-role notes appear on the same confirmation
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-aan rev=1 -->
 #### Scenario: shared-console-user-directory-SC-39 - Review opens when the email is free
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 

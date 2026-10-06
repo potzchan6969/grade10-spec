@@ -98,6 +98,7 @@ address was typed at the counter and nobody has shown it is theirs.
 - **GIVEN** three cases ended by an untouched draft, by nobody booking, and by a missed visit
 - **THEN** each collector is told the true one of the three, not one shared wording
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-r3s rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-35 - An unsent walk-in that runs out tells nobody
 **Serves:** What is sent - the sweep ending a draft staff opened that nobody sent
 
@@ -337,6 +338,7 @@ invitation to verify, whose link opens the identity check:
 - **WHEN** a money record is taken back
 - **THEN** the collector is told, with the amount and what the case now stands at, and never with who recorded it
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-kz4 rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-20 - The invitation is one of the set
 **Serves:** grade10-site-vault-collector-notifications-US-06 - the collector verifying at home before the visit they booked
 
@@ -344,6 +346,7 @@ invitation to verify, whose link opens the identity check:
 - **WHEN** its collector is invited to verify
 - **THEN** the invitation is one of the twenty-four messages this table names, sent to the case's own address like any other
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-ayk rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-34 - The link opens the case the message is about
 **Serves:** grade10-site-vault-collector-notifications-US-02 - the collector going straight from the message to the case rather than asking the shop
 
@@ -364,6 +367,7 @@ Every message ends the same way, whatever it is about.
 - **WHEN** any message is sent about a case
 - **THEN** it carries that case's reference and the item's title directly above the footer
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-3bq rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-22 - A message with no money names the custodian
 **Serves:** grade10-site-vault-collector-notifications-US-02 - the collector hearing that their item is now in the vault
 
@@ -389,6 +393,7 @@ says where the money goes.
 - **How to pay** — a money message sent while a balance is still owed SHALL carry the same how-to-pay block the live loan shows, which `grade10-site/vault/loan-and-settlement` defines, so a borrower can pay without opening the case. A money message naming no balance owed SHALL carry none: the offer, because nothing has been advanced yet, and a loan repaid or an item forfeited, because the case owes nothing after it.
 - **The currency** — every amount SHALL be stated in the case's own currency.
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-o0k rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-23 - The offer's message tables its terms
 **Serves:** grade10-site-vault-collector-notifications-US-05 - the collector answering an offer from the message itself
 
@@ -397,6 +402,7 @@ says where the money goes.
 - **THEN** it tables the loan, the term, the interest for the term, the total to repay, what a late day costs and the day the offer is open until
 - **AND** no one of those figures is readable only inside a sentence
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-a2c rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-24 - The advance's message says where to send the money
 **Serves:** grade10-site-vault-collector-notifications-US-05 - the borrower acting on the advance's message without opening the page
 
@@ -404,6 +410,7 @@ says where the money goes.
 - **THEN** its message tables the amount sent, the due date, the total to repay and what each day after the due date adds
 - **AND** carries the same how-to-pay block the live loan shows
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-tgx rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-25 - The due-soon reminder tables what is owed
 **Serves:** grade10-site-vault-collector-notifications-US-01 - the borrower reading what they owe before the due date
 
@@ -411,6 +418,7 @@ says where the money goes.
 - **WHEN** the due-soon reminder is sent
 - **THEN** it tables what is owed at that reading, the due date and what each day from the day after the due date adds, with how to pay under them
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-3ke rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-26 - The overdue reminder separates the late interest
 **Serves:** grade10-site-vault-collector-notifications-US-01 - the borrower reading what a late week has cost
 
@@ -433,6 +441,7 @@ A borrower told a date is told at the same time when the vault will write again.
 - **What it costs** — the schedule SHALL say that a reminder adds nothing to what is owed.
 - **Once a notice stands** — a message sent after a forfeiture notice SHALL say that no further reminder follows rather than name a next date.
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-0ul rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-28 - The advance names the reminder dates
 **Serves:** grade10-site-vault-collector-notifications-US-01 - the borrower knowing when the warnings will come before the loan falls due
 
@@ -449,6 +458,7 @@ The written notice is evidence, so it carries more than a reminder does.
 - **The last of them** — the notice SHALL say that no further reminder follows it.
 - **How to pay** — the notice SHALL carry the how-to-pay block like any other money message.
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-sar rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-29 - The notice names its clause and the date to pay by
 **Serves:** grade10-site-vault-collector-notifications-US-05 - the borrower reading the notice as the record it is
 
@@ -456,6 +466,7 @@ The written notice is evidence, so it carries more than a reminder does.
 - **THEN** it opens on the clause of the loan agreement it acts under
 - **AND** tables the date to pay in full by, what is owed as at that reading, what each further day adds and the condition on which the item lapses
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-k1j rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-30 - The notice says a person decides and nothing more will be sent
 **Serves:** grade10-site-vault-collector-notifications-US-01 - the borrower learning the weekly warnings have stopped and why
 
@@ -470,6 +481,7 @@ The one message the vault sends a collector who has no identity on file yet.
 - **Where its link goes** — its action link SHALL open the identity check rather than the case.
 - **The other ways** — the invitation SHALL say that the check can be done at the counter instead, and that a collector already verified need do nothing.
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-fcf rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-31 - The invitation names the visit and opens the check
 **Serves:** grade10-site-vault-collector-notifications-US-06 - the collector verifying at home and turning up prepared
 
@@ -487,6 +499,7 @@ FPS id and the bank account; no message goes out with a blank where one belongs.
 - **In production** — an act that would print an unset value SHALL be refused by name, and SHALL commit nothing.
 - **Rendered before it commits** — an act that sends a message SHALL render that message before its own record is written, so no record stands describing a message that cannot be sent.
 
+<!-- trace:scenario id=g10.vault-collector-notifications.SC-tz5 rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-32 - A value Finance has not set prints in brackets outside production
 **Serves:** What a message carries - a shop reading its own letters on staging before Finance has answered
 

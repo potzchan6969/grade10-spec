@@ -26,6 +26,7 @@ one its reads did not answer within 60 seconds, SHALL reach the listing within
 A copy SHALL hold what the shop answered, never what a report alone said, and
 a read older than the report that caused it SHALL NOT be published.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-5zl rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-49 - A published product is listed within seconds
 **Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
@@ -34,6 +35,7 @@ a read older than the report that caused it SHALL NOT be published.
 - **THEN** within 10 seconds of the shop's read answering that product, the listing at any location lists it
 - **AND** its count reads N + 1, and the product's facets count it
 
+<!-- trace:scenario id=g10.store-product-listing.SC-gxw rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-50 - A product taken down leaves within seconds
 **Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
@@ -41,6 +43,7 @@ a read older than the report that caused it SHALL NOT be published.
 - **WHEN** the shop takes that product off the store's channel and reports it
 - **THEN** within 10 seconds of the shop's read no longer answering it, no location lists it, and no count counts it
 
+<!-- trace:scenario id=g10.store-product-listing.SC-6q8 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-51 - A card follows the shop's price and stock
 **Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
@@ -49,6 +52,7 @@ a read older than the report that caused it SHALL NOT be published.
 - **THEN** within 10 seconds of the shop's read answering the new price and count, the card at any location shows the new price and stops at the new count
 - **AND** a price order places the card by the new price
 
+<!-- trace:scenario id=g10.store-product-listing.SC-kj0 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-52 - A change the shop never reported is caught by the re-read
 **Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
@@ -64,6 +68,7 @@ a read older than the report that caused it SHALL NOT be published.
 - **THEN** the older answer is not published, the store reads again every 2 seconds, and the change is listed once the shop answers it
 - **AND** a product the shop reported created but still answers nothing for after 60 seconds is left to the whole read
 
+<!-- trace:scenario id=g10.store-product-listing.SC-71h rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-48 - A location holding no copy answers from the one the store keeps
 **Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
@@ -79,6 +84,7 @@ it holds — cards, counts and sidebar alike — and SHALL say nothing to the
 collector about the shop. The copy SHALL stop moving until the shop answers
 again.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-bcq rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-54 - The listing lists while the shop is down
 **Serves:** grade10-site-store-product-listing-US-15 - Collector browses while the shop is unreachable
 

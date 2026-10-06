@@ -24,6 +24,7 @@ collector SHALL see only orders associated with their account. A collector
 without a decided session SHALL remain at that address while the existing
 sign-in surface decides the session.
 
+<!-- trace:scenario id=g10.store-order-history.SC-u2y rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-01 - A signed-in collector opens Your Orders
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -31,6 +32,7 @@ sign-in surface decides the session.
 - **WHEN** they open `/profile/orders`
 - **THEN** the page lists only that collector's orders
 
+<!-- trace:scenario id=g10.store-order-history.SC-si2 rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-02 - A signed-out collector keeps the intended address
 **Serves:** grade10-site-store-order-history-US-02 - Collector signs in to the intended order page
 
@@ -54,6 +56,7 @@ when present, and otherwise an explicit pending-total treatment. Amounts SHALL
 remain integer minor units paired with their ISO 4217 currency code until
 formatted for the collector.
 
+<!-- trace:scenario id=g10.store-order-history.SC-zre rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-03 - Active and past orders are grouped newest first
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -62,6 +65,7 @@ formatted for the collector.
 - **THEN** active orders appear above past orders
 - **AND** each group is ordered newest first
 
+<!-- trace:scenario id=g10.store-order-history.SC-4i0 rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-04 - The paid total takes precedence
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -70,6 +74,7 @@ formatted for the collector.
 - **THEN** its total shows the paid amount
 - **AND** the quoted subtotal is not presented as the charge
 
+<!-- trace:scenario id=g10.store-order-history.SC-fun rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-05 - A pending total is not invented
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -78,6 +83,7 @@ formatted for the collector.
 - **THEN** it says the total is pending
 - **AND** it does not show a zero amount
 
+<!-- trace:scenario id=g10.store-order-history.SC-yhz rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-12 - A shop order number identifies a summary
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -86,6 +92,7 @@ formatted for the collector.
 - **THEN** the shop order number identifies the order
 - **AND** View Details still targets the order's immutable Store order id
 
+<!-- trace:scenario id=g10.store-order-history.SC-3eo rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-13 - An older order falls back to its Store id
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -104,12 +111,14 @@ open that URL in a new browser context without giving the destination access to
 the Grade10 page. A tracking number or carrier name alone SHALL NOT create a
 tracking action.
 
+<!-- trace:scenario id=g10.store-order-history.SC-71g rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-06 - View Details opens one order
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **WHEN** a collector activates View Details for an order
 - **THEN** `/profile/orders/<order-id>` opens for that order
 
+<!-- trace:scenario id=g10.store-order-history.SC-raj rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-07 - A safe carrier URL enables tracking
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -118,6 +127,7 @@ tracking action.
 - **THEN** Track Order appears
 - **AND** activating it opens the carrier URL in a new browser context isolated from the Grade10 page
 
+<!-- trace:scenario id=g10.store-order-history.SC-ab2 rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-08 - A tracking number alone stays text-only
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -132,12 +142,14 @@ read SHALL show a localized error and a retry action without replacing the
 page address. When the read succeeds with no orders, the page SHALL show the
 designed empty state and a Shop Now action to `/store`.
 
+<!-- trace:scenario id=g10.store-order-history.SC-dta rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-09 - The first read is still loading
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **WHEN** the first order read has not settled
 - **THEN** the page shows a loading state and no empty-state claim
 
+<!-- trace:scenario id=g10.store-order-history.SC-g9j rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-10 - A failed read can be retried
 **Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -145,6 +157,7 @@ designed empty state and a Shop Now action to `/store`.
 - **WHEN** the collector activates Retry
 - **THEN** the page reads the orders again at `/profile/orders`
 
+<!-- trace:scenario id=g10.store-order-history.SC-li6 rev=1 -->
 #### Scenario: grade10-site-store-order-history-SC-11 - A collector with no orders returns to the Store
 **Serves:** grade10-site-store-order-history-US-03 - Collector starts shopping from an empty account
 

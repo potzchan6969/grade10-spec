@@ -37,6 +37,7 @@ recently closed lot SHALL come first.
 
 The account menu SHALL link to My Auction Orders beside My Auctions.
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-nv4 rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-01 - Every won order is listed once
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -45,6 +46,7 @@ The account menu SHALL link to My Auction Orders beside My Auctions.
 - **THEN** it lists three rows, one per auction order
 - **AND** each row carries the lot, the auction, the winning bid and the order status
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-czj rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-02 - Another collector's orders are never listed
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -52,6 +54,7 @@ The account menu SHALL link to My Auction Orders beside My Auctions.
 - **WHEN** the first opens My Auction Orders
 - **THEN** only their own order is listed
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-c1n rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-03 - Orders waiting on the winner come first
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -60,6 +63,7 @@ The account menu SHALL link to My Auction Orders beside My Auctions.
 - **WHEN** the collector opens My Auction Orders
 - **THEN** the Pending Payment order is listed before the Delivered order
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-lqy rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-04 - Newest close first within a band
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -91,6 +95,7 @@ Invoice.
 No row SHALL record payment, change an address, or change an order status from
 the list itself.
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-xrg rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-05 - An order awaiting setup offers Complete Order Setup
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -98,6 +103,7 @@ the list itself.
 - **WHEN** the winner selects Complete Order Setup on its row
 - **THEN** that order opens
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-82x rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-06 - An unpaid order offers Pay Invoice
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -106,6 +112,7 @@ the list itself.
 - **THEN** the row's action is Pay Invoice
 - **AND** selecting it opens that order
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-0y5 rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-07 - An expired invoice offers Contact Us
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -114,6 +121,7 @@ the list itself.
 - **THEN** the order status is Pending Payment
 - **AND** opening the order detail offers Contact Us instead of Pay Invoice
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-oor rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-08 - Other statuses offer View detail
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -122,6 +130,7 @@ the list itself.
 - **WHEN** the winner reads their rows
 - **THEN** each row's action is View detail
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-wgn rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-09 - View lot opens the listing
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -137,6 +146,7 @@ SHALL offer a way to My Auctions, and SHALL NOT be presented as a failure.
 A read Grade10 could not complete SHALL be shown as a failure that can be
 retried, and SHALL NOT be shown as an empty list.
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-yt5 rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-10 - An empty list points to My Auctions
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
@@ -145,6 +155,7 @@ retried, and SHALL NOT be shown as an empty list.
 - **THEN** the page offers a way to My Auctions
 - **AND** it does not report an error
 
+<!-- trace:scenario id=g10.auction-auction-orders.SC-t2o rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-11 - A failed read is not an empty list
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 

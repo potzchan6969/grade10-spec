@@ -9,6 +9,7 @@
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
 **so that** I can still settle the lot I won once I have told Grade10 where to ship it.
 
+<!-- trace:case id=g10.auction-winner-order.TC-9uu rev=1 covers=g10.auction-winner-order.SC-js5,g10.auction-winner-order.SC-byg -->
 ### winner-order-US23-TC1-1: Address confirmed a minute inside the window is accepted
 
 **Classification:**
@@ -48,6 +49,7 @@
 * The order reads Preparing Invoice.
 * No invoice is issued by the confirmation itself.
 
+<!-- trace:case id=g10.auction-winner-order.TC-io3 rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC2-1: First confirmation is refused at the 48-hour mark
 
 **Classification:**
@@ -86,6 +88,7 @@
 * The order holds no confirmed delivery address.
 * The order still reads Setup Overdue.
 
+<!-- trace:case id=g10.auction-winner-order.TC-s6n rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC3-1: A missed address deadline refuses a change to a confirmed address
 
 **Classification:**
@@ -118,6 +121,7 @@
 * The order still shows the address confirmed inside the window.
 * The order still reads Preparing Invoice.
 
+<!-- trace:case id=g10.auction-winner-order.TC-w89 rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC4-1: A reopened address form runs a fresh 48 hours from the reopen
 
 **Classification:**
@@ -158,6 +162,7 @@
 * The confirmation is accepted.
 * The order reads Preparing Invoice.
 
+<!-- trace:case id=g10.auction-winner-order.TC-bth rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC5-1: Winner has no way to reopen the address form
 
 **Classification:**
@@ -189,6 +194,7 @@
 * The reopen is refused.
 * The address deadline is unchanged.
 
+<!-- trace:case id=g10.auction-winner-order.TC-w21 rev=1 covers=g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-gqs -->
 ### winner-order-US23-TC6-1: Three won lots open three orders with their own address deadlines
 
 **Classification:**
@@ -228,6 +234,7 @@
 * The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z.
 * Each order keeps the address confirmed on it and awaits its own invoice.
 
+<!-- trace:case id=g10.auction-winner-order.TC-aui rev=1 covers=g10.auction-winner-order.SC-js5,g10.auction-winner-order.SC-byg -->
 ### winner-order-US23-TC7-1: Sent invoice stops the winner changing the address
 
 **Classification:**
@@ -259,6 +266,7 @@
 * The order still shows the address the invoice was quoted for.
 * The area points the winner at Grade10 for a change.
 
+<!-- trace:case id=g10.auction-winner-order.TC-us7 rev=1 covers=g10.auction-winner-order.SC-h7y -->
 ### winner-order-US23-TC8-1: Expired invoice does not reopen the address form
 
 **Classification:**
@@ -290,6 +298,7 @@
 * The change is refused.
 * The overdue alert carries Contact Us and no card Pay control is shown.
 
+<!-- trace:case id=g10.auction-winner-order.TC-euy rev=1 covers=g10.auction-winner-order.SC-js5,g10.auction-winner-order.SC-byg -->
 ### winner-order-US23-TC9-1: A missed address deadline leaves the account address book alone
 
 **Classification:**
@@ -322,6 +331,7 @@
 * Neither reaches the auction order.
 * The order still has no confirmed delivery address and still offers no address form.
 
+<!-- trace:case id=g10.auction-winner-order.TC-yee rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC10-1: A reopen sends the winner no letter
 
 **Classification:**

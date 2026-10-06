@@ -118,6 +118,7 @@ place.
 - **WHEN** a loan agreement is rendered
 - **THEN** it states the term as days from the advance and carries no due date
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-3r0 rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-32 - The custody agreement names the item as the register holds it
 **Serves:** grade10-site-vault-documents-and-signing-US-06 - the collector signs a paper naming the object the shop keeps
 
@@ -126,6 +127,7 @@ place.
 - **THEN** the custody agreement names the item "Charizard 1999 Base Set", a trading card, with the register's description
 - **AND** it does not print "Charizard card"
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-mvh rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-33 - A graded item prints its grader, grade and cert
 **Serves:** grade10-site-vault-documents-and-signing-US-06 - the collector signs for the exact slab
 
@@ -133,6 +135,7 @@ place.
 - **WHEN** its packet is prepared
 - **THEN** the custody agreement prints PSA, `10` and certificate number `12345678` beside the item
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-82h rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-34 - An item with no grader prints none
 **Serves:** grade10-site-vault-documents-and-signing-US-06 - the collector leaves an ungraded watch
 
@@ -140,6 +143,7 @@ place.
 - **WHEN** its packet is prepared
 - **THEN** the custody agreement prints no grader, grade or certificate number
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-cya rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-35 - A paper keeps the facts it was prepared with, and a re-prepare reads again
 **Serves:** grade10-site-vault-documents-and-signing-US-06 - the collector is never handed a paper that changed after it was printed
 
@@ -149,6 +153,7 @@ place.
 - **WHEN** staff prepare the packet again
 - **THEN** the new custody agreement prints `9`
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-ahm rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-36 - The loan agreement's collateral is the item as the register holds it
 **Serves:** grade10-site-vault-documents-and-signing-US-06 - the collector borrows against the exact slab the shop keeps
 
@@ -157,6 +162,7 @@ place.
 - **THEN** the loan agreement's collateral reads "Charizard 1999 Base Set", a trading card, with PSA, `10` and certificate number `12345678`
 - **AND** it does not print "Charizard card"
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-3g3 rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-37 - The release receipt names the item as the register holds it
 **Serves:** grade10-site-vault-documents-and-signing-US-06 - the collector signs for the slab they take home
 
@@ -252,6 +258,7 @@ the first device that opens it. A signer needs no account.
 - **WHEN** it is opened
 - **THEN** it is refused by name, and staff can mint another
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-k3s rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-30 - A link that has sealed its packet is refused on a second open
 **Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
@@ -379,6 +386,7 @@ and an operator's re-check SHALL itself be recorded.
 - **WHEN** an operator re-checks a sealed packet
 - **THEN** the answer is recomputed from the stored bytes and the chain, and the re-check is recorded against the case
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-leu rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-31 - A digest the vault sealed answers with its document and nobody's name
 **Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
@@ -432,6 +440,7 @@ borrower signs.
 - **A case with no loan** - a case whose lane carries no loan agreement SHALL
   be offered no such list and SHALL be held to none.
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-h2m rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-22 - The terms offered are the agreement's own
 **Serves:** grade10-site-vault-documents-and-signing-US-03 - staff record the conversation for the financed case in front of them
 
@@ -440,6 +449,7 @@ borrower signs.
 - **THEN** the terms offered are the terms the loan agreement states, in that
   document's order
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-z0d rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-23 - A record short of the list is refused
 **Serves:** grade10-site-vault-documents-and-signing-US-03 - staff record the conversation for the financed case in front of them
 
@@ -447,6 +457,7 @@ borrower signs.
 - **WHEN** the record is taken
 - **THEN** it is refused by name and nothing is recorded
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-i4k rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-24 - A recorded set says when and by whom, and opens the packet
 **Serves:** grade10-site-vault-documents-and-signing-US-03 - staff move from the conversation to the papers for the visit in front of them
 
@@ -455,6 +466,7 @@ borrower signs.
 - **THEN** the case shows the day it was taken and who took it, and preparing
   the packet is offered
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-kzm rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-25 - A storage case is held to no list
 **Serves:** grade10-site-vault-documents-and-signing-US-03 - staff paper a case that borrows nothing
 
@@ -487,6 +499,7 @@ page of their cases Your data answers for.
 - **Signed in** - the download SHALL be refused to a request carrying no
   session, and no document SHALL be served.
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-pe0 rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-26 - The download carries every case's sealed documents
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector takes their own signed papers without opening each case in turn
 
@@ -496,6 +509,7 @@ page of their cases Your data answers for.
   and holds nothing from a case they do not own
 - **AND** Your data carried that same set of documents before it was taken
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-wzw rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-27 - A collector who has signed nothing is offered no download
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector looks for their signed papers and has none yet
 
@@ -503,6 +517,7 @@ page of their cases Your data answers for.
 - **WHEN** they read Your data
 - **THEN** it carries no signed document
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-itg rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-28 - A download past the ceiling is refused before anything is read
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector asks for more signed papers than one file can carry
 
@@ -511,6 +526,7 @@ page of their cases Your data answers for.
 - **WHEN** they take the download
 - **THEN** it is refused by name, no document is read and nothing is sent
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-03w rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-29 - The download is on the record
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector takes their own signed papers and the vault keeps the trail
 
@@ -519,6 +535,7 @@ page of their cases Your data answers for.
 - **THEN** each of the three is recorded as a read, and one entry on the audit
   trail names who took it, when, and that it held three documents
 
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-wpb rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-38 - The download is refused to a request with no session
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - nobody takes a collector's signed papers without being that collector
 

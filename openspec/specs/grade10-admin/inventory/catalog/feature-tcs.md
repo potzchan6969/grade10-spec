@@ -10,6 +10,7 @@
 **I want** every stock and reservation transition recorded,
 **so that** I can explain how the latest snapshot was reached.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-p4i rev=2 covers=g10adm.inventory-catalog.SC-l3a,g10adm.inventory-catalog.SC-y6f,g10adm.inventory-catalog.SC-1i4,g10adm.inventory-catalog.SC-k0a,g10adm.inventory-catalog.SC-vgc,g10adm.inventory-catalog.SC-cyf,g10adm.inventory-catalog.SC-ses,g10adm.inventory-catalog.SC-7oz,g10adm.inventory-catalog.SC-txu,g10adm.inventory-catalog.SC-pgg,g10adm.inventory-catalog.SC-6lr,g10adm.inventory-catalog.SC-pi4,g10adm.inventory-catalog.SC-tbn,g10adm.inventory-catalog.SC-6zh,g10adm.inventory-catalog.SC-k28,g10adm.inventory-catalog.SC-76r,g10adm.inventory-catalog.SC-z64,g10adm.inventory-catalog.SC-59i,g10adm.inventory-catalog.SC-kdh -->
 ### grade10-admin-inventory-catalog-US4-TC1-2: Cert ID changes leave the ledger totals unmoved
 
 **Classification:**
@@ -186,6 +187,7 @@ Runs once per row of **Test data**.
 **I want** the stock of an auction that closed with no winner to show as available, with the hold closed and the listing named on the product page and in the history,
 **so that** I can trust the count and see why it moved.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-bzc rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
 ### grade10-admin-inventory-catalog-US9-TC1-2: Unsold close returns the hold and names the listing
 
 **Classification:**
@@ -237,6 +239,7 @@ Runs once per row of **Test data**.
 * Step 4: Remarks read `Released by unsold listing`.
 * Step 4: no admin step appears between the close and the entry.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-8k0 rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
 ### grade10-admin-inventory-catalog-US9-TC2-2: Sold close moves the hold to sold, not available
 
 **Classification:**
@@ -280,6 +283,7 @@ Runs once per row of **Test data**.
 * Step 4: the sale entry's Holder reads `<code_2>` and `<title_2>`.
 * Step 4: no entry reads `Released by unsold listing`.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-iit rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
 ### grade10-admin-inventory-catalog-US9-TC3-2: Called-off release carries no remarks
 
 **Classification:**
@@ -320,6 +324,7 @@ Runs once per row of **Test data**.
 * Step 3: its Holder reads `<code_3>` and `<title_3>`.
 * Step 3: its Remarks read `—`.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-2wi rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
 ### grade10-admin-inventory-catalog-US9-TC4-2: Clean-up release reads as the clean-up's
 
 **Classification:**
@@ -372,6 +377,7 @@ Runs once per row of **Test data**.
 * Step 6 finds the same for `<listing_5>` and `<listing_6>`.
 * Step 8: `<listing_7>`'s hold is unchanged, still active.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-izt rev=1 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
 ### grade10-admin-inventory-catalog-US9-TC5-1: Every history entry shows its holder and remarks
 
 Runs once per row of **Test data**.
@@ -431,6 +437,7 @@ Runs once per row of **Test data**.
 **so that** a listing for that physical copy can begin with the photographs
 that document it while shared product media stays available to every copy.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-9q6 rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC1-1: Tag saved media to one Cert record
 
 Runs once per row of **Test data**.
@@ -471,6 +478,7 @@ Runs once per row of **Test data**.
 
 * The source media item is tagged to the selected Cert record of the same product.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-7fg rev=2 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC2-2: Media for a Cert record without a printed ID stays shared
 
 **Classification:**
@@ -502,6 +510,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the tag write.
 * The source media remains untagged and shared at product level.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-tzo rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC3-1: Untag saved media for product-level sharing
 
 **Classification:**
@@ -533,6 +542,7 @@ Runs once per row of **Test data**.
 * The source media item has no Cert tag.
 * The uploaded media remains available as product-level media.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-hik rev=2 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC4-2: Retagging leaves the original media item untagged
 
 **Classification:**
@@ -566,6 +576,7 @@ Runs once per row of **Test data**.
 * Grade10 does not automatically transfer the existing source media item to <target cert record>.
 * A later tag assignment to <target cert record> is a separate explicit action.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-p5b rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC5-1: Invalid retag targets preserve the current tag
 
 **Classification:**
@@ -605,6 +616,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the tag write.
 * The source media item's current tag and media remain unchanged.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-odt rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC6-1: Unauthorized tag changes are refused
 
 **Classification:**
@@ -634,6 +646,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the write under existing Inventory authorization.
 * The tag and source media remain unchanged.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-j5n rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
 ### grade10-admin-inventory-catalog-US12-TC7-1: Regular stock is not a Cert media tag target
 
 **Classification:**
@@ -740,6 +753,7 @@ Runs once per row of **Test data**.
 * Step 16: `<tagged image>` is deleted.
 * Step 16: `<shared image>` and `<other image>` remain with their tags.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ktu rev=1 covers=g10adm.inventory-catalog.SC-gpb,g10adm.inventory-catalog.SC-k3v -->
 ### grade10-admin-inventory-catalog-US13-TC2-1: An actively reserved Cert unit cannot be removed
 
 **Classification:**
@@ -769,6 +783,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the removal while the active reservation exists.
 * The reservation, stock, withdrawn count, inventory ledger, Cert record, and tagged source media remain unchanged.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-f95 rev=1 covers=g10adm.inventory-catalog.SC-gpb,g10adm.inventory-catalog.SC-k3v -->
 ### grade10-admin-inventory-catalog-US13-TC3-1: A non-available Cert unit cannot be removed
 
 Runs once per row of **Test data**.
@@ -860,6 +875,7 @@ Runs once per row of **Test data**.
 **I want** Cert ID details to list the regular stock without a Cert ID beside the Cert records, by state and holder,
 **so that** I can see where every unit of the product is without adding up the counts myself.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ebs rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
 ### grade10-admin-inventory-catalog-US14-TC1-1: Cert ID details lists every tracked unit by state and holder
 
 **Classification:**
@@ -917,6 +933,7 @@ Runs once per row of **Test data**.
 * Step 5: the Cert record rows come first, by Cert ID, then the available `No Cert ID` row, then the hold rows.
 * Step 6: the sum equals the stock read in step 1.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-b0u rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
 ### grade10-admin-inventory-catalog-US14-TC2-1: A product without Cert records lists its regular stock
 
 **Classification:**
@@ -955,6 +972,7 @@ Runs once per row of **Test data**.
 * Step 2: one `No Cert ID` row reads available and `<regular available>`.
 * Step 2: no other row is listed.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ei7 rev=2 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
 ### grade10-admin-inventory-catalog-US14-TC3-2: Selecting a No Cert ID row shows the regular stock's history
 
 Runs once per row of **Test data**.
@@ -1009,6 +1027,7 @@ Runs once per row of **Test data**.
 * Step 3: the `Cert ID change` from `<cert_x>` to `<cert_a>` does not show.
 * Step 3: the reserve entry for `<cert hold>` does not show.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-9ow rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
 ### grade10-admin-inventory-catalog-US14-TC4-1: Regular stock that is all held reads Available 0
 
 **Classification:**
@@ -1052,6 +1071,7 @@ Runs once per row of **Test data**.
 * Step 3: neither row offers the assign action.
 * Step 3: the rows say no free unit of regular stock can take a Cert ID.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-v6a rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
 ### grade10-admin-inventory-catalog-US14-TC5-1: A released hold's units return to the available row
 
 **Classification:**
@@ -1096,6 +1116,7 @@ Runs once per row of **Test data**.
 * Step 6: the available row reads `<count after>`.
 * Step 6: no row for `<admin hold>` is listed.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-6o7 rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
 ### grade10-admin-inventory-catalog-US14-TC6-1: A product whose regular stock has no history lists no No Cert ID row
 
 Runs once per row of **Test data**.
@@ -1316,6 +1337,7 @@ Runs once per row of **Test data**.
 **I want** to change a wrong Cert ID on an available unit, or give an available unit of regular stock its Cert ID, from Cert ID details,
 **so that** the record matches the card on the shelf without removing the unit and losing its history.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-77a rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC1-1: Correcting a Cert ID keeps the record and records the change
 
 Runs once per row of **Test data**.
@@ -1379,6 +1401,7 @@ Runs once per row of **Test data**.
 * Step 8: the same entry shows in the product history.
 * Step 9: `<tagged image>` is tagged to the new Cert ID.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ytb rev=2 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC2-2: Assigning a Cert ID alone turns one regular unit into a Cert record
 
 Runs once per row of **Test data**.
@@ -1442,6 +1465,7 @@ Runs once per row of **Test data**.
 * Step 8: it reads `No Cert ID` before and `<new cert>` after.
 * Step 8: it shows `<change time>`, the admin as actor and the row's remarks read.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-l2h rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC3-1: An unusable new Cert ID leaves the record unchanged
 
 Runs once per row of **Test data**.
@@ -1495,6 +1519,7 @@ Runs once per row of **Test data**.
 * Step 5: `<cert_a>` and `<cert_b>` read as before.
 * Step 5: no `Cert ID change` entry was added.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-73h rev=2 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC4-2: An unusable Cert ID leaves the regular stock unchanged
 
 Runs once per row of **Test data**.
@@ -1548,6 +1573,7 @@ Runs once per row of **Test data**.
 * Step 5: no new Cert record row is listed.
 * Step 5: no `Cert ID change` entry was added.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-d3n rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC5-1: A unit that is held or has moved offers no Cert ID change
 
 Runs once per row of **Test data**.
@@ -1593,6 +1619,7 @@ Runs once per row of **Test data**.
 * Step 3: no correct or assign action is offered on it.
 * Step 3: the row says why its Cert ID cannot change.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-p63 rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC6-1: A unit held after the form opened is refused at save
 
 Runs once per row of **Test data**.
@@ -1644,6 +1671,7 @@ Runs once per row of **Test data**.
 * Step 6: admin B's hold is listed and intact.
 * Step 6: no `Cert ID change` entry was added.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-qwg rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC7-1: An admin without write authority reads but cannot change
 
 **Classification:**
@@ -1691,6 +1719,7 @@ Runs once per row of **Test data**.
 * Step 7: `<cert_a>` is unchanged; no row reads `<new cert>`.
 * Step 7: the available `No Cert ID` row reads as in step 2.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ej3 rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC8-1: An ended Unsold listing shows the corrected Cert ID
 
 **Classification:**
@@ -1733,6 +1762,7 @@ Runs once per row of **Test data**.
 * Step 2: the change is saved.
 * Step 4: the listing reads `<cert_b>`, not `<cert_a>`.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ouv rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC9-1: An assigned unit can be held by its new Cert ID
 
 **Classification:**
@@ -1776,6 +1806,7 @@ Runs once per row of **Test data**.
 * Step 6: `<new cert>`'s row reads Reserved, with Admin and the hold's reference.
 * Step 6: the available `No Cert ID` row reads as in step 2.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-twb rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
 ### grade10-admin-inventory-catalog-US15-TC10-1: Copy facts sent with an assignment are ignored
 
 Runs once per row of **Test data**.
@@ -2733,6 +2764,7 @@ unnumbered stock from entering inventory.
 * Stock and Cert ID records are unchanged.
 * No refused intake adds a history entry.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-if9 rev=1 covers=g10adm.inventory-catalog.SC-fq8,g10adm.inventory-catalog.SC-irv,g10adm.inventory-catalog.SC-a57,g10adm.inventory-catalog.SC-skp,g10adm.inventory-catalog.SC-ah9,g10adm.inventory-catalog.SC-0ac -->
 ### grade10-admin-inventory-catalog-US69-TC3-1: Intake refuses a Cert ID a change already gave
 
 Runs once per row of **Test data**.
@@ -3532,6 +3564,7 @@ product rows separately from stock, then mark valid products created,
 **I want** to attach, order, replace, and remove photographs and video on a catalogue product,
 **so that** Auction operators can begin a listing with prepared material.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-tf3 rev=1 covers=g10adm.inventory-catalog.SC-nmq,g10adm.inventory-catalog.SC-w9x,g10adm.inventory-catalog.SC-hwk,g10adm.inventory-catalog.SC-vz9,g10adm.inventory-catalog.SC-qs1 -->
 ### grade10-admin-inventory-catalog-US74-TC1-1: Product accepts an ordered reusable gallery
 
 **Classification:**

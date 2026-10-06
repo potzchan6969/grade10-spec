@@ -13,6 +13,7 @@
 
 <!-- trace:case id=g10.shared-audit.TC-63y rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 
+<!-- trace:case id=g10.shared-audit.TC-63z rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC1-1: Successful ban is on the trail by user id
 
 **Classification:**
@@ -44,6 +45,7 @@ Signed in as an operator who can ban. <a subject user id> is unbanned.
 
 <!-- trace:case id=g10.shared-audit.TC-cci rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 
+<!-- trace:case id=g10.shared-audit.TC-ccj rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC2-1: Refused ban is on the trail as unsuccessful
 
 **Classification:**
@@ -74,6 +76,7 @@ Signed in as a caller who cannot ban.
 
 <!-- trace:case id=g10.shared-audit.TC-psr rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 
+<!-- trace:case id=g10.shared-audit.TC-pss rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC3-1: Session revoke is on the trail
 
 **Classification:**
@@ -103,6 +106,7 @@ Signed in as an operator who can revoke. <a subject user id> has a live session.
 
 <!-- trace:case id=g10.shared-audit.TC-aph rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 
+<!-- trace:case id=g10.shared-audit.TC-api rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC4-1: Directory and session lists write no trail entry
 
 **Classification:**
@@ -142,6 +146,7 @@ Signed in as an operator who can list users and sessions.
 
 <!-- trace:case id=g10.shared-audit.TC-etq rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 
+<!-- trace:case id=g10.shared-audit.TC-etr rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 ### shared-auth-audit-US2-TC1-1: Auditor with the grant reads recorded identity actions
 
 **Classification:**
@@ -171,6 +176,7 @@ Signed in as a person who holds `audit:read`. At least one identity action is al
 
 <!-- trace:case id=g10.shared-audit.TC-afw rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 
+<!-- trace:case id=g10.shared-audit.TC-afx rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 ### shared-auth-audit-US2-TC2-1: Consistency check reports without returning the proof
 
 **Classification:**
@@ -200,6 +206,7 @@ Signed in as a person who holds `audit:read`.
 
 <!-- trace:case id=g10.shared-audit.TC-u47 rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 
+<!-- trace:case id=g10.shared-audit.TC-u48 rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 ### shared-auth-audit-US2-TC3-1: Caller without audit read is refused
 
 **Classification:**
@@ -236,6 +243,7 @@ Signed in as a person who does not hold `audit:read`.
 
 <!-- trace:case id=g10.shared-audit.TC-74z rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 
+<!-- trace:case id=g10.shared-audit.TC-75a rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC1-1: Trail entry cannot be rewritten or removed
 
 **Classification:**
@@ -264,6 +272,7 @@ An identity action is already on the trail.
 
 <!-- trace:case id=g10.shared-audit.TC-2cz rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 
+<!-- trace:case id=g10.shared-audit.TC-2d0 rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC2-1: Unrecorded ban does not take effect
 
 **Classification:**
@@ -292,6 +301,7 @@ Signed in as an operator who can ban. The identity trail cannot accept an entry.
 
 <!-- trace:case id=g10.shared-audit.TC-vf9 rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 
+<!-- trace:case id=g10.shared-audit.TC-vfa rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC3-1: Unrecorded revoke does not take effect
 
 **Classification:**
@@ -326,6 +336,7 @@ Signed in as an operator who can revoke. <a subject user id> has a live session.
 **I want** a new user id, a verify that flips, and an account deletion on the identity trail,
 **so that** a dispute can name how that user id appeared or left, without the email.
 
+<!-- trace:case id=g10.shared-audit.TC-p7y rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC1-1: Trusted-product create is on the trail
 
 **Classification:**
@@ -354,6 +365,7 @@ An email that has no account.
 * The trail records the write for the new user id with outcome `created`.
 * The actor is the system and the subject is the user id, not the email.
 
+<!-- trace:case id=g10.shared-audit.TC-2mz rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC2-1: Already-existed find is not on the trail
 
 **Classification:**
@@ -381,6 +393,7 @@ An unverified account already exists for an email.
 
 * No identity trail entry is written for that request.
 
+<!-- trace:case id=g10.shared-audit.TC-8lh rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC3-1: Verify flip and delete are on the trail; unrecorded writes do not land
 
 **Classification:**
@@ -418,6 +431,7 @@ An unverified account exists. The identity trail can accept entries.
 **I want** enabling, disabling, or regenerating recovery codes on the identity trail,
 **so that** a takeover of the second factor is a recorded write, without the codes.
 
+<!-- trace:case id=g10.shared-audit.TC-kw1 rev=1 covers=g10.shared-audit.SC-nte,g10.shared-audit.SC-h1r,g10.shared-audit.SC-0sh,g10.shared-audit.SC-bgp,g10.shared-audit.SC-nr9,g10.shared-audit.SC-tl6,g10.shared-audit.SC-ccw,g10.shared-audit.SC-yjy,g10.shared-audit.SC-gkn -->
 ### shared-auth-audit-US5-TC1-1: Enable, disable, and regenerate are on the trail
 
 **Classification:**
@@ -449,6 +463,7 @@ An account that can enroll a second factor.
 * Enable, regenerate, and disable are on the trail by user id.
 * The regenerate entry does not keep the codes.
 
+<!-- trace:case id=g10.shared-audit.TC-e15 rev=1 covers=g10.shared-audit.SC-nte,g10.shared-audit.SC-h1r,g10.shared-audit.SC-0sh,g10.shared-audit.SC-bgp,g10.shared-audit.SC-nr9,g10.shared-audit.SC-tl6,g10.shared-audit.SC-ccw,g10.shared-audit.SC-yjy,g10.shared-audit.SC-gkn -->
 ### shared-auth-audit-US5-TC2-1: Failed enable record leaves the factor; later proof writes the missing enable
 
 **Classification:**

@@ -10,6 +10,7 @@
 **I want** each block to show what its surface supplies and nothing it was not given,
 **so that** every surface built from them reads as one store.
 
+<!-- trace:case id=g10.shared-store-home.TC-tvf rev=1 covers=g10.shared-store-home.SC-rkl,g10.shared-store-home.SC-fxb,g10.shared-store-home.SC-l81 -->
 ### shared-ui-store-home-US1-TC1-1: Section header renders title alone with no browse link
 
 **Classification:**

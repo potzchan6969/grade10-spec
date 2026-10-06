@@ -10,6 +10,7 @@
 **I want** the cards the stock keeper chose for it, shown under it,
 **so that** I can open the next card worth having without going back to the listing.
 
+<!-- trace:case id=g10.store-cross-sell.TC-a9q rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC1-1: Picks lead the rail and similar cards fill it
 
 **Classification:**
@@ -53,6 +54,7 @@
 * Six tiles in all.
 * No tile or label marks a card as chosen or similar.
 
+<!-- trace:case id=g10.store-cross-sell.TC-tim rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC2-1: Rail stops at six tiles, picks first
 
 Runs once per row of **Test data**.
@@ -94,6 +96,7 @@ Runs once per row of **Test data**.
 * Six tiles show, no more.
 * The tiles are as the row states.
 
+<!-- trace:case id=g10.store-cross-sell.TC-s0n rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC3-1: A rail tile opens that card's own page
 
 **Classification:**
@@ -131,6 +134,7 @@ Runs once per row of **Test data**.
 * `<pick_2>`'s own page opens.
 * That page shows `<pick_2>`'s name, price and add-to-cart control.
 
+<!-- trace:case id=g10.store-cross-sell.TC-za2 rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC4-1: No tile in the rail carries a cart control
 
 **Classification:**
@@ -169,6 +173,7 @@ Runs once per row of **Test data**.
 
 * No tile carries an add-to-cart or quantity control.
 
+<!-- trace:case id=g10.store-cross-sell.TC-3jl rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC5-1: Rail arrives with the page before any script runs
 
 **Classification:**
@@ -214,6 +219,7 @@ Runs once per row of **Test data**.
 * Step 8: no placeholder shows in the rail's place.
 * Step 8: the card's name and price do not move.
 
+<!-- trace:case id=g10.store-cross-sell.TC-zsz rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC6-1: A sold-out pick stays, says so and still opens
 
 **Classification:**
@@ -252,6 +258,7 @@ Runs once per row of **Test data**.
 * The first tile is `<sold-out pick>`, marked sold out, its price shown.
 * Step 3 opens `<sold-out pick>`'s page.
 
+<!-- trace:case id=g10.store-cross-sell.TC-p8m rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC7-1: The card being read never appears in its own rail
 
 **Classification:**
@@ -289,6 +296,7 @@ Runs once per row of **Test data**.
 * No tile is `<card_4>`.
 * `<pick_4>` leads the rail, cards sharing `<card_4>`'s world follow.
 
+<!-- trace:case id=g10.store-cross-sell.TC-38a rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC8-1: A card with nothing to show draws no rail and no space
 
 **Classification:**
@@ -325,6 +333,7 @@ Runs once per row of **Test data**.
 * No heading and no rail.
 * Nothing in the page body follows the card's last line.
 
+<!-- trace:case id=g10.store-cross-sell.TC-4zt rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC9-1: Picks that cannot be read leave similar cards and the page whole
 
 **Classification:**
@@ -360,6 +369,7 @@ Runs once per row of **Test data**.
 * The rail holds the cards sharing `<card_6>`'s world, and no pick.
 * The card's own name, price and add-to-cart control render as usual.
 
+<!-- trace:case id=g10.store-cross-sell.TC-ufd rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC10-1: A sold-out card's own page still shows its rail
 
 **Classification:**
@@ -396,6 +406,7 @@ Runs once per row of **Test data**.
 * The heading You may also like shows, the rail under it.
 * The pick leads, cards sharing `<card_7>`'s world follow.
 
+<!-- trace:case id=g10.store-cross-sell.TC-2rr rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC12-1: One chosen card is enough for a rail
 
 **Classification:**
@@ -433,6 +444,7 @@ Runs once per row of **Test data**.
 * The heading reads You may also like.
 * One tile is drawn, the pick.
 
+<!-- trace:case id=g10.store-cross-sell.TC-r08 rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC13-1: A pick that is also a similar card shows once
 
 **Classification:**
@@ -470,6 +482,7 @@ Runs once per row of **Test data**.
 * `<pick_3>` is the first tile and appears once.
 * The three other cards follow it.
 
+<!-- trace:case id=g10.store-cross-sell.TC-9m2 rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC14-1: A card the store has just taken in shows its picks alone
 
 **Classification:**
@@ -508,6 +521,7 @@ Runs once per row of **Test data**.
 * The rail holds `<card_27>` and `<card_28>` in the stock keeper's order and no other card.
 * The card's own name, price and add-to-cart control render as usual.
 
+<!-- trace:case id=g10.store-cross-sell.TC-b5g rev=1 covers=g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp -->
 ### grade10-site-store-cross-sell-US1-TC15-1: A rail the site cannot compose leaves the page whole
 
 **Classification:**
@@ -554,6 +568,7 @@ Runs once per row of **Test data**.
 picks or no picks,
 **so that** the rail leads me somewhere whether or not anyone chose for it.
 
+<!-- trace:case id=g10.store-cross-sell.TC-ju7 rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC1-1: A card with no picks shows cards like it
 
 **Classification:**
@@ -590,6 +605,7 @@ picks or no picks,
 * The heading reads You may also like.
 * The four cards sharing `<card_8>`'s world show, newest first, and no other tile.
 
+<!-- trace:case id=g10.store-cross-sell.TC-m0r rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC2-1: World is weighed before language, language before type
 
 **Classification:**
@@ -629,6 +645,7 @@ picks or no picks,
 * `<world match>` comes before `<language match>`, which comes before `<type match>`.
 * Every tile shares at least one of the three facts.
 
+<!-- trace:case id=g10.store-cross-sell.TC-ko9 rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC3-1: Newest first among cards sharing the same fact
 
 **Classification:**
@@ -667,6 +684,7 @@ picks or no picks,
 
 * The order is `<newest sibling>`, `<middle sibling>`, `<oldest sibling>`.
 
+<!-- trace:case id=g10.store-cross-sell.TC-3s1 rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC4-1: Similar cards stop at six tiles
 
 **Classification:**
@@ -703,6 +721,7 @@ picks or no picks,
 * Six tiles show, no more.
 * They are the six newest of the ten, newest first.
 
+<!-- trace:case id=g10.store-cross-sell.TC-b34 rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC5-1: A card nobody can buy is never a similar card
 
 **Classification:**
@@ -741,6 +760,7 @@ picks or no picks,
 * No tile is `<sold-out sibling>`.
 * The two cards for sale show, newest first.
 
+<!-- trace:case id=g10.store-cross-sell.TC-ish rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC6-1: A card missing a shared fact falls to the facts it carries
 
 Runs once per row of **Test data**.
@@ -781,6 +801,7 @@ Runs once per row of **Test data**.
 
 * The rail answers as the row states.
 
+<!-- trace:case id=g10.store-cross-sell.TC-1lp rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC7-1: Similar cards follow the store's copy of the catalogue
 
 **Classification:**
@@ -821,6 +842,7 @@ Runs once per row of **Test data**.
 * After step 3, `<new sibling>` leads the tiles.
 * After step 3, the two earlier cards follow, newest first.
 
+<!-- trace:case id=g10.store-cross-sell.TC-xgq rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC8-1: A fact shared twice ranks no higher than once
 
 **Classification:**
@@ -858,6 +880,7 @@ Runs once per row of **Test data**.
 
 * `<card_24>` is before `<card_23>`.
 
+<!-- trace:case id=g10.store-cross-sell.TC-2nh rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC9-1: Closer comes before newer
 
 **Classification:**
@@ -895,6 +918,7 @@ Runs once per row of **Test data**.
 
 * `<card_30>` is before `<card_31>`.
 
+<!-- trace:case id=g10.store-cross-sell.TC-ib1 rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC10-1: A similar card that sells out leaves the rail
 
 **Classification:**
@@ -932,6 +956,7 @@ Runs once per row of **Test data**.
 * Before step 1, `<leaving sibling>` shows.
 * After step 2, `<leaving sibling>` is gone and the other card remains.
 
+<!-- trace:case id=g10.store-cross-sell.TC-adw rev=1 covers=g10.store-cross-sell.SC-of9,g10.store-cross-sell.SC-5na,g10.store-cross-sell.SC-npr,g10.store-cross-sell.SC-gyq,g10.store-cross-sell.SC-g8u,g10.store-cross-sell.SC-znx,g10.store-cross-sell.SC-fi3,g10.store-cross-sell.SC-rz4,g10.store-cross-sell.SC-w2k,g10.store-cross-sell.SC-56r,g10.store-cross-sell.SC-6b1,g10.store-cross-sell.SC-79a -->
 ### grade10-site-store-cross-sell-US2-TC11-1: Picks that cannot be read leave similar cards and the page whole
 
 **Classification:**
@@ -977,6 +1002,7 @@ Runs once per row of **Test data**.
 the card itself, and see them on its page,
 **so that** what I know belongs together is what the collector sees.
 
+<!-- trace:case id=g10.store-cross-sell.TC-65d rev=1 covers=g10.store-cross-sell.SC-n3j,g10.store-cross-sell.SC-zts,g10.store-cross-sell.SC-fch -->
 ### grade10-site-store-cross-sell-US3-TC1-1: Cards chosen in the dashboard lead the card's page in that order
 
 **Classification:**
@@ -1016,6 +1042,7 @@ the card itself, and see them on its page,
 
 * The first three tiles are `<first choice>`, `<second choice>`, `<third choice>`, in that order.
 
+<!-- trace:case id=g10.store-cross-sell.TC-npq rev=1 covers=g10.store-cross-sell.SC-n3j,g10.store-cross-sell.SC-zts,g10.store-cross-sell.SC-fch -->
 ### grade10-site-store-cross-sell-US3-TC2-1: Reordered picks show in the new order
 
 **Classification:**
@@ -1056,6 +1083,7 @@ the card itself, and see them on its page,
 
 * The first tile is `<second choice>`, the second `<first choice>`.
 
+<!-- trace:case id=g10.store-cross-sell.TC-51v rev=1 covers=g10.store-cross-sell.SC-n3j,g10.store-cross-sell.SC-zts,g10.store-cross-sell.SC-fch -->
 ### grade10-site-store-cross-sell-US3-TC3-1: Clearing every pick leaves similar cards under the card
 
 **Classification:**
@@ -1097,6 +1125,7 @@ the card itself, and see them on its page,
 * Every tile shares `<card_17>`'s world.
 * Neither `<pick_8>` nor `<pick_9>` shows.
 
+<!-- trace:case id=g10.store-cross-sell.TC-gyb rev=1 covers=g10.store-cross-sell.SC-n3j,g10.store-cross-sell.SC-zts,g10.store-cross-sell.SC-fch -->
 ### grade10-site-store-cross-sell-US3-TC4-1: A pick the catalogue no longer holds is left out
 
 **Classification:**
@@ -1140,6 +1169,7 @@ the card itself, and see them on its page,
 * `<gone card>` shows nowhere, and no tile is left blank for it.
 * The first two tiles are `<kept pick 1>`, then `<kept pick 2>`.
 
+<!-- trace:case id=g10.store-cross-sell.TC-fe0 rev=1 covers=g10.store-cross-sell.SC-n3j,g10.store-cross-sell.SC-zts,g10.store-cross-sell.SC-fch -->
 ### grade10-site-store-cross-sell-US3-TC5-1: A pick added to a card that already has picks reaches the page
 
 **Classification:**

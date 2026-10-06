@@ -45,6 +45,7 @@ SHALL record neither the address nor the method.
 change the method freely. Once they confirm, the method locks for the winner,
 per "The delivery address locks when the invoice is sent".
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-v59 rev=1 -->
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -54,6 +55,7 @@ per "The delivery address locks when the invoice is sent".
 - **THEN** the order records bank transfer as its payment method
 - **AND** the order derives as Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=1 -->
 #### Scenario: winner-order-SC-91 - The choice shows a fee range and no bank transfer amount
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -71,6 +73,7 @@ per "The delivery address locks when the invoice is sent".
 - **THEN** only card is offered
 - **AND** a confirmation carrying bank transfer for that order is refused
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-pt5 rev=1 -->
 #### Scenario: winner-order-SC-93 - The method can change until the winner confirms
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -88,6 +91,7 @@ per "The delivery address locks when the invoice is sent".
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order is still Awaiting Setup
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-er5 rev=1 -->
 #### Scenario: winner-order-SC-226 - Production offers card only until Finance confirms the account
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -114,6 +118,7 @@ Pay Now after an unfinished session SHALL start a fresh session. An unfinished
 session SHALL NOT change the invoice, its amount or its deadline. Grade10 SHALL
 NOT show the order as paid before it records the invoice `paid`.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bbg rev=1 -->
 #### Scenario: winner-order-SC-49 - A timed-out payment session stays payable
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -122,6 +127,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **THEN** the page says payment was not completed
 - **AND** the order is still Pending Payment with Pay Now available
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-7ra rev=1 -->
 #### Scenario: winner-order-SC-50 - Pay Now after an unfinished session starts fresh
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -129,6 +135,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **WHEN** the winner selects Pay Now
 - **THEN** a new payment session starts for the same invoice amount
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-u5t rev=1 -->
 #### Scenario: winner-order-SC-51 - A completed session confirms before reading Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -139,6 +146,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **THEN** the page shows Confirming payment
 - **AND** the order does not yet read Preparing Shipment
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-49w rev=1 -->
 #### Scenario: winner-order-SC-52 - A recorded payment reads Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -172,6 +180,7 @@ control SHALL read **Pay with Card**. When the invoice status is `expired` or
 that completes anyway is recorded per "Money that lands is always recorded" in
 `grade10-admin/auction/post-sale`.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-0ex rev=1 -->
 #### Scenario: winner-order-SC-15 - A declined payment leaves the invoice payable
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -180,6 +189,7 @@ that completes anyway is recorded per "Money that lands is always recorded" in
 - **THEN** the invoice status remains `pending`
 - **AND** the winner can retry with the same or a different card
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-rbe rev=1 -->
 #### Scenario: winner-order-SC-35 - The winner is offered card payment only
 **Serves:** winner-order-US-01 - Winner settles a won lot
 

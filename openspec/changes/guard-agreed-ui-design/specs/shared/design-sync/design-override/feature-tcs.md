@@ -17,6 +17,7 @@ person confirms it,
 **so that** the agreed look changes only on purpose and the designer hears of
 every override.
 
+<!-- trace:case id=g10.shared-design-override.TC-yi5 rev=1 covers=g10.shared-design-override.SC-rls,g10.shared-design-override.SC-l0o,g10.shared-design-override.SC-6go,g10.shared-design-override.SC-qos,g10.shared-design-override.SC-2yb,g10.shared-design-override.SC-22d,g10.shared-design-override.SC-j3z,g10.shared-design-override.SC-2f5,g10.shared-design-override.SC-vtw,g10.shared-design-override.SC-buk,g10.shared-design-override.SC-qc6,g10.shared-design-override.SC-qla -->
 ### shared-design-sync-design-override-US1-TC1-1: Changes that set no agreed look commit without a stop
 
 Runs once per row of **Test data**.
@@ -64,6 +65,7 @@ Runs once per row of **Test data**.
 * Step 3 prints no stop.
 * The commit is recorded on the branch.
 
+<!-- trace:case id=g10.shared-design-override.TC-l87 rev=1 covers=g10.shared-design-override.SC-rls,g10.shared-design-override.SC-l0o,g10.shared-design-override.SC-6go,g10.shared-design-override.SC-qos,g10.shared-design-override.SC-2yb,g10.shared-design-override.SC-22d,g10.shared-design-override.SC-j3z,g10.shared-design-override.SC-2f5,g10.shared-design-override.SC-vtw,g10.shared-design-override.SC-buk,g10.shared-design-override.SC-qc6,g10.shared-design-override.SC-qla -->
 ### shared-design-sync-design-override-US1-TC2-1: A rewritten or removed look line stops the commit and names it
 
 Runs once per row of **Test data**.
@@ -114,6 +116,7 @@ Runs once per row of **Test data**.
 * Each look line shows its text before and after.
 * Each look line shows who last set it and when, matching its history on `main`.
 
+<!-- trace:case id=g10.shared-design-override.TC-l2j rev=1 covers=g10.shared-design-override.SC-cy5,g10.shared-design-override.SC-l3b,g10.shared-design-override.SC-7on,g10.shared-design-override.SC-re6,g10.shared-design-override.SC-8vy,g10.shared-design-override.SC-vs0 -->
 ### shared-design-sync-design-override-US1-TC3-1: Merges that keep both sides commit without a stop
 
 Runs once per row of **Test data**.
@@ -156,6 +159,7 @@ Runs once per row of **Test data**.
 * Step 3 prints no stop.
 * The merge commit is recorded.
 
+<!-- trace:case id=g10.shared-design-override.TC-32y rev=1 covers=g10.shared-design-override.SC-cy5,g10.shared-design-override.SC-l3b,g10.shared-design-override.SC-7on,g10.shared-design-override.SC-re6,g10.shared-design-override.SC-8vy,g10.shared-design-override.SC-vs0 -->
 ### shared-design-sync-design-override-US1-TC4-1: A merge that drops one side's line stops, whoever commits it
 
 Runs once per row of **Test data**.
@@ -200,6 +204,7 @@ Runs once per row of **Test data**.
 * Step 3 stops; no merge commit is recorded.
 * The stop names the file and the row's dropped line.
 
+<!-- trace:case id=g10.shared-design-override.TC-a37 rev=1 covers=g10.shared-design-override.SC-vhk,g10.shared-design-override.SC-4gl,g10.shared-design-override.SC-u2l,g10.shared-design-override.SC-dmc,g10.shared-design-override.SC-1xq,g10.shared-design-override.SC-d4e,g10.shared-design-override.SC-auw -->
 ### shared-design-sync-design-override-US1-TC5-1: Site page code using store blocks as drawn commits
 
 Runs once per row of **Test data**.
@@ -243,6 +248,7 @@ Runs once per row of **Test data**.
 * Step 3 prints no refusal.
 * The commit is recorded on the branch.
 
+<!-- trace:case id=g10.shared-design-override.TC-eey rev=1 covers=g10.shared-design-override.SC-vhk,g10.shared-design-override.SC-4gl,g10.shared-design-override.SC-u2l,g10.shared-design-override.SC-dmc,g10.shared-design-override.SC-1xq,g10.shared-design-override.SC-d4e,g10.shared-design-override.SC-auw -->
 ### shared-design-sync-design-override-US1-TC6-1: Site page code rebuilding a store block is refused
 
 Runs once per row of **Test data**.
@@ -295,6 +301,7 @@ Runs once per row of **Test data**.
 * Step 3 is refused; no commit is recorded.
 * The refusal names the file and the primitive or the store block.
 
+<!-- trace:case id=g10.shared-design-override.TC-jig rev=1 covers=g10.shared-design-override.SC-b5w,g10.shared-design-override.SC-wrf,g10.shared-design-override.SC-voi,g10.shared-design-override.SC-l1o -->
 ### shared-design-sync-design-override-US1-TC7-1: A stopped change commits with a confirmed override line
 
 Runs once per row of **Test data**.
@@ -336,6 +343,7 @@ Runs once per row of **Test data**.
 * Step 2 prints no stop.
 * The commit is recorded, its message ending with `Design-Override: <reason>`.
 
+<!-- trace:case id=g10.shared-design-override.TC-6c4 rev=1 covers=g10.shared-design-override.SC-b5w,g10.shared-design-override.SC-wrf,g10.shared-design-override.SC-voi,g10.shared-design-override.SC-l1o -->
 ### shared-design-sync-design-override-US1-TC8-1: An empty or misplaced override line leaves the commit stopped
 
 Runs once per row of **Test data**.
@@ -376,6 +384,7 @@ Runs once per row of **Test data**.
 
 * Step 3 stops; no commit is recorded.
 
+<!-- trace:case id=g10.shared-design-override.TC-8c3 rev=1 covers=g10.shared-design-override.SC-b5w,g10.shared-design-override.SC-wrf,g10.shared-design-override.SC-voi,g10.shared-design-override.SC-l1o -->
 ### shared-design-sync-design-override-US1-TC9-1: An agent shows the stop and waits for its person
 
 **Classification:**
@@ -416,6 +425,7 @@ Runs once per row of **Test data**.
 * Before step 3, the agent does not commit with the check skipped.
 * After step 3, the commit is recorded ending `Design-Override: <reason>`.
 
+<!-- trace:case id=g10.shared-design-override.TC-xfm rev=1 covers=g10.shared-design-override.SC-wss,g10.shared-design-override.SC-ab0,g10.shared-design-override.SC-8ji,g10.shared-design-override.SC-akl -->
 ### shared-design-sync-design-override-US1-TC10-1: A look change the designer made commits without a stop
 
 Runs once per row of **Test data**.
@@ -458,6 +468,7 @@ Runs once per row of **Test data**.
 * Step 3 prints no stop.
 * The commit is recorded on the branch.
 
+<!-- trace:case id=g10.shared-design-override.TC-i9o rev=1 covers=g10.shared-design-override.SC-wss,g10.shared-design-override.SC-ab0,g10.shared-design-override.SC-8ji,g10.shared-design-override.SC-akl -->
 ### shared-design-sync-design-override-US1-TC11-1: A look change without the designer on it is not exempt
 
 Runs once per row of **Test data**.
@@ -499,6 +510,7 @@ Runs once per row of **Test data**.
 
 * Step 3 stops; no commit is recorded.
 
+<!-- trace:case id=g10.shared-design-override.TC-4uh rev=1 covers=g10.shared-design-override.SC-r0e,g10.shared-design-override.SC-0f1,g10.shared-design-override.SC-jct,g10.shared-design-override.SC-pri,g10.shared-design-override.SC-zcy,g10.shared-design-override.SC-wgf,g10.shared-design-override.SC-5gs,g10.shared-design-override.SC-v77,g10.shared-design-override.SC-iv0 -->
 ### shared-design-sync-design-override-US1-TC12-1: Only the staged change is checked at commit
 
 **Classification:**
@@ -532,6 +544,7 @@ Runs once per row of **Test data**.
 * The commit is recorded, holding only `<another store block file>`.
 * The unstaged rewrite is still in the working tree.
 
+<!-- trace:case id=g10.shared-design-override.TC-5ed rev=1 covers=g10.shared-design-override.SC-r0e,g10.shared-design-override.SC-0f1,g10.shared-design-override.SC-jct,g10.shared-design-override.SC-pri,g10.shared-design-override.SC-zcy,g10.shared-design-override.SC-wgf,g10.shared-design-override.SC-5gs,g10.shared-design-override.SC-v77,g10.shared-design-override.SC-iv0 -->
 ### shared-design-sync-design-override-US1-TC13-1: A new branch pushes without stopping on main's history
 
 **Classification:**
@@ -562,6 +575,7 @@ Runs once per row of **Test data**.
 * The push prints no stop.
 * `<new branch>` is on `origin` with both commits.
 
+<!-- trace:case id=g10.shared-design-override.TC-c3t rev=1 covers=g10.shared-design-override.SC-r0e,g10.shared-design-override.SC-0f1,g10.shared-design-override.SC-jct,g10.shared-design-override.SC-pri,g10.shared-design-override.SC-zcy,g10.shared-design-override.SC-wgf,g10.shared-design-override.SC-5gs,g10.shared-design-override.SC-v77,g10.shared-design-override.SC-iv0 -->
 ### shared-design-sync-design-override-US1-TC14-1: A push is refused for a stopping commit that went unchecked
 
 Runs once per row of **Test data**.
@@ -603,6 +617,7 @@ Runs once per row of **Test data**.
 * The stop names the row's commit and its look lines.
 * `origin` holds the branch as before, or not at all for `<new branch>`.
 
+<!-- trace:case id=g10.shared-design-override.TC-dtb rev=1 covers=g10.shared-design-override.SC-r0e,g10.shared-design-override.SC-0f1,g10.shared-design-override.SC-jct,g10.shared-design-override.SC-pri,g10.shared-design-override.SC-zcy,g10.shared-design-override.SC-wgf,g10.shared-design-override.SC-5gs,g10.shared-design-override.SC-v77,g10.shared-design-override.SC-iv0 -->
 ### shared-design-sync-design-override-US1-TC15-1: Installing sets both checks in both repositories and the store's submodule
 
 Runs once per row of **Test data**.
@@ -646,6 +661,7 @@ Runs once per row of **Test data**.
 * Step 3 stops; no commit is recorded.
 * Step 5 is refused; `origin` does not receive the branch.
 
+<!-- trace:case id=g10.shared-design-override.TC-pz4 rev=1 covers=g10.shared-design-override.SC-kwf,g10.shared-design-override.SC-0l1,g10.shared-design-override.SC-0kk,g10.shared-design-override.SC-yua,g10.shared-design-override.SC-3wm,g10.shared-design-override.SC-qzc -->
 ### shared-design-sync-design-override-US1-TC16-1: An override reaching main mentions the designer once
 
 Runs once per row of **Test data**.
@@ -689,6 +705,7 @@ Runs once per row of **Test data**.
 * The comment lists the lines the commit changed.
 * Step 5 still shows exactly one mention of `@<designer handle>`.
 
+<!-- trace:case id=g10.shared-design-override.TC-b3y rev=1 covers=g10.shared-design-override.SC-kwf,g10.shared-design-override.SC-0l1,g10.shared-design-override.SC-0kk,g10.shared-design-override.SC-yua,g10.shared-design-override.SC-3wm,g10.shared-design-override.SC-qzc -->
 ### shared-design-sync-design-override-US1-TC17-1: A stopping commit that skipped both checks is reported on main
 
 **Classification:**
@@ -722,6 +739,7 @@ Runs once per row of **Test data**.
 * The comment lists the lines the commit changed.
 * The commit stays on `main`; no revert follows it.
 
+<!-- trace:case id=g10.shared-design-override.TC-lxb rev=1 covers=g10.shared-design-override.SC-kwf,g10.shared-design-override.SC-0l1,g10.shared-design-override.SC-0kk,g10.shared-design-override.SC-yua,g10.shared-design-override.SC-3wm,g10.shared-design-override.SC-qzc -->
 ### shared-design-sync-design-override-US1-TC18-1: Commits that need no word reach main without a mention
 
 Runs once per row of **Test data**.
@@ -762,6 +780,7 @@ Runs once per row of **Test data**.
 
 * Step 3 shows no comment mentioning `@<designer handle>`.
 
+<!-- trace:case id=g10.shared-design-override.TC-xh3 rev=1 covers=g10.shared-design-override.SC-vhk,g10.shared-design-override.SC-4gl,g10.shared-design-override.SC-u2l,g10.shared-design-override.SC-dmc,g10.shared-design-override.SC-1xq,g10.shared-design-override.SC-d4e,g10.shared-design-override.SC-auw -->
 ### shared-design-sync-design-override-US1-TC19-1: A listing that no longer holds fails the block check
 
 Runs once per row of **Test data**.

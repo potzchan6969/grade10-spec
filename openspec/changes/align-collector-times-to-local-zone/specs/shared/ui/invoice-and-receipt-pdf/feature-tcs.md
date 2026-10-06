@@ -11,6 +11,7 @@
 **I want** the Invoice and Receipt PDFs I open from Winner Order to show every line and address Grade10 already committed to, from one shared component,
 **so that** the document I read or download matches what the order page told me, however the page that composes it is built.
 
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-sgk rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-57a -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
 
 **Classification:**

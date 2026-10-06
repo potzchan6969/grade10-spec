@@ -9,6 +9,7 @@
 **I want** the merged trail filtered and ordered by time,
 **so that** I can see one person's writes without paging past other products.
 
+<!-- trace:case id=g10.shared-audit.TC-fh6 rev=1 covers=g10.shared-audit.SC-mum,g10.shared-audit.SC-z5c,g10.shared-audit.SC-1hn,g10.shared-audit.SC-u0a,g10.shared-audit.SC-1gn,g10.shared-audit.SC-7pf,g10.shared-audit.SC-15d,g10.shared-audit.SC-wnk,g10.shared-audit.SC-dlc -->
 ### shared-console-audit-US1-TC1-1: Filters combine and restore from the location
 
 **Classification:**
@@ -39,6 +40,7 @@ Writes on more than one product for more than one subject. Operator holds `audit
 * The same filters and sort are restored.
 * No email filter is offered; no row returns an email.
 
+<!-- trace:case id=g10.shared-audit.TC-ps9 rev=1 covers=g10.shared-audit.SC-mum,g10.shared-audit.SC-z5c,g10.shared-audit.SC-1hn,g10.shared-audit.SC-u0a,g10.shared-audit.SC-1gn,g10.shared-audit.SC-7pf,g10.shared-audit.SC-15d,g10.shared-audit.SC-wnk,g10.shared-audit.SC-dlc -->
 ### shared-console-audit-US1-TC2-1: Date range, no-matches, and product silence
 
 **Classification:**
@@ -75,6 +77,7 @@ A trail that has writes, including one in the final second of a calendar day. On
 **I want** subject, a readable action, roles, and details on a row,
 **so that** I can name who was acted on without email or hashes.
 
+<!-- trace:case id=g10.shared-audit.TC-adt rev=1 covers=g10.shared-audit.SC-9n2,g10.shared-audit.SC-ylk,g10.shared-audit.SC-rqe,g10.shared-audit.SC-pcc,g10.shared-audit.SC-w54,g10.shared-audit.SC-l5y -->
 ### shared-console-audit-US2-TC1-1: Subject, readable action, expand, copy, and directory links
 
 **Classification:**
@@ -111,6 +114,7 @@ A recorded write whose subject is a user id. Operator may or may not hold `user:
 **I want** a chain broken at a position to open that row,
 **so that** I land on the break instead of paging to it.
 
+<!-- trace:case id=g10.shared-audit.TC-v8r rev=1 covers=g10.shared-audit.SC-7ok -->
 ### shared-console-audit-US3-TC1-1: Jump opens the broken position
 
 **Classification:**
@@ -143,6 +147,7 @@ A product chain reported broken at a position.
 **I want** one line when every chain is reading, and a notice only when one is not,
 **so that** the trail is not buried under seven identical rows.
 
+<!-- trace:case id=g10.shared-audit.TC-an7 rev=1 covers=g10.shared-audit.SC-1a3 -->
 ### shared-console-audit-US4-TC1-1: Quiet strip vs issue notice
 
 **Classification:**

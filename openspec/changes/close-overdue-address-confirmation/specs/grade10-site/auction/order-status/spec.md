@@ -50,6 +50,7 @@ re-evaluated from the reopened order facts.
 `grade10-site/auction/winner-order`, and Grade10 SHALL NOT read the condition
 afterwards.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-g4b rev=1 -->
 #### Scenario: auction-status-SC-30 - The address window is derived from its persisted deadline
 **Serves:** Supplementary conditions - the address deadline is read from the order's own facts
 
@@ -60,6 +61,7 @@ afterwards.
 - **THEN** it is true at the first reading and false at the second
 - **AND** no `address_window_open` status enum was written between the two readings
 
+<!-- trace:scenario id=g10.auction-order-status.SC-cgu rev=1 -->
 #### Scenario: auction-status-SC-31 - A passed address deadline derives Setup Overdue
 **Serves:** Derived order status - a passed address deadline derives Setup Overdue
 
@@ -69,6 +71,7 @@ afterwards.
 - **WHEN** its order status is read
 - **THEN** it is Setup Overdue
 
+<!-- trace:scenario id=g10.auction-order-status.SC-nin rev=1 -->
 #### Scenario: auction-status-SC-32 - A passed address deadline keeps Preparing Invoice
 **Serves:** Derived order status - a passed address deadline keeps its status
 
@@ -78,6 +81,7 @@ afterwards.
 - **WHEN** its order status is read
 - **THEN** it is Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-order-status.SC-9bm rev=1 -->
 #### Scenario: auction-status-SC-33 - A passed address deadline refuses the winner's address write
 **Serves:** Guards - no address on a passed address deadline
 
@@ -88,6 +92,7 @@ afterwards.
 - **AND** the order's `address_confirmed` and delivery address are unchanged
 - **AND** its derived order status is unchanged
 
+<!-- trace:scenario id=g10.auction-order-status.SC-soi rev=1 -->
 #### Scenario: auction-status-SC-34 - A reopened window accepts the write again
 **Serves:** Guards - no address on a passed address deadline
 
@@ -99,6 +104,7 @@ afterwards.
 - **AND** `address_confirmed` is true
 - **AND** the order derives as Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-order-status.SC-kki rev=1 -->
 #### Scenario: auction-status-SC-35 - An operator may record the address on a passed address deadline
 **Serves:** Guards - no address on a passed address deadline
 

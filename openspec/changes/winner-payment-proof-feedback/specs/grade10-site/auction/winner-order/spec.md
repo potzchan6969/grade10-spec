@@ -60,6 +60,7 @@ winner. Winner Order, the receipt and every letter SHALL show no payment proof
 file and no file name, the winner's or an operator's. Only the Payment Verifying
 status shows that proof was sent.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=1 -->
 #### Scenario: winner-order-SC-99 - Uploading proof stops the deadline
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -79,6 +80,7 @@ status shows that proof was sent.
 - **AND** stores no file
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-fgj rev=1 -->
 #### Scenario: winner-order-SC-101 - A second upload is refused
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -87,6 +89,7 @@ status shows that proof was sent.
 - **THEN** Grade10 refuses it
 - **AND** the files already stored are unchanged
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=1 -->
 #### Scenario: winner-order-SC-102 - Leaving the confirm step uploads nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -103,6 +106,7 @@ status shows that proof was sent.
 - **THEN** Grade10 refuses both
 - **AND** neither invoice changes status
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ymi rev=1 -->
 #### Scenario: winner-order-SC-115 - The winner never sees proof files
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -118,6 +122,7 @@ status shows that proof was sent.
 - **WHEN** the winner uploads one PDF of 5,242,880 bytes and confirms
 - **THEN** the invoice is `payment_verifying`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-67v rev=1 -->
 #### Scenario: winner-order-SC-117 - A card payment while proof is checked is refused
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -134,6 +139,7 @@ status shows that proof was sent.
 - **THEN** neither offers an upload
 - **AND** Grade10 refuses both attempts
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=1 -->
 #### Scenario: winner-order-SC-119 - An upload that fails part-way stores nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -144,6 +150,7 @@ status shows that proof was sent.
 - **AND** an error toast reads **Proof not submitted** / **Nothing was saved. Try again.**
 - **AND** the winner can upload again
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-7nh rev=1 -->
 #### Scenario: winner-order-SC-121 - Another collector cannot upload proof
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -152,6 +159,7 @@ status shows that proof was sent.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-8q1 rev=1 -->
 #### Scenario: winner-order-SC-218 - Successful proof submit shows the success toast
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -160,6 +168,7 @@ status shows that proof was sent.
 - **THEN** the invoice is `payment_verifying` and the order derives as Payment Verifying
 - **AND** a success toast reads **Proof submitted** / **We'll verify your payment shortly.**
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bb1 rev=1 -->
 #### Scenario: winner-order-SC-219 - Leave is blocked while submitting or converting
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -168,6 +177,7 @@ status shows that proof was sent.
 - **THEN** the dialog stays open
 - **AND** the form stays locked until that beat finishes
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-8uw rev=1 -->
 #### Scenario: winner-order-SC-220 - Confirm stays inline microcopy
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -176,6 +186,7 @@ status shows that proof was sent.
 - **THEN** irreversible microcopy says nothing can be added or changed after submit
 - **AND** no second confirm screen is shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ddi rev=1 -->
 #### Scenario: winner-order-SC-239 - A file whose content is not a type Grade10 takes is refused
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 

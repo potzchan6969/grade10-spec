@@ -52,6 +52,7 @@ the public page does not make the code a separate field or an alternate route.
 - **THEN** the canonical address is `/auction/listings/charizard-psa-10-lk423`
 - **AND** the response exposes no labelled listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-oq9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-21 - A shared lot preview uses the canonical address
 **Serves:** grade10-site-auction-listing-page-US-10 - Collector shares the lot by its title and canonical URL
 
@@ -68,6 +69,7 @@ the public page does not make the code a separate field or an alternate route.
   data over the network
 - **THEN** no response body carries a separate listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-51n rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-23 - Support resolves a lot from its title alone
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a lot and is identified by title, not a code neither of them has
 
@@ -105,6 +107,7 @@ the public page does not make the code a separate field or an alternate route.
   lot
 - **AND** the site's not-found screen is shown, not that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-dc3 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-27 - A public listing keeps the code out of labelled fields once an order exists
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a won lot without a separate code field on the listing page
 

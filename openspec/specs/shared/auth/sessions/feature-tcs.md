@@ -236,6 +236,7 @@ Signed in as an operator who holds `session:revoke`.
 
 * The operator is not signed in.
 
+<!-- trace:case id=g10.shared-sessions.TC-g0e rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots,g10.shared-sessions.SC-bui -->
 ### shared-auth-sessions-US2-TC6-1: A cached browse read closes on the very next read after a revoke
 
 **Classification:**
@@ -267,6 +268,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has two
 * Step 3 shows A as nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
 * Step 3 still shows B signed in — revoking A does not touch a session it did not name.
 
+<!-- trace:case id=g10.shared-sessions.TC-f08 rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots,g10.shared-sessions.SC-bui -->
 ### shared-auth-sessions-US2-TC7-1: A caller without the revoke grant cannot force a stale read either
 
 **Classification:**

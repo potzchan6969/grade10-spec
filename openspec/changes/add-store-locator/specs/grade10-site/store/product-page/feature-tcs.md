@@ -10,6 +10,7 @@
 Store Locator,
 **so that** I see the same shop's address and hours before I choose pickup.
 
+<!-- trace:case id=g10.store-product-page.TC-ka9 rev=1 covers=g10.store-product-page.SC-21b -->
 ### grade10-site-store-product-page-US10-TC1-1: Free pick-up store name opens Store Locator
 
 **Classification:**

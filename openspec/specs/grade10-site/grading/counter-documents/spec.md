@@ -108,6 +108,7 @@ leave the submission where it stands.
 - **THEN** it is refused by name
 - **AND** nothing is rendered and nothing is offered to sign
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-rfe rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-02 - The hand-back receipt waits for the balance and every tick
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector at the counter with an upcharge still to settle
 
@@ -123,6 +124,7 @@ leave the submission where it stands.
 - **THEN** the intake receipt is issued against the submission
 - **AND** nobody is asked to sign it and no signing link is minted for it
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-ofs rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-31 - A Bulk list of a hundred cards runs on and is signed once on the last page
 **Serves:** grade10-site-grading-counter-documents-US-01 - a dealer signing for a Bulk list of a hundred cards
 
@@ -166,6 +168,7 @@ nothing SHALL be handed back on a declined receipt.
 **Signing once** - a document already sealed SHALL NOT take a second signature;
 its sealed copy SHALL be offered instead.
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-bkh rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-04 - A name that is not the booking's is refused
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector typing their name on the iPad
 
@@ -174,6 +177,7 @@ its sealed copy SHALL be offered instead.
 - **THEN** the signature is refused by name
 - **AND** nothing is sealed
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-e21 rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-28 - The hand-back receipt refuses a name the submission does not hold
 **Serves:** grade10-site-grading-counter-documents-US-03 - somebody at the collection counter typing a name that is neither the collector's nor the named person's
 
@@ -182,6 +186,7 @@ its sealed copy SHALL be offered instead.
 - **THEN** the signature is refused by name, against the booking's name
 - **AND** nothing is sealed and nothing is handed back
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-azu rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-05 - A grading document is signed with no identity record
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector who has shown the shop no document signing for their cards
 
@@ -190,6 +195,7 @@ its sealed copy SHALL be offered instead.
 - **THEN** the seal is not refused for want of an identity check
 - **AND** no identity record is asked for or kept, and the certificate says the document was signed without one
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-7ub rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-06 - The agreement takes no signature without the postal address
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector reaching the signing block with the address line empty
 
@@ -197,6 +203,7 @@ its sealed copy SHALL be offered instead.
 - **WHEN** the signer signs
 - **THEN** it is refused by name, naming the address line
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-0d4 rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-07 - A document not read to its end takes no signature
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector signing before scrolling through the clauses
 
@@ -204,6 +211,7 @@ its sealed copy SHALL be offered instead.
 - **WHEN** they sign it
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-8hi rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-08 - A link past its window is refused and staff prepare another
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector opening the iPad half an hour after staff showed it
 
@@ -212,6 +220,7 @@ its sealed copy SHALL be offered instead.
 - **THEN** it is refused by name, saying to ask staff for a new one
 - **AND** staff can prepare the same document again
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-ub5 rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-09 - Declining the agreement leaves nothing paid
 **Serves:** grade10-site-grading-counter-documents-US-02 - a collector who would rather not sign on a screen
 
@@ -220,6 +229,7 @@ its sealed copy SHALL be offered instead.
 - **THEN** the document is withdrawn and the decline is on the record
 - **AND** no fee is taken and the submission is still booked
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-shr rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-10 - Declining the hand-back receipt hands nothing back
 **Serves:** grade10-site-grading-counter-documents-US-02 - somebody at the collection counter refusing the screen
 
@@ -228,6 +238,7 @@ its sealed copy SHALL be offered instead.
 - **THEN** the document is withdrawn and the decline is on the record
 - **AND** nothing is handed back and the submission is still ready
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-nke rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-11 - A sealed document's link offers the copy rather than a second signature
 **Serves:** grade10-site-grading-counter-documents-US-05 - somebody reopening the iPad after signing
 
@@ -267,6 +278,7 @@ appear on neither the schedule nor the fee.
 **Drafts for counsel** - clauses 4 and 6 SHALL print as drafted above until
 counsel words them; counsel words clause 6 and the written notice together.
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-0qe rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-12 - A level that carries cover prints a cover line per card and the cover in total
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector reading what each card is covered for before signing
 
@@ -283,6 +295,7 @@ counsel words them; counsel words clause 6 and the written notice together.
 - **THEN** its schedule lists the three cards that were checked
 - **AND** the fee it prints covers those three alone
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-y94 rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-14 - The return date prints as an estimate from the day the batch leaves
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector working out when the cards come home
 
@@ -344,6 +357,7 @@ per exception, however many exceptions it carries. Every card on it SHALL carry
 a line stating that card's outcome: handed back, held by the grader, gone into
 a vault case, withdrawn, or paid out.
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-fbo rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-16 - The receipt names who collected and the ID that was glanced at
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector collecting cards worth more than the glance threshold
 
@@ -352,6 +366,7 @@ a vault case, withdrawn, or paid out.
 - **THEN** it names who collected and says an ID was matched to the name
 - **AND** it says nothing was kept from that ID
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-n5f rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-17 - A named person signs in the collector's place
 **Serves:** grade10-site-grading-counter-documents-US-04 - somebody the collector named coming in for the cards
 
@@ -360,6 +375,7 @@ a vault case, withdrawn, or paid out.
 - **THEN** the name is prefilled as the submission page names them
 - **AND** the sealed receipt records that they collected in the customer's place
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-vje rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-29 - The named person's prefilled name does not take an edit
 **Serves:** grade10-site-grading-counter-documents-US-04 - somebody the collector named reading their own name on the iPad
 
@@ -368,6 +384,7 @@ a vault case, withdrawn, or paid out.
 - **THEN** the line does not take the edit
 - **AND** the receipt seals under the name the submission page holds
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-6eh rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-18 - A card the grader held is named, and a second receipt closes the submission
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector taking three slabs home while one card is still with the grader
 
@@ -377,6 +394,7 @@ a vault case, withdrawn, or paid out.
 - **AND** the card handed back later is receipted on a second hand-back receipt that closes the submission
 - **AND** the second receipt prints that card alone and names the first receipt by its date and fingerprint
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-8w2 rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-19 - A slab that went into a vault case says so
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector leaving one slab with the shop to vault
 
@@ -384,6 +402,7 @@ a vault case, withdrawn, or paid out.
 - **WHEN** the hand-back receipt is rendered
 - **THEN** it says that card went to the vault rather than to the customer
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-haq rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-20 - A card withdrawn before its batch closed has a receipt of its own
 **Serves:** grade10-site-grading-counter-documents-US-05 - a collector keeping the receipt for one card taken back before the cards leave
 
@@ -392,6 +411,7 @@ a vault case, withdrawn, or paid out.
 - **THEN** a receipt names that card alone and the fee refunded for it
 - **AND** it is issued, with nobody asked to sign it, and the submission page lists it with its fingerprint
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-djb rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-21 - The receipt prints what was paid, refunded and paid out
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector reading the money on the paper before signing for the cards
 
@@ -399,6 +419,7 @@ a vault case, withdrawn, or paid out.
 - **WHEN** the hand-back receipt is rendered
 - **THEN** it prints what was paid, what was refunded and what was paid out, each with how it moved
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-rtd rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-30 - Two exceptions on one hand-back print one receipt with a line per card
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector collecting with one card still at the grader and another going into a vault case
 
@@ -420,6 +441,7 @@ values from then on.
 **A setting changed later** - SHALL change no signed paper, and SHALL reach
 only submissions not yet booked.
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-uif rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-22 - A storage fee raised after signing leaves the signed paper as it was
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector holding the agreement they signed weeks before collecting
 
@@ -474,6 +496,7 @@ naming nobody.
 **Nothing withdrawn is offered** - a declined or withdrawn document SHALL NOT
 be listed and SHALL offer no download.
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-7c2 rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-25 - The copies reach the signer three ways
 **Serves:** grade10-site-grading-counter-documents-US-05 - somebody who has just signed at the counter
 
@@ -482,6 +505,7 @@ be listed and SHALL offer no download.
 - **AND** the email for that step carries the sealed document attached
 - **AND** the submission page lists it with its fingerprint and a download
 
+<!-- trace:scenario id=g10.grading-counter-documents.SC-orn rev=1 -->
 #### Scenario: grade10-site-grading-counter-documents-SC-26 - A declined document is on none of the three
 **Serves:** grade10-site-grading-counter-documents-US-05 - a collector reading the page after declining at the counter
 

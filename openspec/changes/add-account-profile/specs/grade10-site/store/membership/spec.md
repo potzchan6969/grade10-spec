@@ -35,6 +35,7 @@ unpaid SHALL send a correction notice, since the member was already told it
 landed; a sale that never reaches that pass SHALL send nothing. The
 notification SHALL never carry the code.
 
+<!-- trace:scenario id=g10.store-membership.SC-uaf rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-77 - A double tap spends once
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -58,6 +59,7 @@ notification SHALL never carry the code.
 - **WHEN** the sale is later abandoned rather than paid
 - **THEN** the member receives a correction notice
 
+<!-- trace:scenario id=g10.store-membership.SC-a70 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-78 - An unreachable account service shows the member as 會員
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 

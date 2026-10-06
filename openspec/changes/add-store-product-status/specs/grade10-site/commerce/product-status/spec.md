@@ -56,6 +56,7 @@ shop answers. Whether a variant sells past zero is decided on the shop.
 surface offers purchasing, whatever count remains. An out-of-stock variant
 SHALL NOT be purchasable on any surface.
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-zdl rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-01 - The shop offers the variant
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -63,6 +64,7 @@ SHALL NOT be purchasable on any surface.
 - **THEN** it is available
 - **AND** it can be added to the cart
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-dvw rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-02 - The shop no longer offers the variant
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -70,6 +72,7 @@ SHALL NOT be purchasable on any surface.
 - **THEN** it is out of stock
 - **AND** it cannot be added to the cart
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-jwx rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-03 - The shop sells past zero
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -77,6 +80,7 @@ SHALL NOT be purchasable on any surface.
 - **THEN** it is available
 - **AND** it can be added to the cart, exactly as a variant with 12 can
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-w6q rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-04 - The shop exposes no count
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -108,18 +112,21 @@ shop's own checkout answers for what it can deliver.
 variant's availability. A variant that is fillable in part for a request of 50
 SHALL remain available.
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-csg rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-05 - The request can be filled
 **Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 3 are requested of an available variant with a count of 12
 - **THEN** the request is fillable
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-fhg rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-06 - The request can be filled exactly
 **Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 12 are requested of an available variant with a count of 12
 - **THEN** the request is fillable
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-l64 rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-07 - More is asked for than the count
 **Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
@@ -127,12 +134,14 @@ SHALL remain available.
 - **THEN** the request is fillable in part, naming 2
 - **AND** the variant is still available
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-jj1 rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-08 - Nothing remains to fill the request
 **Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 5 are requested of an out-of-stock variant
 - **THEN** the request is not fillable
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-2mz rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-09 - An unbounded variant fills any request
 **Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
@@ -159,6 +168,7 @@ What the cart tells a collector about a line it could not fill in full is
 `grade10-site/store/cart-validation`'s, and is told at the moment the store
 acts on the quantity rather than as a cue to buy sooner.
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-my5 rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-10 - A scarce variant is offered as any other
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -168,6 +178,7 @@ acts on the quantity rather than as a cue to buy sooner.
 - **THEN** both read available, with the same treatment and the same controls
 - **AND** neither shows a remaining count or a scarcity label
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-oaw rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-11 - No count reaches the collector while browsing
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -194,6 +205,7 @@ SHALL NOT render or require the collector to choose among sizes, options, or
 variants, and SHALL NOT show the internal sale identity as a product choice
 or display label.
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-h7u rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-12 - One grade sold, another still for sale
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -204,6 +216,7 @@ or display label.
   in the product read's order
 - **AND** the page offers no variant choice or variant display label
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-uei rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-13 - Nothing left on the card
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -227,6 +240,7 @@ counts.
 **Priced but unbuyable** - A surface SHALL NOT hide a price because a variant
 is out of stock, and SHALL NOT offer a purchase control that cannot be used.
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-ns0 rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-14 - The page and cart use the available item
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -238,6 +252,7 @@ is out of stock, and SHALL NOT offer a purchase control that cannot be used.
 - **AND** the page uses the available item for its price, status, and add
 - **AND** the cart line uses that same internal sale identity and reads available
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-5rs rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-15 - An unavailable item keeps its price
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -263,6 +278,7 @@ surface communicates: every tile reads available or out of stock.
 cart line whose product ceased to be published after it was added — is
 `grade10-site/store/cart-validation`'s.
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-g9e rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-16 - An unpublished product is not listed
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 

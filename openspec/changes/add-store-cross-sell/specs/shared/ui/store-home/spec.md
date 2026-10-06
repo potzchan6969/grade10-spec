@@ -20,6 +20,7 @@
 browse-all link is to be drawn, so a surface with nothing to browse names no
 word for a link it never shows.
 
+<!-- trace:scenario id=g10.shared-store-home.SC-l81 rev=1 -->
 #### Scenario: shared-ui-store-home-SC-10 - No browse label is needed where no link is drawn
 **Serves:** Section header - a surface with nothing to browse names no word for it
 

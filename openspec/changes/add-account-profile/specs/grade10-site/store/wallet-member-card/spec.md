@@ -20,6 +20,7 @@ later lap, leaving the pass as it was; it SHALL NOT blank the name or guess
 one. A pass whose account name changes SHALL show the new name from its next
 due refresh.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-nmv rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-39 - An unreachable account service leaves a pass as it was
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -47,6 +48,7 @@ Identifying from a pass SHALL open the same session on the same terms as the
 card on the site, and removing a pass SHALL change nothing about the
 membership.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-4q3 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-13 - A member adds their card to their wallet
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -55,6 +57,7 @@ membership.
   membership surface shows for them, their tier, points to spend and a
   scannable code
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-7wr rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-14 - A pass identifies as the card does
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -68,6 +71,7 @@ membership.
 - **THEN** it identifies nobody
 - **AND** a code presented twice inside its own period is refused the second time
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-xeb rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-16 - A pass identifies with no signal
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -99,6 +103,7 @@ SHALL be served by the card on the site, as they are today.
 
 Removing a pass SHALL change nothing about the membership.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-fjc rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-18 - A member adds their card to Apple Wallet
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -107,6 +112,7 @@ Removing a pass SHALL change nothing about the membership.
   membership surface shows for them, their tier, points to spend and a
   scannable code
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-95t rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-19 - An Apple pass identifies every time
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -114,6 +120,7 @@ Removing a pass SHALL change nothing about the membership.
 - **WHEN** they present the same pass on two visits
 - **THEN** a session opens both times
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-g3f rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-20 - An Apple pass cannot move value
 **Serves:** grade10-site-store-wallet-member-card-US-08 - Member spends points when the pass they carry cannot
 

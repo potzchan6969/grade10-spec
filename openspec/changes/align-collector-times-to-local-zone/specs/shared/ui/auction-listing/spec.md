@@ -19,6 +19,7 @@ line.
 static Ends / Opens / Closed line as a collector deadline in that zone,
 naming the viewer's short zone (`HKT`, `EDT`).
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-9gi rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-13 - Recent bids show localized activity time
 **Serves:** Bid history - recent bids show localized activity time
 
@@ -27,6 +28,7 @@ naming the viewer's short zone (`HKT`, `EDT`).
 - **THEN** each row shows a formatted activity time
 - **AND** no row shows a raw millisecond value
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-tzc rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-55 - A catalogue tile close follows the viewer
 **Serves:** Bid history - catalogue tile close follows the viewer
 

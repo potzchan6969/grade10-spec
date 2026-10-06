@@ -9,6 +9,7 @@
 **I want** to record each payment as it arrives and see the order until it is settled,
 **so that** every partial payment is recorded without tracking the balance outside Grade10.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-yws rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC1-1: A partial payment starts collection
 
 **Classification:**
@@ -39,6 +40,7 @@
 * The order outcome is Partially Paid.
 * The payment record has its own receipt number and the remaining balance is 60000 minor units.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-3z7 rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC2-1: Repeated payments keep one order history
 
 **Classification:**
@@ -70,6 +72,7 @@
 * Both payments remain in oldest-first order.
 * The order remains Partially Paid until its invoice is closed.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-uz7 rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC3-1: The closing prompt does not discard the payment
 
 **Classification:**
@@ -102,6 +105,7 @@
 * Step 2 leaves the order Partially Paid with the real balance.
 * Step 3 closes the invoice as Paid without a second prompt.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-qpm rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC4-1: An overpayment needs confirmation before Paid
 
 **Classification:**

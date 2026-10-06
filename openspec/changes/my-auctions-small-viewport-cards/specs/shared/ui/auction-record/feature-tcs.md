@@ -9,6 +9,7 @@
 **I want** the shared auction-record blocks to present bookmarked lots,
 **so that** collectors can act on every lot without losing facts on a small viewport.
 
+<!-- trace:case id=g10.shared-auction-record.TC-1ya rev=1 covers=g10.shared-auction-record.SC-v8o,g10.shared-auction-record.SC-ko6,g10.shared-auction-record.SC-s5k,g10.shared-auction-record.SC-ea6,g10.shared-auction-record.SC-zan,g10.shared-auction-record.SC-08a,g10.shared-auction-record.SC-l2l,g10.shared-auction-record.SC-vjs,g10.shared-auction-record.SC-8ki,g10.shared-auction-record.SC-riw,g10.shared-auction-record.SC-2o3,g10.shared-auction-record.SC-dft,g10.shared-auction-record.SC-3me,g10.shared-auction-record.SC-kn1 -->
 ### shared-ui-auction-record-US1-TC20-1: Below md each lot is a card without sideways scroll
 
 **Classification:**
@@ -41,6 +42,7 @@
 * Those facts and actions are reachable without horizontal scroll of the page content.
 * The table column header row is not shown.
 
+<!-- trace:case id=g10.shared-auction-record.TC-qf5 rev=1 covers=g10.shared-auction-record.SC-v8o,g10.shared-auction-record.SC-ko6,g10.shared-auction-record.SC-s5k,g10.shared-auction-record.SC-ea6,g10.shared-auction-record.SC-zan,g10.shared-auction-record.SC-08a,g10.shared-auction-record.SC-l2l,g10.shared-auction-record.SC-vjs,g10.shared-auction-record.SC-8ki,g10.shared-auction-record.SC-riw,g10.shared-auction-record.SC-2o3,g10.shared-auction-record.SC-dft,g10.shared-auction-record.SC-3me,g10.shared-auction-record.SC-kn1 -->
 ### shared-ui-auction-record-US1-TC21-1: From md the five-column table remains
 
 **Classification:**
@@ -70,6 +72,7 @@
 
 * The lots appear in one five-column table with the column header row.
 
+<!-- trace:case id=g10.shared-auction-record.TC-jc0 rev=1 covers=g10.shared-auction-record.SC-v8o,g10.shared-auction-record.SC-ko6,g10.shared-auction-record.SC-s5k,g10.shared-auction-record.SC-ea6,g10.shared-auction-record.SC-zan,g10.shared-auction-record.SC-08a,g10.shared-auction-record.SC-l2l,g10.shared-auction-record.SC-vjs,g10.shared-auction-record.SC-8ki,g10.shared-auction-record.SC-riw,g10.shared-auction-record.SC-2o3,g10.shared-auction-record.SC-dft,g10.shared-auction-record.SC-3me,g10.shared-auction-record.SC-kn1 -->
 ### shared-ui-auction-record-US1-TC22-1: Below md the whole card opens the lot or order
 
 **Classification:**

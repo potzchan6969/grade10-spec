@@ -11,6 +11,7 @@
 **I want** an unpaid invoice past its deadline to read Payment Overdue without winner card pay,
 **so that** the deadline ends self-service settlement while operators can still resolve the order.
 
+<!-- trace:case id=g10.auction-order-status.TC-hwr rev=1 covers=g10.auction-order-status.SC-tc9,g10.auction-order-status.SC-i18,g10.auction-order-status.SC-wlf,g10.auction-order-status.SC-y48,g10.auction-order-status.SC-mej,g10.auction-order-status.SC-sx5,g10.auction-order-status.SC-fmg,g10.auction-order-status.SC-r6z,g10.auction-order-status.SC-d22,g10.auction-order-status.SC-j9x,g10.auction-order-status.SC-wt0,g10.auction-order-status.SC-er6,g10.auction-order-status.SC-e4v,g10.auction-order-status.SC-q1w,g10.auction-order-status.SC-dq1,g10.auction-order-status.SC-x14,g10.auction-order-status.SC-1xq -->
 ### auction-status-US1-TC16-1: A card payment landing on an expired invoice pays it, flagged Paid late
 
 **Classification:**
@@ -41,6 +42,7 @@
 * The payment is recorded and flagged Paid late.
 * The order derives as Preparing Shipment.
 
+<!-- trace:case id=g10.auction-order-status.TC-64l rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US1-TC17-1: A card payment landing on a checked invoice moves nothing
 
 **Classification:**
@@ -71,6 +73,7 @@
 * The invoice status is still `payment_verifying`.
 * The order still derives as Payment Verifying.
 
+<!-- trace:case id=g10.auction-order-status.TC-tvc rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US1-TC18-1: A card payment on a cancelled invoice moves no status
 
 **Classification:**
@@ -101,6 +104,7 @@
 * The invoice status is still `cancelled`.
 * The order still derives as Cancelled.
 
+<!-- trace:case id=g10.auction-order-status.TC-bur rev=1 covers=g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-er6 -->
 ### auction-status-US1-TC19-1: No card payment starts on an expired or checked invoice
 
 Runs once per row of **Test data**.

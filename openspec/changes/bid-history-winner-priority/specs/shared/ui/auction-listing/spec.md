@@ -40,6 +40,7 @@ leads.
 `winner` and `samePricePriorityTip` and SHALL thread them to
 `ListingBidHistoryList`.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-13j rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
 **Serves:** Public bid history outcome - closed sold Recent bids show a winner crown
 
@@ -51,6 +52,7 @@ leads.
 - **AND** no live bid card history row shows a winner crown without
   `isWinner`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-alr rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
 **Serves:** Public bid history outcome - equal-max non-leader shows earlier-leads tip
 
@@ -60,6 +62,7 @@ leads.
 - **THEN** the tooltip states that when maximums match, the earlier one
   leads
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-4a9 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
 **Serves:** Public bid history outcome - no crown without its name
 

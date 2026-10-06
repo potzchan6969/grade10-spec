@@ -18,6 +18,7 @@ sold out, and in cart.
 **Sold out** - A sold-out photo SHALL remain fully visible under the sold-out
 treatment (including reduced opacity) and SHALL NOT scale on hover.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-8fs rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-63 - The whole photo is visible
 **Serves:** Tile contract - the whole photo is visible
 
@@ -26,6 +27,7 @@ treatment (including reduced opacity) and SHALL NOT scale on hover.
 - **THEN** the entire photo is visible inside the well
 - **AND** no edge of the photo is cropped by the well
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ryr rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-90 - Sold-out does not scale on hover
 **Serves:** Tile contract - sold-out does not scale on hover
 

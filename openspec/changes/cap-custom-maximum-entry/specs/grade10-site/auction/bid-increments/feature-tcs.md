@@ -9,6 +9,7 @@
 **I want** the minimum next bid to scale with the lot's price,
 **so that** I can enter an affordable opening bid and a sensible later bid.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-4ox rev=2 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
 ### grade10-site-auction-bid-increments-US1-TC8-2: Lot starting at the ceiling takes one first bid there
 
 Runs once per row of **Test data**.
@@ -59,6 +60,7 @@ Runs once per row of **Test data**.
 **I want** Grade10 to refuse an amount above the ceiling and tell me the limit,
 **so that** a mistyped bid or maximum never commits me to an amount I cannot settle.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-dfw rev=2 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
 ### grade10-site-auction-bid-increments-US2-TC3-2: Auto-bid maximum above the ceiling is refused
 
 **Classification:**

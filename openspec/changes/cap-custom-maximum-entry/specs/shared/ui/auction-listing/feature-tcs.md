@@ -11,6 +11,7 @@
 **I want** the lot page's blocks to show the gallery, my bidding and its disclosures as the contract states,
 **so that** every storefront composing them shows me the same thing.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC19-1: Draft at the ceiling is accepted
 
 **Classification:**
@@ -41,6 +42,7 @@
 
 * The draft shown is `9999999999`.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC20-1: Typed digit past the ceiling restores the prior draft
 
 **Classification:**
@@ -71,6 +73,7 @@
 
 * The draft remains `9999999999`.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-35i rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC21-1: Paste past the ceiling from empty stays empty
 
 **Classification:**
@@ -101,6 +104,7 @@
 
 * The draft remains empty.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC22-1: Paste past the ceiling restores the prior draft
 
 **Classification:**
@@ -131,6 +135,7 @@
 
 * The draft remains `500`.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC23-1: Fractional paste that exceeds after whole-major cleaning restores the prior draft
 
 **Classification:**
@@ -161,6 +166,7 @@
 
 * The draft remains `500`.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC24-1: Raise path restores on overshoot
 
 **Classification:**
@@ -189,6 +195,7 @@
 
 * The draft remains `9999999999`.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC25-1: Over-ceiling refuse shows no dedicated error
 
 **Classification:**
@@ -220,6 +227,7 @@
 * The draft remains `60500`.
 * No invalid-amount, below-floor or too-large message appears.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
 ### shared-ui-auction-listing-US1-TC26-1: Fractional paste at the ceiling after cleaning is accepted
 
 **Classification:**

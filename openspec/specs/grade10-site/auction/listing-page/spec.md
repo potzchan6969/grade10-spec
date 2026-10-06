@@ -364,6 +364,7 @@ signed-in viewer's own standing again, so Outbid and the minimum next valid
 bid show without a reload. The standing comes from that viewer's own read;
 live updates stay anonymous.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-o37 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-29 - Another page's bid shows without a reload
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -372,6 +373,7 @@ live updates stay anonymous.
 - **THEN** the other's page shows the new current bid, bid count and recent
   bids without a reload
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-ohm rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-30 - An extension restarts the countdown
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -380,6 +382,7 @@ live updates stay anonymous.
 - **THEN** the countdown counts to the new recorded close at once, labelled
   Extended bidding, without a reload
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-b9n rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-31 - The scheduled close shows Extended bidding
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -390,6 +393,7 @@ live updates stay anonymous.
   close
 - **AND** it shows no result
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-sux rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-32 - A page without a live connection catches up
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -399,6 +403,7 @@ live updates stay anonymous.
 - **THEN** the page shows the new current bid on its next poll, without a
   reload
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-2d0 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-41 - A page that lost its live connection catches up when it returns
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -407,6 +412,7 @@ live updates stay anonymous.
   returns
 - **THEN** the page shows the new current bid and bid count without a reload
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-7c2 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-43 - A leader outbid from another page reads Outbid without a reload
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -431,6 +437,7 @@ A countdown SHALL round up to the whole second, so it reads 0 only once the
 deadline has passed. It SHALL show whole seconds only, the last 10 seconds
 included.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-9c0 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-33 - A wrong device clock shows the right time left
 **Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
 
@@ -439,6 +446,7 @@ included.
 - **WHEN** both pages show the countdown
 - **THEN** both show the same whole seconds left
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-60y rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-34 - The last second does not read 0
 **Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
 
@@ -447,6 +455,7 @@ included.
 - **WHEN** the countdown shows
 - **THEN** it reads 1 second
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-v0i rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-35 - A return to the tab reads the clock again
 **Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
 
@@ -455,6 +464,7 @@ included.
 - **THEN** the page reads the auction service's clock again and the countdown
   shows the time left on it
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-7y3 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-36 - A small correction never adds time
 **Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
 
@@ -462,6 +472,7 @@ included.
 - **WHEN** a new reading of the service clock moves it back by 0.5 seconds
 - **THEN** the countdown does not read more than 30 seconds
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-qxe rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-44 - The last seconds count in whole seconds
 **Serves:** grade10-site-auction-listing-page-US-13 - Collector reads the same time left as every other page
 
@@ -494,6 +505,7 @@ The page SHALL use only existing words for the moments around the close:
 | A bid refused as placed at or after the close | Your bid did not go through. - the bid form's own words for that refusal, under the bid action |
 | A price-moving bid extends the lot | Extended bidding |
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-rgt rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-37 - The winner reads Closed, then Won
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -503,6 +515,7 @@ The page SHALL use only existing words for the moments around the close:
   never Ended or Did not win
 - **AND** once it is recorded the page shows Won, without a reload
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-76f rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-38 - A losing bidder reads Did not win from the record
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -519,6 +532,7 @@ The page SHALL use only existing words for the moments around the close:
 - **THEN** its status reads Closed with no result, and no label names a
   closing or final-deadline state
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-ygz rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-42 - A later close returns the page to Extended bidding
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -528,6 +542,7 @@ The page SHALL use only existing words for the moments around the close:
 - **THEN** the page shows Extended bidding and counts to the later close
 - **AND** its bid controls are enabled again
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-31a rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-45 - A bid at the close reads only that it did not go through
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -537,6 +552,7 @@ The page SHALL use only existing words for the moments around the close:
 - **THEN** the bid form shows Your bid did not go through. under the bid
   action, and no other words about the bid
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-45u rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-47 - A lot nobody bid on reads Ended with No bids
 **Serves:** grade10-site-auction-listing-page-US-14 - a collector with the page open waits on a lot that took no bid
 
@@ -563,6 +579,7 @@ The lot page SHALL set the public Recent bids flags that
 - **Copy** - the page supplies the winner name and the equal-max tip in the
   collector's language.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-kwb rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-48 - A sold lot crowns its winning bid
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -572,6 +589,7 @@ The lot page SHALL set the public Recent bids flags that
 - **AND** no other row shows a crown
 - **AND** the same lot read while live showed no crown on any row
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-c97 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-49 - A tied maximum that came second carries the tip
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -580,6 +598,7 @@ The lot page SHALL set the public Recent bids flags that
 - **THEN** customer B's row carries the Info tip saying that when maximums match, the earlier one leads
 - **AND** customer A's leading row carries no tip
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-xz7 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-50 - A lot without a winner crowns no bid
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -587,6 +606,7 @@ The lot page SHALL set the public Recent bids flags that
 - **WHEN** a collector reads each lot's Recent bids
 - **THEN** no row on either lot shows a crown
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-s2c rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-51 - An older tie lower down keeps its tip
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -633,6 +653,7 @@ the public page does not make the code a separate field or an alternate route.
 - **THEN** the canonical address is `/auction/listings/charizard-psa-10-lk423`
 - **AND** the response exposes no labelled listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-oq9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-21 - A shared lot preview uses the canonical address
 **Serves:** grade10-site-auction-listing-page-US-10 - Collector shares the lot by its title and canonical URL
 
@@ -649,6 +670,7 @@ the public page does not make the code a separate field or an alternate route.
   data over the network
 - **THEN** no response body carries a separate listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-51n rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-23 - Support resolves a lot from its title alone
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a lot and is identified by title, not a code neither of them has
 
@@ -686,6 +708,7 @@ the public page does not make the code a separate field or an alternate route.
   lot
 - **AND** the site's not-found screen is shown, not that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-dc3 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-27 - A public listing keeps the code out of labelled fields once an order exists
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a won lot without a separate code field on the listing page
 

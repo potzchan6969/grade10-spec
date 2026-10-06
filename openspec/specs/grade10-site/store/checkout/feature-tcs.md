@@ -9,6 +9,7 @@
 **I want** to review my current cart and send its accepted tender to Shopify,
 **so that** I pay for the lines and choices I just saw.
 
+<!-- trace:case id=g10.store-checkout.TC-tb9 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC1-1: Current lines reach one hosted checkout
 
 **Classification:**
@@ -40,6 +41,7 @@
 * One hosted Shopify checkout opens.
 * The checkout asks for shipping and payment on Shopify.
 
+<!-- trace:case id=g10.store-checkout.TC-sew rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC2-1: The estimate leaves final charges to Shopify
 
 **Classification:**
@@ -71,6 +73,7 @@
 * The Grade10 summary does not call shipping or tax final.
 * Shopify shows the address-aware shipping and tax values before payment.
 
+<!-- trace:case id=g10.store-checkout.TC-jze rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC3-1: A repeated Pay uses the same checkout
 
 **Classification:**
@@ -102,6 +105,7 @@
 * The second request returns the existing checkout or its settling state.
 * No second order or second payable invoice is created.
 
+<!-- trace:case id=g10.store-checkout.TC-1yv rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC4-1: A lost response is safe to retry
 
 **Classification:**
@@ -132,6 +136,7 @@
 * The retry returns the existing hosted checkout or settling state.
 * No new Shopify invoice is created.
 
+<!-- trace:case id=g10.store-checkout.TC-gwn rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC5-1: A changed basket starts a new intent
 
 **Classification:**
@@ -161,6 +166,7 @@
 * The changed request has a new intent fingerprint.
 * The old open checkout is not returned as the changed purchase.
 
+<!-- trace:case id=g10.store-checkout.TC-w18 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC8-1: A terminal intent is replayed safely
 
 **Classification:**
@@ -191,6 +197,7 @@
 * No second Grade10 order or Shopify invoice is created.
 * A new intent is required before a changed basket can be paid.
 
+<!-- trace:case id=g10.store-checkout.TC-3dr rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC9-1: A crash before dispatch can retry
 
 **Classification:**
@@ -221,6 +228,7 @@
 * The order can be dispatched once after the lease is reclaimed.
 * The retry creates no second order or invoice.
 
+<!-- trace:case id=g10.store-checkout.TC-jje rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC10-1: An ambiguous dispatch requires operator recovery
 
 **Classification:**
@@ -251,6 +259,7 @@
 * No replacement Shopify invoice is created.
 * The member cannot start a new purchase until an operator binds or cancels the provider draft.
 
+<!-- trace:case id=g10.store-checkout.TC-ldd rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC6-1: A served destination receives the preview rate
 
 **Classification:**
@@ -280,6 +289,7 @@
 * The preview and Shopify show the same configured rate and currency.
 * The carrier callback does not create an order or mutate the cart.
 
+<!-- trace:case id=g10.store-checkout.TC-inp rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC7-1: An unsupported destination receives no rate
 
 **Classification:**
@@ -314,6 +324,7 @@
 **I want** the changed line named before I pay,
 **so that** I can fix the basket instead of paying for stale goods.
 
+<!-- trace:case id=g10.store-checkout.TC-kpm rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC1-1: A changed line blocks payment
 
 **Classification:**
@@ -344,6 +355,7 @@
 * Pay is unavailable until the collector fixes or removes the line.
 * No Shopify checkout or Grade10 order is created by the failed read.
 
+<!-- trace:case id=g10.store-checkout.TC-b5w rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC2-1: A failed read keeps held facts unchecked
 
 **Classification:**
@@ -374,6 +386,7 @@
 * Pay remains unavailable.
 * Retry is offered without creating an order.
 
+<!-- trace:case id=g10.store-checkout.TC-njp rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC3-1: Shopify names a line refused at payment
 
 **Classification:**
@@ -411,6 +424,7 @@
 **I want** to return to Grade10 and find the order while it settles,
 **so that** I can trust the store did not lose my purchase.
 
+<!-- trace:case id=g10.store-checkout.TC-wam rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC1-1: A pending order is visible while payment settles
 
 **Classification:**
@@ -441,6 +455,7 @@
 * The page presents pending as a settling state, not an empty result or an error.
 * The page polls until the order settles or exposes a retryable failure.
 
+<!-- trace:case id=g10.store-checkout.TC-xym rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC2-1: Paid settlement releases the member cart
 
 **Classification:**
@@ -472,6 +487,7 @@
 * The member cart no longer contains the paid lines.
 * The paid order appears in Your Orders and can open its detail page.
 
+<!-- trace:case id=g10.store-checkout.TC-nds rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC3-1: Reconcile repairs a missed payment event
 
 **Classification:**
@@ -502,6 +518,7 @@
 * The order moves to paid once without creating another invoice.
 * Shopify's paid total and supplied shipping/tax facts are retained.
 
+<!-- trace:case id=g10.store-checkout.TC-dno rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC4-1: Shopify confirmation returns to the Grade10 order
 
 **Classification:**
@@ -531,6 +548,7 @@
 * The Grade10 orders surface opens and shows the matching purchase.
 * The link does not require the native Continue shopping button or open a native Shopify account page.
 
+<!-- trace:case id=g10.store-checkout.TC-ce0 rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC5-1: An invalid payment event stays unpaid
 
 **Classification:**
@@ -566,6 +584,7 @@
 **I want** checkout to explain the identity requirement,
 **so that** I can sign in before an order or payment is started.
 
+<!-- trace:case id=g10.store-checkout.TC-nos rev=1 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC1-1: Public checkout requires a member session
 
 **Classification:**

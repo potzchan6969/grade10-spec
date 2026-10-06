@@ -30,6 +30,7 @@ matches or an empty result are offered. Free text remains catalogue-wide
 store search: suggestion hits SHALL NOT include auction lots or other site
 surfaces.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-rv9 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-31 - Typing offers product and filter suggestions
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -44,6 +45,7 @@ surfaces.
 - **AND** the address and the listed cards are unchanged until they commit
   or select
 
+<!-- trace:scenario id=g10.store-product-listing.SC-v1f rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-32 - Enter commits free text as a chip
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -55,6 +57,7 @@ surfaces.
 - **AND** the words appear among the applied narrowings as a dismissible chip
 - **AND** the search field is empty
 
+<!-- trace:scenario id=g10.store-product-listing.SC-hch rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-33 - A product suggestion opens the product
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -64,6 +67,7 @@ surfaces.
 - **AND** free text is not put in force on the listing from that selection
 - **AND** the search field is empty
 
+<!-- trace:scenario id=g10.store-product-listing.SC-xip rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-34 - A filter suggestion applies the facet
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -75,6 +79,7 @@ surfaces.
 - **AND** free text is not put in force from that selection
 - **AND** the search field is empty
 
+<!-- trace:scenario id=g10.store-product-listing.SC-fep rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-35 - Dismissing the search chip clears free text
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -83,6 +88,7 @@ surfaces.
 - **THEN** free text is no longer in force
 - **AND** the address no longer carries the words
 
+<!-- trace:scenario id=g10.store-product-listing.SC-5yb rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-36 - No suggestions still allows commit
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -92,6 +98,7 @@ surfaces.
 - **AND** the address carries the words
 - **AND** before commit the field showed that nothing matched
 
+<!-- trace:scenario id=g10.store-product-listing.SC-1q7 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-37 - Suggestions stay on the store catalogue
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
@@ -100,6 +107,7 @@ surfaces.
   listing facet choice
 - **AND** no auction lot or other site surface is offered
 
+<!-- trace:scenario id=g10.store-product-listing.SC-ph5 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-38 - Waiting for suggestions shows searching
 **Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 

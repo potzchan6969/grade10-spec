@@ -10,6 +10,7 @@
 Active or Upcoming listing and upload one front page image,
 **so that** that slide leads the collector catalogue.
 
+<!-- trace:case id=g10adm.auction-featured.TC-cs2 rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC01-1: Empty slots show up to three ready to fill
 
 **Classification:**
@@ -39,6 +40,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 1 shows up to three empty slots, ready to fill.
 * Step 1 offers no fourth slot.
 
+<!-- trace:case id=g10adm.auction-featured.TC-6yi rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC02-1: Fill a slot with an Active lot and front page image
 
 **Classification:**
@@ -80,6 +82,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 3 shows the lot title or id and front page image preview.
 * Step 5 leads /auction with that slide, <front page image> as banner and slab.
 
+<!-- trace:case id=g10adm.auction-featured.TC-ot7 rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC03-1: Fill a slot with an Upcoming lot and front page image
 
 **Classification:**
@@ -121,6 +124,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 3 shows <upcoming lot> and its front page image preview.
 * Step 5 shows that slide on /auction Featured.
 
+<!-- trace:case id=g10adm.auction-featured.TC-2ti rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC04-1: A fourth slot is refused at the limit
 
 **Classification:**
@@ -151,6 +155,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 2 offers no fourth slot.
 * Step 2 leaves the three filled slots unchanged.
 
+<!-- trace:case id=g10adm.auction-featured.TC-09m rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC05-1: Ended lot is refused for a Featured slot
 
 **Classification:**
@@ -188,6 +193,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 1 refuses the Ended lot.
 * Step 2 does not hold <ended lot> as a complete slide.
 
+<!-- trace:case id=g10adm.auction-featured.TC-pcc rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC06-1: Lot without a front page image stays off /auction
 
 **Classification:**
@@ -225,6 +231,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 2 leaves the incomplete slot off /auction Featured.
 * Step 2 shows no Featured band from that slot alone.
 
+<!-- trace:case id=g10adm.auction-featured.TC-3p8 rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC07-1: Missing catalogue grants block Featured curation
 
 **Classification:**
@@ -256,6 +263,7 @@ Active or Upcoming listing and upload one front page image,
 * Each step leaves controls visible and disabled, or refuses.
 * No step fills or alters a Featured slot.
 
+<!-- trace:case id=g10adm.auction-featured.TC-ghv rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC08-1: Manage Featured opens from the Listings toolbar
 
 **Classification:**
@@ -284,6 +292,7 @@ Active or Upcoming listing and upload one front page image,
 * Step 1 opens the Manage Featured sub-page.
 * Step 1 shows the ordered Featured slots.
 
+<!-- trace:case id=g10adm.auction-featured.TC-1hr rev=1 covers=g10adm.auction-featured.SC-fkl,g10adm.auction-featured.SC-8hv,g10adm.auction-featured.SC-xez,g10adm.auction-featured.SC-mag,g10adm.auction-featured.SC-l3u,g10adm.auction-featured.SC-ad7,g10adm.auction-featured.SC-t75 -->
 ### grade10-admin-auction-featured-US1-TC09-1: Front page image upload offers no gallery picker
 
 **Classification:**
@@ -324,6 +333,7 @@ Active or Upcoming listing and upload one front page image,
 no longer lead,
 **so that** `/auction` shows only the slides I still mean to feature.
 
+<!-- trace:case id=g10adm.auction-featured.TC-fzo rev=1 covers=g10adm.auction-featured.SC-u2e,g10adm.auction-featured.SC-u1c -->
 ### grade10-admin-auction-featured-US2-TC01-1: Reorder filled slots updates site Featured order
 
 **Classification:**
@@ -363,6 +373,7 @@ no longer lead,
 * Step 2 shows <lot B> before <lot A>.
 * Step 4 shows Featured in that new order.
 
+<!-- trace:case id=g10adm.auction-featured.TC-1f6 rev=1 covers=g10adm.auction-featured.SC-u2e,g10adm.auction-featured.SC-u1c -->
 ### grade10-admin-auction-featured-US2-TC02-1: Clear a slot removes that slide from /auction Featured
 
 **Classification:**
@@ -402,6 +413,7 @@ no longer lead,
 * Step 2 shows the cleared slot empty.
 * Step 4 drops <lot A> and still shows complete <lot B>.
 
+<!-- trace:case id=g10adm.auction-featured.TC-ycf rev=1 covers=g10adm.auction-featured.SC-u2e,g10adm.auction-featured.SC-u1c -->
 ### grade10-admin-auction-featured-US2-TC03-1: Clearing the last complete slot leaves Featured absent
 
 **Classification:**

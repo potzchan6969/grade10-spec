@@ -9,6 +9,7 @@
 **I want** an expired invoice to stay Pending Payment without winner card pay,
 **so that** the deadline ends self-service settlement while operators can still resolve the order.
 
+<!-- trace:case id=g10.auction-order-status.TC-4zb rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
 ### auction-status-US5-TC4-1: No invoice and no address reads Awaiting Setup
 
 **Classification:**
@@ -40,6 +41,7 @@
 * The invoice status is `not_issued`.
 * Both the winner and the operator read the same status.
 
+<!-- trace:case id=g10.auction-order-status.TC-dg1 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
 ### auction-status-US5-TC5-1: A confirmed address reads Preparing Invoice before send
 
 **Classification:**
@@ -68,6 +70,7 @@
 * The order status is Preparing Invoice.
 * The invoice status is still `not_issued`.
 
+<!-- trace:case id=g10.auction-order-status.TC-d32 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
 ### auction-status-US5-TC6-1: A closed address window without an address reads Setup Overdue
 
 Runs once per row of **Test data**.
@@ -106,6 +109,7 @@ Runs once per row of **Test data**.
 * A closed window without an address derives Setup Overdue.
 * The invoice status is still `not_issued`.
 
+<!-- trace:case id=g10.auction-order-status.TC-la5 rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US5-TC7-1: A winner's address write is refused on a closed window
 
 **Classification:**
@@ -138,6 +142,7 @@ Runs once per row of **Test data**.
 * The order holds no confirmed delivery address.
 * The order status is still Setup Overdue.
 
+<!-- trace:case id=g10.auction-order-status.TC-43a rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US5-TC8-1: An order with no invoice cannot be dispatched
 
 **Classification:**
@@ -169,6 +174,7 @@ Runs once per row of **Test data**.
 * No tracking facts are recorded.
 * The order status is still Preparing Invoice.
 
+<!-- trace:case id=g10.auction-order-status.TC-36u rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US5-TC9-1: An invoice is refused a send with no confirmed address
 
 **Classification:**
@@ -206,6 +212,7 @@ Runs once per row of **Test data**.
 **I want** to reopen the address form or record the address the winner gave by phone,
 **so that** the order can continue from Setup Overdue without reopening winner self-service unnecessarily.
 
+<!-- trace:case id=g10.auction-order-status.TC-uot rev=1 covers=g10.auction-order-status.SC-g4b -->
 ### auction-status-US6-TC10-1: A reopen restores the write through derived status
 
 **Classification:**
@@ -240,6 +247,7 @@ Runs once per row of **Test data**.
 * The write is accepted.
 * Step 3 reads Preparing Invoice.
 
+<!-- trace:case id=g10.auction-order-status.TC-3v7 rev=1 covers=g10.auction-order-status.SC-tc9,g10.auction-order-status.SC-i18,g10.auction-order-status.SC-wlf,g10.auction-order-status.SC-y48,g10.auction-order-status.SC-mej,g10.auction-order-status.SC-sx5,g10.auction-order-status.SC-fmg,g10.auction-order-status.SC-r6z,g10.auction-order-status.SC-d22,g10.auction-order-status.SC-j9x,g10.auction-order-status.SC-wt0,g10.auction-order-status.SC-er6,g10.auction-order-status.SC-e4v,g10.auction-order-status.SC-q1w,g10.auction-order-status.SC-dq1,g10.auction-order-status.SC-x14,g10.auction-order-status.SC-1xq -->
 ### auction-status-US6-TC11-1: Expiry is a written invoice status, not a time read
 
 **Classification:**
@@ -279,6 +287,7 @@ Runs once per row of **Test data**.
 * Step 2 reads `expired` as a stored fact on the invoice.
 * Step 3 reads Pending Payment, before and after alike.
 
+<!-- trace:case id=g10.auction-order-status.TC-3lv rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US6-TC12-1: An operator's address write is accepted on a closed window
 
 **Classification:**

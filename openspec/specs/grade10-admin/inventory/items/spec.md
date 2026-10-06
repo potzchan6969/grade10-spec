@@ -90,12 +90,14 @@ stock. An item SHALL carry exactly these facts:
   term, amount or catalogue attribute.
 - **Grade10 only** - the register SHALL serve the Grade10 console alone.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-gyp rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-01 - A slab registers with its grader, grade and cert
 **Serves:** grade10-admin-inventory-items-US-02 - staff add a graded slab as it is printed
 
 - **WHEN** staff register a trading card with grader PSA, grade `10` and cert ` 12345678x `
 - **THEN** the item reads PSA, `10` and cert `12345678X`
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-v3t rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-02 - An item with no grader carries no grade and no cert
 **Serves:** grade10-admin-inventory-items-US-02 - staff add a watch nobody graded
 
@@ -104,6 +106,7 @@ stock. An item SHALL carry exactly these facts:
 - **THEN** the grade and cert are cleared and hidden
 - **AND** a register sent with a grade or a cert and no grader is refused by name
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-9v8 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-03 - A grader not listed is written in the description
 **Serves:** grade10-admin-inventory-items-US-02 - staff add a slab from a grader the list does not hold
 
@@ -111,6 +114,7 @@ stock. An item SHALL carry exactly these facts:
 - **THEN** it says a grader not listed, its grade and its cert go in the description
 - **AND** the grader field offers only the eight listed graders, and the category field only the ten categories
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ins rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-04 - A title or a description past its cap is refused
 **Serves:** grade10-admin-inventory-items-US-02 - staff learn the limit before the item is saved
 
@@ -139,6 +143,7 @@ refused by name, naming and linking that item, so staff open it instead of
 adding a second. A retired item's grader and cert SHALL be free for a new
 item.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-g7s rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-07 - A known slab is found, not registered twice
 **Serves:** grade10-admin-inventory-items-US-02 - staff type a slab the register already holds
 
@@ -147,6 +152,7 @@ item.
 - **THEN** it is refused, and the dialog says this grader and cert are already on that item's title, linking it
 - **AND** no second item exists
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ro5 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-08 - An edit onto a known slab is refused
 **Serves:** grade10-admin-inventory-items-US-02 - staff correct a cert to one another item holds
 
@@ -154,6 +160,7 @@ item.
 - **WHEN** staff edit the second item's cert to `111`
 - **THEN** it is refused, naming and linking the first item, and the second keeps `222`
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-b2c rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-09 - A retired slab's cert names a new item
 **Serves:** grade10-admin-inventory-items-US-05 - staff register the slab again after retiring a wrong record
 
@@ -183,6 +190,7 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 - **Sending** - a dialog sending an act SHALL lock its fields until the answer
   arrives, and SHALL show a refusal in its own footer, keeping what was typed.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-law rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-10 - An item is registered under an account by its exact email
 **Serves:** grade10-admin-inventory-items-US-02 - staff add an item a collector owns
 
@@ -194,6 +202,7 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 - **WHEN** staff give a category and a title and register
 - **THEN** the item opens on its own page under Ana Wong
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-3l7 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-11 - An email no account holds is not an owner
 **Serves:** grade10-admin-inventory-items-US-02 - staff mistype the owner's address
 
@@ -201,6 +210,7 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 - **THEN** the field says no account has that email and Register stays disabled
 - **AND** a register sent with that email is refused by name
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-h7o rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-12 - An edit shows who made it and when, on the item alone
 **Serves:** grade10-admin-inventory-items-US-02 - staff correct a title another member of staff typed
 
@@ -209,6 +219,7 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 - **THEN** the item's page shows the new title, who edited it and when
 - **AND** the Items list shows no last-edited column
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-3gy rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-13 - Editing never changes the owner
 **Serves:** grade10-admin-inventory-items-US-02 - staff correct the facts of an item somebody owns
 
@@ -216,6 +227,7 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 - **THEN** the owner reads as a line of text and offers no field
 - **AND** an edit naming another owner is refused by name
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-udb rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-14 - An operator who may only read changes nothing
 **Serves:** grade10-admin-inventory-items-US-02 - a reader of the register is not offered its acts
 
@@ -224,6 +236,7 @@ A holder of `inventory:write` SHALL register an item and edit its facts:
 - **THEN** no Register, Edit, Retire, Restore or Close mark is offered
 - **AND** each, sent anyway, is refused by name
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-qr6 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-15 - A dialog locks while it sends and keeps what was typed on a refusal
 **Serves:** grade10-admin-inventory-items-US-02 - staff are told why an act did not land without losing their typing
 
@@ -251,6 +264,7 @@ one once the owner is erased.
 - **To the collector** - a click on an account owner's name SHALL open that
   collector's page.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-rsv rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-16 - The owner is read by name, and the read is recorded
 **Serves:** grade10-admin-inventory-items-US-01 - staff answer who owns an object by name
 
@@ -259,6 +273,7 @@ one once the owner is erased.
 - **THEN** the owner reads Ana Wong, and a click on the name opens her collector page
 - **AND** the audit log records who read that item's owner
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ujf rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-17 - A name that cannot be read leaves the row standing
 **Serves:** grade10-admin-inventory-items-US-01 - staff still find the item when the account cannot be read
 
@@ -267,6 +282,7 @@ one once the owner is erased.
 - **THEN** each owner reads as its short id and "name unavailable", and every row is shown
 - **AND** an operator without `kyc:read` reads the same short id for every account owner
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-si1 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-18 - The company's items read by its registered names
 **Serves:** grade10-admin-inventory-items-US-01 - staff tell the custodian's stock from a forfeited item
 
@@ -274,6 +290,7 @@ one once the owner is erased.
 - **WHEN** staff read Items
 - **THEN** each owner reads as that entity's registered name
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-o2j rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-69 - An owner whose name cannot be read can still be named
 **Serves:** grade10-admin-inventory-items-US-02 - staff register an item while the account's name cannot be read
 
@@ -287,6 +304,7 @@ An item the company buys or is given SHALL be registered under, or moved to,
 the custodian. The lender SHALL come to own an item only through a forfeit:
 no staff register or transfer SHALL name the lender.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-x19 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-19 - Staff can name the custodian and never the lender
 **Serves:** grade10-admin-inventory-items-US-02 - staff record a slab the shop bought over the counter
 
@@ -370,6 +388,7 @@ only place, and it tells the register where each case stands:
 - **Not marked** - Transfer and Retire SHALL be offered, to the grants that
   hold them.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-dxk rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-25 - A marked item names its case
 **Serves:** grade10-admin-inventory-items-US-01 - staff read which case keeps the object
 
@@ -377,6 +396,7 @@ only place, and it tells the register where each case stands:
 - **WHEN** staff open the item
 - **THEN** its place row reads the vault, `K7P2QX` and the case's status in the collector's word, linking the case
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-cwd rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-26 - The place row stands when the vault cannot be read
 **Serves:** grade10-admin-inventory-items-US-01 - staff still read the item while the vault is down
 
@@ -384,6 +404,7 @@ only place, and it tells the register where each case stands:
 - **WHEN** staff open the item
 - **THEN** the place row names the vault and the case reference, and its status reads unavailable
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-cg2 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-27 - Owners that disagree are both shown
 **Serves:** grade10-admin-inventory-items-US-01 - staff see the register and the vault telling two stories
 
@@ -391,6 +412,7 @@ only place, and it tells the register where each case stands:
 - **WHEN** staff open the item
 - **THEN** a warning shows the vault's owner and the register's owner
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-tna rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-70 - The register's owner stands once the vault lets go
 **Serves:** grade10-admin-inventory-items-US-01 - staff read who owns the item after the case that disagreed has ended
 
@@ -413,6 +435,7 @@ held: released, unwound, forfeited or erased.
 - **A forfeited case** - a hand close on a case the vault reads as forfeited
   SHALL move the item to the lender, as the next requirement reads.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-t3v rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-28 - A mark the vault let go of is closed by hand
 **Serves:** grade10-admin-inventory-items-US-06 - staff free an item whose release never reached the register
 
@@ -422,6 +445,7 @@ held: released, unwound, forfeited or erased.
 - **WHEN** they give the reason and close it
 - **THEN** the place row names who closed it, when and why, and the item reads as not marked
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-iac rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-29 - A mark the vault still holds stays open
 **Serves:** grade10-admin-inventory-items-US-06 - staff cannot free an item still in a locker
 
@@ -430,6 +454,7 @@ held: released, unwound, forfeited or erased.
 - **THEN** Close mark is not offered, and the close is refused by name
 - **AND** a close sent while the vault cannot be asked is refused by name too
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-m22 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-30 - The vault's late word does not reopen a hand close
 **Serves:** grade10-admin-inventory-items-US-06 - staff close a mark once and it stays closed
 
@@ -462,6 +487,7 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
   the present one, and a same-owner refusal answering a resent transfer SHALL
   read as moved.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-gar rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-33 - An item moves to an account with its proof
 **Serves:** grade10-admin-inventory-items-US-03 - staff record a sale between two collectors at the counter
 
@@ -471,12 +497,14 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **AND** its newest move reads from Ana Wong to Ben Lee, who moved it, when, the reason and the PDF to open
 - **AND** the audit log records the move
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-b7n rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-34 - A move with no proof says so
 **Serves:** grade10-admin-inventory-items-US-03 - staff record a gift the owner agreed in person
 
 - **WHEN** staff move an item to the custodian with a reason and no proof
 - **THEN** the move's proof cell says none was given
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-mkf rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-35 - Transfer waits for an owner and a reason
 **Serves:** grade10-admin-inventory-items-US-03 - staff cannot send half a move
 
@@ -484,6 +512,7 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **THEN** it shows the new owner, a reason and an optional proof, and Transfer is disabled
 - **AND** it stays disabled until an owner and a reason are both given
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-xzd rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-36 - A proof outside the rule is refused
 **Serves:** grade10-admin-inventory-items-US-03 - staff attach the papers they were handed
 
@@ -492,12 +521,14 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **WHEN** staff pick a 2 MB PNG
 - **THEN** its name shows under the picker with a way to remove it
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-xvg rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-37 - A move tells nobody
 **Serves:** grade10-admin-inventory-items-US-03 - staff move an item without writing to either owner
 
 - **WHEN** an item moves from one account to another
 - **THEN** no email or other message is sent to either owner
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-rwm rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-38 - An item that never moved says so
 **Serves:** grade10-admin-inventory-items-US-03 - staff read the moves of an item still with its first owner
 
@@ -505,6 +536,7 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **WHEN** staff open it
 - **THEN** its moves say it has not changed owner
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-t95 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-39 - A move to the present owner is refused
 **Serves:** grade10-admin-inventory-items-US-03 - staff send the same move twice
 
@@ -512,6 +544,7 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **WHEN** the same move to Ben Lee is sent again
 - **THEN** it is refused by name and the item has one move to Ben Lee
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-f1a rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-73 - A move from an erased owner names a new title
 **Serves:** grade10-admin-inventory-items-US-03 - staff move an item whose owner was erased and whose title went with them
 
@@ -520,6 +553,7 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 - **THEN** it asks for a title, and Transfer stays disabled until a title, an owner and a reason are given
 - **AND** a transfer sent without a title is refused by name, and one with a title moves the item under that title
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-2fo rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-75 - Transfer waits while the new owner is the present one
 **Serves:** grade10-admin-inventory-items-US-03 - staff cannot move an item to the owner it already has, and a retry reads as done
 
@@ -535,6 +569,7 @@ A holder of `inventory:transfer` SHALL move an item no place marks:
 While any place marks an item, a transfer SHALL be refused by name, naming the
 place and its case, and the item's page SHALL offer no Transfer.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-4vp rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-40 - A marked item offers no Transfer
 **Serves:** grade10-admin-inventory-items-US-04 - staff learn which case keeps an item before they promise to move it
 
@@ -543,6 +578,7 @@ place and its case, and the item's page SHALL offer no Transfer.
 - **THEN** Transfer and Retire are not offered, and a line names the vault and `K7P2QX`
 - **AND** Edit is still offered
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-91a rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-41 - A mark landing under an open dialog refuses the move
 **Serves:** grade10-admin-inventory-items-US-04 - staff move an item the vault marked after the page was opened
 
@@ -582,6 +618,7 @@ A move's proof SHALL be opened only by a holder of `inventory:transfer`, and
 each opening SHALL be on the audit log with who opened which proof. Without
 the grant, an item's page SHALL offer no Transfer and no proof to open.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-4y8 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-44 - A proof is opened under the grant and recorded
 **Serves:** grade10-admin-inventory-items-US-03 - staff read the papers behind a move
 
@@ -589,6 +626,7 @@ the grant, an item's page SHALL offer no Transfer and no proof to open.
 - **WHEN** staff holding `inventory:transfer` open it
 - **THEN** the file is shown and the audit log records who opened it
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ssg rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-45 - Without the grant there is no Transfer and no proof
 **Serves:** grade10-admin-inventory-items-US-03 - a reader of the register sees the move and not the papers
 
@@ -611,6 +649,7 @@ marks the item, naming the place.
   with a reason, which the item keeps; a restore SHALL be refused by name
   while a live item holds its grader and cert, naming that item.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-uc3 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-46 - A duplicate record is retired
 **Serves:** grade10-admin-inventory-items-US-05 - staff find one slab registered twice
 
@@ -621,6 +660,7 @@ marks the item, naming the place.
 - **THEN** it reads as retired, as a duplicate, with the day, and offers no Edit, Transfer or Retire
 - **AND** it leaves the default list and is listed under Retired with its reason
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ynw rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-47 - A marked item cannot be retired
 **Serves:** grade10-admin-inventory-items-US-05 - staff retire an item the vault still keeps
 
@@ -628,6 +668,7 @@ marks the item, naming the place.
 - **WHEN** they retire it
 - **THEN** it is refused, naming the vault and the case, and the item stays live
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-b91 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-48 - A retired item is restored with a reason
 **Serves:** grade10-admin-inventory-items-US-05 - staff undo a retire made on the wrong record
 
@@ -636,6 +677,7 @@ marks the item, naming the place.
 - **THEN** it reads as live with its facts and history, keeping the reason
 - **AND** the audit log records the restore, naming the item and not the reason's text
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-93o rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-49 - A restore onto a live slab is refused
 **Serves:** grade10-admin-inventory-items-US-05 - staff restore a record whose slab was registered again
 
@@ -668,6 +710,7 @@ back to it from one item's page.
   stands; at phone width a table SHALL scroll in its frame, the header's acts
   SHALL wrap and a dialog SHALL scroll its fields.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-z8f rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-50 - Items opens on what the places mark
 **Serves:** grade10-admin-inventory-items-US-01 - staff open the register on what the shop is keeping
 
@@ -676,6 +719,7 @@ back to it from one item's page.
 - **THEN** it lists the three, each with its title, category, grader, cert, owner and the place marking it
 - **AND** a row opens its item, whose page leads back to Items
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-8em rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-51 - Every live item and the retired ones are a tab away
 **Serves:** grade10-admin-inventory-items-US-01 - staff look past what is marked
 
@@ -684,6 +728,7 @@ back to it from one item's page.
 - **THEN** the first lists the five live items marked or not, and not the retired one
 - **AND** the second lists only the retired item, with lost as why it was retired
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-3ic rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-52 - The owner's exact email finds their items
 **Serves:** grade10-admin-inventory-items-US-01 - staff answer a collector at the counter who names their address
 
@@ -691,12 +736,14 @@ back to it from one item's page.
 - **WHEN** staff search `ana@example.com`
 - **THEN** both items are listed and no other
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ajw rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-53 - An item id or a grader and cert finds one item
 **Serves:** grade10-admin-inventory-items-US-01 - staff read a slab's label or a link they were sent
 
 - **WHEN** staff search an item's id, then `PSA 12345678`, then ` psa 12345678 `
 - **THEN** each lists that one item
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-k1r rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-54 - Words search the title and the description, never a name
 **Serves:** grade10-admin-inventory-items-US-01 - staff find an object by what it is, not by who owns it
 
@@ -704,6 +751,7 @@ back to it from one item's page.
 - **WHEN** staff search `submariner`, then `base set`, then `Ana Wong`
 - **THEN** the first finds the watch, the second finds the card, and the third finds neither by its owner
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-g2i rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-71 - A search reads every item whatever the tab
 **Serves:** grade10-admin-inventory-items-US-01 - staff search from the marked tab for an item no place marks
 
@@ -711,12 +759,14 @@ back to it from one item's page.
 - **WHEN** staff on the marked tab search `submariner`
 - **THEN** both are listed, and the retired one is badged retired
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-ou0 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-55 - An empty list and an empty search say which
 **Serves:** grade10-admin-inventory-items-US-01 - staff tell no items from a search that missed
 
 - **WHEN** staff open a tab holding nothing, and then search for a term nothing matches
 - **THEN** the first names the empty tab, and the second names the search and offers to clear it
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-fz5 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-56 - A long list pages
 **Serves:** grade10-admin-inventory-items-US-01 - staff page through every item
 
@@ -724,12 +774,14 @@ back to it from one item's page.
 - **WHEN** staff read every item and go to the next page
 - **THEN** the next page continues where the first ended, with none repeated
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-oh4 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-57 - An unknown id reads as not found
 **Serves:** grade10-admin-inventory-items-US-01 - staff open a link to an item nobody holds
 
 - **WHEN** staff open an item page for an id no item has
 - **THEN** it reads as not found
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-9hc rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-58 - Without the read grant the register names it
 **Serves:** grade10-admin-inventory-items-US-01 - an operator learns which grant they lack
 
@@ -737,6 +789,7 @@ back to it from one item's page.
 - **WHEN** they open Items or one item
 - **THEN** each names `inventory:read`
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-du8 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-59 - A failed read stands alone and retries
 **Serves:** grade10-admin-inventory-items-US-01 - staff keep the page while one part of it fails
 
@@ -766,6 +819,7 @@ Inventory SHALL answer the account erasure checklist.
   erasure checklist.
 - **Twice** - an erasure run again SHALL change nothing.
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-p6v rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-63 - An erasure waits while an item is marked
 **Serves:** grade10-admin-inventory-items-US-08 - the admin learns which item stops the erasure
 
@@ -773,6 +827,7 @@ Inventory SHALL answer the account erasure checklist.
 - **WHEN** an admin runs their erasure
 - **THEN** inventory refuses, and the checklist names the item's id, the vault and `K7P2QX`
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-xp1 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-64 - The person goes and the object stays
 **Serves:** grade10-admin-inventory-items-US-08 - the admin erases a collector whose slab the house keeps on record
 
@@ -781,6 +836,7 @@ Inventory SHALL answer the account erasure checklist.
 - **THEN** the item has no owner and reads as erased, its title reads as erased and its description is gone
 - **AND** its category, PSA, `10` and `12345678` stay, and Transfer is still offered
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-x39 rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-65 - A move keeps its proof only while the other side remains
 **Serves:** grade10-admin-inventory-items-US-08 - the remaining owner keeps the record of how they got the item
 
@@ -789,6 +845,7 @@ Inventory SHALL answer the account erasure checklist.
 - **THEN** both moves lose the person's side and the reason
 - **AND** the first keeps its proof and the second reads "proof removed"
 
+<!-- trace:scenario id=g10adm.inventory-items.SC-vig rev=1 -->
 #### Scenario: grade10-admin-inventory-items-SC-74 - A kept proof is not left remaining
 **Serves:** grade10-admin-inventory-items-US-08 - the admin reads an erasure as done while the custodian keeps its proof
 

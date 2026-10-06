@@ -22,6 +22,7 @@ After a card is added the collector SHALL still be on that card, and what the
 site says the cart holds SHALL account for what was added. Adding the same
 product again SHALL increase one cart line.
 
+<!-- trace:scenario id=g10.store-product-page.SC-jt1 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-07 - A collector adds the grade they chose
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -29,6 +30,7 @@ product again SHALL increase one cart line.
 - **WHEN** a collector opens its product page
 - **THEN** the page offers no size, option, or variant choice
 
+<!-- trace:scenario id=g10.store-product-page.SC-b7g rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-08 - A card with one thing to buy needs no choice
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -36,6 +38,7 @@ product again SHALL increase one cart line.
 - **WHEN** a collector adds it without choosing anything
 - **THEN** the cart holds that product item
 
+<!-- trace:scenario id=g10.store-product-page.SC-qmb rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-09 - The collector keeps their place
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -43,6 +46,7 @@ product again SHALL increase one cart line.
 - **THEN** they are still on that card's address, reading that card
 - **AND** what the site says the cart holds has changed to account for it
 
+<!-- trace:scenario id=g10.store-product-page.SC-tl5 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-10 - The same card twice
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -56,6 +60,7 @@ A card whose one product item is unavailable SHALL say so on its page, in the
 place a collector would otherwise buy it. It SHALL NOT show a control that
 cannot be used, and it SHALL NOT hide the price it lists.
 
+<!-- trace:scenario id=g10.store-product-page.SC-prx rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-11 - Nothing on the card is for sale
 **Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
 
@@ -65,6 +70,7 @@ cannot be used, and it SHALL NOT hide the price it lists.
 - **AND** its price is still visible
 - **AND** there is nothing to press that would add it
 
+<!-- trace:scenario id=g10.store-product-page.SC-1p0 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-12 - One grade sold, another still for sale
 **Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
 
@@ -88,6 +94,7 @@ quantity from one through three, the page SHALL show the remaining quantity.
 It SHALL hide that low-inventory message when quantity is greater than three,
 unknown, or the product item is sold out.
 
+<!-- trace:scenario id=g10.store-product-page.SC-n6k rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-13 - A product page shows its media and price context
 **Serves:** grade10-site-store-product-page-US-06 - Collector reviews a product's catalogue context
 
@@ -97,6 +104,7 @@ unknown, or the product item is sold out.
 - **AND** it renders the current price and the greater compare-at price
 - **AND** it says that only 3 remain
 
+<!-- trace:scenario id=g10.store-product-page.SC-dd3 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-14 - A product without media has an honest placeholder
 **Serves:** grade10-site-store-product-page-US-06 - Collector reviews a product's catalogue context
 
@@ -105,6 +113,7 @@ unknown, or the product item is sold out.
 - **THEN** the page renders one accessible placeholder in the media gallery
 - **AND** it does not render an empty image or an image URL made by the page
 
+<!-- trace:scenario id=g10.store-product-page.SC-h7c rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-15 - A product page shows supplied item facts
 **Serves:** grade10-site-store-product-page-US-06 - Collector reviews a product's catalogue context
 
@@ -131,6 +140,7 @@ description region with `aria-controls`. Activating it SHALL expand the full
 description and change the button to the collapse action; activating it again
 SHALL restore the collapsed state without navigating away.
 
+<!-- trace:scenario id=g10.store-product-page.SC-yaj rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-16 - A collector expands and collapses the description
 **Serves:** grade10-site-store-product-page-US-07 - Collector expands the product description in place
 
@@ -154,6 +164,7 @@ reflect the resulting cart quantity. The page SHALL NOT show an on-page added
 confirmation. If the product item is not available for sale, the action SHALL
 be disabled and labelled as sold out.
 
+<!-- trace:scenario id=g10.store-product-page.SC-lqp rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-17 - A collector adds a chosen quantity in place
 **Serves:** grade10-site-store-product-page-US-08 - Collector adds a product quantity from the product page
 
@@ -167,6 +178,7 @@ be disabled and labelled as sold out.
 - **AND** the quantity stepper resets to one
 - **AND** the page shows no on-page added confirmation
 
+<!-- trace:scenario id=g10.store-product-page.SC-xny rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product offers no add action
 **Serves:** grade10-site-store-product-page-US-09 - Collector meets a sold-out product
 

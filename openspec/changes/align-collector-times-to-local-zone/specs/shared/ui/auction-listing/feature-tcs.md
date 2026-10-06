@@ -11,6 +11,7 @@
 **I want** the lot page's blocks to show the gallery, my bidding and its disclosures as the contract states,
 **so that** every storefront composing them shows me the same thing.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=1 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
 ### shared-ui-auction-listing-US1-TC55-1: A catalogue tile close follows the viewer zone
 
 **Classification:**

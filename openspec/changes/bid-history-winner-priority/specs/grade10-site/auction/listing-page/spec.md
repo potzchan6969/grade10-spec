@@ -25,6 +25,7 @@ The lot page SHALL set the public Recent bids flags that
 - **Copy** - the page supplies the winner name and the equal-max tip in the
   collector's language.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-kwb rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-48 - A sold lot crowns its winning bid
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -34,6 +35,7 @@ The lot page SHALL set the public Recent bids flags that
 - **AND** no other row shows a crown
 - **AND** the same lot read while live showed no crown on any row
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-c97 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-49 - A tied maximum that came second carries the tip
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
@@ -42,6 +44,7 @@ The lot page SHALL set the public Recent bids flags that
 - **THEN** customer B's row carries the Info tip saying that when maximums match, the earlier one leads
 - **AND** customer A's leading row carries no tip
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-xz7 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-50 - A lot without a winner crowns no bid
 **Serves:** grade10-site-auction-listing-page-US-14 - Bidder waits on a closed lot for its result
 
@@ -49,6 +52,7 @@ The lot page SHALL set the public Recent bids flags that
 - **WHEN** a collector reads each lot's Recent bids
 - **THEN** no row on either lot shows a crown
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-s2c rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-51 - An older tie lower down keeps its tip
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 

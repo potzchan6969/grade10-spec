@@ -402,6 +402,7 @@ reservation (holder apps only; admin references are not reused).
 - **THEN** a new active reservation is created
 - **AND** reserved increases by the new quantity
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fac rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-140 - A holder label follows the holder's latest write
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees which listing held the stock
 
@@ -916,6 +917,7 @@ audit.
 - **AND** before and after show product A reserved decreasing by three and
   product B reserved increasing by three
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-74t rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-136 - An Unsold release carries its remarks and the listing's label
 
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees why the stock came back
@@ -928,6 +930,7 @@ audit.
 - **AND** its reservation snapshot carries the holder label
   `7KQ2P · Charizard PSA 10`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-h6i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-137 - The clean-up release reads differently from the close
 
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees why the stock came back
@@ -938,6 +941,7 @@ audit.
 - **THEN** one `release` change records quantity five and the reason
   `Released by unsold listing (clean-up)`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-pi4 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-138 - A call-off release keeps no reason
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -947,6 +951,7 @@ audit.
 - **WHEN** Auction releases it
 - **THEN** one `release` change records quantity two and no reason
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-tbn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-144 - A Cert ID correction records both Cert IDs
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads which number a unit carried before
@@ -961,6 +966,7 @@ audit.
 - **AND** before and after show the same stock, reserved, sold, withdrawn and
   vaulted
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-6zh rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-145 - An assignment records No Cert ID before
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads when a unit of regular stock was numbered
@@ -1281,6 +1287,7 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **THEN** Grade10 refuses the intake
 - **AND** stock, Cert ID records, and change history are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sbt rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-128 - Operator tags media to one same-product Cert record
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
@@ -1289,6 +1296,7 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **THEN** the tag identifies that immutable Cert record id
 - **AND** the source media item remains owned by its product
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hcz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-129 - Regular stock has no Cert media tag target
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
@@ -1297,6 +1305,7 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **THEN** Grade10 refuses the tag write
 - **AND** the source media remains untagged and shared at product level
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ec6 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-130 - Invalid Cert targets preserve the current media tag
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
@@ -1305,6 +1314,7 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **THEN** Grade10 refuses the tag write
 - **AND** the current tag and source media remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-6tq rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-131 - Operator untags media for product-level sharing
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
@@ -1312,6 +1322,7 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **WHEN** an authorized Inventory operator clears its tag
 - **THEN** the source media item has no Cert tag and remains shared at product level
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fbv rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-132 - Retagging leaves the original source item untagged
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
@@ -1320,6 +1331,7 @@ unavailable while the reason is blank, and cancelling SHALL change nothing.
 - **THEN** the existing Cert association is cleared and the source item remains on the product as untagged shared media
 - **AND** Grade10 does not automatically transfer that source item to the second record
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hhf rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-133 - Unauthorized source-media tag writes are refused
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
@@ -2187,6 +2199,7 @@ SHALL be refused and SHALL leave the gallery unchanged.
 A product asset SHALL be available for selection by listings of that product.
 The same product asset MAY be selected by more than one listing.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-nmq rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-123 - Inventory admin orders a product gallery
 **Serves:** grade10-admin-inventory-catalog-US-74 - inventory admin keeps an ordered reusable gallery
 
@@ -2195,6 +2208,7 @@ The same product asset MAY be selected by more than one listing.
 - **THEN** Grade10 stores the assets in that order
 - **AND** the gallery may contain from zero through eight assets
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-w9x rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-124 - Invalid product assets are refused
 **Serves:** grade10-admin-inventory-catalog-US-74 - inventory admin keeps a valid gallery
 
@@ -2203,6 +2217,7 @@ The same product asset MAY be selected by more than one listing.
 - **THEN** Grade10 refuses the operation
 - **AND** the product gallery is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hwk rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-125 - Inventory admin maintains an editable product gallery
 **Serves:** grade10-admin-inventory-catalog-US-74 - inventory admin maintains product media
 
@@ -2211,6 +2226,7 @@ The same product asset MAY be selected by more than one listing.
 - **THEN** Grade10 applies the requested change
 - **AND** clearing the gallery leaves the product with zero assets
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-vz9 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-126 - Unauthorized product-gallery management is refused
 **Serves:** grade10-admin-inventory-catalog-US-74 - product media follows inventory administration access
 
@@ -2219,6 +2235,7 @@ The same product asset MAY be selected by more than one listing.
 - **THEN** Grade10 refuses the request under the existing admin authorization behavior
 - **AND** the product gallery is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-qs1 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-127 - A product asset is reusable across listings
 **Serves:** grade10-admin-inventory-catalog-US-74 - product media can serve more than one listing
 
@@ -2234,6 +2251,7 @@ listing that closed with no winner, showing it as closed with its released
 quantity and naming the listing by its holder label. Available SHALL include
 its units. Other holds SHALL be unchanged.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-evn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-139 - The product page shows the hold released
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees unsold stock come back
 
@@ -2265,6 +2283,7 @@ Every change history entry on the product page SHALL show:
 The words Auction, Vault and Admin SHALL be the page's; the stored holder kind
 and holder reference SHALL be unchanged.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-j3i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-141 - An Unsold release names its holder and remarks in the history
 
 **Serves:** grade10-admin-inventory-catalog-US-09 - the admin sees why the stock came back
@@ -2277,6 +2296,7 @@ and holder reference SHALL be unchanged.
 - **AND** its Holder shows `Auction` and
   `7KQ2P · Charizard PSA 10`, and its Remarks read `Released by unsold listing`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-k28 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-142 - An entry with no hold and no remarks shows dashes
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
@@ -2296,6 +2316,7 @@ and holder reference SHALL be unchanged.
 - **AND** its `reserve` entry's Holder shows `Vault` and
   `vault-7`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-76r rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-146 - The product history shows each Cert ID change
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads every Cert ID change beside the other entries
@@ -2348,6 +2369,7 @@ SHALL NOT show when it holds none. Sold, withdrawn and vaulted regular stock
 SHALL NOT be listed, since no unit of it is tracked. A product with no row
 SHALL show one line saying no unit is on hand.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-4o8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-147 - Regular stock is listed beside the Cert records
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin finds every unit without adding up counts
@@ -2364,6 +2386,7 @@ SHALL show one line saying no unit is on hand.
 - **AND** the quantities add up to the product's stock of six
 - **AND** no row shows a Grade Issuer, Grade, Autograph Grade or Serial
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-2h0 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-148 - Held regular stock reads Available 0
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin sees regular stock that is all held
@@ -2375,6 +2398,7 @@ SHALL show one line saying no unit is on hand.
   Reserved with the Auction hold's holder and 2
 - **AND** no row lists the sold or withdrawn units
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-nf2 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-149 - A released hold returns its units to the available row
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin sees a released hold's units come back
@@ -2386,6 +2410,7 @@ SHALL show one line saying no unit is on hand.
 - **THEN** `No Cert ID` Available reads 3
 - **AND** the Admin hold's row is gone
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ji2 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-170 - A product with no regular stock history lists no No Cert ID row
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin sees only the units the product has had
@@ -2416,6 +2441,7 @@ unit SHALL be reachable however old it is.
 | `intake-reversal`                                                                                   | It names no Cert record                     |
 | `product-create`, `product-update`                                                                  | Never                                       |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-z64 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-150 - A corrected record keeps its earlier history
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin follows one unit across a Cert ID change
@@ -2426,6 +2452,7 @@ unit SHALL be reachable however old it is.
 - **THEN** its history reads, newest first, the reserve, the Cert ID change
   `PSA-1234 → PSA-1243` and the intake
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-59i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-151 - An assigned record's history starts at its assignment
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin sees when a unit was numbered
@@ -2436,6 +2463,7 @@ unit SHALL be reachable however old it is.
 - **THEN** its history holds one entry, `Cert ID change · No Cert ID → BGS-88`
 - **AND** last week's intake is not in it
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ekd rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-152 - A No Cert ID row shows the regular stock history
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - the admin reads how the regular stock moved
@@ -2448,6 +2476,7 @@ unit SHALL be reachable however old it is.
   `reserve` and the `intake`
 - **AND** it does not show the Auction `reserve` of `PSA-1`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-kdh rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-153 - A unit's oldest entry is reachable on a busy product
 
 **Serves:** grade10-admin-inventory-catalog-US-04 - the admin reads a unit's full history
@@ -2504,6 +2533,7 @@ Cert ID details SHALL offer Change Cert ID only on an unmoved Cert record, and
 SHALL show on any other Cert record that its Cert ID is fixed because the unit
 has been held or has moved.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-u13 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-154 - Admin corrects a wrong Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin makes the record match the slab
@@ -2518,6 +2548,7 @@ has been held or has moved.
   Grade Issuer `PSA` and Grade `10`, and the image is still tagged to it
 - **AND** stock reads three and reserved one
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-9io rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-155 - A Cert ID already used on the product is refused
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot give two units one number
@@ -2530,6 +2561,7 @@ has been held or has moved.
   second `PSA-1` and Available
 - **AND** the record still reads `PSA-1` and no entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-auy rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-156 - A held or sold record keeps its Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin sees why a unit cannot change
@@ -2542,6 +2574,7 @@ has been held or has moved.
 - **WHEN** a change to either is sent anyway
 - **THEN** Grade10 refuses it, and no record, count or entry changes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-blo rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-157 - A blank Cert ID is refused
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot clear a Cert ID
@@ -2551,6 +2584,7 @@ has been held or has moved.
 - **THEN** Grade10 refuses it
 - **AND** the record still reads `PSA-1` and no entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-d8o rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-167 - A released record cannot be corrected
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - a unit once held keeps the number it was held under
@@ -2563,6 +2597,7 @@ has been held or has moved.
 - **THEN** Grade10 refuses it, and the record still reads `PSA-1` with no
   entry appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sky rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-168 - No Cert ID is not a Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - a numbered unit never reads as regular stock
@@ -2574,6 +2609,7 @@ has been held or has moved.
 - **THEN** Grade10 refuses both
 - **AND** no record changes or is created and no entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-tl1 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-169 - Letter case makes a different Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin enters the number exactly as printed
@@ -2619,6 +2655,7 @@ row while it reads at least 1, and SHALL show on a hold's row, and on an
 available row reading 0, that no free unit of regular stock can take a Cert
 ID.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-e5t rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-159 - Admin gives a unit of regular stock its Cert ID alone
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin numbers a unit with the one field intake asks for
@@ -2637,6 +2674,7 @@ ID.
 - **AND** `No Cert ID` Available reads 1 and the Admin hold's row still reads 1
 - **AND** stock reads five, reserved one and available four
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-nlh rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-160 - Held regular stock cannot be given a Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot number a unit a holder has
@@ -2649,6 +2687,7 @@ ID.
 - **WHEN** an assignment is sent anyway
 - **THEN** Grade10 refuses it, and no record, count or entry changes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-myo rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-162 - A taken or blank Cert ID is refused on assignment
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the admin cannot give two units one number
@@ -2660,6 +2699,7 @@ ID.
 - **THEN** Grade10 refuses both, the first naming `PSA-2` and Sold
 - **AND** no Cert record is created and no entry is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sbe rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-163 - An assigned unit can be held by its Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - the numbered unit can go to a listing
@@ -2670,6 +2710,7 @@ ID.
 - **THEN** the hold has quantity one and names that record
 - **AND** available regular stock is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-zu9 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-171 - Copy facts sent with an assignment are ignored
 
 **Serves:** grade10-admin-inventory-catalog-US-15 - an assignment sent from outside the page records what the page would
@@ -2689,6 +2730,7 @@ Correcting and assigning a Cert ID SHALL need the grant that intake needs. An
 inventory admin with read access only SHALL see the rows and the history in
 Cert ID details, with no Change Cert ID or Assign Cert ID.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-pwt rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-164 - A reader without the write grant cannot change a Cert ID
 
 **Serves:** grade10-admin-inventory-catalog-US-14 - a reader accounts for units without changing them

@@ -44,6 +44,7 @@ admin access or expose private listing data.
   grade10-admin's listing screens; the code's absence from grade10-site's
   public listing pages is specified by `grade10-site/auction/listing-page`.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cza rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-87 - Operator reads a newly saved draft's code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -54,6 +55,7 @@ admin access or expose private listing data.
 - **AND** the code's first 2 characters are letters drawn from
   `ABCDEFGHJKMNPQRSTVWXYZ`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xrt rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-88 - An unsaved draft shows no listing code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -61,6 +63,7 @@ admin access or expose private listing data.
 - **WHEN** an operator opens its admin screen
 - **THEN** no listing code is shown
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7j9 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-89 - The listing code has no editable control
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -70,6 +73,7 @@ admin access or expose private listing data.
   it
 - **AND** an API write attempting to set the listing code is refused
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xa1 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-90 - A closed or called-off listing keeps its listing code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -77,6 +81,7 @@ admin access or expose private listing data.
 - **WHEN** the listing is closed, or called off before close
 - **THEN** its admin screen still shows the same listing code
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hby rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-91 - Two listings never show the same code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -84,6 +89,7 @@ admin access or expose private listing data.
 - **WHEN** an operator reads each listing's code on its admin screen
 - **THEN** the two codes are different
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-6yj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-92 - A projected collision retries
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -93,6 +99,7 @@ admin access or expose private listing data.
 - **THEN** allocation retries atomically
 - **AND** the stored code has the required shape and differs from the reserved code
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-phl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-93 - Deletion does not release a code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -101,6 +108,7 @@ admin access or expose private listing data.
 - **THEN** `LK423` remains unavailable
 - **AND** the later listing receives a different code
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rax rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-94 - A known code does not grant admin access
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -135,6 +143,7 @@ overwriting an address they chose.
   claims a slug after an available field-exit check, Grade10 SHALL refuse the
   Save and leave the draft's stored slug unchanged.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-w4n rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-118 - First saved draft receives a generated slug
 **Serves:** grade10-admin-auction-listing-US-73 - Operator starts from a distinct public address
 
@@ -142,6 +151,7 @@ overwriting an address they chose.
 - **WHEN** an operator saves it
 - **THEN** the draft stores a listing code and slug `charizard-psa-10-<lowercase code>`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hi0 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-119 - A title-less saved draft uses the neutral prefix
 **Serves:** grade10-admin-auction-listing-US-73 - Operator can save an unfinished listing without losing a valid address
 
@@ -149,6 +159,7 @@ overwriting an address they chose.
 - **WHEN** an operator saves it
 - **THEN** the draft stores slug `lot-<lowercase code>`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7ew rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-120 - A title edit refreshes an untouched generated slug
 **Serves:** grade10-admin-auction-listing-US-73 - Operator keeps the generated address aligned with the title while drafting
 
@@ -156,6 +167,7 @@ overwriting an address they chose.
 - **WHEN** an operator changes its title
 - **THEN** the slug's title portion changes and its lower-case code suffix stays the same
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-jow rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-121 - A title edit preserves an operator slug
 **Serves:** grade10-admin-auction-listing-US-73 - Operator retains an address they selected
 
@@ -163,6 +175,7 @@ overwriting an address they chose.
 - **WHEN** the operator changes its title
 - **THEN** the slug remains unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-96t rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-122 - Slug field exit reports a retained collision
 **Serves:** grade10-admin-auction-listing-US-73 - Operator learns that a chosen address is unavailable before Save
 
@@ -170,6 +183,7 @@ overwriting an address they chose.
 - **WHEN** an operator leaves Slug on another draft
 - **THEN** the editor reports the slug unavailable, keeps its value for correction, and shows the retained-address note
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tb7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-123 - Save rejects a collision after an available check
 **Serves:** grade10-admin-auction-listing-US-73 - Operator receives the authoritative collision result when another save races
 

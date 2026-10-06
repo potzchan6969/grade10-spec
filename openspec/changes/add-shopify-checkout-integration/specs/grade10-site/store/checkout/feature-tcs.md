@@ -9,6 +9,7 @@
 **I want** to review my current cart and send its accepted tender to Shopify,
 **so that** I pay for the lines and choices I just saw.
 
+<!-- trace:case id=g10.store-checkout.TC-uke rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC1-2: Current drawer basket and tender reach hosted payment
 
 **Classification:**
@@ -51,6 +52,7 @@
 * The invoice shows the reviewed basket and accepted tender.
 * Shopify collects the shipping address and payment.
 
+<!-- trace:case id=g10.store-checkout.TC-m23 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC2-1: The drawer estimate leaves final charges to Shopify
 
 **Classification:**
@@ -84,6 +86,7 @@
 * The estimate excludes final shipping and tax.
 * Shopify calculates final shipping and tax.
 
+<!-- trace:case id=g10.store-checkout.TC-kd3 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC6-1: A served destination receives the store preview rate
 
 **Classification:**
@@ -123,6 +126,7 @@
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-t16 rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC12-2: Unverified goods below the limit reach hosted payment
 
 **Classification:**
@@ -161,6 +165,7 @@
 * The account-verification gate does not replace checkout.
 * The returned hosted URL opens.
 
+<!-- trace:case id=g10.store-checkout.TC-0je rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC14-2: Verified goods at the limit reach hosted payment
 
 Runs once per row of **Test data**.
@@ -202,6 +207,7 @@ Runs once per row of **Test data**.
 * The verified buyer can use the checkout action.
 * The returned hosted URL opens.
 
+<!-- trace:case id=g10.store-checkout.TC-ifk rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC3-1: Concurrent Pay requests retain one payable invoice
 
 **Classification:**
@@ -236,6 +242,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-i1x rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC4-1: A lost provider response recovers the same invoice
 
 **Classification:**
@@ -269,6 +276,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-wod rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC5-2: Edited basket and tender reach a fresh submission
 
 **Classification:**
@@ -312,6 +320,7 @@ Runs once per row of **Test data**.
 * The returned hosted URL opens.
 * The earlier invoice is ignored, without cancellation or reuse.
 
+<!-- trace:case id=g10.store-checkout.TC-13i rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC8-1: Terminal intent replay retains its existing outcome
 
 Runs once per row of **Test data**.
@@ -356,6 +365,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-d42 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC9-1: A worker stop before dispatch permits safe recovery
 
 **Classification:**
@@ -389,6 +399,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-9mi rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC10-1: An unresolved dispatch requires operator recovery
 
 **Classification:**
@@ -423,6 +434,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-7s9 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC7-1: Unsupported destinations receive no carrier rate
 
 **Classification:**
@@ -461,6 +473,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-s9e rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC11-1: Same-session reload retains the reviewed checkout intent
 
 **Classification:**
@@ -497,6 +510,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-vil rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC13-2: Unverified goods at the limit require account verification
 
 Runs once per row of **Test data**.
@@ -540,6 +554,7 @@ Runs once per row of **Test data**.
 * The account action opens account verification.
 * The frontend sends no checkout creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-doe rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC15-1: Carrier requests without permission return no usable rate
 
 **Classification:**
@@ -580,6 +595,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-vk1 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC16-1: Provider binding precedes the hosted response
 
 **Classification:**
@@ -613,6 +629,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-3ft rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC17-1: A changed request conflicts with its existing intent
 
 **Classification:**
@@ -645,6 +662,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-sp5 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC18-1: Terminal replay survives changed catalog and verification facts
 
 **Classification:**
@@ -678,6 +696,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-1bl rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC19-1: Customer refusal cannot create another invoice
 
 **Classification:**
@@ -710,6 +729,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-81s rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC20-1: An unresolved dispatch blocks a changed purchase
 
 **Classification:**
@@ -742,6 +762,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-qog rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC21-1: Gross-goods verification refuses Pay despite reduced tender
 
 **Classification:**
@@ -774,6 +795,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-2p2 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC22-1: A pending request prevents another frontend submission
 
 **Classification:**
@@ -808,6 +830,7 @@ Runs once per row of **Test data**.
 * The frontend sends only the first creation request.
 * The returned hosted URL opens when the response arrives.
 
+<!-- trace:case id=g10.store-checkout.TC-w15 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC23-1: A later Pay creates a fresh submission
 
 **Classification:**
@@ -842,6 +865,7 @@ Runs once per row of **Test data**.
 * The newly returned hosted URL opens.
 * The earlier invoice does not block or replace this submission.
 
+<!-- trace:case id=g10.store-checkout.TC-mnx rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC24-1: Reload does not require an earlier invoice to close
 
 **Classification:**
@@ -875,6 +899,7 @@ Runs once per row of **Test data**.
 * Pay calls existing creation again.
 * The frontend does not wait for the earlier invoice.
 
+<!-- trace:case id=g10.store-checkout.TC-urs rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC25-1: An empty basket offers no hosted payment
 
 **Classification:**
@@ -907,6 +932,7 @@ Runs once per row of **Test data**.
 * No checkout action starts an empty purchase.
 * The frontend sends no checkout creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-5g0 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC26-1: Checkout verification response shows existing account feedback
 
 **Classification:**
@@ -943,6 +969,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.store-checkout.TC-zrz rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC27-1: Pending cart and tender writes prevent payment
 
 Runs once per row of **Test data**.
@@ -987,6 +1014,7 @@ Runs once per row of **Test data**.
 * No creation request starts with the earlier facts.
 * Checkout becomes available after current review and quote are ready.
 
+<!-- trace:case id=g10.store-checkout.TC-8yn rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC28-1: Failed tender changes preserve the accepted choice
 
 **Classification:**
@@ -1029,6 +1057,7 @@ Runs once per row of **Test data**.
 * The retained accepted points choice remains 10.
 * Pay uses the retained choice with its ready quote.
 
+<!-- trace:case id=g10.store-checkout.TC-pa7 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC29-1: A settling response opens the existing order surface
 
 **Classification:**
@@ -1070,6 +1099,7 @@ Runs once per row of **Test data**.
 **I want** the changed line named before I pay,
 **so that** I can fix the basket instead of paying for stale goods.
 
+<!-- trace:case id=g10.store-checkout.TC-q0v rev=2 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC1-2: Changed drawer lines block payment before handoff
 
 Runs once per row of **Test data**.
@@ -1113,6 +1143,7 @@ Runs once per row of **Test data**.
 * Checkout remains unavailable until the basket is ready.
 * The frontend sends no checkout creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-uuk rev=2 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC2-2: Failed drawer reads keep held facts unchecked
 
 **Classification:**
@@ -1148,6 +1179,7 @@ Runs once per row of **Test data**.
 * Checkout is unavailable.
 * The frontend sends no checkout creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-vyf rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC3-1: Shopify names a line refused during hosted payment
 
 **Classification:**
@@ -1183,6 +1215,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-zm4 rev=2 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC4-2: A named-line checkout refusal permits basket repair
 
 **Classification:**
@@ -1220,6 +1253,7 @@ Runs once per row of **Test data**.
 * The repaired basket receives a current review.
 * The later submission uses existing creation again.
 
+<!-- trace:case id=g10.store-checkout.TC-dny rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC5-1: Incomplete or contradictory reads cannot authorize payment
 
 Runs once per row of **Test data**.
@@ -1261,6 +1295,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-u81 rev=2 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC6-2: An unfinished live review cannot enable payment
 
 **Classification:**
@@ -1293,6 +1328,7 @@ Runs once per row of **Test data**.
 * Checkout remains unavailable while the review is pending.
 * The frontend sends no checkout creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-97f rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC7-1: Uncertain gift cleanup cannot replace the invoice
 
 **Classification:**
@@ -1327,6 +1363,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-dtv rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC8-1: Checkout failure releases the pending control for retry
 
 **Classification:**
@@ -1364,6 +1401,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.store-checkout.TC-q9i rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC9-1: Contradictory reviews and failed quotes prevent payment
 
 Runs once per row of **Test data**.
@@ -1408,6 +1446,7 @@ Runs once per row of **Test data**.
 * Checkout is unavailable.
 * The frontend sends no creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-5i0 rev=1 covers=g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US2-TC10-1: Lost creation responses offer a fresh retry
 
 Runs once per row of **Test data**.
@@ -1460,6 +1499,7 @@ Runs once per row of **Test data**.
 **I want** to return to Grade10 and find the order while it settles,
 **so that** I can trust the store did not lose my purchase.
 
+<!-- trace:case id=g10.store-checkout.TC-a1c rev=2 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC1-2: A pending purchase remains visible after Shopify return
 
 **Classification:**
@@ -1495,6 +1535,7 @@ Runs once per row of **Test data**.
 * Order detail shows the same purchase.
 * Return alone does not clear the cart or tender.
 
+<!-- trace:case id=g10.store-checkout.TC-09w rev=2 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC2-2: Observed payment refreshes the existing cart cleanup
 
 **Classification:**
@@ -1530,6 +1571,7 @@ Runs once per row of **Test data**.
 * Whole matching variant lines are absent.
 * Cart tender choices are cleared.
 
+<!-- trace:case id=g10.store-checkout.TC-ub1 rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC4-1: Both Shopify confirmation surfaces offer Grade10 Your Orders
 
 Runs once per row of **Test data**.
@@ -1571,6 +1613,7 @@ Runs once per row of **Test data**.
 * The matching purchase appears there.
 * The link works independently of native Continue shopping.
 
+<!-- trace:case id=g10.store-checkout.TC-eul rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC3-1: Reconciliation repairs a missed Shopify payment event
 
 **Classification:**
@@ -1604,6 +1647,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-b6s rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC5-1: Invalid payment events cannot settle a purchase
 
 Runs once per row of **Test data**.
@@ -1647,6 +1691,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-mue rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC6-1: Owned detail reads repair missed payment settlement
 
 **Classification:**
@@ -1680,6 +1725,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-8yq rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC7-1: Repeated settlement signals release paid lines once
 
 **Classification:**
@@ -1715,6 +1761,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-t9f rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC8-1: Another member cannot read the matching order detail
 
 **Classification:**
@@ -1748,6 +1795,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-qkv rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC9-1: The orders list reads stored purchases without repairing each row
 
 **Classification:**
@@ -1782,6 +1830,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-9a1 rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC10-1: Cart edits do not change the invoice purchase
 
 **Classification:**
@@ -1827,6 +1876,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.store-checkout.TC-mw4 rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-n14,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
 ### grade10-site-store-checkout-US3-TC11-1: Missing purchases retain the existing orders surface
 
 Runs once per row of **Test data**.
@@ -1876,6 +1926,7 @@ Runs once per row of **Test data**.
 **I want** checkout to explain the identity requirement,
 **so that** I can sign in before an order or payment is started.
 
+<!-- trace:case id=g10.store-checkout.TC-fwd rev=2 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC1-2: The public cart drawer requires a member session
 
 **Classification:**
@@ -1907,6 +1958,7 @@ Runs once per row of **Test data**.
 * No guest basket or public typed-email checkout is offered.
 * The frontend sends no checkout creation request.
 
+<!-- trace:case id=g10.store-checkout.TC-hi4 rev=2 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC2-2: An expired session shows the existing sign-in outcome
 
 **Classification:**
@@ -1940,6 +1992,7 @@ Runs once per row of **Test data**.
 * No hosted payment destination opens.
 * The request no longer leaves checkout marked pending.
 
+<!-- trace:case id=g10.store-checkout.TC-44q rev=1 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC3-1: Typed email remains restricted to elevated operator tests
 
 Runs once per row of **Test data**.
@@ -1980,6 +2033,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-wi7 rev=1 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC4-1: An authorized sandbox operator retains typed-email checkout
 
 **Classification:**
@@ -2013,6 +2067,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-bvr rev=1 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC5-1: Production refuses typed-email checkout before identity lookup
 
 **Classification:**
@@ -2045,6 +2100,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
+<!-- trace:case id=g10.store-checkout.TC-81w rev=1 covers=g10.store-checkout.SC-f06 -->
 ### grade10-site-store-checkout-US4-TC6-1: Late responses cannot redirect a different member
 
 Runs once per row of **Test data**.

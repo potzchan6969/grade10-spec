@@ -11,6 +11,7 @@ type, and to commit my words as a chip when I submit them,
 **so that** I can jump to a known card or narrow the shop without waiting on
 a blind query.
 
+<!-- trace:case id=g10.store-product-listing.TC-tgd rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC1-1: Typing offers product and filter hits
 
 **Classification:**
@@ -51,6 +52,7 @@ a blind query.
 * Neither group offers more than five hits.
 * The address and the listed cards are unchanged.
 
+<!-- trace:case id=g10.store-product-listing.TC-ma0 rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC2-1: Suggestions stay on the store catalogue
 
 **Classification:**
@@ -89,6 +91,7 @@ a blind query.
 * Every hit is a catalogue product or a listing facet choice.
 * `<matching lot>` is not offered.
 
+<!-- trace:case id=g10.store-product-listing.TC-the rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC3-1: Submitting the words narrows the shop and shows a chip
 
 **Classification:**
@@ -129,6 +132,7 @@ a blind query.
 * `<words>` sits among the applied narrowings as a dismissible chip.
 * The search field is empty.
 
+<!-- trace:case id=g10.store-product-listing.TC-ydt rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC4-1: A product hit opens that product
 
 **Classification:**
@@ -168,6 +172,7 @@ a blind query.
 * The listing address carries no search words.
 * The search field is empty.
 
+<!-- trace:case id=g10.store-product-listing.TC-zoc rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC5-1: A filter hit applies that facet
 
 **Classification:**
@@ -207,6 +212,7 @@ a blind query.
 * `<matching facet>` sits among the applied narrowings, with no chip for `<words>`.
 * The search field is empty.
 
+<!-- trace:case id=g10.store-product-listing.TC-rvc rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC6-1: Dismissing the search chip clears the words
 
 **Classification:**
@@ -244,6 +250,7 @@ a blind query.
 * No chip for `<words>` sits among the applied narrowings.
 * The address no longer carries `<words>`.
 
+<!-- trace:case id=g10.store-product-listing.TC-o0w rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC7-1: Words nothing matches still commit
 
 **Classification:**
@@ -282,6 +289,7 @@ a blind query.
 * Step 3 narrows the listing by `<unmatched words>` as free text.
 * The address carries `<unmatched words>`.
 
+<!-- trace:case id=g10.store-product-listing.TC-bk5 rev=1 covers=g10.store-product-listing.SC-rv9,g10.store-product-listing.SC-v1f,g10.store-product-listing.SC-hch,g10.store-product-listing.SC-xip,g10.store-product-listing.SC-fep,g10.store-product-listing.SC-5yb,g10.store-product-listing.SC-1q7,g10.store-product-listing.SC-ph5 -->
 ### grade10-site-store-product-listing-US10-TC8-1: Hits that take time show searching
 
 **Classification:**
