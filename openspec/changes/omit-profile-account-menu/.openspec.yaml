@@ -2,5 +2,4 @@ schema: grade10-planning
 created: 2026-09-25
 hands:
   design: "@tangconst"
-page_waived: "the outcome waits on Q1; Page Shell · Account Menu holds it as a ❓ line until Product answers, then a 🚧 line replaces this"
 ui_waived: no new surface; the Auction first account-menu story holds the auction-launch menu, and Q7 settles which items the Auction & Store story shows

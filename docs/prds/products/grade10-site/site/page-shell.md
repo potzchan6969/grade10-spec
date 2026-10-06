@@ -39,6 +39,9 @@ chrome, including on auction-first launch.
 the items: My Auctions and Sign Out on auction launch; My Orders and My
 Auctions once Store answers, with Sign Out always last. KYC stays out.
 
+**Withheld pages** — the menu never offers an item whose page the site
+withholds: My Orders, Profile or Membership
+
 **My Orders** — ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
 

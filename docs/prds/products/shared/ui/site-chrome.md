@@ -40,7 +40,11 @@ sign-in email, then My Auctions and Sign Out
 orders item included
 
 ❓ **Avatar without an email** — when `accountEmail` is not supplied, the menu
-shows `copy.accountMenuLabel` and no avatar; the designer confirms that look
+shows `copy.accountMenuLabel` and no avatar; the designer (@tangconst)
+confirms that look
+
+❓ **Account menu story** — which items the Auction & Store story shows once
+Profile and Membership are settled; the designer (@tangconst) confirms
 
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
