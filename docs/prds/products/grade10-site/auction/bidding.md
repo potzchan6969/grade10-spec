@@ -210,7 +210,7 @@ On the same card, locked by the first accepted bid.
 
 - 🚧 **Time left (extended)** — while the lot is in extended bidding the label
   says so, and its tooltip names the extension duration only
-- 🚧 **Recent bids Winner** — after the lot closes sold, the winning public
+- **Recent bids Winner** — after the lot closes sold, the winning public
   row shows a primary crown after the amount; rows tied on amount list the
   earlier maximum first, and each row below it, at the current price or
   lower down, carries an Info tip in the amount tone: when maximums match,

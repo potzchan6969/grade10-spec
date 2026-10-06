@@ -49,10 +49,10 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   close time when it shows a clock, as it does after an open lot's deadline; a
   close day alone names none
   ([Dates and Times](/p/platform/shared/dates-and-times))
-- 🚧 **Winner after close** — when the lot is closed and sold, the winning
+- **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)
-- 🚧 **Equal-max tip** — a row tied on amount with a row above it shows an
+- **Equal-max tip** — a row tied on amount with a row above it shows an
   Info tip in the amount tone, at the current price or lower down: when
   maximums match, the earlier one leads
 
