@@ -122,6 +122,12 @@ in the same pass when the request covers both.
 - **The Summary tab gives each run four rows**, one per surface, grouped under
   the first. Identity, env and the commit sit once, on that first row. Marking a
   cell moves the counts; no second sync is needed.
+- **The sheet walks products in a fixed order.** Shared, then Grade10 site
+  (site, auction, vault, grading, loyalty, commerce, and any other domain of
+  that product), then the store (`grade10-site/store`), then Grade10 admin,
+  then ZZZ site, then ZZZ admin. Inside a band the files stay in path order,
+  and a file's journeys stay in journey order. A product outside these six
+  follows them.
 - **Sort inside the `Walk` filter view, not the sheet.** A sheet-level sort
   would lift the cases out from under their journey banners. The journeys of
   one file fold under a row that names the file (`shared/auth/sign-in`). The

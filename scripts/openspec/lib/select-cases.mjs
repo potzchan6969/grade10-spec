@@ -392,12 +392,39 @@ export function buildGrid(picked) {
   return { rows, lines };
 }
 
-/** Picked cases in reading order: by source file, then by journey, then by the
- *  case number. A tester walks a journey at a time, and the run tab is grouped
- *  by journey, so the order is the grouping. */
+/** Walk bands, in the order a tester meets them. The store is its own band
+ *  inside Grade10 site. A path outside these six follows them. */
+const WALK_BANDS = [
+  "shared",
+  "grade10-site",
+  "grade10-site/store",
+  "grade10-admin",
+  "zzz-site",
+  "zzz-admin",
+];
+
+/** The band of a suite path. The longest matching prefix wins, so the store
+ *  keeps its own band inside Grade10 site. */
+export function walkBand(rel) {
+  const path = String(rel)
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "")
+    .replace(/^openspec\/specs\//, "");
+  let best = -1;
+  WALK_BANDS.forEach((band, index) => {
+    const hit = path === band || path.startsWith(`${band}/`);
+    if (hit && (best === -1 || band.length > WALK_BANDS[best].length))
+      best = index;
+  });
+  return best === -1 ? WALK_BANDS.length : best;
+}
+
+/** Picked cases in walk order: product band, then source path, then journey,
+ *  then case number. A tester walks a journey at a time, and the run tab is
+ *  grouped by journey, so the order is the grouping. */
 export function inReadingOrder(picked) {
   return [...picked].sort(
     (a, b) =>
+      walkBand(a.read.rel) - walkBand(b.read.rel) ||
       a.read.rel.localeCompare(b.read.rel) ||
       (a.tc.journeyNum ?? 0) - (b.tc.journeyNum ?? 0) ||
       (a.tc.tcNum ?? 0) - (b.tc.tcNum ?? 0) ||

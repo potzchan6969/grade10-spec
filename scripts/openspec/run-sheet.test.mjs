@@ -47,6 +47,7 @@ import {
   caseRow,
   caseRows,
   inReadingOrder,
+  walkBand,
   selectCases,
   surfacePrefill,
 } from "./lib/select-cases.mjs";
@@ -798,7 +799,42 @@ test("journeys of two files fold under their capability paths", () => {
   const caps = lines
     .map((line, i) => (line.kind === "capability" ? rows[i][0] : null))
     .filter(Boolean);
-  assert.deepEqual(caps, ["demo/thing/widget", "shared/auth/sign-out"]);
+  assert.deepEqual(caps, ["shared/auth/sign-out", "demo/thing/widget"]);
+});
+
+test("a run walks shared, Grade10 site, the store, admin, then ZZZ", () => {
+  const paths = [
+    "openspec/specs/zzz-admin/site/home/feature-tcs.md",
+    "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
+    "openspec/specs/zzz-site/site/home/feature-tcs.md",
+    "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+    "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+    "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+    "openspec/specs/grade10-site/analytics/home/feature-tcs.md",
+  ];
+  const picked = paths.map((rel, i) => ({
+    read: { rel, level: "feature", capabilityId: rel },
+    tc: {
+      ...candidates[0].tc,
+      id: `band-US1-TC${i}-1`,
+      tcNum: 1,
+      journeyNum: 1,
+    },
+  }));
+  assert.deepEqual(
+    inReadingOrder(picked).map((one) => one.read.rel),
+    [
+      "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+      "openspec/specs/grade10-site/analytics/home/feature-tcs.md",
+      "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
+      "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "openspec/specs/zzz-site/site/home/feature-tcs.md",
+      "openspec/specs/zzz-admin/site/home/feature-tcs.md",
+    ],
+  );
+  assert.equal(walkBand("openspec/changes/some-change/specs/grade10-site/store/checkout/feature-tcs.md"), 2);
+  assert.equal(walkBand("openspec/specs/demo/thing/widget/feature-tcs.md"), 6);
 });
 
 test("admin banners use the fall orange, product banners the noble green", () => {
