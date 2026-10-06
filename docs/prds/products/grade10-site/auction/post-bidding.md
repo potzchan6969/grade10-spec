@@ -307,17 +307,18 @@ failure, and locks the form while work is in progress.
 
 - 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
   or transfer reference); **1 to 3** PDF, PNG, JPG, HEIC or HEIF files, **5 MB**
-  each and **15 MB** total, uploaded once after paying, behind a confirm
-  step saying nothing can be added later; on success a toast reads **Proof
-  submitted** / **We'll verify your payment shortly.**, the order reads
+  each and **15 MB** total, uploaded once after paying, with inline
+  irreversible microcopy saying nothing can be added or changed after submit;
+  on success, a toast reads **Proof submitted** / **We'll verify your payment
+  shortly.**, the order reads
   Payment Verifying, the deadline stops, and Submit Payment Proof, View Bank
   Details and further uploads are hidden; on a failed upload the dialog stays
   open with the draft and a toast reads **Proof not submitted** / **Nothing
   was saved. Try again.**; while submitting or converting HEIC the form locks
   and leave is blocked
 - 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
-  the transfer and will email when payment is confirmed, placed where the
-  Preparing Invoice alert sits
+  the transfer and will email when payment is confirmed, under Order progress
+  on small viewports and under the lot from `lg` up
 - 🚧 **Manual confirmation** — an operator confirms the proof, or returns it
   with a reason the winner reads, the latest only; the deadline runs again
   with the time that was left, and the winner uploads again — [Auction

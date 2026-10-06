@@ -1,21 +1,30 @@
+# grade10-site/auction/winner-order Specification
+
+## Purpose
+What a winner is sent after a lot closes and what they do with it: one order
+per lot, a delivery address, payment method and billing address they choose, an
+operator's invoice priced for both, payment by card or by a bank transfer they
+prove, and the receipt, tracker and delivery proof the order keeps afterwards.
+
 ## Feature set
 
 - Order-progress tracking
-  - Shipping tracker: while fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as an external carrier link; no Track shipment button and no carrier name in that chrome
+  - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
 
 ## ADDED Requirements
 
 ### Requirement: Winner Order makes the tracking number the carrier link
 
-While an auction order's fulfilment is `fulfilled`, Winner Order SHALL show
-the tracking number as the external link to the carrier tracking page in Order
-Progress. It SHALL show no separate Track shipment control and no carrier name
-in that chrome. The link SHALL remain after `delivery_confirmed` is set while
-the fulfilment remains `fulfilled`.
+While an auction order's fulfilment is `fulfilled` and it has a tracking
+number, Winner Order SHALL show that number as the external link to the carrier
+tracking page in Order Progress. The link SHALL open in a new tab. Order
+Progress SHALL show no separate Track shipment control or carrier name. The
+link SHALL remain after `delivery_confirmed` is set while the fulfilment stays
+`fulfilled`.
 
-This requirement governs the live Winner Order presentation only. The records
-the winner keeps, including receipt identifiers and contents, remain governed
-by their own requirement.
+This requirement governs the live Winner Order presentation only. The carrier
+data a winner keeps remains governed by `Records the winner keeps`; it does
+not require carrier name in Order Progress.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=1 -->
 #### Scenario: winner-order-SC-251 - A dispatched lot shows the tracking number as the carrier link
@@ -26,6 +35,7 @@ by their own requirement.
 - **WHEN** the winner opens the order
 - **THEN** Order Progress shows the tracking number as a link to the carrier
   tracking page
+- **AND** the link opens in a new tab
 - **AND** it shows no separate Track shipment control and no carrier name in
   Order Progress
 
