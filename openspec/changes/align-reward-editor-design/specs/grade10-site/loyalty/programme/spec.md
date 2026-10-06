@@ -5,10 +5,13 @@
     physical reward's coupon takes 100% off its own variant, so it completes
     as an ordinary sale
   - Till scope: a reward scoped to named products or a catalog filter is good
-    online only, because a till sale names its goods by variant alone; the till
-    refuses it however it reaches the sale
+    online only, because a till sale names its goods by variant alone; the menu
+    says so before it is bought, and the till refuses it however it reaches
+    the sale
 - Operator console
-  - Reward form: kind, discount, scope and combine setting beside the menu entry; a free item is its own choice and reopens as one
+  - Reward form: kind, discount, scope and combine setting beside the menu
+    entry; a free item is its own choice and reopens as one, and a reward
+    stored with a retired handover keeps it
 
 ## MODIFIED Requirements
 
@@ -36,8 +39,11 @@ takes off wherever it is applied — online or at the till, identically.
 A sale at the till names its goods by variant alone, so a product coupon
 scoped to named products or to a catalog filter SHALL be good online only,
 whatever channels it names: the console's reward form SHALL save it for the
-online channel alone, the till SHALL show it as online only before it is
-applied, and the till SHALL refuse it however it reaches the sale.
+online channel alone, the member's reward menu SHALL state it as good online
+only, the till SHALL show it as online only before it is applied, and the
+till SHALL refuse it however it reaches the sale. Neither way a coupon reaches
+a counter sale under "A redemption settles as a coupon, whatever the reward"
+SHALL take such a coupon.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-qyo rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-152 - A fixed-amount coupon takes a set amount off its scope
@@ -57,7 +63,7 @@ applied, and the till SHALL refuse it however it reaches the sale.
   the matching lines are
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-0tt rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-209 - A percentage coupon with no maximum takes its whole rate
+#### Scenario: grade10-site-loyalty-programme-SC-226 - A percentage coupon with no maximum takes its whole rate
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a percentage with no
@@ -95,7 +101,7 @@ applied, and the till SHALL refuse it however it reaches the sale.
 - **THEN** the gift is refused until the basket reaches it
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-210 - The till holds a coupon scoped to named products or a filter to online only
+#### Scenario: grade10-site-loyalty-programme-SC-227 - The till holds a coupon scoped to named products or a filter to online only
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon scoped to named products or to a
@@ -106,8 +112,18 @@ applied, and the till SHALL refuse it however it reaches the sale.
 - **AND** the member presenting it from their own session is refused for that
   sale
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-62s rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-224 - The menu states a reward scoped to named products or a filter as online only
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **GIVEN** a reward scoped to named products or to a catalog filter,
+  whichever channels it names
+- **WHEN** a member reads the reward menu
+- **THEN** the reward states it is good online only, before any points are
+  spent
+
 <!-- trace:scenario id=g10.loyalty-programme.SC-1bu rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-211 - A reward scoped to named products or a filter is saved for online alone
+#### Scenario: grade10-site-loyalty-programme-SC-228 - A reward scoped to named products or a filter is saved for online alone
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator scopes a money-off reward to named products or to a
@@ -118,7 +134,7 @@ applied, and the till SHALL refuse it however it reaches the sale.
   was chosen before
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-rwu rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-212 - A stored reward scoped to named products that names the till is saved online only
+#### Scenario: grade10-site-loyalty-programme-SC-229 - A stored reward scoped to named products that names the till is saved online only
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward stored as a product coupon scoped to named products,
@@ -147,9 +163,14 @@ The form SHALL offer three choices, each saved as one of the two kinds:
 A stored product coupon at 100%, with no maximum discount, scoped to exactly
 one variant SHALL open in the form as a free item, whether the reward is
 opened or duplicated into a new one. Any other stored product coupon SHALL
-open as money off, a capped or wider 100% discount included.
+open as money off, a capped or wider 100% discount included. A reward stored
+with a handover the programme has retired - a manual handover, or a counter
+collection - SHALL open with no choice made and SHALL keep that handover,
+unchanged, while the fields beside it are edited; once the operator makes one
+of the three choices, it SHALL save as that choice. A duplicate of it SHALL
+open as money off.
 
-The form SHALL save nothing while the chosen kind lacks a part it needs, or
+The form SHALL save nothing while the choice lacks a part it needs, or
 while the window ends before it starts, and SHALL name what is missing.
 Beside the form, a basket check SHALL state what the reward's coupon would
 take off a basket the operator builds, or why it would not apply, without
@@ -188,23 +209,36 @@ saving the reward.
 #### Scenario: grade10-site-loyalty-programme-SC-189 - A capped or wider 100% discount stays money off
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
-- **GIVEN** a reward stored as a product coupon at 100%, either with a
-  maximum discount, scoped to two variants, or scoped to one named product
+- **GIVEN** a reward stored as a product coupon at 100% that has a maximum
+  discount, or that is scoped to two variants, or to one named product
 - **WHEN** an operator opens it in the reward form
 - **THEN** Money off is chosen, with that discount and scope
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-h6j rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-213 - A reward missing a part is not saved
+<!-- trace:scenario id=g10.loyalty-programme.SC-ji6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-225 - A reward stored with a retired handover keeps it until a choice is made
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
-- **WHEN** an operator saves a reward whose kind lacks a part it needs — a
-  free item or a gift with no variant, money off with no amount, a gift with
-  no minimum spend — or whose window ends before it starts
+- **GIVEN** a reward stored as a manual handover or a counter collection
+- **WHEN** an operator opens it in the reward form
+- **THEN** no choice is made
+- **AND** changing its name and saving keeps that handover, unchanged
+- **AND** duplicating it opens a new reward on Money off
+- **AND** choosing Money off with a discount and a scope, then saving, saves
+  it as a product coupon
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-h6j rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-230 - A reward missing a part is not saved
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **WHEN** an operator saves a reward whose choice lacks a part it needs — a
+  free item or a gift with no variant, money off with no amount or with
+  nothing picked in its scope, a gift with no minimum spend — or whose window
+  ends before it starts
 - **THEN** nothing is saved
 - **AND** the form names what is missing
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-fut rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-214 - The basket check states what the coupon would take off
+#### Scenario: grade10-site-loyalty-programme-SC-231 - The basket check states what the coupon would take off
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward in the form whose definition is complete
