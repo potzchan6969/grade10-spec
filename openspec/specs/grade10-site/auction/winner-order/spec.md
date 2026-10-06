@@ -79,6 +79,8 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Delivery proof: what the carrier recorded on handover, given what these lots are worth
   - Receipt identifier: a receipt for a finalized payment uses the invoice payload plus its unpadded per-invoice sequence; historic receipt IDs remain unchanged
   - Receipt: it itemises Tax when added
+  - Cancelled order notice: explains the terminal date, retained lot and winning bid
+  - Contact Us: gives the winner the only next action, with the `order cancelled` ready email
 - Settlement
   - Single fresh charge: one transaction for the final amount, retryable on failure
 - Payment deadline
@@ -1914,19 +1916,26 @@ multi-line field that shares TextInput's label, status and message contract.
 The ready email's subject and body identify the order so support can open it
 without a follow-up.
 
-**Subject** - When the order's current invoice id exists, the subject SHALL be
+**Subject** - For `order cancelled` the subject SHALL be
+`Auction lot {lot title}: order cancelled`, invoice or not. Otherwise, when
+the order's current invoice id exists, the subject SHALL be
 `Auction order {invoice id}: {reason}`. When no invoice id exists (including
 setup overdue before send), the subject SHALL be
 `Auction lot {lot title}: {reason}`.
 
 **Reason** - On Winner Order the reason fragment SHALL be one of
-`setup overdue`, `payment overdue`, or `partial payment`.
+`setup overdue`, `payment overdue`, `partial payment`, or `order cancelled`.
+A Cancelled Winner Order is locked, so it offers Contact Us under "Contact Us
+opens a copy-first ready email" with the `order cancelled` reason. The
+operator's cancellation category and note SHALL NOT appear in the subject or
+body.
 
 **Body** - Message SHALL greet Grade10, say the winner needs help with this
 auction order, name the lot title, name the status label for the reason
-(`Setup overdue`, `Payment overdue`, or `Partially paid`), and leave space
-for the winner's question. When an invoice id exists and the reason is not
-setup overdue, the body SHALL name that invoice id.
+(`Setup overdue`, `Payment overdue`, `Partially paid`, or `Cancelled`), and
+leave space for the winner's question. When an invoice id exists and the reason
+is not setup overdue, the body SHALL name that invoice id; a Cancelled order
+that never had an invoice names none.
 
 **Partial payment** - When the reason is partial payment, the body MAY list
 receipt ids and MUST NOT name the remaining balance. When no receipt id
@@ -1976,6 +1985,16 @@ exists yet, the body SHALL list none.
 - **WHEN** the winner opens Contact Us
 - **THEN** Subject is `Auction order IN-LK42302: payment overdue`
 - **AND** Subject does not name `IN-LK42301`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-e1w rev=1 -->
+#### Scenario: winner-order-SC-275 - Contact Us on a cancelled order names the lot and the cancellation
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a cancelled auction order for lot title "Charizard Base Set PSA 10", with current invoice id `IN-LK42301` and an operator cancellation category and note
+- **WHEN** the winner chooses Contact Us
+- **THEN** Subject is `Auction lot Charizard Base Set PSA 10: order cancelled`
+- **AND** Message names that lot title, that invoice id and status Cancelled
+- **AND** neither Subject nor Message names the cancellation category or note
 
 ### Requirement: Add Address collects phone with country
 
@@ -2785,3 +2804,19 @@ operator sends the invoice.
 - **THEN** Tax is shown as TBD with the other fee rows
 - **AND** no calculated Tax amount is shown
 - **AND** the Tax line offers its info tooltip
+
+### Requirement: Winner Order explains cancellation without exposing the reason
+
+For a cancelled auction order, Winner Order SHALL show the cancellation date as a
+day-only date in the viewer's local zone, the lot and winning bid, and Contact Us as the only next action. It SHALL not show
+the operator's category or note, SHALL not show a stepper or payment action,
+and SHALL preserve the order's retained facts.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1fb rev=2 -->
+#### Scenario: winner-order-SC-143 - Cancelled keeps the lot and winning bid visible
+**Serves:** winner-order-US-13 - Winner learns their order was cancelled
+
+- **GIVEN** a cancelled auction order with a lot and winning bid
+- **WHEN** the winner opens Winner Order
+- **THEN** it shows Cancelled on the recorded day in the viewer's local zone, the lot and winning bid
+- **AND** it shows Contact Us only, without the internal reason

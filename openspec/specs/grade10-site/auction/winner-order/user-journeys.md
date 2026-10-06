@@ -110,6 +110,12 @@ current currency minimum,
 **I want** my invoice and payment receipts to show stable public references built from my payment reference,
 **so that** I can contact Grade10, make a payment, and reconcile charges without exposing internal system keys.
 
+### winner-order-US-13: Winner learns their order was cancelled
+
+**As a** winner whose order an operator cancelled,
+**I want** Winner Order to say it was cancelled and when, with the lot I won and a way to contact Grade10,
+**so that** I know the order is closed and who to ask about it.
+
 ## Retired
 
 - `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.
