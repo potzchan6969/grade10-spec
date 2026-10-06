@@ -1,3 +1,10 @@
+# grade10-site/auction/listing-media Specification
+
+## Purpose
+
+Collectors study a lot's gallery on the details page with a thumbnail rail
+when that gallery has room beside its main frame.
+
 ## Feature set
 
 - Collector-facing gallery
@@ -76,7 +83,7 @@ SHALL keep previous/next and carousel progress.
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows three images in the order A, B, C
 
-<!-- trace:scenario id=g10.auction-listing-media.SC-iki rev=1 -->
+<!-- trace:scenario id=g10.auction-listing-media.SC-iki rev=2 -->
 #### Scenario: grade10-site-auction-listing-media-SC-27 - One image has no strip
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -84,8 +91,9 @@ SHALL keep previous/next and carousel progress.
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows that image
 - **AND** it does not show a thumbnail strip
+- **AND** previous and next are not available
 
-<!-- trace:scenario id=g10.auction-listing-media.SC-70a rev=1 -->
+<!-- trace:scenario id=g10.auction-listing-media.SC-70a rev=2 -->
 #### Scenario: grade10-site-auction-listing-media-SC-28 - No images still shows the listing
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -93,6 +101,7 @@ SHALL keep previous/next and carousel progress.
 - **WHEN** a collector opens that listing
 - **THEN** the page shows the listing's title and bid panel
 - **AND** the gallery has no image
+- **AND** previous and next are not available
 
 <!-- trace:scenario id=g10.auction-listing-media.SC-5tk rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-29 - Wide details gallery shows a left rail
@@ -114,3 +123,4 @@ SHALL keep previous/next and carousel progress.
 - **WHEN** a collector opens that listing
 - **THEN** no thumbnail rail is shown
 - **AND** previous and next remain available
+- **AND** carousel progress remains available
