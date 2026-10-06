@@ -45,7 +45,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       automated only the cases unit tests already decide with
       `pnpm run tcs:automated`, and name any that stay manual in the round
       row.
-- [ ] 3.3 Walk the fractional paste at the ceiling on CustomMaximumCeiling:
+- [x] 3.3 Walk the fractional paste at the ceiling on CustomMaximumCeiling:
       seeded `500`, paste `9999999999.99`, the draft reads `9999999999`.
       `shared-ui-auction-listing-US1-TC26-1`
 

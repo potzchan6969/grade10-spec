@@ -19,7 +19,7 @@ highest accepted bid at the close wins it.
 | Extension duration | **30 minutes** by default, set per listing; **0** turns extended bidding off |
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
 | Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
-| Ceiling | 🚧 **USD 10,000,000**, **HKD 80,000,000**, **JPY 5,000,000,000**, the same on every lot |
+| Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 5,000,000,000**, the same on every lot |
 | Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
@@ -170,7 +170,7 @@ Blocks](/p/shared/ui/auction-listing).
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** of the winning bid, the rate only, always on; the amount first appears on the invoice |
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
-| Custom maximum | 🚧 Whole major units only, up to **9,999,999,999**; a typed decimal mark is refused |
+| Custom maximum | Whole major units only, up to **9,999,999,999**; a typed decimal mark is refused |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 
 :::flow{title="From sign-in to a standing bid"}
