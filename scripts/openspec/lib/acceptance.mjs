@@ -37,7 +37,8 @@ import { git, textAt } from "../store-main.mjs";
 import { foldChecks } from "./fold-checks.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
-const TRACE_MARKER_LINE = /^[ \t]*<!--\s*trace:(?:scenario|case)\b[^\n]*-->[ \t]*\n?/gm;
+const TRACE_MARKER_LINE =
+  /^[ \t]*<!--\s*trace:(?:scenario|case)\b[^\n]*-->[ \t]*\n?/gm;
 
 /** Trace markers are stamped onto durable specs by migrations after a
  * snapshot was taken; a drift check compares wording, so it ignores them. */
