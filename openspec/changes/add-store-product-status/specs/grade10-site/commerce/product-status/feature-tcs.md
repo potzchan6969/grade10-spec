@@ -1,7 +1,7 @@
 # grade10-site/commerce/product-status Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-24, tcs-rules r3.0
+**Status:** in-review
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-commerce-product-status-US1: Collector sees whether a card can be bought
 
@@ -11,7 +11,7 @@ bought, and the product page and cart to report the same internal sale item,
 **so that** the availability I see before adding matches the item in my cart.
 
 <!-- trace:case id=g10.commerce-product-status.TC-c3l rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC1-2: Offered item keeps its availability across browse and cart
+### grade10-site-commerce-product-status-US1-TC1-2: Item for sale reads available on tile, page and cart line
 
 **Classification:**
 
@@ -28,25 +28,35 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify offers the product's internal sale item on the store channel.
+* customer(member) is signed in with an empty cart.
+* <product_1> has one variant, for sale, tracked at <count_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_1> | A card on the store's sales channel with one variant |
+| <count_1> | 5 (any count above 0) |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Read the product tile's availability.
-3. Open the product page.
-4. Read the one sellable item's availability.
-5. Add that item to the cart.
-6. Open the cart and read the line's availability.
+2. Type <product_1>'s name in the listing search and press Enter.
+3. Read <product_1>'s tile.
+4. Click the tile's photo.
+5. Read the purchase area.
+6. Click the add control in the purchase area.
+7. Open the cart drawer.
+8. Read <product_1>'s line.
 
 **Expected Results:**
 
-* The tile reads available.
-* The product page reads the internal sale item as available.
-* The cart line reads the same sale item as available.
+* Step 3: the tile reads available and its add control can be pressed.
+* Step 5: the page shows the item's price and reads available.
+* Step 8: the line is <product_1>, quantity 1, with no sold-out, adjusted or unchecked marking.
 
 <!-- trace:case id=g10.commerce-product-status.TC-wjo rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC2-2: Item Shopify no longer offers is out of stock and keeps its price
+### grade10-site-commerce-product-status-US1-TC2-2: Single-item card the shop stops selling reads sold out, still priced
 
 **Classification:**
 
@@ -63,24 +73,34 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify does not offer the product's internal sale item on the store channel.
+* <product_2> has one variant, priced <price_2>.
+* <product_2> is sold out by the recipe "Sell a card out".
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_2> | A card on the store's sales channel with one variant |
+| <price_2> | Its price, for example HKD 88.00 (8800 minor units) |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Read the product tile's availability.
-3. Open the product page.
-4. Read the internal sale item's price and availability.
-5. Look for an add control for that item.
+2. Type <product_2>'s name in the listing search and press Enter.
+3. Read <product_2>'s tile.
+4. Navigate to <product_2 url>.
+5. Read the purchase area.
 
 **Expected Results:**
 
-* The tile reads out of stock.
-* The product page keeps the item's price and reads it as out of stock.
-* No usable add control is offered for the item.
+* Step 3: the tile reads sold out, shows <price_2>, and offers no add control that can be pressed.
+* Step 5: the page shows <price_2> and reads sold out.
+* Step 5: nothing that adds <product_2> can be pressed.
 
 <!-- trace:case id=g10.commerce-product-status.TC-01e rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC3-1: Shop still offering at zero inventory stays available
+### grade10-site-commerce-product-status-US1-TC3-1: Item the shop still sells at no count reads available
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -97,27 +117,38 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify offers the item for sale with an inventory count of zero.
+* <product_3> has one variant, for sale, set up in the staging shop's admin as the row says.
+* 60 seconds have passed since the setup was saved.
+
+**Test data:**
+
+| Row | <product_3>'s variant in the staging shop's admin |
+| --- | --- |
+| Sells past zero | Inventory tracked at 0, Continue selling when out of stock on |
+| Not counted | Track quantity off |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Read the product tile's availability.
-3. Open the product page and read the item's availability.
+2. Type <product_3>'s name in the listing search and press Enter.
+3. Read <product_3>'s tile.
+4. Navigate to <product_3 url>.
+5. Read the purchase area.
 
 **Expected Results:**
 
-* The tile and product page read the item as available.
-* The item has the same available treatment as one with positive inventory.
+* Step 3: the tile reads available and its add control can be pressed.
+* Step 5: the page reads available and its add control can be pressed.
+* Neither surface marks the item differently from an item tracked above 0.
 
-<!-- trace:case id=g10.commerce-product-status.TC-gpj rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-gpj rev=1 covers=none -->
 ### grade10-site-commerce-product-status-US1-TC4-1: Offered item with no inventory count stays available
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -142,7 +173,9 @@ bought, and the product page and cart to report the same internal sale item,
 * Neither surface derives an out-of-stock answer from the missing count.
 
 <!-- trace:case id=g10.commerce-product-status.TC-0ay rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC5-1: Browse surfaces show no count or scarcity cue
+### grade10-site-commerce-product-status-US1-TC5-1: Browse surfaces say nothing about how many remain
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -159,22 +192,32 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify offers one item with inventory 1 and another with inventory 400.
+* <product_4> has one variant, for sale, tracked at the row's count.
+* 60 seconds have passed since the count was saved.
+
+**Test data:**
+
+| Row | Count |
+| --- | --- |
+| Last one | 1 |
+| Well stocked | 400 |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Compare the two product tiles.
-3. Open each product page and read its one sellable item's availability.
+2. Type <product_4>'s name in the listing search and press Enter.
+3. Read <product_4>'s tile.
+4. Navigate to <product_4 url>.
+5. Read the purchase area.
 
 **Expected Results:**
 
-* Both tiles show availability without a remaining count or scarcity cue.
-* Both product pages show only their item's price and availability.
-* The two inventory counts are not shown as product labels.
+* Step 3: the tile reads available, with no remaining count and no scarcity cue.
+* Step 5: the page shows the item's price and reads available.
+* Step 5: no remaining count and no scarcity cue.
 
 <!-- trace:case id=g10.commerce-product-status.TC-vpr rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC6-2: Listing rolls up variants while the page keeps one item
+### grade10-site-commerce-product-status-US1-TC6-2: Tile with one variant for sale reads available; page takes that variant
 
 **Classification:**
 
@@ -191,22 +234,33 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify offers one variant of a product and does not offer another.
+* <product_6>'s first listed variant is sold out by the recipe "Sell a card out", applied to that variant only.
+* <product_6>'s second listed variant is for sale.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_6> | A card with two variants, priced differently |
+| <price_6a> | The first listed variant's price, for example HKD 50.00 (5000 minor units) |
+| <price_6b> | The second listed variant's price, for example HKD 70.00 (7000 minor units) |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Read the product tile's availability.
-3. Open the product page and inspect its sellable item.
+2. Type <product_6>'s name in the listing search and press Enter.
+3. Read <product_6>'s tile.
+4. Navigate to <product_6 url>.
+5. Read the purchase area.
 
 **Expected Results:**
 
-* The tile reads available because at least one variant is offered.
-* The page shows availability only for its one internal sale item.
-* The page offers no shopper-facing variant choice or variant label.
+* Step 3: the tile reads available, at <price_6b>.
+* Step 5: the page shows <price_6b>, not <price_6a>, and reads available.
+* Step 5: no size, option or variant choice, and no variant name.
 
 <!-- trace:case id=g10.commerce-product-status.TC-f39 rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC7-2: Tile is out of stock only when every variant is unavailable
+### grade10-site-commerce-product-status-US1-TC7-2: Tile reads sold out only when every variant is; page prices the first listed
 
 **Classification:**
 
@@ -223,24 +277,32 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify does not offer any variant of the product for sale.
+* Every variant of <product_7> is sold out by the recipe "Sell a card out".
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_7> | A card with two variants, priced differently |
+| <price_7a> | The first listed variant's price, for example HKD 50.00 (5000 minor units) |
+| <price_7b> | The second listed variant's price, for example HKD 70.00 (7000 minor units) |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Read the product tile's availability.
-3. Open the product page and read the internal sale item's price and availability.
-4. Look for an add control.
+2. Type <product_7>'s name in the listing search and press Enter.
+3. Read <product_7>'s tile.
+4. Navigate to <product_7 url>.
+5. Read the purchase area.
 
 **Expected Results:**
 
-* The tile reads out of stock.
-* The page keeps the internal item's price and reads it as out of stock.
-* No usable add control is offered.
-* No shopper-facing variant choice or label appears.
+* Step 3: the tile reads sold out, shows <price_7a>, and offers no add control that can be pressed.
+* Step 5: the page shows <price_7a>, not <price_7b>, and reads sold out.
+* Step 5: no variant choice or variant name, and nothing that adds <product_7> can be pressed.
 
 <!-- trace:case id=g10.commerce-product-status.TC-gsh rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
-### grade10-site-commerce-product-status-US1-TC8-2: Cart reports the same item after Shopify stops offering it
+### grade10-site-commerce-product-status-US1-TC8-2: Item sold out after it was added reads sold out everywhere
 
 **Classification:**
 
@@ -257,19 +319,31 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* The cart holds the product's internal sale item.
-* Shopify no longer offers that item, and the listing shows the current catalogue answer.
+* customer(member) is signed in.
+* The cart holds 1 of <product_8>, added while the shop sold it.
+* Since then, <product_8> is sold out by the recipe "Sell a card out".
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_8> | A card with one variant, priced <price_8> |
 
 **Steps:**
 
-1. Navigate to <grade10 browse listing url> and read the tile's availability.
-2. Open the product page and read the item's availability.
-3. Open the cart and read the line's availability.
+1. Navigate to <grade10 browse listing url>.
+2. Type <product_8>'s name in the listing search and press Enter.
+3. Read <product_8>'s tile.
+4. Navigate to <product_8 url>.
+5. Read the purchase area.
+6. Open the cart drawer.
+7. Read <product_8>'s line.
 
 **Expected Results:**
 
-* The tile, page and cart line read the same internal item as out of stock.
-* The product page keeps the item's price and offers no usable add control.
+* Step 3: the tile reads sold out.
+* Step 5: the page shows <price_8> and reads sold out, with nothing to press.
+* Step 7: the line is still in the cart, marked sold out.
 
 <!-- trace:case id=g10.commerce-product-status.TC-rza rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC9-2: Unpublished product is absent and its address refuses
@@ -289,18 +363,71 @@ bought, and the product page and cart to report the same internal sale item,
 
 **Pre-conditions:**
 
-* Shopify has not published the product to the store's sales channel.
+* <product_9> is removed from the store's sales channel in the staging shop's admin.
+* 5 minutes have passed since the removal was saved.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_9> | A card that was on the store's sales channel, with a name no other card shares |
 
 **Steps:**
 
 1. Navigate to <grade10 browse listing url>.
-2. Look for the product tile.
-3. Navigate to <the unpublished product address>.
+2. Type <product_9>'s name in the listing search and press Enter.
+3. Read the grid.
+4. Navigate to <product_9 url>.
 
 **Expected Results:**
 
-* No tile for the unpublished product appears.
-* Its address answers 404 with the site's not-found page.
+* Step 3: no tile for <product_9>, sold out or otherwise.
+* Step 4 answers 404 with the site's not-found page.
+
+<!-- trace:case id=g10.commerce-product-status.TC-vrz rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+### grade10-site-commerce-product-status-US1-TC10-1: Listing and page add the same item of a several-variant card
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-commerce-product-status-US-01
+
+**Pre-conditions:**
+
+* customer(member) is signed in with an empty cart.
+* <product_10>'s first listed variant is sold out by the recipe "Sell a card out", applied to that variant only.
+* <product_10>'s second and third listed variants are for sale.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_10> | A card with three variants, priced differently |
+| <price_10b> | The second listed variant's price, for example HKD 70.00 (7000 minor units) |
+| <price_10c> | The third listed variant's price, for example HKD 90.00 (9000 minor units) |
+
+**Steps:**
+
+1. Navigate to <grade10 browse listing url>.
+2. Type <product_10>'s name in the listing search and press Enter.
+3. Click the add control on <product_10>'s tile.
+4. Navigate to <product_10 url>.
+5. Click the add control in the purchase area.
+6. Open the cart drawer.
+7. Read the lines.
+
+**Expected Results:**
+
+* Step 7: one line for <product_10>, quantity 2, at <price_10b>, with no sold-out, adjusted or unchecked marking.
+* Step 7: no line at <price_10c>.
 
 ---
 
@@ -312,8 +439,8 @@ for, and how much,
 **so that** a request the shop cannot meet is a stated answer I can act on
 rather than a refusal at checkout.
 
-<!-- trace:case id=g10.commerce-product-status.TC-kxe rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
-### grade10-site-commerce-product-status-US2-TC1-2: Request at a positive count is fillable
+<!-- trace:case id=g10.commerce-product-status.TC-kxe rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
+### grade10-site-commerce-product-status-US2-TC1-2: Request at or below the shop's count is filled whole
 
 Runs once per row of **Test data**.
 
@@ -332,28 +459,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Shopify offers the product's internal sale item with the count in the row.
+* customer(member) is signed in with an empty cart.
+* <product_11> has one variant, for sale, tracked at the row's count, not sold when out of stock.
 
 **Test data:**
 
-| Surface | Count | Requested quantity | Answer |
-| --- | ---: | ---: | --- |
-| Listing | 1 | 1 | Fillable 1 |
-| Product page | 2 | 2 | Fillable 2 |
+| Surface | Count | Requested | Line reads |
+| --- | --- | --- | --- |
+| <product_11>'s tile on <grade10 browse listing url>, found by searching its name | 3 | 3 | 3 |
+| <product_11 url> | 3 | 2 | 2 |
 
 **Steps:**
 
-1. Open the surface in the row.
-2. Request the quantity in the row and add the item.
-3. Open the cart and read the line.
+1. Navigate to the row's surface.
+2. Set the add control's quantity to the row's requested quantity.
+3. Click the add control.
+4. Open the cart drawer.
+5. Read <product_11>'s line.
 
 **Expected Results:**
 
-* The cart reports the requested quantity as fillable.
-* The line is not marked adjusted or out of stock.
+* Step 2 holds the requested quantity.
+* Step 5: the line reads the row's quantity, with no adjusted or sold-out marking.
 
-<!-- trace:case id=g10.commerce-product-status.TC-huo rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
-### grade10-site-commerce-product-status-US2-TC2-2: Request above a positive count is fillable in part
+<!-- trace:case id=g10.commerce-product-status.TC-huo rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
+### grade10-site-commerce-product-status-US2-TC2-2: Request above the shop's count is filled in part, naming how many
 
 Runs once per row of **Test data**.
 
@@ -372,29 +502,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Shopify offers the product's internal sale item with the count in the row.
+* customer(member) is signed in with an empty cart.
+* <product_12> has one variant, for sale, tracked at the row's count, not sold when out of stock.
 
 **Test data:**
 
-| Surface | Count | Requested quantity | Answer |
-| --- | ---: | ---: | --- |
-| Listing | 1 | 2 | Fillable in part: 1 |
-| Product page | 1 | 2 | Fillable in part: 1 |
+| Surface | Count | Requested | Line reads |
+| --- | --- | --- | --- |
+| <product_12>'s tile on <grade10 browse listing url>, found by searching its name | 2 | 3 | 2 |
+| <product_12 url> | 2 | 5 | 2 |
 
 **Steps:**
 
-1. Open the surface in the row.
-2. Request the quantity in the row and add the item.
-3. Open the cart and read the line.
+1. Navigate to the row's surface.
+2. Set the add control's quantity to the row's requested quantity.
+3. Click the add control.
+4. Open the cart drawer.
+5. Read <product_12>'s line.
 
 **Expected Results:**
 
-* The cart names the requested quantity as fillable in part.
-* The answer names the count Shopify can fill.
-* The browse control did not cap the requested quantity.
+* Step 2 holds the requested quantity, with no ceiling and no remaining count shown.
+* Step 5: the line reads the row's quantity, marked adjusted.
+* Step 5: the line says the shop can fill only that many.
 
-<!-- trace:case id=g10.commerce-product-status.TC-m97 rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
-### grade10-site-commerce-product-status-US2-TC3-2: Request for an unavailable item is not fillable
+<!-- trace:case id=g10.commerce-product-status.TC-m97 rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
+### grade10-site-commerce-product-status-US2-TC3-2: Request for an item the shop stopped selling is not filled
 
 **Classification:**
 
@@ -411,21 +544,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The cart holds the product's internal sale item.
-* Shopify no longer offers the item for sale.
+* customer(member) is signed in.
+* The cart holds 2 of <product_13>, added while the shop sold it.
+* Since then, <product_13> is sold out by the recipe "Sell a card out".
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_13> | A card with one variant |
 
 **Steps:**
 
-1. Open the cart.
-2. Read the line's answer for the requested quantity.
+1. Navigate to <grade10 store url>.
+2. Open the cart drawer.
+3. Read <product_13>'s line.
 
 **Expected Results:**
 
-* The line is not fillable.
-* No positive fill quantity is offered.
+* Step 3: the line is marked sold out, not adjusted.
+* Step 3: the line offers no quantity as one the shop can fill.
 
-<!-- trace:case id=g10.commerce-product-status.TC-oia rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
-### grade10-site-commerce-product-status-US2-TC4-2: Zero or missing count does not bound an offered item
+<!-- trace:case id=g10.commerce-product-status.TC-oia rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
+### grade10-site-commerce-product-status-US2-TC4-2: No count, or a count of 0 the shop sells past, bounds no request
 
 Runs once per row of **Test data**.
 
@@ -444,27 +585,106 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Shopify offers the product's internal sale item.
+* customer(member) is signed in with an empty cart.
+* <product_14> has one variant, for sale, set up in the staging shop's admin as the row says.
+* 60 seconds have passed since the setup was saved.
 
 **Test data:**
 
-| Shopify count | Requested quantity | Answer |
-| --- | ---: | --- |
-| 0 | 5 | Fillable 5 |
-| No count exposed | 5 | Fillable 5 |
+| Row | <product_14>'s variant in the staging shop's admin | Requested | Line reads |
+| --- | --- | --- | --- |
+| Sells past zero | Inventory tracked at 0, Continue selling when out of stock on | 5 | 5 |
+| Not counted | Track quantity off | 5 | 5 |
 
 **Steps:**
 
-1. Open the product page.
-2. Request the quantity in the row and add the item.
-3. Open the cart and read the line.
+1. Navigate to <product_14 url>.
+2. Set the add control's quantity to 5.
+3. Click the add control.
+4. Open the cart drawer.
+5. Read <product_14>'s line.
 
 **Expected Results:**
 
-* The cart reports all 5 as fillable.
-* Neither a zero count nor a missing count limits the request.
+* Step 5: the line reads 5, with no adjusted or sold-out marking.
+
+## Settled
+
+- The front door's merchandised row reads a card's sold-out status as the listing tile does and offers no add, so the one-item add does not arise there.
+- A listing tile shows the price of the card's one item: the first variant for sale, or the first listed when none is.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the rebase. Read
+the anchors, these cases, the Dev scenarios at their current revisions,
+`tech-design.md`, `ui-design.md`, `tasks.md`, `decisions.md`, the Product
+Status, Product Listing, Product Details and Cart Validation pages and the
+Grade10 tile price mapper. Every live case folds against SC-12, SC-13 and
+SC-14 at rev 2, and no scenario is uncovered or contradicted. US1-TC10-1 now
+asserts the one line carries no marking, as SC-14 says it reads available.
+Nothing new was raised.
+
+**Run:** Update on 2026-10-06, from the second acceptance review, after the
+change was rebased on main. Each case keeps the `trace:case` id main or the
+durable suite gave its number, its `rev` follows its heading, and its
+`covers` names every scenario serving its journeys; a deprecated case covers
+none. US1-TC10 takes a new id. SC-12, SC-13 and SC-14 moved to rev 2 for the tile's
+price, its sold-out status and the listing add. QA2 reruns on this suite.
+
+**Run:** QA2 on 2026-10-06, in a fresh context. Read the anchors, these cases,
+the Dev scenarios, `tech-design.md`, `ui-design.md`, `tasks.md`,
+`decisions.md`, the Product Status, Product Listing, Product Details and Cart
+Validation pages, the store's home and checkout specs, and the Grade10 source
+the tech design cites. Every live case folds. QA1's two questions on this
+capability land as Q10 and Q11; Q11 adds the tile's price to the one-item rule
+and its scenario. Cases that read a cart line after a browse add now open the
+cart drawer, since no rule here says an add opens it.
+
+| Case | Disposition | Scenarios |
+| --- | --- | --- |
+| `grade10-site-commerce-product-status-US1-TC1-2` | Folded; step 7 opens the cart drawer | SC-01, SC-14 |
+| `grade10-site-commerce-product-status-US1-TC2-2` | Folded | SC-02, SC-13, SC-15 |
+| `grade10-site-commerce-product-status-US1-TC3-1` | Folded | SC-03, SC-04 |
+| `grade10-site-commerce-product-status-US1-TC4-1` | Deprecated: the Not counted row of US1-TC3-1 | SC-04 |
+| `grade10-site-commerce-product-status-US1-TC5-1` | Folded | SC-10, SC-11 |
+| `grade10-site-commerce-product-status-US1-TC6-2` | Folded; step 3 asserts the tile's price (Q11) | SC-12 |
+| `grade10-site-commerce-product-status-US1-TC7-2` | Folded; step 3 asserts the tile keeps the first listed price | SC-13, SC-15 |
+| `grade10-site-commerce-product-status-US1-TC8-2` | Folded | SC-02, SC-15; the cart line is `grade10-site/store/cart-validation`'s out-of-stock rule |
+| `grade10-site-commerce-product-status-US1-TC9-2` | Folded | SC-16 |
+| `grade10-site-commerce-product-status-US1-TC10-1` | Folded; step 6 opens the cart drawer | SC-14 |
+| `grade10-site-commerce-product-status-US2-TC1-2` | Folded; step 4 opens the cart drawer | SC-05, SC-06 |
+| `grade10-site-commerce-product-status-US2-TC2-2` | Folded; step 4 opens the cart drawer | SC-07, SC-17 |
+| `grade10-site-commerce-product-status-US2-TC3-2` | Folded | SC-08 |
+| `grade10-site-commerce-product-status-US2-TC4-2` | Folded; step 4 opens the cart drawer | SC-09 |
+
+| Scenario | Cases |
+| --- | --- |
+| SC-01 | US1-TC1 |
+| SC-02 | US1-TC2, US1-TC8 |
+| SC-03, SC-04 | US1-TC3 |
+| SC-05, SC-06 | US2-TC1 |
+| SC-07 | US2-TC2 |
+| SC-08 | US2-TC3 |
+| SC-09 | US2-TC4 |
+| SC-10, SC-11 | US1-TC5 |
+| SC-12 | US1-TC6 |
+| SC-13 | US1-TC2, US1-TC7 |
+| SC-14 | US1-TC1, US1-TC10 |
+| SC-15 | US1-TC2, US1-TC7, US1-TC8 |
+| SC-16 | US1-TC9 |
+| SC-17 | US2-TC2 |
+| Uncovered | none |
+| Contradicted | none |
+
+| Raised | Disposition |
+| --- | --- |
+| Does the tile rollup and the one-item rule hold on the front door's tiles? | Q10, settled from `grade10-site/store/home`: its row reads a card's status as the listing does and never sells; the Store domain suite's US2-TC2 and US3-TC1 walk it |
+| Which price does a tile show for a card priced differently by variant? | Q11, folded: the one item's price, as Grade10 already shows; the rule and SC-12 carry it, and US1-TC6 and US1-TC7 assert it |
+
+**Run:** Update on 2026-10-06, from the acceptance review. Moved the browse add
+that keeps a quantity above the shop's count from the listing suite, as rows of
+US2-TC1 and US2-TC2 on the tile and the page. Renamed US1-TC7 and US2-TC3 so
+`unavailable` is kept for a withdrawn cart line.
 
 **Run:** Implementation update on 2026-09-25. Kept the existing 13 case IDs,
 draft statuses and review history. Confirmed the reference implementation

@@ -1,66 +1,58 @@
 # grade10-site/store Cross-Feature E2E Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Status:** in-review
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
-## grade10-site-store-e2e-US1: Collector enters a collection and opens a product
+## grade10-site-store-e2e-US2: Collector adds a product item from its page
 
 **As a** collector,
-**I want** to move from a collection on the Store front door to a product's
-own page,
-**so that** I can inspect the card I chose in the catalogue.
+**I want** to open a card from the Store front door and add its one sellable
+item,
+**so that** I can buy without returning to the listing.
 
-<!-- trace:case id=g10.store-domain.TC-k4u rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4,g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37,g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
-### grade10-site-store-e2e-US1-TC1-1: Collection tile leads to its product page
+<!-- trace:case id=g10.store-domain.TC-n5e rev=1 covers=none -->
+### grade10-site-store-e2e-US2-TC1-1: Merchandised card adds the chosen variant
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-home-US-02, grade10-site-store-product-listing-US-02, grade10-site-store-product-page-US-02
+* **Trace:** grade10-site-store-home-US-03, grade10-site-store-product-page-US-03
 
 **Pre-conditions:**
 
-* <collection> is listed on the Store front door and holds <product>.
-* <product> is listed in <collection>.
+* <product> is in the merchandised row for the first collection the catalogue lists.
+* <product> has more than one variant for sale, including <variant>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <collection> | A catalogue collection with at least one product |
-| <product> | A product listed in <collection> |
+| <product> | A product in the merchandised row with more than one variant for sale |
+| <variant> | An available variant different from the variant selected on opening |
 
 **Steps:**
 
 1. Navigate to <grade10 store url>.
-2. Open the tile for <collection>.
-3. Check the collection shown as the listing narrowing.
-4. Open the card for <product>.
+2. Open the card for <product> in the merchandised row.
+3. Choose <variant> on the product page.
+4. Add the chosen variant to the cart.
 
 **Expected Results:**
 
-* The Store front door renders with <collection> as a collection tile.
-* The browse listing shows <collection> as the narrowing in force.
-* Step 4 opens <product>'s own product page.
+* The merchandised row offers no way into the cart.
+* Step 2 opens <product>'s own product page.
+* The cart holds <variant>, not the variant selected on opening, and the page remains at <product>'s address.
 
----
-
-## grade10-site-store-e2e-US2: Collector adds a product item from its page
-
-**As a** collector,
-**I want** to open a card from the Store front door and add its sellable item,
-**so that** I can buy it without choosing a size, option, or variant.
-
-<!-- trace:case id=g10.store-domain.TC-u3b rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5,g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
-### grade10-site-store-e2e-US2-TC2-1: Merchandised card adds its one sellable item
+<!-- trace:case id=g10.store-domain.TC-u3b rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-product-page.SC-fpg,g10.store-product-page.SC-b01,g10.store-product-page.SC-y8c,g10.store-product-page.SC-o6j,g10.store-product-page.SC-gvt,g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-c5i,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-tuc,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2,g10.store-cart-validation.SC-q4f -->
+### grade10-site-store-e2e-US2-TC2-1: Merchandised card adds its first item for sale
 
 **Classification:**
 
@@ -77,39 +69,45 @@ own page,
 
 **Pre-conditions:**
 
-* customer(member) is on the Store front door with <product> in the merchandised row.
-* <product> has one unavailable variant followed by one available variant.
+* customer(member) is signed in with an empty cart and is on <grade10 store url>.
+* <product> is in the merchandised row.
+* <product>'s first listed variant is sold out by the recipe "Sell a card out", applied to that variant only.
+* <product>'s second listed variant is for sale at <price_b>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product> | A merchandised product with an unavailable variant followed by an available one |
+| <product> | A merchandised card with two variants, the first sold out and the second for sale |
+| <price_b> | The second variant's price, different from the first's, for example HKD 123.00 (12300 minor units) |
 
 **Steps:**
 
-1. Check <product>'s tile status.
-2. Open <product>'s page.
-3. Add the item shown in the purchase area.
-4. Open the cart.
+1. Read <product>'s tile in the merchandised row.
+2. Click <product>'s tile.
+3. Read the purchase area.
+4. Click the add control in the purchase area.
+5. Open the cart drawer.
+6. Read <product>'s line.
 
 **Expected Results:**
 
-* The tile reads available because one item can be bought.
-* The page offers no variant choice and shows the price and availability of its sellable item.
-* Step 3 adds that same item and the cart reads it as available.
+* Step 1: the tile reads available.
+* Step 2 opens <product>'s own page.
+* Step 3: one price, <price_b>, and no size, option or variant choice.
+* Step 6: the line is <product> at <price_b>, quantity 1, with no sold-out, adjusted or unchecked marking.
 
 ---
 
 ## grade10-site-store-e2e-US3: Collector checks a sold-out product from the front door
 
 **As a** collector,
-**I want** a sold-out card in the merchandised row to keep its price and status
+**I want** a sold-out card in the merchandised row to remain marked sold out
 when I open it,
 **so that** I can tell an unavailable card from a broken purchase page.
 
-<!-- trace:case id=g10.store-domain.TC-7vw rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-home.SC-00a,g10.store-home.SC-q66,g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
-### grade10-site-store-e2e-US3-TC2-1: Sold-out card keeps one price and no choice
+<!-- trace:case id=g10.store-domain.TC-g62 rev=2 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-home.SC-00a,g10.store-home.SC-q66,g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
+### grade10-site-store-e2e-US3-TC1-2: Sold-out card keeps its status on the product page
 
 **Classification:**
 
@@ -126,37 +124,41 @@ when I open it,
 
 **Pre-conditions:**
 
-* customer is on the Store front door with <product> in the merchandised row.
-* Every variant listed for <product> is unavailable for sale.
+* customer is on <grade10 store url>.
+* <product> is in the merchandised row.
+* Every variant of <product> is sold out by the recipe "Sell a card out".
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product> | A merchandised product with every variant unavailable for sale |
+| <product> | A merchandised card with two variants, both sold out |
+| <price_a> | The first listed variant's price, different from the second's |
 
 **Steps:**
 
-1. Check <product>'s tile status.
-2. Open <product>'s page.
-3. Read its purchase area.
+1. Read <product>'s tile in the merchandised row.
+2. Click <product>'s tile.
+3. Read the purchase area.
 
 **Expected Results:**
 
-* The tile reads out of stock.
-* The page keeps the first listed item's price and says it is unavailable.
-* The page offers no variant choice or usable add control.
+* Step 1: the tile reads sold out and offers no way into the cart.
+* Step 2 opens <product>'s own page.
+* Step 3: <price_a> is shown and the page reads sold out.
+* Step 3: no variant choice, and nothing that adds <product> can be pressed.
 
 ---
 
-## grade10-site-store-e2e-US4: Member pays at the till with points and a coupon together
+## grade10-site-store-e2e-US7: Collector repairs a line that moved at checkout and pays
 
-**As a** member,
-**I want** staff to take my points and my product coupon off one sale,
-**so that** both settle once, when I pay.
+**As a** collector,
+**I want** a line that moved as I checked out named in the cart, and the
+repaired cart sent on to Shopify's payment page,
+**so that** I pay only for a cart the shop can fill.
 
-<!-- trace:case id=g10.store-domain.TC-gdu rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
-### grade10-site-store-e2e-US4-TC1-1: Points and a product coupon settle together on one till sale
+<!-- trace:case id=g10.store-domain.TC-hkl rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18 -->
+### grade10-site-store-e2e-US7-TC1-1: Line sold out at checkout is named, removed, then paid
 
 **Classification:**
 
@@ -165,129 +167,64 @@ when I open it,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-store-membership-US-02, grade10-site-store-discounts-US-04
-
-**Pre-conditions:**
-
-* No automatic discount is active at the shop.
-* admin(shop staff) has a till session open for customer(member holding <product coupon_1> and at least <points> points), on a sale holding <line_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <line_1> | One HK$780.00 product |
-| <product coupon_1> | A live product coupon that takes HK$50.00 off <line_1> |
-| <points> | 100, worth HK$100.00 |
-
-**Steps:**
-
-1. Choose <points> points and <product coupon_1> in the member's panel.
-2. Apply them to the sale.
-3. Tender the sale.
-4. Read the paid order at the shop.
-
-**Expected Results:**
-
-* Step 2 puts both on the sale, neither refused for the other.
-* The paid order shows Points taking HK$100.00 and <product coupon_1>'s code taking HK$50.00.
-* The balance drops by exactly <points>, and <product coupon_1> reads spent.
-
----
-
-## grade10-site-store-e2e-US5: Member identified from a wallet pass spends at the till
-
-**As a** member,
-**I want** staff to scan the pass in my phone wallet and take my spend from the right place,
-**so that** I am served from my lock screen and a code anybody could photograph never moves my points.
-
-<!-- trace:case id=g10.store-domain.TC-u39 rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv,g10.store-wallet-member-card.SC-nmv,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
-### grade10-site-store-e2e-US5-TC1-1: Google Wallet pass opens a session that spends points
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-store-wallet-member-card-US-06, grade10-site-store-membership-US-02
-
-**Pre-conditions:**
-
-* No automatic discount is active at the shop.
-* customer(member with a live Google Wallet pass and at least <points> points) is at the counter.
-* admin(shop staff) has a sale holding <line_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <line_1> | One HK$780.00 product |
-| <points> | 100, worth HK$100.00 |
-
-**Steps:**
-
-1. Scan the member's Google Wallet pass.
-2. Apply <points> points from the member's panel.
-3. Tender the sale.
-
-**Expected Results:**
-
-* Step 1 opens a session for the member, as a scanned member card does.
-* Step 2 applies the points.
-* The member's balance drops once, by <points>, when the sale is paid.
-
-## Reconciliation
-
-**Run:** 2026-09-24 · updated the Store's merchandised product add and sold-out paths to preserve the internal sale identity without a shopper-facing variant choice; unchanged Store paths and cases remain as they were.
-
-<!-- trace:case id=g10.store-domain.TC-n78 rev=1 covers=g10.store-wallet-member-card.SC-g3f,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
-### grade10-site-store-e2e-US5-TC2-1: Apple Wallet pass refuses the spend and the card pays it
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-store-wallet-member-card-US-08, grade10-site-store-membership-US-02
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-02, grade10-site-store-checkout-US-02, grade10-site-store-checkout-US-01
 
 **Pre-conditions:**
 
-* No automatic discount is active at the shop.
-* customer(member with a live Apple Wallet pass and at least <points> points) is at the counter, member card open on the site.
-* admin(shop staff) has a sale holding <line_1> and a session opened from the member's Apple Wallet pass.
+* customer(member) is signed in and is on <grade10 store url>.
+* The cart holds 1 of <product_a> and 1 of <product_b>, both for sale.
+* The cart's goods are under HKD 120,000.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <line_1> | One HK$780.00 product |
-| <points> | 100, worth HK$100.00 |
+| <product_a> | A card for sale, at <price_a> |
+| <product_b> | Another card for sale |
 
 **Steps:**
 
-1. Apply <points> points from the member's panel.
-2. Scan the member card on the member's phone.
-3. Apply <points> points from the member's panel.
-4. Tender the sale.
+1. Open the cart drawer.
+2. In the staging shop's admin, set every variant of <product_b> to inventory 0, not sold when out of stock.
+3. In the still-open drawer, click Proceed to Checkout.
+4. Read the drawer.
+5. Click the remove control on <product_b>'s line.
+6. Click Proceed to Checkout.
+7. Read Shopify's checkout page.
 
 **Expected Results:**
 
-* Step 1 is refused, not hidden.
-* Step 3 applies the points.
-* The member's balance drops once, by <points>, when the sale is paid.
+* Step 1: both lines read current, with no marking.
+* Step 3 leaves the browser on Grade10.
+* Step 4: the drawer names <product_b> as sold out.
+* Step 6 opens Shopify's checkout page.
+* Step 7: the only line is <product_a> at <price_a>.
+
+## Reconciliation
+
+**Run:** Update on 2026-10-06, from the second acceptance review, after the
+change was rebased on main. Each case keeps the `trace:case` id main or the
+durable suite gave its number, its `rev` follows its heading, and its
+`covers` names every scenario serving its journeys; a deprecated case covers
+none. US2 takes the heading of the store journey this change modifies. US2-TC2 keeps
+main's id for the one-item add; US3-TC1-2 revises the durable US3-TC1-1 under
+its marker, so main's US3-TC2-1 draft is not carried; US7-TC1 takes a new id.
+QA2 reruns on this suite.
+
+**Run:** QA2 on 2026-10-06. US2-TC2 now opens the cart drawer to read the
+line, since a page add is not said to open it. US7-TC1 is the path both
+`grade10-site/store/cart-validation` and `grade10-site/store/checkout` name for a
+line that moved at checkout (Q15). US3-TC1-2 replaces the durable US3-TC1-1 at
+the fold.
+
+**Run:** Update on 2026-10-06, from the acceptance review. The suite holds only
+the paths this change touches; the fold keeps every other durable path under
+its id. US2-TC1 is deprecated, since the page no longer offers a variant
+choice, and US2-TC2 walks the one-item add in its place. US3-TC1 is revised for
+the one item and the sold-out wording.
+
+**Run:** 2026-09-24 · updated the Store's merchandised product add and sold-out paths to preserve the internal sale identity without a shopper-facing variant choice; unchanged Store paths and cases remain as they were.
