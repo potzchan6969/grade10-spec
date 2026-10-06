@@ -10,7 +10,7 @@
 ## Boundaries
 
 - **No persistent change** - No API, database field, derived-status rule, or stepper animation changes.
-- **Tracking chrome** - Keep the existing carrier link on the tracking number and remove the older carrier-name requirement from the Winner Order contract. Shipped and Delivered letters stay as they are.
+- **Tracking chrome** - Keep the existing carrier link on the tracking number; Order Progress adds no separate carrier name. The carrier-name row in `Records the winner keeps` is not touched here: `define-public-auction-identifiers` owns that requirement and removes the name. Shipped and Delivered letters stay as they are.
 - **No application group** - The store owns the catalogues, preview, fixtures, and story assertions. A consuming application only takes the published submodule update.
 
 ## Verification

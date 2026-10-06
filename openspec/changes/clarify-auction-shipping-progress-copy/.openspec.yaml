@@ -9,3 +9,5 @@ hands:
   dev: "@tangconst"
 decisions_carried: "Q1–Q5 on Post-Bidding Progress stepper, Preparing Shipment naming, current Shipping, and Shipped badge tone"
 design_waived: "its one task group lands in this store: preview, catalogs and fixtures, with no application-repository work beyond a submodule bump"
+awaiting:
+  specs: 2026-10-06, the carrier-name removal from `Records the winner keeps` (its tracker table row) waits for define-public-auction-identifiers to archive; that change owns the requirement

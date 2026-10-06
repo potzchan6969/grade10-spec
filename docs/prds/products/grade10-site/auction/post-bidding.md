@@ -112,6 +112,8 @@ meaning.
   the carrier provides one — an operator records both —
   [Auction Management ·
   Fulfilment](/p/grade10-admin/auction/management#fulfilment)
+- 🚧 **The shipping tracker the winner keeps** — the tracking number and
+  its carrier link; no carrier name anywhere on Winner Order
 - 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
   the winning bid, and offers Contact Us alone; it gives no reason, and a
   suspension stays until an operator reinstates
