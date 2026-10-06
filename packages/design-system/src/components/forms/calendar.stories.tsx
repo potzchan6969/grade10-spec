@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { Calendar } from "./calendar";
 
 const TODAY = new Date(2026, 9, 6);
@@ -82,9 +82,12 @@ export const Default: Story = {
     const monthList = await within(canvasElement.ownerDocument.body).findByRole(
       "listbox",
     );
-    expect(
-      within(monthList).getByRole("option", { name: "October" }),
-    ).toBeVisible();
+    // The popup fades in over 100ms, and it is not visible until it has.
+    await waitFor(() => {
+      expect(
+        within(monthList).getByRole("option", { name: "October" }),
+      ).toBeVisible();
+    });
     expect(within(monthList).queryByRole("option", { name: "Oct" })).toBeNull();
     await userEvent.keyboard("{Escape}");
     expect(
