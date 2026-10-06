@@ -9,7 +9,7 @@ line means. The owner chose "Deduction from Points".
 
 The measure: **every points order promised after the switch is paid with a
 discount titled "Deduction from Points"**, and till promises that expire
-unpaid do not rise during the rollout.
+unpaid, per week, are no higher after the title changes than before.
 
 ## What Changes
 
@@ -51,3 +51,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 - [Paying with Points · Rules](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md#rules)
 - [Shopify Integration · Two Channels, One Pipeline](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#two-channels-one-pipeline)
+- [Shopify Integration · Online Checkout](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#online-checkout)
+- [Store Discounts · The Sale, Step by Step](../../../docs/prds/products/grade10-site/store/discounts.md#the-sale-step-by-step)
+- [Store Discounts · Undo](../../../docs/prds/products/grade10-site/store/discounts.md#undo)
+- [Order Details · Order Summary](../../../docs/prds/products/grade10-site/store/order-detail.md#order-summary)
