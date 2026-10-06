@@ -24,9 +24,9 @@ does too, the same way the photo does, and shows it by an underline on hover
 and on focus; a sold-out tile’s name stays inert where the tile sells, and a
 name that does not open is plain text.
 
-🚧 **One keyboard stop** — the name is the tile's one stop for the keyboard
-and for a screen reader, which announces each product once; the photo opens
-on a pointer press only.
+🚧 **One stop to open** — the name is the tile's only keyboard stop for
+opening the product and the one control a screen reader announces for it, so
+each product is announced once; the photo opens on a pointer press only.
 
 🚧 **A link** - a tile that opens, given its product's page, is a link to
 it: it can open in a new tab, and its address can be copied -
@@ -134,13 +134,14 @@ The tile reports the quantity change and the application updates the cart.
 
 :::detail{title="Product decisions" for="pm"}
 The surface displays what a consuming application supplies and decides none of
-it. Two things it has always done were missing from the map above it, and are
-recorded here rather than quietly folded into a group that does not mean them.
-A third row records a decision about the tile.
+it. The first two rows place two parts of its map; the rest decide the tile.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Responsive layout | Decided | The list answers the width it is given. It is its own part of the map, as the spec places it, because no other part means it. Not folded into the tile contract. | Product |
 | Load more | Decided | Reaching the end of the catalogue and waiting for the next products are reported like every other change. It is its own part of the map, as the spec places it, because reaching the end is not a choice the shopper makes in the filters or the sort. Not folded into Filters and sort. | Product |
 | Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round. | Product |
+| One stop to open | Decided | The name is the one keyboard stop that opens the product, so 24 tiles cost 24 Tab presses rather than 48 and a screen reader announces each product once. Ruled out: the photo and the name as two stops for one destination. | Product |
+| Sold-out opens where nothing sells | Decided | A surface that draws no cart control carries the collector on to another product, so it has no reason to stop at a card nobody can buy. Ruled out: a sold-out tile inert everywhere, a dead end on that surface. | Product |
+| The underline means it opens | Decided | A name that opens is underlined on hover and on focus, and a name that does not open stays plain, so the underline never promises a press that does nothing. Ruled out: an underline on every name. | Product |
 :::

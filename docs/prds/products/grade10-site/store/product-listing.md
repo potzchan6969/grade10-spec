@@ -7,7 +7,7 @@ reviewed: 2026-09-25
 
 The product listing lets collectors browse the catalogue and open a product.
 
-- **Every product** — a card that opens its Product Details Page
+- **Every product** — a card that opens its Product Details Page unless sold out
 - **One list that lengthens** — reaching the end of the cards adds the next
   ones below them, so the catalogue is read by scrolling; nothing offers a page
   number, a next control or a load-more button, and a new narrowing starts
@@ -69,9 +69,9 @@ The product listing lets collectors browse the catalogue and open a product.
 
 ## Product Tile
 
-🚧 **Name opens the product** — the product name on a listing card opens
-Product Details the same way the photo does; a sold-out card’s name stays
-inert where the tile sells.
+🚧 **Name opens the product** — a listing card's name opens its Product
+Details Page, as the photo does; a sold-out card opens neither, because the
+listing sells.
 
 **Signed-out Add to cart** — opens the sign-in dialog titled
 **Sign In to Add to Cart**; no guest cart; after a successful sign-in the
