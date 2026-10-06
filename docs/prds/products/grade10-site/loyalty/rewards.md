@@ -61,12 +61,12 @@ Stock reads as a yes or no, never a count.
   part paid
 - **Priced when taken** — the cost is copied onto the redemption, so
   repricing the catalog never rewrites what an earlier redemption cost
-- **Nothing is held** — points are spent at the moment of taking, not
-  reserved
-- **What the coupon needs, before the points go** — a coupon is money off
-  somewhere, not money, so the menu states the basket it has to reach and the
-  one channel it is good at where it names only one. A member who reads that
-  after the redemption is holding something no cart of theirs will take
+- **Nothing is held** — points are spent at the moment of taking, not reserved
+- **What the coupon needs, before the points go** — the menu states the
+  basket it has to reach, and its one channel where it names only one, so
+  nobody spends points on a coupon no cart of theirs will take
+- 🚧 **Online only on the menu** — a reward scoped to named products or a
+  catalog filter reads online only, whatever channels it names
 
 :::example{title="Buying from the shop"}
 | Step | Event | Points | Balance |

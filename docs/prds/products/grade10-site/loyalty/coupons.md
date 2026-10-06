@@ -44,10 +44,12 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
-- 🚧 **Refused at the till by its scope** — a coupon scoped to named products
-  or a catalog filter is refused from the member's panel and from their own
-  phone alike, whatever channels it names —
+- **Online only at the till** — the member's panel marks a coupon scoped to
+  named products or a catalog filter online only, whatever channels it names,
+  and staff cannot apply it —
   [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
+- 🚧 **Refused from the member's phone** — the till refuses such a coupon
+  when the member presents it from their own phone, whatever channels it names
 - 🚧 **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)

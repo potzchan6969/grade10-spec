@@ -46,21 +46,29 @@ An operator writes a reward's whole definition in the console's reward form,
 with no call to the admin API. The form offers three choices, each saved as
 one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-types).
 
-- **Money off** — a discount and a scope, saved as a product coupon
-- **Gift with a purchase** — one variant and a minimum spend, saved as a gift
-- 🚧 **Free item** — one variant at 100% off with no maximum discount, saved
+- **Money off** - a discount and a scope, saved as a product coupon
+- **Gift with a purchase** - one variant and a minimum spend, saved as a gift
+- 🚧 **Free item** - one variant at 100% off with no maximum discount, saved
   as the product coupon Money off would save; a stored reward of that shape
   opens, and duplicates, as a Free item
-- **Online only by product or filter** — the form saves such a reward for
-  online alone, one stored for the till as well included —
+- **Online only by product or filter** - the form saves such a reward for
+  online alone, one stored for the till as well included -
   [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
-- **Missing parts** — nothing is saved while the choice lacks a part it
+- **Retired handovers** - a reward stored as a manual handover or a counter
+  collection keeps how it is handed over, unchanged, while the fields beside
+  it are edited, until the operator picks one of the three choices; a
+  duplicate of it opens as Money off
+- **Missing parts** - nothing is saved while the choice lacks a part it
   needs, or the window ends before it starts; the form names what is missing
-- **Basket check** — beside the form, the operator builds a basket by search
+- **Basket check** - beside the form, the operator builds a basket by search
   and reads what the coupon would take off it, before saving
+- ❓ **Currency mark** - `HKD` in front of a money field, as built, or `HK$`,
+  as the approved mock draws it; @ecchochan's call
+- ❓ **Departures from the mock** - where the form differs from the approved
+  mock waits on the designer's confirmation
 
 :::detail{title="Code map" for="engineer"}
-- **Design record** —
+- **Design record** -
   [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
 :::
 
