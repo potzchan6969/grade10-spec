@@ -46,7 +46,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 - [x] 4.1 `listingBidHistory` sets `isWinner` on the won row of a lot in its
       sold panel; `ListingView` threads `bidHistoryWinner` and
       `samePricePriorityTip`. Built in `684cdc9`.
-- [ ] 4.2 Name in the test titles every scenario they prove: the mapper's
+- [x] 4.2 Name in the test titles every scenario they prove: the mapper's
       in `listingLotExtras.test.ts` for the crown and the tip, and the
       backend's `autoBidding.spec.ts` for a tie listing the earlier maximum
       first once both are outbid, which the one-ms answer stamp in
@@ -57,7 +57,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       `grade10-site-auction-listing-page-SC-49`,
       `grade10-site-auction-listing-page-SC-50`,
       `grade10-site-auction-listing-page-SC-51`
-- [ ] 4.3 Bump `external/grade10-spec` to the commit carrying task 2.4.
+- [x] 4.3 Bump `external/grade10-spec` to the commit carrying task 2.4.
 - [ ] 4.4 Walk the lot page on the isolated stack: no crown while live, the
       crown on the won row once the close is recorded, and the tip on a tied
       maximum that came second, at the current price and at an older tie
