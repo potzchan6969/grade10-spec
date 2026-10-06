@@ -8,16 +8,14 @@ image once photos letterbox.
 
 ## What Changes
 
-- **No multiply on the photo** — the image draws as supplied over the well
-  gradient
+- **No blend on the photo** — the photo draws as supplied in every tile
+  status; a sold-out photo takes the sold-out treatment over it
 - Manual page [Product Listing Blocks](/p/shared/ui/store-product-listing)
   marks the outcome
 
 ## Non-Goals
 
-- **Photo fit / crop** — `fit-product-listing-photo`
-- **Phone cart** — `show-listing-cart-on-touch`
-- **Sort** — `default-listing-sort-to-latest`
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
@@ -27,17 +25,24 @@ image once photos letterbox.
 
 ### Modified Capabilities
 
-- `shared/ui/store-product-listing`: the photo is not multiply-blended
+- `shared/ui/store-product-listing`: the photo is not blended into the well
 
 ## Impact
 
 - **`@grade10/ui`** — `ProductCardImage` drops `mix-blend-multiply`; Storybook
   shows the result
-- **Scenario id** — SC-64
+- **grade10-site** — three surfaces take the change through the submodule pin,
+  with no code of their own:
+  - **Listing** — `apps/frontend/grade10/src/pages/store/ProductListingPage.tsx`,
+    through `ProductBrowse`
+  - **Store home row** — `apps/frontend/grade10/src/pages/store/StoreHomePage.tsx`,
+    through `ProductCard`
+  - **You May Also Like** — `packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductRelatedRail.tsx`,
+    through `StoreProductRelatedRail` and `ProductCard`
 
 ## Open questions
 
-- none — Q1 is in `decisions.md`
+- none — Q1 and Q2 are in `decisions.md`
 
 ## References
 

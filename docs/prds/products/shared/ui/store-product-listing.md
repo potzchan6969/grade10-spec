@@ -147,4 +147,5 @@ it. The first two rows place two parts of its map; the rest decide the tile.
 | One stop to open | Decided | The name is the one keyboard stop that opens the product, so a Tab user passes one stop fewer on every tile and a screen reader announces each product once. Ruled out: the photo and the name as two stops for one destination. | Product |
 | Sold-out opens where nothing sells | Decided | A surface that draws no cart control carries the collector on to another product, so it has no reason to stop at a card nobody can buy. Ruled out: a sold-out tile inert everywhere, a dead end on that surface. | Product |
 | The underline means it opens | Decided | A name that opens is underlined on hover and on keyboard focus, and a name that does not open stays plain, so the underline never promises a press that does nothing. Ruled out: an underline on every name. | Product |
+| Photo as supplied | Decided | The photo is not multiplied onto the well. Multiply made a white studio fill read as transparent, and muddied a real catalogue photo once it letterboxes. A white fill shows white inside the grey well. | Product |
 :::
