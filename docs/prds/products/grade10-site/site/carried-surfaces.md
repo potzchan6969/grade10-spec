@@ -38,6 +38,10 @@ already opened and is carried everywhere.
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
+🚧 **Store Locator** — the shop's location and hours page joins the store's
+set, so it waits for the store's launch —
+[Store Locator](/p/grade10-site/store/store-locator)
+
 The auction, the front door, the terms, the privacy page, and sign-in are
 carried in every lane.
 
@@ -112,6 +116,7 @@ production.
 | The deploy environment turns it off | Decided | Production and preview carry no store; staging and development do. Keying on the site stage was dropped: the stage reads `preview` for production today by one registry row, so a site moved to a preview stage for an unrelated reason would lose its store. | Engineering |
 | Preview follows production | Decided | The preview host is the production build at another address, so it carries what production carries. A preview that sold would be a public shop under a quieter name. | Engineering |
 | A store address in old mail owes nothing | Decided | A lane that carries no store takes no order, so no mail sent from it names a store address. A rule for mail would cover a case no lane can produce. | Product |
+| Store Locator waits with the store | Decided | The shop's location and hours page joins the store's set rather than being carried on every lane. The page and the chrome already tie it to the store: the footer draws it only beside the shop column. | Product |
 | The page code may stay in the bundle | Decided | A build without the store holds no store address and no store page; whether the code behind them still rides in the bundle is not stated. The storefront publishes the shop's features and the account's as one list, and the account's serve the profile, membership and join pages every lane carries, so telling them apart is work the shop's launch retires. | Engineering |
 | The vault's link-bearing surface waits with it | Decided | The signing ceremony waits behind the vault's gate. A shut vault mints no signing link, so any link already sent was internal — nobody outside the team held it. | Product |
 | Booking's private link waits whole | Decided | The private link a booking's mail hands out waits with the rest of booking's set rather than answering on its own. Nobody had taken a booking on a public lane by the time this shipped; a follow-on change covers a collector who already holds one, should one turn up before booking opens. | Product |
