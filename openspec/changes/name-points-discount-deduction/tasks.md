@@ -2,15 +2,16 @@
 
 - [x] 1.1 One import-free store contracts subpath holds the order id attribute, the title writers use, and the title check; both copies of each go
 - [x] 1.2 Settlement finds the points share by the check, and a paid order carrying "Points" still captures its points
-- [x] 1.3 The till's slot read goes through the check, so a cart titled "Points" or "Deduction from Points", ignoring letter case, is ours to hold, strip and recheck
+- [x] 1.3 The till's slot read goes through the check, so a cart titled "Points" or "Deduction from Points", ignoring letter case and surrounding spaces, is ours to count, strip and recheck
 - [x] 1.4 The till panel row takes its own copy instead of the wire title
 - [x] 1.5 Tests name the title through the contract, and the tablet recordings stay as recorded
-- [ ] 1.6 The readers' tests cite what they prove: the till holds and strips a marked sale's "points" discount before the order id, and settlement captures a paid order's points under "Points" and under " deduction FROM points " and never under a near-miss title, and a points title keyed on a sale with no order id refuses Apply, points or a coupon alone, under either title (`grade10-site-store-membership-SC-82`, `grade10-site-store-membership-SC-83`, `grade10-site-store-membership-SC-84`, `grade10-site-store-membership-SC-85`)
+- [ ] 1.6 The readers' tests cite the scenario each proves: the till counts and strips a marked sale's "points" discount before the order id, and never an offer or a code titled the same, in `integrations/shopify-pos/grade10/src/acts/spend.test.ts` and `acts/flow.test.ts` (`grade10-site-store-membership-SC-82`); settlement reads the points share under "Points" and " deduction FROM points " in `packages/grade10-store/backend/test/services/coupons/settle.test.ts` (`grade10-site-store-membership-SC-83`); a paid order naming discounts, none under either title, reads no points allocation, in `packages/grade10-store/contracts/test/saleMarks.test.ts` and `settle.test.ts`, and is debited the applied total less every other instrument, never more than promised, in `packages/grade10-store/backend/test/services/loyalty/pointsSpend.test.ts` (`grade10-site-store-membership-SC-84`); a points title keyed on a sale with no order id refuses a points spend and a coupon alone in `acts/spend.test.ts`, and the panel shows no points field, no coupons and no Apply in `acts/view.test.ts` (`grade10-site-store-membership-SC-85`)
+- [ ] 1.7 Verify: the store contracts, store backend and till extension tests, and typecheck
 
 ## 2. Release 1 (grade10) (owner: @ecchochan)
 
 - [x] 2.1 Deploy the store to staging and publish the till version for a person to release
-- [x] 2.2 Walk the staging tablet: a spend, a strip and a paid sale settle as before; a fixed order discount keyed as "Deduction from Points" keeps its whole title on the cart row, the order summary and the paid order (`docs/architecture/shopify-verification.md` §23)
+- [ ] 2.2 Walk the staging tablet: a spend, a strip and a paid sale settle as before; a fixed order discount keyed as "Deduction from Points" keeps its whole title on the cart row, the order summary and the paid order (`docs/architecture/shopify-verification.md` §23)
 - [ ] 2.3 Release 1 in production: the store deployed, the till version activated at every location, and its client version number recorded in the verification doc for the gate in 3.5
 
 ## 3. Writers switch (grade10)
