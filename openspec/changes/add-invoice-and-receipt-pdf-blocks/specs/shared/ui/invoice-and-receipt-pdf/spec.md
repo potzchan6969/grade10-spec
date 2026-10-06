@@ -17,6 +17,58 @@ reflects what it actually draws today; `## Feature set` bullets and
 requirements this move drops are documented as retired rather than silently
 removed, per the amendment note above each one.
 
+## Feature set
+
+- InvoicePdf export
+  - Title and issuer mark: "Invoice" at the top left, the issuer's wordmark —
+    or its name as text, when no mark is on file — at the top right
+  - Meta rows: invoice number, sent-at date, payment deadline, payment method
+  - Party blocks: Bill To, Ship To
+  - Lot and charges: a Description/Amount table headed by the lot title, the
+    charges given, an optional supplied Tax line, and a boxed
+    Subtotal/Payment Processing Fee/Order Total summary
+  - Replacement relationship: on a replacement invoice, the supplied prior
+    invoice ID appears as `Replaces invoice {id}`, plain text with no link to
+    the prior PDF
+  - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
+    bank reference, a full-width section below the order-value summary, shown
+    only on a bank-transfer invoice
+  - Issuer block: the issuer's name and email, right-aligned at the foot of
+    the sheet
+- ReceiptPdf export
+  - Title and issuer mark, matching InvoicePdf's
+  - Meta rows: receipt number, the invoice number it pays, date paid,
+    payment method, payment reference
+  - Party blocks: Bill To, Ship To, matching InvoicePdf's
+  - The same lot-and-charges table as InvoicePdf
+  - A transfer-reference line, shown only when the payment carries one
+  - Payment breakdown: Original Invoice Total, Previous Payments, Current
+    Payment Received, Remaining Balance Due, in that fixed order, always
+    rendered
+  - Issuer block, matching InvoicePdf's
+- Party address fields
+  - Bill To and Ship To each render as up to seven lines — recipient, company,
+    phone, address line 1, address line 2, a combined city/region/postal-code line,
+    and country — every field optional except recipient, each line withheld
+    rather than blank when not given, and the whole block reading
+    "Not recorded" when no address is given at all
+- Document shape
+  - Each renderer returns exactly one A4 page (595.28×841.89pt)
+- Presentation-only contract
+  - Every amount arrives as a preformatted string; neither renderer
+    computes, sums or reformats a value
+  - Every date arrives as a `Date`; the renderer formats that instant once in
+    `Asia/Hong_Kong` and labels it `GMT+8`
+  - Every label arrives through a `copy` argument; neither renderer imports
+    `@grade10/i18n` or hardcodes a label
+- Reserved extension slots
+  - Retired (`decisions.md` Q19): the manually-settled mark, Superseded
+    invoice, and issuer tax details under InvoicePdf/ReceiptPdf export above
+    — carried no further until a concrete requirement resurfaces one. Bank
+    rails, also retired under Q19, resurfaced with a concrete requirement and
+    rejoins InvoicePdf export above (`decisions.md` Q22), structured rather
+    than restored to its pre-retirement opaque shape
+
 ## ADDED Requirements
 
 ### Requirement: InvoicePdf renders its meta rows and party blocks
