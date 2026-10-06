@@ -1,27 +1,26 @@
 ## Goals
 
-- Connect the existing shared badge to the member cart in grade10-site, including when the drawer is closed.
-
-- With a cart control present and active lines in the cart, the header cart
-  icon shows the same active-line count as the cart drawer title badge.
-- With no active lines, or while the host has not yet supplied a count, the
-  badge is absent.
-- Design-system `Nav` stays count-agnostic; `SiteHeader` owns the badge.
+- A signed-in member sees the same active-line count on the header cart icon
+  as on the cart drawer title, on every surface that offers Cart, with the
+  drawer open or closed.
+- With no active lines, an unknown count, or no signed-in member, the header
+  shows no count and keeps the Cart control.
+- Design-system `Nav` stays count-agnostic; `SiteHeader` owns the badge and
+  grade10-site supplies the number.
 
 ## Non-Goals
 
-- Deriving sold-out / unavailable exclusion inside the chrome — the
-  application supplies the same active count `CartDrawerHeader` already uses
-  (`shared/ui/store-cart`).
+- Counting cart lines inside the chrome — grade10-site supplies the count (Q8).
 - Changing the cart drawer badge, empty state, or cleanup rules.
 - Adding a backend count endpoint, polling inventory, or changing cart storage.
+- Updating the count live from another device (Q10).
 - Truncating large counts to `99+` or similar — the indicator shows the full
   number.
-- Auction-first surfaces before Store answers the cart drawer, which correctly
-  omit the cart control.
+- Auction-first surfaces before Store answers the cart drawer, which omit the
+  cart control.
 - Teaching design-system `Nav` about cart counts.
 - A loading or skeleton treatment for the header badge — the host omits the
-  count until it knows; drawer header skeleton stays the drawer's.
+  count until it knows; the drawer header skeleton stays the drawer's.
 - A signed-out guest cart count — there is no guest cart; signed-out visitors
   get no badge.
 
@@ -29,20 +28,19 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | Specs, suite, and package code already exist — reopen product scope, or close planning? | Close planning: write this file from the settled choices; leave the delta and suite unless a later fact forces a change (recommended) | Rewriting proposal, journeys, and requirements from scratch — rejected: the contract already matches the goals, and reopening would duplicate work already reconciled. |
-| Q2 | What does a signed-out collector's cart badge read? (`require-sign-in-from-nav-cart` deferred this here.) | No guest cart → signed-out always gets no badge (count omitted or `0`) (recommended) | Inventing a signed-out count or a special "guest" pip — rejected: members-only cart; activation is sign-in; chrome only shows a badge when the app supplies `cartItemCount > 0`. |
-| Q3 | What does the header count mean? | Same active-line count as the drawer title badge; app-supplied; chrome does not derive it (recommended) | Chrome counting cart lines itself, or including sold-out / unavailable — rejected: `shared/ui/store-cart` already owns that rule for `CartDrawerHeader`. |
-| Q4 | Header overlay vs drawer title chip — same primitive? | Header uses `StatusIndicator` `type="count"` `variant="brand"`; drawer title keeps `Badge` `variant="brand"` (recommended) | Putting `Badge` on the nav icon, or swapping the drawer to `StatusIndicator` — rejected: overlay vs in-title chip are different surfaces; do not swap one for the other here. |
-| Q5 | Cap large counts at `99+`? | Always show the full number the app supplies (recommended) | Truncating to `99+` — rejected: the drawer title badge shows the full active count; the header must match. |
-| Q6 | Loading / unknown count while the cart hydrates? | Omit until known — no badge loading API on `SiteHeader`; host withholds the prop or passes `0` until it knows (recommended) | A skeleton or pending state on the header badge — rejected: out of scope; drawer header skeleton stays the drawer's concern. |
-| Q7 | Does this change deliver the application count? | Extend this active change with grade10-site integration, as requested on 2026-09-21. Preserve the shared contract and existing task IDs. | A second overlapping badge change or more presentation-only work. |
-| Q8 | Which count reaches the header? | Count distinct active lines in the same reviewed basket as the drawer, never summed quantities or checkout-eligible lines alone. | Using the existing quantity total, which counts unavailable lines and multiples differently. |
-| Q9 | What happens while the current basket cannot be reviewed? | Keep the last verified count for the same member while checking, including after a failed cart update, as chosen by the author on 2026-09-21. Hide it if the check fails. Initial unknown state stays hidden; clear the previous member immediately when session ownership changes. | Hiding a verified same-member count during every refresh, or retaining a failed/previous-member count. |
-| Q10 | When does the count refresh? | Review on member cart hydration, settled cart mutations, and explicit cart review/retry, even when the drawer is closed. Reuse current invalidation; no inventory polling or cross-device real-time guarantee. | Opening the drawer as the only trigger, or introducing a background polling service. |
+| Q2 | What does a signed-out collector's cart badge read? (`require-sign-in-from-nav-cart` deferred this here.) | No badge: there is no guest cart, so the count is omitted or `0` - decided by the round | A signed-out count or a guest pip — the cart is members-only and the chrome shows a badge only for a supplied count above zero. |
+| Q3 | Who works out the header count? | grade10-site supplies it; the chrome displays it and never derives it - decided by the round | The chrome counting cart lines itself — what counts is the site's rule (Q8), and the shared header serves other brands. |
+| Q4 | Header overlay vs drawer title chip — same primitive? | Header uses `StatusIndicator` `type="count"` `variant="brand"`; drawer title keeps `Badge` `variant="brand"` - decided by the round | `Badge` on the nav icon, or `StatusIndicator` in the drawer title — an overlay and an in-title chip are different surfaces. |
+| Q5 | Cap large counts at `99+`? | Always show the full number supplied - decided by the round | `99+` — the drawer title shows the full count, and the header must match it. |
+| Q6 | Loading or unknown count while the cart hydrates? | Omit until known — no badge loading API on `SiteHeader`; the host withholds the prop or passes `0` - decided by the round | A skeleton or pending state on the header badge — the drawer header skeleton stays the drawer's. |
+| Q7 | Does this change deliver the application count? | Yes: this change carries the grade10-site integration and keeps the shared contract and its task IDs - decided by the author on 2026-09-21 | A second, overlapping badge change. |
+| Q8 | Which count reaches the header? | One per distinct active line in the same reviewed basket as the drawer, whatever its quantity; adjusted lines count, sold-out and unavailable lines do not - decided by the round | The quantity total, which counts multiples and unavailable lines; or checkout-eligible lines alone, which drop adjusted lines the drawer still shows. |
+| Q9 | What happens while the current basket cannot be reviewed? | Keep the last verified count for the same member while checking, including after a failed cart update; hide it if the check fails. An unknown first count stays hidden; a member change clears the count at once - decided by the author on 2026-09-21 | Hiding a verified same-member count on every refresh, or keeping a failed or previous-member count. |
+| Q10 | When does the count refresh? | On member cart hydration, a settled cart change, and an explicit cart review or retry, with the drawer open or closed; no polling and no live update from another device - decided by the round | Opening the drawer as the only trigger, or a background polling service. |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| shared/ui/site-chrome | What does the header count mean? | Q3 |
+| shared/ui/site-chrome | What does the header count mean? | Q8 |
 | grade10-site/site/page-shell | Should an already verified same-member count remain while a refresh is pending, and does a failed mutation trigger that refresh? | Q9 |
