@@ -153,7 +153,9 @@ line to check.", and the Shopify footnote.
 | New Reward | A kind chosen, fields for that kind shown | `grade10-site-loyalty-programme-SC-158` |
 | New Reward | Free item chosen: one variant picker and minimum spend, no discount or scope | `grade10-site-loyalty-programme-SC-187` |
 | Edit Reward | Stored 100% with no cap on one variant opens on the Free item card | `grade10-site-loyalty-programme-SC-188` |
-| Edit Reward | Stored 100% with a cap, or on two variants, opens on Money off | `grade10-site-loyalty-programme-SC-189` |
-
-Every other state — retired kinds, online-only scope, gaps named in the save
-bar — keeps the behaviour staging has and takes the mock's look.
+| Edit Reward | Stored 100% with a cap, on two variants or on a product, opens on Money off | `grade10-site-loyalty-programme-SC-189` |
+| New Reward | Money off scoped to named products or a catalog filter: the scope note shows, Online is chosen, In store and Both are unavailable | `grade10-site-loyalty-programme-SC-211` |
+| Edit Reward | Stored products reward naming the till opens on Online; moving its scope to named variants shows its stored channels again | `grade10-site-loyalty-programme-SC-212` |
+| Save bar | Each missing part named as a button that lands on its field; `Ends before it starts.` on Live until | `grade10-site-loyalty-programme-SC-213` |
+| Rail | Each row of Basket Verdicts, and staging's "Finish the coupon to check it." and "Add a line to check." | `grade10-site-loyalty-programme-SC-214` |
+| Edit Reward | Stored manual handover or counter collection keeps its kind, unchanged, while the fields beside it are edited; a duplicate opens on Money off | **Out of suite:** grade10 `rewardCouponDraft.test.ts`, the stored manual handover and counter collection |

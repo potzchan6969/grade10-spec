@@ -15,6 +15,13 @@
   theme upper-cases values, custom property names are case-sensitive, and the
   tokens resolve to nothing. The segmented track, the kind card fill and the
   dialog backdrop depend on them
+- **Online only by product or filter** — built before this change, with no
+  requirement behind it: the console saves such a reward for online alone,
+  and the till panel marks such a coupon online only. The programme's channel
+  guard reads the stored channels alone, so a coupon stored for the till
+  through the admin API passes it when the member presents it from their own
+  phone. The scope rule is written twice, in the console's `onlineOnly` and
+  the store's `panelCoupon`
 
 ## Goals / Non-Goals
 
@@ -26,7 +33,7 @@
 
 **Non-Goals:**
 
-- No wire, backend or contract change
+- No wire change, and no backend change beyond the till's scope rule
 - No hint under its control: Astryx draws a field's description above the
   control, with no theme hook, and redrawing it in a dozen field words would
   re-wire each one's `aria-describedby`
@@ -173,6 +180,49 @@ panel move to level 4. The end-to-end helpers that find the page title by
   under the form; the ready sentence in the success tone; a gap stays a quiet
   button that lands on its field
 
+### Online Only by Product or Filter
+
+One rule, read everywhere: `tillCanMatch(targetKind)` in
+`@grade10/loyalty-contracts` `couponGuard.ts`, beside `rewardCouponGuard`,
+true for named variants and the whole order. The missing parts and the
+basket check were built before this change, and their tests cite their
+scenarios the same way.
+
+- **Guard** — `rewardCouponGuard` refuses `in_store` with `wrong_channel` for
+  a product coupon whose target the till cannot match, whatever channels it
+  names. `decideCoupon` runs the guard for the quote and the claim alike
+  (grade10 `packages/loyalty/backend/src/services/rewards/coupons.ts:365`),
+  and both till entries reach it through `planTillSale`: the staff panel, and
+  `presentCoupon` for the member's own phone. *Rejected:* a check in
+  `presentCoupon` alone, which leaves the staff path to the till view's tap
+- **Console** — `onlineOnly` is money off whose target `tillCanMatch`
+  refuses, and `effectiveChannelsOf` then returns online alone (grade10
+  `rewardCouponDraft.ts:153-166`). The channel control, the list's terms and
+  the fold all read it (`rewardCouponDraft.ts:522`), so the form never shows
+  a channel it will not save
+- **A stored reward naming the till** — `draftOf` keeps the stored channels,
+  and the control shows the effective ones: Online chosen, In store and Both
+  disabled. Saving it unchanged writes online alone; moving its scope to
+  named variants or the whole order brings the stored channels back.
+  *Rejected:* rewriting the channels on open, which loses them when the
+  operator moves the scope back
+- **Till panel** — `panelCoupon` marks a coupon online only where the guard
+  refuses it or `tillCanMatch` refuses its target (grade10
+  `packages/grade10-store/backend/src/services/pos/sale/sale.ts:606-609`), so
+  a member's own coupon and a registry code read the one rule; the till view
+  refuses its tap (`integrations/shopify-pos/grade10/src/acts/view.ts:221`)
+- **No maximum discount** — a percentage with `maxCutMinor: null` takes its
+  whole rate; `evaluate.test.ts` already holds the case
+
+| Scenario | Test |
+| --- | --- |
+| `grade10-site-loyalty-programme-SC-209` | `packages/coupons/contracts/test/evaluate.test.ts`, the uncapped percentage |
+| `grade10-site-loyalty-programme-SC-210` | `packages/loyalty/backend/test/services/rewards/coupons.test.ts`, `decideCoupon` refusing the till for a products and a filter target naming both channels; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a member's own coupon scoped to products, and to a filter, naming both channels, online only on the panel; `integrations/shopify-pos/grade10/src/acts/view.test.ts`, the online-only coupon not offered to staff; `packages/grade10-store/backend/test/services/pos/sale/present.test.ts`, the member presenting one refused |
+| `grade10-site-loyalty-programme-SC-211` | `RewardEditor.test.tsx`, a new reward scoped to products, and to a filter |
+| `grade10-site-loyalty-programme-SC-212` | `RewardEditor.test.tsx`, a stored products reward naming both channels, saved unchanged, then moved to named variants |
+| `grade10-site-loyalty-programme-SC-213` | `rewardGaps.test.ts` and `RewardEditor.test.tsx`, each missing part and the inverted window held in the save bar |
+| `grade10-site-loyalty-programme-SC-214` | `basketVerdict.test.ts`, each verdict from the evaluator's result |
+
 ## Risks / Trade-offs
 
 - [Every Grade10 admin page, and ZZZ's shared console pages, change look]
@@ -184,6 +234,11 @@ panel move to level 4. The end-to-end helpers that find the page title by
   → the two save the same coupon, so nothing an operator saves changes
 - [Disabled segmented options carry `aria-disabled`, not `disabled`] → tests
   assert the attribute
+- [A stored reward naming the till becomes online only on its next save]
+  → the page states it
+- [A coupon already issued for the till with such a scope is now refused
+  when the member presents it] → the panel already marked it online only, and
+  it stays good online
 - [Messages inside a modal dialog are not read: Astryx attaches its live
   regions to the page body, which an open modal hides] → not new; an issue
   on Astryx to attach them to the open dialog
