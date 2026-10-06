@@ -3,14 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## grade10-site-store-e2e-US7: Member's saved name reaches the till and the pass
+## grade10-site-store-e2e-US9: Member's saved name reaches the till and the pass
 
 **As a** member,
 **I want** the name I save on my profile to be the one staff see at the till and the one my wallet pass shows,
 **so that** the site, the counter and my phone name me the same way.
 
-<!-- trace:case id=g10.store-domain.TC-82a rev=1 covers=g10.store-account-profile.SC-zu6,g10.store-wallet-member-card.SC-gvk -->
-### grade10-site-store-e2e-US7-TC1-1: A name saved on the profile shows at the till and on the pass
+<!-- trace:case id=g10.store-domain.TC-82a rev=1 covers=g10.store-account-profile.SC-zu6,g10.store-membership.SC-e9k,g10.store-wallet-member-card.SC-gvk -->
+### grade10-site-store-e2e-US9-TC1-1: A name saved on the profile shows at the till and on the pass
 
 **Classification:**
 
@@ -35,6 +35,7 @@
 | Field | Value |
 | --- | --- |
 | <account name> | `Kit Lam` |
+| <grade10 profile url> | `https://grade10-stg.com/profile` |
 | <signed-in address> | `kit.lam@example.com` |
 | <new name> | `Kit Collector` |
 | <shop_1> | A physical store running the Grade10 till |

@@ -9,7 +9,7 @@
 **I want** my card in the wallet my phone already has, scannable without signal and naming me as the site does,
 **so that** I am served from my lock screen instead of signing in and waiting for a code with a queue behind me.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-mbs rev=1 covers=g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-fjc -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-mbs rev=1 covers=g10.store-wallet-member-card.SC-gtj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-fjc -->
 ### grade10-site-store-wallet-member-card-US6-TC10-1: Pass names the member by the site's one rule
 
 Runs once for each <member state> row on each <wallet>.
@@ -43,6 +43,7 @@ Runs once for each <member state> row on each <wallet>.
 | Saved `Kit Collector` as the display name on the profile; the account is named `Kit Lam` | `Kit Collector` |
 | Never saved a profile; the account is named `Kit Lam` | `Kit Lam` |
 | Never saved a profile; the account holds no name | `kit.lam` |
+| Never saved a profile; the store's record holds the placeholder name older records carry; the account is named `Kit Lam` | `Kit Lam` |
 
 | <wallet> |
 | --- |
@@ -99,7 +100,7 @@ Runs once for each <member state> row on each <wallet>.
 * Within <floor> of step 1, the wallet is sent the pass naming <new name>.
 
 <!-- trace:case id=g10.store-wallet-member-card.TC-nck rev=1 covers=g10.store-wallet-member-card.SC-nmv -->
-### grade10-site-store-wallet-member-card-US6-TC12-1: A name the account service cannot give leaves the pass as it was
+### grade10-site-store-wallet-member-card-US6-TC12-1: An unreachable account service leaves a pass with no shop name as it was
 
 **Classification:**
 
@@ -238,19 +239,23 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** 2026-10-06, second QA2 reconciliation in a fresh context, after the round added `grade10-site-store-wallet-member-card-SC-42` and `grade10-site-store-wallet-member-card-SC-43`. Read: this suite, the delta `spec.md` and `user-journeys.md`, the durable wallet suite for the cases the carried scenarios already have, the domain suite `grade10-site/store/domain-tcs.md` in this change, `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md`, the Member Card in a Wallet page, and the application repository's wallet sweep and pass builders. The blind pass recorded no Run line of its own, so its bundle is not stated here.
+**Run:** 2026-10-06, sixth QA2 reconciliation, in a fresh context, over the same reading: no case moved; `grade10-site-store-wallet-member-card-SC-28`, left uncovered, names its verifier under Out of suite. Before it, the fifth, after the third accept review: the requirement names the failure as an account service that cannot be reached or does not answer for a member with no name chosen for the shop, where "cannot get the account name" would fail every member whose account holds no name, and `grade10-site-store-wallet-member-card-SC-60` now states the placeholder. No case moved; US6-TC12's title takes the requirement's words. Before it, the fourth, in a fresh context, over the same reading: US6-TC10 gained a row. Before it, the third, after the accept review made a profile save a fourth way a pass falls due; after the second accept review the new scenarios were renumbered above the ids concurrent changes claim, and no case moved. Read: this suite, the delta `spec.md` and `user-journeys.md`, the durable wallet suite for the cases the carried scenarios already have, the domain suite `grade10-site/store/domain-tcs.md` in this change, `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md`, the Member Card in a Wallet page, and the application repository's wallet sweep and pass builders. The blind pass recorded no Run line of its own, so its bundle is not stated here.
 
-- **Raised, settled by the round** — a long name on the pass (Q22): the store carries the name whole, as `packages/wallet-pass/src/google.ts` and `packages/wallet-pass/src/apple/pkpass.ts` already do, `grade10-site-store-wallet-member-card-SC-43`, walked by US6-TC13; a saved name through an outage (Q21): the lap names its members one by one, `grade10-site-store-wallet-member-card-SC-42`, walked by US6-TC14
-- **Rewritten to the spec** — US6-TC10 runs on Apple Wallet as well as Google Wallet, since `grade10-site-store-wallet-member-card-SC-18` names the same rule for the Apple pass; US6-TC14 dropped its "no other pass is due" pre-condition and gains a member the service cannot name on the same sweep, as `grade10-site-store-wallet-member-card-SC-42` states; the second `## Settled` line, which let a pass with a saved name wait a lap on its batch, now says what Q21 decided
+- **Raised, settled by the round** — a long name on the pass (Q22): the store carries the name whole, as `packages/wallet-pass/src/google.ts` and `packages/wallet-pass/src/apple/pkpass.ts` already do, `grade10-site-store-wallet-member-card-SC-59`, walked by US6-TC13; a saved name through an outage (Q21): the lap names its members one by one, `grade10-site-store-wallet-member-card-SC-58`, walked by US6-TC14
+- **Added to the spec** — US6-TC10's three rows assert the name order the requirement states, and no scenario stated it: `grade10-site-store-wallet-member-card-SC-13` and `grade10-site-store-wallet-member-card-SC-18` name only "the name the membership surface shows", which no scenario defines. `grade10-site-store-wallet-member-card-SC-60` now states the order, and US6-TC10 traces it
+- **Rewritten to the spec** — US6-TC10 runs on Apple Wallet as well as Google Wallet, since `grade10-site-store-wallet-member-card-SC-18` names the same rule for the Apple pass; US6-TC14 dropped its "no other pass is due" pre-condition and gains a member the service cannot name on the same sweep, as `grade10-site-store-wallet-member-card-SC-58` states; the second `## Settled` line, which let a pass with a saved name wait a lap on its batch, now says what Q21 decided
+- **Rewritten to the page** — US6-TC10 gains a member whose record holds the placeholder name older records carry, named on the pass by the account name, since the Profile page's A name nobody chose line holds the pass to the default too; `grade10-site-store-wallet-member-card-SC-60` now states it, so the row asserts no more than its scenario
 - **Rejected** — none
 - **Contradicted** — none left: the `## Settled` line and US6-TC14's pre-condition were the only ones, both rewritten above
-- **Cases added after the reconciliation** — US6-TC13 (`grade10-site-store-wallet-member-card-SC-43`), US6-TC14 (`grade10-site-store-wallet-member-card-SC-42`): written from the decisions the blind pass raised, so they are not blind
-- **Carried unchanged** — the two modified requirements change only the name each pass carries; their other scenarios keep their durable cases
-- **Covered at domain** — `grade10-site-store-wallet-member-card-SC-40`, a name saved on the profile reaches the pass on the next lap: `grade10-site-store-e2e-US7-TC1-1` saves the name and reads it on the pass after the first sweep
-- **Uncovered** — none
+- **Cases added after the reconciliation** — US6-TC13 (`grade10-site-store-wallet-member-card-SC-59`), US6-TC14 (`grade10-site-store-wallet-member-card-SC-58`): written from the decisions the blind pass raised, so they are not blind
+- **Carried unchanged** — the two card requirements change only the name each pass carries, and the sweep's adds a profile save as a fourth way a pass falls due; `grade10-site-store-wallet-member-card-SC-56` and `grade10-site-store-wallet-member-card-SC-57` move under the sweep's requirement word for word, and every other scenario keeps its durable case. No case moves: US6-TC11 and the domain walk still reach the two, and the page's 🚧 on a saved name through an outage is what US6-TC14 walks
+- **Covered at domain** — `grade10-site-store-wallet-member-card-SC-56`, a name saved on the profile reaches the pass on the next lap: `grade10-site-store-e2e-US9-TC1-1` saves the name and reads it on the pass after the first sweep
+- **Uncovered** — none: `grade10-site-store-wallet-member-card-SC-28`, which no case here or in the durable suite reaches, is out of suite, below
 
 | Scenario | Reached by |
 | --- | --- |
+| `grade10-site-store-wallet-member-card-SC-05` | durable US2-TC1 |
+| `grade10-site-store-wallet-member-card-SC-06` | durable US5-TC1 |
 | `grade10-site-store-wallet-member-card-SC-13` | US6-TC10, durable US6-TC1 |
 | `grade10-site-store-wallet-member-card-SC-14` | durable US6-TC2 |
 | `grade10-site-store-wallet-member-card-SC-15` | durable US7-TC2, US7-TC3 |
@@ -259,8 +264,18 @@ Runs once per row of **Test data**.
 | `grade10-site-store-wallet-member-card-SC-18` | US6-TC10, durable US6-TC1 |
 | `grade10-site-store-wallet-member-card-SC-19` | durable US6-TC3 |
 | `grade10-site-store-wallet-member-card-SC-20` | durable US8-TC1 |
+| `grade10-site-store-wallet-member-card-SC-25` | durable US6-TC7 |
+| `grade10-site-store-wallet-member-card-SC-26` | durable US6-TC8 |
+| `grade10-site-store-wallet-member-card-SC-27` | durable US6-TC9 |
+| `grade10-site-store-wallet-member-card-SC-28` | out of suite |
+| `grade10-site-store-wallet-member-card-SC-29` | durable US6-TC6 |
 | `grade10-site-store-wallet-member-card-SC-39` | US6-TC12, US6-TC14 |
-| `grade10-site-store-wallet-member-card-SC-40` | covered at domain |
-| `grade10-site-store-wallet-member-card-SC-41` | US6-TC11 |
-| `grade10-site-store-wallet-member-card-SC-42` | US6-TC14 |
-| `grade10-site-store-wallet-member-card-SC-43` | US6-TC13 |
+| `grade10-site-store-wallet-member-card-SC-56` | covered at domain |
+| `grade10-site-store-wallet-member-card-SC-57` | US6-TC11 |
+| `grade10-site-store-wallet-member-card-SC-58` | US6-TC14 |
+| `grade10-site-store-wallet-member-card-SC-59` | US6-TC13 |
+| `grade10-site-store-wallet-member-card-SC-60` | US6-TC10 |
+
+### Out of suite
+
+* `grade10-site-store-wallet-member-card-SC-28` - a burst costs one update: a walk sees what the pass shows, not how many updates reached it. Its verifier, in the application repository: the wallet refresh's test, `packages/grade10-store/backend/test/sweeps/walletRefresh.test.ts` ("sends once, then costs nothing while the facts hold still", and "sends again once a fact behind the pass moves").

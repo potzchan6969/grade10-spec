@@ -9,8 +9,8 @@
 **I want** a dynamic code or my email to identify me, staff to see the name the site knows me by, and staff to spend my points once,
 **so that** a replayed code is refused, a miss discloses nothing, and points settle once whether paid online or at the till.
 
-<!-- trace:case id=g10.store-membership.TC-23a rev=1 covers=g10.store-membership.SC-y0k -->
-### grade10-site-store-membership-US2-TC12-1: Till names the member by the site's one rule
+<!-- trace:case id=g10.store-membership.TC-23a rev=1 covers=g10.store-membership.SC-e9k,g10.store-membership.SC-y0k -->
+### grade10-site-store-membership-US2-TC17-1: Till names the member by the site's one rule
 
 Runs once per row of **Test data**.
 
@@ -45,6 +45,7 @@ Runs once per row of **Test data**.
 | Saved `Kit Collector` as the display name on the profile; the account is named `Kit Lam` | `Kit Collector` |
 | Never saved a profile; the account is named `Kit Lam` | `Kit Lam` |
 | Never saved a profile; the account holds no name | `kit.lam` |
+| Never saved a profile; the store's record holds the placeholder name older records carry; the account is named `Kit Lam` | `Kit Lam` |
 
 **Steps:**
 
@@ -59,7 +60,7 @@ Runs once per row of **Test data**.
 * Step 4 reads the same name.
 
 <!-- trace:case id=g10.store-membership.TC-zhi rev=1 covers=g10.store-membership.SC-a70,g10.store-membership.SC-y0k -->
-### grade10-site-store-membership-US2-TC13-1: Till shows 會員 when the account service cannot give the name
+### grade10-site-store-membership-US2-TC18-1: Till shows 會員 for a member with no shop name while the account service cannot be reached
 
 Runs once per row of **Test data**.
 
@@ -106,7 +107,7 @@ Runs once per row of **Test data**.
 * Step 2 still shows <member_1>'s tier and balance.
 
 <!-- trace:case id=g10.store-membership.TC-g53 rev=1 covers=g10.store-membership.SC-jjw,g10.store-membership.SC-y0k -->
-### grade10-site-store-membership-US2-TC14-1: A name saved on the profile shows at the till through an account-service outage
+### grade10-site-store-membership-US2-TC19-1: A name saved on the profile shows at the till through an account-service outage
 
 **Classification:**
 
@@ -149,7 +150,7 @@ Runs once per row of **Test data**.
 * Step 4 reads <saved name>.
 
 <!-- trace:case id=g10.store-membership.TC-80o rev=1 covers=g10.store-membership.SC-ymg -->
-### grade10-site-store-membership-US2-TC15-1: Till is sent an 80-character name whole
+### grade10-site-store-membership-US2-TC20-1: Till is sent an 80-character name whole
 
 **Classification:**
 
@@ -197,14 +198,16 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** 2026-10-06, second QA2 reconciliation in a fresh context. Read: this suite, the delta `spec.md` and `user-journeys.md`, the durable membership suite for the cases the carried scenarios already have, `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md`, the Shopify Integration and Member Card in a Wallet pages, and the application repository's `memberName` and POS directory. The blind pass recorded no Run line of its own, so its bundle is not stated here.
+**Run:** 2026-10-06, sixth QA2 reconciliation, in a fresh context, over the same reading: no case moved. Before it, the fifth, after the third accept review: the requirement names the failure as an account service that cannot be reached or does not answer, where "gives no name" read as an account with no name, and `grade10-site-store-membership-SC-90` now states the placeholder. No case moved; US2-TC18's title takes the requirement's words. Before it, the fourth, in a fresh context, over the same reading: US2-TC17 gained a row. Before it, the third; after the second accept review the new scenarios and cases were renumbered above the ids concurrent changes claim, and no case moved. Read: this suite, the delta `spec.md` and `user-journeys.md`, the durable membership suite for the cases the carried scenarios already have, `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md`, the Shopify Integration and Member Card in a Wallet pages, and the application repository's `memberName` and POS directory. The blind pass recorded no Run line of its own, so its bundle is not stated here.
 
-- **Raised, settled by the round** — a saved name through an account-service outage (Q21): the till shows the saved name, `grade10-site-store-membership-SC-83`, walked by US2-TC14; the pass's half is settled in the wallet suite. A long name in the till's modal (Q22): the requirement sends it whole, and US2-TC15 asserted it with no scenario to reach; `grade10-site-store-membership-SC-85` now states it, as `grade10-site-store-wallet-member-card-SC-43` does for the pass
+- **Raised, settled by the round** — a saved name through an account-service outage (Q21): the till shows the saved name, `grade10-site-store-membership-SC-87`, walked by US2-TC19; the pass's half is settled in the wallet suite. A long name in the till's modal (Q22): the requirement sends it whole, and US2-TC20 asserted it with no scenario to reach; `grade10-site-store-membership-SC-89` now states it, as `grade10-site-store-wallet-member-card-SC-59` does for the pass
+- **Added to the spec** — US2-TC17's three rows assert the name order the requirement states at the till, and no scenario stated it: `grade10-site-store-membership-SC-88` only holds the badge to the till's name. `grade10-site-store-membership-SC-90` now states the order, and US2-TC17 and the domain walk trace it
+- **Rewritten to the page** — US2-TC17 gains a member whose record holds the placeholder name older records carry, read as the account name, since the Profile page's A name nobody chose line holds the till to the default too; `grade10-site-store-membership-SC-90` now states it, so the row asserts no more than its scenario
 - **Rejected** — none
 - **Contradicted** — none
-- **Cases added after the reconciliation** — US2-TC14 (`grade10-site-store-membership-SC-83`), US2-TC15 (`grade10-site-store-membership-SC-85`): written from the decisions the blind pass raised, so they are not blind
-- **Carried unchanged** — the modified requirement changes only the name clause; its other scenarios keep their durable cases
-- **Left to the domain** — nothing: `grade10-site-store-e2e-US7-TC1-1` reads a saved name at the till, and US2-TC12 still asserts it with the badge
+- **Cases added after the reconciliation** — US2-TC19 (`grade10-site-store-membership-SC-87`), US2-TC20 (`grade10-site-store-membership-SC-89`): written from the decisions the blind pass raised, so they are not blind
+- **Carried unchanged** — the modified requirement changes only the name clause; its other scenarios keep their durable cases. `grade10-site-store-membership-SC-77` now serves US-02, whose journey says staff spend points once, where the durable spec has it serve US-04; its outcome is word for word, and durable US4-TC2 still reaches it
+- **Left to the domain** — nothing: `grade10-site-store-e2e-US9-TC1-1` reads a saved name at the till, and US2-TC17 still asserts it with the badge
 - **Uncovered** — none
 
 | Scenario | Reached by |
@@ -212,7 +215,8 @@ Runs once per row of **Test data**.
 | `grade10-site-store-membership-SC-75` | durable US4-TC1, US4-TC4 |
 | `grade10-site-store-membership-SC-76` | durable US4-TC3 |
 | `grade10-site-store-membership-SC-77` | durable US4-TC2 |
-| `grade10-site-store-membership-SC-78` | US2-TC13 |
-| `grade10-site-store-membership-SC-83` | US2-TC14 |
-| `grade10-site-store-membership-SC-84` | US2-TC12, US2-TC13, US2-TC14 |
-| `grade10-site-store-membership-SC-85` | US2-TC15 |
+| `grade10-site-store-membership-SC-78` | US2-TC18 |
+| `grade10-site-store-membership-SC-87` | US2-TC19 |
+| `grade10-site-store-membership-SC-88` | US2-TC17, US2-TC18, US2-TC19 |
+| `grade10-site-store-membership-SC-89` | US2-TC20 |
+| `grade10-site-store-membership-SC-90` | US2-TC17; at domain, `grade10-site-store-e2e-US9-TC1-1` |

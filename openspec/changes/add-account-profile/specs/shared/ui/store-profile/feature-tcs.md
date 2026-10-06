@@ -44,7 +44,7 @@
 * Step 2 renders the read view with no card around it.
 * Step 3 renders the form with no card around it.
 
-<!-- trace:case id=g10.shared-store-profile.TC-ghq rev=1 covers=g10.shared-store-profile.SC-ln9,g10.shared-store-profile.SC-mzb,g10.shared-store-profile.SC-d8w -->
+<!-- trace:case id=g10.shared-store-profile.TC-ghq rev=1 covers=g10.shared-store-profile.SC-ln9,g10.shared-store-profile.SC-mzb,g10.shared-store-profile.SC-d8w,g10.shared-store-profile.SC-z3a -->
 ### shared-ui-store-profile-US1-TC2-1: Card shows the body the application selects
 
 Runs once per row of **Test data**.
@@ -480,7 +480,7 @@ Runs once per row of **Test data**.
 * Step 2 finds only markers and supplied values, the avatar's choose and remove controls named by their `ProfileFormCopy` markers.
 * Step 3 fails the type check, naming the missing label.
 
-<!-- trace:case id=g10.shared-store-profile.TC-d6b rev=1 covers=g10.store-account-profile.SC-akq -->
+<!-- trace:case id=g10.shared-store-profile.TC-d6b rev=1 covers=g10.shared-store-profile.SC-7y6 -->
 ### shared-ui-store-profile-US1-TC13-1: Form reports a cancel and no values
 
 **Classification:**
@@ -498,7 +498,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProfileForm` is given a display name, a bio, an avatar source, a save handler and a cancel handler.
+* `ProfileForm` is given a display name, a bio, an avatar source, a save handler, a cancel handler, and <cancel label> as the cancel label.
 
 **Test data:**
 
@@ -506,29 +506,79 @@ Runs once per row of **Test data**.
 | --- | --- |
 | <typed name> | `Kit Lam` |
 | <chosen file> | A PNG of about 1 MB |
+| <cancel label> | `Discard changes` |
+
+| <cancel props> |
+| --- |
+| The cancel handler and no cancel label |
+| <cancel label> and no cancel handler |
+| Neither |
 
 **Steps:**
 
 1. Render `ProfileForm`.
 2. Replace the display name with <typed name>.
 3. Choose <chosen file> with the avatar control.
-4. Click the cancel control.
+4. Click the control labelled <cancel label>.
+5. Render `ProfileForm` again with each of <cancel props>.
 
 **Expected Results:**
 
 * Step 4 calls the cancel handler once.
 * Step 4 reports no values to the save handler.
+* Step 5 shows no cancel control for any of <cancel props>.
+
+<!-- trace:case id=g10.shared-store-profile.TC-5zz rev=1 covers=g10.shared-store-profile.SC-tlq -->
+### shared-ui-store-profile-US1-TC14-1: Bio keeps its line breaks from the form to the read view
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Form
+
+**Pre-conditions:**
+
+* `ProfileForm` is given a display name and a save handler.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <first line> | `Graded cards only.` |
+| <second line> | `Trades welcome.` |
+
+**Steps:**
+
+1. Render `ProfileForm`.
+2. Type <first line> into the bio, press Enter, and type <second line>.
+3. Click the save button.
+4. Render `ProfileDetails` with the bio step 3 reported.
+
+**Expected Results:**
+
+* Step 2 shows <first line> and <second line> on two lines in the bio field.
+* Step 3 reports a bio holding <first line>, a line break and <second line>.
+* Step 4 shows <first line> and <second line> on two lines.
 
 ## Reconciliation
 
-**Run:** 2026-10-06, second QA2 reconciliation in a fresh context. Read: this suite, the capability's `spec.md` and `user-journeys.md`, `proposal.md`, `decisions.md`, `tech-design.md`, `ui-design.md`, `tasks.md`, the Profile Blocks and Profile pages, and the block as it ships in `packages/ui/src/blocks/store-profile/`. The blind pass recorded no Run line of its own, so its bundle is not stated here.
+**Run:** 2026-10-06, sixth QA2 reconciliation, in a fresh context, over the same reading: US1-TC13 gains the handler alone and the label alone, which US1-TC5 already walks for the edit control. Before it, the fifth, after the third accept review wrote down the form's cancel, which the block already ships: US1-TC13 now traces `shared-ui-store-profile-SC-24` and gains the form with no cancel. Before it, the fourth, after the second accept review added the empty card's scenario and the bio's line breaks; US1-TC2 now reaches the empty card, and US1-TC14 is new. Read: this suite, the capability's `spec.md` and `user-journeys.md`, `proposal.md`, `decisions.md`, `tech-design.md`, `ui-design.md`, `tasks.md`, the Profile Blocks and Profile pages, and the block as it ships in `packages/ui/src/blocks/store-profile/`. The blind pass recorded no Run line of its own, so its bundle is not stated here.
 
-- **Raised** — nothing by the blind pass. The two design questions the accept review raised stay with the designer: frames for the avatar, its controls and the email row (Q5), and the one-line bio (Q14); no case asserts either look
-- **Rewritten to the spec** — US1-TC1 asserts the seven types and nothing else exported (`shared-ui-store-profile-SC-01`); US1-TC2's empty and failed rows supply a message and an action and expect both shown, where the failed row expected no action (`shared-ui-store-profile-SC-05`; the page's failed read showing no action is the application's choice, `grade10-site-store-account-profile-SC-31`), and a failed row with no action is kept; US1-TC3's second row leaves the email out too (`shared-ui-store-profile-SC-07`); US1-TC4 runs on the form as well as the read view (`shared-ui-store-profile-SC-09`, `shared-ui-store-profile-SC-10` name both); US1-TC6 adds a form with no current avatar (`shared-ui-store-profile-SC-14`, "whether or not one is currently set")
-- **Folded from another capability** — US1-TC13, a cancel that reports no values: no scenario here states it; the rule is `grade10-site-store-account-profile-SC-28`, and the case holds the block's half of it, the `onCancel` the form already ships
+- **Raised** — nothing by the blind pass. The accept review's design questions stay with the designer as Q5: frames for the avatar, its controls and the email row, which no case asserts; and save on an empty display name, where US1-TC7 asserts the recommended answer, enabled with the application's refusal, and is rewritten if design keeps it disabled. The bio's field is settled as the design system's `Textarea` (Q14), and no case asserts its look
+- **Rewritten to the spec** — US1-TC1 asserts the seven types and nothing else exported (`shared-ui-store-profile-SC-01`); US1-TC2's empty and failed rows supply a message and an action and expect both shown, where the failed row expected no action (`shared-ui-store-profile-SC-05`; the page's failed read supplies a retry, `grade10-site-store-account-profile-SC-31`), and a failed row with no action is kept; US1-TC3's second row leaves the email out too (`shared-ui-store-profile-SC-07`); US1-TC4 runs on the form as well as the read view (`shared-ui-store-profile-SC-09`, `shared-ui-store-profile-SC-10` name both); US1-TC6 adds a form with no current avatar (`shared-ui-store-profile-SC-14`, "whether or not one is currently set")
+- **Rewritten in the spec** — `shared-ui-store-profile-SC-08` and `shared-ui-store-profile-SC-24` read "without the label and the handler", which a handler given alone also meets; both now name the handler alone, the label alone and neither, as their requirements and US1-TC5 do. The block shows its edit and cancel buttons on the handler alone, with no label, so tasks 1.2 and 1.8 now change that rather than verify it
+- **Added to the spec** — US1-TC13, a cancel that reports no values, was folded from `grade10-site-store-account-profile-SC-28` while no scenario here stated it. `shared-ui-store-profile-SC-24` now states the cancel the block ships, `onCancel` with `copy.cancel`, and US1-TC13 traces it, naming the supplied label and a form given neither
 - **Rejected** — none
 - **Contradicted** — none left: US1-TC2's failed row was the only one, rewritten above
-- **Cases added after the reconciliation** — US1-TC11 (`shared-ui-store-profile-SC-11`), US1-TC12 (`shared-ui-store-profile-SC-16`, `shared-ui-store-profile-SC-17`): written from the scenarios the blind pass left unreached, so they are not blind
+- **Cases added after the reconciliation** — US1-TC11 (`shared-ui-store-profile-SC-11`), US1-TC12 (`shared-ui-store-profile-SC-16`, `shared-ui-store-profile-SC-17`), US1-TC14 (`shared-ui-store-profile-SC-23`): written from the scenarios the blind pass left unreached, so they are not blind
 - **Uncovered** — none
 
 | Scenario | Reached by |
@@ -554,3 +604,6 @@ Runs once per row of **Test data**.
 | `shared-ui-store-profile-SC-19` | US1-TC7 |
 | `shared-ui-store-profile-SC-20` | US1-TC9 |
 | `shared-ui-store-profile-SC-21` | US1-TC10 |
+| `shared-ui-store-profile-SC-22` | US1-TC2 |
+| `shared-ui-store-profile-SC-23` | US1-TC14 |
+| `shared-ui-store-profile-SC-24` | US1-TC13 |

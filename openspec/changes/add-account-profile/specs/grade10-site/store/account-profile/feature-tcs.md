@@ -117,7 +117,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer first saved a profile on <first save date> and saved it again on <later save date>.
+* customer, on an account named <account name>, first saved a profile on <first save date> and saved it again on <later save date>.
 * The profile holds <display name>, <bio> and an avatar of their own.
 
 **Test data:**
@@ -126,6 +126,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | <first save date> | Any date before <later save date> |
 | <later save date> | Any later date |
+| <account name> | `Kit Lam` |
 | <display name> | `Kit Collector` |
 | <bio> | `Pokémon since Base Set.` |
 
@@ -136,7 +137,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The display name reads <display name>, and the bio <bio>.
+* The display name reads <display name>, not <account name>, and the bio <bio>.
 * The avatar shows the collector's image, not the display name's first letter.
 * The email reads the signed-in address.
 * Member-since reads <first save date>, not <later save date>.
@@ -455,8 +456,8 @@ Runs once per row of **Test data**.
 * The form still holds <typed name> and <typed bio>.
 * After step 6, the display name reads <stored name>, and the bio is the one stored before.
 
-<!-- trace:case id=g10.store-account-profile.TC-d5l rev=1 covers=g10.store-account-profile.SC-6r5,g10.store-account-profile.SC-kuq -->
-### grade10-site-store-account-profile-US2-TC4-1: Bio saves at its limit, and an emptied bio clears
+<!-- trace:case id=g10.store-account-profile.TC-d5l rev=1 covers=g10.store-account-profile.SC-6r5,g10.store-account-profile.SC-kuq,g10.shared-store-profile.SC-tlq -->
+### grade10-site-store-account-profile-US2-TC4-1: Bio saves at its limit and in its lines, and an emptied bio clears
 
 Runs once per row of **Test data**.
 
@@ -484,6 +485,7 @@ Runs once per row of **Test data**.
 | 500 characters | the same 500 characters |
 | Nothing: the field emptied | the line saying what a bio is for |
 | Three spaces | the line saying what a bio is for |
+| `Graded cards only.`, a line break, then `Trades welcome.` | the same two lines, on two lines |
 
 **Steps:**
 
@@ -716,6 +718,45 @@ Runs once per row of **Test data**.
 * Step 2 accepts the save.
 * Step 3 reads the row's saved value.
 
+<!-- trace:case id=g10.store-account-profile.TC-n7t rev=1 covers=g10.store-account-profile.SC-oj6 -->
+### grade10-site-store-account-profile-US2-TC10-1: A first save that changes no field starts member-since
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-account-profile-US-02
+
+**Pre-conditions:**
+
+* customer(has never saved a profile, holds no bio) is signed in, on an account named <account name>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <account name> | `Kit Lam` |
+| <run date> | The date of the run |
+
+**Steps:**
+
+1. Send a profile save carrying only an empty bio in the collector's session.
+2. Read the API response.
+3. Read the profile.
+
+**Expected Results:**
+
+* Step 2 accepts the save.
+* Step 3 reads <account name> as the display name and no bio.
+* Step 3 reads <run date> as member-since.
+
 ---
 
 ## grade10-site-store-account-profile-US3: Collector uploads or removes an avatar
@@ -849,6 +890,7 @@ Runs once per row of **Test data**.
 | `陳大文` | `陳` |
 | `ångström` | `Å` |
 | `#1 Fan` | `1` |
+| `@kitlam` | `K` |
 | `🃏🃏` | `?` |
 
 **Steps:**
@@ -928,7 +970,7 @@ Runs once per row of **Test data**.
 | <upload> | Refused for |
 | --- | --- |
 | A GIF of about 100 KB | the accepted types: JPEG, PNG and WebP |
-| A JPEG of 5242881b (5MiB plus one byte, ~5.24MB) | the 5 MB limit |
+| A JPEG of 5242881 bytes (5 MiB + 1 byte) | the 5 MB limit |
 
 **Steps:**
 
@@ -1087,7 +1129,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <upload> | A JPEG of 5242880b (5MiB, ~5.24MB) |
+| <upload> | A JPEG of 5242880 bytes (5 MiB), at the limit |
 
 **Steps:**
 
@@ -1148,27 +1190,44 @@ Runs once per row of **Test data**.
 * Step 4 returns to the read view showing the edit.
 * After step 5, member-since reads the row's date.
 
---- | --- |
-| <new image> | A JPEG of about 1 MB |
-| <save date> | The date of the run |
-| <typed name> | `Kit Collector` |
+<!-- trace:case id=g10.store-account-profile.TC-7o9 rev=1 covers=g10.store-account-profile.SC-hjj -->
+### grade10-site-store-account-profile-US3-TC11-1: Two collectors with the same image each hold their own address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-account-profile-US-03
+
+**Pre-conditions:**
+
+* customer A and customer B are each signed in on their own browser, with no avatar.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <same image> | One JPEG file of about 1 MB, used by both |
 
 **Steps:**
 
-1. Navigate to <grade10 profile url>.
-2. Click the edit control.
-3. Choose <new image> with the avatar control.
-4. Click the save button.
-5. Reload the page.
-6. Click the edit control.
-7. Replace the display name with <typed name>.
-8. Click the save button.
+1. As customer A, choose <same image> with the avatar control and save.
+2. As customer B, choose <same image> with the avatar control and save.
+3. Record each avatar's image address.
+4. As customer A, remove the avatar and save.
+5. Request customer B's image address in customer B's session, from a browser with no cached copy.
 
 **Expected Results:**
 
-* Step 4 returns to the read view showing <new image> as the avatar.
-* After step 5, member-since reads <save date>.
-* Step 8 shows <typed name>, and member-since still reads <save date>.
+* Step 3 records two different addresses.
+* Step 5 returns customer B's image.
 
 ---
 
@@ -1279,7 +1338,7 @@ Runs once per row of **Test data**.
 **so that** a network miss does not look like an empty profile or a successful save.
 
 <!-- trace:case id=g10.store-account-profile.TC-1k8 rev=1 covers=g10.store-account-profile.SC-tvg -->
-### grade10-site-store-account-profile-US5-TC1-1: Failed read says the profile could not be read, not an empty profile
+### grade10-site-store-account-profile-US5-TC1-1: Failed read says the profile could not be read, and a retry reads it
 
 **Classification:**
 
@@ -1308,11 +1367,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 profile url>.
+2. Restore the profile read.
+3. Click the retry control.
 
 **Expected Results:**
 
-* Step 1 shows that the profile could not be read.
+* Step 1 shows that the profile could not be read, and a retry control.
 * Step 1 shows no profile field, not <stored name>, and no edit control.
+* Step 3 shows the profile holding <stored name>.
 
 <!-- trace:case id=g10.store-account-profile.TC-2i3 rev=1 covers=g10.store-account-profile.SC-7oe -->
 ### grade10-site-store-account-profile-US5-TC2-1: Failed save keeps what was typed and stores nothing
@@ -1420,21 +1482,25 @@ Runs once per row of **Test data**.
 - The avatar's 5 MB is 5,242,880 bytes, the reading the grading photo limit uses.
 - An edit whose image is refused or fails saves no text; the form keeps the typed text and the chosen image, so one retry sends both.
 - Member-since is the first save of any field, an avatar saved on its own included.
+- The fallback letter reads the display name whole, so `@kitlam` shows `K`.
 
 ## Reconciliation
 
-**Run:** 2026-10-06, second QA2 reconciliation in a fresh context, after the round added `grade10-site-store-account-profile-SC-35` and `grade10-site-store-account-profile-SC-36` and moved the avatar requirement onto the storage sweep. Read: this suite, the capability's `spec.md` and `user-journeys.md`, `proposal.md`, `decisions.md`, `tech-design.md`, `ui-design.md`, `tasks.md`, the domain suite `grade10-site/store/domain-tcs.md` in this change, the Profile and Profile Blocks pages, and the application repository's profile router, `memberName` and `avatarInitial` for what is built. The blind pass recorded no Run line of its own, so its bundle is not stated here.
+**Run:** 2026-10-06, seventh QA2 reconciliation, in a fresh context, over the same reading: every case and scenario joined again on the anchors, and no case moved; US3-TC5 and US3-TC9 write their byte counts as the store's other suites do. Before it, the sixth, after the third accept review: each profile's image gains an address of its own, the fallback letter reads the display name whole, and a save that repeats the stored values still starts member-since. US3-TC8 is unmoved, US3-TC3 gains the `@kitlam` row, and US2-TC10 and US3-TC11 are new, below. Before it, the fifth, in a fresh context, over the same reading plus the store's `main`, where `omit-profile-account-menu` decides the account menu never offers Profile; two cases moved. Before it, the fourth, after the second accept review dropped the requirement's claim that the first save makes the record, which US1-TC7's record written by the store already contradicted; no case moved. Before it, the third reconciliation in a fresh context, after the accept review gave a failed read its retry, settled the bio's field and added the page's lines on length, `?` and a replaced image. Read: this suite, the capability's `spec.md` and `user-journeys.md`, `proposal.md`, `decisions.md`, `tech-design.md`, `ui-design.md`, `tasks.md`, the domain suite `grade10-site/store/domain-tcs.md` in this change, the Profile and Profile Blocks pages, and the application repository's profile router, `memberName` and `avatarInitial` for what is built. The blind pass recorded no Run line of its own, so its bundle is not stated here.
 
 - **Raised, settled by the round** — how the fallback letter is drawn (Q17: one character, the first letter or digit in any script; US1-TC1, US1-TC2, US3-TC2, US3-TC3 and US3-TC7 assert the letter); how a character is counted (Q18: UTF-16 code units, as the input and the store already count); what 5 MB is (Q19: 5,242,880 bytes, US3-TC5 and US3-TC9 either side of it); a failed avatar in a combined save (Q20: `grade10-site-store-account-profile-SC-33`, walked by US5-TC3); a name with no letter or digit (Q23: `grade10-site-store-account-profile-SC-36`, US3-TC3's `🃏🃏` row); an avatar saved on its own (Q24: `grade10-site-store-account-profile-SC-35`, walked by US3-TC10)
-- **Raised for the human, held open** — Q1: US3-TC8 requests the old address in the collector's session, which holds under either answer; answered as recommended, a request with no session reaches the image too, and the case gains that row. Q10: US3-TC4 refuses a PDF under either answer; no case meets a limit on the picked file. Q11 and Q12: no case walks a profile saved before member-since was recorded, or a save that leaves the prefilled name untouched. Q16: US1-TC1 expects the letter for an account that may hold a picture of its own; answered yes, it gains a pre-condition that the account holds none
-- **Rewritten to the spec** — US1-TC4 signs in after the prompt and reads the collector's own profile (`grade10-site-store-account-profile-SC-34`); US2-TC6 and US3-TC5 assert that a refusal names its reason (`grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-18`, `grade10-site-store-account-profile-SC-21`, `grade10-site-store-account-profile-SC-22`, `grade10-site-store-account-profile-SC-29`); US3-TC8 asserts the replacement's new address (`grade10-site-store-account-profile-SC-23`); US3-TC3 gains the `🃏🃏` row (`grade10-site-store-account-profile-SC-36`)
-- **Folded from another capability** — US3-TC7, an avatar that fails to load: no scenario here states it; the rule is `shared-ui-store-profile-SC-10`, and the case walks it on the page the application composes
+- **Raised for the human, held open** — Q1: US3-TC8 and US3-TC11 request an address in its owner's session, which holds under either answer; answered as recommended, a request with no session reaches the image too, and US3-TC8 gains that row. Q10: US3-TC4 refuses a PDF under either answer; no case meets a limit on the picked file. Q11 and Q12: no case walks a profile saved before member-since was recorded, or a save that leaves the prefilled name untouched. Q16: US1-TC1 expects the letter for an account that may hold a picture of its own; answered yes, it gains a pre-condition that the account holds none. Q13, reopened: no case walks a way to the page; US1-TC4 opens it by address under either answer
+- **Raised for the designer, held open** — Q5: US2-TC3 and US3-TC6 click save on an emptied display name, as the recommended answer keeps it enabled. Answered to keep save disabled, US2-TC3 expects save disabled and no refusal, and `grade10-site-store-account-profile-SC-30` has no path on the page, since the field's own limit stops an over-length name; US2-TC6 still reaches the refusal through the store. No case asserts the bio's several lines, whose look rides Q5
+- **Rewritten to the spec** — US1-TC3 names an account name apart from the saved name and expects the saved one (`grade10-site-store-account-profile-SC-07`), where the two could not be told apart; US1-TC4 signs in after the prompt and reads the collector's own profile (`grade10-site-store-account-profile-SC-34`); US2-TC6 and US3-TC5 assert that a refusal names its reason (`grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-18`, `grade10-site-store-account-profile-SC-21`, `grade10-site-store-account-profile-SC-22`, `grade10-site-store-account-profile-SC-29`); US3-TC8 asserts the replacement's new address (`grade10-site-store-account-profile-SC-23`); US3-TC3 gains the `🃏🃏` row and the `@kitlam` row, read whole as `K` (`grade10-site-store-account-profile-SC-36`); US5-TC1 restores the read and retries it (`grade10-site-store-account-profile-SC-31`, which gained the retry the page's failed-read story shows)
+- **Unmoved by the accept review** — `?` for `🃏🃏` and the counted length are what US3-TC3, US2-TC2 and US2-TC5 assert, and a replaced or removed image stops answering, as US3-TC8 walks. The third review dropped the requirement's clause that a replaced image kept answering while another profile held the same image: each profile's image now has an address of its own, and US3-TC8 requests one collector's old address, which holds as written
+- **Repaired** — US3-TC10 held a second, headless Steps and Expected Results block after its own; it is removed, and the case's two rows walk `grade10-site-store-account-profile-SC-35` whole
+- **Folded from another capability** — US3-TC7, an avatar that fails to load: no scenario here states it; the rule is `shared-ui-store-profile-SC-10`, and the case walks it on the page the application composes; US2-TC4's two-line row, a bio kept in its lines: the rule is `shared-ui-store-profile-SC-23`, and the row walks it through the store and back, as the Profile page's Bio field line states
 - **Folded from the design** — none
 - **Rejected** — none
 - **Contradicted** — none: no case and scenario state opposite outcomes
-- **Cases added after the reconciliation** — US1-TC7 (`grade10-site-store-account-profile-SC-06`, `grade10-site-store-account-profile-SC-10`), US2-TC8 (`grade10-site-store-account-profile-SC-16`), US5-TC3 (`grade10-site-store-account-profile-SC-33`), US3-TC10 (`grade10-site-store-account-profile-SC-35`): written from the scenarios the blind pass left unreached, so they are not blind
+- **Cases added after the reconciliation** — US1-TC7 (`grade10-site-store-account-profile-SC-06`, `grade10-site-store-account-profile-SC-10`), US2-TC8 (`grade10-site-store-account-profile-SC-16`), US5-TC3 (`grade10-site-store-account-profile-SC-33`), US3-TC10 (`grade10-site-store-account-profile-SC-35`), US2-TC10 (`grade10-site-store-account-profile-SC-37`), US3-TC11 (`grade10-site-store-account-profile-SC-38`): written from the scenarios the blind pass left unreached, so they are not blind
 - **Uncovered** — `grade10-site-store-account-profile-SC-05`, and the storage sweep's deletion in `grade10-site-store-account-profile-SC-23` and `grade10-site-store-account-profile-SC-24`: out of suite, below
-- **Left to the domain** — nothing: `grade10-site-store-e2e-US7-TC1-1` passes through a save, and the feature cases still assert it
+- **Left to the domain** — nothing: `grade10-site-store-e2e-US9-TC1-1` passes through a save, and the feature cases still assert it
 
 | Scenario | Reached by |
 | --- | --- |
@@ -1474,6 +1540,8 @@ Runs once per row of **Test data**.
 | `grade10-site-store-account-profile-SC-34` | US1-TC4 |
 | `grade10-site-store-account-profile-SC-35` | US3-TC10 |
 | `grade10-site-store-account-profile-SC-36` | US3-TC3 |
+| `grade10-site-store-account-profile-SC-37` | US2-TC10 |
+| `grade10-site-store-account-profile-SC-38` | US3-TC11 |
 
 ### Out of suite
 
