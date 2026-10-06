@@ -69,10 +69,8 @@ None.
   neither since `05cb3fefa4`, and zzz renders its own header, so no consumer
   adapts.
 - Manual pages: [Page Shell · Account Menu](../../../docs/prds/products/grade10-site/site/page-shell.md#account-menu),
-  [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry),
-  [Post-Bidding · My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders)
-  and [Sign-Out](../../../docs/prds/products/shared/auth/sign-out.md), which
-  names the account page.
+  [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry)
+  and [Post-Bidding · My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders).
 - `nav-cart-count-badge`: its deltas keep only the feature-set lines they
   change (Q12). Its review branch lands on `main` before this change is
   accepted, so neither fold puts back the other's old lines.
@@ -94,7 +92,6 @@ None.
 - [Page Shell · Account Menu](../../../docs/prds/products/grade10-site/site/page-shell.md#account-menu)
 - [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry)
 - [Post-Bidding · My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders)
-- [Sign-Out](../../../docs/prds/products/shared/auth/sign-out.md)
 - [Carried Surfaces](../../../docs/prds/products/grade10-site/site/carried-surfaces.md)
 - `openspec/changes/archive/2026-09-21-hide-profile-until-launch/decisions.md`, Q5 - the handler-gated Profile rule this change would reverse
 - `openspec/changes/archive/2026-09-22-launch-account-menu-composition/decisions.md`, Q7 - no My Auction Orders item in the account menu
