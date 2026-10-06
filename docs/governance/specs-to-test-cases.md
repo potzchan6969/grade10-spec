@@ -143,7 +143,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 - **A qualifier carries what the rule needs** — the class, then the state or grant in brackets; its wording is **How a Case Reads**
 - **A product serves both classes** — `openspec/config.yaml` places a capability by who is held to it, not whose screen shows it
 - **Any other actor is not a journey** — engineers, QA, reviewers and consuming applications are not end users: software this store ships is the system's side of a journey, and the people who build the product walk a test. An outside agent that acts on its own is a role — a crawler, a preview fetcher, a provider calling back — and its cases still name the class whose surface the rule is checked on. A capability nobody reaches writes `**Walked by:** nobody on their own — <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to none of the three
-- **The team walks the delivery line** — a capability under `shared/planning/` is the store's own rails, and its users are the hands of a change: a product manager, a designer, a tech PIC, QA, an engineer, a release hand. There, and only there, a teammate is an `admin`, and a case names the role as the qualifier: `admin(product manager) is on <change page url>.`
+- **The team walks the delivery line** — a capability under `shared/planning/` is the store's own rails, and its users are the hands of a change: a product manager, a designer, QA, an engineer, a release hand. There, and only there, a teammate is an `admin`, and a case names the role as the qualifier: `admin(product manager) is on <change page url>.`
 
 ## Where It Lives
 

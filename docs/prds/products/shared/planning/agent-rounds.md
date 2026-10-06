@@ -50,6 +50,11 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **One human resolves every question** — the same named human answers all
   product questions QA2 raises before accepting the plan; a remaining question
   holds acceptance
+- 🚧 **The engineer challenges the tech design** — there is no tech PIC: the
+  engineer who will build the change challenges the proposed system, its data
+  flow and its rejected options before the plan is accepted, and the human who
+  accepts judges the requirements and the suite whole; a question the tech
+  design cannot settle is a Raised row, never a dated wait
 - 🚧 **About three questions** — the first round asks what changes what is
   built, none of it trivial, one question whether to do it now, and lists the
   rest it decided as decided by the round
@@ -214,15 +219,16 @@ An artifact is drawn from what is before it, the page's marks first.
 The owner's brief asks that the product manager start with what is wanted and
 agents refine the rest, that the tech PIC and the designer review what agents
 propose, and that every step passes through layers of checks. The brief is
-[the blueprint](/references/delivery-workflow-blueprint).
+[the blueprint](/references/delivery-workflow-blueprint). The tech PIC's review now falls to the engineer who builds the change.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Who drafts | Decided | The change's agent drafts every artifact from the proposal to the code; a person answers, remarks and lands. | Product, Engineering |
 | Challenge and verify | Decided | QA1 writes the blind cases; Dev independently writes design and requirements; QA2 reconciles their outputs; the simpler-thing reader checks each draft. | Product, QA, Engineering |
+| The tech design's reader | Decided | The engineer who will build the change challenges the tech design before acceptance; the tech PIC is retired, and a question it cannot settle is a Raised row. | Product |
 | Questions | Decided | Numbered rows in the change's decisions, or `❓` lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
 | Read again | Decided | A landing reads every artifact after it, in order; 🚧 what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
-| Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
+| Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the engineering readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |
 | Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
@@ -230,5 +236,5 @@ propose, and that every step passes through layers of checks. The brief is
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
-| A run-sheet failure | ❓ Open | Whether a failed row on the run sheet reaches the change's thread on its own, or QA writes the sentence there; today it is QA's sentence, read as a remark. Recommended: QA's sentence in the thread, naming the case id, and the sheet left as the record of the walk. | QA, Product |
+| A run-sheet failure | Decided | QA writes the sentence in the change's thread, naming the case id, and the sheet stays the record of the walk; no new sender. | QA, Product |
 :::

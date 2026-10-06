@@ -34,5 +34,14 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "1543ecc330828bf670ae50b305480de020f6d14b",
+      "components": [
+        "admin",
+        "inventory-service"
+      ]
+    }
+  ]
 }

@@ -13,29 +13,31 @@ GitHub Deployment receipts, shown for each application component.
 - Stages read from files
   - One of eight: Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete, Archived, each proven by what is on `main`, never set by a key
   - One projection: the four lanes, the stepper, the pip and every message read the same derivation
-  - Proposed whole: the proposal, the decisions and the journeys are one stage, with ❓ on what is still open
-  - Waivers as written: `ui_waived` and `design_waived` stand for the artifact they name, so Designed needs both designs or their line
-  - Tech design first: the tech design is drawn beside the UI design, before the requirements, on every change
+  - Proposed whole: the proposal, the decisions and the journeys are one stage, with `❓` on what is still open
+  - Waivers as written: `ui_waived` stands for the UI design and `design_waived` for the tech design, so Designed needs the UI design or its line, and Specified the tech design or its line
+  - Design draws the UI alone: Designed is proven by the UI design or `ui_waived` and nothing else, and the designer is its one hand
+  - Tech design in planning: Dev writes the tech design inside the planning run, after the blind cases and before the scenarios, and it proves Specified beside the requirements and the suite; the engineer who will build the change challenges it before acceptance
+  - Raised rows hold acceptance: an open Raised row never holds Specified; the product manager's turn at Specified is to resolve it, and acceptance waits until none is open
 - Drafted, landed on a word
-  - Agent mark: the six stages from Proposed to Building are drafted by the change's agent and carry the hand's move beside the mark
+  - Agent mark: the five stages Proposed, Designed, Specified, Planned and Building are drafted by the change's agent and carry the hand's move beside the mark
   - Landed by: `landed_by:` names the hand whose word landed each artifact, written by the landing itself
 - Hands and whose turn
-  - Hands mapping: `hands:` names one handle per role, written by the product manager, the local manual or the application repository's command, refused when the team map does not know it
-  - Whose turn: derived from the stage and the hands, the product manager holding Proposed until the decisions, the journeys and the hands are on `main`
+  - Hands mapping: `hands:` names one handle per role of five - product manager, designer, engineer, QA and release hand - with no tech PIC, written by the product manager, the local manual or the application repository's command, refused when the team map does not know it
+  - Whose turn: derived from the stage and the hands, the product manager holding Proposed until the decisions, the journeys and the designer's hand are on `main`
   - Unnamed hand: a stage whose hand is unnamed shows the hand as open and routes to the role's channel
   - Team map: one entry per handle with its Slack member and roles, and a channel per role
 - Overlays, a closed set
   - Five overlays: Waiting, Blocked, Idle, Behind and Suite, each read from a file and shown beside the stage
   - Idle counts landings: days since the last tick, claim or artifact landing, never since a repository-wide commit; shelved at 30
   - Behind is shown: an artifact whose linked page lines or artifacts before it changed after it was drawn or last read again is marked on the card and the artifact, holds no tick, claim or wait here
-  - Open questions: a ❓ decisions row or a ❓ line under a linked section, counted per artifact and listed per hand
+  - Open questions: a `❓` decisions row or a `❓` line under a linked section, counted per artifact and listed per hand
 - Messages, once per move
   - Your turn: one direct message to the hand a change reaches, keyed by change, stage and role, never sent twice for one move
   - Behind and implementation complete: one message to the hand of an artifact newly behind, and one to QA when implementation is complete
   - Landed from a terminal: a landing pushed from a terminal posts one reply in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
   - Channel and digest: once the manual deploys a push, the channel post names each change that crossed a milestone - proposed, accepted, implementation claimed, implementation complete, archived; a weekly digest per person lists open questions, idle, behind and waiting
 - Surfaces that show the stage
-  - Board: eight lanes with the agent mark and the hand's move on six, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
+  - Board: eight lanes with the agent mark and the hand's move on five, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
   - Change page: the stepper, the Your turn card with the thread and the command, the hands, each artifact fresh or behind with its questions and who landed it, on the pages every line the change marks, delivery and handoff
   - My turn: the reader's open questions, then the changes on them now, then the ones theirs later
   - Ribbon and pip: a section's in-flight row shows the stage and the hand, and each 🚧 line wears its change's stage
@@ -60,9 +62,9 @@ The stage says how far a change has got, and only what is on `main` proves it.
 
 | # | Stage | Proven by, on `main` |
 | --- | --- | --- |
-| 1 | Proposed | `proposal.md` |
-| 2 | Designed | `ui-design.md` or `ui_waived:` · `tech-design.md` or `design_waived:` |
-| 3 | Specified | QA1 cases · independent Dev requirements, scenarios and technical design · QA2 reconciliation · every Raised row resolved |
+| 1 | Proposed | `proposal.md` · `decisions.md` · the journeys file; a change holding less is Proposed too, the ladder's first rung |
+| 2 | Designed | `ui-design.md` or `ui_waived:` |
+| 3 | Specified | QA1 cases in `feature-tcs.md` · Dev's `tech-design.md` or `design_waived:` · Dev's requirements and scenarios in `spec.md`; an open Raised row holds acceptance, never this rung |
 | 4 | Planned | `tasks.md` |
 | 5 | Accepted | `acceptance.json` records the immutable planning fingerprint of the reconciled plan after one human resolves every raised question |
 | 6 | Building | `implementation.json` names that historical acceptance and the first-claim durable-spec baseline and target scope |
@@ -97,6 +99,13 @@ QA1 and Dev readings and one human has resolved every raised question.
 - **Held** — an unresolved Raised row or a changed review baseline SHALL
   refuse acceptance until the human resolves it and the reconciled plan is
   accepted again
+- **Acceptance only** — an open Raised row SHALL hold acceptance alone and
+  SHALL NOT hold Specified or any rung before it; the product manager's turn
+  at Specified SHALL be to resolve the open rows, a row about the tech design
+  among them, with the engineer's challenge informing the answer
+- **No engineer's sign-off** — acceptance SHALL NOT wait for a separate
+  record of the engineer's word on the tech design; the engineer's challenge
+  lands as decisions rows or Raised rows, which already hold acceptance
 
 #### Scenario: shared-planning-change-stages-SC-79 - Acceptance waits for every raised question
 **Serves:** shared-planning-change-stages-US-02 - the product manager accepts only a reconciled plan whose questions are resolved
@@ -104,7 +113,8 @@ QA1 and Dev readings and one human has resolved every raised question.
 **GIVEN** QA2 has reconciled QA1's cases and Dev's requirements, scenarios and tasks, with one Raised row still open
 **WHEN** `pnpm run accept:preflight` or `pnpm run spec:accept` runs
 **THEN** acceptance SHALL be refused and name the unresolved row
-**AND** the stage SHALL remain Planned
+**AND** the stage SHALL stay below Accepted
+**AND** the open row SHALL NOT hold the stage below Specified
 
 #### Scenario: shared-planning-change-stages-SC-80 - Acceptance preserves a superseded fingerprint
 **Serves:** shared-planning-change-stages-US-02 - the product manager can review which resolved plan implementation follows
@@ -239,9 +249,11 @@ derivation.
 
 ### Requirement: Proposed holds the proposal, the decisions and the journeys
 
-Proposed SHALL be one stage: the proposal proves it, and the decisions, the
-journeys, the marked page lines and `hands:` complete it without moving it. An
-item nobody has confirmed SHALL stay ❓ on the decisions or the page and SHALL
+Proposed SHALL be one stage: a change is Proposed from its proposal, and the
+decisions, the journeys, the marked page lines and `hands:` complete it
+without moving it; the proposal, the decisions and the journeys are its proof
+for the rungs after it. An
+item nobody has confirmed SHALL stay `❓` on the decisions or the page and SHALL
 hold no stage.
 
 #### Scenario: shared-planning-change-stages-SC-06 - The decisions and the journeys complete Proposed
@@ -257,7 +269,8 @@ A change that owes no design says so in one line.
 
 - **What each line stands for** — `ui_waived:` SHALL stand for
   `ui-design.md` and `design_waived:` SHALL stand for `tech-design.md`, so
-  Designed is proven by both designs, by both lines, or by one of each
+  Designed is proven by the UI design or its line, and Specified counts the
+  tech design or its line among its proofs
 - **Shown as not owed** — a waived artifact SHALL be shown as not owed and
   fresh, carrying the reason written on its line
 
@@ -265,48 +278,78 @@ A change that owes no design says so in one line.
 **Serves:** shared-planning-change-stages-US-05 - the designer says a change draws nothing and the ladder moves
 
 **GIVEN** a change in Proposed with its decisions, its journeys and `hands:` on `main`
-**WHEN** `ui_waived:` with `tech-design.md`, or `ui-design.md` with `design_waived:`, or both lines land on `main`
-**THEN** its stage SHALL be Designed
+**WHEN** `ui_waived:` lands, and later `design_waived:` lands with the requirements and the suite
+**THEN** its stage SHALL first be Designed and then Specified
 **AND** each waived design SHALL be shown as not owed and fresh, with its reason
 
 #### Scenario: shared-planning-change-stages-SC-08 - A design with neither a file nor a line
-**Serves:** shared-planning-change-stages-US-05 - the designer writes one line and the other design is still owed
+**Serves:** shared-planning-change-stages-US-05 - the designer writes no line and the UI design is still owed
 
 **GIVEN** a change in Proposed with its decisions, its journeys and `hands:` on `main`
-**WHEN** `ui_waived:` lands and no tech design does
+**WHEN** `tech-design.md` lands and neither `ui-design.md` nor `ui_waived:` does
 **THEN** its stage SHALL be Proposed
-**AND** the tech design SHALL be shown as owed
+**AND** the UI design SHALL be shown as owed
 
-### Requirement: The tech design is drawn before the requirements
+### Requirement: The tech design proves Specified
 
-The tech design is drawn beside the UI design, from the page, the decisions
-and the journeys, before anybody writes a requirement.
+Dev writes the tech design inside the planning run, after QA1's blind cases
+and before the requirement scenarios, so it is proven at Specified beside the
+requirements and the suite rather than at Designed.
 
-- **Owed on every change** — every change SHALL owe `tech-design.md` or
+- **Owed on every change** - every change SHALL owe `tech-design.md` or
   `design_waived:`
-- **Requirements do not stand in for it** — requirements landing while a
-  design is owed SHALL NOT move the stage
-- **A question for the tech PIC** — a requirement that reaches the tech design
-  SHALL be written as a dated wait on the tech PIC and SHALL NOT hold the
-  stage
+- **Not owed at Designed** - a change whose UI design or `ui_waived:` is on
+  `main` SHALL be Designed whether or not its tech design is
+- **Requirements do not stand in for it** - requirements and the suite
+  landing while the tech design is owed SHALL NOT move the stage past
+  Designed, and the change SHALL name the tech design as what it owes
+- **Its hand** - the tech design's hand SHALL be the engineer, `dev`: the
+  engineer who will build the change SHALL challenge it before acceptance,
+  prompted by the Planned turn's move, with no role and no message of its
+  own, and the human who accepts the plan SHALL judge it whole with the
+  requirements and the suite
+- **A question it cannot settle** - SHALL be a Raised row in the change's
+  decisions, which holds acceptance and not Specified, and SHALL NOT be a
+  wait on another hand; the product manager SHALL answer it, with the
+  engineer's challenge informing the answer
 
-#### Scenario: shared-planning-change-stages-SC-09 - A requirement reaches the tech design
-**Serves:** shared-planning-change-stages-US-06 - the requirements run writes what it waits on and the change keeps moving
+#### Scenario: shared-planning-change-stages-SC-85 - The UI design alone proves Designed
+**Serves:** shared-planning-change-stages-US-02 - the product manager reads a change whose UI design has landed and whose planning run has not started
 
-**WHEN** a wait on the requirements names what the tech design has not settled
-**THEN** the wait SHALL be shown against the change's tech PIC with the date it started
-**AND** the stage SHALL be unchanged
+**GIVEN** a change in Proposed with its decisions, its journeys and the designer's hand on `main`
+**WHEN** `ui-design.md` lands and no tech design does
+**THEN** its stage SHALL be Designed
+**AND** the change SHALL name the blind cases, not the tech design, as what it owes
 
-### Requirement: The six drafted stages carry the agent mark and the hand's move
+#### Scenario: shared-planning-change-stages-SC-86 - Requirements and the suite without the tech design
+**Serves:** Stages read from files - a planning run that lands its requirements before its tech design is read on the same push
 
-Proposed to Building are drafted by the change's agent, and the hand of the
-stage answers.
+**GIVEN** a change in Designed carrying neither `tech-design.md` nor `design_waived:`
+**WHEN** `spec.md` with requirements and `feature-tcs.md` land on `main`
+**THEN** its stage SHALL be Designed
+**AND** the change SHALL name the tech design as what it owes
+**AND** once `tech-design.md` lands its stage SHALL be Specified
 
-- **Where the pair is shown** — for Proposed to Building the board's lane
+#### Scenario: shared-planning-change-stages-SC-87 - A question the tech design cannot settle holds acceptance only
+**Serves:** shared-planning-change-stages-US-02 - the product manager reads why a specified change is not accepted
+
+**GIVEN** a change in Designed whose requirements and suite are on `main`
+**WHEN** `tech-design.md` lands with a question it cannot settle written as a Raised row that has landed nowhere
+**THEN** its stage SHALL be Specified
+**AND** the turn SHALL be the product manager's, to resolve the open row
+**AND** acceptance SHALL be refused and name the row until the row lands
+
+### Requirement: The five drafted stages carry the agent mark and the hand's move
+
+Proposed, Designed, Specified, Planned and Building are drafted by the
+change's agent, and the hand of the stage answers. Accepted is the accepting
+human's record, and nobody drafts it.
+
+- **Where the pair is shown** — for the five drafted stages the board's lane
   heading SHALL carry the agent mark and the hand's move, and the change
   page's stepper step SHALL carry the move with the mark on the element for a
-  pointer and a screen reader; Implementation complete and Archived SHALL
-  carry neither
+  pointer and a screen reader; Accepted, Implementation complete and Archived
+  SHALL carry neither
 - **Read from the stage** — the mark and the move SHALL come from the stage,
   so every change in one stage carries the same pair and no change's record
   SHALL change them
@@ -314,19 +357,18 @@ stage answers.
 | # | Stage | The agent drafts | The hand's move |
 | --- | --- | --- | --- |
 | 1 | Proposed | the marks and the three files, from what the hand asks | answer |
-| 2 | Designed | both designs, from the page and the journeys | tweak · challenge |
-| 3 | Specified | QA1's blind cases, Dev's independent design, requirements and scenarios, then QA2's reconciliation | read and resolve raised questions |
-| 4 | Planned | the tasks | read |
-| 5 | Accepted | the immutable accepted fingerprint | accept |
+| 2 | Designed | the UI design, from the page and the journeys | the designer's: tweak |
+| 3 | Specified | QA1's blind cases, Dev's independent tech design, requirements and scenarios, then QA2's reconciliation | the product manager's: resolve the open Raised rows |
+| 4 | Planned | the tasks | read the plan and challenge the tech design |
 | 6 | Building | each group, test first | read each landing |
 
 #### Scenario: shared-planning-change-stages-SC-10 - The mark and the move on a lane and a step
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a lane heading and opens the change beneath it
 
 **WHEN** the lane headings and the change page's stepper steps are read
-**THEN** each lane heading from Proposed to Building SHALL carry the agent mark and the hand's move for that stage
-**AND** each stepper step from Proposed to Building SHALL carry that stage's move, with the mark on the element for a pointer and a screen reader
-**AND** Implementation complete and Archived SHALL carry neither
+**THEN** the lane heading of each of the five drafted stages SHALL carry the agent mark and the hand's move for that stage
+**AND** the stepper step of each of the five SHALL carry that stage's move, with the mark on the element for a pointer and a screen reader
+**AND** Accepted, Implementation complete and Archived SHALL carry neither
 **AND** two changes in one stage SHALL carry the same pair
 
 ### Requirement: `landed_by:` names the hand whose word landed each artifact
@@ -380,24 +422,23 @@ Each change names who takes it at each stage.
 
 | Role | Key | Takes the change at |
 | --- | --- | --- |
-| Product manager | `pm` | Proposed and Accepted; answers each raised question while the change is Specified |
+| Product manager | `pm` | Proposed, Specified and Accepted; resolves the open Raised rows while the change is Specified |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
-| Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
-| Engineer | `dev` | Specified, Planned, Accepted and Building |
+| Engineer | `dev` | Planned, Accepted and Building |
 | QA | `qa` | Implementation complete, for human verification; suite verdict as an overlay after implementation |
 | Release hand | `release` | Environment availability updates after archive |
 
 #### Scenario: shared-planning-change-stages-SC-13 - The hands are named at the interview's end
 **Serves:** shared-planning-change-stages-US-04 - the product manager closes the interview by naming who takes each role
 
-**WHEN** `hands:` names a handle for each of the six roles
+**WHEN** `hands:` names a handle for each of the five roles
 **THEN** each role SHALL show that handle on the change page and on the change's card
 **AND** a role the change does not name SHALL show as open
 
 #### Scenario: shared-planning-change-stages-SC-14 - A hands entry the check refuses
 **Serves:** shared-planning-change-stages-US-04 - the product manager mistypes a role or a handle at the interview's end
 
-**WHEN** `hands:` names a role outside the six, gives a role more than one handle, or names a handle the team map does not know
+**WHEN** `hands:` names a role outside the five, `tech` among them, gives a role more than one handle, or names a handle the team map does not know
 **THEN** the check SHALL refuse the change
 **AND** SHALL name what it refused
 **AND** no message SHALL be sent to that handle
@@ -409,9 +450,9 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 
 | # | Stage | Whose turn |
 | --- | --- | --- |
-| 1 | Proposed | `pm` until `decisions.md` and the journeys file are on `main` and `hands:` names every role the next stage needs - `design` unless `ui_waived`, `tech` unless `design_waived`; then those hands |
+| 1 | Proposed | `pm` until `decisions.md` and the journeys file are on `main` and `hands:` names the designer; then `design`. A change carrying `ui_waived` reaches Designed as its decisions and journeys land, and is nobody's turn at Proposed after them |
 | 2 | Designed | nobody: QA1 writes the blind suite next |
-| 3 | Specified | Dev drafts independently, then QA2 reconciles; `pm` answers every raised question |
+| 3 | Specified | `pm`, resolving the open Raised rows |
 | 4 | Planned | `dev` |
 | 5 | Accepted | `pm` or the one named human who accepts the resolved plan |
 | 6 | Building | `dev` |
@@ -421,18 +462,18 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 #### Scenario: shared-planning-change-stages-SC-15 - Proposed changes hands without changing stage
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the Proposed lane before and after the three files land
 
-**GIVEN** a change holding its proposal and not yet its decisions, its journeys or a hand for either design
-**WHEN** its card is read, and read again once the decisions, the journeys and both hands are on `main`
+**GIVEN** a change holding its proposal and not yet its decisions, its journeys or a designer's hand
+**WHEN** its card is read, and read again once the decisions, the journeys and the designer's hand are on `main`
 **THEN** the turn SHALL first be the product manager's
-**AND** it SHALL then be the designer's and the tech PIC's
-**AND** a change carrying `ui_waived:` SHALL pass to the tech PIC alone, on that hand's name alone
+**AND** it SHALL then be the designer's alone
 **AND** the stage SHALL still be Proposed
+**AND** a change carrying `ui_waived:` SHALL be Designed once its decisions and journeys land, with no designer's turn
 
 #### Scenario: shared-planning-change-stages-SC-16 - Each later stage names its hands
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads across the lanes to see who each change waits on
 
 **WHEN** a change in Specified, Planned, Accepted, Building and Implementation complete is read in turn
-**THEN** the turns SHALL name Dev and QA2 while specified, Dev while planned, the accepting human while accepted, Dev while building, and QA for post-implementation verification
+**THEN** the turns SHALL name the product manager alone while specified, to resolve the open Raised rows, Dev while planned, to read the plan and challenge the tech design, the accepting human while accepted, Dev while building, and QA for post-implementation verification
 **AND** a change in Designed or Archived SHALL name nobody
 
 #### Scenario: shared-planning-change-stages-SC-17 - A hand nobody has named
@@ -526,9 +567,8 @@ tick, claim or artifact landing on the change.
   adds no artifact SHALL NOT move the count, so one commit touching every
   change moves nobody's
 - **The bounds** — the count SHALL be shown from the seventh day, and a
-  change SHALL move to the shelf and off the lanes from the thirtieth — ❓ the
-  recommendation of `Q21`, open on the product manager; another answer changes
-  the day the chip and the shelf appear and the zone the day is counted on
+  change SHALL move to the shelf and off the lanes from the thirtieth, both
+  counted in whole calendar days on the Hong Kong date (`Q21`)
 
 #### Scenario: shared-planning-change-stages-SC-22 - A change that has stopped moving
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads which changes have stopped moving
@@ -639,36 +679,40 @@ was drawn or last read again.
 
 An open question is a line nobody has answered yet, and it holds no stage.
 
-- **What counts** — a decisions row whose decision starts with ❓ and names
-  the role that settles it, or a ❓ line under a top-level page section the
+- **What counts** — a decisions row whose decision starts with `❓` and names
+  the role that settles it, or a `❓` line under a top-level page section the
   change links; a row inside a titled block belongs to the page, not to the
   change
 - **What it carries** — the row's number or the section, and the hand it is
   addressed to: the handle `hands:` names for that role, or the role itself
   when the change names none
-- **Counted against** — a decisions row against the decisions, a ❓ page line
+- **Counted against** — a decisions row against the decisions, a `❓` page line
   against the proposal that links the section
-- **A role outside the six** — a question naming one SHALL be listed under
+- **A role outside the five** — a question naming one SHALL be listed under
   that role and routed to its channel, the way an unnamed hand is
 - **Holds nothing** — an open question SHALL hold no stage
+- **Not a Raised row** — an open Raised row SHALL NOT be an open question: it
+  SHALL stay out of the counts, My turn and the digest, and the product
+  manager SHALL learn of it from the Specified turn and from `spec:accept`'s
+  refusal naming it
 
 #### Scenario: shared-planning-change-stages-SC-32 - A decisions row nobody has settled
 **Serves:** shared-planning-change-stages-US-03 - the teammate the row names reads it on the page listing their work
 
-**GIVEN** a decisions row whose decision starts with ❓ and names a role
+**GIVEN** a decisions row whose decision starts with `❓` and names a role
 **WHEN** the change is read
 **THEN** the row SHALL be listed as an open question with its number
 **AND** SHALL be addressed to the handle `hands:` names for that role
-**AND** a row naming a role outside the six SHALL be listed under that role and routed to its channel
+**AND** a row naming a role outside the five SHALL be listed under that role and routed to its channel
 
 #### Scenario: shared-planning-change-stages-SC-33 - A question on the page
 **Serves:** shared-planning-change-stages-US-03 - the teammate reads the questions the page still carries against the change
 
-**GIVEN** a ❓ line under a top-level page section the change links
+**GIVEN** a `❓` line under a top-level page section the change links
 **WHEN** the change is read
 **THEN** the line SHALL be listed as an open question against the proposal
 **AND** SHALL name the section it sits under
-**AND** a ❓ row inside a titled block of that page SHALL NOT be listed
+**AND** a `❓` row inside a titled block of that page SHALL NOT be listed
 
 #### Scenario: shared-planning-change-stages-SC-34 - Questions counted per artifact
 **Serves:** shared-planning-change-stages-US-02 - the product manager opens the change to see what is unanswered and who answered what
@@ -677,6 +721,16 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **WHEN** the change page is read
 **THEN** the decisions row SHALL show a count of two
 **AND** the UI design SHALL show the handle that landed it
+
+#### Scenario: shared-planning-change-stages-SC-88 - An open Raised row is not an open question
+**Serves:** shared-planning-change-stages-US-02 - the product manager learns of an open Raised row from the Specified turn and the refusal, not from the question lists
+
+**GIVEN** a change in Specified with one open Raised row and no `❓` decisions row or page line
+**WHEN** the change page, My turn and the digest are read
+**THEN** the decisions SHALL show no open question count
+**AND** neither My turn nor the digest SHALL list the row as an open question
+**AND** the turn SHALL be the product manager's, to resolve the open Raised rows
+**AND** `spec:accept` SHALL refuse and name the row
 
 #### Scenario: shared-planning-change-stages-SC-35 - An open question holds nothing
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a change that moved with a question still open
@@ -693,10 +747,8 @@ below and SHALL be sent once for the key it carries, so a re-run of the same
 push sends nothing again.
 
 - **Seven kinds** — nothing else SHALL be sent: a written wait and a change
-  freed by a dependency SHALL be lines of the digest, and the round's own
-  replies are `shared/planning/agent-rounds` — ❓ the recommendation of `Q31`,
-  open on the product manager; another answer adds a message for a written wait
-  and one for a freed dependency
+  freed by a dependency SHALL be lines of the digest and no message of their
+  own (`Q31`), and the round's own replies are `shared/planning/agent-rounds`
 - **Never per commit** — no message SHALL be sent per commit or per tick
 - **Per entry** — a stage re-entered after a revert SHALL send again, and one
   entry SHALL never send twice
@@ -771,10 +823,10 @@ to that hand.
 #### Scenario: shared-planning-change-stages-SC-40 - A stage lands and its hands are told
 **Serves:** shared-planning-change-stages-US-01 - the hand starts the day the change lands, from the message
 
-**GIVEN** a change in Proposed whose designer and tech PIC are named
+**GIVEN** a change in Proposed whose designer is named
 **WHEN** a push lands `decisions.md`, the journeys file and `hands:`
-**THEN** one direct message SHALL be sent to each of the two
-**AND** each SHALL name the change, the stage, the thread and the command
+**THEN** one direct message SHALL be sent to the designer
+**AND** it SHALL name the change, the stage, the thread and the command
 **AND** no message SHALL be sent to the product manager for that move
 
 #### Scenario: shared-planning-change-stages-SC-41 - The hand is unnamed
@@ -980,14 +1032,14 @@ The board is where every change in flight is read at once.
 The change page SHALL show, in this order down the reading column:
 
 1. the stepper, one step per stage, the change's stage marked, the agent mark
-   and the hand's move under the first six
+   and the hand's move under the five drafted stages
 2. the Your turn card: the hand, the link to the change's thread and the
    command to paste
 3. the hands, one row per role with its handle or open
 4. the artifacts, each fresh, behind or not owed, with its open question count
    and the handle that landed it
-5. on the pages: every 🚧 and ❓ line of each page section the proposal
-   links, under its page's title and section, a ❓ line with its hand
+5. on the pages: every 🚧 and `❓` line of each page section the proposal
+   links, under its page's title and section, a `❓` line with its hand
 6. implementation: the historical accepted fingerprint, first-claim
    durable-spec baseline, each repository commit and the concrete application
    component ids recorded for the change
@@ -1024,10 +1076,10 @@ The change page SHALL show, in this order down the reading column:
 #### Scenario: shared-planning-change-stages-SC-71 - The change page lists the lines it marks
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the change's effect on the manual on one screen
 
-**GIVEN** a change whose proposal links two page sections, one carrying two 🚧 lines and one ❓ line addressed to Finance
+**GIVEN** a change whose proposal links two page sections, one carrying two 🚧 lines and one `❓` line addressed to Finance
 **WHEN** the change page is read
 **THEN** On the pages SHALL list each section under its page's title
-**AND** SHALL show every 🚧 and ❓ line of those sections as the page writes them, the ❓ line with its hand
+**AND** SHALL show every 🚧 and `❓` line of those sections as the page writes them, the `❓` line with its hand
 
 #### Scenario: shared-planning-change-stages-SC-76 - A stale deployment receipt is labelled
 **Serves:** shared-planning-change-stages-US-12 - the product manager can tell when availability evidence predates the environment

@@ -103,11 +103,11 @@ product history.
 - **Cert ID change in history** — each change is one history entry with
   its time, actor, the Cert ID before and after (`No Cert ID` before an
   assignment) and optional remarks, and it shows in that unit's history
-- 🚧 **Units entered by mistake** — regular stock intaken since it last moved, or
+- **Units entered by mistake** — regular stock intaken since it last moved, or
   a Cert record only intaken with its tagged media, leaves as never received
-- 🚧 **Confirmed first** — remarks default to `Entered by mistake`
-- 🚧 **Reversal in history** — `Intake reversal · No Cert ID` or `· <Cert ID>`
-- 🚧 **Remove physical unit** — offered only on a Cert record that has moved
+- **Confirmed first** — remarks default to `Entered by mistake`
+- **Reversal in history** — `Intake reversal · No Cert ID` or `· <Cert ID>`
+- **Remove physical unit** — offered only on a Cert record that has moved
 - **Explicit reservation unit** — every reservation selects one Cert ID or
   explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Product bulk import** — upload product names and typed schema attributes
@@ -136,8 +136,8 @@ product history.
   when untagged, or is tagged to one same-product Cert record. Every Cert
   record has a Cert ID; regular stock without a Cert ID has no Cert record or
   tag target. Removing a media Cert tag or retagging leaves the originally tagged
-  source item untagged. Removing a physical unit removes its Cert record and
-  the source media tied to that record; Inventory records the unit as withdrawn
+  source item untagged. Removing a physical unit that has moved removes its
+  Cert record and the source media tied to that record; Inventory records the unit as withdrawn
 
 :::detail{title="Product decisions" for="pm"}
 Cert-scoped source media keeps product-level shared images while letting an
