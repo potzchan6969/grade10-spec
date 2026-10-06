@@ -15,7 +15,8 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
 import { RULES } from "../../../tools/manual/check/context.mjs";
-import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
+import { parsePage } from "../../../tools/manual/src/content/grammar.ts";
+import { sectionTextOf } from "../../../tools/manual/src/content/sections.ts";
 import {
   leadingTitle,
   outline,
@@ -26,6 +27,7 @@ import {
   deltaKindOf,
   deltaRequirementSections,
   deltaSections,
+  proposalSectionLinks,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
 import {
@@ -110,25 +112,32 @@ function walkFiles(root, dir, found = []) {
   return found;
 }
 
-function sectionContent(text, anchor) {
-  const roots = outline(text);
-  const all = [];
-  const visit = (sections) =>
-    sections.forEach((section) => {
-      if (sectionSlug(section.heading) === anchor) all.push(section);
-      visit(section.children);
-    });
-  visit(roots);
-  if (all.length === 0) return null;
-  const section = all[0];
-  const _span = sectionSpan(
-    text,
-    section.heading,
-    section.level === 1 ? roots : undefined,
+/** The page sections the proposal's `## References` link, each read as the
+ * manual reads it, or why it cannot be: a flow's step headings stay inside a
+ * section, and a `detail` or an `example` - the page's `Product decisions`
+ * among them - is the page's own, so a change never inherits the questions
+ * another left there. */
+function linkedSections(root, changeId) {
+  const rel = `openspec/changes/${changeId}`;
+  const proposal = join(root, rel, "proposal.md");
+  if (!existsSync(proposal)) return [];
+  return proposalSectionLinks(readFileSync(proposal, "utf8"), rel).map(
+    ({ page, slug }) => {
+      const path = `${page}#${slug}`;
+      if (!existsSync(join(root, page)))
+        return { path, error: `${page} does not exist` };
+      let ast;
+      try {
+        ast = parsePage(readFileSync(join(root, page), "utf8"));
+      } catch (error) {
+        return { path, error: `${page}: ${error.message}` };
+      }
+      const content = sectionTextOf({ ast }, slug);
+      return content === undefined
+        ? { path, error: `${page} has no section matching #${slug}` }
+        : { path, content };
+    },
   );
-  // `sectionSpan` searches top-level headings; use the outline's complete raw
-  // block for nested sections so unrelated PRD decisions stay out of scope.
-  return `${"#".repeat(section.level)} ${section.heading}\n${section.raw ? `\n${section.raw}` : ""}`;
 }
 
 function changeContractPaths(root, changeId) {
@@ -157,20 +166,6 @@ function canonicalPlanningContent(path, text) {
     )
     .join("\n")
     .replace(/\n{3,}/g, "\n\n");
-}
-
-function prdReferences(root, sourcePaths) {
-  const refs = new Map();
-  for (const path of sourcePaths) {
-    const text = readFileSync(join(root, path), "utf8");
-    for (const match of text.matchAll(/docs\/prds\/[\w./-]+\.md#([\w-]+)/g)) {
-      const file = match[0].split("#")[0];
-      const anchor = match[1];
-      if (!existsSync(join(root, file))) continue;
-      refs.set(`${file}${anchor ? `#${anchor}` : ""}`, { file, anchor });
-    }
-  }
-  return [...refs.values()];
 }
 
 function durableFor(root, capability, filename) {
@@ -1256,7 +1251,11 @@ export function contractTargetDiffs(targets, baselineText, currentText) {
   return differences;
 }
 
-export function acceptanceReadiness(root, changeId) {
+export function acceptanceReadiness(
+  root,
+  changeId,
+  sections = linkedSections(root, changeId),
+) {
   const dir = join(root, "openspec", "changes", changeId);
   const errors = [];
   const required = [
@@ -1356,18 +1355,13 @@ export function acceptanceReadiness(root, changeId) {
     }
   }
   const sourcePaths = changeContractPaths(root, changeId);
-  const prds = prdReferences(root, sourcePaths);
   const scoped = sourcePaths.map((path) => [
     path,
     canonicalPlanningContent(path, readFileSync(join(root, path), "utf8")),
   ]);
-  for (const { file, anchor } of prds) {
-    const page = readFileSync(join(root, file), "utf8");
-    const section = sectionContent(page, anchor);
-    if (section === null)
-      errors.push(`${file} has no section matching #${anchor}`);
-    else scoped.push([`${file}#${anchor}`, section]);
-  }
+  for (const { path, content, error } of sections)
+    if (error) errors.push(error);
+    else scoped.push([path, content]);
   const unresolved = (content) => {
     const visible = content
       .replace(/<!--[\s\S]*?-->/g, "")
@@ -1422,7 +1416,7 @@ export function baselineFingerprint(baseline) {
   return HASH(json([...baseline].sort((a, b) => a.path.localeCompare(b.path))));
 }
 
-function fingerprintArtifacts(root, changeId, outputs) {
+function fingerprintArtifacts(root, changeId, outputs, sections) {
   const sourcePaths = changeContractPaths(root, changeId);
   const snapshots = [];
   const artifacts = sourcePaths.map((path) => ({
@@ -1446,14 +1440,9 @@ function fingerprintArtifacts(root, changeId, outputs) {
     });
     snapshots.push({ path, role: "durable-result", content });
   }
-  for (const { file, anchor } of prdReferences(root, sourcePaths)) {
-    const text = readFileSync(join(root, file), "utf8");
-    const selected = anchor ? sectionContent(text, anchor) : text;
-    if (selected === null)
-      throw new Error(`${file} has no section matching #${anchor}`);
-    const path = anchor ? `${file}#${anchor}` : file;
-    artifacts.push({ path, sha256: HASH(selected), role: "prd-source" });
-    snapshots.push({ path, role: "prd-source", content: selected });
+  for (const { path, content } of sections) {
+    artifacts.push({ path, sha256: HASH(content), role: "prd-source" });
+    snapshots.push({ path, role: "prd-source", content });
   }
   return {
     artifacts: artifacts.sort(
@@ -1470,7 +1459,8 @@ export function prepareAcceptance(
   changeId,
   { foldedOn = new Date().toISOString().slice(0, 10) } = {},
 ) {
-  const readiness = acceptanceReadiness(root, changeId);
+  const sections = linkedSections(root, changeId);
+  const readiness = acceptanceReadiness(root, changeId, sections);
   if (readiness.length > 0)
     throw new Error(
       `Acceptance is blocked:\n${readiness.map((line) => `- ${line}`).join("\n")}`,
@@ -1480,6 +1470,7 @@ export function prepareAcceptance(
     root,
     changeId,
     outputs,
+    sections,
   );
   const targets = contractTargets(root, changeId);
   const identity = {

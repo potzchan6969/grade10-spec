@@ -295,7 +295,7 @@ function readChange(
     const sections = outline(proposal);
     const title = leadingTitle(sections);
     if (title) entry.title = title;
-    const body = title ? sections[0].children : sections;
+    const body = proposalBody(sections);
     const why = body.find((section) => /^Why\b/.test(section.heading));
     if (why) entry.why = why.body;
     else {
@@ -827,6 +827,22 @@ function readSectionLinks(sections: Section[], rel: string): PageSectionRef[] {
     found.push({ page: target[1], slug: target[2] });
   }
   return found;
+}
+
+/** The manual sections a proposal's `## References` link, read as a change
+ * entry's `sections` are: the set `pnpm check:manual` verifies and the change's
+ * open questions are counted on. `rel` is the change's store path. */
+export function proposalSectionLinks(
+  proposal: string,
+  rel: string,
+): PageSectionRef[] {
+  return readSectionLinks(proposalBody(outline(proposal)), rel);
+}
+
+/** A proposal's sections: those under its `# ` title, or the top-level ones
+ * when it has none. */
+function proposalBody(sections: Section[]): Section[] {
+  return leadingTitle(sections) ? sections[0].children : sections;
 }
 
 /**

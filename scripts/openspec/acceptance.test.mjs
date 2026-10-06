@@ -404,25 +404,146 @@ The system SHALL let the member pay through the frontend.
   );
 });
 
+/** Points the proposal at one section of a page with this body. */
+function linkSection(root, files, anchor, body) {
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/proposal.md"),
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#scope",
+      `alpha.md#${anchor}`,
+    ),
+  );
+  writeFileSync(
+    join(root, "docs/prds/products/site/alpha.md"),
+    `---\ntitle: Alpha\n---\n\n${body}`,
+  );
+}
+
 // A page link resolves on the id the manual renders the heading with, so a
 // link `pnpm check:manual` accepts is one acceptance can scope.
 test("a page anchor resolves on the manual's heading id", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "a-card-s-outcome",
+    "## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
+// A section reads as the manual draws it: the page's `Product decisions`
+// block is the page's own, and a flow's steps are the section's lines.
+test("a page's last section ends before its Product decisions block", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "cart",
+    `## Cart
+
+Members see the cart count.
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Help | ❓ Open | Where help sits. | Product |
+:::
+`,
+  );
+  const section = prepareAcceptance(root, CHANGE).snapshots.find(
+    (one) => one.path === "docs/prds/products/site/alpha.md#cart",
+  );
+  assert.match(section.content, /Members see the cart count/);
+  assert.doesNotMatch(section.content, /Where help sits/);
+});
+
+test("a section runs past the step headings of a flow it holds", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "the-wizard",
+    `## The Wizard
+
+:::flow{title="Planning a submission"}
+## The cards
+The collector picks the cards.
+:::
+
+❓ Whether the wizard has pages.
+
+## Fees
+
+Every plan shows its fee.
+`,
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#the-wizard still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
+// Acceptance reads the sections `pnpm check:manual` verifies: the proposal's
+// `## References`. A page cited anywhere else is prose, not scope.
+test("acceptance scopes only the page sections the proposal's References link", () => {
   const { root, files } = sandbox();
   const proposal = join(root, "openspec/changes/build-alpha/proposal.md");
   writeFileSync(
     proposal,
     files["openspec/changes/build-alpha/proposal.md"].replace(
-      "alpha.md#product-decisions",
-      "alpha.md#a-card-s-outcome",
+      "Let a reader search.",
+      "Let a reader search, as [Measurement](../../../docs/prds/products/site/alpha.md#product-decisions) counts it.",
     ),
   );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
+  assert.deepEqual(
+    prepareAcceptance(root, CHANGE)
+      .snapshots.filter((one) => one.role === "prd-source")
+      .map((one) => one.path),
+    ["docs/prds/products/site/alpha.md#scope"],
+  );
+
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "site/alpha.md#scope",
+      "site/gone.md#scope",
+    ),
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /docs\/prds\/products\/site\/gone\.md does not exist/,
+  );
+
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#scope",
+      "alpha.md#nowhere",
+    ),
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /docs\/prds\/products\/site\/alpha\.md has no section matching #nowhere/,
+  );
+});
+
+test("a linked page that breaks the manual's grammar is one blocker among the rest", () => {
+  const { root } = sandbox();
   writeFileSync(
     join(root, "docs/prds/products/site/alpha.md"),
-    "# Alpha\n\n## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+    "## Scope\n\nSearch results stay within the selected capability.\n",
   );
-  assert.throws(
-    () => prepareAcceptance(root, CHANGE),
-    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  rmSync(join(root, "openspec/changes/build-alpha/tasks.md"));
+  const errors = acceptanceReadiness(root, CHANGE).join("\n");
+  assert.match(errors, /required artifact is missing: .*tasks\.md/);
+  assert.match(
+    errors,
+    /docs\/prds\/products\/site\/alpha\.md: .*must start with `---` frontmatter/,
   );
 });
 
