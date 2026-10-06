@@ -64,9 +64,10 @@ utility strip / compact utility list.
 
 🚧 When the cart control is present and the cart holds active lines, `SiteHeader`
 shows a round count on the cart icon — the same number as the cart drawer title
-badge. An empty, omitted, or unknown count hides it. Signed-out visitors have
+badge, in full, never `99+`. An empty, omitted, or unknown count hides it. Signed-out visitors have
 no guest cart, so they receive no count. Design-system `Nav` stays
-count-agnostic.
+count-agnostic: a header that shows a count hands `Nav` its own cart control
+through an optional cart slot, as it does for account.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
 
@@ -107,3 +108,9 @@ count-agnostic.
 The site's own rules for what the shell must do — the landmarks, the session
 timing, the small-width reflow — are [the page shell's](/p/grade10-site/site/page-shell).
 This capability is the component contract underneath it.
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Full cart count | Decided | The header shows the whole count the application supplies, the same number as the drawer title. Rejected `99+`, which would disagree with the drawer title. The planning round decided it from the drawer-title match on this page. | Product |
+:::
