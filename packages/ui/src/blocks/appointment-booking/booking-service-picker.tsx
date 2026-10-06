@@ -33,7 +33,7 @@ function BookingServicePicker({
         {(list) => (
           <RadioList
             aria-label={copy.title}
-            className="[&_[data-slot=radio-list-items]]:grid [&_[data-slot=radio-list-items]]:w-full [&_[data-slot=radio-list-items]]:gap-2 lg:[&_[data-slot=radio-list-items]]:grid-cols-3"
+            className="[&_[data-slot=radio-card]]:h-full [&_[data-slot=radio-card-content]]:h-full [&_[data-slot=radio-card-label]]:h-full [&_[data-slot=radio-list-items]]:grid [&_[data-slot=radio-list-items]]:w-full [&_[data-slot=radio-list-items]]:items-stretch [&_[data-slot=radio-list-items]]:gap-2 lg:[&_[data-slot=radio-list-items]]:grid-cols-3"
             onValueChange={(value) => {
               if (value) {
                 onSelect(value);
@@ -43,17 +43,12 @@ function BookingServicePicker({
           >
             {list.map((service) => (
               <RadioCard
-                description={service.description}
+                className="h-full items-stretch"
+                description={service.durationLabel}
                 key={service.id}
                 title={service.name}
                 value={service.id}
-              >
-                {service.durationLabel ? (
-                  <Text as="span" size="xs" tone="muted">
-                    {service.durationLabel}
-                  </Text>
-                ) : null}
-              </RadioCard>
+              />
             ))}
           </RadioList>
         )}

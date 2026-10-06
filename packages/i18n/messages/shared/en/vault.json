@@ -28,7 +28,7 @@
     "other": "Something else"
   },
   "visit": {
-    "title": "Your visit",
+    "title": "Your Visit",
     "at": "{location}, {when}",
     "pick": "Pick a time and bring the item with you. Nothing happens to it until you have agreed what should.",
     "cancel": "Cancel this visit",

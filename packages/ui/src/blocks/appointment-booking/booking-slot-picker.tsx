@@ -1,7 +1,6 @@
 import { Text } from "@grade10/design-system/components/display/text";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { Calendar } from "@grade10/design-system/components/forms/calendar";
-import { RadioList } from "@grade10/design-system/components/forms/radio-list";
-import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { formatLocalTime } from "../../lib/format-datetime";
@@ -73,12 +72,12 @@ function BookingSlotPicker({
   return (
     <div
       className={cn(
-        "grid gap-8 lg:grid-cols-[minmax(17rem,20rem)_minmax(12rem,1fr)]",
+        "grid gap-8 lg:grid-cols-[auto_minmax(12rem,22rem)] lg:items-start lg:justify-start",
         className,
       )}
       data-slot="booking-slot-picker"
     >
-      <VStack data-slot="booking-day-picker" gap="sm" hAlign="stretch">
+      <VStack data-slot="booking-day-picker" gap="sm" hAlign="start">
         <Text as="h2" size="lg" weight="medium">
           {copy.dayTitle}
         </Text>
@@ -116,42 +115,32 @@ function BookingSlotPicker({
                   {copy.noTimes}
                 </Text>
               ) : (
-                <RadioList
+                <div
                   aria-label={copy.timeTitle}
-                  onValueChange={(value) => {
-                    const slot = list.find(
-                      (row) => String(row.start) === value,
-                    );
-                    if (slot) {
-                      onSelectSlot(slot);
-                    }
-                  }}
-                  value={
-                    selectedStart === undefined
-                      ? undefined
-                      : String(selectedStart)
-                  }
+                  className="grid grid-cols-2 gap-2 sm:grid-cols-3"
+                  role="group"
                 >
                   {list.map((slot) => {
                     const startLabel = formatLocalTime(slot.start, {
                       locale,
                       timeZone,
                     });
-                    const endLabel = formatLocalTime(slot.end, {
-                      locale,
-                      timeZone,
-                    });
+                    const selected = selectedStart === slot.start;
                     return (
-                      <RadioListItem
-                        aria-label={startLabel}
+                      <Button
+                        aria-pressed={selected}
                         key={slot.start}
-                        value={String(slot.start)}
+                        onClick={() => onSelectSlot(slot)}
+                        className="w-full"
+                        size="sm"
+                        type="button"
+                        variant={selected ? "default" : "outline"}
                       >
-                        {startLabel}–{endLabel}
-                      </RadioListItem>
+                        {startLabel}
+                      </Button>
                     );
                   })}
-                </RadioList>
+                </div>
               )
             }
           </AsyncRegion>

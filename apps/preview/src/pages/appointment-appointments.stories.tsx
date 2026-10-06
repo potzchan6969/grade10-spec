@@ -178,8 +178,8 @@ export const Default: Story = {
       canvas.getByRole("heading", { level: 1, name: "Appointments" }),
     ).toBeVisible();
     expect(canvas.getByText("Upcoming")).toBeVisible();
-    expect(canvas.getAllByText("Vault drop-off").length).toBeGreaterThan(0);
-    expect(canvas.getByText("Card grading")).toBeVisible();
+    expect(canvas.getAllByText("Vault Drop-Off").length).toBeGreaterThan(0);
+    expect(canvas.getByText("Card Grading")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Open" }),
     ).not.toBeInTheDocument();
