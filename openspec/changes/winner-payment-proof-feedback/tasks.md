@@ -18,7 +18,7 @@ Winner Order surface. No group has an owner until an engineer claims it.
 - [ ] 2.3 Keep the failed dialog open with its draft and error toast, and block all leave paths while converting or submitting (`winner-order-SC-119`, `winner-order-SC-219`)
 - [ ] 2.4 Verify the Winner Order preview story set and the focused page flow, including the non-busy dirty-leave confirmation (`winner-order-SC-102`, `winner-order-SC-219`)
 
-## 3. Consuming Winner Order integration (grade10)
+## 3. Consuming Winner Order integration (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add failing consumer tests for successful proof acknowledgement, failed retry with draft retention, hidden payment entry points after Payment Verifying, and busy leave blocking (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
 - [ ] 3.2 Wire the existing consuming-app proof dialog and Winner Order page to the approved feedback contract and exact success and failure copy; keep the existing upload procedure and i18n boundary (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
