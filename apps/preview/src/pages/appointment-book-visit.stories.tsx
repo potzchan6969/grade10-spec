@@ -54,6 +54,7 @@ const READY_SERVICES = {
 const CONTACT_SEED = {
   name: "Alex Chan",
   email: ACCOUNT_EMAIL,
+  phoneCountry: "HK",
 };
 
 type BookVisitView = "service" | "slot" | "details";
@@ -242,7 +243,7 @@ function BookVisitPage() {
                   copy={DETAILS_FORM_COPY}
                   questions={service.questions}
                   description={service.description}
-                  emailReadOnly
+                  emailDisabled
                   initialValues={CONTACT_SEED}
                   onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
                 />

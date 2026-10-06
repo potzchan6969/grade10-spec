@@ -152,10 +152,13 @@ const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   name: "Name",
   email: "Email",
   phone: "Phone",
+  phonePlaceholder: "+852 12345678",
+  countrySearchPlaceholder: "e.g. United States",
   optional: "optional",
   nameMissing: "Tell us your name.",
   emailMissing: "Tell us where to send the confirmation.",
   emailInvalid: "That doesn’t look like an email address.",
+  phoneMissing: "Enter a phone number.",
   answerMissing: "This is needed to continue.",
   submit: "Confirm Appointment",
 };

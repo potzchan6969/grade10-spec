@@ -76,6 +76,7 @@ export const ReportsTrimmedValues: Story = {
       name: "Ada",
       email: "ada@example.com",
       phone: "",
+      phoneCountry: "HK",
       notes: "",
       answers: {},
     });
@@ -108,6 +109,7 @@ export const ReportsGradingAnswers: Story = {
       name: "Ada",
       email: "ada@example.com",
       phone: "",
+      phoneCountry: "HK",
       notes: "",
       answers: { quantity: "1–5 cards", company: "PSA" },
     });
@@ -119,15 +121,15 @@ export const LockedEmail: Story = {
   args: {
     questions: [],
     description: undefined,
-    emailReadOnly: true,
-    initialValues: { email: "collector@example.com" },
+    emailDisabled: true,
+    initialValues: { email: "collector@example.com", phoneCountry: "HK" },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("textbox", { name: "Email" });
     expect(field).toHaveValue("collector@example.com");
-    expect(field).toHaveProperty("readOnly", true);
-    expect(field).not.toBeDisabled();
+    expect(field).toBeDisabled();
+    expect(field).not.toHaveProperty("readOnly", true);
   },
 };
 
@@ -137,7 +139,11 @@ export const PendingWithError: Story = {
   args: {
     questions: [],
     description: undefined,
-    initialValues: { name: "Ada", email: "ada@example.com" },
+    initialValues: {
+      name: "Ada",
+      email: "ada@example.com",
+      phoneCountry: "HK",
+    },
     pending: true,
     error: "That time was just taken. Pick another.",
   },

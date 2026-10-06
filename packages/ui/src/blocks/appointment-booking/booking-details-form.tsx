@@ -22,8 +22,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
+import {
+  AuctionPhoneField,
+  auctionPhoneConfirmValue,
+  auctionPhoneSoftReady,
+} from "@grade10/ui";
 import { Info } from "@phosphor-icons/react";
 import { type FormEvent, type ReactNode, useId, useState } from "react";
+import type { Country } from "react-phone-number-input";
 import type {
   BookingAnswers,
   BookingDetailsValues,
@@ -35,6 +41,8 @@ type BookingDetailsFormCopy = {
   name: string;
   email: string;
   phone: string;
+  phonePlaceholder?: string;
+  countrySearchPlaceholder?: string;
   /** Omit it and the built-in notes field is not rendered. */
   notes?: string;
   /** Shown under notes when the answers are for the desk only. */
@@ -44,6 +52,7 @@ type BookingDetailsFormCopy = {
   nameMissing: string;
   emailMissing: string;
   emailInvalid: string;
+  phoneMissing: string;
   answerMissing: string;
   submit: string;
 };
@@ -55,8 +64,8 @@ type BookingDetailsFormProps = {
   description?: ReactNode;
   /** Seeds the fields, so a refused time keeps what the collector typed. */
   initialValues?: Partial<BookingDetailsValues>;
-  /** Locks email to the seeded value — native readOnly, still submitted. */
-  emailReadOnly?: boolean;
+  /** Locks email to the seeded value — native disabled, still submitted. */
+  emailDisabled?: boolean;
   pending?: boolean;
   error?: ReactNode;
   onSubmit: (values: BookingDetailsValues) => void;
@@ -66,6 +75,7 @@ type BookingDetailsFormProps = {
 type FieldErrors = {
   name?: string;
   email?: string;
+  phone?: string;
   answers: Readonly<Record<string, string>>;
 };
 
@@ -85,7 +95,7 @@ function BookingDetailsForm({
   questions,
   description,
   initialValues,
-  emailReadOnly = false,
+  emailDisabled = false,
   pending = false,
   error,
   onSubmit,
@@ -94,6 +104,9 @@ function BookingDetailsForm({
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [phone, setPhone] = useState(initialValues?.phone ?? "");
+  const [phoneCountry, setPhoneCountry] = useState<string | undefined>(
+    initialValues?.phoneCountry ?? "HK",
+  );
   const [notes, setNotes] = useState(initialValues?.notes ?? "");
   const [answers, setAnswers] = useState<BookingAnswers>(
     initialValues?.answers ?? {},
@@ -106,10 +119,28 @@ function BookingDetailsForm({
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const values = collect({ name, email, phone, notes, answers }, questions);
+    const phoneCountryValue = phoneCountry
+      ? (phoneCountry as Country)
+      : undefined;
+    const values = collect(
+      {
+        name,
+        email,
+        phone: auctionPhoneConfirmValue(phone, phoneCountryValue),
+        phoneCountry: phoneCountry ?? "",
+        notes,
+        answers,
+      },
+      questions,
+    );
     const found = validate(values, questions, copy);
     setErrors(found);
-    if (found.name || found.email || Object.keys(found.answers).length > 0) {
+    if (
+      found.name ||
+      found.email ||
+      found.phone ||
+      Object.keys(found.answers).length > 0
+    ) {
       return;
     }
     onSubmit(values);
@@ -149,20 +180,24 @@ function BookingDetailsForm({
           message={errors.email}
           name="email"
           onChange={
-            emailReadOnly ? undefined : (event) => setEmail(event.target.value)
+            emailDisabled ? undefined : (event) => setEmail(event.target.value)
           }
-          readOnly={emailReadOnly}
+          disabled={emailDisabled}
           status={errors.email ? "error" : "default"}
           type="email"
           value={email}
         />
-        <TextInput
-          autoComplete="tel"
-          inputMode="tel"
+        <AuctionPhoneField
+          country={phoneCountry ? (phoneCountry as Country) : undefined}
+          countrySearchPlaceholder={copy.countrySearchPlaceholder}
+          defaultCountry="HK"
           label={`${copy.phone} (${copy.optional})`}
+          message={errors.phone}
           name="phone"
-          onChange={(event) => setPhone(event.target.value)}
-          type="tel"
+          onChange={setPhone}
+          onCountryChange={(next) => setPhoneCountry(next ?? "")}
+          placeholder={copy.phonePlaceholder}
+          status={errors.phone ? "error" : "default"}
           value={phone}
         />
         {questions.map((question) => (
@@ -416,7 +451,8 @@ function collect(
   return {
     name: raw.name.trim(),
     email: raw.email.trim().toLowerCase(),
-    phone: raw.phone.trim(),
+    phone: raw.phone,
+    phoneCountry: raw.phoneCountry,
     notes: raw.notes.trim(),
     answers,
   };
@@ -433,6 +469,10 @@ function validate(
       answers[question.id] = copy.answerMissing;
     }
   }
+  const phoneCountry = values.phoneCountry
+    ? (values.phoneCountry as Country)
+    : undefined;
+  const phoneReady = auctionPhoneSoftReady(values.phone, phoneCountry);
   return {
     name: values.name === "" ? copy.nameMissing : undefined,
     email:
@@ -441,6 +481,7 @@ function validate(
         : EMAIL.test(values.email)
           ? undefined
           : copy.emailInvalid,
+    phone: !phoneReady ? copy.phoneMissing : undefined,
     answers,
   };
 }
