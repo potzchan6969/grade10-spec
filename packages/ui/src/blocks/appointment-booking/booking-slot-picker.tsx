@@ -12,6 +12,7 @@ import {
   dateFromMonth,
   dayFromDate,
   monthFromDate,
+  monthInstant,
 } from "./calendar";
 import type { BookingDay, BookingSlot } from "./types";
 
@@ -101,7 +102,12 @@ function BookingSlotPicker({
           {copy.timeTitle}
         </Text>
         <Text as="span" data-slot="booking-zone" size="sm" tone="secondary">
-          {copy.timesIn} {zoneLabel(timeZone, timeZoneLabel)}
+          {copy.timesIn}{" "}
+          {zoneLabel(
+            timeZone,
+            selectedStart ?? monthInstant(month),
+            timeZoneLabel,
+          )}
         </Text>
         {selectedDate === undefined ? (
           <Text as="span" size="sm" tone="muted">

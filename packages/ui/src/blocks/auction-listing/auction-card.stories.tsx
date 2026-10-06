@@ -42,6 +42,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Scenario: shared-ui-auction-listing-SC-55 - A catalogue tile close follows the viewer
+ * Scenario: shared-dates-and-times-SC-29 - Two collectors read different collector clocks
+ * Case: shared-ui-auction-listing-US1-TC55-1
+ */
 export const ViewerZoneHongKong: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -57,6 +62,11 @@ export const ViewerZoneHongKong: Story = {
   },
 };
 
+/**
+ * Scenario: shared-ui-auction-listing-SC-55 - A catalogue tile close follows the viewer
+ * Scenario: shared-dates-and-times-SC-29 - Two collectors read different collector clocks
+ * Case: shared-ui-auction-listing-US1-TC55-1
+ */
 export const ViewerZoneNewYork: Story = {
   args: { timeZone: FIXTURE_ALT_TIME_ZONE },
   play: async ({ canvasElement }) => {

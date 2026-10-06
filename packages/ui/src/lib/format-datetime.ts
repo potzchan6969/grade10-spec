@@ -220,10 +220,7 @@ type CollectorClockOptions = {
 };
 
 /** Viewer zone as an offset, e.g. `GMT+8`. Documents use this, not `HKT`. */
-export function formatZoneOffset(
-  timeZone: string,
-  at: Date | number = Date.now(),
-): string {
+export function formatZoneOffset(timeZone: string, at: Date | number): string {
   const raw =
     new Intl.DateTimeFormat("en-US", {
       timeZone,
@@ -237,7 +234,7 @@ export function formatZoneOffset(
 /** Viewer short name at that instant: `HKT`, `EDT`. Hong Kong is always `HKT`. */
 export function formatViewerZoneName(
   timeZone: string,
-  at: Date | number = Date.now(),
+  at: Date | number,
 ): string {
   if (timeZone === "Asia/Hong_Kong") return "HKT";
   const raw =

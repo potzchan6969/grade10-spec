@@ -175,7 +175,7 @@ export function footerLines(party: "lender" | "custodian"): string[] {
     name,
     previewCase.shopAddress,
     `Complaints: ${previewCase.complaintsContact}.`,
-    "Dates and times are in Hong Kong Standard Time.",
+    "Dates and times are in Hong Kong time (GMT+8).",
   ];
 }
 
