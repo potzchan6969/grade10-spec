@@ -319,8 +319,8 @@ Every point a member holds lapses on the same day, whatever recorded it.
   latest activity put it
 - **Settled first** — whatever is already dead is written off before the date
   moves, so no date reaches back over a lapse
-- 🚧 **A warning is owed** — the programme records which members are close to
-  losing points; nothing tells them yet —
+- 🚧 **A warning is owed** — the programme works out which members are close
+  to losing points; nothing tells them yet —
   [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders)
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
@@ -439,5 +439,5 @@ spend rather than lose a balance that was about to lapse.
 | How long a restart runs | Decided | Twelve months from today, never a day the operator picks. | Product |
 | Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
 | What moving those dates costs | Decided | Nothing; the move ran on staging alone, which holds play data. A production database starts under the one date. | Finance |
-| Warning a member before the day | ❓ Open | Which channel tells them, and how far ahead; who is owed one is recorded — [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders). | Product |
+| Warning a member before the day | Decided | Who is owed one is worked out apart from what tells them; the channel and how far ahead are open on [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders). | Product |
 :::
