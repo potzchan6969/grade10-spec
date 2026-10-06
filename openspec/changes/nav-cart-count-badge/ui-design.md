@@ -45,10 +45,10 @@ inline label beside the title. The header overlay uses `StatusIndicator`
 | Empty or omitted count | Cart control present; no count indicator | `shared-ui-site-chrome-SC-23` |
 | Count `1` | `StatusIndicator` brand count `1` on the cart icon | `shared-ui-site-chrome-SC-24` |
 | Count `3` | `StatusIndicator` brand count `3` (same active-line count as the drawer title) | `shared-ui-site-chrome-SC-25` |
-| Count `12` | Full digits `12`; no `99+` truncation | `shared-ui-site-chrome-SC-26` |
+| Count `123` | Full digits `123`; no `99+` truncation | `shared-ui-site-chrome-SC-26` |
 | Cart slot composition | Badged cart control rendered through `Nav`'s `cartSlot` | `shared-ui-site-chrome-SC-22` |
-| Cart handler absent | No cart control | **Out of suite:** existing handler-gated cart (`shared-ui-site-chrome-SC-04`) / auction-first pre-Store omission |
-| Signed-out (no guest cart) | Cart control may be present; no badge | **Out of suite:** same treatment as empty/omitted (`shared-ui-site-chrome-SC-23`); no guest count |
+| Cart handler absent | No cart control and no count, whatever count is supplied | `shared-ui-site-chrome-SC-41` |
+| Signed-out (no guest cart) | Cart control present once Store answers; no badge | **Out of suite:** same treatment as empty/omitted (`shared-ui-site-chrome-SC-23`); no guest count |
 | Count unknown (hydrating) | No badge until the host supplies `cartItemCount > 0` | **Out of suite:** host omits the prop or passes `0`; no loading API on `SiteHeader` |
 
 ### Application Cart Count
@@ -59,9 +59,9 @@ The application reuses the existing Auction & Store cart-count stories and share
 | --- | --- | --- |
 | Settled member basket | Same active-line count as the drawer, including adjusted lines | `grade10-site-site-page-shell-SC-42` |
 | Empty or all excluded | Cart control without badge | `grade10-site-site-page-shell-SC-43` |
-| Wide and 375px | Full digits and reachable controls | `grade10-site-site-page-shell-SC-44` |
+| Wide and 375px | Full digits, such as `50`, and reachable controls | `grade10-site-site-page-shell-SC-44` |
 | Cart unavailable | Neither control nor badge | `grade10-site-site-page-shell-SC-45` |
-| Closed drawer after a cart update | Current reviewed count without opening | `grade10-site-site-page-shell-SC-47` |
-| Initial loading or failed review | No badge or badge skeleton; cart control remains | `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-49` |
-| Signed out or switching members | No previous-member count | `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-52` |
+| Closed drawer after hydration or a cart update | Current reviewed count without opening | `grade10-site-site-page-shell-SC-46`, `grade10-site-site-page-shell-SC-47` |
+| Initial loading or failed review | Neither a badge nor a skeleton; the Cart control stays | `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-49` |
+| Signed out or switching members | No previous-member count | `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-51`, `grade10-site-site-page-shell-SC-52` |
 | Same-member refresh | Last verified count stays until success; failure hides it | `grade10-site-site-page-shell-SC-53` |
