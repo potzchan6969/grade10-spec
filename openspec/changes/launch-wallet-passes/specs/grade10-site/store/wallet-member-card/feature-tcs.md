@@ -10,6 +10,7 @@
 **I want** to end a member's pass from the console when the phone it was on is gone,
 **so that** a member who cannot reach their own page is not left with a pass that still identifies them.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-19a rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC1-1: Operator ends one wallet's pass and the other keeps identifying
 
 Runs once per row of **Test data**.
@@ -66,6 +67,7 @@ Runs once per row of **Test data**.
 * Step 9 shows no <ended wallet> pass carried, and offers adding one.
 * Step 11 identifies the member.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-5v6 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC2-1: Record names exactly the wallets carrying a live pass
 
 Runs once per row of **Test data**.
@@ -108,6 +110,7 @@ Runs once per row of **Test data**.
 * The record names <wallets named>, and no other wallet.
 * An ending is offered for each named wallet, and none otherwise.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-5tw rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC3-1: Ending a pass no longer live ends nothing and says so
 
 Runs once per row of **Test data**.
@@ -154,6 +157,7 @@ Runs once per row of **Test data**.
 * Step 6 names Apple Wallet alone, still offering its ending.
 * Step 7 names admin A, the member, Google Wallet and step 4's time, and says nothing was ended.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-b06 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC4-1: Operator without store:write sees no wallets and no ending
 
 **Classification:**
@@ -185,6 +189,7 @@ Runs once per row of **Test data**.
 * The record names no wallet.
 * The record offers no ending.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-r84 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC5-1: Ending sent without store:write is refused and the pass stays live
 
 **Classification:**
@@ -216,6 +221,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused as forbidden.
 * Step 3 shows the member still carries a Google Wallet pass.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-4pc rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC7-1: Ending the operator declines ends nothing
 
 **Classification:**
@@ -252,6 +258,7 @@ Runs once per row of **Test data**.
 * Step 5 still names Apple Wallet, offering its ending.
 * Step 6 shows the member still carries an Apple Wallet pass.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-g2r rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC8-1: Record whose wallets cannot be read says so
 
 **Classification:**
@@ -284,6 +291,7 @@ Runs once per row of **Test data**.
 * The record never says no wallet pass is saved.
 * The record offers no ending.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-7v3 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC9-1: Operator ends a pass on their own member record
 
 **Classification:**
@@ -317,6 +325,7 @@ Runs once per row of **Test data**.
 * Step 4 names no wallet.
 * Step 5 shows no Google Wallet pass carried.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-jac rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC10-1: Shop staff holding store:write ends a member's pass
 
 **Classification:**
@@ -351,6 +360,7 @@ Runs once per row of **Test data**.
 * Step 4 names no wallet.
 * Step 5 shows no Apple Wallet pass carried.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-e3d rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC11-1: Ending sent for a wallet never added ends nothing
 
 **Classification:**
@@ -384,6 +394,7 @@ Runs once per row of **Test data**.
 * Step 3 names the operator, the member, Apple Wallet and step 1's time, and says nothing was ended.
 * Step 4 shows the member still carries a Google Wallet pass.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-doc rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC12-1: Wallets read without store:write is refused
 
 **Classification:**
