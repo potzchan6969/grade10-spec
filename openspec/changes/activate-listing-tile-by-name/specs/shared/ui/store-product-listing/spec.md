@@ -41,18 +41,21 @@ formatted original price, sold-out condition, and in-cart condition with its
 supplied count. It SHALL report tile activation and cart quantity changes
 through named callbacks, each identifying the product.
 
-When the consumer supplies a tile-activation callback and the product is not
-sold out, both the product image and the product name SHALL activate that
-callback. When no callback is supplied, the image and the name SHALL remain
-inert. When the product is sold out, the image and the name SHALL remain inert
-where the consumer supplies a cart handler, and SHALL still activate where an
-activation handler is supplied and no cart handler is.
+A tile SHALL open where the consumer supplies a tile-activation callback or
+the product's address, unless the product is sold out and the consumer also
+supplies a cart handler: a sold-out tile opens where the tile does not sell,
+keeping its sold-out treatment and offering no cart action. Where a tile
+opens, the product image and the product name SHALL open it alike: each
+activates the callback where one is supplied, and a tile given an address and
+no callback opens as a link to that address, whose plain press the browser
+follows. Where a tile does not open, the image and the name SHALL remain
+inert.
 
-Where the tile opens, the name SHALL be its one keyboard stop and the one
-control assistive technology announces for the product, taking the keys its
-native control takes; the image SHALL open on a pointer press and SHALL NOT be
-a second stop. A name that opens SHALL show it by an underline on hover and on
-keyboard focus; a name that does not open SHALL be plain text.
+Where the tile opens, the name SHALL be the tile's one keyboard stop that
+opens the product and the one control assistive technology announces for it,
+taking the keys its native control takes; the image SHALL open on a pointer
+press and SHALL NOT be a stop. A name that opens SHALL show it by an underline
+on hover and on keyboard focus; a name that does not open SHALL be plain text.
 
 A tile SHALL NOT offer a wishlist control.
 
@@ -123,19 +126,27 @@ product is sold out, or hold a cart quantity.
 #### Scenario: shared-ui-store-product-listing-SC-88 - A sold-out tile stays inert where it sells
 **Serves:** Tile contract - a sold-out tile stays inert where it sells
 
-- **GIVEN** a product supplied as sold out, a tile-activation callback and a cart handler
+- **GIVEN** a product supplied as sold out, a cart handler, a tile-activation callback and its address
 - **WHEN** a shopper presses the product name and the product image
-- **THEN** no tile activation is reported
-- **AND** neither the name nor the image is offered as a control
+- **THEN** no tile activation is reported and nothing opens
+- **AND** neither the name nor the image is offered as a link or a control
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-e9w rev=1 -->
-#### Scenario: shared-ui-store-product-listing-SC-89 - No activation without a callback
-**Serves:** Tile contract - no activation without a callback
+#### Scenario: shared-ui-store-product-listing-SC-89 - No activation without a callback or an address
+**Serves:** Tile contract - no activation without a callback or an address
 
-- **GIVEN** a product that is not sold out and no tile-activation callback
+- **GIVEN** a product that is not sold out, no tile-activation callback and no address
+- **WHEN** a shopper presses the product name and the product image
+- **THEN** nothing opens
+- **AND** neither the name nor the image is offered as a control
+
+#### Scenario: shared-ui-store-product-listing-SC-100 - A tile given its address alone is a link
+**Serves:** Tile contract - a tile given its address alone is a link
+
+- **GIVEN** a product that is not sold out, its address, and no tile-activation callback
 - **WHEN** the tile renders
-- **THEN** the product name does not activate
-- **AND** the product image does not activate
+- **THEN** the product name is a link to that address
+- **AND** a plain press on the name or on the image opens that address
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-t2f rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-97 - A sold-out tile opens where it does not sell
@@ -144,15 +155,15 @@ product is sold out, or hold a cart quantity.
 - **GIVEN** a product supplied as sold out, a tile-activation callback and no cart handler
 - **WHEN** a shopper activates the product name, then the product image
 - **THEN** tile activation is reported once for each, identifying that product
-- **AND** the tile keeps the sold-out treatment
+- **AND** the tile keeps the sold-out treatment and offers no cart control
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-ou9 rev=1 -->
-#### Scenario: shared-ui-store-product-listing-SC-98 - A tile that opens is one stop
-**Serves:** Accessibility - a tile that opens is one stop
+#### Scenario: shared-ui-store-product-listing-SC-98 - A tile has one stop to open
+**Serves:** Accessibility - a tile has one stop to open
 
 - **GIVEN** a product that is not sold out, a tile-activation callback and a cart handler
 - **WHEN** a shopper moves through the tile with the Tab key
-- **THEN** focus stops on the product name and on the cart control, and not on the product image
+- **THEN** the product name is the one stop that opens the product, the cart control keeps its own stop, and the product image is no stop
 - **AND** assistive technology announces one control named for the product
 - **AND** Enter or Space on the focused name reports tile activation once
 
@@ -207,6 +218,9 @@ The cart control's accessible names SHALL come from the supplied copy. The
 image SHALL contain no default, fallback, or built-in copy.
 
 `ProductCardImage` SHALL be renderable on its own, outside `ProductCard`.
+Used on its own and given an activation callback or an address, the image
+SHALL open as one control named for the product, which the keyboard reaches;
+inside a product card, the tile's requirement makes it a pointer target.
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-uoy rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-46 - No image source
@@ -250,7 +264,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the requested quantity is reported once
 - **AND** the in-cart condition is unchanged until the consumer supplies a new one
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-yv9 rev=1 -->
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-yv9 rev=2 -->
 #### Scenario: shared-ui-store-product-listing-SC-51 - Keyboard reveals the cart control
 **Serves:** Tile contract - keyboard reveals the cart control
 
@@ -265,6 +279,14 @@ image SHALL contain no default, fallback, or built-in copy.
 
 - **WHEN** an application renders the product card image without a product card
 - **THEN** it renders and behaves as specified, with no missing-context error
+
+#### Scenario: shared-ui-store-product-listing-SC-101 - The image used alone is its own stop
+**Serves:** Accessibility - the image used alone is its own stop
+
+- **GIVEN** the product card image rendered without a product card, with the product's name and a tile-activation callback
+- **WHEN** a shopper moves keyboard focus to the image and presses Enter
+- **THEN** focus stops on the image, announced as one control named for the product
+- **AND** tile activation is reported once
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-ck1 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-53 - The stepper collapses after blur or pointer leave
@@ -283,7 +305,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **WHEN** a shopper activates the collapsed control
 - **THEN** the inline quantity stepper is displayed on the same pill
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-ezf rev=1 -->
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ezf rev=2 -->
 #### Scenario: shared-ui-store-product-listing-SC-55 - A surface that does not sell
 **Serves:** Tile contract - a surface that does not sell
 
