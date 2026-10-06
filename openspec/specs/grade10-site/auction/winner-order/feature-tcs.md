@@ -5661,6 +5661,45 @@ Runs once per row of **Test data**.
 
 ---
 
+## winner-order-US20: Winner waits out a partial payment an operator is collecting
+
+**As a** winner whose invoice an operator has started collecting in parts,
+**I want** a locked order with Contact Us and a receipt for every payment,
+**so that** I have proof of what I paid without tracking a running balance.
+
+<!-- trace:case id=g10.auction-winner-order.TC-sv8 rev=1 covers=g10.auction-winner-order.SC-34b -->
+### winner-order-US20-TC1-1: The partially paid order is locked
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-20
+
+**Pre-conditions:**
+
+* customer(winner of `<partially-paid order>`) is on Winner Order.
+
+**Steps:**
+
+1. Read the payment step, settlement alert and receipt area.
+
+**Expected Results:**
+
+* The page reads Partially Paid.
+* Pay, Submit Payment Proof, View Bank Details and a payment deadline are absent.
+* The page offers Contact Us, shows the full invoice amount and no remaining balance.
+* Each recorded payment has a separate receipt link, oldest first.
+
+---
+
 ## winner-order-US21: Winner quotes their order
 
 **As a** winner of an auction lot,
@@ -6092,3 +6131,7 @@ that implementation works.
 | --- | --- |
 | The winner sees retained facts without the internal reason | **Folded in:** `winner-order-SC-143` |
 | Contact Us on a cancelled order reads `order cancelled` | **Folded in:** `winner-order-SC-275` |
+
+| Finding | Disposition |
+| --- | --- |
+| The winner sees receipts without a second order or deadline | **Folded in:** `winner-order-SC-156` |

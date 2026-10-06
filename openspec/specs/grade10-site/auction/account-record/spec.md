@@ -56,6 +56,8 @@ Owner-only — nobody but the collector sees their record.
   - Won entry: a Won row opens its auction order.
 - Won Status
   - Preparing Shipment: paid, undispatched auction order on My Auctions (was Processing)
+- After a close
+  - Partially Paid row: tells a winner that an operator is collecting the invoice
 
 ## Requirements
 
@@ -881,3 +883,19 @@ remains published. A Won listing SHALL NOT carry it.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Didn't win
 - **AND** the row says their card was not charged
+
+### Requirement: My Auctions keeps a partially paid Won row linked to the order
+
+The My Auctions account record SHALL keep a partially paid auction in the Won
+list, label its order state Partially Paid, show the winning lot and amount,
+and open the same Winner Order when the winner selects View order. It SHALL
+not relabel the row as a new bid standing.
+
+<!-- trace:scenario id=g10.auction-account-record.SC-chv rev=1 -->
+#### Scenario: grade10-site-auction-account-record-SC-62 - A partially paid Won row opens Winner Order
+**Serves:** grade10-site-auction-account-record-US-08 - Winner revisits a partially paid order
+
+- **GIVEN** a winner whose auction order is Partially Paid
+- **WHEN** they open My Auctions and select the Won row
+- **THEN** the row is labelled Partially Paid
+- **AND** View order opens that order's Winner Order

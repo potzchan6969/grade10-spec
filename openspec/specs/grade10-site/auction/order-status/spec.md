@@ -13,6 +13,7 @@ derivation that resolves one status a buyer and an operator both read.
   - Invoice status: the state of the money, written by payment and by an operator
   - Fulfilment status: the state of the goods, written by dispatch alone
   - Supplementary conditions: two facts read from data Grade10 already holds, so no third enum is needed
+  - Partial payment state: records that money has arrived while the invoice remains open
 - Derived order status
   - Refunded from partial collection: makes a refund terminal after any recorded payment
   - Deadline-derived outcomes: distinguishes an overdue setup from an overdue payment
@@ -21,9 +22,11 @@ derivation that resolves one status a buyer and an operator both read.
   - Ordered derivation: one rule chain whose first match wins, so precedence is explicit rather than emergent
   - Never written directly: the primitives are the only writable state, so a status cannot contradict them
   - Preparing Shipment: display name for invoice `paid` and fulfilment `unfulfilled` (was Processing)
+  - Partially Paid: exposes an operator-collected balance that is not yet fully settled
 - Guards
   - Refused combinations: a lot that must never dispatch before payment is stopped at write time
   - Permitted transitions: every other move between states is refused
+  - Self-service closure: stops winner payment, reissue and cancellation after money is recorded
 - Independence from the store
   - Separate derivation: an auction order and a store order share label names and share no meaning
 
@@ -509,3 +512,29 @@ SHALL not be replaced by a later payment or shipment event.
 - **WHEN** any order-status surface reads it
 - **THEN** the derived status remains the status before the overpayment return
 - **AND** it is not Refunded
+
+### Requirement: Recorded money derives Partially Paid and closes self-service
+
+An auction order with at least one recorded payment and an unpaid balance
+SHALL derive Partially Paid. Partially Paid SHALL suppress the winner's
+self-service payment, invoice reissue and cancellation actions, and SHALL
+not carry a payment deadline. The status SHALL remain until the operator
+closes the invoice as Paid, including after confirming an overpayment, or
+records a refund.
+
+<!-- trace:scenario id=g10.auction-order-status.SC-4ke rev=1 -->
+#### Scenario: auction-status-SC-49 - A recorded payment derives Partially Paid
+**Serves:** Derived order status - a recorded payment derives Partially Paid
+
+- **GIVEN** an invoice with one recorded payment and money still due
+- **WHEN** an order-status surface reads it
+- **THEN** the derived status is Partially Paid
+
+<!-- trace:scenario id=g10.auction-order-status.SC-e1r rev=1 -->
+#### Scenario: auction-status-SC-50 - Partially Paid has no self-service deadline
+**Serves:** Guards - Partially Paid has no self-service deadline
+
+- **GIVEN** a Partially Paid order
+- **WHEN** the winner opens Winner Order
+- **THEN** Pay, invoice reissue and cancellation are unavailable
+- **AND** no payment deadline is shown

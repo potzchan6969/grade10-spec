@@ -90,3 +90,9 @@ payments that failed,
 **As an** operator,
 **I want** a cancelled order that received a card payment afterwards to be flagged until I clear it with a reason,
 **so that** no winner is left paying for a lot they no longer have.
+
+### post-sale-US-12: Operator collects a lot's price across more than one payment
+
+**As a** payment operator working an invoice a winner cannot pay in one go,
+**I want** to record each payment as it arrives, smaller than the balance owed, and see the order until it is settled,
+**so that** every partial payment ends up correctly recorded without me tracking the balance outside Grade10.
