@@ -24,9 +24,11 @@ Metric: passes saved per week, per wallet, once that wallet is enrolled.
   and which push header is right, against one enrolled iPhone.
 - **The deployed secrets check** - each wallet secret is expected where
   `packages/app-env` records that wallet's issuer for the brand and
-  environment, and the APNs key only where the Apple issuer records its key
-  id, so `pnpm run secrets --check` fails, naming each missing secret, on a
-  deployment that cannot issue a pass; it then runs against the real deployment.
+  environment, and the APNs key and its key id wherever the Apple issuer is
+  recorded and no `WALLET_APPLE_APNS` client certificate is bound, so
+  `pnpm run secrets --check` fails, naming each missing secret, on a
+  deployment that cannot issue a pass; it then runs against the real
+  deployment.
 
 ## Non-Goals
 

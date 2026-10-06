@@ -8,8 +8,8 @@ order: 8
 
 | Wallet | Code | Identifies | Spends and collects | Offered |
 | --- | --- | --- | --- | --- |
-| Google | Made on the phone from a secret the pass holds · rotates · one use | Every visit, no signal needed | Yes | 🚧 Yes, once the issuer account, an approved class and the key are set |
-| Apple | Made by Grade10 and printed into the pass · never changes | Every visit, no signal needed | No — the member opens the card on the site; fixed in code, not a switch | 🚧 Yes, once the Developer Program, pass type identifiers, certificate and artwork are in place |
+| Google | Made on the phone from a secret the pass holds · rotates · one use | Every visit, no signal needed | Yes | 🚧 Yes, once every Google step of [Setting Up](#detail-setting-up) is done |
+| Apple | Made by Grade10 and printed into the pass · never changes | Every visit, no signal needed | No — the member opens the card on the site; fixed in code, not a switch | 🚧 Yes, once every Apple step of [Setting Up](#detail-setting-up) is done |
 
 A pass is a rendering of the member card, never a second source of it. What
 it solves is distribution: a code that has to be fetched cannot live on a lock
@@ -30,6 +30,15 @@ Apple code identifies and moves nothing.
 - **A missing secret refuses loudly** — adding a pass on a wallet not fully
   configured names the missing secret, rather than issuing one nobody can
   read
+- 🚧 **The launch check names what is missing** - `pnpm run secrets --check`
+  fails, naming each missing secret, where `packages/app-env` records a
+  wallet's issuer for the brand and environment and one of that wallet's
+  secrets is unset. It reports no wallet secret missing wherever no issuer is
+  recorded: a brand that issues no pass, and Grade10 before its issuer is
+  recorded. Where the Apple issuer is recorded and the environment binds no
+  `WALLET_APPLE_APNS` client certificate, it also expects
+  `WALLET_APPLE_APNS_KEY` and the issuer's APNs key id, since a pass that
+  cannot be pushed is never offered
 
 ## On the Pass
 
@@ -47,6 +56,10 @@ Apple code identifies and moves nothing.
 - **Three states** — live, ended or erased; only a live pass identifies
   anybody
 - **From `/membership`** — the member adds a pass from their own page
+- ❓ **The save action's look** - each wallet's own artwork, Apple's "Add to
+  Apple Wallet" badge and Google's "Add to Google Wallet" button, or the
+  card's own text button. Both vendors' brand guidelines expect the artwork.
+  Design's call
 - **One per wallet** — added and ended independently of the other
 - **A new pass replaces the old** — adding a second pass to a wallet already
   holding one ends the earlier pass first
@@ -113,11 +126,11 @@ In this order, because each step needs the one above it:
    every pass secret at rest
 8. *Engineering* — **Record the issuer, the class and the service account** in
    `packages/app-env`. None of the three is a secret, and all three appear in
-   every save link a member opens. Until the issuer and the key are both set,
+   every save link a member opens. Until the issuer and both secrets are set,
    no save action is drawn
-9. ❓ *Design* — **The save action as Google's own "Add to Google Wallet"
-   button**, which Google's brand guidelines expect, rather than a text
-   button. Design's call
+9. *Design* - **Draw the save action as Google's own "Add to Google Wallet"
+   button**, which Google's brand guidelines expect, where
+   [the save action's look](#adding-and-ending) takes each wallet's artwork
 
 ### Apple
 
@@ -168,20 +181,17 @@ seals both their secrets under the one key. In this order:
    device three ways — as shipped, with the header omitted, and over the
    certificate — and record which produces a list request, not which returns
    200
-10. ❓ *Design* — **The save action as Apple's own "Add to Apple Wallet"
-    badge**, rather than a text button. It is licensed only while the
-    organisation is an Apple Developer Program member, and downloaded from the
-    developer site under the Wallet Marketing Agreement. Design's call
+10. *Design* - **Draw the save action as Apple's own "Add to Apple Wallet"
+    badge** where [the save action's look](#adding-and-ending) takes each
+    wallet's artwork. It is licensed only while the organisation is an Apple
+    Developer Program member, and downloaded from the developer site under the
+    Wallet Marketing Agreement
 
 ### Launch Check
 
-- 🚧 *Engineering* — **Run `pnpm run secrets --check`** against the deployed
-  workers, after the last step for each wallet. It fails, naming each missing
-  secret, where `packages/app-env` records a wallet's issuer for that brand
-  and environment and one of that wallet's secrets is unset. It passes
-  wherever no issuer is recorded: a brand that issues no pass, and Grade10
-  before its issuer is recorded. `WALLET_APPLE_APNS_KEY` is expected only
-  where the Apple issuer records an APNs key id
+- *Engineering* - **Run `pnpm run secrets --check`** against the deployed
+  workers, after the last step for each wallet. It names what that wallet
+  still lacks - [Wallets](#wallets)
 
 ### Standing Obligations
 
