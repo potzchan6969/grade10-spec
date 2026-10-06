@@ -127,7 +127,7 @@ Every reward the programme knows, on sale or not; the
 | --- | --- |
 | Slug and name | The id it is referred to by, and what the member reads |
 | Cost | Points per redemption, copied onto the redemption when it is made |
-| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken |
+| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken — [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
 | Stock | Optional; a stocked reward is never oversold |
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
@@ -138,7 +138,6 @@ Every reward the programme knows, on sale or not; the
   the per-redemption and per-day bounds are chosen
 - ❓ **The physical catalog** — which items, and their point prices; Product's
   call
-- 🚧 **Free item** — its own choice in the console: one variant at 100% off
 
 ## Cancelling a Redemption
 
