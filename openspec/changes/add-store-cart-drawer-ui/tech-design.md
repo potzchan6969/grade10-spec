@@ -203,9 +203,15 @@ contract.
 The host passes the review's fetching state as controlled `CartDrawer.loading`.
 While pending, the adapter may provide unreviewed line shape for the shared
 skeleton treatment, but it must not present held prices or availability as
-confirmed. On review failure, the host keeps `loading` true, emits exactly one
-localized failure toast for that open, and leaves Checkout disabled. Closing
-and reopening starts the next review attempt.
+confirmed. On review failure, the host emits exactly one localized failure
+toast with Retry for that open and leaves Checkout disabled. Over a read
+basket, it ends `loading` and shows each line with the unchecked price label
+in place of its price, stock and status, as
+[Cart Validation](../../../docs/prds/products/grade10-site/store/cart-validation.md)
+names unchecked lines (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:593-628`).
+Over a basket it has not read, it keeps `loading` true, so the drawer never
+shows an unread cart as empty (`cart-drawer-empty-state`, Q9). Closing and
+reopening starts the next review attempt.
 
 On success, the drawer receives reviewed title, quantity, current unit price,
 currency, available quantity, previous price, and status. Adjusted and sold-out
@@ -336,8 +342,9 @@ require a running backend because no backend code changes. Coverage must prove:
   settled write.
 - **[Risk] A member session scope changes while the drawer is open.** → Derive
   review from the same `useCart` scope and let the query key move with it.
-- **[Risk] Review failure leaves old values visible.** → Keep controlled loading
-  true, emit one failure toast per open, and recheck on reopen.
+- **[Risk] Review failure leaves old values visible.** → Replace each read
+  line's price, stock and status with the unchecked label, keep `loading` over
+  an unread basket, emit one failure toast per open, and recheck on reopen.
 - **[Risk] The drawer's no-image and display-only tender decisions differ from
   a future applied quote contract.** → Keep images absent, keep tender reads
   optional, and add applied values only through a separate approved quote

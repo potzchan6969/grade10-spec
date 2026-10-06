@@ -46,9 +46,10 @@ States combine this change's Grade10 scenarios with durable
 | Opens over surface; close keeps address | `grade10-site-store-cart-drawer-SC-01`, `grade10-site-store-cart-drawer-SC-02` |
 | Signed-in member cart; signed-out access is gated before the drawer | `grade10-site-store-cart-drawer-SC-04`; `grade10-site-site-page-shell-SC-21`–`SC-24` |
 | Every open starts a fresh read | `grade10-site-store-cart-drawer-SC-05` |
-| Pending / failed review | `grade10-site-store-cart-drawer-SC-06`–`grade10-site-store-cart-drawer-SC-08`; loading bones `shared-ui-store-cart-SC-08` |
+| Pending review | `grade10-site-store-cart-drawer-SC-06`; loading bones `shared-ui-store-cart-SC-08` |
+| Failed review over a read basket: lines unchecked, Retry in the failure toast | `grade10-site-store-cart-drawer-SC-07`, `grade10-site-store-cart-drawer-SC-08` |
 | Reviewed summary; quoted total; existing promo behavior and interactive points | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
-| Empty drawer (shared EmptyState); unread first open stays loading | `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-40` |
+| Empty drawer (shared EmptyState); a basket not yet read, or whose first read failed, stays loading | `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-48` |
 | Unavailable cleanup | `grade10-site-store-cart-drawer-SC-12`; `shared-ui-store-cart-SC-10`, `shared-ui-store-cart-SC-11` |
 | Quantity / remove | `grade10-site-store-cart-drawer-SC-11` |
 | Line → product; Proceed to Checkout → hosted invoice | `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15`; redirecting `shared-ui-store-cart-SC-09` |
