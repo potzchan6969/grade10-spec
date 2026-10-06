@@ -27,33 +27,26 @@ currency.
 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
-sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders
-joins ahead of My Auctions and Membership joins after it. KYC stays out of
-the menu
+sign-in email, then My Auctions and Sign Out
 
-🚧 **My Orders** — ahead of My Auctions once Store answers, opening the Store
-order history surface, and omitted until then
+**Profile** — first in the menu, only when `onProfile` is supplied
 
-**Membership** — ❓ after My Auctions once Store answers; the destination is
-unconfirmed
+**My Orders** — ahead of My Auctions, only when `onMyOrders` is supplied
 
-**Avatar without an email** — ❓ when `accountEmail` is not supplied and the
-menu falls back to `copy.accountMenuLabel`, whether the small initial avatar
-still renders (and from what) or is omitted along with the email is
-unconfirmed
+**Membership** — after My Auctions, only when `onMembership` and
+`copy.membership` are supplied
+
+🚧 **No other item** — the menu offers nothing beyond these, KYC and a second
+orders item included
+
+❓ **Avatar without an email** — when `accountEmail` is not supplied, the menu
+shows `copy.accountMenuLabel` and no avatar; the designer confirms that look
 
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the
 drawer when it is answered.
-
-## No Profile
-
-🚧 **No Profile item** — the menu never offers Profile; there is no Profile
-page. Optional `onProfile` stays on the contract so a later page can wire it;
-Grade10 does not supply it. Specs and Storybook that still named Profile as
-joining once carried are corrected here
 
 ## External Links
 

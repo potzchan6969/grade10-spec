@@ -36,20 +36,22 @@ chrome, including on auction-first launch.
 ## Account Menu
 
 **Account menu** — signed in, an initial avatar sits above the email, above
-the items: My Auctions and Sign Out on auction launch; My Orders, My Auctions,
-and Membership once Store answers, with Sign Out always last. KYC stays out.
+the items: My Auctions and Sign Out on auction launch; My Orders and My
+Auctions once Store answers, with Sign Out always last. KYC stays out.
 
-🚧 **My Orders** — ahead of My Auctions once Store answers, opening
+**My Orders** — ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
 
-**Membership** — ❓ after My Auctions once Store answers; the destination is
-unconfirmed
+❓ **Membership** — after My Auctions once Store answers; Product confirms
+whether it opens the membership page wherever that page is carried, by the
+same rule as Profile
 
-## No Profile
+❓ **Profile** — Product confirms whether Profile joins first wherever the
+account page is carried, which today is development and staging only, or the
+menu never offers it
 
-🚧 **No Profile item** — the menu never offers Profile; there is no Profile
-page. Specs and Storybook that still named Profile as joining once carried
-are corrected here
+**Sign Out on the account page** — the account page offers Sign Out as well,
+wherever it is carried
 
 ## Help
 
@@ -119,7 +121,8 @@ no cart to show someone signed out.
 | Cart count during a refresh | Decided | The last verified count for the same member stays while a refresh checks the cart, including after a failed cart update, and hides if that check fails. A first count still unknown stays hidden. Rejected hiding a verified count on every refresh, and keeping a failed or another member's count. | Product |
 | My Orders label and place | Decided | "My Orders", ahead of My Auctions once Store answers; rejected "Your Orders" (parallels the page title instead of My Auctions naming) and appending after My Auctions, before Sign Out. | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
-| Profile in the menu | Decided | Absent on auction launch and once Store answers alike — there is no Profile page. A later page may reintroduce a menu item through optional `onProfile` on `SiteHeader`; Account and Profile stay future work with no plan today. Sign-out on an account page stays with that future page work. Rejected treating Profile as joining once a `profile` gate opens or once Store answers. | Product |
+| My Auction Orders in the menu | Decided | Not offered. A winner opens each order from its Won row on My Auctions; rejected a second orders item beside My Auctions. | Product |
+| Profile in the menu | ❓ Open | Two menus are on the table. Profile joins first wherever the account page is carried, today development and staging only, so no public lane shows it and `add-account-profile` opens it with the page; or the menu never offers Profile, and collectors reach the account page through the Account breadcrumbs on My Auctions and the order pages. Recommended: join wherever carried, because the header is the one route that stays put on every surface. | Product |
 | Signed-in email | Decided | The menu shows the sign-in email above the items, in place of an "Account" heading, with the same small initial avatar the bidding panel uses for that address. | Product |
-| Membership | ❓ Open | Once Store answers, the menu lists Membership after My Auctions. The destination is unconfirmed. | Product |
+| Membership | ❓ Open | The membership page at `/membership` is carried in development and staging behind its own gate, as the account page is behind its own. Membership either joins after My Auctions wherever that page is carried, by the rule Profile follows, or waits for the loyalty programme's own launch. Recommended: one rule for both account pages, decided with Profile. | Product |
 :::
