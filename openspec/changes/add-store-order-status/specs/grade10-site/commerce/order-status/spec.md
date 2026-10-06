@@ -49,6 +49,7 @@ resolving.
 **Not read** - The mapping SHALL NOT read carrier tracking, delivery
 estimates, line-item quantities, monetary amounts, or elapsed time.
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-qux rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-01 - An unrecognised Shopify value is indeterminate
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -58,6 +59,7 @@ estimates, line-item quantities, monetary amounts, or elapsed time.
 - **AND** a badge resolves
 - **AND** no error is reported to the collector
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-w9f rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-15 - Absent facts read as their defaults
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -66,6 +68,7 @@ estimates, line-item quantities, monetary amounts, or elapsed time.
 - **THEN** the badge is `processing`
 - **AND** the note identifier is `status-indeterminate`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-7vs rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-16 - Letter case does not change the result
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -74,6 +77,7 @@ estimates, line-item quantities, monetary amounts, or elapsed time.
 - **THEN** the badge is `completed`
 - **AND** it is the badge the same order resolves to with `paid` and `fulfilled`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-unk rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-17 - A carrier status does not move the badge
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -82,6 +86,7 @@ estimates, line-item quantities, monetary amounts, or elapsed time.
 - **WHEN** its order status is resolved
 - **THEN** the badge is `processing`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-a9h rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-18 - A return with no refund does not move the badge
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -90,6 +95,7 @@ estimates, line-item quantities, monetary amounts, or elapsed time.
 - **THEN** the badge is `completed`
 - **AND** no note identifier is emitted
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-19w rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-19 - A till sale reads through the same rules
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -124,6 +130,7 @@ to a collector is reported ahead of fulfilment progress. Rule 3's exclusion of
 `on_hold` and `scheduled` SHALL keep an order that is still in progress
 reported as `processing`, even when part of it has been refunded.
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-ln4 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-02 - A canceled order reports Canceled
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -132,6 +139,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `canceled`
 - **AND** the badge is `canceled` for every payment and fulfilment state
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-5n2 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-03 - A voided payment reports Canceled
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -140,6 +148,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `canceled`
 - **AND** the badge is not `processing`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-o4y rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-04 - A refund outranks fulfilment progress
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -148,6 +157,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `refunded`
 - **AND** the badge is neither `shipped` nor `completed`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-0st rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-05 - A held order carrying a partial refund stays Processing
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -156,6 +166,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `processing`
 - **AND** the badge is not `refunded`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-r3l rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-06 - A fulfilled and archived order reports Completed
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -163,6 +174,7 @@ reported as `processing`, even when part of it has been refunded.
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-oyu rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-07 - A partially fulfilled order reports Shipped
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -170,6 +182,7 @@ reported as `processing`, even when part of it has been refunded.
 - **WHEN** its order status is resolved
 - **THEN** the badge is `shipped`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-3ua rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-08 - Every remaining combination reports Processing
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -178,6 +191,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `processing`
 - **AND** no combination of the accepted vocabulary resolves to an absent badge
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-nmr rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-20 - A fulfilled order not yet archived reports Shipped
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -185,6 +199,7 @@ reported as `processing`, even when part of it has been refunded.
 - **WHEN** its order status is resolved
 - **THEN** the badge is `shipped`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-hpt rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-21 - A fulfilled and archived order not yet paid in full reports Shipped
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -193,6 +208,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `shipped`
 - **AND** the badge is not `completed`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-9sm rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-22 - A partly fulfilled order reports Shipped once paid and archived
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -201,6 +217,7 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `shipped`
 - **AND** the badge is not `completed`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-1b0 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-23 - A scheduled order carrying a refund stays Processing
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -250,6 +267,7 @@ display text. A surface that displays a note SHALL take its words from the
 message catalogs, keyed by that identifier, so that a note is not pinned to
 one language or one brand.
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-t5o rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-09 - A confirmed combination carries its note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -258,6 +276,7 @@ one language or one brand.
 - **THEN** the badge is `refunded`
 - **AND** the note identifier is `partial-refund-unshipped`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-x4g rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-10 - An unconfirmed combination carries no note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -266,6 +285,7 @@ one language or one brand.
 - **THEN** the badge is `processing`
 - **AND** no note identifier is emitted
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-34p rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-11 - The mapping emits no display copy
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -274,6 +294,7 @@ one language or one brand.
 - **THEN** the result carries a note identifier from the table above
 - **AND** it carries no human-readable status or note text
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-zkk rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-24 - A return chooses the refund's note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -282,6 +303,7 @@ one language or one brand.
 - **THEN** the badge is `refunded`
 - **AND** the note identifier is `items-returned-partial-refund`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-7ce rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-25 - Only a completed return reads as returned
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -290,6 +312,7 @@ one language or one brand.
 - **THEN** the badge is `refunded`
 - **AND** the note identifier is `refunded-all-items-shipped`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-cvt rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-26 - A voided payment carries the void's note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -298,6 +321,7 @@ one language or one brand.
 - **THEN** the badge is `canceled`
 - **AND** the note identifier is `payment-voided`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-zdo rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-27 - A held order carrying a partial refund carries the hold's refund note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -306,6 +330,7 @@ one language or one brand.
 - **THEN** the badge is `processing`
 - **AND** the note identifier is `on-hold-partial-refund`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-er5 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-28 - An expired payment reads Processing with its note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
@@ -326,6 +351,7 @@ delivery fact.
 **No delivery claim** - No badge SHALL assert that a shipment reached the
 collector.
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-hv0 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-12 - Completed does not assert delivery
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -348,6 +374,7 @@ resolve through the ordered rules like any other order.
 from any shared component or design-system contract; withholding the value is
 a mapping decision, not a component change.
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-4h5 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-13 - Pickup is never emitted in this phase
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
@@ -376,6 +403,7 @@ reports for an order SHALL reach that copy within 5 minutes. A change to the
 fulfilment, archive or return of an order created in the last 90 days SHALL
 reach it within an hour.
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
@@ -384,6 +412,7 @@ reach it within an hour.
 - **THEN** both display the same badge
 - **AND** a surface that displays the note displays the identifier this mapping emitted
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-22a rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-29 - A refund reaches both surfaces within 5 minutes
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
@@ -392,6 +421,7 @@ reach it within an hour.
 - **THEN** within 5 minutes the stored copy reads payment state `refunded`
 - **AND** both surfaces then display the badge `refunded`
 
+<!-- trace:scenario id=g10.commerce-order-status.SC-s28 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-30 - An archive reaches both surfaces within an hour
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 

@@ -11,6 +11,7 @@ way, finished, canceled, or refunded,
 **so that** I am never shown a blank status and never shown a status the surface
 invented for a combination nobody defined.
 
+<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC1-1: Each badge reads from the facts that define it
 
 Runs once per row of **Test data**.
@@ -56,6 +57,7 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge.
 * Step 2: the badge is not blank.
 
+<!-- trace:case id=g10.commerce-order-status.TC-93y rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC2-1: Cancellation or void outranks every other fact
 
 Runs once per row of **Test data**.
@@ -96,6 +98,7 @@ Runs once per row of **Test data**.
 
 * Step 2: the badge reads the row's Badge.
 
+<!-- trace:case id=g10.commerce-order-status.TC-3zq rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC3-1: A refund reads ahead of shipping progress
 
 Runs once per row of **Test data**.
@@ -138,6 +141,7 @@ The order is not canceled in any row.
 
 * Step 2: the badge reads Refunded, never Shipped or Completed.
 
+<!-- trace:case id=g10.commerce-order-status.TC-yg8 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC4-1: Held or scheduled order reads Processing, refunded or not
 
 Runs once per row of **Test data**.
@@ -181,6 +185,7 @@ The order is neither canceled nor archived in any row.
 
 * Step 2: the badge reads Processing, never Refunded.
 
+<!-- trace:case id=g10.commerce-order-status.TC-9iw rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC5-1: Till sale reads through the same rules as a web order
 
 Runs once per row of **Test data**.
@@ -223,6 +228,7 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge.
 * Step 4: the badge reads the same as step 2.
 
+<!-- trace:case id=g10.commerce-order-status.TC-ags rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC6-1: Pickup order reads one of the five, never pickup
 
 Runs once per row of **Test data**.
@@ -267,6 +273,7 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge, not a pickup badge.
 * Step 4: the badge reads the row's Badge, not a pickup badge.
 
+<!-- trace:case id=g10.commerce-order-status.TC-os8 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC7-1: Letter case of a fact does not change the badge
 
 Runs once per row of **Test data**.
@@ -311,6 +318,7 @@ The order is not canceled in any row.
 
 * Step 2: the badge reads the row's Badge.
 
+<!-- trace:case id=g10.commerce-order-status.TC-40a rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC8-1: Completed is withheld until fulfilled, paid and archived
 
 Runs once per row of **Test data**.
@@ -354,6 +362,7 @@ The order is not canceled in any row.
 
 * Step 2: the badge reads the row's Badge, not Completed.
 
+<!-- trace:case id=g10.commerce-order-status.TC-ydn rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC9-1: Carrier-reported delivery leaves an unarchived order Shipped
 
 Runs once per row of **Test data**.
@@ -398,6 +407,7 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads Shipped, not the carrier's status or Completed.
 * Step 4: the badge reads Shipped.
 
+<!-- trace:case id=g10.commerce-order-status.TC-ly4 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC10-1: Return state never moves the badge
 
 Runs once per row of **Test data**.
@@ -442,6 +452,7 @@ The order is not canceled in any row.
 * Step 2: the badge reads the row's Badge.
 * Step 4: the badge reads the same as step 2.
 
+<!-- trace:case id=g10.commerce-order-status.TC-lkv rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
 ### grade10-site-commerce-order-status-US1-TC11-1: Missing or unknown fact reads as that fact's default
 
 Runs once per row of **Test data**.
@@ -495,6 +506,7 @@ Runs once per row of **Test data**.
 **I want** a note explaining what happened to the part of my order that changed,
 **so that** I do not have to contact support to learn whether my items shipped.
 
+<!-- trace:case id=g10.commerce-order-status.TC-8hx rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
 ### grade10-site-commerce-order-status-US2-TC1-1: A confirmed combination names its one note
 
 Runs once per row of **Test data**.
@@ -555,6 +567,7 @@ The order is not archived in any row.
 * Step 3: exactly one note identifier, the row's Note.
 * Step 3: the note is an identifier, carrying no display words.
 
+<!-- trace:case id=g10.commerce-order-status.TC-fur rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
 ### grade10-site-commerce-order-status-US2-TC2-1: Every note has words in each catalog language
 
 **Classification:**
@@ -586,6 +599,7 @@ The order is not archived in any row.
 * Step 2: every identifier resolves to words in every language.
 * Step 2: no identifier resolves to its own key.
 
+<!-- trace:case id=g10.commerce-order-status.TC-dxg rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
 ### grade10-site-commerce-order-status-US2-TC3-1: Combination no confirmed note fits carries its badge alone
 
 Runs once per row of **Test data**.
@@ -637,6 +651,7 @@ Runs once per row of **Test data**.
 **I want** order history and order detail to agree,
 **so that** I do not have to decide which surface is telling the truth.
 
+<!-- trace:case id=g10.commerce-order-status.TC-ql7 rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### grade10-site-commerce-order-status-US3-TC1-1: Your Orders and Order Details show the same badge
 
 Runs once per row of **Test data**.
@@ -683,6 +698,7 @@ Runs once per row of **Test data**.
 * Step 3: Order Details opens for `<order_6>`.
 * Step 4: the badge reads the same as step 2.
 
+<!-- trace:case id=g10.commerce-order-status.TC-e0j rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### grade10-site-commerce-order-status-US3-TC2-1: Both surfaces follow an archive within the hour
 
 **Classification:**
@@ -720,6 +736,7 @@ Runs once per row of **Test data**.
 * Step 5: Order Details opens for `<order_7>`.
 * Step 6: the badge reads Completed.
 
+<!-- trace:case id=g10.commerce-order-status.TC-wg0 rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### grade10-site-commerce-order-status-US3-TC3-1: An order placed before this delivery reads by the rule
 
 Runs once per row of **Test data**.
@@ -763,6 +780,7 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge.
 * Step 4: the badge reads the same as step 2.
 
+<!-- trace:case id=g10.commerce-order-status.TC-4f0 rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### grade10-site-commerce-order-status-US3-TC4-1: Both surfaces follow a refund within 5 minutes
 
 **Classification:**

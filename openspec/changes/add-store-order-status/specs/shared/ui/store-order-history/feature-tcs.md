@@ -11,6 +11,7 @@ when a shipment is underway,
 **so that** I can follow a live order or reopen an older one without the
 surface inventing which orders belong where.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-ar2 rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC7-1: Status badge shows the consumer's variant and label
 
 Runs once per row of **Test data**.
@@ -55,6 +56,7 @@ Runs once per row of **Test data**.
 * Step 3: the badge shows the row's Label supplied, in the row's Variant style.
 * Step 3: the badge shows no words besides the supplied label.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-hyr rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC8-1: A status outside the six is refused at build
 
 **Classification:**
