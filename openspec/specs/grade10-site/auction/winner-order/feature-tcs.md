@@ -1,7 +1,7 @@
 # grade10-site/auction/winner-order Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## winner-order-US1: Winner settles a won lot
 
@@ -2072,6 +2072,84 @@ is still owed, a tracker, and proof of what was handed over,
 * The receipt ID is still <receipt id>.
 * No second receipt ID or audit number exists for <order_paid>.
 
+<!-- trace:case id=g10.auction-winner-order.TC-uox rev=1 covers=g10.auction-winner-order.SC-h7d -->
+### winner-order-US2-TC13-1: Shipped Order Progress opens the carrier tracker
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <shipped order>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <shipped order> | A paid order with fulfilment fulfilled, a tracking number and delivery not confirmed |
+| <tracking number> | The tracking number recorded for <shipped order> |
+| <carrier tracking URL> | The carrier's tracking page for <shipped order> |
+
+**Steps:**
+
+1. Read Order Progress.
+2. Open <tracking number>.
+
+**Expected Results:**
+
+* Order Progress shows <tracking number> as an external link with an arrow icon.
+* Order Progress shows no Track shipment button or carrier name.
+* Step 2 opens <carrier tracking URL> in a new tab.
+
+<!-- trace:case id=g10.auction-winner-order.TC-l0r rev=2 covers=g10.auction-winner-order.SC-k4r -->
+### winner-order-US2-TC12-2: Delivered order keeps the carrier tracker
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <delivered order>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <delivered order> | A paid order with fulfilment fulfilled, delivery confirmed and a tracking number |
+| <tracking number> | The tracking number recorded for <delivered order> |
+| <carrier tracking URL> | The carrier's tracking page for <delivered order> |
+
+**Steps:**
+
+1. Read Order Progress.
+2. Open <tracking number>.
+
+**Expected Results:**
+
+* Order Progress still shows <tracking number> as an external link with an arrow icon.
+* Order Progress shows no Track shipment button or carrier name.
+* Step 2 opens <carrier tracking URL> in a new tab.
+
 ---
 
 ## winner-order-US3: Winner checks the buyer's premium on an invoice
@@ -2760,8 +2838,8 @@ current currency minimum,
 * The bank reference shows, with a copy control and a request to quote it.
 * No card Pay is offered.
 
-<!-- trace:case id=g10.auction-winner-order.TC-42a rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC2-1: Uploading proof stops the deadline and reads Payment Verifying
+<!-- trace:case id=g10.auction-winner-order.TC-isg rev=2 covers=g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-8q1 -->
+### winner-order-US9-TC2-2: Uploading proof stops the deadline and reads Payment Verifying
 
 **Classification:**
 
@@ -2778,13 +2856,13 @@ current currency minimum,
 
 **Pre-conditions:**
 
-* customer(winner) is on <winner order url> for <order_bt>.
+* customer(winner) is on <winner order url> for <order bt>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <order bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
 | <time left> | 3 days 4 hours (273600s) before the payment deadline |
 | <proof> | One PDF under 5 MB |
 
@@ -2792,13 +2870,15 @@ current currency minimum,
 
 1. Click Submit Payment Proof.
 2. Choose <proof>.
-3. Submit, then accept the confirm step.
+3. Submit the proof.
 
 **Expected Results:**
 
+* A toast reads Proof submitted and We'll verify your payment shortly.
 * The order reads Payment Verifying.
 * The deadline stops with <time left> kept.
-* Card Pay and further upload are hidden.
+* A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the lot from `lg` up.
+* Card Pay, Submit Payment Proof, View Bank Details and further uploads are hidden.
 * <proof> and its file name are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-n2e rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
@@ -2974,8 +3054,8 @@ Runs once per row of **Test data**.
 * The whole upload is refused, naming the allowed types.
 * Nothing is stored; the order still reads Pending Payment.
 
-<!-- trace:case id=g10.auction-winner-order.TC-m8s rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC7-1: Backing out of the confirm step uploads nothing
+<!-- trace:case id=g10.auction-winner-order.TC-8kk rev=2 covers=g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-8uw -->
+### winner-order-US9-TC7-2: Backing out of the confirm step uploads nothing
 
 **Classification:**
 
@@ -2992,23 +3072,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on <winner order url> for <order_bt>.
+* customer(winner) is on <winner order url> for <order bt>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <order bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
 | <proof> | Two PNG files |
 
 **Steps:**
 
 1. Click Submit Payment Proof.
 2. Choose <proof>.
-3. Submit, then cancel at the confirm step.
+3. Read the inline warning that files cannot be added or changed after submission.
+4. Cancel without submitting.
 
 **Expected Results:**
 
+* No second confirm screen is shown.
 * No proof is stored.
 * The order still reads Pending Payment; the deadline runs.
 * Submit Payment Proof is still offered.
@@ -3229,8 +3311,8 @@ Runs once per row of **Test data**.
 * Both requests are refused.
 * <order_bt> still reads Pending Payment.
 
-<!-- trace:case id=g10.auction-winner-order.TC-d5k rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC14-1: An upload cut off part-way leaves the invoice pending
+<!-- trace:case id=g10.auction-winner-order.TC-q03 rev=2 covers=g10.auction-winner-order.SC-uxu -->
+### winner-order-US9-TC14-2: An upload cut off part-way leaves the invoice pending
 
 **Classification:**
 
@@ -3242,30 +3324,32 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** winner-order-US-09
 
 **Pre-conditions:**
 
-* customer(winner) is on <winner order url> for <order_bt>.
+* customer(winner) is on <winner order url> for <order bt>.
 * The connection is set to drop during upload.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <order_bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <order bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
 | <proof> | Three allowed files under 5 MB |
 
 **Steps:**
 
 1. Click Submit Payment Proof.
-2. Choose <proof>, submit and accept the confirm step.
-3. Restore the connection and reload the order.
-4. Upload <proof> again.
+2. Choose <proof> and submit.
+3. Let the connection drop during upload.
+4. Restore the connection and submit <proof> again.
 
 **Expected Results:**
 
+* Step 3: Submit Payment Proof stays open with <proof> selected.
+* Step 3: a toast reads Proof not submitted and Nothing was saved. Try again.
 * Step 3: the order reads Pending Payment; the deadline runs; nothing is stored.
 * Step 4: the upload is accepted.
 
@@ -3492,6 +3576,47 @@ Runs once per row of **Test data**.
 
 * Step 2 pastes exactly <reference>, no space.
 * Step 3 shows no bank reference and no copy control.
+
+<!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=2 covers=g10.auction-winner-order.SC-bb1 -->
+### winner-order-US9-TC30-2: Busy proof form blocks every leave route
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is signed in on <winner order url> for <pending bank-transfer order>.
+* Submit Payment Proof is open.
+
+**Test data:**
+
+| <busy work> | <leave route> |
+| --- | --- |
+| Proof submission in progress | Cancel |
+| HEIC conversion in progress | Escape |
+| Proof submission in progress | Overlay dismiss |
+
+**Steps:**
+
+1. Start <busy work>.
+2. Use <leave route>.
+
+**Expected Results:**
+
+* Submit Payment Proof stays open.
+* The form remains locked until <busy work> finishes.
 
 ---
 
@@ -5616,3 +5741,31 @@ Runs once per row of **Test data**.
 | Bank-transfer presentation | `add-winner-how-to-pay-rails` owns the detail rows, including its no-Copy rule; this change supplies only the payment-reference value. |
 | Admin permission and placement | Settled: existing listing-admin read access shows the code in both the Listings table and detail screen; knowing it cannot grant access or private data. |
 | Cached-preview behavior | Settled in Q15: previously cached content may persist without purge or regeneration; current pages and fresh metadata omit the code and private data. |
+
+**Run input:** QA1 wrote four blind cases from frozen `winner-order-US-09` and
+the `Bank transfer` Feature set root. QA2 reconciled those cases against the
+proposal, decisions, UI design, technical design, tasks, delta scenarios and
+journeys, the durable Winner Order suite, Post-Bidding, and active overlapping
+auction changes. This statement records the input to reconciliation, not proof
+that implementation works.
+
+| Blind case or scenario | Disposition |
+| --- | --- |
+| `winner-order-US9-TC28-1` | **Folded into:** `winner-order-US9-TC2-2`. The same successful-upload route now verifies the toast, Payment Verifying Alert and hidden payment controls. |
+| `winner-order-US9-TC29-1` | **Folded into:** `winner-order-US9-TC14-2`. The existing interrupted-upload route now verifies the open draft and failure toast before retry. |
+| `winner-order-US9-TC31-1` | **Folded into:** `winner-order-US9-TC7-2`. The existing back-out route now verifies inline irreversible microcopy and no second confirm screen. |
+| `winner-order-US9-TC30-2` | **Covered:** `winner-order-SC-219`. Busy leave blocking is a distinct route with no durable case. |
+| `winner-order-SC-99`, `winner-order-SC-100`, `winner-order-SC-101`, `winner-order-SC-103`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-121` and `winner-order-SC-239` | **Covered in durable suite:** unchanged Bank transfer scenarios retain their existing cases. |
+| Product questions | **Settled:** none. Decisions Q1-Q16 and the Post-Bidding Payment Verifying alert decide the behavior. |
+| Uncovered scenarios | **None.** SC-218, SC-219 and SC-220 map to revised or distinct cases; SC-119 maps to the revised retry case. |
+
+**Run:** QA2 reconciliation, 2026-10-06, for change `winner-order-tracking-link`. Reconciled both blind cases against the frozen `Order-progress tracking` feature-set group and `winner-order-US-02` journey, then read the delta scenarios, proposal, decisions, UI design, technical design, tasks, durable Winner Order spec and journeys, auction domain suite, and Post-Bidding · Order Status. This is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| `US2-TC2-1` is the durable retained-record case with carrier identity | **Preserved:** it keeps the carrier and tracking link for `winner-order-SC-20`; the new chrome case does not rewrite it |
+| `winner-order-SC-251` - fulfilled order shows and opens the tracking-number link | **Covered:** `winner-order-SC-251` ← `US2-TC13-1` |
+| `winner-order-SC-252` - link remains after delivery is confirmed | **Covered:** `winner-order-SC-252` ← `US2-TC12-2` |
+| The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
+| Root group and journey coverage | **Covered:** both cases trace `winner-order-US-02`; neither case adds behavior outside `Order-progress tracking` |
+| Uncovered scenarios | **None.** Both delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |
