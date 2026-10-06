@@ -148,7 +148,7 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
 }
 ```
 
-The store finds its points by either points title - [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) - whatever case or spaces the shop wrote it in
+The store finds its points by either points title - [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) - in any letter case, with or without spaces around it. An order whose discounts carry neither title is read like one that names none: the applied total less every other instrument, never more than promised - [Discounts](/p/grade10-site/store/discounts#the-sale-step-by-step)
 
 ## *Store* — **Order marked paid**
 The bytes are verified, the delivery is deduped on Shopify's webhook id, and the draft is read back for the order it became, because a paid invoice carries no cart token. The qualifying goods are priced once and the order event is written with the status in one transaction, so a redelivery writes nothing.

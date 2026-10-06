@@ -80,7 +80,9 @@ The debit follows what the shop applied, not what was promised.
   the extension writes the store's order id on the cart, puts the points
   discount on the sale, and shows the points spent, the money still due and
   the balance after; no code is minted for the points, and a repeated tap
-  spends once
+  spends once. A resumed sale applied again puts its points discount
+  back under the title [Rules](/p/grade10-site/loyalty/paying-with-points#rules)
+  names, whatever title it carried
 - **Beside the shop's offer** — points go on beside an automatic offer,
   capped at what the offers leave of the goods; a staff order discount on
   the sale refuses the spend until staff take it off
