@@ -78,15 +78,15 @@ svg[data-diagram="coupon-claim-safety-net"] .c-lane{fill: var(--lane-fill); stro
           <text data-node-label="" data-detail-anchor="" x="501.2" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The request&#39;s guard</text>
           <text data-detail="context" x="501.2" y="131" class="t-muted" font-size="8" text-anchor="middle">every exit before the commit</text>
         </g>
-        <g data-step="held" id="coupon-claim-safety-net-node-held" data-node-id="held" data-node-label="A claim is held" aria-label="Focus A claim is held, one sale, one coupon, The order ended" data-node-kind="security" data-node-sublabel="one sale, one coupon" data-node-context="The order ended">
-          <title>A claim is held · one sale, one coupon · The order ended</title>
+        <g data-step="held" id="coupon-claim-safety-net-node-held" data-node-id="held" data-node-label="A coupon is claimed" aria-label="Focus A coupon is claimed, one sale, one coupon, The order ended" data-node-kind="security" data-node-sublabel="one sale, one coupon" data-node-context="The order ended">
+          <title>A coupon is claimed · one sale, one coupon · The order ended</title>
           <rect x="102" y="217" width="156" height="52" rx="6" class="c-mask"/>
           <rect x="102" y="217" width="156" height="52" rx="6" class="c-security" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(108 223) scale(0.6875)">
             <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
             <path d="m5.8 8 1.5 1.5 3-3"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="180" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">A claim is held</text>
+          <text data-node-label="" data-detail-anchor="" x="180" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">A coupon is claimed</text>
           <text data-detail="context" x="180" y="255" class="t-muted" font-size="8" text-anchor="middle">one sale, one coupon</text>
         </g>
         <g data-step="attempt" id="coupon-claim-safety-net-node-attempt" data-node-id="attempt" data-node-label="The first attempt" aria-label="Focus The first attempt, as the write lands, The order ended" data-node-kind="backend" data-node-sublabel="as the write lands" data-node-context="The order ended">
@@ -99,8 +99,8 @@ svg[data-diagram="coupon-claim-safety-net"] .c-lane{fill: var(--lane-fill); stro
           <text data-node-label="" data-detail-anchor="" x="501.2" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The first attempt</text>
           <text data-detail="context" x="501.2" y="255" class="t-muted" font-size="8" text-anchor="middle">as the write lands</text>
         </g>
-        <g data-step="outbox" id="coupon-claim-safety-net-node-outbox" data-node-id="outbox" data-node-label="The outbox" aria-label="Focus The outbox, retried until it lands, The order ended" data-node-kind="database" data-node-sublabel="retried until it lands" data-node-context="The order ended">
-          <title>The outbox · retried until it lands · The order ended</title>
+        <g data-step="outbox" id="coupon-claim-safety-net-node-outbox" data-node-id="outbox" data-node-label="The outbox" aria-label="Focus The outbox, retried until past the sweep, The order ended" data-node-kind="database" data-node-sublabel="retried until past the sweep" data-node-context="The order ended">
+          <title>The outbox · retried until past the sweep · The order ended</title>
           <rect x="754" y="217" width="172" height="52" rx="6" class="c-mask"/>
           <rect x="754" y="217" width="172" height="52" rx="6" class="c-database" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(760 223) scale(0.6875)">
@@ -108,7 +108,7 @@ svg[data-diagram="coupon-claim-safety-net"] .c-lane{fill: var(--lane-fill); stro
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="840" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The outbox</text>
-          <text data-detail="context" x="840" y="255" class="t-muted" font-size="8" text-anchor="middle">retried until it lands</text>
+          <text data-detail="context" x="840" y="255" class="t-muted" font-size="8" text-anchor="middle">retried until past the sweep</text>
         </g>
         <g data-step="back" id="coupon-claim-safety-net-node-back" data-node-id="back" data-node-label="Back in the wallet" aria-label="Focus Back in the wallet, available again, The order ended" data-node-kind="external" data-node-sublabel="available again" data-node-context="The order ended">
           <title>Back in the wallet · available again · The order ended</title>

@@ -2,7 +2,7 @@
 title: Coupons
 spec: grade10-site/loyalty/programme
 order: 5
-reviewed: 2026-09-15
+reviewed: 2026-10-06
 ---
 
 A coupon is Grade10's own instrument: what a redemption leaves the member
@@ -51,9 +51,10 @@ so redefining the reward never rewrites a coupon a member already holds —
 - 🚧 **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
 - 🚧 **A sale that ends gives it back** — a counter sale nobody paid releases
-  its coupon within the hour, not the next day
-- 🚧 **A sale that took the money keeps it** — and a coupon on a checkout the
-  shop will not close is refused rather than taken
+  its coupon when a newer sale retires it, or an hour after its last plan,
+  not the next day
+- 🚧 **An online checkout that took the money keeps it** — and a coupon on a
+  checkout the shop will not close is refused rather than taken
 - **A sale that beats it** — where the two cannot stack the shop keeps the
   larger cut and the coupon goes back to the wallet —
   [Discounts](/p/grade10-site/store/discounts)
@@ -64,18 +65,21 @@ so redefining the reward never rewrites a coupon a member already holds —
 :::detail{title="One coupon, two sales" for="engineer"}
 - **One conditional write decides it** — the claim lands only where the coupon
   is still available, and one live claim per coupon is a database rule
-- **The sale that loses asks again** — it cancels the earlier sale first, and
+- **The sale that loses asks again** — it retires the earlier sale first, and
   is refused by name where that checkout is still live
 
-::image{src="assets/diagrams/coupon-contested-claim.svg" alt="Two sales claiming one coupon: the reservation write settles it, and the sale that loses cancels the earlier one and asks again"}
+::image{src="assets/diagrams/coupon-contested-claim.svg" alt="Two sales claiming one coupon: the reservation write settles it, and the sale that loses retires the earlier one and asks again"}
 :::
 
 :::detail{title="Giving a claim back" for="engineer"}
 - **Before the commit** — the request's own guard, on every exit
-- **After it** — a release attempt as the write lands, then the outbox
-- **Under both** — the programme releases anything still pending after 25 hours
+- **After it** — a release attempt as the write lands, then the outbox,
+  retried until an hour past the programme's sweep
+- **Under both** — the programme releases any claim still standing 25 hours
+  after it was made: an expired online order's once its code is dead, or one
+  a checkout left when it stopped before its order was written
 
-::image{src="assets/diagrams/coupon-claim-safety-net.svg" alt="The three routes a held claim takes back to the wallet, with the programme's sweep under all of them"}
+::image{src="assets/diagrams/coupon-claim-safety-net.svg" alt="The three routes a claimed coupon takes back to the wallet, with the programme's sweep under all of them"}
 :::
 
 ## Cases
@@ -87,8 +91,8 @@ A code is minted for the cart, ephemeral.
 ## *Member* — **A second cart claims it first**
 Frees the earlier cart's claim and code, and claims it there instead.
 
-## *Loyalty* — **Whichever cart pays is the one that used it**
-The paid order stamps it used. Nothing else does.
+## *Loyalty* — **The cart that claims it uses it when paid**
+The paid order stamps it used. The earlier cart was cancelled with its code, so it cannot pay.
 :::
 
 :::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
@@ -99,10 +103,10 @@ From the member's panel, or the member opens it on their phone and the till scan
 The shop owns that cart, so the sale is never cancelled.
 
 ## *Store* — **The sale runs out of time**
-An hour after the sale was planned, not a day.
+An hour after its last plan, not a day.
 
 ## *Store* — **The coupon comes off**
-The cut and the code go; a sale that pays anyway is settled against what it carried.
+The cut and the code go. A sale paid anyway is settled as [Spending one](#spending-one) says.
 :::
 
 :::flow{title="At the till" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
@@ -112,11 +116,11 @@ A code is minted the moment it is chosen.
 ## *Shopkeeper* — **A second sale claims it first**
 Frees the earlier sale's claim and code, and claims it there instead.
 
-## *Loyalty* — **Whichever sale pays is the one that used it**
-The paid order stamps it used. Nothing else does.
+## *Loyalty* — **The sale that claims it uses it when paid**
+An earlier sale paid with its old code spends nothing, and is reported.
 :::
 
-:::flow{title="Refused" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
+:::flow{title="Refused" case="🚧 An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
 ## *Member* — **Picks a coupon**
 An earlier sale of theirs is carrying it.
 
@@ -126,7 +130,7 @@ The shop will not close that checkout, and its bill can still collect.
 ## *Store* — **Refuses by name**
 Taking the coupon would put the same money on two bills.
 
-## *Member* — **Told which sale**
+## *Member* — **Told an earlier sale stands**
 They read that an earlier sale holds the cut, never that the coupon is unavailable.
 :::
 
@@ -164,6 +168,9 @@ nobody paid was never spent.
 
 - 🚧 **A sale that did not carry it did not spend it** — a counter sale whose
   cut the shop never gave hands the coupon back
+- 🚧 **A code collected after it was let go** — reported to an operator with
+  the order on it; the paid sale spends the coupon unless another sale
+  claims it
 - **Used has no way back** — cancelling or refunding that order leaves the
   coupon used and the points spent
 - **An unused one an operator can reverse** — voided, with the points that
@@ -197,4 +204,23 @@ the store's instrument, not the programme's.
   [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
   and
   [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md#coupons-speak-one-vocabulary)
+:::
+
+:::detail{title="Product decisions" for="pm"}
+A coupon held for a sale nobody paid locks a member out of their own reward,
+at the counter and online alike. So no coupon is held: a claim takes it off
+every earlier sale, and a paid sale spends it only where the shop gave the cut. The decisions behind it
+are on [Discounts](/p/grade10-site/store/discounts).
+
+| Measure | Target |
+| --- | --- |
+| Coupon claims refused as unavailable | Zero |
+| Coupons spent within a day of a counter sale the member walked away from | Counted |
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Deactivating a code | Decided | It never refuses a claim. The shop honours a code a cart already carries, so settlement guards the money and the deactivation is retried. | Product |
+| What the member is shown | Decided | No claimed state, and no sale named. Every coupon the member holds reads as spendable. | Product |
+| An online order that expires | Decided | It keeps its claim until its code can no longer be collected, and the programme's clock then releases it. A counter sale gives its coupon back at its hour. | Engineering |
+| A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Engineering |
 :::

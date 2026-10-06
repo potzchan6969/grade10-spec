@@ -112,7 +112,7 @@
       "from": "newer",
       "to": "earlier",
       "y": 580,
-      "label": "cancel that sale, give its claim back",
+      "label": "retire that sale, give its claim back",
       "variant": "security",
       "note": "or refuse by name, where that checkout is still live"
     },

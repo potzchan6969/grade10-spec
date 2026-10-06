@@ -2,7 +2,7 @@
 title: Tiers
 spec: grade10-site/loyalty/programme
 order: 2
-reviewed: 2026-09-15
+reviewed: 2026-10-06
 ---
 
 ## Ladder

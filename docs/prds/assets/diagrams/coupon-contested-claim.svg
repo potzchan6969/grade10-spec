@@ -117,11 +117,11 @@ svg[data-diagram="coupon-contested-claim"] .c-lane{fill: var(--lane-fill); strok
           <text x="503.1666666666667" y="510" class="t-messagebus" font-size="9" text-anchor="middle">not available</text>
         </g>
         </g>
-        <g data-step="supersede" data-edge-from="newer" data-edge-to="earlier" data-edge-label="cancel that sale, give its claim back" data-edge-key="8" data-edge-id="supersede">
+        <g data-step="supersede" data-edge-from="newer" data-edge-to="earlier" data-edge-label="retire that sale, give its claim back" data-edge-key="8" data-edge-id="supersede">
           <path data-composition-edge-from="newer" data-composition-edge-to="earlier" data-composition-edge-id="supersede" data-composition-points="680.5,580;141.5,580" d="M 680.5 580 L 141.5 580" class="a-security" stroke-width="1.4" marker-end="url(#coupon-contested-claim-arrowhead-security)"/>
         <g data-detail="context">
           <rect x="308.8" y="560" width="204.4" height="16" rx="3" class="c-mask"/>
-          <text x="411" y="570" class="t-security" font-size="9" text-anchor="middle">cancel that sale, give its claim back</text>
+          <text x="411" y="570" class="t-security" font-size="9" text-anchor="middle">retire that sale, give its claim back</text>
         </g>
         <text data-detail="fine" x="153.5" y="598" class="t-dim" font-size="7">or refuse by name, where that checkout is still live</text>
         </g>

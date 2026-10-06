@@ -30,7 +30,7 @@
       "lane": "ended",
       "col": 0,
       "type": "security",
-      "label": "A claim is held",
+      "label": "A coupon is claimed",
       "sublabel": "one sale, one coupon",
       "width": 156
     },
@@ -58,7 +58,7 @@
       "col": 2,
       "type": "database",
       "label": "The outbox",
-      "sublabel": "retried until it lands",
+      "sublabel": "retried until past the sweep",
       "width": 172
     },
     {

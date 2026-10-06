@@ -111,7 +111,7 @@ svg[data-diagram="coupon-claim-mechanism"] .c-grid{stroke-dasharray: 1 4; opacit
           <rect x="418.53333333333336" y="520" width="53.6" height="16" rx="3" class="c-mask"/>
           <text x="445.33333333333337" y="530" class="t-messagebus" font-size="9" text-anchor="middle">released</text>
         </g>
-        <text data-detail="fine" x="397.1666666666667" y="558" class="t-dim" font-size="7">through the outbox, retried until it lands</text>
+        <text data-detail="fine" x="397.1666666666667" y="558" class="t-dim" font-size="7">through the outbox, retried until an hour past the sweep</text>
         </g>
         
         

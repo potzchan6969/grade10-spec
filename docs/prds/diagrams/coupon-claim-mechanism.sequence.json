@@ -101,7 +101,7 @@
       "y": 540,
       "label": "released",
       "variant": "dashed",
-      "note": "through the outbox, retried until it lands"
+      "note": "through the outbox, retried until an hour past the sweep"
     }
   ]
 }

@@ -2,7 +2,7 @@
 title: Rewards
 spec: grade10-site/loyalty/programme
 order: 3
-reviewed: 2026-09-15
+reviewed: 2026-10-06
 ---
 
 ## Reward Types
@@ -147,8 +147,8 @@ one and not the other. It is an operator's move, never a member's.
   points
 - **Used does not** — a used coupon stays used; cancelling or refunding the
   order that carried it changes nothing, and the points stay spent
-- **Held for an order does not** — it is attached to an order being paid,
-  and waits for that order to settle either way
+- 🚧 **Claimed by a sale does not** — refused, naming that sale, until the
+  sale gives the coupon back
 - **A lapsed balance does not** — there is nothing left to return into
 - **Tier is untouched** — a redemption never touched tier progress, so
   reversing one leaves it exactly where it was
