@@ -969,6 +969,35 @@ Runs once per row of **Test data**.
 * No row shows a crown.
 * No row carries an accessible name the copy does not supply, Winner included.
 
+### shared-ui-auction-listing-US1-TC55-1: A catalogue tile close follows the viewer zone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Bid history
+
+**Pre-conditions:**
+
+* The same close instant is rendered on `AuctionCard` once with `Asia/Hong_Kong` and once with `America/New_York`.
+
+**Steps:**
+
+1. Read each card's Ends / Opens / Closed line.
+
+**Expected Results:**
+
+* The two clock values differ.
+* The Hong Kong line names `HKT`.
+* The New York line names `EDT` and does not contain `HKT`.
+
 ## Raised
 
 - None; this change introduces no unresolved product question.

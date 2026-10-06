@@ -435,22 +435,25 @@ receipt; none is conditional on being given.
   order
 - **AND** none is dropped for reading zero
 
-### Requirement: Dates render in the winner's time zone
+### Requirement: Dates render in Hong Kong as GMT+8
 
-Every document date uses the winner's time zone, matching the payment deadline
-the winner sees.
+Every document date uses Asia/Hong_Kong, matching emails and terms, and names
+the offset **GMT+8**.
 
-**Given** — InvoicePdf and ReceiptPdf SHALL render every date as the winner's
-calendar date and clock time, with that zone's name.
+**Given** — InvoicePdf and ReceiptPdf SHALL render every date as the Hong Kong
+calendar date and clock time, followed by `GMT+8`, regardless of the machine
+or the winner's zone.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in the winner's time zone with its zone name
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-43 rev=1 -->
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in Hong Kong as GMT+8
 
-**Serves:** Presentation-only contract - every date renders in the winner's time zone
+**Serves:** Presentation-only contract - every date renders in Hong Kong as GMT+8
 
-- **GIVEN** a `Date` value and a winner zone whose calendar date differs from Hong Kong for that instant
+- **GIVEN** a `Date` value and a machine clock not set to Hong Kong time
 - **WHEN** InvoicePdf renders it as a meta row
-- **THEN** the row shows that instant's winner-zone calendar date and clock
-  time, followed by that zone's name
+- **THEN** the row shows that instant's Hong Kong calendar date and clock
+  time, followed by `GMT+8`
+- **AND** the row does not contain `HKT`
 
 ### Requirement: InvoicePdf and ReceiptPdf render only what they are given
 

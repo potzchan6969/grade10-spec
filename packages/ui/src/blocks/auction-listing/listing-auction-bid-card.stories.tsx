@@ -3,9 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
   FIXTURE_ACTIVITY_TIME_COPY,
+  FIXTURE_ALT_TIME_ZONE,
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
 } from "../../lib/datetime-fixtures";
+import { formatCollectorDeadline } from "../../lib/format-datetime";
 import { DEFAULT_LISTING_CURRENCY } from "../../lib/format-money";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import {
@@ -545,6 +547,33 @@ export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
     expect(recentBids.queryByRole("img")).not.toBeInTheDocument();
     expect(canvas.queryByLabelText("Winner")).not.toBeInTheDocument();
     expect(canvas.queryByText("Winner")).not.toBeInTheDocument();
+  },
+};
+
+export const ViewerZoneNewYork: Story = {
+  args: {
+    timeZone: FIXTURE_ALT_TIME_ZONE,
+    view: liveView({
+      deadlineAtMs: Date.UTC(2026, 8, 1, 18, 0),
+    }),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const ny = formatCollectorDeadline(Date.UTC(2026, 8, 1, 18, 0), {
+      locale: FIXTURE_SHIPPED_LOCALE,
+      timeZone: FIXTURE_ALT_TIME_ZONE,
+      prefix: COPY.endsLabel,
+    });
+    const hk = formatCollectorDeadline(Date.UTC(2026, 8, 1, 18, 0), {
+      locale: FIXTURE_SHIPPED_LOCALE,
+      timeZone: FIXTURE_TIME_ZONE,
+      prefix: COPY.endsLabel,
+    });
+    expect(ny).not.toBe(hk);
+    expect(ny).toMatch(/ EDT$/);
+    expect(canvas.getByText(ny)).toBeInTheDocument();
+    expect(canvas.queryByText(hk)).not.toBeInTheDocument();
+    expect(canvas.queryByText(/HKT|\bUTC\b/)).not.toBeInTheDocument();
   },
 };
 

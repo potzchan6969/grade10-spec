@@ -8,7 +8,7 @@ type BookingWhenProps = LocaleProps & {
   timeZoneLabel?: string;
 };
 
-/** `24 Aug 2026, 10:00 to 10:30 (Hong Kong time)`. Internal. */
+/** `24 Aug 2026, 10:00 to 10:30 (GMT+8)`. Internal. */
 function formatBookingWhen({
   start,
   end,

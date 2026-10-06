@@ -45,7 +45,7 @@ type BookingSlotPickerProps = LocaleProps & {
   slots: AsyncState<readonly BookingSlot[]>;
   selectedStart?: number;
   timeZone: string;
-  /** The zone in the reader's words, e.g. `Hong Kong time`. */
+  /** The zone in the reader's words, e.g. `GMT+8`. */
   timeZoneLabel?: string;
   onMonthChange: (month: string) => void;
   onSelectDay: (date: string) => void;
