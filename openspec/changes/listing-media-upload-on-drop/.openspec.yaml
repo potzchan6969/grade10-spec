@@ -13,3 +13,4 @@ ui_waived: existing auction and inventory media dialogs already use the shared
 reviewed:
   decisions: 44d185d5
   user-journeys: e3384397
+  tasks: e42c95f5
