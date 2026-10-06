@@ -602,7 +602,7 @@ Signed in as an operator who holds `user:ban` and `user:delete`. <a subject user
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
