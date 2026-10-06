@@ -115,10 +115,9 @@ function BookingSlotPicker({
                   {copy.noTimes}
                 </Text>
               ) : (
-                <div
+                <fieldset
                   aria-label={copy.timeTitle}
-                  className="grid grid-cols-2 gap-2 sm:grid-cols-3"
-                  role="group"
+                  className="m-0 grid min-w-0 grid-cols-2 gap-2 border-0 p-0 sm:grid-cols-3"
                 >
                   {list.map((slot) => {
                     const startLabel = formatLocalTime(slot.start, {
@@ -140,7 +139,7 @@ function BookingSlotPicker({
                       </Button>
                     );
                   })}
-                </div>
+                </fieldset>
               )
             }
           </AsyncRegion>
