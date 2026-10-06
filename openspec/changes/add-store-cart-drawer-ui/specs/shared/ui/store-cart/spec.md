@@ -1,7 +1,3 @@
-## Purpose
-
-Expose the consumer's pending tender state without changing the drawer layout.
-
 ## Feature set
 
 - Pending tender
