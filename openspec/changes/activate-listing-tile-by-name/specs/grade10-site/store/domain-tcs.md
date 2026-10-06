@@ -10,8 +10,8 @@
 own page,
 **so that** I can inspect the card I chose in the catalogue.
 
-<!-- trace:case id=g10.store-domain.TC-k4u rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4,g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37,g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
-### grade10-site-store-e2e-US1-TC1-1: Collection tile leads to its product page
+<!-- trace:case id=g10.store-domain.TC-k4u rev=2 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4,g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37,g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
+### grade10-site-store-e2e-US1-TC1-2: Collection tile leads to its product page
 
 **Classification:**
 
@@ -46,8 +46,9 @@ own page,
 
 ## Reconciliation
 
-- **Re-worded** — US1-TC1 opened any product in the collection from the listing; the listing now keeps a sold-out card shut, so `<product>` is for sale; which control opens it is the listing's feature suite's
+- **Re-worded** — US1-TC1 opened any product in the collection from the listing; the listing now keeps a sold-out card shut, so `<product>` is for sale; which control opens it is the listing's feature suite's. Its meaning moved, so it is revision 2
 - **Raised** — nothing: no other cross-feature path is introduced; a sold-out card from the front door's row stays US3-TC1's, whose row does not sell and so still opens it
-- **Shared with** — `add-store-product-status` carries US1-TC1 unchanged; whichever change folds second keeps `<product>` for sale
+- **Shared with** — `add-store-product-status` carries US1-TC1 at revision 1, any product in the collection; the fold refuses that copy once this one lands, so that change rewrites its case against revision 2
+- **Identical path** - `pnpm run tcs:validate` warns that US1-TC1-2 and the durable US1-TC1-1 walk one path; they are one case at two revisions, and the fold keeps revision 2 alone
 
 **Run:** 2026-10-06, the domain check of `activate-listing-tile-by-name` at QA2: the change touches `grade10-site/store/product-listing` and `grade10-site/store/product-page`, and US1-TC1 traces both.

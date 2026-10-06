@@ -10,7 +10,7 @@
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-e05 rev=1 covers=g10.shared-store-product-listing.SC-7pj -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-e05 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC4-1: Name opens the product the same way as the photo
 
 Runs once per row of **Test data**.
@@ -57,7 +57,7 @@ Runs once per row of **Test data**.
 * Step 4 logs nothing else: no cart change, no second activation.
 * The cart control is as the row's **Cart control** says while the pointer is over the photo and while focus is in the tile.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-5vw rev=1 covers=g10.shared-store-product-listing.SC-7pj -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-5vw rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC5-1: Name in the browse grid opens its own product
 
 **Classification:**
@@ -90,7 +90,7 @@ Runs once per row of **Test data**.
 * Step 2 logs one product activation, for `<product_2>`.
 * Step 4 logs one product activation, for `<product_1>`.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-rny rev=1 covers=g10.shared-store-product-listing.SC-30a -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-rny rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC6-1: Name is plain at rest and underlined on hover
 
 **Classification:**
@@ -122,7 +122,7 @@ Runs once per row of **Test data**.
 * Step 2 underlines the name.
 * Step 3 removes the underline.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-63a rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-yv9 -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-63a rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-xip,g10.shared-store-product-listing.SC-nh0,g10.shared-store-product-listing.SC-sz8,g10.shared-store-product-listing.SC-ry5,g10.shared-store-product-listing.SC-7v7 -->
 ### shared-ui-store-product-listing-US1-TC7-1: Name is the tile's one keyboard stop to open, and opens from the keyboard
 
 **Classification:**
@@ -161,7 +161,7 @@ Runs once per row of **Test data**.
 * Step 6 logs one more tile activation for `<product_1>`, and the page does not scroll.
 * Step 7 announces one control named for `<product_1>`; the photo is not announced.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-rg1 rev=1 covers=g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-30a -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-rg1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC8-1: Sold-out name and photo stay inert on a tile that sells
 
 Runs once per row of **Test data**.
@@ -189,7 +189,8 @@ Runs once per row of **Test data**.
 
 | Product | Way in | Outcome |
 | --- | --- | --- |
-| `<product_3>` | an activation callback | name and photo inert |
+| `<product_3>` | an activation callback and `<product_3 address>`, as the story draws them | name and photo inert, no link |
+| `<product_3>` | an activation callback alone, as the listing gives its cards | name and photo inert |
 | `<product_3>` | `<product_3 address>` alone, no activation callback | name and photo inert, no link |
 
 **Steps:**
@@ -209,7 +210,7 @@ Runs once per row of **Test data**.
 * Step 6 never lands focus on the name or the photo.
 * Neither the name nor the photo is offered as a link or a button.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-lbw rev=1 covers=g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-30a -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-lbw rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC9-1: No activation callback and no address leave name and photo inert
 
 **Classification:**
@@ -246,7 +247,7 @@ Runs once per row of **Test data**.
 * Step 6 never lands focus on the name or the photo.
 * Neither the name nor the photo is offered as a link or a button.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-xph rev=1 covers=g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-ezf -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-xph rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC10-1: Sold-out name and photo open on a tile that does not sell
 
 **Classification:**
@@ -285,7 +286,7 @@ Runs once per row of **Test data**.
 * Step 5 logs one tile activation for `<product_3>`, the same as step 3.
 * Step 7 lands focus on the name, underlined, not on the photo.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-64a rev=1 covers=g10.shared-store-product-listing.SC-14a -->
+<!-- trace:case id=g10.shared-store-product-listing.TC-64a rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
 ### shared-ui-store-product-listing-US1-TC11-1: Name is a link where the tile is given an address alone
 
 Runs once per row of **Test data**.
@@ -333,8 +334,10 @@ Runs once per row of **Test data**.
 * Step 7 follows the row's **Address** in the story's frame.
 * The Actions panel logs no tile activation throughout.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-1vn rev=1 covers=g10.shared-store-product-listing.SC-7v7 -->
-### shared-ui-store-product-listing-US1-TC12-1: Photo used alone keeps its own keyboard stop and name
+<!-- trace:case id=g10.shared-store-product-listing.TC-1vn rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-xip,g10.shared-store-product-listing.SC-nh0,g10.shared-store-product-listing.SC-sz8,g10.shared-store-product-listing.SC-ry5,g10.shared-store-product-listing.SC-7v7 -->
+### shared-ui-store-product-listing-US1-TC12-1: Photo used alone opens where a tile would, as its own stop
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -351,9 +354,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProductCardImage` is open in Storybook on its own, drawn as its Opens Alone story, showing `<product_1>`.
-* `<product_1>` is not sold out, and the photo is given an activation callback.
+* `ProductCardImage` is open in Storybook on its own, drawn as the row's **Story**, showing the row's **Product** and given its name.
+* The photo is given an activation callback, and a cart handler as the row's **Cart handler** says.
 * A screen reader is on for step 5.
+
+**Test data:**
+
+| Product | Story | Cart handler | Outcome |
+| --- | --- | --- | --- |
+| `<product_1>`, not sold out | Opens Alone | not supplied | Step 3 lands focus on the photo; step 4 logs one tile activation for `<product_1>`; step 5 announces one control named for `<product_1>`; step 6 logs one more |
+| `<product_3>`, sold out | Sold Out Where It Sells | supplied | Step 3 never lands focus on the photo; step 4 logs nothing; step 5 announces no control named for `<product_3>`; step 6 logs nothing |
 
 **Steps:**
 
@@ -362,12 +372,11 @@ Runs once per row of **Test data**.
 3. Press Tab.
 4. Press Enter.
 5. Move to the photo with the screen reader.
+6. Click the photo.
 
 **Expected Results:**
 
-* Step 3 lands focus on the photo.
-* Step 4 logs one tile activation for `<product_1>`.
-* Step 5 announces one control named for `<product_1>`.
+* Steps 3 to 6 go as the row's **Outcome** says.
 
 ## Settled
 
@@ -377,10 +386,12 @@ Runs once per row of **Test data**.
 
 - **Raised, landed** — the 2026-10-05 pass asked three questions, each landed in `decisions.md`: which keys open the name (Q5), whether the keyboard stops on the photo and the name or on one (Q6), and whether an inert name takes the underline (Q7). US1-TC7 was re-worded to Tab stopping on the name and the cart control and never the photo, Enter and Space each reporting once, and one control announced; US1-TC8 and US1-TC9 to an inert name that stays plain text on hover and takes no focus
 - **Raised, settled** — the 2026-10-06 pass asked what opens a tile given no name; landed as Q10 from `ProductCardProps.name`, a required string the screen reader reads: a nameless tile is outside the contract, recorded under Settled, no case and no scenario
-- **Folded into spec** — US1-TC8's second row keeps a sold-out tile given its address alone and a cart handler inert, no link drawn; the requirement says so and no scenario proved it, so `shared-ui-store-product-listing-SC-88` now gives the tile both a callback and its address. US1-TC12 keeps a `ProductCardImage` used alone a named, focusable control, as the tech design and the UI design state and no requirement did; the image requirement now says so and `shared-ui-store-product-listing-SC-101` proves it, through the Opens Alone story US1-TC12 opens
-- **Folded into case** — `shared-ui-store-product-listing-SC-55`, re-worded here to focus moving through the tile, had no case that checks the cart control on a tile that does not sell; US1-TC4 gained a Tab walk and a Cart control column, its second row showing none on hover or on focus. The 2026-10-06 pass drafted the sold-out tile that does not sell again, with the name's underline and Tab landing on the name; that run is US1-TC10's, so its results joined US1-TC10 and no second case was issued
+- **Folded into spec** — US1-TC8's address-alone row keeps a sold-out tile given its address and a cart handler inert, no link drawn; the requirement says so and no scenario proved it, so `shared-ui-store-product-listing-SC-88` now gives the tile both a callback and its address. US1-TC12 keeps a `ProductCardImage` used alone a named, focusable control, as the tech design and the UI design state and no requirement did; the image requirement now says so and `shared-ui-store-product-listing-SC-101` proves it, through the Opens Alone story US1-TC12 opens. The 2026-10-06 review found the image used alone opening wherever it is given a callback, sold out on a tile that sells included; Q14 puts it under the tile's rule, the requirement and `shared-ui-store-product-listing-SC-101` say so, and US1-TC12 gained the Sold Out Where It Sells row
+- **Folded into case** — `shared-ui-store-product-listing-SC-55`, re-worded here to focus moving through the tile, had no case that checks the cart control on a tile that does not sell; US1-TC4 gained a Tab walk and a Cart control column, its second row showing none on hover or on focus. The 2026-10-06 pass drafted the sold-out tile that does not sell again, with the name's underline and Tab landing on the name; that run is US1-TC10's, so its results joined US1-TC10 and no second case was issued. `shared-ui-store-product-listing-SC-88` gives the tile a callback and its address together, which no row of US1-TC8 did; QA2 added that row first, as the Sold Out story draws it, and kept the callback-alone row as the listing gives its cards
+- **Trace fixed** - each case's `covers` listed the scenarios it walked, chosen by their results; it now lists every scenario serving its `**Trace:**` anchor, in the folded spec's order, as `docs/governance/test-traceability.md` requires: Tile contract for the seven cases tracing it, `add-store-cross-sell`'s link scenario included, and Accessibility for US1-TC7 and US1-TC12. Which case walks which scenario is under Walked
 - **Contradicted** — none: where a case and a scenario state the same behaviour they agree
-- **Walked** — `shared-ui-store-product-listing-SC-87` by US1-TC4 on the tile and US1-TC5 in the browse grid; `shared-ui-store-product-listing-SC-88` by US1-TC8; `shared-ui-store-product-listing-SC-89` by US1-TC9, whose Inert story gives neither a callback nor an address; `shared-ui-store-product-listing-SC-97` by US1-TC10; `shared-ui-store-product-listing-SC-98` by US1-TC7; `shared-ui-store-product-listing-SC-99` by US1-TC6 on hover, US1-TC7 on focus, US1-TC10 on a tile that does not sell, and US1-TC8 and US1-TC9 on a name that does not open; `shared-ui-store-product-listing-SC-100` by US1-TC11, whose plain press on the photo is shown by the photo's link opening the same address on a modified press, since a plain press leaves Storybook; `shared-ui-store-product-listing-SC-101` by US1-TC12; `shared-ui-store-product-listing-SC-51`, re-worded to focus moving into the image, by US1-TC7's cart-control result
+- **Re-read** — `shared-ui-store-product-listing-SC-99` now names keyboard focus, as the requirement does; US1-TC7 and US1-TC10 reach the name by Tab and US1-TC6 by hover, so each stands unchanged
+- **Walked** — `shared-ui-store-product-listing-SC-87` by US1-TC4 on the tile and US1-TC5 in the browse grid; `shared-ui-store-product-listing-SC-88` by US1-TC8; `shared-ui-store-product-listing-SC-89` by US1-TC9, whose Inert story gives neither a callback nor an address; `shared-ui-store-product-listing-SC-97` by US1-TC10; `shared-ui-store-product-listing-SC-98` by US1-TC7; `shared-ui-store-product-listing-SC-99` by US1-TC6 on hover, US1-TC7 on keyboard focus, US1-TC10 on a tile that does not sell, US1-TC11 on a name that is a link, and US1-TC8 and US1-TC9 on a name that does not open; `shared-ui-store-product-listing-SC-100` by US1-TC11, whose plain press on the photo is shown by the photo's link opening the same address on a modified press, since a plain press leaves Storybook; `shared-ui-store-product-listing-SC-101` by US1-TC12; `shared-ui-store-product-listing-SC-51`, re-worded to focus moving into the image, by US1-TC7's cart-control result; `shared-ui-store-product-listing-SC-55` by US1-TC4's second row
 - **Overlap kept** — US1-TC10 and `add-store-cross-sell`'s blind US1-TC1 both walk `shared-ui-store-product-listing-SC-97`, a sold-out tile that opens where it does not sell; US1-TC10 also checks the name's underline and that Tab lands on the name, not the photo. `add-store-cross-sell` retraced its US1-TC1 here when its requirement for the rule left its delta (Q9)
 - **Carried, not this change's** — `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09`, `shared-ui-store-product-listing-SC-46` to `shared-ui-store-product-listing-SC-50`, `shared-ui-store-product-listing-SC-52` to `shared-ui-store-product-listing-SC-54`, `shared-ui-store-product-listing-SC-65` and `shared-ui-store-product-listing-SC-66` are carried word for word; the capability's suite refresh owes them cases
 - **Uncovered** — none of this delta's scenarios

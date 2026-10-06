@@ -8,5 +8,3 @@ hands:
   dev: "@ecchochan"
 depends_on:
   - add-store-cross-sell
-awaiting:
-  test-cases: "2026-10-06, a fresh blind QA1 pass for grade10-site/store/product-listing, whose anchors moved after the last one, and for grade10-site/store/product-page, whose delta is new; then Dev's re-read and QA2"
