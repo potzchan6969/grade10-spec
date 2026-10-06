@@ -404,6 +404,75 @@ The system SHALL let the member pay through the frontend.
   );
 });
 
+test("a group renamed through REMOVED keeps its place in the folded outline", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Discounts
+
+## Purpose
+
+A discount reaches the order.
+
+## Feature set
+
+- One discount-code slot
+  - At most one applies per order
+- An ephemeral code, minted once
+  - Minted when an order claims it
+- Two channels
+  - The same mechanism online and at the till
+
+## Requirements
+
+### Requirement: Codes work
+
+The system SHALL mint codes.
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Discounts
+
+## Feature set
+
+- One discount code or coupon per order
+  - At most one applies per order
+- An ephemeral code, minted once
+  - Settled: a sale is settled against what it carried
+- A new group
+  - Listed after every group the durable spec holds
+
+## REMOVED Feature set
+
+- One discount-code slot
+
+## MODIFIED Requirements
+
+### Requirement: Codes work
+
+The system SHALL mint codes once.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-06").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  const groups = folded.match(/^- .+$/gm);
+  assert.deepEqual(groups, [
+    "- One discount code or coupon per order",
+    "- An ephemeral code, minted once",
+    "- Two channels",
+    "- A new group",
+  ]);
+});
+
 /** Points the proposal at one section of a page with this body. */
 function linkSection(root, files, anchor, body) {
   writeFileSync(
@@ -2336,6 +2405,32 @@ test("feature set fold removes an explicitly retired root group", () => {
     merged,
     /Safe repetition and recovery|Reuse: one invoice/,
   );
+});
+
+test("feature set fold puts a renamed group where the group it replaces stood", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Alpha\n  - A: one\n- Beta\n  - B: two\n- Gamma\n  - C: three\n",
+    ),
+    `# Roles
+
+## Feature set
+
+- Beta prime
+  - B: two
+
+## REMOVED Feature set
+
+- Beta
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.deepEqual(merged.match(/^- .+$/gm), [
+    "- Alpha",
+    "- Beta prime",
+    "- Gamma",
+  ]);
 });
 
 test("feature set fold removes a labelled item without retiring its root group", () => {

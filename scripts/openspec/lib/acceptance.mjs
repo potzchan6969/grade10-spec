@@ -441,6 +441,10 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
       `${capability}: cannot safely merge this Feature set; use its bullet-group form or rebase a complete compatible result`,
     );
   }
+  const order = [...baseGroups.keys()];
+  const fresh = [...deltaGroups.keys()].filter(
+    (group) => !baseGroups.has(group),
+  );
   for (const [group, deltaItems] of deltaGroups) {
     if (!baseGroups.has(group)) baseGroups.set(group, []);
     const items = baseGroups.get(group);
@@ -502,8 +506,25 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     }
     if (items.length === 0) baseGroups.delete(group);
   }
-  const body = [...baseGroups]
-    .map(([group, items]) => [group, ...items.flat()].join("\n"))
+  // A group the durable spec does not hold takes the place of a group the
+  // delta removes whole, paired in listing order, so a rename keeps its
+  // place; one left over lands before the next durable group the delta lists
+  // after it, and last when none follows.
+  const vacated = removedGroupNames.filter(
+    (group) => removedGroups.get(group).length === 0,
+  );
+  const listed = [...deltaGroups.keys()];
+  for (const group of fresh) {
+    const next =
+      vacated.shift() ??
+      listed
+        .slice(listed.indexOf(group) + 1)
+        .find((one) => !fresh.includes(one));
+    order.splice(next ? order.indexOf(next) : order.length, 0, group);
+  }
+  const body = order
+    .filter((group) => baseGroups.has(group))
+    .map((group) => [group, ...baseGroups.get(group).flat()].join("\n"))
     .join("\n");
   const rendered = `## Feature set\n\n${body}\n`;
   const span = sectionSpan(currentSpec, "Feature set");
