@@ -1,3 +1,11 @@
+# grade10-site/auction/lot-status Specification
+
+## Purpose
+
+The external lot status is the status collectors see for an auction lot:
+Upcoming, Active or Ended, worked out from the lot and never saved. This
+capability also sets which lots collectors never see.
+
 ## Feature set
 
 - External lot status
@@ -82,10 +90,10 @@ lot status.
 #### Scenario: grade10-site-auction-lot-status-SC-04 - A lot with a winner is Ended whatever state its order is in
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
-- **GIVEN** three lots with a winner, whose orders are awaiting payment, shipped
-  and cancelled
+- **GIVEN** four lots with a winner, whose orders are awaiting payment,
+  Preparing Shipment, Shipped, and Cancelled
 - **WHEN** Grade10 works out their external lot status
-- **THEN** all three are Ended
+- **THEN** all four are Ended
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-flh rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-12 - A lot that ended with no winner is Ended

@@ -33,7 +33,7 @@ winner.
   - Seven days from send: the window opens when the winner has an amount to pay, not before
   - Absolute datetime display: the deadline is shown as a datetime in the viewer's local zone; no countdown
 - Progress presentation
-  - Five steps: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper
+  - Five steps: Address → Invoice → Payment → Shipping → Completed; Cancelled and Refunded show no stepper
   - Day-only step dates: Address while awaiting reads Confirm by …; Payment while due reads Pay by …; long copy wraps
 - Records the winner keeps
   - Payment receipt: what was paid, itemised, with the method that paid it

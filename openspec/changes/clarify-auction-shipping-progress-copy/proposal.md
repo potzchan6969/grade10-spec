@@ -8,7 +8,7 @@ A paid, undispatched order badges **Processing** while Order Progress pings
 on **Shipped**. The ping marks the current phase; past-tense **Shipped**
 reads as already dispatched. Collectors cannot tell packing from transit.
 
-**Metric:** on Processing Winner Order and My Auctions stories, the badge
+**Metric:** on Preparing Shipment Winner Order and My Auctions stories, the badge
 reads Preparing Shipment and Order Progress pings on Shipping with
 Preparing to ship subtext (target: 100%).
 
@@ -63,7 +63,7 @@ payment-confirm copy are updated in `add-my-auction-orders`.
 
 None.
 
-**Archive:** @tangconst after deploy.
+**Archive:** @tangconst after implementation verification.
 
 ## References
 

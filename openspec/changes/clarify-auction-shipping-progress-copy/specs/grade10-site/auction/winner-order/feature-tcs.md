@@ -43,11 +43,50 @@
 **Expected result:**
 
 * Badge reads Preparing Shipment.
+* Badge uses `default`.
 * Shipping is the current (progress) progress step — not incomplete.
 * Shipping subtext reads Preparing to ship.
 * No step is labelled Preparing Shipment.
 
+<!-- trace:case id=g10.auction-winner-order.TC-7j8 rev=1 covers=g10.auction-winner-order.SC-lk0 -->
+### winner-order-US2-TC20-1: Shipped keeps Shipping current
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_shipped>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_shipped> | A paid, fulfilled order with a ship date and tracking number |
+
+**Steps:**
+
+1. Read the status badge and Order Progress.
+
+**Expected result:**
+
+* Badge reads Shipped and uses `default`.
+* Shipping is the current progress step with the day-only ship date.
+* The tracking number is the external carrier link.
+* No separate Track shipment control or carrier name appears.
+
 ## Reconciliation
 
 - **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
+- **Covered:** `winner-order-SC-253` ← `US2-TC20-1`.
 - **Raised:** none.
