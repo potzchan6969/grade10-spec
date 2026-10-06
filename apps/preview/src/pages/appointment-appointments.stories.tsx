@@ -18,13 +18,15 @@ import {
   GRADING_VISIT_RECORD,
   MANAGE_CARD_COPY,
   SLOT_PICKER_COPY,
+  slotsForVisitDay,
   VAULT_BOOK_VISIT_STORY_ID,
   VISIT_DAYS,
-  VISIT_MONTH,
+  VISIT_MAX_MONTH,
+  VISIT_MIN_MONTH,
   VISIT_NOW_MS,
   VISIT_RECORD,
-  VISIT_SLOTS,
   VISIT_TIME_ZONE,
+  VISIT_TODAY_DATE,
 } from "./vault-content";
 import {
   AppointmentPageShell,
@@ -54,6 +56,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
   const [records, setRecords] = useState(() => seedRecords(empty));
   const [movingId, setMovingId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState("2026-09-03");
+  const [selectedMonth, setSelectedMonth] = useState("2026-09");
   const { upcoming, past } = split(records, VISIT_NOW_MS);
 
   function updateRecord(id: string, patch: Partial<BookingRecord>) {
@@ -62,6 +65,11 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
         record.id === id ? { ...record, ...patch } : record,
       ),
     );
+  }
+
+  function handleMonthChange(month: string) {
+    setSelectedMonth(month);
+    setSelectedDate(undefined);
   }
 
   function renderCard(record: BookingRecord) {
@@ -80,16 +88,20 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
         {movingId === record.id && record.state === "booked" ? (
           <BookingSlotPicker
             copy={SLOT_PICKER_COPY}
-            month={VISIT_MONTH}
-            minMonth={VISIT_MONTH}
-            maxMonth={VISIT_MONTH}
+            month={selectedMonth}
+            minMonth={VISIT_MIN_MONTH}
+            maxMonth={VISIT_MAX_MONTH}
+            today={VISIT_TODAY_DATE}
             days={{ status: "ready", data: VISIT_DAYS }}
             selectedDate={selectedDate}
-            slots={{ status: "ready", data: VISIT_SLOTS }}
+            slots={{
+              status: "ready",
+              data: selectedDate ? slotsForVisitDay(selectedDate) : [],
+            }}
             selectedStart={record.start}
             timeZone={VISIT_TIME_ZONE}
             timeZoneLabel="Hong Kong time"
-            onMonthChange={() => {}}
+            onMonthChange={handleMonthChange}
             onSelectDay={setSelectedDate}
             onSelectSlot={(slot) => {
               updateRecord(record.id, {

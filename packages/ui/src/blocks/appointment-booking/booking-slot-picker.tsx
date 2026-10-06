@@ -35,6 +35,8 @@ type BookingSlotPickerProps = LocaleProps & {
   /** Inclusive bounds the collector can step within. */
   minMonth?: string;
   maxMonth?: string;
+  /** Frozen shop-local today the grid marks; omit it and the calendar uses now. */
+  today?: Date;
   days: AsyncState<readonly BookingDay[]>;
   selectedDate?: string;
   slots: AsyncState<readonly BookingSlot[]>;
@@ -57,6 +59,7 @@ function BookingSlotPicker({
   month,
   minMonth,
   maxMonth,
+  today,
   days,
   selectedDate,
   slots,
@@ -89,6 +92,7 @@ function BookingSlotPicker({
               maxMonth={maxMonth}
               minMonth={minMonth}
               month={month}
+              today={today}
               onMonthChange={onMonthChange}
               onSelectDay={onSelectDay}
               selectedDate={selectedDate}
@@ -156,6 +160,7 @@ function SlotCalendar({
   month,
   minMonth,
   maxMonth,
+  today,
   selectedDate,
   onMonthChange,
   onSelectDay,
@@ -165,6 +170,7 @@ function SlotCalendar({
   month: string;
   minMonth?: string;
   maxMonth?: string;
+  today?: Date;
   selectedDate?: string;
   onMonthChange: (month: string) => void;
   onSelectDay: (date: string) => void;
@@ -172,8 +178,12 @@ function SlotCalendar({
   const available = new Set(
     days.filter((day) => day.available).map((day) => day.date),
   );
+  // Use label instead of dropdown when there's only one month option
+  const captionLayout =
+    minMonth && maxMonth && minMonth === maxMonth ? "label" : "dropdown";
   return (
     <Calendar
+      captionLayout={captionLayout}
       disabled={(date) => !available.has(dayFromDate(date))}
       endMonth={maxMonth ? dateFromMonth(maxMonth) : undefined}
       labels={{
@@ -190,6 +200,7 @@ function SlotCalendar({
       }}
       selected={selectedDate ? dateFromDay(selectedDate) : undefined}
       startMonth={minMonth ? dateFromMonth(minMonth) : undefined}
+      today={today}
     />
   );
 }

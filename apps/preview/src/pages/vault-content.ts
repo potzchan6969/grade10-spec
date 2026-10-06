@@ -295,27 +295,61 @@ const VAULT_FOOTER = {
 };
 
 const VISIT_TIME_ZONE = "Asia/Hong_Kong";
-const VISIT_MONTH = "2026-09";
+/** Shop-local today the Book Visit calendar is drawn on. */
+const VISIT_TODAY = "2026-09-01";
+const VISIT_TODAY_DATE = new Date(2026, 8, 1);
+/** Last bookable day: three months from today. */
+const VISIT_HORIZON = "2026-12-01";
+const VISIT_MIN_MONTH = "2026-09";
+const VISIT_MAX_MONTH = "2026-12";
 
-const VISIT_DAYS: readonly BookingDay[] = Array.from(
-  { length: 30 },
-  (_, index) => {
-    const day = index + 1;
-    const date = `${VISIT_MONTH}-${String(day).padStart(2, "0")}`;
-    const sunday = new Date(Date.UTC(2026, 8, day)).getUTCDay() === 0;
-    return { date, available: day >= 2 && !sunday };
-  },
-);
+function padDatePart(value: number): string {
+  return String(value).padStart(2, "0");
+}
+
+function ymd(year: number, monthIndex: number, day: number): string {
+  return `${year}-${padDatePart(monthIndex + 1)}-${padDatePart(day)}`;
+}
+
+/** Days of the caption months; pickable from the day after today through the horizon, Sundays excepted. */
+const VISIT_DAYS: readonly BookingDay[] = (() => {
+  const days: BookingDay[] = [];
+  for (let monthIndex = 8; monthIndex <= 11; monthIndex += 1) {
+    const count = new Date(Date.UTC(2026, monthIndex + 1, 0)).getUTCDate();
+    for (let day = 1; day <= count; day += 1) {
+      const date = ymd(2026, monthIndex, day);
+      const sunday =
+        new Date(Date.UTC(2026, monthIndex, day)).getUTCDay() === 0;
+      days.push({
+        date,
+        available: !sunday && date > VISIT_TODAY && date <= VISIT_HORIZON,
+      });
+    }
+  }
+  return days;
+})();
 
 const NEXT_AVAILABLE_VISIT_DATE = VISIT_DAYS.find((day) => day.available)?.date;
 
-const THIRD_HKT_10 = Date.UTC(2026, 8, 3, 2, 0);
-const VISIT_SLOTS: readonly BookingSlot[] = [0, 15, 30, 45, 75, 90, 105].map(
-  (minutes) => ({
-    start: THIRD_HKT_10 + minutes * 60_000,
-    end: THIRD_HKT_10 + (minutes + 30) * 60_000,
+function slotsForVisitDay(date: string): readonly BookingSlot[] {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (!match) return [];
+  const start10 = Date.UTC(
+    Number(match[1]),
+    Number(match[2]) - 1,
+    Number(match[3]),
+    2,
+    0,
+  );
+  return [0, 15, 30, 45, 75, 90, 105].map((minutes) => ({
+    start: start10 + minutes * 60_000,
+    end: start10 + (minutes + 30) * 60_000,
     remaining: 1,
-  }),
+  }));
+}
+
+const VISIT_SLOTS: readonly BookingSlot[] = slotsForVisitDay(
+  NEXT_AVAILABLE_VISIT_DATE ?? VISIT_HORIZON,
 );
 
 const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
@@ -508,10 +542,13 @@ const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   name: "Name",
   email: "Email",
   phone: "Phone",
+  phonePlaceholder: "+852 12345678",
+  countrySearchPlaceholder: "e.g. United States",
   optional: "optional",
   nameMissing: "Tell us your name.",
   emailMissing: "Tell us where to send the confirmation.",
   emailInvalid: "That doesn’t look like an email address.",
+  phoneMissing: "Enter a phone number.",
   answerMissing: "This is needed to continue.",
   submit: "Confirm Appointment",
 };
@@ -674,6 +711,7 @@ export {
   SHOP_NAME,
   SLOT_PICKER_COPY,
   SUMMARY_COPY,
+  slotsForVisitDay,
   statusBadgeVariant,
   VAULT_ASSETS,
   VAULT_BOOK_VISIT_HREF,
@@ -700,10 +738,12 @@ export {
   VISIT_CONFIRMATION_COPY,
   VISIT_DAYS,
   VISIT_FIXTURE,
-  VISIT_MONTH,
+  VISIT_MAX_MONTH,
+  VISIT_MIN_MONTH,
   VISIT_NOW_MS,
   VISIT_PREP_TIPS,
   VISIT_RECORD,
   VISIT_SLOTS,
   VISIT_TIME_ZONE,
+  VISIT_TODAY_DATE,
 };

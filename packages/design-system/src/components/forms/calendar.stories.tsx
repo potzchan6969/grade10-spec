@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { Calendar } from "./calendar";
 
 const TODAY = new Date(2026, 9, 6);
@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "react-day-picker wrapped in Grade10 chrome. Sunday-first weeks. Caption is previous, month/year, and next in one row. `captionLayout`: both dropdowns, month dropdown with a fixed year, or a single label. Overflow days are selectable and do not move the caption. No Figma set yet — Storybook-first.",
+          "react-day-picker wrapped in Grade10 chrome. Sunday-first weeks. Caption is previous, month/year, and next in one row. `captionLayout`: both dropdowns, month dropdown with a fixed year, or a single label. A menu lists only months or years inside the start/end bound; a single remaining choice is a label. Overflow days are selectable and do not move the caption. No Figma set yet — Storybook-first.",
       },
     },
   },
@@ -143,6 +143,48 @@ export const DropdownMonth: Story = {
     expect(canvas.getByRole("combobox", { name: /month/i })).toBeVisible();
     expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
     expect(canvas.getByText("2026")).toBeVisible();
+  },
+};
+
+export const BoundedCaption: Story = {
+  name: "Bounded month and year",
+  render: () => {
+    const [month, setMonth] = useState(MONTH);
+    const [selected, setSelected] = useState<Date | undefined>(SELECTED);
+    return (
+      <Calendar
+        endMonth={new Date(2026, 11, 1)}
+        mode="single"
+        month={month}
+        onMonthChange={setMonth}
+        onSelect={setSelected}
+        selected={selected}
+        startMonth={new Date(2026, 8, 1)}
+        today={TODAY}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Oct",
+    );
+    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
+    expect(canvas.getByText("2026")).toBeVisible();
+    await userEvent.click(canvas.getByRole("combobox", { name: /month/i }));
+    const monthList = await within(canvasElement.ownerDocument.body).findByRole(
+      "listbox",
+    );
+    const list = within(monthList);
+    expect(
+      list.getAllByRole("option").map((option) => option.textContent),
+    ).toEqual(["September", "October", "November", "December"]);
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => {
+      expect(
+        within(canvasElement.ownerDocument.body).queryByRole("listbox"),
+      ).toBeNull();
+    });
   },
 };
 

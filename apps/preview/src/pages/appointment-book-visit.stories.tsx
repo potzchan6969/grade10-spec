@@ -35,11 +35,13 @@ import {
   SERVICE_PICKER_COPY,
   SLOT_PICKER_COPY,
   SUMMARY_COPY,
+  slotsForVisitDay,
   VAULT_CONFIRMATION_STORY_ID,
   VISIT_DAYS,
-  VISIT_MONTH,
-  VISIT_SLOTS,
+  VISIT_MAX_MONTH,
+  VISIT_MIN_MONTH,
   VISIT_TIME_ZONE,
+  VISIT_TODAY_DATE,
 } from "./vault-content";
 import { AppointmentPageShell, PageHeader } from "./vault-shared";
 import { navigateToStory, STORE_LOCATOR_HREF } from "./workbench-story-nav";
@@ -62,10 +64,18 @@ function BookVisitPage() {
   const [selectedDate, setSelectedDate] = useState<string | undefined>();
   const [selectedStart, setSelectedStart] = useState<number | undefined>();
   const [selectedEnd, setSelectedEnd] = useState<number | undefined>();
+  const [selectedMonth, setSelectedMonth] = useState<string>(VISIT_MIN_MONTH);
   const service = BOOK_VISIT_SERVICES.find((row) => row.id === serviceId);
   const prepTips = prepTipsForService(service?.id ?? "");
 
   function clearSlot() {
+    setSelectedDate(undefined);
+    setSelectedStart(undefined);
+    setSelectedEnd(undefined);
+  }
+
+  function handleMonthChange(month: string) {
+    setSelectedMonth(month);
     setSelectedDate(undefined);
     setSelectedStart(undefined);
     setSelectedEnd(undefined);
@@ -202,16 +212,20 @@ function BookVisitPage() {
             <div className="p-5 md:p-6">
               <BookingSlotPicker
                 copy={SLOT_PICKER_COPY}
-                month={VISIT_MONTH}
-                minMonth={VISIT_MONTH}
-                maxMonth={VISIT_MONTH}
+                month={selectedMonth}
+                minMonth={VISIT_MIN_MONTH}
+                maxMonth={VISIT_MAX_MONTH}
+                today={VISIT_TODAY_DATE}
                 days={{ status: "ready", data: VISIT_DAYS }}
                 selectedDate={selectedDate}
-                slots={{ status: "ready", data: VISIT_SLOTS }}
+                slots={{
+                  status: "ready",
+                  data: selectedDate ? slotsForVisitDay(selectedDate) : [],
+                }}
                 selectedStart={selectedStart}
                 timeZone={VISIT_TIME_ZONE}
                 timeZoneLabel="Hong Kong time"
-                onMonthChange={() => {}}
+                onMonthChange={handleMonthChange}
                 onSelectDay={(date) => {
                   setSelectedDate(date);
                   setSelectedStart(undefined);
@@ -331,6 +345,24 @@ export const Slot: Story = {
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "2",
     );
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Sep",
+    );
+    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
+    expect(canvas.getByText("2026")).toBeVisible();
     expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Dec",
+    );
+    expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: /December 1st, 2026/ }),
+    ).toBeEnabled();
+    expect(
+      canvas.getByRole("button", { name: /December 2nd, 2026/ }),
+    ).toBeDisabled();
   },
 };
